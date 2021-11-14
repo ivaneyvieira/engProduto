@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.fornecedor
+package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
@@ -10,8 +10,8 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 
-@Route(layout = ProdutoLayout::class)
-@PageTitle("Produto")
+@Route(layout = ProdutoLayout::class, value = "")
+@PageTitle("produto")
 @CssImport("./styles/gridTotal.css")
 class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val viewModel: ProdutoViewModel = ProdutoViewModel(this)
@@ -19,7 +19,7 @@ class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
 
   override fun isAccept(user: IUser): Boolean {
     val userSaci = user as? UserSaci ?: return false
-    return userSaci.fornecedorList
+    return userSaci.produtoList
   }
 
   init {

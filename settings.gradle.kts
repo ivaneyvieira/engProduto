@@ -9,11 +9,3 @@
 
 rootProject.name = "produto"
 
-//include("rest")
-
-pluginManagement {
-  repositories {
-    jcenter()
-    gradlePluginPortal()
-  }
-}

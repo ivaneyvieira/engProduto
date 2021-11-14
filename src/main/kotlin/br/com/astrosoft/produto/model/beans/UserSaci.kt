@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.framework.model.IUser
+import br.com.astrosoft.produto.model.saci
 import kotlin.math.pow
 import kotlin.reflect.KProperty
 
@@ -14,10 +14,10 @@ class UserSaci : IUser {
   var storeno: Int = 0
   var impressora: String? = ""
   override var ativo by DelegateAuthorized(0)
-  var fornecedorList by DelegateAuthorized(1)
+  var produtoList by DelegateAuthorized(1)
 
   val fornecedor
-    get() = fornecedorList
+    get() = produtoList
 
   override val admin
     get() = login == "ADM"

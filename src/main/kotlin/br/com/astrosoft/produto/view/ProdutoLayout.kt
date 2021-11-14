@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view
 
-import br.com.astrosoft.produto.view.fornecedor.ProdutoView
+import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.MainLayout
 import com.vaadin.flow.component.dependency.JsModule
@@ -16,7 +16,7 @@ import com.vaadin.flow.theme.lumo.Lumo
 @JsModule("./styles/shared-styles.js")
 class ProdutoLayout : MainLayout() {
   override fun Tabs.menuConfig() {
-    menuRoute(FORM, "Fornecedor", ProdutoView::class)
+    menuRoute(FORM, "Produto", ProdutoView::class)
     menuRoute(USER, "Usuário", UsuarioView::class, Config.isAdmin)
   }
 }
