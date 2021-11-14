@@ -1,14 +1,11 @@
 package br.com.astrosoft.produto.model
 
 import br.com.astrosoft.devolucao.model.NotaEntradaVO
-import br.com.astrosoft.produto.model.beans.Funcionario
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.Representante
-import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.framework.model.Config.appName
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.util.toSaciDate
+import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
 
 class QuerySaci : QueryDB(driver, url, username, password) {
@@ -39,6 +36,13 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     return query(sql, Loja::class) {
       addOptionalParameter("cnpj", cnpj)
     }.firstOrNull()
+  }
+
+  fun findProduto(filtro: FiltroProduto): List<Produto> {
+    val sql = "/sqlSaci/findProduto.sql"
+    return query(sql, Produto::class) {
+      addOptionalParameter("query", filtro.query)
+    }
   }
 
   fun updateUser(user: UserSaci) {

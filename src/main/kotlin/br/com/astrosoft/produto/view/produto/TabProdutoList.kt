@@ -2,8 +2,27 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.view.addColumnDouble
+import br.com.astrosoft.framework.view.addColumnInt
+import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.Produto
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoAltura
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoBarcode
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClName
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoComprimento
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoFornecedor
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLargura
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNcm
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPrecoCheio
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeName
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeNo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
 import com.github.mvysny.karibudsl.v10.textField
@@ -25,18 +44,33 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
     }
   }
 
-  override fun Grid<Produto>.gridPanel() { //setSelectionMode(MULTI)
+  override fun Grid<Produto>.gridPanel() {
     /**
-    addColumnButton(FILE_TABLE, "Notas", "Notas") { fornecedor ->
-    DlgNota(viewModel).showDialogNota(fornecedor) {
-    viewModel.updateView()
-    }
-    }
-     */
+    setSelectionMode(MULTI)
+     **/
+    produtoCodigo()
+    produtoGrade()
+    produtoBarcode()
+    produtoDescricao()
+    produtoVendno()
+    produtoFornecedor()
+    produtoTypeNo()
+    produtoTypeName()
+    produtoClno()
+    produtoClName()
+    produtoAltura()
+    produtoComprimento()
+    produtoLargura()
+    produtoPrecoCheio()
+    produtoNcm()
+  }
 
-    /***
-     * Colunas
-     */
+  override fun filtro(): FiltroProduto {
+    return FiltroProduto(edtFiltro.value ?: "")
+  }
+
+  override fun updateProdutos(produtos: List<Produto>) {
+    updateGrid(produtos)
   }
 
   override fun isAuthorized(user: IUser): Boolean {
