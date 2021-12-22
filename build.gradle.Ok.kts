@@ -1,52 +1,62 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import Build_gradle.Defs.kotlin_version
+import Build_gradle.Defs.vaadin10_version
+import Build_gradle.Defs.vaadinonkotlin_version
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins {
-  kotlin("jvm") version "1.6.10"
-  id("org.gretty") version "3.0.6"
-  war
-  id("com.vaadin") version "21.0.9"
+object Defs {
+  const val vaadinonkotlin_version = "1.1.1"
+  const val vaadin10_version = "14.7.4"
+  const val kotlin_version = "1.5.31"
+  const val vaadin_plugin = "0.14.6.0"
 }
 
-val karibudsl_version = "1.1.1"
-val vaadin_version = "21.0.9"
+plugins {
+  kotlin("jvm") version "1.5.31"
+  id("org.gretty") version "3.0.6"
+  war
+  id("com.vaadin") version "0.14.7.3"
+  id("com.google.cloud.tools.jib") version "3.0.0"
+}
 
 defaultTasks("clean", "build")
 
 repositories {
   mavenCentral()
   maven { setUrl("https://maven.vaadin.com/vaadin-addons") }
-  maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
 }
 
 gretty {
   contextPath = "/"
   servletContainer = "jetty9.4"
-  // managedClassReload = true // temporarily disabled because of https://github.com/gretty-gradle-plugin/gretty/issues/166
 }
 
-tasks.withType<Test> {
-  useJUnitPlatform()
-  testLogging {
-    // to see the exceptions of failed tests in Travis-CI console.
-    exceptionFormat = TestExceptionFormat.FULL
+val staging: Configuration by configurations.creating
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    jvmTarget = "1.8"
   }
 }
 
+group = "eng-produto"
+version = "1.0"
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 dependencies {
   // Karibu-DSL dependency
-  implementation("com.github.mvysny.karibudsl:karibu-dsl:$karibudsl_version")
+  implementation("com.github.mvysny.karibudsl:karibu-dsl:$vaadinonkotlin_version")
   implementation("com.github.mvysny.karibu-tools:karibu-tools:0.7")
 
-  // Vaadin
-  implementation("com.vaadin:vaadin-core:${vaadin_version}")
+  // Vaadin 14
+  implementation("com.vaadin:vaadin-core:${vaadin10_version}") {
+    // Webjars are only needed when running in Vaadin 13 compatibility mode
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+           "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+           "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+      .forEach { exclude(group = it) }
+  }
   providedCompile("javax.servlet:javax.servlet-api:3.1.0")
-
-  // logging
-  // currently we are logging through the SLF4J API to SLF4J-Simple. See src/main/resources/simplelogger.properties file for the logger configuration
-  implementation("org.slf4j:slf4j-simple:1.7.32")
-
-  implementation(kotlin("stdlib-jdk8"))
 
   // logging
   implementation("ch.qos.logback:logback-classic:1.2.3")
@@ -79,9 +89,9 @@ dependencies {
 
   //implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
 
-  //implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+  implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
 
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
   // https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core
   implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.12.1") {
     exclude(group = "com.lowagie", module = "itext")

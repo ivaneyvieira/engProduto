@@ -10,7 +10,7 @@ import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
 
-@Theme(value = Lumo::class, variant = Lumo.DARK)
+//@Theme(value = Lumo::class, variant = Lumo.DARK)
 @JsModule("./styles/shared-styles.js")
 class ProdutoLayout : MainLayout() {
   override fun Tabs.menuConfig() {
