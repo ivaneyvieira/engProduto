@@ -1,7 +1,4 @@
 import 'construct-style-sheets-polyfill';
-import { DomModule } from "@polymer/polymer/lib/elements/dom-module";
-import { stylesFromTemplate } from "@polymer/polymer/lib/utils/style-gather";
-import "@polymer/polymer/lib/elements/custom-style.js";
 
 const createLinkReferences = (css, target) => {
   // Unresolved urls are written as '@import url(text);' to the css
@@ -49,32 +46,9 @@ export const injectGlobalCss = (css, target, first) => {
     target.adoptedStyleSheets = [...target.adoptedStyleSheets, sheet];
   }
 };
-
-const addCssBlock = function (block, before = false) {
-  const tpl = document.createElement("template");
-  tpl.innerHTML = block;
-  document.head[before ? "insertBefore" : "appendChild"](
-    tpl.content,
-    document.head.firstChild
-  );
-};
-
-const addStyleInclude = (module, target) => {
-  addCssBlock(`<custom-style><style include="${module}"></style></custom-style>`, true);
-};
-
-const getStyleModule = (id) => {
-  const template = DomModule.import(id, "template");
-  const cssText =
-    template &&
-    stylesFromTemplate(template, "")
-      .map((style) => style.textContent)
-      .join(" ");
-  return cssText;
-};
-import stylesCss from 'themes/myapp/styles.css';
-import '@vaadin/vaadin-lumo-styles/color.js';
-import '@vaadin/vaadin-lumo-styles/typography.js';
+import stylesCss from 'themes/myapp/styles.css?inline';
+import { color } from '@vaadin/vaadin-lumo-styles';
+import { typography } from '@vaadin/vaadin-lumo-styles';
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.theme = window.Vaadin.theme || {};
@@ -121,16 +95,7 @@ export const applyTheme = (target) => {
     
     document['_vaadintheme_myapp_componentCss'] = true;
   }
-  // Lumo styles are injected into shadow roots.
-// For the document, we need to be compatible with flow-generated-imports and add missing <style> tags.
-const shadowRoot = (target instanceof ShadowRoot);
-if (shadowRoot) {
-injectGlobalCss(getStyleModule("lumo-color"), target, true);
-injectGlobalCss(getStyleModule("lumo-typography"), target, true);
-} else if (!document['_vaadinthemelumoimports_']) {
-addStyleInclude("lumo-color", target);
-addStyleInclude("lumo-typography", target);
-if(window.ShadyCSS) { window.ShadyCSS.CustomStyleInterface.processStyles(); }document['_vaadinthemelumoimports_'] = true;
-}
+  injectGlobalCss(color.cssText, target, true);
+injectGlobalCss(typography.cssText, target, true);
 
 }

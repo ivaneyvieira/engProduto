@@ -1,15 +1,14 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm") version "1.6.10"
   id("org.gretty") version "3.0.6"
   war
-  id("com.vaadin") version "21.0.9"
+  id("com.vaadin") version "22.0.2"
 }
 
 val karibudsl_version = "1.1.1"
-val vaadin_version = "21.0.9"
+val vaadin_version = "22.0.2"
 
 defaultTasks("clean", "build")
 
@@ -49,17 +48,17 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
 
   // logging
-  implementation("ch.qos.logback:logback-classic:1.2.3")
-  implementation("org.slf4j:slf4j-api:1.7.30")
+  implementation("ch.qos.logback:logback-classic:1.2.9")
+  implementation("org.slf4j:slf4j-api:1.7.32")
   implementation("org.sql2o:sql2o:1.6.0")
   implementation("org.simpleflatmapper:sfm-sql2o:8.2.3")
-  implementation("mysql:mysql-connector-java:5.1.48")
+  implementation("mysql:mysql-connector-java:8.0.25")
   implementation("net.sourceforge.jtds:jtds:1.3.1")
   implementation("org.imgscalr:imgscalr-lib:4.2")
   implementation("com.jcraft:jsch:0.1.55")
   implementation("org.cups4j:cups4j:0.7.8")
   // https://mvnrepository.com/artifact/org.jsoup/jsoup
-  implementation("org.jsoup:jsoup:1.13.1")
+  implementation("org.jsoup:jsoup:1.14.3")
 
   // logging
   implementation("org.vaadin.tatu:twincolselect:1.2.0")
@@ -74,8 +73,8 @@ dependencies {
   implementation("org.vaadin.haijian:exporter:3.0.1")
   implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.15.2")
   implementation("com.beust:klaxon:5.5")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
-  implementation("com.github.wmixvideo:nfe:3.0.58")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
+  implementation("com.github.wmixvideo:nfe:3.0.67")
 
   //implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
 
@@ -87,14 +86,14 @@ dependencies {
     exclude(group = "com.lowagie", module = "itext")
   }
   // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
-  implementation("net.sf.jasperreports:jasperreports:6.17.0")
-  implementation("net.sf.jasperreports:jasperreports-fonts:6.17.0")
+  implementation("net.sf.jasperreports:jasperreports:6.18.1")
+  implementation("net.sf.jasperreports:jasperreports-fonts:6.18.1")
   implementation("de.f0rce.signaturepad:signature-widget:2.0.0")
 
-  implementation("com.lowagie:itext:2.1.7")
-  implementation("javax.xml.bind:jaxb-api:2.3.1")
+  implementation("com.lowagie:itext:4.2.2")
+  implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   implementation("com.sun.mail:javax.mail:1.6.2")
-  implementation("com.sun.mail:gimap:1.6.2")
+  implementation("com.sun.mail:gimap:2.0.1")
 }
 
 vaadin {
