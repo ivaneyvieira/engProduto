@@ -41,7 +41,12 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun findProduto(filtro: FiltroProduto): List<Produto> {
     val sql = "/sqlSaci/findProduto.sql"
     return query(sql, Produto::class) {
-      addOptionalParameter("query", filtro.query)
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("nfno", filtro.nfno)
+      addOptionalParameter("nfse", filtro.nfse)
     }
   }
 
