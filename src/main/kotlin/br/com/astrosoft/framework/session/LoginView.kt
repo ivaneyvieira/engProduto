@@ -15,10 +15,10 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
 
-@Route("login")
 @PageTitle("Login")
 @BodySize(width = "100vw", height = "100vh")
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes")
+@Route("login")
 @Theme(value = Lumo::class, variant = Lumo.DARK)
 class LoginView : KComposite(), BeforeEnterObserver {
 
@@ -63,3 +63,4 @@ class LoginView : KComposite(), BeforeEnterObserver {
     this.additionalInformation = "Versão ${Config.version}"
   }
 }
+
