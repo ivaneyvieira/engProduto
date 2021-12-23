@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.produto.columns
 
 import br.com.astrosoft.framework.view.addColumnDouble
 import br.com.astrosoft.framework.view.addColumnInt
+import br.com.astrosoft.framework.view.addColumnLocalDate
 import br.com.astrosoft.framework.view.addColumnString
 import br.com.astrosoft.produto.model.beans.Produto
 import com.vaadin.flow.component.grid.Grid
@@ -13,6 +14,10 @@ object ProdutoViewColumns {
 
   fun Grid<Produto>.produtoPedido() = addColumnInt(Produto::pedido) {
     this.setHeader("Pedido")
+  }
+
+  fun Grid<Produto>.produtoData() = addColumnLocalDate(Produto::data) {
+    this.setHeader("Data")
   }
 
   fun Grid<Produto>.produtoNota() = addColumnString(Produto::nota) {

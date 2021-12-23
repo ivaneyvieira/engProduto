@@ -1,5 +1,4 @@
-DO @DT := 20201001;
-
+USE sqldados;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E (
@@ -10,8 +9,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
-  AND P.date > @DT
-  AND storeno IN (1, 2, 3, 4, 5, 6)
+  AND storeno IN (2, 3, 4, 5)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -25,8 +23,7 @@ SELECT P.storeno,
        nfse
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
-  AND P.date > @DT
-  AND storeno IN (1, 2, 3, 4, 5, 6)
+  AND storeno IN (2, 3, 4, 5)
 GROUP BY storeno, ordno;
 
 SELECT E.storeno                                       AS loja,
@@ -50,6 +47,10 @@ SELECT E.storeno                                       AS loja,
 FROM sqldados.eoprdf       AS E
   INNER JOIN sqldados.eord AS EO
 	       USING (storeno, ordno)
+  INNER JOIN  T_V
+		USING (storeno, ordno)
+  LEFT JOIN  T_E
+	       USING (storeno, ordno)
   LEFT JOIN  sqldados.stk  AS S
 	       USING (storeno, prdno, grade)
   LEFT JOIN  sqldados.prd  AS P
@@ -60,17 +61,12 @@ FROM sqldados.eoprdf       AS E
 	       ON T.no = P.typeno
   LEFT JOIN  sqldados.cl
 	       ON cl.no = P.clno
-  LEFT JOIN  T_E
-	       USING (storeno, ordno)
-  LEFT JOIN  T_V
-	       USING (storeno, ordno)
 WHERE (E.prdno = :prdno OR :prdno = '')
   AND (P.typeno = :typeno OR :typeno = 0)
   AND (P.clno = :clno OR P.deptno = :clno OR P.groupno = :clno OR :clno = 0)
   AND (P.mfno = :vendno OR :vendno = 0)
   AND (T_V.nfno = :nfno OR :nfno = 0)
   AND (T_V.nfse = :nfse OR :nfse = '')
-  AND E.date >= @DT
   AND T_E.numero IS NULL
 GROUP BY codigo, grade
 

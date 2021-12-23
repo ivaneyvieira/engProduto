@@ -1,5 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-
 plugins {
   kotlin("jvm") version "1.6.10"
   id("org.gretty") version "3.0.6"
@@ -7,8 +5,8 @@ plugins {
   id("com.vaadin") version "22.0.2"
 }
 
-val karibudsl_version = "1.1.1"
-val vaadin_version = "22.0.2"
+val karibudslVersion = "1.1.1"
+val vaadinVersion = "22.0.2"
 
 defaultTasks("clean", "build")
 
@@ -24,21 +22,13 @@ gretty {
   // managedClassReload = true // temporarily disabled because of https://github.com/gretty-gradle-plugin/gretty/issues/166
 }
 
-tasks.withType<Test> {
-  useJUnitPlatform()
-  testLogging {
-    // to see the exceptions of failed tests in Travis-CI console.
-    exceptionFormat = TestExceptionFormat.FULL
-  }
-}
-
 dependencies {
   // Karibu-DSL dependency
-  implementation("com.github.mvysny.karibudsl:karibu-dsl:$karibudsl_version")
+  implementation("com.github.mvysny.karibudsl:karibu-dsl:$karibudslVersion")
   implementation("com.github.mvysny.karibu-tools:karibu-tools:0.7")
 
   // Vaadin
-  implementation("com.vaadin:vaadin-core:${vaadin_version}")
+  implementation("com.vaadin:vaadin-core:${vaadinVersion}")
   providedCompile("javax.servlet:javax.servlet-api:3.1.0")
 
   // logging
