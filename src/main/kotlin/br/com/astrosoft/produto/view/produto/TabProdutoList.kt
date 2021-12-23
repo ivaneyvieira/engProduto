@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCliente
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoData
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEmpno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEstSaci
@@ -74,6 +75,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
 
     produtoLoja()
     produtoPedido()
+    produtoData()
     produtoNota()
     produtoTipo()
     produtoCliente()
