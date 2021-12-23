@@ -10,6 +10,7 @@ SELECT P.storeno,
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5)
+  AND nfse = '1'
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -47,8 +48,8 @@ SELECT E.storeno                                       AS loja,
 FROM sqldados.eoprdf       AS E
   INNER JOIN sqldados.eord AS EO
 	       USING (storeno, ordno)
-  INNER JOIN  T_V
-		USING (storeno, ordno)
+  INNER JOIN T_V
+	       USING (storeno, ordno)
   LEFT JOIN  T_E
 	       USING (storeno, ordno)
   LEFT JOIN  sqldados.stk  AS S
