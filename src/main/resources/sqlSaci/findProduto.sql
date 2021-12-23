@@ -69,5 +69,6 @@ WHERE (E.prdno = :prdno OR :prdno = '')
   AND (T_V.nfno = :nfno OR :nfno = 0)
   AND (T_V.nfse = :nfse OR :nfse = '')
   AND T_E.numero IS NULL
+  AND EO.date >= 20190101
 GROUP BY codigo, grade
 
