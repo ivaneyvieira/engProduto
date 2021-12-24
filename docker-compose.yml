@@ -9,7 +9,7 @@ services:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
     volumes:
-      - ./build/libs/produto-1.0.war:/usr/local/tomcat/webapps/engProduto.war
+      - ./build/libs/produto.war:/usr/local/tomcat/webapps/engProduto.war
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
