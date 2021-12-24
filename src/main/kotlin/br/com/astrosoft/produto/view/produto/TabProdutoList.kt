@@ -5,20 +5,19 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.Produto
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCliente
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoAltura
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoBarcode
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClName
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoData
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoComprimento
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEmpno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEstSaci
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoFornecedor
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLoja
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNota
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPedido
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoQuant
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoSaldo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTipo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLargura
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNcm
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPrecoCheio
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeName
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeNo
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
@@ -36,10 +35,9 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
-  private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("Produto") {
+    edtProduto = textField("ProdutoRetiraEntrega") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -63,32 +61,24 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
         viewModel.updateView()
       }
     }
-    edtNota = textField("Nota") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
   }
 
   override fun Grid<Produto>.gridPanel() {
-
-    produtoLoja()
-    produtoPedido()
-    produtoData()
-    produtoNota()
-    produtoTipo()
-    produtoCliente()
-    produtoEmpno()
     produtoCodigo()
-    produtoDescricao()
     produtoGrade()
+    produtoBarcode()
+    produtoDescricao()
     produtoVendno()
+    produtoFornecedor()
     produtoTypeNo()
+    produtoTypeName()
     produtoClno()
-    produtoQuant()
-    produtoEstSaci()
-    produtoSaldo()
+    produtoClName()
+    produtoAltura()
+    produtoComprimento()
+    produtoLargura()
+    produtoPrecoCheio()
+    produtoNcm()
   }
 
   override fun filtro(): FiltroProduto {
@@ -96,8 +86,9 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
-                         nota = edtNota.value ?: "")
+                         nota = "")
   }
+
 
   override fun updateProdutos(produtos: List<Produto>) {
     updateGrid(produtos)

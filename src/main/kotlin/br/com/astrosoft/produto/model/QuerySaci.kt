@@ -38,15 +38,25 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }.firstOrNull()
   }
 
-  fun findProduto(filtro: FiltroProduto): List<Produto> {
-    val sql = "/sqlSaci/findProduto.sql"
-    return query(sql, Produto::class) {
+  fun findRetiraEntrega(filtro: FiltroProduto): List<ProdutoRetiraEntrega> {
+    val sql = "/sqlSaci/findRetiraEntrega.sql"
+    return query(sql, ProdutoRetiraEntrega::class) {
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
       addOptionalParameter("vendno", filtro.vendno)
       addOptionalParameter("nfno", filtro.nfno)
       addOptionalParameter("nfse", filtro.nfse)
+    }
+  }
+
+  fun findProduto(filtro: FiltroProduto): List<Produto> {
+    val sql = "/sqlSaci/findProdutos.sql"
+    return query(sql, Produto::class) {
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("vendno", filtro.vendno)
     }
   }
 
