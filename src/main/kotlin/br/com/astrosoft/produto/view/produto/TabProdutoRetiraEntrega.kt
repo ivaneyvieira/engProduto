@@ -5,22 +5,22 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoCliente
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoClno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoCodigo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoData
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoDescricao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoEmpno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoEstSaci
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoGrade
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoLoja
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoNota
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoPedido
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoQuant
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoSaldo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoTipo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoTypeNo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoVendno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCliente
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaClno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCodigo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaData
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaDescricao
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEmpno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEstSaci
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaGrade
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaLoja
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaNota
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaPedido
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaQuant
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaSaldo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaTipo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaTypeNo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
 import com.github.mvysny.karibudsl.v10.integerField
@@ -72,22 +72,22 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override fun Grid<ProdutoRetiraEntrega>.gridPanel() {
-    produtoLoja()
-    produtoPedido()
-    produtoData()
-    produtoNota()
-    produtoTipo()
-    produtoCliente()
-    produtoEmpno()
-    produtoCodigo()
-    produtoDescricao()
-    produtoGrade()
-    produtoVendno()
-    produtoTypeNo()
-    produtoClno()
-    produtoQuant()
-    produtoEstSaci()
-    produtoSaldo()
+    retiraEntregaLoja()
+    retiraEntregaPedido()
+    retiraEntregaData()
+    retiraEntregaNota()
+    retiraEntregaTipo()
+    retiraEntregaCliente()
+    retiraEntregaEmpno()
+    retiraEntregaCodigo()
+    retiraEntregaDescricao()
+    retiraEntregaGrade()
+    retiraEntregaVendno()
+    retiraEntregaTypeNo()
+    retiraEntregaClno()
+    retiraEntregaQuant()
+    retiraEntregaEstSaci()
+    retiraEntregaSaldo()
   }
 
   override fun filtro(): FiltroProduto {
@@ -108,7 +108,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override val label: String
-    get() = "ProdutoRetiraEntrega"
+    get() = "Retira/Entrega"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -50,6 +50,16 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findProduto(filtro: FiltroProduto): List<Produto> {
+    val sql = "/sqlSaci/findProdutos.sql"
+    return query(sql, Produto::class) {
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("vendno", filtro.vendno)
+    }
+  }
+
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {

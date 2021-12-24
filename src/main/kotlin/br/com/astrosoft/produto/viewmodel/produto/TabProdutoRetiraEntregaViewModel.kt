@@ -12,7 +12,7 @@ class TabProdutoRetiraEntregaViewModel(val viewModel: ProdutoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabProdutoList
+    get() = viewModel.view.tabProdutoRetiraEntrega
 }
 
 interface ITabProdutoRetiraEntrega : ITabView{
