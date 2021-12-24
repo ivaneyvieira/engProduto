@@ -3,26 +3,26 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
-import br.com.astrosoft.produto.model.beans.Produto
+import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCliente
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoData
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEmpno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoEstSaci
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLoja
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNota
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPedido
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoQuant
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoSaldo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTipo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeNo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoVendno
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoCliente
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoClno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoCodigo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoData
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoDescricao
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoEmpno
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoEstSaci
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoGrade
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoLoja
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoNota
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoPedido
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoQuant
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoSaldo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoTipo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoTypeNo
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.produtoVendno
+import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
+import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -31,7 +31,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Produto>(Produto::class), ITabProdutoList {
+class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) : TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
   private lateinit var edtProduto: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
@@ -39,7 +39,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("Produto") {
+    edtProduto = textField("ProdutoRetiraEntrega") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -71,8 +71,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
     }
   }
 
-  override fun Grid<Produto>.gridPanel() {
-
+  override fun Grid<ProdutoRetiraEntrega>.gridPanel() {
     produtoLoja()
     produtoPedido()
     produtoData()
@@ -99,7 +98,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
                          nota = edtNota.value ?: "")
   }
 
-  override fun updateProdutos(produtos: List<Produto>) {
+  override fun updateProdutos(produtos: List<ProdutoRetiraEntrega>) {
     updateGrid(produtos)
   }
 
@@ -109,7 +108,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "ProdutoRetiraEntrega"
 
   override fun updateComponent() {
     viewModel.updateView()

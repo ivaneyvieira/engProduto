@@ -12,7 +12,7 @@ import com.vaadin.flow.component.tabs.Tabs
 @JsModule("./styles/shared-styles.js")
 class ProdutoLayout : MainLayout() {
   override fun Tabs.menuConfig() {
-    menuRoute(FORM, "Produto", ProdutoView::class)
+    menuRoute(FORM, "ProdutoRetiraEntrega", ProdutoView::class)
     menuRoute(USER, "Usuário", UsuarioView::class, Config.isAdmin)
   }
 }

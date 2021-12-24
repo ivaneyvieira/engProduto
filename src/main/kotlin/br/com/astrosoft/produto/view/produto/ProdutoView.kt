@@ -15,7 +15,7 @@ import com.vaadin.flow.router.Route
 @CssImport("./styles/gridTotal.css")
 class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val viewModel: ProdutoViewModel = ProdutoViewModel(this)
-  override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
+  override val tabProdutoList = TabProdutoRetiraEntrega(viewModel.tabProdutoListViewModel)
 
   override fun isAccept(user: IUser): Boolean {
     val userSaci = user as? UserSaci ?: return false

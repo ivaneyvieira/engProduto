@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class Produto(
+class ProdutoRetiraEntrega(
   val loja: Int,
   val pedido: Int,
   val data: LocalDate,
@@ -23,11 +23,11 @@ class Produto(
   val typeName: String,
   val clno: String,
   val clname: String,
-             ) {
+                          ) {
 
   companion object {
-    fun find(filtro: FiltroProduto): List<Produto> {
-      return saci.findProduto(filtro)
+    fun find(filtro: FiltroProduto): List<ProdutoRetiraEntrega> {
+      return saci.findRetiraEntrega(filtro)
     }
   }
 }

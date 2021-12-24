@@ -61,7 +61,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           binder.bind(this, UserSaci::storeno.name)
         }
         formLayout {
-          h4("Produto") {
+          h4("ProdutoRetiraEntrega") {
             colspan = 2
           }
           checkBox("Produtos") {
