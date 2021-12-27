@@ -53,7 +53,7 @@ FROM sqldados.eoprdf       AS E
   LEFT JOIN  T_E
 	       USING (storeno, ordno)
   LEFT JOIN  sqldados.stk  AS S
-	       USING (storeno, prdno, grade)
+	       ON E.prdno = S.prdno AND E.grade = S.grade AND S.storeno = 4
   LEFT JOIN  sqldados.prd  AS P
 	       ON E.prdno = P.no
   LEFT JOIN  sqldados.vend AS F

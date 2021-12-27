@@ -65,15 +65,12 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
 
   override fun Grid<Produto>.gridPanel() {
     produtoCodigo()
-    produtoGrade()
     produtoBarcode()
     produtoDescricao()
+    produtoGrade()
     produtoVendno()
-    produtoFornecedor()
     produtoTypeNo()
-    produtoTypeName()
     produtoClno()
-    produtoClName()
     produtoAltura()
     produtoComprimento()
     produtoLargura()
