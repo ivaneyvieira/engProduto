@@ -60,6 +60,13 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findGrades(codigo : String): List<PrdGrade>{
+    val sql = "/sqlSaci/findGrades.sql"
+    return query(sql, PrdGrade::class) {
+      addOptionalParameter("codigo", codigo)
+    }
+  }
+
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {

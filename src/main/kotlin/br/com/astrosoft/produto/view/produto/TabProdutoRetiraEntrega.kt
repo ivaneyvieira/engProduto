@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.view.addColumnInt
+import br.com.astrosoft.framework.view.addColumnString
 import br.com.astrosoft.produto.model.beans.FiltroProduto
+import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCliente
@@ -23,15 +26,20 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
+import com.github.mvysny.karibudsl.v10.gridContextMenu
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.provider.SortDirection
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) : TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
+class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
+        TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
   private lateinit var edtProduto: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
@@ -88,6 +96,29 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
     retiraEntregaQuant()
     retiraEntregaEstSaci()
     retiraEntregaSaldo()
+
+    this.gridContextMenu {
+      val gridGrade = Grid(PrdGrade::class.java, false).apply {
+        this.addColumnString(PrdGrade::grade) {
+          this.setHeader("Grade")
+        }
+        this.addColumnInt(PrdGrade::saldo) {
+          this.setHeader("Saldo")
+        }
+        setWidth("200px")
+        setHeight("200px")
+      }
+
+      this.add(gridGrade)
+
+      this.setDynamicContentHandler { prd ->
+        viewModel.findGrade(prd) { itens ->
+          gridGrade.setItems(itens)
+          gridGrade.sort(mutableListOf(GridSortOrder(gridGrade.getColumnBy(PrdGrade::saldo), SortDirection.ASCENDING)))
+        }
+        return@setDynamicContentHandler true
+      }
+    }
   }
 
   override fun filtro(): FiltroProduto {

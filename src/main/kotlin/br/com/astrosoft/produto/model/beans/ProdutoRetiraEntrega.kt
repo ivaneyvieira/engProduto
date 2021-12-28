@@ -24,6 +24,9 @@ class ProdutoRetiraEntrega(
   val clno: String,
   val clname: String,
                           ) {
+  fun findGrades(): List<PrdGrade> {
+    return saci.findGrades(codigo)
+  }
 
   companion object {
     fun find(filtro: FiltroProduto): List<ProdutoRetiraEntrega> {
