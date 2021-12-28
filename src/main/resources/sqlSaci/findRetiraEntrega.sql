@@ -10,6 +10,7 @@ SELECT P.storeno,
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5)
+  AND date >= 20190101
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -25,6 +26,7 @@ FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5)
   AND nfse = '1'
+  AND date >= 20190101
 GROUP BY storeno, ordno;
 
 SELECT E.storeno                                       AS loja,
