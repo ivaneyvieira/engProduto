@@ -44,21 +44,24 @@ SELECT E.storeno                                       AS loja,
        P.typeno                                        AS typeno,
        IFNULL(T.name, '')                              AS typeName,
        CAST(LPAD(P.clno, 6, '0') AS CHAR)              AS clno,
-       IFNULL(cl.name, '')                             AS clname
-FROM sqldados.eoprdf       AS E
-  INNER JOIN sqldados.eord AS EO
+       IFNULL(cl.name, '')                             AS clname,
+       MID(IFNULL(L.localizacao, ''), 1, 4)            AS localizacao
+FROM sqldados.eoprdf         AS E
+  INNER JOIN sqldados.eord   AS EO
 	       USING (storeno, ordno)
   INNER JOIN T_V
 	       USING (storeno, ordno)
   LEFT JOIN  T_E
 	       USING (storeno, ordno)
-  LEFT JOIN  sqldados.stk  AS S
+  LEFT JOIN  sqldados.stk    AS S
 	       ON E.prdno = S.prdno AND E.grade = S.grade AND S.storeno = 4
-  LEFT JOIN  sqldados.prd  AS P
+  LEFT JOIN  sqldados.prdloc AS L
+	       ON L.prdno = S.prdno AND L.grade = E.grade AND L.storeno = 4
+  LEFT JOIN  sqldados.prd    AS P
 	       ON E.prdno = P.no
-  LEFT JOIN  sqldados.vend AS F
+  LEFT JOIN  sqldados.vend   AS F
 	       ON F.no = P.mfno
-  LEFT JOIN  sqldados.type AS T
+  LEFT JOIN  sqldados.type   AS T
 	       ON T.no = P.typeno
   LEFT JOIN  sqldados.cl
 	       ON cl.no = P.clno
@@ -70,5 +73,6 @@ WHERE (E.prdno = :prdno OR :prdno = '')
   AND (T_V.nfse = :nfse OR :nfse = '')
   AND T_E.numero IS NULL
   AND EO.date >= 20190101
+  AND (L.localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
 GROUP BY codigo, grade
 

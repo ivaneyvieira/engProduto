@@ -48,6 +48,10 @@ object ProdutoRetiraEntregaViewColumns {
     this.setHeader("Grade")
   }
 
+  fun Grid<ProdutoRetiraEntrega>.retiraEntregaLocalizacao() = addColumnString(ProdutoRetiraEntrega::localizacao) {
+    this.setHeader("Loc")
+  }
+
   fun Grid<ProdutoRetiraEntrega>.retiraEntregaQuant() = addColumnInt(ProdutoRetiraEntrega::quant) {
     this.setHeader("Qntd")
   }

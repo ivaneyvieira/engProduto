@@ -15,6 +15,10 @@ object ProdutoViewColumns {
     this.setHeader("Grade")
   }
 
+  fun Grid<Produto>.produtoLocalizacao() = addColumnString(Produto::localizacao) {
+    this.setHeader("Loc")
+  }
+
   fun Grid<Produto>.produtoBarcode() = addColumnString(Produto::barcode) {
     this.setHeader("Código de Barras")
   }

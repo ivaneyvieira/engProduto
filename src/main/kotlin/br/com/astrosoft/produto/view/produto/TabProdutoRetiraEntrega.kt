@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.view.addColumnInt
+import br.com.astrosoft.framework.view.addColumnString
 import br.com.astrosoft.produto.model.beans.FiltroProduto
+import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCliente
@@ -13,6 +16,7 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEmpno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEstSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaGrade
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaLocalizacao
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaLoja
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaNota
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaPedido
@@ -23,23 +27,29 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
+import com.github.mvysny.karibudsl.v10.gridContextMenu
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.provider.SortDirection
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) : TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
+class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
+        TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
   private lateinit var edtProduto: TextField
+  private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("ProdutoRetiraEntrega") {
+    edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -58,6 +68,12 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
       }
     }
     edtFornecedor = integerField("Fornecedor") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtLocalizacao = textField("Localização") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -82,12 +98,36 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
     retiraEntregaCodigo()
     retiraEntregaDescricao()
     retiraEntregaGrade()
+    retiraEntregaLocalizacao()
     retiraEntregaVendno()
     retiraEntregaTypeNo()
     retiraEntregaClno()
     retiraEntregaQuant()
     retiraEntregaEstSaci()
     retiraEntregaSaldo()
+
+    this.gridContextMenu {
+      val gridGrade = Grid(PrdGrade::class.java, false).apply {
+        this.addColumnString(PrdGrade::grade) {
+          this.setHeader("Grade")
+        }
+        this.addColumnInt(PrdGrade::saldo) {
+          this.setHeader("Saldo")
+        }
+        setWidth("200px")
+        setHeight("200px")
+      }
+
+      this.add(gridGrade)
+
+      this.setDynamicContentHandler { prd ->
+        viewModel.findGrade(prd) { itens ->
+          gridGrade.setItems(itens)
+          gridGrade.sort(mutableListOf(GridSortOrder(gridGrade.getColumnBy(PrdGrade::saldo), SortDirection.ASCENDING)))
+        }
+        return@setDynamicContentHandler true
+      }
+    }
   }
 
   override fun filtro(): FiltroProduto {
@@ -95,6 +135,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
+                         localizacao = edtLocalizacao.value ?: "",
                          nota = edtNota.value ?: "")
   }
 

@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoD
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoFornecedor
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLargura
+import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLocalizacao
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNcm
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPrecoCheio
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeName
@@ -32,12 +33,13 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Produto>(Produto::class), ITabProdutoList {
   private lateinit var edtProduto: TextField
+  private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("ProdutoRetiraEntrega") {
+    edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -61,6 +63,12 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
         viewModel.updateView()
       }
     }
+    edtLocalizacao = textField("Localização") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun Grid<Produto>.gridPanel() {
@@ -68,6 +76,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
     produtoBarcode()
     produtoDescricao()
     produtoGrade()
+    produtoLocalizacao()
     produtoVendno()
     produtoTypeNo()
     produtoClno()
@@ -83,6 +92,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
+                         localizacao = edtLocalizacao.value ?: "",
                          nota = "")
   }
 

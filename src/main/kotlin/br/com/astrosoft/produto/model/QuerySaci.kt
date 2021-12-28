@@ -45,6 +45,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
       addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("localizacao", filtro.localizacao)
       addOptionalParameter("nfno", filtro.nfno)
       addOptionalParameter("nfse", filtro.nfse)
     }
@@ -57,6 +58,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
       addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("localizacao", filtro.localizacao)
+    }
+  }
+
+  fun findGrades(codigo : String): List<PrdGrade>{
+    val sql = "/sqlSaci/findGrades.sql"
+    return query(sql, PrdGrade::class) {
+      addOptionalParameter("codigo", codigo)
     }
   }
 
