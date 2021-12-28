@@ -16,6 +16,7 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEmpno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaEstSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaGrade
+import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaLocalizacao
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaLoja
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaNota
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaPedido
@@ -41,13 +42,14 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
         TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
   private lateinit var edtProduto: TextField
+  private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("ProdutoRetiraEntrega") {
+    edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -66,6 +68,12 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
       }
     }
     edtFornecedor = integerField("Fornecedor") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtLocalizacao = textField("Localização") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -90,6 +98,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
     retiraEntregaCodigo()
     retiraEntregaDescricao()
     retiraEntregaGrade()
+    retiraEntregaLocalizacao()
     retiraEntregaVendno()
     retiraEntregaTypeNo()
     retiraEntregaClno()
@@ -126,6 +135,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
+                         localizacao = edtLocalizacao.value ?: "",
                          nota = edtNota.value ?: "")
   }
 

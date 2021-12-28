@@ -18,6 +18,7 @@ class Produto(
   val largura: Int,
   val precoCheio: Double,
   val ncm: String,
+  val localizacao: String,
              ) {
 
   companion object {

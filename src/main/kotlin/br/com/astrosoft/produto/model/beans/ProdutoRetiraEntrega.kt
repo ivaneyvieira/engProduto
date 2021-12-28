@@ -23,6 +23,7 @@ class ProdutoRetiraEntrega(
   val typeName: String,
   val clno: String,
   val clname: String,
+  val localizacao: String,
                           ) {
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo)
@@ -35,7 +36,12 @@ class ProdutoRetiraEntrega(
   }
 }
 
-data class FiltroProduto(val codigo: String, val typeno: Int, val clno: Int, val vendno: Int, val nota: String) {
+data class FiltroProduto(val codigo: String,
+                         val typeno: Int,
+                         val clno: Int,
+                         val vendno: Int,
+                         val localizacao: String,
+                         val nota: String) {
   val prdno
     get() = if (codigo == "") "" else codigo.lpad(16, " ")
   val nfno
