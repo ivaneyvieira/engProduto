@@ -62,6 +62,17 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findProdutoReserva(filtro: FiltroProduto): List<ProdutoReserva> {
+    val sql = "/sqlSaci/findPedidosReservados.sql"
+    return query(sql, ProdutoReserva::class) {
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("localizacao", filtro.localizacao)
+    }
+  }
+
   fun findGrades(codigo : String): List<PrdGrade>{
     val sql = "/sqlSaci/findGrades.sql"
     return query(sql, PrdGrade::class) {
