@@ -44,11 +44,18 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
+  private lateinit var edtLoja: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
+    edtLoja = integerField("Loja") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -131,7 +138,8 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(codigo = edtProduto.value ?: "",
+    return FiltroProduto(loja = edtLoja.value ?: 0,
+                         codigo = edtProduto.value ?: "",
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,

@@ -1,5 +1,5 @@
-SELECT O.storeno                                       AS loja,
-       O.ordno                                         AS pedido,
+SELECT E.storeno                                       AS loja,
+       E.ordno                                         AS pedido,
        CAST(O.date AS DATE)                            AS data,
        O.custno                                        AS cliente,
        P.mfno                                          AS vendno,
@@ -38,4 +38,5 @@ WHERE O.status NOT IN (4, 5)
   AND (P.clno = :clno OR P.deptno = :clno OR P.groupno = :clno OR :clno = 0)
   AND (P.mfno = :vendno OR :vendno = 0)
   AND (L.localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND (E.storeno = :loja OR :loja = 0)
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade

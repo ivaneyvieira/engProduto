@@ -76,5 +76,6 @@ WHERE (E.prdno = :prdno OR :prdno = '')
   AND T_E.numero IS NULL
   AND EO.date >= 20190101
   AND (L.localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND (E.storeno = :loja OR :loja = 0)
 GROUP BY codigo, grade
 
