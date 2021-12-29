@@ -38,13 +38,13 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
   private lateinit var edtFornecedor: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtProduto = textField("Produto") {
+    edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-    edtLoja = integerField("Loja") {
+    edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
