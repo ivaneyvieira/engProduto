@@ -85,6 +85,8 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
   }
 
   override fun Grid<ProdutoReserva>.gridPanel() {
+    setSelectionMode(Grid.SelectionMode.MULTI)
+
     produtoReservaLoja()
     produtoReservaPedido()
     produtoReservaData()

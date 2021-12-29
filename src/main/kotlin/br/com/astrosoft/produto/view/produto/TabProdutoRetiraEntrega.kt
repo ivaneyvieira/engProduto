@@ -90,8 +90,6 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override fun Grid<ProdutoRetiraEntrega>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
-
     retiraEntregaLoja()
     retiraEntregaPedido()
     retiraEntregaData()
