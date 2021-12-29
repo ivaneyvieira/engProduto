@@ -148,7 +148,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoRetiraEntrega == true
   }
 
   override val label: String

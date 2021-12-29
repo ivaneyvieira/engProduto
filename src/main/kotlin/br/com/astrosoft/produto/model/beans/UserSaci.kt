@@ -15,6 +15,8 @@ class UserSaci : IUser {
   var impressora: String? = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
+  var produtoReserva by DelegateAuthorized(2)
+  var produtoRetiraEntrega by DelegateAuthorized(3)
 
   val fornecedor
     get() = produtoList

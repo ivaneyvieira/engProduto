@@ -122,7 +122,7 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoReserva == true
   }
 
   override val label: String
