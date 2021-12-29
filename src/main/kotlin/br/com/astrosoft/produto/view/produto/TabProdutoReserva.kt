@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
+import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaClno
@@ -20,7 +21,9 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produ
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoReserva
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoReservaViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -74,6 +77,11 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
         viewModel.updateView()
       }
     }
+    button("Expira pedido"){
+      onLeftClick {
+        viewModel.expiraPedidosSelecionados()
+      }
+    }
   }
 
   override fun Grid<ProdutoReserva>.gridPanel() {
@@ -104,6 +112,10 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
 
   override fun updateProdutos(produtos: List<ProdutoReserva>) {
     updateGrid(produtos)
+  }
+
+  override fun pedidosSelecionado(): List<Pedido> {
+    return itensSelecionados().map { it.pedido() }.distinct()
   }
 
   override fun isAuthorized(user: IUser): Boolean {

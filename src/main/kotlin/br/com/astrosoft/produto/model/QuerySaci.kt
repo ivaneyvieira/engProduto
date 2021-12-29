@@ -141,6 +141,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     })
   }
 
+  fun expira(pedido: Pedido) {
+    val sql = "/sqlSaci/expiraPedido.sql"
+    script(sql){
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.pedido)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     internal val driver = db.driver
