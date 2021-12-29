@@ -36,7 +36,8 @@ class ProdutoRetiraEntrega(
   }
 }
 
-data class FiltroProduto(val codigo: String,
+data class FiltroProduto(val loja: Int,
+                         val codigo: String,
                          val typeno: Int,
                          val clno: Int,
                          val vendno: Int,

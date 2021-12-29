@@ -41,6 +41,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun findRetiraEntrega(filtro: FiltroProduto): List<ProdutoRetiraEntrega> {
     val sql = "/sqlSaci/findRetiraEntrega.sql"
     return query(sql, ProdutoRetiraEntrega::class) {
+      addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
@@ -65,6 +66,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun findProdutoReserva(filtro: FiltroProduto): List<ProdutoReserva> {
     val sql = "/sqlSaci/findPedidosReservados.sql"
     return query(sql, ProdutoReserva::class) {
+      addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
@@ -137,6 +139,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
         q.addOptionalParameter("xmlDadosAdicionais", nota.xmlDadosAdicionais)
       }
     })
+  }
+
+  fun expira(pedido: Pedido) {
+    val sql = "/sqlSaci/expiraPedido.sql"
+    script(sql){
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.pedido)
+    }
   }
 
   companion object {

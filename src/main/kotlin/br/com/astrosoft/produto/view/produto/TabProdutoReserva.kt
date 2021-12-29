@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
-import br.com.astrosoft.produto.model.beans.Produto
+import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaClno
@@ -19,25 +19,11 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produ
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaSaldoSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaTypeNo
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaVendno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoAltura
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoBarcode
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClName
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoComprimento
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoFornecedor
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLargura
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLocalizacao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNcm
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPrecoCheio
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeName
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeNo
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoReserva
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoReservaViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -45,15 +31,22 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) : TabPanelGrid<ProdutoReserva>(ProdutoReserva::class), 
-        ITabProdutoReserva {
+class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
+        TabPanelGrid<ProdutoReserva>(ProdutoReserva::class), ITabProdutoReserva {
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
+  private lateinit var edtLoja: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
+    edtLoja = integerField("Loja") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -84,9 +77,16 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) : TabPanelGri
         viewModel.updateView()
       }
     }
+    button("Expira pedido"){
+      onLeftClick {
+        viewModel.expiraPedidosSelecionados()
+      }
+    }
   }
 
   override fun Grid<ProdutoReserva>.gridPanel() {
+    setSelectionMode(Grid.SelectionMode.MULTI)
+
     produtoReservaLoja()
     produtoReservaPedido()
     produtoReservaData()
@@ -103,7 +103,8 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) : TabPanelGri
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(codigo = edtProduto.value ?: "",
+    return FiltroProduto(loja = edtLoja.value ?: 0,
+                         codigo = edtProduto.value ?: "",
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
@@ -111,14 +112,17 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) : TabPanelGri
                          nota = "")
   }
 
-
   override fun updateProdutos(produtos: List<ProdutoReserva>) {
     updateGrid(produtos)
   }
 
+  override fun pedidosSelecionado(): List<Pedido> {
+    return itensSelecionados().map { it.pedido() }.distinct()
+  }
+
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoReserva == true
   }
 
   override val label: String

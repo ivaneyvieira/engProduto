@@ -7,18 +7,15 @@ import br.com.astrosoft.produto.model.beans.Produto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoAltura
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoBarcode
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClName
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoClno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoCodigo
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoComprimento
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoDescricao
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoFornecedor
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoGrade
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLargura
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoLocalizacao
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoNcm
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoPrecoCheio
-import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeName
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoTypeNo
 import br.com.astrosoft.produto.view.produto.columns.ProdutoViewColumns.produtoVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
@@ -88,14 +85,14 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(codigo = edtProduto.value ?: "",
+    return FiltroProduto(loja = 0,
+                         codigo = edtProduto.value ?: "",
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
                          localizacao = edtLocalizacao.value ?: "",
                          nota = "")
   }
-
 
   override fun updateProdutos(produtos: List<Produto>) {
     updateGrid(produtos)

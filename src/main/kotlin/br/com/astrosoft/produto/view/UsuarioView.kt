@@ -61,12 +61,20 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           binder.bind(this, UserSaci::storeno.name)
         }
         formLayout {
-          h4("ProdutoRetiraEntrega") {
+          h4("Produto") {
             colspan = 2
           }
           checkBox("Produtos") {
             isReadOnly = readOnly
             binder.bind(this, UserSaci::produtoList.name)
+          }
+          checkBox("Retira/Entrega") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::produtoRetiraEntrega.name)
+          }
+          checkBox("Reserva") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::produtoReserva.name)
           }
         }
       }

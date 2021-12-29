@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnInt
 import br.com.astrosoft.framework.view.addColumnString
-import br.com.astrosoft.produto.model.beans.FiltroProduto
-import br.com.astrosoft.produto.model.beans.PrdGrade
-import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCliente
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaClno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCodigo
@@ -27,9 +24,7 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
-import com.github.mvysny.karibudsl.v10.gridContextMenu
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
@@ -44,11 +39,18 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
+  private lateinit var edtLoja: IntegerField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
+    edtLoja = integerField("Loja") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtProduto = textField("Produto") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -131,7 +133,8 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(codigo = edtProduto.value ?: "",
+    return FiltroProduto(loja = edtLoja.value ?: 0,
+                         codigo = edtProduto.value ?: "",
                          typeno = edtTipo.value ?: 0,
                          clno = edtCentroLucro.value ?: 0,
                          vendno = edtFornecedor.value ?: 0,
@@ -145,7 +148,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoRetiraEntrega == true
   }
 
   override val label: String

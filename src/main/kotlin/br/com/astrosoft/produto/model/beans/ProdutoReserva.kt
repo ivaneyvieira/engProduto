@@ -21,7 +21,9 @@ class ProdutoReserva(
   val clno: String,
   val clname: String,
   val localizacao: String,
-                    ){
+                    ) {
+  fun pedido(): Pedido = Pedido(loja, pedido, data, cliente, empno)
+
   companion object {
     fun find(filtro: FiltroProduto): List<ProdutoReserva> {
       return saci.findProdutoReserva(filtro)
