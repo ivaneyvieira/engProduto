@@ -47,7 +47,8 @@ SELECT E.storeno                                       AS loja,
        IFNULL(T.name, '')                              AS typeName,
        CAST(LPAD(P.clno, 6, '0') AS CHAR)              AS clno,
        IFNULL(cl.name, '')                             AS clname,
-       MID(IFNULL(L.localizacao, ''), 1, 4)            AS localizacao
+       MID(IFNULL(L.localizacao, ''), 1, 4)            AS localizacao,
+       E.remarks                                       AS gradeAlternativa
 FROM sqldados.eoprdf         AS E
   INNER JOIN sqldados.eord   AS EO
 	       USING (storeno, ordno)
@@ -77,5 +78,6 @@ WHERE (E.prdno = :prdno OR :prdno = '')
   AND EO.date >= 20190101
   AND (L.localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (E.storeno = :loja OR :loja = 0)
+  AND (E.remarks != '' OR :isEdit = 'N')
 GROUP BY codigo, grade
 

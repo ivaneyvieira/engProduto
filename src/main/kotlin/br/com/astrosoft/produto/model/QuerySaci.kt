@@ -49,6 +49,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("localizacao", filtro.localizacao)
       addOptionalParameter("nfno", filtro.nfno)
       addOptionalParameter("nfse", filtro.nfse)
+      addOptionalParameter("isEdit", if (filtro.isEdit) "S" else "N")
     }
   }
 
@@ -75,7 +76,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findGrades(codigo : String): List<PrdGrade>{
+  fun findGrades(codigo: String): List<PrdGrade> {
     val sql = "/sqlSaci/findGrades.sql"
     return query(sql, PrdGrade::class) {
       addOptionalParameter("codigo", codigo)
@@ -143,9 +144,20 @@ class QuerySaci : QueryDB(driver, url, username, password) {
 
   fun expira(pedido: Pedido) {
     val sql = "/sqlSaci/expiraPedido.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("loja", pedido.loja)
       addOptionalParameter("pedido", pedido.pedido)
+    }
+  }
+
+  fun gravaGrade(entrega: ProdutoRetiraEntrega) {
+    val sql = "/sqlSaci/salvaGrade.sql"
+    script(sql) {
+      addOptionalParameter("storeno", entrega.loja)
+      addOptionalParameter("ordno", entrega.pedido)
+      addOptionalParameter("codigo", entrega.codigo)
+      addOptionalParameter("grade", entrega.grade)
+      addOptionalParameter("gradeAlternativa", entrega.gradeAlternativa)
     }
   }
 

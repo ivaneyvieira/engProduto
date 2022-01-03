@@ -24,10 +24,13 @@ class ProdutoRetiraEntrega(
   val clno: String,
   val clname: String,
   val localizacao: String,
+  var gradeAlternativa: String,
                           ) {
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo)
   }
+
+  fun salvaGrade() = saci.gravaGrade(this)
 
   companion object {
     fun find(filtro: FiltroProduto): List<ProdutoRetiraEntrega> {
@@ -42,7 +45,8 @@ data class FiltroProduto(val loja: Int,
                          val clno: Int,
                          val vendno: Int,
                          val localizacao: String,
-                         val nota: String) {
+                         val nota: String,
+                         val isEdit: Boolean = false) {
   val prdno
     get() = if (codigo == "") "" else codigo.lpad(16, " ")
   val nfno
