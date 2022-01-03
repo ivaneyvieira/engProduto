@@ -126,6 +126,10 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
         viewModel.findGrade(prd) { itens ->
           gridGrade.setItems(itens)
           gridGrade.sort(mutableListOf(GridSortOrder(gridGrade.getColumnBy(PrdGrade::saldo), SortDirection.ASCENDING)))
+          gridGrade.addItemDoubleClickListener {
+            val grade = it.item?.grade
+            viewModel.salvaGrade(prd, grade)
+          }
         }
         return@setDynamicContentHandler true
       }

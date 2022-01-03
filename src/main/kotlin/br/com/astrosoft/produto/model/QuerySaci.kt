@@ -149,6 +149,17 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun gravaGrade(entrega: ProdutoRetiraEntrega) {
+    val sql = "/sqlSaci/salvaGrade.sql"
+    script(sql){
+      addOptionalParameter("storeno", entrega.loja)
+      addOptionalParameter("ordno", entrega.pedido)
+      addOptionalParameter("codigo", entrega.codigo)
+      addOptionalParameter("grade", entrega.grade)
+      addOptionalParameter("gradeAlternativa", entrega.gradeAlternativa)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     internal val driver = db.driver

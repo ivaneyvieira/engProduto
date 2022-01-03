@@ -20,6 +20,12 @@ class TabProdutoRetiraEntregaViewModel(val viewModel: ProdutoViewModel) {
     block(list)
   }
 
+  fun salvaGrade(prd: ProdutoRetiraEntrega?, grade: String?)= viewModel.exec {
+    prd ?: fail("Produto não selecionado")
+    prd.gradeAlternativa = grade ?: ""
+    prd.salvaGrade()
+  }
+
   val subView
     get() = viewModel.view.tabProdutoRetiraEntrega
 }
