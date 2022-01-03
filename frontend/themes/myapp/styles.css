@@ -12,3 +12,8 @@ html {
       --lumo-line-height-s: 1.2;
       --lumo-line-height-xs: 1.1;
     }
+
+[part~="cell"].marcaDiferenca {
+      color: yellow;
+      font-weight: bold;
+}

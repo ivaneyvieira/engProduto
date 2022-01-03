@@ -78,5 +78,6 @@ WHERE (E.prdno = :prdno OR :prdno = '')
   AND EO.date >= 20190101
   AND (L.localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (E.storeno = :loja OR :loja = 0)
+  AND (E.remarks != '' OR :isEdit = 'N')
 GROUP BY codigo, grade
 

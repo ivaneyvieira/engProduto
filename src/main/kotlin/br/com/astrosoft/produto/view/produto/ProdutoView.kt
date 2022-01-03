@@ -18,6 +18,7 @@ class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
   override val tabProdutoReserva = TabProdutoReserva(viewModel.tabProdutoReservaViewModel)
   override val tabProdutoRetiraEntrega = TabProdutoRetiraEntrega(viewModel.tabProdutoRetiraEntregaViewModel)
+  override val tabProdutoRetiraEntregaEdit = TabProdutoRetiraEntregaEdit(viewModel.tabProdutoRetiraEntregaEditViewModel)
 
   override fun isAccept(user: IUser): Boolean {
     val userSaci = user as? UserSaci ?: return false

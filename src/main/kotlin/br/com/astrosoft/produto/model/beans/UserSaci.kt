@@ -17,6 +17,7 @@ class UserSaci : IUser {
   var produtoList by DelegateAuthorized(1)
   var produtoReserva by DelegateAuthorized(2)
   var produtoRetiraEntrega by DelegateAuthorized(3)
+  var produtoRetiraEntregaEdit by DelegateAuthorized(4)
 
   val fornecedor
     get() = produtoList
