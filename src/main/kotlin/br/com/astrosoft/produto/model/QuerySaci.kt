@@ -172,6 +172,15 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findProdutoNF(nfs : NotaSaida): List<ProdutoNF>{
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    return query(sql, ProdutoNF::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdvno)
+      addOptionalParameter("xano", nfs.xano)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     internal val driver = db.driver

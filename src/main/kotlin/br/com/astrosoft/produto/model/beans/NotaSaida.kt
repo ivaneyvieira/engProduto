@@ -4,6 +4,8 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class NotaSaida(val loja: Int,
+                val pdvno: Int,
+                val xano: Long,
                 val numero: Int,
                 val serie: String,
                 val cliente: Int,
@@ -12,8 +14,10 @@ class NotaSaida(val loja: Int,
   val nota
     get() = "$numero/$serie"
 
+  fun produtos() = saci.findProdutoNF(this)
+
   companion object {
-    fun find(filtro : FiltroNota) = saci.findNotaSaida(filtro)
+    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro)
   }
 }
 

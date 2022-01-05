@@ -1,8 +1,10 @@
 SELECT storeno                 AS loja,
+       pdvno                   AS pdvno,
+       xano                    AS xano,
        nfno                    AS numero,
        nfse                    AS serie,
        custno                  AS cliente,
-       CAST(issuedate AS date) AS data,
+       CAST(issuedate AS DATE) AS data,
        empno                   AS vendedor
 FROM sqldados.nf AS N
 WHERE N.issuedate >= 20220101

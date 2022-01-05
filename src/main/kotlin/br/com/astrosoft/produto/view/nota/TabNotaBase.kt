@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.nota
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.FiltroNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -15,6 +16,7 @@ import br.com.astrosoft.produto.viewmodel.nota.ITabNotaBase
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaBaseViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -32,6 +34,9 @@ class TabNotaBase(val viewModel: TabNotaBaseViewModel) : TabPanelGrid<NotaSaida>
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      DlgProdutos(viewModel).showDialog(nota)
+    }
     colunaNFLoja()
     colunaNFNota()
     colunaNFData()
