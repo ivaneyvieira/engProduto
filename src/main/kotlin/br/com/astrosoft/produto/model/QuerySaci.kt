@@ -161,6 +161,26 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findNotaSaida(filtro: FiltroNota) : List<NotaSaida>{
+    val sql = "/sqlSaci/findNotaSaida.sql"
+    val nfno = filtro.nfno
+    val nfse = filtro.nfse
+    return query(sql, NotaSaida::class) {
+      addOptionalParameter("storeno", filtro.storeno)
+      addOptionalParameter("nfno", nfno)
+      addOptionalParameter("nfse", nfse)
+    }
+  }
+
+  fun findProdutoNF(nfs : NotaSaida): List<ProdutoNF>{
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    return query(sql, ProdutoNF::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdvno)
+      addOptionalParameter("xano", nfs.xano)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     internal val driver = db.driver

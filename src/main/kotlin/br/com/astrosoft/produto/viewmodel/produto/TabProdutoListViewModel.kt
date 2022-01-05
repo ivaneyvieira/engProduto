@@ -5,7 +5,7 @@ import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.Produto
 
 class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
-  fun updateView()= viewModel.exec {
+  fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = Produto.find(filtro)
     subView.updateProdutos(produtos)
@@ -15,7 +15,7 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
     get() = viewModel.view.tabProdutoList
 }
 
-interface ITabProdutoList : ITabView{
-  fun filtro() : FiltroProduto
+interface ITabProdutoList : ITabView {
+  fun filtro(): FiltroProduto
   fun updateProdutos(produtos: List<Produto>)
 }
