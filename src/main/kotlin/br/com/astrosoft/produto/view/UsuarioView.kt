@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.view
 
-import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
 import br.com.astrosoft.framework.view.UserLayout
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
+import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -81,9 +81,17 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             binder.bind(this, UserSaci::produtoReserva.name)
           }
         }
+        formLayout {
+          h4("Nota") {
+            colspan = 2
+          }
+          checkBox("Base") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaBase.name)
+          }
+        }
       }
     }
   }
-}
 
 
