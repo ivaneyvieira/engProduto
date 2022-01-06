@@ -93,5 +93,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
       }
     }
   }
+}
 
 
