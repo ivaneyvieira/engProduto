@@ -56,7 +56,7 @@ dependencies {
   implementation("org.vaadin.tabs:paged-tabs:2.0.1")
   implementation("org.claspina:confirm-dialog:2.0.0")
 
-  implementation("org.vaadin.crudui:crudui:4.1.0")
+  implementation("org.vaadin.crudui:crudui:5.0.0")
   implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
   //implementation("com.github.nwillc:poink:0.4.6")
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:2.1.2")

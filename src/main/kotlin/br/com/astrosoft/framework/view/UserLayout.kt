@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
+import com.vaadin.flow.function.SerializableSupplier
 import org.claspina.confirmdialog.ConfirmDialog
 import org.vaadin.crudui.crud.CrudOperation
 import org.vaadin.crudui.crud.CrudOperation.*
@@ -62,14 +63,18 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
 
     crud.grid.addThemeVariants(LUMO_COMPACT)
 
-    crud.crudFormFactory = UserCrudFormFactory(::layoutCrud)
+    crud.crudFormFactory = UserCrudFormFactory(::layoutCrud) {
+      viewModel.createNew()
+    }
     crud.setSizeFull()
     return crud
   }
 }
 
-class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component) :
-        AbstractCrudFormFactory<B>() {
+class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component,
+                                              val createNew: () -> B) : AbstractCrudFormFactory<B>() {
+  private var aInstanceSupplier: SerializableSupplier<B>? = null
+
   override fun buildNewForm(operation: CrudOperation?,
                             domainObject: B?,
                             readOnly: Boolean,
@@ -116,5 +121,26 @@ class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?
 
   override fun showError(operation: CrudOperation?, e: Exception?) {
     ConfirmDialog.createError().withCaption("Erro do aplicativo").withMessage(e?.message ?: "Erro desconhecido").open()
+  }
+
+  override fun setNewInstanceSupplier(newInstanceSupplier: SerializableSupplier<B>?) {
+    this.aInstanceSupplier = newInstanceSupplier
+  }
+
+  override fun getNewInstanceSupplier(): SerializableSupplier<B>? {
+    if (aInstanceSupplier == null) {
+      aInstanceSupplier = SerializableSupplier<B> {
+        try {
+          createNew()
+        } catch (e: InstantiationException) {
+          e.printStackTrace()
+          null
+        } catch (e: IllegalAccessException) {
+          e.printStackTrace()
+          null
+        }
+      }
+    }
+    return aInstanceSupplier
   }
 }
