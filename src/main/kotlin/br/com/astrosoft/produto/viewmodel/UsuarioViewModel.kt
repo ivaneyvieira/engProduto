@@ -26,5 +26,9 @@ class UsuarioViewModel(view: IUsuarioView) : UserViewModel<UserSaci, IUsuarioVie
   }
 
   fun allLojas() = Loja.allLojas()
+
+  override fun createNew(): UserSaci {
+    return UserSaci()
+  }
 }
 
