@@ -46,7 +46,7 @@ class TabNotaBase(val viewModel: TabNotaBaseViewModel) : TabPanelGrid<NotaSaida>
 
   override fun filtro(): FiltroNota {
     val loja = (Config.user as? UserSaci)?.storeno ?: 0
-    return FiltroNota(storeno = loja, nota = edtNota.value, EMarcaNota.BASE)
+    return FiltroNota(storeno = loja, nota = edtNota.value, EMarcaNota.TODOS)
   }
 
   override fun updateProdutos(notas: List<NotaSaida>) {

@@ -12,7 +12,7 @@ FROM sqldados.nf             AS N
 WHERE N.issuedate >= 20220101
   AND N.status <> 1
   AND (N.nfse IN (1, 3, 5, 7))
-  AND (X.s12 = :marca)
+  AND (X.s12 = :marca OR :marca = 999)
   AND (storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)
   AND (N.nfse = :nfse OR :nfse = '')

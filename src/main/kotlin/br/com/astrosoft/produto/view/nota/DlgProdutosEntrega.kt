@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoNF
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFNcm
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
@@ -29,6 +30,7 @@ class DlgProdutosEntrega(val viewModel: TabNotaEntregaViewModel) {
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.desmarcaEntrega()
+          gridDetail.setItems(nota.produtos(EMarcaNota.ENTREGA))
         }
       }
     }) {
@@ -50,6 +52,7 @@ class DlgProdutosEntrega(val viewModel: TabNotaEntregaViewModel) {
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
+      produtoNFGradeAlternativa()
       produtoNFNcm()
       produtoNFQuantidade()
       produtoNFPrecoUnitario()

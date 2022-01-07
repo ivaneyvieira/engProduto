@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.nota
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.FiltroNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
@@ -19,7 +20,7 @@ class TabNotaEntregaViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach{produtoNF ->
-      produtoNF.marca = 0
+      produtoNF.marca = EMarcaNota.BASE.num
       produtoNF.salva()
     }
     updateView()
