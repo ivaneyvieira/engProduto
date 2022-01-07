@@ -30,13 +30,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 class DlgProdutosBase(val viewModel: TabNotaBaseViewModel) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos(EMarcaNota.BASE)
+    val listProdutos = nota.produtos(EMarcaNota.TODOS)
 
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Entrega") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaEntrega()
+          gridDetail.setItems(nota.produtos(EMarcaNota.TODOS))
         }
       }
     }) {

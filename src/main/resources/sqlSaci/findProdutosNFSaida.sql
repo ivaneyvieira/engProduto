@@ -40,5 +40,6 @@ FROM sqldados.prd             AS P
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
+  AND (X.s12 = :marca OR :marca = 999)
 GROUP BY codigo, grade
 

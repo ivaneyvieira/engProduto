@@ -29,5 +29,5 @@ data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota)
 }
 
 enum class EMarcaNota(val num: Int) {
-  BASE(0), ENTREGA(1)
+  BASE(0), ENTREGA(1), TODOS(999)
 }
