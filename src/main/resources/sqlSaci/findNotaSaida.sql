@@ -1,15 +1,19 @@
 SELECT storeno                 AS loja,
        pdvno                   AS pdvno,
        xano                    AS xano,
-       nfno                    AS numero,
-       nfse                    AS serie,
+       N.nfno                  AS numero,
+       N.nfse                  AS serie,
        custno                  AS cliente,
        CAST(issuedate AS DATE) AS data,
-       empno                   AS vendedor
-FROM sqldados.nf AS N
+       N.empno                 AS vendedor
+FROM sqldados.nf             AS N
+  INNER JOIN sqldados.xaprd2 AS X
+	       USING (storeno, pdvno, xano)
 WHERE N.issuedate >= 20220101
   AND N.status <> 1
-  AND (nfse IN (1, 3, 5, 7))
+  AND (N.nfse IN (1, 3, 5, 7))
+  AND (X.s12 = :marca)
   AND (storeno = :storeno OR :storeno = 0)
-  AND (nfno = :nfno OR :nfno = 0)
-  AND (nfse = :nfse OR :nfse = '')
+  AND (N.nfno = :nfno OR :nfno = 0)
+  AND (N.nfse = :nfse OR :nfse = '')
+GROUP BY storeno, pdvno, xano

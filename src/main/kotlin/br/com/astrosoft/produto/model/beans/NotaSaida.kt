@@ -14,16 +14,20 @@ class NotaSaida(val loja: Int,
   val nota
     get() = "$numero/$serie"
 
-  fun produtos() = saci.findProdutoNF(this)
+  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
 
   companion object {
     fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro)
   }
 }
 
-data class FiltroNota(val storeno: Int, val nota: String) {
+data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota) {
   val nfno: Int
     get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
   val nfse: String
     get() = nota.split("/").getOrNull(1) ?: ""
+}
+
+enum class EMarcaNota(val num: Int) {
+  BASE(0), ENTREGA(1)
 }

@@ -15,6 +15,10 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Grade")
   }
 
+  fun Grid<ProdutoNF>.produtoNFGradeAlternativa() = addColumnString(ProdutoNF::gradeAlternativa) {
+    this.setHeader("Grade Editada")
+  }
+
   fun Grid<ProdutoNF>.produtoNFLocalizacao() = addColumnString(ProdutoNF::localizacao) {
     this.setHeader("Loc")
   }

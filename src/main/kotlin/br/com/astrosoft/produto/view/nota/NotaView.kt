@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route
 class NotaView : ViewLayout<NotaViewModel>(), INotaView {
   override val viewModel = NotaViewModel(this)
   override val tabNotaBase = TabNotaBase(viewModel.tabNotaBaseViewModel)
+  override val tabNotaEntrega = TabNotaEntrega(viewModel.tabNotaEntregaViewModel)
 
   override fun isAccept(user: IUser): Boolean {
     val userSaci = user as? UserSaci ?: return false

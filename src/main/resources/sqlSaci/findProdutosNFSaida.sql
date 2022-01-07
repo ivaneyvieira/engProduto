@@ -1,4 +1,7 @@
-SELECT CAST(TRIM(P.no) AS CHAR)             AS codigo,
+SELECT X.storeno                            AS loja,
+       pdvno                                AS pdvno,
+       xano                                 AS xano,
+       CAST(TRIM(P.no) AS CHAR)             AS codigo,
        IFNULL(B.grade, '')                  AS grade,
        TRIM(IFNULL(B.barcode, P.barcode))   AS barcode,
        TRIM(MID(P.name, 1, 37))             AS descricao,
@@ -16,7 +19,9 @@ SELECT CAST(TRIM(P.no) AS CHAR)             AS codigo,
        MID(IFNULL(L.localizacao, ''), 1, 4) AS localizacao,
        X.qtty / 1000                        AS quantidade,
        X.preco                              AS preco,
-       (X.qtty / 1000) * X.preco            AS total
+       (X.qtty / 1000) * X.preco            AS total,
+       X.c6                                 AS gradeAlternativa,
+       X.s12                                AS marca
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.xaprd2  AS X
 	       ON P.no = X.prdno
@@ -36,3 +41,4 @@ WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
 GROUP BY codigo, grade
+
