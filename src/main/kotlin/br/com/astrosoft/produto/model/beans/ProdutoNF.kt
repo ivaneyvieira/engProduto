@@ -1,6 +1,11 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class ProdutoNF(
+  val loja: Int,
+  val pdvno: Int,
+  val xano: Long,
   val codigo: String,
   val grade: String,
   val barcode: String,
@@ -20,4 +25,14 @@ class ProdutoNF(
   val quantidade: Int,
   val preco: Double,
   val total: Double,
-               )
+  var gradeAlternativa: String?,
+  var marca: Int,
+               ){
+  fun salva() {
+    saci.salvaProdutosNFS(this)
+  }
+
+  fun findGrades(): List<PrdGrade> {
+    return saci.findGrades(codigo)
+  }
+}

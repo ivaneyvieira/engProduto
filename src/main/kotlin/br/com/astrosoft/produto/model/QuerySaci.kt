@@ -161,23 +161,38 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota) : List<NotaSaida>{
+  fun salvaProdutosNFS(podutoNF: ProdutoNF) {
+    val sql = "/sqlSaci/salvaProdutosNFS.sql"
+    script(sql) {
+      addOptionalParameter("storeno", podutoNF.loja)
+      addOptionalParameter("pdvno", podutoNF.pdvno)
+      addOptionalParameter("xano", podutoNF.xano)
+      addOptionalParameter("codigo", podutoNF.codigo)
+      addOptionalParameter("grade", podutoNF.grade)
+      addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa)
+      addOptionalParameter("marca", podutoNF.marca)
+    }
+  }
+
+  fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
     val nfse = filtro.nfse
     return query(sql, NotaSaida::class) {
+      addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
     }
   }
 
-  fun findProdutoNF(nfs : NotaSaida): List<ProdutoNF>{
+  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota): List<ProdutoNF> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     return query(sql, ProdutoNF::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
+      addOptionalParameter("marca", marca.num)
     }
   }
 

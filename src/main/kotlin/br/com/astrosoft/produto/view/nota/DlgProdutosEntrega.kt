@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.nota
 
 import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
@@ -10,16 +11,27 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaBaseViewModel
+import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntregaViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutos(viewModel: TabNotaBaseViewModel) {
+class DlgProdutosEntrega(val viewModel: TabNotaEntregaViewModel) {
+  private val gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos()
+    val listProdutos = nota.produtos(EMarcaNota.ENTREGA)
 
-    val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {}) {
+    val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+      button("Volta") {
+        icon = VaadinIcon.ARROW_LEFT.create()
+        onLeftClick {
+          viewModel.desmarcaEntrega()
+        }
+      }
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos(listProdutos)
@@ -29,7 +41,6 @@ class DlgProdutos(viewModel: TabNotaBaseViewModel) {
   }
 
   private fun HorizontalLayout.createGridProdutos(listPedidos: List<ProdutoNF>) {
-    val gridDetail = Grid(ProdutoNF::class.java, false)
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
@@ -45,5 +56,9 @@ class DlgProdutos(viewModel: TabNotaBaseViewModel) {
       produtoNFPrecoTotal()
     }
     this.addAndExpand(gridDetail)
+  }
+
+  fun itensSelecionados(): List<ProdutoNF> {
+    return gridDetail.selectedItems.toList()
   }
 }

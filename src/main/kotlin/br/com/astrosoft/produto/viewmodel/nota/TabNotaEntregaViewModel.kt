@@ -4,40 +4,33 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoNF
 
-class TabNotaBaseViewModel(val viewModel: NotaViewModel) {
+class TabNotaEntregaViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaSaida.find(filtro)
     subView.updateProdutos(notas)
   }
 
-  fun findGrade(prd: ProdutoNF?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
-    prd ?: return@exec
-    val list = prd.findGrades()
-    block(list)
-  }
-
-  fun marcaEntrega() = viewModel.exec {
+  fun desmarcaEntrega() {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
     itens.forEach{produtoNF ->
-      produtoNF.marca = 1
+      produtoNF.marca = 0
       produtoNF.salva()
     }
     updateView()
   }
 
   val subView
-    get() = viewModel.view.tabNotaBase
+    get() = viewModel.view.tabNotaEntrega
 }
 
-interface ITabNotaBase : ITabView {
-  fun filtro(): FiltroNota
-  fun updateProdutos(notas: List<NotaSaida>)
+interface ITabNotaEntrega : ITabView {
+  fun filtro() : FiltroNota
+  fun updateProdutos(notas : List<NotaSaida>)
   fun produtosSelcionados(): List<ProdutoNF>
 }

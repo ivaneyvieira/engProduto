@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.view
 
+import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.textfield.*
@@ -73,6 +74,22 @@ fun <T : Any> Grid.Column<T>.textFieldEditor(): Grid.Column<T> {
 fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   val grid = this.grid
   val component = dateFieldComponente()
+  component.element.addEventListener("keydown") { _ ->
+    grid.editor.cancel()
+  }.filter = "event.key === 'Enter'"
+  grid.editor.binder.forField(component).bind(this.key)
+  this.editorComponent = component
+  return this
+}
+
+fun <T : Any, V: Any> Grid.Column<T>.comboFieldEditor(block : (ComboBox<V>) -> Unit): Grid.Column<T> {
+  val grid = this.grid
+  val component = ComboBox<V>().apply {
+    block(this)
+    this.isAutoOpen = true
+    this.isAllowCustomValue = false
+    this.setWidthFull()
+  }
   component.element.addEventListener("keydown") { _ ->
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
