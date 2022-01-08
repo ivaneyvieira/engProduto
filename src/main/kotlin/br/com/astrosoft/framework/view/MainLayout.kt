@@ -13,11 +13,9 @@ import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.router.BeforeEnterEvent
 import com.vaadin.flow.router.BeforeEnterObserver
 import com.vaadin.flow.router.RouterLayout
-import com.vaadin.flow.server.BootstrapListener
-import com.vaadin.flow.server.BootstrapPageResponse
 import kotlin.reflect.KClass
 
-abstract class MainLayout : AppLayout(), RouterLayout, BeforeEnterObserver, BootstrapListener {
+abstract class MainLayout : AppLayout(), RouterLayout, BeforeEnterObserver {
   init {
     isDrawerOpened = false
     navbar {
@@ -72,7 +70,4 @@ abstract class MainLayout : AppLayout(), RouterLayout, BeforeEnterObserver, Boot
   }
 
  */
-  override fun modifyBootstrapPage(response: BootstrapPageResponse?){
-
-  }
 }
