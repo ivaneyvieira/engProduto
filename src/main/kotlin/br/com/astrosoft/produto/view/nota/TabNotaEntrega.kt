@@ -59,7 +59,7 @@ class TabNotaEntrega(val viewModel: TabNotaEntregaViewModel) : TabPanelGrid<Nota
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.notaBase == true
+    return username?.notaEntrega == true
   }
 
   override val label: String
