@@ -12,6 +12,7 @@ class UserSaci : IUser {
   override var senha: String = ""
   var bitAcesso: Long = 0
   var storeno: Int = 0
+  var locais: String = ""
   var impressora: String? = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
@@ -25,6 +26,12 @@ class UserSaci : IUser {
 
   val fornecedor
     get() = produtoList
+
+  var listLocais: Set<String>
+    get() = locais.split(",").filter { it.isNotBlank() }.toSet()
+    set(value) {
+      locais = value.joinToString(separator = ",")
+    }
 
   override val admin
     get() = login == "ADM"

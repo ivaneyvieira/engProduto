@@ -83,6 +83,12 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+
+  fun findLocais(): List<Local> {
+    val sql = "/sqlSaci/findLocais.sql"
+    return query(sql, Local::class)
+  }
+
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {
@@ -90,6 +96,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("bitAcesso", user.bitAcesso)
       addOptionalParameter("loja", user.storeno)
       addOptionalParameter("appName", appName)
+      addOptionalParameter("locais", user.locais)
     }
   }
 
@@ -171,10 +178,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("grade", podutoNF.grade)
       addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa)
       addOptionalParameter("marca", podutoNF.marca)
+      addOptionalParameter("usuario", podutoNF.usuario)
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota, locais: List<String>): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
     val nfse = filtro.nfse
@@ -183,16 +191,18 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
+      addOptionalParameter("locais", locais)
     }
   }
 
-  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota): List<ProdutoNF> {
+  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, locais: List<String>): List<ProdutoNF> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     return query(sql, ProdutoNF::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locais", locais)
     }
   }
 

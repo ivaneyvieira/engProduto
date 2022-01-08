@@ -8,10 +8,12 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFNcm
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuario
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntregaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -49,11 +51,12 @@ class DlgProdutosEntrega(val viewModel: TabNotaEntregaViewModel) {
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
       setItems(listPedidos)
+      produtoNFUsuario()
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa()
-      produtoNFNcm()
+      produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()

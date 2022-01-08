@@ -1,8 +1,8 @@
 package br.com.astrosoft.framework.view
 
-import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.*
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.binder.Result
@@ -82,12 +82,11 @@ fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   return this
 }
 
-fun <T : Any, V: Any> Grid.Column<T>.comboFieldEditor(block : (ComboBox<V>) -> Unit): Grid.Column<T> {
+fun <T : Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit): Grid.Column<T> {
   val grid = this.grid
-  val component = ComboBox<V>().apply {
+  val component = Select<V>().apply {
     block(this)
-    this.isAutoOpen = true
-    this.isAllowCustomValue = false
+    this.isEmptySelectionAllowed = true
     this.setWidthFull()
   }
   component.element.addEventListener("keydown") { _ ->

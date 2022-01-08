@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -14,11 +15,17 @@ class NotaSaida(val loja: Int,
   val nota
     get() = "$numero/$serie"
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
+  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro)
+    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro, userLocais())
   }
+}
+
+fun userLocais() : List<String>{
+  val username = Config.user as? UserSaci
+  if(username?.admin == true) return listOf("TODOS")
+  return username?.listLocais?.toList() ?: emptyList()
 }
 
 data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota) {

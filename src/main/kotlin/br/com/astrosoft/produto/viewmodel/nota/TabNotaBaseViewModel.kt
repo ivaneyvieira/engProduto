@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.nota
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -24,6 +25,7 @@ class TabNotaBaseViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach{produtoNF ->
       produtoNF.marca = EMarcaNota.ENTREGA.num
+      produtoNF.usuario = Config.user?.login ?: ""
       produtoNF.salva()
     }
     updateView()

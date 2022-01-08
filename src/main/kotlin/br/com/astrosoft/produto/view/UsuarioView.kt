@@ -60,6 +60,15 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           isAllowCustomValue = false
           binder.bind(this, UserSaci::storeno.name)
         }
+        checkBoxGroup<String> {
+          label = "Locais"
+          isReadOnly = readOnly
+
+          val locais = viewModel.allLocais()
+          val values = listOf("TODOS") + locais.map { it.abreviacao }.sorted()
+          setItems(values)
+          binder.bind(this, UserSaci::listLocais.name)
+        }
         formLayout {
           h4("Produto") {
             colspan = 2

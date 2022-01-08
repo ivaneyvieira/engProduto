@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFNcm
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
@@ -21,11 +22,11 @@ import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 
 class DlgProdutosBase(val viewModel: TabNotaBaseViewModel) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
@@ -74,7 +75,7 @@ class DlgProdutosBase(val viewModel: TabNotaBaseViewModel) {
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
-      produtoNFGradeAlternativa().comboFieldEditor { combo: ComboBox<String> ->
+      produtoNFGradeAlternativa().comboFieldEditor { combo: Select<String> ->
         combo.setItems("")
         editor.addOpenListener { e ->
           val produto = e.item
@@ -91,7 +92,7 @@ class DlgProdutosBase(val viewModel: TabNotaBaseViewModel) {
           }
         }
       }
-      produtoNFNcm()
+      produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()

@@ -12,6 +12,7 @@ SELECT U.no,
 			       CHAR(ASCII(SUBSTRING(pswd, 8, 1)) + ASCII(' ') - ASCII('-'))) AS CHAR),
 		   ''))       AS senha,
        IFNULL(A.bitAcesso, 0) AS bitAcesso,
+       IFNULL(A.locais, '')   AS locais,
        P.name                 AS impressora
 FROM sqldados.users          AS U
   LEFT JOIN sqldados.prntr   AS P

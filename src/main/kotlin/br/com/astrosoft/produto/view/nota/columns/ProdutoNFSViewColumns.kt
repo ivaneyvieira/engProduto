@@ -7,6 +7,10 @@ import br.com.astrosoft.produto.model.beans.ProdutoNF
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoNFNFSViewColumns {
+  fun Grid<ProdutoNF>.produtoNFUsuario() = addColumnString(ProdutoNF::usuario) {
+    this.setHeader("Usuário")
+  }
+
   fun Grid<ProdutoNF>.produtoNFCodigo() = addColumnString(ProdutoNF::codigo) {
     this.setHeader("Código")
   }
