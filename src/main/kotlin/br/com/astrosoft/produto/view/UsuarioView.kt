@@ -106,6 +106,14 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             isReadOnly = readOnly
             binder.bind(this, UserSaci::notaEnt.name)
           }
+          checkBox("Voltar CD") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::voltarCD.name)
+          }
+          checkBox("Voltar Ent") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::voltarEnt.name)
+          }
         }
       }
     }

@@ -1,6 +1,7 @@
 SELECT X.storeno                                                     AS loja,
        pdvno                                                         AS pdvno,
        xano                                                          AS xano,
+       CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(B.grade, '')                                           AS grade,
        TRIM(IFNULL(B.barcode, P.barcode))                            AS barcode,
@@ -27,6 +28,8 @@ SELECT X.storeno                                                     AS loja,
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.xaprd2  AS X
 	       ON P.no = X.prdno
+  INNER JOIN sqldados.nf      AS N
+	       USING (storeno, pdvno, xano)
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
   LEFT JOIN  sqldados.prdloc  AS L

@@ -1,9 +1,11 @@
 package br.com.astrosoft.produto.view.nota
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
@@ -36,6 +38,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         }
       }
       textField("Código de barras") {
+        val user = Config.user as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           viewModel.desmarcaEntProdutod(it.value)

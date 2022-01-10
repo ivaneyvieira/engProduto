@@ -22,6 +22,8 @@ class UserSaci : IUser {
   var notaExp by DelegateAuthorized(5)
   var notaCD by DelegateAuthorized(6)
   var notaEnt by DelegateAuthorized(7)
+  var voltarCD by DelegateAuthorized(8)
+  var voltarEnt by DelegateAuthorized(9)
 
   val produto = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit
   val nota = notaExp || notaCD || notaEnt

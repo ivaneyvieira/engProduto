@@ -1,9 +1,11 @@
 package br.com.astrosoft.produto.view.nota
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
@@ -26,6 +28,8 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   fun showDialog() {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
+        val user = Config.user as? UserSaci
+        isVisible = user?.voltarEnt == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.desmarcaEnt()

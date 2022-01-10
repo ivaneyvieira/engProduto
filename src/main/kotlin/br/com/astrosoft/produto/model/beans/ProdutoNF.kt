@@ -10,6 +10,7 @@ class ProdutoNF(
   val loja: Int,
   val pdvno: Int,
   val xano: Long,
+  val nota: String,
   val codigo: String,
   val grade: String,
   val barcode: String,

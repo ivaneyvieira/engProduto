@@ -19,5 +19,5 @@ FROM sqldados.users          AS U
 	      ON P.no = U.prntno
   LEFT JOIN sqldados.userApp AS A
 	      ON A.userno = U.no AND A.appName = :appName
-WHERE login = :login
-   OR :login = 'TODOS'
+WHERE (login = :login OR :login = 'TODOS')
+  AND U.bits1 & POW(2, 0) = 0
