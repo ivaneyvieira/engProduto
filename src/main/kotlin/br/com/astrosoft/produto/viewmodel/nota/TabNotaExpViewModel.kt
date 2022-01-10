@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
-    val filtro = subView.filtro()
+    val filtro = subView.filtro(EMarcaNota.TODOS)
     val notas = NotaSaida.find(filtro)
     subView.updateProdutos(notas)
   }
@@ -36,7 +36,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 }
 
 interface ITabNotaExp : ITabView {
-  fun filtro(): FiltroNota
+  fun filtro(marca : EMarcaNota): FiltroNota
   fun updateProdutos(notas: List<NotaSaida>)
   fun produtosSelcionados(): List<ProdutoNF>
 }

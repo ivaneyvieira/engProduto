@@ -102,6 +102,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             isReadOnly = readOnly
             binder.bind(this, UserSaci::notaCD.name)
           }
+          checkBox("Entrege") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaEnt.name)
+          }
         }
       }
     }

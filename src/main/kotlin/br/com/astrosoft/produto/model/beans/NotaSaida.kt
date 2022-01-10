@@ -36,5 +36,5 @@ data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota)
 }
 
 enum class EMarcaNota(val num: Int) {
-  EXP(0), CD(1), TODOS(999)
+  EXP(0), CD(1), ENT(2), TODOS(999)
 }

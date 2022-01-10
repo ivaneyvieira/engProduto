@@ -10,8 +10,8 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.viewmodel.nota.ITabNotaCD
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
+import br.com.astrosoft.produto.viewmodel.nota.ITabNotaEnt
+import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
-  private lateinit var dlgProduto: DlgProdutosCD
+class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEnt {
+  private lateinit var dlgProduto: DlgProdutosEnt
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -34,7 +34,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
 
   override fun Grid<NotaSaida>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosCD(viewModel)
+      dlgProduto = DlgProdutosEnt(viewModel)
       dlgProduto.showDialog(nota)
     }
     colunaNFLoja()
@@ -59,11 +59,11 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.notaCD == true
+    return username?.notaEnt == true
   }
 
   override val label: String
-    get() = "CD"
+    get() = "Entregue"
 
   override fun updateComponent() {
     viewModel.updateView()

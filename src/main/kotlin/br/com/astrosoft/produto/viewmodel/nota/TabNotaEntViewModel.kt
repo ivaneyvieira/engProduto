@@ -7,30 +7,30 @@ import br.com.astrosoft.produto.model.beans.FiltroNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
 
-class TabNotaCDViewModel(val viewModel: NotaViewModel) {
+class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaNota.CD)
+    val filtro = subView.filtro(EMarcaNota.ENT)
     val notas = NotaSaida.find(filtro)
     subView.updateProdutos(notas)
   }
 
-  fun desmarcaCD() {
+  fun desmarcaEnt() {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
     itens.forEach{produtoNF ->
-      produtoNF.marca = EMarcaNota.EXP.num
+      produtoNF.marca = EMarcaNota.CD.num
       produtoNF.salva()
     }
     updateView()
   }
 
   val subView
-    get() = viewModel.view.tabNotaCD
+    get() = viewModel.view.tabNotaEnt
 }
 
-interface ITabNotaCD : ITabView {
+interface ITabNotaEnt : ITabView {
   fun filtro(marca : EMarcaNota) : FiltroNota
   fun updateProdutos(notas : List<NotaSaida>)
   fun produtosSelcionados(): List<ProdutoNF>

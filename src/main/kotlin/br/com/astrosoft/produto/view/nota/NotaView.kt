@@ -17,6 +17,7 @@ class NotaView : ViewLayout<NotaViewModel>(), INotaView {
   override val viewModel = NotaViewModel(this)
   override val tabNotaExp = TabNotaExp(viewModel.tabNotaExpViewModel)
   override val tabNotaCD = TabNotaCD(viewModel.tabNotaCDViewModel)
+  override val tabNotaEnt = TabNotaEnt(viewModel.tabNotaEntViewModel)
 
   override fun isAccept(user: IUser): Boolean {
     val userSaci = user as? UserSaci ?: return false

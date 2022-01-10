@@ -44,9 +44,9 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFVendedor()
   }
 
-  override fun filtro(): FiltroNota {
+  override fun filtro(marca : EMarcaNota): FiltroNota {
     val loja = (Config.user as? UserSaci)?.storeno ?: 0
-    return FiltroNota(storeno = loja, nota = edtNota.value, EMarcaNota.TODOS)
+    return FiltroNota(storeno = loja, nota = edtNota.value, marca)
   }
 
   override fun updateProdutos(notas: List<NotaSaida>) {
