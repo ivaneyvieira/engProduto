@@ -179,6 +179,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa)
       addOptionalParameter("marca", podutoNF.marca)
       addOptionalParameter("usuario", podutoNF.usuario)
+      addOptionalParameter("data_hora", podutoNF.data_hora)
     }
   }
 

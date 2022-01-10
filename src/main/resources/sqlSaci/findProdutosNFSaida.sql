@@ -22,7 +22,8 @@ SELECT X.storeno                                                     AS loja,
        X.c6                                                          AS gradeAlternativa,
        X.s12                                                         AS marca,
        X.c5                                                          AS usuario,
-       CAST(GROUP_CONCAT(DISTINCT MID(L.localizacao, 1, 4)) AS CHAR) AS localizacao
+       CAST(GROUP_CONCAT(DISTINCT MID(L.localizacao, 1, 4)) AS CHAR) AS localizacao,
+       X.c4                                                          AS data_hora
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.xaprd2  AS X
 	       ON P.no = X.prdno

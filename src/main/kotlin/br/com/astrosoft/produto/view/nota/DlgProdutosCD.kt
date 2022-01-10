@@ -16,6 +16,7 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -32,6 +33,11 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel) {
         onLeftClick {
           viewModel.desmarcaCD()
           gridDetail.setItems(nota.produtos(EMarcaNota.CD))
+        }
+      }
+      textField("Código de barras") {
+        addValueChangeListener {
+
         }
       }
     }) {

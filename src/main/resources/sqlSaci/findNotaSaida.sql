@@ -1,11 +1,16 @@
-SELECT N.storeno               AS loja,
-       pdvno                   AS pdvno,
-       xano                    AS xano,
-       N.nfno                  AS numero,
-       N.nfse                  AS serie,
-       custno                  AS cliente,
-       CAST(issuedate AS DATE) AS data,
-       N.empno                 AS vendedor
+SELECT N.storeno                                      AS loja,
+       pdvno                                          AS pdvno,
+       xano                                           AS xano,
+       N.nfno                                         AS numero,
+       N.nfse                                         AS serie,
+       custno                                         AS cliente,
+       CAST(issuedate AS DATE)                        AS data,
+       N.empno                                        AS vendedor,
+       CAST(CONCAT(X.c5, '_', N.nfno, '/', N.nfse, '_', X.c4, '_',
+		   MID(L.localizacao, 1, 4)) AS char) AS chaveExp,
+       CAST(CONCAT('Entregue', '_', X.c5, '_', N.nfno, '/', N.nfse, '_', X.c4, '_',
+		   MID(L.localizacao, 1, 4)) AS char) AS chaveCD,
+       SUM((X.qtty / 1000) * X.preco)                 AS totalProdutos
 FROM sqldados.nf             AS N
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)

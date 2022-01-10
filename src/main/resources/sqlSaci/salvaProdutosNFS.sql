@@ -1,7 +1,8 @@
 UPDATE sqldados.xaprd2 AS X
 SET X.c6  = :gradeAlternativa,
     X.s12 = :marca,
-    X.c5  = :usuario
+    X.c5  = :usuario,
+    X.c4  = :data_hora
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano

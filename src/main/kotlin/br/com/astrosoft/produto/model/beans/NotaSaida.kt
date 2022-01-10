@@ -11,7 +11,10 @@ class NotaSaida(val loja: Int,
                 val serie: String,
                 val cliente: Int,
                 val data: LocalDate,
-                val vendedor: Int) {
+                val vendedor: Int,
+                val chaveExp: String,
+                val chaveCD: String,
+                val totalProdutos: Double) {
   val nota
     get() = "$numero/$serie"
 
@@ -22,9 +25,9 @@ class NotaSaida(val loja: Int,
   }
 }
 
-fun userLocais() : List<String>{
+fun userLocais(): List<String> {
   val username = Config.user as? UserSaci
-  if(username?.admin == true) return listOf("TODOS")
+  if (username?.admin == true) return listOf("TODOS")
   return username?.listLocais?.toList() ?: emptyList()
 }
 
