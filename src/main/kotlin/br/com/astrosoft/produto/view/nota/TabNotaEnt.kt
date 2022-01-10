@@ -5,10 +5,12 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveCD
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.viewmodel.nota.ITabNotaEnt
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
@@ -33,15 +35,17 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosEnt(viewModel)
-      dlgProduto.showDialog(nota)
-    }
     colunaNFLoja()
+    colunaNFChaveCD()
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      dlgProduto = DlgProdutosEnt(viewModel, nota)
+      dlgProduto.showDialog()
+    }
     colunaNFNota()
     colunaNFData()
     colunaNFCliente()
     colunaNFVendedor()
+    colunaNFValor()
   }
 
   override fun filtro(marca : EMarcaNota): FiltroNota {
@@ -49,9 +53,14 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     return FiltroNota(storeno = loja, nota = edtNota.value, marca)
   }
 
-  override fun updateProdutos(notas: List<NotaSaida>) {
+  override fun updateNotas(notas: List<NotaSaida>) {
     updateGrid(notas)
   }
+
+  override fun updateProdutos() {
+    dlgProduto.update()
+  }
+
 
   override fun produtosSelcionados(): List<ProdutoNF> {
     return dlgProduto.itensSelecionados()

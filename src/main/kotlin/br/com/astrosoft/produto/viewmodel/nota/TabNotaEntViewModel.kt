@@ -11,7 +11,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaNota.ENT)
     val notas = NotaSaida.find(filtro)
-    subView.updateProdutos(notas)
+    subView.updateNotas(notas)
   }
 
   fun desmarcaEnt() {
@@ -23,7 +23,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
       produtoNF.marca = EMarcaNota.CD.num
       produtoNF.salva()
     }
-    updateView()
+    subView.updateProdutos()
   }
 
   val subView
@@ -32,6 +32,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
 
 interface ITabNotaEnt : ITabView {
   fun filtro(marca : EMarcaNota) : FiltroNota
-  fun updateProdutos(notas : List<NotaSaida>)
+  fun updateNotas(notas : List<NotaSaida>)
+  fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
 }

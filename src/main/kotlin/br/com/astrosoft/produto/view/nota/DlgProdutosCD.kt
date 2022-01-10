@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
@@ -17,47 +18,47 @@ import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosCD(val viewModel: TabNotaCDViewModel) {
+class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos(EMarcaNota.CD)
-
+  fun showDialog() {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.desmarcaCD()
-          gridDetail.setItems(nota.produtos(EMarcaNota.CD))
         }
       }
       textField("Código de barras") {
+        this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
-
+          viewModel.desmarcaEntProdutod(it.value)
         }
       }
     }) {
       HorizontalLayout().apply {
         setSizeFull()
-        createGridProdutos(listProdutos)
+        createGridProdutos()
       }
     }
     form.open()
   }
 
-  private fun HorizontalLayout.createGridProdutos(listPedidos: List<ProdutoNF>) {
+  private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      setItems(listPedidos)
       produtoNFUsuario()
       produtoNFCodigo()
+      produtoNFBarcode()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa()
@@ -67,9 +68,19 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel) {
       produtoNFPrecoTotal()
     }
     this.addAndExpand(gridDetail)
+    update()
   }
 
   fun itensSelecionados(): List<ProdutoNF> {
     return gridDetail.selectedItems.toList()
+  }
+
+  fun update() {
+    val listProdutos = nota.produtos(EMarcaNota.CD)
+    gridDetail.setItems(listProdutos)
+  }
+
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoNF? {
+    return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
   }
 }

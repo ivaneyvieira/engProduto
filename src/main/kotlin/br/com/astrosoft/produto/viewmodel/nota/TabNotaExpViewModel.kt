@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel.nota
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -9,7 +8,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaNota.TODOS)
     val notas = NotaSaida.find(filtro)
-    subView.updateProdutos(notas)
+    subView.updateNotas(notas)
   }
 
   fun findGrade(prd: ProdutoNF?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
@@ -25,10 +24,9 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach{produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
-      produtoNF.usuario = Config.user?.login ?: ""
       produtoNF.salva()
     }
-    updateView()
+    subView.updateProdutos()
   }
 
   val subView
@@ -37,6 +35,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 
 interface ITabNotaExp : ITabView {
   fun filtro(marca : EMarcaNota): FiltroNota
-  fun updateProdutos(notas: List<NotaSaida>)
+  fun updateNotas(notas: List<NotaSaida>)
+  fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
 }

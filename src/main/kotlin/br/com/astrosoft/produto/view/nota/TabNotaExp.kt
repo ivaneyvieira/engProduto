@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.viewmodel.nota.ITabNotaExp
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaExpViewModel
@@ -33,15 +34,16 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosExp(viewModel)
-      dlgProduto.showDialog(nota)
-    }
     colunaNFLoja()
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      dlgProduto = DlgProdutosExp(viewModel, nota)
+      dlgProduto.showDialog()
+    }
     colunaNFNota()
     colunaNFData()
     colunaNFCliente()
     colunaNFVendedor()
+    colunaNFValor()
   }
 
   override fun filtro(marca : EMarcaNota): FiltroNota {
@@ -49,8 +51,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     return FiltroNota(storeno = loja, nota = edtNota.value, marca)
   }
 
-  override fun updateProdutos(notas: List<NotaSaida>) {
+  override fun updateNotas(notas: List<NotaSaida>) {
     updateGrid(notas)
+  }
+
+  override fun updateProdutos() {
+    dlgProduto.update()
   }
 
   override fun produtosSelcionados(): List<ProdutoNF> {

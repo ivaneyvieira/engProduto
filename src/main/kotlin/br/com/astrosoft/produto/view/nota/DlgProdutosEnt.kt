@@ -21,11 +21,9 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosEnt(val viewModel: TabNotaEntViewModel) {
+class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos(EMarcaNota.ENT)
-
+  fun showDialog() {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
         icon = VaadinIcon.ARROW_LEFT.create()
@@ -37,19 +35,18 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel) {
     }) {
       HorizontalLayout().apply {
         setSizeFull()
-        createGridProdutos(listProdutos)
+        createGridProdutos()
       }
     }
     form.open()
   }
 
-  private fun HorizontalLayout.createGridProdutos(listPedidos: List<ProdutoNF>) {
+  private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      setItems(listPedidos)
       produtoNFUsuario()
       produtoNFCodigo()
       produtoNFDescricao()
@@ -61,9 +58,15 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel) {
       produtoNFPrecoTotal()
     }
     this.addAndExpand(gridDetail)
+    update()
   }
 
   fun itensSelecionados(): List<ProdutoNF> {
     return gridDetail.selectedItems.toList()
+  }
+
+  fun update() {
+    val listProdutos = nota.produtos(EMarcaNota.ENT)
+    gridDetail.setItems(listProdutos)
   }
 }

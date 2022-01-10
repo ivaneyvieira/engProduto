@@ -24,4 +24,4 @@ WHERE N.issuedate >= 20220101
   AND (N.nfno = :nfno OR :nfno = 0)
   AND (N.nfse = :nfse OR :nfse = '')
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
-GROUP BY N.storeno, pdvno, xano
+GROUP BY N.storeno, pdvno, xano, IF(:marca = 999, '', X.c5)

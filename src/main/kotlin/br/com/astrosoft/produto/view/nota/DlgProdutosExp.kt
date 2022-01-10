@@ -27,11 +27,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
-class DlgProdutosExp(val viewModel: TabNotaExpViewModel) {
-  private val  gridDetail = Grid(ProdutoNF::class.java, false)
-  fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos(EMarcaNota.TODOS)
-
+class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
+  private val gridDetail = Grid(ProdutoNF::class.java, false)
+  fun showDialog() {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("CD") {
         icon = VaadinIcon.ARROW_RIGHT.create()
@@ -43,19 +41,18 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel) {
     }) {
       HorizontalLayout().apply {
         setSizeFull()
-        createGridProdutos(listProdutos)
+        createGridProdutos()
       }
     }
     form.open()
   }
 
-  private fun HorizontalLayout.createGridProdutos(listPedidos: List<ProdutoNF>) {
+  private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      setItems(listPedidos)
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
@@ -101,9 +98,15 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel) {
       }
     }
     this.addAndExpand(gridDetail)
+    update()
   }
 
   fun itensSelecionados(): List<ProdutoNF> {
     return gridDetail.selectedItems.toList()
+  }
+
+  fun update() {
+    val listProdutos = nota.produtos(EMarcaNota.TODOS)
+    gridDetail.setItems(listProdutos)
   }
 }

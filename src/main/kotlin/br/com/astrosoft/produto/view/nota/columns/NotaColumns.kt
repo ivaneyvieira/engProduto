@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.nota.columns
 
+import br.com.astrosoft.framework.view.addColumnDouble
 import br.com.astrosoft.framework.view.addColumnInt
 import br.com.astrosoft.framework.view.addColumnLocalDate
 import br.com.astrosoft.framework.view.addColumnString
@@ -11,19 +12,31 @@ object NotaColumns {
     this.setHeader("Loja")
   }
 
-  fun Grid<NotaSaida>.colunaNFNota()= addColumnString(NotaSaida::nota) {
+  fun Grid<NotaSaida>.colunaNFNota() = addColumnString(NotaSaida::nota) {
     this.setHeader("Nota")
   }
 
-  fun Grid<NotaSaida>.colunaNFCliente()= addColumnInt(NotaSaida::cliente) {
+  fun Grid<NotaSaida>.colunaNFChaveExp() = addColumnString(NotaSaida::chaveExp) {
+    this.setHeader("Chave Exp")
+  }
+
+  fun Grid<NotaSaida>.colunaNFChaveCD() = addColumnString(NotaSaida::chaveCD) {
+    this.setHeader("Chave CD")
+  }
+
+  fun Grid<NotaSaida>.colunaNFCliente() = addColumnInt(NotaSaida::cliente) {
     this.setHeader("Cliente")
   }
 
-  fun Grid<NotaSaida>.colunaNFData()= addColumnLocalDate(NotaSaida::data) {
+  fun Grid<NotaSaida>.colunaNFData() = addColumnLocalDate(NotaSaida::data) {
     this.setHeader("Data")
   }
 
-  fun Grid<NotaSaida>.colunaNFVendedor()= addColumnInt(NotaSaida::vendedor) {
+  fun Grid<NotaSaida>.colunaNFVendedor() = addColumnInt(NotaSaida::vendedor) {
     this.setHeader("Vendedor")
+  }
+
+  fun Grid<NotaSaida>.colunaNFValor() = addColumnDouble(NotaSaida::totalProdutos) {
+    this.setHeader("Valor")
   }
 }
