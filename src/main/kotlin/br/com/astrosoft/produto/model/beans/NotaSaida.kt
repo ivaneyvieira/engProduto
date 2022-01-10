@@ -12,8 +12,8 @@ class NotaSaida(val loja: Int,
                 val cliente: Int,
                 val data: LocalDate,
                 val vendedor: Int,
-                val chaveExp: String,
-                val chaveCD: String,
+                val chaveExp: String?,
+                val chaveCD: String?,
                 val totalProdutos: Double) {
   val nota
     get() = "$numero/$serie"
