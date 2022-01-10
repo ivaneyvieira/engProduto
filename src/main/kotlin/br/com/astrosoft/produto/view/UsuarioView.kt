@@ -94,13 +94,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           h4("Nota") {
             colspan = 2
           }
-          checkBox("Base") {
+          checkBox("Exp") {
             isReadOnly = readOnly
-            binder.bind(this, UserSaci::notaBase.name)
+            binder.bind(this, UserSaci::notaExp.name)
           }
-          checkBox("Entrega") {
+          checkBox("CD") {
             isReadOnly = readOnly
-            binder.bind(this, UserSaci::notaEntrega.name)
+            binder.bind(this, UserSaci::notaCD.name)
           }
         }
       }

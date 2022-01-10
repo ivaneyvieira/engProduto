@@ -9,12 +9,11 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFNcm
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuario
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntregaViewModel
+import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
@@ -22,17 +21,17 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosEntrega(val viewModel: TabNotaEntregaViewModel) {
+class DlgProdutosCD(val viewModel: TabNotaCDViewModel) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(nota: NotaSaida) {
-    val listProdutos = nota.produtos(EMarcaNota.ENTREGA)
+    val listProdutos = nota.produtos(EMarcaNota.CD)
 
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
-          viewModel.desmarcaEntrega()
-          gridDetail.setItems(nota.produtos(EMarcaNota.ENTREGA))
+          viewModel.desmarcaCD()
+          gridDetail.setItems(nota.produtos(EMarcaNota.CD))
         }
       }
     }) {

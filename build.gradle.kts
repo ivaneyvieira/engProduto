@@ -18,12 +18,11 @@ repositories {
 
 gretty {
   contextPath = "/"
-  servletContainer = "jetty9.4"
-  // managedClassReload = true // temporarily disabled because of https://github.com/gretty-gradle-plugin/gretty/issues/166
+  servletContainer =
+          "jetty9.4" // managedClassReload = true // temporarily disabled because of https://github.com/gretty-gradle-plugin/gretty/issues/166
 }
 
-dependencies {
-  // Karibu-DSL dependency
+dependencies { // Karibu-DSL dependency
   implementation("com.github.mvysny.karibudsl:karibu-dsl:$karibudslVersion")
   implementation("com.github.mvysny.karibu-tools:karibu-tools:0.7")
 
@@ -46,8 +45,7 @@ dependencies {
   implementation("net.sourceforge.jtds:jtds:1.3.1")
   implementation("org.imgscalr:imgscalr-lib:4.2")
   implementation("com.jcraft:jsch:0.1.55")
-  implementation("org.cups4j:cups4j:0.7.8")
-  // https://mvnrepository.com/artifact/org.jsoup/jsoup
+  implementation("org.cups4j:cups4j:0.7.8") // https://mvnrepository.com/artifact/org.jsoup/jsoup
   implementation("org.jsoup:jsoup:1.14.3")
 
   // logging
@@ -57,8 +55,7 @@ dependencies {
   implementation("org.claspina:confirm-dialog:2.0.0")
 
   implementation("org.vaadin.crudui:crudui:5.0.0")
-  implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
-  //implementation("com.github.nwillc:poink:0.4.6")
+  implementation("org.vaadin.stefan:lazy-download-button:1.0.0") //implementation("com.github.nwillc:poink:0.4.6")
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:2.1.2")
   implementation("org.vaadin.haijian:exporter:3.0.1")
   implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.15.2")
@@ -70,12 +67,10 @@ dependencies {
 
   //implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
 
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  // https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core
+  implementation("org.jetbrains.kotlin:kotlin-reflect") // https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core
   implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.12.1") {
     exclude(group = "com.lowagie", module = "itext")
-  }
-  // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
+  } // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
   implementation("net.sf.jasperreports:jasperreports:6.18.1")
   implementation("net.sf.jasperreports:jasperreports-fonts:6.18.1")
   implementation("de.f0rce.signaturepad:signature-widget:2.0.0")

@@ -12,11 +12,10 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFNcm
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaBaseViewModel
+import br.com.astrosoft.produto.viewmodel.nota.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.getColumnBy
@@ -28,16 +27,16 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
-class DlgProdutosBase(val viewModel: TabNotaBaseViewModel) {
-  private val gridDetail = Grid(ProdutoNF::class.java, false)
+class DlgProdutosExp(val viewModel: TabNotaExpViewModel) {
+  private val  gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(nota: NotaSaida) {
     val listProdutos = nota.produtos(EMarcaNota.TODOS)
 
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
-      button("Entrega") {
+      button("CD") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
-          viewModel.marcaEntrega()
+          viewModel.marcaCD()
           gridDetail.setItems(nota.produtos(EMarcaNota.TODOS))
         }
       }

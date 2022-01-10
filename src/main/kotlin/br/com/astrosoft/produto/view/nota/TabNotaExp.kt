@@ -10,8 +10,8 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.viewmodel.nota.ITabNotaEntrega
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntregaViewModel
+import br.com.astrosoft.produto.viewmodel.nota.ITabNotaExp
+import br.com.astrosoft.produto.viewmodel.nota.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaEntrega(val viewModel: TabNotaEntregaViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEntrega {
-  private lateinit var dlgProduto: DlgProdutosEntrega
+class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaExp {
+  private lateinit var dlgProduto: DlgProdutosExp
   private lateinit var edtNota: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -34,7 +34,7 @@ class TabNotaEntrega(val viewModel: TabNotaEntregaViewModel) : TabPanelGrid<Nota
 
   override fun Grid<NotaSaida>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosEntrega(viewModel)
+      dlgProduto = DlgProdutosExp(viewModel)
       dlgProduto.showDialog(nota)
     }
     colunaNFLoja()
@@ -46,7 +46,7 @@ class TabNotaEntrega(val viewModel: TabNotaEntregaViewModel) : TabPanelGrid<Nota
 
   override fun filtro(): FiltroNota {
     val loja = (Config.user as? UserSaci)?.storeno ?: 0
-    return FiltroNota(storeno = loja, nota = edtNota.value, EMarcaNota.ENTREGA)
+    return FiltroNota(storeno = loja, nota = edtNota.value, EMarcaNota.TODOS)
   }
 
   override fun updateProdutos(notas: List<NotaSaida>) {
@@ -59,11 +59,11 @@ class TabNotaEntrega(val viewModel: TabNotaEntregaViewModel) : TabPanelGrid<Nota
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
-    return username?.notaEntrega == true
+    return username?.notaExp == true
   }
 
   override val label: String
-    get() = "Entrega"
+    get() = "Exp"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -19,11 +19,11 @@ class UserSaci : IUser {
   var produtoReserva by DelegateAuthorized(2)
   var produtoRetiraEntrega by DelegateAuthorized(3)
   var produtoRetiraEntregaEdit by DelegateAuthorized(4)
-  var notaBase by DelegateAuthorized(5)
-  var notaEntrega by DelegateAuthorized(6)
+  var notaExp by DelegateAuthorized(5)
+  var notaCD by DelegateAuthorized(6)
 
   val produto = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit
-  val nota = notaBase || notaEntrega
+  val nota = notaExp || notaCD
 
   val fornecedor
     get() = produtoList

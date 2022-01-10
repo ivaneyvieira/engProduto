@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 
-class TabNotaBaseViewModel(val viewModel: NotaViewModel) {
+class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaSaida.find(filtro)
@@ -18,13 +18,13 @@ class TabNotaBaseViewModel(val viewModel: NotaViewModel) {
     block(list)
   }
 
-  fun marcaEntrega() = viewModel.exec {
+  fun marcaCD() = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
     itens.forEach{produtoNF ->
-      produtoNF.marca = EMarcaNota.ENTREGA.num
+      produtoNF.marca = EMarcaNota.CD.num
       produtoNF.usuario = Config.user?.login ?: ""
       produtoNF.salva()
     }
@@ -32,10 +32,10 @@ class TabNotaBaseViewModel(val viewModel: NotaViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabNotaBase
+    get() = viewModel.view.tabNotaExp
 }
 
-interface ITabNotaBase : ITabView {
+interface ITabNotaExp : ITabView {
   fun filtro(): FiltroNota
   fun updateProdutos(notas: List<NotaSaida>)
   fun produtosSelcionados(): List<ProdutoNF>
