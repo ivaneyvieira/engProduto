@@ -1,4 +1,9 @@
-.marcaDiferenca {
+.cd {
     color: yellow;
+    font-weight: bold;
+}
+
+.entregue {
+    color: orangered;
     font-weight: bold;
 }

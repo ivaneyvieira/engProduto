@@ -57,6 +57,6 @@ data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota)
     get() = nota.split("/").getOrNull(1) ?: ""
 }
 
-enum class EMarcaNota(val num: Int) {
-  EXP(0), CD(1), ENT(2), TODOS(999)
+enum class EMarcaNota(val num: Int, val descricao: String) {
+  EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
 }

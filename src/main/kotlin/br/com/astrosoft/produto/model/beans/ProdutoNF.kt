@@ -37,6 +37,8 @@ class ProdutoNF(
   val usuarioNameCD
     get() = usuarioCD.split("_").getOrNull(0)
 
+  val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
+
   fun salva() {
     saci.salvaProdutosNFS(this)
   }

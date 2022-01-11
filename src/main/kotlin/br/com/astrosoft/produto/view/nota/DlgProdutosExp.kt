@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFTipo
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -88,6 +89,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           }
         }
       }
+      produtoNFTipo()
       produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario()
@@ -95,8 +97,8 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       this.setClassNameGenerator {
         when (it.marca) {
-          1    -> "marcaDiferenca"
-          2    -> "marcaDiferenca2"
+          1    -> "cd"
+          2    -> "entregue"
           else -> null
         }
       }

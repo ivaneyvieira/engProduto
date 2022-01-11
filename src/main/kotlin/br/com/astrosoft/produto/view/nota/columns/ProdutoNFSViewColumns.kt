@@ -31,6 +31,10 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Loc")
   }
 
+  fun Grid<ProdutoNF>.produtoNFTipo() = addColumnString(ProdutoNF::statusStr) {
+    this.setHeader("Status")
+  }
+
   fun Grid<ProdutoNF>.produtoNFBarcode() = addColumnString(ProdutoNF::barcode) {
     this.setHeader("Código de Barras")
   }

@@ -3,6 +3,11 @@
     font-weight: bold;
 }
 
+[part~="cell"].marcaDiferenca2 {
+    color: darkseagreen;
+    font-weight: bold;
+}
+
 [part~="cell"].marcaRed {
     color: #5b96e4;
     font-weight: bold;

@@ -13,13 +13,13 @@ html {
       --lumo-line-height-xs: 1.1;
     }
 
-[part~="cell"].marcaDiferenca {
+[part~="cell"].cd {
       color: yellow;
       font-weight: bold;
 }
 
 
-[part~="cell"].marcaDiferenca2 {
+[part~="cell"].entregue {
       color: orangered;
       font-weight: bold;
 }
