@@ -14,7 +14,8 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuario
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioNameCD
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioNameExp
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -32,7 +33,7 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
         isVisible = user?.voltarEnt == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
-          viewModel.desmarcaEnt()
+          viewModel.marcaCD()
           gridDetail.setItems(nota.produtos(EMarcaNota.ENT))
         }
       }
@@ -51,7 +52,8 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      produtoNFUsuario()
+      produtoNFUsuarioNameExp()
+      produtoNFUsuarioNameCD()
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()

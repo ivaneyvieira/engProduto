@@ -1,10 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
-import java.time.LocalDate
-import java.time.LocalTime
 
 class ProdutoNF(
   val loja: Int,
@@ -32,12 +28,16 @@ class ProdutoNF(
   val total: Double,
   var gradeAlternativa: String?,
   var marca: Int,
-  var usuario: String,
-  var data_hora: String,
+  var usuarioExp: String,
+  var usuarioCD: String,
                ) {
+  val usuarioNameExp
+    get() = usuarioExp.split("_").getOrNull(0)
+
+  val usuarioNameCD
+    get() = usuarioCD.split("_").getOrNull(0)
+
   fun salva() {
-    data_hora = LocalDate.now().format() + "_" + LocalTime.now().format()
-    usuario = Config.user?.login ?: ""
     saci.salvaProdutosNFS(this)
   }
 

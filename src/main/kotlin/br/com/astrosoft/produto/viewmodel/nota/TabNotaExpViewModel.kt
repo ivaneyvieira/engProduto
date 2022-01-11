@@ -1,10 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.nota
 
 import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
+import java.time.LocalDate
+import java.time.LocalTime
 
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
@@ -26,15 +29,19 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
+      val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+      val usuario = Config.user?.login ?: ""
+      produtoNF.usuarioExp = usuario + "_" + dataHora
+      produtoNF.usuarioCD = ""
       produtoNF.salva()
     }
     subView.updateProdutos()
+    updateView()
     val chave = itens.chave()
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       EtiquetaChave.print(impressora, chave)
     }
-
   }
 
   val subView
@@ -42,11 +49,13 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 }
 
 private fun List<ProdutoNF>.chave(): String {
-  val usuario = this.firstOrNull()?.usuario ?: return ""
+  val usuarioExp = this.firstOrNull()?.usuarioExp ?: return ""
   val nota = this.firstOrNull()?.nota ?: return ""
-  val dataHora = this.firstOrNull()?.data_hora ?: return ""
+  val usuario = usuarioExp.split("_").getOrNull(0) ?: ""
+  val data = usuarioExp.split("_").getOrNull(1) ?: ""
+  val hora = usuarioExp.split("_").getOrNull(2) ?: ""
   val loc = this.firstOrNull()?.localizacao ?: return ""
-  return usuario + "_" + nota + "_" + dataHora + "_" + loc
+  return usuario + "_" + nota + "_" + data + "_" + hora + "_" + loc
 }
 
 interface ITabNotaExp : ITabView {

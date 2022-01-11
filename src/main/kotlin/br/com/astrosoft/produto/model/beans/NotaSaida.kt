@@ -12,11 +12,30 @@ class NotaSaida(val loja: Int,
                 val cliente: Int,
                 val data: LocalDate,
                 val vendedor: Int,
-                val chaveExp: String?,
-                val chaveCD: String?,
+                val localizacao: String?,
+                val usuarioExp: String?,
+                val usuarioCD: String?,
                 val totalProdutos: Double) {
   val nota
     get() = "$numero/$serie"
+
+  val chaveExp: String?
+    get() {
+      val split = usuarioExp?.split("_") ?: return null
+      val usuario = split.getOrNull(0) ?: ""
+      val data = split.getOrNull(1) ?: ""
+      val hora = split.getOrNull(2) ?: ""
+      return usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+    }
+
+  val chaveCD: String?
+    get() {
+      val split = usuarioCD?.split("_") ?: return null
+      val usuario = split.getOrNull(0) ?: ""
+      val data = split.getOrNull(1) ?: ""
+      val hora = split.getOrNull(2) ?: ""
+      return "Entregue" + "_" + usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+    }
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 

@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveCD
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveExp
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
@@ -36,6 +37,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
 
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
+    colunaNFChaveExp()
     colunaNFChaveCD()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEnt(viewModel, nota)

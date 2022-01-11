@@ -1,16 +1,15 @@
-SELECT N.storeno                                                  AS loja,
-       pdvno                                                      AS pdvno,
-       xano                                                       AS xano,
-       N.nfno                                                     AS numero,
-       N.nfse                                                     AS serie,
-       custno                                                     AS cliente,
-       CAST(issuedate AS DATE)                                    AS data,
-       N.empno                                                    AS vendedor,
-       CAST(CONCAT(X.c5, '_', N.nfno, '/', N.nfse, '_', X.c4, '_',
-		   MID(IFNULL(L.localizacao, ''), 1, 4)) AS char) AS chaveExp,
-       CAST(CONCAT('Entregue', '_', X.c5, '_', N.nfno, '/', N.nfse, '_', X.c4, '_',
-		   MID(IFNULL(L.localizacao, ''), 1, 4)) AS char) AS chaveCD,
-       SUM((X.qtty / 1000) * X.preco)                             AS totalProdutos
+SELECT N.storeno                                          AS loja,
+       pdvno                                              AS pdvno,
+       xano                                               AS xano,
+       N.nfno                                             AS numero,
+       N.nfse                                             AS serie,
+       custno                                             AS cliente,
+       CAST(issuedate AS DATE)                            AS data,
+       N.empno                                            AS vendedor,
+       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
+       X.c5                                               AS usuarioExp,
+       X.c4                                               AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos
 FROM sqldados.nf             AS N
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
@@ -24,4 +23,9 @@ WHERE N.issuedate >= 20220101
   AND (N.nfno = :nfno OR :nfno = 0)
   AND (N.nfse = :nfse OR :nfse = '')
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
-GROUP BY N.storeno, pdvno, xano, IF(:marca = 999, '', X.c5)
+GROUP BY N.storeno,
+	 pdvno,
+	 xano,
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '_', 1)),
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
+	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))

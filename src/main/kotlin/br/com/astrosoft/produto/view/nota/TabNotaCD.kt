@@ -41,6 +41,9 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       dlgProduto = DlgProdutosCD(viewModel, nota)
       dlgProduto.showDialog()
     }
+    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
+      viewModel.printEtiqueta(nota.chaveCD)
+    }
     colunaNFNota()
     colunaNFData()
     colunaNFCliente()
@@ -48,7 +51,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     colunaNFValor()
   }
 
-  override fun filtro(marca : EMarcaNota): FiltroNota {
+  override fun filtro(marca: EMarcaNota): FiltroNota {
     val loja = (Config.user as? UserSaci)?.storeno ?: 0
     return FiltroNota(storeno = loja, nota = edtNota.value, marca)
   }

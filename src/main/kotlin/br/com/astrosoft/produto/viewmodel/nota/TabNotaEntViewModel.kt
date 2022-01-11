@@ -14,16 +14,18 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     subView.updateNotas(notas)
   }
 
-  fun desmarcaEnt() {
+  fun marcaCD() {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
     itens.forEach{produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
+      produtoNF.usuarioCD = ""
       produtoNF.salva()
     }
     subView.updateProdutos()
+    updateView()
   }
 
   val subView
