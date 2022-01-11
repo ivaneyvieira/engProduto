@@ -5,7 +5,7 @@ import org.cups4j.CupsPrinter
 import org.cups4j.PrintJob
 
 object CupsUtils {
-  private val cupsClient = CupsClient("172.20.47.1", 631, "root")
+  private val cupsClient = CupsClient("172.20.47.1",631)
   private val printers
     get() = cupsClient.printers.toList()
   val printersInfo
@@ -17,12 +17,24 @@ object CupsUtils {
   }
 
   private fun findPrinter(printerName: String): CupsPrinter? {
-    val printers = cupsClient.printers.toList()
-    return printers.firstOrNull { it.name == printerName }
+    ProcessBuilder("lpadmin",
+                   "-p",
+                   "$printerName",
+                   "-v",
+                   "ipp://172.20.47.1:631/printers/$printerName",
+                   "-E").redirectOutput(ProcessBuilder.Redirect.INHERIT).start().waitFor()
+    return try {
+      val printers = cupsClient.printers
+      printers.firstOrNull { it.name == printerName }
+    } catch (e: Throwable) {
+      e.printStackTrace()
+      null
+    }
   }
 
   @Throws(ECupsPrinter::class)
   fun CupsPrinter.printText(text: String, resultMsg: (String) -> Unit = {}) {
+
     val job = PrintJob.Builder(text.toByteArray()).build()
     try {
       val result = print(job)
