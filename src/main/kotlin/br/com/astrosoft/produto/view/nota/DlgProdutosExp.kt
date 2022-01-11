@@ -94,7 +94,11 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFPrecoTotal()
 
       this.setClassNameGenerator {
-        if (it.marca != 0) "marcaDiferenca" else null
+        when (it.marca) {
+          1    -> "marcaDiferenca"
+          2    -> "marcaDiferenca2"
+          else -> null
+        }
       }
     }
     this.addAndExpand(gridDetail)

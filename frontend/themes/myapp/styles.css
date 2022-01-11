@@ -17,3 +17,9 @@ html {
       color: yellow;
       font-weight: bold;
 }
+
+
+[part~="cell"].marcaDiferenca2 {
+      color: orangered;
+      font-weight: bold;
+}
