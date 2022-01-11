@@ -17,12 +17,6 @@ object CupsUtils {
   }
 
   private fun findPrinter(printerName: String): CupsPrinter? {
-    ProcessBuilder("lpadmin",
-                   "-p",
-                   "$printerName",
-                   "-v",
-                   "ipp://172.20.47.1:631/printers/$printerName",
-                   "-E").redirectOutput(ProcessBuilder.Redirect.INHERIT).start().waitFor()
     return try {
       val printers = cupsClient.printers
       printers.firstOrNull { it.name == printerName }
