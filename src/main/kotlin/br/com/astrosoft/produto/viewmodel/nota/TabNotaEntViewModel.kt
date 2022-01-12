@@ -1,11 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.nota
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EMarcaNota
-import br.com.astrosoft.produto.model.beans.FiltroNota
-import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.ProdutoNF
+import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   fun updateView() {
@@ -26,6 +25,19 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateProdutos()
     updateView()
+  }
+
+  fun printEtiqueta(chave: String?) = viewModel.exec {
+    chave ?: fail("Chave não encontrada")
+    val user = Config.user as? UserSaci
+    user?.impressora?.let { impressora ->
+      try {
+        EtiquetaChave.print(impressora, chave)
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        fail("Falha de impressão na impressora $impressora")
+      }
+    }
   }
 
   val subView

@@ -42,7 +42,11 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
-          viewModel.marcaEntProdutos(it.value)
+          if(it.isFromClient) {
+            viewModel.marcaEntProdutos(it.value)
+            this@textField.value = ""
+            this@textField.focus()
+          }
         }
       }
     }) {

@@ -16,9 +16,13 @@ class NotaSaida(val loja: Int,
                 val usuarioExp: String?,
                 val usuarioCD: String?,
                 val totalProdutos: Double,
-                val marca: Int?) {
+                val marca: Int?,
+                val cancelada: String?) {
   val nota
     get() = "$numero/$serie"
+
+  val situacao
+    get() = if (cancelada == "S") "Cancelada" else ""
 
   val chaveExp: String?
     get() {

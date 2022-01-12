@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.viewmodel.nota.ITabNotaExp
@@ -44,9 +45,19 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCliente()
     colunaNFVendedor()
     colunaNFValor()
+    colunaNFSituacao()
+
+    this.setClassNameGenerator {
+      when {
+        it.cancelada == "S" -> "cancelada"
+        it.marca == 1       -> "cd"
+        it.marca == 2       -> "entregue"
+        else                -> null
+      }
+    }
   }
 
-  override fun filtro(marca : EMarcaNota): FiltroNota {
+  override fun filtro(marca: EMarcaNota): FiltroNota {
     val loja = (Config.user as? UserSaci)?.storeno ?: 0
     return FiltroNota(storeno = loja, nota = edtNota.value, marca)
   }
