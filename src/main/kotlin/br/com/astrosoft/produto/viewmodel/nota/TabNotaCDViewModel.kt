@@ -46,7 +46,12 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     chave ?: fail("Chave não encontrada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
-      EtiquetaChave.print(impressora, chave)
+      try {
+        EtiquetaChave.print(impressora, chave)
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        fail("Falha de impressão na impressora $impressora")
+      }
     }
   }
 
