@@ -44,7 +44,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       dlgProduto.showDialog()
     }
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
-      viewModel.printEtiqueta(nota.chaveCD)
+      viewModel.printEtiqueta(nota)
     }
     colunaNFNota()
     colunaNFData()

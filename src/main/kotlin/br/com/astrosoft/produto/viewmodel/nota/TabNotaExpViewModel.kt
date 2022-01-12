@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.zpl.DadosEtiqueta
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -37,11 +38,18 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateProdutos()
     updateView()
-    val chave = itens.chave()
+    val chaveExp = itens.chave()
+    val split = chaveExp.split("_")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.print(impressora, chave)
+        EtiquetaChave.print(impressora, DadosEtiqueta(titulo = "CD",
+                                                      usuario = split.getOrNull(1) ?: "",
+                                                      nota = split.getOrNull(2) ?: "",
+                                                      data = split.getOrNull(3) ?: "",
+                                                      hora = split.getOrNull(4) ?: "",
+                                                      local = split.getOrNull(5) ?: ""))
+        viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
