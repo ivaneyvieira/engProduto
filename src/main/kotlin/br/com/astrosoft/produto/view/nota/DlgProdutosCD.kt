@@ -32,14 +32,14 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   fun showDialog() {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
+        val user = Config.user as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.marcaExp()
         }
       }
       textField("Código de barras") {
-        val user = Config.user as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           viewModel.marcaEntProdutos(it.value)

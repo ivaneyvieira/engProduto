@@ -9,7 +9,8 @@ SELECT N.storeno                                          AS loja,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c5                                               AS usuarioExp,
        X.c4                                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos
+       SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos,
+       MAX(X.s12)                                         AS marca
 FROM sqldados.nf             AS N
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
