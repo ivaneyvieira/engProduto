@@ -83,7 +83,6 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-
   fun findLocais(): List<Local> {
     val sql = "/sqlSaci/findLocais.sql"
     return query(sql, Local::class)
@@ -183,6 +182,33 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun salvaProdutosPedidoCompra(podutoPedidoCompra: ProdutoPedidoCompra) {
+    val sql = "/sqlSaci/salvaProdutosPedidoCompra.sql"
+    script(sql) {
+      addOptionalParameter("storeno", podutoPedidoCompra.loja)
+      addOptionalParameter("ordno", podutoPedidoCompra.ordno)
+      addOptionalParameter("codigo", podutoPedidoCompra.codigo)
+      addOptionalParameter("grade", podutoPedidoCompra.grade)
+      addOptionalParameter("gradeAlternativa", podutoPedidoCompra.gradeAlternativa)
+      addOptionalParameter("marca", podutoPedidoCompra.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoCompra.usuarioCD)
+      addOptionalParameter("usuarioExp", podutoPedidoCompra.usuarioExp)
+    }
+  }
+
+  fun salvaProdutosRessuprimento(podutoPedidoCompra: ProdutoRessuprimento) {
+    val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("storeno", podutoPedidoCompra.loja)
+      addOptionalParameter("ordno", podutoPedidoCompra.ordno)
+      addOptionalParameter("codigo", podutoPedidoCompra.codigo)
+      addOptionalParameter("grade", podutoPedidoCompra.grade)
+      addOptionalParameter("marca", podutoPedidoCompra.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoCompra.usuarioCD)
+      addOptionalParameter("usuarioExp", podutoPedidoCompra.usuarioExp)
+    }
+  }
+
   fun findNotaSaida(filtro: FiltroNota, locais: List<String>): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
@@ -196,12 +222,56 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findPedidoCompra(filtro: FiltroPedido, locais: List<String>): List<PedidoCompra> {
+    val sql = "/sqlSaci/findPedidoCompra.sql"
+    return query(sql, PedidoCompra::class) {
+      addOptionalParameter("marca", filtro.marca.num)
+      addOptionalParameter("storeno", filtro.storeno)
+      addOptionalParameter("ordno", filtro.ordno)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findRessuprimento(filtro: FiltroRessuprimento, locais: List<String>): List<Ressuprimento> {
+    val sql = "/sqlSaci/findRessuprimento.sql"
+    return query(sql, Ressuprimento::class) {
+      addOptionalParameter("marca", filtro.marca.num)
+      addOptionalParameter("storeno", filtro.storeno)
+      addOptionalParameter("ordno", filtro.pedido)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, locais: List<String>): List<ProdutoNF> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     return query(sql, ProdutoNF::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
+      addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findProdutoPedidoCompra(pedido: PedidoCompra,
+                              marca: EMarcaPedido,
+                              locais: List<String>): List<ProdutoPedidoCompra> {
+    val sql = "/sqlSaci/findProdutosPedidoCompra.sql"
+    return query(sql, ProdutoPedidoCompra::class) {
+      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("ordno", pedido.ordno)
+      addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findProdutoRessuprimento(pedido: Ressuprimento,
+                               marca: EMarcaRessuprimento,
+                               locais: List<String>): List<ProdutoRessuprimento> {
+    val sql = "/sqlSaci/findProdutosRessuprimento.sql"
+    return query(sql, ProdutoRessuprimento::class) {
+      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("ordno", pedido.ordno)
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("locais", locais)
     }

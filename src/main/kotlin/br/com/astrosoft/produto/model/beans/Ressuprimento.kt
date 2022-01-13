@@ -5,11 +5,8 @@ import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaSaida(val loja: Int,
-                val pdvno: Int,
-                val xano: Long,
-                val numero: Int,
-                val serie: String,
+class Ressuprimento(val loja: Int,
+                val ordno: Int,
                 val cliente: Int,
                 val data: LocalDate,
                 val vendedor: Int,
@@ -19,8 +16,6 @@ class NotaSaida(val loja: Int,
                 val totalProdutos: Double,
                 val marca: Int?,
                 val cancelada: String?) {
-  val nota
-    get() = "$numero/$serie"
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
@@ -31,7 +26,7 @@ class NotaSaida(val loja: Int,
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+      return usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
     }
 
   val chaveCD: String?
@@ -40,23 +35,18 @@ class NotaSaida(val loja: Int,
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "_" + usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+      return "Entregue" + "_" + usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
     }
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
+  fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro, userLocais())
+    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userLocais())
   }
 }
 
-data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota) {
-  val nfno: Int
-    get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
-  val nfse: String
-    get() = nota.split("/").getOrNull(1) ?: ""
-}
+data class FiltroRessuprimento(val storeno: Int, val pedido: Int, val marca: EMarcaRessuprimento)
 
-enum class EMarcaNota(val num: Int, val descricao: String) {
-  EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
+enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
+  CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")
 }

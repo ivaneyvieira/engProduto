@@ -5,9 +5,8 @@ import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaSaida(val loja: Int,
-                val pdvno: Int,
-                val xano: Long,
+class PedidoCompra(val loja: Int,
+                val ordno: Int,
                 val numero: Int,
                 val serie: String,
                 val cliente: Int,
@@ -43,20 +42,15 @@ class NotaSaida(val loja: Int,
       return "Entregue" + "_" + usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
     }
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
+  fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoCompra(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro, userLocais())
+    fun find(filtro: FiltroPedido) = saci.findPedidoCompra(filtro, userLocais())
   }
 }
 
-data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota) {
-  val nfno: Int
-    get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
-  val nfse: String
-    get() = nota.split("/").getOrNull(1) ?: ""
-}
+data class FiltroPedido(val storeno: Int, val ordno: Int, val marca: EMarcaNota)
 
-enum class EMarcaNota(val num: Int, val descricao: String) {
-  EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
+enum class EMarcaPedido(val num: Int, val descricao: String) {
+  CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")
 }

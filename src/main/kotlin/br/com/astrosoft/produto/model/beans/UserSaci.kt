@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.produto.model.saci
 import kotlin.math.pow
@@ -51,6 +52,12 @@ class UserSaci : IUser {
 
     fun findUser(login: String?): UserSaci? {
       return saci.findUser(login)
+    }
+
+    fun userLocais(): List<String> {
+      val username = Config.user as? UserSaci
+      if (username?.admin == true) return listOf("TODOS")
+      return username?.listLocais?.toList() ?: emptyList()
     }
   }
 }
