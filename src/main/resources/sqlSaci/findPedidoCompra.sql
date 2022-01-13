@@ -1,7 +1,7 @@
 SELECT N.storeno                                          AS loja,
-       pdvno                                              AS pdvno,
-       N.nfno                                             AS numero,
-       N.nfse                                             AS serie,
+       ordno                                              AS ordno,
+       IFNULL(N.nfno, 0)                                  AS numero,
+       IFNULL(N.nfse, '')                                 AS serie,
        custno                                             AS cliente,
        CAST(date AS DATE)                                 AS data,
        N.empno                                            AS vendedor,
@@ -17,12 +17,9 @@ FROM sqldados.eord           AS N
   LEFT JOIN  sqldados.prdloc AS L
 	       ON L.prdno = X.prdno AND L.storeno = 4
 WHERE N.date >= 20220101
-  AND N.status <> 1
-  AND (N.nfse IN (1, 3, 5, 7))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
-  AND (N.nfno = :nfno OR :nfno = 0)
-  AND (N.nfse = :nfse OR :nfse = '')
+  AND (N.ordno = :ordno OR :ordno = 0)
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
 	 ordno,

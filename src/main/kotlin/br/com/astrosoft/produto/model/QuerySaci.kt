@@ -83,7 +83,6 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-
   fun findLocais(): List<Local> {
     val sql = "/sqlSaci/findLocais.sql"
     return query(sql, Local::class)
@@ -197,6 +196,19 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun salvaProdutosRessuprimento(podutoPedidoCompra: ProdutoRessuprimento) {
+    val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("storeno", podutoPedidoCompra.loja)
+      addOptionalParameter("ordno", podutoPedidoCompra.ordno)
+      addOptionalParameter("codigo", podutoPedidoCompra.codigo)
+      addOptionalParameter("grade", podutoPedidoCompra.grade)
+      addOptionalParameter("marca", podutoPedidoCompra.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoCompra.usuarioCD)
+      addOptionalParameter("usuarioExp", podutoPedidoCompra.usuarioExp)
+    }
+  }
+
   fun findNotaSaida(filtro: FiltroNota, locais: List<String>): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
@@ -212,13 +224,20 @@ class QuerySaci : QueryDB(driver, url, username, password) {
 
   fun findPedidoCompra(filtro: FiltroPedido, locais: List<String>): List<PedidoCompra> {
     val sql = "/sqlSaci/findPedidoCompra.sql"
-    val nfno = filtro.nfno
-    val nfse = filtro.nfse
     return query(sql, PedidoCompra::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
-      addOptionalParameter("nfno", nfno)
-      addOptionalParameter("nfse", nfse)
+      addOptionalParameter("ordno", filtro.ordno)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findRessuprimento(filtro: FiltroRessuprimento, locais: List<String>): List<Ressuprimento> {
+    val sql = "/sqlSaci/findRessuprimento.sql"
+    return query(sql, Ressuprimento::class) {
+      addOptionalParameter("marca", filtro.marca.num)
+      addOptionalParameter("storeno", filtro.storeno)
+      addOptionalParameter("ordno", filtro.pedido)
       addOptionalParameter("locais", locais)
     }
   }
@@ -234,9 +253,23 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findProdutoPedidoCompra(pedido: PedidoCompra, marca: EMarcaNota, locais: List<String>): List<ProdutoPedidoCompra> {
+  fun findProdutoPedidoCompra(pedido: PedidoCompra,
+                              marca: EMarcaPedido,
+                              locais: List<String>): List<ProdutoPedidoCompra> {
     val sql = "/sqlSaci/findProdutosPedidoCompra.sql"
     return query(sql, ProdutoPedidoCompra::class) {
+      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("ordno", pedido.ordno)
+      addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findProdutoRessuprimento(pedido: Ressuprimento,
+                               marca: EMarcaRessuprimento,
+                               locais: List<String>): List<ProdutoRessuprimento> {
+    val sql = "/sqlSaci/findProdutosRessuprimento.sql"
+    return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("storeno", pedido.loja)
       addOptionalParameter("ordno", pedido.ordno)
       addOptionalParameter("marca", marca.num)

@@ -5,10 +5,8 @@ import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class PedidoCompra(val loja: Int,
+class Ressuprimento(val loja: Int,
                 val ordno: Int,
-                val numero: Int,
-                val serie: String,
                 val cliente: Int,
                 val data: LocalDate,
                 val vendedor: Int,
@@ -18,8 +16,6 @@ class PedidoCompra(val loja: Int,
                 val totalProdutos: Double,
                 val marca: Int?,
                 val cancelada: String?) {
-  val nota
-    get() = "$numero/$serie"
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
@@ -30,7 +26,7 @@ class PedidoCompra(val loja: Int,
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+      return usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
     }
 
   val chaveCD: String?
@@ -39,18 +35,18 @@ class PedidoCompra(val loja: Int,
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "_" + usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
+      return "Entregue" + "_" + usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
     }
 
-  fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoCompra(this, marca, userLocais())
+  fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroPedido) = saci.findPedidoCompra(filtro, userLocais())
+    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userLocais())
   }
 }
 
-data class FiltroPedido(val storeno: Int, val ordno: Int, val marca: EMarcaNota)
+data class FiltroRessuprimento(val storeno: Int, val pedido: Int, val marca: EMarcaRessuprimento)
 
-enum class EMarcaPedido(val num: Int, val descricao: String) {
+enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
   CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")
 }
