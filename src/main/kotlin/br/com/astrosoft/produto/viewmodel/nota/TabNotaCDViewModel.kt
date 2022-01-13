@@ -49,14 +49,15 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.print(impressora,
-                            DadosEtiqueta(titulo = "CD",
-                                          usuario = split.getOrNull(0) ?: "",
-                                          nota = split.getOrNull(1) ?: "",
-                                          data = split.getOrNull(2) ?: "",
-                                          hora = split.getOrNull(3) ?: "",
-                                          local = split.getOrNull(4) ?: ""))
-        viewModel.showInformation("Impressão realizada na impressora $impressora")
+        EtiquetaChave.printPreview(impressora,
+                                   DadosEtiqueta(titulo = "Exp",
+                                                 usuario = split.getOrNull(0) ?: "",
+                                                 nota = split.getOrNull(1) ?: "",
+                                                 data = split.getOrNull(2) ?: "",
+                                                 hora = split.getOrNull(3) ?: "",
+                                                 local = split.getOrNull(4)
+                                                         ?: ""))
+        //viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
