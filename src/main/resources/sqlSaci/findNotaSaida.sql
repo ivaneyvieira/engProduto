@@ -11,7 +11,7 @@ SELECT N.storeno                                          AS loja,
        X.c4                                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos,
        MAX(X.s12)                                         AS marca,
-       IF(N.status <> 1, 'S', 'N')                        AS cancelada
+       IF(N.status <> 1, 'N', 'S')                        AS cancelada
 FROM sqldados.nf             AS N
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
