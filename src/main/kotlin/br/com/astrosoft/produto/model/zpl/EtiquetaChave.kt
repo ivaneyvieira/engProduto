@@ -20,6 +20,13 @@ object EtiquetaChave {
       println(it)
     }
   }
+
+  fun printPreview(impresora: String, dados: DadosEtiqueta) {
+    val zpl = template(dados)
+    ZPLPreview.showZPLPreview(zpl){
+      print(impresora, dados)
+    }
+  }
 }
 
 data class DadosEtiqueta(

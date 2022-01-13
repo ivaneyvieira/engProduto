@@ -79,10 +79,12 @@ dependencies { // Karibu-DSL dependency
   implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   implementation("com.sun.mail:javax.mail:1.6.2")
   implementation("com.sun.mail:gimap:2.0.1")
+  // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+  implementation("com.squareup.okhttp3:okhttp:4.9.3")
+  implementation("org.vaadin.addons.componentfactory:vcf-pdf-viewer:2.0.0")
 }
 
 vaadin {
   pnpmEnable = false
   productionMode = true
 }
-

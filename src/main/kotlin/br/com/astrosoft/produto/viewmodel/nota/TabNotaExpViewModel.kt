@@ -43,7 +43,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.print(impressora, DadosEtiqueta(titulo = "CD",
+        EtiquetaChave.print(impressora, DadosEtiqueta(titulo = "Exp",
                                                       usuario = split.getOrNull(1) ?: "",
                                                       nota = split.getOrNull(2) ?: "",
                                                       data = split.getOrNull(3) ?: "",
