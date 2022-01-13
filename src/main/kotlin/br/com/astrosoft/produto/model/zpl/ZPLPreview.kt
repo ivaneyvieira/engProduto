@@ -45,12 +45,12 @@ object ZPLPreview {/*
     return if (response.isSuccessful) response.body?.bytes() else null
   }
 
-  fun showZPLPreview(zplCode: String, printRunnable: () -> Unit) {
+  fun showZPLPreview(impressora: String, zplCode: String, printRunnable: () -> Unit) {
     val image = ZPLPreview.createPdf(zplCode, "2x1")
-    if (image != null) showImage("Preview", image, printRunnable)
+    if (image != null) showImage(impressora, image, printRunnable)
   }
 
-  fun showImage(title: String, image: ByteArray, printRunnable: () -> Unit) {
+  fun showImage(impressora: String, image: ByteArray, printRunnable: () -> Unit) {
 
     val filename = "etiqueta${System.currentTimeMillis()}.pdf"
     val resource = StreamResource(filename, InputStreamFactoryImage(image))
@@ -60,7 +60,7 @@ object ZPLPreview {/*
     embedded.setSizeFull()
     ConfirmDialog.create()
       .withMessage(embedded)
-      .withCaption("Impressão")
+      .withCaption("Impressão ($impressora)")
       .withNoButton(printRunnable, ButtonOption.caption("Imprimir"), ButtonOption.icon(VaadinIcon.PRINT))
       .withCancelButton(ButtonOption.caption("Cancelar"))
       .apply {

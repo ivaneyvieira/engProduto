@@ -23,7 +23,7 @@ object EtiquetaChave {
 
   fun printPreview(impresora: String, dados: DadosEtiqueta) {
     val zpl = template(dados)
-    ZPLPreview.showZPLPreview(zpl){
+    ZPLPreview.showZPLPreview(impresora, zpl) {
       print(impresora, dados)
     }
   }
