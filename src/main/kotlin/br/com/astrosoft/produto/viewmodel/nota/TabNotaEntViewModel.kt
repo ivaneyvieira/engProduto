@@ -35,7 +35,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreview(impressora,
-                            DadosEtiqueta(titulo = "Entrega",
+                            DadosEtiqueta(titulo = "Entrege",
                                           usuario = split.getOrNull(1) ?: "",
                                           nota = split.getOrNull(2) ?: "",
                                           data = split.getOrNull(3) ?: "",

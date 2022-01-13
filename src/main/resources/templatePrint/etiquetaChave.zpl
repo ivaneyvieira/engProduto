@@ -1,8 +1,8 @@
 ^XA
-^FO160,20^AO,23,15^FD[titulo]^FS
-^FO160,50^AO,18,10^FDUsuario: [usuario]^FS
-^FO160,70^AO,18,10^FDNota:    [nota]^FS
-^FO160,90^AO,18,10^FDData:    [data]^FS
-^FO160,110^AO,18,10^FDHora:    [hora]^FS
-^FO160,130^AO,18,10^FDLocal:   [local]^FS
+^FO250,50^AO,23,15^FD[titulo]^FS
+^FO250,80^AO,18,10^FDUsuario: [usuario]^FS
+^FO250,100^AO,18,10^FDNota:    [nota]^FS
+^FO250,120^AO,18,10^FDData:    [data]^FS
+^FO250,140^AO,18,10^FDHora:    [hora]^FS
+^FO250,160^AO,18,10^FDLocal:   [local]^FS
 ^XZ
