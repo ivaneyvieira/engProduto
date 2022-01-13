@@ -46,7 +46,7 @@ object ZPLPreview {/*
   }
 
   fun showZPLPreview(impressora: String, zplCode: String, printRunnable: () -> Unit) {
-    val image = ZPLPreview.createPdf(zplCode, "2x1")
+    val image = ZPLPreview.createPdf(zplCode, "3x1")
     if (image != null) showImage(impressora, image, printRunnable)
   }
 
@@ -63,10 +63,6 @@ object ZPLPreview {/*
       .withCaption("Impressão ($impressora)")
       .withNoButton(printRunnable, ButtonOption.caption("Imprimir"), ButtonOption.icon(VaadinIcon.PRINT))
       .withCancelButton(ButtonOption.caption("Cancelar"))
-      .apply {
-        //this.width = "50%"
-        //this.height = "80%"
-      }
       .open()
   }
 }
