@@ -182,30 +182,29 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun salvaProdutosPedidoCompra(podutoPedidoCompra: ProdutoPedidoCompra) {
-    val sql = "/sqlSaci/salvaProdutosPedidoCompra.sql"
+  fun salvaProdutosPedidoVenda(podutoPedidoVenda: ProdutoPedidoVenda) {
+    val sql = "/sqlSaci/salvaProdutosPedidoVenda.sql"
     script(sql) {
-      addOptionalParameter("storeno", podutoPedidoCompra.loja)
-      addOptionalParameter("ordno", podutoPedidoCompra.ordno)
-      addOptionalParameter("codigo", podutoPedidoCompra.codigo)
-      addOptionalParameter("grade", podutoPedidoCompra.grade)
-      addOptionalParameter("gradeAlternativa", podutoPedidoCompra.gradeAlternativa)
-      addOptionalParameter("marca", podutoPedidoCompra.marca)
-      addOptionalParameter("usuarioCD", podutoPedidoCompra.usuarioCD)
-      addOptionalParameter("usuarioExp", podutoPedidoCompra.usuarioExp)
+      addOptionalParameter("storeno", podutoPedidoVenda.loja)
+      addOptionalParameter("ordno", podutoPedidoVenda.ordno)
+      addOptionalParameter("codigo", podutoPedidoVenda.codigo)
+      addOptionalParameter("grade", podutoPedidoVenda.grade)
+      addOptionalParameter("gradeAlternativa", podutoPedidoVenda.gradeAlternativa)
+      addOptionalParameter("marca", podutoPedidoVenda.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
     }
   }
 
-  fun salvaProdutosRessuprimento(podutoPedidoCompra: ProdutoRessuprimento) {
+  fun salvaProdutosRessuprimento(podutoPedidoVenda: ProdutoRessuprimento) {
     val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
     script(sql) {
-      addOptionalParameter("storeno", podutoPedidoCompra.loja)
-      addOptionalParameter("ordno", podutoPedidoCompra.ordno)
-      addOptionalParameter("codigo", podutoPedidoCompra.codigo)
-      addOptionalParameter("grade", podutoPedidoCompra.grade)
-      addOptionalParameter("marca", podutoPedidoCompra.marca)
-      addOptionalParameter("usuarioCD", podutoPedidoCompra.usuarioCD)
-      addOptionalParameter("usuarioExp", podutoPedidoCompra.usuarioExp)
+      addOptionalParameter("storeno", podutoPedidoVenda.loja)
+      addOptionalParameter("ordno", podutoPedidoVenda.ordno)
+      addOptionalParameter("codigo", podutoPedidoVenda.codigo)
+      addOptionalParameter("grade", podutoPedidoVenda.grade)
+      addOptionalParameter("marca", podutoPedidoVenda.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
+      addOptionalParameter("usuarioExp", podutoPedidoVenda.usuarioExp)
     }
   }
 
@@ -224,9 +223,9 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findPedidoCompra(filtro: FiltroPedido, locais: List<String>): List<PedidoCompra> {
-    val sql = "/sqlSaci/findPedidoCompra.sql"
-    return query(sql, PedidoCompra::class) {
+  fun findPedidoVenda(filtro: FiltroPedido, locais: List<String>): List<PedidoVenda> {
+    val sql = "/sqlSaci/findPedidoVenda.sql"
+    return query(sql, PedidoVenda::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("ordno", filtro.ordno)
@@ -255,11 +254,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findProdutoPedidoCompra(pedido: PedidoCompra,
-                              marca: EMarcaPedido,
-                              locais: List<String>): List<ProdutoPedidoCompra> {
-    val sql = "/sqlSaci/findProdutosPedidoCompra.sql"
-    return query(sql, ProdutoPedidoCompra::class) {
+  fun findProdutoPedidoVenda(pedido: PedidoVenda,
+                             marca: EMarcaPedido,
+                             locais: List<String>): List<ProdutoPedidoVenda> {
+    val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
+    return query(sql, ProdutoPedidoVenda::class) {
       addOptionalParameter("storeno", pedido.loja)
       addOptionalParameter("ordno", pedido.ordno)
       addOptionalParameter("marca", marca.num)

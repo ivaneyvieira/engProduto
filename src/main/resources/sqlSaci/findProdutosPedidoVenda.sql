@@ -21,7 +21,6 @@ SELECT X.storeno                                          AS loja,
        (X.qtty / 1000) * X.price / 100                    AS total,
        X.c2                                               AS gradeAlternativa,
        X.s12                                              AS marca,
-       X.c3                                               AS usuarioExp,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD
 FROM sqldados.prd             AS P

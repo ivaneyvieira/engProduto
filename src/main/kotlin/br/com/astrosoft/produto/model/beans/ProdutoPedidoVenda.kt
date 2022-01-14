@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class ProdutoPedidoCompra(
+class ProdutoPedidoVenda(
   val loja: Int,
   val ordno: Long,
   val nota: String,
@@ -27,19 +27,15 @@ class ProdutoPedidoCompra(
   val total: Double,
   var gradeAlternativa: String?,
   var marca: Int,
-  var usuarioExp: String,
   var usuarioCD: String,
-                         ) {
-  val usuarioNameExp
-    get() = usuarioExp.split("_").getOrNull(0)
-
+                        ) {
   val usuarioNameCD
     get() = usuarioCD.split("_").getOrNull(0)
 
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
 
   fun salva() {
-    saci.salvaProdutosPedidoCompra(this)
+    saci.salvaProdutosPedidoVenda(this)
   }
 
   fun findGrades(): List<PrdGrade> {
