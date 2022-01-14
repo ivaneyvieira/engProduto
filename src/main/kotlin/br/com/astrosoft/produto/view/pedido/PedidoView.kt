@@ -4,11 +4,6 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.ViewLayout
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
-import br.com.astrosoft.produto.view.nota.TabNotaCD
-import br.com.astrosoft.produto.view.nota.TabNotaEnt
-import br.com.astrosoft.produto.view.nota.TabNotaExp
-import br.com.astrosoft.produto.viewmodel.nota.INotaView
-import br.com.astrosoft.produto.viewmodel.nota.NotaViewModel
 import br.com.astrosoft.produto.viewmodel.pedido.IPedidoView
 import br.com.astrosoft.produto.viewmodel.pedido.PedidoViewModel
 import com.vaadin.flow.component.dependency.CssImport
