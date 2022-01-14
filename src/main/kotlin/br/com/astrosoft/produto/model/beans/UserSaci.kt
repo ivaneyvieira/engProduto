@@ -28,9 +28,12 @@ class UserSaci : IUser {
   var pedidoCD by DelegateAuthorized(10)
   var pedidoEnt by DelegateAuthorized(11)
 
-  val produto = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit
-  val nota = notaExp || notaCD || notaEnt
-  val pedido = pedidoCD || pedidoEnt
+  val produto
+    get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
+  val nota
+    get() = notaExp || notaCD || notaEnt || admin
+  val pedido
+    get() = pedidoCD || pedidoEnt || admin
 
   val fornecedor
     get() = produtoList
