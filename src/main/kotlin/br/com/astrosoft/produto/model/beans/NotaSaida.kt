@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -50,7 +49,12 @@ class NotaSaida(val loja: Int,
   }
 }
 
-data class FiltroNota(val storeno: Int, val nota: String, val marca: EMarcaNota) {
+data class FiltroNota(val storeno: Int,
+                      val nota: String,
+                      val marca: EMarcaNota,
+                      val loja: Int,
+                      val cliente: Int,
+                      val vendedor: String) {
   val nfno: Int
     get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
   val nfse: String

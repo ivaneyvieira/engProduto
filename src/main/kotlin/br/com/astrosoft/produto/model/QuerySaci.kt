@@ -218,6 +218,8 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
+      addOptionalParameter("cliente", filtro.cliente)
+      addOptionalParameter("vendedor", filtro.vendedor)
       addOptionalParameter("locais", locais)
     }
   }
