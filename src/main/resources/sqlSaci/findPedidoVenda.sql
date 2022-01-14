@@ -13,7 +13,7 @@ FROM sqldados.eord           AS N
 	       USING (storeno, ordno)
   LEFT JOIN  sqldados.prdloc AS L
 	       ON L.prdno = X.prdno AND L.storeno = 4
-WHERE N.date >= 20220101
+WHERE N.date >= 20220114
   AND N.paymno = 431
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)

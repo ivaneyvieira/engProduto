@@ -6,8 +6,10 @@ import br.com.astrosoft.produto.model.beans.EMarcaPedido
 import br.com.astrosoft.produto.model.beans.PedidoVenda
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoBarcode
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoCodigo
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoDescricao
+import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoEstoque
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGrade
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoLocalizacao
@@ -53,13 +55,12 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
       setSelectionMode(Grid.SelectionMode.MULTI)
       produtoPedidoUsuarioNameCD()
       produtoPedidoCodigo()
+      produtoPedidoBarcode()
       produtoPedidoDescricao()
       produtoPedidoGrade()
-      produtoPedidoGradeAlternativa()
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
-      produtoPedidoPrecoUnitario()
-      produtoPedidoPrecoTotal()
+      produtoPedidoEstoque()
     }
     this.addAndExpand(gridDetail)
     update()

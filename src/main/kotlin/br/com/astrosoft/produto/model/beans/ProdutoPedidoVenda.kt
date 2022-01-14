@@ -28,6 +28,7 @@ class ProdutoPedidoVenda(
   var gradeAlternativa: String?,
   var marca: Int,
   var usuarioCD: String,
+  val estoque: Int,
                         ) {
   val usuarioNameCD
     get() = usuarioCD.split("_").getOrNull(0)

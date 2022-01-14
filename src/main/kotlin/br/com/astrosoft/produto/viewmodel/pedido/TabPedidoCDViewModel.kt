@@ -35,7 +35,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
 
 interface ITabPedidoCD : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(Pedidos: List<PedidoVenda>)
+  fun updatePedidos(pedidos: List<PedidoVenda>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoVenda>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda?

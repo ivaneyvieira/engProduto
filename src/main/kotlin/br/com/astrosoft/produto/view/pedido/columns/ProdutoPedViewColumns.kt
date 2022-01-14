@@ -87,6 +87,10 @@ object ProdutoPedViewColumns {
     this.setHeader("Quant")
   }
 
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoEstoque() = addColumnInt(ProdutoPedidoVenda::estoque) {
+    this.setHeader("Quant")
+  }
+
   fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoUnitario() = addColumnDouble(ProdutoPedidoVenda::preco) {
     this.setHeader("Preço")
   }

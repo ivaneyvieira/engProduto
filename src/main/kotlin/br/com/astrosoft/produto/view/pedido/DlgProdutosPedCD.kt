@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoBarcode
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoCodigo
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoDescricao
+import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoEstoque
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGrade
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoLocalizacao
@@ -54,11 +55,9 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       produtoPedidoBarcode()
       produtoPedidoDescricao()
       produtoPedidoGrade()
-      produtoPedidoGradeAlternativa()
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
-      produtoPedidoPrecoUnitario()
-      produtoPedidoPrecoTotal()
+      produtoPedidoEstoque()
     }
     this.addAndExpand(gridDetail)
     update()

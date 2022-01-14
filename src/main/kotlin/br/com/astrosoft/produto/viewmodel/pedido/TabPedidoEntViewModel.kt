@@ -34,7 +34,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
 
 interface ITabPedidoEnt : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(Pedidos: List<PedidoVenda>)
+  fun updatePedidos(pedidos: List<PedidoVenda>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoVenda>
 }
