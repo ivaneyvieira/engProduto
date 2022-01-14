@@ -15,7 +15,6 @@ SELECT X.storeno                                          AS loja,
        P.m4                                               AS comprimento,
        P.m5                                               AS largura,
        P.sp / 100                                         AS precoCheio,
-       IFNULL(S.ncm, '')                                  AS ncm,
        X.qtty / 1000                                      AS quantidade,
        X.price / 100                                      AS preco,
        (X.qtty / 1000) * X.price / 100                    AS total,
@@ -41,8 +40,6 @@ FROM sqldados.prd             AS P
 	       ON T.no = P.typeno
   LEFT JOIN  sqldados.cl
 	       ON cl.no = P.clno
-  LEFT JOIN  sqldados.spedprd AS S
-	       ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.ordno = :ordno
   AND (X.s12 = :marca OR :marca = 999)

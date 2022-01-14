@@ -79,10 +79,6 @@ object ProdutoPedViewColumns {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoNcm() = addColumnString(ProdutoPedidoVenda::ncm) {
-    this.setHeader("NCM")
-  }
-
   fun Grid<ProdutoPedidoVenda>.produtoPedidoQuantidade() = addColumnInt(ProdutoPedidoVenda::quantidade) {
     this.setHeader("Quant")
   }

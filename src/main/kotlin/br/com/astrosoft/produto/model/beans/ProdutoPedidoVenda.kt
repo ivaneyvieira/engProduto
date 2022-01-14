@@ -20,7 +20,6 @@ class ProdutoPedidoVenda(
   val comprimento: Int,
   val largura: Int,
   val precoCheio: Double,
-  val ncm: String,
   val localizacao: String?,
   val quantidade: Int,
   val preco: Double,
