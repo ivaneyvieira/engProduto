@@ -4,7 +4,10 @@ import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EMarcaPedido
+import br.com.astrosoft.produto.model.beans.FiltroPedido
+import br.com.astrosoft.produto.model.beans.PedidoVenda
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 import java.time.LocalDate
 import java.time.LocalTime
 

@@ -23,7 +23,6 @@ object ProdutoRetiraEntregaViewColumns {
     this.setHeader("Nota")
   }
 
-
   fun Grid<ProdutoRetiraEntrega>.retiraEntregaTipo() = addColumnString(ProdutoRetiraEntrega::tipo) {
     this.setHeader("Tipo")
   }
@@ -48,9 +47,10 @@ object ProdutoRetiraEntregaViewColumns {
     this.setHeader("Grade")
   }
 
-  fun Grid<ProdutoRetiraEntrega>.retiraEntregaGradeAlternativa() = addColumnString(ProdutoRetiraEntrega::gradeAlternativa) {
-    this.setHeader("Grade")
-  }
+  fun Grid<ProdutoRetiraEntrega>.retiraEntregaGradeAlternativa() =
+          addColumnString(ProdutoRetiraEntrega::gradeAlternativa) {
+            this.setHeader("Grade")
+          }
 
   fun Grid<ProdutoRetiraEntrega>.retiraEntregaLocalizacao() = addColumnString(ProdutoRetiraEntrega::localizacao) {
     this.setHeader("Loc")

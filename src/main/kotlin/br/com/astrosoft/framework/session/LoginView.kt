@@ -8,19 +8,13 @@ import com.github.mvysny.karibudsl.v10.verticalLayout
 import com.github.mvysny.kaributools.navigateTo
 import com.vaadin.flow.component.login.LoginForm
 import com.vaadin.flow.component.login.LoginI18n
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.page.BodySize
-import com.vaadin.flow.component.page.Viewport
 import com.vaadin.flow.router.BeforeEnterEvent
 import com.vaadin.flow.router.BeforeEnterObserver
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.lumo.Lumo
 
 @PageTitle("Login")
-@Route("login")
-//@Theme(value = Lumo::class, variant = Lumo.DARK)
+@Route("login") //@Theme(value = Lumo::class, variant = Lumo.DARK)
 class LoginView : KComposite(), BeforeEnterObserver {
 
   override fun beforeEnter(event: BeforeEnterEvent) {

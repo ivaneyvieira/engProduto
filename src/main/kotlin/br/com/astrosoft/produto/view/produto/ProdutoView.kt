@@ -1,11 +1,11 @@
 package br.com.astrosoft.produto.view.produto
 
-import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.ProdutoLayout
-import br.com.astrosoft.produto.viewmodel.produto.ProdutoViewModel
-import br.com.astrosoft.produto.viewmodel.produto.IProdutoView
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.ViewLayout
+import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.ProdutoLayout
+import br.com.astrosoft.produto.viewmodel.produto.IProdutoView
+import br.com.astrosoft.produto.viewmodel.produto.ProdutoViewModel
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route

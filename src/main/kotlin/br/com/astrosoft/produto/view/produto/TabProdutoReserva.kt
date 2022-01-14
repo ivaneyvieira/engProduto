@@ -77,7 +77,7 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
         viewModel.updateView()
       }
     }
-    button("Expira pedido"){
+    button("Expira pedido") {
       onLeftClick {
         viewModel.expiraPedidosSelecionados()
       }

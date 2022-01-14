@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.viewmodel.pedido
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EMarcaPedido
+import br.com.astrosoft.produto.model.beans.FiltroPedido
+import br.com.astrosoft.produto.model.beans.PedidoVenda
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 
 class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
   fun updateView() {

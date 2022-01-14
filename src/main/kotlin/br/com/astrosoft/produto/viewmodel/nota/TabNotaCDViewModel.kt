@@ -56,8 +56,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
                                                  data = split.getOrNull(2) ?: "",
                                                  hora = split.getOrNull(3) ?: "",
                                                  local = split.getOrNull(4)
-                                                         ?: ""))
-        //viewModel.showInformation("Impressão realizada na impressora $impressora")
+                                                         ?: "")) //viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

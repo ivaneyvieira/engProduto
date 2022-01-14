@@ -35,13 +35,13 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreview(impressora,
-                            DadosEtiqueta(titulo = "Entregue",
-                                          usuario = split.getOrNull(1) ?: "",
-                                          nota = split.getOrNull(2) ?: "",
-                                          data = split.getOrNull(3) ?: "",
-                                          hora = split.getOrNull(4) ?: "",
-                                          local = split.getOrNull(5) ?: ""))
-        //viewModel.showInformation("Impressão realizada na impressora $impressora")
+                                   DadosEtiqueta(titulo = "Entregue",
+                                                 usuario = split.getOrNull(1) ?: "",
+                                                 nota = split.getOrNull(2) ?: "",
+                                                 data = split.getOrNull(3) ?: "",
+                                                 hora = split.getOrNull(4) ?: "",
+                                                 local = split.getOrNull(5)
+                                                         ?: "")) //viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

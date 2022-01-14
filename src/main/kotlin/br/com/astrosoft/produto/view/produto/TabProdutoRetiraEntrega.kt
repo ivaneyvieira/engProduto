@@ -5,7 +5,10 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.framework.view.addColumnInt
 import br.com.astrosoft.framework.view.addColumnString
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroProduto
+import br.com.astrosoft.produto.model.beans.PrdGrade
+import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCliente
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaClno
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaCodigo
@@ -25,7 +28,9 @@ import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewCol
 import br.com.astrosoft.produto.view.produto.columns.ProdutoRetiraEntregaViewColumns.retiraEntregaVendno
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoRetiraEntrega
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoRetiraEntregaViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.gridContextMenu
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
@@ -115,16 +120,16 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
         this.addColumnString(PrdGrade::grade) {
           this.setHeader("Grade")
         }
-        this.addColumnButton(iconButton = VaadinIcon.CHECK, tooltip= "Seleciona Grade", header=""){
+        this.addColumnButton(iconButton = VaadinIcon.CHECK, tooltip = "Seleciona Grade", header = "") {
           val grade = it.grade
           viewModel.salvaGrade(grade)
-          val gridContex  =  this@gridContextMenu
+          val gridContex = this@gridContextMenu
           gridContex.close()
         }
         this.addColumnInt(PrdGrade::saldo) {
           this.setHeader("Saldo")
         }
-        setWidth("400px")
+        width = "400px"
         setHeight("300px")
       }
 
@@ -140,7 +145,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
     }
 
     this.setClassNameGenerator {
-      if(it.gradeAlternativa != "") "marcaDiferenca" else null
+      if (it.gradeAlternativa != "") "marcaDiferenca" else null
     }
   }
 

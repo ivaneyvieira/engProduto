@@ -7,15 +7,15 @@ import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
 
 class TabProdutoReservaViewModel(val viewModel: ProdutoViewModel) {
-  fun updateView()= viewModel.exec {
+  fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoReserva.find(filtro)
     subView.updateProdutos(produtos)
   }
 
   fun expiraPedidosSelecionados() = viewModel.exec {
-    val pedidos : List<Pedido> = subView.pedidosSelecionado().ifEmpty { fail("Nenhum pedido selecionado") }
-    pedidos.forEach {pedido ->
+    val pedidos: List<Pedido> = subView.pedidosSelecionado().ifEmpty { fail("Nenhum pedido selecionado") }
+    pedidos.forEach { pedido ->
       pedido.expira()
     }
     subView.updateComponent()
@@ -25,8 +25,8 @@ class TabProdutoReservaViewModel(val viewModel: ProdutoViewModel) {
     get() = viewModel.view.tabProdutoReserva
 }
 
-interface ITabProdutoReserva : ITabView{
-  fun filtro() : FiltroProduto
+interface ITabProdutoReserva : ITabView {
+  fun filtro(): FiltroProduto
   fun updateProdutos(produtos: List<ProdutoReserva>)
   fun pedidosSelecionado(): List<Pedido>
 }

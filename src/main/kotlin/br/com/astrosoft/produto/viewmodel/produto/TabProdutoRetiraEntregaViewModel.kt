@@ -19,7 +19,7 @@ class TabProdutoRetiraEntregaViewModel(val viewModel: ProdutoViewModel) {
     block(list)
   }
 
-  fun salvaGrade(grade: String?)= viewModel.exec {
+  fun salvaGrade(grade: String?) = viewModel.exec {
     val prd = subView.produtoSelecionado()
     prd ?: fail("Produto não selecionado")
     prd.gradeAlternativa = grade ?: ""
@@ -34,5 +34,5 @@ class TabProdutoRetiraEntregaViewModel(val viewModel: ProdutoViewModel) {
 interface ITabProdutoRetiraEntrega : ITabView {
   fun filtro(): FiltroProduto
   fun updateProdutos(produtos: List<ProdutoRetiraEntrega>)
-  fun produtoSelecionado() : ProdutoRetiraEntrega?
+  fun produtoSelecionado(): ProdutoRetiraEntrega?
 }

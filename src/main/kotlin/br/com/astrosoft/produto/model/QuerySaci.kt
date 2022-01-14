@@ -254,9 +254,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findProdutoPedidoVenda(pedido: PedidoVenda,
-                             marca: EMarcaPedido,
-                             locais: List<String>): List<ProdutoPedidoVenda> {
+  fun findProdutoPedidoVenda(pedido: PedidoVenda, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoVenda> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
     return query(sql, ProdutoPedidoVenda::class) {
       addOptionalParameter("storeno", pedido.loja)
