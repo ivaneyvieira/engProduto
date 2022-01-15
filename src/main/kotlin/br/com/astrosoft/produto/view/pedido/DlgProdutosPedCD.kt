@@ -1,9 +1,10 @@
 package br.com.astrosoft.produto.view.pedido
 
 import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.produto.model.beans.EMarcaPedido
-import br.com.astrosoft.produto.model.beans.PedidoVenda
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
+import br.com.astrosoft.framework.view.comboFieldEditor
+import br.com.astrosoft.framework.view.withEditor
+import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoBarcode
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoCodigo
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoDescricao
@@ -17,9 +18,12 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVenda) {
@@ -51,10 +55,38 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
+
+      withEditor(ProdutoPedidoVenda::class, openEditor = {
+        (getColumnBy(ProdutoPedidoVenda::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
+        it.bean?.clno?.startsWith("01") == true
+      }, closeEditor = { binder ->
+        this.dataProvider.refreshItem(binder.bean)
+      })
+
       produtoPedidoCodigo()
       produtoPedidoBarcode()
       produtoPedidoDescricao()
       produtoPedidoGrade()
+      produtoPedidoGradeAlternativa().comboFieldEditor { combo: Select<String> ->
+        combo.setItems("")
+        editor.addOpenListener { e ->
+          if (e.source.isOpen) {
+            val produto = e.item
+            val list = mutableListOf<PrdGrade>()
+
+            viewModel.findGrade(produto) { prds ->
+              list.addAll(prds)
+            }
+            combo.style.set("--vaadin-combo-box-overlay-width", "300px")
+            combo.setItems(list.map { it.grade })
+            combo.setItemLabelGenerator { grade ->
+              val saldo = list.firstOrNull { it.grade == grade }?.saldo ?: 0
+              if (grade == null) ""
+              else "$grade Saldo: $saldo"
+            }
+          }
+        }
+      }
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
       produtoPedidoEstoque()

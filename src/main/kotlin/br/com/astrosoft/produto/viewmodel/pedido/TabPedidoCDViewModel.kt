@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EMarcaPedido
-import br.com.astrosoft.produto.model.beans.FiltroPedido
-import br.com.astrosoft.produto.model.beans.PedidoVenda
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
+import br.com.astrosoft.produto.model.beans.*
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -16,6 +13,12 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     val filtro = subView.filtro(EMarcaPedido.CD)
     val Pedidos = PedidoVenda.find(filtro)
     subView.updatePedidos(Pedidos)
+  }
+
+  fun findGrade(prd: ProdutoPedidoVenda?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
+    prd ?: return@exec
+    val list = prd.findGrades()
+    block(list)
   }
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {

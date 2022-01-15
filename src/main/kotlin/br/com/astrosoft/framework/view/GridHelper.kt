@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 //***********************************************************************************************
 
 fun <T : Any> Grid<T>.withEditor(classBean: KClass<T>,
-                                 openEditor: (Binder<T>) -> Unit,
+                                 openEditor: (Binder<T>) -> Boolean,
                                  closeEditor: (Binder<T>) -> Unit) {
   val binder = Binder(classBean.java)
   editor.binder = binder
@@ -27,11 +27,12 @@ fun <T : Any> Grid<T>.withEditor(classBean: KClass<T>,
     editor.editItem(event.item)
   }
   editor.addOpenListener {
-    openEditor(binder)
+    if (!openEditor(binder)){
+      it.source.cancel()
+    }
   }
-  editor.addCloseListener { _ ->
+  editor.addCloseListener {
     editor.refresh()
-    openEditor(binder)
     closeEditor(binder)
   }
   element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"

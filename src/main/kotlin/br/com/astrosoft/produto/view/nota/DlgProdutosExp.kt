@@ -57,6 +57,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
+        it.bean?.clno?.startsWith("01") == true
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
@@ -75,17 +76,20 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFGradeAlternativa().comboFieldEditor { combo: Select<String> ->
         combo.setItems("")
         editor.addOpenListener { e ->
-          val produto = e.item
-          val list = mutableListOf<PrdGrade>()
+          if (e.source.isOpen) {
+            val produto = e.item
+            val list = mutableListOf<PrdGrade>()
 
-          viewModel.findGrade(produto) { prds ->
-            list.addAll(prds)
-          }
-          combo.style.set("--vaadin-combo-box-overlay-width", "300px")
-          combo.setItems(list.map { it.grade })
-          combo.setItemLabelGenerator { grade ->
-            val saldo = list.firstOrNull { it.grade == grade }?.saldo ?: 0
-            "$grade Saldo: $saldo"
+            viewModel.findGrade(produto) { prds ->
+              list.addAll(prds)
+            }
+            combo.style.set("--vaadin-combo-box-overlay-width", "300px")
+            combo.setItems(list.map { it.grade })
+            combo.setItemLabelGenerator { grade ->
+              val saldo = list.firstOrNull { it.grade == grade }?.saldo ?: 0
+              if (grade == null) ""
+              else "$grade Saldo: $saldo"
+            }
           }
         }
       }

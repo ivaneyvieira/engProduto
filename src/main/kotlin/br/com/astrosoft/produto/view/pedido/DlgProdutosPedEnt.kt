@@ -58,6 +58,7 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
       produtoPedidoBarcode()
       produtoPedidoDescricao()
       produtoPedidoGrade()
+      produtoPedidoGradeAlternativa()
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
       produtoPedidoEstoque()
