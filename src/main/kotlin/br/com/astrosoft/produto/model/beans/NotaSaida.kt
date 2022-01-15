@@ -17,7 +17,8 @@ class NotaSaida(val loja: Int,
                 val usuarioCD: String?,
                 val totalProdutos: Double,
                 val marca: Int?,
-                val cancelada: String?) {
+                val cancelada: String?,
+                val tipoNotaSaida: String?) {
   val nota
     get() = "$numero/$serie"
 

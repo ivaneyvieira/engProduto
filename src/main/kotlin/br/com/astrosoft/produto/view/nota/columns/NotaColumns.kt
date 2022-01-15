@@ -43,4 +43,8 @@ object NotaColumns {
   fun Grid<NotaSaida>.colunaNFSituacao() = addColumnString(NotaSaida::situacao) {
     this.setHeader("Situação")
   }
+
+  fun Grid<NotaSaida>.colunaNFTipo() = addColumnString(NotaSaida::tipoNotaSaida) {
+    this.setHeader("Tipo")
+  }
 }

@@ -11,7 +11,42 @@ SELECT N.storeno                                          AS loja,
        X.c4                                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos,
        MAX(X.s12)                                         AS marca,
-       IF(N.status <> 1, 'N', 'S')                        AS cancelada
+       IF(N.status <> 1, 'N', 'S')                        AS cancelada,
+       CASE
+	 WHEN tipo = 0
+	   THEN ''
+	 WHEN tipo = 1
+	   THEN 'TRANSFRENECIA'
+	 WHEN tipo = 2
+	   THEN 'DEVOLUCAO'
+	 WHEN tipo = 3
+	   THEN 'SIMP REME'
+	 WHEN tipo = 4
+	   THEN 'ENTRE FUT'
+	 WHEN tipo = 5
+	   THEN 'RET DEMON'
+	 WHEN tipo = 6
+	   THEN 'VENDA USA'
+	 WHEN tipo = 7
+	   THEN 'OUTROS'
+	 WHEN tipo = 8
+	   THEN 'NF CF'
+	 WHEN tipo = 9
+	   THEN 'PERD/CONSER'
+	 WHEN tipo = 10
+	   THEN 'REPOSICAO'
+	 WHEN tipo = 11
+	   THEN 'RESSARCI'
+	 WHEN tipo = 12
+	   THEN 'COMODATO'
+	 WHEN tipo = 13
+	   THEN 'NF EMPRESA'
+	 WHEN tipo = 14
+	   THEN 'BONIFICA'
+	 WHEN tipo = 15
+	   THEN 'NFE'
+	 ELSE ''
+       END                                                AS tipoNotaSaida
 FROM sqldados.nf             AS N
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
@@ -20,7 +55,7 @@ FROM sqldados.nf             AS N
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
 WHERE N.issuedate >= 20220101
-  AND (N.nfse IN (1, 5, 7) OR (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
+  AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10) OR (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)

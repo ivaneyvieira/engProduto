@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFSituacao
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.viewmodel.nota.ITabNotaExp
@@ -72,6 +73,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFVendedor()
     colunaNFValor()
     colunaNFSituacao()
+    colunaNFTipo()
 
     this.setClassNameGenerator {
       when {
