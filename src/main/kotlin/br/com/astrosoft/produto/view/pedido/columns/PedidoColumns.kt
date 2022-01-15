@@ -12,8 +12,12 @@ object PedidoColumns {
     this.setHeader("Loja")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoNUmero() = addColumnInt(PedidoVenda::ordno) {
-    this.setHeader("Número")
+  fun Grid<PedidoVenda>.colunaPedidoNumero() = addColumnInt(PedidoVenda::ordno) {
+    this.setHeader("Pedido")
+  }
+
+  fun Grid<PedidoVenda>.colunaPedidoChaveCD() = addColumnString(PedidoVenda::chaveCD) {
+    this.setHeader("Chave")
   }
 
   fun Grid<PedidoVenda>.colunaPedidoCliente() = addColumnInt(PedidoVenda::cliente) {

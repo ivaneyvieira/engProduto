@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCliente
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
-import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNUmero
+import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoValor
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoCD
@@ -45,7 +45,7 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
 
   override fun Grid<PedidoVenda>.gridPanel() {
     colunaPedidoLoja()
-    colunaPedidoNUmero()
+    colunaPedidoNumero()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedCD(viewModel, pedido)
       dlgProduto.showDialog()
@@ -53,7 +53,6 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     colunaPedidoData()
     colunaPedidoCliente()
     colunaPedidoVendedor()
-    colunaPedidoValor()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedido {

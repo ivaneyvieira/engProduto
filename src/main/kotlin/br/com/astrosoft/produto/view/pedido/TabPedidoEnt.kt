@@ -5,10 +5,11 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoChaveCD
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCliente
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
-import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNUmero
+import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoValor
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoEnt
@@ -46,11 +47,15 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
 
   override fun Grid<PedidoVenda>.gridPanel() {
     colunaPedidoLoja()
-    colunaPedidoNUmero()
+    colunaPedidoChaveCD()
+    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { pedido ->
+      viewModel.printEtiqueta(pedido)
+    }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedEnt(viewModel, pedido)
       dlgProduto.showDialog()
     }
+    colunaPedidoNumero()
     colunaPedidoData()
     colunaPedidoCliente()
     colunaPedidoVendedor()
