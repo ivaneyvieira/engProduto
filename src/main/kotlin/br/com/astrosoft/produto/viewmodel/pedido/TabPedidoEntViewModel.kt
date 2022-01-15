@@ -23,6 +23,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
       produtoNF.marca = EMarcaPedido.CD.num
       produtoNF.usuarioCD = ""
       produtoNF.salva()
+      produtoNF.orcamento()
     }
     subView.updateProdutos()
     updateView()

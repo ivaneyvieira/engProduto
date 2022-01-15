@@ -38,6 +38,10 @@ class ProdutoPedidoVenda(
     saci.salvaProdutosPedidoVenda(this)
   }
 
+  fun expira() = saci.statusPedido(this, EStatusPedido.Expirado)
+
+  fun orcamento() = saci.statusPedido(this, EStatusPedido.Orcado)
+
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo)
   }

@@ -148,11 +148,23 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     })
   }
 
-  fun expira(pedido: Pedido) {
+  fun statusPedido(pedido: Pedido, status: EStatusPedido) {
     val sql = "/sqlSaci/expiraPedido.sql"
     script(sql) {
       addOptionalParameter("loja", pedido.loja)
       addOptionalParameter("pedido", pedido.pedido)
+      addOptionalParameter("status", status.codigo)
+    }
+  }
+
+  fun statusPedido(pedido: ProdutoPedidoVenda, status: EStatusPedido) {
+    val sql = "/sqlSaci/expiraPedidoProduto.sql"
+    script(sql) {
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.ordno)
+      addOptionalParameter("codigo", pedido.codigo)
+      addOptionalParameter("grade", pedido.grade)
+      addOptionalParameter("status", status.codigo)
     }
   }
 

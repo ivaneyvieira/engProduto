@@ -5,6 +5,6 @@ import java.time.LocalDate
 
 data class Pedido(val loja: Int, val pedido: Int, val data: LocalDate, val cliente: Int, val empno: Int) {
   fun expira() {
-    saci.expira(this)
+    saci.statusPedido(this, EStatusPedido.Expirado)
   }
 }

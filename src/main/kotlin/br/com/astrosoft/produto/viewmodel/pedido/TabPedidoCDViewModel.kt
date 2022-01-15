@@ -25,6 +25,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     val usuario = Config.user?.login ?: ""
     produtoNF.usuarioCD = usuario + "_" + dataHora
     produtoNF.salva()
+    produtoNF.expira()
     subView.updateProdutos()
     updateView()
   }
