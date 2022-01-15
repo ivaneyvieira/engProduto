@@ -47,7 +47,6 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
 
   override fun Grid<PedidoVenda>.gridPanel() {
     colunaPedidoLoja()
-    colunaPedidoChaveCD()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { pedido ->
       viewModel.printEtiqueta(pedido)
     }
@@ -55,11 +54,11 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
       dlgProduto = DlgProdutosPedEnt(viewModel, pedido)
       dlgProduto.showDialog()
     }
+    colunaPedidoChaveCD()
     colunaPedidoNumero()
     colunaPedidoData()
     colunaPedidoCliente()
     colunaPedidoVendedor()
-    colunaPedidoValor()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedido {
