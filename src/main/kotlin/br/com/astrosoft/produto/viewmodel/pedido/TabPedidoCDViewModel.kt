@@ -34,7 +34,6 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       produtoNF.salva()
     }
     subView.updateProdutos()
-    updateView()
   }
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {

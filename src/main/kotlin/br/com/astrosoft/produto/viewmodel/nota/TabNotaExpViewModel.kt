@@ -37,7 +37,10 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       produtoNF.salva()
     }
     subView.updateProdutos()
-    updateView()
+    imprimeEtiqueta()
+  }
+
+  private fun imprimeEtiqueta() {
     val nota = subView.findNota()
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->

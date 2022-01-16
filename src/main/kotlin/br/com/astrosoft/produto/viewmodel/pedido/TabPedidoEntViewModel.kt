@@ -26,7 +26,6 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
       produtoNF.orcamento()
     }
     subView.updateProdutos()
-    updateView()
   }
 
   fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {

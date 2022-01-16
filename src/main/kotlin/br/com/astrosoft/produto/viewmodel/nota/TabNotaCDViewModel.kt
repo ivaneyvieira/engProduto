@@ -56,7 +56,6 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     produtoNF.usuarioCD = usuario + "_" + dataHora
     produtoNF.salva()
     subView.updateProdutos()
-    updateView()
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {

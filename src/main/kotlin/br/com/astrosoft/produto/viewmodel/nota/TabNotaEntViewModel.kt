@@ -25,7 +25,6 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
       produtoNF.salva()
     }
     subView.updateProdutos()
-    updateView()
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
