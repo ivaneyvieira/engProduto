@@ -48,7 +48,9 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     colunaPedidoNumero()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedCD(viewModel, pedido)
-      dlgProduto.showDialog()
+      dlgProduto.showDialog {
+        viewModel.updateView()
+      }
     }
     colunaPedidoData()
     colunaPedidoCliente()

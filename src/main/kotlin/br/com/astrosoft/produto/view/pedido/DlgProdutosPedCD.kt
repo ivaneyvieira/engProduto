@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.framework.view.comboFieldEditor
 import br.com.astrosoft.framework.view.withEditor
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoBarcode
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoCodigo
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoDescricao
@@ -13,8 +12,6 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGrade
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoLocalizacao
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoPrecoTotal
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoPrecoUnitario
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoQuantidade
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -33,7 +30,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVenda) {
   private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
-  fun showDialog() {
+  fun showDialog(onClose: () -> Unit) {
     val form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Entregue") {
         val user = Config.user as? UserSaci
@@ -53,6 +50,8 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
           }
         }
       }
+    }, onClose = {
+      onClose()
     }) {
       HorizontalLayout().apply {
         setSizeFull()

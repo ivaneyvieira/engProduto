@@ -52,7 +52,9 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedEnt(viewModel, pedido)
-      dlgProduto.showDialog()
+      dlgProduto.showDialog {
+        viewModel.updateView()
+      }
     }
     colunaPedidoChaveCD()
     colunaPedidoNumero()

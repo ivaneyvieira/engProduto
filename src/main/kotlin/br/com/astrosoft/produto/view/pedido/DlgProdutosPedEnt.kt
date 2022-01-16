@@ -27,7 +27,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: PedidoVenda) {
   private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
-  fun showDialog() {
+  fun showDialog(onClose: () -> Unit) {
     val form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
@@ -38,6 +38,8 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
           gridDetail.setItems(pedido.produtos(EMarcaPedido.ENT))
         }
       }
+    }, onClose = {
+      onClose()
     }) {
       HorizontalLayout().apply {
         setSizeFull()

@@ -67,7 +67,9 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosCD(viewModel, nota)
-      dlgProduto.showDialog()
+      dlgProduto.showDialog {
+        viewModel.updateView()
+      }
     }
     colunaNFChaveExp()
     colunaNFNota()

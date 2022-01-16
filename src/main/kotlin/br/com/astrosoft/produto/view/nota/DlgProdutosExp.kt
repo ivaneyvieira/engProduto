@@ -31,7 +31,7 @@ import com.vaadin.flow.component.select.Select
 
 class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  fun showDialog() {
+  fun showDialog(onClose: () -> Unit) {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("CD") {
         icon = VaadinIcon.ARROW_RIGHT.create()
@@ -40,6 +40,8 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           gridDetail.setItems(nota.produtos(EMarcaNota.TODOS))
         }
       }
+    }, onClose = {
+      onClose()
     }) {
       HorizontalLayout().apply {
         setSizeFull()

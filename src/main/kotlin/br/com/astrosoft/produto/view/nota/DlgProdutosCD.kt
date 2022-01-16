@@ -15,7 +15,6 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioNameExp
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -29,7 +28,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  fun showDialog() {
+  fun showDialog(onClose: () -> Unit) {
     val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
@@ -57,6 +56,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           }
         }
       }
+    }, onClose = {
+      onClose()
     }) {
       HorizontalLayout().apply {
         setSizeFull()
