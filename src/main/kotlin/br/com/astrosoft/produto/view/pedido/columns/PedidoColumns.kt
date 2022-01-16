@@ -16,7 +16,7 @@ object PedidoColumns {
     this.setHeader("Pedido")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoChaveCD() = addColumnString(PedidoVenda::chaveCD) {
+  fun Grid<PedidoVenda>.colunaPedidoChaveCD() = addColumnString(PedidoVenda::chaveNovaCD) {
     this.setHeader("Chave")
   }
 

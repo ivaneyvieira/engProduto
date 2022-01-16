@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.DadosEtiqueta
+import br.com.astrosoft.produto.model.zpl.DadosEtiquetaNota
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -38,18 +38,17 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateProdutos()
     updateView()
-    val chaveExp = itens.chave()
-    val split = chaveExp.split("_")
+    val nota = subView.findNota()
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.print(impressora,
-                            DadosEtiqueta(titulo = "Exp",
-                                          usuario = split.getOrNull(1) ?: "",
-                                          nota = split.getOrNull(2) ?: "",
-                                          data = split.getOrNull(3) ?: "",
-                                          hora = split.getOrNull(4) ?: "",
-                                          local = split.getOrNull(5) ?: ""))
+                            DadosEtiquetaNota(titulo = "Exp",
+                                              usuario = nota.usuarioNameCD,
+                                              nota = nota.nota,
+                                              data = nota.dataCD,
+                                              hora = nota.horaCD,
+                                              local = nota.localizacao ?: ""))
         viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
@@ -62,19 +61,10 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     get() = viewModel.view.tabNotaExp
 }
 
-private fun List<ProdutoNF>.chave(): String {
-  val usuarioExp = this.firstOrNull()?.usuarioExp ?: return ""
-  val nota = this.firstOrNull()?.nota ?: return ""
-  val usuario = usuarioExp.split("_").getOrNull(0) ?: ""
-  val data = usuarioExp.split("_").getOrNull(1) ?: ""
-  val hora = usuarioExp.split("_").getOrNull(2) ?: ""
-  val loc = this.firstOrNull()?.localizacao ?: return ""
-  return usuario + "_" + nota + "_" + data + "_" + hora + "_" + loc
-}
-
 interface ITabNotaExp : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
+  fun findNota(): NotaSaida
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
 }

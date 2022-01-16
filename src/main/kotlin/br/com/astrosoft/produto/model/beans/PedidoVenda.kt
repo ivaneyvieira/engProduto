@@ -17,14 +17,17 @@ class PedidoVenda(val loja: Int,
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  val chaveCD: String?
-    get() {
-      val split = usuarioCD?.split("_") ?: return null
-      val usuario = split.getOrNull(0) ?: ""
-      val data = split.getOrNull(1) ?: ""
-      val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "_" + usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
-    }
+  private fun splitCD(index: Int) = usuarioCD?.split("_")?.getOrNull(index) ?: ""
+
+  val usuarioNameCD
+    get() = splitCD(0)
+  val dataCD
+    get() = splitCD(1)
+  val horaCD
+    get() = splitCD(2)
+
+  val chaveNovaCD: String
+    get() = usuarioNameCD + "_" + dataCD + "_" + horaCD + "_" + localizacao
 
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userLocais())
 

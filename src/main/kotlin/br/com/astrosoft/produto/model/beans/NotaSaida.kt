@@ -25,23 +25,29 @@ class NotaSaida(val loja: Int,
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  val chaveExp: String?
-    get() {
-      val split = usuarioExp?.split("_") ?: return null
-      val usuario = split.getOrNull(0) ?: ""
-      val data = split.getOrNull(1) ?: ""
-      val hora = split.getOrNull(2) ?: ""
-      return usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
-    }
+  private fun splitExp(index: Int) = usuarioExp?.split("_")?.getOrNull(index) ?: ""
 
-  val chaveCD: String?
-    get() {
-      val split = usuarioCD?.split("_") ?: return null
-      val usuario = split.getOrNull(0) ?: ""
-      val data = split.getOrNull(1) ?: ""
-      val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "_" + usuario + "_" + nota + "_" + data + "_" + hora + "_" + localizacao
-    }
+  val usuarioNameExp
+    get() = splitExp(0)
+  val dataExp
+    get() = splitExp(1)
+  val horaExp
+    get() = splitExp(2)
+
+  val chaveNovaExp: String
+    get() = usuarioNameExp + "_" + dataExp + "_" + horaExp + "_" + localizacao
+
+  private fun splitCD(index: Int) = usuarioCD?.split("_")?.getOrNull(index) ?: ""
+
+  val usuarioNameCD
+    get() = splitCD(0)
+  val dataCD
+    get() = splitCD(1)
+  val horaCD
+    get() = splitCD(2)
+
+  val chaveNovaCD: String
+    get() = usuarioNameCD + "_" + dataCD + "_" + horaCD + "_" + localizacao
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 

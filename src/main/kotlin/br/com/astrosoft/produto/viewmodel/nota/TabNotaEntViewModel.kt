@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.DadosEtiqueta
+import br.com.astrosoft.produto.model.zpl.DadosEtiquetaNota
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabNotaEntViewModel(val viewModel: NotaViewModel) {
@@ -29,19 +29,17 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
-    val chave = nota?.chaveCD ?: fail("Chave não encontrada")
-    val split = chave.split("_")
+    nota ?: fail("Nenhuma nota selecionada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreview(impressora,
-                                   DadosEtiqueta(titulo = "Entregue",
-                                                 usuario = split.getOrNull(1) ?: "",
-                                                 nota = split.getOrNull(2) ?: "",
-                                                 data = split.getOrNull(3) ?: "",
-                                                 hora = split.getOrNull(4) ?: "",
-                                                 local = split.getOrNull(5)
-                                                         ?: ""))
+                                   DadosEtiquetaNota(titulo = "Entregue",
+                                                     usuario = nota.usuarioNameCD,
+                                                     nota = nota.nota,
+                                                     data = nota.dataCD,
+                                                     hora = nota.horaCD,
+                                                     local = nota.localizacao ?: ""))
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

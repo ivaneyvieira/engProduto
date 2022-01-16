@@ -98,6 +98,10 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     updateGrid(notas)
   }
 
+  override fun findNota(): NotaSaida {
+    return dlgProduto.nota
+  }
+
   override fun updateProdutos() {
     dlgProduto.update()
   }
