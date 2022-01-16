@@ -39,6 +39,14 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           viewModel.marcaExp()
         }
       }
+      button("Entregue") {
+        val user = Config.user as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
+        icon = VaadinIcon.ARROW_RIGHT.create()
+        onLeftClick {
+          viewModel.marcaEnt()
+        }
+      }
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {

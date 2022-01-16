@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.pedido
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.framework.view.comboFieldEditor
 import br.com.astrosoft.framework.view.withEditor
@@ -16,12 +17,15 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoPrecoUnitario
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoQuantidade
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -30,6 +34,14 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
   private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
   fun showDialog() {
     val form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
+      button("Entregue") {
+        val user = Config.user as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
+        icon = VaadinIcon.ARROW_RIGHT.create()
+        onLeftClick {
+          viewModel.marcaEnt()
+        }
+      }
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {

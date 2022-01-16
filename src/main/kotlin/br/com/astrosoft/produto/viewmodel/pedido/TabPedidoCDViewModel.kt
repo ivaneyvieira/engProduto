@@ -21,6 +21,22 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     block(list)
   }
 
+  fun marcaEnt() = viewModel.exec {
+    val itens = subView.produtosSelcionados()
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+    itens.forEach { produtoNF ->
+      produtoNF.marca = EMarcaNota.ENT.num
+      val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+      val usuario = Config.user?.login ?: ""
+      produtoNF.usuarioCD = usuario + "_" + dataHora
+      produtoNF.salva()
+    }
+    subView.updateProdutos()
+    updateView()
+  }
+
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produtoNF.marca = EMarcaPedido.ENT.num
