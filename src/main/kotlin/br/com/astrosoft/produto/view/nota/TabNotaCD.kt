@@ -62,14 +62,14 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
 
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
-    colunaNFChaveExp()
+    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
+      viewModel.printEtiqueta(nota)
+    }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosCD(viewModel, nota)
       dlgProduto.showDialog()
     }
-    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
-      viewModel.printEtiqueta(nota)
-    }
+    colunaNFChaveExp()
     colunaNFNota()
     colunaNFData()
     colunaNFCliente()

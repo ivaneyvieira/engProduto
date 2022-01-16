@@ -22,6 +22,7 @@ import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -74,6 +75,14 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
+
+      addItemDoubleClickListener { e ->
+        editor.editItem(e.item)
+        val editorComponent: Component = e.column.editorComponent
+        if (editorComponent is Focusable<*>) {
+          (editorComponent as Focusable<*>).focus()
+        }
+      }
 
       produtoPedidoCodigo()
       produtoPedidoBarcode()

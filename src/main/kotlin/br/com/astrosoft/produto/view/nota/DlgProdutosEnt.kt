@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNF
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
@@ -52,9 +53,8 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      produtoNFUsuarioNameExp()
-      produtoNFUsuarioNameCD()
       produtoNFCodigo()
+      produtoNFBarcode()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa()

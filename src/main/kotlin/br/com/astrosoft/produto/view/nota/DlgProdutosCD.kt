@@ -72,7 +72,6 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      produtoNFUsuarioNameExp()
       produtoNFCodigo()
       produtoNFBarcode()
       produtoNFDescricao()
