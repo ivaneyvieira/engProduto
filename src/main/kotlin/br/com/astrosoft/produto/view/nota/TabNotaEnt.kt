@@ -26,7 +26,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEnt {
-  private lateinit var dlgProduto: DlgProdutosEnt
+  private var dlgProduto: DlgProdutosEnt? = null
   private lateinit var edtNota: TextField
   private lateinit var edtLoja: IntegerField
   private lateinit var edtCliente: IntegerField
@@ -69,7 +69,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEnt(viewModel, nota)
-      dlgProduto.showDialog {
+      dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
@@ -97,11 +97,11 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun updateProdutos() {
-    dlgProduto.update()
+    dlgProduto?.update()
   }
 
   override fun produtosSelcionados(): List<ProdutoNF> {
-    return dlgProduto.itensSelecionados()
+    return dlgProduto?.itensSelecionados().orEmpty()
   }
 
   override fun isAuthorized(user: IUser): Boolean {

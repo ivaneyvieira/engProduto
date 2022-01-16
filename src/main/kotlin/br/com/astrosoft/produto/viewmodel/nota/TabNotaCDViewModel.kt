@@ -56,6 +56,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     produtoNF.usuarioCD = usuario + "_" + dataHora
     produtoNF.salva()
     subView.updateProdutos()
+    val nota = subView.findNota()
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
@@ -87,4 +88,5 @@ interface ITabNotaCD : ITabView {
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNF?
+  fun findNota() : NotaSaida?
 }

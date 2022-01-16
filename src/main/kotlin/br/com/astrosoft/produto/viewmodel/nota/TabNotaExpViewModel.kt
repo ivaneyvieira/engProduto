@@ -41,7 +41,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   private fun imprimeEtiqueta() {
-    val nota = subView.findNota()
+    val nota = subView.findNota() ?: return
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -67,7 +67,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 interface ITabNotaExp : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
-  fun findNota(): NotaSaida
+  fun findNota(): NotaSaida?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
 }

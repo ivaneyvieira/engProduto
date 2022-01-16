@@ -23,7 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class),
         ITabPedidoEnt {
-  private lateinit var dlgProduto: DlgProdutosPedEnt
+  private var dlgProduto: DlgProdutosPedEnt? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField
 
@@ -52,7 +52,7 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedEnt(viewModel, pedido)
-      dlgProduto.showDialog {
+      dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
@@ -72,11 +72,11 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
   }
 
   override fun updateProdutos() {
-    dlgProduto.update()
+    dlgProduto?.update()
   }
 
   override fun produtosSelcionados(): List<ProdutoPedidoVenda> {
-    return dlgProduto.itensSelecionados()
+    return dlgProduto?.itensSelecionados().orEmpty()
   }
 
   override fun isAuthorized(user: IUser): Boolean {

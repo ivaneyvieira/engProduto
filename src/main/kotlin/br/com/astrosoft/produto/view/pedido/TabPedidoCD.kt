@@ -21,7 +21,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class), ITabPedidoCD {
-  private lateinit var dlgProduto: DlgProdutosPedCD
+  private var dlgProduto: DlgProdutosPedCD? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField
 
@@ -48,7 +48,7 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     colunaPedidoNumero()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedCD(viewModel, pedido)
-      dlgProduto.showDialog {
+      dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
@@ -66,15 +66,15 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
   }
 
   override fun updateProdutos() {
-    dlgProduto.update()
+    dlgProduto?.update()
   }
 
   override fun produtosSelcionados(): List<ProdutoPedidoVenda> {
-    return dlgProduto.itensSelecionados()
+    return dlgProduto?.itensSelecionados().orEmpty()
   }
 
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
-    return dlgProduto.produtosCodigoBarras(codigoBarra)
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
   override fun isAuthorized(user: IUser): Boolean {

@@ -30,9 +30,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
 class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
+  private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("CD") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
@@ -48,7 +49,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         createGridProdutos()
       }
     }
-    form.open()
+    form?.open()
   }
 
   private fun HorizontalLayout.createGridProdutos() {

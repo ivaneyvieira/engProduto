@@ -27,9 +27,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
+  private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
@@ -64,7 +65,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         createGridProdutos()
       }
     }
-    form.open()
+    form?.open()
   }
 
   private fun HorizontalLayout.createGridProdutos() {

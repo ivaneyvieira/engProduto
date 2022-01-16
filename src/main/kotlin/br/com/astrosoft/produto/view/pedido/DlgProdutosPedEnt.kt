@@ -26,9 +26,10 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: PedidoVenda) {
+  private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
+    form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true
@@ -46,7 +47,7 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
         createGridProdutos()
       }
     }
-    form.open()
+    form?.open()
   }
 
   private fun HorizontalLayout.createGridProdutos() {

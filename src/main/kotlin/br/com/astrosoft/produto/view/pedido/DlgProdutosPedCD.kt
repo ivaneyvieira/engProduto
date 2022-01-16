@@ -29,9 +29,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVenda) {
+  private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
+    form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Entregue") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
@@ -58,7 +59,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
         createGridProdutos()
       }
     }
-    form.open()
+    form?.open()
   }
 
   private fun HorizontalLayout.createGridProdutos() {
