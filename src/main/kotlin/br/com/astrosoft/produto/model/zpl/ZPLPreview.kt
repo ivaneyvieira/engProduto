@@ -14,27 +14,7 @@ import org.claspina.confirmdialog.ConfirmDialog
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-object ZPLPreview {/*
-  fun createPdf(zpl: String, size: String): ByteArray? {
-    val uri = URI.create("http://api.labelary.com/v1/printers/8dpmm/labels/$size/")
-    val request =
-            HttpRequest.newBuilder(uri)
-              .header("Accept", "application/pdf")
-              .POST(HttpRequest.BodyPublishers.ofString(zpl))
-              .build()
-    val client = HttpClient.newHttpClient()
-    val response = client.send(request, HttpResponse.BodyHandlers.ofByteArray())
-
-    return if (response.statusCode() == 200) {
-      val body : ByteArray? = response.body()
-      body
-    }
-    else {
-      null
-    }
-  }
-*/
-
+object ZPLPreview {
   fun createPdf(zpl: String, size: String): ByteArray? {
     val url = "http://api.labelary.com/v1/printers/8dpmm/labels/$size/"
     val client: OkHttpClient = OkHttpClient.Builder().build()
@@ -46,12 +26,11 @@ object ZPLPreview {/*
   }
 
   fun showZPLPreview(impressora: String, zplCode: String, printRunnable: () -> Unit) {
-    val image = ZPLPreview.createPdf(zplCode, "3x1")
+    val image = createPdf(zplCode, "3x1")
     if (image != null) showImage(impressora, image, printRunnable)
   }
 
   fun showImage(impressora: String, image: ByteArray, printRunnable: () -> Unit) {
-
     val filename = "etiqueta${System.currentTimeMillis()}.pdf"
     val resource = StreamResource(filename, InputStreamFactoryImage(image))
     val registration = VaadinSession.getCurrent().resourceRegistry.registerResource(resource)
