@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.EDirection
 import br.com.astrosoft.framework.model.SqlLazy
+import br.com.astrosoft.framework.model.SqlOrder
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -53,7 +55,11 @@ class NotaSaida(val loja: Int,
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro, userLocais(), SqlLazy())
+    fun find(filtro: FiltroNota) = saci.findNotaSaida(filtro,
+                                                      userLocais(),
+                                                      SqlLazy(limit = 10000,
+                                                              orders = listOf(SqlOrder(property = "data",
+                                                                                       EDirection.DESC))))
   }
 }
 
