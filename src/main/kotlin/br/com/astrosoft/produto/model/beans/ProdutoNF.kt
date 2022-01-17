@@ -31,8 +31,14 @@ class ProdutoNF(
   var usuarioExp: String,
   var usuarioCD: String,
                ) {
+  private fun splitExp(index: Int) = usuarioExp.split("_").getOrNull(index) ?: ""
+
   val usuarioNameExp
-    get() = usuarioExp.split("_").getOrNull(0)
+    get() = splitExp(0)
+  val dataExp
+    get() = splitExp(1)
+  val horaExp
+    get() = splitExp(2)
 
   private fun splitCD(index: Int) = usuarioCD.split("_").getOrNull(index) ?: ""
 
