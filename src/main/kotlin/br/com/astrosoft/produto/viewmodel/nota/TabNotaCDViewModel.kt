@@ -59,20 +59,20 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val nota = subView.findNota() ?: fail("Nota não encontrada")
     val produtosRestantes = nota.produtos(EMarcaNota.CD)
     if(produtosRestantes.isEmpty()){
-      imprimeEtoquetaCD(nota, produtoNF)
+      imprimeEtiquetaEnt(produtoNF)
     }
   }
 
-  private fun imprimeEtoquetaCD(nota: NotaSaida, produtoNF: ProdutoNF) {
+  private fun imprimeEtiquetaEnt(produtoNF: ProdutoNF) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreview(impressora,
-                                   DadosEtiquetaNota(titulo = "CD",
-                                                     usuario = user.login,
-                                                     nota = nota.nota,
-                                                     data = LocalDate.now().format(),
-                                                     hora = LocalTime.now().format(),
+                                   DadosEtiquetaNota(titulo = "Entregue",
+                                                     usuario = produtoNF.usuarioNameCD,
+                                                     nota = produtoNF.nota,
+                                                     data = produtoNF.dataCD,
+                                                     hora = produtoNF.horaCD,
                                                      local = produtoNF.localizacao ?: ""))
       } catch (e: Throwable) {
         e.printStackTrace()
