@@ -78,9 +78,11 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
 
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
-        val editorComponent: Component = e.column.editorComponent
-        if (editorComponent is Focusable<*>) {
-          (editorComponent as Focusable<*>).focus()
+        if(editor.isOpen) {
+          val editorComponent: Component = e.column.editorComponent
+          if (editorComponent is Focusable<*>) {
+            (editorComponent as Focusable<*>).focus()
+          }
         }
       }
 

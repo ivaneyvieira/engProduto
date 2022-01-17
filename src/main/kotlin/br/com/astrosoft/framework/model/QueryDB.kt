@@ -32,11 +32,14 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  protected fun <T : Any> query(file: String, classes: KClass<T>, lambda: QueryHandle = {}): List<T> {
+  protected fun <T : Any> query(file: String,
+                                classes: KClass<T>,
+                                sqlLazy: SqlLazy = SqlLazy(),
+                                lambda: QueryHandle = {}): List<T> {
     val statements = toStratments(file)
     if (statements.isEmpty()) return emptyList()
     val lastIndex = statements.lastIndex
-    val query = statements[lastIndex]
+    val query = statements[lastIndex] + " " + sqlLazy.toSQL()
     val updates = if (statements.size > 1) statements.subList(0, lastIndex) else emptyList()
     return transaction { con ->
       scriptSQL(con, updates, lambda)

@@ -34,8 +34,14 @@ class ProdutoNF(
   val usuarioNameExp
     get() = usuarioExp.split("_").getOrNull(0)
 
+  private fun splitCD(index: Int) = usuarioCD.split("_").getOrNull(index) ?: ""
+
   val usuarioNameCD
-    get() = usuarioCD.split("_").getOrNull(0)
+    get() = splitCD(0)
+  val dataCD
+    get() = splitCD(1)
+  val horaCD
+    get() = splitCD(2)
 
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
 

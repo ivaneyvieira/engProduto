@@ -56,7 +56,29 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     produtoNF.usuarioCD = usuario + "_" + dataHora
     produtoNF.salva()
     subView.updateProdutos()
-    val nota = subView.findNota()
+    val nota = subView.findNota() ?: fail("Nota não encontrada")
+    val produtosRestantes = nota.produtos(EMarcaNota.CD)
+    if(produtosRestantes.isEmpty()){
+      imprimeEtoquetaCD(nota, produtoNF)
+    }
+  }
+
+  private fun imprimeEtoquetaCD(nota: NotaSaida, produtoNF: ProdutoNF) {
+    val user = Config.user as? UserSaci
+    user?.impressora?.let { impressora ->
+      try {
+        EtiquetaChave.printPreview(impressora,
+                                   DadosEtiquetaNota(titulo = "CD",
+                                                     usuario = user.login,
+                                                     nota = nota.nota,
+                                                     data = LocalDate.now().format(),
+                                                     hora = LocalTime.now().format(),
+                                                     local = produtoNF.localizacao ?: ""))
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        fail("Falha de impressão na impressora $impressora")
+      }
+    }
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {

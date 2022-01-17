@@ -4,6 +4,7 @@ import br.com.astrosoft.devolucao.model.NotaEntradaVO
 import br.com.astrosoft.framework.model.Config.appName
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.QueryDB
+import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
@@ -220,11 +221,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota, locais: List<String>): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, sqlLazy: SqlLazy): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
     val nfse = filtro.nfse
-    return query(sql, NotaSaida::class) {
+    return query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)
