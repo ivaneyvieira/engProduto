@@ -16,7 +16,6 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFTipo
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -98,7 +97,6 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           }
         }
       }
-      produtoNFTipo()
       produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario()

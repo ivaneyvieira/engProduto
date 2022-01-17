@@ -69,47 +69,10 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      withEditor(ProdutoPedidoVenda::class, openEditor = {
-        (getColumnBy(ProdutoPedidoVenda::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        it.bean?.clno?.startsWith("01") == true
-      }, closeEditor = { binder ->
-        this.dataProvider.refreshItem(binder.bean)
-      })
-
-      addItemDoubleClickListener { e ->
-        editor.editItem(e.item)
-        if(editor.isOpen) {
-          val editorComponent: Component = e.column.editorComponent
-          if (editorComponent is Focusable<*>) {
-            (editorComponent as Focusable<*>).focus()
-          }
-        }
-      }
-
       produtoPedidoCodigo()
       produtoPedidoBarcode()
       produtoPedidoDescricao()
       produtoPedidoGrade()
-      produtoPedidoGradeAlternativa().comboFieldEditor { combo: Select<String> ->
-        combo.setItems("")
-        editor.addOpenListener { e ->
-          if (e.source.isOpen) {
-            val produto = e.item
-            val list = mutableListOf<PrdGrade>()
-
-            viewModel.findGrade(produto) { prds ->
-              list.addAll(prds)
-            }
-            combo.style.set("--vaadin-combo-box-overlay-width", "300px")
-            combo.setItems(list.map { it.grade })
-            combo.setItemLabelGenerator { grade ->
-              val saldo = list.firstOrNull { it.grade == grade }?.saldo ?: 0
-              if (grade == null) ""
-              else "$grade Saldo: $saldo"
-            }
-          }
-        }
-      }
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
       produtoPedidoEstoque()

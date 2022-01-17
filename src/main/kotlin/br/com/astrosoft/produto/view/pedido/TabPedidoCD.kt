@@ -45,13 +45,13 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
 
   override fun Grid<PedidoVenda>.gridPanel() {
     colunaPedidoLoja()
-    colunaPedidoNumero()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedCD(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
+    colunaPedidoNumero()
     colunaPedidoData()
     colunaPedidoCliente()
     colunaPedidoVendedor()
@@ -75,6 +75,10 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
 
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun findPedido(): PedidoVenda? {
+    return dlgProduto?.pedido
   }
 
   override fun isAuthorized(user: IUser): Boolean {

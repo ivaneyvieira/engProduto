@@ -16,8 +16,3 @@ UPDATE sqldados.eord
 SET status = :status
 WHERE storeno = :loja
   AND ordno = :pedido
-  AND NOT EXISTS(SELECT *
-		 FROM sqldados.eoprd
-		 WHERE eord.status != :status
-		   AND storeno = :loja
-		   AND ordno = :pedido)

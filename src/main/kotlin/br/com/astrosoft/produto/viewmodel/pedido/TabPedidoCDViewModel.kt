@@ -5,6 +5,8 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.zpl.DadosEtiquetaNota
+import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -26,26 +28,48 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-    itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaNota.ENT.num
+    itens.forEach { produto ->
+      produto.marca = EMarcaNota.ENT.num
       val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produtoNF.usuarioCD = usuario + "_" + dataHora
-      produtoNF.salva()
+      produto.usuarioCD = usuario + "_" + dataHora
+      produto.salva()
     }
     subView.updateProdutos()
   }
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
-    val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produtoNF.marca = EMarcaPedido.ENT.num
+    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.marca = EMarcaPedido.ENT.num
     val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
-    produtoNF.usuarioCD = usuario + "_" + dataHora
-    produtoNF.salva()
-    produtoNF.expira()
+    produto.usuarioCD = usuario + "_" + dataHora
+    produto.salva()
+    produto.expira()
     subView.updateProdutos()
-    updateView()
+    val pedido = subView.findPedido() ?: fail("Nota não encontrada")
+    val produtosRestantes = pedido.produtos(EMarcaPedido.CD)
+    if (produtosRestantes.isEmpty()) {
+      imprimeEtiquetaEnt(produto)
+    }
+  }
+
+  private fun imprimeEtiquetaEnt(produto: ProdutoPedidoVenda) {
+    val user = Config.user as? UserSaci
+    user?.impressora?.let { impressora ->
+      try {
+        EtiquetaChave.printPreview(impressora,
+                                   DadosEtiquetaNota(titulo = "Entregue",
+                                                     usuario = produto.usuarioNameCD,
+                                                     nota = produto.nota,
+                                                     data = produto.dataCD,
+                                                     hora = produto.horaCD,
+                                                     local = produto.localizacao ?: ""))
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        fail("Falha de impressão na impressora $impressora")
+      }
+    }
   }
 
   val subView
@@ -58,4 +82,5 @@ interface ITabPedidoCD : ITabView {
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoVenda>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda?
+  fun findPedido(): PedidoVenda?
 }
