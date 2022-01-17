@@ -16,7 +16,7 @@ SELECT N.storeno                                          AS loja,
 	 WHEN tipo = 0
 	   THEN ''
 	 WHEN tipo = 1
-	   THEN 'TRANSFRENECIA'
+	   THEN ''
 	 WHEN tipo = 2
 	   THEN 'DEVOLUCAO'
 	 WHEN tipo = 3
