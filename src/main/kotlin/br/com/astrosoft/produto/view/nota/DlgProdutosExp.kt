@@ -60,7 +60,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        it.bean?.clno?.startsWith("01") == true
+        it.bean?.clno?.startsWith("01") == true && it.bean.tipoNota == 4 /* NF Entrega futura*/
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })

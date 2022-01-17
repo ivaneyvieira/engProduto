@@ -24,7 +24,8 @@ SELECT X.storeno                                          AS loja,
        X.s12                                              AS marca,
        X.c5                                               AS usuarioExp,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.c4                                               AS usuarioCD
+       X.c4                                               AS usuarioCD,
+       N.tipo                                             AS tipoNota
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.xaprd2  AS X
 	       ON P.no = X.prdno
