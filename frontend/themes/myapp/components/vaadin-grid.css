@@ -1,15 +1,20 @@
 .cd {
-    color: yellow;
+    color: #6c8fbd;
     font-weight: bold;
 }
 
 .entregue {
-    color: yellow;
+    color: #6c8fbd;
     font-weight: bold;
 }
 
 
 .cancelada {
     color: orange;
+    font-weight: bold;
+}
+
+.azul {
+    color: #6c8fbd;
     font-weight: bold;
 }
