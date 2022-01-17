@@ -61,7 +61,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
         EtiquetaChave.printPreview(impressora,
                                    DadosEtiquetaPedido(titulo = "Entregue",
                                                        usuario = produto.usuarioNameCD,
-                                                       pedido = produto.nota,
+                                                       pedido = produto.ordno.toString(),
                                                        data = produto.dataCD,
                                                        hora = produto.horaCD,
                                                        local = produto.localizacao ?: ""))
