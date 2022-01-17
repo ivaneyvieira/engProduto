@@ -74,8 +74,8 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCliente()
     colunaNFVendedor()
     colunaNFValor()
-    colunaNFSituacao()
     colunaNFTipo()
+    colunaNFSituacao()
 
     this.setClassNameGenerator {
       when {
