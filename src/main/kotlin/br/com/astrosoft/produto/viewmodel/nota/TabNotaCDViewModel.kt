@@ -100,6 +100,12 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
   }
 
+  fun findGrade(prd: ProdutoNF?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
+    prd ?: return@exec
+    val list = prd.findGrades()
+    block(list)
+  }
+
   val subView
     get() = viewModel.view.tabNotaCD
 }
