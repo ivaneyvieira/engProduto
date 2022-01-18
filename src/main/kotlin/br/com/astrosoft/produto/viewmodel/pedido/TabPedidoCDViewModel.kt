@@ -29,7 +29,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produto ->
-      produto.marca = EMarcaNota.ENT.num
+      produto.marca = EMarcaPedido.ENT.num
       val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
       produto.usuarioCD = usuario + "_" + dataHora

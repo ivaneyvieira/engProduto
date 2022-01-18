@@ -28,7 +28,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-    itens.forEach { produtoNF ->
+    itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
       val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
