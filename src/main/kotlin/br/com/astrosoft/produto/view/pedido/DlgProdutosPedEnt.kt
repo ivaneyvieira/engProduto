@@ -11,12 +11,8 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoDescricao
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoEstoque
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGrade
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoGradeAlternativa
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoLocalizacao
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoPrecoTotal
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoPrecoUnitario
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoQuantidade
-import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoUsuarioNameCD
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -56,7 +52,6 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
-      produtoPedidoUsuarioNameCD()
       produtoPedidoCodigo()
       produtoPedidoBarcode()
       produtoPedidoDescricao()
