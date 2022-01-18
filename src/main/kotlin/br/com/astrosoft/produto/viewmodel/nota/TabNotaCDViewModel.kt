@@ -39,9 +39,9 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.ENT.num
-      val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produtoNF.usuarioCD = usuario + "_" + dataHora
+      produtoNF.usuarioCD = usuario + "-" + dataHora
       produtoNF.salva()
     }
     subView.updateProdutos()
@@ -51,9 +51,9 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produtoNF.marca = EMarcaNota.ENT.num
-    val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
-    produtoNF.usuarioCD = usuario + "_" + dataHora
+    produtoNF.usuarioCD = usuario + "-" + dataHora
     produtoNF.salva()
     subView.updateProdutos()
     val nota = subView.findNota() ?: fail("Nota não encontrada")

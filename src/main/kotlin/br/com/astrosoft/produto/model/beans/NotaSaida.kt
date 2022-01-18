@@ -29,7 +29,7 @@ class NotaSaida(val loja: Int,
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  private fun splitExp(index: Int) = usuarioExp?.split("_")?.getOrNull(index) ?: ""
+  private fun splitExp(index: Int) = usuarioExp?.split("-")?.getOrNull(index) ?: ""
 
   val usuarioNameExp
     get() = splitExp(0)
@@ -39,9 +39,9 @@ class NotaSaida(val loja: Int,
     get() = splitExp(2)
 
   val chaveNovaExp: String
-    get() = usuarioNameExp + "_" + dataExp + "_" + horaExp + "_" + localizacao
+    get() = usuarioNameExp + "-" + dataExp + "-" + horaExp + "-" + localizacao
 
-  private fun splitCD(index: Int) = usuarioCD?.split("_")?.getOrNull(index) ?: ""
+  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 
   val usuarioNameCD
     get() = splitCD(0)
@@ -51,7 +51,7 @@ class NotaSaida(val loja: Int,
     get() = splitCD(2)
 
   val chaveNovaCD: String
-    get() = usuarioNameCD + "_" + dataCD + "_" + horaCD + "_" + localizacao
+    get() = usuarioNameCD + "-" + dataCD + "-" + horaCD + "-" + localizacao
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 

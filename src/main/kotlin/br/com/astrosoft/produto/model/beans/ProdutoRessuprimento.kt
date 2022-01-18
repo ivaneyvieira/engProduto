@@ -29,10 +29,10 @@ class ProdutoRessuprimento(
   var usuarioCD: String,
                           ) {
   val usuarioNameExp
-    get() = usuarioExp.split("_").getOrNull(0)
+    get() = usuarioExp.split("-").getOrNull(0)
 
   val usuarioNameCD
-    get() = usuarioCD.split("_").getOrNull(0)
+    get() = usuarioCD.split("-").getOrNull(0)
 
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
 

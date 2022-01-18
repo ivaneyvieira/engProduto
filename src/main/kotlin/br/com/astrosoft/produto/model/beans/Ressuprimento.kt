@@ -21,20 +21,20 @@ class Ressuprimento(val loja: Int,
 
   val chaveExp: String?
     get() {
-      val split = usuarioExp?.split("_") ?: return null
+      val split = usuarioExp?.split("-") ?: return null
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
+      return usuario + "-" + ordno + "-" + data + "-" + hora + "-" + localizacao
     }
 
   val chaveCD: String?
     get() {
-      val split = usuarioCD?.split("_") ?: return null
+      val split = usuarioCD?.split("-") ?: return null
       val usuario = split.getOrNull(0) ?: ""
       val data = split.getOrNull(1) ?: ""
       val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "_" + usuario + "_" + ordno + "_" + data + "_" + hora + "_" + localizacao
+      return "Entregue" + "-" + usuario + "-" + ordno + "-" + data + "-" + hora + "-" + localizacao
     }
 
   fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())

@@ -30,9 +30,9 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     }
     itens.forEach { produto ->
       produto.marca = EMarcaPedido.ENT.num
-      val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produto.usuarioCD = usuario + "_" + dataHora
+      produto.usuarioCD = usuario + "-" + dataHora
       produto.salva()
     }
     subView.updateProdutos()
@@ -41,9 +41,9 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marca = EMarcaPedido.ENT.num
-    val dataHora = LocalDate.now().format() + "_" + LocalTime.now().format()
+    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
-    produto.usuarioCD = usuario + "_" + dataHora
+    produto.usuarioCD = usuario + "-" + dataHora
     produto.salva()
     produto.expira()
     subView.updateProdutos()

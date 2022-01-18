@@ -29,7 +29,7 @@ class ProdutoPedidoVenda(
   var usuarioCD: String,
   val estoque: Int,
                         ) {
-  private fun splitCD(index: Int) = usuarioCD.split("_").getOrNull(index) ?: ""
+  private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
 
   val usuarioNameCD
     get() = splitCD(0)
