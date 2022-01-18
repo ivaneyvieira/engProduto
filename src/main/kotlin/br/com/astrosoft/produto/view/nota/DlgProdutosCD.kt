@@ -29,8 +29,9 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
+  val lblCancel = if(nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
@@ -40,6 +41,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         }
       }
       button("Entregue") {
+        isEnabled = nota.cancelada == "N"
         val user = Config.user as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()

@@ -31,9 +31,11 @@ import com.vaadin.flow.component.select.Select
 class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
+  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
       button("CD") {
+        isEnabled = nota.cancelada == "N"
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaCD()
@@ -60,7 +62,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        it.bean?.clno?.startsWith("01") == true && it.bean.tipoNota == 4 /* NF Entrega futura*/
+        it.bean?.clno?.startsWith("01") == true && it.bean.tipoNota == 4 /* NF Entrega futura*/ && nota.cancelada == "N"
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })

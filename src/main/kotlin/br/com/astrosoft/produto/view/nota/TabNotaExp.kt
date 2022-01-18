@@ -19,7 +19,6 @@ import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
@@ -65,13 +64,9 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if(nota.cancelada == "N") {
-        dlgProduto = DlgProdutosExp(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
-      }else{
-        Notification.show("Nota fiscal cancelada")
+      dlgProduto = DlgProdutosExp(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
     colunaNFNota()

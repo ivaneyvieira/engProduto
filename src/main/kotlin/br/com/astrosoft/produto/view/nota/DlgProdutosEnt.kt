@@ -28,8 +28,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
+  val lblCancel = if(nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}", toolBar = {
+    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true

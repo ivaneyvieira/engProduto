@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNotaEnt
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
@@ -78,6 +79,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFChaveCD()
     colunaNFNota()
     colunaNFData()
+    colunaNFNotaEnt()
     colunaNFCliente()
     colunaNFVendedor()
     colunaNFValor()

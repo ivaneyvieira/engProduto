@@ -16,6 +16,10 @@ object NotaColumns {
     this.setHeader("Nota")
   }
 
+  fun Grid<NotaSaida>.colunaNFNotaEnt() = addColumnString(NotaSaida::notaEntrega) {
+    this.setHeader("NF Ent")
+  }
+
   fun Grid<NotaSaida>.colunaNFChaveExp() = addColumnString(NotaSaida::chaveNovaExp) {
     this.setHeader("Chave Exp")
   }

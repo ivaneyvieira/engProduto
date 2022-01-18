@@ -1,3 +1,50 @@
+DO @DT := 20220101;
+
+DROP TEMPORARY TABLE IF EXISTS T_E;
+CREATE TEMPORARY TABLE T_E (
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero
+FROM sqlpdv.pxa AS P
+WHERE P.cfo IN (5117, 6117)
+  AND storeno IN (2, 3, 4, 5)
+  AND date >= @DT
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_V;
+CREATE TEMPORARY TABLE T_V (
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       nfno,
+       nfse
+FROM sqlpdv.pxa AS P
+WHERE P.cfo IN (5922, 6922)
+  AND storeno IN (2, 3, 4, 5)
+  AND nfse = '1'
+  AND date >= @DT
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
+CREATE TEMPORARY TABLE T_ENTREGA (
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT V.storeno,
+       V.pdvno,
+       V.xano,
+       V.numero      AS notaVenda,
+       MAX(E.numero) AS notaEntrega
+FROM T_V        AS V
+  LEFT JOIN T_E AS E
+	      USING (storeno, ordno)
+GROUP BY V.storeno, V.pdvno, V.xano;
+
 SELECT N.storeno                                          AS loja,
        pdvno                                              AS pdvno,
        xano                                               AS xano,
@@ -46,15 +93,18 @@ SELECT N.storeno                                          AS loja,
 	 WHEN tipo = 15
 	   THEN 'NFE'
 	 ELSE ''
-       END                                                AS tipoNotaSaida
+       END                                                AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')                        AS notaEntrega
 FROM sqldados.nf             AS N
+  LEFT JOIN  T_ENTREGA       AS ENT
+	       USING (storeno, pdvno, xano)
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
   LEFT JOIN  sqldados.prdloc AS L
 	       ON L.prdno = X.prdno AND L.storeno = 4
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
-WHERE N.issuedate >= 20220101
+WHERE N.issuedate >= @DT
   AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10) OR (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
