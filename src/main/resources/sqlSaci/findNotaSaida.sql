@@ -6,7 +6,8 @@ CREATE TEMPORARY TABLE T_E (
 )
 SELECT P.storeno,
        P.eordno                                  AS ordno,
-       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       P.date                                    AS data
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5)
@@ -39,7 +40,8 @@ SELECT V.storeno,
        V.pdvno,
        V.xano,
        V.numero      AS notaVenda,
-       MAX(E.numero) AS notaEntrega
+       MAX(E.numero) AS notaEntrega,
+       MAX(E.data)   AS dataEntrega
 FROM T_V        AS V
   LEFT JOIN T_E AS E
 	      USING (storeno, ordno)
@@ -94,7 +96,8 @@ SELECT N.storeno                                          AS loja,
 	   THEN 'NFE'
 	 ELSE ''
        END                                                AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')                        AS notaEntrega
+       IFNULL(ENT.notaEntrega, '')                        AS notaEntrega,
+       CAST(ENT.dataEntrega AS DATE)                      AS dataEntrega
 FROM sqldados.nf             AS N
   LEFT JOIN  T_ENTREGA       AS ENT
 	       USING (storeno, pdvno, xano)

@@ -36,6 +36,10 @@ object NotaColumns {
     this.setHeader("Data")
   }
 
+  fun Grid<NotaSaida>.colunaNFDataEnt() = addColumnLocalDate(NotaSaida::dataEntrega) {
+    this.setHeader("Data")
+  }
+
   fun Grid<NotaSaida>.colunaNFVendedor() = addColumnInt(NotaSaida::vendedor) {
     this.setHeader("Vendedor")
   }

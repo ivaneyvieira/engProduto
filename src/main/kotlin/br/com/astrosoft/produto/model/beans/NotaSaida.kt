@@ -7,22 +7,25 @@ import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaSaida(val loja: Int,
-                val pdvno: Int,
-                val xano: Long,
-                val numero: Int,
-                val serie: String,
-                val cliente: Int,
-                val data: LocalDate,
-                val vendedor: Int,
-                val localizacao: String?,
-                val usuarioExp: String?,
-                val usuarioCD: String?,
-                val totalProdutos: Double,
-                val marca: Int?,
-                val cancelada: String?,
-                val tipoNotaSaida: String?,
-                val notaEntrega: String?) {
+class NotaSaida(
+  val loja: Int,
+  val pdvno: Int,
+  val xano: Long,
+  val numero: Int,
+  val serie: String,
+  val cliente: Int,
+  val data: LocalDate,
+  val vendedor: Int,
+  val localizacao: String?,
+  val usuarioExp: String?,
+  val usuarioCD: String?,
+  val totalProdutos: Double,
+  val marca: Int?,
+  val cancelada: String?,
+  val tipoNotaSaida: String?,
+  val notaEntrega: String?,
+  val dataEntrega: LocalDate?,
+               ) {
   val nota
     get() = "$numero/$serie"
 
