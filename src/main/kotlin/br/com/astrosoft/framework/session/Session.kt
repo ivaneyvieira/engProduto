@@ -31,8 +31,7 @@ object Session {
       val answer: T = defaultValue()
       set(key, answer)
       answer
-    }
-    else {
+    } else {
       value
     }
   }
@@ -52,8 +51,7 @@ object Cookies {
       newCookie.maxAge = 0  // delete immediately
       newCookie.path = "/"
       currentResponse.addCookie(newCookie)
-    }
-    else {
+    } else {
       currentResponse.addCookie(cookie)
     }
   }

@@ -33,7 +33,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoRetiraEntregaEdit(val viewModel: TabProdutoRetiraEntregaEditViewModel) :
-        TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntregaEdit {
+  TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntregaEdit {
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
@@ -108,14 +108,16 @@ class TabProdutoRetiraEntregaEdit(val viewModel: TabProdutoRetiraEntregaEditView
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(loja = edtLoja.value ?: 0,
-                         codigo = edtProduto.value ?: "",
-                         typeno = edtTipo.value ?: 0,
-                         clno = edtCentroLucro.value ?: 0,
-                         vendno = edtFornecedor.value ?: 0,
-                         localizacao = edtLocalizacao.value ?: "",
-                         nota = edtNota.value ?: "",
-                         isEdit = true)
+    return FiltroProduto(
+      loja = edtLoja.value ?: 0,
+      codigo = edtProduto.value ?: "",
+      typeno = edtTipo.value ?: 0,
+      clno = edtCentroLucro.value ?: 0,
+      vendno = edtFornecedor.value ?: 0,
+      localizacao = edtLocalizacao.value ?: "",
+      nota = edtNota.value ?: "",
+      isEdit = true
+    )
   }
 
   override fun updateProdutos(produtos: List<ProdutoRetiraEntrega>) {

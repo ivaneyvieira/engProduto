@@ -44,14 +44,14 @@ fun String.mid(start: Int, len: Int): String {
   else {
     val end = start + len
     val pStart = when {
-      start < 0       -> 0
+      start < 0 -> 0
       start >= length -> length - 1
-      else            -> start
+      else -> start
     }
     val pEnd = when {
-      end < 0      -> 0
+      end < 0 -> 0
       end > length -> length
-      else         -> end
+      else -> end
     }
     if (pStart <= pEnd) substring(pStart, pEnd)
     else ""

@@ -15,8 +15,6 @@ import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produt
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioNameCD
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioNameExp
 import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -28,7 +26,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  val lblCancel = if(nota.cancelada == "S") " (Cancelada)" else ""
+  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
       button("Volta") {

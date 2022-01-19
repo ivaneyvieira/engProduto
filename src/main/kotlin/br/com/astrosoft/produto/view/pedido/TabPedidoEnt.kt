@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCl
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
-import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoValor
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoEnt
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoEntViewModel
@@ -22,7 +21,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class),
-        ITabPedidoEnt {
+  ITabPedidoEnt {
   private var dlgProduto: DlgProdutosPedEnt? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField

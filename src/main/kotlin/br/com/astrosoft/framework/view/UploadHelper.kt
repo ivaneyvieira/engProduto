@@ -12,18 +12,23 @@ import javax.imageio.ImageIO
 
 private fun createComponent(fileName: String, byteArray: ByteArray): Component {
   when {
-    fileName.endsWith("pdf", ignoreCase = true)                                                                                 -> {
+    fileName.endsWith("pdf", ignoreCase = true) -> {
       val resourcePDF = StreamResource(fileName, ConverteByte(byteArray))
       return PDFViewer(resourcePDF)
     }
 
-    fileName.endsWith("jpg", ignoreCase = true) || fileName.endsWith("jpeg",
-                                                                     ignoreCase = true) || fileName.endsWith("png",
-                                                                                                             ignoreCase = true) -> {
+    fileName.endsWith("jpg", ignoreCase = true) || fileName.endsWith(
+      "jpeg",
+      ignoreCase = true
+    ) || fileName.endsWith(
+      "png",
+      ignoreCase = true
+    ) -> {
       val image = Image()
       try {
         image.element.setAttribute("src",
-                                   StreamResource(fileName, InputStreamFactory { ByteArrayInputStream(byteArray) }))
+          StreamResource(fileName, InputStreamFactory { ByteArrayInputStream(byteArray) })
+        )
         ImageIO.createImageInputStream(ByteArrayInputStream(byteArray)).use { `in` ->
           val readers = ImageIO.getImageReaders(`in`)
           if (readers.hasNext()) {
@@ -43,7 +48,7 @@ private fun createComponent(fileName: String, byteArray: ByteArray): Component {
       return image
     }
 
-    else                                                                                                                        -> {
+    else -> {
       return Div()
     }
   }

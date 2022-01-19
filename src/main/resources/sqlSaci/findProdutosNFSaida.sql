@@ -26,23 +26,23 @@ SELECT X.storeno                                          AS loja,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD,
        N.tipo                                             AS tipoNota
-FROM sqldados.prd             AS P
-  INNER JOIN sqldados.xaprd2  AS X
-	       ON P.no = X.prdno
-  INNER JOIN sqldados.nf      AS N
-	       USING (storeno, pdvno, xano)
-  LEFT JOIN  sqldados.prdbar  AS B
-	       ON P.no = B.prdno AND B.grade = X.grade
-  LEFT JOIN  sqldados.prdloc  AS L
-	       ON L.prdno = P.no AND L.storeno = 4
-  LEFT JOIN  sqldados.vend    AS F
-	       ON F.no = P.mfno
-  LEFT JOIN  sqldados.type    AS T
-	       ON T.no = P.typeno
-  LEFT JOIN  sqldados.cl
-	       ON cl.no = P.clno
-  LEFT JOIN  sqldados.spedprd AS S
-	       ON P.no = S.prdno
+FROM sqldados.prd AS P
+         INNER JOIN sqldados.xaprd2 AS X
+                    ON P.no = X.prdno
+         INNER JOIN sqldados.nf AS N
+                    USING (storeno, pdvno, xano)
+         LEFT JOIN sqldados.prdbar AS B
+                   ON P.no = B.prdno AND B.grade = X.grade
+         LEFT JOIN sqldados.prdloc AS L
+                   ON L.prdno = P.no AND L.storeno = 4
+         LEFT JOIN sqldados.vend AS F
+                   ON F.no = P.mfno
+         LEFT JOIN sqldados.type AS T
+                   ON T.no = P.typeno
+         LEFT JOIN sqldados.cl
+                   ON cl.no = P.clno
+         LEFT JOIN sqldados.spedprd AS S
+                   ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano

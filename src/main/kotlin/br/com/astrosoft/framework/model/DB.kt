@@ -20,8 +20,7 @@ class DB(banco: String) {
       return if (file.exists()) {
         properties.load(FileReader(file))
         properties
-      }
-      else throw FileNotFoundException("Arquivo de propriedade não encontrado")
+      } else throw FileNotFoundException("Arquivo de propriedade não encontrado")
     }
 
     private val prop = properties()

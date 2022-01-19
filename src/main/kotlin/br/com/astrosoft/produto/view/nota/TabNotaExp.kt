@@ -80,20 +80,22 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     this.setClassNameGenerator {
       when {
         it.cancelada == "S" -> "cancelada"
-        it.marca == 1       -> "cd"
-        it.marca == 2       -> "entregue"
-        else                -> null
+        it.marca == 1 -> "cd"
+        it.marca == 2 -> "entregue"
+        else -> null
       }
     }
   }
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
-    return FiltroNota(storeno = edtLoja.value ?: 0,
-                      nota = edtNota.value,
-                      marca = marca,
-                      loja = edtLoja.value ?: 0,
-                      cliente = edtCliente.value ?: 0,
-                      vendedor = edtVendedor.value ?: "")
+    return FiltroNota(
+      storeno = edtLoja.value ?: 0,
+      nota = edtNota.value,
+      marca = marca,
+      loja = edtLoja.value ?: 0,
+      cliente = edtCliente.value ?: 0,
+      vendedor = edtVendedor.value ?: ""
+    )
   }
 
   override fun updateNotas(notas: List<NotaSaida>) {

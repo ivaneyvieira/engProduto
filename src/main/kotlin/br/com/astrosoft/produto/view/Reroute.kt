@@ -17,9 +17,9 @@ class Reroute : Div(), BeforeEnterObserver {
     val userSaci = user as? UserSaci
     when {
       userSaci?.produto == true -> event?.rerouteTo(ProdutoView::class.java)
-      userSaci?.nota == true    -> event?.rerouteTo(NotaView::class.java)
-      userSaci?.pedido == true  -> event?.rerouteTo(PedidoView::class.java)
-      else                      -> Notification.show("Nenhuma rota encontrada")
+      userSaci?.nota == true -> event?.rerouteTo(NotaView::class.java)
+      userSaci?.pedido == true -> event?.rerouteTo(PedidoView::class.java)
+      else -> Notification.show("Nenhuma rota encontrada")
     }
   }
 }

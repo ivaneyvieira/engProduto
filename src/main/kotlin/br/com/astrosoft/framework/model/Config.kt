@@ -19,8 +19,7 @@ object Config {
     return if (file.exists()) {
       properties.load(FileReader(file))
       properties
-    }
-    else throw FileNotFoundException("Arquivo de propriedade não encontrado")
+    } else throw FileNotFoundException("Arquivo de propriedade não encontrado")
   }
 
   private val prop = properties()
@@ -42,5 +41,5 @@ object Config {
   @Suppress("UNCHECKED_CAST")
   val mainClass: KClass<Component> = Class.forName(prop.getProperty("mainClass")).kotlin as KClass<Component>
   val userUtilImpl: IUserUtil =
-          Class.forName(prop.getProperty("userUtilImpl")).getDeclaredConstructor().newInstance() as IUserUtil
+    Class.forName(prop.getProperty("userUtilImpl")).getDeclaredConstructor().newInstance() as IUserUtil
 }

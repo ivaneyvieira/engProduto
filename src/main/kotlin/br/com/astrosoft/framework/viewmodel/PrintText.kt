@@ -22,11 +22,13 @@ abstract class PrintText<T> {
     return emptyList()
   }
 
-  fun columNumber(header: String,
-                  size: Int,
-                  format: String = "0",
-                  lineBreak: Boolean = false,
-                  process: T.() -> Double): PrintText<T> {
+  fun columNumber(
+    header: String,
+    size: Int,
+    format: String = "0",
+    lineBreak: Boolean = false,
+    process: T.() -> Double
+  ): PrintText<T> {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, process) { number ->
       decimalFormat.format(number.toInt()).lpad(size, " ")
@@ -147,11 +149,13 @@ abstract class PrintText<T> {
   }
 }
 
-data class Column<T, V>(val header: String,
-                        val size: Int,
-                        val lineBreak: Boolean,
-                        val process: T.() -> V,
-                        val posProcess: (V) -> String) {
+data class Column<T, V>(
+  val header: String,
+  val size: Int,
+  val lineBreak: Boolean,
+  val process: T.() -> V,
+  val posProcess: (V) -> String
+) {
   val columnText
     get() = header.rpad(size, "_")
 

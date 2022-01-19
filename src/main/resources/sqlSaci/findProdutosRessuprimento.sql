@@ -22,23 +22,23 @@ SELECT X.storeno                                          AS loja,
        X.remarks                                          AS usuarioExp,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.obs                                              AS usuarioCD
-FROM sqldados.prd             AS P
-  INNER JOIN sqldados.oprd    AS X
-	       ON P.no = X.prdno
-  INNER JOIN sqldados.ords    AS N
-	       ON N.storeno = X.storeno AND N.no = X.ordno
-  LEFT JOIN  sqldados.prdbar  AS B
-	       ON P.no = B.prdno AND B.grade = X.grade
-  LEFT JOIN  sqldados.prdloc  AS L
-	       ON L.prdno = P.no AND L.storeno = 4
-  LEFT JOIN  sqldados.vend    AS F
-	       ON F.no = P.mfno
-  LEFT JOIN  sqldados.type    AS T
-	       ON T.no = P.typeno
-  LEFT JOIN  sqldados.cl
-	       ON cl.no = P.clno
-  LEFT JOIN  sqldados.spedprd AS S
-	       ON P.no = S.prdno
+FROM sqldados.prd AS P
+         INNER JOIN sqldados.oprd AS X
+                    ON P.no = X.prdno
+         INNER JOIN sqldados.ords AS N
+                    ON N.storeno = X.storeno AND N.no = X.ordno
+         LEFT JOIN sqldados.prdbar AS B
+                   ON P.no = B.prdno AND B.grade = X.grade
+         LEFT JOIN sqldados.prdloc AS L
+                   ON L.prdno = P.no AND L.storeno = 4
+         LEFT JOIN sqldados.vend AS F
+                   ON F.no = P.mfno
+         LEFT JOIN sqldados.type AS T
+                   ON T.no = P.typeno
+         LEFT JOIN sqldados.cl
+                   ON cl.no = P.clno
+         LEFT JOIN sqldados.spedprd AS S
+                   ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca OR :marca = 999)

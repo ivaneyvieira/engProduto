@@ -9,7 +9,6 @@ import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCl
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
-import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoValor
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoCD
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel

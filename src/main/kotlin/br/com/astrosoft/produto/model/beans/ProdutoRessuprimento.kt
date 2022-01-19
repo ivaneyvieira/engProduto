@@ -27,7 +27,7 @@ class ProdutoRessuprimento(
   var marca: Int,
   var usuarioExp: String,
   var usuarioCD: String,
-                          ) {
+) {
   val usuarioNameExp
     get() = usuarioExp.split("-").getOrNull(0)
 

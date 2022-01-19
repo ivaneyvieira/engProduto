@@ -80,7 +80,7 @@ class DelegateAuthorized(numBit: Int) {
     thisRef ?: return
     val v = value ?: false
     thisRef.bitAcesso = when {
-      v    -> thisRef.bitAcesso or bit
+      v -> thisRef.bitAcesso or bit
       else -> thisRef.bitAcesso and bit.inv()
     }
   }
