@@ -30,6 +30,8 @@ class Ressuprimento(
       return usuario + "-" + ordno + "-" + data + "-" + hora + "-" + localizacao
     }
 
+  val chaveNovaCD
+
   val chaveCD: String?
     get() {
       val split = usuarioCD?.split("-") ?: return null
@@ -46,7 +48,7 @@ class Ressuprimento(
   }
 }
 
-data class FiltroRessuprimento(val storeno: Int, val pedido: Int, val marca: EMarcaRessuprimento)
+data class FiltroRessuprimento(val storeno: Int, val numero: Int, val marca: EMarcaRessuprimento)
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
   CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")

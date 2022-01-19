@@ -27,6 +27,8 @@ class UserSaci : IUser {
   var voltarEnt by DelegateAuthorized(9)
   var pedidoCD by DelegateAuthorized(10)
   var pedidoEnt by DelegateAuthorized(11)
+  var ressuprimentoCD by DelegateAuthorized(12)
+  var ressuprimentoEnt by DelegateAuthorized(13)
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
@@ -34,6 +36,8 @@ class UserSaci : IUser {
     get() = notaExp || notaCD || notaEnt || admin
   val pedido
     get() = pedidoCD || pedidoEnt || admin
+  val ressuprimento
+    get() = ressuprimentoCD || ressuprimentoEnt || admin
 
   val fornecedor
     get() = produtoList

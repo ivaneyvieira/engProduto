@@ -28,6 +28,9 @@ class ProdutoRessuprimento(
   var usuarioExp: String,
   var usuarioCD: String,
 ) {
+
+  val estoque
+
   val usuarioNameExp
     get() = usuarioExp.split("-").getOrNull(0)
 

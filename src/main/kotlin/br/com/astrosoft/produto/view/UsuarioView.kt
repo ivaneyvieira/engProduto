@@ -130,6 +130,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             binder.bind(this, UserSaci::pedidoEnt.name)
           }
         }
+        formLayout {
+          h4("Ressuprimento") {
+            colspan = 2
+          }
+          checkBox("CD") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::ressuprimentoCD.name)
+          }
+          checkBox("Entrege") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::ressuprimentoEnt.name)
+          }
+        }
       }
     }
   }
