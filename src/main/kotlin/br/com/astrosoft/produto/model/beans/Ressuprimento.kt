@@ -5,13 +5,11 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class Ressuprimento(
-  val loja: Int,
-  val ordno: Int,
-  val cliente: Int,
+  val numero: Long,
+  val fornecedor: Int,
   val data: LocalDate,
   val vendedor: Int,
   val localizacao: String?,
-  val usuarioExp: String?,
   val usuarioCD: String?,
   val totalProdutos: Double,
   val marca: Int?,
@@ -21,25 +19,17 @@ class Ressuprimento(
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  val chaveExp: String?
-    get() {
-      val split = usuarioExp?.split("-") ?: return null
-      val usuario = split.getOrNull(0) ?: ""
-      val data = split.getOrNull(1) ?: ""
-      val hora = split.getOrNull(2) ?: ""
-      return usuario + "-" + ordno + "-" + data + "-" + hora + "-" + localizacao
-    }
+  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 
-  val chaveNovaCD
+  val usuarioNameCD
+    get() = splitCD(0)
+  val dataCD
+    get() = splitCD(1)
+  val horaCD
+    get() = splitCD(2)
 
-  val chaveCD: String?
-    get() {
-      val split = usuarioCD?.split("-") ?: return null
-      val usuario = split.getOrNull(0) ?: ""
-      val data = split.getOrNull(1) ?: ""
-      val hora = split.getOrNull(2) ?: ""
-      return "Entregue" + "-" + usuario + "-" + ordno + "-" + data + "-" + hora + "-" + localizacao
-    }
+  val chaveNovaCD: String
+    get() = usuarioNameCD + "-" + dataCD + "-" + horaCD + "-" + localizacao
 
   fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
 
@@ -48,7 +38,7 @@ class Ressuprimento(
   }
 }
 
-data class FiltroRessuprimento(val storeno: Int, val numero: Int, val marca: EMarcaRessuprimento)
+data class FiltroRessuprimento(val numero: Int, val marca: EMarcaRessuprimento)
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
   CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")

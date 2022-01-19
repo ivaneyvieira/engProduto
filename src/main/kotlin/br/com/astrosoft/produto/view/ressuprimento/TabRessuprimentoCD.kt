@@ -5,9 +5,7 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoCliente
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoLoja
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoVendedor
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
@@ -23,20 +21,10 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class),
   ITabRessuprimentoCD {
   private var dlgProduto: DlgProdutosRessuCD? = null
-  private lateinit var edtLoja: IntegerField
   private lateinit var edtRessuprimento: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtLoja = integerField("Loja") {
-      val user = Config.user as? UserSaci
-      isVisible = user?.storeno == 0
-      value = user?.storeno
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtRessuprimento = integerField("Ressuprimento") {
+    edtRessuprimento = integerField("Número") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -45,7 +33,6 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
-    colunaRessuprimentoLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosRessuCD(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -54,12 +41,11 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     }
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
-    colunaRessuprimentoCliente()
     colunaRessuprimentoVendedor()
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
-    return FiltroRessuprimento(storeno = edtLoja.value ?: 0, numero = edtRessuprimento.value ?: 0, marca = marca)
+    return FiltroRessuprimento(numero = edtRessuprimento.value ?: 0, marca = marca)
   }
 
   override fun updateRessuprimentos(pedido: List<Ressuprimento>) {

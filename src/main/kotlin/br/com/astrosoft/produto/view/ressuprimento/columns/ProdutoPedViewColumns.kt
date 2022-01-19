@@ -81,7 +81,7 @@ object ProdutoRessuViewColumns {
     this.setHeader("Quant")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = addColumnInt(ProdutoRessuprimento::estoque) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = addColumnDouble(ProdutoRessuprimento::estoque) {
     this.setHeader("Estoque")
   }
 

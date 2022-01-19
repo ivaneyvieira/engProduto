@@ -25,7 +25,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos do ressuprimento ${ressuprimento.ordno} loja: ${ressuprimento.loja}", toolBar = {
+    form = SubWindowForm("Produtos do ressuprimento ${ressuprimento.numero}", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true

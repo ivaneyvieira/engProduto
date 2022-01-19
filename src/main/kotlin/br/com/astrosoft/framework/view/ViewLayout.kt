@@ -332,6 +332,23 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnInt(
   }
 }
 
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnLong(
+  property: KProperty1<T, Long?>,
+  block: (@VaadinDsl Grid.Column<T>).() -> Unit = {}
+): Grid.Column<T> {
+  return this.addColumnFor(property).apply {
+    if (this.key == null) this.key = property.name
+    this.isAutoWidth = true
+    this.setComparator { a, b ->
+      val dataA = property.get(a) ?: Long.MIN_VALUE
+      val dataB = property.get(b) ?: Long.MIN_VALUE
+      dataA.compareTo(dataB)
+    }
+    this.right()
+    this.block()
+  }
+}
+
 fun <T : Any> (@VaadinDsl Grid.Column<T>).right() {
   this.textAlign = ColumnTextAlign.END
 }

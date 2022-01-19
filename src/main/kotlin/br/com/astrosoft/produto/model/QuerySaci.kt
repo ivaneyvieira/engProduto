@@ -250,8 +250,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     val sql = "/sqlSaci/findRessuprimento.sql"
     return query(sql, Ressuprimento::class) {
       addOptionalParameter("marca", filtro.marca.num)
-      addOptionalParameter("storeno", filtro.storeno)
-      addOptionalParameter("ordno", filtro.pedido)
+      addOptionalParameter("ordno", filtro.numero)
       addOptionalParameter("locais", locais)
     }
   }
@@ -284,8 +283,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   ): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
     return query(sql, ProdutoRessuprimento::class) {
-      addOptionalParameter("storeno", pedido.loja)
-      addOptionalParameter("ordno", pedido.ordno)
+      addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("locais", locais)
     }

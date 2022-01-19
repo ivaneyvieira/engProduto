@@ -29,6 +29,17 @@ object EtiquetaChave {
       .replace("[local]", dados.local)
   }
 
+  private fun template(dados: DadosEtiquetaRessuprimento): String {
+    val template = "/templatePrint/etiquetaChaveRessuprimento.zpl"
+    val zpl = SystemUtils.readFile(template)
+    return zpl.replace("[titulo]", dados.titulo)
+      .replace("[usuario]", dados.usuario)
+      .replace("[numero]", dados.numero.toString())
+      .replace("[data]", dados.data)
+      .replace("[hora]", dados.hora)
+      .replace("[local]", dados.local)
+  }
+
   private fun print(impressora: String, dados: DadosEtiquetaNota) {
     CupsUtils.printCups(impressora, template(dados)) {
       println(it)
@@ -48,7 +59,20 @@ object EtiquetaChave {
     }
   }
 
+  private fun print(impressora: String, dados: DadosEtiquetaRessuprimento) {
+    CupsUtils.printCups(impressora, template(dados)) {
+      println(it)
+    }
+  }
+
   private fun printPreview(impressora: String, dados: DadosEtiquetaPedido) {
+    val zpl = template(dados)
+    ZPLPreview.showZPLPreview(impressora, zpl) {
+      print(impressora, dados)
+    }
+  }
+
+  private fun printPreview(impressora: String, dados: DadosEtiquetaRessuprimento) {
     val zpl = template(dados)
     ZPLPreview.showZPLPreview(impressora, zpl) {
       print(impressora, dados)
@@ -118,14 +142,13 @@ object EtiquetaChave {
   fun printPreviewEnt(impressora: String, ressuprimento: Ressuprimento) {
     printPreview(
       impressora,
-      DadosEtiquetaPedido(
+      DadosEtiquetaRessuprimento(
         titulo = "Entregue",
-        usuario = pedido.usuarioNameCD,
-        loja = pedido.loja,
-        pedido = pedido.ordno.toString(),
-        data = pedido.dataCD,
-        hora = pedido.horaCD,
-        local = pedido.localizacao ?: ""
+        usuario = ressuprimento.usuarioNameCD,
+        numero = ressuprimento.numero,
+        data = ressuprimento.dataCD,
+        hora = ressuprimento.horaCD,
+        local = ressuprimento.localizacao ?: ""
       )
     )
   }
@@ -133,14 +156,13 @@ object EtiquetaChave {
   fun printPreviewEnt(impressora: String, produto: ProdutoRessuprimento) {
     printPreview(
       impressora,
-      DadosEtiquetaPedido(
+      DadosEtiquetaRessuprimento(
         titulo = "Entregue",
-        usuario = pedido.usuarioNameCD,
-        loja = pedido.loja,
-        pedido = pedido.ordno.toString(),
-        data = pedido.dataCD,
-        hora = pedido.horaCD,
-        local = pedido.localizacao ?: ""
+        usuario = produto.usuarioNameCD,
+        numero = produto.ordno,
+        data = produto.dataCD,
+        hora = produto.horaCD,
+        local = produto.localizacao ?: ""
       )
     )
   }
@@ -191,6 +213,15 @@ private data class DadosEtiquetaPedido(
   val usuario: String,
   val loja: Int,
   val pedido: String,
+  val data: String,
+  val hora: String,
+  val local: String,
+)
+
+private data class DadosEtiquetaRessuprimento(
+  val titulo: String,
+  val usuario: String,
+  val numero: Long,
   val data: String,
   val hora: String,
   val local: String,

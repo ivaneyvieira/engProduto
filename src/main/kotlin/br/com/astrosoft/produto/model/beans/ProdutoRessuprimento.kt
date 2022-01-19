@@ -19,7 +19,6 @@ class ProdutoRessuprimento(
   val comprimento: Int,
   val largura: Int,
   val precoCheio: Double,
-  val ncm: String,
   val localizacao: String?,
   val quantidade: Int,
   val preco: Double,
@@ -27,15 +26,16 @@ class ProdutoRessuprimento(
   var marca: Int,
   var usuarioExp: String,
   var usuarioCD: String,
+  val estoque: Double,
 ) {
-
-  val estoque
-
-  val usuarioNameExp
-    get() = usuarioExp.split("-").getOrNull(0)
+  private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
 
   val usuarioNameCD
-    get() = usuarioCD.split("-").getOrNull(0)
+    get() = splitCD(0)
+  val dataCD
+    get() = splitCD(1)
+  val horaCD
+    get() = splitCD(2)
 
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
 
