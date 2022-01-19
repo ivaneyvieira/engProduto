@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.model.zpl
 
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.SystemUtils
-import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.PedidoVenda
-import br.com.astrosoft.produto.model.beans.ProdutoNF
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
+import br.com.astrosoft.produto.model.beans.*
 
 object EtiquetaChave {
   private fun template(dados: DadosEtiquetaNota): String {
@@ -93,13 +90,35 @@ object EtiquetaChave {
 
   fun printPreviewEnt(impressora: String, pedido: PedidoVenda) {
     printPreview(impressora,
-                 DadosEtiquetaPedido(titulo = "Entregue",
-                                     usuario = pedido.usuarioNameCD,
-                                     loja = pedido.loja,
-                                     pedido = pedido.ordno.toString(),
-                                     data = pedido.dataCD,
-                                     hora = pedido.horaCD,
-                                     local = pedido.localizacao ?: ""))
+      DadosEtiquetaPedido(titulo = "Entregue",
+        usuario = pedido.usuarioNameCD,
+        loja = pedido.loja,
+        pedido = pedido.ordno.toString(),
+        data = pedido.dataCD,
+        hora = pedido.horaCD,
+        local = pedido.localizacao ?: ""))
+  }
+
+  fun printPreviewEnt(impressora: String, ressuprimento: Ressuprimento) {
+    printPreview(impressora,
+      DadosEtiquetaPedido(titulo = "Entregue",
+        usuario = pedido.usuarioNameCD,
+        loja = pedido.loja,
+        pedido = pedido.ordno.toString(),
+        data = pedido.dataCD,
+        hora = pedido.horaCD,
+        local = pedido.localizacao ?: ""))
+  }
+
+  fun printPreviewEnt(impressora: String, produto: ProdutoRessuprimento) {
+    printPreview(impressora,
+      DadosEtiquetaPedido(titulo = "Entregue",
+        usuario = pedido.usuarioNameCD,
+        loja = pedido.loja,
+        pedido = pedido.ordno.toString(),
+        data = pedido.dataCD,
+        hora = pedido.horaCD,
+        local = pedido.localizacao ?: ""))
   }
 
   fun printPreviewExp(impressora: String, nota: NotaSaida) {

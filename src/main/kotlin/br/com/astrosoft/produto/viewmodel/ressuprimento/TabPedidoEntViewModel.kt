@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.pedido
+package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -6,11 +6,11 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
-class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
+class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaPedido.ENT)
-    val Pedidos = PedidoVenda.find(filtro)
-    subView.updatePedidos(Pedidos)
+    val filtro = subView.filtro(EMarcaRessuprimento.ENT)
+    val ressuprimento = Ressuprimento.find(filtro)
+    subView.updateRessuprimentos(ressuprimento)
   }
 
   fun marcaCD() {
@@ -19,20 +19,19 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaPedido.CD.num
+      produtoNF.marca = EMarcaRessuprimento.CD.num
       produtoNF.usuarioCD = ""
       produtoNF.salva()
-      produtoNF.orcamento()
     }
     subView.updateProdutos()
   }
 
-  fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {
-    pedido ?: fail("Nenhum pedido selecionado")
+  fun printEtiqueta(ressuprimento: Ressuprimento?) = viewModel.exec {
+    ressuprimento ?: fail("Nenhum ressuprimento selecionado")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, pedido)
+        EtiquetaChave.printPreviewEnt(impressora, ressuprimento)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -41,12 +40,12 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabPedidoEnt
+    get() = viewModel.view.tabRessuprimentoEnt
 }
 
-interface ITabPedidoEnt : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(pedidos: List<PedidoVenda>)
+interface ITabRessuprimentoEnt : ITabView {
+  fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
+  fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoVenda>
+  fun produtosSelcionados(): List<ProdutoRessuprimento>
 }

@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.pedido
+package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.util.format
@@ -9,14 +9,14 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
+class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaPedido.CD)
-    val Pedidos = PedidoVenda.find(filtro)
-    subView.updatePedidos(Pedidos)
+    val filtro = subView.filtro(EMarcaRessuprimento.CD)
+    val resuprimento = Ressuprimento.find(filtro)
+    subView.updateRessuprimentos(resuprimento)
   }
 
-  fun findGrade(prd: ProdutoPedidoVenda?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
+  fun findGrade(prd: ProdutoRessuprimento?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
@@ -28,7 +28,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produto ->
-      produto.marca = EMarcaPedido.ENT.num
+      produto.marca = EMarcaRessuprimento.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
       produto.usuarioCD = usuario + "-" + dataHora
@@ -39,21 +39,21 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.marca = EMarcaPedido.ENT.num
+    produto.marca = EMarcaRessuprimento.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
     produto.usuarioCD = usuario + "-" + dataHora
     produto.salva()
-    produto.expira()
+
     subView.updateProdutos()
-    val pedido = subView.findPedido() ?: fail("Nota não encontrada")
-    val produtosRestantes = pedido.produtos(EMarcaPedido.CD)
+    val ressuprimento = subView.findRessuprimento() ?: fail("Nota não encontrada")
+    val produtosRestantes = ressuprimento.produtos(EMarcaRessuprimento.CD)
     if (produtosRestantes.isEmpty()) {
       imprimeEtiquetaEnt(produto)
     }
   }
 
-  private fun imprimeEtiquetaEnt(produto: ProdutoPedidoVenda) {
+  private fun imprimeEtiquetaEnt(produto: ProdutoRessuprimento) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -66,14 +66,14 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabPedidoCD
+    get() = viewModel.view.tabRessuprimentoCD
 }
 
-interface ITabPedidoCD : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(pedidos: List<PedidoVenda>)
+interface ITabRessuprimentoCD : ITabView {
+  fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
+  fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoVenda>
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda?
-  fun findPedido(): PedidoVenda?
+  fun produtosSelcionados(): List<ProdutoRessuprimento>
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
+  fun findRessuprimento(): Ressuprimento?
 }
