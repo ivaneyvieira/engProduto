@@ -25,6 +25,7 @@ import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
@@ -62,7 +63,21 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        it.bean?.clno?.startsWith("01") == true && it.bean.tipoNota == 4 /* NF Entrega futura*/ && nota.cancelada == "N"
+        when {
+          it.bean?.clno?.startsWith("01") == false -> {
+            Notification.show("O produto não está no grupo de piso")
+            false
+          }
+          it.bean.tipoNota != 4 -> {
+            Notification.show("Não é uma nota de edtrega futura")
+            false
+          }
+          nota.cancelada == "S" -> {
+            Notification.show("A nota está cancelada")
+            false
+          }
+          else -> true
+        }
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
@@ -106,8 +121,8 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       this.setClassNameGenerator {
         when (it.marca) {
-          1    -> "cd"
-          2    -> "entregue"
+          1 -> "cd"
+          2 -> "entregue"
           else -> null
         }
       }

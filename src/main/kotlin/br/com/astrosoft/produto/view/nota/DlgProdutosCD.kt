@@ -25,6 +25,7 @@ import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.notification.Notification.show
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -32,7 +33,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNF::class.java, false)
-  val lblCancel = if(nota.cancelada == "S") " (Cancelada)" else ""
+  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
       button("Volta") {
@@ -82,7 +83,21 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
 
       withEditor(ProdutoNF::class, openEditor = {
         (getColumnBy(ProdutoNF::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        it.bean?.clno?.startsWith("01") == true && it.bean.tipoNota == 4 /* NF Entrega futura*/ && nota.cancelada == "N"
+        when {
+          it.bean?.clno?.startsWith("01") == false -> {
+            show("O produto não está no grupo de piso")
+            false
+          }
+          it.bean.tipoNota != 4 -> {
+            show("Não é uma nota de edtrega futura")
+            false
+          }
+          nota.cancelada == "S" -> {
+            show("A nota está cancelada")
+            false
+          }
+          else -> true
+        }
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
