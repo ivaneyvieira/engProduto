@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.DadosEtiquetaPedido
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -58,13 +57,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreview(impressora,
-                                   DadosEtiquetaPedido(titulo = "Entregue",
-                                                       usuario = produto.usuarioNameCD,
-                                                       pedido = produto.ordno.toString(),
-                                                       data = produto.dataCD,
-                                                       hora = produto.horaCD,
-                                                       local = produto.localizacao ?: ""))
+        EtiquetaChave.printPreviewEnt(impressora, produto)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.DadosEtiquetaNota
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -58,22 +57,16 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     subView.updateProdutos()
     val nota = subView.findNota() ?: fail("Nota não encontrada")
     val produtosRestantes = nota.produtos(EMarcaNota.CD)
-    if(produtosRestantes.isEmpty()){
+    if (produtosRestantes.isEmpty()) {
       imprimeEtiquetaEnt(produtoNF)
     }
   }
 
-  private fun imprimeEtiquetaEnt(produtoNF: ProdutoNF) {
+  private fun imprimeEtiquetaEnt(produto: ProdutoNF) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreview(impressora,
-                                   DadosEtiquetaNota(titulo = "Entregue",
-                                                     usuario = produtoNF.usuarioNameCD,
-                                                     nota = produtoNF.nota,
-                                                     data = produtoNF.dataCD,
-                                                     hora = produtoNF.horaCD,
-                                                     local = produtoNF.localizacao ?: ""))
+        EtiquetaChave.printPreviewEnt(impressora, produto)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -81,18 +74,12 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
   }
 
-  fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
+  fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma nota selecionada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreview(impressora,
-                                   DadosEtiquetaNota(titulo = "Exp",
-                                                     usuario = nota.usuarioNameExp,
-                                                     nota = nota.nota,
-                                                     data = nota.dataExp,
-                                                     hora = nota.horaExp,
-                                                     local = nota.localizacao ?: ""))
+        EtiquetaChave.printPreviewExp(impressora, nota)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -116,5 +103,5 @@ interface ITabNotaCD : ITabView {
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNF>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNF?
-  fun findNota() : NotaSaida?
+  fun findNota(): NotaSaida?
 }

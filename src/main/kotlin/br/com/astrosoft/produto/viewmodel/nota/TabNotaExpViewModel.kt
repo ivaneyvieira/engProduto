@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.DadosEtiquetaNota
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -46,13 +45,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.print(impressora,
-                            DadosEtiquetaNota(titulo = "Exp",
-                                              usuario = produto.usuarioNameExp,
-                                              nota = produto.nota,
-                                              data = produto.dataExp,
-                                              hora = produto.horaExp,
-                                              local = produto.localizacao ?: ""))
+        EtiquetaChave.printExp(impressora, produto)
         viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
