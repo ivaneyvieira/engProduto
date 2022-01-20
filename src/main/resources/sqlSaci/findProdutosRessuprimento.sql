@@ -17,7 +17,6 @@ SELECT ordno                                              AS ordno,
        X.cost                                             AS preco,
        (X.qtty * X.mult / 1000) * X.cost                  AS total,
        X.auxShort4                                        AS marca,
-       X.remarks                                          AS usuarioExp,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.obs                                              AS usuarioCD,
        ROUND(IFNULL(S.qtty_varejo, 0) / 1000)             AS estoque

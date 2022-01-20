@@ -5,9 +5,9 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoVendedor
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
 import com.github.mvysny.karibudsl.v10.integerField
@@ -41,15 +41,15 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     }
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
-    colunaRessuprimentoVendedor()
+    colunaRessuprimentoComprador()
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
     return FiltroRessuprimento(numero = edtRessuprimento.value ?: 0, marca = marca)
   }
 
-  override fun updateRessuprimentos(pedido: List<Ressuprimento>) {
-    updateGrid(pedido)
+  override fun updateRessuprimentos(ressuprimento: List<Ressuprimento>) {
+    updateGrid(ressuprimento)
   }
 
   override fun updateProdutos() {

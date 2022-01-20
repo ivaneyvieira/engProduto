@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 
 class ProdutoRessuprimento(
-  val loja: Int,
   val ordno: Long,
   val codigo: String,
   val grade: String,
@@ -24,9 +23,8 @@ class ProdutoRessuprimento(
   val preco: Double,
   val total: Double,
   var marca: Int,
-  var usuarioExp: String,
   var usuarioCD: String,
-  val estoque: Double,
+  val estoque: Int,
 ) {
   private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
 

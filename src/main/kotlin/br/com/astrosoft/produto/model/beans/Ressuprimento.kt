@@ -8,7 +8,7 @@ class Ressuprimento(
   val numero: Long,
   val fornecedor: Int,
   val data: LocalDate,
-  val vendedor: Int,
+  val comprador: Int,
   val localizacao: String?,
   val usuarioCD: String?,
   val totalProdutos: Double,

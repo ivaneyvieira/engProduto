@@ -1,7 +1,7 @@
 SELECT N.no                                               AS numero,
        vendno                                             AS fornecedor,
        CAST(date AS DATE)                                 AS data,
-       N.empno                                            AS vendedor,
+       N.empno                                            AS comprador,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.obs                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.cost)                      AS totalProdutos,

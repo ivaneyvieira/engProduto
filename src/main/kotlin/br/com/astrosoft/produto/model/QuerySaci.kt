@@ -211,13 +211,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun salvaProdutosRessuprimento(podutoPedidoVenda: ProdutoRessuprimento) {
     val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
     script(sql) {
-      addOptionalParameter("storeno", podutoPedidoVenda.loja)
       addOptionalParameter("ordno", podutoPedidoVenda.ordno)
       addOptionalParameter("codigo", podutoPedidoVenda.codigo)
       addOptionalParameter("grade", podutoPedidoVenda.grade)
       addOptionalParameter("marca", podutoPedidoVenda.marca)
       addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
-      addOptionalParameter("usuarioExp", podutoPedidoVenda.usuarioExp)
     }
   }
 
