@@ -24,10 +24,6 @@ object PedidoColumns {
     this.setHeader("Cliente")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoNota() = addColumnString(PedidoVenda::nota) {
-    this.setHeader("Nota")
-  }
-
   fun Grid<PedidoVenda>.colunaPedidoData() = addColumnLocalDate(PedidoVenda::data) {
     this.setHeader("Data")
   }

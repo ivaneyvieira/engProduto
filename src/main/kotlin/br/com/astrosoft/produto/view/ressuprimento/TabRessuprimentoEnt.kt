@@ -8,6 +8,8 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoChaveCD
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
@@ -46,6 +48,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoChaveCD()
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
+    colunaRessuprimentoNotaBaixa()
+    colunaRessuprimentoDataBaixa()
     colunaRessuprimentoComprador()
   }
 

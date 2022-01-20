@@ -17,6 +17,14 @@ object RessuprimentoColumns {
     this.setHeader("Data")
   }
 
+  fun Grid<Ressuprimento>.colunaRessuprimentoNotaBaixa() = addColumnString(Ressuprimento::notaBaixa) {
+    this.setHeader("Nota")
+  }
+
+  fun Grid<Ressuprimento>.colunaRessuprimentoDataBaixa() = addColumnLocalDate(Ressuprimento::dataBaixa) {
+    this.setHeader("Data")
+  }
+
   fun Grid<Ressuprimento>.colunaRessuprimentoComprador() = addColumnInt(Ressuprimento::comprador) {
     this.setHeader("Comprador")
   }

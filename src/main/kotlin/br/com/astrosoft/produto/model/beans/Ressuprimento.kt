@@ -13,8 +13,10 @@ class Ressuprimento(
   val usuarioCD: String?,
   val totalProdutos: Double,
   val marca: Int?,
-  val cancelada: String?
-) {
+  val cancelada: String?,
+  val notaBaixa: String?,
+  val dataBaixa: LocalDate?,
+                   ) {
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""

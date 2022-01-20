@@ -1,7 +1,6 @@
 SELECT N.storeno                                                     AS loja,
        ordno                                                         AS ordno,
        custno                                                        AS cliente,
-       CAST(IF(N.nfno = 0, '', CONCAT(N.nfno, '/', N.nfse)) AS CHAR) AS nota,
        CAST(date AS DATE)                                            AS data,
        N.empno                                                       AS vendedor,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)            AS localizacao,

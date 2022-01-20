@@ -9,7 +9,6 @@ import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCh
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCliente
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
-import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNota
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoEnt
@@ -59,7 +58,6 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
     colunaPedidoChaveCD()
     colunaPedidoNumero()
     colunaPedidoData()
-    colunaPedidoNota()
     colunaPedidoCliente()
     colunaPedidoVendedor()
   }
