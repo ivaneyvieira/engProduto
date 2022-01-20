@@ -7,6 +7,7 @@ import java.time.LocalDate
 class PedidoVenda(
   val loja: Int,
   val ordno: Int,
+  val nota: String,
   val cliente: Int,
   val data: LocalDate,
   val vendedor: Int,

@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCliente
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoData
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoLoja
+import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNota
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoNumero
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoVendedor
 import br.com.astrosoft.produto.viewmodel.pedido.ITabPedidoCD
@@ -52,6 +53,7 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     }
     colunaPedidoNumero()
     colunaPedidoData()
+    colunaPedidoNota()
     colunaPedidoCliente()
     colunaPedidoVendedor()
   }

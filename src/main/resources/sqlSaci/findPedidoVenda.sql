@@ -1,13 +1,14 @@
-SELECT N.storeno                                          AS loja,
-       ordno                                              AS ordno,
-       custno                                             AS cliente,
-       CAST(date AS DATE)                                 AS data,
-       N.empno                                            AS vendedor,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.c4                                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.price / 100)               AS totalProdutos,
-       MAX(X.s12)                                         AS marca,
-       'N'                                                AS cancelada
+SELECT N.storeno                                                     AS loja,
+       ordno                                                         AS ordno,
+       custno                                                        AS cliente,
+       CAST(IF(N.nfno = 0, '', CONCAT(N.nfno, '/', N.nfse)) AS CHAR) AS nota,
+       CAST(date AS DATE)                                            AS data,
+       N.empno                                                       AS vendedor,
+       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)            AS localizacao,
+       X.c4                                                          AS usuarioCD,
+       SUM((X.qtty / 1000) * X.price / 100)                          AS totalProdutos,
+       MAX(X.s12)                                                    AS marca,
+       'N'                                                           AS cancelada
 FROM sqldados.eord           AS N
   INNER JOIN sqldados.eoprd  AS X
 	       USING (storeno, ordno)
