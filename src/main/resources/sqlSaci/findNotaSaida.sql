@@ -1,9 +1,8 @@
 DO @DT := 20220101;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
-CREATE TEMPORARY TABLE T_E
-(
-    PRIMARY KEY (storeno, ordno)
+CREATE TEMPORARY TABLE T_E (
+  PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
        P.eordno                                  AS ordno,
@@ -16,9 +15,8 @@ WHERE P.cfo IN (5117, 6117)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
-CREATE TEMPORARY TABLE T_V
-(
-    PRIMARY KEY (storeno, ordno)
+CREATE TEMPORARY TABLE T_V (
+  PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -35,9 +33,8 @@ WHERE P.cfo IN (5922, 6922)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
-CREATE TEMPORARY TABLE T_ENTREGA
-(
-    PRIMARY KEY (storeno, pdvno, xano)
+CREATE TEMPORARY TABLE T_ENTREGA (
+  PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT V.storeno,
        V.pdvno,
@@ -45,9 +42,9 @@ SELECT V.storeno,
        V.numero      AS notaVenda,
        MAX(E.numero) AS notaEntrega,
        MAX(E.data)   AS dataEntrega
-FROM T_V AS V
-         LEFT JOIN T_E AS E
-                   USING (storeno, ordno)
+FROM T_V        AS V
+  LEFT JOIN T_E AS E
+	      USING (storeno, ordno)
 GROUP BY V.storeno, V.pdvno, V.xano;
 
 SELECT N.storeno                                          AS loja,
@@ -65,51 +62,51 @@ SELECT N.storeno                                          AS loja,
        MAX(X.s12)                                         AS marca,
        IF(N.status <> 1, 'N', 'S')                        AS cancelada,
        CASE
-           WHEN tipo = 0
-               THEN ''
-           WHEN tipo = 1
-               THEN ''
-           WHEN tipo = 2
-               THEN 'DEVOLUCAO'
-           WHEN tipo = 3
-               THEN 'SIMP REME'
-           WHEN tipo = 4
-               THEN 'ENTRE FUT'
-           WHEN tipo = 5
-               THEN 'RET DEMON'
-           WHEN tipo = 6
-               THEN 'VENDA USA'
-           WHEN tipo = 7
-               THEN 'OUTROS'
-           WHEN tipo = 8
-               THEN 'NF CF'
-           WHEN tipo = 9
-               THEN 'PERD/CONSER'
-           WHEN tipo = 10
-               THEN 'REPOSICAO'
-           WHEN tipo = 11
-               THEN 'RESSARCI'
-           WHEN tipo = 12
-               THEN 'COMODATO'
-           WHEN tipo = 13
-               THEN 'NF EMPRESA'
-           WHEN tipo = 14
-               THEN 'BONIFICA'
-           WHEN tipo = 15
-               THEN 'NFE'
-           ELSE ''
-           END                                            AS tipoNotaSaida,
+	 WHEN tipo = 0
+	   THEN ''
+	 WHEN tipo = 1
+	   THEN ''
+	 WHEN tipo = 2
+	   THEN 'DEVOLUCAO'
+	 WHEN tipo = 3
+	   THEN 'SIMP REME'
+	 WHEN tipo = 4
+	   THEN 'ENTRE FUT'
+	 WHEN tipo = 5
+	   THEN 'RET DEMON'
+	 WHEN tipo = 6
+	   THEN 'VENDA USA'
+	 WHEN tipo = 7
+	   THEN 'OUTROS'
+	 WHEN tipo = 8
+	   THEN 'NF CF'
+	 WHEN tipo = 9
+	   THEN 'PERD/CONSER'
+	 WHEN tipo = 10
+	   THEN 'REPOSICAO'
+	 WHEN tipo = 11
+	   THEN 'RESSARCI'
+	 WHEN tipo = 12
+	   THEN 'COMODATO'
+	 WHEN tipo = 13
+	   THEN 'NF EMPRESA'
+	 WHEN tipo = 14
+	   THEN 'BONIFICA'
+	 WHEN tipo = 15
+	   THEN 'NFE'
+	 ELSE ''
+       END                                                AS tipoNotaSaida,
        IFNULL(ENT.notaEntrega, '')                        AS notaEntrega,
        CAST(ENT.dataEntrega AS DATE)                      AS dataEntrega
-FROM sqldados.nf AS N
-         LEFT JOIN T_ENTREGA AS ENT
-                   USING (storeno, pdvno, xano)
-         INNER JOIN sqldados.xaprd2 AS X
-                    USING (storeno, pdvno, xano)
-         LEFT JOIN sqldados.prdloc AS L
-                   ON L.prdno = X.prdno AND L.storeno = 4
-         LEFT JOIN sqldados.emp AS E
-                   ON E.no = N.empno
+FROM sqldados.nf             AS N
+  LEFT JOIN  T_ENTREGA       AS ENT
+	       USING (storeno, pdvno, xano)
+  INNER JOIN sqldados.xaprd2 AS X
+	       USING (storeno, pdvno, xano)
+  LEFT JOIN  sqldados.prdloc AS L
+	       ON L.prdno = X.prdno AND L.storeno = 4
+  LEFT JOIN  sqldados.emp    AS E
+	       ON E.no = N.empno
 WHERE N.issuedate >= @DT
   AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10) OR (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
   AND (X.s12 = :marca OR :marca = 999)
@@ -120,8 +117,8 @@ WHERE N.issuedate >= @DT
   AND (E.sname = :vendedor OR :vendedor = '')
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
-         pdvno,
-         xano,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '_', 1)),
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
-         IF(:marca = 999, '', MID(L.localizacao, 1, 4))
+	 pdvno,
+	 xano,
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '_', 1)),
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
+	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))

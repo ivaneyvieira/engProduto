@@ -8,11 +8,11 @@ SELECT N.storeno                                          AS loja,
        SUM((X.qtty / 1000) * X.price / 100)               AS totalProdutos,
        MAX(X.s12)                                         AS marca,
        'N'                                                AS cancelada
-FROM sqldados.eord AS N
-         INNER JOIN sqldados.eoprd AS X
-                    USING (storeno, ordno)
-         LEFT JOIN sqldados.prdloc AS L
-                   ON L.prdno = X.prdno AND L.storeno = 4
+FROM sqldados.eord           AS N
+  INNER JOIN sqldados.eoprd  AS X
+	       USING (storeno, ordno)
+  LEFT JOIN  sqldados.prdloc AS L
+	       ON L.prdno = X.prdno AND L.storeno = 4
 WHERE N.date >= 20220114
   AND N.paymno = 431
   AND (X.s12 = :marca OR :marca = 999)
@@ -20,6 +20,6 @@ WHERE N.date >= 20220114
   AND (N.ordno = :ordno OR :ordno = 0)
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
-         ordno,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
-         IF(:marca = 999, '', MID(L.localizacao, 1, 4))
+	 ordno,
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
+	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))
