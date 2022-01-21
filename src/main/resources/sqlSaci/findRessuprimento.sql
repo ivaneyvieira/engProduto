@@ -57,12 +57,12 @@ SELECT N.no                                               AS numero,
        'N'                                                AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
        NF.dataNota                                        AS dataBaixa
-FROM sqldados.ords           AS N
-  LEFT JOIN  T_PEDIDO_NOTA   AS NF
+FROM sqldados.ordsRessu         AS N
+  LEFT JOIN  T_PEDIDO_NOTA      AS NF
 	       ON N.no = NF.ordno
-  INNER JOIN sqldados.oprdRessu    AS X
+  INNER JOIN sqldados.oprdRessu AS X
 	       ON N.storeno = X.storeno AND N.no = X.ordno
-  LEFT JOIN  sqldados.prdloc AS L
+  LEFT JOIN  sqldados.prdloc    AS L
 	       ON L.prdno = X.prdno AND L.storeno = 4
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
@@ -75,6 +75,13 @@ GROUP BY N.storeno,
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
 	 IF(:marca = 999, '', MID(L.localizacao, 1, 4));
 
-SELECT * FROM T_PEDIDO_01
-UNION DISTINCT
-SELECT * FROM T_PEDIDO_02
+SELECT *
+FROM (SELECT *
+      FROM T_PEDIDO_01
+      UNION
+      DISTINCT
+      SELECT *
+      FROM T_PEDIDO_02) AS D
+GROUP BY numero,
+	 IF(:marca = 999, '', SUBSTRING_INDEX(usuarioCD, '-', 1)),
+	 IF(:marca = 999, '', localizacao)
