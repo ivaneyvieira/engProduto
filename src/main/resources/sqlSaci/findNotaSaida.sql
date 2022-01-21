@@ -119,6 +119,6 @@ WHERE N.issuedate >= @DT
 GROUP BY N.storeno,
 	 pdvno,
 	 xano,
-	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '_', 1)),
-	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '-', 1)),
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1)),
 	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))

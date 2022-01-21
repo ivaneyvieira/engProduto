@@ -21,5 +21,5 @@ WHERE N.date >= 20220114
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
 	 ordno,
-	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '_', 1)),
+	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1)),
 	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))
