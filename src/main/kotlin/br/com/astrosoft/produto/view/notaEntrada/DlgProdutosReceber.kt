@@ -18,6 +18,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota: NotaEntrada) {
@@ -41,11 +42,13 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       }
       edtQuant = integerField("Quantidade") {
         this.isAutoselect = true
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.marcaProdutos(edtCodbar.value, edtQuant.value)
             edtCodbar.value = ""
+            edtQuant.value = 0
             edtCodbar.selectAll()
             edtCodbar.focus()
           }
