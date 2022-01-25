@@ -21,7 +21,7 @@ class NotaEntrada(
     return saci.findProdutoNFEConf(this)
   }
 
-  fun addProdutoConf(barcode : String) = saci.addProdutoConf(this, barcode)
+  fun addProdutoConf(barcode : String, quant : Int) = saci.addProdutoConf(this, barcode, quant)
 
   val nota
     get() = "$numero/$serie"

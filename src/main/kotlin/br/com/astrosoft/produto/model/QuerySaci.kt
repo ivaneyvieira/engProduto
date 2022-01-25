@@ -315,11 +315,12 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun addProdutoConf(nota : NotaEntrada, barcode: String){
+  fun addProdutoConf(nota : NotaEntrada, barcode: String, quant : Int){
     val sql = "/sqlSaci/addProdutoConf.sql"
     return script(sql) {
       addOptionalParameter("ni", nota.ni)
       addOptionalParameter("barcode", barcode)
+      addOptionalParameter("quant", quant)
     }
   }
 

@@ -7,33 +7,52 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFECodigo
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEDescricao
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEGrade
-import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFELocalizacao
-import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEPrecoTotal
-import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEPrecoUnitario
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaReceberViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import sun.security.jgss.GSSUtil.login
 
 class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota: NotaEntrada) {
+  private lateinit var edtQuant: IntegerField
+  private lateinit var edtCodbar: TextField
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {
-      textField("Código de barras") {
+      edtCodbar = textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
+        this.isAutoselect = true
         addValueChangeListener {
           if (it.isFromClient) {
-            viewModel.marcaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
+            viewModel.marcaProdutos(edtCodbar.value, edtQuant.value ?: 0)
+            edtQuant.value = 0
+            edtQuant.focus()
           }
         }
       }
+      edtQuant = integerField("Quantidade") {
+        this.isAutoselect = true
+        this.valueChangeMode = ValueChangeMode.ON_CHANGE
+        addValueChangeListener {
+          if (it.isFromClient) {
+            viewModel.marcaProdutos(edtCodbar.value, edtQuant.value)
+            edtCodbar.value = ""
+            edtCodbar.selectAll()
+            edtCodbar.focus()
+          }
+        }
+      }
+      button("Processa") {  }
     }, onClose = {
       onClose()
     }) {
@@ -56,6 +75,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEBarcode()
       produtoNFEDescricao()
       produtoNFEGrade()
+      produtoNFEQuantidade()
     }
     this.addAndExpand(gridDetail)
     update()

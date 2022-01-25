@@ -1,7 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.notaEntrada
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroNotaEntrada
+import br.com.astrosoft.produto.model.beans.NotaEntrada
 
 class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   val subView
@@ -13,18 +14,18 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun adicionaChave(chave: String?) {
-    if(!chave.isNullOrBlank()){
+    if (!chave.isNullOrBlank()) {
       val nota = NotaEntrada.marcaNotaEntrada(chave)
-      if(nota == null){
+      if (nota == null) {
         viewModel.showError("Nota não encontrada")
       }
       updateView()
     }
   }
 
-  fun marcaProdutos(barCode: String?) {
+  fun marcaProdutos(barCode: String?, quant: Int?) {
     val nota = subView.notaSelecionada()
-    nota?.addProdutoConf(barCode ?: "")
+    nota?.addProdutoConf(barCode ?: "", quant ?: 0)
     subView.updateViewProduto()
   }
 }
