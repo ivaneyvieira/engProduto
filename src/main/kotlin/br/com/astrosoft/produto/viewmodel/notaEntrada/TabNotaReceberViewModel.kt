@@ -23,10 +23,14 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun marcaProdutos(barCode: String?) {
-    TODO("Not yet implemented")
+    val nota = subView.notaSelecionada()
+    nota?.addProdutoConf(barCode ?: "")
+    subView.updateViewProduto()
   }
 }
 
 interface ITabNotaEntradaReceber : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
+  fun notaSelecionada(): NotaEntrada?
+  fun updateViewProduto()
 }

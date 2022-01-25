@@ -9,7 +9,7 @@ class ProdutoNFE(
   val barcode: String,
   val descricao: String,
   val vendno: Int,
-  val fornecedor: Int,
+  val fornecedor: String,
   val typeno: Int,
   val typeName: String,
   val clno: String,

@@ -308,6 +308,21 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findProdutoNFEConf(nota: NotaEntrada): List<ProdutoNFE> {
+    val sql = "/sqlSaci/findProdutosNFEntradaConf.sql"
+    return query(sql, ProdutoNFE::class) {
+      addOptionalParameter("ni", nota.ni)
+    }
+  }
+
+  fun addProdutoConf(nota : NotaEntrada, barcode: String){
+    val sql = "/sqlSaci/addProdutoConf.sql"
+    return script(sql) {
+      addOptionalParameter("ni", nota.ni)
+      addOptionalParameter("barcode", barcode)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     internal val driver = db.driver

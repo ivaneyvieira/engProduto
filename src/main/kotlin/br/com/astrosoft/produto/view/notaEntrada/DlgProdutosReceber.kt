@@ -23,7 +23,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja", toolBar = {
+    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
@@ -56,10 +56,6 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEBarcode()
       produtoNFEDescricao()
       produtoNFEGrade()
-      produtoNFELocalizacao()
-      produtoNFEQuantidade()
-      produtoNFEPrecoUnitario()
-      produtoNFEPrecoTotal()
     }
     this.addAndExpand(gridDetail)
     update()

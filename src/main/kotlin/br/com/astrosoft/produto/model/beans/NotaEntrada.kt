@@ -18,8 +18,10 @@ class NotaEntrada(
   fun findProduto(marca: Boolean) = saci.findProdutoNFE(this, marca)
 
   fun produtosConferencia(): List<ProdutoNFE> {
-    TODO()
+    return saci.findProdutoNFEConf(this)
   }
+
+  fun addProdutoConf(barcode : String) = saci.addProdutoConf(this, barcode)
 
   val nota
     get() = "$numero/$serie"

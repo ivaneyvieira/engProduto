@@ -50,6 +50,14 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) : Tab
     edtChave?.focus()
   }
 
+  override fun notaSelecionada(): NotaEntrada? {
+    return dlgProduto?.nota
+  }
+
+  override fun updateViewProduto() {
+    dlgProduto?.update()
+  }
+
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
     return username?.notaEntradaReceber == true
