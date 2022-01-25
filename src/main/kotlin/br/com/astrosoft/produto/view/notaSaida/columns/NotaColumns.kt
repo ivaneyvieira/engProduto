@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.nota.columns
+package br.com.astrosoft.produto.view.notaSaida.columns
 
 import br.com.astrosoft.framework.view.addColumnDouble
 import br.com.astrosoft.framework.view.addColumnInt

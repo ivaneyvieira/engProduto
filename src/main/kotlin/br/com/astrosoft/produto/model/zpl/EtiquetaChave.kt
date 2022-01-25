@@ -11,7 +11,7 @@ object EtiquetaChave {
     return zpl.replace("[titulo]", dados.titulo)
       .replace("[usuario]", dados.usuario)
       .replace("[loja]", dados.loja.toString())
-      .replace("[nota]", dados.nota)
+      .replace("[notaSaida]", dados.nota)
       .replace("[data]", dados.data)
       .replace("[hora]", dados.hora)
       .replace("[local]", dados.local)
@@ -79,7 +79,7 @@ object EtiquetaChave {
     }
   }
 
-  fun printPreviewEnt(impressora: String, produto: ProdutoNF) {
+  fun printPreviewEnt(impressora: String, produto: ProdutoNFS) {
     printPreview(
       impressora,
       DadosEtiquetaNota(
@@ -182,7 +182,7 @@ object EtiquetaChave {
     )
   }
 
-  fun printExp(impressora: String, produto: ProdutoNF) {
+  fun printExp(impressora: String, produto: ProdutoNFS) {
     print(
       impressora,
       DadosEtiquetaNota(

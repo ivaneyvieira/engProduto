@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class ProdutoNF(
+class ProdutoNFS(
   val loja: Int,
   val pdvno: Int,
   val xano: Long,
@@ -31,7 +31,7 @@ class ProdutoNF(
   var usuarioExp: String,
   var usuarioCD: String,
   val tipoNota: Int,
-) {
+                ) {
   private fun splitExp(index: Int) = usuarioExp.split("-").getOrNull(index) ?: ""
 
   val usuarioNameExp

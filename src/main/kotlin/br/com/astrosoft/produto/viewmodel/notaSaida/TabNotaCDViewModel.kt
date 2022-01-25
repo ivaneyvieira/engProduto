@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.nota
+package br.com.astrosoft.produto.viewmodel.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.util.format
@@ -62,7 +62,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
   }
 
-  private fun imprimeEtiquetaEnt(produto: ProdutoNF) {
+  private fun imprimeEtiquetaEnt(produto: ProdutoNFS) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -75,7 +75,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
-    nota ?: fail("Nenhuma nota selecionada")
+    nota ?: fail("Nenhuma notaSaida selecionada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -87,7 +87,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
   }
 
-  fun findGrade(prd: ProdutoNF?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
+  fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
@@ -101,7 +101,7 @@ interface ITabNotaCD : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNF>
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoNF?
+  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
   fun findNota(): NotaSaida?
 }

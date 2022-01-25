@@ -1,21 +1,21 @@
-package br.com.astrosoft.produto.view.nota
+package br.com.astrosoft.produto.view.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.ProdutoNF
+import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGrade
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
-import br.com.astrosoft.produto.view.nota.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFGrade
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
@@ -25,10 +25,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoNF::class.java, false)
+  private val gridDetail = Grid(ProdutoNFS::class.java, false)
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da nota ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
+    form = SubWindowForm("Produtos da notaSaida ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
       button("Volta") {
         val user = Config.user as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true
@@ -69,7 +69,7 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
     update()
   }
 
-  fun itensSelecionados(): List<ProdutoNF> {
+  fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
 

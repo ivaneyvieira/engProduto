@@ -2,8 +2,10 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.MainLayout
+import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.nota.NotaView
+import br.com.astrosoft.produto.view.notaEntrada.NotaEntradaView
+import br.com.astrosoft.produto.view.notaSaida.NotaView
 import br.com.astrosoft.produto.view.pedido.PedidoView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
@@ -19,7 +21,8 @@ class ProdutoLayout : MainLayout() {
   override fun Tabs.menuConfig() {
     val userSaci = Config.user as? UserSaci
     if (userSaci?.produto == true) menuRoute(FORM, "Produtos", ProdutoView::class)
-    if (userSaci?.nota == true) menuRoute(DIPLOMA, "Notas", NotaView::class)
+    if (userSaci?.nota == true) menuRoute(DIPLOMA, "Notas de Saída", NotaView::class)
+    if (userSaci?.notaEntrada == true) menuRoute(DIPLOMA, "Notas de Entrada", NotaEntradaView::class)
     if (userSaci?.pedido == true) menuRoute(DIPLOMA, "Pedido", PedidoView::class)
     if (userSaci?.pedido == true) menuRoute(DIPLOMA, "Ressuprimento", RessuprimentoView::class)
     if (userSaci?.admin == true) menuRoute(USER, "Usuário", UsuarioView::class, Config.isAdmin)

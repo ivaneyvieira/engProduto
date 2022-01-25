@@ -1,24 +1,24 @@
-package br.com.astrosoft.produto.view.nota
+package br.com.astrosoft.produto.view.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveCD
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveExp
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFDataEnt
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNotaEnt
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFSituacao
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFTipo
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.viewmodel.nota.ITabNotaEnt
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaEntViewModel
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveCD
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFDataEnt
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNotaEnt
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFSituacao
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFTipo
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaEnt
+import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -108,7 +108,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoNF> {
+  override fun produtosSelcionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

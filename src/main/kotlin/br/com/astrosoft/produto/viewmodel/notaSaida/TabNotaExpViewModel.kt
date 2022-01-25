@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.nota
+package br.com.astrosoft.produto.viewmodel.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.util.format
@@ -16,7 +16,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     subView.updateNotas(notas)
   }
 
-  fun findGrade(prd: ProdutoNF?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
+  fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
@@ -63,5 +63,5 @@ interface ITabNotaExp : ITabView {
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNF>
+  fun produtosSelcionados(): List<ProdutoNFS>
 }

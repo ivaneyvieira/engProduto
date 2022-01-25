@@ -1,19 +1,19 @@
-package br.com.astrosoft.produto.view.nota
+package br.com.astrosoft.produto.view.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFChaveExp
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFCliente
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFLoja
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.nota.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.viewmodel.nota.ITabNotaCD
-import br.com.astrosoft.produto.viewmodel.nota.TabNotaCDViewModel
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaCD
+import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -98,11 +98,11 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoNF> {
+  override fun produtosSelcionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoNF? {
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 

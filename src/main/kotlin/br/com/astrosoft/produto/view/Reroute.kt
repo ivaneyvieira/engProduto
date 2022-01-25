@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.model.Config.user
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.nota.NotaView
+import br.com.astrosoft.produto.view.notaSaida.NotaView
 import br.com.astrosoft.produto.view.pedido.PedidoView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import com.vaadin.flow.component.html.Div

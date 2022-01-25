@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.nota
+package br.com.astrosoft.produto.viewmodel.notaSaida
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -27,7 +27,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   }
 
   fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
-    nota ?: fail("Nenhuma nota selecionada")
+    nota ?: fail("Nenhuma notaSaida selecionada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -47,5 +47,5 @@ interface ITabNotaEnt : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNF>
+  fun produtosSelcionados(): List<ProdutoNFS>
 }
