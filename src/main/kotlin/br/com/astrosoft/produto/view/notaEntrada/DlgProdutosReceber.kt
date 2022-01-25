@@ -19,7 +19,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import sun.security.jgss.GSSUtil.login
 
 class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota: NotaEntrada) {
   private lateinit var edtQuant: IntegerField
@@ -52,7 +51,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
           }
         }
       }
-      button("Processa") {  }
+      button("Processa") { }
     }, onClose = {
       onClose()
     }) {
