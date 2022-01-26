@@ -17,7 +17,8 @@ CREATE TABLE sqldados.invConferencia (
   `invse`    char(4)     NOT NULL DEFAULT '',
   issue_date INT(11)     NOT NULL DEFAULT 0,
   nfekey     char(60)    NOT NULL DEFAULT '',
-  PRIMARY KEY (invno)
+  PRIMARY KEY (invno),
+  UNIQUE (nfekey)
 );
 
 

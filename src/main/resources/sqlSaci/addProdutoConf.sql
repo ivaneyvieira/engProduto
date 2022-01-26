@@ -10,7 +10,7 @@ FROM sqldados.prd           AS P
   LEFT JOIN sqldados.prdbar AS B
 	      ON B.prdno = P.no
 WHERE B.barcode = LPAD(:barcode, 16, ' ')
-   OR (P.barcode = LPAD(:barcode, 16, ' ') AND B.barcode IS NULL)
+   OR (P.barcode = LPAD(:barcode, 16, ' '))
 GROUP BY prdno, IFNULL(B.grade, '');
 
 REPLACE INTO sqldados.iprdConferencia(invno, prdno, grade, qtty, fob, s27)
