@@ -5,13 +5,11 @@ SELECT I.invno                              AS ni,
        I.vendno                             AS fornecedor,
        CAST(I.issue_date AS DATE)           AS data,
        I.grossamt / 100                     AS valorNota,
-       s27                                  AS marca,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
        N.nfekey                             AS chave
 FROM sqldados.inv            AS I
   INNER JOIN sqldados.invnfe AS N
 	       USING (invno)
-WHERE s27 > 0
-  AND I.storeno IN (2, 3, 4, 5)
+WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
   AND (N.nfekey = :chave OR :chave = '')

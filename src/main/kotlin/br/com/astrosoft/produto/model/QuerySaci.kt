@@ -292,19 +292,25 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
+  fun findNotaEntradaConf(filtro: FiltroNotaEntrada): List<NotaEntrada> {
+    val sql = "/sqlSaci/findNotaEntradaConf.sql"
+    return query(sql, NotaEntrada::class) {
+      addOptionalParameter("chave", filtro.chave)
+    }
+  }
+
   fun marcaNotaEntrada(chave: String): NotaEntrada? {
     val sql = "/sqlSaci/marcaNotaEntrada.sql"
     script(sql) {
       addOptionalParameter("chave", chave)
     }
-    return findNotaEntrada(FiltroNotaEntrada(chave)).firstOrNull()
+    return findNotaEntradaConf(FiltroNotaEntrada(chave)).firstOrNull()
   }
 
-  fun findProdutoNFE(nota: NotaEntrada, marca: Boolean): List<ProdutoNFE> {
+  fun findProdutoNFE(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntrada.sql"
     return query(sql, ProdutoNFE::class) {
       addOptionalParameter("ni", nota.ni)
-      addOptionalParameter("marca", if (marca) 1 else 0)
     }
   }
 

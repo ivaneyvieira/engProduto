@@ -19,6 +19,5 @@ class ProdutoNFE(
   val quantidade: Int,
   val preco: Double,
   val total: Double,
-  val marca: Int,
   val localizacao: String,
                 )

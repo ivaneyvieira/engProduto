@@ -11,11 +11,10 @@ class NotaEntrada(
   val fornecedor: Int,
   val data: LocalDate,
   val valorNota: Double,
-  val marca: Int,
   val cancelada: String,
   val chave: String,
                  ) {
-  fun findProduto(marca: Boolean) = saci.findProdutoNFE(this, marca)
+  fun findProduto() = saci.findProdutoNFE(this)
 
   fun produtosConferencia(): List<ProdutoNFE> {
     return saci.findProdutoNFEConf(this)
@@ -28,6 +27,8 @@ class NotaEntrada(
 
   companion object {
     fun findNotaEntrada(filtro: FiltroNotaEntrada) = saci.findNotaEntrada(filtro)
+
+    fun findNotaEntradaConf(filtro: FiltroNotaEntrada) = saci.findNotaEntradaConf(filtro)
 
     fun marcaNotaEntrada(chave: String) = saci.marcaNotaEntrada(chave)
   }
