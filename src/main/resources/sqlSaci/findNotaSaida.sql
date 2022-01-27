@@ -108,7 +108,8 @@ FROM sqldados.nf             AS N
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
 WHERE N.issuedate >= @DT
-  AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10) OR (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
+  AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10 AND (:NFCE = 'S')) OR
+       (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)

@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.EDirection
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.SqlOrder
@@ -25,7 +26,7 @@ class NotaSaida(
   val tipoNotaSaida: String?,
   val notaEntrega: String?,
   val dataEntrega: LocalDate?,
-) {
+               ) {
   val nota
     get() = "$numero/$serie"
 
@@ -59,30 +60,23 @@ class NotaSaida(
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroNota) = saci.findNotaSaida(
-      filtro,
-      userLocais(),
-      SqlLazy(
-        limit = 10000,
-        orders = listOf(
-          SqlOrder(
-            property = "data",
-            EDirection.DESC
-          )
-        )
-      )
-    )
+    fun find(filtro: FiltroNota): List<NotaSaida> {
+      val user = Config.user as? UserSaci
+      return saci.findNotaSaida(filtro = filtro,
+                                locais = userLocais(),
+                                nfce = user?.nfceExpedicao == true,
+                                SqlLazy(limit = 10000,
+                                        orders = listOf(SqlOrder(property = "data", EDirection.DESC))))
+    }
   }
 }
 
-data class FiltroNota(
-  val storeno: Int,
-  val nota: String,
-  val marca: EMarcaNota,
-  val loja: Int,
-  val cliente: Int,
-  val vendedor: String
-) {
+data class FiltroNota(val storeno: Int,
+                      val nota: String,
+                      val marca: EMarcaNota,
+                      val loja: Int,
+                      val cliente: Int,
+                      val vendedor: String) {
   val nfno: Int
     get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
   val nfse: String

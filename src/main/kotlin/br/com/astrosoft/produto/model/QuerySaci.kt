@@ -219,7 +219,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, sqlLazy: SqlLazy): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, nfce: Boolean, sqlLazy: SqlLazy): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
     val nfse = filtro.nfse
@@ -231,6 +231,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("cliente", filtro.cliente)
       addOptionalParameter("vendedor", filtro.vendedor)
       addOptionalParameter("locais", locais)
+      addOptionalParameter("NFCE", if (nfce) "S" else "N")
     }
   }
 
