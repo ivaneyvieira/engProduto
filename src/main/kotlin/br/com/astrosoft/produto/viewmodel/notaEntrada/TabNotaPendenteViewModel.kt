@@ -4,23 +4,13 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaEntrada
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 
-class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
+class TabNotaEntradaPendenteViewModel(val viewModel: NotaEntradaViewModel) {
   val subView
-    get() = viewModel.view.tabNotaEntradaReceber
+    get() = viewModel.view.tabNotaEntradaPendente
 
   fun updateView() {
-    val lista = NotaEntrada.findNotaEntradaConf(FiltroNotaEntrada())
+    val lista = NotaEntrada.findNotaEntradaPendente(FiltroNotaEntrada())
     subView.updateNotas(lista)
-  }
-
-  fun adicionaChave(chave: String?) {
-    if (!chave.isNullOrBlank()) {
-      val nota = NotaEntrada.marcaNotaEntradaConf(chave)
-      if (nota == null) {
-        viewModel.showError("Nota não encontrada")
-      }
-      updateView()
-    }
   }
 
   fun marcaProdutos(barCode: String?, quant: Int?) {
@@ -30,7 +20,7 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 }
 
-interface ITabNotaEntradaReceber : ITabView {
+interface ITabNotaEntradaPendente : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()

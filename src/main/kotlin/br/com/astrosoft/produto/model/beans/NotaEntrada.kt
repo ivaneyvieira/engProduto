@@ -14,7 +14,7 @@ class NotaEntrada(
   val cancelada: String,
   val chave: String,
                  ) {
-  fun findProduto() = saci.findProdutoNFE(this)
+  fun findProduto() = saci.findProdutoNFEPendente(this)
 
   fun produtosConferencia(): List<ProdutoNFE> {
     return saci.findProdutoNFEConf(this)
@@ -26,11 +26,11 @@ class NotaEntrada(
     get() = "$numero/$serie"
 
   companion object {
-    fun findNotaEntrada(filtro: FiltroNotaEntrada) = saci.findNotaEntrada(filtro)
+    fun findNotaEntradaPendente(filtro: FiltroNotaEntrada) = saci.findNotaEntradaPendente(filtro)
 
     fun findNotaEntradaConf(filtro: FiltroNotaEntrada) = saci.findNotaEntradaConf(filtro)
 
-    fun marcaNotaEntrada(chave: String) = saci.marcaNotaEntrada(chave)
+    fun marcaNotaEntradaConf(chave: String) = saci.marcaNotaEntradaConf(chave)
   }
 }
 

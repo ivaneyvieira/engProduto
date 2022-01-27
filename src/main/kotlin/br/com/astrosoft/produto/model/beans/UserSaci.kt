@@ -30,6 +30,8 @@ class UserSaci : IUser {
   var ressuprimentoCD by DelegateAuthorized(12)
   var ressuprimentoEnt by DelegateAuthorized(13)
   var notaEntradaReceber by DelegateAuthorized(14)
+  var notaEntradaPendente by DelegateAuthorized(15)
+  var notaEntradaRecebido by DelegateAuthorized(16)
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
@@ -40,7 +42,7 @@ class UserSaci : IUser {
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || admin
   val notaEntrada
-    get() = notaEntradaReceber || admin
+    get() = notaEntradaReceber || notaEntradaReceber || notaEntradaRecebido || admin
 
   val fornecedor
     get() = produtoList
@@ -87,7 +89,7 @@ class DelegateAuthorized(numBit: Int) {
     thisRef ?: return
     val v = value ?: false
     thisRef.bitAcesso = when {
-      v -> thisRef.bitAcesso or bit
+      v    -> thisRef.bitAcesso or bit
       else -> thisRef.bitAcesso and bit.inv()
     }
   }

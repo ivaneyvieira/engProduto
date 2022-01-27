@@ -93,7 +93,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
         }
         formLayout {
-          h4("Nota") {
+          h4("Nota de Saida") {
             colspan = 2
           }
           checkBox("Exp") {
@@ -115,6 +115,23 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           checkBox("Voltar Ent") {
             isReadOnly = readOnly
             binder.bind(this, UserSaci::voltarEnt.name)
+          }
+        }
+        formLayout {
+          h4("Nota de Entrada") {
+            colspan = 2
+          }
+          checkBox("Receber") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaEntradaReceber.name)
+          }
+          checkBox("Pendente") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaEntradaPendente.name)
+          }
+          checkBox("Recebido") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaEntradaRecebido.name)
           }
         }
         formLayout {
