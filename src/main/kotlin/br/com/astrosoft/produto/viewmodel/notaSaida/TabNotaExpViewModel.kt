@@ -46,7 +46,6 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, produto)
-        viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
