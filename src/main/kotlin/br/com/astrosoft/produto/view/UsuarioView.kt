@@ -96,6 +96,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           h4("Nota de Saida") {
             colspan = 2
           }
+          checkBox("NFCE na Expedicao") {
+            isReadOnly = readOnly
+            binder.bind(this, UserSaci::notaExp.name)
+          }
           checkBox("Exp") {
             isReadOnly = readOnly
             binder.bind(this, UserSaci::notaExp.name)

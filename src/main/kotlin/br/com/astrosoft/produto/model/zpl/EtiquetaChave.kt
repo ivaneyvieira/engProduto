@@ -11,7 +11,7 @@ object EtiquetaChave {
     return zpl.replace("[titulo]", dados.titulo)
       .replace("[usuario]", dados.usuario)
       .replace("[loja]", dados.loja.toString())
-      .replace("[notaSaida]", dados.nota)
+      .replace("[nota]", dados.nota)
       .replace("[data]", dados.data)
       .replace("[hora]", dados.hora)
       .replace("[local]", dados.local)
