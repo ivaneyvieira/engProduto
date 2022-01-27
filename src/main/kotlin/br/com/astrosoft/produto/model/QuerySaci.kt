@@ -298,7 +298,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   }
 
   fun findNotaEntradaReceber(filtro: FiltroNotaEntrada): List<NotaEntrada> {
-    val sql = "/sqlSaci/findNotaEntradaConf.sql"
+    val sql = "/sqlSaci/findNotaEntradaReceber.sql"
     return query(sql, NotaEntrada::class) {
       addOptionalParameter("chave", filtro.chave)
     }

@@ -12,4 +12,5 @@ FROM sqldados.inv2            AS I
 	       USING (invno)
 WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
-  AND I.s27 > 0
+  AND N.nfekey IN (SELECT nfekey
+		   FROM sqldados.invConferencia)

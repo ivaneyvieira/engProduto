@@ -7,6 +7,10 @@ import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEChave
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEData
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEFornecedor
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFELoja
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFENota
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEValor
 import br.com.astrosoft.produto.viewmodel.notaEntrada.ITabNotaEntradaRecebido
 import br.com.astrosoft.produto.viewmodel.notaEntrada.ITabNotaEntradaReceber
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaRecebidoViewModel
@@ -32,8 +36,11 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) : T
         viewModel.updateView()
       }
     }
-    colunaNFEChave()
+    colunaNFELoja()
+    colunaNFENota()
     colunaNFEData()
+    colunaNFEFornecedor()
+    colunaNFEValor()
   }
 
   override fun updateNotas(notas: List<NotaEntrada>) {
