@@ -288,19 +288,29 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun findNotaEntradaPendente(filtro: FiltroNotaEntrada): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaPendente.sql"
     return query(sql, NotaEntrada::class) {
-      addOptionalParameter("chave", filtro.chave)
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("ni", filtro.ni)
+      addOptionalParameter("nfno", filtro.nfno)
+      addOptionalParameter("nfse", filtro.nfse)
+      addOptionalParameter("vendno", filtro.vendno)
     }
   }
 
-  fun findNotaEntradaRecebido(): List<NotaEntrada> {
+  fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaRecebido.sql"
-    return query(sql, NotaEntrada::class)
+    return query(sql, NotaEntrada::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("ni", filtro.ni)
+      addOptionalParameter("nfno", filtro.nfno)
+      addOptionalParameter("nfse", filtro.nfse)
+      addOptionalParameter("vendno", filtro.vendno)
+    }
   }
 
-  fun findNotaEntradaReceber(filtro: FiltroNotaEntrada): List<NotaEntrada> {
+  fun findNotaEntradaReceber(chave: String): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaReceber.sql"
     return query(sql, NotaEntrada::class) {
-      addOptionalParameter("chave", filtro.chave)
+      addOptionalParameter("chave", chave)
     }
   }
 
@@ -309,7 +319,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     script(sql) {
       addOptionalParameter("chave", chave)
     }
-    return findNotaEntradaReceber(FiltroNotaEntrada(chave)).firstOrNull()
+    return findNotaEntradaReceber(chave).firstOrNull()
   }
 
   fun findProdutoNFEPendente(nota: NotaEntrada): List<ProdutoNFE> {
@@ -327,13 +337,13 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   }
 
   fun findProdutoNFEReceber(nota: NotaEntrada): List<ProdutoNFE> {
-    val sql = "/sqlSaci/findProdutosNFEntradaConf.sql"
+    val sql = "/sqlSaci/findProdutosNFEntradaReceber.sql"
     return query(sql, ProdutoNFE::class) {
       addOptionalParameter("ni", nota.ni)
     }
   }
 
-  fun addProdutoReceber(nota : NotaEntrada, barcode: String, quant : Int){
+  fun addProdutoReceber(nota: NotaEntrada, barcode: String, quant: Int) {
     val sql = "/sqlSaci/addProdutoConf.sql"
     return script(sql) {
       addOptionalParameter("ni", nota.ni)

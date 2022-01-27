@@ -10,7 +10,8 @@ class TabNotaEntradaRecebidoViewModel(val viewModel: NotaEntradaViewModel) {
     get() = viewModel.view.tabNotaEntradaRecebido
 
   fun updateView() {
-    val lista = NotaEntrada.findNotaEntradaRecebido()
+    val filtro = subView.filtro()
+    val lista = NotaEntrada.findNotaEntradaRecebido(filtro)
     subView.updateNotas(lista)
   }
 
@@ -23,4 +24,5 @@ interface ITabNotaEntradaRecebido : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()
+  fun filtro() : FiltroNotaEntrada
 }

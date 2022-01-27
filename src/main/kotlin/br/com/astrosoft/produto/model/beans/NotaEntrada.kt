@@ -24,20 +24,25 @@ class NotaEntrada(
     return saci.findProdutoNFEReceber(this)
   }
 
-  fun addProdutoReceber(barcode : String, quant : Int) = saci.addProdutoReceber(this, barcode, quant)
+  fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(this, barcode, quant)
 
   val nota
     get() = "$numero/$serie"
 
   companion object {
-    fun findNotaEntradaRecebido() = saci.findNotaEntradaRecebido()
+    fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada) = saci.findNotaEntradaRecebido(filtro)
 
     fun findNotaEntradaPendente(filtro: FiltroNotaEntrada) = saci.findNotaEntradaPendente(filtro)
 
-    fun findNotaEntradaReceber(filtro: FiltroNotaEntrada) = saci.findNotaEntradaReceber(filtro)
+    fun findNotaEntradaReceber(chave: String = "") = saci.findNotaEntradaReceber(chave)
 
     fun marcaNotaEntradaReceber(chave: String) = saci.marcaNotaEntradaReceber(chave)
   }
 }
 
-data class FiltroNotaEntrada(val chave: String = "")
+data class FiltroNotaEntrada(val loja: Int, val ni: Int, val nota: String, val vendno: Int) {
+  val nfno: String
+    get() = nota.split("/").getOrNull(0) ?: ""
+  val nfse: String
+    get() = nota.split("/").getOrNull(1) ?: ""
+}

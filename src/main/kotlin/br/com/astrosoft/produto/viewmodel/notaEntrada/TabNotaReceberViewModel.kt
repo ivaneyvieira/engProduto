@@ -10,7 +10,7 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
     get() = viewModel.view.tabNotaEntradaReceber
 
   fun updateView() {
-    val lista = NotaEntrada.findNotaEntradaReceber(FiltroNotaEntrada())
+    val lista = NotaEntrada.findNotaEntradaReceber()
     subView.updateNotas(lista)
   }
 

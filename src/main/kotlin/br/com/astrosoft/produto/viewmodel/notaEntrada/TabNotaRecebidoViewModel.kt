@@ -10,7 +10,8 @@ class TabNotaEntradaPendenteViewModel(val viewModel: NotaEntradaViewModel) {
     get() = viewModel.view.tabNotaEntradaPendente
 
   fun updateView() {
-    val lista = NotaEntrada.findNotaEntradaPendente(FiltroNotaEntrada())
+    val filtro = subView.filtro()
+    val lista = NotaEntrada.findNotaEntradaPendente(filtro)
     subView.updateNotas(lista)
   }
 
@@ -23,4 +24,5 @@ interface ITabNotaEntradaPendente : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()
+  fun filtro() : FiltroNotaEntrada
 }

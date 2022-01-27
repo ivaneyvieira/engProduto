@@ -18,3 +18,8 @@ WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
   AND I.type = 0
   AND I.bits & POW(2, 6) = 0
+  AND (I.storeno = :loja OR :loja = 0)
+  AND (I.invno = :ni OR :ni = 0)
+  AND (I.nfname = :nfno OR :nfno = '')
+  AND (I.invse = :nfse OR :nfse = '')
+  AND (I.vendno = :vendno OR :vendno = 0)
