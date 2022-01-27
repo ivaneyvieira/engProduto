@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEChave
-import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEData
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEDataEmissao
 import br.com.astrosoft.produto.viewmodel.notaEntrada.ITabNotaEntradaReceber
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaReceberViewModel
 import com.github.mvysny.karibudsl.v10.textField
@@ -41,7 +41,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) : Tab
       }
     }
     colunaNFEChave()
-    colunaNFEData()
+    colunaNFEDataEmissao()
   }
 
   override fun updateNotas(notas: List<NotaEntrada>) {

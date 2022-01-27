@@ -5,9 +5,12 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEData
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEDataEmissao
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEDataEntrada
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEFornecedor
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFELoja
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFENI
+import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFENomeFornecedor
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFENota
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEValor
 import br.com.astrosoft.produto.viewmodel.notaEntrada.ITabNotaEntradaPendente
@@ -24,16 +27,19 @@ class TabNotaEntradaPendente(val viewModel: TabNotaEntradaPendenteViewModel) : T
   }
 
   override fun Grid<NotaEntrada>.gridPanel() {
+    colunaNFELoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosPendente(viewModel,nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    colunaNFELoja()
+    colunaNFENI()
     colunaNFENota()
-    colunaNFEData()
+    colunaNFEDataEmissao()
+    colunaNFEDataEntrada()
     colunaNFEFornecedor()
+    colunaNFENomeFornecedor()
     colunaNFEValor()
   }
 
