@@ -31,7 +31,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       produtoNF.marca = EMarcaNota.CD.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produtoNF.usuarioExp = usuario + "-" + dataHora
+      produtoNF.usuarioExp = "$usuario-$dataHora"
       produtoNF.usuarioCD = ""
       produtoNF.salva()
     }
@@ -45,7 +45,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printExp(impressora, produto)
+        EtiquetaChave.printPreviewExp(impressora, produto)
         viewModel.showInformation("Impressão realizada na impressora $impressora")
       } catch (e: Throwable) {
         e.printStackTrace()

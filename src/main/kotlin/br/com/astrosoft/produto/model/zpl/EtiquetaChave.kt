@@ -80,121 +80,89 @@ object EtiquetaChave {
   }
 
   fun printPreviewEnt(impressora: String, produto: ProdutoNFS) {
-    printPreview(
-      impressora,
-      DadosEtiquetaNota(
-        titulo = "Entregue",
-        usuario = produto.usuarioNameCD,
-        loja = produto.loja,
-        nota = produto.nota,
-        data = produto.dataCD,
-        hora = produto.horaCD,
-        local = produto.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaNota(titulo = "Entregue",
+                                   usuario = produto.usuarioNameCD,
+                                   loja = produto.loja,
+                                   nota = produto.nota,
+                                   data = produto.dataCD,
+                                   hora = produto.horaCD,
+                                   local = produto.localizacao ?: ""))
   }
 
   fun printPreviewEnt(impressora: String, nota: NotaSaida) {
-    printPreview(
-      impressora,
-      DadosEtiquetaNota(
-        titulo = "Entregue",
-        usuario = nota.usuarioNameCD,
-        loja = nota.loja,
-        nota = nota.nota,
-        data = nota.dataCD,
-        hora = nota.horaCD,
-        local = nota.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaNota(titulo = "Entregue",
+                                   usuario = nota.usuarioNameCD,
+                                   loja = nota.loja,
+                                   nota = nota.nota,
+                                   data = nota.dataCD,
+                                   hora = nota.horaCD,
+                                   local = nota.localizacao ?: ""))
   }
 
   fun printPreviewEnt(impressora: String, produto: ProdutoPedidoVenda) {
-    printPreview(
-      impressora,
-      DadosEtiquetaPedido(
-        titulo = "Entregue",
-        usuario = produto.usuarioNameCD,
-        loja = produto.loja,
-        pedido = produto.ordno.toString(),
-        data = produto.dataCD,
-        hora = produto.horaCD,
-        local = produto.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaPedido(titulo = "Entregue",
+                                     usuario = produto.usuarioNameCD,
+                                     loja = produto.loja,
+                                     pedido = produto.ordno.toString(),
+                                     data = produto.dataCD,
+                                     hora = produto.horaCD,
+                                     local = produto.localizacao ?: ""))
   }
 
   fun printPreviewEnt(impressora: String, pedido: PedidoVenda) {
-    printPreview(
-      impressora,
-      DadosEtiquetaPedido(
-        titulo = "Entregue",
-        usuario = pedido.usuarioNameCD,
-        loja = pedido.loja,
-        pedido = pedido.ordno.toString(),
-        data = pedido.dataCD,
-        hora = pedido.horaCD,
-        local = pedido.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaPedido(titulo = "Entregue",
+                                     usuario = pedido.usuarioNameCD,
+                                     loja = pedido.loja,
+                                     pedido = pedido.ordno.toString(),
+                                     data = pedido.dataCD,
+                                     hora = pedido.horaCD,
+                                     local = pedido.localizacao ?: ""))
   }
 
   fun printPreviewEnt(impressora: String, ressuprimento: Ressuprimento) {
-    printPreview(
-      impressora,
-      DadosEtiquetaRessuprimento(
-        titulo = "Entregue",
-        usuario = ressuprimento.usuarioNameCD,
-        numero = ressuprimento.numero,
-        data = ressuprimento.dataCD,
-        hora = ressuprimento.horaCD,
-        local = ressuprimento.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaRessuprimento(titulo = "Entregue",
+                                            usuario = ressuprimento.usuarioNameCD,
+                                            numero = ressuprimento.numero,
+                                            data = ressuprimento.dataCD,
+                                            hora = ressuprimento.horaCD,
+                                            local = ressuprimento.localizacao ?: ""))
   }
 
   fun printPreviewEnt(impressora: String, produto: ProdutoRessuprimento) {
-    printPreview(
-      impressora,
-      DadosEtiquetaRessuprimento(
-        titulo = "Entregue",
-        usuario = produto.usuarioNameCD,
-        numero = produto.ordno,
-        data = produto.dataCD,
-        hora = produto.horaCD,
-        local = produto.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaRessuprimento(titulo = "Entregue",
+                                            usuario = produto.usuarioNameCD,
+                                            numero = produto.ordno,
+                                            data = produto.dataCD,
+                                            hora = produto.horaCD,
+                                            local = produto.localizacao ?: ""))
   }
 
   fun printPreviewExp(impressora: String, nota: NotaSaida) {
-    printPreview(
-      impressora,
-      DadosEtiquetaNota(
-        titulo = "Exp",
-        usuario = nota.usuarioNameExp,
-        loja = nota.loja,
-        nota = nota.nota,
-        data = nota.dataExp,
-        hora = nota.horaExp,
-        local = nota.localizacao ?: ""
-      )
-    )
+    printPreview(impressora,
+                 DadosEtiquetaNota(titulo = "Exp",
+                                   usuario = nota.usuarioNameExp,
+                                   loja = nota.loja,
+                                   nota = nota.nota,
+                                   data = nota.dataExp,
+                                   hora = nota.horaExp,
+                                   local = nota.localizacao ?: ""))
   }
 
-  fun printExp(impressora: String, produto: ProdutoNFS) {
-    print(
-      impressora,
-      DadosEtiquetaNota(
-        titulo = "Exp",
-        usuario = produto.usuarioNameExp,
-        loja = produto.loja,
-        nota = produto.nota,
-        data = produto.dataExp,
-        hora = produto.horaExp,
-        local = produto.localizacao ?: ""
-      )
-    )
+  fun printPreviewExp(impressora: String, produto: ProdutoNFS) {
+    printPreview(impressora,
+                 DadosEtiquetaNota(titulo = "Exp",
+                                   usuario = produto.usuarioNameExp,
+                                   loja = produto.loja,
+                                   nota = produto.nota,
+                                   data = produto.dataExp,
+                                   hora = produto.horaExp,
+                                   local = produto.localizacao ?: ""))
   }
 }
 
@@ -206,7 +174,7 @@ private data class DadosEtiquetaNota(
   val data: String,
   val hora: String,
   val local: String,
-)
+                                    )
 
 private data class DadosEtiquetaPedido(
   val titulo: String,
@@ -216,7 +184,7 @@ private data class DadosEtiquetaPedido(
   val data: String,
   val hora: String,
   val local: String,
-)
+                                      )
 
 private data class DadosEtiquetaRessuprimento(
   val titulo: String,
@@ -225,4 +193,4 @@ private data class DadosEtiquetaRessuprimento(
   val data: String,
   val hora: String,
   val local: String,
-)
+                                             )
