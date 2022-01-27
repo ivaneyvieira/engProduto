@@ -84,7 +84,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   }
 
   fun update() {
-    val listProdutos = nota.produtosConferencia()
+    val listProdutos = viewModel.produtos()
     gridDetail.setItems(listProdutos)
   }
 }

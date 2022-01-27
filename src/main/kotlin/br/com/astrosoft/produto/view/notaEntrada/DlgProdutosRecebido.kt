@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEDescricao
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEGrade
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
-import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaPendenteViewModel
+import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaRecebidoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,7 +21,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosPendente(val viewModel: TabNotaEntradaPendenteViewModel, val nota: NotaEntrada) {
+class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val nota: NotaEntrada) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
