@@ -1,3 +1,20 @@
+DROP TABLE IF EXISTS T_INV;
+CREATE TEMPORARY TABLE T_INV (
+  PRIMARY KEY (nfekey, prdno, grade)
+)
+SELECT N.nfekey,
+       prdno,
+       grade,
+       P.qtty / 1000 AS qtty
+FROM sqldados.invnfe                 AS N
+  INNER JOIN sqldados.inv            AS I
+	       USING (invno)
+  INNER JOIN sqldados.iprd           AS P
+	       USING (invno)
+  INNER JOIN sqldados.invConferencia AS C
+	       USING (nfekey)
+GROUP BY nfekey, prdno, grade;
+
 SELECT N.storeno                                          AS loja,
        X.invno                                            AS ni,
        CAST(CONCAT(N.nfname, '/', N.invse) AS CHAR)       AS nota,
@@ -16,12 +33,17 @@ SELECT N.storeno                                          AS loja,
        X.qtty / 1000                                      AS quantidade,
        X.fob / 100                                        AS preco,
        (X.qtty / 1000) * (X.fob / 100)                    AS total,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao
+       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
+       IFNULL(TI.qtty, 0) / 1000                          AS qttyRef
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.iprd    AS X
 	       ON P.no = X.prdno
   INNER JOIN sqldados.inv     AS N
 	       USING (invno)
+  INNER JOIN sqldados.invnfe  AS K
+	       USING (invno)
+  LEFT JOIN  T_INV            AS TI
+	       USING (nfekey, prdno, grade)
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
   LEFT JOIN  sqldados.prdloc  AS L
@@ -35,6 +57,6 @@ FROM sqldados.prd             AS P
   LEFT JOIN  sqldados.spedprd AS S
 	       ON P.no = S.prdno
 WHERE X.invno = :ni
-  AND X.s27 > 0
 GROUP BY codigo, grade
+HAVING quantidade = qttyRef
 

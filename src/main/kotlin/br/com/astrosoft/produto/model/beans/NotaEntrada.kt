@@ -15,6 +15,7 @@ class NotaEntrada(
   val valorNota: Double,
   val cancelada: String,
   val chave: String,
+  val invnoRef: Int,
                  ) {
   fun produtosPendente() = saci.findProdutoNFEPendente(this)
 

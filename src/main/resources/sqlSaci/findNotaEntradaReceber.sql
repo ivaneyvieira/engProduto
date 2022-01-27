@@ -7,6 +7,10 @@ SELECT I.invno                    AS ni,
        CAST(NULL AS DATE)         AS entrada,
        0                          AS valorNota,
        'N'                        AS cancelada,
-       I.nfekey                   AS chave
+       I.nfekey                   AS chave,
+       IFNULL(N.invno, 0)         AS invnoRef
 FROM sqldados.invConferencia AS I
+  LEFT JOIN sqldados.invnfe  AS N
+	      ON N.nfekey = I.nfekey
 WHERE (I.nfekey = :chave OR :chave = '')
+GROUP BY I.invno

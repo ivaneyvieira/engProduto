@@ -20,4 +20,5 @@ class ProdutoNFE(
   val preco: Double,
   val total: Double,
   val localizacao: String,
+  val qttyRef: Int,
                 )
