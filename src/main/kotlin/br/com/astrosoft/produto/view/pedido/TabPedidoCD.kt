@@ -72,12 +72,20 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
+  override fun produtosMarcados(): List<ProdutoPedidoVenda> {
+    return dlgProduto?.produtosMarcados().orEmpty()
+  }
+
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
   override fun findPedido(): PedidoVenda? {
     return dlgProduto?.pedido
+  }
+
+  override fun updateProduto(produto: ProdutoPedidoVenda) {
+    dlgProduto?.updateProduto(produto)
   }
 
   override fun isAuthorized(user: IUser): Boolean {

@@ -47,6 +47,13 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
           }
         }
       }
+      button("Imprime") {
+        val user = Config.user as? UserSaci
+        icon = VaadinIcon.PRINT.create()
+        onLeftClick {
+          viewModel.salvaProdutos()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -63,7 +70,10 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      val user = Config.user as? UserSaci
+      if (user?.voltarCD == true || user?.admin == true) {
+        setSelectionMode(Grid.SelectionMode.MULTI)
+      }
 
       produtoPedidoCodigo()
       produtoPedidoBarcode()
@@ -72,6 +82,10 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
       produtoPedidoEstoque()
+
+      this.setClassNameGenerator {
+        if (it.marca == EMarcaPedido.ENT.num) "entregue" else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -88,5 +102,13 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
 
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
+  }
+
+  fun updateProduto(produto: ProdutoPedidoVenda) {
+    gridDetail.dataProvider.refreshItem(produto)
+  }
+
+  fun produtosMarcados(): List<ProdutoPedidoVenda> {
+    return gridDetail.dataProvider.fetchAll().filter { it.marca == EMarcaPedido.ENT.num }
   }
 }

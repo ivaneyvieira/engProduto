@@ -60,12 +60,20 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
+  override fun produtosMarcados(): List<ProdutoRessuprimento> {
+    return dlgProduto?.produtosMarcados().orEmpty()
+  }
+
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
   override fun findRessuprimento(): Ressuprimento? {
     return dlgProduto?.ressuprimento
+  }
+
+  override fun updateProduto(produto: ProdutoRessuprimento) {
+    dlgProduto?.updateProduto(produto)
   }
 
   override fun isAuthorized(user: IUser): Boolean {

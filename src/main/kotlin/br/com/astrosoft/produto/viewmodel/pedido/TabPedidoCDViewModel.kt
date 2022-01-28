@@ -12,14 +12,8 @@ import java.time.LocalTime
 class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
-    val Pedidos = PedidoVenda.find(filtro)
-    subView.updatePedidos(Pedidos)
-  }
-
-  fun findGrade(prd: ProdutoPedidoVenda?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
-    prd ?: return@exec
-    val list = prd.findGrades()
-    block(list)
+    val pedidos = PedidoVenda.find(filtro)
+    subView.updatePedidos(pedidos)
   }
 
   fun marcaEnt() = viewModel.exec {
@@ -31,7 +25,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       produto.marca = EMarcaPedido.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produto.usuarioCD = usuario + "-" + dataHora
+      produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
     subView.updateProdutos()
@@ -42,22 +36,29 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     produto.marca = EMarcaPedido.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
-    produto.usuarioCD = usuario + "-" + dataHora
-    produto.salva()
-    produto.expira()
-    subView.updateProdutos()
-    val pedido = subView.findPedido() ?: fail("Nota não encontrada")
-    val produtosRestantes = pedido.produtos(EMarcaPedido.CD)
-    if (produtosRestantes.isEmpty()) {
-      imprimeEtiquetaEnt(produto)
-    }
+    produto.usuarioCD = "$usuario-$dataHora"
+    subView.updateProduto(produto)
   }
 
-  private fun imprimeEtiquetaEnt(produto: ProdutoPedidoVenda) {
+  fun salvaProdutos() = viewModel.exec {
+    val itens = subView.produtosMarcados()
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+    itens.forEach { produto ->
+      produto.salva()
+      produto.expira()
+    }
+    val pedido = subView.findPedido() ?: fail("Nota não encontrada")
+    imprimeEtiquetaEnt(pedido)
+    subView.updateProdutos()
+  }
+
+  private fun imprimeEtiquetaEnt(pedido: PedidoVenda) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, produto)
+        EtiquetaChave.printPreviewEnt(impressora, pedido)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -74,6 +75,8 @@ interface ITabPedidoCD : ITabView {
   fun updatePedidos(pedidos: List<PedidoVenda>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoVenda>
+  fun produtosMarcados(): List<ProdutoPedidoVenda>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda?
   fun findPedido(): PedidoVenda?
+  fun updateProduto(produto: ProdutoPedidoVenda)
 }

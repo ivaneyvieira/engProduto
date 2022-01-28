@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.Ressuprimento
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
@@ -88,5 +85,13 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
 
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
+  }
+
+  fun updateProduto(produto: ProdutoRessuprimento) {
+    gridDetail.dataProvider.refreshItem(produto)
+  }
+
+  fun produtosMarcados(): List<ProdutoRessuprimento> {
+    return gridDetail.dataProvider.fetchAll().filter { it.marca == EMarcaRessuprimento.ENT.num }
   }
 }

@@ -16,12 +16,6 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateRessuprimentos(resuprimento)
   }
 
-  fun findGrade(prd: ProdutoRessuprimento?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
-    prd ?: return@exec
-    val list = prd.findGrades()
-    block(list)
-  }
-
   fun marcaEnt() = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
@@ -43,21 +37,27 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
     produto.usuarioCD = "$usuario-$dataHora"
-    produto.salva()
-
-    subView.updateProdutos()
-    val ressuprimento = subView.findRessuprimento() ?: fail("Nota não encontrada")
-    val produtosRestantes = ressuprimento.produtos(EMarcaRessuprimento.CD)
-    if (produtosRestantes.isEmpty()) {
-      imprimeEtiquetaEnt(produto)
-    }
+    subView.updateProduto(produto)
   }
 
-  private fun imprimeEtiquetaEnt(produto: ProdutoRessuprimento) {
+  fun salvaProdutos() = viewModel.exec {
+    val itens = subView.produtosMarcados()
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+    itens.forEach { produto ->
+      produto.salva()
+    }
+    val ressuprimento = subView.findRessuprimento() ?: fail("Nota não encontrada")
+    imprimeEtiquetaEnt(ressuprimento)
+    subView.updateProdutos()
+  }
+
+  private fun imprimeEtiquetaEnt(ressuprimento: Ressuprimento) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, produto)
+        EtiquetaChave.printPreviewEnt(impressora, ressuprimento)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -74,6 +74,8 @@ interface ITabRessuprimentoCD : ITabView {
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoRessuprimento>
+  fun produtosMarcados(): List<ProdutoRessuprimento>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun findRessuprimento(): Ressuprimento?
+  fun updateProduto(produto: ProdutoRessuprimento)
 }
