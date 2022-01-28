@@ -27,20 +27,19 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
+    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
+    val usuario = Config.user?.login ?: ""
     itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = Config.user?.login ?: ""
       produtoNF.usuarioExp = "$usuario-$dataHora"
       produtoNF.usuarioCD = ""
       produtoNF.salva()
     }
+    imprimeEtiqueta(itens)
     subView.updateProdutos()
-    imprimeEtiqueta()
   }
 
-  private fun imprimeEtiqueta() {
-    val produtos = subView.produtosSelcionados()
+  private fun imprimeEtiqueta(produtos : List<ProdutoNFS>) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
