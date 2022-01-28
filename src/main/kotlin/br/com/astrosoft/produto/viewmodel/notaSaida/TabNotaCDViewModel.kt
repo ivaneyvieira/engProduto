@@ -58,15 +58,15 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val nota = subView.findNota() ?: fail("Nota não encontrada")
     val produtosRestantes = nota.produtos(EMarcaNota.CD)
     if (produtosRestantes.isEmpty()) {
-      imprimeEtiquetaEnt(produtoNF)
+      imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT))
     }
   }
 
-  private fun imprimeEtiquetaEnt(produto: ProdutoNFS) {
+  private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, produto)
+        EtiquetaChave.printPreviewEnt(impressora, produtos)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
@@ -79,7 +79,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewExp(impressora, nota)
+        EtiquetaChave.printPreviewExp(impressora, nota.produtos(EMarcaNota.CD))
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

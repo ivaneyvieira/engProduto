@@ -68,7 +68,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
-      viewModel.printEtiqueta(nota)
+      viewModel.printEtiquetaEnt(nota)
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEnt(viewModel, nota)

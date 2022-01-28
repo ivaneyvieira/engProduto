@@ -40,130 +40,113 @@ object EtiquetaChave {
       .replace("[local]", dados.local)
   }
 
-  private fun print(impressora: String, dados: DadosEtiquetaNota) {
-    CupsUtils.printCups(impressora, template(dados)) {
+  @JvmName("printNota")
+  private fun print(impressora: String, dados: List<DadosEtiquetaNota>) {
+    val zpl = dados.joinToString("\n"){
+      template(it)
+    }
+    CupsUtils.printCups(impressora, zpl) {
       println(it)
     }
   }
 
-  private fun printPreview(impressora: String, dados: DadosEtiquetaNota) {
-    val zpl = template(dados)
+  @JvmName("printPreviewNota")
+  private fun printPreview(impressora: String, dados: List<DadosEtiquetaNota>) {
+    val zpl = dados.joinToString("\n"){
+      template(it)
+    }
     ZPLPreview.showZPLPreview(impressora, zpl) {
       print(impressora, dados)
     }
   }
 
-  private fun print(impressora: String, dados: DadosEtiquetaPedido) {
-    CupsUtils.printCups(impressora, template(dados)) {
+  private fun print(impressora: String, dados: List<DadosEtiquetaPedido>) {
+    val template = dados.joinToString("\n") { dado -> template(dado) }
+    CupsUtils.printCups(impressora, template) {
       println(it)
     }
   }
 
-  private fun print(impressora: String, dados: DadosEtiquetaRessuprimento) {
-    CupsUtils.printCups(impressora, template(dados)) {
+  @JvmName("printRessuprimento")
+  private fun print(impressora: String, dados: List<DadosEtiquetaRessuprimento>) {
+    val zpl = dados.joinToString("\n") {
+      template(it)
+    }
+    CupsUtils.printCups(impressora, zpl) {
       println(it)
     }
   }
 
-  private fun printPreview(impressora: String, dados: DadosEtiquetaPedido) {
-    val zpl = template(dados)
+  private fun printPreview(impressora: String, dados: List<DadosEtiquetaPedido>) {
+    val zpl = dados.joinToString("\n") { dado -> template(dado) }
     ZPLPreview.showZPLPreview(impressora, zpl) {
       print(impressora, dados)
     }
   }
 
-  private fun printPreview(impressora: String, dados: DadosEtiquetaRessuprimento) {
-    val zpl = template(dados)
+  @JvmName("printPreviewRessuprimento")
+  private fun printPreview(impressora: String, dados: List<DadosEtiquetaRessuprimento>) {
+    val zpl = dados.joinToString("\n") {
+      template(it)
+    }
     ZPLPreview.showZPLPreview(impressora, zpl) {
       print(impressora, dados)
     }
   }
 
-  fun printPreviewEnt(impressora: String, produto: ProdutoNFS) {
-    printPreview(impressora,
-                 DadosEtiquetaNota(titulo = "Entregue",
-                                   usuario = produto.usuarioNameCD,
-                                   loja = produto.loja,
-                                   nota = produto.nota,
-                                   data = produto.dataCD,
-                                   hora = produto.horaCD,
-                                   local = produto.localizacao ?: ""))
+  fun printPreviewExp(impressora: String, produtos: List<ProdutoNFS>) {
+    val dadosEdtiquetas = produtos.map { produto ->
+      DadosEtiquetaNota(titulo = "Exp",
+                        usuario = produto.usuarioNameExp,
+                        loja = produto.loja,
+                        nota = produto.nota,
+                        data = produto.dataExp,
+                        hora = produto.horaExp,
+                        local = produto.localizacao ?: "")
+    }.distinct()
+    printPreview(impressora, dadosEdtiquetas)
   }
 
-  fun printPreviewEnt(impressora: String, nota: NotaSaida) {
-    printPreview(impressora,
-                 DadosEtiquetaNota(titulo = "Entregue",
-                                   usuario = nota.usuarioNameCD,
-                                   loja = nota.loja,
-                                   nota = nota.nota,
-                                   data = nota.dataCD,
-                                   hora = nota.horaCD,
-                                   local = nota.localizacao ?: ""))
+  @JvmName("printPreviewEntNota")
+  fun printPreviewEnt(impressora: String, produtos: List<ProdutoNFS>) {
+    val dadosEtiquetas = produtos.map {produto ->
+      DadosEtiquetaNota(titulo = "Entregue",
+                        usuario = produto.usuarioNameCD,
+                        loja = produto.loja,
+                        nota = produto.nota,
+                        data = produto.dataCD,
+                        hora = produto.horaCD,
+                        local = produto.localizacao ?: "")
+    }.distinct()
+    printPreview(impressora, dadosEtiquetas)
   }
 
-  fun printPreviewEnt(impressora: String, produto: ProdutoPedidoVenda) {
-    printPreview(impressora,
-                 DadosEtiquetaPedido(titulo = "Entregue",
-                                     usuario = produto.usuarioNameCD,
-                                     loja = produto.loja,
-                                     pedido = produto.ordno.toString(),
-                                     data = produto.dataCD,
-                                     hora = produto.horaCD,
-                                     local = produto.localizacao ?: ""))
+  fun printPreviewEnt(impressora: String, produtos: List<ProdutoPedidoVenda>) {
+    val dadosEtiquetas = produtos.map { produto ->
+      DadosEtiquetaPedido(titulo = "Entregue",
+                          usuario = produto.usuarioNameCD,
+                          loja = produto.loja,
+                          pedido = produto.ordno.toString(),
+                          data = produto.dataCD,
+                          hora = produto.horaCD,
+                          local = produto.localizacao ?: "")
+    }.distinct()
+    printPreview(impressora, dadosEtiquetas)
   }
 
-  fun printPreviewEnt(impressora: String, pedido: PedidoVenda) {
-    printPreview(impressora,
-                 DadosEtiquetaPedido(titulo = "Entregue",
-                                     usuario = pedido.usuarioNameCD,
-                                     loja = pedido.loja,
-                                     pedido = pedido.ordno.toString(),
-                                     data = pedido.dataCD,
-                                     hora = pedido.horaCD,
-                                     local = pedido.localizacao ?: ""))
+  @JvmName("printPreviewEntRessuprimento")
+  fun printPreviewEnt(impressora: String, produtos: List<ProdutoRessuprimento>) {
+    val dadosEtiquetas = produtos.map { produto ->
+      DadosEtiquetaRessuprimento(titulo = "Entregue",
+                                 usuario = produto.usuarioNameCD,
+                                 numero = produto.ordno,
+                                 data = produto.dataCD,
+                                 hora = produto.horaCD,
+                                 local = produto.localizacao ?: "")
+    }.distinct()
+    printPreview(impressora, dadosEtiquetas)
   }
 
-  fun printPreviewEnt(impressora: String, ressuprimento: Ressuprimento) {
-    printPreview(impressora,
-                 DadosEtiquetaRessuprimento(titulo = "Entregue",
-                                            usuario = ressuprimento.usuarioNameCD,
-                                            numero = ressuprimento.numero,
-                                            data = ressuprimento.dataCD,
-                                            hora = ressuprimento.horaCD,
-                                            local = ressuprimento.localizacao ?: ""))
-  }
-
-  fun printPreviewEnt(impressora: String, produto: ProdutoRessuprimento) {
-    printPreview(impressora,
-                 DadosEtiquetaRessuprimento(titulo = "Entregue",
-                                            usuario = produto.usuarioNameCD,
-                                            numero = produto.ordno,
-                                            data = produto.dataCD,
-                                            hora = produto.horaCD,
-                                            local = produto.localizacao ?: ""))
-  }
-
-  fun printPreviewExp(impressora: String, nota: NotaSaida) {
-    printPreview(impressora,
-                 DadosEtiquetaNota(titulo = "Exp",
-                                   usuario = nota.usuarioNameExp,
-                                   loja = nota.loja,
-                                   nota = nota.nota,
-                                   data = nota.dataExp,
-                                   hora = nota.horaExp,
-                                   local = nota.localizacao ?: ""))
-  }
-
-  fun printPreviewExp(impressora: String, produto: ProdutoNFS) {
-    printPreview(impressora,
-                 DadosEtiquetaNota(titulo = "Exp",
-                                   usuario = produto.usuarioNameExp,
-                                   loja = produto.loja,
-                                   nota = produto.nota,
-                                   data = produto.dataExp,
-                                   hora = produto.horaExp,
-                                   local = produto.localizacao ?: ""))
-  }
 }
 
 private data class DadosEtiquetaNota(

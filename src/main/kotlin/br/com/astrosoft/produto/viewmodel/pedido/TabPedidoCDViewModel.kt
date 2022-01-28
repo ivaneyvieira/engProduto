@@ -52,16 +52,15 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       produto.salva()
       produto.expira()
     }
-    val pedido = subView.findPedido() ?: fail("Nota não encontrada")
-    imprimeEtiquetaEnt(pedido)
+    imprimeEtiquetaEnt(itens)
     subView.updateProdutos()
   }
 
-  private fun imprimeEtiquetaEnt(pedido: PedidoVenda) {
+  private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoVenda>) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, pedido)
+        EtiquetaChave.printPreviewEnt(impressora, produto)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

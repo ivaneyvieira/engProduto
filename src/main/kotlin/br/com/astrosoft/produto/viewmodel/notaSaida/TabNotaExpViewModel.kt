@@ -40,12 +40,11 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   private fun imprimeEtiqueta() {
-    val notaExp = subView.findNota() ?: fail("Etiqueta de impressão não foi localizada")
-    val produto = notaExp.produtos(EMarcaNota.CD).firstOrNull() ?: return
+    val produtos = subView.produtosSelcionados()
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewExp(impressora, produto)
+        EtiquetaChave.printPreviewExp(impressora, produtos)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

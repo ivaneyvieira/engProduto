@@ -26,12 +26,12 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     subView.updateProdutos()
   }
 
-  fun printEtiqueta(nota: NotaSaida?) = viewModel.exec {
+  fun printEtiquetaEnt(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, nota)
+        EtiquetaChave.printPreviewEnt(impressora, nota.produtos(EMarcaNota.ENT))
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

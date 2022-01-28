@@ -32,7 +32,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, pedido)
+        EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")

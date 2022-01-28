@@ -51,16 +51,16 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
       produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
-    val ressuprimento = subView.findRessuprimento() ?: fail("Nota não encontrada")
-    imprimeEtiquetaEnt(ressuprimento)
+
+    imprimeEtiquetaEnt(itens)
     subView.updateProdutos()
   }
 
-  private fun imprimeEtiquetaEnt(ressuprimento: Ressuprimento) {
+  private fun imprimeEtiquetaEnt(produtos: List<ProdutoRessuprimento>) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, ressuprimento)
+        EtiquetaChave.printPreviewEnt(impressora, produtos)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
