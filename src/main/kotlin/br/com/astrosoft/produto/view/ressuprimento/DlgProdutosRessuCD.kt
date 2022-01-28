@@ -44,6 +44,13 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
           }
         }
       }
+      button("Imprime") {
+        val user = Config.user as? UserSaci
+        icon = VaadinIcon.PRINT.create()
+        onLeftClick {
+          viewModel.salvaProdutos()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -69,6 +76,10 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQuantidade()
       produtoRessuprimentoEstoque()
+
+      this.setClassNameGenerator {
+        if (it.marca == EMarcaRessuprimento.ENT.num) "entregue" else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()
