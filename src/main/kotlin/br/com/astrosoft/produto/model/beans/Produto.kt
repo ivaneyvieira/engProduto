@@ -19,7 +19,7 @@ class Produto(
   val precoCheio: Double,
   val ncm: String,
   val localizacao: String,
-) {
+             ) {
 
   companion object {
     fun find(filtro: FiltroProduto): List<Produto> {

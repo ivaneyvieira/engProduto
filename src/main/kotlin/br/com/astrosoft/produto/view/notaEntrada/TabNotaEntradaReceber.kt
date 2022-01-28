@@ -16,9 +16,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) : TabPanelGrid<NotaEntrada>
-  (NotaEntrada::class), ITabNotaEntradaReceber {
-  private  var dlgProduto: DlgProdutosReceber? = null
+class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
+        TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
+  private var dlgProduto: DlgProdutosReceber? = null
   private var edtChave: TextField? = null
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -26,7 +26,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) : Tab
       width = "400px"
       valueChangeMode = ValueChangeMode.ON_CHANGE
       addValueChangeListener {
-        if(it.isFromClient) {
+        if (it.isFromClient) {
           viewModel.adicionaChave(it.value)
         }
       }
@@ -35,7 +35,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) : Tab
 
   override fun Grid<NotaEntrada>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosReceber(viewModel,nota)
+      dlgProduto = DlgProdutosReceber(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }

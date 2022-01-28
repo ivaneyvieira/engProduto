@@ -88,15 +88,15 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
             show("O produto não está no grupo de piso")
             false
           }
-          it.bean.tipoNota != 4 -> {
+          it.bean.tipoNota != 4                    -> {
             show("Não é uma notaSaida de edtrega futura")
             false
           }
-          nota.cancelada == "S" -> {
+          nota.cancelada == "S"                    -> {
             show("A notaSaida está cancelada")
             false
           }
-          else -> true
+          else                                     -> true
         }
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)

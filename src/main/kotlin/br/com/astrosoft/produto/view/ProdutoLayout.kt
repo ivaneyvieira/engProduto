@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.MainLayout
-import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.NotaEntradaView
 import br.com.astrosoft.produto.view.notaSaida.NotaView

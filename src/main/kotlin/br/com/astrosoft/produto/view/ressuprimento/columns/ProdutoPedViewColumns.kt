@@ -8,9 +8,9 @@ import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoUsuarioNameCD() =
-    addColumnString(ProdutoRessuprimento::usuarioNameCD) {
-      this.setHeader("Usuário CD")
-    }
+          addColumnString(ProdutoRessuprimento::usuarioNameCD) {
+            this.setHeader("Usuário CD")
+          }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = addColumnString(ProdutoRessuprimento::codigo) {
     this.setHeader("Código")
@@ -21,9 +21,9 @@ object ProdutoRessuViewColumns {
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() =
-    addColumnString(ProdutoRessuprimento::localizacao) {
-      this.setHeader("Loc")
-    }
+          addColumnString(ProdutoRessuprimento::localizacao) {
+            this.setHeader("Loc")
+          }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTipo() = addColumnString(ProdutoRessuprimento::statusStr) {
     this.setHeader("Status")

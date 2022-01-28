@@ -39,7 +39,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     subView.updateProdutos()
   }
 
-  private fun imprimeEtiqueta(produtos : List<ProdutoNFS>) {
+  private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = Config.user as? UserSaci
     user?.impressora?.let { impressora ->
       try {

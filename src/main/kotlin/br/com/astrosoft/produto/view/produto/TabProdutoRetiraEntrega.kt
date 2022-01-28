@@ -42,7 +42,7 @@ import com.vaadin.flow.data.provider.SortDirection
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
-  TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
+        TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntrega {
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
@@ -150,15 +150,13 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(
-      loja = edtLoja.value ?: 0,
-      codigo = edtProduto.value ?: "",
-      typeno = edtTipo.value ?: 0,
-      clno = edtCentroLucro.value ?: 0,
-      vendno = edtFornecedor.value ?: 0,
-      localizacao = edtLocalizacao.value ?: "",
-      nota = edtNota.value ?: ""
-    )
+    return FiltroProduto(loja = edtLoja.value ?: 0,
+                         codigo = edtProduto.value ?: "",
+                         typeno = edtTipo.value ?: 0,
+                         clno = edtCentroLucro.value ?: 0,
+                         vendno = edtFornecedor.value ?: 0,
+                         localizacao = edtLocalizacao.value ?: "",
+                         nota = edtNota.value ?: "")
   }
 
   override fun updateProdutos(produtos: List<ProdutoRetiraEntrega>) {

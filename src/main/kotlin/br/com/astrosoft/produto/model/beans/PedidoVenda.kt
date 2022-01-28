@@ -4,18 +4,16 @@ import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class PedidoVenda(
-  val loja: Int,
-  val ordno: Int,
-  val cliente: Int,
-  val data: LocalDate,
-  val vendedor: Int,
-  val localizacao: String?,
-  val usuarioCD: String?,
-  val totalProdutos: Double,
-  val marca: Int?,
-  val cancelada: String?
-) {
+class PedidoVenda(val loja: Int,
+                  val ordno: Int,
+                  val cliente: Int,
+                  val data: LocalDate,
+                  val vendedor: Int,
+                  val localizacao: String?,
+                  val usuarioCD: String?,
+                  val totalProdutos: Double,
+                  val marca: Int?,
+                  val cancelada: String?) {
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 

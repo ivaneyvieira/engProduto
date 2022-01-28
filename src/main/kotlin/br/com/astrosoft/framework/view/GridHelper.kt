@@ -18,11 +18,9 @@ import kotlin.reflect.KClass
 //Editores de colunas
 //***********************************************************************************************
 
-fun <T : Any> Grid<T>.withEditor(
-  classBean: KClass<T>,
-  openEditor: (Binder<T>) -> Boolean,
-  closeEditor: (Binder<T>) -> Unit
-) {
+fun <T : Any> Grid<T>.withEditor(classBean: KClass<T>,
+                                 openEditor: (Binder<T>) -> Boolean,
+                                 closeEditor: (Binder<T>) -> Unit) {
   val binder = Binder(classBean.java)
   editor.binder = binder
   addItemDoubleClickListener { event ->

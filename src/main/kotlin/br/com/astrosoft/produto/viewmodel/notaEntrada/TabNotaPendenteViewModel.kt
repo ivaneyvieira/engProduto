@@ -24,5 +24,5 @@ interface ITabNotaEntradaRecebido : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()
-  fun filtro() : FiltroNotaEntrada
+  fun filtro(): FiltroNotaEntrada
 }

@@ -9,25 +9,16 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEGrade
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaRecebidoViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.textfield.IntegerField
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val nota: NotaEntrada) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {
-    }, onClose = {
+    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {}, onClose = {
       onClose()
     }) {
       HorizontalLayout().apply {

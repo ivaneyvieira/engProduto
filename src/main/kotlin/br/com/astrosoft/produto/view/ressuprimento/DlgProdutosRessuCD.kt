@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
+import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
+import br.com.astrosoft.produto.model.beans.Ressuprimento
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao

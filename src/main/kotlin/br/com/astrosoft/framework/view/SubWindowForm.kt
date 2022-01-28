@@ -11,7 +11,7 @@ class SubWindowForm(
   val toolBar: HasComponents.(SubWindowForm) -> Unit = {},
   val onClose: (Dialog) -> Unit = {},
   val blockForm: () -> Component,
-) : Dialog() {
+                   ) : Dialog() {
   init {
     width = "100%"
     height = "100%"

@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
@@ -21,8 +20,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
-  TabPanelGrid<Ressuprimento>(Ressuprimento::class),
-  ITabRessuprimentoEnt {
+        TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
   private var dlgProduto: DlgProdutosRessuEnt? = null
   private lateinit var edtRessuprimento: IntegerField
 

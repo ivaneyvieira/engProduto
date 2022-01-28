@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
 
 @VaadinDsl
 fun <T> (@VaadinDsl HasComponents).multiselectComboBox(block: (@VaadinDsl MultiselectComboBox<T>).() -> Unit = {}) =
-  init(MultiselectComboBox(), block)
+        init(MultiselectComboBox(), block)
 
 /*
 private fun buttonPlanilha(fornecedores: () -> List<Fornecedor>): LazyDownloadButton {
@@ -31,20 +31,20 @@ fun (@VaadinDsl HasComponents).lazyDownloadButton(
   extensao: String,
   icon: Component? = null,
   byteArray: () -> ByteArray,
-): LazyDownloadButton {
+                                                 ): LazyDownloadButton {
   val ldb =
-    LazyDownloadButton(
-      text,
-      icon,
-      {
-        val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
-        val textTime = LocalDateTime.now().format(sdf)
-        "$prefixo$textTime.$extensao"
-      },
-      {
-        ByteArrayInputStream(byteArray())
-      },
-    )
+          LazyDownloadButton(
+            text,
+            icon,
+            {
+              val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
+              val textTime = LocalDateTime.now().format(sdf)
+              "$prefixo$textTime.$extensao"
+            },
+            {
+              ByteArrayInputStream(byteArray())
+            },
+                            )
   return init(ldb)
 }
 
@@ -53,5 +53,5 @@ fun (@VaadinDsl HasComponents).lazyDownloadButtonXlsx(
   text: String? = null,
   prefixo: String,
   byteArray: () -> ByteArray,
-) =
-  lazyDownloadButton(text, prefixo, ".xlsx", FontAwesome.Solid.FILE_EXCEL.create(), byteArray)
+                                                     ) =
+        lazyDownloadButton(text, prefixo, ".xlsx", FontAwesome.Solid.FILE_EXCEL.create(), byteArray)

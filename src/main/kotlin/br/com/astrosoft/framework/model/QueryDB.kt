@@ -32,12 +32,10 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  protected fun <T : Any> query(
-    file: String,
-    classes: KClass<T>,
-    sqlLazy: SqlLazy = SqlLazy(),
-    lambda: QueryHandle = {}
-  ): List<T> {
+  protected fun <T : Any> query(file: String,
+                                classes: KClass<T>,
+                                sqlLazy: SqlLazy = SqlLazy(),
+                                lambda: QueryHandle = {}): List<T> {
     val statements = toStratments(file)
     if (statements.isEmpty()) return emptyList()
     val lastIndex = statements.lastIndex
@@ -50,12 +48,10 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  protected fun <R : Any> querySerivce(
-    file: String,
-    complemento: String?,
-    lambda: QueryHandle = {},
-    result: (Query) -> R
-  ): R {
+  protected fun <R : Any> querySerivce(file: String,
+                                       complemento: String?,
+                                       lambda: QueryHandle = {},
+                                       result: (Query) -> R): R {
     val statements = toStratments(file, complemento)
     val lastIndex = statements.lastIndex
     val query = statements[lastIndex]

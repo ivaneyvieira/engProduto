@@ -17,7 +17,7 @@ import com.vaadin.flow.router.Route
 @Route(layout = ProdutoLayout::class, value = "notaEntrada")
 @PageTitle("Nota Entrada")
 @CssImport("./styles/gridTotal.css")
-class NotaEntradaView: ViewLayout<NotaEntradaViewModel>(), INotaEntradaView, BeforeEnterObserver {
+class NotaEntradaView : ViewLayout<NotaEntradaViewModel>(), INotaEntradaView, BeforeEnterObserver {
   override val viewModel = NotaEntradaViewModel(this)
   override val tabNotaEntradaReceber = TabNotaEntradaReceber(viewModel.tabNotaReceberViewModel)
   override val tabNotaEntradaPendente = TabNotaEntradaPendente(viewModel.tabNotaPendenteViewModel)

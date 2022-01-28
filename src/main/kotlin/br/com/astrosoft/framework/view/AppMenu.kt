@@ -22,6 +22,7 @@ class ItemMenu(route: RouterLink) : Div() {
   private fun updateSelect() {
     if (select) {
       style.set("backgroundColor", SolidColor.LIGHTBLUE.toString()).set("color", "white")
-    } else style.clear()
+    }
+    else style.clear()
   }
 }

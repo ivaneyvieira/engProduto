@@ -21,7 +21,8 @@ fun <T : Any> @VaadinDsl Grid<T>.shiftSelect() {
       if (pedidoInicial == null) {
         pedidoInicial = pedido
         grade.select(pedido)
-      } else {
+      }
+      else {
         if (pedidoFinal == null) {
           val itens = grade.list()
           pedidoFinal = pedido
@@ -33,12 +34,14 @@ fun <T : Any> @VaadinDsl Grid<T>.shiftSelect() {
           }
           pedidoFinal = null
           pedidoInicial = null
-        } else {
+        }
+        else {
           pedidoFinal = null
           pedidoInicial = null
         }
       }
-    } else {
+    }
+    else {
       pedidoFinal = null
       pedidoInicial = null
     }
@@ -74,7 +77,7 @@ private fun <T : Any> comparator(sortOrder: List<GridSortOrder<T>>, classGrid: K
     }
     props.map { prop ->
       when (gridSort.direction) {
-        DESCENDING -> compareByDescending {
+        DESCENDING      -> compareByDescending {
           prop.get(it)
         }
         null, ASCENDING -> compareBy<T> {

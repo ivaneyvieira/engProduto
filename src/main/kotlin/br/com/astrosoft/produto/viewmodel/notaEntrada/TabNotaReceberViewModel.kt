@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.notaEntrada
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntrada
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
 

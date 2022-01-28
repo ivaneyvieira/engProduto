@@ -2,7 +2,9 @@ package br.com.astrosoft.produto.model.zpl
 
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.SystemUtils
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
+import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 
 object EtiquetaChave {
   private fun template(dados: DadosEtiquetaNota): String {
@@ -42,21 +44,11 @@ object EtiquetaChave {
 
   @JvmName("printNota")
   private fun print(impressora: String, dados: List<DadosEtiquetaNota>) {
-    val zpl = dados.joinToString("\n"){
+    val zpl = dados.joinToString("\n") {
       template(it)
     }
     CupsUtils.printCups(impressora, zpl) {
       println(it)
-    }
-  }
-
-  @JvmName("printPreviewNota")
-  private fun printPreview(impressora: String, dados: List<DadosEtiquetaNota>) {
-    val zpl = dados.joinToString("\n"){
-      template(it)
-    }
-    ZPLPreview.showZPLPreview(impressora, zpl) {
-      print(impressora, dados)
     }
   }
 
@@ -74,6 +66,16 @@ object EtiquetaChave {
     }
     CupsUtils.printCups(impressora, zpl) {
       println(it)
+    }
+  }
+
+  @JvmName("printPreviewNota")
+  private fun printPreview(impressora: String, dados: List<DadosEtiquetaNota>) {
+    val zpl = dados.joinToString("\n") {
+      template(it)
+    }
+    ZPLPreview.showZPLPreview(impressora, zpl) {
+      print(impressora, dados)
     }
   }
 
@@ -109,7 +111,7 @@ object EtiquetaChave {
 
   @JvmName("printPreviewEntNota")
   fun printPreviewEnt(impressora: String, produtos: List<ProdutoNFS>) {
-    val dadosEtiquetas = produtos.map {produto ->
+    val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(titulo = "Entregue",
                         usuario = produto.usuarioNameCD,
                         loja = produto.loja,
@@ -146,7 +148,6 @@ object EtiquetaChave {
     }.distinct()
     printPreview(impressora, dadosEtiquetas)
   }
-
 }
 
 private data class DadosEtiquetaNota(

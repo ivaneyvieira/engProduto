@@ -38,83 +38,71 @@ abstract class ReportBuild<T> {
 
   protected open fun labelTitleCol(): TextColumnBuilder<String>? = null
 
-  protected fun <V> column(
-    dataType: DRIDataType<in V, V>,
-    prop: KProperty1<T, V>,
-    title: String,
-    aligment: HorizontalTextAlignment,
-    width: Int,
-    pattern: String,
-    oculto: Boolean,
-    block: TextColumnBuilder<V>.() -> Unit = {}
-  ): TextColumnBuilder<V> =
-    col.column(if (oculto) "" else if (title == "") prop.name else title, prop.name, dataType).apply {
-      this.setHorizontalTextAlignment(aligment)
-      if (width > 0) this.setFixedWidth(width) else this.setMinHeight(0)
-      if (pattern != "") this.setPattern(pattern)
-      block()
+  protected fun <V> column(dataType: DRIDataType<in V, V>,
+                           prop: KProperty1<T, V>,
+                           title: String,
+                           aligment: HorizontalTextAlignment,
+                           width: Int,
+                           pattern: String,
+                           oculto: Boolean,
+                           block: TextColumnBuilder<V>.() -> Unit = {}): TextColumnBuilder<V> =
+          col.column(if (oculto) "" else if (title == "") prop.name else title, prop.name, dataType).apply {
+            this.setHorizontalTextAlignment(aligment)
+            if (width > 0) this.setFixedWidth(width) else this.setMinHeight(0)
+            if (pattern != "") this.setPattern(pattern)
+            block()
 
-      columnsMap[prop] = this
-      columnsList.add(this)
-      if (oculto) {
-        this.setFixedWidth(0)
-        this.setStyle(stl.style().setBackgroundColor(Color(0, 0, 0, 0)))
-      }
-    }
+            columnsMap[prop] = this
+            columnsList.add(this)
+            if (oculto) {
+              this.setFixedWidth(0)
+              this.setStyle(stl.style().setBackgroundColor(Color(0, 0, 0, 0)))
+            }
+          }
 
-  protected fun columnInt(
-    prop: KProperty1<T, Int>,
-    title: String = "",
-    aligment: HorizontalTextAlignment = RIGHT,
-    width: Int = -1,
-    pattern: String = "0",
-    oculto: Boolean = false,
-    block: TextColumnBuilder<Int>.() -> Unit = {}
-  ): TextColumnBuilder<Int> =
-    column(type.integerType(), prop, title, aligment, width, pattern, oculto, block)
+  protected fun columnInt(prop: KProperty1<T, Int>,
+                          title: String = "",
+                          aligment: HorizontalTextAlignment = RIGHT,
+                          width: Int = -1,
+                          pattern: String = "0",
+                          oculto: Boolean = false,
+                          block: TextColumnBuilder<Int>.() -> Unit = {}): TextColumnBuilder<Int> =
+          column(type.integerType(), prop, title, aligment, width, pattern, oculto, block)
 
-  protected fun columnDouble(
-    prop: KProperty1<T, Double>,
-    title: String = "",
-    aligment: HorizontalTextAlignment = RIGHT,
-    width: Int = -1,
-    pattern: String = "#,##0.00",
-    oculto: Boolean = false,
-    block: TextColumnBuilder<Double>.() -> Unit = {}
-  ): TextColumnBuilder<Double> =
-    column(type.doubleType(), prop, title, aligment, width, pattern, oculto, block)
+  protected fun columnDouble(prop: KProperty1<T, Double>,
+                             title: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT,
+                             width: Int = -1,
+                             pattern: String = "#,##0.00",
+                             oculto: Boolean = false,
+                             block: TextColumnBuilder<Double>.() -> Unit = {}): TextColumnBuilder<Double> =
+          column(type.doubleType(), prop, title, aligment, width, pattern, oculto, block)
 
-  protected fun columnString(
-    prop: KProperty1<T, String>,
-    title: String = "",
-    aligment: HorizontalTextAlignment = LEFT,
-    width: Int = -1,
-    oculto: Boolean = false,
-    block: TextColumnBuilder<String>.() -> Unit = {}
-  ): TextColumnBuilder<String> =
-    column(type.stringType(), prop, title, aligment, width, "", oculto, block)
+  protected fun columnString(prop: KProperty1<T, String>,
+                             title: String = "",
+                             aligment: HorizontalTextAlignment = LEFT,
+                             width: Int = -1,
+                             oculto: Boolean = false,
+                             block: TextColumnBuilder<String>.() -> Unit = {}): TextColumnBuilder<String> =
+          column(type.stringType(), prop, title, aligment, width, "", oculto, block)
 
-  protected fun columnLocalDate(
-    prop: KProperty1<T, LocalDate>,
-    title: String = "",
-    aligment: HorizontalTextAlignment = RIGHT,
-    width: Int = -1,
-    pattern: String = "dd/MM/yyyy",
-    oculto: Boolean = false,
-    block: TextColumnBuilder<LocalDate>.() -> Unit = {}
-  ): TextColumnBuilder<LocalDate> =
-    column(localDateType, prop, title, aligment, width, pattern, oculto, block)
+  protected fun columnLocalDate(prop: KProperty1<T, LocalDate>,
+                                title: String = "",
+                                aligment: HorizontalTextAlignment = RIGHT,
+                                width: Int = -1,
+                                pattern: String = "dd/MM/yyyy",
+                                oculto: Boolean = false,
+                                block: TextColumnBuilder<LocalDate>.() -> Unit = {}): TextColumnBuilder<LocalDate> =
+          column(localDateType, prop, title, aligment, width, pattern, oculto, block)
 
-  protected fun columnDate(
-    prop: KProperty1<T, Date>,
-    title: String = "",
-    aligment: HorizontalTextAlignment = RIGHT,
-    width: Int = -1,
-    pattern: String = "dd/MM/yyyy",
-    oculto: Boolean = false,
-    block: TextColumnBuilder<Date>.() -> Unit = {}
-  ): TextColumnBuilder<Date> =
-    column(type.dateDayType(), prop, title, aligment, width, pattern, oculto, block)
+  protected fun columnDate(prop: KProperty1<T, Date>,
+                           title: String = "",
+                           aligment: HorizontalTextAlignment = RIGHT,
+                           width: Int = -1,
+                           pattern: String = "dd/MM/yyyy",
+                           oculto: Boolean = false,
+                           block: TextColumnBuilder<Date>.() -> Unit = {}): TextColumnBuilder<Date> =
+          column(type.dateDayType(), prop, title, aligment, width, pattern, oculto, block)
 
   protected fun columnBuilder(): List<TextColumnBuilder<out Any>> {
     return columnsList
@@ -163,10 +151,8 @@ abstract class ReportBuild<T> {
       .subtotalsAtSummary(* subtotalBuilder().toTypedArray())
       .setSubtotalStyle(stl.style().setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
-      .setColumnStyle(
-        stl.style()
-          .setFontSize(propriedades.detailFonteSize)
-      ) //.setColumnTitleStyle(stl.style().setFontSize(propriedades.detailFonteSize))
+      .setColumnStyle(stl.style()
+                        .setFontSize(propriedades.detailFonteSize)) //.setColumnTitleStyle(stl.style().setFontSize(propriedades.detailFonteSize))
       .setDetailStyle(stl.style().setFontSize(propriedades.detailFonteSize))
       .apply {
         if (itemGroup != null) this.groupBy(itemGroup).addGroupFooter(itemGroup, cmp.text("")).setShowColumnTitle(false)
@@ -199,7 +185,8 @@ open class LocalDateType : AbstractDataType<LocalDate, LocalDate>() {
   override fun valueToString(value: LocalDate?, locale: Locale): String? {
     return if (value != null) {
       SimpleDateFormat(pattern, locale).format(value.toDate())
-    } else null
+    }
+    else null
   }
 
   @Throws(DRException::class)
@@ -210,7 +197,8 @@ open class LocalDateType : AbstractDataType<LocalDate, LocalDate>() {
       } catch (e: ParseException) {
         throw DRException("Unable to convert string value to date", e)
       }
-    } else null
+    }
+    else null
   }
 
   companion object {
@@ -218,11 +206,9 @@ open class LocalDateType : AbstractDataType<LocalDate, LocalDate>() {
   }
 }
 
-data class PropriedadeRelatorio(
-  val titulo: String,
-  val subTitulo: String,
-  val detailFonteSize: Int = 10,
-  val color: Color = Color.BLACK,
-  val pageOrientation: PageOrientation = PORTRAIT,
-  val pageType: PageType = A4
-)
+data class PropriedadeRelatorio(val titulo: String,
+                                val subTitulo: String,
+                                val detailFonteSize: Int = 10,
+                                val color: Color = Color.BLACK,
+                                val pageOrientation: PageOrientation = PORTRAIT,
+                                val pageType: PageType = A4)

@@ -90,14 +90,12 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
-    return FiltroNota(
-      storeno = edtLoja.value ?: 0,
-      nota = edtNota.value,
-      marca = marca,
-      loja = edtLoja.value ?: 0,
-      cliente = edtCliente.value ?: 0,
-      vendedor = edtVendedor.value ?: ""
-    )
+    return FiltroNota(storeno = edtLoja.value ?: 0,
+                      nota = edtNota.value,
+                      marca = marca,
+                      loja = edtLoja.value ?: 0,
+                      cliente = edtCliente.value ?: 0,
+                      vendedor = edtVendedor.value ?: "")
   }
 
   override fun updateNotas(notas: List<NotaSaida>) {
