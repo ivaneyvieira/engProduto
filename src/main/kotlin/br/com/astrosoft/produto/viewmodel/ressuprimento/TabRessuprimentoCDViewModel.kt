@@ -45,7 +45,10 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
+    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
+    val usuario = Config.user?.login ?: ""
     itens.forEach { produto ->
+      produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
     val ressuprimento = subView.findRessuprimento() ?: fail("Nota não encontrada")
