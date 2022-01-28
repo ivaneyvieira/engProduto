@@ -219,10 +219,16 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, nfce: Boolean, sqlLazy: SqlLazy): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, user: UserSaci?, sqlLazy: SqlLazy): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val nfno = filtro.nfno
     val nfse = filtro.nfse
+    val listaTipos =
+            listOfNotNull(if (user?.nfceExpedicao == true) "NFCE" else null,
+                          if (user?.vendaExpedicao == true) "VENDA" else null,
+                          if (user?.entRetExpedicao == true) "ENT_RET" else null,
+                          if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
+                          if (user?.vendaFExpedicao == true) "VENDAF" else null)
     return query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
@@ -231,7 +237,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("cliente", filtro.cliente)
       addOptionalParameter("vendedor", filtro.vendedor)
       addOptionalParameter("locais", locais)
-      addOptionalParameter("NFCE", if (nfce) "S" else "N")
+      addOptionalParameter("listaTipos", listaTipos)
     }
   }
 

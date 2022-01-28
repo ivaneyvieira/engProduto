@@ -55,7 +55,7 @@ class NotaSaida(
     get() = splitCD(2)
 
   val chaveNovaCD: String
-    get() = usuarioNameCD + "-" + dataCD + "-" + horaCD + "-" + localizacao
+    get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
 
@@ -64,9 +64,8 @@ class NotaSaida(
       val user = Config.user as? UserSaci
       return saci.findNotaSaida(filtro = filtro,
                                 locais = userLocais(),
-                                nfce = user?.nfceExpedicao == true,
-                                SqlLazy(limit = 10000,
-                                        orders = listOf(SqlOrder(property = "data", EDirection.DESC))))
+                                user = user,
+                                SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC))))
     }
   }
 }

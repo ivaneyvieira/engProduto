@@ -1,3 +1,5 @@
+USE sqldados;
+
 DO @DT := 20220101;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
@@ -48,8 +50,8 @@ FROM T_V        AS V
 GROUP BY V.storeno, V.pdvno, V.xano;
 
 SELECT N.storeno                                          AS loja,
-       pdvno                                              AS pdvno,
-       xano                                               AS xano,
+       N.pdvno                                              AS pdvno,
+       N.xano                                               AS xano,
        N.nfno                                             AS numero,
        N.nfse                                             AS serie,
        custno                                             AS cliente,
@@ -103,13 +105,37 @@ FROM sqldados.nf             AS N
 	       USING (storeno, pdvno, xano)
   INNER JOIN sqldados.xaprd2 AS X
 	       USING (storeno, pdvno, xano)
+  LEFT JOIN  sqldados.nfrprd AS NP
+	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
+		  X.prdno = NP.prdno AND X.grade = NP.grade AND (optionEntrega % 100) = 4
   LEFT JOIN  sqldados.prdloc AS L
 	       ON L.prdno = X.prdno AND L.storeno = 4
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
 WHERE N.issuedate >= @DT
-  AND (N.nfse IN (1, 5, 7) OR (N.nfse >= 10 AND (:NFCE = 'S')) OR
-       (N.nfse IN (1, 3, 5, 7) AND :marca = 2))
+  AND (CASE
+	 WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
+	   THEN 'RETIRAF'
+	 WHEN (N.nfse = 1 AND N.cfo IN (5922, 6922)) OR (N.nfse = 7)
+	   THEN 'VENDAF'
+	 WHEN N.nfse = '66'
+	   THEN 'ACERTO_S'
+	 WHEN N.nfse = '3'
+	   THEN 'ENT_RET'
+	 WHEN tipo = 0 AND N.nfse >= 10
+	   THEN 'NFCE'
+	 WHEN tipo = 0
+	   THEN 'VENDA'
+	 WHEN tipo = 1
+	   THEN 'TRANSFERENCIA'
+	 WHEN tipo = 2
+	   THEN 'DEV_FOR'
+	 WHEN tipo = 3
+	   THEN 'OUTRAS_NFS'
+	 WHEN tipo = 7
+	   THEN 'OUTRAS_NFS'
+	 ELSE 'SP_REME'
+       END IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)
@@ -118,8 +144,8 @@ WHERE N.issuedate >= @DT
   AND (E.sname = :vendedor OR :vendedor = '')
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
-	 pdvno,
-	 xano,
+	 N.pdvno,
+	 N.xano,
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '-', 1)),
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1)),
 	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))
