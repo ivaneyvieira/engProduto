@@ -31,7 +31,7 @@ class Ressuprimento(
     get() = splitCD(2)
 
   val chaveNovaCD: String
-    get() = usuarioNameCD + "-" + dataCD + "-" + horaCD + "-" + localizacao
+    get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
 

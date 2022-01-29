@@ -1,4 +1,4 @@
-package br.com.astrosoft.devolucao.model
+package br.com.astrosoft.produto.model.beans
 
 import java.time.LocalDate
 

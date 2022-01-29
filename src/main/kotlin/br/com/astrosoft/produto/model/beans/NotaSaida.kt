@@ -43,7 +43,7 @@ class NotaSaida(
     get() = splitExp(2)
 
   val chaveNovaExp: String
-    get() = usuarioNameExp + "-" + dataExp + "-" + horaExp + "-" + localizacao
+    get() = "$usuarioNameExp-$dataExp-$horaExp-$localizacao"
 
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 

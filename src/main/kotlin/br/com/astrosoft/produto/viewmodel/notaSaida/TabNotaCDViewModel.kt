@@ -40,7 +40,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       produtoNF.marca = EMarcaNota.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = Config.user?.login ?: ""
-      produtoNF.usuarioCD = usuario + "-" + dataHora
+      produtoNF.usuarioCD = "$usuario-$dataHora"
       produtoNF.salva()
     }
     subView.updateProdutos()
@@ -52,7 +52,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     produtoNF.marca = EMarcaNota.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = Config.user?.login ?: ""
-    produtoNF.usuarioCD = usuario + "-" + dataHora
+    produtoNF.usuarioCD = "$usuario-$dataHora"
     produtoNF.salva()
     subView.updateProdutos()
     val nota = subView.findNota() ?: fail("Nota não encontrada")

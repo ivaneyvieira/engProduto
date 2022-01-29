@@ -31,4 +31,4 @@ class ProdutoLayout : MainLayout() {
 @BodySize(width = "100vw", height = "100vh")
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes")
 @Theme(value = "myapp", variant = Lumo.DARK)
-class app : AppShellConfigurator
+class App : AppShellConfigurator

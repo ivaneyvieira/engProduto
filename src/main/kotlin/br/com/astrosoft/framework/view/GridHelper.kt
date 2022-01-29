@@ -64,7 +64,7 @@ fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit =
 fun <T : Any> Grid.Column<T>.textFieldEditor(): Grid.Column<T> {
   val grid = this.grid
   val component = textFieldComponente()
-  component.element.addEventListener("keydown") { _ ->
+  component.element.addEventListener("keydown") {
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
   grid.editor.binder.forField(component).bind(this.key)
@@ -75,7 +75,7 @@ fun <T : Any> Grid.Column<T>.textFieldEditor(): Grid.Column<T> {
 fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   val grid = this.grid
   val component = dateFieldComponente()
-  component.element.addEventListener("keydown") { _ ->
+  component.element.addEventListener("keydown") {
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
   grid.editor.binder.forField(component).bind(this.key)
@@ -90,7 +90,7 @@ fun <T : Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Uni
     this.isEmptySelectionAllowed = true
     this.setWidthFull()
   }
-  component.element.addEventListener("keydown") { _ ->
+  component.element.addEventListener("keydown") {
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
   grid.editor.binder.forField(component).bind(this.key)

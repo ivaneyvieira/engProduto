@@ -59,7 +59,7 @@ private fun getOutput(channel: Channel): String {
     }
     try {
       Thread.sleep(1000)
-    } catch (ee: Exception) {
+    } catch (_: Exception) {
     }
   }
   return stringBuild.toString()

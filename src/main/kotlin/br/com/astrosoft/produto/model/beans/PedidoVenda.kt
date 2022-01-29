@@ -27,7 +27,7 @@ class PedidoVenda(val loja: Int,
     get() = splitCD(2)
 
   val chaveNovaCD: String
-    get() = usuarioNameCD + "-" + dataCD + "-" + horaCD + "-" + localizacao
+    get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userLocais())
 

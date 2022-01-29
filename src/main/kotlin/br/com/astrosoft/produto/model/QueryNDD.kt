@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.model
 
-import br.com.astrosoft.devolucao.model.NotaEntradaVO
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.QueryDB
+import br.com.astrosoft.produto.model.beans.NotaEntradaVO
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaVO
 import java.time.LocalDate
 

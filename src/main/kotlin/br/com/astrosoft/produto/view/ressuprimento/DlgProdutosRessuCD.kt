@@ -48,7 +48,6 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
         }
       }
       button("Imprime") {
-        val user = Config.user as? UserSaci
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
           viewModel.salvaProdutos()

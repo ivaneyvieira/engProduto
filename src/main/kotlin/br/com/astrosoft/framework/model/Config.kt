@@ -25,11 +25,11 @@ object Config {
 
   private val prop = properties()
 
-  val appName = prop.getProperty("appName")
-  val commpany = prop.getProperty("commpany")
-  val title = prop.getProperty("title")
-  val shortName = prop.getProperty("shortName")
-  val iconPath = prop.getProperty("iconPath")
+  val appName: String = prop.getProperty("appName")
+  val commpany: String = prop.getProperty("commpany")
+  val title: String = prop.getProperty("title")
+  val shortName: String = prop.getProperty("shortName")
+  val iconPath: String = prop.getProperty("iconPath")
 
   val version: String
     get() {

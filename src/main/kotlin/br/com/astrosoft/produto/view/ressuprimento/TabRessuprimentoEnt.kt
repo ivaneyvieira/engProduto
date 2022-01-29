@@ -55,8 +55,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     return FiltroRessuprimento(numero = edtRessuprimento.value ?: 0, marca = marca)
   }
 
-  override fun updateRessuprimentos(ressuprimento: List<Ressuprimento>) {
-    updateGrid(ressuprimento)
+  override fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>) {
+    updateGrid(ressuprimentos)
   }
 
   override fun updateProdutos() {
