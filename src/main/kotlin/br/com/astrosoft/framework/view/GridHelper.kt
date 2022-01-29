@@ -9,7 +9,6 @@ import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.apache.poi.ss.formula.functions.T
 import java.math.BigDecimal
 import java.util.*
 import kotlin.reflect.KClass
