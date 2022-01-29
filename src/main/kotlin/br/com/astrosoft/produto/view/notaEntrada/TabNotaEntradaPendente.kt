@@ -31,6 +31,7 @@ class TabNotaEntradaPendente(val viewModel: TabNotaEntradaPendenteViewModel) :
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
   private lateinit var edtLoja: IntegerField
+  private lateinit var edtChave: TextField
   private var dlgProduto: DlgProdutosPendente? = null
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -58,6 +59,13 @@ class TabNotaEntradaPendente(val viewModel: TabNotaEntradaPendenteViewModel) :
         viewModel.updateView()
       }
     }
+    edtChave = textField("Chave") {
+      width = "400px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun Grid<NotaEntrada>.gridPanel() {
@@ -75,6 +83,9 @@ class TabNotaEntradaPendente(val viewModel: TabNotaEntradaPendenteViewModel) :
     colunaNFEFornecedor()
     colunaNFENomeFornecedor()
     colunaNFEValor()
+    setClassNameGenerator {
+      if (it.invnoRef > 0) "azul" else null
+    }
   }
 
   override fun updateNotas(notas: List<NotaEntrada>) {
@@ -89,10 +100,13 @@ class TabNotaEntradaPendente(val viewModel: TabNotaEntradaPendenteViewModel) :
     dlgProduto?.update()
   }
 
-  override fun filtro() = FiltroNotaEntrada(loja = edtLoja.value ?: 0,
-                                            ni = edtNI.value ?: 0,
-                                            nota = edtNota.value ?: "",
-                                            vendno = edtFornecedor.value ?: 0)
+  override fun filtro() = FiltroNotaEntrada(
+    loja = edtLoja.value ?: 0,
+    ni = edtNI.value ?: 0,
+    nota = edtNota.value ?: "",
+    vendno = edtFornecedor.value ?: 0,
+    chave = edtChave.value ?: "",
+                                           )
 
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci

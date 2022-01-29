@@ -31,6 +31,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
   private lateinit var edtLoja: IntegerField
+  private lateinit var edtChave: TextField
   private var dlgProduto: DlgProdutosRecebido? = null
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -58,6 +59,13 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
         viewModel.updateView()
       }
     }
+    edtChave = textField("Chave") {
+      width = "400px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun Grid<NotaEntrada>.gridPanel() {
@@ -75,12 +83,18 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     colunaNFEFornecedor()
     colunaNFENomeFornecedor()
     colunaNFEValor()
+    setClassNameGenerator {
+      if (it.invnoRef > 0) "azul" else null
+    }
   }
 
-  override fun filtro() = FiltroNotaEntrada(loja = edtLoja.value ?: 0,
-                                            ni = edtNI.value ?: 0,
-                                            nota = edtNota.value ?: "",
-                                            vendno = edtFornecedor.value ?: 0)
+  override fun filtro() = FiltroNotaEntrada(
+    loja = edtLoja.value ?: 0,
+    ni = edtNI.value ?: 0,
+    nota = edtNota.value ?: "",
+    vendno = edtFornecedor.value ?: 0,
+    chave = edtChave.value ?: "",
+                                           )
 
   override fun updateNotas(notas: List<NotaEntrada>) {
     updateGrid(notas)

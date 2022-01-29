@@ -27,6 +27,10 @@ class NotaEntrada(
 
   fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(this, barcode, quant)
 
+  fun removeReceber() {
+    saci.removerNotaReceber(this)
+  }
+
   val nota
     get() = "$numero/$serie"
 
@@ -41,7 +45,7 @@ class NotaEntrada(
   }
 }
 
-data class FiltroNotaEntrada(val loja: Int, val ni: Int, val nota: String, val vendno: Int) {
+data class FiltroNotaEntrada(val loja: Int, val ni: Int, val nota: String, val vendno: Int, val chave: String) {
   val nfno: String
     get() = nota.split("/").getOrNull(0) ?: ""
   val nfse: String

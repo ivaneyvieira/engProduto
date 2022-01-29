@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
 import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEBarcode
@@ -15,6 +16,7 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
@@ -73,6 +75,9 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
+      addColumnButton(VaadinIcon.TRASH, "Remover", "Remover") { produto ->
+        viewModel.removeProduto(produto)
+      }
       produtoNFECodigo()
       produtoNFEBarcode()
       produtoNFEDescricao()

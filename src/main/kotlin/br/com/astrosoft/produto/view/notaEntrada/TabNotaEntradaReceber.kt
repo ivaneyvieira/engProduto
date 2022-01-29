@@ -40,8 +40,14 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
         viewModel.updateView()
       }
     }
+    addColumnButton(VaadinIcon.TRASH, "Remover", "Remover") { nota ->
+      viewModel.removeNota(nota)
+    }
     colunaNFEChave()
     colunaNFEDataEmissao()
+    setClassNameGenerator {
+      if(it.invnoRef > 0) "azul" else null
+    }
   }
 
   override fun updateNotas(notas: List<NotaEntrada>) {

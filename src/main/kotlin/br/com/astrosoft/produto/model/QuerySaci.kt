@@ -299,6 +299,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("nfno", filtro.nfno)
       addOptionalParameter("nfse", filtro.nfse)
       addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("chave", filtro.chave)
     }
   }
 
@@ -310,6 +311,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("nfno", filtro.nfno)
       addOptionalParameter("nfse", filtro.nfse)
       addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("chave", filtro.chave)
     }
   }
 
@@ -355,6 +357,22 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("ni", nota.ni)
       addOptionalParameter("barcode", barcode)
       addOptionalParameter("quant", quant)
+    }
+  }
+
+  fun removerNotaReceber(nota: NotaEntrada) {
+    val sql = "/sqlSaci/revoverNotaReceber.sql"
+    return script(sql) {
+      addOptionalParameter("ni", nota.ni)
+    }
+  }
+
+  fun removeProdutoReceber(produto: ProdutoNFE) {
+    val sql = "/sqlSaci/revomerProdutoReceber.sql"
+    return script(sql) {
+      addOptionalParameter("ni", produto.ni)
+      addOptionalParameter("codigo", produto.codigo)
+      addOptionalParameter("grade", produto.grade)
     }
   }
 

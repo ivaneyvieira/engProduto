@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.notaEntrada
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
+import okhttp3.internal.notifyAll
 
 class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   val subView
@@ -31,6 +33,18 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
 
   fun produtos(): List<ProdutoNFE> {
     return subView.notaSelecionada()?.produtosReceber().orEmpty()
+  }
+
+  fun removeNota(nota: NotaEntrada?) = viewModel.exec{
+    nota ?: fail("Nota não selecionada")
+    nota.removeReceber()
+    updateView()
+  }
+
+  fun removeProduto(produto: ProdutoNFE?) {
+    produto ?: fail("Produto não selecionado")
+    produto.revomeProdutoReceber()
+    subView.updateViewProduto()
   }
 }
 

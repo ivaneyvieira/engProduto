@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class ProdutoNFE(
   val loja: Int,
   val ni: Int,
@@ -21,4 +23,8 @@ class ProdutoNFE(
   val total: Double,
   val localizacao: String,
   val qttyRef: Int,
-                )
+                ){
+  fun revomeProdutoReceber(){
+    saci.removeProdutoReceber(this)
+  }
+}

@@ -27,4 +27,5 @@ WHERE I.storeno IN (2, 3, 4, 5)
   AND (I.nfname = :nfno AND :nfno = '')
   AND (I.invse = :nfse AND :nfse = '')
   AND (I.vendno = :vendno AND :vendno = 0)
+  AND (N.nfekey = :chave OR :chave = '')
 GROUP BY I.invno
