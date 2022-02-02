@@ -109,7 +109,7 @@ FROM sqldados.nf             AS N
 	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
 		  X.prdno = NP.prdno AND X.grade = NP.grade AND (optionEntrega % 100) = 4
   LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = X.prdno AND L.storeno = 4
+	       ON L.prdno = X.prdno AND L.storeno = :storeno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
 WHERE N.issuedate >= @DT
@@ -135,7 +135,7 @@ WHERE N.issuedate >= @DT
 	 WHEN tipo = 7
 	   THEN 'OUTRAS_NFS'
 	 ELSE 'SP_REME'
-       END IN (:listaTipos))
+       END NOT IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)

@@ -34,7 +34,7 @@ FROM sqldados.prd             AS P
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
   LEFT JOIN  sqldados.prdloc  AS L
-	       ON L.prdno = P.no AND L.storeno = 4
+	       ON L.prdno = P.no AND L.storeno = :storeno
   LEFT JOIN  sqldados.vend    AS F
 	       ON F.no = P.mfno
   LEFT JOIN  sqldados.type    AS T
