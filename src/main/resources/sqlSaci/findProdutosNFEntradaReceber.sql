@@ -5,7 +5,8 @@ CREATE TEMPORARY TABLE T_INV (
 SELECT N.nfekey,
        prdno,
        grade,
-       P.qtty / 1000 AS qtty
+       P.qtty,
+       P.fob
 FROM sqldados.invnfe                 AS N
   INNER JOIN sqldados.inv            AS I
 	       USING (invno)
@@ -31,10 +32,10 @@ SELECT N.storeno                                          AS loja,
        P.sp / 100                                         AS precoCheio,
        IFNULL(S.ncm, '')                                  AS ncm,
        X.qtty / 1000                                      AS quantidade,
-       X.fob / 100                                        AS preco,
-       (X.qtty / 1000) * (X.fob / 100)                    AS total,
+       TI.fob / 100                                       AS preco,
+       (TI.qtty / 1000) * (TI.fob / 100)                  AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       IFNULL(TI.qtty, 0) / 1000                          AS qttyRef
+       TI.qtty / 1000                                     AS qttyRef
 FROM sqldados.prd                     AS P
   INNER JOIN sqldados.iprdConferencia AS X
 	       ON P.no = X.prdno

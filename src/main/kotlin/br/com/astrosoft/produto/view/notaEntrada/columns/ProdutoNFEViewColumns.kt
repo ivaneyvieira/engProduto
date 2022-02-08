@@ -31,6 +31,10 @@ object ProdutoNFEViewColumns {
     this.setHeader("Quant")
   }
 
+  fun Grid<ProdutoNFE>.produtoNFEQuantidadeRef() = addColumnInt(ProdutoNFE::qttyRef) {
+    this.setHeader("Quant")
+  }
+
   fun Grid<ProdutoNFE>.produtoNFEPrecoUnitario() = addColumnDouble(ProdutoNFE::preco) {
     this.setHeader("Preço")
   }

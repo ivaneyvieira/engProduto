@@ -19,10 +19,10 @@ class ProdutoNFE(
   val precoCheio: Double,
   val ncm: String,
   val quantidade: Int,
-  val preco: Double,
-  val total: Double,
+  val preco: Double?,
+  val total: Double?,
   val localizacao: String,
-  val qttyRef: Int,
+  val qttyRef: Int?,
                 ){
   fun revomeProdutoReceber(){
     saci.removeProdutoReceber(this)
