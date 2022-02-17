@@ -87,20 +87,6 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEDescricao()
       produtoNFEGrade()
       produtoNFEQuantidade()
-
-      addColumn {
-        ""
-      }.apply {
-        this.isAutoWidth = false
-        this.width = "1px"
-        this.setClassNameGenerator {
-          "preto"
-        }
-      }
-
-      produtoNFEQuantidadeRef()
-      produtoNFEPrecoUnitario()
-      produtoNFEPrecoTotal()
     }
     this.addAndExpand(gridDetail)
     update()

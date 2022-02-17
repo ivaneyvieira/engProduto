@@ -15,7 +15,7 @@ FROM sqldados.inv                    AS I
 	       USING (invno)
   INNER JOIN sqldados.vend           AS V
 	       ON V.no = I.vendno
-  LEFT JOIN  sqldados.invConferencia AS C
+  INNER JOIN  sqldados.invConferencia AS C
 	       ON C.nfekey = N.nfekey
 WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
