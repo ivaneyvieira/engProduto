@@ -7,6 +7,8 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFECodigo
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEDescricao
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEGrade
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEPrecoTotal
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEPrecoUnitario
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaPendenteViewModel
 import com.vaadin.flow.component.grid.Grid
@@ -41,6 +43,8 @@ class DlgProdutosPendente(val viewModel: TabNotaEntradaPendenteViewModel, val no
       produtoNFEDescricao()
       produtoNFEGrade()
       produtoNFEQuantidade()
+      produtoNFEPrecoUnitario()
+      produtoNFEPrecoTotal()
     }
     this.addAndExpand(gridDetail)
     update()

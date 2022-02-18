@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaReceberViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.header2
 import com.github.mvysny.kaributools.selectAll
@@ -60,7 +61,11 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
           }
         }
       }
-      button("Processa") { }
+      button("Processa") {
+        onLeftClick {
+          viewModel.processaProdutos()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -95,5 +100,9 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   fun update() {
     val listProdutos = viewModel.produtos()
     gridDetail.setItems(listProdutos)
+  }
+
+  fun produtosSelecionados(): List<ProdutoNFE> {
+    return gridDetail.selectedItems.toList()
   }
 }

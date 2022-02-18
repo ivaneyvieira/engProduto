@@ -23,8 +23,14 @@ class ProdutoNFE(
   val total: Double?,
   val localizacao: String,
   val qttyRef: Int?,
-                ){
-  fun revomeProdutoReceber(){
+  var marca: Int,
+                ) {
+  fun revomeProdutoReceber() {
     saci.removeProdutoReceber(this)
+  }
+
+  fun processaReceber() {
+    marca = 1
+    saci.updateProdutoReceber(this)
   }
 }

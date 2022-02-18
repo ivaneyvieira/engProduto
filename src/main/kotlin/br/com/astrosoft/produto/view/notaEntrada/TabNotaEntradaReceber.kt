@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.produto.model.beans.NotaEntrada
+import br.com.astrosoft.produto.model.beans.ProdutoNFE
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEChave
 import br.com.astrosoft.produto.view.notaEntrada.columns.NotaEColumns.colunaNFEDataEmissao
@@ -62,6 +63,10 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
 
   override fun updateViewProduto() {
     dlgProduto?.update()
+  }
+
+  override fun produtosSelecionados(): List<ProdutoNFE> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
   }
 
   override fun isAuthorized(user: IUser): Boolean {

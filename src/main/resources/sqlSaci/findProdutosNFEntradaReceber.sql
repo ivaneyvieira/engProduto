@@ -35,7 +35,8 @@ SELECT N.storeno                                          AS loja,
        TI.fob / 100                                       AS preco,
        (TI.qtty / 1000) * (TI.fob / 100)                  AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       TI.qtty / 1000                                     AS qttyRef
+       TI.qtty / 1000                                     AS qttyRef,
+       X.s27                                              AS marca
 FROM sqldados.prd                     AS P
   INNER JOIN sqldados.iprdConferencia AS X
 	       ON P.no = X.prdno
@@ -56,5 +57,6 @@ FROM sqldados.prd                     AS P
   LEFT JOIN  sqldados.spedprd         AS S
 	       ON P.no = S.prdno
 WHERE X.invno = :ni
+  AND X.s27 = 0
 GROUP BY codigo, grade
 

@@ -34,7 +34,8 @@ SELECT N.storeno                                          AS loja,
        X.fob / 100                                        AS preco,
        (X.qtty / 1000) * (X.fob / 100)                    AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       IFNULL(TI.qtty, 0) / 1000                          AS qttyRef
+       IFNULL(TI.qtty, 0) / 1000                          AS qttyRef,
+       2                                                  AS marca
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.iprd    AS X
 	       ON P.no = X.prdno

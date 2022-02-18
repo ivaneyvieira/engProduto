@@ -10,13 +10,15 @@ SELECT I.invno                              AS ni,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
        N.nfekey                             AS chave,
        IFNULL(C.invno, 0)                   AS invnoRef
-FROM sqldados.inv                    AS I
-  INNER JOIN sqldados.invnfe         AS N
+FROM sqldados.inv                     AS I
+  INNER JOIN sqldados.invnfe          AS N
 	       USING (invno)
-  INNER JOIN sqldados.vend           AS V
+  INNER JOIN sqldados.vend            AS V
 	       ON V.no = I.vendno
-  LEFT JOIN  sqldados.invConferencia AS C
+  LEFT JOIN  sqldados.invConferencia  AS C
 	       ON C.nfekey = N.nfekey
+  INNER JOIN sqldados.iprdConferencia AS P
+	       ON P.invno = C.invno
 WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
   AND I.cfo NOT IN (1551, 2551, 1556, 2556)
@@ -28,4 +30,5 @@ WHERE I.storeno IN (2, 3, 4, 5)
   AND (I.invse = :nfse AND :nfse = '')
   AND (I.vendno = :vendno AND :vendno = 0)
   AND (N.nfekey = :chave OR :chave = '')
+  AND P.s27 = 2
 GROUP BY I.invno
