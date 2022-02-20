@@ -5,7 +5,7 @@ CREATE TEMPORARY TABLE T_INV (
 SELECT N.nfekey,
        prdno,
        grade,
-       P.qtty / 1000 AS qtty
+       P.qtty AS qtty
 FROM sqldados.invnfe                 AS N
   INNER JOIN sqldados.inv            AS I
 	       USING (invno)
@@ -17,6 +17,7 @@ GROUP BY nfekey, prdno, grade;
 
 SELECT N.storeno                                          AS loja,
        X.invno                                            AS ni,
+       K.nfekey                                           AS chave,
        CAST(CONCAT(N.nfname, '/', N.invse) AS CHAR)       AS nota,
        CAST(TRIM(P.no) AS CHAR)                           AS codigo,
        IFNULL(X.grade, '')                                AS grade,
@@ -35,7 +36,7 @@ SELECT N.storeno                                          AS loja,
        (X.qtty / 1000) * (X.fob / 100)                    AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        IFNULL(TI.qtty, 0) / 1000                          AS qttyRef,
-       2                                                  AS marca
+       1                                                  AS marca
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.iprd    AS X
 	       ON P.no = X.prdno
@@ -43,7 +44,7 @@ FROM sqldados.prd             AS P
 	       USING (invno)
   INNER JOIN sqldados.invnfe  AS K
 	       USING (invno)
-  LEFT JOIN  T_INV            AS TI
+  INNER JOIN T_INV            AS TI
 	       USING (nfekey, prdno, grade)
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
@@ -58,6 +59,6 @@ FROM sqldados.prd             AS P
   LEFT JOIN  sqldados.spedprd AS S
 	       ON P.no = S.prdno
 WHERE X.invno = :ni
+  AND TI.qtty = X.qtty
 GROUP BY codigo, grade
-HAVING quantidade = qttyRef
 

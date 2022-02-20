@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.saci
 class ProdutoNFE(
   val loja: Int,
   val ni: Int,
+  val chave: String,
   val nota: String,
   val codigo: String,
   val grade: String,

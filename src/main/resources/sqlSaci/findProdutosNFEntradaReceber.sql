@@ -3,6 +3,10 @@ CREATE TEMPORARY TABLE T_INV (
   PRIMARY KEY (nfekey, prdno, grade)
 )
 SELECT N.nfekey,
+       I.storeno,
+       I.invno,
+       I.nfname,
+       I.invse,
        prdno,
        grade,
        P.qtty,
@@ -16,32 +20,33 @@ FROM sqldados.invnfe                 AS N
 	       USING (nfekey)
 GROUP BY nfekey, prdno, grade;
 
-SELECT N.storeno                                          AS loja,
-       X.invno                                            AS ni,
-       CAST(CONCAT(N.nfname, '/', N.invse) AS CHAR)       AS nota,
-       CAST(TRIM(P.no) AS CHAR)                           AS codigo,
-       IFNULL(X.grade, '')                                AS grade,
-       TRIM(IFNULL(B.barcode, P.barcode))                 AS barcode,
-       TRIM(MID(P.name, 1, 37))                           AS descricao,
-       P.mfno                                             AS vendno,
-       IFNULL(F.auxChar1, '')                             AS fornecedor,
-       P.typeno                                           AS typeno,
-       IFNULL(T.name, '')                                 AS typeName,
-       CAST(LPAD(P.clno, 6, '0') AS CHAR)                 AS clno,
-       IFNULL(cl.name, '')                                AS clname,
-       P.sp / 100                                         AS precoCheio,
-       IFNULL(S.ncm, '')                                  AS ncm,
-       X.qtty / 1000                                      AS quantidade,
-       TI.fob / 100                                       AS preco,
-       (TI.qtty / 1000) * (TI.fob / 100)                  AS total,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       TI.qtty / 1000                                     AS qttyRef,
-       X.s27                                              AS marca
+SELECT IFNULL(TI.storeno, 0)                                      AS loja,
+       IFNULL(TI.invno, 0)                                        AS ni,
+       N.nfekey                                                   AS chave,
+       IFNULL(CAST(CONCAT(TI.nfname, '/', TI.invse) AS CHAR), '') AS nota,
+       CAST(TRIM(X.prdno) AS CHAR)                                   AS codigo,
+       IFNULL(X.grade, '')                                        AS grade,
+       TRIM(IFNULL(B.barcode, P.barcode))                         AS barcode,
+       TRIM(MID(P.name, 1, 37))                                   AS descricao,
+       P.mfno                                                     AS vendno,
+       IFNULL(F.auxChar1, '')                                     AS fornecedor,
+       P.typeno                                                   AS typeno,
+       IFNULL(T.name, '')                                         AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)                         AS clno,
+       IFNULL(cl.name, '')                                        AS clname,
+       P.sp / 100                                                 AS precoCheio,
+       IFNULL(S.ncm, '')                                          AS ncm,
+       X.qtty / 1000                                              AS quantidade,
+       TI.fob / 100                                               AS preco,
+       (TI.qtty / 1000) * (TI.fob / 100)                          AS total,
+       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)         AS localizacao,
+       TI.qtty / 1000                                             AS qttyRef,
+       X.marca                                                    AS marca
 FROM sqldados.prd                     AS P
   INNER JOIN sqldados.iprdConferencia AS X
 	       ON P.no = X.prdno
   INNER JOIN sqldados.invConferencia  AS N
-	       USING (invno)
+	       USING (nfekey)
   LEFT JOIN  T_INV                    AS TI
 	       USING (nfekey, prdno, grade)
   LEFT JOIN  sqldados.prdbar          AS B
@@ -56,7 +61,7 @@ FROM sqldados.prd                     AS P
 	       ON cl.no = P.clno
   LEFT JOIN  sqldados.spedprd         AS S
 	       ON P.no = S.prdno
-WHERE X.invno = :ni
-  AND X.s27 = 0
+WHERE X.nfekey = :nfekey
+  AND X.marca = 0
 GROUP BY codigo, grade
 

@@ -498,7 +498,7 @@ FROM sqldados.prd                     AS P
   INNER JOIN sqldados.iprdConferencia AS X
 	       ON P.no = X.prdno
   INNER JOIN sqldados.invConferencia  AS N
-	       USING (invno)
+	       USING (nfekey)
   LEFT JOIN  sqldados.prdbar          AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
   LEFT JOIN  sqldados.prdloc          AS L

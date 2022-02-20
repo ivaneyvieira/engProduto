@@ -18,6 +18,7 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.Focusable
@@ -99,7 +100,6 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
@@ -114,7 +114,12 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEBarcode()
       produtoNFEDescricao()
       produtoNFEGrade()
-      produtoNFEQuantidade().integerFieldEditor()
+      produtoNFEQuantidade().integerFieldEditor().apply {
+        this.setClassNameGenerator { produto ->
+          if (produto.quantidade != produto.qttyRef) "amarelo"
+          else null
+        }
+      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -134,7 +139,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
     gridDetail.setItems(listProdutos)
   }
 
-  fun produtosSelecionados(): List<ProdutoNFE> {
-    return gridDetail.selectedItems.toList()
+  fun produtosNota(): List<ProdutoNFE> {
+    return gridDetail.dataProvider.fetchAll()
   }
 }

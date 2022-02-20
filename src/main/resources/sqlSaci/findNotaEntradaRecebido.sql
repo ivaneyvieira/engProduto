@@ -8,8 +8,7 @@ SELECT I.invno                              AS ni,
        CAST(I.date AS DATE)                 AS entrada,
        I.grossamt / 100                     AS valorNota,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
-       N.nfekey                             AS chave,
-       IFNULL(C.invno, 0)                   AS invnoRef
+       N.nfekey                             AS chave
 FROM sqldados.inv                     AS I
   INNER JOIN sqldados.invnfe          AS N
 	       USING (invno)
@@ -18,7 +17,7 @@ FROM sqldados.inv                     AS I
   LEFT JOIN  sqldados.invConferencia  AS C
 	       ON C.nfekey = N.nfekey
   INNER JOIN sqldados.iprdConferencia AS P
-	       ON P.invno = C.invno
+	       ON P.nfekey = C.nfekey
 WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
   AND I.cfo NOT IN (1551, 2551, 1556, 2556)
@@ -30,5 +29,5 @@ WHERE I.storeno IN (2, 3, 4, 5)
   AND (I.invse = :nfse AND :nfse = '')
   AND (I.vendno = :vendno AND :vendno = 0)
   AND (N.nfekey = :chave OR :chave = '')
-  AND P.s27 = 2
+  AND P.marca = 1
 GROUP BY I.invno

@@ -291,17 +291,6 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  private fun findNotaEntradaPendente(filtro: FiltroNotaEntrada): List<NotaEntrada> {
-    val sql = "/sqlSaci/findNotaEntradaPendente.sql"
-    return query(sql, NotaEntrada::class) {
-      addOptionalParameter("loja", filtro.loja)
-      addOptionalParameter("ni", filtro.ni)
-      addOptionalParameter("nfno", filtro.nfno)
-      addOptionalParameter("nfse", filtro.nfse)
-      addOptionalParameter("vendno", filtro.vendno)
-      addOptionalParameter("chave", filtro.chave)
-    }
-  }
 
   fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaRecebido.sql"
@@ -333,28 +322,27 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   private fun findProdutoNFEPendente(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaPendente.sql"
     return query(sql, ProdutoNFE::class) {
-      addOptionalParameter("ni", nota.ni)
+      addOptionalParameter("ni", nota.ni ?: 0)
     }
   }
 
   fun findProdutoNFERecebido(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaRecebido.sql"
     return query(sql, ProdutoNFE::class) {
-      addOptionalParameter("ni", nota.ni)
+      addOptionalParameter("ni", nota.ni ?: 0)
     }
   }
 
   fun findProdutoNFEReceber(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaReceber.sql"
     return query(sql, ProdutoNFE::class) {
-      addOptionalParameter("ni", nota.ni)
+      addOptionalParameter("nfekey", nota.chave)
     }
   }
 
-  fun addProdutoReceber(nota: NotaEntrada, barcode: String, quant: Int) {
+  fun addProdutoReceber(barcode: String, quant: Int) {
     val sql = "/sqlSaci/addProdutoConf.sql"
     return script(sql) {
-      addOptionalParameter("ni", nota.ni)
       addOptionalParameter("barcode", barcode)
       addOptionalParameter("quant", quant)
     }
@@ -363,7 +351,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun updateProdutoReceber(produto: ProdutoNFE) {
     val sql = "/sqlSaci/updateProdutoConf.sql"
     return script(sql) {
-      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("nfekey", produto.chave)
       addOptionalParameter("codigo", produto.codigo)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("marca", produto.marca)
@@ -374,14 +362,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   fun removerNotaReceber(nota: NotaEntrada) {
     val sql = "/sqlSaci/revoverNotaReceber.sql"
     return script(sql) {
-      addOptionalParameter("ni", nota.ni)
+      addOptionalParameter("nfekey", nota.chave)
     }
   }
 
   fun removeProdutoReceber(produto: ProdutoNFE) {
     val sql = "/sqlSaci/revomerProdutoReceber.sql"
     return script(sql) {
-      addOptionalParameter("ni", produto.ni)
+      addOptionalParameter("nfekey", produto.chave)
       addOptionalParameter("codigo", produto.codigo)
       addOptionalParameter("grade", produto.grade)
     }

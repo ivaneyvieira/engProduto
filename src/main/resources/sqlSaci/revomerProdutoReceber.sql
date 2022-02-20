@@ -1,5 +1,5 @@
 DELETE
 FROM sqldados.iprdConferencia
-WHERE invno = :ni
+WHERE nfekey = :nfekey
   AND prdno = LPAD(:codigo, 16, ' ')
   AND grade = :grade

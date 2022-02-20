@@ -47,7 +47,7 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun processaProdutos() = viewModel.exec {
-    val produtos = subView.produtosSelecionados().ifEmpty {
+    val produtos = subView.produtosNota().ifEmpty {
       fail("Não há nenhum produto selecionado")
     }
     produtos.forEach { produto ->
@@ -67,5 +67,5 @@ interface ITabNotaEntradaReceber : ITabView {
   fun updateNotas(notas: List<NotaEntrada>)
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()
-  fun produtosSelecionados(): List<ProdutoNFE>
+  fun produtosNota(): List<ProdutoNFE>
 }

@@ -47,7 +47,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     colunaNFEChave()
     colunaNFEDataEmissao()
     setClassNameGenerator {
-      if (it.invnoRef > 0) "azul" else null
+      if (it.ni > 0) "azul" else null
     }
   }
 
@@ -65,8 +65,8 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     dlgProduto?.update()
   }
 
-  override fun produtosSelecionados(): List<ProdutoNFE> {
-    return dlgProduto?.produtosSelecionados().orEmpty()
+  override fun produtosNota(): List<ProdutoNFE> {
+    return dlgProduto?.produtosNota().orEmpty()
   }
 
   override fun isAuthorized(user: IUser): Boolean {

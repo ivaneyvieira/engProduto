@@ -15,18 +15,14 @@ class NotaEntrada(
   val valorNota: Double,
   val cancelada: String,
   val chave: String,
-  val invnoRef: Int,
-                 ) {/*
-  fun produtosPendente() = saci.findProdutoNFEPendente(this)
-*/
-
+                 ) {
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
 
   fun produtosReceber(): List<ProdutoNFE> {
     return saci.findProdutoNFEReceber(this)
   }
 
-  fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(this, barcode, quant)
+  fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(barcode, quant)
 
   fun removeReceber() {
     saci.removerNotaReceber(this)

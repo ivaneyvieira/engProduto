@@ -1,6 +1,6 @@
 UPDATE sqldados.iprdConferencia
-SET s27  = :marca,
+SET marca  = :marca,
     qtty = :qtty * 1000
-WHERE invno = :invno
+WHERE nfekey = :nfekey
   AND prdno = LPAD(:codigo, 16, ' ')
   AND grade = :grade
