@@ -367,6 +367,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("codigo", produto.codigo)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("marca", produto.marca)
+      addOptionalParameter("qtty", produto.quantidade)
     }
   }
 

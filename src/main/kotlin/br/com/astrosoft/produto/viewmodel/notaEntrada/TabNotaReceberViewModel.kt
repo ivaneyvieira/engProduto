@@ -55,6 +55,12 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
     }
     subView.updateViewProduto()
   }
+
+  fun saveProduto(produto: ProdutoNFE?) {
+    produto ?: fail("Não há produto selecionado")
+    produto.saveProdutoReceber()
+    subView.updateViewProduto()
+  }
 }
 
 interface ITabNotaEntradaReceber : ITabView {

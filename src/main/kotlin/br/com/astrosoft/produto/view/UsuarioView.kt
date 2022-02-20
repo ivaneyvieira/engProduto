@@ -187,6 +187,27 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::ressuprimentoEnt.name)
             }
           }
+          formLayout {
+            h4("Receber Entrada") {
+              colspan = 2
+            }
+            checkBox("Alterar") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::receberQuantidade.name)
+            }
+            checkBox("Excluir") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::receberExcluir.name)
+            }
+            checkBox("Adicionar") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::receberAdicionar.name)
+            }
+            checkBox("Processar") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::receberProcessar.name)
+            }
+          }
         }
       }
     }

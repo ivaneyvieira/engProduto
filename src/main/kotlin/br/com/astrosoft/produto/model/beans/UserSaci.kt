@@ -37,6 +37,11 @@ class UserSaci : IUser {
   var entRetExpedicao by DelegateAuthorized(19)
   var transfExpedicao by DelegateAuthorized(20)
   var vendaFExpedicao by DelegateAuthorized(21)
+  //Permissões da tela receber
+  var receberQuantidade by DelegateAuthorized(22)
+  var receberExcluir by DelegateAuthorized(23)
+  var receberAdicionar by DelegateAuthorized(24)
+  var receberProcessar by DelegateAuthorized(25)
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin

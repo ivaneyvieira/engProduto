@@ -18,7 +18,7 @@ class ProdutoNFE(
   val clname: String,
   val precoCheio: Double,
   val ncm: String,
-  val quantidade: Int,
+  var quantidade: Int,
   val preco: Double?,
   val total: Double?,
   val localizacao: String,
@@ -31,6 +31,10 @@ class ProdutoNFE(
 
   fun processaReceber() {
     marca = 1
+    saci.updateProdutoReceber(this)
+  }
+
+  fun saveProdutoReceber() {
     saci.updateProdutoReceber(this)
   }
 }

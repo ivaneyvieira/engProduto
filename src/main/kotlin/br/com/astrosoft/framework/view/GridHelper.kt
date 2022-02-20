@@ -54,6 +54,9 @@ fun <T : Any> Grid.Column<T>.textAreaEditor(block: TextArea.() -> Unit = {}): Gr
 
 fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit = {}): Grid.Column<T> {
   val component = integerFieldComponente()
+  component.element.addEventListener("keydown") {
+    grid.editor.cancel()
+  }.filter = "event.key === 'Enter'"
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
