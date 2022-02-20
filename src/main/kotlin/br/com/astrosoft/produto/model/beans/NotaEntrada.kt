@@ -16,8 +16,9 @@ class NotaEntrada(
   val cancelada: String,
   val chave: String,
   val invnoRef: Int,
-                 ) {
+                 ) {/*
   fun produtosPendente() = saci.findProdutoNFEPendente(this)
+*/
 
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
 
@@ -37,8 +38,9 @@ class NotaEntrada(
   companion object {
     fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada) = saci.findNotaEntradaRecebido(filtro)
 
-    fun findNotaEntradaPendente(filtro: FiltroNotaEntrada) = saci.findNotaEntradaPendente(filtro)
-
+    /*
+        fun findNotaEntradaPendente(filtro: FiltroNotaEntrada) = saci.findNotaEntradaPendente(filtro)
+    */
     fun findNotaEntradaReceber(chave: String = "") = saci.findNotaEntradaReceber(chave)
 
     fun marcaNotaEntradaReceber(chave: String) = saci.marcaNotaEntradaReceber(chave)

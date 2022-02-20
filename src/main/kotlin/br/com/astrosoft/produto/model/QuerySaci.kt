@@ -291,7 +291,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findNotaEntradaPendente(filtro: FiltroNotaEntrada): List<NotaEntrada> {
+  private fun findNotaEntradaPendente(filtro: FiltroNotaEntrada): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaPendente.sql"
     return query(sql, NotaEntrada::class) {
       addOptionalParameter("loja", filtro.loja)
@@ -330,7 +330,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     return findNotaEntradaReceber(chave).firstOrNull()
   }
 
-  fun findProdutoNFEPendente(nota: NotaEntrada): List<ProdutoNFE> {
+  private fun findProdutoNFEPendente(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaPendente.sql"
     return query(sql, ProdutoNFE::class) {
       addOptionalParameter("ni", nota.ni)

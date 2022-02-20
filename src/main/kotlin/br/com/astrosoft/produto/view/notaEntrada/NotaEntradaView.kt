@@ -20,7 +20,6 @@ import com.vaadin.flow.router.Route
 class NotaEntradaView : ViewLayout<NotaEntradaViewModel>(), INotaEntradaView, BeforeEnterObserver {
   override val viewModel = NotaEntradaViewModel(this)
   override val tabNotaEntradaReceber = TabNotaEntradaReceber(viewModel.tabNotaReceberViewModel)
-  override val tabNotaEntradaPendente = TabNotaEntradaPendente(viewModel.tabNotaPendenteViewModel)
   override val tabNotaEntradaRecebido = TabNotaEntradaRecebido(viewModel.tabNotaRecebidoViewModel)
 
   override fun isAccept(user: IUser): Boolean {
