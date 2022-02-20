@@ -42,6 +42,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
     form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {
       formAdicionarItem()
       botaoProcessar()
+      botaoExcluir()
     }, onClose = {
       onClose()
     }) {
@@ -100,6 +101,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
@@ -109,7 +111,6 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
         viewModel.saveProduto(binder.bean)
       })
 
-      botaoExcluir()
       produtoNFECodigo()
       produtoNFEBarcode()
       produtoNFEDescricao()
@@ -120,16 +121,22 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
           else null
         }
       }
+      this.setClassNameGenerator { produto ->
+        if (produto.qttyRef == null) "amarelo"
+        else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  private fun Grid<ProdutoNFE>.botaoExcluir() {
+  private fun HasComponents.botaoExcluir() {
     val user = Config.user as? UserSaci
     if (user?.receberExcluir == true) {
-      addColumnButton(VaadinIcon.TRASH, "Remover", "Remover") { produto ->
-        viewModel.removeProduto(produto)
+      button("Remover") {
+        onLeftClick {
+          viewModel.removeProduto()
+        }
       }
     }
   }
@@ -141,5 +148,9 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
 
   fun produtosNota(): List<ProdutoNFE> {
     return gridDetail.dataProvider.fetchAll()
+  }
+
+  fun produtosSelecionados(): List<ProdutoNFE> {
+    return gridDetail.selectedItems.toList()
   }
 }

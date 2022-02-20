@@ -19,8 +19,8 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
       val nota = NotaEntrada.marcaNotaEntradaReceber(chave)
       if (nota == null) {
         viewModel.showError("Nota não encontrada")
+        updateView()
       }
-      updateView()
     }
   }
 
@@ -36,13 +36,22 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
 
   fun removeNota(nota: NotaEntrada?) = viewModel.exec {
     nota ?: fail("Nota não selecionada")
-    nota.removeReceber()
-    updateView()
+
+    viewModel.showQuestion("Remover nota ${nota.numero}/${nota.serie}?", execYes = {
+      nota.removeReceber()
+      updateView()
+    })
   }
 
-  fun removeProduto(produto: ProdutoNFE?) {
-    produto ?: fail("Produto não selecionado")
-    produto.revomeProdutoReceber()
+  fun removeProduto() = viewModel.exec {
+    val produtos = subView.produtosSelecionados().ifEmpty {
+      fail("Não há nenhum produto selecionado")
+    }
+    viewModel.showQuestion("Remover produtos selecionados?", execYes = {
+      produtos.forEach { produto ->
+        produto.revomeProdutoReceber()
+      }
+    })
     subView.updateViewProduto()
   }
 
@@ -68,4 +77,5 @@ interface ITabNotaEntradaReceber : ITabView {
   fun notaSelecionada(): NotaEntrada?
   fun updateViewProduto()
   fun produtosNota(): List<ProdutoNFE>
+  fun produtosSelecionados(): List<ProdutoNFE>
 }

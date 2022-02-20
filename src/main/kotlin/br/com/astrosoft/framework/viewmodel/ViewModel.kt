@@ -16,6 +16,8 @@ abstract class ViewModel<V : IView>(val view: V) {
   fun showWarning(msg: String) = view.showWarning(msg)
   fun showInformation(msg: String) = view.showInformation(msg)
   fun showReport(chave: String, report: ByteArray) = view.showReport(chave, report)
+  fun showQuestion(msg: String, execYes: () -> Unit = {}, execNo: () -> Unit = {}) =
+          view.showQuestion(msg, execYes, execNo)
 }
 
 fun exec(view: IView, block: () -> Unit) {
@@ -41,4 +43,5 @@ interface IView {
   fun showWarning(msg: String)
   fun showInformation(msg: String)
   fun showReport(chave: String, report: ByteArray)
+  fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit)
 }

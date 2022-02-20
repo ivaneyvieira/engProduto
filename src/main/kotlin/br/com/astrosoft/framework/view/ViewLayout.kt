@@ -75,11 +75,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     SubWindowPDF(chave, report).open()
   }
 
-  fun showQuestion(msg: String, execYes: () -> Unit) {
-    showQuestion(msg, execYes)
-  }
-
-  private fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit) {
+  override fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit) {
     ConfirmDialog.createQuestion()
       .withCaption("Confirmação")
       .withMessage(msg)

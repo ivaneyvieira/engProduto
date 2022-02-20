@@ -69,6 +69,10 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     return dlgProduto?.produtosNota().orEmpty()
   }
 
+  override fun produtosSelecionados(): List<ProdutoNFE> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
   override fun isAuthorized(user: IUser): Boolean {
     val username = user as? UserSaci
     return username?.notaEntradaReceber == true
