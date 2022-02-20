@@ -360,7 +360,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun updateProdutoReceber(produto : ProdutoNFE) {
+  fun updateProdutoReceber(produto: ProdutoNFE) {
     val sql = "/sqlSaci/updateProdutoConf.sql"
     return script(sql) {
       addOptionalParameter("invno", produto.ni)

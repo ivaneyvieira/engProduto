@@ -47,7 +47,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     colunaNFEChave()
     colunaNFEDataEmissao()
     setClassNameGenerator {
-      if(it.invnoRef > 0) "azul" else null
+      if (it.invnoRef > 0) "azul" else null
     }
   }
 

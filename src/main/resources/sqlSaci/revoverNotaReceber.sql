@@ -1,4 +1,5 @@
-DELETE FROM sqldados.iprdConferencia
+DELETE
+FROM sqldados.iprdConferencia
 WHERE invno = :ni;
 
 DELETE

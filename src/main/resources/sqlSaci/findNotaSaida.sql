@@ -50,8 +50,8 @@ FROM T_V        AS V
 GROUP BY V.storeno, V.pdvno, V.xano;
 
 SELECT N.storeno                                          AS loja,
-       N.pdvno                                              AS pdvno,
-       N.xano                                               AS xano,
+       N.pdvno                                            AS pdvno,
+       N.xano                                             AS xano,
        N.nfno                                             AS numero,
        N.nfse                                             AS serie,
        custno                                             AS cliente,
