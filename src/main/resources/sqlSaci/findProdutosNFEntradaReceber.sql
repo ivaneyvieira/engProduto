@@ -16,8 +16,7 @@ FROM sqldados.invnfe                 AS N
 	       USING (invno)
   INNER JOIN sqldados.iprd           AS P
 	       USING (invno)
-  INNER JOIN sqldados.invConferencia AS C
-	       USING (nfekey)
+WHERE N.nfekey = :nfekey
 GROUP BY nfekey, prdno, grade;
 
 SELECT IFNULL(TI.storeno, 0)                                      AS loja,
