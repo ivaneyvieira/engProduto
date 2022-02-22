@@ -291,7 +291,6 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-
   fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada): List<NotaEntrada> {
     val sql = "/sqlSaci/findNotaEntradaRecebido.sql"
     return query(sql, NotaEntrada::class) {
@@ -340,9 +339,10 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun addProdutoReceber(barcode: String, quant: Int) {
+  fun addProdutoReceber(chave: String, barcode: String, quant: Int) {
     val sql = "/sqlSaci/addProdutoConf.sql"
     return script(sql) {
+      addOptionalParameter("nfekey", chave)
       addOptionalParameter("barcode", barcode)
       addOptionalParameter("quant", quant)
     }

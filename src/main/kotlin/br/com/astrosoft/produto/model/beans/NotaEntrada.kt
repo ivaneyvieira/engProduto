@@ -22,7 +22,7 @@ class NotaEntrada(
     return saci.findProdutoNFEReceber(this)
   }
 
-  fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(barcode, quant)
+  fun addProdutoReceber(barcode: String, quant: Int) = saci.addProdutoReceber(chave, barcode, quant)
 
   fun removeReceber() {
     saci.removerNotaReceber(this)
