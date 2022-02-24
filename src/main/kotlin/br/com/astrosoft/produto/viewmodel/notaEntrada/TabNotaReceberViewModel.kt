@@ -57,8 +57,8 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
       produtos.forEach { produto ->
         produto.revomeProdutoReceber()
       }
+      subView.updateViewProduto()
     })
-    subView.updateViewProduto()
   }
 
   fun processaProdutos() = viewModel.exec {
