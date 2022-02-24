@@ -1,19 +1,63 @@
-DROP TABLE IF EXISTS T_INV;
-CREATE TEMPORARY TABLE T_INV (
+USE sqldados;
+
+DROP TABLE IF EXISTS T_IPRD_C;
+CREATE TABLE T_IPRD_C (
   PRIMARY KEY (nfekey, prdno, grade)
 )
-SELECT N.nfekey,
+SELECT nfekey,
        prdno,
        grade,
-       P.qtty AS qtty
+       qtty,
+       marca
+FROM sqldados.iprdConferencia AS X
+WHERE X.nfekey = :nfekey;
+
+DROP TABLE IF EXISTS T_IPRD_S;
+CREATE TABLE T_IPRD_S (
+  PRIMARY KEY (nfekey, prdno, grade)
+)
+SELECT nfekey,
+       prdno,
+       grade,
+       qtty,
+       0 AS marca
 FROM sqldados.invnfe                 AS N
-  INNER JOIN sqldados.inv            AS I
-	       USING (invno)
-  INNER JOIN sqldados.iprd           AS P
+  INNER JOIN sqldados.iprd           AS X
 	       USING (invno)
   INNER JOIN sqldados.invConferencia AS C
 	       USING (nfekey)
-GROUP BY nfekey, prdno, grade;
+WHERE N.nfekey = :nfekey;
+
+DROP TABLE IF EXISTS T_MESTRE;
+CREATE TABLE T_MESTRE (
+  PRIMARY KEY (nfekey, prdno, grade)
+)
+SELECT nfekey,
+       prdno,
+       grade
+FROM T_IPRD_S
+UNION
+DISTINCT
+SELECT nfekey,
+       prdno,
+       grade
+FROM T_IPRD_C;
+
+DROP TABLE IF EXISTS T_IPRD_M;
+CREATE TABLE T_IPRD_M (
+  PRIMARY KEY (nfekey, prdno, grade)
+)
+SELECT nfekey,
+       prdno,
+       grade,
+       IF(C.marca = 1, IF(S.qtty = C.qtty, 1, 0), 0) AS marca,
+       IFNULL(S.qtty, 0)                             AS qttyS,
+       IFNULL(C.qtty, 0)                             AS qttyC
+FROM T_MESTRE
+  LEFT JOIN T_IPRD_S AS S
+	      USING (nfekey, prdno, grade)
+  LEFT JOIN T_IPRD_C AS C
+	      USING (nfekey, prdno, grade);
 
 SELECT N.storeno                                          AS loja,
        X.invno                                            AS ni,
@@ -35,8 +79,8 @@ SELECT N.storeno                                          AS loja,
        X.fob / 100                                        AS preco,
        (X.qtty / 1000) * (X.fob / 100)                    AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       IFNULL(TI.qtty, 0) / 1000                          AS qttyRef,
-       1                                                  AS marca
+       IFNULL(TI.qttyC, 0) / 1000                         AS qttyRef,
+       TI.marca                                           AS marca
 FROM sqldados.prd             AS P
   INNER JOIN sqldados.iprd    AS X
 	       ON P.no = X.prdno
@@ -44,7 +88,7 @@ FROM sqldados.prd             AS P
 	       USING (invno)
   INNER JOIN sqldados.invnfe  AS K
 	       USING (invno)
-  INNER JOIN T_INV            AS TI
+  INNER JOIN T_IPRD_M         AS TI
 	       USING (nfekey, prdno, grade)
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
@@ -58,7 +102,5 @@ FROM sqldados.prd             AS P
 	       ON cl.no = P.clno
   LEFT JOIN  sqldados.spedprd AS S
 	       ON P.no = S.prdno
-WHERE X.invno = :ni
-  AND TI.qtty = X.qtty
 GROUP BY codigo, grade
 

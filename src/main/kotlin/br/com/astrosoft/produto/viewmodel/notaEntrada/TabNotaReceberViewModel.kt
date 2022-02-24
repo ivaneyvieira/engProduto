@@ -9,8 +9,10 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   val subView
     get() = viewModel.view.tabNotaEntradaReceber
 
+  fun findNotaEntradaReceber() = NotaEntrada.findNotaEntradaReceber()
+
   fun updateView() {
-    val lista = NotaEntrada.findNotaEntradaReceber()
+    val lista = findNotaEntradaReceber()
     subView.updateNotas(lista)
   }
 
@@ -31,6 +33,10 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun produtos(): List<ProdutoNFE> {
+    return produtosTotal().filter { it.marca >= 0 }
+  }
+
+  private fun produtosTotal(): List<ProdutoNFE> {
     return subView.notaSelecionada()?.produtosReceber().orEmpty()
   }
 
@@ -56,6 +62,20 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun processaProdutos() = viewModel.exec {
+    val produtosTotal = produtosTotal()
+
+    if(produtosTotal.any { it.marca == -1 }){
+      fail("Está faltando produto da nota fiscal")
+    }
+
+    if(produtosTotal.any { it.qttyRef == null }){
+      fail("Existe produto sobrando")
+    }
+
+    if(produtosTotal.any { it.qttyRef != it.quantidade }){
+      fail("Ainda tem quantidades divergentes")
+    }
+
     val produtos = subView.produtosNota().ifEmpty {
       fail("Não há nenhum produto selecionado")
     }

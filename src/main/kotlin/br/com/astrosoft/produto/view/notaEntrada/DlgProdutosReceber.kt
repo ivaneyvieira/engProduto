@@ -101,7 +101,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      setSelectionMode(Grid.SelectionMode.SINGLE)
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
