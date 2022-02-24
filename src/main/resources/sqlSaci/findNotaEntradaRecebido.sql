@@ -80,11 +80,11 @@ FROM sqldados.inv            AS I
 WHERE I.storeno IN (2, 3, 4, 5)
   AND date >= 20220101
   AND I.cfo NOT IN (1551, 2551, 1556, 2556)
-  AND (I.storeno = :loja AND :loja = 0)
-  AND (I.invno = :ni AND :ni = 0)
-  AND (I.nfname = :nfno AND :nfno = '')
-  AND (I.invse = :nfse AND :nfse = '')
-  AND (I.vendno = :vendno AND :vendno = 0)
+  AND (I.storeno = :loja OR :loja = 0)
+  AND (I.invno = :ni OR :ni = 0)
+  AND (I.nfname = :nfno OR :nfno = '')
+  AND (I.invse = :nfse OR :nfse = '')
+  AND (I.vendno = :vendno OR :vendno = 0)
   AND (N.nfekey = :chave OR :chave = '')
 GROUP BY I.invno
 HAVING SUM(P.marca = 0) = 0
