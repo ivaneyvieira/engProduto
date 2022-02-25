@@ -3,7 +3,6 @@ plugins {
   id("org.gretty") version "3.0.6"
   war
   id("com.vaadin") version "22.0.2"
-  id("org.graalvm.buildtools.native") version "0.9.4"
 }
 
 val karibudslVersion = "1.1.1"
