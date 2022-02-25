@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
 import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.Config.user
 import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.framework.view.integerFieldEditor
 import br.com.astrosoft.framework.view.withEditor
 import br.com.astrosoft.produto.model.beans.NotaEntrada
@@ -25,7 +25,6 @@ import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
@@ -97,11 +96,17 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   }
 
   private fun HorizontalLayout.createGridProdutos() {
+    val user = Config.user as? UserSaci
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.SINGLE)
+      if (user?.receberExcluir == true) {
+        setSelectionMode(Grid.SelectionMode.MULTI)
+      }
+      else {
+        setSelectionMode(Grid.SelectionMode.SINGLE)
+      }
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()

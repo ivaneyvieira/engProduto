@@ -34,7 +34,7 @@ class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val no
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      setSelectionMode(Grid.SelectionMode.SINGLE)
 
       produtoNFECodigo()
       produtoNFEBarcode()

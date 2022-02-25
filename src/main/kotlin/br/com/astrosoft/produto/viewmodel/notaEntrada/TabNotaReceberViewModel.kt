@@ -17,12 +17,13 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun adicionaChave(chave: String?) {
-    if (!chave.isNullOrBlank()) {
-      val nota = NotaEntrada.marcaNotaEntradaReceber(chave)
+    val chaveTratada = chave?.replace("[^0-9]+".toRegex(), "") ?: ""
+    if (chaveTratada.isNotBlank()) {
+      val nota = NotaEntrada.marcaNotaEntradaReceber(chaveTratada)
       if (nota == null) {
         viewModel.showError("Nota não encontrada")
-        updateView()
       }
+      updateView()
     }
   }
 

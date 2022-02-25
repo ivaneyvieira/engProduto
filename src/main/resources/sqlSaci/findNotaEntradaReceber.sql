@@ -80,4 +80,5 @@ FROM sqldados.invConferencia AS I
 	      ON V.no = NI.vendno
 WHERE (I.nfekey = :chave OR :chave = '')
 GROUP BY I.nfekey
-HAVING SUM(P.marca = 0) > 0
+HAVING (SUM(P.marca = 0) > 0)
+    OR (SUM(P.marca IS NULL) > 0)
