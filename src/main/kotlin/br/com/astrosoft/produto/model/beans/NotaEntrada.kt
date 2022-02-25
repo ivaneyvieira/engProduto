@@ -18,6 +18,8 @@ class NotaEntrada(
                  ) {
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
 
+  fun produtosBase() = saci.findProdutoNFEBase(this)
+
   fun produtosReceber(): List<ProdutoNFE> {
     return saci.findProdutoNFEReceber(this)
   }
@@ -32,6 +34,8 @@ class NotaEntrada(
     get() = "$numero/$serie"
 
   companion object {
+    fun findNotaEntradaBase(filtro: FiltroNotaEntrada) = saci.findNotaEntradaBase(filtro)
+
     fun findNotaEntradaRecebido(filtro: FiltroNotaEntrada) = saci.findNotaEntradaRecebido(filtro)
 
     fun findNotaEntradaReceber(chave: String = "") = saci.findNotaEntradaReceber(chave)

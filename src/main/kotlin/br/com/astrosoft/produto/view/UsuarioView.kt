@@ -148,13 +148,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             h4("Nota de Entrada") {
               colspan = 2
             }
+            checkBox("Base") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::notaEntradaBase.name)
+            }
             checkBox("Receber") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::notaEntradaReceber.name)
-            }
-            checkBox("Pendente") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::notaEntradaPendente.name)
             }
             checkBox("Recebido") {
               isReadOnly = readOnly
