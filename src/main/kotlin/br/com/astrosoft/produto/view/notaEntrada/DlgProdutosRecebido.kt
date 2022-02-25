@@ -7,7 +7,10 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFECodigo
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEDescricao
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEGrade
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEMesesGarantia
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidadePacote
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEReferencia
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaRecebidoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -37,9 +40,12 @@ class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val no
       setSelectionMode(Grid.SelectionMode.SINGLE)
 
       produtoNFECodigo()
+      produtoNFEReferencia()
       produtoNFEBarcode()
       produtoNFEDescricao()
       produtoNFEGrade()
+      produtoNFEQuantidadePacote()
+      produtoNFEMesesGarantia()
       produtoNFEQuantidade()
     }
     this.addAndExpand(gridDetail)

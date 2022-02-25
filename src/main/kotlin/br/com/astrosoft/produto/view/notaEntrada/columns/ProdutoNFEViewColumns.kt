@@ -23,6 +23,18 @@ object ProdutoNFEViewColumns {
     this.setHeader("Código de Barras")
   }
 
+  fun Grid<ProdutoNFE>.produtoNFEReferencia() = addColumnString(ProdutoNFE::referencia) {
+    this.setHeader("Ref Forn")
+  }
+
+  fun Grid<ProdutoNFE>.produtoNFEMesesGarantia() = addColumnInt(ProdutoNFE::mesesGarantia) {
+    this.setHeader("Validade")
+  }
+
+  fun Grid<ProdutoNFE>.produtoNFEQuantidadePacote() = addColumnInt(ProdutoNFE::quantidadePacote) {
+    this.setHeader("Qnt Emb")
+  }
+
   fun Grid<ProdutoNFE>.produtoNFEDescricao() = addColumnString(ProdutoNFE::descricao) {
     this.setHeader("Descrição")
   }
