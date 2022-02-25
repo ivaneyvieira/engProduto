@@ -110,7 +110,6 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
-        val user = Config.user as? UserSaci
         user?.receberQuantidade == true
       }, closeEditor = { binder ->
         viewModel.saveProduto(binder.bean)

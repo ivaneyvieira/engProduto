@@ -321,14 +321,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
   private fun findProdutoNFEPendente(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaPendente.sql"
     return query(sql, ProdutoNFE::class) {
-      addOptionalParameter("ni", nota.ni ?: 0)
+      addOptionalParameter("ni", nota.ni)
     }
   }
 
   fun findProdutoNFERecebido(nota: NotaEntrada): List<ProdutoNFE> {
     val sql = "/sqlSaci/findProdutosNFEntradaRecebido.sql"
     return query(sql, ProdutoNFE::class) {
-      addOptionalParameter("nfekey", nota.chave ?: "")
+      addOptionalParameter("nfekey", nota.chave)
     }
   }
 

@@ -48,7 +48,6 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
         }
       }
       button("Imprime") {
-        val user = Config.user as? UserSaci
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
           viewModel.salvaProdutos()

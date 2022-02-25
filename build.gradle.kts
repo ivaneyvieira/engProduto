@@ -3,6 +3,7 @@ plugins {
   id("org.gretty") version "3.0.6"
   war
   id("com.vaadin") version "22.0.2"
+  id("org.graalvm.buildtools.native") version "0.9.4"
 }
 
 val karibudslVersion = "1.1.1"
@@ -14,17 +15,17 @@ repositories {
   mavenCentral()
   maven { setUrl("https://maven.vaadin.com/vaadin-addons") }
   maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
+  gradlePluginPortal()
 }
 
 gretty {
   contextPath = "/"
-  servletContainer =
-          "jetty9.4" // managedClassReload = true // temporarily disabled because of https://github.com/gretty-gradle-plugin/gretty/issues/166
+  servletContainer = "jetty9.4"
 }
 
 dependencies { // Karibu-DSL dependency
   implementation("com.github.mvysny.karibudsl:karibu-dsl:$karibudslVersion")
-  implementation("com.github.mvysny.karibu-tools:karibu-tools:0.7")
+  implementation("com.github.mvysny.karibu-tools:karibu-tools:0.8")
 
   // Vaadin
   implementation("com.vaadin:vaadin-core:${vaadinVersion}")
@@ -78,8 +79,7 @@ dependencies { // Karibu-DSL dependency
   implementation("com.lowagie:itext:4.2.2")
   implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   implementation("com.sun.mail:javax.mail:1.6.2")
-  implementation("com.sun.mail:gimap:2.0.1")
-  // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+  implementation("com.sun.mail:gimap:2.0.1") // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
   implementation("com.squareup.okhttp3:okhttp:4.9.3")
   implementation("org.vaadin.addons.componentfactory:vcf-pdf-viewer:2.0.0")
 }
