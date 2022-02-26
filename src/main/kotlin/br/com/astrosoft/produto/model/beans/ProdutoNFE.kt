@@ -14,6 +14,7 @@ class ProdutoNFE(
   val mesesGarantia: Int?,
   val quantidadePacote: Int?,
   val descricao: String,
+  val unidade: String,
   val vendno: Int,
   val fornecedor: String,
   val typeno: Int,

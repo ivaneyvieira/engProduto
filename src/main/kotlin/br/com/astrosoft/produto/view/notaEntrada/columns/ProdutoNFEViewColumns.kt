@@ -15,6 +15,10 @@ object ProdutoNFEViewColumns {
     this.setHeader("Grade")
   }
 
+  fun Grid<ProdutoNFE>.produtoNFEUnidade() = addColumnString(ProdutoNFE::unidade) {
+    this.setHeader("Unid")
+  }
+
   fun Grid<ProdutoNFE>.produtoNFELocalizacao() = addColumnString(ProdutoNFE::localizacao) {
     this.setHeader("Loc")
   }

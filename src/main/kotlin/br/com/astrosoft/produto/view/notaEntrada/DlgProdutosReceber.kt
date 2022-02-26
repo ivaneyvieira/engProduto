@@ -16,6 +16,7 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidade
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEQuantidadePacote
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEReferencia
+import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEUnidade
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaReceberViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -123,14 +124,15 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEBarcode()
       produtoNFEDescricao()
       produtoNFEGrade()
-      produtoNFEQuantidadePacote()
-      produtoNFEMesesGarantia()
+      produtoNFEUnidade()
       produtoNFEQuantidade().integerFieldEditor().apply {
         this.setClassNameGenerator { produto ->
           if (produto.quantidade != produto.qttyRef) "amarelo"
           else null
         }
       }
+      produtoNFEMesesGarantia()
+      produtoNFEQuantidadePacote()
       this.setClassNameGenerator { produto ->
         if (produto.qttyRef == null) "amarelo"
         else null
