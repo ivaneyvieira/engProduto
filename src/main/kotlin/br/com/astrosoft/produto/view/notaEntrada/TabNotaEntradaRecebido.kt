@@ -83,9 +83,6 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     colunaNFEFornecedor()
     colunaNFENomeFornecedor()
     colunaNFEValor()
-    setClassNameGenerator {
-      if (it.ni > 0) "azul" else null
-    }
   }
 
   override fun filtro() = FiltroNotaEntrada(

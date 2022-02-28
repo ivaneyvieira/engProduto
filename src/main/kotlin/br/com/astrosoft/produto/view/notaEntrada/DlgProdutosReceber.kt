@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.Config.user
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.framework.view.integerFieldEditor
@@ -41,8 +40,13 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
+  private val userSaci
+    get() = user as? UserSaci
+
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {
+    val status = if (userSaci?.receberProcessar == true) "Pronto para processar" else ""
+    val txtStatus = if (status == "") "" else "($status)"
+    form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja} $txtStatus", toolBar = {
       formAdicionarItem()
       botaoProcessar()
       botaoExcluir()
@@ -58,8 +62,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   }
 
   private fun HasComponents.formAdicionarItem() {
-    val user = Config.user as? UserSaci
-    if (user?.receberAdicionar == true) {
+    if (userSaci?.receberAdicionar == true) {
       edtCodbar = textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         this.isAutoselect = true
@@ -89,23 +92,28 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   }
 
   private fun HasComponents.botaoProcessar() {
-    val user = Config.user as? UserSaci
-    if (user?.receberProcessar == true) {
+    if (userSaci?.receberProcessar == true) {
       button("Processa") {
         onLeftClick {
           viewModel.processaProdutos()
         }
       }
     }
+    else {
+      button("Concluir") {
+        onLeftClick {
+          viewModel.receberConcluir()
+        }
+      }
+    }
   }
 
   private fun HorizontalLayout.createGridProdutos() {
-    val user = Config.user as? UserSaci
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      if (user?.receberExcluir == true) {
+      if (userSaci?.receberExcluir == true) {
         setSelectionMode(Grid.SelectionMode.MULTI)
       }
       else {
@@ -114,7 +122,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
 
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
-        user?.receberQuantidade == true
+        userSaci?.receberQuantidade == true
       }, closeEditor = { binder ->
         viewModel.saveProduto(binder.bean)
       })
@@ -127,14 +135,20 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEUnidade()
       produtoNFEQuantidade().integerFieldEditor().apply {
         this.setClassNameGenerator { produto ->
-          if (produto.quantidade != produto.qttyRef) "amarelo"
+          if (userSaci?.receberProcessar == true) {
+            if (produto.quantidade != produto.qttyRef) "amarelo"
+            else null
+          }
           else null
         }
       }
       produtoNFEMesesGarantia()
       produtoNFEQuantidadePacote()
       this.setClassNameGenerator { produto ->
-        if (produto.qttyRef == null) "amarelo"
+        if (userSaci?.receberProcessar == true) {
+          if (produto.qttyRef == null) "amarelo"
+          else null
+        }
         else null
       }
     }
@@ -143,8 +157,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   }
 
   private fun HasComponents.botaoExcluir() {
-    val user = Config.user as? UserSaci
-    if (user?.receberExcluir == true) {
+    if (userSaci?.receberExcluir == true) {
       button("Remover") {
         onLeftClick {
           viewModel.removeProduto()

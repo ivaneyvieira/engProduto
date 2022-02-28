@@ -70,6 +70,11 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
     })
   }
 
+  fun receberConcluir() = viewModel.exec {
+    val nota = subView.notaSelecionada() ?: fail("Não há nota selecionada")
+    edicaoPronta(nota.chave)
+  }
+
   fun processaProdutos() = viewModel.exec {
     val produtosTotal = produtosTotal()
 

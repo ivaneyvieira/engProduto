@@ -25,8 +25,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) :
-        TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaBase {
+class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelGrid<NotaEntrada>(NotaEntrada::class),
+        ITabNotaEntradaBase {
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
@@ -84,7 +84,11 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) :
     colunaNFENomeFornecedor()
     colunaNFEValor()
     setClassNameGenerator {
-      if (it.ni > 0) "azul" else null
+      when (it.marca) {
+        0    -> "azul"
+        1    -> "amarelo"
+        else -> null
+      }
     }
   }
 

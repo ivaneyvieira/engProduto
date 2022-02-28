@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.view.SubWindowForm
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEBarcode
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFECodigo
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEDescricao
@@ -20,6 +22,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val nota: NotaEntrada) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
+  private val userSaci
+    get() = Config.user as? UserSaci
 
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {}, onClose = {

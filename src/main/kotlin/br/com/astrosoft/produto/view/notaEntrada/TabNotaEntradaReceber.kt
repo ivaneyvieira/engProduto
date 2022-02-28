@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
@@ -21,6 +22,9 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
         TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
   private var dlgProduto: DlgProdutosReceber? = null
   private var edtChave: TextField? = null
+
+  val userSaci
+    get() = Config.user as? UserSaci
 
   override fun HorizontalLayout.toolBarConfig() {
     edtChave = textField("Chave") {
@@ -47,7 +51,12 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     colunaNFEChave()
     colunaNFEDataEmissao()
     setClassNameGenerator {
-      if (it.ni > 0) "azul" else null
+      if (userSaci?.receberProcessar == true) when (it.marca) {
+        0    -> "azul"
+        1    -> "amarelo"
+        else -> null
+      }
+      else null
     }
   }
 
