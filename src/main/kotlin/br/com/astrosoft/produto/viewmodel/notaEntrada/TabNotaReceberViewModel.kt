@@ -17,9 +17,17 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   }
 
   fun adicionaChave(chave: String?) {
+    saveNotaReceber(chave, 0)
+  }
+
+  fun edicaoPronta(chave: String?) {
+    saveNotaReceber(chave, 1)
+  }
+
+  private fun saveNotaReceber(chave: String?, marca: Int) {
     val chaveTratada = chave?.replace("[^0-9]+".toRegex(), "") ?: ""
     if (chaveTratada.isNotBlank()) {
-      val nota = NotaEntrada.marcaNotaEntradaReceber(chaveTratada)
+      val nota = NotaEntrada.marcaNotaEntradaReceber(chaveTratada, marca)
       if (nota == null) {
         viewModel.showError("Nota não encontrada")
       }
@@ -65,15 +73,15 @@ class TabNotaEntradaReceberViewModel(val viewModel: NotaEntradaViewModel) {
   fun processaProdutos() = viewModel.exec {
     val produtosTotal = produtosTotal()
 
-    if(produtosTotal.any { it.marca == -1 }){
+    if (produtosTotal.any { it.marca == -1 }) {
       fail("Está faltando produto da nota fiscal")
     }
 
-    if(produtosTotal.any { it.qttyRef == null }){
+    if (produtosTotal.any { it.qttyRef == null }) {
       fail("Existe produto sobrando")
     }
 
-    if(produtosTotal.any { it.qttyRef != it.quantidade }){
+    if (produtosTotal.any { it.qttyRef != it.quantidade }) {
       fail("Ainda tem quantidades divergentes")
     }
 

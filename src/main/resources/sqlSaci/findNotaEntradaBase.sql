@@ -59,7 +59,6 @@ FROM T_MESTRE
   LEFT JOIN T_IPRD_C AS C
 	      USING (nfekey, prdno, grade);
 
-
 SELECT I.invno                              AS ni,
        I.storeno                            AS loja,
        I.nfname                             AS numero,
@@ -70,16 +69,19 @@ SELECT I.invno                              AS ni,
        CAST(I.date AS DATE)                 AS entrada,
        I.grossamt / 100                     AS valorNota,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
-       N.nfekey                             AS chave
-FROM sqldados.inv            AS I
-  INNER JOIN sqldados.invnfe AS N
+       N.nfekey                             AS chave,
+       IFNULL(IC.marca, 0)                  AS marca
+FROM sqldados.inv                    AS I
+  INNER JOIN sqldados.invnfe         AS N
 	       USING (invno)
-  INNER JOIN sqldados.vend   AS V
+  INNER JOIN sqldados.vend           AS V
 	       ON V.no = I.vendno
-  LEFT JOIN T_IPRD_M        AS P
+  LEFT JOIN  T_IPRD_M                AS P
 	       ON P.nfekey = N.nfekey
+  LEFT JOIN  sqldados.invConferencia AS IC
+	       ON IC.nfekey = N.nfekey
 WHERE I.storeno IN (2, 3, 4, 5)
-  AND date >= 20220225
+  AND I.date >= 20220225
   AND I.type = 0
   AND I.vendno NOT IN (SELECT no
 		       FROM sqldados.vend

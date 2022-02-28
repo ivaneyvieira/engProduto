@@ -64,11 +64,12 @@ SELECT IFNULL(NI.invno, 0)                               AS ni,
        IFNULL(NI.nfname, '')                             AS numero,
        IFNULL(NI.invse, '')                              AS serie,
        IFNULL(V.sname, '')                               AS nomeForn,
-       CAST(NI.issue_date AS DATE)                       AS emissao,
-       CAST(NI.date AS DATE)                             AS entrada,
+       CAST(I.date AS DATE)                              AS emissao,
+       CAST(I.date AS DATE)                              AS entrada,
        0                                                 AS valorNota,
        IFNULL(IF(NI.bits & POW(2, 4) = 0, 'N', 'S'), '') AS cancelada,
-       I.nfekey                                          AS chave
+       I.nfekey                                          AS chave,
+       I.marca                                           AS marca
 FROM sqldados.invConferencia AS I
   LEFT JOIN T_IPRD_M         AS P
 	      USING (nfekey)

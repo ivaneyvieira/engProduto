@@ -69,7 +69,8 @@ SELECT I.invno                              AS ni,
        CAST(I.date AS DATE)                 AS entrada,
        I.grossamt / 100                     AS valorNota,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
-       N.nfekey                             AS chave
+       N.nfekey                             AS chave,
+       2                                    AS marca
 FROM sqldados.inv            AS I
   INNER JOIN sqldados.invnfe AS N
 	       USING (invno)

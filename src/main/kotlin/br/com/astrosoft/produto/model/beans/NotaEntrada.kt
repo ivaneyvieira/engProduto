@@ -15,6 +15,7 @@ class NotaEntrada(
   val valorNota: Double,
   val cancelada: String,
   val chave: String,
+  val marca: Int,
                  ) {
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
 
@@ -40,7 +41,7 @@ class NotaEntrada(
 
     fun findNotaEntradaReceber(chave: String = "") = saci.findNotaEntradaReceber(chave)
 
-    fun marcaNotaEntradaReceber(chave: String) = saci.marcaNotaEntradaReceber(chave)
+    fun marcaNotaEntradaReceber(chave: String, marca: Int) = saci.marcaNotaEntradaReceber(chave, marca)
   }
 }
 

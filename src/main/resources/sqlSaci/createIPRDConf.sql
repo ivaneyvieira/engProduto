@@ -513,5 +513,17 @@ FROM sqldados.prd                     AS P
 	       ON P.no = S.prdno
 WHERE X.invno = :ni
   AND (X.s27 = :marca OR :marca = 0)
-GROUP BY codigo, grade
+GROUP BY codigo, grade;
 
+###########################################
+
+DESCRIBE sqldados.invConferencia;
+
+SELECT *
+FROM sqldados.invConferencia;
+
+ALTER TABLE sqldados.invConferencia
+  CHANGE issue_date date int(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE sqldados.invConferencia
+ADD COLUMN marca int(11) DEFAULT 0;

@@ -322,10 +322,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun marcaNotaEntradaReceber(chave: String): NotaEntrada? {
+  fun marcaNotaEntradaReceber(chave: String, marca: Int): NotaEntrada? {
     val sql = "/sqlSaci/marcaNotaEntrada.sql"
     script(sql) {
       addOptionalParameter("chave", chave)
+      addOptionalParameter("marca", marca)
     }
     return findNotaEntradaReceber(chave).firstOrNull()
   }

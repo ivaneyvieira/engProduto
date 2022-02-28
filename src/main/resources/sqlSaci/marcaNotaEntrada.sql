@@ -1,2 +1,2 @@
-INSERT IGNORE sqldados.invConferencia(issue_date, nfekey)
-VALUES (CURRENT_DATE * 1, :chave)
+REPLACE sqldados.invConferencia(date, nfekey, marca)
+VALUES (CURRENT_DATE * 1, :chave, :marca)
