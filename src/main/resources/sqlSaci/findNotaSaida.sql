@@ -109,7 +109,7 @@ FROM sqldados.nf             AS N
 	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
 		  X.prdno = NP.prdno AND X.grade = NP.grade AND (optionEntrega % 100) = 4
   LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = X.prdno AND L.storeno = :storeno
+	       ON L.prdno = X.prdno AND L.storeno =X.storeno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
 WHERE N.issuedate >= @DT
