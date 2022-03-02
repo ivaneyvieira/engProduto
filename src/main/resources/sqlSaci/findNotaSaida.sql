@@ -135,7 +135,7 @@ WHERE N.issuedate >= @DT
 	 WHEN tipo = 7
 	   THEN 'OUTRAS_NFS'
 	 ELSE 'SP_REME'
-       END NOT IN (:listaTipos))
+       END IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)
