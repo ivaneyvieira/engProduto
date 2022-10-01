@@ -70,12 +70,16 @@ class NotaSaida(
   }
 }
 
-data class FiltroNota(val storeno: Int,
-                      val nota: String,
-                      val marca: EMarcaNota,
-                      val loja: Int,
-                      val cliente: Int,
-                      val vendedor: String) {
+data class FiltroNota(
+  val storeno: Int,
+  val nota: String,
+  val marca: EMarcaNota,
+  val loja: Int,
+  val cliente: Int,
+  val vendedor: String,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?,
+                     ) {
   val nfno: Int
     get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
   val nfse: String

@@ -112,7 +112,7 @@ FROM sqldados.nf             AS N
 	       ON L.prdno = X.prdno AND L.storeno =X.storeno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
-WHERE N.issuedate >= @DT
+WHERE N.issuedate BETWEEN :dataInicial AND :dataFinal
   AND (CASE
 	 WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
 	   THEN 'RETIRAF'

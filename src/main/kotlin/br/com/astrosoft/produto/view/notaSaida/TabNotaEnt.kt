@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
+import br.com.astrosoft.framework.view.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveCD
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
@@ -19,8 +20,10 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaEnt
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaEntViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,8 +37,22 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   private lateinit var edtLoja: IntegerField
   private lateinit var edtCliente: IntegerField
   private lateinit var edtVendedor: TextField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
+    edtDataInicial = datePicker("Data Inicial") {
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtNota = textField("Nota") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -90,12 +107,16 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
-    return FiltroNota(storeno = edtLoja.value ?: 0,
-                      nota = edtNota.value,
-                      marca = marca,
-                      loja = edtLoja.value ?: 0,
-                      cliente = edtCliente.value ?: 0,
-                      vendedor = edtVendedor.value ?: "")
+    return FiltroNota(
+      storeno = edtLoja.value ?: 0,
+      nota = edtNota.value,
+      marca = marca,
+      loja = edtLoja.value ?: 0,
+      cliente = edtCliente.value ?: 0,
+      vendedor = edtVendedor.value ?: "",
+      dataInicial = edtDataInicial.value,
+      dataFinal = edtDataFinal.value,
+                     )
   }
 
   override fun updateNotas(notas: List<NotaSaida>) {
