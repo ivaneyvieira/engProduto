@@ -1,6 +1,6 @@
 USE sqldados;
 
-DO @DT := 20220301;
+DO @DT := 20200101;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E (
@@ -54,9 +54,12 @@ SELECT N.storeno                                          AS loja,
        N.xano                                             AS xano,
        N.nfno                                             AS numero,
        N.nfse                                             AS serie,
-       custno                                             AS cliente,
+       N.custno                                           AS cliente,
+       C.name                                             AS nomeCliente,
        CAST(issuedate AS DATE)                            AS data,
+       SEC_TO_TIME(P.time)                                AS hora,
        N.empno                                            AS vendedor,
+       TRIM(MID(E.sname, 1, 20))                          AS nomeVendedor,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c5                                               AS usuarioExp,
        X.c4                                               AS usuarioCD,
@@ -101,6 +104,8 @@ SELECT N.storeno                                          AS loja,
        IFNULL(ENT.notaEntrega, '')                        AS notaEntrega,
        CAST(ENT.dataEntrega AS DATE)                      AS dataEntrega
 FROM sqldados.nf             AS N
+  LEFT JOIN  sqlpdv.pxa      AS P
+	       USING (storeno, pdvno, xano)
   LEFT JOIN  T_ENTREGA       AS ENT
 	       USING (storeno, pdvno, xano)
   INNER JOIN sqldados.xaprd2 AS X
@@ -109,10 +114,12 @@ FROM sqldados.nf             AS N
 	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
 		  X.prdno = NP.prdno AND X.grade = NP.grade
   LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = X.prdno AND L.storeno =X.storeno
+	       ON L.prdno = X.prdno AND L.storeno = X.storeno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
-WHERE N.issuedate BETWEEN :dataInicial AND :dataFinal
+  LEFT JOIN  sqldados.custp  AS C
+	       ON C.no = N.custno
+WHERE issuedate BETWEEN :dataInicial AND :dataFinal
   AND (CASE
 	 WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
 	   THEN 'RETIRAF'
@@ -135,7 +142,7 @@ WHERE N.issuedate BETWEEN :dataInicial AND :dataFinal
 	 WHEN tipo = 7
 	   THEN 'OUTRAS_NFS'
 	 ELSE 'SP_REME'
-       END IN (:listaTipos))
+       END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)

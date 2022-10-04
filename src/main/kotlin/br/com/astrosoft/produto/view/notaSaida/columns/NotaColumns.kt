@@ -1,9 +1,6 @@
 package br.com.astrosoft.produto.view.notaSaida.columns
 
-import br.com.astrosoft.framework.view.addColumnDouble
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnLocalDate
-import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.framework.view.*
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import com.vaadin.flow.component.grid.Grid
 
@@ -54,5 +51,17 @@ object NotaColumns {
 
   fun Grid<NotaSaida>.colunaNFTipo() = addColumnString(NotaSaida::tipoNotaSaida) {
     this.setHeader("Tipo")
+  }
+
+  fun Grid<NotaSaida>.colunaNomeCliente() = addColumnString(NotaSaida::nomeCliente) {
+    this.setHeader("Nome CLiente")
+  }
+
+  fun Grid<NotaSaida>.colunaNomeVendedor() = addColumnString(NotaSaida::nomeVendedor) {
+    this.setHeader("Nome Vendedor")
+  }
+
+  fun Grid<NotaSaida>.colunaHora() = addColumnLocalTime(NotaSaida::hora) {
+    this.setHeader("Hora")
   }
 }

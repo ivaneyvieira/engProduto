@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.framework.view.localePtBr
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
@@ -14,6 +15,8 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFSitua
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaExp
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -88,8 +91,11 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     }
     colunaNFNota()
     colunaNFData()
+    colunaHora()
     colunaNFCliente()
+    colunaNomeCliente()
     colunaNFVendedor()
+    colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
     colunaNFSituacao()

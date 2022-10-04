@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.model.SqlOrder
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import java.time.LocalTime
 
 class NotaSaida(
   val loja: Int,
@@ -15,8 +16,11 @@ class NotaSaida(
   val numero: Int,
   val serie: String,
   val cliente: Int,
+  val nomeCliente: String,
   val data: LocalDate,
+  val hora: LocalTime?,
   val vendedor: Int,
+  val nomeVendedor: String,
   val localizacao: String?,
   val usuarioExp: String?,
   val usuarioCD: String?,

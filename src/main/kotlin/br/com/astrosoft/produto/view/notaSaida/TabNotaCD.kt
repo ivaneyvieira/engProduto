@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
 import br.com.astrosoft.framework.view.localePtBr
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
@@ -13,6 +14,8 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaCD
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -25,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
   private var dlgProduto: DlgProdutosCD? = null
@@ -32,22 +36,9 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   private lateinit var edtLoja: IntegerField
   private lateinit var edtCliente: IntegerField
   private lateinit var edtVendedor: TextField
-  private lateinit var edtDataInicial: DatePicker
-  private lateinit var edtDataFinal: DatePicker
+
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtDataInicial = datePicker("Data Inicial") {
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     edtNota = textField("Nota") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -92,8 +83,11 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     colunaNFChaveExp()
     colunaNFNota()
     colunaNFData()
+    colunaHora()
     colunaNFCliente()
+    colunaNomeCliente()
     colunaNFVendedor()
+    colunaNomeVendedor()
     colunaNFValor()
   }
 
@@ -105,8 +99,8 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       loja = edtLoja.value ?: 0,
       cliente = edtCliente.value ?: 0,
       vendedor = edtVendedor.value ?: "",
-      dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value,
+      dataInicial = LocalDate.of(2022,1,1),
+      dataFinal = LocalDate.now().plusDays(30),
                      )
   }
 
