@@ -54,7 +54,7 @@ object NotaColumns {
   }
 
   fun Grid<NotaSaida>.colunaNomeCliente() = addColumnString(NotaSaida::nomeCliente) {
-    this.setHeader("Nome CLiente")
+    this.setHeader("Nome Cliente")
   }
 
   fun Grid<NotaSaida>.colunaNomeVendedor() = addColumnString(NotaSaida::nomeVendedor) {
