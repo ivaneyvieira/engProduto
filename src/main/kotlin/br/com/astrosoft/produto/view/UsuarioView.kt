@@ -30,6 +30,9 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
                         readOnly: Boolean,
                         binder: Binder<UserSaci>): Component {
     return VerticalLayout().apply {
+      val impressora = viewModel.allImpressoras()
+      val impressoras = impressora.map { it.name }
+
       isPadding = false
       isMargin = false
       formLayout {
@@ -45,10 +48,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           isReadOnly = true
           binder.bind(this, UserSaci::name.name)
         }
+
         if (operation in listOf(ADD, READ, DELETE, UPDATE)) {
-          comboBox<Int>("Número Loja") {
+          select<Int>("Nome Loja") {
             isReadOnly = readOnly
-            isAllowCustomValue = false
             val lojas = viewModel.allLojas()
             val values = lojas.map { it.no } + listOf(0)
             setItems(values.distinct().sorted())
@@ -60,7 +63,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
                 }?.descricao ?: ""
               }
             }
-            isAllowCustomValue = false
             binder.bind(this, UserSaci::storeno.name)
           }
           checkBoxGroup<String> {
@@ -95,9 +97,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Tipo Notas Saida") {
+            h4("Tipo Notas Saida"){
               colspan = 2
             }
+
             checkBox("NFCE") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::nfceExpedicao.name)
@@ -120,8 +123,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Nota de Saida") {
-              colspan = 2
+            h4("Nota de Saida")
+            comboBox<String>("Impressora") {
+              isReadOnly = readOnly
+              setItems(impressoras.distinct().sorted())
+              this.isClearButtonVisible = true
+              this.isAutoOpen = true
+              binder.bind(this, UserSaci::impressoraSaida.name)
             }
             checkBox("Exp") {
               isReadOnly = readOnly
@@ -145,8 +153,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Nota de Entrada") {
-              colspan = 2
+            h4("Nota de Entrada")
+            comboBox<String>("Impressora") {
+              isReadOnly = readOnly
+              setItems(impressoras.distinct().sorted())
+              this.isClearButtonVisible = true
+              this.isAutoOpen = true
+              binder.bind(this, UserSaci::impressoraEntrada.name)
             }
             checkBox("Base") {
               isReadOnly = readOnly
@@ -162,8 +175,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Pedido") {
-              colspan = 2
+            h4("Pedido")
+            comboBox<String>("Impressora") {
+              isReadOnly = readOnly
+              setItems(impressoras.distinct().sorted())
+              this.isClearButtonVisible = true
+              this.isAutoOpen = true
+              binder.bind(this, UserSaci::impressoraPedido.name)
             }
             checkBox("CD") {
               isReadOnly = readOnly
@@ -175,8 +193,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Ressuprimento") {
-              colspan = 2
+            h4("Ressuprimento")
+            comboBox<String>("Impressora") {
+              isReadOnly = readOnly
+              setItems(impressoras.distinct().sorted())
+              this.isClearButtonVisible = true
+              this.isAutoOpen = true
+              binder.bind(this, UserSaci::impressoraRessuprimento.name)
             }
             checkBox("CD") {
               isReadOnly = readOnly

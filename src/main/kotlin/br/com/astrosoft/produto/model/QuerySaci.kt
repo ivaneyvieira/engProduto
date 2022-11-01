@@ -88,6 +88,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     return query(sql, Local::class)
   }
 
+  fun findImpressoras(): List<Impressora> {
+    val sql = "/sqlSaci/userPrint.sql"
+    return query(sql, Impressora::class)
+  }
+
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {
@@ -96,6 +101,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("loja", user.storeno)
       addOptionalParameter("appName", appName)
       addOptionalParameter("locais", user.locais)
+      addOptionalParameter("listaImpressora", user.listaImpressora)
     }
   }
 

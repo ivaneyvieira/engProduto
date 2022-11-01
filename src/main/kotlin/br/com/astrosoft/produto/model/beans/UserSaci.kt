@@ -14,6 +14,7 @@ class UserSaci : IUser {
   var bitAcesso: Long = 0
   var storeno: Int = 0
   var locais: String = ""
+  var listaImpressora: String = ""
   var impressora: String? = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
@@ -37,12 +38,49 @@ class UserSaci : IUser {
   var entRetExpedicao by DelegateAuthorized(19)
   var transfExpedicao by DelegateAuthorized(20)
   var vendaFExpedicao by DelegateAuthorized(21)
+
   //Permissões da tela receber
   var receberQuantidade by DelegateAuthorized(22)
   var receberExcluir by DelegateAuthorized(23)
   var receberAdicionar by DelegateAuthorized(24)
   var receberProcessar by DelegateAuthorized(25)
   var notaEntradaBase by DelegateAuthorized(26)
+
+  var impressoras
+    get() = listaImpressora.split(",").map { print ->
+      print.trim()
+    }
+    set(value) {
+      listaImpressora = value.joinToString(",") { print ->
+        print
+      }
+    }
+
+  var impressoraSaida: String
+    get() = impressoras.getOrNull(0) ?: ""
+    set(value) {
+      impressoras = listOf(value)
+    }
+  var impressoraEntrada: String
+    get() = impressoras.getOrNull(1) ?: ""
+    set(value) {
+      impressoras = listOf(impressoraSaida, value)
+    }
+  var impressoraPedido: String
+    get() = impressoras.getOrNull(2) ?: ""
+    set(value) {
+      impressoras = listOf(impressoraSaida, impressoraEntrada, value)
+    }
+  var impressoraRessuprimento: String
+    get() = impressoras.getOrNull(3) ?: ""
+    set(value) {
+      impressoras = listOf(impressoraSaida, impressoraEntrada, impressoraPedido, value)
+    }
+
+  fun impressoraSaida(): String? = impressoraSaida.ifBlank { impressora }
+  fun impressoraEntrada(): String? = impressoraEntrada.ifBlank { impressora }
+  fun impressoraPedido(): String? = impressoraPedido.ifBlank { impressora }
+  fun impressoraRessuprimento(): String? = impressoraRessuprimento.ifBlank { impressora }
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin

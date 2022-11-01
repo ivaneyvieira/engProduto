@@ -64,7 +64,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
     val user = Config.user as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraSaida()?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, produtos)
       } catch (e: Throwable) {
@@ -77,7 +77,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
     val user = Config.user as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraSaida()?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, nota.produtos(EMarcaNota.CD))
       } catch (e: Throwable) {

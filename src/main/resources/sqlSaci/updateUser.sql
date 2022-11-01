@@ -8,5 +8,6 @@ WHERE no = @NO;
 
 INSERT INTO sqldados.userApp(userno, appName, bitAcesso, locais)
 VALUES (@NO, :appName, :bitAcesso, :locais)
-ON DUPLICATE KEY UPDATE bitAcesso = :bitAcesso,
-			locais    = :locais
+ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
+			locais      = :locais,
+			impressoras = :listaImpressora

@@ -29,7 +29,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun printEtiqueta(ressuprimento: Ressuprimento?) = viewModel.exec {
     ressuprimento ?: fail("Nenhum ressuprimento selecionado")
     val user = Config.user as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraRessuprimento()?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, ressuprimento.produtos(EMarcaRessuprimento.ENT))
       } catch (e: Throwable) {

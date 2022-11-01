@@ -30,7 +30,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
   fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {
     pedido ?: fail("Nenhum pedido selecionado")
     val user = Config.user as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraPedido()?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))
       } catch (e: Throwable) {
