@@ -127,7 +127,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(values.distinct().sorted())
               this.setItemLabelGenerator { storeno ->
                 when (storeno) {
-                  0    -> "Todas as lojas"
+                  0    -> "Loja Padrão"
                   else -> lojas.firstOrNull { loja ->
                     loja.no == storeno
                   }?.descricao ?: ""
@@ -163,7 +163,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(values.distinct().sorted())
               this.setItemLabelGenerator { storeno ->
                 when (storeno) {
-                  0    -> "Todas as lojas"
+                  0    -> "Loja Padrão"
                   else -> lojas.firstOrNull { loja ->
                     loja.no == storeno
                   }?.descricao ?: ""
@@ -191,7 +191,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(values.distinct().sorted())
               this.setItemLabelGenerator { storeno ->
                 when (storeno) {
-                  0    -> "Todas as lojas"
+                  0    -> "Loja Padrão"
                   else -> lojas.firstOrNull { loja ->
                     loja.no == storeno
                   }?.descricao ?: ""
@@ -215,7 +215,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(values.distinct().sorted())
               this.setItemLabelGenerator { storeno ->
                 when (storeno) {
-                  0    -> "Todas as lojas"
+                  0    -> "Loja Padrão"
                   else -> lojas.firstOrNull { loja ->
                     loja.no == storeno
                   }?.descricao ?: ""
