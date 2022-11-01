@@ -58,7 +58,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoRessuprimento>) {
     val user = Config.user as? UserSaci
-    user?.impressoraRessuprimento()?.let { impressora ->
+    user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, produtos)
       } catch (e: Throwable) {

@@ -15,6 +15,7 @@ class UserSaci : IUser {
   var storeno: Int = 0
   var locais: String = ""
   var listaImpressora: String = ""
+  var listaLoja: String = ""
   var impressora: String? = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
@@ -46,41 +47,41 @@ class UserSaci : IUser {
   var receberProcessar by DelegateAuthorized(25)
   var notaEntradaBase by DelegateAuthorized(26)
 
-  var impressoras
-    get() = listaImpressora.split(",").map { print ->
-      print.trim()
+  var lojas
+    get() = listaLoja.split(",").map { print ->
+      print.trim().toIntOrNull() ?: 0
     }
     set(value) {
-      listaImpressora = value.joinToString(",") { print ->
-        print
+      listaLoja = value.joinToString(",") { print ->
+        print.toString()
       }
     }
 
-  var impressoraSaida: String
-    get() = impressoras.getOrNull(0) ?: ""
+  var lojaSaida: Int
+    get() = lojas.getOrNull(0) ?: 0
     set(value) {
-      impressoras = listOf(value)
+      lojas = listOf(value)
     }
-  var impressoraEntrada: String
-    get() = impressoras.getOrNull(1) ?: ""
+  var lojaEntrada: Int
+    get() = lojas.getOrNull(1) ?: 0
     set(value) {
-      impressoras = listOf(impressoraSaida, value)
+      lojas = listOf(lojaSaida, value)
     }
-  var impressoraPedido: String
-    get() = impressoras.getOrNull(2) ?: ""
+  var lojaPedido: Int
+    get() = lojas.getOrNull(2) ?: 0
     set(value) {
-      impressoras = listOf(impressoraSaida, impressoraEntrada, value)
+      lojas = listOf(lojaSaida, lojaEntrada, value)
     }
-  var impressoraRessuprimento: String
-    get() = impressoras.getOrNull(3) ?: ""
+  var lojaRessuprimento: Int
+    get() = lojas.getOrNull(3) ?: 0
     set(value) {
-      impressoras = listOf(impressoraSaida, impressoraEntrada, impressoraPedido, value)
+      lojas = listOf(lojaSaida, lojaEntrada, lojaPedido, value)
     }
 
-  fun impressoraSaida(): String? = impressoraSaida.ifBlank { impressora }
-  fun impressoraEntrada(): String? = impressoraEntrada.ifBlank { impressora }
-  fun impressoraPedido(): String? = impressoraPedido.ifBlank { impressora }
-  fun impressoraRessuprimento(): String? = impressoraRessuprimento.ifBlank { impressora }
+  fun lojaSaidaOk(): Int = if (lojaSaida == 0) storeno else lojaSaida
+  fun lojaEntradaOk(): Int = if (lojaEntrada == 0) storeno else lojaEntrada
+  fun lojaPedidoOk(): Int = if (lojaPedido == 0) storeno else lojaPedido
+  fun lojaRessuprimentoOk(): Int = if (lojaRessuprimento == 0) storeno else lojaRessuprimento
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin

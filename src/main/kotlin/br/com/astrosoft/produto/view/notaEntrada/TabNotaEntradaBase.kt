@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
+import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.view.TabPanelGrid
 import br.com.astrosoft.framework.view.addColumnButton
@@ -37,6 +38,8 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
+      val user = Config.user as? UserSaci
+      value = user?.lojaEntradaOk()
       addValueChangeListener {
         viewModel.updateView()
       }

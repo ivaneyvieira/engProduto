@@ -37,7 +37,6 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   private lateinit var edtCliente: IntegerField
   private lateinit var edtVendedor: TextField
 
-
   override fun HorizontalLayout.toolBarConfig() {
     edtNota = textField("Nota") {
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -47,8 +46,8 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     }
     edtLoja = integerField("Loja") {
       val user = Config.user as? UserSaci
-      isVisible = user?.storeno == 0
-      value = user?.storeno
+      isVisible = user?.lojaSaidaOk() == 0
+      value = user?.lojaSaidaOk()
       valueChangeMode = ValueChangeMode.LAZY
 
       addValueChangeListener {

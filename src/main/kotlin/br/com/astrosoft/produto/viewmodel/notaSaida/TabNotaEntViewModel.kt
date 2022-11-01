@@ -29,7 +29,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   fun printEtiquetaEnt(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
     val user = Config.user as? UserSaci
-    user?.impressoraSaida()?.let { impressora ->
+    user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, nota.produtos(EMarcaNota.ENT))
       } catch (e: Throwable) {

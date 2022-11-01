@@ -29,8 +29,8 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       val user = Config.user as? UserSaci
-      isVisible = user?.storeno == 0
-      value = user?.storeno
+      isVisible = user?.lojaPedidoOk() == 0
+      value = user?.lojaPedidoOk()
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()

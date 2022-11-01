@@ -14,7 +14,8 @@ SELECT U.no,
        IFNULL(A.bitAcesso, 0)  AS bitAcesso,
        IFNULL(A.locais, '')    AS locais,
        P.name                  AS impressora,
-       IFNULL(impressoras, '') AS listaImpressora
+       IFNULL(impressoras, '') AS listaImpressora,
+       IFNULL(lojas, '')       AS listaLoja
 FROM sqldados.users          AS U
   LEFT JOIN sqldados.prntr   AS P
 	      ON P.no = U.prntno

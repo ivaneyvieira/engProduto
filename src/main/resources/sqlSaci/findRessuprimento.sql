@@ -1,4 +1,4 @@
-DO @DATA := 20220101;
+DO @DATA := 20221101;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA (
@@ -39,6 +39,7 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
+  AND date >= 20221101
 GROUP BY N.storeno,
 	 N.no,
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
@@ -48,7 +49,7 @@ DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
 CREATE TEMPORARY TABLE T_PEDIDO_02
 SELECT N.no                                               AS numero,
        vendno                                             AS fornecedor,
-       CAST(date AS DATE)                                 AS data,
+       CAST(N.date AS DATE)                                 AS data,
        N.empno                                            AS comprador,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.obs                                              AS usuarioCD,
@@ -75,7 +76,17 @@ GROUP BY N.storeno,
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
 	 IF(:marca = 999, '', MID(L.localizacao, 1, 4));
 
-SELECT *
+SELECT numero,
+       fornecedor,
+       data,
+       comprador,
+       localizacao,
+       usuarioCD,
+       totalProdutos,
+       marca,
+       cancelada,
+       notaBaixa,
+       dataBaixa
 FROM (SELECT *
       FROM T_PEDIDO_01
       UNION

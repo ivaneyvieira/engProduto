@@ -30,8 +30,8 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
                         readOnly: Boolean,
                         binder: Binder<UserSaci>): Component {
     return VerticalLayout().apply {
-      val impressora = viewModel.allImpressoras()
-      val impressoras = impressora.map { it.name }
+      val lojas = viewModel.allLojas()
+      val values = lojas.map { it.no } + listOf(0)
 
       isPadding = false
       isMargin = false
@@ -52,8 +52,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
         if (operation in listOf(ADD, READ, DELETE, UPDATE)) {
           select<Int>("Nome Loja") {
             isReadOnly = readOnly
-            val lojas = viewModel.allLojas()
-            val values = lojas.map { it.no } + listOf(0)
             setItems(values.distinct().sorted())
             this.setItemLabelGenerator { storeno ->
               when (storeno) {
@@ -124,12 +122,18 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
           formLayout {
             h4("Nota de Saida")
-            comboBox<String>("Impressora") {
+            select<Int>("Impressora") {
               isReadOnly = readOnly
-              setItems(impressoras.distinct().sorted())
-              this.isClearButtonVisible = true
-              this.isAutoOpen = true
-              binder.bind(this, UserSaci::impressoraSaida.name)
+              setItems(values.distinct().sorted())
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
+              }
+              binder.bind(this, UserSaci::lojaSaida.name)
             }
             checkBox("Exp") {
               isReadOnly = readOnly
@@ -154,12 +158,18 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
           formLayout {
             h4("Nota de Entrada")
-            comboBox<String>("Impressora") {
+            select<Int>("Impressora") {
               isReadOnly = readOnly
-              setItems(impressoras.distinct().sorted())
-              this.isClearButtonVisible = true
-              this.isAutoOpen = true
-              binder.bind(this, UserSaci::impressoraEntrada.name)
+              setItems(values.distinct().sorted())
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
+              }
+              binder.bind(this, UserSaci::lojaEntrada.name)
             }
             checkBox("Base") {
               isReadOnly = readOnly
@@ -176,12 +186,18 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
           formLayout {
             h4("Pedido")
-            comboBox<String>("Impressora") {
+            select<Int>("Impressora") {
               isReadOnly = readOnly
-              setItems(impressoras.distinct().sorted())
-              this.isClearButtonVisible = true
-              this.isAutoOpen = true
-              binder.bind(this, UserSaci::impressoraPedido.name)
+              setItems(values.distinct().sorted())
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
+              }
+              binder.bind(this, UserSaci::lojaPedido.name)
             }
             checkBox("CD") {
               isReadOnly = readOnly
@@ -194,12 +210,18 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
           formLayout {
             h4("Ressuprimento")
-            comboBox<String>("Impressora") {
+            select<Int>("Impressora") {
               isReadOnly = readOnly
-              setItems(impressoras.distinct().sorted())
-              this.isClearButtonVisible = true
-              this.isAutoOpen = true
-              binder.bind(this, UserSaci::impressoraRessuprimento.name)
+              setItems(values.distinct().sorted())
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
+              }
+              binder.bind(this, UserSaci::lojaRessuprimento.name)
             }
             checkBox("CD") {
               isReadOnly = readOnly

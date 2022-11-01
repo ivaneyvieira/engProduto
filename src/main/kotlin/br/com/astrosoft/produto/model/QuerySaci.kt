@@ -102,6 +102,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       addOptionalParameter("appName", appName)
       addOptionalParameter("locais", user.locais)
       addOptionalParameter("listaImpressora", user.listaImpressora)
+      addOptionalParameter("listaLoja", user.listaLoja)
     }
   }
 

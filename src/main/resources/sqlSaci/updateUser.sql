@@ -10,4 +10,5 @@ INSERT INTO sqldados.userApp(userno, appName, bitAcesso, locais)
 VALUES (@NO, :appName, :bitAcesso, :locais)
 ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
 			locais      = :locais,
-			impressoras = :listaImpressora
+			impressoras = :listaImpressora,
+			lojas       = :listaLoja
