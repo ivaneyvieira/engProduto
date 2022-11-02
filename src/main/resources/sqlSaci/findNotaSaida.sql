@@ -49,23 +49,32 @@ FROM T_V        AS V
 	      USING (storeno, ordno)
 GROUP BY V.storeno, V.pdvno, V.xano;
 
-SELECT N.storeno                                          AS loja,
-       N.pdvno                                            AS pdvno,
-       N.xano                                             AS xano,
-       N.nfno                                             AS numero,
-       N.nfse                                             AS serie,
-       N.custno                                           AS cliente,
-       ifnull(C.name, '')                                 AS nomeCliente,
-       CAST(issuedate AS DATE)                            AS data,
-       SEC_TO_TIME(P.time)                                AS hora,
-       N.empno                                            AS vendedor,
-       TRIM(MID(E.sname, 1, 20))                          AS nomeVendedor,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.c5                                               AS usuarioExp,
-       X.c4                                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)                     AS totalProdutos,
-       MAX(X.s12)                                         AS marca,
-       IF(N.status <> 1, 'N', 'S')                        AS cancelada,
+DROP TEMPORARY TABLE IF EXISTS T_LOC;
+CREATE TEMPORARY TABLE T_LOC (
+  PRIMARY KEY (prdno, loc)
+)
+SELECT prdno, IF(:marca = 999, '', CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)) AS loc
+FROM sqldados.prdloc AS L
+WHERE (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+GROUP BY prdno, loc;
+
+SELECT N.storeno                       AS loja,
+       N.pdvno                         AS pdvno,
+       N.xano                          AS xano,
+       N.nfno                          AS numero,
+       N.nfse                          AS serie,
+       N.custno                        AS cliente,
+       IFNULL(C.name, '')              AS nomeCliente,
+       CAST(issuedate AS DATE)         AS data,
+       SEC_TO_TIME(P.time)             AS hora,
+       N.empno                         AS vendedor,
+       TRIM(MID(E.sname, 1, 20))       AS nomeVendedor,
+       CAST(IFNULL(L.loc, '') AS CHAR) AS localizacao,
+       X.c5                            AS usuarioExp,
+       X.c4                            AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco)  AS totalProdutos,
+       MAX(X.s12)                      AS marca,
+       IF(N.status <> 1, 'N', 'S')     AS cancelada,
        CASE
 	 WHEN tipo = 0
 	   THEN ''
@@ -100,9 +109,9 @@ SELECT N.storeno                                          AS loja,
 	 WHEN tipo = 15
 	   THEN 'NFE'
 	 ELSE ''
-       END                                                AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')                        AS notaEntrega,
-       CAST(ENT.dataEntrega AS DATE)                      AS dataEntrega
+       END                             AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')     AS notaEntrega,
+       CAST(ENT.dataEntrega AS DATE)   AS dataEntrega
 FROM sqldados.nf             AS N
   LEFT JOIN  sqlpdv.pxa      AS P
 	       USING (storeno, pdvno, xano)
@@ -113,8 +122,8 @@ FROM sqldados.nf             AS N
   LEFT JOIN  sqldados.nfrprd AS NP
 	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
 		  X.prdno = NP.prdno AND X.grade = NP.grade
-  LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = X.prdno AND L.storeno = X.storeno
+  LEFT JOIN  T_LOC           AS L
+	       ON L.prdno = X.prdno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
   LEFT JOIN  sqldados.custp  AS C
@@ -150,10 +159,9 @@ WHERE issuedate BETWEEN :dataInicial AND :dataFinal
   AND (N.nfse = :nfse OR :nfse = '')
   AND (N.custno = :cliente OR :cliente = 0)
   AND (E.sname = :vendedor OR :vendedor = '')
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno,
 	 N.pdvno,
 	 N.xano,
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '-', 1)),
 	 IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1)),
-	 IF(:marca = 999, '', MID(L.localizacao, 1, 4))
+	 IF(:marca = 999, '', L.loc)
