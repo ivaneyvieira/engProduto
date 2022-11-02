@@ -39,7 +39,7 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       val user = Config.user as? UserSaci
-      value = user?.lojaEntradaOk()
+      value = user?.storeno
       addValueChangeListener {
         viewModel.updateView()
       }

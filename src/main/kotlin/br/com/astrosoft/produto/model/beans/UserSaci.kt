@@ -57,31 +57,25 @@ class UserSaci : IUser {
       }
     }
 
-  var lojaSaida: Int
+  var lojaSaidaExp: Int
     get() = lojas.getOrNull(0) ?: 0
     set(value) {
       lojas = listOf(value)
     }
-  var lojaEntrada: Int
+  var lojaSaidaCD: Int
     get() = lojas.getOrNull(1) ?: 0
     set(value) {
-      lojas = listOf(lojaSaida, value)
+      lojas = listOf(lojaSaidaExp, value)
     }
-  var lojaPedido: Int
+  var lojaSaidaEntregue: Int
     get() = lojas.getOrNull(2) ?: 0
     set(value) {
-      lojas = listOf(lojaSaida, lojaEntrada, value)
-    }
-  var lojaRessuprimento: Int
-    get() = lojas.getOrNull(3) ?: 0
-    set(value) {
-      lojas = listOf(lojaSaida, lojaEntrada, lojaPedido, value)
+      lojas = listOf(lojaSaidaExp, lojaSaidaCD, value)
     }
 
-  fun lojaSaidaOk(): Int = if (lojaSaida == 0) storeno else lojaSaida
-  fun lojaEntradaOk(): Int = if (lojaEntrada == 0) storeno else lojaEntrada
-  fun lojaPedidoOk(): Int = if (lojaPedido == 0) storeno else lojaPedido
-  fun lojaRessuprimentoOk(): Int = if (lojaRessuprimento == 0) storeno else lojaRessuprimento
+  fun lojaSaidaExpOk(): Int = if (lojaSaidaExp == 0) storeno else lojaSaidaExp
+  fun lojaSaidaCDOk(): Int = if (lojaSaidaCD == 0) storeno else lojaSaidaCD
+  fun lojaSaidaEntregueOk(): Int = if (lojaSaidaEntregue == 0) storeno else lojaSaidaEntregue
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin

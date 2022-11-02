@@ -230,14 +230,15 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     val nfno = filtro.nfno
     val nfse = filtro.nfse
     val listaTipos =
-            listOfNotNull(if (user?.nfceExpedicao == true) "NFCE" else null,
-                          if (user?.vendaExpedicao == true) "VENDA" else null,
-                          if (user?.entRetExpedicao == true) "ENT_RET" else null,
-                          if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
-                          if (user?.vendaFExpedicao == true) "VENDAF" else null)
+      listOfNotNull(if (user?.nfceExpedicao == true) "NFCE" else null,
+                    if (user?.vendaExpedicao == true) "VENDA" else null,
+                    if (user?.entRetExpedicao == true) "ENT_RET" else null,
+                    if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
+                    if (user?.vendaFExpedicao == true) "VENDAF" else null)
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: dataInicial
-    return query(sql, NotaSaida::class, sqlLazy) {
+    return if (dataInicial == 0 && dataFinal == 0) emptyList()
+    else query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)

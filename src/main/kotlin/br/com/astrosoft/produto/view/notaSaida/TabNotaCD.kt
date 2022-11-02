@@ -46,8 +46,8 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     }
     edtLoja = integerField("Loja") {
       val user = Config.user as? UserSaci
-      isVisible = user?.lojaSaidaOk() == 0
-      value = user?.lojaSaidaOk()
+      isVisible = user?.lojaSaidaCDOk() == 0
+      value = user?.lojaSaidaCDOk()
       valueChangeMode = ValueChangeMode.LAZY
 
       addValueChangeListener {

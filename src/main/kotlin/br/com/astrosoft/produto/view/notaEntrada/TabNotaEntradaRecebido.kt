@@ -39,7 +39,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       val user = Config.user as? UserSaci
-      value = user?.lojaEntradaOk()
+      value = user?.storeno
       addValueChangeListener {
         viewModel.updateView()
       }

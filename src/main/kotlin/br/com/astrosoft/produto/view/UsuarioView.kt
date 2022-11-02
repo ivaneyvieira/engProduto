@@ -69,8 +69,8 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             isReadOnly = readOnly
 
             val locais = viewModel.allLocais()
-            val values = listOf("TODOS") + locais.map { it.abreviacao }.sorted()
-            setItems(values)
+            val valuesCD = listOf("TODOS") + locais.map { it.abreviacao }.sorted()
+            setItems(valuesCD)
             binder.bind(this, UserSaci::listLocais.name)
           }
           formLayout {
@@ -121,31 +121,65 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Nota de Saida")
-            select<Int>("Impressora") {
-              isReadOnly = readOnly
-              setItems(values.distinct().sorted())
-              this.setItemLabelGenerator { storeno ->
-                when (storeno) {
-                  0    -> "Loja Padrão"
-                  else -> lojas.firstOrNull { loja ->
-                    loja.no == storeno
-                  }?.descricao ?: ""
-                }
+            h4("Nota de Saida"){
+              colspan = 2
+            }
+            formLayout {
+              checkBox("Exp") {
+                isReadOnly = readOnly
+                binder.bind(this, UserSaci::notaExp.name)
               }
-              binder.bind(this, UserSaci::lojaSaida.name)
+              select<Int>("Loja Exp") {
+                isReadOnly = readOnly
+                setItems(values.distinct().sorted())
+                this.setItemLabelGenerator { storeno ->
+                  when (storeno) {
+                    0    -> "Loja Padrão"
+                    else -> lojas.firstOrNull { loja ->
+                      loja.no == storeno
+                    }?.descricao ?: ""
+                  }
+                }
+                binder.bind(this, UserSaci::lojaSaidaExp.name)
+              }
             }
-            checkBox("Exp") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::notaExp.name)
+            formLayout {
+              checkBox("CD") {
+                isReadOnly = readOnly
+                binder.bind(this, UserSaci::notaCD.name)
+              }
+              select<Int>("Loja CD") {
+                isReadOnly = readOnly
+                setItems(values.distinct().sorted())
+                this.setItemLabelGenerator { storeno ->
+                  when (storeno) {
+                    0    -> "Loja Padrão"
+                    else -> lojas.firstOrNull { loja ->
+                      loja.no == storeno
+                    }?.descricao ?: ""
+                  }
+                }
+                binder.bind(this, UserSaci::lojaSaidaCD.name)
+             }
             }
-            checkBox("CD") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::notaCD.name)
-            }
-            checkBox("Entrege") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::notaEnt.name)
+            formLayout {
+              checkBox("Entrege") {
+                isReadOnly = readOnly
+                binder.bind(this, UserSaci::notaEnt.name)
+              }
+              select<Int>("Loja Entregue") {
+                isReadOnly = readOnly
+                setItems(values.distinct().sorted())
+                this.setItemLabelGenerator { storeno ->
+                  when (storeno) {
+                    0    -> "Loja Padrão"
+                    else -> lojas.firstOrNull { loja ->
+                      loja.no == storeno
+                    }?.descricao ?: ""
+                  }
+                }
+                binder.bind(this, UserSaci::lojaSaidaEntregue.name)
+              }
             }
             checkBox("Voltar CD") {
               isReadOnly = readOnly
@@ -157,19 +191,8 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Nota de Entrada")
-            select<Int>("Impressora") {
-              isReadOnly = readOnly
-              setItems(values.distinct().sorted())
-              this.setItemLabelGenerator { storeno ->
-                when (storeno) {
-                  0    -> "Loja Padrão"
-                  else -> lojas.firstOrNull { loja ->
-                    loja.no == storeno
-                  }?.descricao ?: ""
-                }
-              }
-              binder.bind(this, UserSaci::lojaEntrada.name)
+            h4("Nota de Entrada"){
+              colspan = 2
             }
             checkBox("Base") {
               isReadOnly = readOnly
@@ -185,19 +208,8 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Pedido")
-            select<Int>("Impressora") {
-              isReadOnly = readOnly
-              setItems(values.distinct().sorted())
-              this.setItemLabelGenerator { storeno ->
-                when (storeno) {
-                  0    -> "Loja Padrão"
-                  else -> lojas.firstOrNull { loja ->
-                    loja.no == storeno
-                  }?.descricao ?: ""
-                }
-              }
-              binder.bind(this, UserSaci::lojaPedido.name)
+            h4("Pedido"){
+              colspan = 2
             }
             checkBox("CD") {
               isReadOnly = readOnly
@@ -209,19 +221,8 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Ressuprimento")
-            select<Int>("Impressora") {
-              isReadOnly = readOnly
-              setItems(values.distinct().sorted())
-              this.setItemLabelGenerator { storeno ->
-                when (storeno) {
-                  0    -> "Loja Padrão"
-                  else -> lojas.firstOrNull { loja ->
-                    loja.no == storeno
-                  }?.descricao ?: ""
-                }
-              }
-              binder.bind(this, UserSaci::lojaRessuprimento.name)
+            h4("Ressuprimento"){
+              colspan = 2
             }
             checkBox("CD") {
               isReadOnly = readOnly
