@@ -73,9 +73,9 @@ class UserSaci : IUser {
       lojas = listOf(lojaSaidaExp, lojaSaidaCD, value)
     }
 
-  fun lojaSaidaExpOk(): Int = if (lojaSaidaExp == 0) storeno else lojaSaidaExp
-  fun lojaSaidaCDOk(): Int = if (lojaSaidaCD == 0) storeno else lojaSaidaCD
-  fun lojaSaidaEntregueOk(): Int = if (lojaSaidaEntregue == 0) storeno else lojaSaidaEntregue
+  fun lojaSaidaExpOk(): Int = lojaSaidaExp
+  fun lojaSaidaCDOk(): Int = lojaSaidaCD
+  fun lojaSaidaEntregueOk(): Int = lojaSaidaEntregue
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
