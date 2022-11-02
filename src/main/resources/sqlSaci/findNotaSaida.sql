@@ -120,6 +120,7 @@ FROM sqldados.nf             AS N
   LEFT JOIN  sqldados.custp  AS C
 	       ON C.no = N.custno
 WHERE issuedate BETWEEN :dataInicial AND :dataFinal
+  AND issuedate >= @DT
   AND (CASE
 	 WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
 	   THEN 'RETIRAF'
