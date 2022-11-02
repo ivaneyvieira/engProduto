@@ -53,8 +53,11 @@ DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC (
   PRIMARY KEY (prdno, loc)
 )
-SELECT prdno, IF(:marca = 999, '', CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)) AS loc
-FROM sqldados.prdloc AS L
+SELECT P.no                                                                     AS prdno,
+       IF(:marca = 999, '', CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)) AS loc
+FROM sqldados.prd           AS P
+  LEFT JOIN sqldados.prdloc AS L
+	      ON P.no = L.prdno
 WHERE (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY prdno, loc;
 
@@ -122,7 +125,7 @@ FROM sqldados.nf             AS N
   LEFT JOIN  sqldados.nfrprd AS NP
 	       ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
 		  X.prdno = NP.prdno AND X.grade = NP.grade
-  LEFT JOIN  T_LOC           AS L
+  INNER JOIN  T_LOC           AS L
 	       ON L.prdno = X.prdno
   LEFT JOIN  sqldados.emp    AS E
 	       ON E.no = N.empno
