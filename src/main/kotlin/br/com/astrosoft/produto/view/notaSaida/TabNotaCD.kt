@@ -98,7 +98,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       loja = edtLoja.value ?: 0,
       cliente = edtCliente.value ?: 0,
       vendedor = edtVendedor.value ?: "",
-      dataInicial = LocalDate.of(2022,11,1),
+      dataInicial = LocalDate.now().minusDays(90),
       dataFinal = LocalDate.now().plusDays(30),
                      )
   }
