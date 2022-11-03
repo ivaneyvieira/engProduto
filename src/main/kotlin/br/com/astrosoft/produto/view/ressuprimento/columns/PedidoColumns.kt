@@ -36,4 +36,8 @@ object RessuprimentoColumns {
   fun Grid<Ressuprimento>.colunaRessuprimentoSituacao() = addColumnString(Ressuprimento::situacao) {
     this.setHeader("Situação")
   }
+  fun Grid<Ressuprimento>.colunaRessuprimentoLocalizacao() = addColumnString(Ressuprimento::localizacao) {
+    this.setHeader("Loc")
+  }
+
 }
