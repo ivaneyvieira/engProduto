@@ -45,7 +45,7 @@ FROM sqldados.prd             AS P
 	       USING (storeno, pdvno, xano)
   LEFT JOIN  sqldados.prdbar  AS B
 	       ON P.no = B.prdno AND B.grade = X.grade
-  LEFT JOIN  T_LOC            AS L
+  INNER JOIN  T_LOC            AS L
 	       ON L.prdno = P.no
   LEFT JOIN  sqldados.vend    AS F
 	       ON F.no = P.mfno
@@ -59,5 +59,5 @@ WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
   AND (X.s12 = :marca OR :marca = 999)
-GROUP BY codigo, grade
+GROUP BY codigo, grade, L.loc
 
