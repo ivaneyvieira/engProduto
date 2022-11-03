@@ -22,7 +22,7 @@ class ProdutoNFS(
   val largura: Int,
   val precoCheio: Double,
   val ncm: String,
-  val localizacao: String?,
+  val local: String,
   val quantidade: Int,
   val preco: Double,
   val total: Double,

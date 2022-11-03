@@ -104,7 +104,7 @@ object EtiquetaChave {
                         nota = produto.nota,
                         data = produto.dataExp,
                         hora = produto.horaExp,
-                        local = produto.localizacao ?: "")
+                        local = produto.local)
     }.distinct()
     printPreview(impressora, dadosEdtiquetas)
   }
@@ -118,7 +118,7 @@ object EtiquetaChave {
                         nota = produto.nota,
                         data = produto.dataCD,
                         hora = produto.horaCD,
-                        local = produto.localizacao ?: "")
+                        local = produto.local)
     }.distinct()
     printPreview(impressora, dadosEtiquetas)
   }

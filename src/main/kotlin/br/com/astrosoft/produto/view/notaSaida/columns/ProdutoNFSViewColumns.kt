@@ -27,7 +27,7 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Grade Editada")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFLocalizacao() = addColumnString(ProdutoNFS::localizacao) {
+  fun Grid<ProdutoNFS>.produtoNFLocalizacao() = addColumnString(ProdutoNFS::local) {
     this.setHeader("Loc")
   }
 

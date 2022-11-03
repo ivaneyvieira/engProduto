@@ -273,13 +273,17 @@ class QuerySaci : QueryDB(driver, url, username, password) {
 
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, locais: List<String>): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    return query(sql, ProdutoNFS::class) {
+    val produtos =  query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("locais", locais)
     }
+    produtos.forEach {
+      println(it.local)
+    }
+    return produtos
   }
 
   fun findProdutoPedidoVenda(pedido: PedidoVenda, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoVenda> {
