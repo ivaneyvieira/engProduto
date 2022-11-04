@@ -19,33 +19,20 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
 GROUP BY ordno;
 
+INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes, qttyVendaMesAnt, qttyVendaMedia, qttyPendente, stkDisponivel, qttyAbc, storeno, seqno, status, bits, bits2, auxShort1, auxShort2, auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada, obs, auxStr)
+SELECT ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes, qttyVendaMesAnt, qttyVendaMedia, qttyPendente, stkDisponivel, qttyAbc, storeno, seqno, status, bits, bits2, auxShort1, auxShort2, auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada, obs, auxStr
+FROM sqldados.oprd
+WHERE  storeno = 1
+  AND (ordno = :ordno OR :ordno = 0)
+  AND ordno >= 100000000;
 
-DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_00;
-CREATE TEMPORARY TABLE T_PEDIDO_00
-SELECT NF.ordno                                           AS numero,
-       0                                                  AS fornecedor,
-       CAST(NF.date AS DATE)                              AS data,
-       NF.empno                                           AS comprador,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.obs                                              AS usuarioCD,
-       SUM((X.qtty / 1000) * X.cost)                      AS totalProdutos,
-       MAX(X.auxShort4)                                   AS marca,
-       'N'                                                AS cancelada,
-       CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
-       NF.dataNota                                        AS dataBaixa
-FROM T_PEDIDO_NOTA           AS NF
-  INNER JOIN sqldados.oprd   AS X
-	       ON NF.storeno = X.storeno AND NF.ordno = X.ordno
-  LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = X.prdno AND L.storeno = 4
-WHERE NF.date >= @DATA
-  AND (X.auxShort4 = :marca OR :marca = 999)
-  AND (NF.ordno = :ordno OR :ordno = 0)
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
-GROUP BY NF.storeno,
-	 NF.ordno,
-	 IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
-	 IF(:marca = 999, '', MID(L.localizacao, 1, 4));
+INSERT IGNORE sqldados.ordsRessu(no, date, vendno, discount, amt, package, custo_fin, others,
+                             eord_ordno, dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem, dataEntrega, discountOrig, l1, l2, l3, l4, m1, m2, m3, m4, deliv, storeno, carrno, empno, prazo, eord_storeno, delivOriginal, bits, bits2, bits3, padbyte, indxno, repno, auxShort1, auxShort2, noofinst, status, s1, s2, s3, s4, frete, remarks, ordnoFromVend, remarksInv, remarksRcv, remarksOrd, auxChar, c1, c2, c3, c4)
+SELECT no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno, dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem, dataEntrega, discountOrig, l1, l2, l3, l4, m1, m2, m3, m4, deliv, storeno, carrno, empno, prazo, eord_storeno, delivOriginal, bits, bits2, bits3, padbyte, indxno, repno, auxShort1, auxShort2, noofinst, status, s1, s2, s3, s4, frete, remarks, ordnoFromVend, remarksInv, remarksRcv, remarksOrd, auxChar, c1, c2, c3, c4
+FROM sqldados.ords o
+WHERE  storeno = 1
+  AND (no = :ordno OR :ordno = 0)
+  AND no >= 100000000;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_01;
 CREATE TEMPORARY TABLE T_PEDIDO_01
@@ -137,21 +124,7 @@ SELECT numero,
        cancelada,
        notaBaixa,
        dataBaixa
-FROM T_PEDIDO_02
-UNION
-DISTINCT
-SELECT numero,
-       fornecedor,
-       data,
-       comprador,
-       localizacao,
-       usuarioCD,
-       totalProdutos,
-       marca,
-       cancelada,
-       notaBaixa,
-       dataBaixa
-FROM T_PEDIDO_00;
+FROM T_PEDIDO_02;
 
 SELECT numero,
        fornecedor,
