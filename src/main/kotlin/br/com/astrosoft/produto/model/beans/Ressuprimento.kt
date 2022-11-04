@@ -7,7 +7,7 @@ import java.time.LocalDate
 class Ressuprimento(
   val numero: Long,
   val fornecedor: Int,
-  val data: LocalDate,
+  val data: LocalDate?,
   val comprador: Int,
   val localizacao: String?,
   val usuarioCD: String?,
