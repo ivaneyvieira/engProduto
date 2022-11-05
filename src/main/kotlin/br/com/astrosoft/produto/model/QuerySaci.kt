@@ -233,6 +233,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
       listOfNotNull(if (user?.nfceExpedicao == true) "NFCE" else null,
                     if (user?.vendaExpedicao == true) "VENDA" else null,
                     if (user?.entRetExpedicao == true) "ENT_RET" else null,
+                    if (user?.entRetExpedicao == true) "RETIRAF" else null,
                     if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
                     if (user?.vendaFExpedicao == true) "VENDAF" else null)
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
