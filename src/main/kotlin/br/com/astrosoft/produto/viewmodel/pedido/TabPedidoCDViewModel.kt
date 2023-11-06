@@ -12,7 +12,7 @@ import java.time.LocalTime
 class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
-    val pedidos = PedidoVenda.find(filtro)
+    val pedidos = PedidoVenda.findVenda(filtro)
     subView.updatePedidos(pedidos)
   }
 

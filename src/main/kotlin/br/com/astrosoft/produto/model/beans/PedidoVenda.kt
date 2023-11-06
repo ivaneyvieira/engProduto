@@ -32,7 +32,8 @@ class PedidoVenda(var loja: Int,
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userLocais())
 
   companion object {
-    fun find(filtro: FiltroPedido) = saci.findPedidoVenda(filtro, userLocais())
+    fun findVenda(filtro: FiltroPedido) = saci.findPedidoVenda(filtro, userLocais())
+    fun findTransf(filtro: FiltroPedido) = saci.findPedidoTransf(filtro, userLocais())
   }
 }
 

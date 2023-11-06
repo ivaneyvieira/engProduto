@@ -12,7 +12,7 @@ import java.time.LocalTime
 class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
-    val pedidos = PedidoVenda.find(filtro)
+    val pedidos = PedidoVenda.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
 

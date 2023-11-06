@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.ENT)
-    val pedidos = PedidoVenda.find(filtro)
+    val pedidos = PedidoVenda.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
 
