@@ -10,6 +10,7 @@ class PedidoTransf(
   var ordno: Int,
   var lojaDestino: String?,
   var cliente: Int?,
+  var usuario: String?,
   var data: LocalDate?,
   var vendedor: Int?,
   var localizacao: String?,

@@ -5,6 +5,7 @@ SELECT N.storeno                                          AS loja,
        custno                                             AS cliente,
        CAST(date AS DATE)                                 AS data,
        N.empno                                            AS vendedor,
+       U.name                                             AS usuario,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.price / 100)               AS totalProdutos,
@@ -21,6 +22,8 @@ FROM sqldados.eord AS N
                  ON C.no = N.custno
        LEFT JOIN sqldados.store AS SD
                  ON SD.cgc = C.cpf_cgc
+       LEFT JOIN sqldados.users AS U
+                 ON U.no = N.userno
 WHERE N.date >= 20231101
   AND N.paymno = 69
   AND (X.s12 = :marca OR :marca = 999)
