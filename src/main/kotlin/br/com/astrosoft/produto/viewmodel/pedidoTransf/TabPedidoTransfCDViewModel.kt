@@ -12,7 +12,7 @@ import java.time.LocalTime
 class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
-    val pedidos = PedidoVenda.findTransf(filtro)
+    val pedidos = PedidoTransf.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
 
@@ -56,7 +56,7 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
     subView.updateProdutos()
   }
 
-  private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoVenda>) {
+  private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoTransf>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
@@ -74,11 +74,11 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
 
 interface ITabPedidoTransfCD : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(pedidos: List<PedidoVenda>)
+  fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoVenda>
-  fun produtosMarcados(): List<ProdutoPedidoVenda>
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda?
-  fun findPedido(): PedidoVenda?
-  fun updateProduto(produto: ProdutoPedidoVenda)
+  fun produtosSelcionados(): List<ProdutoPedidoTransf>
+  fun produtosMarcados(): List<ProdutoPedidoTransf>
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf?
+  fun findPedido(): PedidoTransf?
+  fun updateProduto(produto: ProdutoPedidoTransf)
 }

@@ -19,7 +19,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class),
+class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
         ITabPedidoTransfEnt {
   private var dlgProduto: DlgProdutosPedTransfEnt? = null
   private lateinit var edtLoja: IntegerField
@@ -43,7 +43,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     }
   }
 
-  override fun Grid<PedidoVenda>.gridPanel() {
+  override fun Grid<PedidoTransf>.gridPanel() {
     colunaPedidoTransfLoja()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { pedido ->
       viewModel.printEtiqueta(pedido)
@@ -65,7 +65,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     return FiltroPedido(storeno = edtLoja.value ?: 0, ordno = edtPedido.value ?: 0, marca = marca)
   }
 
-  override fun updatePedidos(pedidos: List<PedidoVenda>) {
+  override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
   }
 
@@ -73,7 +73,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoPedidoVenda> {
+  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

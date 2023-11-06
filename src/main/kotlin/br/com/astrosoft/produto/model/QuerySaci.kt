@@ -176,6 +176,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun statusPedido(pedido: ProdutoPedidoTransf, status: EStatusPedido) {
+    val sql = "/sqlSaci/expiraPedidoProduto.sql"
+    script(sql) {
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.ordno)
+      addOptionalParameter("codigo", pedido.codigo)
+      addOptionalParameter("grade", pedido.grade)
+      addOptionalParameter("status", status.codigo)
+    }
+  }
+
   fun gravaGrade(entrega: ProdutoRetiraEntrega) {
     val sql = "/sqlSaci/salvaGrade.sql"
     script(sql) {
@@ -212,6 +223,19 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("gradeAlternativa", podutoPedidoVenda.gradeAlternativa)
       addOptionalParameter("marca", podutoPedidoVenda.marca)
       addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
+    }
+  }
+
+  fun salvaProdutosPedidoTransf(podutoPedidoTransf: ProdutoPedidoTransf) {
+    val sql = "/sqlSaci/salvaProdutosPedidoVenda.sql"
+    script(sql) {
+      addOptionalParameter("storeno", podutoPedidoTransf.loja)
+      addOptionalParameter("ordno", podutoPedidoTransf.ordno)
+      addOptionalParameter("codigo", podutoPedidoTransf.codigo)
+      addOptionalParameter("grade", podutoPedidoTransf.grade)
+      addOptionalParameter("gradeAlternativa", podutoPedidoTransf.gradeAlternativa)
+      addOptionalParameter("marca", podutoPedidoTransf.marca)
+      addOptionalParameter("usuarioCD", podutoPedidoTransf.usuarioCD)
     }
   }
 
@@ -266,9 +290,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findPedidoTransf(filtro: FiltroPedido, locais: List<String>): List<PedidoVenda> {
+  fun findPedidoTransf(filtro: FiltroPedido, locais: List<String>): List<PedidoTransf> {
     val sql = "/sqlSaci/findPedidoTransf.sql"
-    return query(sql, PedidoVenda::class) {
+    return query(sql, PedidoTransf::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("ordno", filtro.ordno)
@@ -303,6 +327,16 @@ class QuerySaci : QueryDB(database) {
   fun findProdutoPedidoVenda(pedido: PedidoVenda, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoVenda> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
     return query(sql, ProdutoPedidoVenda::class) {
+      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("ordno", pedido.ordno)
+      addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locais", locais)
+    }
+  }
+
+  fun findProdutoPedidoTransf(pedido: PedidoTransf, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoTransf> {
+    val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
+    return query(sql, ProdutoPedidoTransf::class) {
       addOptionalParameter("storeno", pedido.loja)
       addOptionalParameter("ordno", pedido.ordno)
       addOptionalParameter("marca", marca.num)

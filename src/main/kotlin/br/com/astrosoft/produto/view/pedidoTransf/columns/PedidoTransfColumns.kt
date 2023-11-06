@@ -1,39 +1,39 @@
 package br.com.astrosoft.produto.view.pedidoTransf.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.produto.model.beans.PedidoVenda
+import br.com.astrosoft.produto.model.beans.PedidoTransf
 import com.vaadin.flow.component.grid.Grid
 
 object PedidoTransfColumns {
-  fun Grid<PedidoVenda>.colunaPedidoTransfLoja() = columnGrid(PedidoVenda::loja) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfLoja() = columnGrid(PedidoTransf::loja) {
     this.setHeader("Loja")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfNumero() = columnGrid(PedidoVenda::ordno) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfNumero() = columnGrid(PedidoTransf::ordno) {
     this.setHeader("Pedido")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfChaveCD() = columnGrid(PedidoVenda::chaveNovaCD) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfChaveCD() = columnGrid(PedidoTransf::chaveNovaCD) {
     this.setHeader("Chave")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfCliente() = columnGrid(PedidoVenda::cliente) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfCliente() = columnGrid(PedidoTransf::cliente) {
     this.setHeader("Cliente")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfData() = columnGrid(PedidoVenda::data) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfData() = columnGrid(PedidoTransf::data) {
     this.setHeader("Data")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfVendedor() = columnGrid(PedidoVenda::vendedor) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfVendedor() = columnGrid(PedidoTransf::vendedor) {
     this.setHeader("Vendedor")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfValor() = columnGrid(PedidoVenda::totalProdutos) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfValor() = columnGrid(PedidoTransf::totalProdutos) {
     this.setHeader("Valor")
   }
 
-  fun Grid<PedidoVenda>.colunaPedidoTransfSituacao() = columnGrid(PedidoVenda::situacao) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfSituacao() = columnGrid(PedidoTransf::situacao) {
     this.setHeader("Situação")
   }
 }

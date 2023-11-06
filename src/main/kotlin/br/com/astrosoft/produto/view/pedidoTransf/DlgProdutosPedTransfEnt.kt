@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.produto.model.beans.EMarcaPedido
-import br.com.astrosoft.produto.model.beans.PedidoVenda
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfBarcode
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfCodigo
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfDescricao
@@ -21,9 +18,9 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pedido: PedidoVenda) {
+class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pedido: PedidoTransf) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
+  private val gridDetail = Grid(ProdutoPedidoTransf::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Volta") {
@@ -64,7 +61,7 @@ class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pe
     update()
   }
 
-  fun itensSelecionados(): List<ProdutoPedidoVenda> {
+  fun itensSelecionados(): List<ProdutoPedidoTransf> {
     return gridDetail.selectedItems.toList()
   }
 

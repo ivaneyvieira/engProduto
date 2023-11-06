@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.produto.model.beans.EMarcaPedido
-import br.com.astrosoft.produto.model.beans.PedidoVenda
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfBarcode
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfCodigo
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfDescricao
@@ -24,9 +21,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedido: PedidoVenda) {
+class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedido: PedidoTransf) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoPedidoVenda::class.java, false)
+  private val gridDetail = Grid(ProdutoPedidoTransf::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Entregue") {
@@ -90,7 +87,7 @@ class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedi
     update()
   }
 
-  fun itensSelecionados(): List<ProdutoPedidoVenda> {
+  fun itensSelecionados(): List<ProdutoPedidoTransf> {
     return gridDetail.selectedItems.toList()
   }
 
@@ -99,15 +96,15 @@ class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedi
     gridDetail.setItems(listProdutos)
   }
 
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
   }
 
-  fun updateProduto(produto: ProdutoPedidoVenda) {
+  fun updateProduto(produto: ProdutoPedidoTransf) {
     gridDetail.dataProvider.refreshItem(produto)
   }
 
-  fun produtosMarcados(): List<ProdutoPedidoVenda> {
+  fun produtosMarcados(): List<ProdutoPedidoTransf> {
     return gridDetail.dataProvider.fetchAll().filter { it.marca == EMarcaPedido.ENT.num }
   }
 }

@@ -18,7 +18,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class), ITabPedidoTransfCD {
+class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+  ITabPedidoTransfCD {
   private var dlgProduto: DlgProdutosPedTransfCD? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField
@@ -42,7 +43,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     }
   }
 
-  override fun Grid<PedidoVenda>.gridPanel() {
+  override fun Grid<PedidoTransf>.gridPanel() {
     colunaPedidoTransfLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfCD(viewModel, pedido)
@@ -60,7 +61,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     return FiltroPedido(storeno = edtLoja.value ?: 0, ordno = edtPedido.value ?: 0, marca = marca)
   }
 
-  override fun updatePedidos(pedidos: List<PedidoVenda>) {
+  override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
   }
 
@@ -68,23 +69,23 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoPedidoVenda> {
+  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun produtosMarcados(): List<ProdutoPedidoVenda> {
+  override fun produtosMarcados(): List<ProdutoPedidoTransf> {
     return dlgProduto?.produtosMarcados().orEmpty()
   }
 
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
-  override fun findPedido(): PedidoVenda? {
+  override fun findPedido(): PedidoTransf? {
     return dlgProduto?.pedido
   }
 
-  override fun updateProduto(produto: ProdutoPedidoVenda) {
+  override fun updateProduto(produto: ProdutoPedidoTransf) {
     dlgProduto?.updateProduto(produto)
   }
 

@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.zpl
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.SystemUtils
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 
@@ -123,7 +124,22 @@ object EtiquetaChave {
     printPreview(impressora, dadosEtiquetas)
   }
 
+  @JvmName("printPreviewEntVenda")
   fun printPreviewEnt(impressora: String, produtos: List<ProdutoPedidoVenda>) {
+    val dadosEtiquetas = produtos.map { produto ->
+      DadosEtiquetaPedido(titulo = "Entregue",
+                          usuario = produto.usuarioNameCD,
+                          loja = produto.loja,
+                          pedido = produto.ordno.toString(),
+                          data = produto.dataCD,
+                          hora = produto.horaCD,
+                          local = produto.localizacao ?: "")
+    }.distinct()
+    printPreview(impressora, dadosEtiquetas)
+  }
+
+  @JvmName("printPreviewEntTransf")
+  fun printPreviewEnt(impressora: String, produtos: List<ProdutoPedidoTransf>) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaPedido(titulo = "Entregue",
                           usuario = produto.usuarioNameCD,

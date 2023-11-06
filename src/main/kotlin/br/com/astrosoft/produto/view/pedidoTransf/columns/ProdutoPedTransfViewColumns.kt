@@ -1,95 +1,95 @@
 package br.com.astrosoft.produto.view.pedidoTransf.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoPedTransfViewColumns {
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfUsuarioNameCD() = columnGrid(ProdutoPedidoVenda::usuarioNameCD) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfUsuarioNameCD() = columnGrid(ProdutoPedidoTransf::usuarioNameCD) {
     this.setHeader("Usuário CD")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfCodigo() = columnGrid(ProdutoPedidoVenda::codigo) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfCodigo() = columnGrid(ProdutoPedidoTransf::codigo) {
     this.setHeader("Código")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfGrade() = columnGrid(ProdutoPedidoVenda::grade) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfGrade() = columnGrid(ProdutoPedidoTransf::grade) {
     this.setHeader("Grade")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfGradeAlternativa() = columnGrid(ProdutoPedidoVenda::gradeAlternativa) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfGradeAlternativa() = columnGrid(ProdutoPedidoTransf::gradeAlternativa) {
     this.setHeader("Grade Editada")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfLocalizacao() = columnGrid(ProdutoPedidoVenda::localizacao) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfLocalizacao() = columnGrid(ProdutoPedidoTransf::localizacao) {
     this.setHeader("Loc")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfTipo() = columnGrid(ProdutoPedidoVenda::statusStr) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfTipo() = columnGrid(ProdutoPedidoTransf::statusStr) {
     this.setHeader("Status")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfBarcode() = columnGrid(ProdutoPedidoVenda::barcode) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfBarcode() = columnGrid(ProdutoPedidoTransf::barcode) {
     this.setHeader("Código de Barras")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfDescricao() = columnGrid(ProdutoPedidoVenda::descricao) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfDescricao() = columnGrid(ProdutoPedidoTransf::descricao) {
     this.setHeader("Descrição")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfVendno() = columnGrid(ProdutoPedidoVenda::vendno) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfVendno() = columnGrid(ProdutoPedidoTransf::vendno) {
     this.setHeader("Fornecedor")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfFornecedor() = columnGrid(ProdutoPedidoVenda::fornecedor) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfFornecedor() = columnGrid(ProdutoPedidoTransf::fornecedor) {
     this.setHeader("Nome Fornecedor")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfTypeNo() = columnGrid(ProdutoPedidoVenda::typeno) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfTypeNo() = columnGrid(ProdutoPedidoTransf::typeno) {
     this.setHeader("Tipo")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfTypeName() = columnGrid(ProdutoPedidoVenda::typeName) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfTypeName() = columnGrid(ProdutoPedidoTransf::typeName) {
     this.setHeader("Nome Tipo")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfClno() = columnGrid(ProdutoPedidoVenda::clno) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfClno() = columnGrid(ProdutoPedidoTransf::clno) {
     this.setHeader("Centro de lucro")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfClName() = columnGrid(ProdutoPedidoVenda::clname) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfClName() = columnGrid(ProdutoPedidoTransf::clname) {
     this.setHeader("Nome Centro de Lucro")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfAltura() = columnGrid(ProdutoPedidoVenda::altura) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfAltura() = columnGrid(ProdutoPedidoTransf::altura) {
     this.setHeader("Altura")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfComprimento() = columnGrid(ProdutoPedidoVenda::comprimento) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfComprimento() = columnGrid(ProdutoPedidoTransf::comprimento) {
     this.setHeader("Comprimento")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfLargura() = columnGrid(ProdutoPedidoVenda::largura) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfLargura() = columnGrid(ProdutoPedidoTransf::largura) {
     this.setHeader("Largura")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfPrecoCheio() = columnGrid(ProdutoPedidoVenda::precoCheio) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfPrecoCheio() = columnGrid(ProdutoPedidoTransf::precoCheio) {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfQuantidade() = columnGrid(ProdutoPedidoVenda::quantidade) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfQuantidade() = columnGrid(ProdutoPedidoTransf::quantidade) {
     this.setHeader("Quant")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfEstoque() = columnGrid(ProdutoPedidoVenda::estoque) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfEstoque() = columnGrid(ProdutoPedidoTransf::estoque) {
     this.setHeader("Estoque")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfPrecoUnitario() = columnGrid(ProdutoPedidoVenda::preco) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfPrecoUnitario() = columnGrid(ProdutoPedidoTransf::preco) {
     this.setHeader("Preço")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTransfPrecoTotal() = columnGrid(ProdutoPedidoVenda::total) {
+  fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfPrecoTotal() = columnGrid(ProdutoPedidoTransf::total) {
     this.setHeader("Total")
   }
 }

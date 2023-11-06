@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.ENT)
-    val pedidos = PedidoVenda.findTransf(filtro)
+    val pedidos = PedidoTransf.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
 
@@ -40,13 +40,26 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
+  fun printEtiqueta(pedido: PedidoTransf?) = viewModel.exec {
+    pedido ?: fail("Nenhum pedido selecionado")
+    val user = AppConfig.userLogin() as? UserSaci
+    user?.impressora?.let { impressora ->
+      try {
+        EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        fail("Falha de impressão na impressora $impressora")
+      }
+    }
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfEnt
 }
 
 interface ITabPedidoTransfEnt : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedido
-  fun updatePedidos(pedidos: List<PedidoVenda>)
+  fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoVenda>
+  fun produtosSelcionados(): List<ProdutoPedidoTransf>
 }

@@ -33,7 +33,6 @@ class PedidoVenda(var loja: Int,
 
   companion object {
     fun findVenda(filtro: FiltroPedido) = saci.findPedidoVenda(filtro, userLocais())
-    fun findTransf(filtro: FiltroPedido) = saci.findPedidoTransf(filtro, userLocais())
   }
 }
 
