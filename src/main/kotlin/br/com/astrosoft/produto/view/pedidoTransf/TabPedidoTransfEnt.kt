@@ -79,7 +79,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoEnt == true
+    return username?.pedidoTransfEnt == true
   }
 
   override val label: String

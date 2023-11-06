@@ -11,7 +11,7 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import jakarta.annotation.security.PermitAll
 
-@Route(layout = ProdutoLayout::class, value = "pedido")
+@Route(layout = ProdutoLayout::class, value = "pedidoTransf")
 @PageTitle("Pedido")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
@@ -22,7 +22,7 @@ class PedidoTransfView : ViewLayout<PedidoTransfViewModel>(), IPedidoTransfView 
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
-    return userSaci.pedido
+    return userSaci.pedidoTransf
   }
 
   init {

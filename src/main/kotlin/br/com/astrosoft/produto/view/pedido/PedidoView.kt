@@ -22,7 +22,7 @@ class PedidoView : ViewLayout<PedidoViewModel>(), IPedidoView {
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
-    return userSaci.nota
+    return userSaci.pedido
   }
 
   init {

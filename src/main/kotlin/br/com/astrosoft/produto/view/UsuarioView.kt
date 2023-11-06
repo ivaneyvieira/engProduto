@@ -236,6 +236,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
+            h4("Pedido Transf"){
+              colspan = 2
+            }
+            checkBox("CD") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::pedidoTransfCD.name)
+            }
+            checkBox("Entrege") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::pedidoTransfEnt.name)
+            }
+          }
+          formLayout {
             h4("Receber Entrada") {
               colspan = 2
             }

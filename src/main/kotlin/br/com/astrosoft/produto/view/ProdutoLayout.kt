@@ -6,13 +6,13 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.notaEntrada.NotaEntradaView
 import br.com.astrosoft.produto.view.notaSaida.NotaView
 import br.com.astrosoft.produto.view.pedido.PedidoView
+import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.icon.VaadinIcon.*
-import com.vaadin.flow.component.tabs.Tabs
 
 class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
@@ -31,6 +31,12 @@ class ProdutoLayout : AppLayoutAbstract() {
         title = "Ressuprimento",
         routeClass = RessuprimentoView::class
       )
+      if (userSaci?.pedidoTransf == true) route(
+        icon = DIPLOMA,
+        title = "Pedido Transf",
+        routeClass = PedidoTransfView::class
+      )
+
       if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)
     }
   }
