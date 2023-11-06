@@ -55,8 +55,8 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
         viewModel.updateView()
       }
     }
-    colunaPedidoTransfNumero()
     colunaPedidoTransfData()
+    colunaPedidoTransfNumero()
     colunaPedidoTransfVendedor()
   }
 
