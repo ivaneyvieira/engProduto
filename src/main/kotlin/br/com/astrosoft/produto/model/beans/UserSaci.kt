@@ -1,13 +1,13 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.IUser
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import kotlin.math.pow
 import kotlin.reflect.KProperty
 
 class UserSaci : IUser {
-  var no: Int = 0
+  override var no: Int = 0
   var name: String = ""
   override var login: String = ""
   override var senha: String = ""
@@ -114,7 +114,7 @@ class UserSaci : IUser {
     }
 
     fun userLocais(): List<String> {
-      val username = Config.user as? UserSaci
+      val username = AppConfig.userLogin() as? UserSaci
       if (username?.admin == true) return listOf("TODOS")
       return username?.listLocais?.toList() ?: emptyList()
     }

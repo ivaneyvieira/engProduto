@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -23,7 +23,7 @@ class DlgProdutosBase(val viewModel: TabNotaEntradaBaseViewModel, val nota: Nota
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
   private val userSaci
-    get() = Config.user as? UserSaci
+    get() = AppConfig.userLogin() as? UserSaci
 
   fun showDialog(onClose: () -> Unit) {
     val status = if (userSaci?.receberProcessar == true) "Pronto para processar" else ""

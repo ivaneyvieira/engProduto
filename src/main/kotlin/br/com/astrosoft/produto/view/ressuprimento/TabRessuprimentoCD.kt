@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
@@ -80,8 +80,8 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     dlgProduto?.updateProduto(produto)
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoCD == true
   }
 

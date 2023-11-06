@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.view.pedido
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoChaveCD
 import br.com.astrosoft.produto.view.pedido.columns.PedidoColumns.colunaPedidoCliente
@@ -28,7 +27,7 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
 
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       isVisible = user?.storeno == 0
       value = user?.storeno
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -78,8 +77,8 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoEnt == true
   }
 

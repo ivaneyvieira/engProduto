@@ -1,10 +1,9 @@
 package br.com.astrosoft.produto.view.notaSaida
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
-import br.com.astrosoft.framework.view.localePtBr
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveCD
@@ -63,7 +62,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     edtLoja = integerField("Loja") {
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       isVisible = user?.lojaSaidaEntregueOk() == 0
       value = user?.lojaSaidaEntregueOk()
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -137,8 +136,8 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.notaEnt == true
   }
 

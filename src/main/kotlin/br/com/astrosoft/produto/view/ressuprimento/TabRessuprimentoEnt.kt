@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoChaveCD
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
@@ -20,7 +20,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
-        TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
+  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
   private var dlgProduto: DlgProdutosRessuEnt? = null
   private lateinit var edtRessuprimento: IntegerField
 
@@ -67,8 +67,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoEnt == true
   }
 

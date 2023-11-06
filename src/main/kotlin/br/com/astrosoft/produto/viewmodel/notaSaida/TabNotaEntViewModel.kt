@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.notaSaida
 
-import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -28,7 +28,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
 
   fun printEtiquetaEnt(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, nota.produtos(EMarcaNota.ENT))

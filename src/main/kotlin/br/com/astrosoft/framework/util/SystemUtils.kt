@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -19,8 +20,7 @@ object SystemUtils {
     val envResult = enviroment[variable]
     return if (envResult == null || envResult.trim { it <= ' ' } == "") {
       def
-    }
-    else envResult
+    } else envResult
   }
 
   fun resize(imagem: ByteArray?, width: Int, height: Int): ByteArray? {
@@ -49,6 +49,41 @@ object SystemUtils {
     val imageInByte = baos.toByteArray()
     baos.close()
     return imageInByte
+  }
+
+  fun getResourceAsStream(name: String?): InputStream? {
+    var nameRet = name
+    nameRet = resolveName(nameRet)
+    val cl = SystemUtils::class.java.classLoader ?: return ClassLoader.getSystemResourceAsStream(nameRet)
+    return cl.getResourceAsStream(nameRet)
+  }
+
+  fun readStream(file: String): InputStream? {
+    val resource = SystemUtils::class.java.getResource(file) ?: return null
+    val path = Paths.get(resource.toURI())
+    val encoded = Files.readAllBytes(path)
+    return ByteArrayInputStream(encoded)
+  }
+
+  private fun resolveName(name: String?): String? {
+    var nameRet = name
+    if (nameRet == null) {
+      return nameRet
+    }
+    if (!nameRet.startsWith("/")) {
+      var c: Class<*> = SystemUtils::class.java
+      while (c.isArray) {
+        c = c.componentType
+      }
+      val baseName = c.name
+      val index = baseName.lastIndexOf('.')
+      if (index != -1) {
+        nameRet = baseName.substring(0, index).replace('.', '/') + "/" + nameRet
+      }
+    } else {
+      nameRet = nameRet.substring(1)
+    }
+    return nameRet
   }
 
   fun readFile(file: String): String {

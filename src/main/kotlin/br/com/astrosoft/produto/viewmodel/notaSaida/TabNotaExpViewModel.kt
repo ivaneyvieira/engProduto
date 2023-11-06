@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.notaSaida
 
-import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -28,7 +28,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = Config.user?.login ?: ""
+    val usuario = AppConfig.userLogin()?.login ?: ""
     itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
       produtoNF.usuarioExp = "$usuario-$dataHora"
@@ -40,7 +40,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, produtos)

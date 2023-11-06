@@ -1,97 +1,95 @@
 package br.com.astrosoft.produto.view.notaSaida.columns
 
-import br.com.astrosoft.framework.view.addColumnDouble
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoNFNFSViewColumns {
-  fun Grid<ProdutoNFS>.produtoNFUsuarioNameCD() = addColumnString(ProdutoNFS::usuarioNameCD) {
+  fun Grid<ProdutoNFS>.produtoNFUsuarioNameCD() = columnGrid(ProdutoNFS::usuarioNameCD) {
     this.setHeader("Usuário CD")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFUsuarioNameExp() = addColumnString(ProdutoNFS::usuarioNameExp) {
+  fun Grid<ProdutoNFS>.produtoNFUsuarioNameExp() = columnGrid(ProdutoNFS::usuarioNameExp) {
     this.setHeader("Usuário Exp")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFCodigo() = addColumnString(ProdutoNFS::codigo) {
+  fun Grid<ProdutoNFS>.produtoNFCodigo() = columnGrid(ProdutoNFS::codigo) {
     this.setHeader("Código")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFGrade() = addColumnString(ProdutoNFS::grade) {
+  fun Grid<ProdutoNFS>.produtoNFGrade() = columnGrid(ProdutoNFS::grade) {
     this.setHeader("Grade")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFGradeAlternativa() = addColumnString(ProdutoNFS::gradeAlternativa) {
+  fun Grid<ProdutoNFS>.produtoNFGradeAlternativa() = columnGrid(ProdutoNFS::gradeAlternativa) {
     this.setHeader("Grade Editada")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFLocalizacao() = addColumnString(ProdutoNFS::local) {
+  fun Grid<ProdutoNFS>.produtoNFLocalizacao() = columnGrid(ProdutoNFS::local) {
     this.setHeader("Loc")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFBarcode() = addColumnString(ProdutoNFS::barcode) {
+  fun Grid<ProdutoNFS>.produtoNFBarcode() = columnGrid(ProdutoNFS::barcode) {
     this.setHeader("Código de Barras")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFDescricao() = addColumnString(ProdutoNFS::descricao) {
+  fun Grid<ProdutoNFS>.produtoNFDescricao() = columnGrid(ProdutoNFS::descricao) {
     this.setHeader("Descrição")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFVendno() = addColumnInt(ProdutoNFS::vendno) {
+  fun Grid<ProdutoNFS>.produtoNFVendno() = columnGrid(ProdutoNFS::vendno) {
     this.setHeader("Fornecedor")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFFornecedor() = addColumnString(ProdutoNFS::fornecedor) {
+  fun Grid<ProdutoNFS>.produtoNFFornecedor() = columnGrid(ProdutoNFS::fornecedor) {
     this.setHeader("Nome Fornecedor")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFTypeNo() = addColumnInt(ProdutoNFS::typeno) {
+  fun Grid<ProdutoNFS>.produtoNFTypeNo() = columnGrid(ProdutoNFS::typeno) {
     this.setHeader("Tipo")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFTypeName() = addColumnString(ProdutoNFS::typeName) {
+  fun Grid<ProdutoNFS>.produtoNFTypeName() = columnGrid(ProdutoNFS::typeName) {
     this.setHeader("Nome Tipo")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFClno() = addColumnString(ProdutoNFS::clno) {
+  fun Grid<ProdutoNFS>.produtoNFClno() = columnGrid(ProdutoNFS::clno) {
     this.setHeader("Centro de lucro")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFClName() = addColumnString(ProdutoNFS::clname) {
+  fun Grid<ProdutoNFS>.produtoNFClName() = columnGrid(ProdutoNFS::clname) {
     this.setHeader("Nome Centro de Lucro")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFAltura() = addColumnInt(ProdutoNFS::altura) {
+  fun Grid<ProdutoNFS>.produtoNFAltura() = columnGrid(ProdutoNFS::altura) {
     this.setHeader("Altura")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFComprimento() = addColumnInt(ProdutoNFS::comprimento) {
+  fun Grid<ProdutoNFS>.produtoNFComprimento() = columnGrid(ProdutoNFS::comprimento) {
     this.setHeader("Comprimento")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFLargura() = addColumnInt(ProdutoNFS::largura) {
+  fun Grid<ProdutoNFS>.produtoNFLargura() = columnGrid(ProdutoNFS::largura) {
     this.setHeader("Largura")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFPrecoCheio() = addColumnDouble(ProdutoNFS::precoCheio) {
+  fun Grid<ProdutoNFS>.produtoNFPrecoCheio() = columnGrid(ProdutoNFS::precoCheio) {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFNcm() = addColumnString(ProdutoNFS::ncm) {
+  fun Grid<ProdutoNFS>.produtoNFNcm() = columnGrid(ProdutoNFS::ncm) {
     this.setHeader("NCM")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFQuantidade() = addColumnInt(ProdutoNFS::quantidade) {
+  fun Grid<ProdutoNFS>.produtoNFQuantidade() = columnGrid(ProdutoNFS::quantidade) {
     this.setHeader("Quant")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFPrecoUnitario() = addColumnDouble(ProdutoNFS::preco) {
+  fun Grid<ProdutoNFS>.produtoNFPrecoUnitario() = columnGrid(ProdutoNFS::preco) {
     this.setHeader("Preço")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFPrecoTotal() = addColumnDouble(ProdutoNFS::total) {
+  fun Grid<ProdutoNFS>.produtoNFPrecoTotal() = columnGrid(ProdutoNFS::total) {
     this.setHeader("Total")
   }
 }

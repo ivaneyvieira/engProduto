@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 git pull
-./gradlew clean build -Pvaadin.productionMode
-
+docker-compose build
 docker-compose down
-docker-compose up -d
+docker-compose up -d --build
+

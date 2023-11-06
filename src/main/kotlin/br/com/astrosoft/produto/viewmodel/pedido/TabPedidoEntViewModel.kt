@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.pedido
 
-import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -29,7 +29,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
 
   fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {
     pedido ?: fail("Nenhum pedido selecionado")
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))

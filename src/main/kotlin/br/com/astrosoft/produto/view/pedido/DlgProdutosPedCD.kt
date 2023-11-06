@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.pedido
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaPedido
 import br.com.astrosoft.produto.model.beans.PedidoVenda
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
@@ -30,7 +30,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Entregue") {
-        val user = Config.user as? UserSaci
+        val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
@@ -69,7 +69,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       if (user?.voltarCD == true || user?.admin == true) {
         setSelectionMode(Grid.SelectionMode.MULTI)
       }

@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.Produto
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -98,8 +98,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
     updateGrid(produtos)
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoList == true
   }
 

@@ -1,97 +1,95 @@
 package br.com.astrosoft.produto.view.pedido.columns
 
-import br.com.astrosoft.framework.view.addColumnDouble
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoPedViewColumns {
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoUsuarioNameCD() = addColumnString(ProdutoPedidoVenda::usuarioNameCD) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoUsuarioNameCD() = columnGrid(ProdutoPedidoVenda::usuarioNameCD) {
     this.setHeader("Usuário CD")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoCodigo() = addColumnString(ProdutoPedidoVenda::codigo) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoCodigo() = columnGrid(ProdutoPedidoVenda::codigo) {
     this.setHeader("Código")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoGrade() = addColumnString(ProdutoPedidoVenda::grade) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoGrade() = columnGrid(ProdutoPedidoVenda::grade) {
     this.setHeader("Grade")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoGradeAlternativa() = addColumnString(ProdutoPedidoVenda::gradeAlternativa) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoGradeAlternativa() = columnGrid(ProdutoPedidoVenda::gradeAlternativa) {
     this.setHeader("Grade Editada")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoLocalizacao() = addColumnString(ProdutoPedidoVenda::localizacao) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoLocalizacao() = columnGrid(ProdutoPedidoVenda::localizacao) {
     this.setHeader("Loc")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTipo() = addColumnString(ProdutoPedidoVenda::statusStr) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoTipo() = columnGrid(ProdutoPedidoVenda::statusStr) {
     this.setHeader("Status")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoBarcode() = addColumnString(ProdutoPedidoVenda::barcode) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoBarcode() = columnGrid(ProdutoPedidoVenda::barcode) {
     this.setHeader("Código de Barras")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoDescricao() = addColumnString(ProdutoPedidoVenda::descricao) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoDescricao() = columnGrid(ProdutoPedidoVenda::descricao) {
     this.setHeader("Descrição")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoVendno() = addColumnInt(ProdutoPedidoVenda::vendno) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoVendno() = columnGrid(ProdutoPedidoVenda::vendno) {
     this.setHeader("Fornecedor")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoFornecedor() = addColumnString(ProdutoPedidoVenda::fornecedor) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoFornecedor() = columnGrid(ProdutoPedidoVenda::fornecedor) {
     this.setHeader("Nome Fornecedor")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTypeNo() = addColumnInt(ProdutoPedidoVenda::typeno) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoTypeNo() = columnGrid(ProdutoPedidoVenda::typeno) {
     this.setHeader("Tipo")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoTypeName() = addColumnString(ProdutoPedidoVenda::typeName) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoTypeName() = columnGrid(ProdutoPedidoVenda::typeName) {
     this.setHeader("Nome Tipo")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoClno() = addColumnString(ProdutoPedidoVenda::clno) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoClno() = columnGrid(ProdutoPedidoVenda::clno) {
     this.setHeader("Centro de lucro")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoClName() = addColumnString(ProdutoPedidoVenda::clname) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoClName() = columnGrid(ProdutoPedidoVenda::clname) {
     this.setHeader("Nome Centro de Lucro")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoAltura() = addColumnInt(ProdutoPedidoVenda::altura) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoAltura() = columnGrid(ProdutoPedidoVenda::altura) {
     this.setHeader("Altura")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoComprimento() = addColumnInt(ProdutoPedidoVenda::comprimento) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoComprimento() = columnGrid(ProdutoPedidoVenda::comprimento) {
     this.setHeader("Comprimento")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoLargura() = addColumnInt(ProdutoPedidoVenda::largura) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoLargura() = columnGrid(ProdutoPedidoVenda::largura) {
     this.setHeader("Largura")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoCheio() = addColumnDouble(ProdutoPedidoVenda::precoCheio) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoCheio() = columnGrid(ProdutoPedidoVenda::precoCheio) {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoQuantidade() = addColumnInt(ProdutoPedidoVenda::quantidade) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoQuantidade() = columnGrid(ProdutoPedidoVenda::quantidade) {
     this.setHeader("Quant")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoEstoque() = addColumnInt(ProdutoPedidoVenda::estoque) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoEstoque() = columnGrid(ProdutoPedidoVenda::estoque) {
     this.setHeader("Estoque")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoUnitario() = addColumnDouble(ProdutoPedidoVenda::preco) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoUnitario() = columnGrid(ProdutoPedidoVenda::preco) {
     this.setHeader("Preço")
   }
 
-  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoTotal() = addColumnDouble(ProdutoPedidoVenda::total) {
+  fun Grid<ProdutoPedidoVenda>.produtoPedidoPrecoTotal() = columnGrid(ProdutoPedidoVenda::total) {
     this.setHeader("Total")
   }
 }

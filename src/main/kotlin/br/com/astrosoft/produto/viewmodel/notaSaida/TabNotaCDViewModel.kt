@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.notaSaida
 
-import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -39,7 +39,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = Config.user?.login ?: ""
+      val usuario = AppConfig.userLogin()?.login ?: ""
       produtoNF.usuarioCD = "$usuario-$dataHora"
       produtoNF.salva()
     }
@@ -51,7 +51,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produtoNF.marca = EMarcaNota.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = Config.user?.login ?: ""
+    val usuario = AppConfig.userLogin()?.login ?: ""
     produtoNF.usuarioCD = "$usuario-$dataHora"
     produtoNF.salva()
     subView.updateProdutos()
@@ -63,7 +63,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, produtos)
@@ -76,7 +76,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, nota.produtos(EMarcaNota.CD))

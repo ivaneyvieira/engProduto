@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
-import br.com.astrosoft.framework.model.Config.user
-import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.framework.view.integerFieldEditor
-import br.com.astrosoft.framework.view.withEditor
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.ProdutoNFE
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -41,7 +41,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
 
   private val userSaci
-    get() = user as? UserSaci
+    get() = AppConfig.userLogin() as? UserSaci
 
   fun showDialog(onClose: () -> Unit) {
     val status = if (userSaci?.receberProcessar == true) "Pronto para processar" else ""

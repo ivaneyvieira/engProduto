@@ -1,14 +1,15 @@
 package br.com.astrosoft.produto.model
 
-import br.com.astrosoft.framework.model.Config.appName
 import br.com.astrosoft.framework.model.DB
+import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
+import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
 
-class QuerySaci : QueryDB(driver, url, username, password) {
+class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): UserSaci? {
     login ?: return null
     val sql = "/sqlSaci/userSenha.sql"
@@ -230,12 +231,14 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     val nfno = filtro.nfno
     val nfse = filtro.nfse
     val listaTipos =
-      listOfNotNull(if (user?.nfceExpedicao == true) "NFCE" else null,
-                    if (user?.vendaExpedicao == true) "VENDA" else null,
-                    if (user?.entRetExpedicao == true) "ENT_RET" else null,
-                    if (user?.entRetExpedicao == true) "RETIRAF" else null,
-                    if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
-                    if (user?.vendaFExpedicao == true) "VENDAF" else null)
+        listOfNotNull(
+          if (user?.nfceExpedicao == true) "NFCE" else null,
+          if (user?.vendaExpedicao == true) "VENDA" else null,
+          if (user?.entRetExpedicao == true) "ENT_RET" else null,
+          if (user?.entRetExpedicao == true) "RETIRAF" else null,
+          if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
+          if (user?.vendaFExpedicao == true) "VENDAF" else null
+        )
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: dataInicial
     return if (dataInicial == 0 && dataFinal == 0) emptyList()
@@ -274,7 +277,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
 
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, locais: List<String>): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    val produtos =  query(sql, ProdutoNFS::class) {
+    val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
@@ -297,9 +300,11 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun findProdutoRessuprimento(pedido: Ressuprimento,
-                               marca: EMarcaRessuprimento,
-                               locais: List<String>): List<ProdutoRessuprimento> {
+  fun findProdutoRessuprimento(
+    pedido: Ressuprimento,
+    marca: EMarcaRessuprimento,
+    locais: List<String>
+  ): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
@@ -376,7 +381,7 @@ class QuerySaci : QueryDB(driver, url, username, password) {
     }
   }
 
-  fun addProdutoReceber(chave: String, barcode: String, quant: Int) {
+  fun addProdutoReceber(chave: String?, barcode: String, quant: Int) {
     val sql = "/sqlSaci/addProdutoConf.sql"
     return script(sql) {
       addOptionalParameter("nfekey", chave)
@@ -414,12 +419,16 @@ class QuerySaci : QueryDB(driver, url, username, password) {
 
   companion object {
     private val db = DB("saci")
-    internal val driver = db.driver
-    internal val url = db.url
-    internal val username = db.username
-    internal val password = db.password
-    val ipServer: String? = url.split("/").getOrNull(2)
+    val ipServer: String? = db.url.split("/").getOrNull(2)
+
+    internal val database = DatabaseConfig(
+      driver = db.driver,
+      url = db.url,
+      user = db.username,
+      password = db.password
+    )
   }
 }
+
 
 val saci = QuerySaci()

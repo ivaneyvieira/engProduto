@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
@@ -30,7 +30,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos de Ressuprimento ${ressuprimento.numero}", toolBar = {
       button("Entregue") {
-        val user = Config.user as? UserSaci
+        val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {

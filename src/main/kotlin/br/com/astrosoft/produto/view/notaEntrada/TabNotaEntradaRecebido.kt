@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.FiltroNotaEntrada
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -38,7 +37,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       value = user?.storeno
       addValueChangeListener {
         viewModel.updateView()
@@ -108,8 +107,8 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     dlgProduto?.update()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.notaEntradaRecebido == true
   }
 

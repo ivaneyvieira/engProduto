@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.view.notaSaida
 
-import br.com.astrosoft.framework.view.SubWindowForm
-import br.com.astrosoft.framework.view.comboFieldEditor
-import br.com.astrosoft.framework.view.withEditor
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.PrdGrade
@@ -68,14 +68,17 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
             Notification.show("O produto não está no grupo de piso")
             false
           }
+
           it.bean.tipoNota != 4                    -> {
             Notification.show("Não é uma notaSaida de edtrega futura")
             false
           }
+
           nota.cancelada == "S"                    -> {
             Notification.show("A notaSaida está cancelada")
             false
           }
+
           else                                     -> true
         }
       }, closeEditor = { binder ->

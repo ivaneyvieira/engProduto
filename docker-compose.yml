@@ -1,23 +1,25 @@
 version: "3"
 services:
-  engecopi_pro:
-    image: tomcat:8
-    container_name: eng_produto
+  eng_substi:
+    container_name: eng_substi
     ports:
-      - "8034:8080"
+      - "8052:8080"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
+      LANG: 'pt_BR.UTF-8'
+      LANGUAGE: 'pt_BR:pt'
+      LC_ALL: 'pt_BR.UTF-8'
+    build: .
     volumes:
-      - ./build/libs/produto.war:/usr/local/tomcat/webapps/engProduto.war
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
-      rede_pro:
-        ipv4_address: 172.134.1.1
+      net_substi:
+        ipv4_address: 172.192.9.1
 networks:
-  rede_pro:
+  net_substi:
     ipam:
       driver: default
       config:
-        - subnet: 172.134.0.0/16
+        - subnet: 172.192.0.0/16

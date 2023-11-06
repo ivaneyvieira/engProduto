@@ -5,17 +5,17 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class Ressuprimento(
-  val numero: Long,
-  val fornecedor: Int,
-  val data: LocalDate?,
-  val comprador: Int,
-  val localizacao: String?,
-  val usuarioCD: String?,
-  val totalProdutos: Double,
-  val marca: Int?,
-  val cancelada: String?,
-  val notaBaixa: String?,
-  val dataBaixa: LocalDate?,
+  var numero: Int,
+  var fornecedor: Int,
+  var data: LocalDate?,
+  var comprador: Int,
+  var localizacao: String?,
+  var usuarioCD: String?,
+  var totalProdutos: Double,
+  var marca: Int?,
+  var cancelada: String?,
+  var notaBaixa: String?,
+  var dataBaixa: LocalDate?,
                    ) {
 
   val situacao

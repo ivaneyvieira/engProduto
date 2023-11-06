@@ -11,18 +11,22 @@ import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.reflect.KClass
 
-typealias QueryHandle = Query.() -> Unit
+typealias QueryHandler = Query.() -> Unit
 
-open class QueryDB(driver: String, url: String, username: String, password: String) {
-  protected val sql2o: Sql2o
+open class QueryDB(database: DatabaseConfig) {
+  private val sql2o: Sql2o
 
   init {
-    registerDriver(driver)
-    val maps = HashMap<Class<*>, Converter<*>>()
-    maps[LocalDate::class.java] = LocalDateConverter()
-    maps[LocalTime::class.java] = LocalSqlTimeConverter()
-    maps[ByteArray::class.java] = ByteArrayConverter()
-    this.sql2o = Sql2o(url, username, password, NoQuirks(maps))
+    try {
+      Class.forName(database.driver)
+      val maps = HashMap<Class<*>, Converter<*>>()
+      maps[LocalDate::class.java] = LocalDateConverter()
+      maps[LocalTime::class.java] = LocalSqlTimeConverter()
+      maps[ByteArray::class.java] = ByteArrayConverter()
+      this.sql2o = Sql2o(database.url, database.user, database.password, NoQuirks(maps))
+    } catch (e: Exception) {
+      throw RuntimeException(e)
+    }
   }
 
   private fun registerDriver(driver: String) {
@@ -32,10 +36,12 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  protected fun <T : Any> query(file: String,
-                                classes: KClass<T>,
-                                sqlLazy: SqlLazy = SqlLazy(),
-                                lambda: QueryHandle = {}): List<T> {
+  protected fun <T : Any> query(
+    file: String,
+    classes: KClass<T>,
+    sqlLazy: SqlLazy = SqlLazy(),
+    lambda: QueryHandler = {}
+  ): List<T> {
     val statements = toStratments(file)
     if (statements.isEmpty()) return emptyList()
     val lastIndex = statements.lastIndex
@@ -48,10 +54,12 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  protected fun <R : Any> querySerivce(file: String,
-                                       complemento: String?,
-                                       lambda: QueryHandle = {},
-                                       result: (Query) -> R): R {
+  protected fun <R : Any> querySerivce(
+    file: String,
+    complemento: String?,
+    lambda: QueryHandler = {},
+    result: (Query) -> R
+  ): R {
     val statements = toStratments(file, complemento)
     val lastIndex = statements.lastIndex
     val query = statements[lastIndex]
@@ -70,27 +78,32 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     return query
   }
 
-  private fun querySQLResult(con: Connection, sql: String?, lambda: QueryHandle = {}): Query {
+  private fun querySQLResult(con: Connection, sql: String?, lambda: QueryHandler = {}): Query {
     val query = con.createQueryConfig(sql)
     query.lambda()
     return query
   }
 
-  private fun <T : Any> querySQL(con: Connection, sql: String?, classes: KClass<T>, lambda: QueryHandle = {}): List<T> {
+  private fun <T : Any> querySQL(
+    con: Connection,
+    sql: String?,
+    classes: KClass<T>,
+    lambda: QueryHandler = {}
+  ): List<T> {
     val query = con.createQueryConfig(sql)
     query.lambda()
     println(sql)
     return query.executeAndFetch(classes.java)
   }
 
-  protected fun script(file: String, lambda: QueryHandle = {}) {
+  protected fun script(file: String, lambda: QueryHandler = {}) {
     val stratments = toStratments(file)
     transaction { con ->
       scriptSQL(con, stratments, lambda)
     }
   }
 
-  protected fun script(file: String, lambda: List<QueryHandle>) {
+  protected fun script(file: String, lambda: List<QueryHandler>) {
     val stratments = toStratments(file)
     transaction { con ->
       scriptSQL(con, stratments, lambda)
@@ -104,7 +117,7 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     return sqlComplemento.split(";").filter { it.isNotBlank() || it.isNotEmpty() }
   }
 
-  private fun scriptSQL(con: Connection, stratments: List<String>, lambda: QueryHandle = {}) {
+  private fun scriptSQL(con: Connection, stratments: List<String>, lambda: QueryHandler = {}) {
     stratments.forEach { sql ->
       val query = con.createQueryConfig(sql)
       query.lambda()
@@ -113,7 +126,7 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
 
-  private fun scriptSQL(con: Connection, stratments: List<String>, lambda: List<QueryHandle>) {
+  private fun scriptSQL(con: Connection, stratments: List<String>, lambda: List<QueryHandler>) {
     stratments.forEach { sql ->
       val query = con.createQueryConfig(sql)
       lambda.forEach { lamb ->
@@ -173,3 +186,5 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
   }
 }
 
+data class ScripyUpdate(val query: Query, val queryText: String)
+data class DatabaseConfig(val url: String, val user: String, val password: String, val driver: String)

@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view
 
-import br.com.astrosoft.framework.view.UserLayout
+import br.com.astrosoft.framework.view.vaadin.UserLayout
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
@@ -10,12 +10,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import jakarta.annotation.security.PermitAll
 import org.vaadin.crudui.crud.CrudOperation
 import org.vaadin.crudui.crud.CrudOperation.*
 import org.vaadin.crudui.crud.impl.GridCrud
 
 @Route(layout = ProdutoLayout::class)
 @PageTitle("Usuário")
+@PermitAll
 class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   override val viewModel = UsuarioViewModel(this)
 

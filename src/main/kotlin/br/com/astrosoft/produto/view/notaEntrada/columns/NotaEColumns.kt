@@ -1,46 +1,44 @@
 package br.com.astrosoft.produto.view.notaEntrada.columns
 
-import br.com.astrosoft.framework.view.addColumnDouble
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnLocalDate
-import br.com.astrosoft.framework.view.addColumnString
+
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import com.vaadin.flow.component.grid.Grid
 
 object NotaEColumns {
-  fun Grid<NotaEntrada>.colunaNFEChave() = addColumnString(NotaEntrada::chave) {
+  fun Grid<NotaEntrada>.colunaNFEChave() = columnGrid(NotaEntrada::chave) {
     this.setHeader("Chave")
   }
 
-  fun Grid<NotaEntrada>.colunaNFEDataEntrada() = addColumnLocalDate(NotaEntrada::entrada) {
+  fun Grid<NotaEntrada>.colunaNFEDataEntrada() = columnGrid(NotaEntrada::entrada) {
     this.setHeader("Entrada")
   }
 
-  fun Grid<NotaEntrada>.colunaNFEDataEmissao() = addColumnLocalDate(NotaEntrada::emissao) {
+  fun Grid<NotaEntrada>.colunaNFEDataEmissao() = columnGrid(NotaEntrada::emissao) {
     this.setHeader("Emissao")
   }
 
-  fun Grid<NotaEntrada>.colunaNFELoja() = addColumnInt(NotaEntrada::loja) {
+  fun Grid<NotaEntrada>.colunaNFELoja() = columnGrid(NotaEntrada::loja) {
     this.setHeader("Loja")
   }
 
-  fun Grid<NotaEntrada>.colunaNFENI() = addColumnInt(NotaEntrada::ni) {
+  fun Grid<NotaEntrada>.colunaNFENI() = columnGrid(NotaEntrada::ni) {
     this.setHeader("NI")
   }
 
-  fun Grid<NotaEntrada>.colunaNFENota() = addColumnString(NotaEntrada::nota) {
+  fun Grid<NotaEntrada>.colunaNFENota() = columnGrid(NotaEntrada::nota) {
     this.setHeader("Nota")
   }
 
-  fun Grid<NotaEntrada>.colunaNFEFornecedor() = addColumnInt(NotaEntrada::fornecedor) {
+  fun Grid<NotaEntrada>.colunaNFEFornecedor() = columnGrid(NotaEntrada::fornecedor) {
     this.setHeader("Fornecedor")
   }
 
-  fun Grid<NotaEntrada>.colunaNFENomeFornecedor() = addColumnString(NotaEntrada::nomeForn) {
+  fun Grid<NotaEntrada>.colunaNFENomeFornecedor() = columnGrid(NotaEntrada::nomeForn) {
     this.setHeader("Nome For")
   }
 
-  fun Grid<NotaEntrada>.colunaNFEValor() = addColumnDouble(NotaEntrada::valorNota) {
+  fun Grid<NotaEntrada>.colunaNFEValor() = columnGrid(NotaEntrada::valorNota) {
     this.setHeader("Valor")
   }
 }

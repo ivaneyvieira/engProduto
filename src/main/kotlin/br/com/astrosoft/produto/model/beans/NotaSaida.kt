@@ -1,35 +1,35 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.Config
 import br.com.astrosoft.framework.model.EDirection
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.SqlOrder
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
 class NotaSaida(
-  val loja: Int,
-  val pdvno: Int,
-  val xano: Long,
-  val numero: Int,
-  val serie: String,
-  val cliente: Int,
-  val nomeCliente: String,
-  val data: LocalDate,
-  val hora: LocalTime?,
-  val vendedor: Int,
-  val nomeVendedor: String,
-  val locais: String?,
-  val usuarioExp: String?,
-  val usuarioCD: String?,
-  val totalProdutos: Double,
-  val marca: Int?,
-  val cancelada: String?,
-  val tipoNotaSaida: String?,
-  val notaEntrega: String?,
-  val dataEntrega: LocalDate?,
+  var loja: Int,
+  var pdvno: Int,
+  var xano: Long,
+  var numero: Int,
+  var serie: String,
+  var cliente: Int,
+  var nomeCliente: String,
+  var data: LocalDate,
+  var hora: LocalTime?,
+  var vendedor: Int,
+  var nomeVendedor: String,
+  var locais: String?,
+  var usuarioExp: String?,
+  var usuarioCD: String?,
+  var totalProdutos: Double,
+  var marca: Int?,
+  var cancelada: String?,
+  var tipoNotaSaida: String?,
+  var notaEntrega: String?,
+  var dataEntrega: LocalDate?,
                ) {
   val nota
     get() = "$numero/$serie"
@@ -65,7 +65,7 @@ class NotaSaida(
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       return saci.findNotaSaida(filtro = filtro,
                                 locais = userLocais(),
                                 user = user,

@@ -2,6 +2,8 @@ package br.com.astrosoft.framework.util
 
 import org.jsoup.Jsoup
 import java.text.DecimalFormat
+import java.text.Normalizer
+import java.util.*
 
 private val formatNumber = DecimalFormat("#,##0.00")
 private val formatInteger = DecimalFormat("#,##0")
@@ -71,13 +73,17 @@ fun parameterNames(sql: String): List<String> {
 fun htmlToText(htmlTxt: String?): String {
   htmlTxt ?: return ""
   return Jsoup.parse(htmlTxt.replace("</p>", "\n").replace("<br>", "\n")).wholeText()
-}/*
-@Suppress("UNCHECKED_CAST")
-fun readInstanceProperty(instance: Any, propertyName: String): Any? {
-  val property = instance::class.memberProperties
-    // don't cast here to <Any, R>, it would succeed silently
-    .firstOrNull {it.name == propertyName} as? KProperty1<Any, *>
-  // force a invalid cast exception if incorrect type here
-  return property?.get(instance)
 }
-*/
+
+private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+
+fun CharSequence.unaccent(): String {
+  val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
+  return REGEX_UNACCENT.replace(temp, "").uppercase(Locale.getDefault())
+}
+
+fun String.customTrim(): String {
+  return trim {
+    it <= ' '
+  }
+}

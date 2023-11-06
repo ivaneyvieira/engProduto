@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
@@ -120,8 +120,8 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
     return itensSelecionados().map { it.pedido() }.distinct()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoReserva == true
   }
 

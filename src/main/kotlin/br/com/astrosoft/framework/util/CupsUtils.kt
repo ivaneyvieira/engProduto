@@ -5,7 +5,7 @@ import org.cups4j.CupsPrinter
 import org.cups4j.PrintJob
 
 object CupsUtils {
-  private val cupsClient = CupsClient("172.20.47.1", 631)
+  private val cupsClient = CupsClient("192.168.1.14", 631, "root")
   private val printers
     get() = cupsClient.printers.toList()
   val printersInfo
@@ -17,18 +17,12 @@ object CupsUtils {
   }
 
   private fun findPrinter(printerName: String): CupsPrinter? {
-    return try {
-      val printers = cupsClient.printers
-      printers.firstOrNull { it.name == printerName }
-    } catch (e: Throwable) {
-      e.printStackTrace()
-      null
-    }
+    val printers = cupsClient.printers.toList()
+    return printers.firstOrNull { it.name == printerName }
   }
 
   @Throws(ECupsPrinter::class)
   fun CupsPrinter.printText(text: String, resultMsg: (String) -> Unit = {}) {
-
     val job = PrintJob.Builder(text.toByteArray()).build()
     try {
       val result = print(job)
@@ -45,8 +39,8 @@ object CupsUtils {
   @Throws(ECupsPrinter::class)
   fun printCups(impressora: String, text: String, resultMsg: (String) -> Unit = {}) {
     val printer =
-            findPrinter(impressora)
-            ?: throw ECupsPrinter("Impressora $impressora não está configurada no sistema operacional")
+        findPrinter(impressora)
+        ?: throw ECupsPrinter("Impressora $impressora não está configurada no sistema operacional")
     printer.printText(text, resultMsg)
   }
 

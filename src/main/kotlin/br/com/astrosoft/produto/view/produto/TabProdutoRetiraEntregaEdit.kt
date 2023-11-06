@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -33,7 +33,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoRetiraEntregaEdit(val viewModel: TabProdutoRetiraEntregaEditViewModel) :
-        TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntregaEdit {
+  TabPanelGrid<ProdutoRetiraEntrega>(ProdutoRetiraEntrega::class), ITabProdutoRetiraEntregaEdit {
   private lateinit var edtProduto: TextField
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtTipo: IntegerField
@@ -108,22 +108,24 @@ class TabProdutoRetiraEntregaEdit(val viewModel: TabProdutoRetiraEntregaEditView
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(loja = edtLoja.value ?: 0,
-                         codigo = edtProduto.value ?: "",
-                         typeno = edtTipo.value ?: 0,
-                         clno = edtCentroLucro.value ?: 0,
-                         vendno = edtFornecedor.value ?: 0,
-                         localizacao = edtLocalizacao.value ?: "",
-                         nota = edtNota.value ?: "",
-                         isEdit = true)
+    return FiltroProduto(
+      loja = edtLoja.value ?: 0,
+      codigo = edtProduto.value ?: "",
+      typeno = edtTipo.value ?: 0,
+      clno = edtCentroLucro.value ?: 0,
+      vendno = edtFornecedor.value ?: 0,
+      localizacao = edtLocalizacao.value ?: "",
+      nota = edtNota.value ?: "",
+      isEdit = true
+    )
   }
 
   override fun updateProdutos(produtos: List<ProdutoRetiraEntrega>) {
     updateGrid(produtos)
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoRetiraEntregaEdit == true
   }
 

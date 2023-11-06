@@ -1,10 +1,9 @@
 package br.com.astrosoft.produto.view.produto
 
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoRetiraEntrega
@@ -117,7 +116,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
 
     this.gridContextMenu {
       val gridGrade = Grid(PrdGrade::class.java, false).apply {
-        this.addColumnString(PrdGrade::grade) {
+        this.columnGrid(PrdGrade::grade) {
           this.setHeader("Grade")
         }
         this.addColumnButton(iconButton = VaadinIcon.CHECK, tooltip = "Seleciona Grade", header = "") {
@@ -126,7 +125,7 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
           val gridContex = this@gridContextMenu
           gridContex.close()
         }
-        this.addColumnInt(PrdGrade::saldo) {
+        this.columnGrid(PrdGrade::saldo) {
           this.setHeader("Saldo")
         }
         width = "400px"
@@ -167,8 +166,8 @@ class TabProdutoRetiraEntrega(val viewModel: TabProdutoRetiraEntregaViewModel) :
     return itensSelecionados().firstOrNull()
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoRetiraEntrega == true
   }
 

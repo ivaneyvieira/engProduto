@@ -1,95 +1,93 @@
 package br.com.astrosoft.produto.view.ressuprimento.columns
 
-import br.com.astrosoft.framework.view.addColumnDouble
-import br.com.astrosoft.framework.view.addColumnInt
-import br.com.astrosoft.framework.view.addColumnString
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoUsuarioNameCD() =
-          addColumnString(ProdutoRessuprimento::usuarioNameCD) {
+          columnGrid(ProdutoRessuprimento::usuarioNameCD) {
             this.setHeader("Usuário CD")
           }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = addColumnString(ProdutoRessuprimento::codigo) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = columnGrid(ProdutoRessuprimento::codigo) {
     this.setHeader("Código")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() = addColumnString(ProdutoRessuprimento::grade) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() = columnGrid(ProdutoRessuprimento::grade) {
     this.setHeader("Grade")
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() =
-          addColumnString(ProdutoRessuprimento::localizacao) {
+          columnGrid(ProdutoRessuprimento::localizacao) {
             this.setHeader("Loc")
           }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTipo() = addColumnString(ProdutoRessuprimento::statusStr) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTipo() = columnGrid(ProdutoRessuprimento::statusStr) {
     this.setHeader("Status")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoBarcode() = addColumnString(ProdutoRessuprimento::barcode) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoBarcode() = columnGrid(ProdutoRessuprimento::barcode) {
     this.setHeader("Código de Barras")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDescricao() = addColumnString(ProdutoRessuprimento::descricao) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDescricao() = columnGrid(ProdutoRessuprimento::descricao) {
     this.setHeader("Descrição")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVendno() = addColumnInt(ProdutoRessuprimento::vendno) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVendno() = columnGrid(ProdutoRessuprimento::vendno) {
     this.setHeader("Fornecedor")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoFornecedor() = addColumnString(ProdutoRessuprimento::fornecedor) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoFornecedor() = columnGrid(ProdutoRessuprimento::fornecedor) {
     this.setHeader("Nome Fornecedor")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTypeNo() = addColumnInt(ProdutoRessuprimento::typeno) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTypeNo() = columnGrid(ProdutoRessuprimento::typeno) {
     this.setHeader("Tipo")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTypeName() = addColumnString(ProdutoRessuprimento::typeName) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTypeName() = columnGrid(ProdutoRessuprimento::typeName) {
     this.setHeader("Nome Tipo")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoClno() = addColumnString(ProdutoRessuprimento::clno) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoClno() = columnGrid(ProdutoRessuprimento::clno) {
     this.setHeader("Centro de lucro")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoClName() = addColumnString(ProdutoRessuprimento::clname) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoClName() = columnGrid(ProdutoRessuprimento::clname) {
     this.setHeader("Nome Centro de Lucro")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoAltura() = addColumnInt(ProdutoRessuprimento::altura) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoAltura() = columnGrid(ProdutoRessuprimento::altura) {
     this.setHeader("Altura")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoComprimento() = addColumnInt(ProdutoRessuprimento::comprimento) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoComprimento() = columnGrid(ProdutoRessuprimento::comprimento) {
     this.setHeader("Comprimento")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLargura() = addColumnInt(ProdutoRessuprimento::largura) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLargura() = columnGrid(ProdutoRessuprimento::largura) {
     this.setHeader("Largura")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoCheio() = addColumnDouble(ProdutoRessuprimento::precoCheio) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoCheio() = columnGrid(ProdutoRessuprimento::precoCheio) {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQuantidade() = addColumnInt(ProdutoRessuprimento::quantidade) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQuantidade() = columnGrid(ProdutoRessuprimento::quantidade) {
     this.setHeader("Quant")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = addColumnInt(ProdutoRessuprimento::estoque) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = columnGrid(ProdutoRessuprimento::estoque) {
     this.setHeader("Estoque")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoUnitario() = addColumnDouble(ProdutoRessuprimento::preco) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoUnitario() = columnGrid(ProdutoRessuprimento::preco) {
     this.setHeader("Preço")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoTotal() = addColumnDouble(ProdutoRessuprimento::total) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoTotal() = columnGrid(ProdutoRessuprimento::total) {
     this.setHeader("Total")
   }
 }

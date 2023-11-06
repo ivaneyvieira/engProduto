@@ -1,13 +1,12 @@
 package br.com.astrosoft.framework.viewmodel
 
-import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
 import java.io.File
 import java.text.DecimalFormat
 
-abstract class PrintText<T> {
+abstract class PrintText<T>(val isTest: () -> Boolean) {
   private val columns = mutableListOf<Column<T, *>>()
 
   fun columText(header: String, size: Int, lineBreak: Boolean = false, process: T.() -> String): PrintText<T> {
@@ -22,11 +21,13 @@ abstract class PrintText<T> {
     return emptyList()
   }
 
-  fun columNumber(header: String,
-                  size: Int,
-                  format: String = "0",
-                  lineBreak: Boolean = false,
-                  process: T.() -> Double): PrintText<T> {
+  fun columNumber(
+    header: String,
+    size: Int,
+    format: String = "0",
+    lineBreak: Boolean = false,
+    process: T.() -> Double
+  ): PrintText<T> {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, process) { number ->
       decimalFormat.format(number.toInt()).lpad(size, " ")
@@ -55,7 +56,7 @@ abstract class PrintText<T> {
       }
       sumary(text)
       finalize(text)
-      if (!DB.test) CupsUtils.printCups(impressora, text.toString())
+      if (isTest() == false) CupsUtils.printCups(impressora, text.toString())
       else {
         println(text.toString())
         File("/tmp/relatorio.txt").writeText(text.toString())
@@ -91,7 +92,8 @@ abstract class PrintText<T> {
 
   protected fun String.negrito(): String {
     val stringBuffer = StringBuilder()
-    stringBuffer.append(0x1b.toChar()).append(0x45.toChar()).append(this).append(0x1b.toChar()).append(0x46.toChar())
+    stringBuffer.append(0x1b.toChar()).append(0x45.toChar()).append(this).append(0x1b.toChar())
+      .append(0x46.toChar())
     return this
   }
 
@@ -129,12 +131,12 @@ abstract class PrintText<T> {
       .append(0x1b.toChar())
       .append(0x45.toChar())
       .append(0x00.toChar())
-      .appendLine()
+      .append("\n")
     return stringBuffer.toString()
   }
 
   private fun StringBuilder.line(line: String): StringBuilder {
-    this.append(line).appendLine()
+    this.append(line).append("\n")
     return this
   }
 
@@ -147,11 +149,13 @@ abstract class PrintText<T> {
   }
 }
 
-data class Column<T, V>(val header: String,
-                        val size: Int,
-                        val lineBreak: Boolean,
-                        val process: T.() -> V,
-                        val posProcess: (V) -> String) {
+data class Column<T, V>(
+  val header: String,
+  val size: Int,
+  val lineBreak: Boolean,
+  val process: T.() -> V,
+  val posProcess: (V) -> String
+) {
   val columnText
     get() = header.rpad(size, "_")
 

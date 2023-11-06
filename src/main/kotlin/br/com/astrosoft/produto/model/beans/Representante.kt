@@ -1,3 +1,3 @@
 package br.com.astrosoft.produto.model.beans
 
-class Representante(val vendno: Int, val nome: String, val telefone: String, val celular: String, val email: String)
+class Representante(var vendno: Int, var nome: String, var telefone: String, var celular: String, var email: String)

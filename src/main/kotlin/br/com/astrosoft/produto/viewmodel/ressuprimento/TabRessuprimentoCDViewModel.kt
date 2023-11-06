@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
-import br.com.astrosoft.framework.model.Config
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -24,7 +24,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = Config.user?.login ?: ""
+      val usuario = AppConfig.userLogin()?.login ?: ""
       produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
@@ -35,7 +35,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marca = EMarcaRessuprimento.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = Config.user?.login ?: ""
+    val usuario = AppConfig.userLogin()?.login ?: ""
     produto.usuarioCD = "$usuario-$dataHora"
     subView.updateProduto(produto)
   }
@@ -46,7 +46,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Nenhum produto selecionado")
     }
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = Config.user?.login ?: ""
+    val usuario = AppConfig.userLogin()?.login ?: ""
     itens.forEach { produto ->
       produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
@@ -57,7 +57,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoRessuprimento>) {
-    val user = Config.user as? UserSaci
+    val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, produtos)

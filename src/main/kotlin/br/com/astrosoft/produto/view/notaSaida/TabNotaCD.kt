@@ -1,10 +1,8 @@
 package br.com.astrosoft.produto.view.notaSaida
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.view.TabPanelGrid
-import br.com.astrosoft.framework.view.addColumnButton
-import br.com.astrosoft.framework.view.localePtBr
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
@@ -18,10 +16,8 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCli
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaCD
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -45,7 +41,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       }
     }
     edtLoja = integerField("Loja") {
-      val user = Config.user as? UserSaci
+      val user = AppConfig.userLogin() as? UserSaci
       isVisible = user?.lojaSaidaCDOk() == 0
       value = user?.lojaSaidaCDOk()
       valueChangeMode = ValueChangeMode.LAZY
@@ -100,7 +96,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       vendedor = edtVendedor.value ?: "",
       dataInicial = LocalDate.now().minusDays(15),
       dataFinal = LocalDate.now().plusDays(30),
-                     )
+    )
   }
 
   override fun updateNotas(notas: List<NotaSaida>) {
@@ -123,8 +119,8 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     return dlgProduto?.nota
   }
 
-  override fun isAuthorized(user: IUser): Boolean {
-    val username = user as? UserSaci
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
     return username?.notaCD == true
   }
 

@@ -5,29 +5,30 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class ProdutoRetiraEntrega(
-  val loja: Int,
-  val pedido: Int,
-  val data: LocalDate,
-  val nota: String,
-  val tipo: String,
-  val cliente: Int,
-  val empno: Int,
-  val vendno: Int,
-  val codigo: String,
-  val descricao: String,
-  val grade: String,
-  val quant: Int,
-  val estSaci: Int,
-  val saldo: Int,
-  val typeno: Int,
-  val typeName: String,
-  val clno: String,
-  val clname: String,
-  val localizacao: String,
-  var gradeAlternativa: String,
+  var loja: Int,
+  var pedido: Int,
+  var data: LocalDate?,
+  var nota: String?,
+  var tipo: String?,
+  var cliente: Int?,
+  var empno: Int?,
+  var vendno: Int?,
+  var codigo: String?,
+  var descricao: String?,
+  var grade: String?,
+  var quant: Int?,
+  var estSaci: Int?,
+  var saldo: Int?,
+  var typeno: Int?,
+  var typeName: String?,
+  var clno: String?,
+  var clname: String?,
+  var localizacao: String?,
+  var gradeAlternativa: String?,
                           ) {
   fun findGrades(): List<PrdGrade> {
-    return saci.findGrades(codigo)
+    val cod = codigo ?: return emptyList()
+    return saci.findGrades(cod)
   }
 
   fun salvaGrade() = saci.gravaGrade(this)

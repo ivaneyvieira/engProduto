@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class Loja(val no: Int, val sname: String, val name: String) {
+class Loja(var no: Int, var sname: String, var name: String) {
   val descricao
     get() = "$no - $sname : $name"
 

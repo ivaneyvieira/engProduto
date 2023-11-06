@@ -8,6 +8,7 @@ abstract class UserViewModel<B : IUser, V : IUsuarioView>(view: V) : ViewModel<V
   abstract fun addUser(user: B)
   abstract fun updateUser(user: B)
   abstract fun deleteUser(user: B)
+
   abstract fun createNew(): B
 
   fun findAll(): List<B> {

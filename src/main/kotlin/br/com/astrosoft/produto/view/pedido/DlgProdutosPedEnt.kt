@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.pedido
 
-import br.com.astrosoft.framework.model.Config
-import br.com.astrosoft.framework.view.SubWindowForm
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaPedido
 import br.com.astrosoft.produto.model.beans.PedidoVenda
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoVenda
@@ -27,7 +27,7 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
       button("Volta") {
-        val user = Config.user as? UserSaci
+        val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
