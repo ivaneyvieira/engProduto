@@ -10,7 +10,8 @@ SELECT N.storeno                                          AS loja,
        X.c4                                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.price / 100)               AS totalProdutos,
        MAX(X.s12)                                         AS marca,
-       'N'                                                AS cancelada
+       'N'                                                AS cancelada,
+       SEC_TO_TIME(N.l4)                                  AS hora
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -24,7 +25,9 @@ FROM sqldados.eord AS N
                  ON SD.cgc = C.cpf_cgc
        LEFT JOIN sqldados.users AS U
                  ON U.no = N.userno
-WHERE N.date >= 20231101
+WHERE ((N.date = 20231106 AND N.l4 >= TIME_TO_SEC('14:00:00'))
+  OR (N.date > 20231106)
+  )
   AND N.paymno = 69
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)

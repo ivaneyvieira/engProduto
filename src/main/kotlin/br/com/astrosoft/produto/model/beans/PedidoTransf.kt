@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import java.time.LocalTime
 
 class PedidoTransf(
   var loja: Int,
@@ -18,6 +19,7 @@ class PedidoTransf(
   var totalProdutos: Double?,
   var marca: Int?,
   var cancelada: String?,
+  var hora: LocalTime?,
 ) {
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
