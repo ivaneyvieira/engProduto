@@ -7,6 +7,8 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfCliente
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfData
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLoja
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfVendedor
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfCD
@@ -44,7 +46,8 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
-    colunaPedidoTransfLoja()
+    colunaPedidoTransfLojaOrig()
+    colunaPedidoTransfCliente()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfCD(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -53,7 +56,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     }
     colunaPedidoTransfNumero()
     colunaPedidoTransfData()
-    colunaPedidoTransfCliente()
+    colunaPedidoTransfLojaDest()
     colunaPedidoTransfVendedor()
   }
 

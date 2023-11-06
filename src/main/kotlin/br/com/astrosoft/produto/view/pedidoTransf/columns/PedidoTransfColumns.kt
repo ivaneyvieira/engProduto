@@ -5,6 +5,14 @@ import br.com.astrosoft.produto.model.beans.PedidoTransf
 import com.vaadin.flow.component.grid.Grid
 
 object PedidoTransfColumns {
+  fun Grid<PedidoTransf>.colunaPedidoTransfLojaOrig() = columnGrid(PedidoTransf::lojaOrigem) {
+    this.setHeader("Lj Orig")
+  }
+
+  fun Grid<PedidoTransf>.colunaPedidoTransfLojaDest() = columnGrid(PedidoTransf::lojaDestino) {
+    this.setHeader("Lj Dest")
+  }
+
   fun Grid<PedidoTransf>.colunaPedidoTransfLoja() = columnGrid(PedidoTransf::loja) {
     this.setHeader("Loja")
   }
