@@ -18,13 +18,13 @@ class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
-      if (userSaci?.produto == true) route(icon = FORM, title = "Produtos", routeClass = ProdutoView::class)
-      if (userSaci?.nota == true) route(icon = DIPLOMA, title = "Notas de Saída", routeClass = NotaView::class)
-      if (userSaci?.notaEntrada == true) route(
-        icon = DIPLOMA,
-        title = "Notas de Entrada",
-        routeClass = NotaEntradaView::class
-      )
+      //if (userSaci?.produto == true) route(icon = FORM, title = "Produtos", routeClass = ProdutoView::class)
+      //if (userSaci?.nota == true) route(icon = DIPLOMA, title = "Notas de Saída", routeClass = NotaView::class)
+      //if (userSaci?.notaEntrada == true) route(
+     //   icon = DIPLOMA,
+     //   title = "Notas de Entrada",
+     //   routeClass = NotaEntradaView::class
+     // )
       if (userSaci?.pedido == true) route(icon = DIPLOMA, title = "Pedido", routeClass = PedidoView::class)
       if (userSaci?.pedido == true) route(
         icon = DIPLOMA,

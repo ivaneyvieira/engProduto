@@ -33,7 +33,4 @@ WHERE ((N.date = 20231106 AND N.l4 >= TIME_TO_SEC('14:00:00'))
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.ordno = :ordno OR :ordno = 0)
   AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
-GROUP BY N.storeno,
-         ordno,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1)),
-         IF(:marca = 999, '', MID(L.localizacao, 1, 4))
+GROUP BY N.storeno, ordno
