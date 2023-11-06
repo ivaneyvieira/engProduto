@@ -1,7 +1,7 @@
 SELECT N.storeno                                          AS loja,
        SO.sname                                           AS lojaOrigem,
        SD.sname                                           AS lojaDestino,
-       ordno                                              AS ordno,
+       CAST(N.ordno AS CHAR)                              AS ordno,
        custno                                             AS cliente,
        CAST(date AS DATE)                                 AS data,
        N.empno                                            AS vendedor,

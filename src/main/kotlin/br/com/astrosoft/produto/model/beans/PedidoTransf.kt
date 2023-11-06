@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 class PedidoTransf(
   var loja: Int,
-  var lojaOrigem: String,
-  var ordno: Int,
+  var lojaOrigem: String?,
+  var ordno: String?,
   var lojaDestino: String?,
   var cliente: Int?,
   var usuario: String?,
