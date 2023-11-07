@@ -27,6 +27,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfCD {
@@ -62,12 +63,14 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     }
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
