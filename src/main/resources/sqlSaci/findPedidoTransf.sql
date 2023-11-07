@@ -71,6 +71,7 @@ GROUP BY N.storeno, ordno;
 SELECT loja,
        lojaOrigem,
        lojaDestino,
+       rota,
        ordno,
        cliente,
        data,
