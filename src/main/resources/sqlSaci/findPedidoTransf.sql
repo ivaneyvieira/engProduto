@@ -55,5 +55,5 @@ WHERE N.date > 20231106
       END
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.ordno = :ordno OR :ordno = 0)
-  AND SD.no != SO.no
+  AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)
 GROUP BY N.storeno, ordno
