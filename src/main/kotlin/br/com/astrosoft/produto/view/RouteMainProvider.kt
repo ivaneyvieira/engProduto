@@ -18,7 +18,6 @@ class RouteMainProvider() : IRouteMainProvider {
       val userSaci = AppConfig.userLogin() as? UserSaci
 
       return when {
-        userSaci?.pedido == true       -> PedidoView::class
         userSaci?.pedidoTransf == true -> PedidoTransfView::class
         userSaci?.pedido == true       -> RessuprimentoView::class
         userSaci?.admin == true        -> UsuarioView::class
