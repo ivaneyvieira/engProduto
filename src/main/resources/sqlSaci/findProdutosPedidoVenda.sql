@@ -39,7 +39,5 @@ FROM sqldados.prd            AS P
 	       ON cl.no = P.clno
 WHERE X.storeno = :storeno
   AND X.ordno = :ordno
-  AND (X.s12 = :marca OR :marca = 999)
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY codigo, grade
 

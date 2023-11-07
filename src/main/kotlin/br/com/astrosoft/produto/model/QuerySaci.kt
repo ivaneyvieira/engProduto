@@ -335,13 +335,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoPedidoTransf(pedido: PedidoTransf, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoTransf> {
+  fun findProdutoPedidoTransf(pedido: PedidoTransf, marca: EMarcaPedido): List<ProdutoPedidoTransf> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
     return query(sql, ProdutoPedidoTransf::class) {
       addOptionalParameter("storeno", pedido.loja)
       addOptionalParameter("ordno", pedido.ordno)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locais", locais)
     }
   }
 
