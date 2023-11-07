@@ -8,7 +8,13 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfCliente
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfData
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLoja
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfVendedor
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfEnt
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfEntViewModel
@@ -20,7 +26,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-        ITabPedidoTransfEnt {
+  ITabPedidoTransfEnt {
   private var dlgProduto: DlgProdutosPedTransfEnt? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField
@@ -44,21 +50,22 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
-    colunaPedidoTransfLoja()
-    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { pedido ->
-      viewModel.printEtiqueta(pedido)
-    }
+    colunaPedidoTransfLojaOrig()
+    colunaPedidoTransfLojaDest()
+    colunaPedidoTransfCliente()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfEnt(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    colunaPedidoTransfChaveCD()
-    colunaPedidoTransfNumero()
     colunaPedidoTransfData()
-    colunaPedidoTransfCliente()
+    colunaPedidoTransfNumero()
     colunaPedidoTransfVendedor()
+    colunaPedidoTransfUsuarioNum()
+    colunaPedidoTransfUsuario()
+    colunaPedidoTransfSituacaoPedido()
+    colunaPedidoTransfObsevacao()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedido {
