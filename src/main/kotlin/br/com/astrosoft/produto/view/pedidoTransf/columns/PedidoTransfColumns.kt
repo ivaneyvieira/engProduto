@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.PedidoTransf
+import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
 
 object PedidoTransfColumns {
@@ -39,6 +40,15 @@ object PedidoTransfColumns {
 
   fun Grid<PedidoTransf>.colunaPedidoTransfUsuario() = columnGrid(PedidoTransf::usuario) {
     this.setHeader("Usuário")
+  }
+
+  fun Grid<PedidoTransf>.colunaPedidoTransfSituacaoPedido() = columnGrid(PedidoTransf::situacaoPedido) {
+    this.setHeader("Situação")
+  }
+
+  fun Grid<PedidoTransf>.colunaPedidoTransfObsevacao() = columnGrid(PedidoTransf::observacaoLimpa) {
+    this.setHeader("Observação")
+    this.isExpand = true
   }
 
   fun Grid<PedidoTransf>.colunaPedidoTransfValor() = columnGrid(PedidoTransf::totalProdutos) {

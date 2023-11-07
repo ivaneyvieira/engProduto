@@ -11,7 +11,24 @@ SELECT N.storeno                                          AS loja,
        SUM((X.qtty / 1000) * X.price / 100)               AS totalProdutos,
        MAX(X.s12)                                         AS marca,
        'N'                                                AS cancelada,
-       SEC_TO_TIME(N.l4)                                  AS hora
+       SEC_TO_TIME(N.l4)                                  AS hora,
+       CASE N.status
+         WHEN 0 THEN 'Incluído'
+         WHEN 1 THEN 'Orçado'
+         WHEN 2 THEN 'Reservado'
+         WHEN 3 THEN 'Vendido'
+         WHEN 4 THEN 'Expirado'
+         WHEN 5 THEN 'Cancelado'
+         WHEN 6 THEN 'Reserva B'
+         WHEN 7 THEN 'Trânsito'
+         WHEN 8 THEN 'Futura'
+         ELSE 'Outro'
+       END                                                AS situacaoPedido,
+       CAST(CONCAT(MID(R.remarks__480, 1, 40),
+                   MID(R.remarks__480, 41, 40),
+                   MID(R.remarks__480, 81, 40),
+                   MID(R.remarks__480, 121, 40),
+                   MID(R.remarks__480, 161, 40)) AS CHAR) AS observacao
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -25,6 +42,8 @@ FROM sqldados.eord AS N
                  ON SD.cgc = C.cpf_cgc
        LEFT JOIN sqldados.users AS U
                  ON U.no = N.userno
+       LEFT JOIN sqldados.eordrk AS R
+                 ON R.storeno = N.storeno AND R.ordno = N.ordno
 WHERE ((N.date = 20231106 AND N.l4 >= TIME_TO_SEC('14:00:00'))
   OR (N.date > 20231106)
   )

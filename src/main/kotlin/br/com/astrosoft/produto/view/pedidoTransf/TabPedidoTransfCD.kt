@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfVendedor
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfCD
@@ -60,6 +62,8 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     colunaPedidoTransfNumero()
     colunaPedidoTransfVendedor()
     colunaPedidoTransfUsuario()
+    colunaPedidoTransfSituacaoPedido()
+    colunaPedidoTransfObsevacao()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedido {

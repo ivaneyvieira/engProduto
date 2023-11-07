@@ -20,9 +20,14 @@ class PedidoTransf(
   var marca: Int?,
   var cancelada: String?,
   var hora: LocalTime?,
+  var situacaoPedido: String?,
+  var observacao: String?,
 ) {
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
+
+  val observacaoLimpa
+    get() = observacao?.replace(" +".toRegex(), " ")
 
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 
