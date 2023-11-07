@@ -44,9 +44,7 @@ FROM sqldados.eord AS N
                  ON U.no = N.userno
        LEFT JOIN sqldados.eordrk AS R
                  ON R.storeno = N.storeno AND R.ordno = N.ordno
-WHERE ((N.date = 20231106 AND N.l4 >= TIME_TO_SEC('14:00:00'))
-  OR (N.date > 20231106)
-  )
+WHERE N.date > 20231106
   AND N.paymno = 69
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
