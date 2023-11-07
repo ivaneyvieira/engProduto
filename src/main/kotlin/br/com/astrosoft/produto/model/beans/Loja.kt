@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 
 class Loja(var no: Int, var sname: String, var name: String) {
   val descricao
-    get() = "$no - $sname : $name"
+    get() = "$no - $sname"
 
   companion object {
     val lojaZero = Loja(0, "Todas", "")

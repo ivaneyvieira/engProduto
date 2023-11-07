@@ -45,7 +45,14 @@ class PedidoTransf(
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoTransf(this, marca, userLocais())
 
   companion object {
-    fun findTransf(filtro: FiltroPedido) = saci.findPedidoTransf(filtro)
+    fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
   }
 }
 
+data class FiltroPedidoTransf(
+  val storeno: Int,
+  val pesquisa: String,
+  val marca: EMarcaPedido,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?
+)

@@ -1,3 +1,10 @@
+DO @PESQUISA := :pesquisa;
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISALIKE := IF(@PESQUISA REGEXP '[0-9]+', '%', CONCAT('%', @PESQUISA, '%'));
+
+
+DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
+CREATE TEMPORARY TABLE T_PEDIDO
 SELECT N.storeno                                          AS loja,
        SO.sname                                           AS lojaOrigem,
        SD.sname                                           AS lojaDestino,
@@ -54,6 +61,37 @@ WHERE N.date > 20231106
         ELSE FALSE
       END
   AND (N.storeno = :storeno OR :storeno = 0)
-  AND (N.ordno = :ordno OR :ordno = 0)
   AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)
-GROUP BY N.storeno, ordno
+  AND (N.date >= :dataInicial OR :dataInicial)
+  AND (N.date <= :dataFinal OR :dataFinal)
+GROUP BY N.storeno, ordno;
+
+
+SELECT loja,
+       lojaOrigem,
+       lojaDestino,
+       ordno,
+       cliente,
+       data,
+       vendedor,
+       userno,
+       usuario,
+       localizacao,
+       usuarioCD,
+       totalProdutos,
+       marca,
+       cancelada,
+       hora,
+       situacaoPedido,
+       observacao
+FROM T_PEDIDO
+WHERE (lojaOrigem = @PESQUISA OR
+       lojaDestino = @PESQUISA OR
+       cliente = @PESQUISANUM OR
+       ordno = @PESQUISANUM OR
+       vendedor = @PESQUISANUM OR
+       userno = @PESQUISANUM OR
+       usuario LIKE @PESQUISALIKE OR
+       situacaoPedido LIKE @PESQUISALIKE OR
+       observacao LIKE @PESQUISALIKE OR
+       @PESQUISA = '')

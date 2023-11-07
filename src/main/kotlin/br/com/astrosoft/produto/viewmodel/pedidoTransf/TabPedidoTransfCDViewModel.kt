@@ -16,6 +16,15 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
     subView.updatePedidos(pedidos)
   }
 
+  fun findLoja(storeno : Int) : Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas() : List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun marcaEnt() = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
@@ -73,7 +82,7 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
 }
 
 interface ITabPedidoTransfCD : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedido
+  fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoTransf>

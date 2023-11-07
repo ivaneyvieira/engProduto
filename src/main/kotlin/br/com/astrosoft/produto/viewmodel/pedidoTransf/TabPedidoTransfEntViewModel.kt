@@ -1,16 +1,23 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.ENT)
     val pedidos = PedidoTransf.findTransf(filtro)
     subView.updatePedidos(pedidos)
+  }
+
+  fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
   }
 
   fun marcaCD() {
@@ -27,38 +34,12 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
     subView.updateProdutos()
   }
 
-  fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {
-    pedido ?: fail("Nenhum pedido selecionado")
-    val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
-      try {
-        EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))
-      } catch (e: Throwable) {
-        e.printStackTrace()
-        fail("Falha de impressão na impressora $impressora")
-      }
-    }
-  }
-
-  fun printEtiqueta(pedido: PedidoTransf?) = viewModel.exec {
-    pedido ?: fail("Nenhum pedido selecionado")
-    val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
-      try {
-        EtiquetaChave.printPreviewEnt(impressora, pedido.produtos(EMarcaPedido.ENT))
-      } catch (e: Throwable) {
-        e.printStackTrace()
-        fail("Falha de impressão na impressora $impressora")
-      }
-    }
-  }
-
   val subView
     get() = viewModel.view.tabPedidoTransfEnt
 }
 
 interface ITabPedidoTransfEnt : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedido
+  fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoTransf>
