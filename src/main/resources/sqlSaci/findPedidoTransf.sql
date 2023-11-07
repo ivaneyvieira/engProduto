@@ -5,6 +5,7 @@ SELECT N.storeno                                          AS loja,
        custno                                             AS cliente,
        CAST(date AS DATE)                                 AS data,
        N.empno                                            AS vendedor,
+       U.no                                               AS userno,
        U.name                                             AS usuario,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD,
@@ -46,8 +47,12 @@ FROM sqldados.eord AS N
                  ON R.storeno = N.storeno AND R.ordno = N.ordno
 WHERE N.date > 20231106
   AND N.paymno = 69
-  AND (X.s12 = :marca OR :marca = 999)
+  AND CASE :marca
+        WHEN 0 THEN N.status IN (1, 2, 3, 5, 6, 7, 8)
+        WHEN 1 THEN N.status IN (4)
+        WHEN 999 THEN TRUE
+        ELSE FALSE
+      END
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.ordno = :ordno OR :ordno = 0)
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
 GROUP BY N.storeno, ordno

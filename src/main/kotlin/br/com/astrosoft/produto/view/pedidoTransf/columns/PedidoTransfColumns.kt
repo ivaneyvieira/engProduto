@@ -38,6 +38,10 @@ object PedidoTransfColumns {
     this.setHeader("Vendedor")
   }
 
+  fun Grid<PedidoTransf>.colunaPedidoTransfUsuarioNum() = columnGrid(PedidoTransf::userno) {
+    this.setHeader("Num")
+  }
+
   fun Grid<PedidoTransf>.colunaPedidoTransfUsuario() = columnGrid(PedidoTransf::usuario) {
     this.setHeader("Usuário")
   }

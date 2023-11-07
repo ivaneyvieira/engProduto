@@ -290,13 +290,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findPedidoTransf(filtro: FiltroPedido, locais: List<String>): List<PedidoTransf> {
+  fun findPedidoTransf(filtro: FiltroPedido): List<PedidoTransf> {
     val sql = "/sqlSaci/findPedidoTransf.sql"
     return query(sql, PedidoTransf::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("ordno", filtro.ordno)
-      addOptionalParameter("locais", locais)
     }
   }
 

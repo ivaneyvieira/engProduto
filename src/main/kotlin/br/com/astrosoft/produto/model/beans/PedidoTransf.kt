@@ -11,6 +11,7 @@ class PedidoTransf(
   var ordno: String?,
   var lojaDestino: String?,
   var cliente: Int?,
+  var userno: Int?,
   var usuario: String?,
   var data: LocalDate?,
   var vendedor: Int?,
@@ -44,7 +45,7 @@ class PedidoTransf(
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoTransf(this, marca, userLocais())
 
   companion object {
-    fun findTransf(filtro: FiltroPedido) = saci.findPedidoTransf(filtro, userLocais())
+    fun findTransf(filtro: FiltroPedido) = saci.findPedidoTransf(filtro)
   }
 }
 
