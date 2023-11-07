@@ -8,6 +8,7 @@ CREATE TEMPORARY TABLE T_PEDIDO
 SELECT N.storeno                                          AS loja,
        SO.sname                                           AS lojaOrigem,
        SD.sname                                           AS lojaDestino,
+       CAST(CONCAT('Rota', SO.no, SD.no) AS CHAR)         AS rota,
        CAST(N.ordno AS CHAR)                              AS ordno,
        custno                                             AS cliente,
        CAST(date AS DATE)                                 AS data,

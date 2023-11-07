@@ -10,6 +10,7 @@ class PedidoTransf(
   var lojaOrigem: String?,
   var ordno: String?,
   var lojaDestino: String?,
+  var rota: String?,
   var cliente: Int?,
   var userno: Int?,
   var usuario: String?,
@@ -24,6 +25,7 @@ class PedidoTransf(
   var situacaoPedido: String?,
   var observacao: String?,
 ) {
+
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
@@ -42,7 +44,7 @@ class PedidoTransf(
   val chaveNovaCD: String
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
-  fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoTransf(this, marca, userLocais())
+  fun produtos() = saci.findProdutoPedidoTransf(this)
 
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)

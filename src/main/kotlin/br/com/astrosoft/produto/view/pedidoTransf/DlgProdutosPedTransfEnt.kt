@@ -22,16 +22,7 @@ class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pe
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoPedidoTransf::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos do pedido ${pedido.ordno} loja: ${pedido.loja}", toolBar = {
-      button("Volta") {
-        val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarEnt == true || user?.admin == true
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.marcaCD()
-          gridDetail.setItems(pedido.produtos(EMarcaPedido.ENT))
-        }
-      }
+    form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
     }, onClose = {
       onClose()
     }) {
@@ -66,7 +57,7 @@ class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pe
   }
 
   fun update() {
-    val listProdutos = pedido.produtos(EMarcaPedido.ENT)
+    val listProdutos = pedido.produtos()
     gridDetail.setItems(listProdutos)
   }
 }
