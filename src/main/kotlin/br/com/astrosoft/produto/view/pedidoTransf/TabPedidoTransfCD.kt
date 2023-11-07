@@ -50,15 +50,15 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
-    colunaPedidoTransfLojaOrig()
-    colunaPedidoTransfLojaDest()
-    colunaPedidoTransfCliente()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfCD(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
+    colunaPedidoTransfLojaOrig()
+    colunaPedidoTransfLojaDest()
+    colunaPedidoTransfCliente()
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
     colunaPedidoTransfVendedor()
