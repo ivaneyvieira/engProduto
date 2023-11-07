@@ -106,7 +106,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
   }
 
   override val label: String
-    get() = "CD"
+    get() = "Reserva"
 
   override fun updateComponent() {
     viewModel.updateView()
