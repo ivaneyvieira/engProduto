@@ -10,7 +10,7 @@ SELECT N.storeno                                          AS loja,
        SD.sname                                           AS lojaDestino,
        CAST(CONCAT('Rota', SO.no, SD.no) AS CHAR)         AS rota,
        CAST(N.ordno AS CHAR)                              AS ordno,
-       custno                                             AS cliente,
+       N.custno                                           AS cliente,
        CAST(date AS DATE)                                 AS data,
        N.empno                                            AS vendedor,
        U.no                                               AS userno,
@@ -21,6 +21,8 @@ SELECT N.storeno                                          AS loja,
        MAX(X.s12)                                         AS marca,
        'N'                                                AS cancelada,
        SEC_TO_TIME(N.l4)                                  AS hora,
+       CAST(T.issuedate AS DATE)                          AS dataTransf,
+       CAST(CONCAT(T.nfno, '/', T.nfse) AS CHAR)          AS notaTransf,
        CASE N.status
          WHEN 0 THEN 'Incluído'
          WHEN 1 THEN 'Orçado'
@@ -53,6 +55,9 @@ FROM sqldados.eord AS N
                  ON U.no = N.userno
        LEFT JOIN sqldados.eordrk AS R
                  ON R.storeno = N.storeno AND R.ordno = N.ordno
+       LEFT JOIN sqldados.nf AS T
+                 ON T.storeno = N.storeno
+                   AND T.eordno = N.ordno
 WHERE N.date > 20231106
   AND N.paymno = 69
   AND CASE :marca
@@ -65,7 +70,7 @@ WHERE N.date > 20231106
   AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
-GROUP BY N.storeno, ordno;
+GROUP BY N.storeno, N.ordno;
 
 
 SELECT loja,
@@ -85,7 +90,9 @@ SELECT loja,
        cancelada,
        hora,
        situacaoPedido,
-       observacao
+       observacao,
+       dataTransf,
+       notaTransf
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR

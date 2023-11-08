@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -24,6 +23,8 @@ class PedidoTransf(
   var hora: LocalTime?,
   var situacaoPedido: String?,
   var observacao: String?,
+  var dataTransf: LocalDate?,
+  var notaTransf: String?,
 ) {
 
   val situacao
