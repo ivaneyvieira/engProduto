@@ -48,16 +48,12 @@ object EtiquetaChave {
     val zpl = dados.joinToString("\n") {
       template(it)
     }
-    CupsUtils.printCups(impressora, zpl) {
-      println(it)
-    }
+    CupsUtils.printCups(impressora, zpl)
   }
 
   private fun print(impressora: String, dados: List<DadosEtiquetaPedido>) {
     val template = dados.joinToString("\n") { dado -> template(dado) }
-    CupsUtils.printCups(impressora, template) {
-      println(it)
-    }
+    CupsUtils.printCups(impressora, template)
   }
 
   @JvmName("printRessuprimento")
@@ -65,9 +61,7 @@ object EtiquetaChave {
     val zpl = dados.joinToString("\n") {
       template(it)
     }
-    CupsUtils.printCups(impressora, zpl) {
-      println(it)
-    }
+    CupsUtils.printCups(impressora, zpl)
   }
 
   @JvmName("printPreviewNota")
