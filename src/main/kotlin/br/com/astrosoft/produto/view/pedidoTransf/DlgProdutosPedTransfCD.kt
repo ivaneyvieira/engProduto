@@ -48,12 +48,9 @@ class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedi
       }
 
       produtoPedidoTransfCodigo()
-      produtoPedidoTransfBarcode()
       produtoPedidoTransfDescricao()
       produtoPedidoTransfGrade()
-      produtoPedidoTransfLocalizacao()
       produtoPedidoTransfQuantidade()
-      produtoPedidoTransfEstoque()
 
       this.setClassNameGenerator {
         if (it.marca == EMarcaPedido.ENT.num) "entregue" else null

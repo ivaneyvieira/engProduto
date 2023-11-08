@@ -41,12 +41,9 @@ class DlgProdutosPedTransfEnt(val viewModel: TabPedidoTransfEntViewModel, val pe
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
       produtoPedidoTransfCodigo()
-      produtoPedidoTransfBarcode()
       produtoPedidoTransfDescricao()
       produtoPedidoTransfGrade()
-      produtoPedidoTransfLocalizacao()
       produtoPedidoTransfQuantidade()
-      produtoPedidoTransfEstoque()
     }
     this.addAndExpand(gridDetail)
     update()

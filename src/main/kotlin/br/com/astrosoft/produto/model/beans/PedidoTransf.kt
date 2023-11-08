@@ -25,6 +25,10 @@ class PedidoTransf(
   var observacao: String?,
   var dataTransf: LocalDate?,
   var notaTransf: String?,
+  var autorizado: String?,
+  var referente: String?,
+  var entregue: String?,
+  var recebido: String?
 ) {
 
   val situacao

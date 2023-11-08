@@ -39,7 +39,11 @@ SELECT N.storeno                                          AS loja,
                    MID(R.remarks__480, 41, 40),
                    MID(R.remarks__480, 81, 40),
                    MID(R.remarks__480, 121, 40),
-                   MID(R.remarks__480, 161, 40)) AS CHAR) AS observacao
+                   MID(R.remarks__480, 161, 40)) AS CHAR) AS observacao,
+       TRIM(MID(R.remarks__480, 1, 40))                   AS autorizado,
+       TRIM(MID(R.remarks__480, 41, 40))                  AS referente,
+       TRIM(MID(R.remarks__480, 81, 40))                  AS entregue,
+       TRIM(MID(R.remarks__480, 121, 40))                 AS recebido
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -92,7 +96,11 @@ SELECT loja,
        situacaoPedido,
        observacao,
        dataTransf,
-       notaTransf
+       notaTransf,
+       autorizado,
+       referente,
+       entregue,
+       recebido
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
