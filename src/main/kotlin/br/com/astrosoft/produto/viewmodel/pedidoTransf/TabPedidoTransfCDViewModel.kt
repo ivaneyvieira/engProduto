@@ -78,11 +78,11 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
-  fun imprimePedido(pedido: PedidoTransf) = viewModel.exec {
-    val usuario = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não definido")
-    val relatorio = RequisicaoTransferencia(pedido)
-    val impressora = usuario.impressora ?: fail("Impressora não definida")
-    relatorio.print(impressora = impressora, dados = pedido.produtos())
+  fun imprimePedido(pedido: PedidoTransf, impressora : String) = viewModel.exec {
+    viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
+      val relatorio = RequisicaoTransferencia(pedido)
+      relatorio.print(impressora = impressora, dados = pedido.produtos())
+    }
   }
 
   val subView

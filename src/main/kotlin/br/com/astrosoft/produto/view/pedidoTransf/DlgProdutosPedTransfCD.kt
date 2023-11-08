@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.produto.model.beans.EMarcaPedido
-import br.com.astrosoft.produto.model.beans.PedidoTransf
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfCodigo
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfDescricao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfGrade
@@ -13,19 +10,33 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewCo
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 
 class DlgProdutosPedTransfCD(val viewModel: TabPedidoTransfCDViewModel, val pedido: PedidoTransf) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoPedidoTransf::class.java, false)
+  private var cmbImpressora: Select<Impressora>? = null
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
+      cmbImpressora = select<Impressora>("Impressora") {
+        val lista =Impressora.all()
+        val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
+        setItems(lista)
+        this.setItemLabelGenerator { it.name }
+
+        this.value = lista.firstOrNull {
+          it.name == printerUser
+        }
+      }
       this.button("Imprimir") {
         this.onLeftClick {
-          viewModel.imprimePedido(pedido)
+          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+          viewModel.imprimePedido(pedido, impressora)
         }
       }
     }, onClose = {
