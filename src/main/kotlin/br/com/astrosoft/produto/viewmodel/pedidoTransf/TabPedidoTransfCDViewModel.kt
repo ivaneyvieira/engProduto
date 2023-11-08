@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -16,12 +17,12 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
     subView.updatePedidos(pedidos)
   }
 
-  fun findLoja(storeno : Int) : Loja? {
+  fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
 
-  fun findAllLojas() : List<Loja> {
+  fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
 
@@ -75,6 +76,13 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
         fail("Falha de impressão na impressora $impressora")
       }
     }
+  }
+
+  fun imprimePedido(pedido: PedidoTransf) = viewModel.exec {
+    val usuario = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não definido")
+    val relatorio = RequisicaoTransferencia(pedido)
+    val impressora = usuario.impressora ?: fail("Impressora não definida")
+    relatorio.print(impressora = impressora, dados = pedido.produtos())
   }
 
   val subView

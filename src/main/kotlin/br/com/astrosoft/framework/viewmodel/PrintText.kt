@@ -1,12 +1,13 @@
 package br.com.astrosoft.framework.viewmodel
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
 import java.io.File
 import java.text.DecimalFormat
 
-abstract class PrintText<T>(val isTest: () -> Boolean) {
+abstract class PrintText<T> {
   private val columns = mutableListOf<Column<T, *>>()
 
   fun columText(header: String, size: Int, lineBreak: Boolean = false, process: T.() -> String): PrintText<T> {
@@ -56,10 +57,12 @@ abstract class PrintText<T>(val isTest: () -> Boolean) {
       }
       sumary(text)
       finalize(text)
-      if (isTest() == false) CupsUtils.printCups(impressora, text.toString())
-      else {
+      val isTest = AppConfig.test
+      if (isTest) {
         println(text.toString())
         File("/tmp/relatorio.txt").writeText(text.toString())
+      } else {
+        CupsUtils.printCups(impressora, text.toString())
       }
     }
   }
@@ -120,7 +123,7 @@ abstract class PrintText<T>(val isTest: () -> Boolean) {
     }
   }
 
-  protected abstract fun titleLines(bean: T): List<String>
+  protected abstract fun titleLines(bean : T): List<String>
 
   private fun String.expandLine(): String {
     val stringBuffer = StringBuilder()
