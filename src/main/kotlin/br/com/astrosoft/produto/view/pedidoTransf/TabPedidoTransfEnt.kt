@@ -90,7 +90,6 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     colunaPedidoTransfNumero()
     colunaPedidoTransfDataTransf()
     colunaPedidoTransfNotaTransf()
-    colunaPedidoTransfVendedor()
     colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
