@@ -37,6 +37,7 @@ class IppPrintJob {
           dataInputStream.readByte(), dataInputStream.readByte()
         )
       )
+      println(uri)
       dataInputStream.readShort()
     } else {
       throw IOException(
