@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.viewmodel
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.CupsUtils
+import br.com.astrosoft.framework.util.PrintJava
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
 import java.io.File

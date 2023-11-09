@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.zpl
 
 import br.com.astrosoft.framework.util.CupsUtils
+import br.com.astrosoft.framework.util.PrintJava
 import br.com.astrosoft.framework.util.SystemUtils
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
