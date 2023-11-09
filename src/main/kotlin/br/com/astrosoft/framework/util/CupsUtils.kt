@@ -5,7 +5,7 @@ import java.io.FileInputStream
 import java.net.URI
 
 object CupsUtils {
-  private const  val HOST = "172.20.47.1"
+  private const  val HOST = "172.20.47.2"
   fun printCups(impressora: String, text: String) {
     val printerURI = URI.create("http://$HOST:631/ipp/$impressora")
     val status = IppPrintJob()
