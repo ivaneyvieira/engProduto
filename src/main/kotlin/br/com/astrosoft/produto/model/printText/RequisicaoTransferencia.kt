@@ -10,13 +10,13 @@ class RequisicaoTransferencia(val nota : PedidoTransf) : PrintText<ProdutoPedido
   init {
     columText("Codigo", 6) {codigo.lpad(6, "0")}
     columText("Descricao", 30) {descricao ?: ""}
-    columText("Grade", 5) {grade ?: ""}
-    columNumber("Quantidade", 10, format = "0") { quantidade * 1.00 }
+    columText("Grade", 9) {grade ?: ""}
+    columNumber("Quant", 6, format = "0") { quantidade * 1.00 }
   }
   override fun titleLines(bean : ProdutoPedidoTransf): List<String> {
     return listOf(
       "Requisicao de Transferencia: ${nota.rota ?: "Rota nao definida"}",
-      "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ",
+      "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ${nota.ordno}",
       "Usuario: ${nota.usuario ?: "Usuario nao definido"}",
       "Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}",
       "Referente: ${nota.referente ?: "Nao definido"}",
