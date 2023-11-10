@@ -12,11 +12,12 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNotaTransf
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacaoTransf
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfVendedor
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfValorTransf
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfEnt
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfEntViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -90,10 +91,12 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     colunaPedidoTransfNumero()
     colunaPedidoTransfDataTransf()
     colunaPedidoTransfNotaTransf()
+    colunaPedidoTransfValorTransf()
     colunaPedidoTransfUsuarioNum()
+    colunaPedidoTransfSing()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
-    colunaPedidoTransfObsevacao()
+    colunaPedidoTransfObsevacaoTransf()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {

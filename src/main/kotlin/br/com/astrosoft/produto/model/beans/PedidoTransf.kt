@@ -31,6 +31,8 @@ class PedidoTransf(
   var recebido: String?,
   var numSing: String?,
   var nameSing: String?,
+  var valorTransf: Double?,
+  var observacaoTransf: String?
 ) {
   val sing: String
     get() {

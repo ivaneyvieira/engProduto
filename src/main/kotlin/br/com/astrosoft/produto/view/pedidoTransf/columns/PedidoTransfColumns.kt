@@ -69,6 +69,15 @@ object PedidoTransfColumns {
     this.isExpand = true
   }
 
+  fun Grid<PedidoTransf>.colunaPedidoTransfObsevacaoTransf() = columnGrid(PedidoTransf::observacaoTransf) {
+    this.setHeader("Observação")
+    this.isExpand = true
+  }
+
+  fun Grid<PedidoTransf>.colunaPedidoTransfValorTransf() = columnGrid(PedidoTransf::valorTransf) {
+    this.setHeader("Valor")
+  }
+
   fun Grid<PedidoTransf>.colunaPedidoTransfValor() = columnGrid(PedidoTransf::totalProdutos) {
     this.setHeader("Valor")
   }

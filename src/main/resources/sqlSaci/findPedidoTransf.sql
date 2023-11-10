@@ -45,7 +45,9 @@ SELECT N.storeno                                          AS loja,
        TRIM(MID(R.remarks__480, 81, 40))                  AS entregue,
        TRIM(MID(R.remarks__480, 121, 40))                 AS recebido,
        S.no                                               AS numSing,
-       S.login                                            AS nameSing
+       S.login                                            AS nameSing,
+       T.grossamt / 100                                   AS valorTransf,
+       TRIM(T.remarks)                                    AS observacaoTransf
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -112,7 +114,9 @@ SELECT loja,
        entregue,
        recebido,
        numSing,
-       nameSing
+       nameSing,
+       valorTransf,
+       observacaoTransf
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
