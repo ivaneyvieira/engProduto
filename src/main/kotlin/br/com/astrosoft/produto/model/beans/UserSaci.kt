@@ -48,6 +48,7 @@ class UserSaci : IUser {
   var notaEntradaBase by DelegateAuthorized(26)
   var pedidoTransfReserva by DelegateAuthorized(27)
   var pedidoTransfEnt by DelegateAuthorized(28)
+  var pedidoTransfAutorizada by DelegateAuthorized(29)
 
   var lojas
     get() = listaLoja.split(",").map { print ->
