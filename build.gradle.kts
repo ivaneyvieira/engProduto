@@ -81,8 +81,7 @@ dependencies {
   implementation("io.github.rushuat:ocell:0.1.7")
 
   //Legado
-  //implementation("com.github.wmixvideo:nfe:3.0.67")
-  implementation("com.squareup.okhttp3:okhttp:4.9.3")
+  implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("org.claspina:confirm-dialog:2.0.0")
   //implementation("org.codehaus.woodstox:stax2-api:4.1")
 }
