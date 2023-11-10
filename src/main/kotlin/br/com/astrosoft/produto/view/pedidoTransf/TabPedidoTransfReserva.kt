@@ -16,8 +16,8 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfCD
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfCDViewModel
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfReserva
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfReservaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -30,9 +30,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfCD {
-  private var dlgProduto: DlgProdutosPedTransfCD? = null
+class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+  ITabPedidoTransfReserva {
+  private var dlgProduto: DlgProdutosPedTransfReserva? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -81,7 +81,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfCD(viewModel, pedido)
+      dlgProduto = DlgProdutosPedTransfReserva(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -148,7 +148,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoTransfCD == true
+    return username?.pedidoTransfReserva == true
   }
 
   override val label: String

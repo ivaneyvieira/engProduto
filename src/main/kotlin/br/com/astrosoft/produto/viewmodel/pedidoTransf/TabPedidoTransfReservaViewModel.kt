@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
+class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
     val pedidos = PedidoTransf.findTransf(filtro)
@@ -94,10 +94,10 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabPedidoTransfCD
+    get() = viewModel.view.tabPedidoTransfReserva
 }
 
-interface ITabPedidoTransfCD : ITabView {
+interface ITabPedidoTransfReserva : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()

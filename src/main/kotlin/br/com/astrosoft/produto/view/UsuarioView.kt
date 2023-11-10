@@ -239,9 +239,9 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             h4("Pedido Transf"){
               colspan = 2
             }
-            checkBox("CD") {
+            checkBox("Reserva") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::pedidoTransfCD.name)
+              binder.bind(this, UserSaci::pedidoTransfReserva.name)
             }
             checkBox("Entrege") {
               isReadOnly = readOnly
