@@ -86,7 +86,7 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
-    val user = UserSaci.findAll().firstOrNull { it.login == login && it.senha == senha }
+    val user = UserSaci.findAll().firstOrNull { it.login.uppercase() == login.uppercase() && it.senha.uppercase() == senha.uppercase() }
     user ?: fail("Usuário ou senha inválidos")
 
     pedido.autoriza(user)
