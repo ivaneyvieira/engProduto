@@ -34,3 +34,4 @@ src/main/resources/report/.metadata/
 *.jasper
 .vscode
 .settings
+frontend/generated
