@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -11,10 +12,10 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfVendedor
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfCD
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfCDViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -78,6 +79,7 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
+    this.addClassName("styling")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfCD(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -89,11 +91,21 @@ class TabPedidoTransfCD(val viewModel: TabPedidoTransfCDViewModel) : TabPanelGri
     colunaPedidoTransfCliente()
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
-    colunaPedidoTransfVendedor()
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
+      val form = FormAutoriza()
+      DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+        viewModel.autorizaPedido(pedido, form.login, form.senha)
+      }
+    }
+    colunaPedidoTransfSing()
     colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
+
+    this.setPartNameGenerator {
+      if(it.sing.isNotBlank()) "amarelo" else null
+    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {

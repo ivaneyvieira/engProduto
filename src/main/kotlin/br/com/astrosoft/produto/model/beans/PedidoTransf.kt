@@ -28,8 +28,16 @@ class PedidoTransf(
   var autorizado: String?,
   var referente: String?,
   var entregue: String?,
-  var recebido: String?
+  var recebido: String?,
+  var numSing: String?,
+  var nameSing: String?,
 ) {
+  val sing: String
+    get() {
+      val numSingVal = numSing ?: return ""
+      val nameSingVal = nameSing ?: return ""
+      return "$numSingVal - $nameSingVal"
+    }
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
@@ -50,6 +58,9 @@ class PedidoTransf(
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos() = saci.findProdutoPedidoTransf(this)
+  fun autoriza(user: UserSaci) {
+    saci.autorizaPedidoTransf(this, user.no)
+  }
 
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)

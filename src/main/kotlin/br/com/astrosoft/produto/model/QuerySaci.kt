@@ -446,18 +446,28 @@ class QuerySaci : QueryDB(database) {
 
   fun removerNotaReceber(nota: NotaEntrada) {
     val sql = "/sqlSaci/revoverNotaReceber.sql"
-    return script(sql) {
+    script(sql) {
       addOptionalParameter("nfekey", nota.chave)
     }
   }
 
   fun removeProdutoReceber(produto: ProdutoNFE) {
     val sql = "/sqlSaci/revomerProdutoReceber.sql"
-    return script(sql) {
+    script(sql) {
       addOptionalParameter("nfekey", produto.chave)
       addOptionalParameter("codigo", produto.codigo)
       addOptionalParameter("grade", produto.grade)
     }
+  }
+
+  fun autorizaPedidoTransf(pedidoTransf: PedidoTransf, userSing: Int) {
+    val sql = "/sqlSaci/autorizaPedidoTransf.sql"
+    script(sql) {
+      addOptionalParameter("storeno", pedidoTransf.loja)
+      addOptionalParameter("ordno", pedidoTransf.ordno)
+      addOptionalParameter("userSing", userSing)
+    }
+
   }
 
   companion object {

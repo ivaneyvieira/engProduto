@@ -78,11 +78,19 @@ class TabPedidoTransfCDViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
-  fun imprimePedido(pedido: PedidoTransf, impressora : String) = viewModel.exec {
+  fun imprimePedido(pedido: PedidoTransf, impressora: String) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
       relatorio.print(impressora = impressora, dados = pedido.produtos())
     }
+  }
+
+  fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
+    val user = UserSaci.findAll().firstOrNull { it.login == login && it.senha == senha }
+    user ?: fail("Usuário ou senha inválidos")
+
+    pedido.autoriza(user)
+    updateView()
   }
 
   val subView

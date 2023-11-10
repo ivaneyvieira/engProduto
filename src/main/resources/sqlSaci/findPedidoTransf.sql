@@ -43,7 +43,9 @@ SELECT N.storeno                                          AS loja,
        TRIM(MID(R.remarks__480, 1, 40))                   AS autorizado,
        TRIM(MID(R.remarks__480, 41, 40))                  AS referente,
        TRIM(MID(R.remarks__480, 81, 40))                  AS entregue,
-       TRIM(MID(R.remarks__480, 121, 40))                 AS recebido
+       TRIM(MID(R.remarks__480, 121, 40))                 AS recebido,
+       S.no                                               AS numSing,
+       S.login                                            AS nameSing
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -57,6 +59,8 @@ FROM sqldados.eord AS N
                  ON SD.cgc = C.cpf_cgc
        LEFT JOIN sqldados.users AS U
                  ON U.no = N.userno
+       LEFT JOIN sqldados.users AS S
+                 ON S.no = N.s10
        LEFT JOIN sqldados.eordrk AS R
                  ON R.storeno = N.storeno AND R.ordno = N.ordno
        LEFT JOIN sqldados.nf AS T
@@ -100,7 +104,9 @@ SELECT loja,
        autorizado,
        referente,
        entregue,
-       recebido
+       recebido,
+       numSing,
+       nameSing
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
