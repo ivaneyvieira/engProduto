@@ -97,15 +97,10 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) : T
         viewModel.autorizaPedido(pedido, form.login, form.senha)
       }
     }
-    colunaPedidoTransfSing()
     colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
-
-    this.setPartNameGenerator {
-      if(it.sing.isNotBlank()) "amarelo" else null
-    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
@@ -114,7 +109,8 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) : T
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value
+      dataFinal = edtDataFinal.value,
+      autorizado = false,
     )
   }
 

@@ -72,5 +72,6 @@ data class FiltroPedidoTransf(
   val pesquisa: String,
   val marca: EMarcaPedido,
   val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?
+  val dataFinal: LocalDate?,
+  val autorizado: Boolean?,
 )

@@ -91,21 +91,11 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfCliente()
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
-      val form = FormAutoriza()
-      DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
-        viewModel.autorizaPedido(pedido, form.login, form.senha)
-      }
-    }
     colunaPedidoTransfSing()
     colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
-
-    this.setPartNameGenerator {
-      if(it.sing.isNotBlank()) "amarelo" else null
-    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
@@ -114,7 +104,8 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value
+      dataFinal = edtDataFinal.value,
+      autorizado = true,
     )
   }
 

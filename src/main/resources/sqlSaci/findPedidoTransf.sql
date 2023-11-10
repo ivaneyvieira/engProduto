@@ -78,6 +78,12 @@ WHERE N.date > 20231106
   AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
+  AND CASE :autorizado
+        WHEN 'S' THEN IFNULL(S.no, 0) > 0
+        WHEN 'N' THEN IFNULL(S.no, 0) = 0
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
+      END
 GROUP BY N.storeno, N.ordno;
 
 

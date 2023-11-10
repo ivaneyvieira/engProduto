@@ -296,6 +296,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("autorizado", filtro.autorizado.let { if (it == null) "T" else if (it) "S" else "N" })
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
@@ -482,6 +483,5 @@ class QuerySaci : QueryDB(database) {
     )
   }
 }
-
 
 val saci = QuerySaci()

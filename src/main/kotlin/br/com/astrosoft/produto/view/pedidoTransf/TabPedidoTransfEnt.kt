@@ -102,7 +102,8 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value
+      dataFinal = edtDataFinal.value,
+      autorizado = null
     )
   }
 
