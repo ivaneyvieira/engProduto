@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 import br.com.astrosoft.produto.model.beans.TransfRessu4
@@ -12,21 +13,18 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, val pedido: TransfRessu4) {
+class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, val nota: TransfRessu4) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoTransfRessu4::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
-      this.button("Planilha") {
-        icon = VaadinIcon.FILE_TABLE.create()
-        onLeftClick {
-          viewModel.geraPlanilha(pedido)
-        }
+    form = SubWindowForm("NF Transf ${nota.notaTransf} - ${nota.rota}", toolBar = {
+      this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaPedidoTransfRessu4") {
+        viewModel.geraPlanilha(nota)
       }
       this.button("Relatório") {
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
-          viewModel.imprimeRelatorio(pedido)
+          viewModel.imprimeRelatorio(nota)
         }
       }
     }, onClose = {
@@ -62,7 +60,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
   }
 
   fun update() {
-    val listProdutos = pedido.produtos()
+    val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)
   }
 }

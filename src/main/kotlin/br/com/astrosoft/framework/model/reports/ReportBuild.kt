@@ -31,12 +31,12 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.KProperty1
 
-abstract class ReportBuild<T> {
+abstract class ReportBuild<T>() {
   private val localDateType = LocalDateType()
   private val columnsMap = mutableMapOf<KProperty1<T, *>, TextColumnBuilder<*>>()
   private val columnsList = mutableListOf<TextColumnBuilder<*>>()
 
-  abstract val propriedades: PropriedadeRelatorio
+  abstract fun config(itens: List<T>): PropriedadeRelatorio
 
   protected open fun labelTitleCol(): TextColumnBuilder<String>? = null
 
@@ -130,7 +130,7 @@ abstract class ReportBuild<T> {
     return columnsList
   }
 
-  protected open fun titleBuider(): ComponentBuilder<*, *> {
+  protected open fun titleBuider(propriedades: PropriedadeRelatorio): ComponentBuilder<*, *> {
     val largura = -1
     return verticalBlock {
       horizontalList {
@@ -154,21 +154,20 @@ abstract class ReportBuild<T> {
     return emptyList()
   }
 
-  abstract fun listDataSource(): List<T>
-
-  open fun makeReport(): JasperReportBuilder {
+  open fun makeReport(itens: List<T>): JasperReportBuilder {
     val labelTitleCol = labelTitleCol()
     val itemGroup = if (labelTitleCol == null) null
     else grp.group(labelTitleCol).setTitleWidth(0).setHeaderLayout(GroupHeaderLayout.VALUE)
       .showColumnHeaderAndFooter()
     val colunms = columnBuilder().toTypedArray()
+    val propriedades = config(itens)
 
     return report()
-      .title(titleBuider())
+      .title(titleBuider(propriedades))
       .setTemplate(Templates.reportTemplate)
       .columns(* colunms)
       .columnGrid(* colunms)
-      .setDataSource(listDataSource())
+      .setDataSource(itens)
       .setPageFormat(propriedades.pageType, propriedades.pageOrientation)
       .setPageMargin(margin(28))
       .summary(pageFooterBuilder())
@@ -187,17 +186,21 @@ abstract class ReportBuild<T> {
       }
   }
 
-  companion object {
-    fun renderReport(printList: List<JasperPrint>): ByteArray {
-      val exporter = JRPdfExporter()
-      val out = ByteArrayOutputStream()
-      exporter.setExporterInput(SimpleExporterInput.getInstance(printList))
+  fun processaRelatorio(itens: List<T>): ByteArray {
+    val report = makeReport(itens)
+    val printList = listOf(report.toJasperPrint())
+    return renderReport(printList)
+  }
 
-      exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
+  private fun renderReport(printList: List<JasperPrint>): ByteArray {
+    val exporter = JRPdfExporter()
+    val out = ByteArrayOutputStream()
+    exporter.setExporterInput(SimpleExporterInput.getInstance(printList))
 
-      exporter.exportReport()
-      return out.toByteArray()
-    }
+    exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
+
+    exporter.exportReport()
+    return out.toByteArray()
   }
 }
 
