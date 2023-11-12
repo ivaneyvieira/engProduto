@@ -302,6 +302,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+    fun findPedidoRessu4(filtro: FiltroPedidoRessu4): List<PedidoResu4> {
+    val sql = "/sqlSaci/findPedidoRessu4.sql"
+    return query(sql, PedidoResu4::class) {
+      addOptionalParameter("storeno", filtro.storeno)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   fun findRessuprimento(filtro: FiltroRessuprimento, locais: List<String>): List<Ressuprimento> {
     val sql = "/sqlSaci/findRessuprimento.sql"
     return query(sql, Ressuprimento::class) {
