@@ -1,6 +1,5 @@
-package br.com.astrosoft.framework.model
+package br.com.astrosoft.framework.model.planilha
 
-import br.com.astrosoft.framework.util.toDate
 import com.github.nwillc.poink.PSheet
 import com.github.nwillc.poink.workbook
 import org.apache.poi.ss.usermodel.FillPatternType
@@ -11,11 +10,6 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.reflect.KProperty1
 
-fun interface ProduceValue<B, T : Any?> {
-  fun value(bean: B): T
-}
-
-class Column<B, T : Any?>(val header: String, val pattern: String?, val property: ProduceValue<B, T>)
 open class Planilha<B>(private val sheatName: String) {
   protected val columns: MutableList<Column<B, *>> = mutableListOf()
 
@@ -134,3 +128,9 @@ open class Planilha<B>(private val sheatName: String) {
     return outBytes.toByteArray()
   }
 }
+
+fun interface ProduceValue<B, T : Any?> {
+  fun value(bean: B): T
+}
+
+class Column<B, T : Any?>(val header: String, val pattern: String?, val property: ProduceValue<B, T>)
