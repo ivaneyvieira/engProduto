@@ -251,6 +251,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::pedidoTransfEnt.name)
             }
+            checkBox("Ressu4") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::pedidoTransfRessu4.name)
+            }
           }
           formLayout {
             h4("Receber Entrada") {
