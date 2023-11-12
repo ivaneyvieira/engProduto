@@ -6,8 +6,8 @@ import br.com.astrosoft.produto.model.beans.*
 
 class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaPedido.ENT)
-    val pedidos = PedidoTransf.findTransf(filtro)
+    val filtro = subView.filtro()
+    val pedidos = PedidoRessu4.findAll(filtro)
     subView.updatePedidos(pedidos)
   }
 
@@ -20,27 +20,13 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
     return Loja.allLojas()
   }
 
-  fun marcaCD() {
-    val itens = subView.produtosSelcionados()
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-    itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaPedido.CD.num
-      produtoNF.usuarioCD = ""
-      produtoNF.salva()
-      produtoNF.orcamento()
-    }
-    subView.updateProdutos()
-  }
-
   val subView
     get() = viewModel.view.tabPedidoTransfRessu4
 }
 
 interface ITabPedidoTransfRessu4 : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
-  fun updatePedidos(pedidos: List<PedidoTransf>)
+  fun filtro(): FiltroPedidoRessu4
+  fun updatePedidos(pedidos: List<PedidoRessu4>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoTransf>
+  fun produtosSelcionados(): List<ProdutoPedidoRessu4>
 }

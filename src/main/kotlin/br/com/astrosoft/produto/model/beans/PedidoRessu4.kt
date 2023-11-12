@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class PedidoResu4(
+class PedidoRessu4(
   var loja: Int,
   var pdvno: Int,
   var transacao: Int,
@@ -20,8 +20,11 @@ class PedidoResu4(
   var valorTransf: Double?,
   var observacaoTransf: String?,
 ) {
+
+  fun produtos() = saci.findProdutoPedidoRessu4(this)
+
   companion object {
-    fun findAll(filtro: FiltroPedidoRessu4): List<PedidoResu4> {
+    fun findAll(filtro: FiltroPedidoRessu4): List<PedidoRessu4> {
       return saci.findPedidoRessu4(filtro)
     }
   }
