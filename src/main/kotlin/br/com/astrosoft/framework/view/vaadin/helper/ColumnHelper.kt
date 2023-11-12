@@ -93,11 +93,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, String?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,//TODO Usar isso nos outros métodos
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
+    this.isExpand = isExpand
     if (width != null) {
       this.isAutoWidth = false
       this.width = width

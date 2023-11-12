@@ -302,9 +302,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findPedidoRessu4(filtro: FiltroPedidoRessu4): List<PedidoRessu4> {
+  fun findPedidoRessu4(filtro: FiltroPedidoRessu4): List<TransfRessu4> {
     val sql = "/sqlSaci/findPedidoRessu4.sql"
-    return query(sql, PedidoRessu4::class) {
+    return query(sql, TransfRessu4::class) {
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
@@ -481,12 +481,12 @@ class QuerySaci : QueryDB(database) {
 
   }
 
-  fun findProdutoPedidoRessu4(pedidoRessu4: PedidoRessu4): List<ProdutoPedidoRessu4> {
+  fun findProdutoPedidoRessu4(transfRessu4: TransfRessu4): List<ProdutoTransfRessu4> {
     val sql = "/sqlSaci/findProdutosPedidoRessu4.sql"
-    return query(sql, ProdutoPedidoRessu4::class) {
-      addOptionalParameter("loja", pedidoRessu4.loja)
-      addOptionalParameter("pdvno", pedidoRessu4.pdvno)
-      addOptionalParameter("transacao", pedidoRessu4.transacao)
+    return query(sql, ProdutoTransfRessu4::class) {
+      addOptionalParameter("loja", transfRessu4.loja)
+      addOptionalParameter("pdvno", transfRessu4.pdvno)
+      addOptionalParameter("transacao", transfRessu4.transacao)
     }
   }
 

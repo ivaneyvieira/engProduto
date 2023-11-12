@@ -3,21 +3,9 @@ package br.com.astrosoft.produto.view.pedidoTransf
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfCliente
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfData
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfDataTransf
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNotaTransf
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacaoTransf
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfValorTransf
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfRessu4
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -32,7 +20,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : TabPanelGrid<TransfRessu4>(TransfRessu4::class),
   ITabPedidoTransfRessu4 {
   private var dlgProduto: DlgProdutosPedTransfRessu4? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -80,40 +68,33 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : Tab
     }
   }
 
-  override fun Grid<PedidoTransf>.gridPanel() {
+  override fun Grid<TransfRessu4>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfRessu4(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    colunaPedidoTransfLojaOrig()
-    colunaPedidoTransfLojaDest()
-    colunaPedidoTransfCliente()
-    colunaPedidoTransfData()
-    colunaPedidoTransfNumero()
-    colunaPedidoTransfDataTransf()
-    colunaPedidoTransfNotaTransf()
-    colunaPedidoTransfValorTransf()
-    colunaPedidoTransfUsuarioNum()
-    colunaPedidoTransfSing()
-    colunaPedidoTransfUsuario()
-    colunaPedidoTransfSituacaoPedido()
-    colunaPedidoTransfObsevacaoTransf()
+    columnGrid(TransfRessu4::lojaOrigem, "Loja Orig")
+    columnGrid(TransfRessu4::lojaDestino, "Loja Dest")
+    columnGrid(TransfRessu4::cliente, "Cliente")
+    columnGrid(TransfRessu4::data, "Loja Data")
+    columnGrid(TransfRessu4::notaTransf, "NF Transf")
+    columnGrid(TransfRessu4::valorTransf, "Valor")
+    columnGrid(TransfRessu4::usuario, "Usuário")
+    columnGrid(TransfRessu4::observacaoTransf, "Observação", isExpand = true)
   }
 
-  override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
-    return FiltroPedidoTransf(
+  override fun filtro(): FiltroPedidoRessu4 {
+    return FiltroPedidoRessu4(
       storeno = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = marca,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      autorizado = null
     )
   }
 
-  override fun updatePedidos(pedidos: List<PedidoTransf>) {
+  override fun updatePedidos(pedidos: List<TransfRessu4>) {
     updateGrid(pedidos)
   }
 
@@ -121,7 +102,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : Tab
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
+  override fun produtosSelcionados(): List<ProdutoTransfRessu4> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

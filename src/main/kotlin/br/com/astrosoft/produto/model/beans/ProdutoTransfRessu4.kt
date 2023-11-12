@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
-class ProdutoPedidoRessu4(
+class ProdutoTransfRessu4(
   var storeno: Int,
   var pdvno: Int,
   var xano: Int,
