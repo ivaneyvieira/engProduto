@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 import br.com.astrosoft.produto.model.beans.TransfRessu4
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
@@ -45,7 +46,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
       columnGrid(ProdutoTransfRessu4::codigo, "Código")
-      columnGrid(ProdutoTransfRessu4::descricao, "Descrição", isExpand = true)
+      columnGrid(ProdutoTransfRessu4::descricao, "Descrição").expand()
       columnGrid(ProdutoTransfRessu4::grade, "Grade")
       columnGrid(ProdutoTransfRessu4::codigoBarras, "Código de Barras")
       columnGrid(ProdutoTransfRessu4::referencia, "Ref Fornecedor")

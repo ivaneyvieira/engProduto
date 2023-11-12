@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfRessu4
@@ -82,7 +83,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : Tab
     columnGrid(TransfRessu4::notaTransf, "NF Transf")
     columnGrid(TransfRessu4::valorTransf, "Valor")
     columnGrid(TransfRessu4::usuario, "Usuário")
-    columnGrid(TransfRessu4::observacaoTransf, "Observação", isExpand = true)
+    columnGrid(TransfRessu4::observacaoTransf, "Observação").expand()
   }
 
   override fun filtro(): FiltroPedidoRessu4 {

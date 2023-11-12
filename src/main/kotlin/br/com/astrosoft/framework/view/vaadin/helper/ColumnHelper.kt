@@ -8,14 +8,11 @@ import com.github.mvysny.karibudsl.v10.VaadinDsl
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.addColumnFor
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.renderer.LocalDateRenderer
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer
 import com.vaadin.flow.data.renderer.NumberRenderer
@@ -69,7 +66,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   }
 }
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = null,): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = null): Column<T> {
   return addColumn {
     val lista = this.list()
     lista.indexOf(it) + 1
@@ -93,12 +90,11 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, String?>,
   header: String? = null,
   width: String? = null,
-  isExpand: Boolean = false,//TODO Usar isso nos outros métodos
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = isExpand
+    this.isExpand = false
     if (width != null) {
       this.isAutoWidth = false
       this.width = width
@@ -343,57 +339,32 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   }
 }
 
+fun <T : Any> (@VaadinDsl Column<T>).header(header: String): Column<T> {
+  this.setHeader(header)
+  return this
+}
+
+fun <T : Any> (@VaadinDsl Column<T>).width(width: String): Column<T> {
+  this.width = width
+  return this
+}
+
 fun <T : Any> (@VaadinDsl Column<T>).expand(expand: Boolean = true): Column<T> {
   this.isExpand = expand
   return this
 }
 
-fun <T : Any> (@VaadinDsl Column<T>).right() {
+fun <T : Any> Column<T>.right(): Column<T> {
   this.textAlign = ColumnTextAlign.END
+  return this
 }
 
-fun <T : Any> (@VaadinDsl Column<T>).left() {
+fun <T : Any> Column<T>.left(): Column<T> {
   this.textAlign = ColumnTextAlign.START
+  return this
 }
 
-fun <T : Any> (@VaadinDsl Column<T>).center() {
+fun <T : Any> Column<T>.center(): Column<T> {
   this.textAlign = ColumnTextAlign.CENTER
+  return this
 }
-
-fun Component.style(name: String, value: String) {
-  this.element.style.set(name, value)
-}
-
-fun DatePicker.localePtBr() {
-  this.locale = Locale("pt-br")
-  this.i18n =
-      DatePicker.DatePickerI18n().apply {
-        this.setDateFormat("dd/MM/yyyy")
-        this.today = "hoje"
-        this.cancel = "cancelar"
-        this.firstDayOfWeek = 1
-        this.monthNames = listOf(
-          "janeiro",
-          "fevereiro",
-          "março",
-          "abril",
-          "maio",
-          "junho",
-          "julho",
-          "agosto",
-          "setembro",
-          "outubro",
-          "novembro",
-          "dezembro"
-        )
-        this.weekdays = listOf("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado")
-        this.weekdaysShort = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sab")
-      }
-}
-
-fun <T> ListDataProvider<T>.updateItens(itens: List<T>) {
-  this.items.clear() //  this.items.addAll(itens.sortedBy {it.hashCode()})
-  this.items.addAll(itens)
-  this.refreshAll()
-}
-

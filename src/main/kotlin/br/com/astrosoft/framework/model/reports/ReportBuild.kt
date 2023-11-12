@@ -175,9 +175,10 @@ abstract class ReportBuild<T>() {
       .setSubtotalStyle(stl.style().setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
       .setColumnStyle(
-        stl
-          .style()
+        stl.style()
           .setFontSize(propriedades.detailFonteSize)
+          .setLeftPadding(4)
+          .setRightPadding(4)
       )
       .setDetailStyle(stl.style().setFontSize(propriedades.detailFonteSize))
       .apply {
