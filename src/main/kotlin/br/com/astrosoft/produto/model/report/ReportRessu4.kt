@@ -4,9 +4,7 @@ import br.com.astrosoft.framework.model.reports.PropriedadeRelatorio
 import br.com.astrosoft.framework.model.reports.ReportBuild
 import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.CENTER
 import net.sf.dynamicreports.report.constant.PageOrientation
-import net.sf.dynamicreports.report.constant.TextAdjust
 
 class ReportRessu4() : ReportBuild<ProdutoTransfRessu4>() {
   init {
@@ -22,7 +20,7 @@ class ReportRessu4() : ReportBuild<ProdutoTransfRessu4>() {
     return PropriedadeRelatorio(
       titulo = "NF Transf ${itens.firstOrNull()?.notaTransf} - ${itens.firstOrNull()?.rota}",
       subTitulo = "",
-      detailFonteSize = 10,
+      detailFonteSize = 8,
       pageOrientation = PageOrientation.PORTRAIT
     )
   }
