@@ -5,5 +5,5 @@ import com.github.mvysny.vaadinboot.VaadinBoot
 
 fun main() {
   val context = AppConfig.context
-  VaadinBoot().withContextRoot("/$context").openBrowserInDevMode(false).run()
+  VaadinBoot().withContextRoot("/$context").openBrowserInDevMode(false).disableClasspathScanning(false).run()
 }

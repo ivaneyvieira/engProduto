@@ -47,5 +47,5 @@ object Templates {
         .setHorizontalTextAlignment(CENTER)
         .setBackgroundColor(Color.LIGHT_GRAY)
         .bold()
-  val fieldFontGrande: StyleBuilder = stl.style(rootStyle).setFontSize(12)
+  val fieldFontGrande: StyleBuilder = stl.style(rootStyle).setFontSize(10)
 }
