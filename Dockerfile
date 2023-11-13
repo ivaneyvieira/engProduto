@@ -9,7 +9,7 @@ RUN ls -la
 RUN unzip app.zip
 
 
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17
 COPY --from=BUILD /app/build/distributions/app /app/
 WORKDIR /app/bin
 EXPOSE 8080
