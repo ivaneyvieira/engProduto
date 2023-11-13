@@ -35,6 +35,7 @@ WHERE T.issuedate >= 20231111
   AND (T.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (T.issuedate <= :dataFinal OR :dataFinal = 0)
   AND (T.tipo = 1)
+  AND (U.name LIKE '%RESSU4%')
 GROUP BY T.storeno, T.pdvno, T.xano;
 
 
