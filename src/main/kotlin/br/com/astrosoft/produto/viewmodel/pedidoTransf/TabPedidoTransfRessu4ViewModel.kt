@@ -3,6 +3,8 @@ package br.com.astrosoft.produto.viewmodel.pedidoTransf
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaRessu4
+import br.com.astrosoft.produto.model.printText.NotaTransferencia
+import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.report.ReportRessu4
 
 class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
@@ -30,6 +32,13 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
     val report = ReportRessu4()
     val file = report.processaRelatorio(pedido.produtos())
     viewModel.view.showReport(chave = "Ressuprimento4${System.nanoTime()}", report = file)
+  }
+
+  fun imprimeNota(nota: TransfRessu4, impressora: String) {
+    viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
+      val relatorio = NotaTransferencia()
+      relatorio.print(impressora = impressora, dados = nota.produtos())
+    }
   }
 
   val subView

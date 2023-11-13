@@ -12,4 +12,7 @@ class ProdutoTransfRessu4(
   var codigoBarras: String?,
   var referencia: String?,
   var quant: Int?,
-)
+){
+  val codigoFormat
+    get() = codigo?.padStart(6, '0') ?: ""
+}

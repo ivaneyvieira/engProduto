@@ -24,7 +24,7 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
       cmbImpressora = select<Impressora>("Impressora") {
-        val lista =Impressora.all()
+        val lista =Impressora.allTermica()
         val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
         setItems(lista)
         this.setItemLabelGenerator { it.name }

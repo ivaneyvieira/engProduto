@@ -1,22 +1,29 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 import br.com.astrosoft.produto.model.beans.TransfRessu4
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 
 class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, val nota: TransfRessu4) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoTransfRessu4::class.java, false)
+  private var cmbImpressora: Select<Impressora>? = null
+
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("NF Transf ${nota.notaTransf} - ${nota.rota}", toolBar = {
       this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaPedidoTransfRessu4") {
@@ -26,6 +33,22 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
           viewModel.imprimeRelatorio(nota)
+        }
+      }
+      cmbImpressora = select<Impressora>("Impressora") {
+        val lista = Impressora.allTermica()
+        val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
+        setItems(lista)
+        this.setItemLabelGenerator { it.name }
+
+        this.value = lista.firstOrNull {
+          it.name == printerUser
+        }
+      }
+      this.button("Imprimir") {
+        this.onLeftClick {
+          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+          viewModel.imprimeNota(nota, impressora)
         }
       }
     }, onClose = {

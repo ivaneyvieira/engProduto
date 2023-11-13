@@ -6,13 +6,47 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
 import java.io.File
 import java.text.DecimalFormat
+import kotlin.reflect.KProperty1
 
 abstract class PrintText<T> {
   private val columns = mutableListOf<Column<T, *>>()
 
-  fun columText(header: String, size: Int, lineBreak: Boolean = false, process: T.() -> String): PrintText<T> {
-    val column = Column(header, size, lineBreak, process) { str ->
+  @JvmName("columnString")
+  fun column(property: KProperty1<T, String?>, header: String, size: Int, lineBreak: Boolean = false): PrintText<T> {
+    val column = Column(header, size, lineBreak, property) { str ->
       str.rpad(size, " ")
+    }
+    columns.add(column)
+    return this
+  }
+
+  @JvmName("columnDouble")
+  fun column(
+    property: KProperty1<T, Double?>,
+    header: String,
+    size: Int,
+    format: String = "#,##0.00",
+    lineBreak: Boolean = false
+  ): PrintText<T> {
+    val decimalFormat = DecimalFormat(format)
+    val column = Column(header, size, lineBreak, property) { number ->
+      decimalFormat.format(number).lpad(size, " ")
+    }
+    columns.add(column)
+    return this
+  }
+
+  @JvmName("columnInt")
+  fun column(
+    property: KProperty1<T, Int?>,
+    header: String,
+    size: Int,
+    format: String = "#,##0",
+    lineBreak: Boolean = false
+  ): PrintText<T> {
+    val decimalFormat = DecimalFormat(format)
+    val column = Column(header, size, lineBreak, property) { number ->
+      decimalFormat.format(number).lpad(size, " ")
     }
     columns.add(column)
     return this
@@ -20,19 +54,6 @@ abstract class PrintText<T> {
 
   open fun sumaryLine(): String {
     return ""
-  }
-
-  fun columNumber(header: String,
-                  size: Int,
-                  format: String = "#,##0.##",
-                  lineBreak: Boolean = false,
-                  process: T.() -> Double): PrintText<T> {
-    val decimalFormat = DecimalFormat(format)
-    val column = Column(header, size, lineBreak, process) { number ->
-      decimalFormat.format(number).lpad(size, " ")
-    }
-    columns.add(column)
-    return this
   }
 
   private fun header() = montaLinha { col ->
@@ -144,11 +165,13 @@ abstract class PrintText<T> {
   }
 }
 
-data class Column<T, V>(val header: String,
-                        val size: Int,
-                        val lineBreak: Boolean,
-                        val process: T.() -> V,
-                        val posProcess: (V) -> String) {
+data class Column<T, V>(
+  val header: String,
+  val size: Int,
+  val lineBreak: Boolean,
+  val process: T.() -> V,
+  val posProcess: (V) -> String
+) {
   val columnText
     get() = header.rpad(size, "_")
 

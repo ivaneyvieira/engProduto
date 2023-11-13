@@ -28,7 +28,10 @@ class ProdutoPedidoTransf(
   var marca: Int,
   var usuarioCD: String,
   var estoque: Int,
-                        ) {
+) {
+  val codigoFormat
+    get() = codigo.padStart(6, '0')
+
   private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
 
   val usuarioNameCD
