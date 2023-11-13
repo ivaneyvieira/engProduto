@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoTransf>() {
   init {
     column(ProdutoPedidoTransf::codigoFormat, "Codigo", 6)
-    column(ProdutoPedidoTransf::descricao, "Descricao", 30)
+    column(ProdutoPedidoTransf::descricao, "Descricao", 40)
     column(ProdutoPedidoTransf::grade, "Grade", 9)
     column(ProdutoPedidoTransf::quantidade, "Quant", 6)
   }
@@ -21,7 +21,8 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
       "Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}",
       "Referente: ${nota.referente ?: "Nao definido"}",
       "Entregue Por: ${nota.entregue ?: "Entregador nao definido"}",
-      "Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}"
+      "Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}",
+      "".padEnd(64, '-'),
     )
   }
 }
