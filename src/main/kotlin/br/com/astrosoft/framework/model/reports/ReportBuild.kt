@@ -230,6 +230,9 @@ abstract class ReportBuild<T>() {
           .setFontSize(propriedades.detailFonteSize)
           .setLeftPadding(4)
           .setRightPadding(4)
+          .setTopPadding(2)
+          .setBottomPadding(2)
+          .setBottomBorder(stl.pen1Point())
       )
       .setDetailStyle(stl.style().setFontSize(propriedades.detailFonteSize))
       .apply {
@@ -253,6 +256,10 @@ abstract class ReportBuild<T>() {
 
     exporter.exportReport()
     return out.toByteArray()
+  }
+
+  protected fun TextColumnBuilder<*>.scaleFont(){
+    this.setTextAdjust(TextAdjust.SCALE_FONT)
   }
 }
 
