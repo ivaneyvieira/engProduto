@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -81,7 +82,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun imprimePedido(pedido: PedidoTransf, impressora: String) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
-      relatorio.print(impressora = impressora, dados = pedido.produtos())
+      relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora))
     }
   }
 

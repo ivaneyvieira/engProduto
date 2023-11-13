@@ -1,10 +1,7 @@
-package br.com.astrosoft.framework.viewmodel
+package br.com.astrosoft.framework.model.printText
 
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
-import java.io.File
 import java.text.DecimalFormat
 import kotlin.reflect.KProperty1
 
@@ -64,7 +61,7 @@ abstract class PrintText<T> {
     col.dataText(value)
   }
 
-  fun print(impressora: String, dados: List<T>) {
+  fun print(dados: List<T>, printer: IPrinter) {
     dados.firstOrNull()?.let { bean ->
       val text = StringBuilder()
       inicialize(text)
@@ -76,12 +73,7 @@ abstract class PrintText<T> {
       }
       sumary(text)
       finalize(text)
-      val test = AppConfig.test
-      if (!test) CupsUtils.printCups(impressora, text.toString())
-      else {
-        println(text.toString())
-        File("/tmp/relatorio.txt").writeText(text.toString())
-      }
+      printer.print(text.toString())
     }
   }
 

@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.model.printText
 
+import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.viewmodel.PrintText
 import br.com.astrosoft.produto.model.beans.PedidoTransf
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 

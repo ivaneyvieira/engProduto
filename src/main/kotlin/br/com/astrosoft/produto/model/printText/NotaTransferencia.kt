@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.model.printText
 
+import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
-import br.com.astrosoft.framework.viewmodel.PrintText
 import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 
 class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {

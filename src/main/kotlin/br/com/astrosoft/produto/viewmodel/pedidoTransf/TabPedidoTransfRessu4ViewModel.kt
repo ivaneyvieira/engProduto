@@ -1,10 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
+import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroPedidoRessu4
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
+import br.com.astrosoft.produto.model.beans.TransfRessu4
 import br.com.astrosoft.produto.model.planilha.PlanilhaRessu4
 import br.com.astrosoft.produto.model.printText.NotaTransferencia
-import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.report.ReportRessu4
 
 class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
@@ -37,7 +40,7 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
   fun imprimeNota(nota: TransfRessu4, impressora: String) {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = NotaTransferencia()
-      relatorio.print(impressora = impressora, dados = nota.produtos())
+      relatorio.print(dados = nota.produtos(), printer = PrinterCups(impressora))
     }
   }
 
