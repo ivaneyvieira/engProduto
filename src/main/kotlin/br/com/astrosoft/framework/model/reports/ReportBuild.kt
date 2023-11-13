@@ -50,20 +50,21 @@ abstract class ReportBuild<T>() {
     pattern: String,
     oculto: Boolean,
     block: TextColumnBuilder<V?>.() -> Unit = {}
-  ): TextColumnBuilder<V> =
-      col.column(if (oculto) "" else if (header == "") property.name else header, property.name, dataType).apply {
-        this.setHorizontalTextAlignment(aligment)
-        if (width > 0) this.setFixedWidth(width) else this.setMinHeight(0)
-        if (pattern != "") this.setPattern(pattern)
-        block()
+  ): TextColumnBuilder<V> {
+    return col.column(if (oculto) "" else if (header == "") property.name else header, property.name, dataType).apply {
+      this.setHorizontalTextAlignment(aligment)
+      if (width > 0) this.setFixedWidth(width) else this.setMinHeight(0)
+      if (pattern != "") this.setPattern(pattern)
+      block()
 
-        columnsMap[property] = this
-        columnsList.add(this)
-        if (oculto) {
-          this.setFixedWidth(0)
-          this.setStyle(stl.style().setBackgroundColor(Color(0, 0, 0, 0)))
-        }
+      columnsMap[property] = this
+      columnsList.add(this)
+      if (oculto) {
+        this.setFixedWidth(0)
+        this.setStyle(stl.style().setBackgroundColor(Color(0, 0, 0, 0)))
       }
+    }
+  }
 
   @JvmName("columnInt")
   protected fun columnReport(
@@ -74,8 +75,18 @@ abstract class ReportBuild<T>() {
     pattern: String = "0",
     oculto: Boolean = false,
     block: TextColumnBuilder<Int?>.() -> Unit = {}
-  ): TextColumnBuilder<Int> =
-      columnReport(type.integerType(), property, header, aligment, width, pattern, oculto, block)
+  ): TextColumnBuilder<Int> {
+    return columnReport(
+      dataType = type.integerType(),
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = pattern,
+      oculto = oculto,
+      block = block
+    )
+  }
 
   @JvmName("columnDouble")
   protected fun columnReport(
@@ -86,8 +97,18 @@ abstract class ReportBuild<T>() {
     pattern: String = "#,##0.00",
     oculto: Boolean = false,
     block: TextColumnBuilder<Double?>.() -> Unit = {}
-  ): TextColumnBuilder<Double> =
-      columnReport(type.doubleType(), property, header, aligment, width, pattern, oculto, block)
+  ): TextColumnBuilder<Double> {
+    return columnReport(
+      dataType = type.doubleType(),
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = pattern,
+      oculto = oculto,
+      block = block
+    )
+  }
 
   @JvmName("columnString")
   protected fun columnReport(
@@ -97,7 +118,18 @@ abstract class ReportBuild<T>() {
     width: Int = -1,
     oculto: Boolean = false,
     block: TextColumnBuilder<String?>.() -> Unit = {}
-  ): TextColumnBuilder<String> = columnReport(type.stringType(), property, header, aligment, width, "", oculto, block)
+  ): TextColumnBuilder<String> {
+    return columnReport(
+      dataType = type.stringType(),
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = "",
+      oculto = oculto,
+      block = block
+    )
+  }
 
   @JvmName("columnLocalDate")
   protected fun columnReport(
@@ -109,7 +141,16 @@ abstract class ReportBuild<T>() {
     oculto: Boolean = false,
     block: TextColumnBuilder<LocalDate?>.() -> Unit = {}
   ): TextColumnBuilder<LocalDate> {
-    val col = columnReport(localDateType, property, header, aligment, width, pattern, oculto, block)
+    val col = columnReport(
+      dataType = localDateType,
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = pattern,
+      oculto = oculto,
+      block = block
+    )
     col.setValueFormatter(DateFormatter(pattern))
     return col
   }
@@ -123,8 +164,18 @@ abstract class ReportBuild<T>() {
     pattern: String = "dd/MM/yyyy",
     oculto: Boolean = false,
     block: TextColumnBuilder<Date?>.() -> Unit = {}
-  ): TextColumnBuilder<Date> =
-      columnReport(type.dateDayType(), property, header, aligment, width, pattern, oculto, block)
+  ): TextColumnBuilder<Date> {
+    return columnReport(
+      dataType = type.dateDayType(),
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = pattern,
+      oculto = oculto,
+      block = block
+    )
+  }
 
   private fun columnBuilder(): List<TextColumnBuilder<out Any>> {
     return columnsList
