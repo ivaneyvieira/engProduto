@@ -29,3 +29,4 @@ WHERE X.storeno = :loja
   AND X.pdvno = :pdvno
   AND X.xano = :transacao
 GROUP BY X.storeno, X.pdvno, X.grade, X.prdno, X.grade
+ORDER BY descricao, grade
