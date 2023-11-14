@@ -33,6 +33,7 @@ class SubWindowPrinter(text: String) : Dialog() {
         text.removerInicializer()
           .removerCodigoBarras()
           .removeFinalize()
+          .removerExpand()
           .removerNegrito()
           .replace("\n", "<br>")
           .replace(" ", "&nbsp;")
@@ -77,23 +78,29 @@ class SubWindowPrinter(text: String) : Dialog() {
   }
 
   private fun String.removerInicializer(): String {
-    val padrao = "\u001B\u0021\u0001".toRegex()
+    val padrao = "\u001B\u0021\u0001"
     return this.replace(padrao, "")
   }
 
   private fun String.removeFinalize(): String {
-    val padrao = "\u000A\u000A\u000A\u001B\u0069".toRegex()
+    val padrao = "\u000A\u000A\u000A\u001B\u0069"
     return this.replace(padrao, "")
   }
 
   private fun String.removerCodigoBarras(): String {
-    val padrao = "\u001D\u0068\u0050\u001D\u0077\u0004\u001D\u006B\u0049".toRegex()
+    val padrao = "\u001D\u0068\u0050\u001D\u0077\u0004\u001D\u006B\u0049"
     return this.replace(padrao, "")
   }
 
   private fun String.removerNegrito(): String {
-    val padraoi = "\u001B\u0045".toRegex()
-    val padraof = "\u001B\u0046".toRegex()
+    val padraoi = "\u001B\u0045"
+    val padraof = "\u001B\u0046"
+    return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
+  }
+
+  private fun String.removerExpand(): String {
+    val padraoi = "\u001B\u0045\u0001"
+    val padraof = "\u001B\u0045\u0000"
     return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
   }
 }

@@ -128,20 +128,6 @@ abstract class PrintText<T> {
 
   protected abstract fun titleLines(bean: T): List<String>
 
-  private fun String.expandLine(): String {
-    val stringBuffer = StringBuilder()
-    stringBuffer
-      .append(0x1b.toChar())
-      .append(0x45.toChar())
-      .append(0x01.toChar())
-      .append(this)
-      .append(0x1b.toChar())
-      .append(0x45.toChar())
-      .append(0x00.toChar())
-      .appendLine()
-    return stringBuffer.toString()
-  }
-
   private fun StringBuilder.line(line: String): StringBuilder {
     this.append(0x1b.toChar()).append(0x21.toChar()).append(0x01.toChar())
     this.append(line).appendLine()
