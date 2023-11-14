@@ -1,11 +1,10 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
+import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfRessu4
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
@@ -20,6 +19,7 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
+import java.util.Objects
 
 class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : TabPanelGrid<TransfRessu4>(TransfRessu4::class),
   ITabPedidoTransfRessu4 {
@@ -105,6 +105,10 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : Tab
 
   override fun produtosSelcionados(): List<ProdutoTransfRessu4> {
     return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun printerPreview(): IPrinter {
+    return PrinterPreview()
   }
 
   override fun isAuthorized(): Boolean {

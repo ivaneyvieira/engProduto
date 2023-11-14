@@ -79,6 +79,10 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     DialogHelper.showReport(chave, report)
   }
 
+  override fun showPrintText(text: String) {
+    DialogHelper.showPrintText(text)
+  }
+
   override fun beforeLeave(event: BeforeLeaveEvent?) {
   }
 

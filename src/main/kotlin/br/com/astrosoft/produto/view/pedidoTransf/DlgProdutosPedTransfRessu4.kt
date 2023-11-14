@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.TransfRessu4
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.icon
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
@@ -43,12 +44,19 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
 
         this.value = lista.firstOrNull {
           it.name == printerUser
-        }
+        } ?: lista.firstOrNull()
       }
       this.button("Imprimir") {
+        icon = VaadinIcon.PRINT.create()
         this.onLeftClick {
           val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
           viewModel.imprimeNota(nota, impressora)
+        }
+      }
+      this.button("Preview") {
+        icon = VaadinIcon.PRINT.create()
+        this.onLeftClick {
+          viewModel.previewNota(nota)
         }
       }
     }, onClose = {

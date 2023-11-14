@@ -1,6 +1,7 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowPDF
+import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.formlayout.FormLayout
 
@@ -45,6 +46,11 @@ object DialogHelper {
 
   fun showReport(chave: String, report: ByteArray) {
     SubWindowPDF(chave, report).open()
+  }
+
+  fun showPrintText(text: String) {
+    val form = SubWindowPrinter(text)
+    form.open()
   }
 
   fun showQuestion(msg: String, execYes: () -> Unit) {

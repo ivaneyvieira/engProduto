@@ -12,7 +12,7 @@ import com.vaadin.flow.server.StreamResource
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-class SubWindowPDF(chave: String, bytesBoletos: ByteArray) : Dialog() {
+class SubWindowPDF(chave: String, bytesPDF: ByteArray) : Dialog() {
   init {
     width = "100%"
     height = "100%"
@@ -20,7 +20,7 @@ class SubWindowPDF(chave: String, bytesBoletos: ByteArray) : Dialog() {
     val resourcePDF =
         StreamResource(
           "${chave}_${timeNumber}.pdf",
-          ConverteByte(bytesBoletos)
+          ConverteByte(bytesPDF)
         ) //val buttonWrapper = FileDownloadWrapper(resourcePDF)
     verticalLayout {
       isPadding = false

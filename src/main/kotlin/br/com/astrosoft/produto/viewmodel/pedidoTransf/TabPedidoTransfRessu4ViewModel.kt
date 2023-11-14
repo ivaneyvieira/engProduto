@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessu4
@@ -44,6 +45,11 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
+  fun previewNota(nota: TransfRessu4) {
+      val relatorio = NotaTransferencia()
+      relatorio.print(dados = nota.produtos(), printer = subView.printerPreview())
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfRessu4
 }
@@ -53,4 +59,5 @@ interface ITabPedidoTransfRessu4 : ITabView {
   fun updatePedidos(pedidos: List<TransfRessu4>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoTransfRessu4>
+  fun printerPreview(): IPrinter
 }

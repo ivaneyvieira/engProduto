@@ -54,7 +54,7 @@ abstract class PrintText<T> {
   }
 
   private fun header() = montaLinha { col ->
-    col.columnText
+    col.columnText.negrito()
   }
 
   private fun detail(value: T) = montaLinha { col ->
@@ -105,7 +105,7 @@ abstract class PrintText<T> {
   protected fun String.negrito(): String {
     val stringBuffer = StringBuilder()
     stringBuffer.append(0x1b.toChar()).append(0x45.toChar()).append(this).append(0x1b.toChar()).append(0x46.toChar())
-    return this
+    return stringBuffer.toString()
   }
 
   private fun finalize(text: StringBuilder) {
@@ -117,12 +117,12 @@ abstract class PrintText<T> {
   }
 
   private fun printHeader(text: StringBuilder) {
-    text.line(header().negrito())
+    text.line(header())
   }
 
   private fun printTitle(text: StringBuilder, bean: T) {
     titleLines(bean).forEach { line ->
-      text.line(line)
+      text.line(line.negrito())
     }
   }
 
