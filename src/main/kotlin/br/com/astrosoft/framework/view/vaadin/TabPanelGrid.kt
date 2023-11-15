@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
 import br.com.astrosoft.framework.view.vaadin.helper.updateItens
+import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.kaributools.fetchAll
