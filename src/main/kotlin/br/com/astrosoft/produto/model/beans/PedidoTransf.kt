@@ -44,8 +44,11 @@ class PedidoTransf(
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  val observacaoLimpa
-    get() = observacao?.replace(" +".toRegex(), " ")
+  val observacaoLimpa: String
+    get() {
+      autorizado ?: referente ?: entregue ?: recebido ?: return ""
+      return "${autorizado ?: ""} | ${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""}"
+    }
 
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 
