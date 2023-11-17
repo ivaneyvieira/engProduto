@@ -29,7 +29,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
+  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfReserva {
   private var dlgProduto: DlgProdutosPedTransfReserva? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -91,15 +92,19 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) : T
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
-      val form = FormAutoriza()
-      DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
-        viewModel.autorizaPedido(pedido, form.login, form.senha)
-      }
+      viewModel.formAutoriza(pedido)
     }
     colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
+  }
+
+  override fun formAutoriza(pedido: PedidoTransf) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+      viewModel.autorizaPedido(pedido, form.login, form.senha)
+    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
