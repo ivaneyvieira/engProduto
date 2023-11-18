@@ -1,11 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.NotaTransferencia
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
@@ -103,6 +105,11 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     subView.formAutoriza(pedido)
   }
 
+  fun previewPedido(pedido: PedidoTransf) {
+    val relatorio = RequisicaoTransferencia(pedido)
+    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview())
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfReserva
 }
@@ -117,4 +124,5 @@ interface ITabPedidoTransfReserva : ITabView {
   fun findPedido(): PedidoTransf?
   fun updateProduto(produto: ProdutoPedidoTransf)
   fun formAutoriza(pedido: PedidoTransf)
+  fun printerPreview(): IPrinter
 }

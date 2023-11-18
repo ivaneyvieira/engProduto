@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
+import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
@@ -43,6 +45,10 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+  }
+
+  override fun printerPreview(): IPrinter {
+    return PrinterPreview()
   }
 
   override fun HorizontalLayout.toolBarConfig() {

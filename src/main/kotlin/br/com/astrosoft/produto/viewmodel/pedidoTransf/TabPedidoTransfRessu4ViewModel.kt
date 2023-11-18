@@ -46,8 +46,8 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   fun previewNota(nota: TransfRessu4) {
-      val relatorio = NotaTransferencia()
-      relatorio.print(dados = nota.produtos(), printer = subView.printerPreview())
+    val relatorio = NotaTransferencia()
+    relatorio.print(dados = nota.produtos(), printer = subView.printerPreview())
   }
 
   val subView
