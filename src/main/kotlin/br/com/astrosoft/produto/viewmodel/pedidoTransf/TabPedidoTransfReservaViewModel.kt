@@ -89,14 +89,12 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
-      .firstOrNull { it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim() }
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
     user ?: fail("Usuário ou senha inválidos")
 
-    when{
-      user.admin -> pedido.autoriza(user)
-      user.storeno == pedido.loja -> pedido.autoriza(user)
-      else -> fail("Usuário não autorizado na loja ${pedido.loja}")
-    }
+    pedido.autoriza(user)
 
     updateView()
   }
