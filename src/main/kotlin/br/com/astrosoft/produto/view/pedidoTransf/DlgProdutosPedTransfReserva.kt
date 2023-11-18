@@ -24,7 +24,7 @@ class DlgProdutosPedTransfReserva(val viewModel: TabPedidoTransfReservaViewModel
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
       cmbImpressora = select<Impressora>("Impressora") {
-        val lista =Impressora.allTermica()
+        val lista = Impressora.allTermica()
         val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
         setItems(lista)
         this.setItemLabelGenerator { it.name }
@@ -56,9 +56,7 @@ class DlgProdutosPedTransfReserva(val viewModel: TabPedidoTransfReservaViewModel
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       val user = AppConfig.userLogin() as? UserSaci
-      if (user?.voltarCD == true || user?.admin == true) {
-        setSelectionMode(Grid.SelectionMode.MULTI)
-      }
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       produtoPedidoTransfCodigo()
       produtoPedidoTransfDescricao()
