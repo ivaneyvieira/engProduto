@@ -33,7 +33,6 @@ class SubWindowPrinter(text: String) : Dialog() {
         text.removerInicializer()
           .removerCodigoBarras()
           .removeFinalize()
-          .removerExpand()
           .removerNegrito()
           .replace("\n", "<br>")
           .replace(" ", "&nbsp;")
@@ -93,12 +92,6 @@ class SubWindowPrinter(text: String) : Dialog() {
   }
 
   private fun String.removerNegrito(): String {
-    val padraoi = "\u001B\u0045"
-    val padraof = "\u001B\u0046"
-    return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
-  }
-
-  private fun String.removerExpand(): String {
     val padraoi = "\u001B\u0045\u0001"
     val padraof = "\u001B\u0045\u0000"
     return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")

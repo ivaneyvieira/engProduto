@@ -49,10 +49,6 @@ abstract class PrintText<T> {
     return this
   }
 
-  open fun sumaryLine(): String {
-    return ""
-  }
-
   private fun header() = montaLinha { col ->
     col.columnText.negrito()
   }
@@ -77,8 +73,8 @@ abstract class PrintText<T> {
     }
   }
 
-  private fun sumary(text: StringBuilder) {
-    text.line(sumaryLine())
+  open fun sumary(text: StringBuilder) {
+    text.line("")
   }
 
   private fun inicialize(text: StringBuilder) {
@@ -104,7 +100,13 @@ abstract class PrintText<T> {
 
   protected fun String.negrito(): String {
     val stringBuffer = StringBuilder()
-    stringBuffer.append(0x1b.toChar()).append(0x45.toChar()).append(this).append(0x1b.toChar()).append(0x46.toChar())
+    stringBuffer.append(0x1b.toChar())
+      .append(0x45.toChar())
+      .append(0x01.toChar())
+      .append(this)
+      .append(0x1b.toChar())
+      .append(0x46.toChar())
+      .append(0x00.toChar())
     return stringBuffer.toString()
   }
 

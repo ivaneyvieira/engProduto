@@ -25,4 +25,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
       "".padEnd(64, '-'),
     )
   }
+
+  override fun sumary(text: StringBuilder) {
+  }
 }

@@ -23,20 +23,22 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
   private var cmbImpressora: Select<Impressora>? = null
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
-      cmbImpressora = select<Impressora>("Impressora") {
-        val lista = Impressora.allTermica()
-        val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
-        setItems(lista)
-        this.setItemLabelGenerator { it.name }
+      if (AppConfig.userLogin()?.admin == true) {
+        cmbImpressora = select("Impressora") {
+          val lista = Impressora.allTermica()
+          val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
+          setItems(lista)
+          this.setItemLabelGenerator { it.name }
 
-        this.value = lista.firstOrNull {
-          it.name == printerUser
+          this.value = lista.firstOrNull {
+            it.name == printerUser
+          }
         }
-      }
-      this.button("Imprimir") {
-        this.onLeftClick {
-          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-          viewModel.imprimePedido(pedido, impressora)
+        this.button("Imprimir") {
+          this.onLeftClick {
+            val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+            viewModel.imprimePedido(pedido, impressora)
+          }
         }
       }
     }, onClose = {
@@ -55,7 +57,6 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      val user = AppConfig.userLogin() as? UserSaci
 
       setSelectionMode(Grid.SelectionMode.MULTI)
 
