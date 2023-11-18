@@ -27,5 +27,10 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
   }
 
   override fun sumary(text: StringBuilder) {
+    text.line("")
+    text.line("")
+    text.line("")
+    text.line("_______________________________  _______________________________")
+    text.line("          Autorizacao                        Entregue")
   }
 }
