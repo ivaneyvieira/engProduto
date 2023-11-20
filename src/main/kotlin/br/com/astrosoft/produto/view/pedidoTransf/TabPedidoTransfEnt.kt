@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -86,6 +87,13 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
+    }
+    addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
+      val obs = "Autorizado Por: ${nota.autorizado ?: ""}<br>" +
+                "Referente: ${nota.referente ?: ""}<br>" +
+                "Entregue Por: ${nota.entregue ?: ""}<br>" +
+                "Recebido Por: ${nota.recebido ?: ""}"
+      DialogHelper.showInformation(obs)
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
