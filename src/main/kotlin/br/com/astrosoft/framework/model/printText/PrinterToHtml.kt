@@ -3,6 +3,8 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPAND_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPAND_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.PAPPER_CUT
@@ -15,8 +17,9 @@ object PrinterToHtml {
           .removerCodigoBarras()
           .removeFinalize()
           .removerNegrito()
+          .removerExpandido()
           .replace("\n", "<br>")
-          .replace(" ", "&nbsp;")
+          //.replace(" ", "&nbsp;")
 
     return "<pre>$html</pre>"
   }
@@ -36,5 +39,9 @@ object PrinterToHtml {
 
   private fun String.removerNegrito(): String {
     return this.replace(NEGRITO_ON, "<strong>").replace(NEGRITO_OFF, "</strong>")
+  }
+
+  private fun String.removerExpandido(): String {
+    return this.replace(EXPAND_ON, "<span style='font-size: 200%'>").replace(EXPAND_OFF, "</span>")
   }
 }

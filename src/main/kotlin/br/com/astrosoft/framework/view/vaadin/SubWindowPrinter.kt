@@ -12,6 +12,7 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.select.Select
+import java.io.File
 
 class SubWindowPrinter(text: String) : Dialog() {
   private var cmbImpressora: Select<Impressora>? = null
@@ -30,6 +31,8 @@ class SubWindowPrinter(text: String) : Dialog() {
   }
 
   init {
+    File("/tmp/relatorio.txt").writeText(text)
+
     height = "100%"
     verticalLayout {
       isPadding = false
