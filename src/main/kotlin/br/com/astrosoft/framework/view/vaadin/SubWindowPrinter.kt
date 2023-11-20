@@ -2,6 +2,12 @@ package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.EscPosConst
+import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
+import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
+import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
+import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
+import br.com.astrosoft.framework.model.printText.EscPosConst.PAPPER_CUT
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.produto.model.beans.Impressora
@@ -83,20 +89,20 @@ class SubWindowPrinter(text: String) : Dialog() {
   }
 
   private fun String.removeFinalize(): String {
-    val padrao = EscPosConst.PAPPER_CUT
+    val padrao = PAPPER_CUT
     return this.replace(padrao, "")
   }
 
   private fun String.removerCodigoBarras(): String {
-    val padrao1 = EscPosConst.BARCODE_HEIGHT
-    val padrao2 = EscPosConst.BARCODE_WIDTH
-    val padrao3 = (EscPosConst.BARCODE_128 + "..").toRegex()
+    val padrao1 = BARCODE_HEIGHT
+    val padrao2 = BARCODE_WIDTH
+    val padrao3 = "$BARCODE_128..".toRegex()
     return this.replace(padrao1, "").replace(padrao2, "").replace(padrao3, "")
   }
 
   private fun String.removerNegrito(): String {
-    val padraoi = EscPosConst.NEGRITO_ON
-    val padraof = EscPosConst.NEGRITO_OFF
+    val padraoi = NEGRITO_ON
+    val padraof = NEGRITO_OFF
     return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
   }
 }
