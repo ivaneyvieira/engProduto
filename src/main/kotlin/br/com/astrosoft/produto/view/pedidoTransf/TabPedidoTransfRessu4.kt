@@ -107,10 +107,6 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) : Tab
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun printerPreview(): IPrinter {
-    return PrinterPreview()
-  }
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfRessu4 == true

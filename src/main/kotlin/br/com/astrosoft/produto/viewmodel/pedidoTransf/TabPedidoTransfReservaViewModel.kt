@@ -124,5 +124,4 @@ interface ITabPedidoTransfReserva : ITabView {
   fun findPedido(): PedidoTransf?
   fun updateProduto(produto: ProdutoPedidoTransf)
   fun formAutoriza(pedido: PedidoTransf)
-  fun printerPreview(): IPrinter
 }

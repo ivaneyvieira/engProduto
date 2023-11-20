@@ -138,10 +138,6 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     dlgProduto?.updateProduto(produto)
   }
 
-  override fun printerPreview(): IPrinter {
-    return PrinterPreview()
-  }
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfAutorizada == true

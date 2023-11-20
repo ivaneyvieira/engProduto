@@ -1,8 +1,8 @@
 package br.com.astrosoft.framework.view.vaadin
 
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
 import br.com.astrosoft.framework.view.vaadin.helper.updateItens
-import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.kaributools.fetchAll
@@ -45,4 +45,8 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   fun listBeans() = dataProviderPanel.fetchAll()
 
   fun itensSelecionados() = gridPanel.selectedItems.toList()
+
+  override fun printerPreview(): IPrinter {
+    return PrinterPreview()
+  }
 }

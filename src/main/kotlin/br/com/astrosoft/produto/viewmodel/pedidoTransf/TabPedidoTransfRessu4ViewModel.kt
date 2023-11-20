@@ -59,5 +59,4 @@ interface ITabPedidoTransfRessu4 : ITabView {
   fun updatePedidos(pedidos: List<TransfRessu4>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoTransfRessu4>
-  fun printerPreview(): IPrinter
 }

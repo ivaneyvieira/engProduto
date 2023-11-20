@@ -114,5 +114,4 @@ interface ITabPedidoTransfAutorizada : ITabView {
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf?
   fun findPedido(): PedidoTransf?
   fun updateProduto(produto: ProdutoPedidoTransf)
-  fun printerPreview(): IPrinter
 }

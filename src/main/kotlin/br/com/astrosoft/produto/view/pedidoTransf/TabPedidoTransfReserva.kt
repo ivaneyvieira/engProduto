@@ -47,10 +47,6 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
-  override fun printerPreview(): IPrinter {
-    return PrinterPreview()
-  }
-
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
