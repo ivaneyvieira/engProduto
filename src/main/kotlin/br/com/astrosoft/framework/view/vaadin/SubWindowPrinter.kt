@@ -1,14 +1,8 @@
 package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.EscPosConst
-import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
-import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
-import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
-import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
-import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
-import br.com.astrosoft.framework.model.printText.EscPosConst.PAPPER_CUT
 import br.com.astrosoft.framework.model.printText.PrinterCups
+import br.com.astrosoft.framework.model.printText.PrinterToHtml
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -32,19 +26,7 @@ class SubWindowPrinter(text: String) : Dialog() {
     this.style("border", "1px solid black")
     this.style("border-radius", "5px")
     this.style("color", "black")
-    this.html(toHtml(text))
-  }
-
-  private fun toHtml(text: String): String {
-    val html =
-        text.removerInicializer()
-          .removerCodigoBarras()
-          .removeFinalize()
-          .removerNegrito()
-          .replace("\n", "<br>")
-          .replace(" ", "&nbsp;")
-
-    return "<pre>$html</pre>"
+    this.html(PrinterToHtml.toHtml(text))
   }
 
   init {
@@ -66,7 +48,7 @@ class SubWindowPrinter(text: String) : Dialog() {
 
           this.value = lista.firstOrNull {
             it.name == printerUser
-          }?: lista.firstOrNull()
+          } ?: lista.firstOrNull()
         }
         this.button("Imprimir") {
           icon = VaadinIcon.PRINT.create()
@@ -83,28 +65,6 @@ class SubWindowPrinter(text: String) : Dialog() {
     isCloseOnEsc = true
   }
 
-  private fun String.removerInicializer(): String {
-    val padrao = EscPosConst.SET_FONT_SMALL
-    return this.replace(padrao, "")
-  }
-
-  private fun String.removeFinalize(): String {
-    val padrao = PAPPER_CUT
-    return this.replace(padrao, "")
-  }
-
-  private fun String.removerCodigoBarras(): String {
-    val padrao1 = BARCODE_HEIGHT
-    val padrao2 = BARCODE_WIDTH
-    val padrao3 = "$BARCODE_128..".toRegex()
-    return this.replace(padrao1, "").replace(padrao2, "").replace(padrao3, "")
-  }
-
-  private fun String.removerNegrito(): String {
-    val padraoi = NEGRITO_ON
-    val padraof = NEGRITO_OFF
-    return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
-  }
 }
 
 
