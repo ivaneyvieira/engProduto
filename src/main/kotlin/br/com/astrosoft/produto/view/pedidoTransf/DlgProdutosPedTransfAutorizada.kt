@@ -14,6 +14,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
@@ -38,6 +39,12 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
           this.onLeftClick {
             val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
             viewModel.imprimePedido(pedido, impressora)
+          }
+        }
+        this.button("Preview") {
+          icon = VaadinIcon.PRINT.create()
+          this.onLeftClick {
+            viewModel.previewPedido(pedido)
           }
         }
       }

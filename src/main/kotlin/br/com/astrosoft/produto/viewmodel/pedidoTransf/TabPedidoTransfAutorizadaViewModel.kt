@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -95,6 +96,11 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
     updateView()
   }
 
+  fun previewPedido(pedido: PedidoTransf) {
+    val relatorio = RequisicaoTransferencia(pedido)
+    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview())
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfAutorizada
 }
@@ -108,4 +114,5 @@ interface ITabPedidoTransfAutorizada : ITabView {
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf?
   fun findPedido(): PedidoTransf?
   fun updateProduto(produto: ProdutoPedidoTransf)
+  fun printerPreview(): IPrinter
 }

@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
+import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -134,6 +136,10 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
 
   override fun updateProduto(produto: ProdutoPedidoTransf) {
     dlgProduto?.updateProduto(produto)
+  }
+
+  override fun printerPreview(): IPrinter {
+    return PrinterPreview()
   }
 
   override fun isAuthorized(): Boolean {
