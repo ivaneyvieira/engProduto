@@ -93,7 +93,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
                 "Referente: ${nota.referente ?: ""}<br>" +
                 "Entregue Por: ${nota.entregue ?: ""}<br>" +
                 "Recebido Por: ${nota.recebido ?: ""}"
-      DialogHelper.showInformation(obs)
+      DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()

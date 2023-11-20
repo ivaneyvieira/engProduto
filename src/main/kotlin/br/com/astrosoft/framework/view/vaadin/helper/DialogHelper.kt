@@ -2,8 +2,10 @@ package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowPDF
 import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
+import com.github.mvysny.karibudsl.v10.html
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.formlayout.FormLayout
+import com.vaadin.flow.component.html.Div
 
 object DialogHelper {
   fun showForm(caption: String, form: FormLayout, runConfirm: (() -> Unit)) {
@@ -36,10 +38,12 @@ object DialogHelper {
     dialog.open()
   }
 
-  fun showInformation(msg: String) {
+  fun showInformation(msg: String, title: String = "Informação") {
     val dialog = ConfirmDialog()
-    dialog.setHeader("Informação")
-    dialog.setText(msg)
+    dialog.setHeader(title)
+    dialog.setText(Div().apply {
+      this.html(msg)
+    })
     dialog.setConfirmText("OK")
     dialog.open()
   }
