@@ -15,12 +15,11 @@ class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {
     column(ProdutoTransfRessu4::referencia, "Referencia", 42)
   }
 
-  override fun titleLines(bean: ProdutoTransfRessu4): List<String> {
+  override fun printTitle(bean: ProdutoTransfRessu4) {
     val titulo = "NF Transf ${bean.notaTransf} - ${bean.rota}"
     val data = "Data: ${bean.data?.format() ?: "  /  /    "}".lpad(64 - titulo.length, " ")
-    return listOf(
-      "$titulo$data",
-      "".lpad(64, "-")
-    )
+
+    println("$titulo$data", negrito = true)
+    println("".lpad(64, "-"), negrito = true)
   }
 }

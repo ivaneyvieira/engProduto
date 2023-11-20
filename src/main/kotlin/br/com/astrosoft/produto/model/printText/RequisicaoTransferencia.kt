@@ -13,24 +13,22 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     column(ProdutoPedidoTransf::quantidade, "Quant", 6)
   }
 
-  override fun titleLines(bean: ProdutoPedidoTransf): List<String> {
-    return listOf(
-      "Requisicao de Transferencia: ${nota.rota ?: "Rota nao definida"}",
-      "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ${nota.ordno}",
-      "Usuario: ${nota.usuario ?: "Usuario nao definido"}",
-      "Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}",
-      "Referente: ${nota.referente ?: "Nao definido"}",
-      "Entregue Por: ${nota.entregue ?: "Entregador nao definido"}",
-      "Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}",
-      "".padEnd(64, '-'),
-    )
+  override fun printTitle(bean: ProdutoPedidoTransf) {
+    println("Requisicao de Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
+    println("Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ${nota.ordno}", negrito = true)
+    println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
+    println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
+    println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
+    println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
+    println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
+    println("".padEnd(64, '-'))
   }
 
-  override fun sumary(text: StringBuilder) {
-    text.line("")
-    text.line("")
-    text.line("")
-    text.line("_______________________________  _______________________________")
-    text.line("          Autorizacao                        Entregue")
+  override fun printSumary() {
+    println("")
+    println("")
+    println("")
+    println("_______________________________  _______________________________")
+    println("          Autorizacao                        Entregue")
   }
 }

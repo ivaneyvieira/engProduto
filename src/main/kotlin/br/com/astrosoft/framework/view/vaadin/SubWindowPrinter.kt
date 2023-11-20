@@ -1,6 +1,7 @@
 package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.EscPosConst
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.produto.model.beans.Impressora
@@ -18,7 +19,7 @@ class SubWindowPrinter(text: String) : Dialog() {
   private val divText = Div().apply {
     this.style("background-color", "#FFE4B5")
     this.style("font-family", "monospace")
-    this.style("font-size", "12px")
+    this.style("font-size", "80%")
     this.style("white-space", "pre-wrap")
     this.style("padding", "10px")
     this.style("margin", "10px")
@@ -77,23 +78,25 @@ class SubWindowPrinter(text: String) : Dialog() {
   }
 
   private fun String.removerInicializer(): String {
-    val padrao = "\u001B\u0021\u0001"
+    val padrao = EscPosConst.SET_FONT_SMALL
     return this.replace(padrao, "")
   }
 
   private fun String.removeFinalize(): String {
-    val padrao = "\u000A\u000A\u000A\u001B\u0069"
+    val padrao = EscPosConst.PAPPER_CUT
     return this.replace(padrao, "")
   }
 
   private fun String.removerCodigoBarras(): String {
-    val padrao = "\u001D\u0068\u0050\u001D\u0077\u0004\u001D\u006B\u0049"
-    return this.replace(padrao, "")
+    val padrao1 = EscPosConst.BARCODE_HEIGHT
+    val padrao2 = EscPosConst.BARCODE_WIDTH
+    val padrao3 = (EscPosConst.BARCODE_128 + "..").toRegex()
+    return this.replace(padrao1, "").replace(padrao2, "").replace(padrao3, "")
   }
 
   private fun String.removerNegrito(): String {
-    val padraoi = "\u001B\u0045\u0001"
-    val padraof = "\u001B\u0045\u0000"
+    val padraoi = EscPosConst.NEGRITO_ON
+    val padraof = EscPosConst.NEGRITO_OFF
     return this.replace(padraoi, "<strong>").replace(padraof, "</strong>")
   }
 }
