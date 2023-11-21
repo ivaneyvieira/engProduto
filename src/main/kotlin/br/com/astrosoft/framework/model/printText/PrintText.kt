@@ -3,8 +3,6 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPAND_OFF
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPAND_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import kotlin.reflect.KProperty1
@@ -89,7 +87,7 @@ abstract class PrintText<T> {
   }
 
   protected fun String.expandido(): String {
-    return "$EXPAND_ON${this}$EXPAND_OFF"
+    return this
   }
 
   private fun printDetail(bean: T) {
