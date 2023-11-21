@@ -8,8 +8,8 @@ object EscPosConst {
   const val NEGRITO_ON = "\u001B\u0045\u0001"
   const val NEGRITO_OFF = "\u001B\u0045\u0000"
 
-  const val EXPAND_ON = "\u001B\u0057\u0001"
-  const val EXPAND_OFF = "\u001B\u0057\u0000"
+  const val EXPAND_ON = ""
+  const val EXPAND_OFF = ""
 
   const val SET_FONT_SMALL = "\u001B\u0021\u0001"
   const val PAPPER_CUT = "\n\n\n\n\u001B\u0069"
