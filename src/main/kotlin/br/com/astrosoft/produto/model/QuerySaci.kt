@@ -490,6 +490,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun entradaDevCli(filtro: FiltroEntradaDevCli): List<EntradaDevCli> {
+    val sql = "/sqlSaci/entradaDevCli.sql"
+    return query(sql, EntradaDevCli::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("numero", filtro.numero)
+      addOptionalParameter("serie", filtro.serie)
+      addOptionalParameter("dataI", filtro.dataI.toSaciDate())
+      addOptionalParameter("dataF", filtro.dataF.toSaciDate())
+      addOptionalParameter("codigoCliente", filtro.codigoCliente)
+      addOptionalParameter("nomeCliente", filtro.nomeCliente)
+    }
+  }
+
+    fun entradaDevCliPro(invno: Int): List<EntradaDevCliPro> {
+    val sql = "/sqlSaci/entradaDevCliPro.sql"
+    return query(sql, EntradaDevCliPro::class) {
+      addOptionalParameter("invno", invno)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
