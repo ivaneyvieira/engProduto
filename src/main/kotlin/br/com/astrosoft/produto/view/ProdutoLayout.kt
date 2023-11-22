@@ -26,7 +26,7 @@ class ProdutoLayout : AppLayoutAbstract() {
         title = "Pedido Transf",
         routeClass = PedidoTransfView::class
       )
-      if (userSaci?.pedidoTransf == true) route(
+      if (userSaci?.devCliente == true) route(
         icon = DIPLOMA,
         title = "Dev Cliente",
         routeClass = DevClienteView::class,

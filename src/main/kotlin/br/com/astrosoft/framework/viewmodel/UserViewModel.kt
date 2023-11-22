@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.IUser
 
 abstract class UserViewModel<B : IUser, V : IUsuarioView>(view: V) : ViewModel<V>(view) {
   abstract fun findAllUser(): List<B>
-  abstract fun findUser(login: String): B?
+  abstract fun findUser(user: B): B?
   abstract fun addUser(user: B)
   abstract fun updateUser(user: B)
   abstract fun deleteUser(user: B)
@@ -31,7 +31,7 @@ abstract class UserViewModel<B : IUser, V : IUsuarioView>(view: V) : ViewModel<V
 
   private fun validaUser(user: B?): B {
     user ?: fail("Usuário não selecionado")
-    findUser(user.login) ?: fail("Usuário não encontrado no saci")
+    findUser(user) ?: fail("Usuário não encontrado no saci")
     return user
   }
 

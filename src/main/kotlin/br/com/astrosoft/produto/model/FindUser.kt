@@ -5,9 +5,8 @@ import br.com.astrosoft.framework.model.security.IFindUser
 
 class FindUser : IFindUser {
   override fun findUser(username: String, senha: String): IUser? {
-    return saci.findUser(username).let { user ->
-      if (user?.senha == senha) user
-      else null
+    return saci.findUser(username).firstOrNull { user ->
+      user.senha == senha
     }
   }
 }

@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel
 
+import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
 import br.com.astrosoft.framework.viewmodel.UserViewModel
@@ -13,8 +14,7 @@ class UsuarioViewModel(view: IUsuarioView) : UserViewModel<UserSaci, IUsuarioVie
 
   override fun findAllUser() = UserSaci.findAll()
 
-  override fun findUser(login: String) = UserSaci.findUser(login)
-
+  override fun findUser(user: UserSaci) = UserSaci.findUser(user.login).firstOrNull()
   override fun addUser(user: UserSaci) {
     UserSaci.updateUser(user)
   }

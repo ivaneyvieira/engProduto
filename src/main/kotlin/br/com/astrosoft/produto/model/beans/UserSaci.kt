@@ -89,7 +89,7 @@ class UserSaci : IUser {
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   val pedidoTransf
-    get() = pedidoTransfReserva || pedidoTransfEnt || admin
+    get() = pedidoTransfReserva || pedidoTransfAutorizada || pedidoTransfRessu4 || pedidoTransfEnt || admin
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || admin
   val notaEntrada
@@ -119,7 +119,7 @@ class UserSaci : IUser {
       saci.updateUser(user)
     }
 
-    fun findUser(login: String?): UserSaci? {
+    fun findUser(login: String?): List<UserSaci> {
       return saci.findUser(login)
     }
 
