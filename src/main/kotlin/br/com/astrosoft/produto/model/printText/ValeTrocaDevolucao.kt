@@ -21,7 +21,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("Loja: ${nota.loja}", negrito = true)
     println("Cliente: ${nota.custno} - ${nota.cliente}", negrito = true)
     println("NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()}", negrito = true)
-    println("Referente:", negrito = true)
+    println("Referente: ${nota.remarks ?: ""}", negrito = true)
     println("".padEnd(64, '-'), negrito = true)
   }
 
