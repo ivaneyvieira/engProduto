@@ -6,6 +6,7 @@ import java.time.LocalDate
 class EntradaDevCli(
   val invno: Int,
   var loja: Int,
+  var nomeLoja: String?,
   var notaFiscal: String?,
   var data: LocalDate?,
   var vendno: Int?,
