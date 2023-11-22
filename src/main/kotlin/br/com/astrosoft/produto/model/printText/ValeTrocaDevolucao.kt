@@ -9,10 +9,9 @@ import java.time.LocalDate
 class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
   init {
     column(EntradaDevCliPro::codigo, "Codigo", 6)
-    column(EntradaDevCliPro::descricao, "Descricao", 32)
+    column(EntradaDevCliPro::descricao, "Descricao", 41)
     column(EntradaDevCliPro::grade, "Grade", 8)
     column(EntradaDevCliPro::quantidade, "Qtd", 6)
-    column(EntradaDevCliPro::valorTotal, "V. Total", 8)
   }
 
   override fun printTitle(bean: EntradaDevCliPro) {
@@ -35,5 +34,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("")
     println("____________________  ____________________  ____________________")
     println("      Gerencia              S. Troca               Caixa")
+    println("")
+    println("")
   }
 }
