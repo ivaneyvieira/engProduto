@@ -15,6 +15,6 @@ object EscPosConst {
   const val INICIALIZE_PRINT = "\u001B\u0040"
 
   //const val SET_FONT_SMALL = "\u001B\u0021\u0001"
-  const val SET_FONT_SMALL = "\u000F"
+  const val SET_FONT_SMALL = "\u001B\u000F"
   const val PAPPER_CUT = "\n\n\n\n\u001B\u0069"
 }

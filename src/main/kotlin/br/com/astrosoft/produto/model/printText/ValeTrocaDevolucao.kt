@@ -24,7 +24,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("Cliente: ${nota.custno} - ${nota.cliente}", negrito = true)
     println("NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()}", negrito = true)
     println("Referente: ${nota.remarks ?: ""}", negrito = true)
-    println("".padEnd(64, '-'), negrito = true)
+    printLine('-')
   }
 
   override fun printSumary() {

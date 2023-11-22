@@ -112,5 +112,9 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       return@let textNeg
     })
   }
+
+  protected fun printLine(char: Char) {
+    textBuffer.println(char.toString().repeat(widthPage))
+  }
 }
 
