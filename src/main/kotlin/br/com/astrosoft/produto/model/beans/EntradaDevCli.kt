@@ -11,20 +11,21 @@ class EntradaDevCli(
   var vendno: Int?,
   var fornecedor: String?,
   var remarks: String?,
-  var varor: Double?,
+  var valor: Double?,
   var storeno: Int?,
   var pdvno: Int?,
   var xano: Int?,
   var custno: Int?,
   var nfVenda: String?,
   var nfData: LocalDate?,
-  var nfvaror: Double?,
+  var nfValor: Double?,
   var cliente: String?,
   var empno: Int?,
   var vendedor: String?
 ) {
 
   fun produtos() = saci.entradaDevCliPro(invno)
+
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
   }
@@ -32,16 +33,7 @@ class EntradaDevCli(
 
 data class FiltroEntradaDevCli(
   val loja: Int,
-  val nota: String,
+  val query: String,
   val dataI: LocalDate?,
   val dataF: LocalDate?,
-  val codigoCliente: Int,
-  val nomeCliente: String,
-) {
-  fun isEmpty() = (nota == "") && (codigoCliente == 0) && (nomeCliente == "") && (dataI == null) && (dataF == null)
-
-  val numero
-    get() = nota.split("/").getOrNull(0) ?: ""
-  val serie
-    get() = nota.split("/").getOrNull(1) ?: ""
-}
+)

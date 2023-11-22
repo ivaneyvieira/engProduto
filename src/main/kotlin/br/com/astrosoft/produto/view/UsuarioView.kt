@@ -100,6 +100,15 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::pedidoTransfRessu4.name)
             }
           }
+          formLayout {
+            h4("Dev Cliente"){
+              colspan = 2
+            }
+            checkBox("Vale Troca") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::devCliValeTroca.name)
+            }
+          }
         }
       }
     }

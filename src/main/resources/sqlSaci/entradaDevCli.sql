@@ -40,14 +40,13 @@ FROM sqldados.inv          AS I
 	      ON C.no = IFNULL(NF1.custno, NF2.custno)
   LEFT JOIN sqldados.emp   AS E
 	      ON E.no = IFNULL(NF1.empno, NF2.empno)
-WHERE I.date >= 20220101
-  AND I.account = '2.01.25'
+WHERE I.account = '2.01.25'
   AND (I.storeno = :loja OR :loja = 0)
-  AND (I.nfname = :numero OR :numero = '')
-  AND (I.invse = :serie OR :serie = '')
-  AND ((I.date BETWEEN :dataI AND :dataF) OR :dataI = 0 OR :dataF = 0)
-  AND (C.no = :codigoCliente OR :codigoCliente = 0)
-  AND (C.name LIKE CONCAT('%', :nomeCliente, '%') OR :nomeCliente = '');
+  AND (I.nfname = :query OR :query = '')
+  AND (I.date >= :dataI OR :dataI = 0)
+  AND (I.date <= :dataF OR :dataF = 0)
+  AND (C.no = :query OR :query = '')
+  AND (C.name LIKE CONCAT('%', :query, '%') OR :query = '');
 
 SELECT I.invno,
        I.loja,

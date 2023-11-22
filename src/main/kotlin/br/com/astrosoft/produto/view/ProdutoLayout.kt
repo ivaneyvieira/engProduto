@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.layout.AppLayoutAbstract
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import com.github.mvysny.karibudsl.v23.route
@@ -15,14 +16,6 @@ class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
-      //if (userSaci?.produto == true) route(icon = FORM, title = "Produtos", routeClass = ProdutoView::class)
-      //if (userSaci?.nota == true) route(icon = DIPLOMA, title = "Notas de Saída", routeClass = NotaView::class)
-      //if (userSaci?.notaEntrada == true) route(
-      //   icon = DIPLOMA,
-      //   title = "Notas de Entrada",
-      //   routeClass = NotaEntradaView::class
-      // )
-      //if (userSaci?.pedido == true) route(icon = DIPLOMA, title = "Pedido", routeClass = PedidoView::class)
       if (userSaci?.pedido == true) route(
         icon = DIPLOMA,
         title = "Ressuprimento",
@@ -32,6 +25,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = DIPLOMA,
         title = "Pedido Transf",
         routeClass = PedidoTransfView::class
+      )
+      if (userSaci?.pedidoTransf == true) route(
+        icon = DIPLOMA,
+        title = "Dev Cliente",
+        routeClass = DevClienteView::class,
       )
 
       if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)

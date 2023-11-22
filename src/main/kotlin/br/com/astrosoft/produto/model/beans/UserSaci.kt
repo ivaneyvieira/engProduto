@@ -50,6 +50,7 @@ class UserSaci : IUser {
   var pedidoTransfEnt by DelegateAuthorized(28)
   var pedidoTransfAutorizada by DelegateAuthorized(29)
   var pedidoTransfRessu4 by DelegateAuthorized(30)
+  var devCliValeTroca by DelegateAuthorized(31)
 
   var lojas
     get() = listaLoja.split(",").map { print ->
@@ -96,6 +97,9 @@ class UserSaci : IUser {
 
   val fornecedor
     get() = produtoList
+
+  val devCliente
+    get() = devCliValeTroca || admin
 
   var listLocais: Set<String>
     get() = locais.split(",").filter { it.isNotBlank() }.toSet()
