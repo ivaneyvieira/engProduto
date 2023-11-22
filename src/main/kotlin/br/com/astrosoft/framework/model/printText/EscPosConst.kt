@@ -5,12 +5,16 @@ object EscPosConst {
   const val BARCODE_WIDTH = "\u001D\u0077\u0004"
   const val BARCODE_128 = "\u001D\u006B\u0049"
 
-  const val NEGRITO_ON = "\u001B\u0045\u0001"
-  const val NEGRITO_OFF = "\u001B\u0045\u0000"
+  //const val NEGRITO_ON = "\u001B\u0045\u0001"
+  //const val NEGRITO_OFF = "\u001B\u0045\u0000"
+  const val NEGRITO_ON = "\u001B\u0021\u0009"
+  const val NEGRITO_OFF = "\u001B\u0021\u0001"
 
   //const val EXPAND_ON = ""
   //const val EXPAND_OFF = ""
+  const val INICIALIZE_PRINT = "\u001B\u0040"
 
-  const val SET_FONT_SMALL = "\u001B\u0021\u0001"
+  //const val SET_FONT_SMALL = "\u001B\u0021\u0001"
+  const val SET_FONT_SMALL = "\u000F"
   const val PAPPER_CUT = "\n\n\n\n\u001B\u0069"
 }

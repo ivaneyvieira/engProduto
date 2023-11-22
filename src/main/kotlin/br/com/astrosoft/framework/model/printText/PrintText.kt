@@ -1,13 +1,13 @@
 package br.com.astrosoft.framework.model.printText
 
+import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
-import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import kotlin.reflect.KProperty1
 
-abstract class PrintText<T> {
+abstract class PrintText<T>(val widthPage: Int = 64) {
   private val columns: ColumnList<T> = ColumnList()
   private val textBuffer = TextBuffer()
 
@@ -102,9 +102,14 @@ abstract class PrintText<T> {
 
   }
 
-  protected fun println(text: String, negrito: Boolean = false) {
-    textBuffer.println(text.let {
-      if(negrito) it.negrito() else it
+  protected fun println(text: String, negrito: Boolean = false, center: Boolean = false) {
+    textBuffer.println(text.let { textOrig ->
+      val textCenter = if (center) {
+        val margem = (widthPage - textOrig.length) / 2
+        " ".repeat(margem) + textOrig
+      } else textOrig
+      val textNeg = if (negrito) textCenter.negrito() else textCenter
+      return@let textNeg
     })
   }
 }
