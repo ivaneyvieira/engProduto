@@ -78,5 +78,6 @@ FROM T_NOTA                 AS I
   LEFT JOIN  sqldados.vend  AS V
 	       ON V.no = I.vendno
 GROUP BY I.invno, X.prdno, X.grade
+ORDER BY descricao, grade, codigo
 
 

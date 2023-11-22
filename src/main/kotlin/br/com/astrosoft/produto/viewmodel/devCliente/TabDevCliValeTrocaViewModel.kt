@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.beans.PedidoTransf
+import br.com.astrosoft.produto.model.beans.EntradaDevCli
+import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
 class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -18,6 +20,11 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
     val filtro = subView.filtro()
     val notas = EntradaDevCli.findAll(filtro)
     subView.updateNotas(notas)
+  }
+
+  fun imprimeValeTroca(nota: EntradaDevCli) {
+    val relatorio = ValeTrocaDevolucao(nota)
+    relatorio.print(nota.produtos(), subView.printerPreview())
   }
 
   val subView

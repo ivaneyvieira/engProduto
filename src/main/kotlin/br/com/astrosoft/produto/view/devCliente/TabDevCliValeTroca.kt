@@ -2,6 +2,8 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
@@ -15,6 +17,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -72,6 +75,9 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
+    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+      viewModel.imprimeValeTroca(nota)
+    }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "Nota Devolução")
     columnGrid(EntradaDevCli::data, header = "Data")
@@ -81,7 +87,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cliente")
-    columnGrid(EntradaDevCli::cliente, header = "Nome do CLiente")
+    columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }
 

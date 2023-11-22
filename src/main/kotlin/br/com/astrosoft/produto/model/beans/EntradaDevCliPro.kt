@@ -23,8 +23,8 @@ class EntradaDevCliPro(
   var grade: String?,
   var descricao: String?,
   var quantidade: Double?,
-  var varorUnitario: Double?,
-  var varorTotal: Double?,
+  var valorUnitario: Double?,
+  var valorTotal: Double?,
   var cliente: String?,
   var vendedor: String?,
 )
