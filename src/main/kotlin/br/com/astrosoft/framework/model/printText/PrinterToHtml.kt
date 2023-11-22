@@ -3,6 +3,7 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
+import br.com.astrosoft.framework.model.printText.EscPosConst.INICIALIZE_PRINT
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.PAPPER_CUT
@@ -23,7 +24,7 @@ object PrinterToHtml {
   }
 
   private fun String.removerInicializer(): String {
-    return this.replace(SET_FONT_SMALL, "")
+    return this.replace(SET_FONT_SMALL, "").replace(INICIALIZE_PRINT, "")
   }
 
   private fun String.removeFinalize(): String {

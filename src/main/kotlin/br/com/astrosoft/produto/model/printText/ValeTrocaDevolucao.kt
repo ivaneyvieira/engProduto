@@ -9,10 +9,9 @@ import java.time.LocalDate
 class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
   init {
     column(EntradaDevCliPro::codigo, "Codigo", 6)
-    column(EntradaDevCliPro::descricao, "Descricao", 25)
+    column(EntradaDevCliPro::descricao, "Descricao", 32)
     column(EntradaDevCliPro::grade, "Grade", 8)
     column(EntradaDevCliPro::quantidade, "Qtd", 6)
-    column(EntradaDevCliPro::valorUnitario, "V. Unit", 6)
     column(EntradaDevCliPro::valorTotal, "V. Total", 8)
   }
 
@@ -28,6 +27,8 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   }
 
   override fun printSumary() {
+    val totalTxt = "Valor Total R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00}.format()}"
+    println(" ".repeat(64 - totalTxt.length) + totalTxt, negrito = true)
     println("")
     println("DOCUMENTO NAO FISCAL".expandido(), center = true)
     println("")
