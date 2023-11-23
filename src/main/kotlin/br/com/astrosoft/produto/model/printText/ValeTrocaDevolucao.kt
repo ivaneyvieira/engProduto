@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
   init {
-    column(EntradaDevCliPro::codigo, "Codigo", 6)
+    column(EntradaDevCliPro::codigoFormat, "Codigo", 6)
     column(EntradaDevCliPro::descricao, "Descricao", 41)
     column(EntradaDevCliPro::grade, "Grade", 8)
     column(EntradaDevCliPro::quantidade, "Qtd", 6)
@@ -22,14 +22,14 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("Cliente: ${nota.custno} - ${nota.cliente}", negrito = true)
     println("NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()}", negrito = true)
     println("Referente: ${nota.remarks ?: ""}", negrito = true)
+    val totalTxt = "Valor Total do Vale Troca R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00}.format()}"
+    println(totalTxt, negrito = true)
     printLine('-')
   }
 
   override fun printSumary() {
-    val totalTxt = "Valor Total R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00}.format()}"
-    println(" ".repeat(64 - totalTxt.length) + totalTxt, negrito = true)
     println("")
-    println("DOCUMENTO NAO FISCAL".expandido(), center = true)
+    println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
     println("____________________  ____________________  ____________________")

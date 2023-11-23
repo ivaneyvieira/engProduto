@@ -86,10 +86,6 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return "$NEGRITO_ON${this}$NEGRITO_OFF"
   }
 
-  protected fun String.expandido(): String {
-    return this
-  }
-
   private fun printDetail(bean: T) {
     textBuffer.println(detail(bean))
   }

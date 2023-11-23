@@ -16,10 +16,13 @@ object PrinterToHtml {
           .removeFinalize()
           .removerNegrito()
           .removerExpandido()
-          .replace("\n", "<br>")
-          //.replace(" ", "&nbsp;")
+          .replace(" ", "&nbsp;")
 
-    return "<pre>$html</pre>"
+    val htmlFormat = html.lines().joinToString(separator = "<br>") {linha ->
+      "<code>$linha</code>"
+    }
+
+    return htmlFormat
   }
 
   private fun String.removerInicializer(): String {

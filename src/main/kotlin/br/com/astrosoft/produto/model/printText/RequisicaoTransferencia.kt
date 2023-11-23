@@ -26,7 +26,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
 
   override fun printSumary() {
     println("")
-    println("      DOCUMENTO NAO FISCAL".expandido())
+    println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
     println("_______________________________  _______________________________")

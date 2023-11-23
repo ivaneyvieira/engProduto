@@ -22,9 +22,12 @@ class EntradaDevCliPro(
   var codigo: String?,
   var grade: String?,
   var descricao: String?,
-  var quantidade: Double?,
+  var quantidade: Int?,
   var valorUnitario: Double?,
   var valorTotal: Double?,
   var cliente: String?,
   var vendedor: String?,
-)
+){
+  val codigoFormat
+    get() = codigo?.padStart(6, '0') ?: ""
+}
