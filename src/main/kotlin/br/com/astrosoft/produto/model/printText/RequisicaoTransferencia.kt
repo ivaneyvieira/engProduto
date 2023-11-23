@@ -31,5 +31,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("")
     println("_______________________________  _______________________________")
     println("          Autorizacao                        Entregue")
+    println("")
+    println("")
   }
 }

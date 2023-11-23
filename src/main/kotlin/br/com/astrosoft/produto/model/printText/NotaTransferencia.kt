@@ -22,4 +22,10 @@ class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {
     println("$titulo$data", negrito = true)
     println("".lpad(64, "-"), negrito = true)
   }
+
+  override fun printSumary() {
+    println("")
+    println("")
+    println("")
+  }
 }
