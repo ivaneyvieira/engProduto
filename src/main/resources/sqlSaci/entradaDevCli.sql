@@ -50,7 +50,12 @@ WHERE I.account = '2.01.25'
   AND (I.date >= :dataI OR :dataI = 0)
   AND (I.date <= :dataF OR :dataF = 0)
   AND (C.no = :query OR :query = '')
-  AND (C.name LIKE CONCAT('%', :query, '%') OR :query = '');
+  AND (C.name LIKE CONCAT('%', :query, '%') OR :query = '')
+  AND CASE :impresso
+        WHEN 'S' THEN I.c9 = 'S'
+        WHEN 'N' THEN I.c9 != 'S'
+        ELSE TRUE
+      END;
 
 SELECT I.invno,
        I.loja,

@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -97,6 +96,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
       query = edtPesquisa.value ?: "",
       dataI = edtDataInicial.value,
       dataF = edtDataFinal.value,
+      impresso = false,
     )
   }
 

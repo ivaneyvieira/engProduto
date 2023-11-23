@@ -26,6 +26,9 @@ class EntradaDevCli(
 ) {
 
   fun produtos() = saci.entradaDevCliPro(invno)
+  fun marcaImpresso(marca: String) {
+    saci.marcaImpresso(invno, marca)
+  }
 
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
@@ -37,4 +40,5 @@ data class FiltroEntradaDevCli(
   val query: String,
   val dataI: LocalDate?,
   val dataF: LocalDate?,
+  val impresso: Boolean,
 )

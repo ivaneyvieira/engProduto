@@ -497,13 +497,22 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataI", filtro.dataI.toSaciDate())
       addOptionalParameter("dataF", filtro.dataF.toSaciDate())
       addOptionalParameter("query", filtro.query)
+      addOptionalParameter("impresso", filtro.impresso.let { if (it) "S" else "N" })
     }
   }
 
-    fun entradaDevCliPro(invno: Int): List<EntradaDevCliPro> {
+  fun entradaDevCliPro(invno: Int): List<EntradaDevCliPro> {
     val sql = "/sqlSaci/entradaDevCliPro.sql"
     return query(sql, EntradaDevCliPro::class) {
       addOptionalParameter("invno", invno)
+    }
+  }
+
+  fun marcaImpresso(invno: Int, marca: String) {
+    val sql = "/sqlSaci/marcaImpresso.sql"
+    script(sql) {
+      addOptionalParameter("invno", invno)
+      addOptionalParameter("marca", marca)
     }
   }
 

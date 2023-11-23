@@ -96,6 +96,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
       query = edtPesquisa.value ?: "",
       dataI = edtDataInicial.value,
       dataF = edtDataFinal.value,
+      impresso = true,
     )
   }
 
