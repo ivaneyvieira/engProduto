@@ -34,7 +34,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
   init {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isVisible = user?.storeno == 0
+    cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
