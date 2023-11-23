@@ -53,6 +53,12 @@ class UserSaci : IUser {
   var devCliValeTroca by DelegateAuthorized(31)
   var devCliValeTrocaImp by DelegateAuthorized(32)
 
+  var lojaVale: Int
+    get() = listaLoja.toIntOrNull() ?: 0
+    set(value) {
+      listaLoja = value.toString()
+    }
+
   var lojas
     get() = listaLoja.split(",").map { print ->
       print.trim().toIntOrNull() ?: 0

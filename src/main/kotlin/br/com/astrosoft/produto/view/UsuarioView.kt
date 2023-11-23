@@ -104,6 +104,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             h4("Dev Cliente"){
               colspan = 2
             }
+            select<Int>("Nome Loja") {
+            isReadOnly = readOnly
+            setItems(values.distinct().sorted())
+            this.setItemLabelGenerator { storeno ->
+              when (storeno) {
+                0    -> "Todas as lojas"
+                else -> lojas.firstOrNull { loja ->
+                  loja.no == storeno
+                }?.descricao ?: ""
+              }
+            }
+            binder.bind(this, UserSaci::lojaVale.name)
+          }
             checkBox("Vale Troca") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTroca.name)

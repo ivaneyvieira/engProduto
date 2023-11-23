@@ -34,8 +34,8 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
   init {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.storeno != 0
-    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+    cmbLoja.isReadOnly = user?.lojaVale != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
