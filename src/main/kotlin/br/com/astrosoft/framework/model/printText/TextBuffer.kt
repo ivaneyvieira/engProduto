@@ -8,7 +8,6 @@ class TextBuffer {
   private val buffer = StringBuilder()
 
   fun println(text: String) {
-    buffer.append(SET_FONT_SMALL)
     buffer.append(text).appendLine()
   }
 
