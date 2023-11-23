@@ -26,7 +26,8 @@ object PrinterToHtml {
   }
 
   private fun String.removerInicializer(): String {
-    return this.replace(SET_FONT_SMALL, "")
+    val padrao = "^$SET_FONT_SMALL".toRegex()
+    return this.replace(padrao, "")
   }
 
   private fun String.removeFinalize(): String {

@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
+import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
 import kotlin.reflect.KProperty1
 
 abstract class PrintText<T>(val widthPage: Int = 64) {
@@ -86,6 +87,10 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return "$NEGRITO_ON${this}$NEGRITO_OFF"
   }
 
+  protected fun String.negritoOff(): String {
+    return "$SET_FONT_SMALL${this}"
+  }
+
   private fun printDetail(bean: T) {
     textBuffer.println(detail(bean))
   }
@@ -104,7 +109,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         val margem = (widthPage - textOrig.length) / 2
         " ".repeat(margem) + textOrig
       } else textOrig
-      val textNeg = if (negrito) textCenter.negrito() else textCenter
+      val textNeg = if (negrito) textCenter.negrito() else textCenter.negritoOff()
       return@let textNeg
     })
   }
