@@ -108,6 +108,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTroca.name)
             }
+            checkBox("Impressão") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::devCliValeTrocaImp.name)
+            }
           }
         }
       }

@@ -51,6 +51,7 @@ class UserSaci : IUser {
   var pedidoTransfAutorizada by DelegateAuthorized(29)
   var pedidoTransfRessu4 by DelegateAuthorized(30)
   var devCliValeTroca by DelegateAuthorized(31)
+  var devCliValeTrocaImp by DelegateAuthorized(32)
 
   var lojas
     get() = listaLoja.split(",").map { print ->
