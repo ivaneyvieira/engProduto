@@ -16,7 +16,6 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfAutorizada
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizadaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -97,7 +96,6 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
     colunaPedidoTransfSing()
-    colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
