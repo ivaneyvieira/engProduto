@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.IUsuarioView
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
@@ -87,10 +88,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             h4("Pedido Transf") {
               colspan = 2
             }
-            select<String>("Impressora") {
+            multiSelectComboBox<String>("Impressoras") {
               isReadOnly = readOnly
               setItems(impressoras.distinct().sorted())
               binder.bind(this, UserSaci::impressoraTrans.name)
+              colspan = 2
             }
 
             checkBox("Reserva") {

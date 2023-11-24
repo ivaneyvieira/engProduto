@@ -38,5 +38,5 @@ interface IView {
   fun showInformation(msg: String)
   fun showQuestion(msg: String, execYes: () -> Unit)
   fun showReport(chave: String, report: ByteArray)
-  fun showPrintText(text: String, printerUser: String, printEvent: (impressora: String) -> Unit)
+  fun showPrintText(text: String, printerUser: List<String>, printEvent: (impressora: String) -> Unit)
 }

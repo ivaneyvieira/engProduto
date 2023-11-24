@@ -75,13 +75,17 @@ class UserSaci : IUser {
       )
     }
 
-  var impressoraTrans: String?
-    get() = lojas.getOrNull(1)
+  var impressoraTrans: Set<String>
+    get() = lojas.getOrNull(1)?.split(":").orEmpty().map { print ->
+      print.trim()
+    }.toSet()
     set(value) {
       val listLojas = lojas
       lojas = listOf(
         listLojas.getOrNull(0) ?: "",
-        value ?: "",
+        value.joinToString(":") { print ->
+          print.trim()
+        },
         listLojas.getOrNull(2) ?: ""
       )
     }

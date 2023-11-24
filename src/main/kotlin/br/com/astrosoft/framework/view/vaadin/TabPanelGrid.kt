@@ -50,5 +50,5 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     return PrinterPreview(printerUser(), printEvent)
   }
 
-  open fun printerUser(): String = ""
+  open fun printerUser(): List<String> = emptyList()
 }

@@ -80,7 +80,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     DialogHelper.showReport(chave, report)
   }
 
-  override fun showPrintText(text: String, printerUser: String, printEvent: (impressora: String) -> Unit) {
+  override fun showPrintText(text: String, printerUser: List<String>, printEvent: (impressora: String) -> Unit) {
     DialogHelper.showPrintText(text, printerUser, printEvent)
   }
 

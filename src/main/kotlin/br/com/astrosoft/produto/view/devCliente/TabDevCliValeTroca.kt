@@ -38,9 +38,9 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
 
-  override fun printerUser(): String {
+  override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.impressoraDev ?: ""
+    return listOfNotNull(username?.impressoraDev)
   }
 
   override fun HorizontalLayout.toolBarConfig() {

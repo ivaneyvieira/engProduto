@@ -75,9 +75,9 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     )
   }
 
-  override fun printerUser(): String {
+  override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.impressoraDev ?: ""
+    return listOfNotNull(username?.impressoraDev)
   }
 
   override fun updateProdutos(produtos: List<EntradaDevCliProList>) {

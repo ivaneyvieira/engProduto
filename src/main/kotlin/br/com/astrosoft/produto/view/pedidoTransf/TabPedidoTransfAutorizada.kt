@@ -46,9 +46,9 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
-  override fun printerUser(): String {
+  override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.impressoraTrans ?: ""
+    return username?.impressoraTrans?.toList() ?: emptyList()
   }
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
