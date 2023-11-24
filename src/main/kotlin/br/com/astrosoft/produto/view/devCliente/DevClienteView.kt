@@ -20,6 +20,7 @@ import jakarta.annotation.security.PermitAll
 class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val viewModel = DevClienteViewModel(this)
   override val tabDevCliValeTroca = TabDevCliValeTroca(viewModel.tabDevCliValeTrocaViewModel)
+  override val tabDevCliValeTrocaProduto = TabDevCliValeTrocaProduto(viewModel.tabDevCliValeTrocaProdutoViewModel)
   override val tabDevCliValeTrocaImp = TabDevCliValeTrocaImp(viewModel.tabDevCliValeTrocaImpViewModel)
 
   override fun isAccept(): Boolean {

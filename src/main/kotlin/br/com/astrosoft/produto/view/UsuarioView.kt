@@ -27,10 +27,12 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
 
   override fun createGrid() = GridCrud(UserSaci::class.java)
 
-  override fun formCrud(operation: CrudOperation?,
-                        domainObject: UserSaci?,
-                        readOnly: Boolean,
-                        binder: Binder<UserSaci>): Component {
+  override fun formCrud(
+    operation: CrudOperation?,
+    domainObject: UserSaci?,
+    readOnly: Boolean,
+    binder: Binder<UserSaci>
+  ): Component {
     return VerticalLayout().apply {
       val lojas = viewModel.allLojas()
       val values = lojas.map { it.no } + listOf(0)
@@ -67,7 +69,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           }
 
           formLayout {
-            h4("Ressuprimento"){
+            h4("Ressuprimento") {
               colspan = 2
             }
             checkBox("CD") {
@@ -80,7 +82,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Pedido Transf"){
+            h4("Pedido Transf") {
               colspan = 2
             }
             checkBox("Reserva") {
@@ -101,22 +103,22 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Dev Cliente"){
+            h4("Dev Cliente") {
               colspan = 2
             }
             select<Int>("Nome Loja") {
-            isReadOnly = readOnly
-            setItems(values.distinct().sorted())
-            this.setItemLabelGenerator { storeno ->
-              when (storeno) {
-                0    -> "Todas as lojas"
-                else -> lojas.firstOrNull { loja ->
-                  loja.no == storeno
-                }?.descricao ?: ""
+              isReadOnly = readOnly
+              setItems(values.distinct().sorted())
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
               }
+              binder.bind(this, UserSaci::lojaVale.name)
             }
-            binder.bind(this, UserSaci::lojaVale.name)
-          }
             checkBox("Vale Troca") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTroca.name)
@@ -124,6 +126,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             checkBox("Impressão") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTrocaImp.name)
+            }
+            checkBox("Produto") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::devCliValeTrocaProduto.name)
             }
           }
         }

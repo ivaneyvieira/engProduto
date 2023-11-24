@@ -52,6 +52,7 @@ class UserSaci : IUser {
   var pedidoTransfRessu4 by DelegateAuthorized(30)
   var devCliValeTroca by DelegateAuthorized(31)
   var devCliValeTrocaImp by DelegateAuthorized(32)
+  var devCliValeTrocaProduto by DelegateAuthorized(33)
 
   var lojaVale: Int
     get() = listaLoja.toIntOrNull() ?: 0
@@ -106,7 +107,7 @@ class UserSaci : IUser {
     get() = produtoList
 
   val devCliente
-    get() = devCliValeTroca || admin
+    get() = devCliValeTroca || devCliValeTrocaImp || devCliValeTrocaProduto || admin
 
   var listLocais: Set<String>
     get() = locais.split(",").filter { it.isNotBlank() }.toSet()
