@@ -62,7 +62,7 @@ class DlgProdutosPedTransfReserva(val viewModel: TabPedidoTransfReservaViewModel
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      val user = AppConfig.userLogin() as? UserSaci
+
       setSelectionMode(Grid.SelectionMode.MULTI)
 
       produtoPedidoTransfCodigo()

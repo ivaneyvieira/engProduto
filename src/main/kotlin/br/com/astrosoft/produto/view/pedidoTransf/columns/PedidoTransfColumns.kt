@@ -15,7 +15,7 @@ object PedidoTransfColumns {
     this.setHeader("Lj Dest")
   }
 
-  fun Grid<PedidoTransf>.colunaPedidoTransfLoja() = columnGrid(PedidoTransf::loja) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfLoja() = columnGrid(PedidoTransf::lojaNoOri) {
     this.setHeader("Loja")
   }
 

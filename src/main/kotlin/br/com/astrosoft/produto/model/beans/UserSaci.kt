@@ -97,6 +97,9 @@ class UserSaci : IUser {
       )
     }
 
+  val lojaUsuario
+    get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
+
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
   val nota

@@ -1,13 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.NotaTransferencia
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
@@ -95,6 +93,12 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
         it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
+
+    if (!user.admin) {
+      val lojaUserSaci = user.lojaUsuario
+      val lojaDestinoPedido = pedido.lojaNoDes ?: fail("Loja destino não encontrada")
+      if (lojaUserSaci != lojaDestinoPedido) fail("Usuário não autorizado para esta loja")
+    }
 
     pedido.autoriza(user)
 

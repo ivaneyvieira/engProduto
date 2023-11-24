@@ -5,9 +5,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class PedidoTransf(
-  var loja: Int,
+  var lojaNoOri: Int,
   var lojaOrigem: String?,
   var ordno: String?,
+  var lojaNoDes: Int?,
   var lojaDestino: String?,
   var rota: String?,
   var cliente: Int?,

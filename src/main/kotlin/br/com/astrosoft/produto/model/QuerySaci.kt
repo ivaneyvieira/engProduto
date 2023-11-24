@@ -349,7 +349,7 @@ class QuerySaci : QueryDB(database) {
   fun findProdutoPedidoTransf(pedido: PedidoTransf): List<ProdutoPedidoTransf> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
     return query(sql, ProdutoPedidoTransf::class) {
-      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("storeno", pedido.lojaNoOri)
       addOptionalParameter("ordno", pedido.ordno)
     }
   }
@@ -474,7 +474,7 @@ class QuerySaci : QueryDB(database) {
   fun autorizaPedidoTransf(pedidoTransf: PedidoTransf, userSing: Int) {
     val sql = "/sqlSaci/autorizaPedidoTransf.sql"
     script(sql) {
-      addOptionalParameter("storeno", pedidoTransf.loja)
+      addOptionalParameter("storeno", pedidoTransf.lojaNoOri)
       addOptionalParameter("ordno", pedidoTransf.ordno)
       addOptionalParameter("userSing", userSing)
     }

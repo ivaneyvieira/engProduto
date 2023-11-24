@@ -5,8 +5,9 @@ DO @PESQUISALIKE := IF(@PESQUISA REGEXP '[0-9]+', '', CONCAT('%', @PESQUISA, '%'
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
-SELECT N.storeno                                          AS loja,
+SELECT N.storeno                                          AS lojaNoOri,
        SO.sname                                           AS lojaOrigem,
+       SD.no                                              AS lojaNoDes,
        SD.sname                                           AS lojaDestino,
        CAST(CONCAT('Rota', SO.no, SD.no) AS CHAR)         AS rota,
        CAST(N.ordno AS CHAR)                              AS ordno,
@@ -89,8 +90,9 @@ WHERE N.date > 20231106
 GROUP BY N.storeno, N.ordno;
 
 
-SELECT loja,
+SELECT lojaNoOri,
        lojaOrigem,
+       lojaNoDes,
        lojaDestino,
        rota,
        ordno,
