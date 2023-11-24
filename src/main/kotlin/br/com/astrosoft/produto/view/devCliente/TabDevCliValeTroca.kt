@@ -38,6 +38,11 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
 
+  override fun printerUser(): String {
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.impressoraDev ?: ""
+  }
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->

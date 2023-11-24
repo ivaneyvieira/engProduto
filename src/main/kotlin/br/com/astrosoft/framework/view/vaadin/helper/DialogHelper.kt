@@ -52,8 +52,8 @@ object DialogHelper {
     SubWindowPDF(chave, report).open()
   }
 
-  fun showPrintText(text: String, printEvent: () -> Unit) {
-    val form = SubWindowPrinter(text, printEvent)
+  fun showPrintText(text: String, printerUser: String, printEvent: () -> Unit) {
+    val form = SubWindowPrinter(text, printerUser, printEvent)
     form.open()
   }
 

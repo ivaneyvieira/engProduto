@@ -48,6 +48,10 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
+  override fun printerUser(): String {
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.impressoraTrans ?: ""
+  }
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->

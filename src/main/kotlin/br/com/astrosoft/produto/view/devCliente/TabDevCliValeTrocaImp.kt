@@ -104,6 +104,11 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
     updateGrid(notas)
   }
 
+  override fun printerUser(): String {
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.impressoraDev ?: ""
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliValeTrocaImp == true

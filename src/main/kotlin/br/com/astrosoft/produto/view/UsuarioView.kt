@@ -37,7 +37,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
       val lojas = viewModel.allLojas()
       val lojasNum = lojas.map { it.no } + listOf(0)
       val impressoras = viewModel.allImpressoras()
-        .filter { it.name.contains("TERMICA", ignoreCase = true) }
         .map { it.name }
 
       isPadding = false
