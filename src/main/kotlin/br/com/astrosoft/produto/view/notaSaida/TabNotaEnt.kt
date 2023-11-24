@@ -62,9 +62,9 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     edtLoja = integerField("Loja") {
-      val user = AppConfig.userLogin() as? UserSaci
-      isVisible = user?.lojaSaidaEntregueOk() == 0
-      value = user?.lojaSaidaEntregueOk()
+      //val user = AppConfig.userLogin() as? UserSaci
+      //isVisible = user?.lojaSaidaEntregueOk() == 0
+      //value = user?.lojaSaidaEntregueOk()
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()

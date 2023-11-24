@@ -54,41 +54,48 @@ class UserSaci : IUser {
   var devCliValeTrocaImp by DelegateAuthorized(32)
   var devCliValeTrocaProduto by DelegateAuthorized(33)
 
-  var lojaVale: Int
-    get() = listaLoja.toIntOrNull() ?: 0
-    set(value) {
-      listaLoja = value.toString()
-    }
-
-  var lojas
+  var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
-      print.trim().toIntOrNull() ?: 0
+      print.trim()
     }
     set(value) {
       listaLoja = value.joinToString(",") { print ->
-        print.toString()
+        print
       }
     }
 
-  var lojaSaidaExp: Int
-    get() = lojas.getOrNull(0) ?: 0
+  var lojaVale: Int?
+    get() = lojas.getOrNull(0)?.toIntOrNull()
     set(value) {
-      lojas = listOf(value)
-    }
-  var lojaSaidaCD: Int
-    get() = lojas.getOrNull(1) ?: 0
-    set(value) {
-      lojas = listOf(lojaSaidaExp, value)
-    }
-  var lojaSaidaEntregue: Int
-    get() = lojas.getOrNull(2) ?: 0
-    set(value) {
-      lojas = listOf(lojaSaidaExp, lojaSaidaCD, value)
+      val listLojas = lojas
+      lojas = listOf(
+        value?.toString() ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: ""
+      )
     }
 
-  fun lojaSaidaExpOk(): Int = lojaSaidaExp
-  fun lojaSaidaCDOk(): Int = lojaSaidaCD
-  fun lojaSaidaEntregueOk(): Int = lojaSaidaEntregue
+  var impressoraTrans: String?
+    get() = lojas.getOrNull(1)
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        value ?: "",
+        listLojas.getOrNull(2) ?: ""
+      )
+    }
+
+  var impressoraDev: String?
+    get() = lojas.getOrNull(2)
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        value ?: ""
+      )
+    }
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
