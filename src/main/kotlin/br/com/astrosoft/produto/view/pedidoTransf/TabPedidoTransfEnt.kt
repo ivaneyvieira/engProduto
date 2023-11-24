@@ -17,7 +17,6 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfValorTransf
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfEnt
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfEntViewModel
@@ -107,7 +106,6 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     colunaPedidoTransfDataTransf()
     colunaPedidoTransfNotaTransf()
     colunaPedidoTransfValorTransf()
-    colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfSing()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()

@@ -1,8 +1,6 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
-import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
@@ -16,7 +14,6 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioNum
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfReserva
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfReservaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -101,7 +98,6 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
       viewModel.formAutoriza(pedido)
     }
-    colunaPedidoTransfUsuarioNum()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
