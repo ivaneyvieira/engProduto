@@ -30,7 +30,8 @@ SELECT I.invno                                                                  
            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)),
            ' ', 1))                                                                      AS nfRmk,
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                                AS nfno,
-       MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2)               AS nfse
+       MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2)               AS nfse,
+       I.c9                                                                              AS impressora
 FROM sqldados.inv AS I
        LEFT JOIN sqldados.nf AS NF1
                  ON (NF1.nfno = I.nfNfno AND NF1.storeno = I.nfStoreno AND NF1.nfse = I.nfNfse)
@@ -53,8 +54,8 @@ WHERE I.account = '2.01.25'
   AND (C.no = :query OR :query = '')
   AND (C.name LIKE CONCAT('%', :query, '%') OR :query = '')
   AND CASE :impresso
-        WHEN 'S' THEN I.c9 = 'S'
-        WHEN 'N' THEN I.c9 != 'S'
+        WHEN 'S' THEN I.c9 != ''
+        WHEN 'N' THEN I.c9 = ''
         ELSE TRUE
       END;
 
@@ -76,7 +77,8 @@ SELECT I.invno,
        IFNULL(I.nfValor, N.grossamt / 100)            AS nfValor,
        IFNULL(I.empno, N.empno)                       AS empno,
        IFNULL(I.cliente, C.name)                      AS cliente,
-       MID(IFNULL(I.vendedor, E.sname), 1, 15)        AS vendedor
+       MID(IFNULL(I.vendedor, E.sname), 1, 15)        AS vendedor,
+       impressora                                     AS impressora
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse

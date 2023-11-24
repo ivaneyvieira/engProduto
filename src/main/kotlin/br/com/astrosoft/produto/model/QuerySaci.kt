@@ -508,11 +508,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaImpresso(invno: Int, marca: String) {
+  fun marcaImpresso(invno: Int, impressora: Impressora) {
     val sql = "/sqlSaci/marcaImpresso.sql"
     script(sql) {
       addOptionalParameter("invno", invno)
-      addOptionalParameter("marca", marca)
+      addOptionalParameter("marca", impressora.name)
     }
   }
 

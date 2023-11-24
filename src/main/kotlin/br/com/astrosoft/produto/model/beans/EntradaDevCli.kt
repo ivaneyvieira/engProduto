@@ -22,12 +22,13 @@ class EntradaDevCli(
   var nfValor: Double?,
   var cliente: String?,
   var empno: Int?,
-  var vendedor: String?
+  var vendedor: String?,
+  var impressora: String?,
 ) {
 
   fun produtos() = saci.entradaDevCliPro(invno)
-  fun marcaImpresso(marca: String) {
-    saci.marcaImpresso(invno, marca)
+  fun marcaImpresso(impressora: Impressora) {
+    saci.marcaImpresso(invno, impressora)
   }
 
   companion object {

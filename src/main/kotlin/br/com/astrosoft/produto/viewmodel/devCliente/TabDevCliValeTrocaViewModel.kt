@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
+import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
@@ -24,8 +25,8 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
 
   fun imprimeValeTroca(nota: EntradaDevCli) {
     val relatorio = ValeTrocaDevolucao(nota)
-    relatorio.print(nota.produtos(), subView.printerPreview {
-      nota.marcaImpresso("S")
+    relatorio.print(nota.produtos(), subView.printerPreview { impressora ->
+      nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     })
   }

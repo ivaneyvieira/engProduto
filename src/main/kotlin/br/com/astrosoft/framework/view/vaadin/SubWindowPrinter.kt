@@ -15,7 +15,7 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.select.Select
 import java.io.File
 
-class SubWindowPrinter(text: String, printerUser: String, val printEvent: () -> Unit) : Dialog() {
+class SubWindowPrinter(text: String, printerUser: String, val printEvent: (impressora: String) -> Unit) : Dialog() {
   private var cmbImpressora: Select<Impressora>? = null
 
   private val divText = Div().apply {
@@ -62,7 +62,7 @@ class SubWindowPrinter(text: String, printerUser: String, val printEvent: () -> 
               val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
               val printer = PrinterCups(impressora)
               printer.print(text)
-              printEvent()
+              printEvent(impressora)
               this@SubWindowPrinter.close()
               //TODO verificar se a impressão foi realizada
             }
