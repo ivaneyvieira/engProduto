@@ -15,7 +15,7 @@ class ProdutosDevolucao() : PrintText<EntradaDevCliProList>() {
   override fun printTitle(bean: EntradaDevCliProList) {
     println("Loja: ${bean.loja}", negrito = true)
     println("Produtos de Devolucoes de Clientes", negrito = true)
-    println("Periodo: ${bean.dataI.format()} a ${bean.dataF.format()}", negrito = true)
+    println("Data: ${bean.data.format()}", negrito = true)
 
     printLine('-')
   }

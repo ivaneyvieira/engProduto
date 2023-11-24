@@ -520,8 +520,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/entradaDevCliProList.sql"
     return query(sql, EntradaDevCliProList::class) {
       addOptionalParameter("loja", filtro.loja)
-      addOptionalParameter("dataI", filtro.dataI.toSaciDate())
-      addOptionalParameter("dataF", filtro.dataF.toSaciDate())
+      addOptionalParameter("data", filtro.data.toSaciDate())
     }
   }
 

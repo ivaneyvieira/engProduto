@@ -6,19 +6,18 @@ CREATE TEMPORARY TABLE T_NOTA
   PRIMARY KEY (invno)
 )
 SELECT I.invno     AS invno,
+       I.date      AS data,
        I.storeno   AS codLoja,
        S.otherName AS loja
 FROM sqldados.inv AS I
        LEFT JOIN sqldados.store AS S
                  ON S.no = I.storeno
-WHERE (I.date >= :dataI)
-  AND (I.date <= :dataF)
+WHERE (I.date = :data)
   AND (I.storeno = :loja)
   AND I.bits & POW(2, 4) = 0
   AND I.account = '2.01.25';
 
-SELECT CAST(:dataI AS DATE)      AS dataI,
-       CAST(:dataF AS DATE)      AS dataF,
+SELECT CAST(data AS DATE)        AS data,
        I.codLoja                 AS codLoja,
        I.loja                    AS loja,
        X.prdno                   AS prdno,

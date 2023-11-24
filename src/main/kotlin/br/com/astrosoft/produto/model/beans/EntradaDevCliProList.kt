@@ -4,8 +4,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class EntradaDevCliProList(
-  var dataI: LocalDate?,
-  var dataF: LocalDate?,
+  var data: LocalDate?,
   var codLoja: Int?,
   var loja: String?,
   var prdno: String?,
@@ -24,6 +23,5 @@ class EntradaDevCliProList(
 
 data class FiltroEntradaDevCliProList(
   val loja: Int,
-  val dataI: LocalDate,
-  val dataF: LocalDate
+  val data: LocalDate,
 )

@@ -20,7 +20,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val produtos = EntradaDevCliProList.findAll(filtro)
-    subView.updateNotas(produtos)
+    subView.updateProdutos(produtos)
   }
 
   fun imprimeProdutos() = viewModel.exec {
@@ -38,7 +38,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
 
 interface ITabDevCliValeTrocaProduto : ITabView {
   fun filtro(): FiltroEntradaDevCliProList
-  fun updateNotas(produtos: List<EntradaDevCliProList>)
+  fun updateProdutos(produtos: List<EntradaDevCliProList>)
 
   fun produtosSelecionados(): List<EntradaDevCliProList>
 }
