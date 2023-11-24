@@ -1,8 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 
 class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -20,12 +23,13 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
     subView.updateNotas(produtos)
   }
 
-  fun imprimeValeTroca(nota: EntradaDevCli) {
-    val relatorio = ValeTrocaDevolucao(nota)
-    relatorio.print(nota.produtos(), subView.printerPreview {
-      nota.marcaImpresso("S")
-      updateView()
-    })
+  fun imprimeProdutos() = viewModel.exec {
+    val produtos = subView.produtosSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Não há produtos selecionados")
+    }
+    val relatorio = ProdutosDevolucao()
+    relatorio.print(produtos, subView.printerPreview())
   }
 
   val subView
@@ -35,4 +39,6 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
 interface ITabDevCliValeTrocaProduto : ITabView {
   fun filtro(): FiltroEntradaDevCliProList
   fun updateNotas(produtos: List<EntradaDevCliProList>)
+
+  fun produtosSelecionados(): List<EntradaDevCliProList>
 }

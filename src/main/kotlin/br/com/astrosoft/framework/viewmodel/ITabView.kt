@@ -6,5 +6,5 @@ interface ITabView {
   fun isAuthorized(): Boolean
   val label: String
   fun updateComponent()
-  fun printerPreview(printEvent : () -> Unit): IPrinter
+  fun printerPreview(printEvent : () -> Unit = {}): IPrinter
 }

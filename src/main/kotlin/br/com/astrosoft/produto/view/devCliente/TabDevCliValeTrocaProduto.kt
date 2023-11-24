@@ -11,9 +11,8 @@ import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTroca
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -31,10 +30,11 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
   private lateinit var edtDataFinal: DatePicker
 
   init {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val listLojas = viewModel.findAllLojas()
+    cmbLoja.setItems(listLojas)
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
-    cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
+    cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: listLojas.firstOrNull()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -61,14 +61,23 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
         viewModel.updateView()
       }
     }
+
+    button("Impressão") {
+      icon = VaadinIcon.PRINT.create()
+      onLeftClick {
+        viewModel.imprimeProdutos()
+      }
+    }
   }
 
   override fun Grid<EntradaDevCliProList>.gridPanel() {
     this.addClassName("styling")
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     columnGrid(EntradaDevCliProList::codigo, header = "Código")
     columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
     columnGrid(EntradaDevCliProList::quantidade, header = "Quantidade")
+    GridHelper.setEnhancedSelectionEnabled(this, true)
   }
 
   override fun filtro(): FiltroEntradaDevCliProList {
@@ -81,6 +90,10 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
 
   override fun updateNotas(notas: List<EntradaDevCliProList>) {
     updateGrid(notas)
+  }
+
+  override fun produtosSelecionados(): List<EntradaDevCliProList> {
+    return this.itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {

@@ -11,13 +11,15 @@ SELECT I.invno     AS invno,
 FROM sqldados.inv AS I
        LEFT JOIN sqldados.store AS S
                  ON S.no = I.storeno
-WHERE (I.date >= :dataI OR :dataI = 0)
-  AND (I.date <= :dataF OR :dataF = 0)
+WHERE (I.date >= :dataI)
+  AND (I.date <= :dataF)
   AND (I.storeno = :loja)
   AND I.bits & POW(2, 4) = 0
   AND I.account = '2.01.25';
 
-SELECT I.codLoja                 AS codLoja,
+SELECT CAST(:dataI AS DATE)      AS dataI,
+       CAST(:dataF AS DATE)      AS dataF,
+       I.codLoja                 AS codLoja,
        I.loja                    AS loja,
        X.prdno                   AS prdno,
        TRIM(X.prdno)             AS codigo,
