@@ -36,8 +36,7 @@ FROM sqldados.inv          AS I
 	      ON C.no = IFNULL(NF1.custno, NF2.custno)
   LEFT JOIN sqldados.emp   AS E
 	      ON E.no = IFNULL(NF1.empno, NF2.empno)
-WHERE I.date >= 20220101
-  AND I.account = '2.01.25'
+WHERE I.account = '2.01.25'
   AND I.invno = :invno;
 
 SELECT I.invno,

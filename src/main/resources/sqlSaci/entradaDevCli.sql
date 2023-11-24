@@ -45,6 +45,7 @@ FROM sqldados.inv AS I
        LEFT JOIN sqldados.store AS S
                  ON S.no = I.storeno
 WHERE I.account = '2.01.25'
+  AND I.bits & POW(2, 4) = 0
   AND (I.storeno = :loja OR :loja = 0)
   AND (I.nfname = :query OR :query = '')
   AND (I.date >= :dataI OR :dataI = 0)

@@ -516,6 +516,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun entradaDevCliProList(filtro: FiltroEntradaDevCliProList): List<EntradaDevCliProList> {
+    val sql = "/sqlSaci/entradaDevCliProList.sql"
+    return query(sql, EntradaDevCliProList::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("dataI", filtro.dataI.toSaciDate())
+      addOptionalParameter("dataF", filtro.dataF.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
