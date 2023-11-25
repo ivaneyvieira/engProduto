@@ -25,13 +25,13 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
   }
 
   override fun printSumary() {
-    val autorizado = nota.autorizado ?: ""
+    val autorizado = nota.nameSing ?: ""
     val margem = (31 - autorizado.length) / 2
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
-    println("${" ".repeat(margem)}${nota.autorizado ?: ""}")
+    println("${" ".repeat(margem)}${autorizado ?: ""}")
     println("_______________________________  _______________________________")
     println("    Autorizacao no Sistema                  Entregue")
     println("")

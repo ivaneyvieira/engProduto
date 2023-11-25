@@ -31,6 +31,7 @@ class PedidoTransf(
   var entregue: String?,
   var recebido: String?,
   var numSing: String?,
+  var loginSing: String?,
   var nameSing: String?,
   var valorTransf: Double?,
   var observacaoTransf: String?
@@ -38,7 +39,7 @@ class PedidoTransf(
   val sing: String
     get() {
       val numSingVal = numSing ?: return ""
-      val nameSingVal = nameSing ?: return ""
+      val nameSingVal = loginSing ?: return ""
       return "$numSingVal - $nameSingVal"
     }
 
