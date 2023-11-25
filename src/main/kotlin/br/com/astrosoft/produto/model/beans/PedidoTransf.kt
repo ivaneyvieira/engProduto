@@ -47,7 +47,7 @@ class PedidoTransf(
   val observacaoLimpa: String
     get() {
       referente ?: entregue ?: recebido ?: return ""
-      return "${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""} | ${selfColor ?: ""}}"
+      return "${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""} | ${selfColor ?: ""}"
     }
 
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
