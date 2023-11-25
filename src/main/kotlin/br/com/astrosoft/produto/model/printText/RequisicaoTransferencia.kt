@@ -31,9 +31,9 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
-    println("${" ".repeat(margem)}${autorizado ?: ""}")
     println("_______________________________  _______________________________")
     println("    Autorizacao no Sistema                  Entregue")
+    println("${" ".repeat(margem)}${autorizado ?: ""}")
     println("")
     println("")
   }
