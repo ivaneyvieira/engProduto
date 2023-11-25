@@ -92,10 +92,11 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       }
     }
     addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
-      val obs = "Autorizado Por: ${nota.autorizado ?: ""}<br>" +
+      val obs =
                 "Referente: ${nota.referente ?: ""}<br>" +
                 "Entregue Por: ${nota.entregue ?: ""}<br>" +
-                "Recebido Por: ${nota.recebido ?: ""}"
+                "Recebido Por: ${nota.recebido ?: ""}" +
+                "Self Color: ${nota.selfColor ?: ""}"
       DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()

@@ -26,7 +26,7 @@ class PedidoTransf(
   var observacao: String?,
   var dataTransf: LocalDate?,
   var notaTransf: String?,
-  var autorizado: String?,
+  var selfColor: String?,
   var referente: String?,
   var entregue: String?,
   var recebido: String?,
@@ -46,8 +46,8 @@ class PedidoTransf(
 
   val observacaoLimpa: String
     get() {
-      autorizado ?: referente ?: entregue ?: recebido ?: return ""
-      return "${autorizado ?: ""} | ${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""}"
+      referente ?: entregue ?: recebido ?: return ""
+      return "${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""} | ${selfColor ?: ""}}"
     }
 
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
