@@ -48,7 +48,7 @@ class SubWindowPrinter(text: String, printerUser: List<String>, val printEvent: 
         cmbImpressora = select("Impressora") {
           val userSaci = AppConfig.userLogin() as? UserSaci
           val allPrinter = Impressora.allTermica().map { it.name }
-          val lista = if (userSaci.admin) allPrinter else printerUser.ifEmpty { allPrinter }
+          val lista = if (userSaci?.admin == true) allPrinter else printerUser.ifEmpty { allPrinter }
           setItems(lista)
 
           this.value = lista.firstOrNull()
