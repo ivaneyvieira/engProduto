@@ -20,10 +20,11 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
       negrito = true
     )
     println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
-    println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
+    //println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
-    //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
-    //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
+    println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
+    println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
+    println("Self Color: ____________________________________________________", negrito = true)
     println("".padEnd(64, '-'))
   }
 
