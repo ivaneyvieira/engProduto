@@ -41,7 +41,6 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("")
     println("_______________________________  _______________________________")
     println("            Entregue                        Recebido")
-    println("${" ".repeat(margem)}${autorizado ?: ""}")
     println("")
     println("")
   }
