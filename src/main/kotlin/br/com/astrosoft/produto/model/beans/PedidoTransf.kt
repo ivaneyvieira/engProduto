@@ -38,9 +38,7 @@ class PedidoTransf(
 ) {
   val sing: String
     get() {
-      val numSingVal = numSing ?: return ""
-      val nameSingVal = loginSing ?: return ""
-      return "$numSingVal - $nameSingVal"
+      return nameSing ?: ""
     }
 
   val situacao
