@@ -23,6 +23,10 @@ object PedidoTransfColumns {
     this.setHeader("Pedido")
   }
 
+  fun Grid<PedidoTransf>.colunaPedidoTransfUsuarioTransf() = columnGrid(PedidoTransf::loginTransf) {
+    this.setHeader("NF Transf Usuário")
+  }
+
   fun Grid<PedidoTransf>.colunaPedidoTransfSing() = columnGrid(PedidoTransf::sing) {
     this.setHeader("Autorização")
   }

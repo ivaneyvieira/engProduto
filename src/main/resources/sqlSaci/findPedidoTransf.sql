@@ -49,7 +49,9 @@ SELECT N.storeno                                          AS lojaNoOri,
        S.login                                            AS loginSing,
        IFNULL(SA.name, S.name)                            AS nameSing,
        T.grossamt / 100                                   AS valorTransf,
-       TRIM(T.remarks)                                    AS observacaoTransf
+       TRIM(T.remarks)                                    AS observacaoTransf,
+       T.padbits                                          AS userTransf,
+       UT.login                                           AS loginTransf
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -73,6 +75,8 @@ FROM sqldados.eord AS N
        LEFT JOIN sqldados.nf AS T
                  ON T.storeno = N.storeno
                    AND T.eordno = N.ordno
+       LEFT JOIN sqldados.users AS UT
+                 ON UT.no = T.padbits
 WHERE N.date > 20231106
   AND N.paymno = 69
   AND CASE :marca
@@ -92,7 +96,6 @@ WHERE N.date > 20231106
         ELSE FALSE
       END
 GROUP BY N.storeno, N.ordno;
-
 
 SELECT lojaNoOri,
        lojaOrigem,
@@ -123,7 +126,9 @@ SELECT lojaNoOri,
        loginSing,
        nameSing,
        valorTransf,
-       observacaoTransf
+       observacaoTransf,
+       userTransf,
+       loginTransf
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR

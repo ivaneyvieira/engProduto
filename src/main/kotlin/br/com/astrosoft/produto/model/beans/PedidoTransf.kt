@@ -34,7 +34,9 @@ class PedidoTransf(
   var loginSing: String?,
   var nameSing: String?,
   var valorTransf: Double?,
-  var observacaoTransf: String?
+  var observacaoTransf: String?,
+  var userTransf: Int?,
+  var loginTransf: String?
 ) {
   val sing: String
     get() {
