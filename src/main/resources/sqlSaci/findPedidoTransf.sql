@@ -47,7 +47,7 @@ SELECT N.storeno                                          AS lojaNoOri,
        TRIM(MID(R.remarks__480, 121, 40))                 AS recebido,
        S.no                                               AS numSing,
        S.login                                            AS loginSing,
-       S.name                                             AS nameSing,
+       IFNULL(SA.name, S.name)                            AS nameSing,
        T.grossamt / 100                                   AS valorTransf,
        TRIM(T.remarks)                                    AS observacaoTransf
 FROM sqldados.eord AS N
@@ -65,6 +65,9 @@ FROM sqldados.eord AS N
                  ON U.no = N.userno
        LEFT JOIN sqldados.users AS S
                  ON S.no = N.s10
+       LEFT JOIN sqldados.users AS SA
+                 ON SA.login = S.login
+                   AND (SA.bits1 & 1) = 0
        LEFT JOIN sqldados.eordrk AS R
                  ON R.storeno = N.storeno AND R.ordno = N.ordno
        LEFT JOIN sqldados.nf AS T
