@@ -45,14 +45,14 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
           it.name == printerUser
         } ?: lista.firstOrNull()
       }
-      // this.button("Imprimir") {
-      //   icon = VaadinIcon.PRINT.create()
-      //   this.onLeftClick {
-      //     val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-      //     viewModel.imprimeNota(nota, impressora)
-      //   }
-      // }
       this.button("Imprimir") {
+        icon = VaadinIcon.PRINT.create()
+        this.onLeftClick {
+          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+          viewModel.imprimeNota(nota, impressora)
+        }
+      }
+      this.button("Preview") {
         icon = VaadinIcon.PRINT.create()
         this.onLeftClick {
           viewModel.previewNota(nota)
