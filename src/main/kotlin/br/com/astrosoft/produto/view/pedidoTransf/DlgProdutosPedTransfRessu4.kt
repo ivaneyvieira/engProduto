@@ -11,7 +11,6 @@ import br.com.astrosoft.produto.model.beans.TransfRessu4
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfRessu4ViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.icon
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
@@ -46,14 +45,14 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
           it.name == printerUser
         } ?: lista.firstOrNull()
       }
+      // this.button("Imprimir") {
+      //   icon = VaadinIcon.PRINT.create()
+      //   this.onLeftClick {
+      //     val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+      //     viewModel.imprimeNota(nota, impressora)
+      //   }
+      // }
       this.button("Imprimir") {
-        icon = VaadinIcon.PRINT.create()
-        this.onLeftClick {
-          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-          viewModel.imprimeNota(nota, impressora)
-        }
-      }
-      this.button("Preview") {
         icon = VaadinIcon.PRINT.create()
         this.onLeftClick {
           viewModel.previewNota(nota)
@@ -75,7 +74,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      //setSelectionMode(Grid.SelectionMode.MULTI)
       columnGrid(ProdutoTransfRessu4::codigo, "Código")
       columnGrid(ProdutoTransfRessu4::descricao, "Descrição").expand()
       columnGrid(ProdutoTransfRessu4::grade, "Grade")

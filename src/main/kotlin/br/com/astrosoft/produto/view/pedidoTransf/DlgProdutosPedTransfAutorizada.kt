@@ -35,13 +35,13 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
             it.name == printerUser
           }
         }
+        //   this.button("Imprimir") {
+        //     this.onLeftClick {
+        //       val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+        //       viewModel.imprimePedido(pedido, impressora)
+        //     }
+        //   }
         this.button("Imprimir") {
-          this.onLeftClick {
-            val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-            viewModel.imprimePedido(pedido, impressora)
-          }
-        }
-        this.button("Preview") {
           icon = VaadinIcon.PRINT.create()
           this.onLeftClick {
             viewModel.previewPedido(pedido, {})
@@ -65,7 +65,7 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
 
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      //setSelectionMode(Grid.SelectionMode.MULTI)
 
       produtoPedidoTransfCodigo()
       produtoPedidoTransfDescricao()

@@ -22,25 +22,28 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
     println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
-    println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
-    println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
+    //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
+    //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
     println("".padEnd(64, '-'))
   }
 
   override fun printSumary() {
-    val autorizado = nota.nameSing ?: ""
-    val margem = (31 - autorizado.length) / 2
+    val entregue = nota.entregue ?: ""
+    val margemEntregue = (31 - entregue.length) / 2
+    val recebido = nota.recebido ?: ""
+    val margemRecebido = (31 - recebido.length) / 2
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
     println("_______________________________", center = true)
     println("Autorizacao no Sistema", center = true)
-    println(autorizado, center = true)
+    println(nota.sing, center = true)
     println("")
     println("")
     println("_______________________________  _______________________________")
     println("            Entregue                        Recebido")
+    println("${" ".repeat(margemEntregue)}$entregue${" ".repeat(margemEntregue)}  ${" ".repeat(margemRecebido)}$recebido")
     println("")
     println("")
   }
