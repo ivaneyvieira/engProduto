@@ -120,6 +120,7 @@ SELECT lojaNoOri,
        entregue,
        recebido,
        numSing,
+       loginSing,
        nameSing,
        valorTransf,
        observacaoTransf
