@@ -15,7 +15,10 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
 
   override fun printTitle(bean: ProdutoPedidoTransf) {
     println("Requisicao de Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
-    println("Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ${nota.ordno}", negrito = true)
+    println(
+      "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Reserva: ${nota.ordno}",
+      negrito = true
+    )
     println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
     println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
@@ -31,8 +34,13 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
     println("")
+    println("_______________________________", center = true)
+    println("Autorizacao no Sistema", center = true)
+    println(autorizado, center = true)
+    println("")
+    println("")
     println("_______________________________  _______________________________")
-    println("    Autorizacao no Sistema                  Entregue")
+    println("            Entregue                        Recebido")
     println("${" ".repeat(margem)}${autorizado ?: ""}")
     println("")
     println("")
