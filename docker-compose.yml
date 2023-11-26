@@ -1,9 +1,9 @@
 version: "3"
 services:
-  eng_produtoh:
-    container_name: eng_produtoh
+  ${EMP_NAME}_${APP_NAME}:
+    container_name: ${EMP_NAME}_${APP_NAME}
     ports:
-      - "8036:8080"
+      - "${PORT}:8080"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
@@ -15,11 +15,11 @@ services:
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
-      net_produtoh:
-        ipv4_address: 172.195.9.1
+      net_${APP_NAME}:
+        ipv4_address: ${NET_IP}.9.1
 networks:
-  net_produtoh:
+  net_${APP_NAME}:
     ipam:
       driver: default
       config:
-        - subnet: 172.195.0.0/16
+        - subnet: ${NET_IP}.0.0/16
