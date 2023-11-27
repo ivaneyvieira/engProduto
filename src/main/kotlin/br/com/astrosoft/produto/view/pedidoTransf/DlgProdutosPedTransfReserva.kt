@@ -24,17 +24,17 @@ class DlgProdutosPedTransfReserva(val viewModel: TabPedidoTransfReservaViewModel
   private var cmbImpressora: Select<Impressora>? = null
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Pedido ${pedido.ordno} - ${pedido.rota}", toolBar = {
-      cmbImpressora = select<Impressora>("Impressora") {
-        val lista = Impressora.allTermica()
-        val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
-        setItems(lista)
-        this.setItemLabelGenerator { it.name }
-
-        this.value = lista.firstOrNull {
-          it.name == printerUser
-        }
-      }
       if (AppConfig.userLogin()?.admin == true) {
+        cmbImpressora = select<Impressora>("Impressora") {
+          val lista = Impressora.allTermica()
+          val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
+          setItems(lista)
+          this.setItemLabelGenerator { it.name }
+
+          this.value = lista.firstOrNull {
+            it.name == printerUser
+          }
+        }
         this.button("Imprimir") {
           this.onLeftClick {
             val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
