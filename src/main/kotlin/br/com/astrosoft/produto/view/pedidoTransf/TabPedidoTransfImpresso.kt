@@ -1,26 +1,23 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
+import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfCliente
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfData
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfDataTransf
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNotaTransf
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacaoTransf
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuarioTransf
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfValorTransf
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfEnt
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfEntViewModel
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfImpresso
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfImpressoViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -33,9 +30,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfEnt {
-  private var dlgProduto: DlgProdutosPedTransfEnt? = null
+class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+  ITabPedidoTransfImpresso {
+  private var dlgProduto: DlgProdutosPedTransfImpresso? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -50,7 +47,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
 
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return listOfNotNull(username?.impressoraDev)
+    return username?.impressoraTrans?.toList() ?: emptyList()
   }
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
@@ -86,33 +83,22 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
+    this.addClassName("styling")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfEnt(viewModel, pedido)
+      dlgProduto = DlgProdutosPedTransfImpresso(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
-    }
-    addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
-      val obs =
-                "Referente: ${nota.referente ?: ""}<br>" +
-                "Entregue Por: ${nota.entregue ?: ""}<br>" +
-                "Recebido Por: ${nota.recebido ?: ""}" +
-                "Self Color: ${nota.selfColor ?: ""}"
-      DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
     colunaPedidoTransfCliente()
     colunaPedidoTransfData()
     colunaPedidoTransfNumero()
-    colunaPedidoTransfUsuarioTransf()
-    colunaPedidoTransfDataTransf()
-    colunaPedidoTransfNotaTransf()
-    colunaPedidoTransfValorTransf()
     colunaPedidoTransfSing()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
-    colunaPedidoTransfObsevacaoTransf()
+    colunaPedidoTransfObsevacao()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
@@ -122,8 +108,8 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       marca = marca,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      autorizado = null,
-      impresso = true
+      autorizado = true,
+      impresso = false,
     )
   }
 
@@ -139,13 +125,29 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
+  override fun produtosMarcados(): List<ProdutoPedidoTransf> {
+    return dlgProduto?.produtosMarcados().orEmpty()
+  }
+
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun findPedido(): PedidoTransf? {
+    return dlgProduto?.pedido
+  }
+
+  override fun updateProduto(produto: ProdutoPedidoTransf) {
+    dlgProduto?.updateProduto(produto)
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoTransfEnt == true
+    return username?.pedidoTransfImpresso == true
   }
 
   override val label: String
-    get() = "Entregue"
+    get() = "Impresso"
 
   override fun updateComponent() {
     viewModel.updateView()

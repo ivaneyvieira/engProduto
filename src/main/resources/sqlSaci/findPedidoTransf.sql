@@ -51,7 +51,8 @@ SELECT N.storeno                                          AS lojaNoOri,
        T.grossamt / 100                                   AS valorTransf,
        TRIM(T.remarks)                                    AS observacaoTransf,
        T.padbits                                          AS userTransf,
-       UT.login                                           AS loginTransf
+       UT.login                                           AS loginTransf,
+       N.s16                                              AS numImpressora
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -92,6 +93,12 @@ WHERE N.date > 20231106
   AND CASE :autorizado
         WHEN 'S' THEN IFNULL(S.no, 0) > 0
         WHEN 'N' THEN IFNULL(S.no, 0) = 0
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
+      END
+  AND CASE :impresso
+        WHEN 'S' THEN N.s16 > 0
+        WHEN 'N' THEN N.s16 = 0
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END

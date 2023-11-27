@@ -53,6 +53,7 @@ class UserSaci : IUser {
   var devCliValeTroca by DelegateAuthorized(31)
   var devCliValeTrocaImp by DelegateAuthorized(32)
   var devCliValeTrocaProduto by DelegateAuthorized(33)
+  var pedidoTransfImpresso by DelegateAuthorized(34)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -111,7 +112,8 @@ class UserSaci : IUser {
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   val pedidoTransf
-    get() = pedidoTransfReserva || pedidoTransfAutorizada || pedidoTransfRessu4 || pedidoTransfEnt || admin
+    get() = pedidoTransfReserva || pedidoTransfAutorizada || pedidoTransfRessu4 || pedidoTransfEnt ||
+            pedidoTransfImpresso || admin
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || admin
   val notaEntrada

@@ -69,6 +69,10 @@ class PedidoTransf(
     saci.autorizaPedidoTransf(this, user.no)
   }
 
+  fun marca(imrpessora: Impressora) {
+    saci.marcaPedidoImpresso(lojaNoOri, ordno?.toIntOrNull() ?: 0, imrpessora)
+  }
+
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
   }
@@ -81,4 +85,5 @@ data class FiltroPedidoTransf(
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val autorizado: Boolean?,
+  val impresso: Boolean?,
 )

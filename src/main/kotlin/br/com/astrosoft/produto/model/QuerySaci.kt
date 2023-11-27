@@ -299,6 +299,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("autorizado", filtro.autorizado.let { if (it == null) "T" else if (it) "S" else "N" })
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("impresso", filtro.impresso.let { if (it == null) "T" else if (it) "S" else "N" })
     }
   }
 
@@ -513,6 +514,15 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("invno", invno)
       addOptionalParameter("marca", impressora.name)
+    }
+  }
+
+  fun marcaPedidoImpresso(storeno: Int, ordno: Int, impressora: Impressora) {
+    val sql = "/sqlSaci/marcaPedidoImpresso.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("numPrinter", impressora.no)
     }
   }
 
