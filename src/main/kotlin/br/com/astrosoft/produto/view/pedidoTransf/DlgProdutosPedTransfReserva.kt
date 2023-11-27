@@ -34,16 +34,18 @@ class DlgProdutosPedTransfReserva(val viewModel: TabPedidoTransfReservaViewModel
           it.name == printerUser
         }
       }
-      this.button("Imprimir") {
-        this.onLeftClick {
-          val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-          viewModel.imprimePedido(pedido, impressora)
+      if (AppConfig.userLogin()?.admin == true) {
+        this.button("Imprimir") {
+          this.onLeftClick {
+            val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
+            viewModel.imprimePedido(pedido, impressora)
+          }
         }
-      }
-      this.button("Preview") {
-        icon = VaadinIcon.PRINT.create()
-        this.onLeftClick {
-          viewModel.previewPedido(pedido)
+        this.button("Preview") {
+          icon = VaadinIcon.PRINT.create()
+          this.onLeftClick {
+            viewModel.previewPedido(pedido)
+          }
         }
       }
     }, onClose = {
