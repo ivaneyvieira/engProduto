@@ -84,11 +84,8 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
 
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfReserva(viewModel, pedido)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
-      }
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
