@@ -81,7 +81,7 @@ class UserSaci : IUser {
   var impressoraTrans: Set<String>
     get() = lojas.getOrNull(1)?.split(":").orEmpty().map { print ->
       print.trim()
-    }.toSet()
+    }.filter { it.isNotBlank() }.toSet()
     set(value) {
       val listLojas = lojas
       lojas = listOf(
