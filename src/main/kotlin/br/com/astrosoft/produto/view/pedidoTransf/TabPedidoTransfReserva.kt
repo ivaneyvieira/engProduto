@@ -118,7 +118,7 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = false,
-      impresso = false,
+      impresso = null,
     )
   }
 

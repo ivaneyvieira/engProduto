@@ -123,7 +123,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = null,
-      impresso = true
+      impresso = null,
     )
   }
 
