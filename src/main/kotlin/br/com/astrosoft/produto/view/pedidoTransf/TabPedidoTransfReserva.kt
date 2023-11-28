@@ -104,7 +104,7 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
   }
 
   override fun formAutoriza(pedido: PedidoTransf) {
-    val form = FormAutoriza()
+    val form = FormAutoriza(pedido)
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaPedido(pedido, form.login, form.senha)
     }

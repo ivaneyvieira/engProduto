@@ -105,7 +105,31 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     updateView()
   }
 
+  private fun List<String>.listaCampos(): String {
+    return when {
+      this.isEmpty() -> ""
+      this.size == 1 -> this.first()
+      this.size == 2 -> this.first() + " e " + this.last()
+      else           -> this.dropLast(1).joinToString(", ") + " e " + this.last()
+    }
+  }
+
   fun formAutoriza(pedido: PedidoTransf) = viewModel.exec {
+    val camposVazios = listOfNotNull(
+      if (pedido.referente.isNullOrEmpty()) "Referência"
+      else null,
+      if (pedido.recebido.isNullOrEmpty()) "Recebido"
+      else null,
+      if (pedido.entregue.isNullOrEmpty()) "Entregue"
+      else null,
+    )
+    if (camposVazios.isNotEmpty()) {
+      val campos = camposVazios.listaCampos()
+      if (camposVazios.size == 1)
+        fail("O campo $campos está vazio")
+      else
+        fail("Os campos $campos estão vazios")
+    }
     subView.formAutoriza(pedido)
   }
 
