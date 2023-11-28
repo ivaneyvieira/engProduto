@@ -95,7 +95,7 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
     updateView()
   }
 
-  fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) {
+  fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit = {}) {
     val relatorio = RequisicaoTransferencia(pedido)
     relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(printEvent))
   }
