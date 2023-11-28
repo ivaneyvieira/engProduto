@@ -72,7 +72,9 @@ class UserSaci : IUser {
       lojas = listOf(
         value?.toString() ?: "",
         listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: ""
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
       )
     }
 
@@ -87,7 +89,9 @@ class UserSaci : IUser {
         value.joinToString(":") { print ->
           print.trim()
         },
-        listLojas.getOrNull(2) ?: ""
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
       )
     }
 
@@ -98,7 +102,35 @@ class UserSaci : IUser {
       lojas = listOf(
         listLojas.getOrNull(0) ?: "",
         listLojas.getOrNull(1) ?: "",
-        value ?: ""
+        value ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
+      )
+    }
+
+  var lojaAutor: Int?
+    get() = lojas.getOrNull(3)?.toIntOrNull()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        value?.toString() ?: "",
+        listLojas.getOrNull(4) ?: "",
+      )
+    }
+
+  var lojaEntre: Int?
+    get() = lojas.getOrNull(4)?.toIntOrNull()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        value?.toString() ?: ""
       )
     }
 
