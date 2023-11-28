@@ -108,32 +108,6 @@ class UserSaci : IUser {
       )
     }
 
-  var lojaAutor: Int?
-    get() = lojas.getOrNull(3)?.toIntOrNull()
-    set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        value?.toString() ?: "",
-        listLojas.getOrNull(4) ?: "",
-      )
-    }
-
-  var lojaEntre: Int?
-    get() = lojas.getOrNull(4)?.toIntOrNull()
-    set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        value?.toString() ?: ""
-      )
-    }
-
   val lojaUsuario
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 

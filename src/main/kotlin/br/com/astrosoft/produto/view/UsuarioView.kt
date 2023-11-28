@@ -94,52 +94,17 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::impressoraTrans.name)
               colspan = 2
             }
-
             checkBox("Reserva") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::pedidoTransfReserva.name)
             }
-            horizontalLayout {
-              checkBox("Autorizada") {
-                isReadOnly = readOnly
-                binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
-              }
-              select<Int>("Loja") {
-                isReadOnly = readOnly
-                setItems(lojasNum.distinct().sorted())
-                this.setItemLabelGenerator { storeno ->
-                  when (storeno) {
-                    0    -> "Todas as lojas"
-                    else -> lojas.firstOrNull { loja ->
-                      loja.no == storeno
-                    }?.descricao ?: ""
-                  }
-                }
-                binder.bind(this, UserSaci::lojaAutor.name)
-              }
+            checkBox("Autorizada") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
             }
-            // checkBox("Impresso") {
-            //   isReadOnly = readOnly
-            //   binder.bind(this, UserSaci::pedidoTransfImpresso.name)
-            // }
-            horizontalLayout {
-              checkBox("Entrege") {
-                isReadOnly = readOnly
-                binder.bind(this, UserSaci::pedidoTransfEnt.name)
-              }
-              select<Int>("Loja") {
-                isReadOnly = readOnly
-                setItems(lojasNum.distinct().sorted())
-                this.setItemLabelGenerator { storeno ->
-                  when (storeno) {
-                    0    -> "Todas as lojas"
-                    else -> lojas.firstOrNull { loja ->
-                      loja.no == storeno
-                    }?.descricao ?: ""
-                  }
-                }
-                binder.bind(this, UserSaci::lojaEntre.name)
-              }
+            checkBox("Entrege") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::pedidoTransfEnt.name)
             }
             checkBox("Ressu4") {
               isReadOnly = readOnly
