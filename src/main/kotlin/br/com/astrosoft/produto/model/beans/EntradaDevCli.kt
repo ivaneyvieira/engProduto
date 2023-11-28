@@ -9,6 +9,7 @@ class EntradaDevCli(
   var nomeLoja: String?,
   var notaFiscal: String?,
   var data: LocalDate?,
+  var hora: String?,
   var vendno: Int?,
   var fornecedor: String?,
   var remarks: String?,

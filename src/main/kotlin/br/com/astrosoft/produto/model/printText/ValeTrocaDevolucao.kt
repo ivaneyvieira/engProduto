@@ -20,9 +20,12 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("", negrito = true)
     println("Loja: ${nota.nomeLoja}", negrito = true)
     println("Cliente: ${nota.custno} - ${nota.cliente}", negrito = true)
-    println("NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()}", negrito = true)
+    println(
+      "NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
+      negrito = true
+    )
     println("Referente: ${nota.remarks ?: ""}", negrito = true)
-    val totalTxt = "Valor Total do Vale Troca R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00}.format()}"
+    val totalTxt = "Valor Total do Vale Troca R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00 }.format()}"
     println(totalTxt, negrito = true)
     printLine('-')
   }
