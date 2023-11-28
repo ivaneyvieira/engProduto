@@ -8,6 +8,7 @@ CREATE TEMPORARY TABLE T_NOTA
   PRIMARY KEY (invno)
 )
 SELECT I.invno                                                                           AS invno,
+       IF(I.usernoLast = 0, I.usernoFirst, I.usernoLast)                                 AS userno,
        I.storeno                                                                         AS loja,
        S.otherName                                                                       AS nomeLoja,
        CAST(CONCAT(I.nfname, '/', I.invse) AS CHAR)                                      AS notaFiscal,
@@ -78,7 +79,8 @@ SELECT I.invno,
        IFNULL(I.empno, N.empno)                       AS empno,
        IFNULL(I.cliente, C.name)                      AS cliente,
        MID(IFNULL(I.vendedor, E.sname), 1, 15)        AS vendedor,
-       impressora                                     AS impressora
+       impressora                                     AS impressora,
+       U.name                                         AS userName
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
@@ -86,5 +88,6 @@ FROM T_NOTA AS I
                  ON C.no = N.custno
        LEFT JOIN sqldados.emp AS E
                  ON E.no = N.empno
+       LEFT JOIN sqldados.users AS U
+                 ON U.no = I.userno
 GROUP BY I.invno
-

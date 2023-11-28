@@ -78,6 +78,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
       viewModel.imprimeValeTroca(nota)
     }
     columnGrid(EntradaDevCli::impressora, header = "Impressora")
+    columnGrid(EntradaDevCli::userName, header = "Usuário")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "Nota Devolução")
     columnGrid(EntradaDevCli::data, header = "Data")

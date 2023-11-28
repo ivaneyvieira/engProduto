@@ -24,6 +24,7 @@ class EntradaDevCli(
   var empno: Int?,
   var vendedor: String?,
   var impressora: String?,
+  var userName: String?,
 ) {
 
   fun produtos() = saci.entradaDevCliPro(invno)
