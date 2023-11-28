@@ -26,7 +26,7 @@ SELECT I.invno                                                                  
        IFNULL(NF1.grossamt / 100, NF2.grossamt / 100)                                    AS nfValor,
        IFNULL(NF1.empno, NF2.empno)                                                      AS empno,
        C.name                                                                            AS cliente,
-       E.sname                                                                           AS vendedor,
+       E.name                                                                            AS vendedor,
        @NOTA := TRIM(SUBSTRING_INDEX(
            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)),
            ' ', 1))                                                                      AS nfRmk,
@@ -79,7 +79,7 @@ SELECT I.invno,
        IFNULL(I.nfValor, N.grossamt / 100)            AS nfValor,
        IFNULL(I.empno, N.empno)                       AS empno,
        IFNULL(I.cliente, C.name)                      AS cliente,
-       MID(IFNULL(I.vendedor, E.sname), 1, 15)        AS vendedor,
+       TRIM(IFNULL(I.vendedor, E.name))               AS vendedor,
        impressora                                     AS impressora,
        U.name                                         AS userName
 FROM T_NOTA AS I
