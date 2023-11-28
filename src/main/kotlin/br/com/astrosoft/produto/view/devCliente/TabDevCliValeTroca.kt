@@ -63,6 +63,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
+      this.isVisible = AppConfig.userLogin()?.admin == true
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -70,6 +71,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
+      this.isVisible = AppConfig.userLogin()?.admin == true
       addValueChangeListener {
         viewModel.updateView()
       }
