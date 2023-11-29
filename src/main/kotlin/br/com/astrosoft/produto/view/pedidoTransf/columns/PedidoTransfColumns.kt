@@ -23,7 +23,7 @@ object PedidoTransfColumns {
     this.setHeader("Pedido")
   }
 
-  fun Grid<PedidoTransf>.colunaPedidoTransfUsuarioTransf() = columnGrid(PedidoTransf::loginTransf) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfUsuarioTransf() = columnGrid(PedidoTransf::nameTransf) {
     this.setHeader("NFT Usuário")
   }
 
@@ -82,7 +82,7 @@ object PedidoTransfColumns {
     this.setHeader("Valor")
   }
 
-  fun Grid<PedidoTransf>.colunaPedidoTransfSituacao() = columnGrid(PedidoTransf::situacao) {
+  fun Grid<PedidoTransf>.colunaPedidoTransfSituacao() = columnGrid(PedidoTransf::situacaoCancelada) {
     this.setHeader("Situação")
   }
 }

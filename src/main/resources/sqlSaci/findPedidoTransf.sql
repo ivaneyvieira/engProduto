@@ -2,8 +2,8 @@ SET SQL_MODE = '';
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISASTART :=  CONCAT(@PESQUISA, '%');
-DO @PESQUISALIKE :=  CONCAT('%', @PESQUISA, '%');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
@@ -26,6 +26,7 @@ SELECT N.storeno                                          AS lojaNoOri,
        SEC_TO_TIME(N.l4)                                  AS hora,
        CAST(T.issuedate AS DATE)                          AS dataTransf,
        CAST(CONCAT(T.nfno, '/', T.nfse) AS CHAR)          AS notaTransf,
+       N.status                                           AS situacao,
        CASE N.status
          WHEN 0 THEN 'Incluído'
          WHEN 1 THEN 'Orçado'
@@ -53,7 +54,7 @@ SELECT N.storeno                                          AS lojaNoOri,
        T.grossamt / 100                                   AS valorTransf,
        TRIM(T.remarks)                                    AS observacaoTransf,
        T.padbits                                          AS userTransf,
-       UT.login                                           AS loginTransf,
+       UT.name                                            AS nameTransf,
        N.s16                                              AS numImpressora
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
@@ -123,7 +124,7 @@ SELECT lojaNoOri,
        marca,
        cancelada,
        hora,
-       situacaoPedido,
+       situacao,
        observacao,
        dataTransf,
        notaTransf,
@@ -137,13 +138,13 @@ SELECT lojaNoOri,
        valorTransf,
        observacaoTransf,
        userTransf,
-       loginTransf
+       nameTransf
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
        cliente = @PESQUISANUM OR
        ordno = @PESQUISANUM OR
-       loginTransf LIKE @PESQUISALIKE OR
+       nameTransf LIKE @PESQUISALIKE OR
        notaTransf LIKE @PESQUISASTART OR
        nameSing LIKE @PESQUISALIKE OR
        usuario LIKE @PESQUISASTART OR

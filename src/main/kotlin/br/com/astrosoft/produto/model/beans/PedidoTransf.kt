@@ -22,7 +22,7 @@ class PedidoTransf(
   var marca: Int?,
   var cancelada: String?,
   var hora: LocalTime?,
-  var situacaoPedido: String?,
+  var situacao: Int?,
   var observacao: String?,
   var dataTransf: LocalDate?,
   var notaTransf: String?,
@@ -36,14 +36,28 @@ class PedidoTransf(
   var valorTransf: Double?,
   var observacaoTransf: String?,
   var userTransf: Int?,
-  var loginTransf: String?
+  var nameTransf: String?
 ) {
+  val situacaoPedido
+    get() = when (situacao) {
+      0    -> "Incluído"
+      1    -> "Orçado"
+      2    -> "Reservado"
+      3    -> "Vendido"
+      4    -> "Expirado"
+      5    -> "Cancelado"
+      6    -> "Reserva B"
+      7    -> "Trânsito"
+      8    -> "Futura"
+      else -> "Outro"
+    }
+
   val sing: String
     get() {
       return nameSing ?: ""
     }
 
-  val situacao
+  val situacaoCancelada
     get() = if (cancelada == "S") "Cancelada" else ""
 
   val observacaoLimpa: String
