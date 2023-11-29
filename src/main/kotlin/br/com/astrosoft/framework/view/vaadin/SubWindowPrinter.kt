@@ -15,7 +15,12 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.select.Select
 import java.io.File
 
-class SubWindowPrinter(text: String, printerUser: List<String>, val printEvent: (impressora: String) -> Unit) :
+class SubWindowPrinter(
+  text: String,
+  printerUser: List<String>,
+  printerRota: List<String>,
+  val printEvent: (impressora: String) -> Unit
+) :
   Dialog() {
   private var cmbImpressora: Select<String>? = null
 
@@ -47,13 +52,13 @@ class SubWindowPrinter(text: String, printerUser: List<String>, val printEvent: 
         }
         cmbImpressora = select("Impressora") {
           val userSaci = AppConfig.userLogin() as? UserSaci
-          val allPrinter = Impressora.allTermica().map { it.name }
+          val allPrinter = Impressora.allTermica().map { it.name } + Impressora.ROTA.name
           val lista =
               when {
-                userSaci?.admin == true                -> allPrinter
-                printerUser.contains(Impressora.TODAS) -> allPrinter
-                printerUser.isEmpty()                  -> emptyList()
-                else                                   -> printerUser
+                userSaci?.admin == true -> allPrinter
+                printerUser.contains(Impressora.TODAS.name) -> allPrinter
+                printerUser.isEmpty() -> emptyList()
+                else -> printerUser
               }
           setItems(lista)
 
@@ -64,9 +69,16 @@ class SubWindowPrinter(text: String, printerUser: List<String>, val printEvent: 
           this.onLeftClick {
             DialogHelper.showQuestion("Confirma a impressão?") {
               val impressora = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
-              val printer = PrinterCups(impressora)
-              printer.print(text)
-              printEvent(impressora)
+              if (impressora == Impressora.ROTA.name) {
+                printerRota.forEach { printer ->
+                  val printerCups = PrinterCups(printer)
+                  printerCups.print(text)
+                }
+              } else {
+                val printer = PrinterCups(impressora)
+                printer.print(text)
+                printEvent(impressora)
+              }
               this@SubWindowPrinter.close()
               //TODO verificar se a impressão foi realizada
             }

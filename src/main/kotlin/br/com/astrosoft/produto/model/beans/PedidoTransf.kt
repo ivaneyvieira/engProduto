@@ -87,6 +87,12 @@ class PedidoTransf(
     saci.marcaPedidoImpresso(lojaNoOri, ordno?.toIntOrNull() ?: 0, imrpessora)
   }
 
+  fun printerRota(): List<String> {
+    val printerOrigem = Impressora.findImpressora(lojaNoOri)
+    val printerDestino = Impressora.findImpressora(lojaNoDes)
+    return listOfNotNull(printerOrigem, printerDestino).map { it.name }
+  }
+
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
   }
