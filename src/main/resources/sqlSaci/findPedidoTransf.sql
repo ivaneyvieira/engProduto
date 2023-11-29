@@ -141,9 +141,9 @@ WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
        cliente = @PESQUISANUM OR
        ordno = @PESQUISANUM OR
-       vendedor = @PESQUISANUM OR
-       userno = @PESQUISANUM OR
+       loginTransf LIKE @PESQUISALIKE OR
+       notaTransf LIKE @PESQUISALIKE OR
+       nameSing LIKE @PESQUISALIKE OR
        usuario LIKE @PESQUISALIKE OR
        situacaoPedido LIKE @PESQUISALIKE OR
-       observacao LIKE @PESQUISALIKE OR
        @PESQUISA = '')
