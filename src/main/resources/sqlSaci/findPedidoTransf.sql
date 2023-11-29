@@ -1,6 +1,7 @@
 DO @PESQUISA := :pesquisa;
 DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISALIKE := IF(@PESQUISA REGEXP '[0-9]+', '', CONCAT('%', @PESQUISA, '%'));
+DO @PESQUISASTART :=  CONCAT('%', @PESQUISA);
+DO @PESQUISALIKE :=  CONCAT('%', @PESQUISA, '%');
 
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
@@ -142,8 +143,8 @@ WHERE (lojaOrigem = @PESQUISA OR
        cliente = @PESQUISANUM OR
        ordno = @PESQUISANUM OR
        loginTransf LIKE @PESQUISALIKE OR
-       notaTransf LIKE @PESQUISALIKE OR
+       notaTransf LIKE @PESQUISASTART OR
        nameSing LIKE @PESQUISALIKE OR
-       usuario LIKE @PESQUISALIKE OR
-       situacaoPedido LIKE @PESQUISALIKE OR
+       usuario LIKE @PESQUISASTART OR
+       situacaoPedido LIKE @PESQUISASTART OR
        @PESQUISA = '')
