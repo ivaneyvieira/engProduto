@@ -89,7 +89,7 @@ WHERE N.date > 20231106
         WHEN 999 THEN TRUE
         ELSE FALSE
       END
-  AND (N.storeno = :storeno OR :storeno = 0)
+  AND (N.storeno = :storeno OR SD.no = :storeno OR :storeno = 0)
   AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
