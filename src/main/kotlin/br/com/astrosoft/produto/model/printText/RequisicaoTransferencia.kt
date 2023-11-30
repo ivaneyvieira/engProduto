@@ -29,10 +29,12 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
   }
 
   override fun printSumary() {
-    val entregue = nota.entregue ?: ""
-    val margemEntregue = (31 - entregue.length) / 2
-    val recebido = nota.recebido ?: ""
-    val margemRecebido = (31 - recebido.length) / 2
+    val lengthEntregue = (nota.entregue ?: "").length
+    val entregue = if (lengthEntregue >= 31) (nota.entregue ?: "").substring(0, 31) else nota.entregue ?: ""
+    val margemEntregue = (31 - lengthEntregue) / 2
+    val lengthRecebido = (nota.recebido ?: "").length
+    val recebido = if (lengthRecebido >= 31) (nota.recebido ?: "").substring(0, 31) else nota.recebido ?: ""
+    val margemRecebido = (31 - lengthRecebido) / 2
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
