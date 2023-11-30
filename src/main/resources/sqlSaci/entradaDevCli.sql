@@ -2,6 +2,11 @@ USE sqldados;
 
 SET sql_mode = '';
 
+DO @PESQUISA := :query;
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -49,11 +54,8 @@ FROM sqldados.inv AS I
 WHERE I.account = '2.01.25'
   AND I.bits & POW(2, 4) = 0
   AND (I.storeno = :loja OR :loja = 0)
-  AND (I.nfname = :query OR :query = '')
   AND (I.date >= :dataI OR :dataI = 0)
   AND (I.date <= :dataF OR :dataF = 0)
-  AND (C.no = :query OR :query = '')
-  AND (C.name LIKE CONCAT('%', :query, '%') OR :query = '')
   AND CASE :impresso
         WHEN 'S' THEN I.c9 != ''
         WHEN 'N' THEN I.c9 = ''
@@ -91,4 +93,13 @@ FROM T_NOTA AS I
                  ON E.no = N.empno
        LEFT JOIN sqldados.users AS U
                  ON U.no = I.userno
+WHERE (@PESQUISA = '' OR
+       I.invno = @PESQUISANUM OR
+       I.loja = @PESQUISANUM OR
+       I.notaFiscal LIKE @PESQUISASTART OR
+       I.vendno = @PESQUISANUM OR
+       I.fornecedor LIKE @PESQUISALIKE OR
+       nfVenda LIKE @PESQUISASTART OR
+       IFNULL(I.custno, N.custno) = @PESQUISANUM OR
+       IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE)
 GROUP BY I.invno
