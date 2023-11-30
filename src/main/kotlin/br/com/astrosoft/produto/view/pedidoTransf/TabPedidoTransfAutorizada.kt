@@ -148,7 +148,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
   }
 
   override val label: String
-    get() = "Autorizada"
+    get() = "Autorizar"
 
   override fun updateComponent() {
     viewModel.updateView()

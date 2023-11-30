@@ -147,7 +147,7 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
   }
 
   override val label: String
-    get() = "Impresso"
+    get() = "Autorizada"
 
   override fun updateComponent() {
     viewModel.updateView()
