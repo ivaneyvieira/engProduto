@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.view.vaadin.UserLayout
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
-import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.Impressora.Companion.ROTA
 import br.com.astrosoft.produto.model.beans.Impressora.Companion.TODAS
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -104,11 +103,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
             checkBox("Autorizar") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
+              binder.bind(this, UserSaci::pedidoTransfAutorizar.name)
             }
             checkBox("Autorizada") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::pedidoTransfImpresso.name)
+              binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
             }
             checkBox("Entrege") {
               isReadOnly = readOnly

@@ -82,9 +82,10 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
 
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
-    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido){impressora ->
-        viewModel.marcaImpressao(pedido, impressora)
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
+      dlgProduto = DlgProdutosPedTransfAutorizada(viewModel, pedido)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
     colunaPedidoTransfLojaOrig()
@@ -96,10 +97,6 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
-
-    setPartNameGenerator {
-      if(it.situacao == 5) "amarelo" else null
-    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
@@ -110,7 +107,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = true,
-      impresso = false,
+      impresso = true,
     )
   }
 
@@ -148,7 +145,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
   }
 
   override val label: String
-    get() = "Autorizar"
+    get() = "Autorizada"
 
   override fun updateComponent() {
     viewModel.updateView()

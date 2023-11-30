@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewCo
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfDescricao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfGrade
 import br.com.astrosoft.produto.view.pedidoTransf.columns.ProdutoPedTransfViewColumns.produtoPedidoTransfQuantidade
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfImpressoViewModel
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizarViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.select
@@ -18,7 +18,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
-class DlgProdutosPedTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel, val pedido: PedidoTransf) {
+class DlgProdutosPedTransfAutorizar(val viewModel: TabPedidoTransfAutorizarViewModel, val pedido: PedidoTransf) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoPedidoTransf::class.java, false)
   private var cmbImpressora: Select<Impressora>? = null

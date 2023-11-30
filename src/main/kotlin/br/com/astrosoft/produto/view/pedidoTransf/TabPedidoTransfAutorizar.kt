@@ -1,8 +1,6 @@
 package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
-import br.com.astrosoft.framework.view.vaadin.PrinterPreview
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -16,8 +14,8 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfImpresso
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfImpressoViewModel
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfAutorizar
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizarViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -30,9 +28,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfImpresso {
-  private var dlgProduto: DlgProdutosPedTransfImpresso? = null
+class TabPedidoTransfAutorizar(val viewModel: TabPedidoTransfAutorizarViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+  ITabPedidoTransfAutorizar {
+  private var dlgProduto: DlgProdutosPedTransfAutorizar? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -84,10 +82,9 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
 
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfImpresso(viewModel, pedido)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido){impressora ->
+        viewModel.marcaImpressao(pedido, impressora)
       }
     }
     colunaPedidoTransfLojaOrig()
@@ -99,6 +96,10 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
+
+    setPartNameGenerator {
+      if(it.situacao == 5) "amarelo" else null
+    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
@@ -109,7 +110,7 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = true,
-      impresso = true,
+      impresso = false,
     )
   }
 
@@ -143,11 +144,11 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoTransfImpresso == true
+    return username?.pedidoTransfAutorizar == true
   }
 
   override val label: String
-    get() = "Autorizada"
+    get() = "Autorizar"
 
   override fun updateComponent() {
     viewModel.updateView()

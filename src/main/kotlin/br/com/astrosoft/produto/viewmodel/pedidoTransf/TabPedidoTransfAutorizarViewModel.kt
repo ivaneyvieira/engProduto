@@ -11,7 +11,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabPedidoTransfImpressoViewModel(val viewModel: PedidoTransfViewModel) {
+class TabPedidoTransfAutorizarViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.CD)
     val pedidos = PedidoTransf.findTransf(filtro)
@@ -97,14 +97,24 @@ class TabPedidoTransfImpressoViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) {
     val relatorio = RequisicaoTransferencia(pedido)
-    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(printEvent = printEvent))
+    val printerRota = pedido.printerRota()
+    relatorio.print(
+      dados = pedido.produtos(),
+      printer = subView.printerPreview(printerRota = printerRota, printEvent = printEvent)
+    )
+  }
+
+  fun marcaImpressao(pedido: PedidoTransf, impressora: String) = viewModel.exec{
+    val printer = Impressora.findImpressora(impressora) ?: fail("Impressora não encontrada")
+    pedido.marca(printer)
+    updateView()
   }
 
   val subView
-    get() = viewModel.view.tabPedidoTransfImpresso
+    get() = viewModel.view.tabPedidoTransfAutorizada
 }
 
-interface ITabPedidoTransfImpresso : ITabView {
+interface ITabPedidoTransfAutorizar : ITabView {
   fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()

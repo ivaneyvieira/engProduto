@@ -18,8 +18,8 @@ import jakarta.annotation.security.PermitAll
 class PedidoTransfView : ViewLayout<PedidoTransfViewModel>(), IPedidoTransfView {
   override val viewModel = PedidoTransfViewModel(this)
   override val tabPedidoTransfReserva = TabPedidoTransfReserva(viewModel.tabPedidoTransfReservaViewModel)
+  override val tabPedidoTransfAutorizar = TabPedidoTransfAutorizar(viewModel.tabPedidoTransfAutorizarViewModel)
   override val tabPedidoTransfAutorizada = TabPedidoTransfAutorizada(viewModel.tabPedidoTransfAutorizadaViewModel)
-  override val tabPedidoTransfImpresso = TabPedidoTransfImpresso(viewModel.tabPedidoTransfImpressoViewModel)
   override val tabPedidoTransfEnt = TabPedidoTransfEnt(viewModel.tabPedidoTransfEntViewModel)
   override val tabPedidoTransfRessu4 = TabPedidoTransfRessu4(viewModel.tabPedidoTransfRessu4ViewModel)
 
