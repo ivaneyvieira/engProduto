@@ -94,6 +94,10 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
+
+    setPartNameGenerator {
+      if(it.situacao == 5) "amarelo" else null
+    }
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {

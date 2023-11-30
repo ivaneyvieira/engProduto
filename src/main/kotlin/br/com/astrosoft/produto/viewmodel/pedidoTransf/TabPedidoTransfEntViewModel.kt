@@ -9,7 +9,9 @@ import br.com.astrosoft.produto.model.printText.TransferenciaEntregue
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaPedido.ENT)
-    val pedidos = PedidoTransf.findTransf(filtro)
+    val pedidos = PedidoTransf.findTransf(filtro).filter {
+      it.situacao != 5
+    }
     subView.updatePedidos(pedidos)
   }
 
