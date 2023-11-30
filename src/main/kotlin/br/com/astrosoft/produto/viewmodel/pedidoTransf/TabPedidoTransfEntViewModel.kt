@@ -3,6 +3,8 @@ package br.com.astrosoft.produto.viewmodel.pedidoTransf
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
+import br.com.astrosoft.produto.model.printText.TransferenciaEntregue
 
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
@@ -32,6 +34,15 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
       produtoNF.orcamento()
     }
     subView.updateProdutos()
+  }
+
+  fun previewPedido(pedido: PedidoTransf) {
+    val relatorio = TransferenciaEntregue(pedido)
+    val printerRota = pedido.printerRota()
+    relatorio.print(
+      dados = pedido.produtos(),
+      printer = subView.printerPreview(printerRota = printerRota)
+    )
   }
 
   val subView

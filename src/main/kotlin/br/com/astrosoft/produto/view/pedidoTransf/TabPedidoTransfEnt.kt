@@ -86,11 +86,8 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
   }
 
   override fun Grid<PedidoTransf>.gridPanel() {
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfEnt(viewModel, pedido)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
-      }
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
     }
     addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
       val obs =
