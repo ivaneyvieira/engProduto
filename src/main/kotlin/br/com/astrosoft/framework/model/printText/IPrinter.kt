@@ -1,6 +1,7 @@
 package br.com.astrosoft.framework.model.printText
 
 import br.com.astrosoft.framework.util.CupsUtils
+import org.apache.http.conn.ConnectTimeoutException
 import java.io.File
 
 interface IPrinter {
@@ -9,7 +10,11 @@ interface IPrinter {
 
 class PrinterCups(private val printerName: String) : IPrinter {
   override fun print(text: String) {
-    CupsUtils.printCups(printerName, text)
+    try {
+      CupsUtils.printCups(printerName, text)
+    } catch (e: ConnectTimeoutException) {
+      //TODO
+    }
   }
 }
 

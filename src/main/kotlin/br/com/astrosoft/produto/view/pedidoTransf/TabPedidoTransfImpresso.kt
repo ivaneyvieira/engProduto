@@ -109,7 +109,7 @@ class TabPedidoTransfImpresso(val viewModel: TabPedidoTransfImpressoViewModel) :
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = true,
-      impresso = false,
+      impresso = true,
     )
   }
 

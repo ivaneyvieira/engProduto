@@ -95,13 +95,19 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
     updateView()
   }
 
-  fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit = {}) {
+  fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) {
     val relatorio = RequisicaoTransferencia(pedido)
     val printerRota = pedido.printerRota()
     relatorio.print(
       dados = pedido.produtos(),
       printer = subView.printerPreview(printerRota = printerRota, printEvent = printEvent)
     )
+  }
+
+  fun marcaImpressao(pedido: PedidoTransf, impressora: String) = viewModel.exec{
+    val printer = Impressora.findImpressora(impressora) ?: fail("Impressora não encontrada")
+    pedido.marca(printer)
+    updateView()
   }
 
   val subView

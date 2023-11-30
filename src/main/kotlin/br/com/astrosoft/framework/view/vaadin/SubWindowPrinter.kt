@@ -79,6 +79,7 @@ class SubWindowPrinter(
                   val printerCups = PrinterCups(printer)
                   printerCups.print(text)
                 }
+                printEvent(printerRota.firstOrNull() ?: "")
               } else {
                 val printer = PrinterCups(impressora)
                 printer.print(text)

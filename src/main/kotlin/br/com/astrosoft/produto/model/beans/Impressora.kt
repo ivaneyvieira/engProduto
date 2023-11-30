@@ -12,6 +12,10 @@ class Impressora(var no: Int, var name: String) {
       return impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
     }
 
+    fun findImpressora(printerName : String): Impressora? {
+      return all().firstOrNull { it.name.uppercase() == printerName.uppercase() }
+    }
+
     val TODAS = Impressora(0, "Todas")
     val ROTA = Impressora(9999, "Rota")
   }
