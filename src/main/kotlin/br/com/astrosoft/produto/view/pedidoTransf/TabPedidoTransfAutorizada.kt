@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
-import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUserReservado
@@ -32,7 +31,6 @@ import java.time.LocalDate
 class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewModel) :
   TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfAutorizada {
-  private var dlgProduto: DlgProdutosPedTransfAutorizada? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -115,31 +113,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
   }
 
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
-    updateGrid(pedidos)
-  }
-
-  override fun updateProdutos() {
-    dlgProduto?.update()
-  }
-
-  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.itensSelecionados().orEmpty()
-  }
-
-  override fun produtosMarcados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.produtosMarcados().orEmpty()
-  }
-
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
-    return dlgProduto?.produtosCodigoBarras(codigoBarra)
-  }
-
-  override fun findPedido(): PedidoTransf? {
-    return dlgProduto?.pedido
-  }
-
-  override fun updateProduto(produto: ProdutoPedidoTransf) {
-    dlgProduto?.updateProduto(produto)
+    this.updateGrid(pedidos)
   }
 
   override fun isAuthorized(): Boolean {

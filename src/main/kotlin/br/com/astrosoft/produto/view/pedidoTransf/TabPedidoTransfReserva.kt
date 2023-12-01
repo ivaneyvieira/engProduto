@@ -12,6 +12,7 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfReserva
@@ -31,7 +32,6 @@ import java.time.LocalDate
 class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
   TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfReserva {
-  private var dlgProduto: DlgProdutosPedTransfReserva? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -85,7 +85,9 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido)
+      viewModel.previewPedido(pedido){impressora ->
+        viewModel.marcaImpressao(pedido, impressora)
+      }
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
@@ -95,6 +97,7 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
       viewModel.formAutoriza(pedido)
     }
+    colunaPedidoTransfSing()
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
@@ -111,40 +114,16 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaPedido.TODOS,
+      marca = EMarcaPedido.CD,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      autorizado = false,
-      impresso = null,
+      autorizado = null,
+      impresso = false,
     )
   }
 
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
-  }
-
-  override fun updateProdutos() {
-    dlgProduto?.update()
-  }
-
-  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.itensSelecionados().orEmpty()
-  }
-
-  override fun produtosMarcados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.produtosMarcados().orEmpty()
-  }
-
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
-    return dlgProduto?.produtosCodigoBarras(codigoBarra)
-  }
-
-  override fun findPedido(): PedidoTransf? {
-    return dlgProduto?.pedido
-  }
-
-  override fun updateProduto(produto: ProdutoPedidoTransf) {
-    dlgProduto?.updateProduto(produto)
   }
 
   override fun isAuthorized(): Boolean {

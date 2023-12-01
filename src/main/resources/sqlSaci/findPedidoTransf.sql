@@ -105,7 +105,7 @@ WHERE N.date > 20231106
       END
   AND CASE :impresso
         WHEN 'S' THEN N.s16 > 0
-        WHEN 'N' THEN N.s16 = 0
+        WHEN 'N' THEN (N.s16 = 0) OR (IFNULL(S.no, 0) = 0)
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END

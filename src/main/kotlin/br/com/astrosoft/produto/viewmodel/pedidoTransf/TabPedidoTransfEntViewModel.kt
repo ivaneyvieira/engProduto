@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
+import br.com.astrosoft.produto.model.beans.FiltroPedidoTransf
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.PedidoTransf
 import br.com.astrosoft.produto.model.printText.TransferenciaEntregue
 
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
@@ -24,20 +24,6 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
     return Loja.allLojas()
   }
 
-  fun marcaCD() {
-    val itens = subView.produtosSelcionados()
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-    itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaPedido.CD.num
-      produtoNF.usuarioCD = ""
-      produtoNF.salva()
-      produtoNF.orcamento()
-    }
-    subView.updateProdutos()
-  }
-
   fun previewPedido(pedido: PedidoTransf) {
     val relatorio = TransferenciaEntregue(pedido)
     val printerRota = pedido.printerRota()
@@ -54,6 +40,4 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
 interface ITabPedidoTransfEnt : ITabView {
   fun filtro(): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
-  fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoTransf>
 }

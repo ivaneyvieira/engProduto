@@ -35,7 +35,6 @@ import java.time.LocalDate
 
 class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfEnt {
-  private var dlgProduto: DlgProdutosPedTransfEnt? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -126,14 +125,6 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
 
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
-  }
-
-  override fun updateProdutos() {
-    dlgProduto?.update()
-  }
-
-  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.itensSelecionados().orEmpty()
   }
 
   override fun isAuthorized(): Boolean {

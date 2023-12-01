@@ -30,7 +30,6 @@ import java.time.LocalDate
 
 class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfImprimir {
-  private var dlgProduto: DlgProdutosPedTransfImprimir? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -116,30 +115,6 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
 
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
-  }
-
-  override fun updateProdutos() {
-    dlgProduto?.update()
-  }
-
-  override fun produtosSelcionados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.itensSelecionados().orEmpty()
-  }
-
-  override fun produtosMarcados(): List<ProdutoPedidoTransf> {
-    return dlgProduto?.produtosMarcados().orEmpty()
-  }
-
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf? {
-    return dlgProduto?.produtosCodigoBarras(codigoBarra)
-  }
-
-  override fun findPedido(): PedidoTransf? {
-    return dlgProduto?.pedido
-  }
-
-  override fun updateProduto(produto: ProdutoPedidoTransf) {
-    dlgProduto?.updateProduto(produto)
   }
 
   override fun isAuthorized(): Boolean {

@@ -27,45 +27,10 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     return Loja.allLojas()
   }
 
-  fun marcaEnt() = viewModel.exec {
-    val itens = subView.produtosSelcionados()
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-    itens.forEach { produto ->
-      produto.marca = EMarcaPedido.ENT.num
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = AppConfig.userLogin()?.login ?: ""
-      produto.usuarioCD = "$usuario-$dataHora"
-      produto.salva()
-    }
-    subView.updateProdutos()
-  }
 
-  fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
-    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.marca = EMarcaPedido.ENT.num
-    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
-    produto.usuarioCD = "$usuario-$dataHora"
-    subView.updateProduto(produto)
-  }
 
-  fun salvaProdutos() = viewModel.exec {
-    val itens = subView.produtosMarcados()
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
-    itens.forEach { produto ->
-      produto.usuarioCD = "$usuario-$dataHora"
-      produto.salva()
-      produto.expira()
-    }
-    imprimeEtiquetaEnt(itens)
-    subView.updateProdutos()
-  }
+
+
 
   private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoTransf>) {
     val user = AppConfig.userLogin() as? UserSaci
@@ -133,11 +98,21 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     subView.formAutoriza(pedido)
   }
 
-  fun previewPedido(pedido: PedidoTransf) {
+  fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) {
     val relatorio = RequisicaoTransferencia(pedido)
-    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(printEvent = {}))
+    val printerRota = pedido.printerRota()
+    relatorio.print(
+      dados = pedido.produtos(),
+      printer = subView.printerPreview(printerRota = printerRota, printEvent = printEvent)
+    )
   }
-  
+
+  fun marcaImpressao(pedido: PedidoTransf, impressora: String) = viewModel.exec{
+    val printer = Impressora.findImpressora(impressora) ?: fail("Impressora não encontrada")
+    pedido.marca(printer)
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfReserva
 }
@@ -145,11 +120,5 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
 interface ITabPedidoTransfReserva : ITabView {
   fun filtro(): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
-  fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoPedidoTransf>
-  fun produtosMarcados(): List<ProdutoPedidoTransf>
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoTransf?
-  fun findPedido(): PedidoTransf?
-  fun updateProduto(produto: ProdutoPedidoTransf)
   fun formAutoriza(pedido: PedidoTransf)
 }
