@@ -11,7 +11,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabPedidoTransfAutorizarViewModel(val viewModel: PedidoTransfViewModel) {
+class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val pedidos = PedidoTransf.findTransf(filtro)
@@ -114,7 +114,7 @@ class TabPedidoTransfAutorizarViewModel(val viewModel: PedidoTransfViewModel) {
     get() = viewModel.view.tabPedidoTransfAutorizar
 }
 
-interface ITabPedidoTransfAutorizar : ITabView {
+interface ITabPedidoTransfImprimir : ITabView {
   fun filtro(): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()

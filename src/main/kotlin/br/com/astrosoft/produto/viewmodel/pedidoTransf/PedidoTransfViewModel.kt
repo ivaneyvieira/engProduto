@@ -5,14 +5,14 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class PedidoTransfViewModel(view: IPedidoTransfView) : ViewModel<IPedidoTransfView>(view) {
   val tabPedidoTransfReservaViewModel = TabPedidoTransfReservaViewModel(this)
-  val tabPedidoTransfAutorizarViewModel = TabPedidoTransfAutorizarViewModel(this)
+  val tabPedidoTransfImprimirViewModel = TabPedidoTransfImprimirViewModel(this)
   val tabPedidoTransfAutorizadaViewModel = TabPedidoTransfAutorizadaViewModel(this)
   val tabPedidoTransfEntViewModel = TabPedidoTransfEntViewModel(this)
   val tabPedidoTransfRessu4ViewModel = TabPedidoTransfRessu4ViewModel(this)
 
   override fun listTab() = listOf(
     view.tabPedidoTransfReserva,
-    view.tabPedidoTransfAutorizar,
+    view.tabPedidoTransfImprimir,
     view.tabPedidoTransfAutorizada,
     view.tabPedidoTransfEnt,
     view.tabPedidoTransfRessu4
@@ -20,7 +20,7 @@ class PedidoTransfViewModel(view: IPedidoTransfView) : ViewModel<IPedidoTransfVi
 }
 
 interface IPedidoTransfView : IView {
-  val tabPedidoTransfAutorizar: ITabPedidoTransfAutorizar
+  val tabPedidoTransfImprimir: ITabPedidoTransfImprimir
   val tabPedidoTransfAutorizada: ITabPedidoTransfAutorizada
   val tabPedidoTransfReserva: ITabPedidoTransfReserva
   val tabPedidoTransfEnt: ITabPedidoTransfEnt

@@ -14,8 +14,8 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfAutorizar
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizarViewModel
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfImprimir
+import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfImprimirViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -28,9 +28,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfAutorizar(val viewModel: TabPedidoTransfAutorizarViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfAutorizar {
-  private var dlgProduto: DlgProdutosPedTransfAutorizar? = null
+class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+  ITabPedidoTransfImprimir {
+  private var dlgProduto: DlgProdutosPedTransfImprimir? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -144,11 +144,11 @@ class TabPedidoTransfAutorizar(val viewModel: TabPedidoTransfAutorizarViewModel)
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoTransfAutorizar == true
+    return username?.pedidoTransfImprimir == true
   }
 
   override val label: String
-    get() = "Autorizar"
+    get() = "Imprimir"
 
   override fun updateComponent() {
     viewModel.updateView()

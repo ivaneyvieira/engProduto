@@ -137,7 +137,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     val relatorio = RequisicaoTransferencia(pedido)
     relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(printEvent = {}))
   }
-
+  
   val subView
     get() = viewModel.view.tabPedidoTransfReserva
 }

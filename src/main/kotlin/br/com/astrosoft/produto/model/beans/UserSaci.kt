@@ -48,7 +48,7 @@ class UserSaci : IUser {
   var notaEntradaBase by DelegateAuthorized(26)
   var pedidoTransfReserva by DelegateAuthorized(27)
   var pedidoTransfEnt by DelegateAuthorized(28)
-  var pedidoTransfAutorizar by DelegateAuthorized(29)
+  var pedidoTransfImprimir by DelegateAuthorized(29)
   var pedidoTransfRessu4 by DelegateAuthorized(30)
   var devCliValeTroca by DelegateAuthorized(31)
   var devCliValeTrocaImp by DelegateAuthorized(32)
@@ -118,7 +118,7 @@ class UserSaci : IUser {
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   val pedidoTransf
-    get() = pedidoTransfReserva || pedidoTransfAutorizar || pedidoTransfRessu4 || pedidoTransfEnt ||
+    get() = pedidoTransfReserva || pedidoTransfImprimir || pedidoTransfRessu4 || pedidoTransfEnt ||
             pedidoTransfAutorizada || admin
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || admin
