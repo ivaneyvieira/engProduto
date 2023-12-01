@@ -12,7 +12,7 @@ class PedidoTransfViewModel(view: IPedidoTransfView) : ViewModel<IPedidoTransfVi
 
   override fun listTab() = listOf(
     view.tabPedidoTransfReserva,
-    view.tabPedidoTransfImprimir,
+    //view.tabPedidoTransfImprimir,
     view.tabPedidoTransfAutorizada,
     view.tabPedidoTransfEnt,
     view.tabPedidoTransfRessu4
