@@ -102,11 +102,11 @@ class TabPedidoTransfAutorizar(val viewModel: TabPedidoTransfAutorizarViewModel)
     }
   }
 
-  override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
+  override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = marca,
+      marca = EMarcaPedido.TODOS,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = true,

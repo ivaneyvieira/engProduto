@@ -112,11 +112,11 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     colunaPedidoTransfObsevacaoTransf()
   }
 
-  override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {
+  override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = marca,
+      marca = EMarcaPedido.ENT,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = null,

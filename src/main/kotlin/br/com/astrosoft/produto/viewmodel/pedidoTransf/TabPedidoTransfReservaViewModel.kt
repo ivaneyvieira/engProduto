@@ -13,7 +13,7 @@ import java.time.LocalTime
 
 class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaPedido.CD)
+    val filtro = subView.filtro()
     val pedidos = PedidoTransf.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
@@ -143,7 +143,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
 }
 
 interface ITabPedidoTransfReserva : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
+  fun filtro(): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoTransf>

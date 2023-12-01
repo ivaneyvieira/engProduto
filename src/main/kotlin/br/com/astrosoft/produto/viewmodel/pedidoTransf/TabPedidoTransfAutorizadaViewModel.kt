@@ -14,7 +14,7 @@ import java.time.LocalTime
 
 class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaPedido.CD)
+    val filtro = subView.filtro()
     val pedidos = PedidoTransf.findTransf(filtro)
     subView.updatePedidos(pedidos)
   }
@@ -117,7 +117,7 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
 }
 
 interface ITabPedidoTransfAutorizada : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedidoTransf
+  fun filtro(): FiltroPedidoTransf
   fun updatePedidos(pedidos: List<PedidoTransf>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoTransf>
