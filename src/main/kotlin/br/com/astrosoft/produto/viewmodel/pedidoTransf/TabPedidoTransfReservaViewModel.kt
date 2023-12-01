@@ -94,7 +94,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     val relatorio = RequisicaoTransferencia(pedido)
     val printerRota = pedido.printerRota()
     if (pedido.nameSing.isNullOrEmpty())
-      fail("Pedido não autorizado")
+      fail("Imprimir após Autorização")
     relatorio.print(
       dados = pedido.produtos(),
       printer = subView.printerPreview(printerRota = printerRota, printEvent = printEvent)
