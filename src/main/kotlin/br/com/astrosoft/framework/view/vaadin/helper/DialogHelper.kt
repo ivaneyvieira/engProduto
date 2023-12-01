@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowPDF
 import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
+import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.html
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -55,10 +56,10 @@ object DialogHelper {
   fun showPrintText(
     text: String,
     printerUser: List<String>,
-    printerRota: List<String>,
+    rota: Rota?,
     printEvent: (impressora: String) -> Unit
   ) {
-    val form = SubWindowPrinter(text, printerUser, printerRota, printEvent)
+    val form = SubWindowPrinter(text, printerUser, rota, printEvent)
     form.open()
   }
 

@@ -92,12 +92,12 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     val relatorio = RequisicaoTransferencia(pedido)
-    val printerRota = pedido.printerRota()
+    val rota = pedido.rotaPedido()
     if (pedido.nameSing.isNullOrEmpty())
       fail("Imprimir após Autorização")
     relatorio.print(
       dados = pedido.produtos(),
-      printer = subView.printerPreview(printerRota = printerRota, printEvent = printEvent)
+      printer = subView.printerPreview(rota = rota, printEvent = printEvent)
     )
   }
 

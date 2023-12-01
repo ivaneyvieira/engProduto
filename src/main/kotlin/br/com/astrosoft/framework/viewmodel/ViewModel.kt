@@ -1,5 +1,7 @@
 package br.com.astrosoft.framework.viewmodel
 
+import br.com.astrosoft.produto.model.beans.Rota
+
 abstract class ViewModel<V : IView>(val view: V) {
   fun <T> exec(block: () -> T) = exec(view, block)
   protected abstract fun listTab(): List<ITabView>
@@ -41,7 +43,7 @@ interface IView {
   fun showPrintText(
     text: String,
     printerUser: List<String>,
-    printerRota: List<String>,
+    rota: Rota?,
     printEvent: (impressora: String) -> Unit
   )
 }

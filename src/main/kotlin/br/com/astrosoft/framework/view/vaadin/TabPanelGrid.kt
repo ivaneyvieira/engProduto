@@ -3,6 +3,7 @@ package br.com.astrosoft.framework.view.vaadin
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
 import br.com.astrosoft.framework.view.vaadin.helper.updateItens
+import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.kaributools.fetchAll
@@ -46,8 +47,8 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
 
   fun itensSelecionados() = gridPanel.selectedItems.toList()
 
-  override fun printerPreview(printerRota: List<String>, printEvent: (impressora: String) -> Unit): IPrinter {
-    return PrinterPreview(printerUser(), printerRota, printEvent)
+  override fun printerPreview(rota: Rota?, printEvent: (impressora: String) -> Unit): IPrinter {
+    return PrinterPreview(printerUser(), rota, printEvent)
   }
 
   open fun printerUser(): List<String> = emptyList()

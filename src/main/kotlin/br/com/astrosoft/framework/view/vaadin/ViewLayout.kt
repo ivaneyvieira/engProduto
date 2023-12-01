@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.framework.view.vaadin.helper.tabPanel
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
+import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.karibudsl.v23.tab
 import com.github.mvysny.karibudsl.v23.tabSheet
@@ -83,10 +84,10 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
   override fun showPrintText(
     text: String,
     printerUser: List<String>,
-    printerRota: List<String>,
+    rota: Rota?,
     printEvent: (impressora: String) -> Unit
   ) {
-    DialogHelper.showPrintText(text, printerUser, printerRota, printEvent)
+    DialogHelper.showPrintText(text, printerUser, rota, printEvent)
   }
 
   override fun beforeLeave(event: BeforeLeaveEvent?) {

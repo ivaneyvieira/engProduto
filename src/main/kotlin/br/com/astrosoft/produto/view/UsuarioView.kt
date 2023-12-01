@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.view.vaadin.UserLayout
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
+import br.com.astrosoft.produto.model.beans.Impressora.Companion.PISO
 import br.com.astrosoft.produto.model.beans.Impressora.Companion.ROTA
 import br.com.astrosoft.produto.model.beans.Impressora.Companion.TODAS
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -92,7 +93,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
             multiSelectComboBox<String>("Impressoras") {
               isReadOnly = readOnly
-              setItems(impressoras.distinct().sorted() + listOf(TODAS.name, ROTA.name))
+              setItems(impressoras.distinct().sorted() + listOf(TODAS.name, ROTA.name, PISO.name))
               this.value = emptySet()
               binder.bind(this, UserSaci::impressoraTrans.name)
               colspan = 2

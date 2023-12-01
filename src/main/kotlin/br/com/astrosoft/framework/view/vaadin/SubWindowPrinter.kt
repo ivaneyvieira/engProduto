@@ -6,7 +6,9 @@ import br.com.astrosoft.framework.model.printText.PrinterToHtml
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.produto.model.beans.Impressora
+import br.com.astrosoft.produto.model.beans.Rota
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.tipoRota
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
@@ -18,7 +20,7 @@ import java.io.File
 class SubWindowPrinter(
   text: String,
   printerUser: List<String>,
-  printerRota: List<String>,
+  rota: Rota?,
   val printEvent: (impressora: String) -> Unit
 ) :
   Dialog() {
@@ -53,10 +55,10 @@ class SubWindowPrinter(
         cmbImpressora = select("Impressora") {
           val userSaci = AppConfig.userLogin() as? UserSaci
           val allPrinter =
-              if (printerRota.isEmpty()) {
+              if (rota == null) {
                 Impressora.allTermica().map { it.name }
               } else {
-                Impressora.allTermica().map { it.name } + Impressora.ROTA.name
+                Impressora.allTermica().map { it.name } + Impressora.ROTA.name + Impressora.PISO.name
               }
           val lista =
               when {
@@ -74,7 +76,11 @@ class SubWindowPrinter(
           this.onLeftClick {
             DialogHelper.showQuestion("Confirma a impressão?") {
               val impressora = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
-              if (impressora == Impressora.ROTA.name) {
+              val tipoRota = Impressora.findImpressora(impressora)?.tipoRota()
+              if (tipoRota != null) {
+                val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
+                val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
+                val printerRota = listOf(impressoraOrigem, impressoraDestino)
                 printerRota.forEach { printer ->
                   val printerCups = PrinterCups(printer)
                   printerCups.print(text)
@@ -96,7 +102,6 @@ class SubWindowPrinter(
     }
     isCloseOnEsc = true
   }
-
 }
 
 

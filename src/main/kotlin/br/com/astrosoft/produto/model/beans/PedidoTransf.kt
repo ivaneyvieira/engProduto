@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -90,10 +89,8 @@ class PedidoTransf(
     saci.marcaPedidoImpresso(lojaNoOri, ordno?.toIntOrNull() ?: 0, imrpessora)
   }
 
-  fun printerRota(): List<String> {
-    val printerOrigem = Impressora.findImpressora(lojaNoOri)
-    val printerDestino = Impressora.findImpressora(lojaNoDes)
-    return listOfNotNull(printerOrigem, printerDestino).map { it.name }
+  fun rotaPedido(): Rota {
+    return Rota(lojaNoOri, lojaNoDes ?: 0)
   }
 
   fun mudaParaReservado(user: Int) {
@@ -114,3 +111,5 @@ data class FiltroPedidoTransf(
   val autorizado: Boolean?,
   val impresso: Boolean?,
 )
+
+data class Rota(val lojaOrigem: Int, val lojaDestino: Int)
