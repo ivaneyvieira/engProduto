@@ -101,10 +101,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::pedidoTransfReserva.name)
             }
-            checkBox("Imprimir") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::pedidoTransfImprimir.name)
-            }
             checkBox("Autorizada") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
