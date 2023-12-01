@@ -111,7 +111,7 @@ class TabPedidoTransfAutorizarViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabPedidoTransfAutorizada
+    get() = viewModel.view.tabPedidoTransfAutorizar
 }
 
 interface ITabPedidoTransfAutorizar : ITabView {
