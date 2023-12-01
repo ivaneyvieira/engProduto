@@ -106,7 +106,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaPedido.TODOS,
+      marca = EMarcaPedido.CD,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autorizado = true,
