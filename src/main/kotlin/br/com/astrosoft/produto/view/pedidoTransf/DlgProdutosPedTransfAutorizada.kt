@@ -43,7 +43,7 @@ class DlgProdutosPedTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaVie
       this.button("Preview") {
         icon = VaadinIcon.PRINT.create()
         this.onLeftClick {
-          viewModel.previewPedido(pedido, {})
+          viewModel.previewPedido(pedido)
         }
       }
     }, onClose = {

@@ -82,11 +82,8 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
 
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedTransfAutorizada(viewModel, pedido)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
-      }
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
