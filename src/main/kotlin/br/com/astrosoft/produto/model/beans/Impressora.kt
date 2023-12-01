@@ -22,7 +22,7 @@ class Impressora(var no: Int, var name: String) {
 
     val TODAS = Impressora(0, "Todas")
     val ROTA = Impressora(9999, "Rota")
-    val PISO = Impressora(8888, "Rota")
+    val PISO = Impressora(8888, "Piso")
     val RESSU4 = Impressora(7777, "Ressu4")
   }
 }
