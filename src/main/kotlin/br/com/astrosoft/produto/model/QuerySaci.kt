@@ -534,6 +534,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun mudaParaReservado(storeno: Int, ordno: Int, user: Int) {
+    val sql = "/sqlSaci/mudaParaReservado.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("user", user)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)

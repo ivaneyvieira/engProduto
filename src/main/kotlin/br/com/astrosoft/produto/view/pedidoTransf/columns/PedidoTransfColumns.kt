@@ -60,6 +60,10 @@ object PedidoTransfColumns {
     this.setHeader("Usuário")
   }
 
+  fun Grid<PedidoTransf>.colunaPedidoTransfUserReservado() = columnGrid(PedidoTransf::nameReserva) {
+    this.setHeader("Usuário Muda Situação")
+  }
+
   fun Grid<PedidoTransf>.colunaPedidoTransfSituacaoPedido() = columnGrid(PedidoTransf::situacaoPedido) {
     this.setHeader("Situação")
   }

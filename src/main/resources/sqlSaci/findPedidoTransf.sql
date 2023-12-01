@@ -39,6 +39,8 @@ SELECT N.storeno                                          AS lojaNoOri,
          WHEN 8 THEN 'Futura'
          ELSE 'Outro'
        END                                                AS situacaoPedido,
+       N.s11                                              AS userReserva,
+       UR.name                                            AS nameReserva,
        CAST(CONCAT(MID(R.remarks__480, 1, 40),
                    MID(R.remarks__480, 41, 40),
                    MID(R.remarks__480, 81, 40),
@@ -81,6 +83,8 @@ FROM sqldados.eord AS N
                    AND T.eordno = N.ordno
        LEFT JOIN sqldados.users AS UT
                  ON UT.no = T.padbits
+       LEFT JOIN sqldados.users AS UR
+                 ON UR.no = N.s11
 WHERE N.date > 20231106
   AND N.paymno = 69
   AND CASE :marca
@@ -138,7 +142,9 @@ SELECT lojaNoOri,
        valorTransf,
        observacaoTransf,
        userTransf,
-       nameTransf
+       nameTransf,
+       userReserva,
+       nameReserva
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR

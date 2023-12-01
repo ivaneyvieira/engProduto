@@ -13,6 +13,7 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfObsevacao
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSing
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUserReservado
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfAutorizada
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizadaViewModel
@@ -28,7 +29,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewModel) :
+  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfAutorizada {
   private var dlgProduto: DlgProdutosPedTransfAutorizada? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -47,6 +49,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraTrans?.toList() ?: emptyList()
   }
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
@@ -92,8 +95,11 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfNumero()
     colunaPedidoTransfSing()
     colunaPedidoTransfUsuario()
+    addColumnButton(VaadinIcon.EXCHANGE, "Reserva", "Muda para reservado") { pedido ->
+      viewModel.mudaParaReservado(pedido)
+    }
     colunaPedidoTransfSituacaoPedido()
-    colunaPedidoTransfObsevacao()
+    colunaPedidoTransfUserReservado()
   }
 
   override fun filtro(marca: EMarcaPedido): FiltroPedidoTransf {

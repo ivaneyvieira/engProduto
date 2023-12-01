@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.exec
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
@@ -98,6 +99,17 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
   fun previewPedido(pedido: PedidoTransf) {
     val relatorio = RequisicaoTransferencia(pedido)
     relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview())
+  }
+
+  fun mudaParaReservado(pedido: PedidoTransf)= viewModel.exec {
+    val situação = pedido.situacao ?: fail("Pedido sem situação")
+    if(situação != 1) fail("Pedido não está orçado")
+
+    viewModel.view.showQuestion("Confirma a mudança para reservado?") {
+      val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
+      pedido.mudaParaReservado(user.no)
+      updateView()
+    }
   }
 
   val subView

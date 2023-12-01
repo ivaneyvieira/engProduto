@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -36,7 +37,9 @@ class PedidoTransf(
   var valorTransf: Double?,
   var observacaoTransf: String?,
   var userTransf: Int?,
-  var nameTransf: String?
+  var nameTransf: String?,
+  var userReserva: Int?,
+  var nameReserva: String?,
 ) {
   val situacaoPedido
     get() = when (situacao) {
@@ -91,6 +94,10 @@ class PedidoTransf(
     val printerOrigem = Impressora.findImpressora(lojaNoOri)
     val printerDestino = Impressora.findImpressora(lojaNoDes)
     return listOfNotNull(printerOrigem, printerDestino).map { it.name }
+  }
+
+  fun mudaParaReservado(user: Int) {
+    saci.mudaParaReservado(lojaNoOri, ordno?.toIntOrNull() ?: 0, user)
   }
 
   companion object {
