@@ -43,7 +43,7 @@ class PedidoTransf(
 ) {
 
   private fun extrairNumeros(str: String): List<Int> {
-    val regex = "\\d+".toRegex()
+    val regex = "^\\d+".toRegex()
     return regex.findAll(str).mapNotNull { it.value.toIntOrNull() }.toList()
   }
 
