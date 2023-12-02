@@ -20,20 +20,20 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
       negrito = true
     )
     println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
-    //println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
-    //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
-    //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
     println("Self Color: ${nota.selfColor ?: ""}", negrito = true)
     println("".padEnd(64, '-'))
   }
 
   override fun printSumary() {
-    val lengthEntregue = (nota.entregue ?: "").length
-    val entregue = if (lengthEntregue >= 31) (nota.entregue ?: "").substring(0, 31) else nota.entregue ?: ""
+    val entregueRelatorio = nota.entregueRelatorio()
+    val lengthEntregue = (entregueRelatorio ?: "").length
+    val entregue = if (lengthEntregue >= 31) entregueRelatorio.substring(0, 31) else entregueRelatorio
     val margemEntregue = (31 - entregue.length) / 2
-    val lengthRecebido = (nota.recebido ?: "").length
-    val recebido = if (lengthRecebido >= 31) (nota.recebido ?: "").substring(0, 31) else nota.recebido ?: ""
+    val campoRecebido = nota.recebidoRelatorio()
+    val recebidoRelatorio = campoRecebido.value
+    val lengthRecebido = recebidoRelatorio.length
+    val recebido = if (lengthRecebido >= 31) (recebidoRelatorio).substring(0, 31) else recebidoRelatorio
     val margemRecebido = (31 - recebido.length) / 2
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
@@ -46,7 +46,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("")
     println("_______________________________  _______________________________")
     println("${" ".repeat(margemEntregue)}$entregue${" ".repeat(margemEntregue)}  ${" ".repeat(margemRecebido)}$recebido")
-    println("            Entregue                        Recebido")
+    println("            Entregue                     ${campoRecebido.label}")
     println("")
     println("")
   }

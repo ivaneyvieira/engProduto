@@ -12,6 +12,7 @@ class PedidoTransf(
   var lojaDestino: String?,
   var rota: String?,
   var cliente: Int?,
+  var clienteNome: String?,
   var userno: Int?,
   var usuario: String?,
   var data: LocalDate?,
@@ -40,6 +41,18 @@ class PedidoTransf(
   var userReserva: Int?,
   var nameReserva: String?,
 ) {
+
+  private fun extrairNumeros(str: String): List<Int> {
+    val regex = "\\d+".toRegex()
+    return regex.findAll(str).mapNotNull { it.value.toIntOrNull() }.toList()
+  }
+
+  fun entregueRelatorio(): String {
+    val listNumero = extrairNumeros(entregue ?: "")
+    return if (listNumero.isEmpty()) entregue ?: ""
+    else saci.findAllUser().firstOrNull { listNumero.contains(it.no) }?.name ?: entregue ?: ""
+  }
+
   val situacaoPedido
     get() = when (situacao) {
       0    -> "Incluído"
@@ -97,6 +110,23 @@ class PedidoTransf(
     saci.mudaParaReservado(lojaNoOri, ordno?.toIntOrNull() ?: 0, user)
   }
 
+  fun recebidoRelatorio(): CampoRelatorio {
+    val recebidoStr = recebido?.trim() ?: ""
+    return if (recebidoStr.startsWith("CLIENTE", ignoreCase = true)) {
+      val splitReferente = referente?.split(" ") ?: emptyList()
+      val nota = splitReferente.getOrNull(1)?.trim() ?: ""
+      val splitNota = nota.split("/")
+      val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
+      val serie = splitNota.getOrNull(1)?.trim() ?: ""
+      val notaSaida =
+          saci.findNota(numero, serie, data ?: LocalDate.now()) ?: return CampoRelatorio("Recebido", recebidoStr)
+      return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
+      else CampoRelatorio("Recebido CLiente", notaSaida.nomeCliente ?: "")
+    } else {
+      CampoRelatorio("Recebido", recebidoStr)
+    }
+  }
+
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
   }
@@ -113,3 +143,5 @@ data class FiltroPedidoTransf(
 )
 
 data class Rota(val lojaOrigem: Int, val lojaDestino: Int)
+
+data class CampoRelatorio(val label: String, val value: String)

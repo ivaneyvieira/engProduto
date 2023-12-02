@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
+import java.time.LocalDate
 
 class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): List<UserSaci> {
@@ -301,6 +302,15 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("impresso", filtro.impresso.let { if (it == null) "T" else if (it) "S" else "N" })
     }
+  }
+
+  fun findNota(nfno: Int, nfse: String, date: LocalDate): Nota? {
+    val sql = "/sqlSaci/findNota.sql"
+    return query(sql, Nota::class) {
+      addOptionalParameter("nfno", nfno)
+      addOptionalParameter("nfse", nfse)
+      addOptionalParameter("data", date.toSaciDate())
+    }.firstOrNull()
   }
 
   fun findPedidoRessu4(filtro: FiltroPedidoRessu4): List<TransfRessu4> {
