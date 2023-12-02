@@ -58,7 +58,8 @@ class SubWindowPrinter(
               if (rota == null) {
                 Impressora.allTermica().map { it.name }
               } else {
-                Impressora.allTermica().map { it.name } + Impressora.ROTA.name + Impressora.PISO.name
+                Impressora.allTermica()
+                  .map { it.name } + Impressora.ROTA.name + Impressora.PISO.name + Impressora.RESSU4.name
               }
           val lista =
               when {

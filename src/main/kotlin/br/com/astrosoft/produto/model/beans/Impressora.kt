@@ -8,16 +8,17 @@ class Impressora(var no: Int, var name: String) {
     fun allTermica() = all().filter { it.name.contains("Termica", ignoreCase = true) }
     fun findImpressora(loja: Int?, tipoRota: ETipoRota): Impressora? {
       loja ?: return null
-      val impressoras = allTermica()
       return if (loja == 4) {
         findImpressora(tipoRota.impressora)
       } else {
+        val impressoras = allTermica()
         impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
       }
     }
 
     fun findImpressora(printerName: String): Impressora? {
-      return all().firstOrNull { it.name.uppercase() == printerName.uppercase() }
+      val listaImpressoras = all() + listOf(TODAS, ROTA, PISO, RESSU4)
+      return listaImpressoras.firstOrNull { it.name.uppercase() == printerName.uppercase() }
     }
 
     val TODAS = Impressora(0, "Todas")
