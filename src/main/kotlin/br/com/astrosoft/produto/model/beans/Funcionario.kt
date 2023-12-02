@@ -1,3 +1,3 @@
 package br.com.astrosoft.produto.model.beans
 
-class Funcionario(var codigo: Int, var nome: String)
+class Funcionario(var codigo: Int?, var nome: String?, var funcao: String?)

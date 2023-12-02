@@ -6,7 +6,6 @@ import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 import kotlin.reflect.KProperty1
 
 abstract class PrintText<T>(val widthPage: Int = 64) {
@@ -115,8 +114,19 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     })
   }
 
-  protected fun printLine(character: Char) {
+  protected fun printLine(character: Char = '-') {
     textBuffer.println(character.toString().repeat(widthPage))
+  }
+
+  protected fun String?.center(width: Int): String {
+    if (this == null) return " ".repeat(width)
+    val margem = (width - this.length) / 2
+    val margemEsquerda = if (margem < 0) 0 else margem
+    val parte1 = " ".repeat(margemEsquerda) + this
+    val resto = width - parte1.length
+    val margemDireita = if (resto < 0) 0 else resto
+    val text = parte1 + " ".repeat(margemDireita)
+    return if (text.length >= width) text.substring(0, width) else text.padEnd(width, ' ')
   }
 }
 

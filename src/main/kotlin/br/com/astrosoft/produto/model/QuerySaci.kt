@@ -115,10 +115,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun listFuncionario(codigo: String): Funcionario? {
+  fun listFuncionario(codigo: Int): Funcionario? {
     val sql = "/sqlSaci/listFuncionario.sql"
     return query(sql, Funcionario::class) {
-      addOptionalParameter("codigo", codigo.toIntOrNull() ?: 0)
+      addOptionalParameter("codigo", codigo)
     }.firstOrNull()
   }
 

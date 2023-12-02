@@ -44,9 +44,9 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     println("Autorizacao no Sistema", center = true)
     println("")
     println("")
-    println("_______________________________  _______________________________")
-    println("${" ".repeat(margemEntregue)}$entregue${" ".repeat(margemEntregue)}  ${" ".repeat(margemRecebido)}$recebido")
-    println("            Entregue                     ${campoRecebido.label}")
+    println("_______________________________".center(32) + "_______________________________".center(32))
+    println("${entregue.center(32)}${recebido.center(32)}")
+    println("Entregue".center(32) + campoRecebido.label.center(32))
     println("")
     println("")
   }

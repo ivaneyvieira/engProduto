@@ -113,18 +113,38 @@ class PedidoTransf(
   fun recebidoRelatorio(): CampoRelatorio {
     val recebidoStr = recebido?.trim() ?: ""
     return if (recebidoStr.startsWith("CLIENTE", ignoreCase = true)) {
-      val splitReferente = referente?.split(" ") ?: emptyList()
-      val nota = splitReferente.getOrNull(1)?.trim() ?: ""
-      val splitNota = nota.split("/")
-      val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
-      val serie = splitNota.getOrNull(1)?.trim() ?: ""
-      val notaSaida =
-          saci.findNota(numero, serie, data ?: LocalDate.now()) ?: return CampoRelatorio("Recebido", recebidoStr)
-      return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
-      else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
+      campoRelatorioCliente(recebidoStr)
+    } else if (recebidoStr.startsWithNumber()) {
+      val numero = recebidoStr.split(" ").firstOrNull()?.toIntOrNull()
+      if (numero == null)
+        CampoRelatorio("Recebido", recebidoStr)
+      else {
+        val funcionario = saci.listFuncionario(numero)
+        if (funcionario == null)
+          CampoRelatorio("Recebido", recebidoStr)
+        else
+          CampoRelatorio("Recebido pelo ${funcionario.funcao}", funcionario.nome ?: "")
+      }
     } else {
       CampoRelatorio("Recebido", recebidoStr)
     }
+  }
+
+  fun String.startsWithNumber(): Boolean {
+    val regex = "^\\d+".toRegex()
+    return regex.matches(this)
+  }
+
+  private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
+    val splitReferente = referente?.split(" ") ?: emptyList()
+    val nota = splitReferente.getOrNull(1)?.trim() ?: ""
+    val splitNota = nota.split("/")
+    val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
+    val serie = splitNota.getOrNull(1)?.trim() ?: ""
+    val notaSaida =
+        saci.findNota(numero, serie, data ?: LocalDate.now()) ?: return CampoRelatorio("Recebido", recebidoStr)
+    return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
+    else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
   }
 
   companion object {
