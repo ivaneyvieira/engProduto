@@ -121,7 +121,7 @@ class PedidoTransf(
       val notaSaida =
           saci.findNota(numero, serie, data ?: LocalDate.now()) ?: return CampoRelatorio("Recebido", recebidoStr)
       return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
-      else CampoRelatorio("Recebido CLiente", notaSaida.nomeCliente ?: "")
+      else CampoRelatorio("Recebido Cliente", notaSaida.nomeCliente ?: "")
     } else {
       CampoRelatorio("Recebido", recebidoStr)
     }
