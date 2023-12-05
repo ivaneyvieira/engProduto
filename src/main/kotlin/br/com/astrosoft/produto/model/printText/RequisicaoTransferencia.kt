@@ -27,7 +27,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
 
   override fun printSumary() {
     val entregueRelatorio = nota.entregueRelatorio()
-    val lengthEntregue = (entregueRelatorio ?: "").length
+    val lengthEntregue = entregueRelatorio.length
     val entregue = if (lengthEntregue >= 31) entregueRelatorio.substring(0, 31) else entregueRelatorio
     val campoRecebido = nota.recebidoRelatorio()
     val recebidoRelatorio = campoRecebido.value
