@@ -39,6 +39,14 @@ class SubWindowPrinter(
     this.html(PrinterToHtml.toHtml(text))
   }
 
+  private fun imprimeText(text: String, impressora: String) {
+    val printer = PrinterCups(impressora)
+    printer.print(text)
+    if (!impressora.startsWith("EXP3", ignoreCase = true)) {
+      PrinterCups("Conf3.Termica").print(text)
+    }
+  }
+
   init {
     File("/tmp/relatorio.txt").writeText(text)
 
@@ -83,13 +91,11 @@ class SubWindowPrinter(
                 val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
                 val printerRota = listOf(impressoraOrigem, impressoraDestino)
                 printerRota.forEach { printer ->
-                  val printerCups = PrinterCups(printer)
-                  printerCups.print(text)
+                  imprimeText(text, printer)
                 }
                 printEvent(printerRota.firstOrNull() ?: "")
               } else {
-                val printer = PrinterCups(impressora)
-                printer.print(text)
+                imprimeText(text, impressora)
                 printEvent(impressora)
               }
               this@SubWindowPrinter.close()
