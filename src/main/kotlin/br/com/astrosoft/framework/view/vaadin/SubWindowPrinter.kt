@@ -42,7 +42,12 @@ class SubWindowPrinter(
   private fun imprimeText(text: String, impressora: String) {
     val printer = PrinterCups(impressora)
     printer.print(text)
-    if (!impressora.startsWith("EXP3", ignoreCase = true)) {
+    if (impressora.startsWith("EXP2", ignoreCase = true) ||
+        impressora.startsWith("EXP4", ignoreCase = true) ||
+        impressora.startsWith("EXP5", ignoreCase = true) ||
+        impressora.startsWith("EXP8", ignoreCase = true) ||
+        impressora.startsWith("CD5A", ignoreCase = true)
+    ) {
       PrinterCups("Conf3.Termica").print(text)
     }
   }
