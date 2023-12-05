@@ -29,12 +29,10 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     val entregueRelatorio = nota.entregueRelatorio()
     val lengthEntregue = (entregueRelatorio ?: "").length
     val entregue = if (lengthEntregue >= 31) entregueRelatorio.substring(0, 31) else entregueRelatorio
-    val margemEntregue = (31 - entregue.length) / 2
     val campoRecebido = nota.recebidoRelatorio()
     val recebidoRelatorio = campoRecebido.value
     val lengthRecebido = recebidoRelatorio.length
     val recebido = if (lengthRecebido >= 31) (recebidoRelatorio).substring(0, 31) else recebidoRelatorio
-    val margemRecebido = (31 - recebido.length) / 2
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
