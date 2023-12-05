@@ -48,13 +48,14 @@ class PedidoTransf(
   }
 
   fun entregueRelatorio(): String {
-    return if(nameTransf.isNullOrEmpty()) {
+    /*return if(nameTransf.isNullOrEmpty()) {
       val numero = extrairNumeros(entregue ?: "").firstOrNull()
       if (numero == null) entregue ?: ""
       else saci.findAllUser().firstOrNull { it.no == numero }?.name ?: ""
     }else {
       nameTransf ?: ""
-    }
+    }*/
+    nameTransf ?: ""
   }
 
   val situacaoPedido
