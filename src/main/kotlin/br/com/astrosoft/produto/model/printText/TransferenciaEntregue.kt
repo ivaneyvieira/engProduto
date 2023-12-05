@@ -29,10 +29,13 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
   }
 
   override fun printSumary() {
-    val entregue = nota.entregue ?: ""
-    val margemEntregue = (31 - entregue.length) / 2
-    val recebido = nota.recebido ?: ""
-    val margemRecebido = (31 - recebido.length) / 2
+    val entregueRelatorio = nota.entregueRelatorio()
+    val lengthEntregue = entregueRelatorio.length
+    val entregue = if (lengthEntregue >= 31) entregueRelatorio.substring(0, 31) else entregueRelatorio
+    val campoRecebido = nota.recebidoRelatorio()
+    val recebidoRelatorio = campoRecebido.value
+    val lengthRecebido = recebidoRelatorio.length
+    val recebido = if (lengthRecebido >= 31) (recebidoRelatorio).substring(0, 31) else recebidoRelatorio
     println("")
     println("DOCUMENTO NAO FISCAL", center = true)
     println("")
@@ -42,9 +45,9 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
     println("Autorizacao no Sistema", center = true)
     println("")
     println("")
-    println("_______________________________  _______________________________")
-    println("${" ".repeat(margemEntregue)}$entregue${" ".repeat(margemEntregue)}  ${" ".repeat(margemRecebido)}$recebido")
-    println("            Entregue                        Recebido")
+    println("_______________________________".center(32) + "_______________________________".center(32))
+    println("${entregue.center(32)}${recebido.center(32)}")
+    println("Entregue".center(32) + campoRecebido.label.center(32))
     println("")
     println("")
   }
