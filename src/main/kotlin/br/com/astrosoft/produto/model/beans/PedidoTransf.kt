@@ -43,7 +43,7 @@ class PedidoTransf(
 ) {
 
   private fun extrairNumeros(str: String): List<Int> {
-    val regex = "^\\d+".toRegex()
+    val regex = "\\d+".toRegex()
     return regex.findAll(str).mapNotNull { it.value.toIntOrNull() }.toList()
   }
 
@@ -119,8 +119,8 @@ class PedidoTransf(
     val recebidoStr = recebido?.trim() ?: ""
     return if (recebidoStr.startsWith("CLIENTE", ignoreCase = true)) {
       campoRelatorioCliente(recebidoStr)
-    } else if (recebidoStr.startsWithNumber()) {
-      val numero = recebidoStr.split(" ").firstOrNull()?.toIntOrNull()
+    } else if (recebidoStr.containNumber()) {
+      val numero = extrairNumeros(recebidoStr).firstOrNull()
       if (numero == null)
         CampoRelatorio("Recebido", recebidoStr)
       else {
@@ -135,8 +135,8 @@ class PedidoTransf(
     }
   }
 
-  fun String.startsWithNumber(): Boolean {
-    val regex = "^\\d+".toRegex()
+  fun String.containNumber(): Boolean {
+    val regex = "\\d+".toRegex()
     return regex.matches(this)
   }
 
