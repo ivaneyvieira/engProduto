@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.model.printText.PrinterToHtml
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.style
-import br.com.astrosoft.produto.model.beans.Impressora
-import br.com.astrosoft.produto.model.beans.Rota
-import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.model.beans.tipoRota
+import br.com.astrosoft.produto.model.beans.*
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
@@ -42,14 +39,6 @@ class SubWindowPrinter(
   private fun imprimeText(text: String, impressora: String) {
     val printer = PrinterCups(impressora)
     printer.print(text)
-    if (impressora.startsWith("EXP2", ignoreCase = true) ||
-        impressora.startsWith("EXP4", ignoreCase = true) ||
-        impressora.startsWith("EXP5", ignoreCase = true) ||
-        impressora.startsWith("EXP8", ignoreCase = true) ||
-        impressora.startsWith("CD5A", ignoreCase = true)
-    ) {
-      PrinterCups("Conf3.Termica").print(text)
-    }
   }
 
   init {
@@ -72,14 +61,14 @@ class SubWindowPrinter(
                 Impressora.allTermica().map { it.name }
               } else {
                 Impressora.allTermica()
-                  .map { it.name } + Impressora.ROTA.name + Impressora.PISO.name + Impressora.RESSU4.name
+                  .map { it.name } + ETipoRota.entries.map { it.nome }
               }
           val lista =
               when {
-                userSaci?.admin == true                     -> allPrinter
-                printerUser.contains(Impressora.TODAS.name) -> allPrinter
-                printerUser.isEmpty()                       -> emptyList()
-                else                                        -> printerUser
+                userSaci?.admin == true                    -> allPrinter
+                printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                printerUser.isEmpty()                      -> emptyList()
+                else                                       -> printerUser
               }
           setItems(lista)
 

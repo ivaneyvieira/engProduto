@@ -17,26 +17,25 @@ class Impressora(var no: Int, var name: String) {
     }
 
     fun findImpressora(printerName: String): Impressora? {
-      val listaImpressoras = all() + listOf(TODAS, ROTA, PISO, RESSU4)
+      val listaImpressoras = all() + ETipoRota.entries.map { it.impressora() }
       return listaImpressoras.firstOrNull { it.name.uppercase() == printerName.uppercase() }
     }
-
-    val TODAS = Impressora(0, "Todas")
-    val ROTA = Impressora(9999, "Rota")
-    val PISO = Impressora(8888, "Piso")
-    val RESSU4 = Impressora(7777, "Ressu4")
   }
 }
 
-enum class ETipoRota(val impressora: String) {
-  ROTA("Exp4.Termica"), PISO("CD5A.Termica"), RESSU4("Ressu4.Termica")
+enum class ETipoRota(val numero: Int, val nome: String, val impressora: String) {
+  TODAS(numero = 0, nome = "Todas", impressora = ""),
+  ROTA(numero = 9999, nome = "Rota", impressora = "Exp4.Termica"),
+  PISO(numero = 8888, nome = "Piso", impressora = "CD5A.Termica"),
+  RESSU4(numero = 7777, nome = "Ressu4", impressora = "Ressu4.Termica"),
+  CONF5_EXP(numero = 6666, nome = "Conf5.Exp", impressora = "Conf5.Termica"),
+  CONF5_PISO(numero = 5555, nome = "Conf5.Piso", impressora = "Conf5.Termica"),
+  CONF3_EXP(numero = 4444, nome = "Conf3.Exp", impressora = "Conf3.Termica"),
+  CONF3_PISO(numero = 3333, nome = "Conf3.Piso", impressora = "Conf3.Termica");
+
+  fun impressora() = Impressora(numero, nome)
 }
 
 fun Impressora.tipoRota(): ETipoRota? {
-  return when (no) {
-    9999 -> ETipoRota.ROTA
-    8888 -> ETipoRota.PISO
-    7777 -> ETipoRota.RESSU4
-    else -> null
-  }
+  return ETipoRota.entries.firstOrNull { it.numero == no }
 }
