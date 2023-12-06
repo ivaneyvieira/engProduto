@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.beans.ETipoRota.*
 import br.com.astrosoft.produto.model.saci
 
 class Impressora(var no: Int, var name: String) {
@@ -7,12 +8,34 @@ class Impressora(var no: Int, var name: String) {
     fun all() = saci.findImpressoras()
     fun allTermica() = all().filter { it.name.contains("Termica", ignoreCase = true) }
     fun findImpressora(loja: Int?, tipoRota: ETipoRota): Impressora? {
+      val impressoras = allTermica()
       loja ?: return null
-      return if (loja == 4) {
-        findImpressora(tipoRota.impressora)
-      } else {
-        val impressoras = allTermica()
-        impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
+      return when (tipoRota) {
+        PISO, ROTA            -> {
+          if (loja == 4) {
+            tipoRota.impressoraRota()
+          } else {
+            impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
+          }
+        }
+
+        CONF3_EXP, CONF3_PISO -> {
+          if (loja == 3) {
+            tipoRota.impressoraRota()
+          } else {
+            impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
+          }
+        }
+
+        CONF5_EXP, CONF5_PISO -> {
+          if (loja == 5) {
+            tipoRota.impressoraRota()
+          } else {
+            impressoras.firstOrNull { it.name.contains("exp$loja", ignoreCase = true) }
+          }
+        }
+
+        else                  -> null
       }
     }
 
@@ -34,6 +57,7 @@ enum class ETipoRota(val numero: Int, val nome: String, val impressora: String) 
   CONF3_PISO(numero = 3333, nome = "Conf3.Piso", impressora = "Conf3.Termica");
 
   fun impressora() = Impressora(numero, nome)
+  fun impressoraRota() = Impressora(numero, impressora)
 }
 
 fun Impressora.tipoRota(): ETipoRota? {
