@@ -136,8 +136,7 @@ class PedidoTransf(
   }
 
   fun String.containNumber(): Boolean {
-    val regex = "\\d+".toRegex()
-    return regex.matches(this)
+    return extrairNumeros(this).isNotEmpty()
   }
 
   private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
