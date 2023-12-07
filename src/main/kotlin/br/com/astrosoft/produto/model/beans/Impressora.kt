@@ -48,9 +48,9 @@ class Impressora(var no: Int, var name: String) {
 
 enum class ETipoRota(val numero: Int, val nome: String, val impressora: String) {
   TODAS(numero = 0, nome = "Todas", impressora = ""),
-  ROTA(numero = 9999, nome = "Rota", impressora = "Exp4.Termica"),
-  PISO(numero = 8888, nome = "Piso", impressora = "CD5A.Termica"),
-  RESSU4(numero = 7777, nome = "Ressu4", impressora = "Ressu4.Termica"),
+  ROTA(numero = 9999, nome = "Exp.Exp", impressora = "Exp4.Termica"),
+  PISO(numero = 8888, nome = "Exp.Piso", impressora = "CD5A.Termica"),
+  RESSU4(numero = 7777, nome = "Exp.Ressu4", impressora = "Ressu4.Termica"),
   CONF5_EXP(numero = 6666, nome = "Conf5.Exp", impressora = "Conf5.Termica"),
   CONF5_PISO(numero = 5555, nome = "Conf5.Piso", impressora = "Conf5.Termica"),
   CONF3_EXP(numero = 4444, nome = "Conf3.Exp", impressora = "Conf3.Termica"),
