@@ -13,7 +13,7 @@ class PrinterCups(private val printerName: String) : IPrinter {
     try {
       CupsUtils.printCups(printerName, text)
     } catch (e: ConnectTimeoutException) {
-      //TODO
+      e.printStackTrace()
     }
   }
 }
