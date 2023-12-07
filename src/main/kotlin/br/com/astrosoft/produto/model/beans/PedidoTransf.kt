@@ -48,13 +48,6 @@ class PedidoTransf(
   }
 
   fun entregueRelatorio(): String {
-    /*return if(nameTransf.isNullOrEmpty()) {
-      val numero = extrairNumeros(entregue ?: "").firstOrNull()
-      if (numero == null) entregue ?: ""
-      else saci.findAllUser().firstOrNull { it.no == numero }?.name ?: ""
-    }else {
-      nameTransf ?: ""
-    }*/
     return nameTransf ?: ""
   }
 
@@ -139,17 +132,22 @@ class PedidoTransf(
     return extrairNumeros(this).isNotEmpty()
   }
 
-  private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
+  private fun findNotaVenda(): Nota? {
     val splitReferente = referente?.split(" ") ?: emptyList()
     val nota = splitReferente.getOrNull(1)?.trim() ?: ""
     val splitNota = nota.split("/")
     val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
     val serie = splitNota.getOrNull(1)?.trim() ?: ""
-    val notaSaida =
-        saci.findNota(numero, serie, data ?: LocalDate.now()) ?: return CampoRelatorio("Recebido", recebidoStr)
+    return saci.findNota(numero, serie, data ?: LocalDate.now())
+  }
+
+  private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
+    val notaSaida = findNotaVenda() ?: return CampoRelatorio("Recebido", recebidoStr)
     return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
     else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
   }
+
+  fun nomeVendedor() = findNotaVenda()?.nomeVendedor ?: ""
 
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)

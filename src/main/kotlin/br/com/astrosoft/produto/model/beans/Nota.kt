@@ -8,4 +8,6 @@ class Nota(
   var data: LocalDate?,
   var cliente: Int?,
   var nomeCliente: String?,
+  var vendedor: Int?,
+  var nomeVendedor: String?,
 )

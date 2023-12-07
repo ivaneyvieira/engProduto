@@ -24,6 +24,7 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
     //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
     //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
+    println("Vendedor (a): ${nota.nomeVendedor()}", negrito = true)
     println("Self Color: ${nota.selfColor ?: ""}", negrito = true)
     println("".padEnd(64, '-'))
   }
