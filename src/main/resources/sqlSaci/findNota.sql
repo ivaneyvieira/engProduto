@@ -10,7 +10,7 @@ FROM sqldados.nf AS N
                   ON N.custno = C.no
        LEFT JOIN sqldados.emp AS V
                  ON V.no = N.empno
-WHERE N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+WHERE N.storeno = :loja
   AND N.nfno = :nfno
   AND N.nfse = :nfse
   AND N.issuedate <= :data

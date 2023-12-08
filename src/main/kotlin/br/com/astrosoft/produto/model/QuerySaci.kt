@@ -304,9 +304,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNota(nfno: Int, nfse: String, date: LocalDate): Nota? {
+  fun findNota(loja: Int, nfno: Int, nfse: String, date: LocalDate): Nota? {
     val sql = "/sqlSaci/findNota.sql"
     return query(sql, Nota::class) {
+      addOptionalParameter("loja", loja)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
       addOptionalParameter("data", date.toSaciDate())

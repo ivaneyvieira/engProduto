@@ -133,12 +133,14 @@ class PedidoTransf(
   }
 
   private fun findNotaVenda(): Nota? {
+    val loja = lojaNoDes ?: return null
+
     val splitReferente = referente?.split(" ") ?: emptyList()
     val nota = splitReferente.getOrNull(1)?.trim() ?: ""
     val splitNota = nota.split("/")
     val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
     val serie = splitNota.getOrNull(1)?.trim() ?: ""
-    return saci.findNota(numero, serie, data ?: LocalDate.now())
+    return saci.findNota(loja, numero, serie, data ?: LocalDate.now())
   }
 
   private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
@@ -147,7 +149,7 @@ class PedidoTransf(
     else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
   }
 
-  fun nomeVendedor(): String{
+  fun nomeVendedor(): String {
     val nota = findNotaVenda() ?: return ""
     return "${nota.vendedor} - ${nota.nomeVendedor}"
   }
