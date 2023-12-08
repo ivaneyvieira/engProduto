@@ -147,7 +147,10 @@ class PedidoTransf(
     else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
   }
 
-  fun nomeVendedor() = findNotaVenda()?.nomeVendedor ?: ""
+  fun nomeVendedor(): String{
+    val nota = findNotaVenda() ?: return ""
+    return "${nota.vendedor} - ${nota.nomeVendedor}"
+  }
 
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
