@@ -10,9 +10,9 @@ FROM sqldados.nf AS N
                   ON N.custno = C.no
        LEFT JOIN sqldados.emp AS V
                  ON V.no = N.empno
-WHERE N.storeno = :loja
+WHERE N.storeno IN (2, 3, 4, 5, 6, 8)
   AND N.nfno = :nfno
   AND N.nfse = :nfse
-  AND N.issuedate <= ADDDATE(:data, 2)*1
+  AND N.issuedate <= ADDDATE(:data, 2) * 1
 ORDER BY N.issuedate DESC
 LIMIT 1
