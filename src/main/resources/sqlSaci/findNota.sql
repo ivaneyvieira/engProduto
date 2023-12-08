@@ -13,6 +13,6 @@ FROM sqldados.nf AS N
 WHERE N.storeno = :loja
   AND N.nfno = :nfno
   AND N.nfse = :nfse
-  AND N.issuedate <= :data
+  AND N.issuedate <= ADDDATE(:data, 2)*1
 ORDER BY N.issuedate DESC
 LIMIT 1
