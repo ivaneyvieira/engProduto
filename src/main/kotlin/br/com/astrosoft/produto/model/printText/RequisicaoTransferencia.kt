@@ -21,7 +21,7 @@ class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoT
     )
     println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
     println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
-    println("Vendedor (a): ${nota.nomeVendedor()}", negrito = true)
+    println("Vendedor (a): ${nota.vendedor} - ${nota.nomeVendedor()}", negrito = true)
     println("Self Color: ${nota.selfColor ?: ""}", negrito = true)
     println("".padEnd(64, '-'))
   }
