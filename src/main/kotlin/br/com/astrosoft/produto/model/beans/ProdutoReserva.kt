@@ -22,7 +22,7 @@ class ProdutoReserva(
   var clname: String?,
   var localizacao: String?,
                     ) {
-  fun pedido(): Pedido = Pedido(loja, pedido, data, cliente, empno)
+  fun pedido(): DadosPedido = DadosPedido(loja, pedido, data, cliente, empno)
 
   companion object {
     fun find(filtro: FiltroProduto): List<ProdutoReserva> {

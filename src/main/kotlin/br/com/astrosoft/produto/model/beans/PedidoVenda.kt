@@ -32,11 +32,11 @@ class PedidoVenda(var loja: Int,
   fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userLocais())
 
   companion object {
-    fun findVenda(filtro: FiltroPedido) = saci.findPedidoVenda(filtro, userLocais())
+    fun findVenda(filtro: FiltroPedidoVenda) = saci.findPedidoVenda(filtro, userLocais())
   }
 }
 
-data class FiltroPedido(val storeno: Int, val ordno: Int, val marca: EMarcaPedido)
+data class FiltroPedidoVenda(val storeno: Int, val ordno: Int, val marca: EMarcaPedido)
 
 enum class EMarcaPedido(val num: Int, val descricao: String) {
   CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")

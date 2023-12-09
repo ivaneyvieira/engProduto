@@ -4,11 +4,15 @@ import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.util.parserDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
 import java.time.LocalDate
+import java.time.LocalTime
+import java.util.*
 
 class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): List<UserSaci> {
@@ -157,7 +161,7 @@ class QuerySaci : QueryDB(database) {
     })
   }
 
-  fun statusPedido(pedido: Pedido, status: EStatusPedido) {
+  fun statusPedido(pedido: DadosPedido, status: EStatusPedido) {
     val sql = "/sqlSaci/expiraPedido.sql"
     script(sql) {
       addOptionalParameter("loja", pedido.loja)
@@ -281,7 +285,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findPedidoVenda(filtro: FiltroPedido, locais: List<String>): List<PedidoVenda> {
+  fun findPedidoVenda(filtro: FiltroPedidoVenda, locais: List<String>): List<PedidoVenda> {
     val sql = "/sqlSaci/findPedidoVenda.sql"
     return query(sql, PedidoVenda::class) {
       addOptionalParameter("marca", filtro.marca.num)
@@ -550,6 +554,102 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", storeno)
       addOptionalParameter("ordno", ordno)
       addOptionalParameter("user", user)
+    }
+  }
+
+  fun ativaMarca(storeno: Int, ordno: Int, marca: String) {
+    val sql = "/sqlSaci/ativaMarca.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("marca", marca)
+    }
+  }
+
+  fun marcaSeparado(storeno: Int, ordno: Int, marca: String) {
+    val sql = "/sqlSaci/marcaSeparado.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("marca", marca)
+    }
+  }
+
+  fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?) {
+    val sql = "/sqlSaci/ativaDataHoraImpressao.sql"
+    script(sql) {
+      addParameter("storeno", storeno)
+      addParameter("ordno", ordno)
+      addParameter("data", data?.toSaciDate() ?: 0)
+      addParameter("hora", hora ?: LocalTime.MIN)
+    }
+  }
+
+  fun produtoPedido(storeno: Int, ordno: Int, tipo: String): List<ProdutoPedido> {
+    val sql = "/sqlSaci/produtoPedido.sql"
+    return query(sql, ProdutoPedido::class) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("tipo", tipo)
+    }
+  }
+
+  fun marcaCarga(storeno: Int, ordno: Int, carga: EZonaCarga, entrega: LocalDate?) {
+    val sql = "/sqlSaci/marcaCarga.sql"
+    val dataEntrega = entrega.toSaciDate().toString()
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("marca", carga.codigo.toString())
+      addOptionalParameter("entrega", dataEntrega)
+    }
+  }
+
+  fun listaPedido(filtro: FiltroPedido): List<Pedido> {
+    val sql = "/sqlSaci/listaPedido.sql"
+    val storeno = (AppConfig.userLogin() as? UserSaci)?.storeno ?: 0
+    val ec = if (filtro.ecommerce) "S" else "N"
+
+    val dataInicial = filtro.dataInicial.toSaciDate()
+    val dataFinal = filtro.dataFinal.toSaciDate()
+
+    val pesquisa = filtro.pesquisa.trim()
+    val filtroInt = pesquisa.toIntOrNull() ?: 0
+    val filtroData = pesquisa.parserDate().toSaciDate()
+    val filtroCD =
+        if ((pesquisa.startsWith("CD", ignoreCase = true) || pesquisa.startsWith(
+            "EXP",
+            ignoreCase = true
+          )) && pesquisa.length in listOf(
+            3,
+            4
+          )
+        ) pesquisa.uppercase(Locale.getDefault())
+        else ""
+    val filtroStr = if (filtroInt == 0 && filtroData == 0 && filtroCD == "") pesquisa else ""
+    val filtroLoja = filtroInt
+    val filtroPedido = filtroInt
+    val filtroArea = filtroStr
+    val filtroRota = filtroStr
+    val filtroFat = filtroInt
+    val filtroPiso = filtroInt
+    val filtroVend = filtroInt
+
+    return query(sql, Pedido::class) {
+      addOptionalParameter("tipo", filtro.tipo.sigla)
+      addOptionalParameter("storeno", if (filtro.tipo == ETipoPedido.ENTREGA) 0 else storeno)
+      addOptionalParameter("ecommerce", ec)
+      addOptionalParameter("dataInicial", dataInicial)
+      addOptionalParameter("dataFinal", dataFinal)
+      addOptionalParameter("filtroPedido", filtroPedido)
+      addOptionalParameter("filtroArea", filtroArea)
+      addOptionalParameter("filtroRota", filtroRota)
+      addOptionalParameter("filtroFat", filtroFat)
+      addOptionalParameter("filtroData", filtroData)
+      addOptionalParameter("filtroPiso", filtroPiso)
+      addOptionalParameter("filtroVend", filtroVend)
+      addOptionalParameter("filtroLoja", filtroLoja)
+      addOptionalParameter("filtroCD", filtroCD)
     }
   }
 

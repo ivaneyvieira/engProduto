@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.FiltroProduto
-import br.com.astrosoft.produto.model.beans.Pedido
+import br.com.astrosoft.produto.model.beans.DadosPedido
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.produto.columns.ProdutoReservaColumns.produtoReservaClno
@@ -116,7 +116,7 @@ class TabProdutoReserva(val viewModel: TabProdutoReservaViewModel) :
     updateGrid(produtos)
   }
 
-  override fun pedidosSelecionado(): List<Pedido> {
+  override fun pedidosSelecionado(): List<DadosPedido> {
     return itensSelecionados().map { it.pedido() }.distinct()
   }
 
