@@ -86,16 +86,16 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         when {
           it.bean?.clno?.startsWith("01") == false -> {
             show("O produto não está no grupo de piso")
-            false
           }
+
           it.bean.tipoNota != 4                    -> {
             show("Não é uma notaSaida de edtrega futura")
-            false
           }
+
           nota.cancelada == "S"                    -> {
             show("A notaSaida está cancelada")
-            false
           }
+
           else                                     -> true
         }
       }, closeEditor = { binder ->

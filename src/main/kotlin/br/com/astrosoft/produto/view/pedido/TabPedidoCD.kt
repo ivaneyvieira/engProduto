@@ -56,8 +56,8 @@ class TabPedidoCD(val viewModel: TabPedidoCDViewModel) : TabPanelGrid<PedidoVend
     colunaPedidoVendedor()
   }
 
-  override fun filtro(marca: EMarcaPedido): FiltroPedido {
-    return FiltroPedido(storeno = edtLoja.value ?: 0, ordno = edtPedido.value ?: 0, marca = marca)
+  override fun filtro(marca: EMarcaPedido): FiltroPedidoVenda {
+    return FiltroPedidoVenda(storeno = edtLoja.value ?: 0, ordno = edtPedido.value ?: 0, marca = marca)
   }
 
   override fun updatePedidos(pedidos: List<PedidoVenda>) {

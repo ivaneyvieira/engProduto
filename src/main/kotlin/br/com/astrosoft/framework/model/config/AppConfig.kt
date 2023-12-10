@@ -45,6 +45,12 @@ object AppConfig {
     return findUser(currentUser?.username, currentUser?.hashedPassword)
   }
 
+  val isAdmin: Boolean
+    get() {
+      val user = userLogin()
+      return user?.admin ?: false
+    }
+
   fun findUser(username: String?, senha: String?): IUser? {
     username ?: return null
     senha ?: return null

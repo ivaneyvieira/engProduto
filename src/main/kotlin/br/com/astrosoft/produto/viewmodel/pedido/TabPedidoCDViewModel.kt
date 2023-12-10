@@ -73,7 +73,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
 }
 
 interface ITabPedidoCD : ITabView {
-  fun filtro(marca: EMarcaPedido): FiltroPedido
+  fun filtro(marca: EMarcaPedido): FiltroPedidoVenda
   fun updatePedidos(pedidos: List<PedidoVenda>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoPedidoVenda>

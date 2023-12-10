@@ -66,17 +66,17 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         when {
           it.bean?.clno?.startsWith("01") == false -> {
             Notification.show("O produto não está no grupo de piso")
-            false
+
           }
 
           it.bean.tipoNota != 4                    -> {
             Notification.show("Não é uma notaSaida de edtrega futura")
-            false
+
           }
 
           nota.cancelada == "S"                    -> {
             Notification.show("A notaSaida está cancelada")
-            false
+
           }
 
           else                                     -> true

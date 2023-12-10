@@ -1,63 +1,42 @@
 package br.com.astrosoft.produto.view.retira
 
-import br.com.astrosoft.AppConfig
-import br.com.astrosoft.framework.view.SubWindowPDF
-import br.com.astrosoft.framework.view.ViewLayout
-import br.com.astrosoft.framework.view.tabPanel
-import br.com.astrosoft.pedido.model.beans.Pedido
-import br.com.astrosoft.pedido.view.PedidoEntregaLayout
-import br.com.astrosoft.pedido.view.reports.RelatorioPedido
-import br.com.astrosoft.pedido.viewmodel.retira.IPedidoRetiraView
-import br.com.astrosoft.pedido.viewmodel.retira.PedidoRetiraViewModel
-import com.github.mvysny.karibudsl.v10.tabSheet
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.ViewLayout
+import br.com.astrosoft.produto.model.beans.Pedido
+import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.ProdutoLayout
+import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraView
+import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraViewModel
+import com.github.mvysny.karibudsl.v23.tabSheet
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 
-@Route(layout = PedidoEntregaLayout::class, value = "retira")
+@Route(layout = ProdutoLayout::class, value = "retira")
 @PageTitle("Retira")
 class PedidoRetiraView : ViewLayout<PedidoRetiraViewModel>(), IPedidoRetiraView {
   override val viewModel: PedidoRetiraViewModel = PedidoRetiraViewModel(this)
   override val tabRetiraImprimir = TabRetiraImprimir(viewModel.tabRetiraImprimirViewModel)
   override val tabRetiraImpressoSemNota = TabRetiraImpressoSemNota(viewModel.tabRetiraImpressoSemNotaViewModel)
-  override val tabRetiraPendente = TabRetiraPendente(viewModel.tabRetiraPendenteViewModel)
-  override val tabRetiraImpressoComNota = TabRetiraImpressoComNota(viewModel.tabRetiraImpressoComNotaViewModel)
+
+  override fun isAccept(): Boolean {
+    val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
+    return userSaci.pedidoRetira
+  }
 
   init {
-    tabSheet {
-      val user = AppConfig.userSaci
-      setSizeFull()
-      var update = true
-      if (user?.retira_imprimir == true) {
-        tabPanel(tabRetiraImprimir, update)
-        update = false
-      }
-      if (user?.retira_impressoSemNota == true) {
-        tabPanel(tabRetiraImpressoSemNota, update)
-        update = false
-      }
-      if (user?.retira_pendente == true) {
-        tabPanel(tabRetiraPendente, update)
-        update = false
-      }
-      if (user?.retira_impressoComNota == true) {
-        tabPanel(tabRetiraImpressoComNota, update)
-      }
-    }
+    addTabSheat(viewModel)
   }
 
   override fun showRelatorioPedidoMinuta(pedidos: List<Pedido>) {
-    val byteArray = RelatorioPedido.processaPedidosMinutaCompacta(pedidos)
-    showRelatorio(byteArray)
+    //TODO
   }
 
   override fun showRelatorioPedido(pedidos: List<Pedido>) {
-    val byteArray = RelatorioPedido.processaPedidosMinutaCompacta(pedidos)
-    showRelatorio(byteArray)
+    //TODO
   }
 
   private fun showRelatorio(byteArray: ByteArray) {
-    val chave = "PedidoRetira"
-    SubWindowPDF(chave, byteArray).open()
+    //TODO
   }
 }
 

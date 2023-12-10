@@ -148,6 +148,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::devCliValeTrocaProduto.name)
             }
           }
+          formLayout {
+            h4("Retira") {
+              colspan = 2
+            }
+            checkBox("Imprimir") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::retiraImprimir.name)
+            }
+            checkBox("Impresso sem Nota") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::retiraImpressoSemNota.name)
+            }
+          }
         }
       }
     }

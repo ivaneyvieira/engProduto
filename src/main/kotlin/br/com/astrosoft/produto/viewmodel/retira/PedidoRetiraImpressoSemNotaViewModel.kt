@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.retira
 
+import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.exec
 import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
 
@@ -12,7 +14,14 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
   private fun listPedidosEntregaImpressoSemNota(): List<Pedido> {
     val numPedido = subView.pedidoImpressoSemNota
     return Pedido
-      .listaPedidoImpressoSemNota(FiltroPedido(tipo = RETIRA, ecommerce = false, dataInicial = null, dataFinal = null))
+      .listaPedidoImpressoSemNota(
+        FiltroPedido(
+          tipo = ETipoPedido.RETIRA,
+          ecommerce = false,
+          dataInicial = null,
+          dataFinal = null
+        )
+      )
       .filter { pedido ->
         pedido.pedido == numPedido || numPedido == 0
       }
@@ -23,7 +32,7 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
   }
 
   fun desmarcaSemNota() = exec(viewModel.view) {
-    val pedidos = subView.itensSelecionado().ifEmpty { fail("Não há pedido selecionado") }
+    val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
     pedidos.forEach { pedido ->
       pedido.desmarcaImpresso()
     }
@@ -36,8 +45,8 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
   }
 }
 
-interface IPedidoRetiraImpressoSemNota {
+interface IPedidoRetiraImpressoSemNota : ITabView {
   fun updateGrid(itens: List<Pedido>)
-  fun itensSelecionado(): List<Pedido>
+  fun itensSelecionados(): List<Pedido>
   val pedidoImpressoSemNota: Int
 }
