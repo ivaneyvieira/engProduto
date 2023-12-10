@@ -12,62 +12,62 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class Pedido(
-  val loja: Int,
-  val nomeLoja: String,
-  val siglaLoja: String,
-  val pedido: Int,
-  val marca: String,
-  val separado: String,
-  val zonaCarga: String,
-  val entrega: LocalDate?,
-  val data: LocalDate?,
-  val dataEntrega: LocalDate?,
-  val pdvno: Int,
-  val pdvnoVenda: Int?,
-  val hora: Time?,
-  val nfnoFat: String,
-  val nfseFat: String,
-  val dataFat: LocalDate?,
-  val horaFat: Time?,
-  val valorFat: Double,
-  val nfnoEnt: String,
-  val nfseEnt: String,
-  val dataEnt: LocalDate?,
-  val horaEnt: Time?,
-  val valorEnt: Double,
-  val vendno: Int,
-  val vendedor: String,
-  val custno: Int,
-  val cliente: String,
-  val foneCliente: String,
-  val endereco: String,
-  val bairro: String,
-  val cidade: String,
-  val estado: String,
-  val enderecoEntrega: String,
-  val bairroEntrega: String,
-  val frete: Double,
-  val valor: Double,
-  val status: String,
-  val area: String,
-  val rota: String,
-  val obs: String,
-  val codArea: Int,
-  val userno: Int,
-  val username: String,
-  val dataPrint: LocalDate?,
-  val horaPrint: LocalTime?,
-  val obs1: String,
-  val obs2: String,
-  val obs3: String,
-  val obs4: String,
-  val obs5: String,
-  val obs6: String,
-  val obs7: String,
-  val tipo: String,
-  val metodo: String,
-  val piso: Int,
-  val loc: String,
+  var loja: Int,
+  var nomeLoja: String?,
+  var siglaLoja: String?,
+  var pedido: Int,
+  var marca: String?,
+  var separado: String?,
+  var zonaCarga: String?,
+  var entrega: LocalDate?,
+  var data: LocalDate?,
+  var dataEntrega: LocalDate?,
+  var pdvno: Int?,
+  var pdvnoVenda: Int?,
+  var hora: Time?,
+  var nfnoFat: String?,
+  var nfseFat: String?,
+  var dataFat: LocalDate?,
+  var horaFat: Time?,
+  var valorFat: Double?,
+  var nfnoEnt: String?,
+  var nfseEnt: String?,
+  var dataEnt: LocalDate?,
+  var horaEnt: Time?,
+  var valorEnt: Double?,
+  var vendno: Int?,
+  var vendedor: String?,
+  var custno: Int?,
+  var cliente: String?,
+  var foneCliente: String?,
+  var endereco: String?,
+  var bairro: String?,
+  var cidade: String?,
+  var estado: String?,
+  var enderecoEntrega: String?,
+  var bairroEntrega: String?,
+  var frete: Double?,
+  var valor: Double?,
+  var status: String?,
+  var area: String?,
+  var rota: String?,
+  var obs: String?,
+  var codArea: Int?,
+  var userno: Int?,
+  var username: String?,
+  var dataPrint: LocalDate?,
+  var horaPrint: LocalTime?,
+  var obs1: String?,
+  var obs2: String?,
+  var obs3: String?,
+  var obs4: String?,
+  var obs5: String?,
+  var obs6: String?,
+  var obs7: String?,
+  var tipo: String?,
+  var metodo: String?,
+  var piso: Int?,
+  var loc: String?,
 ) {
   var seq: Int = 0
 
@@ -88,12 +88,12 @@ class Pedido(
 
   val rotaArea
     get() = when {
-      area.startsWith("NORTE")    -> "Norte"
-      area.startsWith("SUL")      -> "Sul"
-      area.startsWith("LESTE")    -> "Leste"
-      area.startsWith("NORDESTE") -> "Nordeste"
-      area.startsWith("SUDESTE")  -> "Sudeste"
-      else                        -> null
+      area?.startsWith("NORTE") == true    -> "Norte"
+      area?.startsWith("SUL") == true      -> "Sul"
+      area?.startsWith("LESTE") == true    -> "Leste"
+      area?.startsWith("NORDESTE") == true -> "Nordeste"
+      area?.startsWith("SUDESTE") == true  -> "Sudeste"
+      else                                 -> null
     }
 
   val isEcommerce
@@ -136,7 +136,7 @@ class Pedido(
 
   fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)
 
-  fun produtos(): List<ProdutoPedido> = saci.produtoPedido(loja, pedido, tipo)
+  fun produtos(): List<ProdutoPedido> = saci.produtoPedido(loja, pedido, tipo ?: "")
   fun marcaCarga(carga: EZonaCarga, entrega: LocalDate?) {
     saci.marcaCarga(loja, pedido, carga, entrega)
   }
@@ -149,14 +149,14 @@ class Pedido(
     val produtos = produtos()
     return produtos.map { produto ->
       Relatorio(
-        loja = siglaLoja,
+        loja = siglaLoja ?: "",
         pedido = pedido.toString(),
         dataPedido = data.format(),
         notaFiscal = nfFat,
         dataHoraNota = "${dataFat.format()}-${horaFat.format()}",
         rota = descricaoZonaCarga ?: "",
-        vendedor = vendedor,
-        cliente = cliente,
+        vendedor = vendedor ?: "",
+        cliente = cliente ?: "",
         codigo = produto.codigo,
         descricao = produto.descricao,
         grade = produto.grade,
@@ -223,8 +223,8 @@ fun List<Pedido>.groupRotaLoja() = this.groupBy { pedido ->
   RotaPedido(
     nomeRota = rota,
     loja = loja,
-    valorFat = pedidos.sumOf { it.valorFat },
-    frete = pedidos.sumOf { it.frete },
+    valorFat = pedidos.sumOf { it.valorFat ?: 0.00 },
+    frete = pedidos.sumOf { it.frete ?: 0.00 },
     quantEntradas = pedidos.size
   )
 }.sortedBy { it.data }
@@ -236,8 +236,8 @@ fun List<Pedido>.groupRotas() = this.groupBy { pedido ->
   val pedidos = entry.value
   RotaPedido(
     nomeRota = nomeRota,
-    valorFat = pedidos.sumOf { it.valorFat },
-    frete = pedidos.sumOf { it.frete },
+    valorFat = pedidos.sumOf { it.valorFat ?: 0.00 },
+    frete = pedidos.sumOf { it.frete ?: 0.00 },
     quantEntradas = pedidos.size,
     listRota = pedidos.rotaPedido(),
     listPedidos = pedidos
@@ -253,8 +253,8 @@ fun List<Pedido>.groupRoot() = this.groupBy { pedido ->
   RotaPedido(
     nomeRota = "",
     loja = loja,
-    valorFat = pedidos.sumOf { it.valorFat },
-    frete = pedidos.sumOf { it.frete },
+    valorFat = pedidos.sumOf { it.valorFat ?: 0.00 },
+    frete = pedidos.sumOf { it.frete ?: 0.00 },
     quantEntradas = pedidos.size,
     listRota = rotas,
     listPedidos = pedidos
@@ -319,15 +319,15 @@ fun List<Pedido>.groupBy(): List<PedidoGroup> {
     PedidoChave(
       carga = it.descricaoZonaCarga,
       data = if (it.descricaoZonaCarga.isNullOrBlank()) it.data.toSaciDate() else it.entrega.toSaciDate(),
-      loc = it.loc
+      loc = it.loc ?: ""
     )
   }.map { entry ->
     PedidoGroup(
       carga = entry.key.carga,
       data = entry.key.data?.localDate(),
       loc = entry.key.loc,
-      piso = entry.value.sumOf { it.piso },
-      total = entry.value.sumOf { it.valorComFrete },
+      piso = entry.value.sumOf { it.piso ?: 0 },
+      total = entry.value.sumOf { it.valorComFrete ?: 0.00 },
       quant = entry.value.size,
       list = entry.value,
     )

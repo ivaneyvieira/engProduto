@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.retira
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -59,21 +60,30 @@ class TabRetiraImpressoSemNota(val viewModel: PedidoRetiraImpressoSemNotaViewMod
 
   override fun Grid<Pedido>.gridPanel() {
     setSelectionMode(SelectionMode.MULTI)
+    addColumnSeq("Seq")
+
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
+
     columnGrid(Pedido::dataHoraPrint, "Data Hora Impressão")
     columnGrid(Pedido::data, "Data")
-    columnGrid(Pedido::area, "Área")
+    columnGrid(Pedido::hora, "Hora")
+
     columnGrid(Pedido::nfFat, "NF Fat")
+
     columnGrid(Pedido::dataFat, "Data")
     columnGrid(Pedido::horaFat, "Hora")
-    columnGrid(Pedido::rota, "Rota")
+    columnGrid(Pedido::loc, "CD")
+
+    columnGrid(Pedido::piso, "Piso")
     columnGrid(Pedido::vendno, "Vendedor")
     columnGrid(Pedido::frete, "R$ Frete")
-    columnGrid(Pedido::valorComFrete, "R\$ Nota")
+
+    columnGrid(Pedido::valorComFrete, "R$ Nota")
     columnGrid(Pedido::obs, "Obs")
     columnGrid(Pedido::nfEnt, "NF Ent")
+
     columnGrid(Pedido::dataEnt, "Data")
     columnGrid(Pedido::horaEnt, "Hora")
     columnGrid(Pedido::username, "Usuário")

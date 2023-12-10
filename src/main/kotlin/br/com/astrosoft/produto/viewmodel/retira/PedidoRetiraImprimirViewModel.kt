@@ -28,9 +28,9 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
         )
       )
       .filter { pedido ->
-        (pedido.pedido == numPedido || numPedido == 0) && (pedido.data == data || data == null) && (pedido.rota.contains(
+        (pedido.pedido == numPedido || numPedido == 0) && (pedido.data == data || data == null) && (pedido.rota?.contains(
           rota
-        ) || rota == "") && (pedido.area.contains(area) || area == "")
+        ) == true || rota == "") && (pedido.area?.contains(area) == true || area == "")
       }
   }
 

@@ -10,9 +10,11 @@ import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraViewModel
 import com.github.mvysny.karibudsl.v23.tabSheet
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import jakarta.annotation.security.PermitAll
 
 @Route(layout = ProdutoLayout::class, value = "retira")
 @PageTitle("Retira")
+@PermitAll
 class PedidoRetiraView : ViewLayout<PedidoRetiraViewModel>(), IPedidoRetiraView {
   override val viewModel: PedidoRetiraViewModel = PedidoRetiraViewModel(this)
   override val tabRetiraImprimir = TabRetiraImprimir(viewModel.tabRetiraImprimirViewModel)

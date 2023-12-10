@@ -6,30 +6,35 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
+import br.com.astrosoft.produto.view.retira.PedidoRetiraView
 import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.icon.VaadinIcon.DIPLOMA
-import com.vaadin.flow.component.icon.VaadinIcon.USER
+import com.vaadin.flow.component.icon.VaadinIcon.*
 
 class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
       if (userSaci?.pedido == true) route(
-        icon = DIPLOMA,
+        icon = SHOP,
         title = "Ressuprimento",
         routeClass = RessuprimentoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
-        icon = DIPLOMA,
+        icon = EXCHANGE,
         title = "Pedido Transf",
         routeClass = PedidoTransfView::class
       )
       if (userSaci?.devCliente == true) route(
-        icon = DIPLOMA,
+        icon = REPLY,
         title = "Dev Cliente",
         routeClass = DevClienteView::class,
+      )
+      if (userSaci?.pedidoRetira == true) route(
+        icon = CART,
+        title = "Retira",
+        routeClass = PedidoRetiraView::class,
       )
 
       if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)

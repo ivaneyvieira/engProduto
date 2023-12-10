@@ -106,21 +106,27 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
+
     columnGrid(Pedido::dataHoraPrint, "Data Hora Impressão")
     columnGrid(Pedido::data, "Data")
-    columnGrid(Pedido::area, "Área")
+    columnGrid(Pedido::hora, "Hora")
+
     columnGrid(Pedido::nfFat, "NF Fat")
+
     columnGrid(Pedido::dataFat, "Data")
     columnGrid(Pedido::horaFat, "Hora")
-    columnGrid(Pedido::rota, "Rota")
     columnGrid(Pedido::vendno, "Vendedor")
+
     columnGrid(Pedido::frete, "R$ Frete")
-    columnGrid(Pedido::valorComFrete, "R\$ Nota")
+    columnGrid(Pedido::valorComFrete, "R$ Nota")
     columnGrid(Pedido::obs, "Obs")
+
     columnGrid(Pedido::nfEnt, "NF Ent")
     columnGrid(Pedido::dataEnt, "Data")
     columnGrid(Pedido::horaEnt, "Hora")
+
     columnGrid(Pedido::username, "Usuário")
+
     this.sort(
       listOf(
         GridSortOrder(getColumnBy(Pedido::loja), ASCENDING),
