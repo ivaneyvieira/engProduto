@@ -1,8 +1,10 @@
 package br.com.astrosoft.framework.model
 
-class SqlLazy(private val orders: List<SqlOrder> = emptyList(),
-              private val limit: Int = -1,
-              private val offset: Int = -1) {
+class SqlLazy(
+  private val orders: List<SqlOrder> = emptyList(),
+  private val limit: Int = -1,
+  private val offset: Int = -1
+) {
 
   private fun orderStt(): String {
     return if (orders.isEmpty()) ""

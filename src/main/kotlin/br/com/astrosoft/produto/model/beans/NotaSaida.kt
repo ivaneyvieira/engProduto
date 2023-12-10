@@ -30,7 +30,7 @@ class NotaSaida(
   var tipoNotaSaida: String?,
   var notaEntrega: String?,
   var dataEntrega: LocalDate?,
-               ) {
+) {
   val nota
     get() = "$numero/$serie"
 
@@ -66,10 +66,12 @@ class NotaSaida(
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
       val user = AppConfig.userLogin() as? UserSaci
-      return saci.findNotaSaida(filtro = filtro,
-                                locais = userLocais(),
-                                user = user,
-                                SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC))))
+      return saci.findNotaSaida(
+        filtro = filtro,
+        locais = userLocais(),
+        user = user,
+        SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC)))
+      )
     }
   }
 }
@@ -83,7 +85,7 @@ data class FiltroNota(
   val vendedor: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
-                     ) {
+) {
   val nfno: Int
     get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
   val nfse: String

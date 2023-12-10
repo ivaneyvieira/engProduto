@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel
 
-import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
 import br.com.astrosoft.framework.viewmodel.UserViewModel

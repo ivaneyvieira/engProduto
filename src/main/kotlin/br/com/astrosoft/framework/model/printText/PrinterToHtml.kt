@@ -18,7 +18,7 @@ object PrinterToHtml {
           .removerExpandido()
           .replace(" ", "&nbsp;")
 
-    val htmlFormat = html.lines().joinToString(separator = "<br>") {linha ->
+    val htmlFormat = html.lines().joinToString(separator = "<br>") { linha ->
       "<code>$linha</code>"
     }
 

@@ -36,7 +36,7 @@ object CupsUtils {
     printText(etiqueta)
   }
 
-  fun teste(){
+  fun teste() {
     org.codehaus.stax2.ri.EmptyIterator.getInstance<String>()
   }
 

@@ -24,7 +24,7 @@ import org.vaadin.crudui.crud.CrudOperation.*
 import org.vaadin.crudui.crud.impl.GridCrud
 import org.vaadin.crudui.form.AbstractCrudFormFactory
 
-abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>>() : ViewLayout<VM>() {
+abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>() {
   abstract fun createGrid(): GridCrud<B>
   abstract fun columns(): List<String>
   abstract fun formCrud(operation: CrudOperation?, domainObject: B?, readOnly: Boolean, binder: Binder<B>): Component

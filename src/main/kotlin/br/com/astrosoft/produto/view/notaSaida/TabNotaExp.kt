@@ -119,7 +119,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       vendedor = edtVendedor.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-                     )
+    )
   }
 
   override fun updateNotas(notas: List<NotaSaida>) {

@@ -85,7 +85,7 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido){impressora ->
+      viewModel.previewPedido(pedido) { impressora ->
         viewModel.marcaImpressao(pedido, impressora)
       }
     }

@@ -85,13 +85,15 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<Prod
   }
 
   override fun filtro(): FiltroProduto {
-    return FiltroProduto(loja = 0,
-                         codigo = edtProduto.value ?: "",
-                         typeno = edtTipo.value ?: 0,
-                         clno = edtCentroLucro.value ?: 0,
-                         vendno = edtFornecedor.value ?: 0,
-                         localizacao = edtLocalizacao.value ?: "",
-                         nota = "")
+    return FiltroProduto(
+      loja = 0,
+      codigo = edtProduto.value ?: "",
+      typeno = edtTipo.value ?: 0,
+      clno = edtCentroLucro.value ?: 0,
+      vendno = edtFornecedor.value ?: 0,
+      localizacao = edtLocalizacao.value ?: "",
+      nota = ""
+    )
   }
 
   override fun updateProdutos(produtos: List<Produto>) {

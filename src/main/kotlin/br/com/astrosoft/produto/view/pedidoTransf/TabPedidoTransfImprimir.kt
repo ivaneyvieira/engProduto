@@ -28,7 +28,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
+class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
+  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
   ITabPedidoTransfImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
@@ -46,6 +47,7 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraTrans?.toList() ?: emptyList()
   }
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
@@ -82,7 +84,7 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido){impressora ->
+      viewModel.previewPedido(pedido) { impressora ->
         viewModel.marcaImpressao(pedido, impressora)
       }
     }
@@ -97,7 +99,7 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
     colunaPedidoTransfObsevacao()
 
     setPartNameGenerator {
-      if(it.situacao == 5) "amarelo" else null
+      if (it.situacao == 5) "amarelo" else null
     }
   }
 

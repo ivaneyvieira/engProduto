@@ -51,6 +51,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     val username = AppConfig.userLogin() as? UserSaci
     return listOfNotNull(username?.impressoraDev)
   }
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
@@ -90,10 +91,10 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     }
     addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
       val obs =
-                "Referente: ${nota.referente ?: ""}<br>" +
-                "Entregue Por: ${nota.entregue ?: ""}<br>" +
-                "Recebido Por: ${nota.recebido ?: ""}" +
-                "Self Color: ${nota.selfColor ?: ""}"
+          "Referente: ${nota.referente ?: ""}<br>" +
+          "Entregue Por: ${nota.entregue ?: ""}<br>" +
+          "Recebido Por: ${nota.recebido ?: ""}" +
+          "Self Color: ${nota.selfColor ?: ""}"
       DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()

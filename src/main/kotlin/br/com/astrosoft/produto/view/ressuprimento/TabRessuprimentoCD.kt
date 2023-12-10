@@ -20,7 +20,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
-        TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
+  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
   private var dlgProduto: DlgProdutosRessuCD? = null
   private lateinit var edtRessuprimento: IntegerField
 

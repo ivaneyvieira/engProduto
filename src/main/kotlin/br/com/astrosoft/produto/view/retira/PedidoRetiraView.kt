@@ -7,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
 import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraView
 import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraViewModel
-import com.github.mvysny.karibudsl.v23.tabSheet
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import jakarta.annotation.security.PermitAll

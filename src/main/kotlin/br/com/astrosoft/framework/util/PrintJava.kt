@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 import java.net.URI
 
 object PrintJava {
-  private const  val HOST = "172.20.47.1"
+  private const val HOST = "172.20.47.1"
   private fun printCups(impressora: String, text: String) {
     val printerURI = URI.create("http://$HOST:631/ipp/$impressora")
     val status = IppPrintJob()

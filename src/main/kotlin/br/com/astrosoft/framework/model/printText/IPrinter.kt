@@ -18,7 +18,7 @@ class PrinterCups(private val printerName: String) : IPrinter {
   }
 }
 
-class PrinterFile() : IPrinter {
+class PrinterFile : IPrinter {
   override fun print(text: String) {
     val file = File("/tmp/relatorio.txt")
     file.writeText(text)

@@ -17,9 +17,7 @@ class Loja(var no: Int, var sname: String, var name: String) {
 
     other as Loja
 
-    if (no != other.no) return false
-
-    return true
+    return no == other.no
   }
 
   override fun hashCode(): Int {

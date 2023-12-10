@@ -18,7 +18,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
-        TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
+  TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
   private var dlgProduto: DlgProdutosReceber? = null
   private var edtChave: TextField? = null
 

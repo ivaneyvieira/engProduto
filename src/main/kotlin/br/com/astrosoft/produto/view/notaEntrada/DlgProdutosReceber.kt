@@ -98,8 +98,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
           viewModel.processaProdutos()
         }
       }
-    }
-    else {
+    } else {
       button("Concluir") {
         onLeftClick {
           viewModel.receberConcluir()
@@ -115,8 +114,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       isMultiSort = false
       if (userSaci?.receberExcluir == true) {
         setSelectionMode(Grid.SelectionMode.MULTI)
-      }
-      else {
+      } else {
         setSelectionMode(Grid.SelectionMode.SINGLE)
       }
 
@@ -138,8 +136,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
           if (userSaci?.receberProcessar == true) {
             if (produto.quantidade != produto.qttyRef) "amarelo"
             else null
-          }
-          else null
+          } else null
         }
       }
       produtoNFEMesesGarantia()
@@ -148,8 +145,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
         if (userSaci?.receberProcessar == true) {
           if (produto.qttyRef == null) "amarelo"
           else null
-        }
-        else null
+        } else null
       }
     }
     this.addAndExpand(gridDetail)

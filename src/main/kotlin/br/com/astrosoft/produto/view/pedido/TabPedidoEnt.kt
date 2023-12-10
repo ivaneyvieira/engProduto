@@ -20,7 +20,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class),
-        ITabPedidoEnt {
+  ITabPedidoEnt {
   private var dlgProduto: DlgProdutosPedEnt? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField

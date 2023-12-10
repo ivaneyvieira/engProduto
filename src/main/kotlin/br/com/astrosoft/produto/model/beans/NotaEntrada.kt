@@ -16,7 +16,7 @@ class NotaEntrada(
   var cancelada: String?,
   var chave: String?,
   var marca: Int?,
-                 ) {
+) {
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
 
   fun produtosBase() = saci.findProdutoNFEBase(this)

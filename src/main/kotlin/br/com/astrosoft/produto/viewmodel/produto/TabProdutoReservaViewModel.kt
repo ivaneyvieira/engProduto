@@ -2,8 +2,8 @@ package br.com.astrosoft.produto.viewmodel.produto
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.DadosPedido
+import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.ProdutoReserva
 
 class TabProdutoReservaViewModel(val viewModel: ProdutoViewModel) {

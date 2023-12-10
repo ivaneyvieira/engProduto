@@ -1,7 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.saci
-
 class EntradaDevCliPro(
   var invno: Int,
   var codLoja: Int,
@@ -27,7 +25,7 @@ class EntradaDevCliPro(
   var valorTotal: Double?,
   var cliente: String?,
   var vendedor: String?,
-){
+) {
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 }

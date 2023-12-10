@@ -93,7 +93,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     val relatorio = RequisicaoTransferencia(pedido)
     val rota = pedido.rotaPedido()
-    if (pedido.nameSing.isNullOrEmpty() && AppConfig.userLogin()?.admin != true){
+    if (pedido.nameSing.isNullOrEmpty() && AppConfig.userLogin()?.admin != true) {
       fail("Imprimir após Autorização")
     }
     relatorio.print(

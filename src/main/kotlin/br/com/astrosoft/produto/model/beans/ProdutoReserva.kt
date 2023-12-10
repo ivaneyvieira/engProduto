@@ -21,7 +21,7 @@ class ProdutoReserva(
   var clno: String?,
   var clname: String?,
   var localizacao: String?,
-                    ) {
+) {
   fun pedido(): DadosPedido = DadosPedido(loja, pedido, data, cliente, empno)
 
   companion object {

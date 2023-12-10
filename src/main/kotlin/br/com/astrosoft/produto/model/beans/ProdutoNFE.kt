@@ -29,7 +29,7 @@ class ProdutoNFE(
   var localizacao: String,
   var qttyRef: Int?,
   var marca: Int,
-                ) {
+) {
   fun revomeProdutoReceber() {
     saci.removeProdutoReceber(this)
   }

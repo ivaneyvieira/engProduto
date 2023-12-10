@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.KProperty1
 
-abstract class ReportBuild<T>() {
+abstract class ReportBuild<T> {
   private val localDateType = LocalDateType()
   private val columnsMap = mutableMapOf<KProperty1<T, *>, TextColumnBuilder<*>>()
   private val columnsList = mutableListOf<TextColumnBuilder<*>>()
@@ -258,7 +258,7 @@ abstract class ReportBuild<T>() {
     return out.toByteArray()
   }
 
-  protected fun TextColumnBuilder<*>.scaleFont(){
+  protected fun TextColumnBuilder<*>.scaleFont() {
     this.setTextAdjust(TextAdjust.SCALE_FONT)
   }
 }

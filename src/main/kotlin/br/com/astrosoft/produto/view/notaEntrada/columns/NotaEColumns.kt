@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.notaEntrada.columns
 
-
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaEntrada
 import com.vaadin.flow.component.grid.Grid

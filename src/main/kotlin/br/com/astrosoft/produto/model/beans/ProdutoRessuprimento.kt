@@ -25,7 +25,7 @@ class ProdutoRessuprimento(
   var marca: Int,
   var usuarioCD: String,
   var estoque: Int,
-                          ) {
+) {
   private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
 
   val usuarioNameCD

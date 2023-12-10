@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
 import net.sf.dynamicreports.report.constant.PageOrientation
 
-class ReportRessu4() : ReportBuild<ProdutoTransfRessu4>() {
+class ReportRessu4 : ReportBuild<ProdutoTransfRessu4>() {
   init {
     columnReport(ProdutoTransfRessu4::codigo, "Código", width = 45, aligment = RIGHT)
     columnReport(ProdutoTransfRessu4::descricao, "Descrição").scaleFont()

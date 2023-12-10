@@ -26,7 +26,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
-        TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaRecebido {
+  TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaRecebido {
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
@@ -93,7 +93,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     nota = edtNota.value ?: "",
     vendno = edtFornecedor.value ?: 0,
     chave = edtChave.value ?: "",
-                                           )
+  )
 
   override fun updateNotas(notas: List<NotaEntrada>) {
     updateGrid(notas)

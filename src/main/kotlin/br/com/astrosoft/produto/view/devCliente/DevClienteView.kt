@@ -6,8 +6,6 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
 import br.com.astrosoft.produto.viewmodel.devCliente.DevClienteViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.IDevClienteView
-import br.com.astrosoft.produto.viewmodel.pedido.IPedidoView
-import br.com.astrosoft.produto.viewmodel.pedido.PedidoViewModel
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route

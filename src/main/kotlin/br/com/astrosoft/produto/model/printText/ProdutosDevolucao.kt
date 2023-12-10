@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 
-class ProdutosDevolucao() : PrintText<EntradaDevCliProList>() {
+class ProdutosDevolucao : PrintText<EntradaDevCliProList>() {
   init {
     column(EntradaDevCliProList::codigoFormat, "Codigo", 6)
     column(EntradaDevCliProList::descricao, "Descricao", 41)

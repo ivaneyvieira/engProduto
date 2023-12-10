@@ -43,7 +43,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     edtLoja = integerField("Loja") {
       //val user = AppConfig.userLogin() as? UserSaci
       //isVisible = user?.lojaSaidaCDOk() == 0
-     // value = user?.lojaSaidaCDOk()
+      // value = user?.lojaSaidaCDOk()
       valueChangeMode = ValueChangeMode.LAZY
 
       addValueChangeListener {

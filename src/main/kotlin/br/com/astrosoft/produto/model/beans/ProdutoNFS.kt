@@ -31,7 +31,7 @@ class ProdutoNFS(
   var usuarioExp: String,
   var usuarioCD: String,
   var tipoNota: Int,
-                ) {
+) {
   private fun splitExp(index: Int) = usuarioExp.split("-").getOrNull(index) ?: ""
 
   val usuarioNameExp

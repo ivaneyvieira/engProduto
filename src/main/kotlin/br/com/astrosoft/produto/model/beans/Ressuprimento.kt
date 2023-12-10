@@ -16,7 +16,7 @@ class Ressuprimento(
   var cancelada: String?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
-                   ) {
+) {
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""

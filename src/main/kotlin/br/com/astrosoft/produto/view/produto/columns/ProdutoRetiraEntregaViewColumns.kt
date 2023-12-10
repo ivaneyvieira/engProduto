@@ -46,9 +46,9 @@ object ProdutoRetiraEntregaViewColumns {
   }
 
   fun Grid<ProdutoRetiraEntrega>.retiraEntregaGradeAlternativa() =
-          columnGrid(ProdutoRetiraEntrega::gradeAlternativa) {
-            this.setHeader("Grade")
-          }
+      columnGrid(ProdutoRetiraEntrega::gradeAlternativa) {
+        this.setHeader("Grade")
+      }
 
   fun Grid<ProdutoRetiraEntrega>.retiraEntregaLocalizacao() = columnGrid(ProdutoRetiraEntrega::localizacao) {
     this.setHeader("Loc")
