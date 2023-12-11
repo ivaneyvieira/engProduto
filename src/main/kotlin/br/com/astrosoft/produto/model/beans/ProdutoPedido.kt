@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.framework.util.format
 
 data class ProdutoPedido(
+  val pedido: Pedido,
   val codigo: String,
   val descricao: String,
   val grade: String,

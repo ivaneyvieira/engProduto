@@ -142,7 +142,7 @@ class PedidoTransf(
     return saci.findNota(
       nfno = numero,
       nfse = serie,
-      date = data ?: LocalDate.now()
+      date = dataTransf ?: LocalDate.now()
     )
   }
 
