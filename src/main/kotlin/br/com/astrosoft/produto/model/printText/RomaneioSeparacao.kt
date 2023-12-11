@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ProdutoPedido
 
 class RomaneioSeparacao : PrintText<ProdutoPedido>() {
-
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
     println("Romaneio de Separação de Reserva Retira: ${pedido?.pedido}", negrito = true, center = true)

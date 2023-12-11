@@ -2,7 +2,9 @@ package br.com.astrosoft.produto.view.retira
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -49,13 +51,6 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     get() = ""
 
   override fun HorizontalLayout.toolBarConfig() {
-    button("Imprimir") {
-      icon = VaadinIcon.PRINT.create()
-      addClickListener {
-        viewModel.confirmaPrint()
-      }
-    }
-
     edtPedidoImprimir = textField("Numero Pedido") {
       this.valueChangeMode = TIMEOUT
       this.isAutofocus = true
@@ -73,7 +68,9 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
   }
 
   override fun Grid<Pedido>.gridPanel() {
-    setSelectionMode(SelectionMode.MULTI)
+    addColumnButton(VaadinIcon.PRINT, "Imprimir", "Imprimir") { pedido ->
+      viewModel.confirmaPrint(pedido)
+    }
 
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
@@ -91,7 +88,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
 
     columnGrid(Pedido::frete, "R$ Frete")
     columnGrid(Pedido::valorComFrete, "R$ Nota")
-    columnGrid(Pedido::obs, "Obs")
+    columnGrid(Pedido::obs, "Obs").expand()
 
     columnGrid(Pedido::username, "Usuário")
 
