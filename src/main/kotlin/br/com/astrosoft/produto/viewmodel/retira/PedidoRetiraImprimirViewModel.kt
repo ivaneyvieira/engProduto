@@ -1,13 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.retira
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.exec
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   private val subView
@@ -28,19 +26,14 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
         )
       )
       .filter { pedido ->
-        (pedido.pedido == numPedido || numPedido == 0) && (pedido.data == data || data == null) && (pedido.rota?.contains(
-          rota
-        ) == true || rota == "") && (pedido.area?.contains(area) == true || area == "")
+        (pedido.pedido == numPedido || numPedido == 0) &&
+        (pedido.data == data || data == null) && (pedido.rota?.contains(rota) == true || rota == "") &&
+        (pedido.area?.contains(area) == true || area == "")
       }
   }
 
   fun updateGridImprimir() {
     subView.updateGrid(listPedidosEntregaImprimir())
-  }
-
-  fun imprimirPedidos(pedidos: List<Pedido>) = exec(viewModel.view) {
-    printPedidoPdf(pedidos)
-    updateGridImprimir()
   }
 
   fun confirmaPrint() {
@@ -51,24 +44,6 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     }
 
     updateGridImprimir()
-  }
-
-  private fun printPedidoPdf(pedidos: List<Pedido>) {
-    //TODO
-  }
-
-  fun imprimirPedidoMinuta() = viewModel.exec {
-    val datetime = LocalDateTime.now()
-    val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
-    printPedidoMinutaPdf(pedidos)
-    pedidos.forEach { pedido ->
-      pedido.marcaDataHora(datetime)
-    }
-    updateGridImprimir()
-  }
-
-  private fun printPedidoMinutaPdf(pedidos: List<Pedido>) {
-    //TODO
   }
 }
 

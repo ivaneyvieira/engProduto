@@ -13,7 +13,6 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
 import com.vaadin.flow.component.icon.VaadinIcon.CLOSE
-import com.vaadin.flow.component.icon.VaadinIcon.EYE
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT
@@ -43,12 +42,7 @@ class TabRetiraImpressoSemNota(val viewModel: PedidoRetiraImpressoSemNotaViewMod
         viewModel.desmarcaSemNota()
       }
     }
-    if (AppConfig.isAdmin) button("Visualizar") {
-      icon = EYE.create()
-      addClickListener {
-        viewModel.imprimirPedidos(itensSelecionados())
-      }
-    }
+
     edtPedidoImpressoSemNota = textField("Numero Pedido") {
       this.valueChangeMode = TIMEOUT
       this.isAutofocus = true

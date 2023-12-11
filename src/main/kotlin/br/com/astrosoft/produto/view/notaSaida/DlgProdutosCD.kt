@@ -95,8 +95,6 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           nota.cancelada == "S"                    -> {
             show("A notaSaida está cancelada")
           }
-
-          else                                     -> true
         }
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)

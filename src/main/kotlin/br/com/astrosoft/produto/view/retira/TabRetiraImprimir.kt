@@ -16,20 +16,17 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
 import com.vaadin.flow.component.grid.GridSortOrder
-import com.vaadin.flow.component.icon.VaadinIcon.*
+import com.vaadin.flow.component.icon.VaadinIcon.THUMBS_UP
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.SortDirection.ASCENDING
 import com.vaadin.flow.data.provider.SortDirection.DESCENDING
 import com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT
 import java.time.LocalDate
-import java.util.*
 
 class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanelGrid<Pedido>(Pedido::class),
   IPedidoRetiraImprimir {
   private lateinit var edtPedidoImprimir: TextField
-  private lateinit var edtRotaImprimir: TextField
-  private lateinit var edtAreaImprimir: TextField
   private lateinit var edtDataImprimir: DatePicker
   override val label: String = "Imprimir"
 
@@ -47,9 +44,9 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
   override val dataImprimir: LocalDate?
     get() = edtDataImprimir.value
   override val areaImprimir: String
-    get() = edtAreaImprimir.value.uppercase(Locale.getDefault())
+    get() = ""
   override val rotaImprimir: String
-    get() = edtRotaImprimir.value.uppercase(Locale.getDefault())
+    get() = ""
 
   override fun HorizontalLayout.toolBarConfig() {
     button("Confirma") {
@@ -73,28 +70,16 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
         viewModel.updateGridImprimir()
       }
     }
-    edtAreaImprimir = textField("Área") {
-      this.valueChangeMode = TIMEOUT
-      addValueChangeListener {
-        viewModel.updateGridImprimir()
-      }
-    }
-    edtRotaImprimir = textField("Rota") {
-      this.valueChangeMode = TIMEOUT
-
-      addValueChangeListener {
-        viewModel.updateGridImprimir()
-      }
-    }
   }
 
   override fun Grid<Pedido>.gridPanel() {
     setSelectionMode(SelectionMode.MULTI)
+
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
 
-    columnGrid(Pedido::dataHoraPrint, "Data Hora Impressão")
+    columnGrid(Pedido::dataHoraPrint, "Impressão")
     columnGrid(Pedido::data, "Data")
     columnGrid(Pedido::hora, "Hora")
 
@@ -107,10 +92,6 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     columnGrid(Pedido::frete, "R$ Frete")
     columnGrid(Pedido::valorComFrete, "R$ Nota")
     columnGrid(Pedido::obs, "Obs")
-
-    columnGrid(Pedido::nfEnt, "NF Ent")
-    columnGrid(Pedido::dataEnt, "Data")
-    columnGrid(Pedido::horaEnt, "Hora")
 
     columnGrid(Pedido::username, "Usuário")
 

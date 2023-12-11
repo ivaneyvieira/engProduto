@@ -39,10 +39,6 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
 
     updateGridImpressoSemNota()
   }
-
-  fun imprimirPedidos(itensSelecionado: List<Pedido>) {
-    viewModel.tabRetiraImprimirViewModel.imprimirPedidos(itensSelecionado)
-  }
 }
 
 interface IPedidoRetiraImpressoSemNota : ITabView {

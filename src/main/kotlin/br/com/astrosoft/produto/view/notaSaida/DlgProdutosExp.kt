@@ -78,8 +78,6 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
             Notification.show("A notaSaida está cancelada")
 
           }
-
-          else                                     -> true
         }
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)

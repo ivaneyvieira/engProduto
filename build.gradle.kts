@@ -24,7 +24,6 @@ repositories {
   }
 }
 
-
 tasks.withType<KotlinCompile> {
   kotlinOptions.jvmTarget = "17"
 }
