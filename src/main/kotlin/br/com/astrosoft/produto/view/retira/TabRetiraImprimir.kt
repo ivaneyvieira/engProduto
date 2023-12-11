@@ -52,19 +52,6 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     get() = edtRotaImprimir.value.uppercase(Locale.getDefault())
 
   override fun HorizontalLayout.toolBarConfig() {
-    button("Imprimir") {
-      icon = PRINT.create()
-      addClickListener {
-        viewModel.imprimirPedidoMinuta()
-      }
-    }
-    if (AppConfig.isAdmin) button("Visualizar") {
-      icon = EYE.create()
-      addClickListener {
-        viewModel.imprimirPedidos(itensSelecionados())
-      }
-    }
-
     button("Confirma") {
       icon = THUMBS_UP.create()
       addClickListener {

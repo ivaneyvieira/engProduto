@@ -44,7 +44,7 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   }
 
   fun confirmaPrint() {
-    val pedidos = viewModel.view.tabRetiraImprimir.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
+    val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
 
     pedidos.forEach { pedido ->
       if (pedido.dataHoraPrint != null) pedido.marcaImpresso()
@@ -54,12 +54,12 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   }
 
   private fun printPedidoPdf(pedidos: List<Pedido>) {
-    viewModel.view.showRelatorioPedido(pedidos)
+    //TODO
   }
 
-  fun imprimirPedidoMinuta() = exec(viewModel.view) {
+  fun imprimirPedidoMinuta() = viewModel.exec {
     val datetime = LocalDateTime.now()
-    val pedidos = viewModel.view.tabRetiraImprimir.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
+    val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
     printPedidoMinutaPdf(pedidos)
     pedidos.forEach { pedido ->
       pedido.marcaDataHora(datetime)
@@ -68,7 +68,7 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   }
 
   private fun printPedidoMinutaPdf(pedidos: List<Pedido>) {
-    viewModel.view.showRelatorioPedidoMinuta(pedidos)
+    //TODO
   }
 }
 

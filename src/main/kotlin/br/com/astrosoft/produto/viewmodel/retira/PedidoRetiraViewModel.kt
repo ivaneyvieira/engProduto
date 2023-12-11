@@ -14,9 +14,4 @@ class PedidoRetiraViewModel(view: IPedidoRetiraView) : ViewModel<IPedidoRetiraVi
 interface IPedidoRetiraView : IView {
   val tabRetiraImprimir: IPedidoRetiraImprimir
   val tabRetiraImpressoSemNota: IPedidoRetiraImpressoSemNota
-
-  //
-  fun showRelatorioPedidoMinuta(pedidos: List<Pedido>)
-
-  fun showRelatorioPedido(pedidos: List<Pedido>)
 }

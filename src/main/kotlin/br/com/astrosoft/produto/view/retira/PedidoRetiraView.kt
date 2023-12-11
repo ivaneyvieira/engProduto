@@ -27,17 +27,5 @@ class PedidoRetiraView : ViewLayout<PedidoRetiraViewModel>(), IPedidoRetiraView 
   init {
     addTabSheat(viewModel)
   }
-
-  override fun showRelatorioPedidoMinuta(pedidos: List<Pedido>) {
-    //TODO
-  }
-
-  override fun showRelatorioPedido(pedidos: List<Pedido>) {
-    //TODO
-  }
-
-  private fun showRelatorio(byteArray: ByteArray) {
-    //TODO
-  }
 }
 
