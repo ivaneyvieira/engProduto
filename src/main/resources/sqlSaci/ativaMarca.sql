@@ -1,4 +1,4 @@
 UPDATE sqldados.eord
-SET eord.rmkMontagem = CONCAT(:marca, mid(eord.rmkMontagem, length(:marca) + 1, 50))
+SET eord.c3 = CONCAT(:marca, mid(eord.c3, length(:marca) + 1, 50))
 WHERE ordno = :ordno
   AND storeno = :storeno
