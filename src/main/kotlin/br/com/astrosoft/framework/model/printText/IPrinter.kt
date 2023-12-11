@@ -8,6 +8,17 @@ interface IPrinter {
   fun print(text: String)
 }
 
+class DummyPrinter : IPrinter {
+  private val buffer = StringBuffer()
+
+  override fun print(text: String) {
+    buffer.append(text)
+    buffer.append("\n")
+  }
+
+  fun text() = buffer.toString()
+}
+
 class PrinterCups(private val printerName: String) : IPrinter {
   override fun print(text: String) {
     try {

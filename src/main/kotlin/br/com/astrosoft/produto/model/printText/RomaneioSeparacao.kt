@@ -3,13 +3,32 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.produto.model.beans.ProdutoPedido
 
-class RomaneioSeparacao: PrintText<ProdutoPedido>() {
+class RomaneioSeparacao : PrintText<ProdutoPedido>() {
 
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
-    println("Romaneio de Separação de Reserva Retira: ${pedido.pedido}", negrito = true, center = true)
+    println("Romaneio de Separação de Reserva Retira: ${pedido?.pedido}", negrito = true, center = true)
 
-    println("Loja: ${pedido.nomeLoja}")
-    println("Usuario da Impressao: ${pedido.username}")
+    println("Loja: ${pedido?.nomeLoja}")
+    println("Usuario da Impressao: ${pedido?.username}")
+    println("NF de Fatura: ${pedido?.nfnoFat}/${pedido?.nfseFat} Data: ${pedido?.dataFat} Hora: ${pedido?.horaFat}")
+    println("PDF: ${pedido?.pdvnoVenda} Pgto:            Valor: ${pedido?.valorFat}")
+    println("Cliente: ${pedido?.cliente}")
+    println("Vendedor (a): ${pedido?.vendedor}")
+    println("Obs na Reserva: ${pedido?.obs}")
+  }
+
+  init {
+    column(ProdutoPedido::codigo, "Codigo", 6)
+    column(ProdutoPedido::descricao, "Descricao", 40)
+    column(ProdutoPedido::grade, "Grade", 9)
+    column(ProdutoPedido::qtd, "Quant", 6)
+  }
+
+  override fun printSumary() {
+    println("")
+    println("DOCUMENTO NAO FISCAL", center = true)
+    println("")
+    println("")
   }
 }

@@ -136,34 +136,17 @@ class Pedido(
 
   fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)
 
-  fun produtos(): List<ProdutoPedido> = saci.produtoPedido(loja, pedido, tipo ?: "")
+  fun produtos(): List<ProdutoPedido> = saci.produtoPedido(loja, pedido, tipo ?: "").map { produto ->
+    produto.pedido = this
+    produto
+  }
+
   fun marcaCarga(carga: EZonaCarga, entrega: LocalDate?) {
     saci.marcaCarga(loja, pedido, carga, entrega)
   }
 
   fun removeCarga() {
     saci.marcaCarga(loja, pedido, EZonaCarga.SemZona, entrega = null)
-  }
-
-  fun listaRelatorio(): List<Relatorio> {
-    val produtos = produtos()
-    return produtos.map { produto ->
-      Relatorio(
-        loja = siglaLoja ?: "",
-        pedido = pedido.toString(),
-        dataPedido = data.format(),
-        notaFiscal = nfFat,
-        dataHoraNota = "${dataFat.format()}-${horaFat.format()}",
-        rota = descricaoZonaCarga ?: "",
-        vendedor = vendedor ?: "",
-        cliente = cliente ?: "",
-        codigo = produto.codigo,
-        descricao = produto.descricao,
-        grade = produto.grade,
-        localizacao = produto.localizacao.mid(0, 4),
-        quantidade = produto.qtd,
-      )
-    }
   }
 
   companion object {

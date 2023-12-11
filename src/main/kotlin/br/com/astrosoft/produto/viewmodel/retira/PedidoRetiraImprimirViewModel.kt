@@ -1,10 +1,12 @@
 package br.com.astrosoft.produto.viewmodel.retira
 
+import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
+import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
 import java.time.LocalDate
 
 class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
@@ -38,9 +40,17 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
 
   fun confirmaPrint() {
     val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
+    val relatorio = RomaneioSeparacao()
+    val dummyPrinter = DummyPrinter()
 
     pedidos.forEach { pedido ->
-      if (pedido.dataHoraPrint != null) pedido.marcaImpresso()
+      relatorio.print(dados = pedido.produtos(), printer = dummyPrinter)
+    }
+
+    viewModel.view.showPrintText(dummyPrinter.text()) {
+      pedidos.forEach { pedido ->
+        if (pedido.dataHoraPrint != null) pedido.marcaImpresso()
+      }
     }
 
     updateGridImprimir()
