@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ProdutoPedido
 
 class RomaneioSeparacao : PrintText<ProdutoPedido>() {
@@ -12,7 +13,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     println("Loja: ${pedido?.nomeLoja}")
     println("Usuario da Impressao: ${pedido?.username}")
     println("NF de Fatura: ${pedido?.nfnoFat}/${pedido?.nfseFat} Data: ${pedido?.dataFat} Hora: ${pedido?.horaFat}")
-    println("PDF: ${pedido?.pdvnoVenda} Pgto:            Valor: ${pedido?.valorFat}")
+    println("PDF: ${pedido?.pdvnoVenda} Pgto: ${pedido?.metodo ?: ""} Valor: ${pedido?.valorFat.format()}")
     println("Cliente: ${pedido?.cliente}")
     println("Vendedor (a): ${pedido?.vendedor}")
     println("Obs na Reserva: ${pedido?.obs}")
