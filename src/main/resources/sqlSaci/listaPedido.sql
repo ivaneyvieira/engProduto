@@ -138,7 +138,8 @@ SELECT EO.storeno                                                             AS
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')               AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')               AS obs7,
        @TIPO                                                                  AS tipo,
-       paym.name                                                              AS metodo
+       paym.name                                                              AS metodo,
+       nfe.remarks                                                            AS obsNota
 FROM T2
        LEFT JOIN sqldados.eord AS EO
                  ON (T2.storeno = EO.storeno AND T2.ordno = EO.ordno)
@@ -246,7 +247,8 @@ SELECT EO.storeno                                                             AS
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')               AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')               AS obs7,
        @TIPO                                                                  AS tipo,
-       paym.name                                                              AS metodo
+       paym.name                                                              AS metodo,
+       nff.remarks                                                            AS obsNota
 FROM sqldados.eord AS EO
        INNER JOIN T2_ECOMERCE AS T2
                   ON (T2.storeno = EO.storeno AND T2.ordno = EO.ordno)
@@ -350,7 +352,8 @@ SELECT loja,
        obs6,
        obs7,
        tipo,
-       metodo
+       metodo,
+       obsNota
 FROM VENDA_NORMAL AS VN
 UNION
 SELECT loja,
@@ -406,7 +409,8 @@ SELECT loja,
        obs6,
        obs7,
        tipo,
-       metodo
+       metodo,
+       obsNota
 FROM VENDA_ECOMERCE;
 
 DROP TEMPORARY TABLE IF EXISTS PEDIDO_PISO;
@@ -511,7 +515,8 @@ SELECT loja,
        tipo,
        metodo,
        IFNULL(piso, 0.00)                   AS piso,
-       IFNULL(loc, '')                      AS loc
+       IFNULL(loc, '')                      AS loc,
+       obsNota
 FROM PEDIDOS
        LEFT JOIN PEDIDO_PISO
                  USING (loja, pedido)

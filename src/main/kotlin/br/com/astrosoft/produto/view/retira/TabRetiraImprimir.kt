@@ -88,7 +88,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
 
     columnGrid(Pedido::frete, "R$ Frete")
     columnGrid(Pedido::valorComFrete, "R$ Nota")
-    columnGrid(Pedido::obs, "Obs").expand()
+    columnGrid(Pedido::obsNota, "Obs").expand()
 
     columnGrid(Pedido::username, "Usuário")
 

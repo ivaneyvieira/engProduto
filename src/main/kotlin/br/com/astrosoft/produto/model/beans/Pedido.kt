@@ -68,8 +68,15 @@ class Pedido(
   var metodo: String?,
   var piso: Int?,
   var loc: String?,
+  var obsNota: String?,
 ) {
   var seq: Int = 0
+
+  val observacao: String
+    get() {
+      val listObs = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
+      return listObs.filter{ !it.isNullOrBlank() }.joinToString(separator = " / ")
+    }
 
   val dataHoraPrint
     get() = if (dataPrint == null || horaPrint == null) null
