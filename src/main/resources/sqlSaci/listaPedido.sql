@@ -105,10 +105,10 @@ SELECT EO.storeno                                                             AS
        IFNULL(T2.nfse_entrega, '')                                            AS nfseEnt,
        IF(T2.data_entrega = 0, NULL, CAST(T2.data_entrega AS DATE))           AS dataEnt,
        SEC_TO_TIME(nfe2.auxLong4)                                             AS horaEnt,
-       (valor_entrega / 100)                                                  AS valorEnt,
+       (valor_entrega / 100) AS valorEnt,
 
        IFNULL(E.no, 0)                                                        AS vendno,
-       CAST(CONCAT(E.no, '-', E.sname) AS CHAR)                               AS vendedor,
+       CAST(CONCAT(E.no, '-', E.name) AS CHAR)                                AS vendedor,
        IFNULL(C.no, 0)                                                        AS custno,
        CAST(CONCAT(LPAD(C.no * 1, 6, '0'), '-', C.name) AS CHAR)              AS cliente,
        CAST(CONCAT('(', IFNULL(CA.ddd, LEFT(C.ddd, 3)), ')',
@@ -217,7 +217,7 @@ SELECT EO.storeno                                                             AS
        (valor_entrega / 100)                                                  AS valorEnt,
 
        IFNULL(E.no, 0)                                                        AS vendno,
-       CAST(CONCAT(E.no, '-', E.sname) AS CHAR)                               AS vendedor,
+       CAST(CONCAT(E.no, '-', E.name) AS CHAR)                               AS vendedor,
        IFNULL(C.no, 0)                                                        AS custno,
        CAST(CONCAT(LPAD(C.no * 1, 6, '0'), '-', C.name) AS CHAR)              AS cliente,
        CAST(CONCAT('(', IFNULL(CA.ddd, LEFT(C.ddd, 3)), ')',

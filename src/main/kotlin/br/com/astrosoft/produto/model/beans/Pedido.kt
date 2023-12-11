@@ -72,10 +72,12 @@ class Pedido(
 ) {
   var seq: Int = 0
 
+  fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7).mapNotNull { it?.trim() }.filter { it != "" }
+
+
   val observacao: String
     get() {
-      val listObs = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
-      return listObs.filter{ !it.isNullOrBlank() }.joinToString(separator = " / ")
+      return listObs().joinToString(separator = " / ")
     }
 
   val dataHoraPrint

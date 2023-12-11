@@ -8,15 +8,25 @@ import br.com.astrosoft.produto.model.beans.ProdutoPedido
 class RomaneioSeparacao : PrintText<ProdutoPedido>() {
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
+    val listObs = pedido?.listObs().orEmpty()
     println("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
 
-    println("Loja: ${pedido?.nomeLoja}")
-    println("Usuario da Impressao: ${AppConfig.userLogin()?.login}")
-    println("NF de Fatura: ${pedido?.nfnoFat}/${pedido?.nfseFat} Data: ${pedido?.dataFat} Hora: ${pedido?.horaFat}")
-    println("PDF: ${pedido?.pdvnoVenda} Pgto: ${pedido?.metodo ?: ""} Valor: ${pedido?.valorFat.format()}")
-    println("Cliente: ${pedido?.cliente}")
-    println("Vendedor (a): ${pedido?.vendedor}")
-    println("Obs na Reserva: ${pedido?.observacao ?: ""}")
+    println("<B>Loja: </B>${pedido?.nomeLoja}")
+    println("<B>Usuario da Impressao: </B>${AppConfig.userLogin()?.login}")
+    println("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
+    println("<B>PDF: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
+    println("<B>Cliente: </B>${pedido?.cliente}")
+    println("<B>Vendedor (a): </B>${pedido?.vendedor}")
+    if (listObs.isNotEmpty()) {
+      println("<B>Obs na Reserva: </B>${listObs.firstOrNull() ?: ""}")
+    }else{
+      println("<B>Obs na Reserva: </B>")
+    }
+    if (listObs.size > 1) {
+      listObs.subList(1, listObs.size).forEach { obs ->
+        println("                $obs")
+      }
+    }
   }
 
   init {

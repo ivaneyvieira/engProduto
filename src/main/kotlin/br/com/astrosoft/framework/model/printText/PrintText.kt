@@ -109,7 +109,9 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         val margem = (widthPage - textOrig.length) / 2
         " ".repeat(margem) + textOrig
       } else textOrig
-      val textNeg = if (negrito) textCenter.negrito() else textCenter.negritoOff()
+      val textNeg = if (negrito) textCenter.negrito() else {
+        textCenter.replace("<B>", NEGRITO_ON).replace("</B>", NEGRITO_OFF).negritoOff()
+      }
       return@let textNeg
     })
   }
