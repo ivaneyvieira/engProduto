@@ -72,8 +72,15 @@ class Pedido(
 ) {
   var seq: Int = 0
 
-  fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7).mapNotNull { it?.trim() }.filter { it != "" }
-
+  fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
+    .mapNotNull { it?.trim() }
+    .filter { it != "" }
+    .flatMap {obs ->
+      if(obs.length > 40)
+        listOf(obs.mid(0, 40), obs.mid(40, obs.length))
+      else
+        listOf(obs)
+    }
 
   val observacao: String
     get() {
