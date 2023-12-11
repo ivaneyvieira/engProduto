@@ -125,7 +125,7 @@ SELECT N.storeno                          AS loja,
          WHEN tipo = 15
            THEN 'NFE'
          ELSE ''
-         END                              AS tipoNotaSaida,
+       END                                AS tipoNotaSaida,
        IFNULL(ENT.notaEntrega, '')        AS notaEntrega,
        CAST(ENT.dataEntrega AS DATE)      AS dataEntrega
 FROM sqldados.nf AS N
@@ -168,7 +168,7 @@ WHERE issuedate BETWEEN :dataInicial AND :dataFinal
          WHEN tipo = 7
            THEN 'OUTRAS_NFS'
          ELSE 'SP_REME'
-         END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
+       END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :storeno OR :storeno = 0)
   AND (N.nfno = :nfno OR :nfno = 0)

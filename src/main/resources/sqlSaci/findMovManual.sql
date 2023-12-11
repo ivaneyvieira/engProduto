@@ -1,5 +1,5 @@
-select *
-from sqldados.stkmov AS M
-inner join sqldados.prd AS P
-ON P.no = M.prdno
-where
+SELECT *
+FROM sqldados.stkmov AS M
+       INNER JOIN sqldados.prd AS P
+                  ON P.no = M.prdno
+WHERE

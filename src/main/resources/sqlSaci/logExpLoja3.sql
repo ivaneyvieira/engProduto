@@ -12,13 +12,14 @@ SHOW INDEX FROM sqldados.prdloc;
 
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE3;
-CREATE TEMPORARY TABLE T_PRD_GRADE3 (
+CREATE TEMPORARY TABLE T_PRD_GRADE3
+(
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT storeno, prdno, grade, qtty_varejo
-FROM stk         AS S
-  INNER JOIN prd AS P
-	       ON P.no = S.prdno
+FROM stk AS S
+       INNER JOIN prd AS P
+                  ON P.no = S.prdno
 WHERE storeno = 3;
 
 DELETE
@@ -37,7 +38,7 @@ WHERE storeno = 3
 
 
 INSERT INTO sqldados.prdloc2(stkmin, stkmax, l1, l2, l3, l4, l5, l6, l7, l8, m1, m2, m3, m4, m5, m6, m7, m8,
-			     storeno, sano, bits, s1, s2, s3, s4, s5, s6, s7, prdno, grade, localizacao, c1, c2)
+                             storeno, sano, bits, s1, s2, s3, s4, s5, s6, s7, prdno, grade, localizacao, c1, c2)
 SELECT 0      AS stkmin,
        0      AS stkmax,
        0      AS l1,

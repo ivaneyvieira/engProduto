@@ -6,9 +6,9 @@ CREATE TEMPORARY TABLE T
 SELECT P.no                         AS prdno,
        IFNULL(B.grade, '')          AS grade,
        IFNULL(B.barcode, P.barcode) AS barcode
-FROM sqldados.prd           AS P
-  LEFT JOIN sqldados.prdbar AS B
-	      ON B.prdno = P.no
+FROM sqldados.prd AS P
+       LEFT JOIN sqldados.prdbar AS B
+                 ON B.prdno = P.no
 WHERE B.barcode = LPAD(:barcode, 16, ' ')
    OR (P.barcode = LPAD(:barcode, 16, ' '))
 GROUP BY prdno, IFNULL(B.grade, '');

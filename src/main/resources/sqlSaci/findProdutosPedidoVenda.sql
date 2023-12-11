@@ -20,23 +20,23 @@ SELECT X.storeno                                          AS loja,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD,
        ROUND(IFNULL(S.qtty_varejo, 0) / 1000)             AS estoque
-FROM sqldados.prd            AS P
-  INNER JOIN sqldados.eoprd  AS X
-	       ON P.no = X.prdno
-  INNER JOIN sqldados.eord   AS N
-	       USING (storeno, ordno)
-  LEFT JOIN  sqldados.stk    AS S
-	       ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
-  LEFT JOIN  sqldados.prdbar AS B
-	       ON P.no = B.prdno AND B.grade = X.grade
-  LEFT JOIN  sqldados.prdloc AS L
-	       ON L.prdno = P.no AND L.storeno = 4
-  LEFT JOIN  sqldados.vend   AS F
-	       ON F.no = P.mfno
-  LEFT JOIN  sqldados.type   AS T
-	       ON T.no = P.typeno
-  LEFT JOIN  sqldados.cl
-	       ON cl.no = P.clno
+FROM sqldados.prd AS P
+       INNER JOIN sqldados.eoprd AS X
+                  ON P.no = X.prdno
+       INNER JOIN sqldados.eord AS N
+                  USING (storeno, ordno)
+       LEFT JOIN sqldados.stk AS S
+                 ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
+       LEFT JOIN sqldados.prdbar AS B
+                 ON P.no = B.prdno AND B.grade = X.grade
+       LEFT JOIN sqldados.prdloc AS L
+                 ON L.prdno = P.no AND L.storeno = 4
+       LEFT JOIN sqldados.vend AS F
+                 ON F.no = P.mfno
+       LEFT JOIN sqldados.type AS T
+                 ON T.no = P.typeno
+       LEFT JOIN sqldados.cl
+                 ON cl.no = P.clno
 WHERE X.storeno = :storeno
   AND X.ordno = :ordno
 GROUP BY codigo, grade
