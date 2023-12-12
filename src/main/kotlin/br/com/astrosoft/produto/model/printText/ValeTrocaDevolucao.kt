@@ -25,7 +25,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     )
     println("Referente: ${nota.remarks ?: ""}", negrito = true)
     println("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
-    val totalTxt = "Valor Total do Vale Troca R$: ${nota.produtos().sumOf { it.valorTotal ?: 0.00 }.format()}"
+    val totalTxt = "Valor Total do Vale Troca R$: ${nota.nfValor.format()}"
     println(totalTxt, negrito = true)
     printLine('-')
   }
