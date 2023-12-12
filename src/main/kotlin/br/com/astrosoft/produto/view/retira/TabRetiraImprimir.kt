@@ -76,7 +76,6 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
 
-    columnGrid(Pedido::dataHoraPrint, "Impressão")
     columnGrid(Pedido::data, "Data")
     columnGrid(Pedido::hora, "Hora")
 
