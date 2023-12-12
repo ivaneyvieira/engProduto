@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.retira
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.Pedido
@@ -12,6 +13,7 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.icon.VaadinIcon.CLOSE
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
@@ -53,7 +55,9 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
   }
 
   override fun Grid<Pedido>.gridPanel() {
-    setSelectionMode(SelectionMode.MULTI)
+    addColumnButton(VaadinIcon.PRINT, "Imprimir", "Imprimir") { pedido ->
+      viewModel.confirmaPrint(pedido)
+    }
 
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
