@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   private val subView
@@ -49,7 +50,10 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     val impressora = userSaci?.impressoraRet ?: ""
 
     viewModel.view.showPrintText(dummyPrinter.text(), printerUser = listOf(impressora)) {
-      if (pedido.dataHoraPrint == null) pedido.marcaImpresso()
+      if (pedido.dataHoraPrint == null) {
+        pedido.marcaImpresso()
+        pedido.marcaDataHora(LocalDateTime.now())
+      }
       updateGridImprimir()
     }
   }

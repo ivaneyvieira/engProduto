@@ -144,11 +144,11 @@ class Pedido(
   }
 
   fun marcaDataHora(dataHora: LocalDateTime) {
-    saci.ativaDataHoraImpressao(loja, pedido, dataHora.toLocalDate(), dataHora.toLocalTime())
+    saci.ativaDataHoraImpressao(loja, pedido, dataHora.toLocalDate(), dataHora.toLocalTime(), AppConfig.userLogin()?.no ?: 0)
   }
 
   private fun desmarcaDataHora() {
-    saci.ativaDataHoraImpressao(loja, pedido, null, null)
+    saci.ativaDataHoraImpressao(loja, pedido, null, null, 0)
   }
 
   fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)

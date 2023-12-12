@@ -575,14 +575,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?) {
+  fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?, userno: Int) {
     val sql = "/sqlSaci/ativaDataHoraImpressao.sql"
     script(sql) {
       addParameter("storeno", storeno)
       addParameter("ordno", ordno)
       addParameter("data", data?.toSaciDate() ?: 0)
       addParameter("hora", hora ?: LocalTime.MIN)
-      addParameter("userno", AppConfig.userLogin()?.no ?: 0)
+      addParameter("userno", userno)
     }
   }
 

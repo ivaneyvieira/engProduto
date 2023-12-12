@@ -2,8 +2,8 @@ package br.com.astrosoft.produto.view.retira
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraImpresso
@@ -54,13 +54,12 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
 
   override fun Grid<Pedido>.gridPanel() {
     setSelectionMode(SelectionMode.MULTI)
-    addColumnSeq("Seq")
 
     columnGrid(Pedido::tipoEcommece, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
-
     columnGrid(Pedido::dataHoraPrint, "Impressão")
+
     columnGrid(Pedido::data, "Data")
     columnGrid(Pedido::hora, "Hora")
 
@@ -68,18 +67,11 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
 
     columnGrid(Pedido::dataFat, "Data")
     columnGrid(Pedido::horaFat, "Hora")
-    columnGrid(Pedido::loc, "CD")
-
-    columnGrid(Pedido::piso, "Piso")
     columnGrid(Pedido::vendno, "Vendedor")
+
     columnGrid(Pedido::frete, "R$ Frete")
-
     columnGrid(Pedido::valorComFrete, "R$ Nota")
-    columnGrid(Pedido::obs, "Obs")
-    columnGrid(Pedido::nfEnt, "NF Ent")
+    columnGrid(Pedido::cliente, "Cliente").expand()
 
-    columnGrid(Pedido::dataEnt, "Data")
-    columnGrid(Pedido::horaEnt, "Hora")
-    columnGrid(Pedido::username, "Usuário")
   }
 }
