@@ -152,6 +152,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             h4("Retira") {
               colspan = 2
             }
+            select<String>("Impressora") {
+              isReadOnly = readOnly
+              setItems(impressoras.distinct().sorted())
+              binder.bind(this, UserSaci::impressoraRet.name)
+            }
             checkBox("Imprimir") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::retiraImprimir.name)

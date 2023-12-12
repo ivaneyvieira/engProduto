@@ -110,6 +110,19 @@ class UserSaci : IUser {
       )
     }
 
+  var impressoraRet: String?
+    get() = lojas.getOrNull(3)
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        value ?: "",
+        listLojas.getOrNull(4) ?: "",
+      )
+    }
+
   val lojaUsuario
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
