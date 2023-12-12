@@ -49,10 +49,9 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     val impressora = userSaci?.impressoraRet ?: ""
 
     viewModel.view.showPrintText(dummyPrinter.text(), printerUser = listOf(impressora)) {
-      if (pedido.dataHoraPrint != null) pedido.marcaImpresso()
+      if (pedido.dataHoraPrint == null) pedido.marcaImpresso()
+      updateGridImprimir()
     }
-
-    updateGridImprimir()
   }
 }
 

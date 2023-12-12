@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraImpressoSemNota
-import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraImpressoSemNotaViewModel
+import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraImpresso
+import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraImpressoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -17,22 +17,22 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT
 
-class TabRetiraImpressoSemNota(val viewModel: PedidoRetiraImpressoSemNotaViewModel) :
+class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
   TabPanelGrid<Pedido>(Pedido::class),
-  IPedidoRetiraImpressoSemNota {
-  private lateinit var edtPedidoImpressoSemNota: TextField
-  override val label = "Impresso sem Nota"
+  IPedidoRetiraImpresso {
+  private lateinit var edtPedidoImpresso: TextField
+  override val label = "Impresso"
 
   override fun updateComponent() {
-    viewModel.updateGridImpressoSemNota()
+    viewModel.updateGridImpresso()
   }
 
-  override val pedidoImpressoSemNota: Int
-    get() = edtPedidoImpressoSemNota.value?.toIntOrNull() ?: 0
+  override val pedidoImpressoa: Int
+    get() = edtPedidoImpresso.value?.toIntOrNull() ?: 0
 
   override fun isAuthorized(): Boolean {
     val userSaci = (AppConfig.userLogin() as? UserSaci) ?: return false
-    return userSaci.retiraImpressoSemNota
+    return userSaci.retiraImpresso
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -43,7 +43,7 @@ class TabRetiraImpressoSemNota(val viewModel: PedidoRetiraImpressoSemNotaViewMod
       }
     }
 
-    edtPedidoImpressoSemNota = textField("Numero Pedido") {
+    edtPedidoImpresso = textField("Numero Pedido") {
       this.valueChangeMode = TIMEOUT
       this.isAutofocus = true
       addValueChangeListener {
@@ -60,7 +60,6 @@ class TabRetiraImpressoSemNota(val viewModel: PedidoRetiraImpressoSemNotaViewMod
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
 
-    columnGrid(Pedido::dataHoraPrint, "Data Hora Impressão")
     columnGrid(Pedido::data, "Data")
     columnGrid(Pedido::hora, "Hora")
 

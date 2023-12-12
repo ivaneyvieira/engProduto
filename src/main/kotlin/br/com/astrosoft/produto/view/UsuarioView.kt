@@ -161,9 +161,9 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::retiraImprimir.name)
             }
-            checkBox("Impresso sem Nota") {
+            checkBox("Impresso") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::retiraImpressoSemNota.name)
+              binder.bind(this, UserSaci::retiraImpresso.name)
             }
           }
         }

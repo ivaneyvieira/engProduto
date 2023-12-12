@@ -7,12 +7,12 @@ import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
 
-class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel) {
+class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
   private val subView
-    get() = viewModel.view.tabRetiraImpressoSemNota
+    get() = viewModel.view.tabRetiraImpresso
 
   private fun listPedidosEntregaImpressoSemNota(): List<Pedido> {
-    val numPedido = subView.pedidoImpressoSemNota
+    val numPedido = subView.pedidoImpressoa
     return Pedido
       .listaPedidoImpressoSemNota(
         FiltroPedido(
@@ -27,7 +27,7 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
       }
   }
 
-  fun updateGridImpressoSemNota() {
+  fun updateGridImpresso() {
     subView.updateGrid(listPedidosEntregaImpressoSemNota())
   }
 
@@ -37,12 +37,12 @@ class PedidoRetiraImpressoSemNotaViewModel(val viewModel: PedidoRetiraViewModel)
       pedido.desmarcaImpresso()
     }
 
-    updateGridImpressoSemNota()
+    updateGridImpresso()
   }
 }
 
-interface IPedidoRetiraImpressoSemNota : ITabView {
+interface IPedidoRetiraImpresso : ITabView {
   fun updateGrid(itens: List<Pedido>)
   fun itensSelecionados(): List<Pedido>
-  val pedidoImpressoSemNota: Int
+  val pedidoImpressoa: Int
 }
