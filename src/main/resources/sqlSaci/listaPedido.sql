@@ -105,7 +105,7 @@ SELECT EO.storeno                                                             AS
        IFNULL(T2.nfse_entrega, '')                                            AS nfseEnt,
        IF(T2.data_entrega = 0, NULL, CAST(T2.data_entrega AS DATE))           AS dataEnt,
        SEC_TO_TIME(nfe2.auxLong4)                                             AS horaEnt,
-       (valor_entrega / 100) AS valorEnt,
+       (valor_entrega / 100)                                                  AS valorEnt,
 
        IFNULL(E.no, 0)                                                        AS vendno,
        CAST(CONCAT(E.no, '-', E.name) AS CHAR)                                AS vendedor,
@@ -130,6 +130,7 @@ SELECT EO.storeno                                                             AS
        IFNULL(U.name, '')                                                     AS username,
        CAST(IF(EO.l9 = 0, NULL, EO.l9) AS DATE)                               AS dataPrint,
        SEC_TO_TIME(IF(EO.l8 = 0, NULL, EO.l8))                                AS horaPrint,
+       EO.l5                                                                  AS userPrint,
        RPAD(IFNULL(MID(O.remarks__480, 1, 80), ' '), 80, ' ')                 AS obs1,
        RPAD(IFNULL(MID(O.remarks__480, 81, 80), ' '), 80, ' ')                AS obs2,
        RPAD(IFNULL(MID(O.remarks__480, 161, 80), ' '), 80, ' ')               AS obs3,
@@ -217,7 +218,7 @@ SELECT EO.storeno                                                             AS
        (valor_entrega / 100)                                                  AS valorEnt,
 
        IFNULL(E.no, 0)                                                        AS vendno,
-       CAST(CONCAT(E.no, '-', E.name) AS CHAR)                               AS vendedor,
+       CAST(CONCAT(E.no, '-', E.name) AS CHAR)                                AS vendedor,
        IFNULL(C.no, 0)                                                        AS custno,
        CAST(CONCAT(LPAD(C.no * 1, 6, '0'), '-', C.name) AS CHAR)              AS cliente,
        CAST(CONCAT('(', IFNULL(CA.ddd, LEFT(C.ddd, 3)), ')',
@@ -239,6 +240,7 @@ SELECT EO.storeno                                                             AS
        IFNULL(U.name, '')                                                     AS username,
        CAST(IF(EO.l9 = 0, NULL, EO.l9) AS DATE)                               AS dataPrint,
        SEC_TO_TIME(IF(EO.l8 = 0, NULL, EO.l8))                                AS horaPrint,
+       EO.l5                                                                  AS userPrint,
        RPAD(IFNULL(MID(O.remarks__480, 1, 80), ' '), 80, ' ')                 AS obs1,
        RPAD(IFNULL(MID(O.remarks__480, 81, 80), ' '), 80, ' ')                AS obs2,
        RPAD(IFNULL(MID(O.remarks__480, 161, 80), ' '), 80, ' ')               AS obs3,
@@ -344,6 +346,7 @@ SELECT loja,
        username,
        dataPrint,
        horaPrint,
+       userPrint,
        obs1,
        obs2,
        obs3,
@@ -401,6 +404,7 @@ SELECT loja,
        username,
        dataPrint,
        horaPrint,
+       userPrint,
        obs1,
        obs2,
        obs3,
@@ -505,6 +509,8 @@ SELECT loja,
        username,
        dataPrint,
        horaPrint,
+       userPrint,
+       U.name                               AS userPrintName,
        obs1,
        obs2,
        obs3,
@@ -522,6 +528,8 @@ FROM PEDIDOS
                  USING (loja, pedido)
        LEFT JOIN PEDIDO_CD
                  USING (loja, pedido)
+       LEFT JOIN sqldados.users AS U
+                 ON userPrint = U.no
 WHERE (area LIKE CONCAT(:filtroArea, '%') OR :filtroArea = '' OR
        rota LIKE CONCAT('%', :filtroRota, '%') OR :filtroRota = '')
   AND (dataFat = :filtroData OR :filtroData = 0)

@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.localDate
 import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.util.toSaciDate
@@ -57,6 +56,8 @@ class Pedido(
   var username: String?,
   var dataPrint: LocalDate?,
   var horaPrint: LocalTime?,
+  var userPrint: Int?,
+  var userPrintName: String?,
   var obs1: String?,
   var obs2: String?,
   var obs3: String?,
@@ -75,8 +76,8 @@ class Pedido(
   fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
     .mapNotNull { it?.trim() }
     .filter { it != "" }
-    .flatMap {obs ->
-      if(obs.length > 40)
+    .flatMap { obs ->
+      if (obs.length > 40)
         listOf(obs.mid(0, 40), obs.mid(40, obs.length))
       else
         listOf(obs)

@@ -582,6 +582,7 @@ class QuerySaci : QueryDB(database) {
       addParameter("ordno", ordno)
       addParameter("data", data?.toSaciDate() ?: 0)
       addParameter("hora", hora ?: LocalTime.MIN)
+      addParameter("userno", AppConfig.userLogin()?.no ?: 0)
     }
   }
 

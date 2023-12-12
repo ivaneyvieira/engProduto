@@ -12,19 +12,19 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     println("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
 
     println("<B>Loja: </B>${pedido?.nomeLoja}")
-    println("<B>Usuario da Impressao: </B>${AppConfig.userLogin()?.login}")
+    println("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
     println("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
     println("<B>PDF: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
     println("<B>Cliente: </B>${pedido?.cliente}")
     println("<B>Vendedor (a): </B>${pedido?.vendedor}")
     if (listObs.isNotEmpty()) {
       println("<B>Obs na Reserva: </B>${listObs.firstOrNull() ?: ""}")
-    }else{
+    } else {
       println("<B>Obs na Reserva: </B>")
     }
     if (listObs.size > 1) {
       listObs.subList(1, listObs.size).forEach { obs ->
-        println("                $obs")
+        println(obs)
       }
     }
   }

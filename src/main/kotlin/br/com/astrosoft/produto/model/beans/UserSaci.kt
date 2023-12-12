@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
 
 class UserSaci : IUser {
   override var no: Int = 0
-  var name: String = ""
+  override var name: String = ""
   override var login: String = ""
   override var senha: String = ""
   var bitAcesso: Long = 0
