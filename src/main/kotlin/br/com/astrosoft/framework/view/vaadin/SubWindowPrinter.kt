@@ -16,7 +16,7 @@ import java.io.File
 
 class SubWindowPrinter(
   text: String,
-  showButtonImprimir: Boolean = true,
+  showPrinter: Boolean = true,
   printerUser: List<String>,
   rota: Rota?,
   val printEvent: (impressora: String) -> Unit
@@ -55,48 +55,48 @@ class SubWindowPrinter(
             close()
           }
         }
-        cmbImpressora = select("Impressora") {
-          this.isVisible = showButtonImprimir
-          val userSaci = AppConfig.userLogin() as? UserSaci
-          val allPrinter =
-              if (rota == null) {
-                Impressora.allTermica().map { it.name }
-              } else {
-                Impressora.allTermica()
-                  .map { it.name } + ETipoRota.entries.map { it.nome }
-              }
-          val lista =
-              when {
-                userSaci?.admin == true                    -> allPrinter
-                printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
-                printerUser.isEmpty()                      -> emptyList()
-                else                                       -> printerUser
-              }
-          setItems(lista)
-
-          this.value = lista.firstOrNull()
-        }
-        this.button("Imprimir") {
-          this.isVisible = showButtonImprimir
-          icon = VaadinIcon.PRINT.create()
-          this.onLeftClick {
-            DialogHelper.showQuestion("Confirma a impressão?") {
-              val impressora = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
-              val tipoRota = Impressora.findImpressora(impressora)?.tipoRota()
-              if (tipoRota != null) {
-                val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
-                val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
-                val printerRota = listOf(impressoraOrigem, impressoraDestino)
-                printerRota.forEach { printer ->
-                  imprimeText(text, printer)
+        if (showPrinter) {
+          cmbImpressora = this.select("Impressora") {
+            val userSaci = AppConfig.userLogin() as? UserSaci
+            val allPrinter =
+                if (rota == null) {
+                  Impressora.allTermica().map { it.name }
+                } else {
+                  Impressora.allTermica()
+                    .map { it.name } + ETipoRota.entries.map { it.nome }
                 }
-                printEvent(printerRota.firstOrNull() ?: "")
-              } else {
-                imprimeText(text, impressora)
-                printEvent(impressora)
+            val lista =
+                when {
+                  userSaci?.admin == true                    -> allPrinter
+                  printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                  printerUser.isEmpty()                      -> emptyList()
+                  else                                       -> printerUser
+                }
+            setItems(lista)
+
+            this.value = lista.firstOrNull()
+          }
+          this.button("Imprimir") {
+            icon = VaadinIcon.PRINT.create()
+            this.onLeftClick {
+              DialogHelper.showQuestion("Confirma a impressão?") {
+                val impressora = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
+                val tipoRota = Impressora.findImpressora(impressora)?.tipoRota()
+                if (tipoRota != null) {
+                  val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
+                  val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
+                  val printerRota = listOf(impressoraOrigem, impressoraDestino)
+                  printerRota.forEach { printer ->
+                    imprimeText(text, printer)
+                  }
+                  printEvent(printerRota.firstOrNull() ?: "")
+                } else {
+                  imprimeText(text, impressora)
+                  printEvent(impressora)
+                }
+                this@SubWindowPrinter.close()
+                //TODO verificar se a impressão foi realizada
               }
-              this@SubWindowPrinter.close()
-              //TODO verificar se a impressão foi realizada
             }
           }
         }
@@ -107,5 +107,3 @@ class SubWindowPrinter(
     isCloseOnEsc = true
   }
 }
-
-

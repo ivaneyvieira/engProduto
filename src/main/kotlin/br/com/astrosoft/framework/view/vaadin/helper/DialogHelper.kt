@@ -55,12 +55,12 @@ object DialogHelper {
 
   fun showPrintText(
     text: String,
-    showButtonImprimir: Boolean = true,
+    showPrinter: Boolean = true,
     printerUser: List<String>,
     rota: Rota?,
     printEvent: (impressora: String) -> Unit
   ) {
-    val form = SubWindowPrinter(text, showButtonImprimir, printerUser, rota, printEvent)
+    val form = SubWindowPrinter(text, showPrinter, printerUser, rota, printEvent)
     form.open()
   }
 

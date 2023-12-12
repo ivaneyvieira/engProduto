@@ -63,7 +63,6 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     edtData = datePicker("Data") {
       this.localePtBr()
       this.value = LocalDate.now()
-      this.isVisible = AppConfig.userLogin()?.admin == true
       this.isClearButtonVisible = true
       addValueChangeListener {
         viewModel.updateGridImprimir()

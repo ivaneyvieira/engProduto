@@ -41,9 +41,11 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
     val userSaci = AppConfig.userLogin() as? UserSaci
     val impressora = userSaci?.impressoraRet ?: ""
 
+    val text= dummyPrinter.text()
+
     viewModel.view.showPrintText(
-      dummyPrinter.text(),
-      showButtonImprimir = userSaci?.admin == true,
+      text,
+      showPrinter = userSaci?.admin == true,
       printerUser = listOf(impressora)
     ) {
       if (pedido.dataHoraPrint == null) {

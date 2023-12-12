@@ -8,8 +8,8 @@ interface ITabView {
   val label: String
   fun updateComponent()
   fun printerPreview(
+    showPrinter: Boolean = true,
     rota: Rota? = null,
-    showButtonImprimir: Boolean = true,
     printEvent: (impressora: String) -> Unit = {}
   ): IPrinter
 }
