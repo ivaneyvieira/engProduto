@@ -37,8 +37,8 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       tipo = ETipoPedido.RETIRA,
       loja = (AppConfig.userLogin() as? UserSaci)?.storeno ?: 0,
       pesquisa = edtPesquisa?.value ?: "",
-      dataInicial = edtData?.value ?: LocalDate.now(),
-      dataFinal = edtData?.value ?: LocalDate.now(),
+      dataInicial = edtData?.value,
+      dataFinal = edtData?.value,
     )
   }
 
@@ -60,10 +60,11 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       }
     }
 
-    edtData = datePicker("Data inicial") {
+    edtData = datePicker("Data") {
       this.localePtBr()
       this.value = LocalDate.now()
       this.isVisible = AppConfig.userLogin()?.admin == true
+      this.isClearButtonVisible = true
       addValueChangeListener {
         viewModel.updateGridImprimir()
       }

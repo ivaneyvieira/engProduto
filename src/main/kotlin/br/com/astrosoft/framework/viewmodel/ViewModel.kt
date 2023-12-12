@@ -42,6 +42,7 @@ interface IView {
   fun showReport(chave: String, report: ByteArray)
   fun showPrintText(
     text: String,
+    showButtonImprimir: Boolean = true,
     printerUser: List<String> = emptyList(),
     rota: Rota? = null,
     printEvent: (impressora: String) -> Unit

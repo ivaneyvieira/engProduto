@@ -16,6 +16,7 @@ import java.io.File
 
 class SubWindowPrinter(
   text: String,
+  showButtonImprimir: Boolean = true,
   printerUser: List<String>,
   rota: Rota?,
   val printEvent: (impressora: String) -> Unit
@@ -55,6 +56,7 @@ class SubWindowPrinter(
           }
         }
         cmbImpressora = select("Impressora") {
+          this.isVisible = showButtonImprimir
           val userSaci = AppConfig.userLogin() as? UserSaci
           val allPrinter =
               if (rota == null) {
@@ -75,6 +77,7 @@ class SubWindowPrinter(
           this.value = lista.firstOrNull()
         }
         this.button("Imprimir") {
+          this.isVisible = showButtonImprimir
           icon = VaadinIcon.PRINT.create()
           this.onLeftClick {
             DialogHelper.showQuestion("Confirma a impressão?") {

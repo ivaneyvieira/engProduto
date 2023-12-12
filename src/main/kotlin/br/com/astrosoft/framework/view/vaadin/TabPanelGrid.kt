@@ -47,8 +47,12 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
 
   fun itensSelecionados() = gridPanel.selectedItems.toList()
 
-  override fun printerPreview(rota: Rota?, printEvent: (impressora: String) -> Unit): IPrinter {
-    return PrinterPreview(printerUser(), rota, printEvent)
+  override fun printerPreview(
+    rota: Rota?,
+    showButtonImprimir: Boolean,
+    printEvent: (impressora: String) -> Unit
+  ): IPrinter {
+    return PrinterPreview(printerUser(), rota, showButtonImprimir, printEvent)
   }
 
   open fun printerUser(): List<String> = emptyList()

@@ -31,7 +31,10 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     val userSaci = AppConfig.userLogin() as? UserSaci
     val impressora = userSaci?.impressoraRet ?: ""
 
-    viewModel.view.showPrintText(dummyPrinter.text(), printerUser = listOf(impressora)) {
+    viewModel.view.showPrintText(
+      dummyPrinter.text(),
+      printerUser = listOf(impressora)
+    ) {
       if (pedido.dataHoraPrint == null) {
         pedido.marcaImpresso()
         pedido.marcaDataHora(LocalDateTime.now())

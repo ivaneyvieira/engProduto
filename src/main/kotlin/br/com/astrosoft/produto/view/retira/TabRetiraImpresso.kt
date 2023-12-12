@@ -22,7 +22,6 @@ import com.vaadin.flow.component.icon.VaadinIcon.CLOSE
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT
 import java.time.LocalDate
 
 class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
@@ -41,8 +40,8 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
       tipo = ETipoPedido.RETIRA,
       loja = (AppConfig.userLogin() as? UserSaci)?.storeno ?: 0,
       pesquisa = edtPesquisa?.value ?: "",
-      dataInicial = edtData?.value ?: LocalDate.now(),
-      dataFinal = edtData?.value ?: LocalDate.now(),
+      dataInicial = edtData?.value,
+      dataFinal = edtData?.value,
     )
   }
 
@@ -67,10 +66,11 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
       }
     }
 
-    edtData = datePicker("Data inicial") {
+    edtData = datePicker("Data") {
       this.localePtBr()
       this.value = LocalDate.now()
       this.isVisible = AppConfig.userLogin()?.admin == true
+      this.isClearButtonVisible = true
       addValueChangeListener {
         viewModel.updateGridImpresso()
       }

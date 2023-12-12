@@ -291,8 +291,8 @@ data class FiltroPedido(
   val tipo: ETipoPedido,
   val loja: Int,
   val pesquisa: String = "",
-  val dataInicial: LocalDate,
-  val dataFinal: LocalDate
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?
 )
 
 data class PedidoChave(
