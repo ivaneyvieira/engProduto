@@ -27,6 +27,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
         println(obs)
       }
     }
+    printLine()
   }
 
   init {
