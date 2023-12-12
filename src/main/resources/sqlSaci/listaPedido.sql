@@ -8,7 +8,7 @@ DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
 DO @TIPO := :tipo;
 
-DO @DATA := SUBDATE(CURDATE(), 90)*1;
+DO @DATA := SUBDATE(CURDATE(), 90) * 1;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
@@ -49,6 +49,7 @@ FROM sqlpdv.pxa
 WHERE (pxa.storeno IN (2, 3, 4, 5, 8))
   AND (pxa.storeno = :storeno OR :storeno = 0)
   AND pxa.cfo IN (5922, 6922, 5117, 6117)
+  AND pxa.date >= @DATA
 GROUP BY pxa.storeno, pxa.eordno;
 
 DROP TEMPORARY TABLE IF EXISTS T2_ECOMERCE;
@@ -76,6 +77,7 @@ WHERE (E.storeno IN (4))
   AND E.status NOT IN (3, 5)
   AND (E.storeno = :storeno OR :storeno = 0)
   AND (E.empno = 440)
+  AND P.date >= @DATA
 GROUP BY E.storeno, E.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS VENDA_NORMAL;
@@ -529,5 +531,4 @@ FROM PEDIDOS
        LEFT JOIN sqldados.users AS U
                  ON userPrint = U.no
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
-        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente = @PESQUISANUM
-         )
+        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)
