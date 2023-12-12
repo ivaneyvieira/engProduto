@@ -608,49 +608,13 @@ class QuerySaci : QueryDB(database) {
 
   fun listaPedido(filtro: FiltroPedido): List<Pedido> {
     val sql = "/sqlSaci/listaPedido.sql"
-    val storeno = (AppConfig.userLogin() as? UserSaci)?.storeno ?: 0
-    val ec = if (filtro.ecommerce) "S" else "N"
-
-    val dataInicial = filtro.dataInicial.toSaciDate()
-    val dataFinal = filtro.dataFinal.toSaciDate()
-
-    val pesquisa = filtro.pesquisa.trim()
-    val filtroInt = pesquisa.toIntOrNull() ?: 0
-    val filtroData = pesquisa.parserDate().toSaciDate()
-    val filtroCD =
-        if ((pesquisa.startsWith("CD", ignoreCase = true) || pesquisa.startsWith(
-            "EXP",
-            ignoreCase = true
-          )) && pesquisa.length in listOf(
-            3,
-            4
-          )
-        ) pesquisa.uppercase(Locale.getDefault())
-        else ""
-    val filtroStr = if (filtroInt == 0 && filtroData == 0 && filtroCD == "") pesquisa else ""
-    val filtroLoja = filtroInt
-    val filtroPedido = filtroInt
-    val filtroArea = filtroStr
-    val filtroRota = filtroStr
-    val filtroFat = filtroInt
-    val filtroPiso = filtroInt
-    val filtroVend = filtroInt
 
     return query(sql, Pedido::class) {
       addOptionalParameter("tipo", filtro.tipo.sigla)
-      addOptionalParameter("storeno", if (filtro.tipo == ETipoPedido.ENTREGA) 0 else storeno)
-      addOptionalParameter("ecommerce", ec)
-      addOptionalParameter("dataInicial", dataInicial)
-      addOptionalParameter("dataFinal", dataFinal)
-      addOptionalParameter("filtroPedido", filtroPedido)
-      addOptionalParameter("filtroArea", filtroArea)
-      addOptionalParameter("filtroRota", filtroRota)
-      addOptionalParameter("filtroFat", filtroFat)
-      addOptionalParameter("filtroData", filtroData)
-      addOptionalParameter("filtroPiso", filtroPiso)
-      addOptionalParameter("filtroVend", filtroVend)
-      addOptionalParameter("filtroLoja", filtroLoja)
-      addOptionalParameter("filtroCD", filtroCD)
+      addOptionalParameter("storeno", filtro.loja)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("pesquisa", filtro.pesquisa.trim())
     }
   }
 

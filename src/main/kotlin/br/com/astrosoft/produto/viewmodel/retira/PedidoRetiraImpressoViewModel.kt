@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.exec
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -17,19 +16,7 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
     get() = viewModel.view.tabRetiraImpresso
 
   private fun listPedidosEntregaImpressoSemNota(): List<Pedido> {
-    val numPedido = subView.pedidoImpressoa
-    return Pedido
-      .listaPedidoImpressoSemNota(
-        FiltroPedido(
-          tipo = ETipoPedido.RETIRA,
-          ecommerce = false,
-          dataInicial = null,
-          dataFinal = null
-        )
-      )
-      .filter { pedido ->
-        pedido.pedido == numPedido || numPedido == 0
-      }
+    return Pedido.listaPedidoImpressoSemNota(subView.filtro())
   }
 
   fun updateGridImpresso() {
@@ -67,5 +54,5 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
 interface IPedidoRetiraImpresso : ITabView {
   fun updateGrid(itens: List<Pedido>)
   fun itensSelecionados(): List<Pedido>
-  val pedidoImpressoa: Int
+  fun filtro(): FiltroPedido
 }

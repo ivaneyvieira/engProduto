@@ -11,7 +11,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     val listObs = pedido?.listObs().orEmpty()
     println("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
 
-    println("<B>Loja: </B>${pedido?.nomeLoja}")
+    println("<B>Loja: </B>${pedido?.siglaLoja}")
     println("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
     println("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
     println("<B>PDV: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")

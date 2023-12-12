@@ -1,12 +1,14 @@
 USE sqldados;
 SET SQL_MODE = '';
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+
 DO @TIPO := :tipo;
-DO @EC := :ecommerce;
-DO @DATA1 := IF(@TIPO = 'R', 20170601, 20200101);
-DO @DATA2 := IF(@TIPO = 'R', 20170601, 20200518);
-DO @DATA1 := 20221001;
-DO @DATA2 := 20221001;
+
+DO @DATA := SUBDATE(CURDATE(), 90);
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
@@ -18,7 +20,7 @@ FROM sqldados.eoprdf
 WHERE (((@TIPO = 'R') AND (eoprdf.bits & POW(2, 1))) OR
        ((@TIPO = 'E') AND (NOT eoprdf.bits & POW(2, 1))))
   AND (storeno IN (2, 3, 4, 5, 8))
-  AND (date >= @DATA2);
+  AND (date >= @DATA);
 
 DROP TEMPORARY TABLE IF EXISTS T2;
 CREATE TEMPORARY TABLE T2
@@ -46,7 +48,6 @@ FROM sqlpdv.pxa
                      pxa.pdvno = pxanf.pdvno)
 WHERE (pxa.storeno IN (2, 3, 4, 5, 8))
   AND (pxa.storeno = :storeno OR :storeno = 0)
-  AND (pxa.date >= @DATA2)
   AND pxa.cfo IN (5922, 6922, 5117, 6117)
 GROUP BY pxa.storeno, pxa.eordno;
 
@@ -73,7 +74,6 @@ FROM sqldados.eord AS E
                  ON P.storeno = E.storeno AND E.ordno = P.eordno AND P.nfno != ''
 WHERE (E.storeno IN (4))
   AND E.status NOT IN (3, 5)
-  AND (E.date >= @DATA1)
   AND (E.storeno = :storeno OR :storeno = 0)
   AND (E.empno = 440)
 GROUP BY E.storeno, E.ordno;
@@ -180,10 +180,8 @@ FROM T2
        LEFT JOIN sqldados.eordrk AS OBS
                  ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE EO.status NOT IN (3, 5)
-  AND (EO.date >= @DATA1)
+  AND (EO.date >= @DATA)
   AND (nff.status <> 1 OR nff.status IS NULL)
-  AND (@EC <> 'S')
-  AND P.date > 20170601
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY T2.storeno, T2.ordno;
@@ -291,6 +289,7 @@ FROM sqldados.eord AS EO
        LEFT JOIN sqldados.eordrk AS OBS
                  ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE EO.status NOT IN (0, 5)
+  AND (EO.date >= @DATA)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (EO.date >= :dataInicial OR :dataInicial = 0)
   AND (EO.date <= :dataFinal OR :dataFinal = 0)
@@ -460,8 +459,6 @@ FROM sqldados.eoprd AS P
                   ON P.storeno = E.loja AND P.ordno = E.pedido
        LEFT JOIN T_LOC AS L
                  ON P.prdno = L.prdno
-WHERE localizacao LIKE CONCAT(:filtroCD, '%')
-   OR :filtroCD = ''
 GROUP BY P.storeno, P.ordno;
 
 SELECT loja,
@@ -470,7 +467,7 @@ SELECT loja,
        pedido,
        separado,
        zonaCarga,
-       DATE(IF(entrega = 0, NULL, entrega)) AS entrega,
+       DATE(IF(entrega = 0, NULL, entrega))     AS entrega,
        marca,
        data,
        dataEntrega,
@@ -510,7 +507,7 @@ SELECT loja,
        dataPrint,
        horaPrint,
        userPrint,
-       U.name                               AS userPrintName,
+       U.name                                   AS userPrintName,
        obs1,
        obs2,
        obs3,
@@ -520,9 +517,10 @@ SELECT loja,
        obs7,
        tipo,
        metodo,
-       IFNULL(piso, 0.00)                   AS piso,
-       IFNULL(loc, '')                      AS loc,
-       obsNota
+       IFNULL(piso, 0.00)                       AS piso,
+       IFNULL(loc, '')                          AS loc,
+       obsNota,
+       IF(vendno = 440 AND loja = 4, 'WEB', '') AS tipoEcommece
 FROM PEDIDOS
        LEFT JOIN PEDIDO_PISO
                  USING (loja, pedido)
@@ -530,10 +528,6 @@ FROM PEDIDOS
                  USING (loja, pedido)
        LEFT JOIN sqldados.users AS U
                  ON userPrint = U.no
-WHERE (area LIKE CONCAT(:filtroArea, '%') OR :filtroArea = '' OR
-       rota LIKE CONCAT('%', :filtroRota, '%') OR :filtroRota = '')
-  AND (dataFat = :filtroData OR :filtroData = 0)
-  AND (loc LIKE CONCAT(:filtroCD, '%') OR :filtroCD = '')
-  AND (piso = :filtroPiso OR :filtroPiso = 0 OR vendno = :filtroVend OR :filtroVend = 0 OR
-       pedido = :filtroPedido OR :filtroPedido = 0 OR loja = :filtroLoja OR :filtroLoja = 0 OR
-       nfnoFat = :filtroFat OR :filtroFat = 0)
+HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
+        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente = @PESQUISANUM
+         )

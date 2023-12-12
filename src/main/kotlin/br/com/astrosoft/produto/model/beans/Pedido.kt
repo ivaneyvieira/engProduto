@@ -70,6 +70,7 @@ class Pedido(
   var piso: Int?,
   var loc: String?,
   var obsNota: String?,
+  var tipoEcommece : String?,
 ) {
   var seq: Int = 0
 
@@ -113,10 +114,6 @@ class Pedido(
       else                                 -> null
     }
 
-  val isEcommerce
-    get() = vendno == 440 && loja == 4
-  val tipoEcommece
-    get() = if (isEcommerce) "WEB" else ""
   val paraImprimir: Boolean
     get() = (marca != "S") && (nfnoEnt == "")
   val impressoSemNota: Boolean
@@ -292,10 +289,10 @@ private fun numeroNota(nfno: String?, nfse: String?): String {
 
 data class FiltroPedido(
   val tipo: ETipoPedido,
+  val loja: Int,
   val pesquisa: String = "",
-  val ecommerce: Boolean,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?
+  val dataInicial: LocalDate,
+  val dataFinal: LocalDate
 )
 
 data class PedidoChave(

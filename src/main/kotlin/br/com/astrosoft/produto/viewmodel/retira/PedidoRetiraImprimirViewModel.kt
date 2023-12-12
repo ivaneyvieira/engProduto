@@ -3,12 +3,10 @@ package br.com.astrosoft.produto.viewmodel.retira
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.ETipoPedido
 import br.com.astrosoft.produto.model.beans.FiltroPedido
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
@@ -16,24 +14,8 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     get() = viewModel.view.tabRetiraImprimir
 
   private fun listPedidosEntregaImprimir(): List<Pedido> {
-    val numPedido = subView.pedidoImprimir
-    val data = subView.dataImprimir
-    val area = subView.areaImprimir.trim()
-    val rota = subView.rotaImprimir.trim()
-    return Pedido
-      .listaPedidoImprimir(
-        FiltroPedido(
-          tipo = ETipoPedido.RETIRA,
-          ecommerce = false,
-          dataInicial = null,
-          dataFinal = null
-        )
-      )
-      .filter { pedido ->
-        (pedido.pedido == numPedido || numPedido == 0) &&
-        (pedido.data == data || data == null) && (pedido.rota?.contains(rota) == true || rota == "") &&
-        (pedido.area?.contains(area) == true || area == "")
-      }
+    val filtro = subView.filtro()
+    return Pedido.listaPedidoImprimir(filtro)
   }
 
   fun updateGridImprimir() {
@@ -62,8 +44,5 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
 interface IPedidoRetiraImprimir : ITabView {
   fun updateGrid(itens: List<Pedido>)
   fun itensSelecionados(): List<Pedido>
-  val pedidoImprimir: Int
-  val dataImprimir: LocalDate?
-  val areaImprimir: String
-  val rotaImprimir: String
+  fun filtro(): FiltroPedido
 }
