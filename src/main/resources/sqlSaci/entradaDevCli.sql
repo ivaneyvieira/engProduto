@@ -26,6 +26,7 @@ SELECT I.invno                                                                  
        IFNULL(NF1.pdvno, NF2.pdvno)                                                      AS pdvno,
        IFNULL(NF1.xano, NF2.xano)                                                        AS xano,
        IFNULL(NF1.custno, NF2.custno)                                                    AS custno,
+       IFNULL(NF1.cfo, NF2.cfo)                                                          AS cfo,
        CAST(CONCAT(IFNULL(NF1.nfno, NF2.nfno), '/', IFNULL(NF1.nfse, NF2.nfse)) AS CHAR) AS nfVenda,
        DATE(IFNULL(NF1.issuedate, NF2.issuedate))                                        AS nfData,
        IFNULL(NF1.grossamt / 100, NF2.grossamt / 100)                                    AS nfValor,
@@ -81,6 +82,7 @@ SELECT I.invno,
        IFNULL(I.nfValor, N.grossamt / 100)            AS nfValor,
        IFNULL(I.empno, N.empno)                       AS empno,
        IFNULL(I.cliente, C.name)                      AS cliente,
+       IFNULL(I.cfo, N.cfo)                           AS cfo,
        TRIM(IFNULL(I.vendedor, E.name))               AS vendedor,
        impressora                                     AS impressora,
        U.name                                         AS userName
@@ -102,4 +104,5 @@ WHERE (@PESQUISA = '' OR
        nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE)
+  AND COALESCE(I.cfo, N.cfo, 0) NOT IN (1949, 2949)
 GROUP BY I.invno
