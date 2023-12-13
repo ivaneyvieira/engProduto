@@ -104,5 +104,4 @@ WHERE (@PESQUISA = '' OR
        nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE)
-  AND COALESCE(I.cfo, N.cfo, 0) NOT IN (1949, 2949)
 GROUP BY I.invno
