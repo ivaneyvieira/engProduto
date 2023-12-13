@@ -6,13 +6,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.ETipoPedido
-import br.com.astrosoft.produto.model.beans.FiltroPedido
-import br.com.astrosoft.produto.model.beans.Pedido
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.retira.IPedidoRetiraImprimir
 import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraImprimirViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -20,6 +18,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.SortDirection.ASCENDING
 import com.vaadin.flow.data.provider.SortDirection.DESCENDING
@@ -28,17 +27,25 @@ import java.time.LocalDate
 
 class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanelGrid<Pedido>(Pedido::class),
   IPedidoRetiraImprimir {
-  private var edtPesquisa: TextField? = null
-  private var edtData: DatePicker? = null
-  override val label: String = "Imprimir"
+  private lateinit var cmbLoja: Select<Loja>
+  private lateinit var edtPesquisa: TextField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
+
+  init {
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val user = AppConfig.userLogin() as? UserSaci
+    cmbLoja.isVisible = user?.storeno == 0
+    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+  }
 
   override fun filtro(): FiltroPedido {
     return FiltroPedido(
       tipo = ETipoPedido.RETIRA,
-      loja = (AppConfig.userLogin() as? UserSaci)?.storeno ?: 0,
-      pesquisa = edtPesquisa?.value ?: "",
-      dataInicial = edtData?.value,
-      dataFinal = edtData?.value,
+      loja = cmbLoja.value?.no ?: 0,
+      pesquisa = edtPesquisa.value ?: "",
+      dataInicial = edtDataInicial.value ?: LocalDate.now(),
+      dataFinal = edtDataInicial.value ?: LocalDate.now(),
     )
   }
 
@@ -47,11 +54,23 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     return userSaci.retiraImprimir
   }
 
+  override val label: String
+    get() = "Imprimir"
+
   override fun updateComponent() {
     viewModel.updateGridImprimir()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateGridImprimir()
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -59,11 +78,16 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
         viewModel.updateGridImprimir()
       }
     }
-
-    edtData = datePicker("Data") {
+    edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-      this.isClearButtonVisible = true
+      addValueChangeListener {
+        viewModel.updateGridImprimir()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateGridImprimir()
       }

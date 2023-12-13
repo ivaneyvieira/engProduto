@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroPedido
+import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.Pedido
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
@@ -41,6 +42,15 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
       }
       updateGridImprimir()
     }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
+  fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
   }
 }
 
