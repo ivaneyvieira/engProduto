@@ -45,7 +45,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value ?: LocalDate.now(),
-      dataFinal = edtDataInicial.value ?: LocalDate.now(),
+      dataFinal = edtDataFinal.value ?: LocalDate.now(),
     )
   }
 
