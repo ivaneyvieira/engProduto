@@ -31,6 +31,11 @@ class EntradaDevCli(
   fun produtos() = saci.entradaDevCliPro(invno)
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
+    if (custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800) {
+      val valor = valor ?: 0.00
+      val saldoDevolucao = SaldoDevolucao(invno, custno ?: 0, valor)
+      saci.saldoDevolucao(saldoDevolucao)
+    }
   }
 
   companion object {

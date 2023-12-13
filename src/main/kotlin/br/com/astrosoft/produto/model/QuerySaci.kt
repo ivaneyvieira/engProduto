@@ -4,15 +4,12 @@ import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
-import br.com.astrosoft.framework.util.parserDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
 
 class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): List<UserSaci> {
@@ -615,6 +612,15 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("pesquisa", filtro.pesquisa.trim())
+    }
+  }
+
+  fun saldoDevolucao(saldoDevolucao: SaldoDevolucao) {
+    val sql = "/sqlSaci/updateSaldoDevolucao.sql"
+    script(sql) {
+      addOptionalParameter("invno", saldoDevolucao.invno)
+      addOptionalParameter("custno", saldoDevolucao.custno)
+      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
     }
   }
 
