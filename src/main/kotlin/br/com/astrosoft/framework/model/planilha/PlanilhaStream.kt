@@ -1,16 +1,17 @@
 package br.com.astrosoft.framework.model.planilha
 
-import com.github.nwillc.poink.PSheet
-import com.github.nwillc.poink.workbook
-import org.apache.poi.ss.usermodel.FillPatternType
-import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.ss.usermodel.*
+import org.apache.poi.xssf.streaming.SXSSFSheet
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.reflect.KProperty1
 
-open class Planilha<B>(private val sheatName: String) {
+open class PlanilhaStream<B>(private val sheatName: String) {
+  private val styles: MutableMap<String, XSSFCellStyle> = mutableMapOf()
   protected val columns: MutableList<Column<B, *>> = mutableListOf()
 
   @JvmName("campoString")
@@ -53,7 +54,7 @@ open class Planilha<B>(private val sheatName: String) {
     columns.add(campo)
   }
 
-  private fun PSheet.row(bean: B) {
+  private fun SXSSFSheet.row(bean: B) {
     val row = this.createRow(this.physicalNumberOfRows)
     val creationHelper = workbook.creationHelper
 
@@ -103,17 +104,66 @@ open class Planilha<B>(private val sheatName: String) {
     }
   }
 
+  fun SXSSFWorkbook.cellStyle(name: String, block: CellStyle.() -> Unit = {}): XSSFCellStyle =
+      styles.computeIfAbsent(name) { this.createCellStyle() as XSSFCellStyle }
+        .apply(block)
+
+  private fun SXSSFWorkbook.cloneAndFormat(style: CellStyle?, format: Short) = this.createCellStyle().apply {
+    if (style != null) {
+      cloneStyleFrom(style)
+    }
+    dataFormat = format
+  }
+
+  private fun SXSSFSheet.row(cells: List<Any>, wb: SXSSFWorkbook, style: CellStyle? = null): List<Cell> {
+    val format = wb.createDataFormat()
+    val dateFormat = format.getFormat("MM/DD/YYYY")
+    val timeStampFormat = format.getFormat("MM/DD/YYYY HH:MM:SS")
+    val calendarFormat = format.getFormat("MMM D, YYYY")
+
+    val cellList = mutableListOf<Cell>()
+    val row = this.createRow(this.physicalNumberOfRows)
+    var col = 0
+    cells.forEach { cellValue ->
+      cellList.add(row.createCell(col++).apply {
+        cellStyle = style
+        when (cellValue) {
+          is String        -> setCellValue(cellValue)
+          is Number        -> setCellValue(cellValue.toDouble())
+          is LocalDateTime -> {
+            cellStyle = wb.cloneAndFormat(style, timeStampFormat)
+            setCellValue(cellValue)
+          }
+
+          is LocalDate     -> {
+            cellStyle = wb.cloneAndFormat(style, dateFormat)
+            setCellValue(cellValue)
+          }
+
+          is Calendar      -> {
+            cellStyle = wb.cloneAndFormat(style, calendarFormat)
+            setCellValue(cellValue)
+          }
+
+          else             -> setCellValue(cellValue.toString())
+        }
+      })
+    }
+    return cellList
+  }
+
   fun write(listBean: List<B>): ByteArray {
-    val wb = workbook {
+    val wb = SXSSFWorkbook().apply {
+      val wb = this
       val headerStyle = cellStyle("Header") {
         fillForegroundColor = IndexedColors.GREY_25_PERCENT.index
         fillPattern = FillPatternType.SOLID_FOREGROUND
         this.verticalAlignment = VerticalAlignment.TOP
       }
 
-      val stNotas = sheet(sheatName) {
+      val stNotas = this.createSheet(sheatName).apply {
         val headers = columns.map { it.header }
-        row(headers, headerStyle)
+        row(headers, wb, headerStyle)
         val listTotal = listBean.size
 
         listBean.forEachIndexed { index, bean ->
@@ -122,9 +172,9 @@ open class Planilha<B>(private val sheatName: String) {
         }
       }
 
-      columns.forEachIndexed { index, _ ->
-        stNotas.autoSizeColumn(index)
-      }
+     // columns.forEachIndexed { index, _ ->
+     //   stNotas.autoSizeColumn(index)
+     // }
     }
     val outBytes = ByteArrayOutputStream()
     wb.write(outBytes)
