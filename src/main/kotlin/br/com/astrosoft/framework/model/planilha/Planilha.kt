@@ -114,7 +114,10 @@ open class Planilha<B>(private val sheatName: String) {
       val stNotas = sheet(sheatName) {
         val headers = columns.map { it.header }
         row(headers, headerStyle)
-        listBean.forEach { bean ->
+        val listTotal = listBean.size
+
+        listBean.forEachIndexed { index, bean ->
+          println("planilha $index/$listTotal")
           row(bean)
         }
       }

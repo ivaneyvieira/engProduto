@@ -2,25 +2,19 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliCredito
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliCreditoViewModel
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
-import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
   TabPanelGrid<CreditoCliente>(CreditoCliente::class),
@@ -34,6 +28,10 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
       addValueChangeListener {
         viewModel.updateView()
       }
+    }
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "creditoCliente") {
+      val clientes = listBeans()
+      viewModel.geraPlanilha(clientes)
     }
   }
 
@@ -58,7 +56,6 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
     val username = AppConfig.userLogin() as? UserSaci
     return listOfNotNull(username?.impressoraDev)
   }
-
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
