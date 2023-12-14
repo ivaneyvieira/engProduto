@@ -7,9 +7,10 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
   val tabDevCliValeTrocaViewModel = TabDevCliValeTrocaViewModel(this)
   val tabDevCliValeTrocaProdutoViewModel = TabDevCliValeTrocaProdutoViewModel(this)
   val tabDevCliValeTrocaImpViewModel = TabDevCliValeTrocaImpViewModel(this)
+  val tabDevCliCreditoViewModel = TabDevCliCreditoViewModel(this)
 
   override fun listTab() = listOf(
-    view.tabDevCliValeTroca, view.tabDevCliValeTrocaImp, view.tabDevCliValeTrocaProduto,
+    view.tabDevCliValeTroca, view.tabDevCliValeTrocaImp, view.tabDevCliValeTrocaProduto, view.tabDevCliCredito,
   )
 }
 
@@ -17,4 +18,5 @@ interface IDevClienteView : IView {
   val tabDevCliValeTroca: ITabDevCliValeTroca
   val tabDevCliValeTrocaProduto: ITabDevCliValeTrocaProduto
   val tabDevCliValeTrocaImp: ITabDevCliValeTrocaImp
+  val tabDevCliCredito: ITabDevCliCredito
 }

@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
 import br.com.astrosoft.produto.viewmodel.devCliente.DevClienteViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.IDevClienteView
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliCredito
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -20,6 +21,7 @@ class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val tabDevCliValeTroca = TabDevCliValeTroca(viewModel.tabDevCliValeTrocaViewModel)
   override val tabDevCliValeTrocaProduto = TabDevCliValeTrocaProduto(viewModel.tabDevCliValeTrocaProdutoViewModel)
   override val tabDevCliValeTrocaImp = TabDevCliValeTrocaImp(viewModel.tabDevCliValeTrocaImpViewModel)
+  override val tabDevCliCredito= TabDevCliCredito(viewModel.tabDevCliCreditoViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

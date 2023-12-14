@@ -624,6 +624,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findCreditoCliente(filtro: FiltroCreditoCliente): List<CreditoCliente> {
+    val sql = "/sqlSaci/findCredito.sql"
+    return query(sql, CreditoCliente::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
