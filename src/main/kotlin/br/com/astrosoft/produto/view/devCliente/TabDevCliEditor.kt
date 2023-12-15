@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
 import br.com.astrosoft.produto.model.beans.Loja
@@ -82,14 +83,14 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
     columnGrid(EntradaDevCli::invno, header = "NI")
-    columnGrid(EntradaDevCli::notaFiscal, header = "Nota Devolução")
+    columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev").right()
     columnGrid(EntradaDevCli::data, header = "Data")
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
-    columnGrid(EntradaDevCli::valor, header = "Valor Devolução")
-    columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
+    columnGrid(EntradaDevCli::valor, header = "Valor Dev")
+    columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
-    columnGrid(EntradaDevCli::custno, header = "Cód Cliente")
+    columnGrid(EntradaDevCli::custno, header = "Cód Cli")
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }
