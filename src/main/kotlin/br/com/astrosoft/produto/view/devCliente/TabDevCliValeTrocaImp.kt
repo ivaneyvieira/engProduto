@@ -84,6 +84,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
+    columnGrid(EntradaDevCli::remarks, header = "Observação")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cli")
