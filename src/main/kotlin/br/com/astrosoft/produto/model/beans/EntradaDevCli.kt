@@ -49,5 +49,6 @@ data class FiltroEntradaDevCli(
   val query: String,
   val dataI: LocalDate?,
   val dataF: LocalDate?,
-  val impresso: Boolean,
+  val dataLimiteInicial: LocalDate?,
+  val impresso: Boolean?,
 )

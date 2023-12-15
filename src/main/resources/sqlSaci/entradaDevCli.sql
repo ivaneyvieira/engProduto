@@ -57,10 +57,12 @@ WHERE I.account = '2.01.25'
   AND (I.storeno = :loja OR :loja = 0)
   AND (I.date >= :dataI OR :dataI = 0)
   AND (I.date <= :dataF OR :dataF = 0)
+  AND (I.date >= :dataLimiteInicial)
   AND CASE :impresso
         WHEN 'S' THEN I.c9 != ''
         WHEN 'N' THEN I.c9 = ''
-        ELSE TRUE
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
       END;
 
 SELECT I.invno,

@@ -509,7 +509,14 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataI", filtro.dataI.toSaciDate())
       addOptionalParameter("dataF", filtro.dataF.toSaciDate())
       addOptionalParameter("query", filtro.query)
-      addOptionalParameter("impresso", filtro.impresso.let { if (it) "S" else "N" })
+      addOptionalParameter("dataLimiteInicial", filtro.dataLimiteInicial.toSaciDate())
+      addOptionalParameter("impresso", filtro.impresso.let {
+        when {
+          it == null -> "T"
+          it         -> "S"
+          else       -> "N"
+        }
+      })
     }
   }
 

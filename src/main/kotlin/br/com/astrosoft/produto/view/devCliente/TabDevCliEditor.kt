@@ -9,8 +9,8 @@ import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTroca
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliEditor
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliEditorViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -23,9 +23,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
+class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
   TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliValeTroca {
+  ITabDevCliEditor {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -81,9 +81,6 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
-    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
-      viewModel.imprimeValeTroca(nota)
-    }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "Nota Devolução")
     columnGrid(EntradaDevCli::data, header = "Data")
@@ -103,8 +100,8 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
       query = edtPesquisa.value ?: "",
       dataI = edtDataInicial.value,
       dataF = edtDataFinal.value,
-      impresso = false,
-      dataLimiteInicial = LocalDate.of(2023, 12, 1),
+      impresso = null,
+      dataLimiteInicial = null,
     )
   }
 
@@ -114,11 +111,11 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliValeTroca == true
+    return username?.devCliEditor == true
   }
 
   override val label: String
-    get() = "Vale Troca"
+    get() = "Editor"
 
   override fun updateComponent() {
     viewModel.updateView()
