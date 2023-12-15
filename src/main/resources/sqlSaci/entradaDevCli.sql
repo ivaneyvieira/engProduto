@@ -107,6 +107,7 @@ WHERE (@PESQUISA = '' OR
        I.fornecedor LIKE @PESQUISALIKE OR
        nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR
-       IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE)
+       IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
+       I.remarks LIKE @PESQUISALIKE)
   AND IFNULL(I.xano, N.xano) IS NOT NULL
 GROUP BY I.invno
