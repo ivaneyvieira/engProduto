@@ -1,5 +1,14 @@
 USE sqldados;
 
+USE sqldados;
+
+SET sql_mode = '';
+
+DO @PESQUISA := TRIM(:pesquisa);
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -8,7 +17,8 @@ CREATE TEMPORARY TABLE T_NOTA
 SELECT I.invno     AS invno,
        I.date      AS data,
        I.storeno   AS codLoja,
-       S.otherName AS loja
+       S.otherName AS loja,
+       I.remarks   AS observacao
 FROM sqldados.inv AS I
        LEFT JOIN sqldados.store AS S
                  ON S.no = I.storeno
@@ -24,13 +34,20 @@ SELECT CAST(data AS DATE)        AS data,
        TRIM(X.prdno)             AS codigo,
        TRIM(MID(P.name, 1, 37))  AS descricao,
        X.grade                   AS grade,
-       SUM(ROUND(X.qtty / 1000)) AS quantidade
+       SUM(ROUND(X.qtty / 1000)) AS quantidade,
+       observacao                AS observacao
 FROM T_NOTA AS I
        INNER JOIN sqldados.iprd AS X
                   ON I.invno = X.invno
        LEFT JOIN sqldados.prd AS P
                  ON P.no = X.prdno
-GROUP BY I.codLoja, X.prdno, X.grade
+WHERE (@PESQUISA = '' OR
+       I.codLoja = @PESQUISANUM OR
+       TRIM(prdno) = @PESQUISANUM OR
+       TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR
+       X.grade LIKE @PESQUISAS OR
+       I.observacao LIKE @PESQUISALIKE)
+GROUP BY I.codLoja, X.prdno, X.grade, I.observacao
 ORDER BY descricao, grade, codigo
 
 

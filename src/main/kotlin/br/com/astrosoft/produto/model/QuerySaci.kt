@@ -549,6 +549,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, EntradaDevCliProList::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("data", filtro.data.toSaciDate())
+      addOptionalParameter("pesquisa", filtro.pesquisa)
     }
   }
 

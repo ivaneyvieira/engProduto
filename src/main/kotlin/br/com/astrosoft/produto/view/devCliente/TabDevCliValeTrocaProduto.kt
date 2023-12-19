@@ -13,15 +13,13 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
 class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewModel) :
@@ -29,6 +27,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
   ITabDevCliValeTrocaProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
+  private lateinit var edtPesquisa: TextField
 
   init {
     val listLojas = viewModel.findAllLojas()
@@ -46,6 +45,11 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
+      }
+    }
+    edtPesquisa = textField("Pesquisa") {
+      addValueChangeListener {
+        viewModel.updateView()
       }
     }
     edtData = datePicker("Data") {
@@ -66,10 +70,12 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
 
   override fun Grid<EntradaDevCliProList>.gridPanel() {
     this.addClassName("styling")
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     columnGrid(EntradaDevCliProList::codigo, header = "Código").right()
     columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
     columnGrid(EntradaDevCliProList::quantidade, header = "Quantidade")
+    columnGrid(EntradaDevCliProList::observacao, header = "Observação")
     GridHelper.setEnhancedSelectionEnabled(this, true)
   }
 
@@ -77,6 +83,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     return FiltroEntradaDevCliProList(
       loja = cmbLoja.value?.no ?: 0,
       data = edtData.value ?: LocalDate.now(),
+      pesquisa = edtPesquisa.value ?: "",
     )
   }
 

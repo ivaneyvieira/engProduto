@@ -11,7 +11,8 @@ class EntradaDevCliProList(
   var codigo: String?,
   var descricao: String?,
   var grade: String?,
-  var quantidade: Int?
+  var quantidade: Int?,
+  var observacao: String?,
 ) {
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
@@ -24,4 +25,5 @@ class EntradaDevCliProList(
 data class FiltroEntradaDevCliProList(
   val loja: Int,
   val data: LocalDate,
+  val pesquisa: String,
 )
