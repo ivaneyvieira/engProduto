@@ -6,17 +6,24 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(view) {
   val tabDevCliEditorViewModel = TabDevCliEditorViewModel(this)
   val tabDevCliValeTrocaViewModel = TabDevCliValeTrocaViewModel(this)
+  val tabDevCliDevTrocaViewModel = TabDevCliDevTrocaViewModel(this)
   val tabDevCliValeTrocaProdutoViewModel = TabDevCliValeTrocaProdutoViewModel(this)
   val tabDevCliValeTrocaImpViewModel = TabDevCliValeTrocaImpViewModel(this)
   val tabDevCliCreditoViewModel = TabDevCliCreditoViewModel(this)
 
   override fun listTab() = listOf(
-    view.tabDevCliEditor, view.tabDevCliValeTroca, view.tabDevCliValeTrocaImp, view.tabDevCliValeTrocaProduto, view.tabDevCliCredito,
+    view.tabDevCliEditor,
+    view.tabDevCliValeTroca,
+    view.tabDevCliValeTrocaImp,
+    view.tabDevCliValeTrocaProduto,
+    view.tabDevCliCredito,
+    view.tabDevCliDevTroca,
   )
 }
 
 interface IDevClienteView : IView {
   val tabDevCliValeTroca: ITabDevCliValeTroca
+  val tabDevCliDevTroca: ITabDevCliDevTroca
   val tabDevCliEditor: ITabDevCliEditor
   val tabDevCliValeTrocaProduto: ITabDevCliValeTrocaProduto
   val tabDevCliValeTrocaImp: ITabDevCliValeTrocaImp

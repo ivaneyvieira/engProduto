@@ -638,6 +638,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findDevTroca(filtro: FiltroDevTroca): List<DevTroca> {
+    val sql = "/sqlSaci/findDevTroca.sql"
+    return query(sql, DevTroca::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
