@@ -14,13 +14,14 @@ class ProdutosDevolucao : PrintText<EntradaDevCliProList>() {
 
   override fun groupBotton(beanDetail: EntradaDevCliProList): String {
     val finalTroca = beanDetail.observacao?.split(")")?.getOrNull(1)?.trim() ?: ""
-    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()}"
+    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} R$: ${beanDetail.valor.format()}"
   }
 
   override fun printTitle(bean: EntradaDevCliProList) {
     println("Loja: ${bean.loja}", negrito = true)
     println("Produtos de Devolucoes de Clientes", negrito = true)
     println("Data: ${bean.data.format()}", negrito = true)
+    println("Usuario da Impressao: ${bean.userName}", negrito = true)
 
     printLine('-')
   }

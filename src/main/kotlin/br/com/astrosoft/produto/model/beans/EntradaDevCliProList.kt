@@ -11,10 +11,12 @@ class EntradaDevCliProList(
   var codigo: String?,
   var descricao: String?,
   var grade: String?,
+  var userName: String?,
   var quantidade: Int?,
   var observacao: String?,
   var ni: Int?,
   var nota: String?,
+  var valor: Double?,
 ) {
   val observacao01: String
     get() {
