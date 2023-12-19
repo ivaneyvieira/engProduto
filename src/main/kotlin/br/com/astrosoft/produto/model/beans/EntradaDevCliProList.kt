@@ -13,6 +13,8 @@ class EntradaDevCliProList(
   var grade: String?,
   var quantidade: Int?,
   var observacao: String?,
+  var ni: Int?,
+  var nota: String?,
 ) {
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""

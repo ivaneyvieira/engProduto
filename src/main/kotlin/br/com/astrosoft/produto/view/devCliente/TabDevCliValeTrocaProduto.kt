@@ -75,7 +75,10 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
     columnGrid(EntradaDevCliProList::quantidade, header = "Quantidade")
-    columnGrid(EntradaDevCliProList::observacao, header = "Observação")
+    columnGrid(EntradaDevCliProList::observacao, header = "Observação").expand()
+    columnGrid(EntradaDevCliProList::ni, header = "NI")
+    columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
+    columnGrid(EntradaDevCliProList::data, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
   }
 
