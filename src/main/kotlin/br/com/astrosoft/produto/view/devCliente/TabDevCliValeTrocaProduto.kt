@@ -97,7 +97,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
   }
 
   override fun produtosSelecionados(): List<EntradaDevCliProList> {
-    return this.listBeans()
+    return this.itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
