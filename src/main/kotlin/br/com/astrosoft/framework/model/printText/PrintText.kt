@@ -64,7 +64,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         list.forEach { beanDetail ->
           if (group != "") {
             textBuffer.println("")
-            textBuffer.println(group)
+            println(group, negrito = true)
           }
           printDetail(beanDetail)
         }

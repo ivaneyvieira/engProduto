@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.printText
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
@@ -21,7 +22,7 @@ class ProdutosDevolucao : PrintText<EntradaDevCliProList>() {
     println("Loja: ${bean.loja}", negrito = true)
     println("Produtos de Devolucoes de Clientes", negrito = true)
     println("Data: ${bean.data.format()}", negrito = true)
-    println("Usuario da Impressao: ${bean.userName}", negrito = true)
+    println("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
 
     printLine('-')
   }
