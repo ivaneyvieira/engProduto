@@ -47,6 +47,10 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     col.dataText(value)
   }
 
+  protected open fun groupBotton(beanDetail: T): String {
+    return ""
+  }
+
   fun print(dados: List<T>, printer: IPrinter) {
     dados.firstOrNull()?.let { bean ->
       textBuffer.inicializePrint()
@@ -54,9 +58,18 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
 
       printHeader()
 
-      dados.forEach { beanDetail ->
-        printDetail(beanDetail)
+      val groupDados = dados.groupBy { groupBotton(it) }
+
+      groupDados.forEach { (group, list) ->
+        list.forEach { beanDetail ->
+          printDetail(beanDetail)
+        }
+        if (group != "") {
+          textBuffer.println(group)
+          textBuffer.println("")
+        }
       }
+
 
       printSumary()
 

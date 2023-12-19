@@ -12,6 +12,11 @@ class ProdutosDevolucao : PrintText<EntradaDevCliProList>() {
     column(EntradaDevCliProList::quantidade, "Qtd", 6)
   }
 
+  override fun groupBotton(beanDetail: EntradaDevCliProList): String {
+    val finalTroca = beanDetail.observacao?.split(")")?.getOrNull(1)?.trim() ?: ""
+    return "$finalTroca NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()}"
+  }
+
   override fun printTitle(bean: EntradaDevCliProList) {
     println("Loja: ${bean.loja}", negrito = true)
     println("Produtos de Devolucoes de Clientes", negrito = true)
