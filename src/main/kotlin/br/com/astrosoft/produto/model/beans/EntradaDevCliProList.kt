@@ -16,6 +16,18 @@ class EntradaDevCliProList(
   var ni: Int?,
   var nota: String?,
 ) {
+  val observacao01: String
+    get() {
+      val parte1 = observacao?.split(")")?.getOrNull(0) ?: return ""
+      return "$parte1)"
+    }
+
+  val observacao02: String
+    get() {
+      val parte2 = observacao?.split(")")?.getOrNull(1) ?: return ""
+      return parte2.trim()
+    }
+
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 
