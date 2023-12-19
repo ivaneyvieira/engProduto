@@ -63,8 +63,8 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       groupDados.forEach { (group, list) ->
         list.forEach { beanDetail ->
           if (group != "") {
-            textBuffer.println(group)
             textBuffer.println("")
+            textBuffer.println(group)
           }
           printDetail(beanDetail)
         }
