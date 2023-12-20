@@ -29,6 +29,18 @@ class EntradaDevCli(
   var userName: String?,
 ) {
 
+    val observacao01: String
+    get() {
+      val parte1 = remarks?.split(")")?.getOrNull(0) ?: return ""
+      return "$parte1)"
+    }
+
+  val observacao02: String
+    get() {
+      val parte2 = remarks?.split(")")?.getOrNull(1) ?: return ""
+      return parte2.trim()
+    }
+
   fun produtos() = saci.entradaDevCliPro(invno)
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)

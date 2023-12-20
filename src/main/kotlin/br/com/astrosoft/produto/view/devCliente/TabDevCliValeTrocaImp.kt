@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
@@ -84,11 +85,12 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
-    columnGrid(EntradaDevCli::remarks, header = "Observação")
+    columnGrid(EntradaDevCli::observacao01, header = "Observação").expand()
+    columnGrid(EntradaDevCli::observacao02, header = "Troca")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cli")
-    columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
+    columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente").expand()
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
     columnGrid(EntradaDevCli::impressora, header = "Impressora")
     columnGrid(EntradaDevCli::userName, header = "Usuário")
