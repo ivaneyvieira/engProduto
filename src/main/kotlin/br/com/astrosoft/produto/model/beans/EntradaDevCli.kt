@@ -33,10 +33,14 @@ class EntradaDevCli(
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
     val saldoDevolucao = SaldoDevolucao(invno, custno ?: 0, valor ?: 0.00)
-    if (isReenbolso()) {
-      saci.marcaImpressoReembolso(saldoDevolucao)
-    } else if (custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800) {
-      saci.saldoDevolucao(saldoDevolucao)
+    when {
+      isReenbolso()                                                                     -> {
+        saci.marcaImpressoReembolso(saldoDevolucao)
+      }
+
+      custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800 -> {
+        saci.saldoDevolucao(saldoDevolucao)
+      }
     }
   }
 
