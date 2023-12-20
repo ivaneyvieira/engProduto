@@ -632,6 +632,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun marcaImpressoReembolso(saldoDevolucao: SaldoDevolucao) {
+    val sql = "/sqlSaci/updateSaldoReembolso.sql"
+    script(sql) {
+      addOptionalParameter("invno", saldoDevolucao.invno)
+      addOptionalParameter("custno", saldoDevolucao.custno)
+      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
+    }
+  }
+
   fun findCreditoCliente(filtro: FiltroCreditoCliente): List<CreditoCliente> {
     val sql = "/sqlSaci/findCredito.sql"
     return query(sql, CreditoCliente::class) {

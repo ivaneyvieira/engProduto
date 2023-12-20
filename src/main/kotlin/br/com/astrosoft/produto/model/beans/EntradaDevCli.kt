@@ -32,11 +32,18 @@ class EntradaDevCli(
   fun produtos() = saci.entradaDevCliPro(invno)
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
-    if (custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800) {
-      val valor = valor ?: 0.00
-      val saldoDevolucao = SaldoDevolucao(invno, custno ?: 0, valor)
+    val saldoDevolucao = SaldoDevolucao(invno, custno ?: 0, valor ?: 0.00)
+    if (isReenbolso()) {
+      saci.marcaImpressoReembolso(saldoDevolucao)
+    } else if (custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800) {
       saci.saldoDevolucao(saldoDevolucao)
     }
+  }
+
+  fun isReenbolso(): Boolean {
+    return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
+           remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
+           remarks?.contains("REEMBOLSO", ignoreCase = true) == true
   }
 
   companion object {
