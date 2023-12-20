@@ -634,6 +634,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun marcaImpressoMuda(saldoDevolucao: SaldoDevolucao) {
+    val sql = "/sqlSaci/updateSaldoMuda.sql"
+    script(sql) {
+      addOptionalParameter("invno", saldoDevolucao.invno)
+      addOptionalParameter("custno", saldoDevolucao.custno)
+      addOptionalParameter("custnoCred", saldoDevolucao.custnoCred)
+      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
+    }
+  }
+
   fun marcaImpressoReembolso(saldoDevolucao: SaldoDevolucao) {
     val sql = "/sqlSaci/updateSaldoReembolso.sql"
     script(sql) {
