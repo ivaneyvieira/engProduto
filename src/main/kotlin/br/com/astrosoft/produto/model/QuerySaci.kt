@@ -5,6 +5,8 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.model.exceptions.EModelFail
+import br.com.astrosoft.framework.model.exceptions.EViewModelFail
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query

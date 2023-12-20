@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.model
 
+import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection
@@ -90,10 +91,14 @@ open class QueryDB(database: DatabaseConfig) {
     classes: KClass<T>,
     lambda: QueryHandler = {}
   ): List<T> {
-    val query = con.createQueryConfig(sql)
-    query.lambda()
-    println(sql)
-    return query.executeAndFetch(classes.java)
+    try {
+      val query = con.createQueryConfig(sql)
+      query.lambda()
+      println(sql)
+      return query.executeAndFetch(classes.java)
+    } catch (e: Exception) {
+      failDB(e.message)
+    }
   }
 
   protected fun script(file: String, lambda: QueryHandler = {}) {
@@ -118,22 +123,30 @@ open class QueryDB(database: DatabaseConfig) {
   }
 
   private fun scriptSQL(con: Connection, stratments: List<String>, lambda: QueryHandler = {}) {
-    stratments.forEach { sql ->
-      val query = con.createQueryConfig(sql)
-      query.lambda()
-      query.executeUpdate()
-      println(sql)
+    try {
+      stratments.forEach { sql ->
+        val query = con.createQueryConfig(sql)
+        query.lambda()
+        query.executeUpdate()
+        println(sql)
+      }
+    } catch (e: Exception) {
+      failDB(e.message)
     }
   }
 
   private fun scriptSQL(con: Connection, stratments: List<String>, lambda: List<QueryHandler>) {
-    stratments.forEach { sql ->
-      val query = con.createQueryConfig(sql)
-      lambda.forEach { lamb ->
-        query.lamb()
-        query.executeUpdate()
-        println(sql)
+    try {
+      stratments.forEach { sql ->
+        val query = con.createQueryConfig(sql)
+        lambda.forEach { lamb ->
+          query.lamb()
+          query.executeUpdate()
+          println(sql)
+        }
       }
+    } catch (e: Exception) {
+      failDB(e.message)
     }
   }
 
@@ -188,3 +201,7 @@ open class QueryDB(database: DatabaseConfig) {
 
 data class ScripyUpdate(val query: Query, val queryText: String)
 data class DatabaseConfig(val url: String, val user: String, val password: String, val driver: String)
+
+fun failDB(message: String?): Nothing {
+  throw EModelFail(message)
+}

@@ -15,7 +15,7 @@ class TabDevCliDevTrocaViewModel(val viewModel: DevClienteViewModel) {
     return Loja.allLojas()
   }
 
-  fun updateView() {
+  fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = DevTroca.findAll(filtro)
     subView.updateNotas(notas)

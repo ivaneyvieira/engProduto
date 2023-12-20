@@ -1,5 +1,7 @@
 package br.com.astrosoft.framework.viewmodel
 
+import br.com.astrosoft.framework.model.exceptions.EModelFail
+import br.com.astrosoft.framework.model.exceptions.EViewModelFail
 import br.com.astrosoft.produto.model.beans.Rota
 
 abstract class ViewModel<V : IView>(val view: V) {
@@ -22,6 +24,9 @@ fun <T> exec(view: IView, block: () -> T): T {
     block()
   } catch (e: EViewModelFail) {
     view.showError(e.message ?: "Erro generico")
+    throw e
+  } catch (e: EModelFail) {
+    view.showError("Erro de banco de dados: ${e.message ?: "Erro generico"}")
     throw e
   }
 }
