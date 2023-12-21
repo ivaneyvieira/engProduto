@@ -79,7 +79,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
     columnGrid(EntradaDevCliProList::quantidade, header = "Quantidade")
     columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
-    columnGrid(EntradaDevCliProList::observacao02, header = "Troca")
+    columnGrid(EntradaDevCliProList::observacao02, header = "Tipo")
     columnGrid(EntradaDevCliProList::ni, header = "NI")
     columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
     columnGrid(EntradaDevCliProList::data, header = "Data")
