@@ -669,6 +669,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun mudaCliente(codigo: Int): Cliente? {
+    val sql = "/sqlSaci/findCliente.sql"
+    return query(sql, Cliente::class) {
+      addOptionalParameter("codigo", codigo)
+    }.firstOrNull()
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)

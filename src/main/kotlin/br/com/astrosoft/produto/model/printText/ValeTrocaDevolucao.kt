@@ -13,8 +13,49 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     column(EntradaDevCliPro::quantidade, "Qtd", 6)
   }
 
+  private fun tituloValeTroca() {
+    when {
+      nota.observacao02.contains("TROCA")      -> {
+        println("Vale Credito: TROCA", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("ENTREGA")    -> {
+        println("Vale Credito: ENTREGA", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("RETIRA")     -> {
+        println("Vale Credito: RETIRA", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("REEMBOLSO")  -> {
+        println("Vale Credito: REEMBOLSO", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("MUDA NF")    -> {
+        println("Vale Credito: MUDA NF", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("MUDA")       -> {
+        println("Vale Credito: MUDA CLIENTE", negrito = true, center = true)
+        println("Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("EST CARTAO") -> {
+        println("Vale Credito: ESTORNO CARTAO", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("EST BOLETO") -> {
+        println("Vale Credito: ESTORNO BOLETO", negrito = true, center = true)
+      }
+
+      nota.observacao02.contains("EST DEP")    -> {
+        println("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true)
+      }
+    }
+  }
+
   override fun printTitle(bean: EntradaDevCliPro) {
-    println("VALE TROCA", negrito = true, center = true)
+    tituloValeTroca()
     println("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     println("", negrito = true)
     println("Loja: ${nota.nomeLoja}", negrito = true)

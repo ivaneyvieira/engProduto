@@ -29,7 +29,7 @@ class EntradaDevCli(
   var userName: String?,
 ) {
 
-    val observacao01: String
+  val observacao01: String
     get() {
       val parte1 = remarks?.split(")")?.getOrNull(0) ?: return ""
       return "$parte1)"
@@ -56,7 +56,7 @@ class EntradaDevCli(
       }
 
       isMuda()         -> {
-        val mudaCliente = mudaCliente()
+        val mudaCliente = mudaCodigo()
         val custno = custno ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
@@ -85,7 +85,7 @@ class EntradaDevCli(
     return custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800
   }
 
-  private val MUDA_CLIENTE = "MUDA +C([0-9]+)".toRegex()
+  private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
   fun isReenbolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
@@ -94,13 +94,19 @@ class EntradaDevCli(
            remarks?.contains("EST DEP", ignoreCase = true) == true
   }
 
-  fun isMuda(): Boolean {
+  private fun isMuda(): Boolean {
     return remarks?.contains(MUDA_CLIENTE) == true
   }
 
-  fun mudaCliente(): Int {
+  private fun mudaCodigo(): Int {
     val matchResult = MUDA_CLIENTE.find(remarks ?: "")
     return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
+  }
+
+  fun mudaCliente(): String {
+    val codigo = mudaCodigo()
+    val cliente = saci.mudaCliente(codigo) ?: return ""
+    return "${cliente.codigo} - ${cliente.nome}"
   }
 
   companion object {
