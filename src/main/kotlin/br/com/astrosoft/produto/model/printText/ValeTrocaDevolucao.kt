@@ -37,7 +37,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
 
       nota.observacao02.contains("MUDA")       -> {
         println("Vale Credito: MUDA CLIENTE", negrito = true, center = true)
-        println("Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
+        println("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
       nota.observacao02.contains("EST CARTAO") -> {
