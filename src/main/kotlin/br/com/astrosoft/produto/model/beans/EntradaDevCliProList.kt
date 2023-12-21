@@ -12,6 +12,7 @@ class EntradaDevCliProList(
   var descricao: String?,
   var grade: String?,
   var userName: String?,
+  var userLogin: String?,
   var quantidade: Int?,
   var observacao: String?,
   var ni: Int?,

@@ -27,6 +27,7 @@ class EntradaDevCli(
   var vendedor: String?,
   var impressora: String?,
   var userName: String?,
+  var userLogin: String?,
 ) {
 
   val observacao01: String
@@ -87,7 +88,7 @@ class EntradaDevCli(
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
-  fun isReenbolso(): Boolean {
+  private fun isReenbolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
            remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
            remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||

@@ -1,4 +1,4 @@
-use sqldados;
+USE sqldados;
 
 DO @invno := :invno;
 DO @custnoCred := :custnoCred;

@@ -89,7 +89,8 @@ SELECT I.invno,
        IFNULL(I.cfo, N.cfo)                           AS cfo,
        TRIM(IFNULL(I.vendedor, E.name))               AS vendedor,
        SUBSTRING_INDEX(impressora, '/', 1)            AS impressora,
-       U.name                                         AS userName
+       U.name                                         AS userName,
+       U.login                                        AS userLogin
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
