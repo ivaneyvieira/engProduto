@@ -37,8 +37,10 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
 
   override fun Grid<CreditoCliente>.gridPanel() {
     this.addClassName("styling")
+    columnGrid(CreditoCliente::loja, header = "Loja").right()
     columnGrid(CreditoCliente::codigo, header = "Cód Cliente").right()
     columnGrid(CreditoCliente::nome, header = "Nome Cliente").expand()
+    columnGrid(CreditoCliente::tipo, header = "Tipo")
     columnGrid(CreditoCliente::vlCredito, header = "Valor Crédito")
   }
 
