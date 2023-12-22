@@ -12,6 +12,8 @@ class EntradaDevCli(
   var hora: String?,
   var vendno: Int?,
   var fornecedor: String?,
+  var custnoDev: Int?,
+  var clienteDev: String?,
   var remarks: String?,
   var valor: Double?,
   var storeno: Int?,

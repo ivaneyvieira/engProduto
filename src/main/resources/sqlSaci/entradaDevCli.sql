@@ -20,6 +20,8 @@ SELECT I.invno                                                                  
        CAST(I.date AS DATE)                                                              AS data,
        I.vendno                                                                          AS vendno,
        V.sname                                                                           AS fornecedor,
+       IFNULL(CD.no, 0)                                                                  AS custnoDev,
+       IFNULL(CD.name, '')                                                               AS clienteDev,
        I.remarks                                                                         AS remarks,
        I.grossamt / 100                                                                  AS valor,
        IFNULL(NF1.storeno, NF2.storeno)                                                  AS storeno,
@@ -46,6 +48,8 @@ FROM sqldados.inv AS I
                  ON (NF2.storeno = I.s1 AND NF2.pdvno = I.s2 AND NF2.xano = I.l2)
        LEFT JOIN sqldados.vend AS V
                  ON V.no = I.vendno
+       LEFT JOIN sqldados.custp AS CD
+                 ON CD.cpf_cgc = V.cgc
        LEFT JOIN sqldados.custp AS C
                  ON C.no = IFNULL(NF1.custno, NF2.custno)
        LEFT JOIN sqldados.emp AS E
@@ -63,7 +67,8 @@ WHERE I.account = '2.01.25'
         WHEN 'N' THEN I.c9 = ''
         WHEN 'T' THEN TRUE
         ELSE FALSE
-      END;
+      END
+GROUP BY I.invno;
 
 SELECT I.invno,
        I.loja,
@@ -75,6 +80,8 @@ SELECT I.invno,
           TIME_FORMAT(CURRENT_TIME, '%H:%i'))         AS hora,
        I.vendno,
        I.fornecedor,
+       I.custnoDev,
+       I.clienteDev,
        I.remarks,
        I.valor,
        IFNULL(I.storeno, N.storeno)                   AS storeno,
