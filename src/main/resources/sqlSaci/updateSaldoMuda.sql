@@ -5,24 +5,6 @@ DO @custnoCred := :custnoCred;
 DO @saldo := :saldo;
 DO @custno := :custno;
 
-DROP TEMPORARY TABLE IF EXISTS T_SALDO;
-CREATE TEMPORARY TABLE T_SALDO
-SELECT invno, custnoLoj, custnoDev, saldo
-FROM sqldados.saldoDevolucao
-WHERE invno = @invno;
-
-UPDATE sqldados.custp AS C
-  INNER JOIN T_SALDO AS S
-  ON C.no = S.custnoLoj
-SET C.saldoDevolucao = C.saldoDevolucao + S.saldo
-WHERE C.no = S.custnoLoj;
-
-UPDATE sqldados.custp AS C
-  INNER JOIN T_SALDO AS S
-  ON C.no = S.custnoDev
-SET C.saldoDevolucao = C.saldoDevolucao - S.saldo
-WHERE C.no = S.custnoDev;
-
 UPDATE sqldados.custp AS C
 SET C.saldoDevolucao = C.saldoDevolucao - @saldo
 WHERE C.no = @custno;

@@ -18,25 +18,6 @@ WHERE C.cpf_cgc LIKE '07.483.654/%'
 select @invno, @custnoDev, @saldo, @custnoLoj
 */
 
-DROP TEMPORARY TABLE IF EXISTS T_SALDO;
-CREATE TEMPORARY TABLE T_SALDO
-SELECT invno, custnoLoj, custnoDev, saldo
-FROM sqldados.saldoDevolucao
-WHERE invno = @invno
-  AND @custnoDev IN (200, 300, 400, 500, 600, 800);
-
-UPDATE sqldados.custp AS C
-  INNER JOIN T_SALDO AS S
-  ON C.no = S.custnoLoj
-SET C.saldoDevolucao = C.saldoDevolucao + S.saldo
-WHERE C.no = S.custnoLoj;
-
-UPDATE sqldados.custp AS C
-  INNER JOIN T_SALDO AS S
-  ON C.no = S.custnoDev
-SET C.saldoDevolucao = C.saldoDevolucao - S.saldo
-WHERE C.no = S.custnoDev;
-
 UPDATE sqldados.custp AS C
 SET C.saldoDevolucao = C.saldoDevolucao - @saldo
 WHERE C.no = @custnoLoj

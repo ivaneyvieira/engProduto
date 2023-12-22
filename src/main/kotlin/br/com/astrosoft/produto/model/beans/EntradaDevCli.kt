@@ -46,7 +46,7 @@ class EntradaDevCli(
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
     when {
-      isReenbolso()    -> {
+      isReembolso() -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custno = custno ?: 0,
@@ -88,7 +88,7 @@ class EntradaDevCli(
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
-  private fun isReenbolso(): Boolean {
+  private fun isReembolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
            remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
            remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||
