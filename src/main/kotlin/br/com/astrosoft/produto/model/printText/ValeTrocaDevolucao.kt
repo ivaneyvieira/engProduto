@@ -17,6 +17,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     when {
       nota.observacao02.contains("TROCA")      -> {
         println("Vale Credito: TROCA", negrito = true, center = true)
+        println("Cliente Venda: ${nota.custno} - ${nota.cliente}", negrito = true, center = true)
       }
 
       nota.observacao02.contains("ENTREGA")    -> {
@@ -59,11 +60,11 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     println("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     println("", negrito = true)
     println("Loja: ${nota.nomeLoja}", negrito = true)
-    println("Cliente: ${nota.custno} - ${nota.cliente}", negrito = true)
     println(
       "NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
       negrito = true
     )
+    println("Cliente Devolucao: ${nota.vendno} - ${nota.fornecedor}", negrito = true)
     println("Referente: ${nota.remarks ?: ""}", negrito = true)
     println("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     val totalTxt = "Valor Total do Vale Troca R$: ${nota.valor.format()}"

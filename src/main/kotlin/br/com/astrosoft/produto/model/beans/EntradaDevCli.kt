@@ -46,7 +46,7 @@ class EntradaDevCli(
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
     when {
-      isReembolso() -> {
+      isReembolso()    -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custno = custno ?: 0,
@@ -54,6 +54,15 @@ class EntradaDevCli(
           saldo = valor ?: 0.00
         )
         saci.marcaImpressoReembolso(saldoDevolucao)
+
+        val loja = saci.findLojaNaoInformada(custno ?: 0)
+        val saldoDevolucaoLoja = SaldoDevolucao(
+          invno = invno,
+          custno = loja?.codigo ?: 0,
+          custnoCred = loja?.codigo ?: 0,
+          saldo = valor ?: 0.00
+        )
+        saci.marcaImpressoReembolso(saldoDevolucaoLoja)
       }
 
       isMuda()         -> {

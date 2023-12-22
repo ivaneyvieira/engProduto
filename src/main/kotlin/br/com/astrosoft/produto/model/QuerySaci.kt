@@ -676,6 +676,13 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun findLojaNaoInformada(custno: Int): Cliente?{
+    val sql = "/sqlSaci/findLojaNaoInformada.sql"
+    return query(sql, Cliente::class){
+      addOptionalParameter("custno", custno)
+    }.firstOrNull()
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
