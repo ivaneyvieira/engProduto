@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.DevTroca
-import br.com.astrosoft.produto.model.beans.FiltroDevTroca
+import br.com.astrosoft.produto.model.beans.EntradaDevCli
+import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
 import br.com.astrosoft.produto.model.beans.Loja
 
 class TabDevCliDevTrocaViewModel(val viewModel: DevClienteViewModel) {
@@ -17,7 +17,7 @@ class TabDevCliDevTrocaViewModel(val viewModel: DevClienteViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val notas = DevTroca.findAll(filtro)
+    val notas = EntradaDevCli.findAll(filtro)
     subView.updateNotas(notas)
   }
 
@@ -26,6 +26,6 @@ class TabDevCliDevTrocaViewModel(val viewModel: DevClienteViewModel) {
 }
 
 interface ITabDevCliDevTroca : ITabView {
-  fun filtro(): FiltroDevTroca
-  fun updateNotas(notas: List<DevTroca>)
+  fun filtro(): FiltroEntradaDevCli
+  fun updateNotas(notas: List<EntradaDevCli>)
 }
