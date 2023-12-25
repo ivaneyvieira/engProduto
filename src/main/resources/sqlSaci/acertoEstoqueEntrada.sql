@@ -1,3 +1,10 @@
+SET sql_mode = '';
+
+DO @PESQUISA := TRIM(:pesquisa);
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+
 SELECT N.storeno                                    AS loja,
        N.invno                                      AS ni,
        CONCAT(N.nfname, '/', N.invse)               AS notaFiscal,
@@ -26,3 +33,10 @@ WHERE N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND N.cfo IN (1949)
   AND NOT (I.bits & POW(2, 4))
   AND V.sname LIKE 'ENG%'
+HAVING (@PESQUISA = '' OR
+        ni = @PESQUISANUM OR
+        notaFiscal LIKE @PESQUISASTART OR
+        fornecedor = @PESQUISANUM OR
+        nomeFornecedor LIKE @PESQUISALIKE OR
+        observacao LIKE @PESQUISALIKE
+         )

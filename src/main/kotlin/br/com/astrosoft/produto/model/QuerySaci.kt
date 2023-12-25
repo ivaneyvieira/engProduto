@@ -683,6 +683,26 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun findAcertoEstoqueEntrada(filtro: FiltroAcertoEntrada): List<AcertoEntrada>{
+    val sql = "/sqlSaci/acertoEstoqueEntrada.sql"
+    return query(sql, AcertoEntrada::class){
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.query)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
+  fun findAcertoEstoqueSaida(filtro: FiltroAcertoSaida): List<AcertoSaida>{
+    val sql = "/sqlSaci/acertoEstoqueSaida.sql"
+    return query(sql, AcertoSaida::class){
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.query)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)

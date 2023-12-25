@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class AcertoEntrada(
@@ -16,4 +17,17 @@ class AcertoEntrada(
   var quantidade: Int?,
   var valorUnitario: Double?,
   var valorTotal: Double?,
+){
+  companion object {
+    fun findAll(filtro: FiltroAcertoEntrada): List<AcertoEntrada> {
+      return saci.findAcertoEstoqueEntrada(filtro)
+    }
+  }
+}
+
+data class FiltroAcertoEntrada(
+  val loja: Int,
+  val query: String,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?,
 )
