@@ -56,7 +56,7 @@ class EntradaDevCli(
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           saldo = valor ?: 0.00
         )
-        saci.marcaImpressoReembolso(saldoDevolucao)
+        saci.marcaReembolso(saldoDevolucao)
       }
 
       isMuda()         -> {
@@ -68,17 +68,17 @@ class EntradaDevCli(
           custnoMuda = mudaCliente,
           saldo = valor ?: 0.00
         )
-        saci.marcaImpressoMuda(saldoDevolucao)
+        saci.marcaMudaCliente(saldoDevolucao)
       }
 
       isNaoInformado() -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custnoDev = custno ?: 0,
-          custnoMuda = lojaNaoInformado?.codigo ?: 0,
+          custnoDev = lojaNaoInformado?.codigo ?: 0,
+          custnoMuda = custno ?: 0,
           saldo = valor ?: 0.00
         )
-        saci.marcaImpressoMuda(saldoDevolucao)
+        saci.marcaMudaCliente(saldoDevolucao)
       }
     }
   }

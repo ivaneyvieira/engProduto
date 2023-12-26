@@ -5,8 +5,6 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.config.AppConfig.appName
-import br.com.astrosoft.framework.model.exceptions.EModelFail
-import br.com.astrosoft.framework.model.exceptions.EViewModelFail
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
@@ -625,7 +623,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaImpressoMuda(saldoDevolucao: SaldoDevolucao) {
+  fun marcaMudaCliente(saldoDevolucao: SaldoDevolucao) {
     val sql = "/sqlSaci/updateSaldoMuda.sql"
     script(sql) {
       addOptionalParameter("invno", saldoDevolucao.invno)
@@ -635,7 +633,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaImpressoReembolso(saldoDevolucao: SaldoDevolucao) {
+  fun marcaReembolso(saldoDevolucao: SaldoDevolucao) {
     val sql = "/sqlSaci/updateSaldoReembolso.sql"
     script(sql) {
       addOptionalParameter("invno", saldoDevolucao.invno)
