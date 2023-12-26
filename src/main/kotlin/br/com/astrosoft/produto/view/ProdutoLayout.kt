@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.layout.AppLayoutAbstract
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
@@ -35,6 +36,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = CART,
         title = "Retira",
         routeClass = PedidoRetiraView::class,
+      )
+      if (userSaci?.acertoEstoque == true) route(
+        icon = PACKAGE,
+        title = "Aceito Estoque",
+        routeClass = AcertoEstoqueView::class,
       )
 
       if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)

@@ -174,6 +174,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::retiraImpresso.name)
             }
           }
+          formLayout {
+            h4("Acerto Estoque") {
+              colspan = 2
+            }
+            checkBox("Entrada") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::acertoEntrada.name)
+            }
+            checkBox("Saída") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::acertoSaida.name)
+            }
+          }
         }
       }
     }

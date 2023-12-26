@@ -9,7 +9,7 @@ class AcertoEntrada(
   var notaFiscal: String?,
   var dataEmissao: LocalDate?,
   var fornecedor: Int?,
-  var nomeFornecedo: String?,
+  var nomeFornecedor: String?,
   var observacao: String?,
   var codigoProduto: String?,
   var nomeProduto: String?,
@@ -39,7 +39,7 @@ class AcertoEntrada(
           notaFiscal = nota.notaFiscal,
           dataEmissao = nota.dataEmissao,
           fornecedor = nota.fornecedor,
-          nomeFornecedo = nota.nomeFornecedo,
+          nomeFornecedor = nota.nomeFornecedor,
           observacao = nota.observacao,
           produtos = produtos,
         )
@@ -61,7 +61,7 @@ data class AcertoEntradaNota(
   val notaFiscal: String?,
   val dataEmissao: LocalDate?,
   val fornecedor: Int?,
-  val nomeFornecedo: String?,
+  val nomeFornecedor: String?,
   val observacao: String?,
   val produtos: List<AcertoEntradaProduto>,
 )
