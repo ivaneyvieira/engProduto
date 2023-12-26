@@ -625,21 +625,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saldoDevolucao(saldoDevolucao: SaldoDevolucao) {
-    val sql = "/sqlSaci/updateSaldoDevolucao.sql"
-    script(sql) {
-      addOptionalParameter("invno", saldoDevolucao.invno)
-      addOptionalParameter("custno", saldoDevolucao.custno)
-      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
-    }
-  }
-
   fun marcaImpressoMuda(saldoDevolucao: SaldoDevolucao) {
     val sql = "/sqlSaci/updateSaldoMuda.sql"
     script(sql) {
       addOptionalParameter("invno", saldoDevolucao.invno)
-      addOptionalParameter("custno", saldoDevolucao.custno)
-      addOptionalParameter("custnoCred", saldoDevolucao.custnoCred)
+      addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
+      addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
       addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
     }
   }
@@ -648,7 +639,8 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/updateSaldoReembolso.sql"
     script(sql) {
       addOptionalParameter("invno", saldoDevolucao.invno)
-      addOptionalParameter("custno", saldoDevolucao.custno)
+      addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
+      addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
       addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
     }
   }

@@ -3,16 +3,16 @@ package br.com.astrosoft.produto.view.acertoEstoque
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.produto.model.beans.AcertoEntradaNota
-import br.com.astrosoft.produto.model.beans.AcertoEntradaProduto
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueEntradaViewModel
+import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
+import br.com.astrosoft.produto.model.beans.AcertoSaidaProduto
+import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel, val nota: AcertoEntradaNota) {
+class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: AcertoSaidaNota) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(AcertoEntradaProduto::class.java, false)
+  private val gridDetail = Grid(AcertoSaidaProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Pedido ${nota.notaFiscal} loja: ${nota.loja}", toolBar = {
     }, onClose = {
@@ -32,18 +32,18 @@ class DlgProdutosEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel, val no
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COLUMN_BORDERS)
       isMultiSort = false
 
-      columnGrid(AcertoEntradaProduto::codigoProduto, "Código")
-      columnGrid(AcertoEntradaProduto::nomeProduto, "Descrição").expand()
-      columnGrid(AcertoEntradaProduto::grade, "Grade")
-      columnGrid(AcertoEntradaProduto::quantidade, "Quant")
-      columnGrid(AcertoEntradaProduto::valorUnitario, "V Unit")
-      columnGrid(AcertoEntradaProduto::valorTotal, "V Total")
+      columnGrid(AcertoSaidaProduto::codigoProduto, "Código")
+      columnGrid(AcertoSaidaProduto::nomeProduto, "Descrição").expand()
+      columnGrid(AcertoSaidaProduto::grade, "Grade")
+      columnGrid(AcertoSaidaProduto::quantidade, "Quant")
+      columnGrid(AcertoSaidaProduto::valorUnitario, "V Unit")
+      columnGrid(AcertoSaidaProduto::valorTotal, "V Total")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun itensSelecionados(): List<AcertoEntradaProduto> {
+  fun itensSelecionados(): List<AcertoSaidaProduto> {
     return gridDetail.selectedItems.toList()
   }
 

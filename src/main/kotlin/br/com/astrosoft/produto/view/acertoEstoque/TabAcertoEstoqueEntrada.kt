@@ -4,13 +4,13 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.AcertoEntradaNota
 import br.com.astrosoft.produto.model.beans.FiltroAcertoEntrada
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.pedido.DlgProdutosPedCD
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoEstoqueEntrada
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueEntradaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -77,14 +77,17 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
     this.addClassName("styling")
     columnGrid(AcertoEntradaNota::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-
+      val dlgProduto = DlgProdutosEntrada(viewModel, nota)
+      dlgProduto.showDialog {
+        viewModel.updateView()
+      }
     }
     columnGrid(AcertoEntradaNota::ni, header = "NI")
     columnGrid(AcertoEntradaNota::notaFiscal, header = "Nota Fiscal").right()
     columnGrid(AcertoEntradaNota::dataEmissao, header = "Data")
     columnGrid(AcertoEntradaNota::fornecedor, header = "Cód For")
-    columnGrid(AcertoEntradaNota::nomeFornecedor, header = "Fornecedor")
-    columnGrid(AcertoEntradaNota::observacao, header = "Observação")
+    columnGrid(AcertoEntradaNota::nomeFornecedor, header = "Fornecedor").expand()
+    columnGrid(AcertoEntradaNota::observacao, header = "Observação").expand()
   }
 
   override fun filtro(): FiltroAcertoEntrada {

@@ -1,18 +1,16 @@
 USE sqldados;
 
 DO @invno := :invno;
-DO @custnoCred := :custnoCred;
+DO @custnoDev := :custnoDev;
 DO @saldo := :saldo;
-DO @custno := :custno;
+DO @custnoMuda := :custnoMuda;
 
 UPDATE sqldados.custp AS C
-SET C.saldoDevolucao = C.saldoDevolucao - @saldo
-WHERE C.no = @custno;
+SET C.saldoDevolucao = 0
+WHERE C.no = @custnoDev
+  AND @custnoDev > 0;
 
 UPDATE sqldados.custp AS C
 SET C.saldoDevolucao = C.saldoDevolucao + @saldo
-WHERE C.no = @custnoCred;
-
-REPLACE INTO sqldados.saldoDevolucao(invno, custnoLoj, custnoDev, saldo)
-SELECT @invno AS invno, IFNULL(@custno, 0) AS custnoLoj, IFNULL(@custnoCred, 0) AS custnoDev, @saldo AS saldo
-FROM DUAL
+WHERE C.no = @custnoMuda
+  AND @custnoMuda > 0

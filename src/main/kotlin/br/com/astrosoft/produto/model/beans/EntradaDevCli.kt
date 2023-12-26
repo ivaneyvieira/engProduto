@@ -47,24 +47,16 @@ class EntradaDevCli(
   fun produtos() = saci.entradaDevCliPro(invno)
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(invno, impressora)
+    val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
     when {
       isReembolso()    -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custno = custno ?: 0,
-          custnoCred = custno ?: 0,
+          custnoDev = custno ?: 0,
+          custnoMuda = lojaNaoInformado?.codigo ?: 0,
           saldo = valor ?: 0.00
         )
         saci.marcaImpressoReembolso(saldoDevolucao)
-
-        val loja = saci.findLojaNaoInformada(custno ?: 0)
-        val saldoDevolucaoLoja = SaldoDevolucao(
-          invno = invno,
-          custno = loja?.codigo ?: 0,
-          custnoCred = loja?.codigo ?: 0,
-          saldo = valor ?: 0.00
-        )
-        saci.marcaImpressoReembolso(saldoDevolucaoLoja)
       }
 
       isMuda()         -> {
@@ -72,23 +64,21 @@ class EntradaDevCli(
         val custno = custno ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custno = custno,
-          custnoCred = mudaCliente,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
           saldo = valor ?: 0.00
         )
-        if (mudaCliente > 0 && custno > 0) {
-          saci.marcaImpressoMuda(saldoDevolucao)
-        }
+        saci.marcaImpressoMuda(saldoDevolucao)
       }
 
       isNaoInformado() -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custno = custno ?: 0,
-          custnoCred = custno ?: 0,
+          custnoDev = custno ?: 0,
+          custnoMuda = lojaNaoInformado?.codigo ?: 0,
           saldo = valor ?: 0.00
         )
-        saci.saldoDevolucao(saldoDevolucao)
+        saci.marcaImpressoMuda(saldoDevolucao)
       }
     }
   }

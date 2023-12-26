@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
@@ -76,13 +77,16 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
     this.addClassName("styling")
     columnGrid(AcertoSaidaNota::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-
+      val dlgProduto = DlgProdutosSaida(viewModel, nota)
+      dlgProduto.showDialog {
+        viewModel.updateView()
+      }
     }
     columnGrid(AcertoSaidaNota::notaFiscal, header = "Nota Fiscal").right()
     columnGrid(AcertoSaidaNota::dataEmissao, header = "Data")
     columnGrid(AcertoSaidaNota::cliente, header = "Cód Cli")
-    columnGrid(AcertoSaidaNota::nomeCliente, header = "Cliente")
-    columnGrid(AcertoSaidaNota::observacao, header = "Observação")
+    columnGrid(AcertoSaidaNota::nomeCliente, header = "Cliente").expand()
+    columnGrid(AcertoSaidaNota::observacao, header = "Observação").expand()
   }
 
   override fun filtro(): FiltroAcertoSaida {
