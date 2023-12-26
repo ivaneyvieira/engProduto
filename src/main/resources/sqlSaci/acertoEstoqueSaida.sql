@@ -1,3 +1,10 @@
+SET sql_mode = '';
+
+DO @PESQUISA := TRIM(:pesquisa);
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+
 SELECT nf.storeno                            AS loja,
        CONCAT(nf.nfno, '/', nf.nfse)         AS notaFiscal,
        CAST(nf.issuedate AS DATE)            AS dataEmissao,
@@ -28,3 +35,9 @@ WHERE nf.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND nf.status != 1
   AND nf.pdvno = 0
   AND nf.tipo = 7
+HAVING (@PESQUISA = '' OR
+        notaFiscal LIKE @PESQUISASTART OR
+        cliente = @PESQUISANUM OR
+        nomeCliente LIKE @PESQUISALIKE OR
+        observacao LIKE @PESQUISALIKE
+         )
