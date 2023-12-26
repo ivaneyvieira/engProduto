@@ -39,7 +39,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       )
       if (userSaci?.acertoEstoque == true) route(
         icon = PACKAGE,
-        title = "Aceito Estoque",
+        title = "Acerto Estoque",
         routeClass = AcertoEstoqueView::class,
       )
 

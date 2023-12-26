@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
@@ -16,6 +17,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -73,6 +75,9 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
   override fun Grid<AcertoSaidaNota>.gridPanel() {
     this.addClassName("styling")
     columnGrid(AcertoSaidaNota::loja, header = "Loja")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+
+    }
     columnGrid(AcertoSaidaNota::notaFiscal, header = "Nota Fiscal").right()
     columnGrid(AcertoSaidaNota::dataEmissao, header = "Data")
     columnGrid(AcertoSaidaNota::cliente, header = "Cód Cli")

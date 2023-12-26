@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
@@ -9,6 +10,7 @@ import br.com.astrosoft.produto.model.beans.AcertoEntradaNota
 import br.com.astrosoft.produto.model.beans.FiltroAcertoEntrada
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.pedido.DlgProdutosPedCD
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoEstoqueEntrada
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueEntradaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -16,6 +18,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -73,6 +76,9 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
   override fun Grid<AcertoEntradaNota>.gridPanel() {
     this.addClassName("styling")
     columnGrid(AcertoEntradaNota::loja, header = "Loja")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+
+    }
     columnGrid(AcertoEntradaNota::ni, header = "NI")
     columnGrid(AcertoEntradaNota::notaFiscal, header = "Nota Fiscal").right()
     columnGrid(AcertoEntradaNota::dataEmissao, header = "Data")
