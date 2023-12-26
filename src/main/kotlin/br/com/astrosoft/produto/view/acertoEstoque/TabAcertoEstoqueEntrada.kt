@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -16,6 +17,7 @@ import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueEntradaV
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -88,6 +90,12 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
     columnGrid(AcertoEntradaNota::fornecedor, header = "Cód For")
     columnGrid(AcertoEntradaNota::nomeFornecedor, header = "Fornecedor").expand()
     columnGrid(AcertoEntradaNota::observacao, header = "Observação").expand()
+    columnGrid(AcertoEntradaNota::valor, header = "Valor", width = "12em") {
+      this.grid.dataProvider.addDataProviderListener {
+        val total = listBeans().sumOf { it.valor ?: 0.0 }
+        setFooter(Html("<b><font size=4>Total R$ &nbsp;&nbsp;&nbsp;&nbsp; ${total.format()}</font></b>"))
+      }
+    }
   }
 
   override fun filtro(): FiltroAcertoEntrada {

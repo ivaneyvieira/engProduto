@@ -11,6 +11,7 @@ class AcertoEntrada(
   var fornecedor: Int?,
   var nomeFornecedor: String?,
   var observacao: String?,
+  var valorNota: Double?,
   var codigoProduto: String?,
   var nomeProduto: String?,
   var grade: String?,
@@ -41,6 +42,7 @@ class AcertoEntrada(
           fornecedor = nota.fornecedor,
           nomeFornecedor = nota.nomeFornecedor,
           observacao = nota.observacao,
+          valor = nota.valorNota,
           produtos = produtos,
         )
       }
@@ -63,6 +65,7 @@ data class AcertoEntradaNota(
   val fornecedor: Int?,
   val nomeFornecedor: String?,
   val observacao: String?,
+  val valor: Double?,
   val produtos: List<AcertoEntradaProduto>,
 )
 

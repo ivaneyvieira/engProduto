@@ -1,21 +1,20 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
-import br.com.astrosoft.produto.model.beans.FiltroAcertoSaida
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoEstoqueSaida
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -87,6 +86,12 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
     columnGrid(AcertoSaidaNota::cliente, header = "Cód Cli")
     columnGrid(AcertoSaidaNota::nomeCliente, header = "Cliente").expand()
     columnGrid(AcertoSaidaNota::observacao, header = "Observação").expand()
+    columnGrid(AcertoSaidaNota::valor, header = "Valor", width = "12em") {
+      this.grid.dataProvider.addDataProviderListener {
+        val total = listBeans().sumOf { it.valor ?: 0.0 }
+        setFooter(Html("<b><font size=4>Total R$ &nbsp;&nbsp;&nbsp;&nbsp; ${total.format()}</font></b>"))
+      }
+    }
   }
 
   override fun filtro(): FiltroAcertoSaida {

@@ -296,7 +296,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       this.isAutoWidth = false
       this.width = width
     } else {
-      this.isAutoWidth = true
+      this.isAutoWidth = false
+      this.width = "8em"
     }
     this.isResizable = true
     this.setComparator { a, b ->
@@ -325,7 +326,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       this.isAutoWidth = false
       this.width = width
     } else {
-      this.isAutoWidth = true
+      this.isAutoWidth = false
+      this.width = "8em"
     }
     this.isExpand = false
     this.isResizable = true
