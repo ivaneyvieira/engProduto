@@ -2,12 +2,14 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EntradaDevCli
+import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliDevTroca
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevTrocaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -15,7 +17,6 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -81,6 +82,12 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
     columnGrid(EntradaDevCli::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCli::observacao02, header = "Tipo")
+    columnGrid(EntradaDevCli::pdvVenda, header = "PDV")
+    columnGrid(EntradaDevCli::nfVendaVenda, header = "NF Venda").right()
+    columnGrid(EntradaDevCli::dataVenda, header = "Data")
+    columnGrid(EntradaDevCli::clienteVenda, header = "Cod Cli")
+    columnGrid(EntradaDevCli::clienteNome, header = "Nome Cliente")
+    columnGrid(EntradaDevCli::nfValorVenda, header = "Valor Venda")
   }
 
   override fun filtro(): FiltroEntradaDevCli {

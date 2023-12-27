@@ -30,6 +30,12 @@ class EntradaDevCli(
   var impressora: String?,
   var userName: String?,
   var userLogin: String?,
+  var pdvVenda: Int?,
+  var nfVendaVenda: String?,
+  var dataVenda: LocalDate?,
+  var clienteVenda: Int?,
+  var clienteNome: String?,
+  var nfValorVenda: Double?,
 ) {
 
   val observacao01: String

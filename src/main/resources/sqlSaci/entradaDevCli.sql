@@ -7,6 +7,24 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
+DROP TEMPORARY TABLE IF EXISTS T_VENDA;
+CREATE TEMPORARY TABLE T_VENDA
+SELECT N.storeno                 AS loja,
+       N.pdvno                   AS pdv,
+       N.xano                    AS xano,
+       CONCAT(nfno, '/', nfse)   AS nfVenda,
+       CAST(N.issuedate AS DATE) AS data,
+       N.grossamt / 100          AS nfValor,
+       N.custno                  AS cliente,
+       C.name                    AS clienteNome,
+       N.print_remarks           AS obsNI
+FROM sqldados.nf AS N
+       INNER JOIN sqldados.custp AS C
+                  ON C.no = N.custno
+WHERE N.print_remarks REGEXP 'NI.+[0-9]+'
+  AND N.issuedate > :dataLimiteInicial;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -40,8 +58,16 @@ SELECT I.invno                                                                  
            ' ', 1))                                                                      AS nfRmk,
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                                AS nfno,
        MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2)               AS nfse,
-       I.c9                                                                              AS impressora
+       I.c9                                                                              AS impressora,
+       U.pdv                                                                             AS pdvVenda,
+       U.nfVenda                                                                         AS nfVendaVenda,
+       U.data                                                                            AS dataVenda,
+       U.cliente                                                                         AS clienteVenda,
+       U.clienteNome                                                                     AS clienteNome,
+       U.nfValor                                                                         AS nfValorVenda
 FROM sqldados.inv AS I
+       LEFT JOIN T_VENDA AS U
+                 ON U.loja = I.storeno AND U.data >= I.issue_date AND U.obsNI LIKE CONCAT('NI%', I.invno, '%')
        LEFT JOIN sqldados.nf AS NF1
                  ON (NF1.nfno = I.nfNfno AND NF1.storeno = I.nfStoreno AND NF1.nfse = I.nfNfse)
        LEFT JOIN sqldados.nf AS NF2
@@ -97,7 +123,13 @@ SELECT I.invno,
        TRIM(IFNULL(I.vendedor, E.name))               AS vendedor,
        SUBSTRING_INDEX(impressora, '/', 1)            AS impressora,
        U.name                                         AS userName,
-       U.login                                        AS userLogin
+       U.login                                        AS userLogin,
+       pdvVenda                                       AS pdvVenda,
+       nfVendaVenda                                   AS nfVendaVenda,
+       dataVenda                                      AS dataVenda,
+       clienteVenda                                   AS clienteVenda,
+       clienteNome                                    AS clienteNome,
+       nfValorVenda                                   AS nfValorVenda
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse

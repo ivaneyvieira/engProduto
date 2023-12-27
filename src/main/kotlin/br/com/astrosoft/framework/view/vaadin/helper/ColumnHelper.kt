@@ -326,7 +326,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       this.isAutoWidth = false
       this.width = width
     } else {
-      this.isAutoWidth = false
+      this.isAutoWidth = true
       this.width = "8em"
     }
     this.isExpand = false
