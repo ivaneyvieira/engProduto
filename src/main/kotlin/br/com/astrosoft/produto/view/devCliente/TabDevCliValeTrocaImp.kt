@@ -79,7 +79,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
-    columnGrid(EntradaDevCli::fezTroca, header = "Troca")
+    columnGrid(EntradaDevCli::fezTrocaCol, header = "Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev").right()
     columnGrid(EntradaDevCli::data, header = "Data")

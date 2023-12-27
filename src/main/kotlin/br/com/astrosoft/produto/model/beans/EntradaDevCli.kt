@@ -38,6 +38,9 @@ class EntradaDevCli(
   var nfValorVenda: Double?,
   var fezTroca: String?,
 ) {
+  val fezTrocaCol
+    get() = if(fezTroca == "S") "Sim" else "Não"
+
   val observacao01: String
     get() {
       val parte1 = remarks?.split(")")?.getOrNull(0) ?: return ""
