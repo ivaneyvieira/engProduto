@@ -94,6 +94,10 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
     columnGrid(EntradaDevCli::impressora, header = "Impressora")
     columnGrid(EntradaDevCli::userName, header = "Usuário")
+    this.setPartNameGenerator {
+      if (it.pdvVenda == null) null
+      else "amarelo"
+    }
   }
 
   override fun filtro(): FiltroEntradaDevCli {

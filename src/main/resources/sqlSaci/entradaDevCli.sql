@@ -17,12 +17,17 @@ SELECT N.storeno                 AS loja,
        N.grossamt / 100          AS nfValor,
        N.custno                  AS cliente,
        C.name                    AS clienteNome,
-       N.print_remarks           AS obsNI
+       CASE
+         WHEN N.print_remarks REGEXP 'NI.+[0-9]+' THEN N.print_remarks
+         WHEN N.remarks REGEXP 'NI.+[0-9]+' THEN N.remarks
+         ELSE ''
+       END                       AS obsNI
 FROM sqldados.nf AS N
        INNER JOIN sqldados.custp AS C
                   ON C.no = N.custno
-WHERE N.print_remarks REGEXP 'NI.+[0-9]+'
-  AND N.issuedate > :dataLimiteInicial;
+WHERE (N.print_remarks REGEXP 'NI.+[0-9]+' OR N.remarks REGEXP 'NI.+[0-9]+')
+  AND N.issuedate > :dataLimiteInicial
+  AND N.xatype IN (1, 999);
 
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
@@ -64,7 +69,9 @@ SELECT I.invno                                                                  
        U.data                                                                            AS dataVenda,
        U.cliente                                                                         AS clienteVenda,
        U.clienteNome                                                                     AS clienteNome,
-       U.nfValor                                                                         AS nfValorVenda
+       U.nfValor                                                                         AS nfValorVenda,
+       IF(I.remarks LIKE '%EST CARTAO%' OR I.remarks LIKE '%EST BOLETO%' OR I.remarks LIKE '%EST DEP%' OR
+          I.remarks LIKE '%REEMBOLSO%', 'S', 'N')                                        AS estorno
 FROM sqldados.inv AS I
        LEFT JOIN T_VENDA AS U
                  ON U.loja = I.storeno AND U.data >= I.issue_date AND U.obsNI LIKE CONCAT('NI%', I.invno, '%')
