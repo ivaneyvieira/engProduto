@@ -136,7 +136,8 @@ SELECT I.invno,
        IF(I.estorno = 'N', dataVenda, IFNULL(I.nfData, DATE(N.issuedate)))               AS dataVenda,
        IF(I.estorno = 'N', clienteVenda, IFNULL(I.custno, N.custno))                     AS clienteVenda,
        IF(I.estorno = 'N', clienteNome, IFNULL(I.cliente, C.name))                       AS clienteNome,
-       IF(I.estorno = 'N', nfValorVenda, IFNULL(I.nfValor, N.grossamt / 100))            AS nfValorVenda
+       IF(I.estorno = 'N', nfValorVenda, IFNULL(I.nfValor, N.grossamt / 100))            AS nfValorVenda,
+       IF(pdvVenda IS NULL, 'Não', 'Sim')                                                AS fezTroca
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
