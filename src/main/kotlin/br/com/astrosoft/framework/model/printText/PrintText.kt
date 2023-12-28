@@ -139,12 +139,17 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         if (expand)
           textCenter.expandNegrito()
         else
-          textCenter.negrito()
+          textCenter.replace("<E>", EXPANDIDON_ON)
+            .replace("</E>", EXPANDIDON_OFF).negrito()
       } else {
         if (expand)
           textCenter.expand()
         else
-          textCenter.replace("<B>", NEGRITO_ON).replace("</B>", NEGRITO_OFF).negritoOff()
+          textCenter.replace("<B>", NEGRITO_ON)
+            .replace("</B>", NEGRITO_OFF)
+            .replace("<E>", EXPANDIDO_ON)
+            .replace("</E>", EXPANDIDO_OFF)
+            .negritoOff()
       }
       return@let textNeg
     })
