@@ -57,11 +57,12 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   override fun printTitle(bean: EntradaDevCliPro) {
     tituloValeTroca()
     println("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
+    println("NI: ${nota.invno}", negrito = true)
     println("", negrito = true)
     println("Loja: ${nota.nomeLoja}", negrito = true)
     println("Cliente Compra: ${nota.custno} - ${nota.cliente}", negrito = true)
     println(
-      "NI: ${nota.invno}  NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
+      "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
       negrito = true
     )
     println("Cliente Devolucao: ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
