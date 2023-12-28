@@ -3,23 +3,29 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_ON
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.PAPPER_CUT
 import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
 
 object PrinterToHtml {
+  private val FONT_SIZE = 3
   fun toHtml(text: String): String {
     val html =
-        text.removerInicializer()
+        text
+          .replace(" ", "&nbsp;")
+          .removerInicializer()
           .removerCodigoBarras()
           .removeFinalize()
           .removerNegrito()
           .removerExpandido()
-          .replace(" ", "&nbsp;")
 
     val htmlFormat = html.lines().joinToString(separator = "<br>") { linha ->
-      "<code>$linha</code>"
+      "<code><font size=$FONT_SIZE>$linha</font></code>"
     }
 
     return htmlFormat
@@ -36,14 +42,19 @@ object PrinterToHtml {
 
   private fun String.removerCodigoBarras(): String {
     val padrao3 = "$BARCODE_128..".toRegex()
-    return this.replace(BARCODE_HEIGHT, "").replace(BARCODE_WIDTH, "").replace(padrao3, "")
+    return this.replace(BARCODE_HEIGHT, "").replace(BARCODE_WIDTH, "")
+      .replace(padrao3, "")
   }
 
   private fun String.removerNegrito(): String {
-    return this.replace(NEGRITO_ON, "<strong>").replace(NEGRITO_OFF, "</strong>")
+    return this.replace(NEGRITO_ON, "<strong>")
+      .replace(NEGRITO_OFF, "</strong>")
   }
 
   private fun String.removerExpandido(): String {
-    return this
+    return this.replace(EXPANDIDON_ON, "<strong><font size=${FONT_SIZE * 2}>")
+      .replace(EXPANDIDON_OFF, "</font></strong>")
+      .replace(EXPANDIDO_ON, "<font size=${FONT_SIZE * 2}>")
+      .replace(EXPANDIDO_OFF, "</font>")
   }
 }

@@ -3,6 +3,10 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_ON
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_OFF
+import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
 import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
@@ -100,6 +104,14 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return "$NEGRITO_ON${this}$NEGRITO_OFF"
   }
 
+  protected fun String.expand(): String {
+    return "$EXPANDIDO_ON${this}$EXPANDIDO_OFF"
+  }
+
+  protected fun String.expandNegrito(): String {
+    return "$EXPANDIDON_ON${this}$EXPANDIDON_OFF"
+  }
+
   protected fun String.negritoOff(): String {
     return "$SET_FONT_SMALL${this}"
   }
@@ -116,14 +128,23 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     textBuffer.println("")
   }
 
-  protected fun println(text: String, negrito: Boolean = false, center: Boolean = false) {
+  protected fun println(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
     textBuffer.println(text.let { textOrig ->
       val textCenter = if (center) {
-        val margem = (widthPage - textOrig.length) / 2
+        val widthPageCalc = if (expand) widthPage / 2 else widthPage
+        val margem = (widthPageCalc - textOrig.length) / 2
         " ".repeat(margem) + textOrig
       } else textOrig
-      val textNeg = if (negrito) textCenter.negrito() else {
-        textCenter.replace("<B>", NEGRITO_ON).replace("</B>", NEGRITO_OFF).negritoOff()
+      val textNeg = if (negrito) {
+        if (expand)
+          textCenter.expandNegrito()
+        else
+          textCenter.negrito()
+      } else {
+        if (expand)
+          textCenter.expand()
+        else
+          textCenter.replace("<B>", NEGRITO_ON).replace("</B>", NEGRITO_OFF).negritoOff()
       }
       return@let textNeg
     })
