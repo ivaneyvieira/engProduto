@@ -34,7 +34,7 @@ DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
 CREATE TEMPORARY TABLE T_REEMBOLSO
 SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
 FROM sqldados.pdvcxh
-WHERE date > :dataLimiteInicial
+WHERE date > :dataI
   AND remarks LIKE 'REEMBOLSO%';
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
