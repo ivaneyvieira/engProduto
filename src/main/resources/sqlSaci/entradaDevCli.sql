@@ -27,6 +27,7 @@ FROM sqldados.nf AS N
                   ON C.no = N.custno
 WHERE (N.print_remarks REGEXP 'NI.+[0-9]+' OR N.remarks REGEXP 'NI.+[0-9]+')
   AND N.issuedate > :dataLimiteInicial
+  AND N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND N.xatype IN (1, 999);
 
 DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
