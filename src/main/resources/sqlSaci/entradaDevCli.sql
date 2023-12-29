@@ -29,6 +29,12 @@ WHERE (N.print_remarks REGEXP 'NI.+[0-9]+' OR N.remarks REGEXP 'NI.+[0-9]+')
   AND N.issuedate > :dataLimiteInicial
   AND N.xatype IN (1, 999);
 
+DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
+CREATE TEMPORARY TABLE T_REEMBOLSO
+SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
+FROM sqldados.pdvcxh
+WHERE date > :dataLimiteInicial
+  AND remarks LIKE 'REEMBOLSO%';
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -71,10 +77,13 @@ SELECT I.invno                                                                  
        U.clienteNome                                                                     AS clienteNome,
        U.nfValor                                                                         AS nfValorVenda,
        IF(I.remarks LIKE '%EST CARTAO%' OR I.remarks LIKE '%EST BOLETO%' OR I.remarks LIKE '%EST DEP%' OR
-          I.remarks LIKE '%REEMBOLSO%', 'S', 'N')                                        AS estorno
+          I.remarks LIKE '%REEMBOLSO%', 'S', 'N')                                        AS estorno,
+       R.pdvReembolso                                                                    AS pdvReembolso
 FROM sqldados.inv AS I
        LEFT JOIN T_VENDA AS U
-                 ON U.loja = I.storeno AND U.data >= I.issue_date AND U.obsNI LIKE CONCAT('NI%', I.invno, '%')
+                 ON U.loja = I.storeno AND U.obsNI LIKE CONCAT('NI%', I.invno, '%')
+       LEFT JOIN T_REEMBOLSO AS R
+                 ON R.loja = I.storeno AND R.obs LIKE CONCAT('REEMBOLSO%', I.invno, '%')
        LEFT JOIN sqldados.nf AS NF1
                  ON (NF1.nfno = I.nfNfno AND NF1.storeno = I.nfStoreno AND NF1.nfse = I.nfNfse)
        LEFT JOIN sqldados.nf AS NF2
@@ -110,34 +119,34 @@ SELECT I.invno,
        I.data,
        IF(LOCATE('/', impressora) > 0,
           SUBSTRING_INDEX(impressora, '/', -1),
-          TIME_FORMAT(CURRENT_TIME, '%H:%i'))                                            AS hora,
+          TIME_FORMAT(CURRENT_TIME, '%H:%i'))                            AS hora,
        I.vendno,
        I.fornecedor,
        I.custnoDev,
        I.clienteDev,
        I.remarks,
        I.valor,
-       IFNULL(I.storeno, N.storeno)                                                      AS storeno,
-       IFNULL(I.pdvno, N.pdvno)                                                          AS pdvno,
-       IFNULL(I.xano, N.xano)                                                            AS xano,
-       IFNULL(I.custno, N.custno)                                                        AS custno,
-       IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                                    AS nfVenda,
-       IFNULL(I.nfData, DATE(N.issuedate))                                               AS nfData,
-       IFNULL(I.nfValor, N.grossamt / 100)                                               AS nfValor,
-       IFNULL(I.empno, N.empno)                                                          AS empno,
-       IFNULL(I.cliente, C.name)                                                         AS cliente,
-       IFNULL(I.cfo, N.cfo)                                                              AS cfo,
-       TRIM(IFNULL(I.vendedor, E.name))                                                  AS vendedor,
-       SUBSTRING_INDEX(impressora, '/', 1)                                               AS impressora,
-       U.name                                                                            AS userName,
-       U.login                                                                           AS userLogin,
-       IF(I.estorno = 'N', pdvVenda, IFNULL(I.pdvno, N.pdvno))                           AS pdvVenda,
-       IF(I.estorno = 'N', nfVendaVenda, IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))) AS nfVendaVenda,
-       IF(I.estorno = 'N', dataVenda, IFNULL(I.nfData, DATE(N.issuedate)))               AS dataVenda,
-       IF(I.estorno = 'N', clienteVenda, IFNULL(I.custno, N.custno))                     AS clienteVenda,
-       IF(I.estorno = 'N', clienteNome, IFNULL(I.cliente, C.name))                       AS clienteNome,
-       IF(I.estorno = 'N', nfValorVenda, IFNULL(I.nfValor, N.grossamt / 100))            AS nfValorVenda,
-       IF(pdvVenda IS NULL, 'N', 'S')                                                    AS fezTroca
+       IFNULL(I.storeno, N.storeno)                                      AS storeno,
+       IFNULL(I.pdvno, N.pdvno)                                          AS pdvno,
+       IFNULL(I.xano, N.xano)                                            AS xano,
+       IFNULL(I.custno, N.custno)                                        AS custno,
+       IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                    AS nfVenda,
+       IFNULL(I.nfData, DATE(N.issuedate))                               AS nfData,
+       IFNULL(I.nfValor, N.grossamt / 100)                               AS nfValor,
+       IFNULL(I.empno, N.empno)                                          AS empno,
+       IFNULL(I.cliente, C.name)                                         AS cliente,
+       IFNULL(I.cfo, N.cfo)                                              AS cfo,
+       TRIM(IFNULL(I.vendedor, E.name))                                  AS vendedor,
+       SUBSTRING_INDEX(impressora, '/', 1)                               AS impressora,
+       U.name                                                            AS userName,
+       U.login                                                           AS userLogin,
+       IF(I.estorno = 'N', pdvVenda, pdvReembolso)                       AS pdvVenda,
+       nfVendaVenda                                                      AS nfVendaVenda,
+       dataVenda                                                         AS dataVenda,
+       clienteVenda                                                      AS clienteVenda,
+       clienteNome                                                       AS clienteNome,
+       nfValorVenda                                                      AS nfValorVenda,
+       IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
