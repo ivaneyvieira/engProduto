@@ -39,7 +39,7 @@ class EntradaDevCli(
   var fezTroca: String?,
 ) {
   val fezTrocaCol
-    get() = if(fezTroca == "S") "Sim" else "Não"
+    get() = if (fezTroca == "S") "Sim" else "Não"
 
   val observacao01: String
     get() {
@@ -55,7 +55,13 @@ class EntradaDevCli(
 
   fun produtos() = saci.entradaDevCliPro(invno)
   fun marcaImpresso(impressora: Impressora) {
-    saci.marcaImpresso(invno, impressora)
+    saci.marcaImpresso(
+      invno = invno,
+      storeno = storeno ?: 0,
+      pdvno = pdvVenda ?: 0,
+      xano = xano ?: 0,
+      impressora = impressora
+    )
     val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
     when {
       isReembolso()    -> {
