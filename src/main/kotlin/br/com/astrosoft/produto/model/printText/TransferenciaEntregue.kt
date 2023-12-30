@@ -14,19 +14,19 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
   }
 
   override fun printTitle(bean: ProdutoPedidoTransf) {
-    println("Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
-    println(
+    writeln("Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
+    writeln(
       "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Nota Transf: ${nota.notaTransf}",
       negrito = true
     )
-    println("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
+    writeln("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
     //println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
-    println("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
+    writeln("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
     //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
     //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
-    println("Vendedor (a): ${nota.nomeVendedor()}", negrito = true)
-    println("Self Color: ${nota.selfColor ?: ""}", negrito = true)
-    println("".padEnd(64, '-'))
+    writeln("Vendedor (a): ${nota.nomeVendedor()}", negrito = true)
+    writeln("Self Color: ${nota.selfColor ?: ""}", negrito = true)
+    writeln("".padEnd(64, '-'))
   }
 
   override fun printSumary() {
@@ -37,19 +37,19 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
     val recebidoRelatorio = campoRecebido.value
     val lengthRecebido = recebidoRelatorio.length
     val recebido = if (lengthRecebido >= 31) (recebidoRelatorio).substring(0, 31) else recebidoRelatorio
-    println("")
-    println("DOCUMENTO NAO FISCAL", center = true)
-    println("")
-    println("")
-    println("_______________________________", center = true)
-    println(nota.sing, center = true)
-    println("Autorizacao no Sistema", center = true)
-    println("")
-    println("")
-    println("_______________________________".center(32) + "_______________________________".center(32))
-    println("${entregue.center(32)}${recebido.center(32)}")
-    println("Entregue".center(32) + campoRecebido.label.center(32))
-    println("")
-    println("")
+    writeln("")
+    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("")
+    writeln("_______________________________", center = true)
+    writeln(nota.sing, center = true)
+    writeln("Autorizacao no Sistema", center = true)
+    writeln("")
+    writeln("")
+    writeln("_______________________________".center(32) + "_______________________________".center(32))
+    writeln("${entregue.center(32)}${recebido.center(32)}")
+    writeln("Entregue".center(32) + campoRecebido.label.center(32))
+    writeln("")
+    writeln("")
   }
 }

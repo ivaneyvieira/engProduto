@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin
 
+import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
 import br.com.astrosoft.framework.view.vaadin.helper.style
@@ -82,7 +83,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
   }
 
   override fun showPrintText(
-    text: String,
+    text: TextBuffer,
     showPrinter : Boolean,
     printerUser: List<String>,
     rota: Rota?,

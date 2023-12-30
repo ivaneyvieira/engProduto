@@ -19,22 +19,22 @@ class ProdutosDevolucao : PrintText<EntradaDevCliProList>() {
   }
 
   override fun printTitle(bean: EntradaDevCliProList) {
-    println("Loja: ${bean.loja}", negrito = true)
-    println("Produtos de Devolucoes de Clientes", negrito = true)
-    println("Data: ${bean.data.format()}", negrito = true)
-    println("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
+    writeln("Loja: ${bean.loja}", negrito = true)
+    writeln("Produtos de Devolucoes de Clientes", negrito = true)
+    writeln("Data: ${bean.data.format()}", negrito = true)
+    writeln("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
 
     printLine('-')
   }
 
   override fun printSumary() {
-    println("")
-    println("DOCUMENTO NAO FISCAL", center = true)
-    println("")
-    println("")
-    println("_________________________________", center = true)
-    println("Conferido", center = true)
-    println("")
-    println("")
+    writeln("")
+    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("")
+    writeln("_________________________________", center = true)
+    writeln("Conferido", center = true)
+    writeln("")
+    writeln("")
   }
 }

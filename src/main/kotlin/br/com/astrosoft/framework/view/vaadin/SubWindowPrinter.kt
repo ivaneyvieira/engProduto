@@ -3,6 +3,7 @@ package br.com.astrosoft.framework.view.vaadin
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.model.printText.PrinterToHtml
+import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.produto.model.beans.*
@@ -15,7 +16,7 @@ import com.vaadin.flow.component.select.Select
 import java.io.File
 
 class SubWindowPrinter(
-  text: String,
+  text: TextBuffer,
   showPrinter: Boolean = true,
   printerUser: List<String>,
   rota: Rota?,
@@ -34,16 +35,16 @@ class SubWindowPrinter(
     this.style("border", "1px solid black")
     this.style("border-radius", "5px")
     this.style("color", "black")
-    this.html(PrinterToHtml.toHtml(text))
+    this.html(PrinterToHtml.toHtml(text.printHtml()))
   }
 
-  private fun imprimeText(text: String, impressora: String) {
+  private fun imprimeText(text: TextBuffer, impressora: String) {
     val printer = PrinterCups(impressora)
     printer.print(text)
   }
 
   init {
-    File("/tmp/relatorio.txt").writeText(text)
+    File("/tmp/relatorio.txt").writeText(text.printEspPos())
 
     height = "100%"
     verticalLayout {

@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.viewmodel
 
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.model.exceptions.EViewModelFail
+import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.produto.model.beans.Rota
 
 abstract class ViewModel<V : IView>(val view: V) {
@@ -46,7 +47,7 @@ interface IView {
   fun showQuestion(msg: String, execYes: () -> Unit)
   fun showReport(chave: String, report: ByteArray)
   fun showPrintText(
-    text: String,
+    text: TextBuffer,
     showPrinter: Boolean = true,
     printerUser: List<String> = emptyList(),
     rota: Rota? = null,

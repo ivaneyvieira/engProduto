@@ -5,24 +5,23 @@ import org.apache.http.conn.ConnectTimeoutException
 import java.io.File
 
 interface IPrinter {
-  fun print(text: String)
+  fun print(text: TextBuffer)
 }
 
 class DummyPrinter : IPrinter {
-  private val buffer = StringBuffer()
+  private var text: TextBuffer? = null
 
-  override fun print(text: String) {
-    buffer.append(text)
-    buffer.append("\n")
+  override fun print(text: TextBuffer) {
+    this.text = text
   }
 
-  fun text() = buffer.toString()
+  fun textBuffer() = text ?: TextBuffer()
 }
 
 class PrinterCups(private val printerName: String) : IPrinter {
-  override fun print(text: String) {
+  override fun print(text: TextBuffer) {
     try {
-      CupsUtils.printCups(printerName, text)
+      CupsUtils.printCups(printerName, text.printEspPos())
     } catch (e: ConnectTimeoutException) {
       e.printStackTrace()
     }
@@ -30,8 +29,8 @@ class PrinterCups(private val printerName: String) : IPrinter {
 }
 
 class PrinterFile : IPrinter {
-  override fun print(text: String) {
+  override fun print(text: TextBuffer) {
     val file = File("/tmp/relatorio.txt")
-    file.writeText(text)
+    file.writeText(text.printEspPos())
   }
 }

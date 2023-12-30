@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
+import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.view.vaadin.SubWindowPDF
 import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
 import br.com.astrosoft.produto.model.beans.Rota
@@ -54,7 +55,7 @@ object DialogHelper {
   }
 
   fun showPrintText(
-    text: String,
+    text: TextBuffer,
     showPrinter: Boolean = true,
     printerUser: List<String>,
     rota: Rota?,

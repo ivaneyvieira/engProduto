@@ -3,12 +3,6 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_OFF
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDON_ON
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_OFF
-import br.com.astrosoft.framework.model.printText.EscPosConst.EXPANDIDO_ON
-import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_OFF
-import br.com.astrosoft.framework.model.printText.EscPosConst.NEGRITO_ON
 import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
 import kotlin.reflect.KProperty1
 
@@ -44,7 +38,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   }
 
   private fun header() = columns.montaLinha { col ->
-    col.columnText.negrito()
+    col.columnText
   }
 
   private fun detail(value: T) = columns.montaLinha { col ->
@@ -67,23 +61,22 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       groupDados.forEach { (group, list) ->
         list.forEach { beanDetail ->
           if (group != "") {
-            textBuffer.println("")
-            println(group, negrito = true)
+            writeln("")
+            writeln(group, negrito = true)
           }
           printDetail(beanDetail)
         }
       }
 
-
       printSumary()
 
       textBuffer.finalizePrint()
-      printer.print(textBuffer.printText())
+      printer.print(textBuffer)
     }
   }
 
   open fun printSumary() {
-    println("")
+    writeln("")
   }
 
   protected fun String.barras(): String {
@@ -100,35 +93,35 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return stringBuffer.toString()
   }
 
-  protected fun String.negrito(): String {
-    return "$NEGRITO_ON${this}$NEGRITO_OFF"
+  private fun String.negrito(): String {
+    return "<B>${this}</B>"
   }
 
-  protected fun String.expand(): String {
-    return "$EXPANDIDO_ON${this}$EXPANDIDO_OFF"
+  private fun String.expand(): String {
+    return "<E>${this}</E>"
   }
 
-  protected fun String.expandNegrito(): String {
-    return "$EXPANDIDON_ON${this}$EXPANDIDON_OFF"
+  private fun String.expandNegrito(): String {
+    return "<EB>${this}</EB>"
   }
 
-  protected fun String.negritoOff(): String {
-    return "$SET_FONT_SMALL${this}"
+  private fun String.negritoOff(): String {
+    return "<N>${this}</N>"
   }
 
   private fun printDetail(bean: T) {
-    textBuffer.println(detail(bean))
+    writeln(detail(bean))
   }
 
   private fun printHeader() {
-    textBuffer.println(header())
+    writeln(header(), negrito = true)
   }
 
   open fun printTitle(bean: T) {
-    textBuffer.println("")
+
   }
 
-  protected fun println(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
+  protected fun writeln(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
     textBuffer.println(text.let { textOrig ->
       val textCenter = if (center) {
         val widthPageCalc = if (expand) widthPage / 2 else widthPage
@@ -139,24 +132,19 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         if (expand)
           textCenter.expandNegrito()
         else
-          textCenter.replace("<E>", EXPANDIDON_ON)
-            .replace("</E>", EXPANDIDON_OFF).negrito()
+          textCenter.negrito()
       } else {
         if (expand)
           textCenter.expand()
         else
-          textCenter.replace("<B>", NEGRITO_ON)
-            .replace("</B>", NEGRITO_OFF)
-            .replace("<E>", EXPANDIDO_ON)
-            .replace("</E>", EXPANDIDO_OFF)
-            .negritoOff()
+          textCenter.negritoOff()
       }
       return@let textNeg
     })
   }
 
   protected fun printLine(character: Char = '-') {
-    textBuffer.println(character.toString().repeat(widthPage))
+    writeln(character.toString().repeat(widthPage))
   }
 
   protected fun String?.center(width: Int): String {

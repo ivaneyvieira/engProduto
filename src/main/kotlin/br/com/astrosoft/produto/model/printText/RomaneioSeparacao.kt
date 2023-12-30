@@ -9,22 +9,22 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
     val listObs = pedido?.listObs().orEmpty()
-    println("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
+    writeln("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
 
-    println("<B>Loja: </B>${pedido?.siglaLoja}")
-    println("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
-    println("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
-    println("<B>PDV: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
-    println("<B>Cliente: </B>${pedido?.cliente}")
-    println("<B>Vendedor (a): </B>${pedido?.vendedor}")
+    writeln("<B>Loja: </B>${pedido?.siglaLoja}")
+    writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
+    writeln("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
+    writeln("<B>PDV: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
+    writeln("<B>Cliente: </B>${pedido?.cliente}")
+    writeln("<B>Vendedor (a): </B>${pedido?.vendedor}")
     if (listObs.isNotEmpty()) {
-      println("<B>Obs na Reserva: </B>${listObs.firstOrNull() ?: ""}")
+      writeln("<B>Obs na Reserva: </B>${listObs.firstOrNull() ?: ""}")
     } else {
-      println("<B>Obs na Reserva: </B>")
+      writeln("<B>Obs na Reserva: </B>")
     }
     if (listObs.size > 1) {
       listObs.subList(1, listObs.size).forEach { obs ->
-        println(obs)
+        writeln(obs)
       }
     }
     printLine()
@@ -38,9 +38,9 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
   }
 
   override fun printSumary() {
-    println("")
-    println("DOCUMENTO NAO FISCAL", center = true)
-    println("")
-    println("")
+    writeln("")
+    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("")
   }
 }

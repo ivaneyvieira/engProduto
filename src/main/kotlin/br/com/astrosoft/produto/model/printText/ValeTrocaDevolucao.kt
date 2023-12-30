@@ -16,76 +16,76 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   private fun tituloValeTroca() {
     when {
       nota.observacao02.contains("TROCA")      -> {
-        println("Vale Credito: TROCA", negrito = true, center = true)
+        writeln("Vale Credito: TROCA", negrito = true, center = true)
       }
 
       nota.observacao02.contains("ENTREGA")    -> {
-        println("Vale Credito: ENTREGA", negrito = true, center = true)
+        writeln("Vale Credito: ENTREGA", negrito = true, center = true)
       }
 
       nota.observacao02.contains("RETIRA")     -> {
-        println("Vale Credito: RETIRA", negrito = true, center = true)
+        writeln("Vale Credito: RETIRA", negrito = true, center = true)
       }
 
       nota.observacao02.contains("REEMBOLSO")  -> {
-        println("Vale Credito: REEMBOLSO", negrito = true, center = true)
+        writeln("Vale Credito: REEMBOLSO", negrito = true, center = true)
       }
 
       nota.observacao02.contains("MUDA NF")    -> {
-        println("Vale Credito: MUDA NF", negrito = true, center = true)
+        writeln("Vale Credito: MUDA NF", negrito = true, center = true)
       }
 
       nota.observacao02.contains("MUDA")       -> {
-        println("Vale Credito: MUDA CLIENTE", negrito = true, center = true)
-        println("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
+        writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true)
+        writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
       nota.observacao02.contains("EST CARTAO") -> {
-        println("Vale Credito: ESTORNO CARTAO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true)
       }
 
       nota.observacao02.contains("EST BOLETO") -> {
-        println("Vale Credito: ESTORNO BOLETO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true)
       }
 
       nota.observacao02.contains("EST DEP")    -> {
-        println("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true)
       }
     }
   }
 
   override fun printTitle(bean: EntradaDevCliPro) {
     tituloValeTroca()
-    println("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
-    println("NI: ${nota.invno}", negrito = true, expand = true, center = true)
-    println("", negrito = true)
-    println("Loja: ${nota.nomeLoja}", negrito = true)
-    println("Cliente Compra: ${nota.custno} - ${nota.cliente}", negrito = true)
-    println(
+    writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
+    writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
+    writeln("", negrito = true)
+    writeln("Loja: ${nota.nomeLoja}", negrito = true)
+    writeln("Cliente Compra: <E>${nota.custno}</E> - ${nota.cliente}", negrito = true)
+    writeln(
       "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
       negrito = true
     )
-    println("Cliente Devolucao: ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
-    println("Referente: ${nota.remarks ?: ""}", negrito = true)
-    println("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
+    writeln("Cliente Devolucao: ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
+    writeln("Referente: ${nota.remarks ?: ""}", negrito = true)
+    writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     val totalTxt = "Valor Total do Vale Troca <E>R$: ${nota.valor.format()}</E>"
-    println(totalTxt, negrito = true)
+    writeln(totalTxt, negrito = true)
     printLine('-')
   }
 
   override fun printSumary() {
-    println("")
-    println("DOCUMENTO NAO FISCAL", center = true)
-    println("")
-    println("")
-    println("______________________________________", center = true)
-    println(nota.userName ?: "", center = true)
-    println("Setor de Troca", center = true)
-    println("")
-    println("")
-    println("_______________________________  _______________________________")
-    println("            Gerencia                           Caixa")
-    println("")
-    println("")
+    writeln("")
+    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("")
+    writeln("______________________________________", center = true)
+    writeln(nota.userName ?: "", center = true)
+    writeln("Setor de Troca", center = true)
+    writeln("")
+    writeln("")
+    writeln("_______________________________  _______________________________")
+    writeln("            Gerencia                           Caixa")
+    writeln("")
+    writeln("")
   }
 }

@@ -19,13 +19,13 @@ class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {
     val titulo = "NF Transf ${bean.notaTransf} - ${bean.rota}"
     val data = "Data: ${bean.data?.format() ?: "  /  /    "}".lpad(64 - titulo.length, " ")
 
-    println("$titulo$data", negrito = true)
-    println("".lpad(64, "-"), negrito = true)
+    writeln("$titulo$data", negrito = true)
+    writeln("".lpad(64, "-"), negrito = true)
   }
 
   override fun printSumary() {
-    println("")
-    println("")
-    println("")
+    writeln("")
+    writeln("")
+    writeln("")
   }
 }

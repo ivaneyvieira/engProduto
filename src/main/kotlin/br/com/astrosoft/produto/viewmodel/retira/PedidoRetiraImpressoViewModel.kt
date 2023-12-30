@@ -42,7 +42,7 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
     val userSaci = AppConfig.userLogin() as? UserSaci
     val impressora = userSaci?.impressoraRet ?: ""
 
-    val text = dummyPrinter.text()
+    val text = dummyPrinter.textBuffer()
 
     viewModel.view.showPrintText(
       text,
