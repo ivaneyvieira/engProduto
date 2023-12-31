@@ -1,14 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-  // fix for https://github.com/mvysny/vaadin-boot-example-gradle/issues/3
-  dependencies {
-    classpath("com.vaadin:vaadin-prod-bundle:${project.properties["vaadinVersion"]}")
-  }
-}
+val vaadinVersion: String by extra
+val karibuDslVersion: String by extra
 
 plugins {
-  kotlin("jvm") version "1.9.10"
+  kotlin("jvm") version "1.9.20"
   id("application")
   id("com.vaadin")
 }
@@ -24,14 +20,12 @@ repositories {
   }
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "17"
-}
-
 dependencies {
+  // Karibu-DSL dependency
+  implementation("com.github.mvysny.karibudsl:karibu-dsl-v23:$karibuDslVersion")
+
   // Vaadin
-  implementation("com.github.mvysny.karibudsl:karibu-dsl-v23:2.1.0")
-  implementation("com.vaadin:vaadin-core:${properties["vaadinVersion"]}") {
+  implementation("com.vaadin:vaadin-core:$vaadinVersion") {
     afterEvaluate {
       if (vaadin.productionMode) {
         exclude(module = "vaadin-dev")
@@ -84,6 +78,10 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("org.claspina:confirm-dialog:2.0.0")
   //implementation("org.codehaus.woodstox:stax2-api:4.1")
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions.jvmTarget = "17"
 }
 
 java {

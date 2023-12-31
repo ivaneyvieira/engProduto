@@ -33,6 +33,8 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
 
   init {
     this.setSizeFull()
+    this.isMargin = false
+    this.isPadding = false
   }
 
   abstract fun isAccept(): Boolean
