@@ -3,7 +3,6 @@ package br.com.astrosoft.framework.model.printText
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_128
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_HEIGHT
 import br.com.astrosoft.framework.model.printText.EscPosConst.BARCODE_WIDTH
-import br.com.astrosoft.framework.model.printText.EscPosConst.SET_FONT_SMALL
 import kotlin.reflect.KProperty1
 
 abstract class PrintText<T>(val widthPage: Int = 64) {

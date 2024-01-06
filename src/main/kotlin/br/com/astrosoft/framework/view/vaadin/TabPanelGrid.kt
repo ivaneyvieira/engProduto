@@ -52,9 +52,10 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   override fun printerPreview(
     showPrinter: Boolean,
     rota: Rota?,
+    loja: Int,
     printEvent: (impressora: String) -> Unit
   ): IPrinter {
-    return PrinterPreview(showPrinter, printerUser(), rota, printEvent)
+    return PrinterPreview(showPrinter, printerUser(), rota, loja, printEvent)
   }
 
   open fun printerUser(): List<String> = emptyList()

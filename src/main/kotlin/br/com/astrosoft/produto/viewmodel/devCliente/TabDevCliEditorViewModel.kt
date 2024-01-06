@@ -26,7 +26,7 @@ class TabDevCliEditorViewModel(val viewModel: DevClienteViewModel) {
 
   fun imprimeValeTroca(nota: EntradaDevCli) {
     val relatorio = ValeTrocaDevolucao(nota)
-    relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin) { impressora ->
+    relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
       nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     })

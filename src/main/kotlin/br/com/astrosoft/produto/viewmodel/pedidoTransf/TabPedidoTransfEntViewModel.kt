@@ -29,7 +29,7 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
     val rota = pedido.rotaPedido()
     relatorio.print(
       dados = pedido.produtos(),
-      printer = subView.printerPreview(rota = rota)
+      printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0)
     )
   }
 

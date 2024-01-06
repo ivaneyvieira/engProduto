@@ -47,6 +47,7 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
     viewModel.view.showPrintText(
       text,
       showPrinter = userSaci?.admin == true,
+      loja = 0,
       printerUser = listOf(impressora)
     ) {
       if (pedido.dataHoraPrint == null) {

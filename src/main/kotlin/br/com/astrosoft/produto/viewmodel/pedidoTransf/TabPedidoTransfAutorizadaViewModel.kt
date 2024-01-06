@@ -36,10 +36,10 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
-  fun imprimePedido(pedido: PedidoTransf, impressora: String) = viewModel.exec {
+  fun imprimePedido(pedido: PedidoTransf, impressora: String, loja: Int) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
-      relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora))
+      relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora, loja))
     }
   }
 
@@ -54,7 +54,7 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun previewPedido(pedido: PedidoTransf) {
     val relatorio = RequisicaoTransferencia(pedido)
-    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview())
+    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(loja = pedido.lojaNoDes ?: 0))
   }
 
   fun mudaParaReservado(pedido: PedidoTransf) = viewModel.exec {

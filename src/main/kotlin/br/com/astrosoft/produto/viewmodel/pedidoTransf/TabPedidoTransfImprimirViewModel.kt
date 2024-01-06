@@ -36,10 +36,10 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
     }
   }
 
-  fun imprimePedido(pedido: PedidoTransf, impressora: String) = viewModel.exec {
+  fun imprimePedido(pedido: PedidoTransf, impressora: String, loja: Int) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
-      relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora))
+      relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora, loja))
     }
   }
 
@@ -57,7 +57,7 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
     val rota = pedido.rotaPedido()
     relatorio.print(
       dados = pedido.produtos(),
-      printer = subView.printerPreview(rota = rota, printEvent = printEvent)
+      printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0, printEvent = printEvent)
     )
   }
 

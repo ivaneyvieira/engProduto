@@ -9,6 +9,8 @@ class TransfRessu4(
   var transacao: Int,
   var lojaOrigem: String?,
   var lojaDestino: String?,
+  var lojaOrigemNo: Int?,
+  var lojaDestinoNo: Int?,
   var rota: String?,
   var ordno: String?,
   var cliente: Int?,

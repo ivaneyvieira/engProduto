@@ -29,7 +29,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Não há produtos selecionados")
     }
     val relatorio = ProdutosDevolucao()
-    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview())
+    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
   val subView

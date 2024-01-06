@@ -37,16 +37,19 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
     viewModel.view.showReport(chave = "Ressuprimento4${System.nanoTime()}", report = file)
   }
 
-  fun imprimeNota(nota: TransfRessu4, impressora: String) {
+  fun imprimeNota(nota: TransfRessu4, impressora: String, loja: Int) {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = NotaTransferencia()
-      relatorio.print(dados = nota.produtos(), printer = PrinterCups(impressora))
+      relatorio.print(dados = nota.produtos(), printer = PrinterCups(impressora, loja))
     }
   }
 
   fun previewNota(nota: TransfRessu4) {
     val relatorio = NotaTransferencia()
-    relatorio.print(dados = nota.produtos(), printer = subView.printerPreview(printEvent = {}))
+    relatorio.print(
+      dados = nota.produtos(),
+      printer = subView.printerPreview(loja = nota.lojaDestinoNo ?: 0, printEvent = {})
+    )
   }
 
   val subView

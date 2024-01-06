@@ -18,10 +18,14 @@ class DummyPrinter : IPrinter {
   fun textBuffer() = text ?: TextBuffer()
 }
 
-class PrinterCups(private val printerName: String) : IPrinter {
+class PrinterCups(private val printerName: String, private val loja: Int) : IPrinter {
   override fun print(text: TextBuffer) {
     try {
       CupsUtils.printCups(printerName, text.printEspPos())
+      if (printerName.startsWith("RESSU4.", ignoreCase = true)) {
+        if (loja in listOf(2, 3, 5, 8))
+          CupsUtils.printCups("Exp$loja.Termica", text.toString())
+      }
     } catch (e: ConnectTimeoutException) {
       e.printStackTrace()
     }

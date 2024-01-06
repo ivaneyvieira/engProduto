@@ -49,7 +49,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
         icon = VaadinIcon.PRINT.create()
         this.onLeftClick {
           val impressora = cmbImpressora?.value?.name ?: "Nenhuma impressora selecionada"
-          viewModel.imprimeNota(nota, impressora)
+          viewModel.imprimeNota(nota, impressora, nota.lojaDestinoNo ?: 0)
         }
       }
       this.button("Preview") {

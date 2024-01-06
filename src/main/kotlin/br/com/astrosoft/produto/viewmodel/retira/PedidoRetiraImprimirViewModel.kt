@@ -34,6 +34,7 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
 
     viewModel.view.showPrintText(
       dummyPrinter.textBuffer(),
+      loja = 0,
       printerUser = listOf(impressora)
     ) {
       if (pedido.dataHoraPrint == null) {

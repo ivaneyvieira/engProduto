@@ -20,6 +20,7 @@ class SubWindowPrinter(
   showPrinter: Boolean = true,
   printerUser: List<String>,
   rota: Rota?,
+  loja: Int,
   val printEvent: (impressora: String) -> Unit
 ) :
   Dialog() {
@@ -38,8 +39,8 @@ class SubWindowPrinter(
     this.html(PrinterToHtml.toHtml(text.printHtml()))
   }
 
-  private fun imprimeText(text: TextBuffer, impressora: String) {
-    val printer = PrinterCups(impressora)
+  private fun imprimeText(text: TextBuffer, impressora: String, loja: Int) {
+    val printer = PrinterCups(impressora, loja)
     printer.print(text)
   }
 
@@ -88,11 +89,11 @@ class SubWindowPrinter(
                   val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
                   val printerRota = listOf(impressoraOrigem, impressoraDestino)
                   printerRota.forEach { printer ->
-                    imprimeText(text, printer)
+                    imprimeText(text, printer, loja)
                   }
                   printEvent(printerRota.firstOrNull() ?: "")
                 } else {
-                  imprimeText(text, impressora)
+                  imprimeText(text, impressora, loja)
                   printEvent(impressora)
                 }
                 this@SubWindowPrinter.close()
