@@ -17,6 +17,7 @@ class UserSaci : IUser {
   var listaImpressora: String = ""
   var listaLoja: String = ""
   var impressora: String? = ""
+  var ativoSaci: String = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
   var produtoReserva by DelegateAuthorized(2)

@@ -1,7 +1,7 @@
 SELECT U.no,
        U.name,
        login,
-       U.auxLong1              AS storeno,
+       U.auxLong1                                AS storeno,
        TRIM(IFNULL(CAST(CONCAT(CHAR(ASCII(SUBSTRING(pswd, 1, 1)) + ASCII('e') - ASCII('j')),
                                CHAR(ASCII(SUBSTRING(pswd, 2, 1)) + ASCII('a') - ASCII('h')),
                                CHAR(ASCII(SUBSTRING(pswd, 3, 1)) + ASCII('c') - ASCII('k')),
@@ -10,12 +10,13 @@ SELECT U.no,
                                CHAR(ASCII(SUBSTRING(pswd, 6, 1)) + ASCII(' ') - ASCII(')')),
                                CHAR(ASCII(SUBSTRING(pswd, 7, 1)) + ASCII(' ') - ASCII(')')),
                                CHAR(ASCII(SUBSTRING(pswd, 8, 1)) + ASCII(' ') - ASCII('-'))) AS CHAR),
-                   ''))        AS senha,
-       IFNULL(A.bitAcesso, 0)  AS bitAcesso,
-       IFNULL(A.locais, '')    AS locais,
-       P.name                  AS impressora,
-       IFNULL(impressoras, '') AS listaImpressora,
-       IFNULL(lojas, '')       AS listaLoja
+                   ''))                          AS senha,
+       IFNULL(A.bitAcesso, 0)                    AS bitAcesso,
+       IFNULL(A.locais, '')                      AS locais,
+       P.name                                    AS impressora,
+       IFNULL(impressoras, '')                   AS listaImpressora,
+       IF(U.bits1 & POW(0, 2) = 0, 'Sim', 'Não') AS ativoSaci,
+       IFNULL(lojas, '')                         AS listaLoja
 FROM sqldados.users AS U
        LEFT JOIN sqldados.prntr AS P
                  ON P.no = U.prntno
