@@ -41,7 +41,7 @@ class ReportImpresso : ReportBuild<EntradaDevCli>() {
 
   override fun config(itens: List<EntradaDevCli>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
-      titulo = "Pedidos",
+      titulo = "Crédito não Utilizado",
       subTitulo = "",
       color = Color.WHITE,
       detailFonteSize = 8,
