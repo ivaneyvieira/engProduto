@@ -13,9 +13,7 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaImp
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaImpViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -71,6 +69,12 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
         viewModel.updateView()
       }
     }
+    button ("Relatorio"){
+      icon = VaadinIcon.PRINT.create()
+      onLeftClick {
+        viewModel.imprimeRelatorio()
+      }
+    }
   }
 
   override fun Grid<EntradaDevCli>.gridPanel() {
@@ -110,6 +114,10 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
 
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
+  }
+
+  override fun itensNotasSelecionados(): List<EntradaDevCli> {
+    return listBeans()
   }
 
   override fun printerUser(): List<String> {

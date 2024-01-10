@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
 import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
+import br.com.astrosoft.produto.model.report.ReportImpresso
 
 class TabDevCliValeTrocaImpViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -32,6 +33,13 @@ class TabDevCliValeTrocaImpViewModel(val viewModel: DevClienteViewModel) {
     })
   }
 
+  fun imprimeRelatorio() {
+    val notas = subView.itensNotasSelecionados()
+    val report = ReportImpresso()
+    val file = report.processaRelatorio(notas)
+    viewModel.view.showReport(chave = "NotaImpresso${System.nanoTime()}", report = file)
+  }
+
   val subView
     get() = viewModel.view.tabDevCliValeTrocaImp
 }
@@ -39,4 +47,5 @@ class TabDevCliValeTrocaImpViewModel(val viewModel: DevClienteViewModel) {
 interface ITabDevCliValeTrocaImp : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
+  fun itensNotasSelecionados() : List<EntradaDevCli>
 }
