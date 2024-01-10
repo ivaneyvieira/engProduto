@@ -14,6 +14,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaImp
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaImpViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.isMultiSelect
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -79,6 +80,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
 
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
@@ -117,7 +119,7 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
   }
 
   override fun itensNotasSelecionados(): List<EntradaDevCli> {
-    return listBeans()
+    return itensSelecionados()
   }
 
   override fun printerUser(): List<String> {
