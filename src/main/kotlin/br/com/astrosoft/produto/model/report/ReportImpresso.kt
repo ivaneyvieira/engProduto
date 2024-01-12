@@ -4,10 +4,8 @@ import br.com.astrosoft.framework.model.reports.PropriedadeRelatorio
 import br.com.astrosoft.framework.model.reports.ReportBuild
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
-import net.sf.dynamicreports.report.builder.DynamicReports
 import net.sf.dynamicreports.report.builder.DynamicReports.margin
 import net.sf.dynamicreports.report.builder.DynamicReports.stl
-import net.sf.dynamicreports.report.builder.style.Styles
 import net.sf.dynamicreports.report.builder.style.Styles.padding
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.CENTER
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.RIGHT

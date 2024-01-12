@@ -18,8 +18,8 @@ SELECT N.storeno                 AS loja,
        N.custno                  AS cliente,
        C.name                    AS clienteNome,
        CASE
-         WHEN N.print_remarks REGEXP 'NI.+[0-9]+' THEN N.print_remarks
          WHEN N.remarks REGEXP 'NI.+[0-9]+' THEN N.remarks
+         WHEN N.print_remarks REGEXP 'NI.+[0-9]+' THEN N.print_remarks
          ELSE ''
        END                       AS obsNI
 FROM sqldados.nf AS N
