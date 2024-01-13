@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -9,11 +10,14 @@ import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliAutorizacao
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliAutorizacaoViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
+import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -73,10 +77,47 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
         viewModel.updateView()
       }
     }
+
+    button("Adcionaer Nota") {
+      this.icon = VaadinIcon.PLUS_CIRCLE_O.create()
+      this.addClickListener {
+        val cmbLoja = select<Loja>("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.setItems(viewModel.findAllLojas())
+          this.value = cmbLoja.value
+        }
+        val edtNota = textField("Nota Fiscal") {
+          this.valueChangeMode = ValueChangeMode.TIMEOUT
+        }
+        val form = FormLayout().apply {
+          add(cmbLoja)
+          add(edtNota)
+        }
+        DialogHelper.showForm("Nota Fiscal", form) {
+          val chave = NotaAutorizacaoChave(
+            loja = cmbLoja.value?.no ?: 0,
+            notaFiscal = edtNota.value ?: ""
+          )
+          viewModel.addNota(chave)
+        }
+      }
+    }
+
+    button("Excluir Nota") {
+      this.icon = VaadinIcon.MINUS_CIRCLE_O.create()
+      this.addClickListener {
+        val notas = itensSelecionados()
+        viewModel.deleteNota(notas)
+      }
+    }
   }
 
   override fun Grid<NotaAutorizacao>.gridPanel() {
     this.addClassName("styling")
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
+
     columnGrid(NotaAutorizacao::loja, header = "Loja")
     columnGrid(NotaAutorizacao::nfVenda, header = "NF Venda").right()
     columnGrid(NotaAutorizacao::dataEmissao, header = "Data")

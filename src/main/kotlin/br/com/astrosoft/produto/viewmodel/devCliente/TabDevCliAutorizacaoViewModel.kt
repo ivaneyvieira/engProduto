@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaAutorizacao
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaAutorizacao
+import br.com.astrosoft.produto.model.beans.NotaAutorizacaoChave
 
 class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -19,6 +20,18 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     val filtro = subView.filtro()
     val notas = NotaAutorizacao.findAll(filtro)
     subView.updateNotas(notas)
+  }
+
+  fun addNota(chave: NotaAutorizacaoChave) = viewModel.exec {
+    NotaAutorizacao.insert(chave)
+    updateView()
+  }
+
+  fun deleteNota(notas: List<NotaAutorizacao>) = viewModel.exec {
+    notas.forEach { nota ->
+      nota.delete()
+    }
+    updateView()
   }
 
   val subView

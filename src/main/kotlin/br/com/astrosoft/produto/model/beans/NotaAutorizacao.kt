@@ -8,18 +8,11 @@ class NotaAutorizacao(
   var pdv: Int?,
   var transacao: Int?,
   var nfVenda: String?,
-  var nfno: Int?,
-  var nfse: Int?,
   var dataEmissao: LocalDate?,
   var codCliente: Int?,
   var nomeCliente: String?,
   var valorVenda: Double?,
 ) {
-
-  fun insert() {
-    saci.insertNotaAutorizacao(this)
-  }
-
   fun delete() {
     saci.deleteNotaAutorizacao(this)
   }
@@ -27,6 +20,10 @@ class NotaAutorizacao(
   companion object {
     fun findAll(filtro: FiltroNotaAutorizacao): List<NotaAutorizacao> {
       return saci.findNotaAutorizacao(filtro)
+    }
+
+    fun insert(chave: NotaAutorizacaoChave) {
+      saci.insertNotaAutorizacao(chave)
     }
   }
 }
@@ -37,3 +34,14 @@ data class FiltroNotaAutorizacao(
   val dataInicial: LocalDate,
   val dataFinal: LocalDate,
 )
+
+data class NotaAutorizacaoChave(
+  val loja: Int,
+  val notaFiscal: String,
+) {
+  val nfno
+    get() = notaFiscal.substringBefore("/").toIntOrNull() ?: 0
+
+  val nfse
+    get() = notaFiscal.substringAfter("/").toIntOrNull() ?: 0
+}

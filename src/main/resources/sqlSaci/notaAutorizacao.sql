@@ -7,8 +7,8 @@ CREATE TABLE sqldados.nfAutorizacao
   pdvno   INT,
   xano    INT,
   PRIMARY KEY (storeno, pdvno, xano)
-);
- */
+)
+*/
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
@@ -19,8 +19,6 @@ SELECT N.storeno                   AS loja,
        N.pdvno                     AS pdv,
        N.xano                      AS transacao,
        CONCAT(N.nfno, '/', N.nfse) AS nfVenda,
-       N.nfno                      AS nfno,
-       N.nfse                      AS nfse,
        CAST(N.issuedate AS DATE)   AS dataEmissao,
        N.custno                    AS codCliente,
        C.name                      AS nomeCliente,
