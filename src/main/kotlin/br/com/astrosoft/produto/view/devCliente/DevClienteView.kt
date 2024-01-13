@@ -19,6 +19,7 @@ import jakarta.annotation.security.PermitAll
 class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val viewModel = DevClienteViewModel(this)
   override val tabDevCliEditor = TabDevCliEditor(viewModel.tabDevCliEditorViewModel)
+  override val tabDevCliAutorizacao = TabDevCliAutorizacao(viewModel.tabDevCliAutorizacaoViewModel)
   override val tabDevCliValeTroca = TabDevCliValeTroca(viewModel.tabDevCliValeTrocaViewModel)
   override val tabDevCliDevTroca = TabDevCliDevTroca(viewModel.tabDevCliDevTrocaViewModel)
   override val tabDevCliValeTrocaProduto = TabDevCliValeTrocaProduto(viewModel.tabDevCliValeTrocaProdutoViewModel)

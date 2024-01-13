@@ -62,6 +62,7 @@ class UserSaci : IUser {
   val devCliDevTroca by DelegateAuthorized(39)
   val acertoEntrada by DelegateAuthorized(40)
   val acertoSaida by DelegateAuthorized(41)
+  val devCliAutorizacao by DelegateAuthorized(42)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -152,7 +153,8 @@ class UserSaci : IUser {
     get() = produtoList
 
   val devCliente
-    get() = devCliValeTroca || devCliValeTrocaImp || devCliValeTrocaProduto || devCliCredito || devCliEditor || devCliDevTroca || admin
+    get() = devCliValeTroca || devCliValeTrocaImp || devCliValeTrocaProduto || devCliCredito ||
+            devCliEditor || devCliDevTroca || devCliAutorizacao || admin
 
   val acertoEstoque
     get() = acertoEntrada || acertoSaida || admin

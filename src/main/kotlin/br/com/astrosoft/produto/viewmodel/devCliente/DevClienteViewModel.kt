@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(view) {
   val tabDevCliEditorViewModel = TabDevCliEditorViewModel(this)
+  val tabDevCliAutorizacaoViewModel = TabDevCliAutorizacaoViewModel(this)
   val tabDevCliValeTrocaViewModel = TabDevCliValeTrocaViewModel(this)
   val tabDevCliDevTrocaViewModel = TabDevCliDevTrocaViewModel(this)
   val tabDevCliValeTrocaProdutoViewModel = TabDevCliValeTrocaProdutoViewModel(this)
@@ -18,6 +19,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
     view.tabDevCliValeTrocaProduto,
     view.tabDevCliCredito,
     view.tabDevCliDevTroca,
+    view.tabDevCliAutorizacao,
   )
 }
 
@@ -25,6 +27,7 @@ interface IDevClienteView : IView {
   val tabDevCliValeTroca: ITabDevCliValeTroca
   val tabDevCliDevTroca: ITabDevCliDevTroca
   val tabDevCliEditor: ITabDevCliEditor
+  val tabDevCliAutorizacao: ITabDevCliAutorizacao
   val tabDevCliValeTrocaProduto: ITabDevCliValeTrocaProduto
   val tabDevCliValeTrocaImp: ITabDevCliValeTrocaImp
   val tabDevCliCredito: ITabDevCliCredito
