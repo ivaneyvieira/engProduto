@@ -669,16 +669,16 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
-  fun findLojaNaoInformada(custno: Int): Cliente?{
+  fun findLojaNaoInformada(custno: Int): Cliente? {
     val sql = "/sqlSaci/findLojaNaoInformada.sql"
-    return query(sql, Cliente::class){
+    return query(sql, Cliente::class) {
       addOptionalParameter("custno", custno)
     }.firstOrNull()
   }
 
-  fun findAcertoEstoqueEntrada(filtro: FiltroAcertoEntrada): List<AcertoEntrada>{
+  fun findAcertoEstoqueEntrada(filtro: FiltroAcertoEntrada): List<AcertoEntrada> {
     val sql = "/sqlSaci/acertoEstoqueEntrada.sql"
-    return query(sql, AcertoEntrada::class){
+    return query(sql, AcertoEntrada::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.query)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
@@ -686,13 +686,42 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findAcertoEstoqueSaida(filtro: FiltroAcertoSaida): List<AcertoSaida>{
+  fun findAcertoEstoqueSaida(filtro: FiltroAcertoSaida): List<AcertoSaida> {
     val sql = "/sqlSaci/acertoEstoqueSaida.sql"
-    return query(sql, AcertoSaida::class){
+    return query(sql, AcertoSaida::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.query)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
+  fun findNotaAutorizacao(filtro: FiltroNotaAutorizacao): List<NotaAutorizacao> {
+    val sql = "/sqlSaci/notaAutorizacao.sql"
+    return query(sql, NotaAutorizacao::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
+  fun deleteNotaAutorizacao(nota: NotaAutorizacao) {
+    val sql = "/sqlSaci/notaAutorizacaoDelete.sql"
+    script(sql) {
+      addOptionalParameter("loja", nota.loja ?: 0)
+      addOptionalParameter("nfno", nota.nfno ?: 0)
+      addOptionalParameter("nfse", nota.nfse ?: 0)
+    }
+  }
+
+
+  fun insertNotaAutorizacao(nota: NotaAutorizacao) {
+    val sql = "/sqlSaci/notaAutorizacaoInsert.sql"
+    script(sql) {
+      addOptionalParameter("loja", nota.loja ?: 0)
+      addOptionalParameter("nfno", nota.nfno ?: 0)
+      addOptionalParameter("nfse", nota.nfse ?: 0)
     }
   }
 
