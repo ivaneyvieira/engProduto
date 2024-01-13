@@ -124,6 +124,12 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     columnGrid(NotaAutorizacao::codCliente, header = "Cód Cli")
     columnGrid(NotaAutorizacao::nomeCliente, header = "Nome do Cliente").expand()
     columnGrid(NotaAutorizacao::valorVenda, header = "Valor Venda")
+    columnGrid(NotaAutorizacao::tipoDev, header = "Tipo Dev")
+    columnGrid(NotaAutorizacao::autorizacao, header = "Autorização")
+    columnGrid(NotaAutorizacao::ni, header = "NI")
+    columnGrid(NotaAutorizacao::nfDev, header = "NF Dev")
+    columnGrid(NotaAutorizacao::dataDev, header = "Data")
+    columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
   }
 
   override fun filtro(): FiltroNotaAutorizacao {

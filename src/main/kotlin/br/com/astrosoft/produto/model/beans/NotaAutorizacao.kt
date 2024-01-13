@@ -12,6 +12,12 @@ class NotaAutorizacao(
   var codCliente: Int?,
   var nomeCliente: String?,
   var valorVenda: Double?,
+  var tipoDev: String?,
+  var autorizacao: String?,
+  var ni: Int?,
+  var nfDev: String?,
+  var dataDev: LocalDate?,
+  var valorDev: Double?,
 ) {
   fun delete() {
     saci.deleteNotaAutorizacao(this)
