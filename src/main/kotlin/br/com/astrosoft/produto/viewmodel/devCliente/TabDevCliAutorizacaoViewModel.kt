@@ -34,6 +34,13 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun updateAutorizacao(bean: NotaAutorizacao?) {
+    bean?.let {
+      it.update()
+      updateView()
+    }
+  }
+
   val subView
     get() = viewModel.view.tabDevCliAutorizacao
 }

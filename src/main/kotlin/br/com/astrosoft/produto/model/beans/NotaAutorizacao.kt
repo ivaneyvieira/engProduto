@@ -13,6 +13,7 @@ class NotaAutorizacao(
   var nomeCliente: String?,
   var valorVenda: Double?,
   var tipoDev: String?,
+  var usernoSing: Int?,
   var autorizacao: String?,
   var ni: Int?,
   var nfDev: String?,
@@ -21,6 +22,10 @@ class NotaAutorizacao(
 ) {
   fun delete() {
     saci.deleteNotaAutorizacao(this)
+  }
+
+  fun update() {
+    saci.updateNotaAutorizacao(this)
   }
 
   companion object {

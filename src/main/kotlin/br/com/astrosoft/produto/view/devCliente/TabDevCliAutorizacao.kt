@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliAutorizacao
@@ -14,6 +11,7 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
@@ -78,7 +76,7 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
       }
     }
 
-    button("Adcionaer Nota") {
+    button("Adicionar Nota") {
       this.icon = VaadinIcon.PLUS_CIRCLE_O.create()
       this.addClickListener {
         val cmbLoja = select<Loja>("Loja") {
@@ -118,13 +116,28 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     this.addClassName("styling")
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
+    this.withEditor(NotaAutorizacao::class,
+      openEditor = {
+        val colunas = this.columns
+        val componente = colunas.firstOrNull {
+          it.editorComponent != null && (it.editorComponent is Focusable<*>)
+        }
+        val focusable = componente?.editorComponent as? Focusable<*>
+        focusable?.focus()
+      },
+      closeEditor = {
+        viewModel.updateAutorizacao(it.bean)
+      })
+
     columnGrid(NotaAutorizacao::loja, header = "Loja")
     columnGrid(NotaAutorizacao::nfVenda, header = "NF Venda").right()
     columnGrid(NotaAutorizacao::dataEmissao, header = "Data")
     columnGrid(NotaAutorizacao::codCliente, header = "Cód Cli")
     columnGrid(NotaAutorizacao::nomeCliente, header = "Nome do Cliente").expand()
     columnGrid(NotaAutorizacao::valorVenda, header = "Valor Venda")
-    columnGrid(NotaAutorizacao::tipoDev, header = "Tipo Dev")
+    columnGrid(NotaAutorizacao::tipoDev, header = "Tipo Dev", width = "8em").comboFieldEditor {
+      it.setItems("Tipo Dev", "Est Boleto", "Est Cartão", "Est Deposito", "Muda Cliente", "Muda Nota", "Troca")
+    }
     columnGrid(NotaAutorizacao::autorizacao, header = "Autorização")
     columnGrid(NotaAutorizacao::ni, header = "NI")
     columnGrid(NotaAutorizacao::nfDev, header = "NF Dev")

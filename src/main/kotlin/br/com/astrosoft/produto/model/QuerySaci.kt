@@ -715,13 +715,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-
   fun insertNotaAutorizacao(nota: NotaAutorizacaoChave) {
     val sql = "/sqlSaci/notaAutorizacaoInsert.sql"
     script(sql) {
       addOptionalParameter("loja", nota.loja ?: 0)
       addOptionalParameter("nfno", nota.nfno ?: 0)
       addOptionalParameter("nfse", nota.nfse ?: 0)
+    }
+  }
+
+  fun updateNotaAutorizacao(nota: NotaAutorizacao) {
+    val sql = "/sqlSaci/notaAutorizacaoUpdate.sql"
+    script(sql) {
+      addOptionalParameter("loja", nota.loja ?: 0)
+      addOptionalParameter("pdv", nota.pdv ?: 0)
+      addOptionalParameter("transacao", nota.transacao ?: 0)
+      addOptionalParameter("usernoSing", nota.usernoSing ?: 0)
+      addOptionalParameter("tipoDev", nota.tipoDev ?: "")
     }
   }
 

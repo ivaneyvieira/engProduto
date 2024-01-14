@@ -8,6 +8,10 @@ CREATE TABLE sqldados.nfAutorizacao
   xano    INT,
   PRIMARY KEY (storeno, pdvno, xano)
 )
+
+alter table sqldados.nfAutorizacao
+  add column usernoSing int after xano,
+  add column tipoDev varchar(20) after usernoSing
 */
 
 DO @PESQUISA := :pesquisa;
@@ -23,15 +27,9 @@ SELECT N.storeno                      AS loja,
        N.custno                       AS codCliente,
        C.name                         AS nomeCliente,
        N.grossamt / 100               AS valorVenda,
-       CASE
-         WHEN I.remarks LIKE '%EST%BOLETO%' THEN 'Est Boleto'
-         WHEN I.remarks LIKE '%EST%CARTAO%' THEN 'Est Cartao'
-         WHEN I.remarks LIKE '%EST%DEP%' THEN 'Est Deposito'
-         WHEN I.remarks LIKE '%MUDA%CLI%' THEN 'Muda CLiente'
-         WHEN I.remarks LIKE '%MUDA%NOTA%' THEN 'Muda Nota'
-         ELSE ''
-       END                            AS tipoDev,
-       IFNULL(SA.name, S.name)        AS autorizacao,
+       A.tipoDev                      AS tipoDev,
+       S.no                           AS usernoSing,
+       S.name                         AS autorizacao,
        I.invno                        AS ni,
        CONCAT(I.nfname, '/', I.invse) AS nfDev,
        CAST(I.issue_date AS DATE)     AS dataDev,
@@ -45,14 +43,8 @@ FROM sqldados.nf AS N
                  ON N.storeno = I.storeno AND
                     (N.remarks LIKE CONCAT('NI%', I.invno, '%')
                       OR N.print_remarks LIKE CONCAT('NI%', I.invno, '%'))
-       LEFT JOIN sqldados.eord AS E
-                 ON N.storeno = E.storeno
-                   AND N.eordno = E.ordno
        LEFT JOIN sqldados.users AS S
-                 ON S.no = E.s10
-       LEFT JOIN sqldados.users AS SA
-                 ON SA.login = S.login
-                   AND (SA.bits1 & 1) = 0
+                 ON S.no = A.usernoSing
 WHERE (N.storeno = :loja OR :loja = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
