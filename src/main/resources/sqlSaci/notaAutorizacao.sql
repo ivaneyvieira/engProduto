@@ -41,8 +41,8 @@ FROM sqldados.nf AS N
                  ON C.no = N.custno
        LEFT JOIN sqldados.inv AS I
                  ON N.storeno = I.storeno AND
-                    (N.remarks LIKE CONCAT('NI%', I.invno, '%')
-                      OR N.print_remarks LIKE CONCAT('NI%', I.invno, '%'))
+                    (N.remarks REGEXP CONCAT('NI *', I.invno)
+                      OR N.print_remarks REGEXP CONCAT('NI *', I.invno))
        LEFT JOIN sqldados.users AS S
                  ON S.no = A.usernoSing
 WHERE (N.storeno = :loja OR :loja = 0)

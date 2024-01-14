@@ -82,7 +82,7 @@ SELECT I.invno                                                                  
        R.pdvReembolso                                                                    AS pdvReembolso
 FROM sqldados.inv AS I
        LEFT JOIN T_VENDA AS U
-                 ON U.loja = I.storeno AND U.obsNI LIKE CONCAT('NI%', I.invno, '%')
+                 ON U.loja = I.storeno AND U.obsNI REGEXP CONCAT('NI *', I.invno)
        LEFT JOIN T_REEMBOLSO AS R
                  ON R.loja = I.storeno AND R.obs LIKE CONCAT('REEMBOLSO%', I.invno, '%')
        LEFT JOIN sqldados.nf AS NF1

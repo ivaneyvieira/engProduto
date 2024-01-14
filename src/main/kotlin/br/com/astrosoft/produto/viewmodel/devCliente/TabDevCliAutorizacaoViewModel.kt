@@ -1,10 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaAutorizacao
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaAutorizacao
-import br.com.astrosoft.produto.model.beans.NotaAutorizacaoChave
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.*
 
 class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -41,6 +39,29 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
+  fun formAutoriza(nota: NotaAutorizacao) {
+    subView.formAutoriza(nota)
+  }
+
+  fun autorizaNota(nota: NotaAutorizacao, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    if (!user.admin) {
+      val lojaUserSaci = user.lojaUsuario
+      val lojaNoto = nota.loja ?: fail("Loja destino não encontrada")
+      if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
+    }
+
+    nota.autoriza(user)
+
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliAutorizacao
 }
@@ -48,4 +69,5 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
 interface ITabDevCliAutorizacao : ITabView {
   fun filtro(): FiltroNotaAutorizacao
   fun updateNotas(notas: List<NotaAutorizacao>)
+  fun formAutoriza(nota: NotaAutorizacao)
 }

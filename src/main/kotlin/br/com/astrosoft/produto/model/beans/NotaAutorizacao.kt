@@ -28,6 +28,11 @@ class NotaAutorizacao(
     saci.updateNotaAutorizacao(this)
   }
 
+  fun autoriza(user: UserSaci) {
+    this.usernoSing = user.no
+    update()
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaAutorizacao): List<NotaAutorizacao> {
       return saci.findNotaAutorizacao(filtro)
