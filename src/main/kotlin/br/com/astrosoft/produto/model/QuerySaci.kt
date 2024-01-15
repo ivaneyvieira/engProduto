@@ -732,6 +732,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("transacao", nota.transacao ?: 0)
       addOptionalParameter("usernoSing", nota.usernoSing ?: 0)
       addOptionalParameter("tipoDev", nota.tipoDev ?: "")
+      addOptionalParameter("observacao", nota.observacao ?: "")
     }
   }
 

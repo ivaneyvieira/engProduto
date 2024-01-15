@@ -137,7 +137,7 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     columnGrid(NotaAutorizacao::nomeCliente, header = "Nome do Cliente").expand()
     columnGrid(NotaAutorizacao::valorVenda, header = "Valor Venda")
     columnGrid(NotaAutorizacao::tipoDev, header = "Tipo Dev", width = "8em").comboFieldEditor {
-      it.setItems("Tipo Dev", "Est Boleto", "Est Cartão", "Est Deposito", "Muda Cliente", "Muda Nota", "Troca")
+      it.setItems("Est Boleto", "Est Cartão", "Est Deposito", "Muda Cliente", "Muda Nota", "Troca")
     }
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
       viewModel.formAutoriza(nota)
@@ -147,6 +147,7 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     columnGrid(NotaAutorizacao::nfDev, header = "NF Dev")
     columnGrid(NotaAutorizacao::dataDev, header = "Data")
     columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
+    columnGrid(NotaAutorizacao::observacao, header = "Observação").expand().textFieldEditor()
   }
 
     override fun formAutoriza(nota: NotaAutorizacao) {

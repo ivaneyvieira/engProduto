@@ -12,6 +12,10 @@ CREATE TABLE sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column usernoSing int after xano,
   add column tipoDev varchar(20) after usernoSing
+
+alter table sqldados.nfAutorizacao
+  add column observacao varchar(100) after tipoDev
+
 */
 
 DO @PESQUISA := :pesquisa;
@@ -33,7 +37,8 @@ SELECT N.storeno                      AS loja,
        I.invno                        AS ni,
        CONCAT(I.nfname, '/', I.invse) AS nfDev,
        CAST(I.issue_date AS DATE)     AS dataDev,
-       I.grossamt / 100               AS valorDev
+       I.grossamt / 100               AS valorDev,
+       A.observacao                   AS observacao
 FROM sqldados.nf AS N
        INNER JOIN sqldados.nfAutorizacao AS A
                   USING (storeno, pdvno, xano)
