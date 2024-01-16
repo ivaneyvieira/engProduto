@@ -143,10 +143,10 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
       viewModel.formAutoriza(nota)
     }
     columnGrid(NotaAutorizacao::autorizacao, header = "Autorização")
-    columnGrid(NotaAutorizacao::ni, header = "NI", width="7em")
-    columnGrid(NotaAutorizacao::nfDev, header = "NF Dev", width="8em")
-    columnGrid(NotaAutorizacao::dataDev, header = "Data")
-    columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
+    //columnGrid(NotaAutorizacao::ni, header = "NI", width="7em")
+    //columnGrid(NotaAutorizacao::nfDev, header = "NF Dev", width="8em")
+    //columnGrid(NotaAutorizacao::dataDev, header = "Data")
+    //columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
     columnGrid(NotaAutorizacao::usuarioDev, header = "Usuário", width="17em")
     columnGrid(NotaAutorizacao::observacao, header = "Observação", width = "17em").textFieldEditor()
   }
