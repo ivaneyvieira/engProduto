@@ -16,10 +16,10 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
     view.tabDevCliEditor,
     view.tabDevCliValeTroca,
     view.tabDevCliComPrd,
+    view.tabDevCliSemPrd,
     view.tabDevCliValeTrocaProduto,
     view.tabDevCliCredito,
     view.tabDevCliDevTroca,
-    view.tabDevCliSemPrd,
   )
 }
 
