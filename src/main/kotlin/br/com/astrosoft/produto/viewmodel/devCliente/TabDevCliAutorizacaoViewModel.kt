@@ -86,13 +86,13 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     } ?: fail("Nota de devolução não encontrada")
 
     if (AppConfig.userLogin()?.admin != true)
-      if (!notaDev.impressora.isNullOrBlank()) {
+      if (nota.impresso == "S") {
         fail("Vale troca já impresso")
       }
     val relatorio = ValeTrocaDevolucao(notaDev)
     relatorio.print(notaDev.produtos(), subView.printerPreview(loja = 0) { impressora ->
-      if (notaDev.impressora.isNullOrBlank())
-        notaDev.marcaImpresso(Impressora(0, impressora))
+      if (nota.impresso == "N")
+        nota.marcaImpresso()
       updateView()
     })
   }

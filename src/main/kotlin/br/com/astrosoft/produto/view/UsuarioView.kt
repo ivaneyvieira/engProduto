@@ -164,6 +164,14 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliAutorizacao.name)
             }
+            checkBox("Autorização Adicionar") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::devCliAutorizacaoInsert.name)
+            }
+            checkBox("Autorização Excluir") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::devCliAutorizacaoDelete.name)
+            }
           }
           formLayout {
             h4("Retira") {

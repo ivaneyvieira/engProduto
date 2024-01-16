@@ -62,7 +62,6 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-      this.isVisible = AppConfig.userLogin()?.admin == true
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -70,13 +69,14 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
-      this.isVisible = AppConfig.userLogin()?.admin == true
       addValueChangeListener {
         viewModel.updateView()
       }
     }
 
     button("Adicionar Nota") {
+      val user = AppConfig.userLogin() as? UserSaci
+      this.isVisible = user?.devCliAutorizacaoInsert == true
       this.icon = VaadinIcon.PLUS_CIRCLE_O.create()
       this.addClickListener {
         val cmbLoja = select<Loja>("Loja") {
@@ -104,6 +104,8 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
     }
 
     button("Excluir Nota") {
+      val user = AppConfig.userLogin() as? UserSaci
+      this.isVisible = user?.devCliAutorizacaoDelete == true
       this.icon = VaadinIcon.MINUS_CIRCLE_O.create()
       this.addClickListener {
         val notas = itensSelecionados()

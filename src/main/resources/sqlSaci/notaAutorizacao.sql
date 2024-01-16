@@ -16,6 +16,9 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column observacao varchar(100) after tipoDev
 
+alter table sqldados.nfAutorizacao
+  add column impresso varchar(1) default 'N' after observacao
+
 */
 
 DO @PESQUISA := :pesquisa;
@@ -40,7 +43,8 @@ SELECT N.storeno                                                                
        IFNULL(I1.grossamt, I2.grossamt) / 100                                     AS valorDev,
        U.name                                                                     AS usuarioDev,
        U.login                                                                    AS loginDev,
-       A.observacao                                                               AS observacao
+       A.observacao                                                               AS observacao,
+       A.impresso                                                                 AS impresso
 FROM sqldados.nf AS N
        INNER JOIN sqldados.nfAutorizacao AS A
                   USING (storeno, pdvno, xano)

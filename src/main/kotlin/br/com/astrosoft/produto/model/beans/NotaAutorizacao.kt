@@ -22,6 +22,7 @@ class NotaAutorizacao(
   var usuarioDev: String?,
   var loginDev: String?,
   var observacao: String?,
+  var impresso: String?,
 ) {
   fun delete() {
     saci.deleteNotaAutorizacao(this)
@@ -33,6 +34,11 @@ class NotaAutorizacao(
 
   fun autoriza(user: UserSaci) {
     this.usernoSing = user.no
+    update()
+  }
+
+  fun marcaImpresso() {
+    this.impresso = "S"
     update()
   }
 
