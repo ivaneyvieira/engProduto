@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.pedidoTransf.FormAutoriza
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliAutorizacao
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliAutorizacaoViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -131,6 +130,9 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
       })
 
     columnGrid(NotaAutorizacao::loja, header = "Loja")
+    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+      viewModel.imprimeValeTroca(nota)
+    }
     columnGrid(NotaAutorizacao::nfVenda, header = "NF Venda").right()
     columnGrid(NotaAutorizacao::dataEmissao, header = "Data")
     columnGrid(NotaAutorizacao::codCliente, header = "Cód Cli")
@@ -143,15 +145,15 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
       viewModel.formAutoriza(nota)
     }
     columnGrid(NotaAutorizacao::autorizacao, header = "Autorização")
-    //columnGrid(NotaAutorizacao::ni, header = "NI", width="7em")
-    //columnGrid(NotaAutorizacao::nfDev, header = "NF Dev", width="8em")
-    //columnGrid(NotaAutorizacao::dataDev, header = "Data")
-    //columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
-    columnGrid(NotaAutorizacao::loginDev, header = "Usuário", width="10em")
+    columnGrid(NotaAutorizacao::ni, header = "NI", width = "7em")
+    columnGrid(NotaAutorizacao::nfDev, header = "NF Dev", width = "8em")
+    columnGrid(NotaAutorizacao::dataDev, header = "Data")
+    columnGrid(NotaAutorizacao::valorDev, header = "Valor Dev")
+    columnGrid(NotaAutorizacao::loginDev, header = "Usuário", width = "10em")
     columnGrid(NotaAutorizacao::observacao, header = "Observação", width = "17em").textFieldEditor()
   }
 
-    override fun formAutoriza(nota: NotaAutorizacao) {
+  override fun formAutoriza(nota: NotaAutorizacao) {
     val form = FormAutorizaNota()
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)

@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
 class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -31,10 +33,12 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun deleteNota(notas: List<NotaAutorizacao>) = viewModel.exec {
-    notas.forEach { nota ->
-      nota.delete()
+    viewModel.view.showQuestion("Confirma a exclusão das notas selecionadas?") {
+      notas.forEach { nota ->
+        nota.delete()
+      }
+      updateView()
     }
-    updateView()
   }
 
   fun updateAutorizacao(bean: NotaAutorizacao?) {
@@ -44,7 +48,8 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
-  fun formAutoriza(nota: NotaAutorizacao) {
+  fun formAutoriza(nota: NotaAutorizacao) = viewModel.exec {
+    if (nota.tipoDev.isNullOrBlank()) fail("Tipo de devolução não informado")
     subView.formAutoriza(nota)
   }
 
@@ -65,6 +70,31 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     nota.autoriza(user)
 
     updateView()
+  }
+
+  fun imprimeValeTroca(nota: NotaAutorizacao) = viewModel.exec {
+    val filtro = FiltroEntradaDevCli(
+      loja = nota.loja ?: 0,
+      query = nota.ni?.toString() ?: fail("NI não encontrado"),
+      dataI = null,
+      dataF = null,
+      dataLimiteInicial = null,
+      impresso = null,
+    )
+    val notaDev = EntradaDevCli.findAll(filtro).firstOrNull {
+      it.invno == nota.ni
+    } ?: fail("Nota de devolução não encontrada")
+
+    if (AppConfig.userLogin()?.admin != true)
+      if (!notaDev.impressora.isNullOrBlank()) {
+        fail("Vale troca já impresso")
+      }
+    val relatorio = ValeTrocaDevolucao(notaDev)
+    relatorio.print(notaDev.produtos(), subView.printerPreview(loja = 0) { impressora ->
+      if (notaDev.impressora.isNullOrBlank())
+        notaDev.marcaImpresso(Impressora(0, impressora))
+      updateView()
+    })
   }
 
   val subView
