@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
-class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -98,10 +98,10 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevCliAutorizacao
+    get() = viewModel.view.tabDevCliSemPrd
 }
 
-interface ITabDevCliAutorizacao : ITabView {
+interface ITabDevCliSemPrd : ITabView {
   fun filtro(): FiltroNotaAutorizacao
   fun updateNotas(notas: List<NotaAutorizacao>)
   fun formAutoriza(nota: NotaAutorizacao)

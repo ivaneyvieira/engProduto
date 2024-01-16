@@ -4,13 +4,12 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
-import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.planilha.PlanilhaImpresso
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 import br.com.astrosoft.produto.model.report.ReportImpresso
 
-class TabDevCliValeTrocaImpViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliComPrdViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -47,10 +46,10 @@ class TabDevCliValeTrocaImpViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevCliValeTrocaImp
+    get() = viewModel.view.tabDevCliComPrd
 }
 
-interface ITabDevCliValeTrocaImp : ITabView {
+interface ITabDevCliComPrd : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
   fun itensNotasSelecionados(): List<EntradaDevCli>

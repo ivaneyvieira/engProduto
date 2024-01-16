@@ -5,21 +5,21 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(view) {
   val tabDevCliEditorViewModel = TabDevCliEditorViewModel(this)
-  val tabDevCliAutorizacaoViewModel = TabDevCliAutorizacaoViewModel(this)
+  val tabDevCliSemPrdViewModel = TabDevCliSemPrdViewModel(this)
   val tabDevCliValeTrocaViewModel = TabDevCliValeTrocaViewModel(this)
   val tabDevCliDevTrocaViewModel = TabDevCliDevTrocaViewModel(this)
   val tabDevCliValeTrocaProdutoViewModel = TabDevCliValeTrocaProdutoViewModel(this)
-  val tabDevCliValeTrocaImpViewModel = TabDevCliValeTrocaImpViewModel(this)
+  val tabDevCliComPrdViewModel = TabDevCliComPrdViewModel(this)
   val tabDevCliCreditoViewModel = TabDevCliCreditoViewModel(this)
 
   override fun listTab() = listOf(
     view.tabDevCliEditor,
     view.tabDevCliValeTroca,
-    view.tabDevCliValeTrocaImp,
+    view.tabDevCliComPrd,
     view.tabDevCliValeTrocaProduto,
     view.tabDevCliCredito,
     view.tabDevCliDevTroca,
-    view.tabDevCliAutorizacao,
+    view.tabDevCliSemPrd,
   )
 }
 
@@ -27,8 +27,8 @@ interface IDevClienteView : IView {
   val tabDevCliValeTroca: ITabDevCliValeTroca
   val tabDevCliDevTroca: ITabDevCliDevTroca
   val tabDevCliEditor: ITabDevCliEditor
-  val tabDevCliAutorizacao: ITabDevCliAutorizacao
+  val tabDevCliSemPrd: ITabDevCliSemPrd
   val tabDevCliValeTrocaProduto: ITabDevCliValeTrocaProduto
-  val tabDevCliValeTrocaImp: ITabDevCliValeTrocaImp
+  val tabDevCliComPrd: ITabDevCliComPrd
   val tabDevCliCredito: ITabDevCliCredito
 }

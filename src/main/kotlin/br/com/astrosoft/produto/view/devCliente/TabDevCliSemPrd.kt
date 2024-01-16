@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliAutorizacao
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliAutorizacaoViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliSemPrd
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliSemPrdViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
@@ -22,9 +22,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
+class TabDevCliSemPrd(val viewModel: TabDevCliSemPrdViewModel) :
   TabPanelGrid<NotaAutorizacao>(NotaAutorizacao::class),
-  ITabDevCliAutorizacao {
+  ITabDevCliSemPrd {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -76,7 +76,7 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
 
     button("Adicionar Nota") {
       val user = AppConfig.userLogin() as? UserSaci
-      this.isVisible = user?.devCliAutorizacaoInsert == true
+      this.isVisible = user?.devCliSemPrdInsert == true
       this.icon = VaadinIcon.PLUS_CIRCLE_O.create()
       this.addClickListener {
         val cmbLoja = select<Loja>("Loja") {
@@ -105,7 +105,7 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
 
     button("Excluir Nota") {
       val user = AppConfig.userLogin() as? UserSaci
-      this.isVisible = user?.devCliAutorizacaoDelete == true
+      this.isVisible = user?.devCliSemPrdDelete == true
       this.icon = VaadinIcon.MINUS_CIRCLE_O.create()
       this.addClickListener {
         val notas = itensSelecionados()
@@ -177,11 +177,11 @@ class TabDevCliAutorizacao(val viewModel: TabDevCliAutorizacaoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliAutorizacao == true
+    return username?.devCliSemPrd == true
   }
 
   override val label: String
-    get() = "Autorização"
+    get() = "Dev Sem Prd"
 
   override fun updateComponent() {
     viewModel.updateView()

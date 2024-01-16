@@ -140,9 +140,9 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTroca.name)
             }
-            checkBox("Impressão") {
+            checkBox("Dev com Prd") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliValeTrocaImp.name)
+              binder.bind(this, UserSaci::devCliComPrd.name)
             }
             checkBox("Produto") {
               isReadOnly = readOnly
@@ -160,17 +160,17 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devClienteTroca.name)
             }
-            checkBox("Autorização") {
+            checkBox("Dev sem Prd") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliAutorizacao.name)
+              binder.bind(this, UserSaci::devCliSemPrd.name)
             }
-            checkBox("Autorização Adicionar") {
+            checkBox("Dev sem Prd Adicionar") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliAutorizacaoInsert.name)
+              binder.bind(this, UserSaci::devCliSemPrdInsert.name)
             }
-            checkBox("Autorização Excluir") {
+            checkBox("Dev sem Prd Excluir") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliAutorizacaoDelete.name)
+              binder.bind(this, UserSaci::devCliSemPrdDelete.name)
             }
           }
           formLayout {

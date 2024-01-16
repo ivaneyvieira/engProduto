@@ -12,10 +12,9 @@ import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaImp
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaImpViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliComPrd
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliComPrdViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.isMultiSelect
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -25,9 +24,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
+class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
   TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliValeTrocaImp {
+  ITabDevCliComPrd {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -133,11 +132,11 @@ class TabDevCliValeTrocaImp(val viewModel: TabDevCliValeTrocaImpViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliValeTrocaImp == true
+    return username?.devCliComPrd == true
   }
 
   override val label: String
-    get() = "Impresso"
+    get() = "Dev Com Prd"
 
   override fun updateComponent() {
     viewModel.updateView()

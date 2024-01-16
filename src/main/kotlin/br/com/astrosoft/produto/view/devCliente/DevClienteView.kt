@@ -6,7 +6,6 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
 import br.com.astrosoft.produto.viewmodel.devCliente.DevClienteViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.IDevClienteView
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliCredito
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -19,11 +18,11 @@ import jakarta.annotation.security.PermitAll
 class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val viewModel = DevClienteViewModel(this)
   override val tabDevCliEditor = TabDevCliEditor(viewModel.tabDevCliEditorViewModel)
-  override val tabDevCliAutorizacao = TabDevCliAutorizacao(viewModel.tabDevCliAutorizacaoViewModel)
+  override val tabDevCliSemPrd = TabDevCliSemPrd(viewModel.tabDevCliSemPrdViewModel)
   override val tabDevCliValeTroca = TabDevCliValeTroca(viewModel.tabDevCliValeTrocaViewModel)
   override val tabDevCliDevTroca = TabDevCliDevTroca(viewModel.tabDevCliDevTrocaViewModel)
   override val tabDevCliValeTrocaProduto = TabDevCliValeTrocaProduto(viewModel.tabDevCliValeTrocaProdutoViewModel)
-  override val tabDevCliValeTrocaImp = TabDevCliValeTrocaImp(viewModel.tabDevCliValeTrocaImpViewModel)
+  override val tabDevCliComPrd = TabDevCliComPrd(viewModel.tabDevCliComPrdViewModel)
   override val tabDevCliCredito= TabDevCliCredito(viewModel.tabDevCliCreditoViewModel)
 
   override fun isAccept(): Boolean {

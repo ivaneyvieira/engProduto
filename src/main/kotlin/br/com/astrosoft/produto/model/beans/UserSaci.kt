@@ -52,7 +52,7 @@ class UserSaci : IUser {
   var pedidoTransfImprimir by DelegateAuthorized(29)
   var pedidoTransfRessu4 by DelegateAuthorized(30)
   var devCliValeTroca by DelegateAuthorized(31)
-  var devCliValeTrocaImp by DelegateAuthorized(32)
+  var devCliComPrd by DelegateAuthorized(32)
   var devCliValeTrocaProduto by DelegateAuthorized(33)
   var pedidoTransfAutorizada by DelegateAuthorized(34)
   var retiraImprimir by DelegateAuthorized(35)
@@ -62,9 +62,9 @@ class UserSaci : IUser {
   var devClienteTroca by DelegateAuthorized(39)
   var acertoEntrada by DelegateAuthorized(40)
   var acertoSaida by DelegateAuthorized(41)
-  var devCliAutorizacao by DelegateAuthorized(42)
-  var devCliAutorizacaoInsert by DelegateAuthorized(43)
-  var devCliAutorizacaoDelete by DelegateAuthorized(44)
+  var devCliSemPrd by DelegateAuthorized(42)
+  var devCliSemPrdInsert by DelegateAuthorized(43)
+  var devCliSemPrdDelete by DelegateAuthorized(44)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -155,8 +155,8 @@ class UserSaci : IUser {
     get() = produtoList
 
   val devCliente
-    get() = devCliValeTroca || devCliValeTrocaImp || devCliValeTrocaProduto || devCliCredito ||
-            devCliEditor || devClienteTroca || devCliAutorizacao || admin
+    get() = devCliValeTroca || devCliComPrd || devCliValeTrocaProduto || devCliCredito ||
+            devCliEditor || devClienteTroca || devCliSemPrd || admin
 
   val acertoEstoque
     get() = acertoEntrada || acertoSaida || admin
