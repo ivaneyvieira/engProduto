@@ -20,6 +20,7 @@ class NotaAutorizacao(
   var dataDev: LocalDate?,
   var valorDev: Double?,
   var usuarioDev: String?,
+  var loginDev: String?,
   var observacao: String?,
 ) {
   fun delete() {

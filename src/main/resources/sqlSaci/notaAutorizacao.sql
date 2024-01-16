@@ -39,6 +39,7 @@ SELECT N.storeno                                                                
        CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE)                         AS dataDev,
        IFNULL(I1.grossamt, I2.grossamt) / 100                                     AS valorDev,
        U.name                                                                     AS usuarioDev,
+       U.login                                                                    AS loginDev,
        A.observacao                                                               AS observacao
 FROM sqldados.nf AS N
        INNER JOIN sqldados.nfAutorizacao AS A
