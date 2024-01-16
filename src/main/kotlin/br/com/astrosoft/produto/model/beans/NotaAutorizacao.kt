@@ -19,6 +19,7 @@ class NotaAutorizacao(
   var nfDev: String?,
   var dataDev: LocalDate?,
   var valorDev: Double?,
+  var usuarioDev: String?,
   var observacao: String?,
 ) {
   fun delete() {
@@ -42,14 +43,24 @@ class NotaAutorizacao(
     fun insert(chave: NotaAutorizacaoChave) {
       saci.insertNotaAutorizacao(chave)
     }
+
+    fun findNota(loja: Int, nota: String): NotaAutorizacao? {
+      val split = nota.trim().split("/")
+      val nfno = split.firstOrNull()?.trim()?.toIntOrNull() ?: 0
+      val nfse = split.lastOrNull()?.trim() ?: ""
+      val lista = saci.findNotaAutorizacao(loja, nfno, nfse)
+      return lista.firstOrNull {
+        it.nfVenda == nota
+      }
+    }
   }
 }
 
 data class FiltroNotaAutorizacao(
   val loja: Int,
   val pesquisa: String,
-  val dataInicial: LocalDate,
-  val dataFinal: LocalDate,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?,
 )
 
 data class NotaAutorizacaoChave(

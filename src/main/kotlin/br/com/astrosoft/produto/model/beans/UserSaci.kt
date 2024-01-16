@@ -58,11 +58,11 @@ class UserSaci : IUser {
   var retiraImprimir by DelegateAuthorized(35)
   var retiraImpresso by DelegateAuthorized(36)
   var devCliCredito by DelegateAuthorized(37)
-  val devCliEditor by DelegateAuthorized(38)
-  val devCliDevTroca by DelegateAuthorized(39)
-  val acertoEntrada by DelegateAuthorized(40)
-  val acertoSaida by DelegateAuthorized(41)
-  val devCliAutorizacao by DelegateAuthorized(42)
+  var devCliEditor by DelegateAuthorized(38)
+  var devClienteTroca by DelegateAuthorized(39)
+  var acertoEntrada by DelegateAuthorized(40)
+  var acertoSaida by DelegateAuthorized(41)
+  var devCliAutorizacao by DelegateAuthorized(42)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -154,7 +154,7 @@ class UserSaci : IUser {
 
   val devCliente
     get() = devCliValeTroca || devCliValeTrocaImp || devCliValeTrocaProduto || devCliCredito ||
-            devCliEditor || devCliDevTroca || devCliAutorizacao || admin
+            devCliEditor || devClienteTroca || devCliAutorizacao || admin
 
   val acertoEstoque
     get() = acertoEntrada || acertoSaida || admin

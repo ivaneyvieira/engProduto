@@ -696,6 +696,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findNotaAutorizacao(loja: Int, nfno: Int, nfse: String): List<NotaAutorizacao> {
+    val sql = "/sqlSaci/notaAutorizacaoSimples.sql"
+    return query(sql, NotaAutorizacao::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("nfno", nfno)
+      addOptionalParameter("nfse", nfse)
+    }
+  }
+
   fun findNotaAutorizacao(filtro: FiltroNotaAutorizacao): List<NotaAutorizacao> {
     val sql = "/sqlSaci/notaAutorizacao.sql"
     return query(sql, NotaAutorizacao::class) {

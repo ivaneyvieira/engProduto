@@ -21,8 +21,13 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun addNota(chave: NotaAutorizacaoChave) = viewModel.exec {
-    NotaAutorizacao.insert(chave)
-    updateView()
+    val notaPesquisa = NotaAutorizacao.findNota(chave.loja, chave.notaFiscal) ?: fail("Nota não encontrada")
+
+    if (notaPesquisa.ni != null) fail("Nota já devolvida")
+    else {
+      NotaAutorizacao.insert(chave)
+      updateView()
+    }
   }
 
   fun deleteNota(notas: List<NotaAutorizacao>) = viewModel.exec {
@@ -43,7 +48,7 @@ class TabDevCliAutorizacaoViewModel(val viewModel: DevClienteViewModel) {
     subView.formAutoriza(nota)
   }
 
-  fun autorizaNota(nota: NotaAutorizacao, login: String, senha: String) {
+  fun autorizaNota(nota: NotaAutorizacao, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {

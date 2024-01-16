@@ -112,7 +112,7 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliDevTroca == true
+    return username?.devClienteTroca == true
   }
 
   override val label: String
