@@ -98,6 +98,7 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
       dataF = edtDataFinal.value,
       impresso = true,
       dataLimiteInicial = LocalDate.of(2023, 12, 1),
+      tipo = "COM",
     )
   }
 

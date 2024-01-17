@@ -105,6 +105,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
       dataF = edtDataFinal.value,
       impresso = false,
       dataLimiteInicial = LocalDate.of(2023, 12, 1),
+      tipo = "COM",
     )
   }
 

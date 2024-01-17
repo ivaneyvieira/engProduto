@@ -109,6 +109,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
       dataF = edtDataFinal.value,
       impresso = null,
       dataLimiteInicial = null,
+      tipo = "COM",
     )
   }
 

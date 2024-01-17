@@ -106,7 +106,7 @@ WHERE I.account = '2.01.25'
   AND (I.storeno = :loja OR :loja = 0)
   AND (I.date >= :dataI OR :dataI = 0)
   AND (I.date <= :dataF OR :dataF = 0)
-  AND (I.date >= :dataLimiteInicial)
+  AND (I.date >= :dataLimiteInicial OR :dataLimiteInicial = 0)
   AND CASE :impresso
         WHEN 'S' THEN I.c9 != ''
         WHEN 'N' THEN I.c9 = ''
@@ -172,5 +172,5 @@ WHERE (@PESQUISA = '' OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND IFNULL(I.xano, N.xano) IS NOT NULL
-  AND A.xano IS NULL
+  AND (A.xano IS NULL OR :tipo = 'TODOS')
 GROUP BY I.invno

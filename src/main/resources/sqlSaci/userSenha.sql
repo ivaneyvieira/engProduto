@@ -24,5 +24,3 @@ FROM sqldados.users AS U
                  ON A.userno = U.no AND A.appName = :appName
 WHERE (login = :login OR :login = 'TODOS')
   AND U.bits1 & POW(2, 0) = 0
-  AND (U.name NOT LIKE '%INATIVO%'
-  OR (U.bits1 & 1) != 0)

@@ -80,6 +80,7 @@ class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
       dataF = null,
       dataLimiteInicial = null,
       impresso = null,
+      tipo = "TODOS"
     )
     val notaDev = EntradaDevCli.findAll(filtro).firstOrNull {
       it.invno == nota.ni

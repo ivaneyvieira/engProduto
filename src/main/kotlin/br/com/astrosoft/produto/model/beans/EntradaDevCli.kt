@@ -138,4 +138,5 @@ data class FiltroEntradaDevCli(
   val dataF: LocalDate?,
   val dataLimiteInicial: LocalDate?,
   val impresso: Boolean?,
+  val tipo: String?,
 )

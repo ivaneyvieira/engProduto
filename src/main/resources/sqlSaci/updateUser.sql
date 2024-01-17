@@ -1,8 +1,7 @@
 DO @NO := (SELECT MAX(no)
            FROM sqldados.users
            WHERE login = :login
-             AND (name NOT LIKE '%INATIVO%'
-             OR (bits1 & 1) != 0));
+             AND (bits1 & POW(2, 0)) = 0);
 
 UPDATE sqldados.users
 SET auxLong1 = :loja
