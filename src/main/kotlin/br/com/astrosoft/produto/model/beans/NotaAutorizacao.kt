@@ -23,6 +23,7 @@ class NotaAutorizacao(
   var loginDev: String?,
   var observacao: String?,
   var impresso: String?,
+  var data: LocalDate?,
 ) {
   fun delete() {
     saci.deleteNotaAutorizacao(this)
