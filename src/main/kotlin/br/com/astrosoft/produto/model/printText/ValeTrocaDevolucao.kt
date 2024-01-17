@@ -90,8 +90,9 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
       val len = ("_______________________________  ".length - autorizacao.length) /2
       val str = " ".repeat(len)
 
-      writeln("${str}${autorizacao}${str}_______________________________")
-      writeln("           Autorizacao                         Caixa")
+      writeln("_______________________________  _______________________________")
+      writeln("${str}${autorizacao}${str}                     Caixa")
+      writeln("           Autorizacao")
     }
     writeln("")
     writeln("")
