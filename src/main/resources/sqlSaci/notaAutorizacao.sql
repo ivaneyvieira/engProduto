@@ -19,6 +19,9 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column impresso varchar(1) default 'N' after observacao
 
+alter table sqldados.nfAutorizacao
+  add column dataInsert int default '0' after impresso
+
 */
 
 DO @PESQUISA := :pesquisa;
@@ -26,25 +29,27 @@ DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, 0);
 
-SELECT N.storeno                                                                  AS loja,
-       N.pdvno                                                                    AS pdv,
-       N.xano                                                                     AS transacao,
-       CONCAT(N.nfno, '/', N.nfse)                                                AS nfVenda,
-       CAST(N.issuedate AS DATE)                                                  AS dataEmissao,
-       N.custno                                                                   AS codCliente,
-       C.name                                                                     AS nomeCliente,
-       N.grossamt / 100                                                           AS valorVenda,
-       A.tipoDev                                                                  AS tipoDev,
-       S.no                                                                       AS usernoSing,
-       S.name                                                                     AS autorizacao,
-       IFNULL(I1.invno, I2.invno)                                                 AS ni,
-       IFNULL(CONCAT(I1.nfname, '/', I1.invse), CONCAT(I2.nfname, '/', I2.invse)) AS nfDev,
-       CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE)                         AS dataDev,
-       IFNULL(I1.grossamt, I2.grossamt) / 100                                     AS valorDev,
-       U.name                                                                     AS usuarioDev,
-       U.login                                                                    AS loginDev,
-       A.observacao                                                               AS observacao,
-       A.impresso                                                                 AS impresso
+SELECT N.storeno                                                                                  AS loja,
+       N.pdvno                                                                                    AS pdv,
+       N.xano                                                                                     AS transacao,
+       CONCAT(N.nfno, '/', N.nfse)                                                                AS nfVenda,
+       CAST(N.issuedate AS DATE)                                                                  AS dataEmissao,
+       N.custno                                                                                   AS codCliente,
+       C.name                                                                                     AS nomeCliente,
+       N.grossamt / 100                                                                           AS valorVenda,
+       A.tipoDev                                                                                  AS tipoDev,
+       S.no                                                                                       AS usernoSing,
+       S.name                                                                                     AS autorizacao,
+       IFNULL(I1.invno, I2.invno)                                                                 AS ni,
+       IFNULL(CONCAT(I1.nfname, '/', I1.invse), CONCAT(I2.nfname, '/', I2.invse))                 AS nfDev,
+       CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE)                                         AS dataDev,
+       IFNULL(I1.grossamt, I2.grossamt) / 100                                                     AS valorDev,
+       U.name                                                                                     AS usuarioDev,
+       U.login                                                                                    AS loginDev,
+       A.observacao                                                                               AS observacao,
+       A.impresso                                                                                 AS impresso,
+       IF(A.dataInsert = 0, CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE),
+          IFNULL(CAST(A.dataInsert AS DATE), CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE))) AS data
 FROM sqldados.nf AS N
        INNER JOIN sqldados.nfAutorizacao AS A
                   USING (storeno, pdvno, xano)
@@ -60,8 +65,12 @@ FROM sqldados.nf AS N
        LEFT JOIN sqldados.users AS S
                  ON S.no = A.usernoSing
 WHERE (N.storeno = :loja OR :loja = 0)
-  AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
-  AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
+  AND (IF(A.dataInsert = 0, CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE),
+          IFNULL(CAST(A.dataInsert AS DATE), CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE))) * 1 >= :dataInicial OR
+       :dataInicial = 0)
+  AND (IF(A.dataInsert = 0, CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE),
+          IFNULL(CAST(A.dataInsert AS DATE), CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE))) * 1 <= :dataFinal OR
+       :dataFinal = 0)
   AND (@PESQUISA = '' OR
        CONCAT(N.nfno, '/', N.nfse) LIKE @PESQUISA_START OR
        N.custno LIKE @PESQUISA_INT OR

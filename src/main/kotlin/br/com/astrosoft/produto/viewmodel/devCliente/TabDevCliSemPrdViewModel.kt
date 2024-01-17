@@ -90,7 +90,7 @@ class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
       if (nota.impresso == "S") {
         fail("Vale troca já impresso")
       }
-    val relatorio = ValeTrocaDevolucao(notaDev)
+    val relatorio = ValeTrocaDevolucao(notaDev, autorizacao = true)
     relatorio.print(notaDev.produtos(), subView.printerPreview(loja = 0) { impressora ->
       if (nota.impresso == "N")
         nota.marcaImpresso()

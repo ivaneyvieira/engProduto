@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
 
-class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
+class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: Boolean = false) : PrintText<EntradaDevCliPro>() {
   init {
     column(EntradaDevCliPro::codigoFormat, "Codigo", 6)
     column(EntradaDevCliPro::descricao, "Descricao", 41)
@@ -83,8 +83,13 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
-    writeln("_______________________________  _______________________________")
-    writeln("            Gerencia                           Caixa")
+    if(autorizacao) {
+      writeln("_______________________________  _______________________________")
+      writeln("           Autorizacao                         Caixa")
+    }else{
+      writeln("_______________________________  _______________________________")
+      writeln("            Gerencia                           Caixa")
+    }
     writeln("")
     writeln("")
   }
