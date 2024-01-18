@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
 class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
@@ -98,6 +99,16 @@ class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
     })
   }
 
+  fun imprimeProdutos() {
+    val listNi = subView.itensNotasSelecionados().mapNotNull { it.ni }
+    val produtos = EntradaDevCliProList.findAll(listNi)
+    if (produtos.isEmpty()) {
+      fail("Não há produtos selecionados")
+    }
+    val relatorio = ProdutosDevolucao()
+    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
+  }
+
   val subView
     get() = viewModel.view.tabDevCliSemPrd
 }
@@ -106,4 +117,5 @@ interface ITabDevCliSemPrd : ITabView {
   fun filtro(): FiltroNotaAutorizacao
   fun updateNotas(notas: List<NotaAutorizacao>)
   fun formAutoriza(nota: NotaAutorizacao)
+  fun itensNotasSelecionados(): List<NotaAutorizacao>
 }

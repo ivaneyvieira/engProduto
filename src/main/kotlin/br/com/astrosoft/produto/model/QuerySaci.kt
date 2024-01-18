@@ -557,6 +557,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun entradaDevCliProList(listNi : List<Int>): List<EntradaDevCliProList> {
+    val sql = "/sqlSaci/entradaDevCliProListNi.sql"
+    return query(sql, EntradaDevCliProList::class) {
+      addOptionalParameter("listNi", listNi)
+    }
+  }
+
   fun mudaParaReservado(storeno: Int, ordno: Int, user: Int) {
     val sql = "/sqlSaci/mudaParaReservado.sql"
     script(sql) {

@@ -70,15 +70,22 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
         viewModel.updateView()
       }
     }
-    button ("Relatorio"){
+    button("Relatorio") {
       icon = VaadinIcon.PRINT.create()
       onLeftClick {
         viewModel.imprimeRelatorio()
       }
     }
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaNotas") {
-        viewModel.geraPlanilha()
+      viewModel.geraPlanilha()
+    }
+
+    button("Impressão") {
+      icon = VaadinIcon.PRINT.create()
+      onLeftClick {
+        viewModel.imprimeProdutos()
       }
+    }
   }
 
   override fun Grid<EntradaDevCli>.gridPanel() {

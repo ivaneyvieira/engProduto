@@ -7,10 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliSemPrd
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliSemPrdViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -112,6 +109,14 @@ class TabDevCliSemPrd(val viewModel: TabDevCliSemPrdViewModel) :
         viewModel.deleteNota(notas)
       }
     }
+
+
+    button("Impressão") {
+      icon = VaadinIcon.PRINT.create()
+      onLeftClick {
+        viewModel.imprimeProdutos()
+      }
+    }
   }
 
   override fun Grid<NotaAutorizacao>.gridPanel() {
@@ -160,6 +165,10 @@ class TabDevCliSemPrd(val viewModel: TabDevCliSemPrdViewModel) :
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
+  }
+
+  override fun itensNotasSelecionados(): List<NotaAutorizacao> {
+    return this.itensSelecionados()
   }
 
   override fun filtro(): FiltroNotaAutorizacao {
