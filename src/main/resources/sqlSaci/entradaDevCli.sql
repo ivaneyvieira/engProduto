@@ -40,7 +40,7 @@ WHERE date >= :dataI
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
-  PRIMARY KEY (invno)
+  INDEX (invno)
 )
 SELECT I.invno                                                                           AS invno,
        IF(I.usernoLast = 0, I.usernoFirst, I.usernoLast)                                 AS userno,
@@ -79,7 +79,8 @@ SELECT I.invno                                                                  
        U.nfValor                                                                         AS nfValorVenda,
        IF(I.remarks LIKE '%EST CARTAO%' OR I.remarks LIKE '%EST BOLETO%' OR I.remarks LIKE '%EST DEP%' OR
           I.remarks LIKE '%REEMBOLSO%', 'S', 'N')                                        AS estorno,
-       R.pdvReembolso                                                                    AS pdvReembolso
+       R.pdvReembolso                                                                    AS pdvReembolso,
+       obsNI                                                                             AS obsNI
 FROM sqldados.inv AS I
        LEFT JOIN T_VENDA AS U
                  ON U.loja = I.storeno AND U.obsNI REGEXP CONCAT('NI *', I.invno)
@@ -112,8 +113,7 @@ WHERE I.account = '2.01.25'
         WHEN 'N' THEN I.c9 = ''
         WHEN 'T' THEN TRUE
         ELSE FALSE
-      END
-GROUP BY I.invno;
+      END;
 
 SELECT I.invno,
        I.loja,
@@ -154,7 +154,7 @@ FROM T_NOTA AS I
        LEFT JOIN sqldados.nfAutorizacao AS A
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.nf AS N
-                 ON I.xano IS NULL AND N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
+                 ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
        LEFT JOIN sqldados.custp AS C
                  ON C.no = N.custno
        LEFT JOIN sqldados.emp AS E
@@ -171,6 +171,8 @@ WHERE (@PESQUISA = '' OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
-  AND IFNULL(I.xano, N.xano) IS NOT NULL
+  AND (IFNULL(I.xano, N.xano) IS NOT NULL
+         OR I.remarks LIKE '% P'
+         OR I.remarks LIKE '% P %')
   AND (A.xano IS NULL OR :tipo = 'TODOS')
-GROUP BY I.invno
+
