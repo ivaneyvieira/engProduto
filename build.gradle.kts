@@ -4,7 +4,7 @@ val vaadinVersion: String by extra
 val karibuDslVersion: String by extra
 
 plugins {
-  kotlin("jvm") version "1.9.20"
+  kotlin("jvm") version "1.9.22"
   id("application")
   id("com.vaadin")
 }
@@ -27,12 +27,12 @@ dependencies {
   // Vaadin
   implementation("com.vaadin:vaadin-core:$vaadinVersion") {
     afterEvaluate {
-      if (vaadin.productionMode) {
+      if (vaadin.productionMode.get()) {
         exclude(module = "vaadin-dev")
       }
     }
   }
-  implementation("com.github.mvysny.vaadin-boot:vaadin-boot:12.1")
+  implementation("com.github.mvysny.vaadin-boot:vaadin-boot:12.2")
   implementation("com.github.mvysny.vaadin-simple-security:vaadin-simple-security:0.2")
 
   // logging
