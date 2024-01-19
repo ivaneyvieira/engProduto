@@ -171,8 +171,8 @@ WHERE (@PESQUISA = '' OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
-  AND (IFNULL(I.xano, N.xano) IS NOT NULL
-         OR I.remarks LIKE '% P'
-         OR I.remarks LIKE '% P %')
-  AND (A.xano IS NULL OR :tipo = 'TODOS')
+  AND (IFNULL(I.xano, N.xano) IS NOT NULL)
+  AND (A.xano IS NULL OR :tipo = 'TODOS' OR
+       (A.xano IS NOT NULL AND
+        ((IFNULL(I.xano, N.xano) IS NOT NULL AND (I.remarks LIKE '% P' OR I.remarks LIKE '% P %')))))
 
