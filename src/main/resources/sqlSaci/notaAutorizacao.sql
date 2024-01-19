@@ -77,7 +77,8 @@ WHERE (N.storeno = :loja OR :loja = 0)
        C.name LIKE @PESQUISA_LIKE OR
        A.tipoDev LIKE @PESQUISA_LIKE OR
        S.name LIKE @PESQUISA_LIKE OR
-       A.observacao LIKE @PESQUISA_LIKE)
-HAVING (@PESQUISA = '' OR
-        ni = @PESQUISA_INT OR
-        nfDev LIKE @PESQUISA_START)
+       A.observacao LIKE @PESQUISA_LIKE OR
+       IFNULL(I1.invno, I2.invno) = @PESQUISA_INT OR
+       IFNULL(CONCAT(I1.nfname, '/', I1.invse), CONCAT(I2.nfname, '/', I2.invse)) LIKE @PESQUISA_START)
+  AND (IFNULL(I1.remarks, I2.remarks) NOT LIKE '% P' AND
+       IFNULL(I1.remarks, I2.remarks) NOT LIKE '% P %')
