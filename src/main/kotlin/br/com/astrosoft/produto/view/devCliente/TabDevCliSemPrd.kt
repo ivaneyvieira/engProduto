@@ -110,7 +110,6 @@ class TabDevCliSemPrd(val viewModel: TabDevCliSemPrdViewModel) :
       }
     }
 
-
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onLeftClick {
