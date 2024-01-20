@@ -557,7 +557,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun entradaDevCliProList(listNi : List<Int>): List<EntradaDevCliProList> {
+  fun entradaDevCliProList(listNi: List<Int>): List<EntradaDevCliProList> {
     val sql = "/sqlSaci/entradaDevCliProListNi.sql"
     return query(sql, EntradaDevCliProList::class) {
       addOptionalParameter("listNi", listNi)
@@ -751,6 +751,16 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoDev", nota.tipoDev ?: "")
       addOptionalParameter("observacao", nota.observacao ?: "")
       addOptionalParameter("impresso", nota.impresso ?: "N")
+    }
+  }
+
+  fun findNotaVenda(filtro: FiltroNotaVenda): List<NotaVenda> {
+    val sql = "/sqlSaci/vendas.sql"
+    return query(sql, NotaVenda::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
   }
 

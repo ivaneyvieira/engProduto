@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 
-class ProdutosDevolucao(val titulo: String?) : PrintText<EntradaDevCliProList>() {
+class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() {
   init {
     column(EntradaDevCliProList::codigoFormat, "Codigo", 6)
     column(EntradaDevCliProList::descricao, "Descricao", 41)
@@ -20,7 +20,7 @@ class ProdutosDevolucao(val titulo: String?) : PrintText<EntradaDevCliProList>()
 
   override fun printTitle(bean: EntradaDevCliProList) {
     writeln("Loja: ${bean.loja}", negrito = true)
-    writeln(titulo ?: "Produtos de Devolucoes de Clientes", negrito = true)
+    writeln(titulo, negrito = true)
     writeln("Data: ${bean.data.format()}", negrito = true)
     writeln("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
 

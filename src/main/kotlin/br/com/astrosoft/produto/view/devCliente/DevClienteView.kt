@@ -24,6 +24,7 @@ class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val tabDevCliValeTrocaProduto = TabDevCliValeTrocaProduto(viewModel.tabDevCliValeTrocaProdutoViewModel)
   override val tabDevCliComPrd = TabDevCliComPrd(viewModel.tabDevCliComPrdViewModel)
   override val tabDevCliCredito= TabDevCliCredito(viewModel.tabDevCliCreditoViewModel)
+  override val tabDevVenda= TabDevVenda(viewModel.tabDevVendaViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

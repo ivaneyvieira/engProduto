@@ -26,11 +26,11 @@ class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
   fun addNota(chave: NotaAutorizacaoChave) = viewModel.exec {
     val notaPesquisa = NotaAutorizacao.findNota(chave.loja, chave.notaFiscal) ?: fail("Nota não encontrada")
 
-    if (notaPesquisa.ni != null) fail("Nota já devolvida")
-    else {
-      NotaAutorizacao.insert(chave)
-      updateView()
+    if (notaPesquisa.ni != null) {
+      println("Nota já devolvida")
     }
+    NotaAutorizacao.insert(chave)
+    updateView()
   }
 
   fun deleteNota(notas: List<NotaAutorizacao>) = viewModel.exec {
@@ -105,7 +105,7 @@ class TabDevCliSemPrdViewModel(val viewModel: DevClienteViewModel) {
     if (produtos.isEmpty()) {
       fail("Não há produtos selecionados")
     }
-    val relatorio = ProdutosDevolucao("Produtos de Devolucoes de Clientes sem Produtos")
+    val relatorio = ProdutosDevolucao("Devolucoes de Clientes sem Produtos")
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
