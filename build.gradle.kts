@@ -14,9 +14,12 @@ defaultTasks("clean", "build")
 repositories {
   mavenLocal()
   mavenCentral()
-  jcenter()
+  //jcenter()
   maven {
     url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+  maven {
+    url = uri("https://jaspersoft.jfrog.io/jaspersoft/jaspersoft-repo")
   }
 }
 
@@ -63,16 +66,19 @@ dependencies {
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
 
   //Report
-  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.12.1") {
-    exclude(group = "com.lowagie", module = "itext")
-  } // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
-  implementation("net.sf.jasperreports:jasperreports:6.20.0")
-  implementation("net.sf.jasperreports:jasperreports-fonts:6.20.0")
-  implementation("com.lowagie:itext:2.1.7")
+  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1")
+  // {
+//    exclude(group = "com.lowagie", module = "itext")
+//  }
+  implementation("net.sf.jasperreports:jasperreports:6.20.6")
+  implementation("net.sf.jasperreports:jasperreports-fonts:6.20.6")
+  // implementation("com.lowagie:itext:2.1.7")
 
   //Planilhas
-  implementation("com.github.nwillc:poink:0.4.6")
-  implementation("io.github.rushuat:ocell:0.1.7")
+  //implementation("com.github.nwillc:poink:0.4.6")
+  //implementation("io.github.rushuat:ocell:0.1.7")
+  implementation("org.apache.poi:poi:5.2.5")
+  implementation("org.apache.poi:poi-ooxml:5.2.5")
 
   //Legado
   implementation("com.squareup.okhttp3:okhttp:4.12.0")

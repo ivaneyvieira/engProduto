@@ -1,16 +1,7 @@
 package br.com.astrosoft.framework.model.planilha
 
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.xssf.streaming.SXSSFSheet
-import org.apache.poi.xssf.streaming.SXSSFWorkbook
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
-import java.io.ByteArrayOutputStream
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.*
-import kotlin.reflect.KProperty1
-
 open class PlanilhaStream<B>(private val sheatName: String) {
+  /*
   private val styles: MutableMap<String, XSSFCellStyle> = mutableMapOf()
   protected val columns: MutableList<Column<B, *>> = mutableListOf()
 
@@ -179,6 +170,6 @@ open class PlanilhaStream<B>(private val sheatName: String) {
     val outBytes = ByteArrayOutputStream()
     wb.write(outBytes)
     return outBytes.toByteArray()
-  }
+  }*/
 }
 

@@ -1,10 +1,10 @@
 package br.com.astrosoft.framework.model.planilha
 
-import com.github.nwillc.poink.PSheet
-import com.github.nwillc.poink.workbook
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.util.*
@@ -53,7 +53,7 @@ open class Planilha<B>(private val sheatName: String) {
     columns.add(campo)
   }
 
-  private fun PSheet.row(bean: B) {
+  private fun Sheet.row(bean: B) {
     val row = this.createRow(this.physicalNumberOfRows)
     val creationHelper = workbook.creationHelper
 
@@ -104,28 +104,35 @@ open class Planilha<B>(private val sheatName: String) {
   }
 
   fun write(listBean: List<B>): ByteArray {
-    val wb = workbook {
-      val headerStyle = cellStyle("Header") {
-        fillForegroundColor = IndexedColors.GREY_25_PERCENT.index
-        fillPattern = FillPatternType.SOLID_FOREGROUND
-        this.verticalAlignment = VerticalAlignment.TOP
-      }
+    val wb = XSSFWorkbook()
+    val headerStyle = wb.createCellStyle().apply {
+      fillForegroundColor = IndexedColors.GREY_25_PERCENT.index
+      fillPattern = FillPatternType.SOLID_FOREGROUND
+      verticalAlignment = VerticalAlignment.TOP
+    }
 
-      val stNotas = sheet(sheatName) {
-        val headers = columns.map { it.header }
-        row(headers, headerStyle)
-        val listTotal = listBean.size
-
-        listBean.forEachIndexed { index, bean ->
-          println("planilha $index/$listTotal")
-          row(bean)
+    val stNotas = wb.createSheet(sheatName).apply {
+      val headerRow = this.createRow(0)
+      val headers = columns.map { it.header }
+      headers.forEachIndexed { index, header ->
+        headerRow.createCell(index).apply {
+          setCellValue(header)
+          cellStyle = headerStyle
         }
       }
 
-      columns.forEachIndexed { index, _ ->
-        stNotas.autoSizeColumn(index)
+      val listTotal = listBean.size
+
+      listBean.forEachIndexed { index, bean ->
+        println("planilha $index/$listTotal")
+        row(bean)
       }
     }
+
+    columns.forEachIndexed { index, _ ->
+      stNotas.autoSizeColumn(index)
+    }
+
     val outBytes = ByteArrayOutputStream()
     wb.write(outBytes)
     return outBytes.toByteArray()
