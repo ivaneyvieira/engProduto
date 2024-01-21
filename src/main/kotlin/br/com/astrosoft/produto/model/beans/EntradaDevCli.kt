@@ -139,5 +139,9 @@ data class FiltroEntradaDevCli(
   val dataF: LocalDate?,
   val dataLimiteInicial: LocalDate?,
   val impresso: Boolean?,
-  val tipo: String?,
+  val tipo: ETipoDevCli,
 )
+
+enum class ETipoDevCli(val codigo: String) {
+  COM("COM"), SEM("SEM"), TODOS("TODOS")
+}

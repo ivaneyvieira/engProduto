@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.EntradaDevCli
-import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTroca
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -105,7 +102,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
       dataF = edtDataFinal.value,
       impresso = false,
       dataLimiteInicial = LocalDate.of(2023, 12, 1),
-      tipo = "COM",
+      tipo = ETipoDevCli.COM,
     )
   }
 
