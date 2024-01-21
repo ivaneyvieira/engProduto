@@ -32,8 +32,7 @@ webpack.generated.js
 src/main/resources/report/.metadata/
 .metadata
 *.jasper
-.vscode
-.settings
 frontend/generated/
 src/main/dev-bundle
+src/main/bundle
 cahche/*
