@@ -66,10 +66,9 @@ dependencies {
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
 
   //Report
-  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1")
-  // {
-//    exclude(group = "com.lowagie", module = "itext")
-//  }
+  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1")   {
+    exclude(group = "org.glassfish.jaxb", module = "jaxb-core")
+  }
   implementation("net.sf.jasperreports:jasperreports:6.20.6")
   implementation("net.sf.jasperreports:jasperreports-fonts:6.20.6")
   // implementation("com.lowagie:itext:2.1.7")
@@ -98,3 +97,6 @@ java {
 application {
   mainClass.set("br.com.astrosoft.framework.view.layout.MainKt")
 }
+
+
+
