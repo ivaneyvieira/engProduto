@@ -87,12 +87,12 @@ class EntradaDevCli(
       }
 
       isNaoInformado() -> {
-        val saldoDevolucao = SaldoDevolucao(
-          invno = invno,
-          custnoDev = lojaNaoInformado?.codigo ?: 0,
-          custnoMuda = custno ?: 0,
-          saldo = valor ?: 0.00
-        )
+        // val saldoDevolucao = SaldoDevolucao(
+        //   invno = invno,
+        //   custnoDev = lojaNaoInformado?.codigo ?: 0,
+        //   custnoMuda = custno ?: 0,
+        //   saldo = valor ?: 0.00
+        // )
         //saci.marcaMudaCliente(saldoDevolucao)
         println("Não faz nada")
       }
