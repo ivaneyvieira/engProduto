@@ -735,9 +735,9 @@ class QuerySaci : QueryDB(database) {
   fun insertNotaAutorizacao(nota: NotaAutorizacaoChave) {
     val sql = "/sqlSaci/notaAutorizacaoInsert.sql"
     script(sql) {
-      addOptionalParameter("loja", nota.loja ?: 0)
-      addOptionalParameter("nfno", nota.nfno ?: 0)
-      addOptionalParameter("nfse", nota.nfse ?: 0)
+      addOptionalParameter("loja", nota.loja)
+      addOptionalParameter("nfno", nota.nfno)
+      addOptionalParameter("nfse", nota.nfse)
     }
   }
 
