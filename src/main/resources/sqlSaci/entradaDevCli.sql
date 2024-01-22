@@ -151,8 +151,6 @@ SELECT I.invno,
        nfValorVenda                                                      AS nfValorVenda,
        IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca
 FROM T_NOTA AS I
-       LEFT JOIN sqldados.nfAutorizacao AS A
-                 USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.nf AS N
                  ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
        LEFT JOIN sqldados.custp AS C
@@ -172,7 +170,5 @@ WHERE (@PESQUISA = '' OR
        IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
-  AND (A.xano IS NULL OR :tipo = 'TODOS' OR
-       (A.xano IS NOT NULL AND
-        ((IFNULL(I.xano, N.xano) IS NOT NULL AND (I.remarks LIKE '% P' OR I.remarks LIKE '% P %')))))
+
 
