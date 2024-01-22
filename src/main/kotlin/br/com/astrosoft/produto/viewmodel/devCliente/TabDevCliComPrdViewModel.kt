@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EntradaDevCli
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCli
-import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaImpresso
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
@@ -58,6 +55,30 @@ class TabDevCliComPrdViewModel(val viewModel: DevClienteViewModel) {
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
+  fun formAutoriza(nota: EntradaDevCli) {
+    //if (nota.tipoDev.isNullOrBlank()) fail("Tipo de devolução não informado")
+    subView.formAutoriza(nota)
+  }
+
+  fun autorizaNota(nota: EntradaDevCli, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    if (!user.admin) {
+      val lojaUserSaci = user.lojaUsuario
+      val lojaNoto = nota.loja ?: fail("Loja destino não encontrada")
+      if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
+    }
+
+    nota.autoriza(user)
+
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliComPrd
 }
@@ -66,4 +87,5 @@ interface ITabDevCliComPrd : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
   fun itensNotasSelecionados(): List<EntradaDevCli>
+  fun formAutoriza(nota: EntradaDevCli)
 }

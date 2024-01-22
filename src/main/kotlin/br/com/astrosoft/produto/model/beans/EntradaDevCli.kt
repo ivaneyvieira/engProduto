@@ -37,6 +37,8 @@ class EntradaDevCli(
   var clienteNome: String?,
   var nfValorVenda: Double?,
   var fezTroca: String?,
+  var usernoAutorizacao: Int?,
+  var nameAutorizacao: String?,
 ) {
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
@@ -125,6 +127,16 @@ class EntradaDevCli(
     val codigo = mudaCodigo()
     val cliente = saci.mudaCliente(codigo) ?: return ""
     return "${cliente.codigo} - ${cliente.nome}"
+  }
+
+  fun autoriza(user: UserSaci) {
+    saci.autorizaNota(
+      invno = invno,
+      storeno = storeno ?: 0,
+      pdvno = pdvno ?: 0,
+      xano = xano ?: 0,
+      user = user
+    )
   }
 
   companion object {

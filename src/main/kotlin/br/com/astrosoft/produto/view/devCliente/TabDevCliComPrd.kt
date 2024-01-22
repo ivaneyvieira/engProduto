@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliComPrd
@@ -101,6 +98,10 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
     columnGrid(EntradaDevCli::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCli::observacao02, header = "Tipo")
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
+      viewModel.formAutoriza(nota)
+    }
+    columnGrid(EntradaDevCli::nameAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cli")
@@ -128,6 +129,13 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
 
   override fun itensNotasSelecionados(): List<EntradaDevCli> {
     return itensSelecionados()
+  }
+
+  override fun formAutoriza(nota: EntradaDevCli) {
+    val form = FormAutorizaNota()
+    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+      viewModel.autorizaNota(nota, form.login, form.senha)
+    }
   }
 
   override fun printerUser(): List<String> {

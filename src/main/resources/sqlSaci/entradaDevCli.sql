@@ -149,7 +149,9 @@ SELECT I.invno,
        clienteVenda                                                      AS clienteVenda,
        clienteNome                                                       AS clienteNome,
        nfValorVenda                                                      AS nfValorVenda,
-       IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca
+       IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca,
+       A.userno                                                          AS usernoAutorizacao,
+       UA.name                                                           AS nameAutorizacao
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
@@ -159,6 +161,13 @@ FROM T_NOTA AS I
                  ON E.no = N.empno
        LEFT JOIN sqldados.users AS U
                  ON U.no = I.userno
+       LEFT JOIN sqldados.invAutorizacao AS A
+                 ON A.invno = I.invno AND
+                    A.storeno = IFNULL(I.storeno, N.storeno) AND
+                    A.pdvno = IFNULL(I.pdvno, N.pdvno) AND
+                    A.xano = IFNULL(I.xano, N.xano)
+       LEFT JOIN sqldados.users AS UA
+                 ON UA.no = A.userno
 WHERE (@PESQUISA = '' OR
        I.invno = @PESQUISANUM OR
        I.loja = @PESQUISANUM OR

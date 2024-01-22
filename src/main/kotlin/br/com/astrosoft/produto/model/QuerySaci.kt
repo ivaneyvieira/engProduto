@@ -764,6 +764,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun autorizaNota(invno: Int, storeno: Int, pdvno: Int, xano: Int, user: UserSaci) {
+    val sql = "/sqlSaci/autorizaNota.sql"
+    script(sql) {
+      addOptionalParameter("invno", invno)
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("pdvno", pdvno)
+      addOptionalParameter("xano", xano)
+      addOptionalParameter("userno", user.no)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
