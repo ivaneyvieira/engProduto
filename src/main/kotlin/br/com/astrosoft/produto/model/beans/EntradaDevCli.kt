@@ -118,6 +118,12 @@ class EntradaDevCli(
     return remarks?.contains(MUDA_CLIENTE) == true
   }
 
+  fun isComProduto() : Boolean {
+    return " P ".toRegex().matches(remarks ?: "") ||
+           "^P ".toRegex().matches(remarks ?: "") ||
+           " P$".toRegex().matches(remarks ?: "")
+  }
+
   private fun mudaCodigo(): Int {
     val matchResult = MUDA_CLIENTE.find(remarks ?: "")
     return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0

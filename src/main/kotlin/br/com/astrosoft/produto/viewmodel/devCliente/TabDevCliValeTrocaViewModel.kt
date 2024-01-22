@@ -22,9 +22,11 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    val userno = nota.nameAutorizacao ?: ""
-    if (userno.isBlank()) {
-      fail("Usuário não autorizado")
+    if(!nota.isComProduto()) {
+      val userno = nota.nameAutorizacao ?: ""
+      if (userno.isBlank()) {
+        fail("Devolução de Cliente sem produto, autorizar para imprimir")
+      }
     }
     val relatorio = ValeTrocaDevolucao(nota)
     relatorio.print(nota.produtos(), subView.printerPreview(loja = 0) { impressora ->
