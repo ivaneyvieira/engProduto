@@ -98,9 +98,6 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
     columnGrid(EntradaDevCli::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCli::observacao02, header = "Tipo")
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
-      viewModel.formAutoriza(nota)
-    }
     columnGrid(EntradaDevCli::nameAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
@@ -129,13 +126,6 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
 
   override fun itensNotasSelecionados(): List<EntradaDevCli> {
     return itensSelecionados()
-  }
-
-  override fun formAutoriza(nota: EntradaDevCli) {
-    val form = FormAutorizaNota()
-    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
-      viewModel.autorizaNota(nota, form.login, form.senha)
-    }
   }
 
   override fun printerUser(): List<String> {

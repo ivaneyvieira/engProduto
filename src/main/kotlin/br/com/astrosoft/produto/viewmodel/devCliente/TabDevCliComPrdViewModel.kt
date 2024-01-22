@@ -55,11 +55,6 @@ class TabDevCliComPrdViewModel(val viewModel: DevClienteViewModel) {
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
-  fun formAutoriza(nota: EntradaDevCli) {
-    //if (nota.tipoDev.isNullOrBlank()) fail("Tipo de devolução não informado")
-    subView.formAutoriza(nota)
-  }
-
   fun autorizaNota(nota: EntradaDevCli, login: String, senha: String) {
     val lista = UserSaci.findAll()
     val user = lista
@@ -87,5 +82,4 @@ interface ITabDevCliComPrd : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
   fun itensNotasSelecionados(): List<EntradaDevCli>
-  fun formAutoriza(nota: EntradaDevCli)
 }

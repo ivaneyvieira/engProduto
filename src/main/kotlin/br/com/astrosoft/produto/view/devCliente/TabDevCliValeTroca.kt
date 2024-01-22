@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -87,6 +88,10 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
     columnGrid(EntradaDevCli::valor, header = "Valor Devolução")
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
+      viewModel.formAutoriza(nota)
+    }
+    columnGrid(EntradaDevCli::nameAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cliente")
@@ -108,6 +113,13 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
 
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
+  }
+
+  override fun formAutoriza(nota: EntradaDevCli) {
+    val form = FormAutorizaNota()
+    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+      viewModel.autorizaNota(nota, form.login, form.senha)
+    }
   }
 
   override fun isAuthorized(): Boolean {
