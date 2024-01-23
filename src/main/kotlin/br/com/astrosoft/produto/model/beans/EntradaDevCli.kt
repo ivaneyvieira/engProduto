@@ -39,6 +39,7 @@ class EntradaDevCli(
   var fezTroca: String?,
   var usernoAutorizacao: Int?,
   var nameAutorizacao: String?,
+  var comProduto: Boolean?,
 ) {
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
@@ -119,9 +120,7 @@ class EntradaDevCli(
   }
 
   fun isComProduto() : Boolean {
-    return " P ".toRegex().matches(remarks ?: "") ||
-           "^P ".toRegex().matches(remarks ?: "") ||
-           " P$".toRegex().matches(remarks ?: "")
+    return comProduto == true
   }
 
   private fun mudaCodigo(): Int {
