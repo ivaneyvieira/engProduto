@@ -13,4 +13,11 @@ WHERE C.no = @custnoDev
 UPDATE sqldados.custp AS C
 SET C.saldoDevolucao = 0
 WHERE C.no = @custnoMuda
-  AND @custnoMuda > 0
+  AND @custnoMuda > 0;
+
+UPDATE sqldados.nf
+SET remarks = CONCAT(remarks, ' ', :tipo)
+WHERE storeno = :loja
+  AND nfno = :nfno
+  AND nfse = :nfse
+  AND remarks NOT LIKE CONCAT('%', :tipo, '%')

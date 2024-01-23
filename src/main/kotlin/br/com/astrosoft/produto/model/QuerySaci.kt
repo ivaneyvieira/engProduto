@@ -651,6 +651,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
       addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
       addOptionalParameter("tipo", saldoDevolucao.tipo)
+      addOptionalParameter("loja", saldoDevolucao.notaDev?.loja ?: 0)
+      addOptionalParameter("nfno", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(0)?.toInt() ?: 0)
+      addOptionalParameter("nfse", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(1) ?: "")
       addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
     }
   }
