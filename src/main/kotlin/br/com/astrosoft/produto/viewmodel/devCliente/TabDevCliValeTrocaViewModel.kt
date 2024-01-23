@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -22,14 +23,19 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
+    val userName = nota.nameAutorizacao ?: ""
+    val valor = nota.valor ?: 0.00
     val relatorio = if (nota.isComProduto()) {
-      ValeTrocaDevolucao(nota)
+      val valorLimit = 500.00
+      if (userName.isBlank() && valor >= valorLimit) {
+        fail("Devolução de Cliente com valor maior que ${valorLimit.format()}, autorizar para imprimir")
+      }
+      ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
     } else {
-      val userName = nota.nameAutorizacao ?: ""
       if (userName.isBlank()) {
         fail("Devolução de Cliente sem produto, autorizar para imprimir")
-      }else {
-        ValeTrocaDevolucao(nota, userName)
+      } else {
+        ValeTrocaDevolucao(nota = nota, autorizacao = userName)
       }
     }
 
@@ -56,7 +62,7 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
       val lojaUserSaci = user.lojaUsuario
       val lojaNoto = nota.loja ?: fail("Loja destino não encontrada")
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
-      if(!user.autorizaDevolucao) fail("Usuário não autorizado para esta operação")
+      if (!user.autorizaDevolucao) fail("Usuário não autorizado para esta operação")
     }
 
     nota.autoriza(user)
