@@ -152,7 +152,8 @@ SELECT I.invno,
        IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca,
        A.userno                                                          AS usernoAutorizacao,
        UA.name                                                           AS nameAutorizacao,
-       I.remarks REGEXP '[[:<:]]P[[:>:]]'                                AS comProduto
+       UA.login                                                          AS loginAutorizacao,
+       IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                  AS comProduto
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse

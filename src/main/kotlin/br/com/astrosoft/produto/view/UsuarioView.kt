@@ -140,6 +140,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliValeTroca.name)
             }
+            checkBox("Autoriza Devolução") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::autorizaDevolucao.name)
+            }
             checkBox("Dev com Prd") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliComPrd.name)

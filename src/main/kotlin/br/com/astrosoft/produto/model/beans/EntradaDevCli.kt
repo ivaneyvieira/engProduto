@@ -39,7 +39,8 @@ class EntradaDevCli(
   var fezTroca: String?,
   var usernoAutorizacao: Int?,
   var nameAutorizacao: String?,
-  var comProduto: Boolean?,
+  var loginAutorizacao: String?,
+  var comProduto: String?,
 ) {
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
@@ -120,7 +121,7 @@ class EntradaDevCli(
   }
 
   fun isComProduto() : Boolean {
-    return comProduto == true
+    return comProduto == "COM"
   }
 
   private fun mudaCodigo(): Int {

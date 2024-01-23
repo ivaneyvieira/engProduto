@@ -77,6 +77,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
   }
 
   override fun Grid<EntradaDevCli>.gridPanel() {
+    val username = AppConfig.userLogin() as? UserSaci
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
@@ -91,7 +92,7 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
       viewModel.formAutoriza(nota)
     }
-    columnGrid(EntradaDevCli::nameAutorizacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cliente")

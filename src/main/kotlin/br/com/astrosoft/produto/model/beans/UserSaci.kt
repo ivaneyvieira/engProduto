@@ -66,6 +66,7 @@ class UserSaci : IUser {
   var devCliSemPrdInsert by DelegateAuthorized(43)
   var devCliSemPrdDelete by DelegateAuthorized(44)
   var devVenda by DelegateAuthorized(45)
+  var autorizaDevolucao by DelegateAuthorized(46)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->

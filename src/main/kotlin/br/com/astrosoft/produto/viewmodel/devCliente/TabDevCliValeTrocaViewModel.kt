@@ -56,6 +56,7 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
       val lojaUserSaci = user.lojaUsuario
       val lojaNoto = nota.loja ?: fail("Loja destino não encontrada")
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
+      if(!user.autorizaDevolucao) fail("Usuário não autorizado para esta operação")
     }
 
     nota.autoriza(user)
