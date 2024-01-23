@@ -73,6 +73,8 @@ class EntradaDevCli(
           invno = invno,
           custnoDev = custno ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
+          tipo = this.observacao02,
+          notaDev = this,
           saldo = valor ?: 0.00
         )
         saci.marcaReembolso(saldoDevolucao)
@@ -85,6 +87,7 @@ class EntradaDevCli(
           invno = invno,
           custnoDev = custno,
           custnoMuda = mudaCliente,
+          tipo = this.observacao02,
           saldo = valor ?: 0.00
         )
         saci.marcaMudaCliente(saldoDevolucao)

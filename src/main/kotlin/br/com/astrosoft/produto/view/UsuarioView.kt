@@ -62,6 +62,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           select<Int>("Nome Loja") {
             isReadOnly = readOnly
             setItems(lojasNum.distinct().sorted())
+            this.isEmptySelectionAllowed = true
             this.setItemLabelGenerator { storeno ->
               when (storeno) {
                 0    -> "Todas as lojas"
@@ -121,11 +122,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             select<String>("Impressora") {
               isReadOnly = readOnly
               setItems(impressoras.distinct().sorted())
+              this.isEmptySelectionAllowed = true
               binder.bind(this, UserSaci::impressoraDev.name)
             }
             select<Int>("Nome Loja") {
               isReadOnly = readOnly
               setItems(lojasNum.distinct().sorted())
+              this.isEmptySelectionAllowed = true
               this.setItemLabelGenerator { storeno ->
                 when (storeno) {
                   0    -> "Todas as lojas"
@@ -176,6 +179,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             select<String>("Impressora") {
               isReadOnly = readOnly
               setItems(impressoras.distinct().sorted())
+              this.isEmptySelectionAllowed = true
               binder.bind(this, UserSaci::impressoraRet.name)
             }
             checkBox("Imprimir") {
