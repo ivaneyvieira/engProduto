@@ -16,40 +16,40 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
   private fun tituloValeTroca() {
     when {
       nota.observacao02.contains("TROCA")      -> {
-        writeln("Vale Credito: TROCA", negrito = true, center = true)
+        writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("ENTREGA")    -> {
-        writeln("Vale Credito: ENTREGA", negrito = true, center = true)
+        writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("RETIRA")     -> {
-        writeln("Vale Credito: RETIRA", negrito = true, center = true)
+        writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("REEMBOLSO")  -> {
-        writeln("Vale Credito: REEMBOLSO", negrito = true, center = true)
+        writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("MUDA NF")    -> {
-        writeln("Vale Credito: MUDA NF", negrito = true, center = true)
+        writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("MUDA")       -> {
-        writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true)
+        writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
       nota.observacao02.contains("EST CARTAO") -> {
-        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("EST BOLETO") -> {
-        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
       }
 
       nota.observacao02.contains("EST DEP")    -> {
-        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true)
+        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }
   }
