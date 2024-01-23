@@ -18,6 +18,7 @@ class NotaVenda(
   var cliente: String?,
   var nomeCliente: String?,
   var vendedor: String?,
+  var valorTipo: Double?,
 ) {
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {

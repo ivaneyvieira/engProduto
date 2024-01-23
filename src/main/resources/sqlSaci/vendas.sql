@@ -5,12 +5,12 @@ DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, 0);
 
-SELECT N.storeno                   AS loja,
-       N.pdvno                     AS pdv,
-       N.xano                      AS transacao,
-       N.eordno                    AS pedido,
-       CAST(N.issuedate AS DATE)   AS data,
-       CONCAT(N.nfno, '/', N.nfse) AS nota,
+SELECT N.storeno                                  AS loja,
+       N.pdvno                                    AS pdv,
+       N.xano                                     AS transacao,
+       N.eordno                                   AS pedido,
+       CAST(N.issuedate AS DATE)                  AS data,
+       CONCAT(N.nfno, '/', N.nfse)                AS nota,
        CASE
          WHEN tipo = 0 THEN 'VENDA NF'
          WHEN tipo = 1 THEN 'TRANSFERENCIA'
@@ -29,26 +29,31 @@ SELECT N.storeno                   AS loja,
          WHEN tipo = 14 THEN 'BONIFICA'
          WHEN tipo = 15 THEN 'NFE'
          ELSE 'TIPO INVALIDO'
-       END                         AS tipoNf,
-       SEC_TO_TIME(P.time)         AS hora,
-       Q.string                    AS tipoPgto,
-       N.grossamt / 100            AS valor,
-       N.custno                    AS cliente,
-       C.name                      AS nomeCliente,
-       CONCAT(E.no, ' - ', E.name) AS vendedor
+       END                                        AS tipoNf,
+       SEC_TO_TIME(P.time)                        AS hora,
+       Q.string                                   AS tipoPgto,
+       N.grossamt / 100                           AS valor,
+       N.custno                                   AS cliente,
+       C.name                                     AS nomeCliente,
+       CONCAT(E.no, ' - ', E.name)                AS vendedor,
+       IFNULL(SUM(V.amt / 100), N.grossamt / 100) AS valorTipo
 FROM sqldados.nf AS N
        LEFT JOIN sqlpdv.pxa AS P
+                 USING (storeno, pdvno, xano)
+       LEFT JOIN sqlpdv.pxaval AS V
                  USING (storeno, pdvno, xano)
        INNER JOIN sqldados.custp AS C
                   ON C.no = N.custno
        INNER JOIN sqldados.emp AS E
                   ON E.no = N.empno
        LEFT JOIN sqldados.query1 AS Q
-                 ON Q.no_short = N.xatype
+                 ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
 WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
+  AND N.tipo IN (0, 4)
+GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR
         pedido = @PESQUISA_INT OR
         pdv = @PESQUISA_INT OR
@@ -59,3 +64,4 @@ HAVING (@PESQUISA = '' OR
         nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE
          )
+ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto
