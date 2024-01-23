@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliComPrd
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliComPrdViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliImpresso
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImpressoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -18,9 +18,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
+class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
   TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliComPrd {
+  ITabDevCliImpresso {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -135,11 +135,11 @@ class TabDevCliComPrd(val viewModel: TabDevCliComPrdViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliComPrd == true
+    return username?.devCliImpresso == true
   }
 
   override val label: String
-    get() = "Dev Com Prd"
+    get() = "VT Impresso"
 
   override fun updateComponent() {
     viewModel.updateView()

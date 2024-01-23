@@ -136,17 +136,17 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               }
               binder.bind(this, UserSaci::lojaVale.name)
             }
-            checkBox("Vale Troca") {
+            checkBox("VT Imprimir") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliValeTroca.name)
+              binder.bind(this, UserSaci::devCliImprimir.name)
             }
             checkBox("Autoriza Devolução") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::autorizaDevolucao.name)
             }
-            checkBox("Dev com Prd") {
+            checkBox("VT Impresso") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliComPrd.name)
+              binder.bind(this, UserSaci::devCliImpresso.name)
             }
             checkBox("Produto") {
               isReadOnly = readOnly
@@ -163,18 +163,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             checkBox("Troca") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devClienteTroca.name)
-            }
-            checkBox("Dev sem Prd") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliSemPrd.name)
-            }
-            checkBox("Dev sem Prd Adicionar") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliSemPrdInsert.name)
-            }
-            checkBox("Dev sem Prd Excluir") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::devCliSemPrdDelete.name)
             }
             checkBox("Venda") {
               isReadOnly = readOnly

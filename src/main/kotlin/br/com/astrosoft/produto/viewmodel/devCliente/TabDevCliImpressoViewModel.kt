@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 import br.com.astrosoft.produto.model.report.ReportImpresso
 
-class TabDevCliComPrdViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -75,10 +75,10 @@ class TabDevCliComPrdViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevCliComPrd
+    get() = viewModel.view.tabDevCliImpresso
 }
 
-interface ITabDevCliComPrd : ITabView {
+interface ITabDevCliImpresso : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
   fun itensNotasSelecionados(): List<EntradaDevCli>

@@ -7,8 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTroca
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliImprimir
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,9 +21,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
+class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliValeTroca {
+  ITabDevCliImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -125,11 +125,11 @@ class TabDevCliValeTroca(val viewModel: TabDevCliValeTrocaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliValeTroca == true
+    return username?.devCliImprimir == true
   }
 
   override val label: String
-    get() = "Vale Troca"
+    get() = "VT Imprimir"
 
   override fun updateComponent() {
     viewModel.updateView()

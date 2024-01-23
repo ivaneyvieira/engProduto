@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
-class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -71,10 +71,10 @@ class TabDevCliValeTrocaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevCliValeTroca
+    get() = viewModel.view.tabDevCliImprimir
 }
 
-interface ITabDevCliValeTroca : ITabView {
+interface ITabDevCliImprimir : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
 

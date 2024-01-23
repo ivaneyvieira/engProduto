@@ -51,8 +51,8 @@ class UserSaci : IUser {
   var pedidoTransfEnt by DelegateAuthorized(28)
   var pedidoTransfImprimir by DelegateAuthorized(29)
   var pedidoTransfRessu4 by DelegateAuthorized(30)
-  var devCliValeTroca by DelegateAuthorized(31)
-  var devCliComPrd by DelegateAuthorized(32)
+  var devCliImprimir by DelegateAuthorized(31)
+  var devCliImpresso by DelegateAuthorized(32)
   var devCliValeTrocaProduto by DelegateAuthorized(33)
   var pedidoTransfAutorizada by DelegateAuthorized(34)
   var retiraImprimir by DelegateAuthorized(35)
@@ -157,7 +157,7 @@ class UserSaci : IUser {
     get() = produtoList
 
   val devCliente
-    get() = devCliValeTroca || devCliComPrd || devCliValeTrocaProduto || devCliCredito ||
+    get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito ||
             devCliEditor || devClienteTroca || devCliSemPrd || admin
 
   val acertoEstoque
