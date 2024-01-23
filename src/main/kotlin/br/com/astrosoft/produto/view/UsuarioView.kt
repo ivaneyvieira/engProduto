@@ -136,7 +136,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               }
               binder.bind(this, UserSaci::lojaVale.name)
             }
-            checkBox("VT Imprimir") {
+            checkBox("VC Imprimir") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliImprimir.name)
             }
@@ -144,7 +144,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::autorizaDevolucao.name)
             }
-            checkBox("VT Impresso") {
+            checkBox("VC Impresso") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::devCliImpresso.name)
             }

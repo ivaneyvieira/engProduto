@@ -139,7 +139,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
   }
 
   override val label: String
-    get() = "VT Impresso"
+    get() = "VC Impresso"
 
   override fun updateComponent() {
     viewModel.updateView()
