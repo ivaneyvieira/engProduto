@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.model.reports
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.toLocalDate
+import br.com.astrosoft.framework.util.toLocalDateTime
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
 import net.sf.dynamicreports.report.base.datatype.AbstractDataType
 import net.sf.dynamicreports.report.base.expression.AbstractValueFormatter
@@ -27,12 +28,14 @@ import java.io.ByteArrayOutputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.KProperty1
 
 abstract class ReportBuild<T> {
   private val localDateType = LocalDateType()
+  private val localTimeType = LocalTimeType()
   private val columnsMap = mutableMapOf<KProperty1<T, *>, TextColumnBuilder<*>>()
   private val columnsList = mutableListOf<TextColumnBuilder<*>>()
 
@@ -155,6 +158,30 @@ abstract class ReportBuild<T> {
     return col
   }
 
+  @JvmName("columnLocalTime")
+  protected fun columnReport(
+    property: KProperty1<T, LocalTime?>,
+    header: String = "",
+    aligment: HorizontalTextAlignment = RIGHT,
+    width: Int = -1,
+    pattern: String = "hh:mm",
+    oculto: Boolean = false,
+    block: TextColumnBuilder<LocalTime?>.() -> Unit = {}
+  ): TextColumnBuilder<LocalTime> {
+    val col = columnReport(
+      dataType = localTimeType,
+      property = property,
+      header = header,
+      aligment = aligment,
+      width = width,
+      pattern = pattern,
+      oculto = oculto,
+      block = block
+    )
+    col.setValueFormatter(TimeFormatter(pattern))
+    return col
+  }
+
   @JvmName("columnDate")
   protected fun columnReport(
     property: KProperty1<T, Date>,
@@ -220,7 +247,7 @@ abstract class ReportBuild<T> {
       .columnGrid(* colunms)
       .setDataSource(itens)
       .setPageFormat(propriedades.pageType, propriedades.pageOrientation)
-      .setPageMargin(margin(28))
+      .setPageMargin(margin(propriedades.margem))
       .summary(pageFooterBuilder())
       .subtotalsAtSummary(* subtotalBuilder().toTypedArray())
       .setSubtotalStyle(stl.style().setPadding(2).setTopBorder(stl.pen1Point()))
@@ -288,8 +315,39 @@ open class LocalDateType : AbstractDataType<LocalDate, LocalDate>() {
   }
 }
 
+open class LocalTimeType : AbstractDataType<LocalTime, LocalTime>() {
+  override fun getPattern(): String {
+    return Defaults.getDefaults().dateType.pattern
+  }
+
+  override fun getHorizontalTextAlignment(): HorizontalTextAlignment {
+    return Defaults.getDefaults().dateType.horizontalTextAlignment
+  }
+
+  override fun valueToString(value: LocalTime?, locale: Locale): String? {
+    return value?.format(DateTimeFormatter.ofPattern(pattern))
+  }
+
+  @Throws(DRException::class)
+  override fun stringToValue(value: String?, locale: Locale): LocalTime? {
+    return if (value != null) {
+      try {
+        SimpleDateFormat(pattern, locale).parse(value).toLocalDateTime()?.toLocalTime()
+      } catch (e: ParseException) {
+        throw DRException("Unable to convert string value to date", e)
+      }
+    } else null
+  }
+}
+
 private class DateFormatter(private val pattern: String) : AbstractValueFormatter<String?, LocalDate?>() {
   override fun format(value: LocalDate?, reportParameters: ReportParameters?): String {
+    return value.format(pattern)
+  }
+}
+
+private class TimeFormatter(private val pattern: String) : AbstractValueFormatter<String?, LocalTime?>() {
+  override fun format(value: LocalTime?, reportParameters: ReportParameters?): String {
     return value.format(pattern)
   }
 }
@@ -300,5 +358,6 @@ data class PropriedadeRelatorio(
   val detailFonteSize: Int = 10,
   val color: Color = Color.BLACK,
   val pageOrientation: PageOrientation = PORTRAIT,
-  val pageType: PageType = A4
+  val pageType: PageType = A4,
+  val margem: Int = 28
 )

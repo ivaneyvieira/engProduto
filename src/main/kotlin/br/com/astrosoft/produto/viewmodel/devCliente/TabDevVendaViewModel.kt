@@ -4,8 +4,9 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
-import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
+import br.com.astrosoft.produto.model.report.ReportImpresso
+import br.com.astrosoft.produto.model.report.ReportVenda
 
 class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -28,6 +29,13 @@ class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
     return planilha.write(vendas)
   }
 
+  fun imprimeRelatorio() {
+    val notas = subView.itensNotasSelecionados()
+    val report = ReportVenda()
+    val file = report.processaRelatorio(notas)
+    viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
+  }
+
   val subView
     get() = viewModel.view.tabDevVenda
 }
@@ -35,4 +43,5 @@ class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
 interface ITabDevVenda : ITabView {
   fun filtro(): FiltroNotaVenda
   fun updateNotas(notas: List<NotaVenda>)
+  fun itensNotasSelecionados(): List<NotaVenda>
 }

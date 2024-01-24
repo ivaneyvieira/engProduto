@@ -2,13 +2,12 @@ package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
+import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.framework.view.vaadin.helper.updateItens
 import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
-import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.GridVariant.*
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -17,7 +16,7 @@ import kotlin.reflect.KClass
 
 abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   private val dataProviderPanel = ListDataProvider<T>(mutableListOf())
-  protected val gridPanel: Grid<T> = Grid(classGrid.java, false)
+  private val gridPanel: Grid<T> = Grid(classGrid.java, false)
   protected abstract fun HorizontalLayout.toolBarConfig()
   protected abstract fun Grid<T>.gridPanel()
 
@@ -45,9 +44,14 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     dataProviderPanel.updateItens(itens)
   }
 
-  fun listBeans() = dataProviderPanel.fetchAll()
+  fun listBeans() = gridPanel.list()
 
-  fun itensSelecionados() = gridPanel.selectedItems.toList()
+  fun itensSelecionados(): List<T> {
+    val selecionados = gridPanel.selectedItems.toList()
+    return listBeans().filter {
+      selecionados.contains(it)
+    }
+  }
 
   override fun printerPreview(
     showPrinter: Boolean,

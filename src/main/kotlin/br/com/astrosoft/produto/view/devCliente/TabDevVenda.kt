@@ -14,9 +14,7 @@ import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevVenda
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevVendaViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -79,6 +77,12 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
         viewModel.updateView()
       }
     }
+    button("Relatorio") {
+      icon = VaadinIcon.PRINT.create()
+      onLeftClick {
+        viewModel.imprimeRelatorio()
+      }
+    }
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
@@ -110,7 +114,9 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
-      val totalValor = list.groupBy { "${it.loja} ${it.pdv} ${it.transacao}" }
+      val totalValor = list.groupBy {nota ->
+        "${nota.loja} ${nota.pdv} ${nota.transacao}"
+      }
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
@@ -129,6 +135,10 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
 
   override fun updateNotas(notas: List<NotaVenda>) {
     this.updateGrid(notas)
+  }
+
+  override fun itensNotasSelecionados(): List<NotaVenda> {
+    return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
