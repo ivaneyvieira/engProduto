@@ -3,8 +3,9 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaAutorizacao
 import br.com.astrosoft.produto.model.beans.NotaVenda
+import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
+import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
 
 class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -20,6 +21,11 @@ class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
     val filtro = subView.filtro()
     val notas = NotaVenda.findAll(filtro)
     subView.updateNotas(notas)
+  }
+
+  fun geraPlanilha(vendas: List<NotaVenda>): ByteArray {
+    val planilha = PlanilhaVendas()
+    return planilha.write(vendas)
   }
 
   val subView

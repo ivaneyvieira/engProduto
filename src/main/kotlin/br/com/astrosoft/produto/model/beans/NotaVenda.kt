@@ -15,7 +15,7 @@ class NotaVenda(
   var hora: LocalTime?,
   var tipoPgto: String?,
   var valor: Double?,
-  var cliente: String?,
+  var cliente: Int?,
   var nomeCliente: String?,
   var vendedor: String?,
   var valorTipo: Double?,

@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
@@ -20,6 +21,7 @@ import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -76,6 +78,10 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
       addValueChangeListener {
         viewModel.updateView()
       }
+    }
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
+      val vendas = itensSelecionados()
+      viewModel.geraPlanilha(vendas)
     }
   }
 

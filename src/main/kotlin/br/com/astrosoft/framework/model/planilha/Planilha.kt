@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KProperty1
 
@@ -53,6 +55,14 @@ open class Planilha<B>(private val sheatName: String) {
     columns.add(campo)
   }
 
+  @JvmName("campoLocalTime")
+  fun columnSheet(property: KProperty1<B, LocalTime?>, header: String, pattern: String? = "hh:MM") {
+    val campo = Column<B, LocalTime?>(header = header, pattern = pattern) {
+      property.get(it)
+    }
+    columns.add(campo)
+  }
+
   private fun Sheet.row(bean: B) {
     val row = this.createRow(this.physicalNumberOfRows)
     val creationHelper = workbook.creationHelper
@@ -88,6 +98,13 @@ open class Planilha<B>(private val sheatName: String) {
           is LocalDate -> {
             val style = workbook.createCellStyle()
             style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "dd/mm/yyyy")
+            cellStyle = style
+            setCellValue(cellValue)
+          }
+
+          is LocalDateTime -> {
+            val style = workbook.createCellStyle()
+            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "hh:mm")
             cellStyle = style
             setCellValue(cellValue)
           }
