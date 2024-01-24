@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -15,6 +16,8 @@ import br.com.astrosoft.produto.viewmodel.devCliente.TabDevVendaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.fetchAll
+import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -89,12 +92,23 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
     columnGrid(NotaVenda::nota, header = "NF")
     columnGrid(NotaVenda::tipoNf, header = "Tipo NF")
     columnGrid(NotaVenda::hora, header = "Hora")
-    columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto")
-    columnGrid(NotaVenda::valor, header = "Valor")
-    columnGrid(NotaVenda::valorTipo, header = "Parcela")
+    columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto") {
+      this.setFooter(Html("<b><font size=4>Total</font></b>"))
+    }
+    val valorCol = columnGrid(NotaVenda::valor, header = "Valor NF")
+    val valorTipoCol = columnGrid(NotaVenda::valorTipo, header = "Valor TP")
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
+
+    this.dataProvider.addDataProviderListener {
+      val list = it.source.fetchAll()
+      val totalValor = list.groupBy { "${it.loja} ${it.pdv} ${it.transacao}" }
+        .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
+      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
+      valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
+      valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+    }
   }
 
   override fun filtro(): FiltroNotaVenda {
