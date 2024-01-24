@@ -37,7 +37,7 @@ SELECT N.storeno                                  AS loja,
        C.name                                     AS nomeCliente,
        CONCAT(E.no, ' - ', MID(E.sname, 1, 17))   AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100) AS valorTipo,
-       N.remarks                                  AS obs
+       CONCAT(N.remarks, ' ', N.print_remarks)    AS obs
 FROM sqldados.nf AS N
        LEFT JOIN sqlpdv.pxa AS P
                  USING (storeno, pdvno, xano)
@@ -62,7 +62,7 @@ HAVING (@PESQUISA = '' OR
         tipoNf LIKE @PESQUISA_LIKE OR
         tipoPgto LIKE @PESQUISA_LIKE OR
         cliente LIKE @PESQUISA_INT OR
-        OBS REGEXP CONCAT('NI *', @PESQUISA_INT) OR
+        obs REGEXP CONCAT('NI *', @PESQUISA_INT) OR
         nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE
          )
