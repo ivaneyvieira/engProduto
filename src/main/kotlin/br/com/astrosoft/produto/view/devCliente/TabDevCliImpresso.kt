@@ -98,7 +98,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
     columnGrid(EntradaDevCli::valor, header = "Valor Dev")
     columnGrid(EntradaDevCli::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCli::observacao02, header = "Tipo")
-    columnGrid(EntradaDevCli::nameAutorizacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cli")

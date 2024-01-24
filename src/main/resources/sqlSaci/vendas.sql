@@ -3,7 +3,7 @@ USE sqldados;
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
-DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, 0);
+DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
 SELECT N.storeno                                  AS loja,
        N.pdvno                                    AS pdv,
@@ -35,7 +35,7 @@ SELECT N.storeno                                  AS loja,
        N.grossamt / 100                           AS valor,
        N.custno                                   AS cliente,
        C.name                                     AS nomeCliente,
-       CONCAT(E.no, ' - ', E.name)                AS vendedor,
+       CONCAT(E.no, ' - ', MID(E.sname, 1, 17))   AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100) AS valorTipo
 FROM sqldados.nf AS N
        LEFT JOIN sqlpdv.pxa AS P
