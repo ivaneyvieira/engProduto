@@ -19,7 +19,16 @@ class NotaVenda(
   var nomeCliente: String?,
   var vendedor: String?,
   var valorTipo: Double?,
+  var obs: String?,
 ) {
+
+  val numeroInterno: Int?
+    get() {
+      val regex = Regex("""NI (\d+)""")
+      val matchResults = regex.findAll(obs ?: "")
+      return matchResults.firstOrNull()?.groupValues?.getOrNull(1)?.toIntOrNull()
+    }
+
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
       return saci.findNotaVenda(filtro)

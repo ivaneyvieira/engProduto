@@ -39,7 +39,7 @@ class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: 
       columnGrid(AcertoSaidaProduto::grade, "Grade")
       columnGrid(AcertoSaidaProduto::quantidade, "Quant")
       columnGrid(AcertoSaidaProduto::valorUnitario, "V Unit")
-      columnGrid(AcertoSaidaProduto::valorTotal, "V Total", width = "12em") {
+      columnGrid(AcertoSaidaProduto::valorTotal, "V Total", width = "180px") {
         this.grid.dataProvider.addDataProviderListener {
           val total = nota.produtos.sumOf { it.valorTotal ?: 0.0 }
           setFooter(Html("<b><font size=4>Total R$ &nbsp;&nbsp;&nbsp;&nbsp; ${total.format()}</font></b>"))

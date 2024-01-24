@@ -33,7 +33,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return addComponentColumn { bean ->
-    Icon(iconButton).apply {
+    iconButton.create().apply {
       configIcon(this, bean)
       this.style.set("cursor", "pointer")
       if (tooltip != null) this.setTooltipText(tooltip)
@@ -42,9 +42,10 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
       }
     }
   }.apply {
-    this.isAutoWidth = false
+    this.isResizable = true
+    this.isAutoWidth = true
+    this.flexGrow = 0
     this.isExpand = false
-    this.width = "4em"
     this.center()
     this.block()
   }
@@ -59,10 +60,9 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
 ): Column<T> {
   return addColumnButton(iconButton, tooltip, execButton, configIcon) {
     this.setHeader(header)
-    this.isAutoWidth = false
+    this.isAutoWidth = true
     this.flexGrow = 0
     this.isExpand = false
-    this.width = "4em"
   }
 }
 
@@ -291,15 +291,15 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 ): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer(property, DecimalFormat(pattern))).apply {
     this.setHeader(header ?: property.name)
+    this.isResizable = true
     this.isExpand = false
+    this.setFlexGrow(0)
+    this.isAutoWidth = false
     if (width != null) {
-      this.isAutoWidth = false
       this.width = width
     } else {
-      this.isAutoWidth = false
-      this.width = "8em"
+      this.width = "120px"
     }
-    this.isResizable = true
     this.setComparator { a, b ->
       val dataA = property.get(a) ?: Double.MIN_VALUE
       val dataB = property.get(b) ?: Double.MIN_VALUE
@@ -327,7 +327,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       this.width = width
     } else {
       this.isAutoWidth = true
-      this.width = "8em"
+      this.width = "120px"
     }
     this.isExpand = false
     this.isResizable = true
@@ -347,6 +347,9 @@ fun <T : Any> (@VaadinDsl Column<T>).header(header: String): Column<T> {
 }
 
 fun <T : Any> (@VaadinDsl Column<T>).width(width: String): Column<T> {
+  this.isAutoWidth = false
+  this.isExpand = false
+  this.setFlexGrow(0)
   this.width = width
   return this
 }

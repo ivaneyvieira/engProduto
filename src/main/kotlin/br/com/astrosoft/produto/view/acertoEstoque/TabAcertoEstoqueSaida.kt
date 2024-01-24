@@ -86,7 +86,7 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
     columnGrid(AcertoSaidaNota::cliente, header = "Cód Cli")
     columnGrid(AcertoSaidaNota::nomeCliente, header = "Cliente").expand()
     columnGrid(AcertoSaidaNota::observacao, header = "Observação").expand()
-    columnGrid(AcertoSaidaNota::valor, header = "Valor", width = "12em") {
+    columnGrid(AcertoSaidaNota::valor, header = "Valor", width = "180px") {
       this.grid.dataProvider.addDataProviderListener {
         val total = listBeans().sumOf { it.valor ?: 0.0 }
         setFooter(Html("<b><font size=4>Total R$ &nbsp;&nbsp;&nbsp;&nbsp; ${total.format()}</font></b>"))

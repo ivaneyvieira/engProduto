@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.NotaVenda
 
@@ -14,6 +15,7 @@ class PlanilhaVendas : Planilha<NotaVenda>("Vendas") {
     columnSheet(NotaVenda::nota, header = "NF")
     columnSheet(NotaVenda::tipoNf, header = "Tipo NF")
     columnSheet(NotaVenda::hora, header = "Hora")
+    columnSheet(NotaVenda::numeroInterno, header = "NI")
     columnSheet(NotaVenda::tipoPgto, header = "Tipo Pgto")
     columnSheet(NotaVenda::valor, header = "Valor NF")
     columnSheet(NotaVenda::valorTipo, header = "Valor TP")
