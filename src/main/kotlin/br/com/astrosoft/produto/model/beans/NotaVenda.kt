@@ -24,9 +24,11 @@ class NotaVenda(
 
   val numeroInterno: Int?
     get() {
-      val regex = Regex("""NI[^0-9A-Z]*(d+)""")
-      val matchResults = regex.findAll(obs?.uppercase() ?: "")
-      return matchResults.firstOrNull()?.groupValues?.getOrNull(1)?.toIntOrNull()
+      val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
+      val obsInput = obs?.uppercase() ?: return null
+      val match = regex.find(obsInput) ?: return null
+      val groups = match.groupValues
+      return groups.getOrNull(1)?.toIntOrNull()
     }
 
   companion object {
