@@ -63,7 +63,7 @@ HAVING (@PESQUISA = '' OR
         tipoNf LIKE @PESQUISA_LIKE OR
         tipoPgto LIKE @PESQUISA_LIKE OR
         cliente LIKE @PESQUISA_INT OR
-        obs REGEXP CONCAT('NI *', @PESQUISA_INT) OR
+        upper(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR
         nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE
          )
