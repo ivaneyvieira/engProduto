@@ -36,7 +36,7 @@ CREATE TEMPORARY TABLE T_REEMBOLSO
 SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
 FROM sqldados.pdvcxh
 WHERE date >= :dataI
-  AND remarks LIKE 'REEMBOLSO%';
+  AND remarks LIKE '%REEMBOLSO%';
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -123,38 +123,38 @@ SELECT I.invno,
        I.data,
        IF(LOCATE('/', impressora) > 0,
           SUBSTRING_INDEX(impressora, '/', -1),
-          TIME_FORMAT(CURRENT_TIME, '%H:%i'))                            AS hora,
+          TIME_FORMAT(CURRENT_TIME, '%H:%i'))                                 AS hora,
        I.vendno,
        I.fornecedor,
        I.custnoDev,
        I.clienteDev,
        I.remarks,
        I.valor,
-       IFNULL(I.storeno, N.storeno)                                      AS storeno,
-       IFNULL(I.pdvno, N.pdvno)                                          AS pdvno,
-       IFNULL(I.xano, N.xano)                                            AS xano,
-       IFNULL(I.custno, N.custno)                                        AS custno,
-       IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                    AS nfVenda,
-       IFNULL(I.nfData, DATE(N.issuedate))                               AS nfData,
-       IFNULL(I.nfValor, N.grossamt / 100)                               AS nfValor,
-       IFNULL(I.empno, N.empno)                                          AS empno,
-       IFNULL(I.cliente, C.name)                                         AS cliente,
-       IFNULL(I.cfo, N.cfo)                                              AS cfo,
-       TRIM(IFNULL(I.vendedor, E.name))                                  AS vendedor,
-       SUBSTRING_INDEX(impressora, '/', 1)                               AS impressora,
-       U.name                                                            AS userName,
-       U.login                                                           AS userLogin,
-       IF(I.estorno = 'N', pdvVenda, pdvReembolso)                       AS pdvVenda,
-       nfVendaVenda                                                      AS nfVendaVenda,
-       dataVenda                                                         AS dataVenda,
-       clienteVenda                                                      AS clienteVenda,
-       clienteNome                                                       AS clienteNome,
-       nfValorVenda                                                      AS nfValorVenda,
-       IF(IF(I.estorno = 'N', pdvVenda, pdvReembolso) IS NULL, 'N', 'S') AS fezTroca,
-       A.userno                                                          AS usernoAutorizacao,
-       UA.name                                                           AS nameAutorizacao,
-       UA.login                                                          AS loginAutorizacao,
-       IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                  AS comProduto
+       IFNULL(I.storeno, N.storeno)                                           AS storeno,
+       IFNULL(I.pdvno, N.pdvno)                                               AS pdvno,
+       IFNULL(I.xano, N.xano)                                                 AS xano,
+       IFNULL(I.custno, N.custno)                                             AS custno,
+       IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                         AS nfVenda,
+       IFNULL(I.nfData, DATE(N.issuedate))                                    AS nfData,
+       IFNULL(I.nfValor, N.grossamt / 100)                                    AS nfValor,
+       IFNULL(I.empno, N.empno)                                               AS empno,
+       IFNULL(I.cliente, C.name)                                              AS cliente,
+       IFNULL(I.cfo, N.cfo)                                                   AS cfo,
+       TRIM(IFNULL(I.vendedor, E.name))                                       AS vendedor,
+       SUBSTRING_INDEX(impressora, '/', 1)                                    AS impressora,
+       U.name                                                                 AS userName,
+       U.login                                                                AS userLogin,
+       IF(I.estorno = 'N', pdvVenda, pdvVenda)                                AS pdvVenda,
+       nfVendaVenda                                                           AS nfVendaVenda,
+       dataVenda                                                              AS dataVenda,
+       clienteVenda                                                           AS clienteVenda,
+       clienteNome                                                            AS clienteNome,
+       nfValorVenda                                                           AS nfValorVenda,
+       IF(IF(I.estorno = 'N', pdvVenda, N.remarks LIKE '') IS NULL, 'N', 'S') AS fezTroca,
+       A.userno                                                               AS usernoAutorizacao,
+       UA.name                                                                AS nameAutorizacao,
+       UA.login                                                               AS loginAutorizacao,
+       IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto
 FROM T_NOTA AS I
        LEFT JOIN sqldados.nf AS N
                  ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse

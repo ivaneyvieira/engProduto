@@ -16,7 +16,7 @@ WHERE C.no = @custnoMuda
   AND @custnoMuda > 0;
 
 UPDATE sqldados.nf
-SET remarks = CONCAT(remarks, ' ', :tipo)
+SET remarks = TRIM(CONCAT(remarks, ' NI ', :invno, '-', :nfdev, ' ', :tipo))
 WHERE storeno = :loja
   AND nfno = :nfno
   AND nfse = :nfse

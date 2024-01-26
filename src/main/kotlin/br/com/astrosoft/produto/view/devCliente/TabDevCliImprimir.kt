@@ -84,7 +84,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       viewModel.imprimeValeTroca(nota)
     }
     columnGrid(EntradaDevCli::invno, header = "NI")
-    columnGrid(EntradaDevCli::notaFiscal, header = "Nota Devolução")
+    columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
