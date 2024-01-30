@@ -62,7 +62,6 @@ dependencies {
   implementation("org.vaadin.crudui:crudui:7.1.0")
   implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:5.2.2")
-  implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
 
   //Report

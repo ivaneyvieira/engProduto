@@ -82,8 +82,9 @@ class SubWindowPrinter(
             icon = VaadinIcon.PRINT.create()
             this.onLeftClick {
               DialogHelper.showQuestion("Confirma a impressão?") {
-                val impressora = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
-                val tipoRota = Impressora.findImpressora(impressora)?.tipoRota()
+                val impressoraName = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
+                val impressora = Impressora.findImpressora(impressoraName)
+                val tipoRota = impressora?.tipoRota()
                 if (tipoRota != null) {
                   val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
                   val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
@@ -93,8 +94,8 @@ class SubWindowPrinter(
                   }
                   printEvent(printerRota.firstOrNull() ?: "")
                 } else {
-                  imprimeText(text, impressora, loja)
-                  printEvent(impressora)
+                  imprimeText(text, impressoraName, loja)
+                  printEvent(impressoraName)
                 }
                 this@SubWindowPrinter.close()
                 //TODO verificar se a impressão foi realizada

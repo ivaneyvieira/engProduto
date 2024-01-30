@@ -24,7 +24,7 @@ class PrinterCups(private val printerName: String, private val loja: Int) : IPri
       CupsUtils.printCups(printerName, text.printEspPos())
       if (printerName.startsWith("RESSU4.", ignoreCase = true)) {
         if (loja in listOf(2, 3, 5, 8))
-          CupsUtils.printCups("Exp$loja.Termica", text.toString())
+          CupsUtils.printCups("Exp$loja.Termica", text.printEspPos())
       }
     } catch (e: ConnectTimeoutException) {
       e.printStackTrace()
