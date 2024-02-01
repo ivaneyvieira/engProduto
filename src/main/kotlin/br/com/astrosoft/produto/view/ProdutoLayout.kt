@@ -19,7 +19,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       val userSaci = AppConfig.userLogin() as? UserSaci
       if (userSaci?.pedido == true) route(
         icon = SHOP,
-        title = "Ressuprimento2",
+        title = "Ressuprimento",
         routeClass = RessuprimentoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
