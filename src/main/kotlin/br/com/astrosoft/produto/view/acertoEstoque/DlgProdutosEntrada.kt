@@ -37,6 +37,8 @@ class DlgProdutosEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel, val no
       columnGrid(AcertoEntradaProduto::codigoProduto, "Código")
       columnGrid(AcertoEntradaProduto::nomeProduto, "Descrição").expand()
       columnGrid(AcertoEntradaProduto::grade, "Grade")
+      columnGrid(AcertoEntradaProduto::rotulo, "Rótulo")
+      columnGrid(AcertoEntradaProduto::tributacao, "Tributação")
       columnGrid(AcertoEntradaProduto::quantidade, "Quant")
       columnGrid(AcertoEntradaProduto::valorUnitario, "V Unit")
       columnGrid(AcertoEntradaProduto::valorTotal, "V Total", width = "180px") {

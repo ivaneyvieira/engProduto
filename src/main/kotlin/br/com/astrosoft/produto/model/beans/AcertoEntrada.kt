@@ -14,6 +14,8 @@ class AcertoEntrada(
   var valorNota: Double?,
   var codigoProduto: String?,
   var nomeProduto: String?,
+  var rotulo: String?,
+  var tributacao: String?,
   var grade: String?,
   var quantidade: Int?,
   var valorUnitario: Double?,
@@ -32,6 +34,8 @@ class AcertoEntrada(
             quantidade = produto.quantidade,
             valorUnitario = produto.valorUnitario,
             valorTotal = produto.valorTotal,
+            rotulo = produto.rotulo,
+            tributacao = produto.tributacao,
           )
         }
         AcertoEntradaNota(
@@ -73,6 +77,8 @@ data class AcertoEntradaProduto(
   val codigoProduto: String?,
   val nomeProduto: String?,
   val grade: String?,
+  val rotulo : String?,
+  val tributacao: String?,
   val quantidade: Int?,
   val valorUnitario: Double?,
   val valorTotal: Double?,

@@ -15,6 +15,8 @@ SELECT N.storeno                                    AS loja,
        ROUND(N.grossamt / 100, 2)                   AS valorNota,
        TRIM(I.prdno)                                AS codigoProduto,
        TRIM(MID(P.name, 1, 37))                     AS nomeProduto,
+       IFNULL(R.form_label, '')                     AS rotulo,
+       P.taxno                                      AS tributacao,
        I.grade                                      AS grade,
        ROUND(I.qtty / 1000)                         AS quantidade,
        ROUND(I.fob4 / 10000, 2)                     AS valorUnitario,
@@ -26,6 +28,8 @@ FROM sqldados.inv AS N
                  USING (invno)
        LEFT JOIN sqldados.prd AS P
                  ON (P.no = I.prdno)
+       LEFT JOIN sqldados.prdalq AS R
+                 ON R.prdno = I.prdno
 WHERE N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.issue_date >= :dataInicial OR :dataInicial = 0)
