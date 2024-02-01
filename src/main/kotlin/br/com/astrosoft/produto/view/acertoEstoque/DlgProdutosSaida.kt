@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.produto.model.beans.AcertoEntradaProduto
 import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
 import br.com.astrosoft.produto.model.beans.AcertoSaidaProduto
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel
@@ -37,6 +38,8 @@ class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: 
       columnGrid(AcertoSaidaProduto::codigoProduto, "Código")
       columnGrid(AcertoSaidaProduto::nomeProduto, "Descrição").expand()
       columnGrid(AcertoSaidaProduto::grade, "Grade")
+      columnGrid(AcertoSaidaProduto::rotulo, "Rótulo")
+      columnGrid(AcertoSaidaProduto::tributacao, "Tributação")
       columnGrid(AcertoSaidaProduto::quantidade, "Quant")
       columnGrid(AcertoSaidaProduto::valorUnitario, "V Unit")
       columnGrid(AcertoSaidaProduto::valorTotal, "V Total", width = "180px") {
