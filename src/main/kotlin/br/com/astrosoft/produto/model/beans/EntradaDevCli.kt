@@ -112,7 +112,7 @@ class EntradaDevCli(
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
-  private fun isReembolso(): Boolean {
+  fun isReembolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
            remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
            remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||

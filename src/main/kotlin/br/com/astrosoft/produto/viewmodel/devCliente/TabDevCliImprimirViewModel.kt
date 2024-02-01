@@ -27,8 +27,11 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     val valor = nota.valor ?: 0.00
     val relatorio = if (nota.isComProduto()) {
       val valorLimit = 500.00
-      if (userName.isBlank() && valor >= valorLimit) {
+      if (userName.isBlank() && (valor >= valorLimit)) {
         fail("Devolução de Cliente com valor maior que ${valorLimit.format()}, autorizar para imprimir")
+      } else
+      if (userName.isBlank() && (nota.isReembolso())) {
+        fail("Devolução de Cliente com reembolso ou estorno")
       }
       ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
     } else {
