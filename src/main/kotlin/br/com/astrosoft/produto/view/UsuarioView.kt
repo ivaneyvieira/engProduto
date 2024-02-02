@@ -203,6 +203,14 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::acertoSaida.name)
             }
+            checkBox("Ent Manual") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::acertoMovManualEntrada.name)
+            }
+            checkBox("Sai Manual") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::acertoMovManualSaida.name)
+            }
           }
         }
       }

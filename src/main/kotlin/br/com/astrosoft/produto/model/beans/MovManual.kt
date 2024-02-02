@@ -5,26 +5,27 @@ import java.time.LocalDate
 
 class MovManual(
   var loja: Int?,
-  var tranacao: Int?,
-  var dataEmissao: LocalDate?,
+  var transacao: Int?,
+  var data: LocalDate?,
   var codigoProduto: Int?,
   var nomeProduto: String?,
   var grade: String?,
   var observacao: String?,
   var rotulo: String?,
   var tributacao: String?,
+  var qtty: Double?,
   var estVarejo: Double?,
   var estAtacado: Double?,
   var estTotal: Double?,
 ){
   companion object {
-    fun findMovManual(filter: MovManulFilter): List<MovManual> {
+    fun findMovManual(filter: MovManualFilter): List<MovManual> {
       return saci.findMovManual(filter)
     }
   }
 }
 
-data class MovManulFilter(
+data class MovManualFilter(
   val loja: Int,
   val query: String,
   val dataI: LocalDate?,

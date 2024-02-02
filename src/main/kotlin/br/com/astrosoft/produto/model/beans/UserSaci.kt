@@ -67,6 +67,8 @@ class UserSaci : IUser {
   var devCliSemPrdDelete by DelegateAuthorized(44)
   var devVenda by DelegateAuthorized(45)
   var autorizaDevolucao by DelegateAuthorized(46)
+  var acertoMovManualSaida by DelegateAuthorized(47)
+  var acertoMovManualEntrada by DelegateAuthorized(48)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -161,7 +163,7 @@ class UserSaci : IUser {
             devCliEditor || devClienteTroca || devCliSemPrd || admin
 
   val acertoEstoque
-    get() = acertoEntrada || acertoSaida || admin
+    get() = acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || admin
 
   var listLocais: Set<String>
     get() = locais.split(",").filter { it.isNotBlank() }.toSet()

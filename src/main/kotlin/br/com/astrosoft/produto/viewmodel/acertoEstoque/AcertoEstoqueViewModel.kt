@@ -7,14 +7,20 @@ import br.com.astrosoft.produto.viewmodel.devCliente.*
 class AcertoEstoqueViewModel(view: IAcertoEstoqueView) : ViewModel<IAcertoEstoqueView>(view) {
   val tabAcertoEstoqueEntradaViewModel = TabAcertoEstoqueEntradaViewModel(this)
   val tabAcertoEstoqueSaidaViewModel = TabAcertoEstoqueSaidaViewModel(this)
+  val tabAcertoMovManualSaidaViewModel = TabAcertoMovManualSaidaViewModel(this)
+  val tabAcertoMovManualEntradaViewModel = TabAcertoMovManualEntradaViewModel(this)
 
   override fun listTab() = listOf(
     view.tabAcertoEstoqueEntrada,
     view.tabAcertoEstoqueSaida,
+    view.tabAcertoMovManualEntrada,
+    view.tabAcertoMovManualSaida,
   )
 }
 
 interface IAcertoEstoqueView : IView {
   val tabAcertoEstoqueEntrada: ITabAcertoEstoqueEntrada
   val tabAcertoEstoqueSaida: ITabAcertoEstoqueSaida
+  val tabAcertoMovManualSaida: ITabAcertoMovManualSaida
+  val tabAcertoMovManualEntrada: ITabAcertoMovManualEntrada
 }

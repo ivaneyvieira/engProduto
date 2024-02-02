@@ -780,7 +780,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findMovManual(filter: MovManulFilter): List<MovManual> {
+  fun findMovManual(filter: MovManualFilter): List<MovManual> {
     val sql = "/sqlSaci/acertoEstoqueMovManual.sql"
     return query(sql, MovManual::class) {
       addOptionalParameter("loja", filter.loja)

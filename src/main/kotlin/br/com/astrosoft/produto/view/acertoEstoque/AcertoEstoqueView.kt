@@ -19,6 +19,8 @@ class AcertoEstoqueView : ViewLayout<AcertoEstoqueViewModel>(), IAcertoEstoqueVi
   override val viewModel = AcertoEstoqueViewModel(this)
   override val tabAcertoEstoqueEntrada = TabAcertoEstoqueEntrada(viewModel.tabAcertoEstoqueEntradaViewModel)
   override val tabAcertoEstoqueSaida = TabAcertoEstoqueSaida(viewModel.tabAcertoEstoqueSaidaViewModel)
+  override val tabAcertoMovManualSaida = TabAcertoMovManualSaida(viewModel.tabAcertoMovManualSaidaViewModel)
+  override val tabAcertoMovManualEntrada = TabAcertoMovManualEntrada(viewModel.tabAcertoMovManualEntradaViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

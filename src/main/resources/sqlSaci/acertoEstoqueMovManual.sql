@@ -11,8 +11,8 @@ DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_MOVMANUAL;
 CREATE TEMPORARY TABLE T_MOVMANUAL
 SELECT M.storeno                                      AS loja,
-       M.xano                                         AS tranacao,
-       CAST(M.date AS DATE)                           AS dataEmissao,
+       M.xano                                         AS transacao,
+       CAST(M.date AS DATE)                           AS data,
        TRIM(M.prdno) * 1                              AS codigoProduto,
        TRIM(MID(P.name, 1, 37))                       AS nomeProduto,
        M.grade                                        AS grade,
@@ -41,20 +41,21 @@ WHERE M.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
       END;
 
 SELECT loja,
-       tranacao,
-       dataEmissao,
+       transacao,
+       data,
        codigoProduto,
        nomeProduto,
        grade,
        observacao,
        rotulo,
        tributacao,
+       qtty,
        estVarejo,
        estAtacado,
        estTotal
 FROM T_MOVMANUAL
 WHERE (@PESQUISA = '' OR
-       tranacao = @PESQUISANUM OR
+       transacao = @PESQUISANUM OR
        codigoProduto = @PESQUISANUM OR
        nomeProduto LIKE @PESQUISASTART OR
        grade LIKE @PESQUISASTART OR
