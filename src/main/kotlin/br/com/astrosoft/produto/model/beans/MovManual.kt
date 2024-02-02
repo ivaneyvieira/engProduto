@@ -11,12 +11,13 @@ class MovManual(
   var nomeProduto: String?,
   var grade: String?,
   var observacao: String?,
+  var pedido: String?,
   var rotulo: String?,
   var tributacao: String?,
-  var qtty: Double?,
-  var estVarejo: Double?,
-  var estAtacado: Double?,
-  var estTotal: Double?,
+  var qtty: Int?,
+  var estVarejo: Int?,
+  var estAtacado: Int?,
+  var estTotal: Int?,
 ){
   companion object {
     fun findMovManual(filter: MovManualFilter): List<MovManual> {
