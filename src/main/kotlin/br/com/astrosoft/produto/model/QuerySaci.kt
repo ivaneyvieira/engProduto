@@ -780,6 +780,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findMovManual(filter: MovManulFilter): List<MovManual> {
+    val sql = "/sqlSaci/acertoEstoqueMovManual.sql"
+    return query(sql, MovManual::class) {
+      addOptionalParameter("loja", filter.loja)
+      addOptionalParameter("pesquisa", filter.query)
+      addOptionalParameter("dataInicial", filter.dataI.toSaciDate())
+      addOptionalParameter("dataFinal", filter.dataF.toSaciDate())
+      addOptionalParameter("tipo", filter.tipo.codigo)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
