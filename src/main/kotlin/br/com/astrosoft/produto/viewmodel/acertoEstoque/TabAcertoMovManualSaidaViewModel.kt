@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.acertoEstoque
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaMovManual
 
 class TabAcertoMovManualSaidaViewModel(val viewModel: AcertoEstoqueViewModel) {
   val subView
@@ -21,9 +22,14 @@ class TabAcertoMovManualSaidaViewModel(val viewModel: AcertoEstoqueViewModel) {
     val notas = MovManual.findMovManual(filtro)
     subView.updateNotas(notas)
   }
+
+  fun geraPlanilha(mov: List<MovManual>): ByteArray {
+    val planilha = PlanilhaMovManual()
+    return planilha.write(mov)
+  }
 }
 
 interface ITabAcertoMovManualSaida : ITabView {
   fun filtro(): MovManualFilter
-  fun updateNotas(nota: List<MovManual>)
+  fun updateNotas(movManualList: List<MovManual>)
 }

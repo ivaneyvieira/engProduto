@@ -1,19 +1,17 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.*
+import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoMovManualSaida
+import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoMovManualSaidaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -69,6 +67,10 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
         viewModel.updateView()
       }
     }
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
+      val mov = itensSelecionados()
+      viewModel.geraPlanilha(mov)
+    }
   }
 
   override fun Grid<MovManual>.gridPanel() {
@@ -93,11 +95,11 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
       dataI = edtDataInicial.value,
       dataF = edtDataFinal.value,
       tipo = ETipoMovManul.SAIDA
-                            )
+    )
   }
 
-  override fun updateNotas(notas: List<MovManual>) {
-    updateGrid(notas)
+  override fun updateNotas(movManualList: List<MovManual>) {
+    updateGrid(movManualList)
   }
 
   override fun isAuthorized(): Boolean {
