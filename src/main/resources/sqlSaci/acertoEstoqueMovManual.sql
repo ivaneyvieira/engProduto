@@ -17,11 +17,11 @@ SELECT M.storeno                                      AS loja,
        TRIM(MID(P.name, 1, 37))                       AS nomeProduto,
        M.prdno                                        AS prdno,
        M.grade                                        AS grade,
-       CASE
-         WHEN M.remarks LIKE '66:PED E%' THEN TRIM(MID(M.remarks, 9, 100))
-         WHEN M.remarks LIKE '66:PED S%' THEN TRIM(MID(M.remarks, 9, 100))
-         ELSE '0'
-       END * 1                                        AS pedido,
+       SUBSTRING_INDEX(CASE
+                         WHEN M.remarks LIKE '66:PED E%' THEN TRIM(MID(M.remarks, 9, 100))
+                         WHEN M.remarks LIKE '66:PED S%' THEN TRIM(MID(M.remarks, 9, 100))
+                         ELSE '0'
+                       END, ' ', 1) * 1               AS pedido,
        CASE
          WHEN M.remarks LIKE '66:PED E%' THEN 'E'
          WHEN M.remarks LIKE '66:PED S%' THEN 'S'
