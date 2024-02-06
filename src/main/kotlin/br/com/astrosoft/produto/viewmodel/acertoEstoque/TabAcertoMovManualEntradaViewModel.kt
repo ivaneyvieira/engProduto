@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.acertoEstoque
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.MovManual
 import br.com.astrosoft.produto.model.beans.MovManualFilter
@@ -28,6 +29,14 @@ class TabAcertoMovManualEntradaViewModel(val viewModel: AcertoEstoqueViewModel) 
   fun geraPlanilha(mov: List<MovManual>): ByteArray {
     val planilha = PlanilhaMovManual()
     return planilha.write(mov)
+  }
+
+  fun estorno(movs: List<MovManual>) {
+    movs.ifEmpty { fail("Não há notas selecionadas") }
+    viewModel.view.showQuestion("Confirma o estorno das movimentações selecionadas?") {
+      movs.forEach { it.estorno() }
+      updateView()
+    }
   }
 }
 

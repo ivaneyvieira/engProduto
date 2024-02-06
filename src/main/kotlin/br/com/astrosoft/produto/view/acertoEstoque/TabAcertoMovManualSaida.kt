@@ -9,9 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoMovManualSaida
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoMovManualSaidaViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -71,10 +69,17 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
       val mov = itensSelecionados()
       viewModel.geraPlanilha(mov)
     }
+    this.button("Estorno") {
+      icon = VaadinIcon.OUTBOX.create()
+      onLeftClick {
+        viewModel.estorno(itensSelecionados())
+      }
+    }
   }
 
   override fun Grid<MovManual>.gridPanel() {
     this.addClassName("styling")
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     columnGrid(MovManual::loja, header = "Loja")
     columnGrid(MovManual::codigoProduto, header = "Código")
     columnGrid(MovManual::nomeProduto, header = "Descrição").expand()

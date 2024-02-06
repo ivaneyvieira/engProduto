@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
@@ -788,6 +789,20 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filter.dataI.toSaciDate())
       addOptionalParameter("dataFinal", filter.dataF.toSaciDate())
       addOptionalParameter("tipo", filter.tipo.codigo)
+    }
+  }
+
+  fun estornoMovManual(movManual: MovManual) {
+    val sql = "/sqlSaci/acertoEstoqueEstornoMovManual.sql"
+    val loja = movManual.loja ?: return
+    val prdno = movManual.codigoProduto?.toString()?.lpad(16, " ") ?: return
+    val grade = movManual.grade ?: return
+    val xano = movManual.transacao ?: return
+    script(sql) {
+      addOptionalParameter("storeno", loja)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("xano", xano)
     }
   }
 

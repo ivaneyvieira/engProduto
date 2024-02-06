@@ -20,6 +20,10 @@ class MovManual(
   var estTotal: Int?,
   var tipo: String?,
 ){
+  fun estorno() {
+    saci.estornoMovManual(this)
+  }
+
   companion object {
     fun findMovManual(filter: MovManualFilter): List<MovManual> {
       return saci.findMovManual(filter)
