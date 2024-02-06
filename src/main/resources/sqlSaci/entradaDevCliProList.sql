@@ -1,7 +1,5 @@
 USE sqldados;
 
-USE sqldados;
-
 SET sql_mode = '';
 
 DO @PESQUISA := TRIM(:pesquisa);
@@ -28,7 +26,8 @@ FROM sqldados.inv AS I
 WHERE (I.date = :data)
   AND (I.storeno = :loja)
   AND I.bits & POW(2, 4) = 0
-  AND I.account = '2.01.25';
+  AND I.account = '2.01.25'
+  AND I.cfo NOT LIKE '%949';
 
 SELECT CAST(data AS DATE)        AS data,
        I.codLoja                 AS codLoja,
