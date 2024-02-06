@@ -15,11 +15,18 @@ SELECT M.storeno                                      AS loja,
        CAST(M.date AS DATE)                           AS data,
        TRIM(M.prdno) * 1                              AS codigoProduto,
        TRIM(MID(P.name, 1, 37))                       AS nomeProduto,
+       M.prdno                                        AS prdno,
        M.grade                                        AS grade,
        CASE
          WHEN M.remarks LIKE '66:PED E%' THEN TRIM(MID(M.remarks, 9, 100))
          WHEN M.remarks LIKE '66:PED S%' THEN TRIM(MID(M.remarks, 9, 100))
-       END                                            AS pedido,
+         ELSE '0'
+       END * 1                                        AS pedido,
+       CASE
+         WHEN M.remarks LIKE '66:PED E%' THEN 'E'
+         WHEN M.remarks LIKE '66:PED S%' THEN 'S'
+         ELSE ''
+       END                                            AS tipoPedido,
        M.remarks                                      AS observacao,
        IFNULL(R.form_label, '')                       AS rotulo,
        P.taxno                                        AS tributacao,
@@ -57,8 +64,12 @@ SELECT loja,
        qtty,
        estVarejo,
        estAtacado,
-       estTotal
-FROM T_MOVMANUAL
+       estTotal,
+       TRIM(IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(MID(PS.remarks__480, 1, 40), '(', 1), '.', 1), '')) AS tipo
+FROM T_MOVMANUAL AS M
+       LEFT JOIN sqldados.eordrk AS PS
+                 ON PS.storeno = M.loja
+                   AND PS.ordno = M.pedido
 WHERE (@PESQUISA = '' OR
        transacao = @PESQUISANUM OR
        codigoProduto = @PESQUISANUM OR

@@ -12,6 +12,7 @@ class PlanilhaMovManual : Planilha<MovManual>("MovManual") {
     columnSheet(MovManual::data, header = "Data")
     columnSheet(MovManual::pedido, header = "Pedido")
     columnSheet(MovManual::transacao, header = "Transação")
+    columnSheet(MovManual::tipo, header = "Tipo")
     columnSheet(MovManual::qtty, header = "Quant Mov")
     columnSheet(MovManual::estVarejo, header = "Est Varejo")
     columnSheet(MovManual::estAtacado, header = "Est Atacado")

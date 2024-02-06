@@ -18,6 +18,7 @@ class MovManual(
   var estVarejo: Int?,
   var estAtacado: Int?,
   var estTotal: Int?,
+  var tipo: String?,
 ){
   companion object {
     fun findMovManual(filter: MovManualFilter): List<MovManual> {

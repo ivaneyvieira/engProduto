@@ -82,6 +82,7 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
     columnGrid(MovManual::data, header = "Data")
     columnGrid(MovManual::pedido, header = "Pedido")
     columnGrid(MovManual::transacao, header = "Transação")
+    columnGrid(MovManual::tipo, header = "Tipo")
     columnGrid(MovManual::qtty, header = "Quant Mov")
     columnGrid(MovManual::estVarejo, header = "Est Varejo")
     columnGrid(MovManual::estAtacado, header = "Est Atacado")
