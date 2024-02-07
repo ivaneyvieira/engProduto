@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.*
@@ -35,10 +36,12 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var edtSaldo: IntegerField
 
   init {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
-    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+    val loja = user?.storeno ?: 1
+    val lojaEscolhida = if(loja == 0) 1 else loja
+    cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -53,6 +56,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
+
           addValueChangeListener {
             if (it.isFromClient)
               viewModel.updateView()
@@ -147,8 +151,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         }
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
-          val mov = itensSelecionados()
-          viewModel.geraPlanilha(mov)
+          val produtos = itensSelecionados()
+          viewModel.geraPlanilha(produtos)
         }
       }
     }
@@ -156,6 +160,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
   override fun Grid<ProdutoSaldo>.gridPanel() {
     this.addClassName("styling")
+    setSelectionMode(Grid.SelectionMode.MULTI)
+    this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoSaldo::loja, header = "Loja")
     columnGrid(ProdutoSaldo::codigo, header = "Código")
     columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()

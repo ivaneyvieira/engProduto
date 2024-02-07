@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldo
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoSaldo
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldo
 
 class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -21,8 +22,9 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
     subView.updateProdutos(produtos)
   }
 
-  fun geraPlanilha(mov: List<ProdutoSaldo>): ByteArray {
-    TODO("Not yet implemented")
+  fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
+    val planilha = PlanilhaProdutoSaldo()
+    return planilha.write(produtos)
   }
 
   val subView
