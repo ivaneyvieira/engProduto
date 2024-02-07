@@ -78,8 +78,7 @@ SELECT S.storeno                                         AS loja,
 FROM sqldados.stk AS S
        INNER JOIN T_PRD AS P
                   USING (prdno)
-WHERE (S.qtty_varejo + S.qtty_atacado) != 0
-  AND (S.storeno = :loja OR :loja = 0)
+WHERE (S.storeno = :loja OR :loja = 0)
 GROUP BY loja, prdno, gradeProduto
 HAVING CASE :estoque
          WHEN '<' THEN SUM(S.qtty_varejo + S.qtty_atacado) < :saldo
