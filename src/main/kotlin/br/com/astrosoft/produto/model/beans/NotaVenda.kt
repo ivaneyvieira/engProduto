@@ -16,6 +16,7 @@ class NotaVenda(
   var tipoPgto: String?,
   var valor: Double?,
   var cliente: Int?,
+  var uf: String?,
   var nomeCliente: String?,
   var vendedor: String?,
   var valorTipo: Double?,

@@ -15,6 +15,7 @@ class ReportVenda : ReportBuild<NotaVenda>() {
     columnReport(NotaVenda::pdv, header = "PDV", width = 30, aligment = CENTER)
     columnReport(NotaVenda::data, header = "Data", width = 55)
     columnReport(NotaVenda::nota, header = "NF", width = 50, aligment = RIGHT)
+    columnReport(NotaVenda::uf, header = "UF", width = 20, aligment = CENTER)
     columnReport(NotaVenda::numeroInterno, header = "NI", width = 70)
     columnReport(NotaVenda::tipoPgto, header = "Tipo Pgto", width = 70){
       this.setTextAdjust(TextAdjust.SCALE_FONT)

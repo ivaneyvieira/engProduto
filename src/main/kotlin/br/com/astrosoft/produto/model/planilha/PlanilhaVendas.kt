@@ -13,6 +13,7 @@ class PlanilhaVendas : Planilha<NotaVenda>("Vendas") {
     columnSheet(NotaVenda::data, header = "Data")
     columnSheet(NotaVenda::transacao, header = "Transação", pattern = "0")
     columnSheet(NotaVenda::nota, header = "NF")
+    columnSheet(NotaVenda::uf, header = "UF")
     columnSheet(NotaVenda::tipoNf, header = "Tipo NF")
     columnSheet(NotaVenda::hora, header = "Hora")
     columnSheet(NotaVenda::numeroInterno, header = "NI")

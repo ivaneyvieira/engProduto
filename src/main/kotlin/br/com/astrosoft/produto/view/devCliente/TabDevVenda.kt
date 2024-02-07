@@ -100,6 +100,7 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
     columnGrid(NotaVenda::data, header = "Data")
     columnGrid(NotaVenda::transacao, header = "Transação")
     columnGrid(NotaVenda::nota, header = "NF")
+    columnGrid(NotaVenda::uf, header = "UF")
     columnGrid(NotaVenda::tipoNf, header = "Tipo NF")
     columnGrid(NotaVenda::hora, header = "Hora")
     columnGrid(NotaVenda::numeroInterno, header = "NI", width = "100px")
