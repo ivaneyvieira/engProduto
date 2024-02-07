@@ -806,6 +806,22 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoSaldo(filtro: FiltroProdutoSaldo) : List<ProdutoSaldo>{
+    val sql = "/sqlSaci/findProdutosSaldo.sql"
+    return query(sql, ProdutoSaldo::class){
+      this.addOptionalParameter("loja", filtro.loja)
+      this.addOptionalParameter("fornecedor", filtro.fornecedor)
+      this.addOptionalParameter("tributacao", filtro.tributacao)
+      this.addOptionalParameter("rotulo", filtro.rotulo)
+      this.addOptionalParameter("tipo", filtro.tipo)
+      this.addOptionalParameter("cl", filtro.cl)
+      this.addOptionalParameter("caracter", filtro.caracter.value)
+      this.addOptionalParameter("grade", filtro.grade)
+      this.addOptionalParameter("estoque", filtro.estoque.value)
+      this.addOptionalParameter("saldo", filtro.saldo)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
