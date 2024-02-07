@@ -10,7 +10,7 @@ class Bootstrap : ServletContextListener {
   override fun contextInitialized(sce: ServletContextEvent) {
     println("Starting up")
 
-    Locale.setDefault(Locale.of("pt", "BR"))
+    Locale.setDefault(Locale("pt", "BR"))
     println("Starting up")
     val home = System.getenv("HOME")
     val fileName = System.getenv("EBEAN_PROPS") ?: "$home/ebean.properties"

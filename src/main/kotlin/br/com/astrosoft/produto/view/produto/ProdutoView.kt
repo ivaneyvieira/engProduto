@@ -17,10 +17,8 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val viewModel: ProdutoViewModel = ProdutoViewModel(this)
+
   override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
-  override val tabProdutoReserva = TabProdutoReserva(viewModel.tabProdutoReservaViewModel)
-  override val tabProdutoRetiraEntrega = TabProdutoRetiraEntrega(viewModel.tabProdutoRetiraEntregaViewModel)
-  override val tabProdutoRetiraEntregaEdit = TabProdutoRetiraEntregaEdit(viewModel.tabProdutoRetiraEntregaEditViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

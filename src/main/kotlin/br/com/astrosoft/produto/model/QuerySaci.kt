@@ -810,6 +810,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/findProdutosSaldo.sql"
     return query(sql, ProdutoSaldo::class){
       this.addOptionalParameter("loja", filtro.loja)
+      this.addOptionalParameter("pesquisa", filtro.pesquisa)
       this.addOptionalParameter("fornecedor", filtro.fornecedor)
       this.addOptionalParameter("tributacao", filtro.tributacao)
       this.addOptionalParameter("rotulo", filtro.rotulo)

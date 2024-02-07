@@ -3,23 +3,23 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 
 class ProdutoSaldo(
-  val loja: Int?,
-  val prdno: String?,
-  val codigo: String?,
-  val descricao: String?,
-  val gradeProduto: String?,
-  val unidade: String?,
-  val estoqueLojas: Int?,
-  val qttyVarejo: Int?,
-  val qttyAtacado: Int?,
-  val qttyTotal: Int?,
-  val tributacao: String?,
-  val rotulo: String?,
-  val ncm: String?,
-  val fornecedor: Int?,
-  val abrev: String?,
-  val tipo: Int?,
-  val cl: Int?,
+  var loja: Int?,
+  var prdno: String?,
+  var codigo: String?,
+  var descricao: String?,
+  var gradeProduto: String?,
+  var unidade: String?,
+  var estoqueLojas: Int?,
+  var qttyVarejo: Int?,
+  var qttyAtacado: Int?,
+  var qttyTotal: Int?,
+  var tributacao: String?,
+  var rotulo: String?,
+  var ncm: String?,
+  var fornecedor: Int?,
+  var abrev: String?,
+  var tipo: Int?,
+  var cl: Int?,
 ) {
   companion object {
     fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {
@@ -30,6 +30,7 @@ class ProdutoSaldo(
 
 data class FiltroProdutoSaldo(
   val loja: Int,
+  val pesquisa: String,
   val fornecedor: Int,
   val tributacao: String,
   val rotulo: String,

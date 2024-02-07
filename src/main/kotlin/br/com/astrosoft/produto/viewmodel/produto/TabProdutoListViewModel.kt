@@ -1,14 +1,28 @@
 package br.com.astrosoft.produto.viewmodel.produto
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroProduto
-import br.com.astrosoft.produto.model.beans.Produto
+import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldo
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoSaldo
 
 class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
+  fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val produtos = Produto.find(filtro)
+    val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
     subView.updateProdutos(produtos)
+  }
+
+  fun geraPlanilha(mov: List<ProdutoSaldo>): ByteArray {
+    TODO("Not yet implemented")
   }
 
   val subView
@@ -16,6 +30,6 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
 }
 
 interface ITabProdutoList : ITabView {
-  fun filtro(): FiltroProduto
-  fun updateProdutos(produtos: List<Produto>)
+  fun filtro(): FiltroProdutoSaldo
+  fun updateProdutos(produtos: List<ProdutoSaldo>)
 }

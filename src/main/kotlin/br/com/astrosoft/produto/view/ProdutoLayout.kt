@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
+import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.view.retira.PedidoRetiraView
 import com.github.mvysny.karibudsl.v23.route
@@ -36,6 +37,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = CART,
         title = "Retira",
         routeClass = PedidoRetiraView::class,
+      )
+      if (userSaci?.pedidoRetira == true) route(
+        icon = CUBES,
+        title = "Produto",
+        routeClass = ProdutoView::class,
       )
       if (userSaci?.acertoEstoque == true) route(
         icon = PACKAGE,

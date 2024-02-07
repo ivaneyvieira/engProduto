@@ -1,5 +1,11 @@
 USE sqldados;
 
+SET SQL_MODE = '';
+
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
+DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
+
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
@@ -103,3 +109,14 @@ SELECT loja,
 FROM T_PRDSTK AS S
        LEFT JOIN T_STKLOJA AS L
                  USING (prdno, gradeProduto)
+WHERE (@PESQUISA = '' OR
+       codigo = @PESQUISA OR
+       descricao LIKE @PESQUISA_LIKE OR
+       gradeProduto LIKE @PESQUISA_START OR
+       unidade = @PESQUISA OR
+       tributacao = @PESQUISA OR
+       rotulo LIKE @PESQUISA_START OR
+       ncm LIKE @PESQUISA_START OR
+       fornecedor = @PESQUISA OR
+       abrev LIKE @PESQUISA_LIKE OR
+       cl = @PESQUISA)
