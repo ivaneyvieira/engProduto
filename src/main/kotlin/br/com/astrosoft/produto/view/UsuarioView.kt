@@ -211,6 +211,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::acertoMovManualSaida.name)
             }
+            checkBox("Atacado") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::acertoMovAtacado.name)
+            }
           }
         }
       }
