@@ -26,8 +26,7 @@ FROM sqldados.nf AS N
        LEFT JOIN sqldados.inv AS I2
                  ON (N.storeno = I2.s1 AND N.pdvno = I2.s2 AND N.xano = I2.l2)
        LEFT JOIN sqldados.users AS U
-                 ON U.no = IFNULL(IF(I1.usernoLast = 0, I1.usernoFirst, I1.usernoLast),
-                                  IF(I2.usernoLast = 0, I2.usernoFirst, I2.usernoLast))
+                 ON U.no = IFNULL(I1.usernoFirst, I2.usernoFirst)
 WHERE N.storeno = :loja
   AND N.nfno = :nfno
   AND N.nfse = :nfse

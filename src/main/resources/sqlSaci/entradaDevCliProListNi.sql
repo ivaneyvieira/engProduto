@@ -9,14 +9,14 @@ CREATE TEMPORARY TABLE T_NOTA
 (
   PRIMARY KEY (invno)
 )
-SELECT I.invno                                           AS invno,
-       IF(I.usernoLast = 0, I.usernoFirst, I.usernoLast) AS userno,
-       CAST(I.date AS DATE)                              AS data,
-       I.storeno                                         AS codLoja,
-       CONCAT(I.nfname, '/', I.invse)                    AS nota,
-       S.otherName                                       AS loja,
-       I.remarks                                         AS observacao,
-       ROUND(I.grossamt / 100, 2)                        AS valor
+SELECT I.invno                        AS invno,
+       I.usernoFirst                  AS userno,
+       CAST(I.date AS DATE)           AS data,
+       I.storeno                      AS codLoja,
+       CONCAT(I.nfname, '/', I.invse) AS nota,
+       S.otherName                    AS loja,
+       I.remarks                      AS observacao,
+       ROUND(I.grossamt / 100, 2)     AS valor
 FROM sqldados.inv AS I
        LEFT JOIN sqldados.store AS S
                  ON S.no = I.storeno
