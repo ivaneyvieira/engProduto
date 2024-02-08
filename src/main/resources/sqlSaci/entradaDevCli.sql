@@ -44,7 +44,7 @@ CREATE TEMPORARY TABLE T_NOTA
   INDEX (invno)
 )
 SELECT I.invno                                                                           AS invno,
-       I.usernoFirst                                                                     AS userno,
+       IF(I.usernoFirst = 0, I.usernoLast, I.usernoFirst)                                AS userno,
        I.storeno                                                                         AS loja,
        S.otherName                                                                       AS nomeLoja,
        CAST(CONCAT(I.nfname, '/', I.invse) AS CHAR)                                      AS notaFiscal,
