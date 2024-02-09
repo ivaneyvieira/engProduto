@@ -74,10 +74,9 @@ FROM T_MOVMANUAL AS M
 WHERE (@PESQUISA = '' OR
        transacao = @PESQUISANUM OR
        codigoProduto = @PESQUISANUM OR
-       nomeProduto LIKE @PESQUISASTART OR
+       nomeProduto LIKE @PESQUISALIKE OR
        grade LIKE @PESQUISASTART OR
-       observacao LIKE @PESQUISALIKE OR
-       rotulo LIKE @PESQUISALIKE OR
+       rotulo LIKE @PESQUISASTART OR
        tributacao LIKE @PESQUISASTART OR
-       TRIM(IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(MID(PS.remarks__480, 1, 40), '(', 1), '.', 1), '')) LIKE @PESQUISA
+       TRIM(IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(MID(PS.remarks__480, 1, 40), '(', 1), '.', 1), '')) LIKE @PESQUISASTART
         )
