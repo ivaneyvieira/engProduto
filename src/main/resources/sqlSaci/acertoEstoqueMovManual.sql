@@ -78,5 +78,6 @@ WHERE (@PESQUISA = '' OR
        grade LIKE @PESQUISASTART OR
        observacao LIKE @PESQUISALIKE OR
        rotulo LIKE @PESQUISALIKE OR
-       tributacao LIKE @PESQUISASTART
+       tributacao LIKE @PESQUISASTART OR
+       TRIM(IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(MID(PS.remarks__480, 1, 40), '(', 1), '.', 1), '')) LIKE @PESQUISA
         )
