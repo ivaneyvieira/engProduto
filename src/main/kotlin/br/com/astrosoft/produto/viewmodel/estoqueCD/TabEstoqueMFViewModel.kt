@@ -2,6 +2,8 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaMovManual
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 
 class TabEstoqueMFViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -20,6 +22,11 @@ class TabEstoqueMFViewModel(val viewModel: EstoqueCDViewModel) {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     subView.updateProduto(produtos)
+  }
+
+  fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
+    val planilha = PlanilhaProdutoEstoque()
+    return planilha.write(produtos)
   }
 }
 

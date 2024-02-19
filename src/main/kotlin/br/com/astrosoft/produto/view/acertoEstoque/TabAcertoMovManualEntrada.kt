@@ -69,13 +69,13 @@ class TabAcertoMovManualEntrada(val viewModel: TabAcertoMovManualEntradaViewMode
       val mov = itensSelecionados()
       viewModel.geraPlanilha(mov)
     }
-      this.button("Estorno") {
+    this.button("Estorno") {
       icon = VaadinIcon.OUTBOX.create()
       onLeftClick {
         viewModel.estorno(itensSelecionados())
       }
     }
-}
+  }
 
   override fun Grid<MovManual>.gridPanel() {
     this.addClassName("styling")

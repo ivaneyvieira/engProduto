@@ -1,9 +1,11 @@
 package br.com.astrosoft.framework.model.planilha
 
+import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
@@ -14,6 +16,18 @@ import kotlin.reflect.KProperty1
 
 open class Planilha<B>(private val sheatName: String) {
   protected val columns: MutableList<Column<B, *>> = mutableListOf()
+
+  private val mapStyles = mutableMapOf<String, CellStyle>()
+
+  private fun Workbook.createStyle(pattern : String): CellStyle{
+    return mapStyles.getOrPut(pattern) {
+      val style = this.createCellStyle()
+      style.dataFormat = this.creationHelper.createDataFormat().getFormat(pattern)
+      style
+    }
+  }
+
+
 
   @JvmName("campoString")
   fun columnSheet(property: KProperty1<B, String?>, header: String) {
@@ -65,51 +79,42 @@ open class Planilha<B>(private val sheatName: String) {
 
   private fun Sheet.row(bean: B) {
     val row = this.createRow(this.physicalNumberOfRows)
-    val creationHelper = workbook.creationHelper
+
 
     columns.forEachIndexed { index, column ->
       val cellValue = column.property.value(bean)
-      //autoSizeColumn(index)
+
+
       row.createCell(index).apply {
         when (cellValue) {
-          is String    -> setCellValue(cellValue)
+          is String        -> setCellValue(cellValue)
 
-          is Int       -> {
-            val style = workbook.createCellStyle()
-            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "#,##0")
-            cellStyle = style
+          is Int           -> {
+            cellStyle = workbook.createStyle("#,##0")
             setCellValue(cellValue.toDouble())
           }
 
-          is Number    -> {
-            val style = workbook.createCellStyle()
-            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "#,##0.00")
-            cellStyle = style
+          is Number        -> {
+            cellStyle = workbook.createStyle("#,##0.00")
             setCellValue(cellValue.toDouble())
           }
 
-          is Date      -> {
-            val style = workbook.createCellStyle()
-            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "dd/mm/yyyy")
-            cellStyle = style
+          is Date          -> {
+            cellStyle = workbook.createStyle("dd/mm/yyyy")
             setCellValue(cellValue)
           }
 
-          is LocalDate -> {
-            val style = workbook.createCellStyle()
-            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "dd/mm/yyyy")
-            cellStyle = style
+          is LocalDate     -> {
+            cellStyle = workbook.createStyle("dd/mm/yyyy")
             setCellValue(cellValue)
           }
 
           is LocalDateTime -> {
-            val style = workbook.createCellStyle()
-            style.dataFormat = creationHelper.createDataFormat().getFormat(column.pattern ?: "hh:mm")
-            cellStyle = style
+            cellStyle = workbook.createStyle("hh:MM")
             setCellValue(cellValue)
           }
 
-          else         -> {
+          else             -> {
             if (cellValue != null)
               setCellValue(cellValue.toString())
             else
