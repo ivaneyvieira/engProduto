@@ -70,6 +70,7 @@ class UserSaci : IUser {
   var acertoMovManualSaida by DelegateAuthorized(47)
   var acertoMovManualEntrada by DelegateAuthorized(48)
   var acertoMovAtacado by DelegateAuthorized(49)
+  var estoqueMF by DelegateAuthorized(50)
 
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
@@ -155,6 +156,9 @@ class UserSaci : IUser {
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
   val pedidoRetira
     get() = retiraImprimir || retiraImpresso || admin
+
+  val estoqueCD
+    get() = estoqueMF || admin
 
   val fornecedor
     get() = produtoList

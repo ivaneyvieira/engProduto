@@ -216,6 +216,15 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::acertoMovAtacado.name)
             }
           }
+          formLayout {
+            h4("Estoque CD") {
+              colspan = 2
+            }
+            checkBox("MF") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::estoqueMF.name)
+            }
+          }
         }
       }
     }

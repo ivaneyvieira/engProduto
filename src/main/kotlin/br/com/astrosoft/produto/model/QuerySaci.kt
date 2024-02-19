@@ -806,9 +806,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoSaldo(filtro: FiltroProdutoSaldo) : List<ProdutoSaldo>{
+  fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {
     val sql = "/sqlSaci/findProdutosSaldo.sql"
-    return query(sql, ProdutoSaldo::class){
+    return query(sql, ProdutoSaldo::class) {
       this.addOptionalParameter("loja", filtro.loja)
       this.addOptionalParameter("pesquisa", filtro.pesquisa)
       this.addOptionalParameter("fornecedor", filtro.fornecedor)
@@ -820,6 +820,14 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
       this.addOptionalParameter("estoque", filtro.estoque.value)
       this.addOptionalParameter("saldo", filtro.saldo)
+    }
+  }
+
+  fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
+    val sql = "/sqlSaci/findProdutoEstoque.sql"
+    return query(sql, ProdutoEstoque::class) {
+      addOptionalParameter("loja", filter.loja)
+      addOptionalParameter("pesquisa", filter.pesquisa)
     }
   }
 

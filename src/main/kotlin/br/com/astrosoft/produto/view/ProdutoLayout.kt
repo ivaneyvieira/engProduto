@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.layout.AppLayoutAbstract
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
+import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
@@ -47,6 +48,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = PACKAGE,
         title = "Acerto Estoque",
         routeClass = AcertoEstoqueView::class,
+      )
+      if (userSaci?.estoqueCD == true) route(
+        icon = STORAGE,
+        title = "Estoque CD",
+        routeClass = EstoqueCDView::class,
       )
 
       if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)
