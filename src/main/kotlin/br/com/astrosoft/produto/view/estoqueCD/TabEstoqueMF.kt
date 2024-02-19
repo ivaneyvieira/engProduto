@@ -47,7 +47,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     columnGrid(ProdutoEstoque::grade, header = "Grade")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Embalagem")
+    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::estoque, header = "Estoque")
   }
 
