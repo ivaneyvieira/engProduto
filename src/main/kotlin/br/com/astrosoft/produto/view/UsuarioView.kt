@@ -224,6 +224,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::estoqueMF.name)
             }
+            select<String>("Localização") {
+              isReadOnly = readOnly
+              setItems(listOf("TODOS") + viewModel.allLocalizacao())
+              binder.bind(this, UserSaci::locais.name)
+            }
           }
         }
       }

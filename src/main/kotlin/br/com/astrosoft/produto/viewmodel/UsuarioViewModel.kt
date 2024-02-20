@@ -35,5 +35,8 @@ class UsuarioViewModel(view: IUsuarioView) : UserViewModel<UserSaci, IUsuarioVie
   }
 
   fun allLocais(): List<Local> = Local.all()
+  fun allLocalizacao(): List<String> {
+    return allLocais().mapNotNull { it.abreviacao }.distinct().sorted()
+  }
 }
 

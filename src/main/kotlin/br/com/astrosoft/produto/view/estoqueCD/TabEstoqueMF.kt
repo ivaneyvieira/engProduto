@@ -46,6 +46,12 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     edtLocalizacao = textField("Loc") {
       this.width = "60px"
       valueChangeMode = ValueChangeMode.TIMEOUT
+      val userSaci = AppConfig.userLogin() as? UserSaci
+      val local = userSaci?.locais ?: "TODOS"
+      if((local != "TODOS") && (local != "")) {
+        this.value = local
+        this.isReadOnly = true
+      }
       addValueChangeListener {
         viewModel.updateView()
       }
