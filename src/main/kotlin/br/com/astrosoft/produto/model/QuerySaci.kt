@@ -828,6 +828,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoEstoque::class) {
       addOptionalParameter("loja", filter.loja)
       addOptionalParameter("pesquisa", filter.pesquisa)
+      addOptionalParameter("grade", filter.grade)
     }
   }
 

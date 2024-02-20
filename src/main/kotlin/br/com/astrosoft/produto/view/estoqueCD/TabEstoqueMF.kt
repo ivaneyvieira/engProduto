@@ -11,8 +11,6 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -23,10 +21,18 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueMF {
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtGrade: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtGrade = textField("Grade") {
+      this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -44,18 +50,21 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoEstoque::grade, header = "Grade")
+    columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
+    columnGrid(ProdutoEstoque::localizacao, header = "Loc")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::estoque, header = "Estoque")
+    columnGrid(ProdutoEstoque::saldo, header = "Saldo")
   }
 
   override fun filtro(): FiltroProdutoEstoque {
     return FiltroProdutoEstoque(
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
-    )
+      grade = edtGrade.value ?: "",
+      )
   }
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {

@@ -12,6 +12,8 @@ class ProdutoEstoque(
   var embalagem: Double?,
   var qtdEmbalagem: Int?,
   var estoque: Int?,
+  var localizacao: String?,
+  var saldo: Int?,
 ) {
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
@@ -23,4 +25,5 @@ class ProdutoEstoque(
 data class FiltroProdutoEstoque(
   val loja: Int,
   val pesquisa: String,
+  val grade: String,
 )

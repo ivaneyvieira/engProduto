@@ -27,20 +27,26 @@ SELECT S.storeno                                                     AS loja,
        S.grade                                                       AS grade,
        P.qttyPackClosed / 1000                                       AS embalagem,
        TRUNCATE(IFNULL(A.estoque, 0) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
-       IFNULL(A.estoque, 0)                                          AS estoque
-FROM sqldados.prd AS P
-       INNER JOIN sqldados.stk AS S
+       IFNULL(A.estoque, 0)                                          AS estoque,
+       IFNULL(MID(L1.localizacao, 1, 4), '')                         AS localizacao,
+       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                AS saldo
+FROM sqldados.stk AS S
+       INNER JOIN sqldados.prd AS P
                   ON S.prdno = P.no
        LEFT JOIN sqldados.prdAdicional AS A
                  USING (storeno, prdno, grade)
-WHERE (S.storeno = :loja OR :loja = 0);
+       LEFT JOIN sqldados.prdloc AS L1
+                 USING (storeno, prdno, grade)
+WHERE (S.storeno = :loja OR :loja = 0)
+GROUP BY S.storeno, S.prdno, S.grade;
 
 SELECT *
 FROM temp_pesquisa
 WHERE (
-        @PESQUISA = '' OR
-        codigo = @PESQUISANUM OR
-        descricao LIKE @PESQUISALIKE OR
-        unidade LIKE @PESQUISA OR
-        grade LIKE @PESQUISALIKE
-        )
+  @PESQUISA = '' OR
+  codigo = @PESQUISANUM OR
+  descricao LIKE @PESQUISALIKE OR
+  unidade LIKE @PESQUISA OR
+  localizacao LIKE @PESQUISASTART
+  )
+  AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
