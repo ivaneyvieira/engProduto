@@ -26,6 +26,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
+  private lateinit var edtLocalizacao: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -37,6 +38,13 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     }
     edtGrade = textField("Grade") {
       this.width = "100px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtLocalizacao = textField("Loc") {
+      this.width = "60px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -78,7 +86,8 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
       grade = edtGrade.value ?: "",
-      caracter = cmbCaracter.value ?: ECaracter.TODOS
+      caracter = cmbCaracter.value ?: ECaracter.TODOS,
+      localizacao = edtLocalizacao.value ?: ""
     )
   }
 

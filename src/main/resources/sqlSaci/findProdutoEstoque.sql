@@ -52,7 +52,7 @@ WHERE (
   @PESQUISA = '' OR
   codigo = @PESQUISANUM OR
   descricao LIKE @PESQUISALIKE OR
-  unidade LIKE @PESQUISA OR
-  localizacao LIKE @PESQUISASTART
+  unidade LIKE @PESQUISA
   )
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
+AND (localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
