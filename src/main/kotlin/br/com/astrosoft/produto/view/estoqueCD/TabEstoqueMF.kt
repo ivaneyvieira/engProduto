@@ -6,15 +6,18 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -22,6 +25,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueMF {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
+  private lateinit var cmbCaracter: Select<ECaracter>
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -34,6 +38,16 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     edtGrade = textField("Grade") {
       this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbCaracter = select("Caracter") {
+      this.setItems(ECaracter.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = ECaracter.TODOS
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -64,7 +78,8 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
       grade = edtGrade.value ?: "",
-      )
+      caracter = cmbCaracter.value ?: ECaracter.TODOS
+    )
   }
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {

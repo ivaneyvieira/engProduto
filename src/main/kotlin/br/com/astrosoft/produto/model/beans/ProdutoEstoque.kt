@@ -26,4 +26,5 @@ data class FiltroProdutoEstoque(
   val loja: Int,
   val pesquisa: String,
   val grade: String,
+  val caracter: ECaracter,
 )

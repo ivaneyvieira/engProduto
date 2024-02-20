@@ -38,6 +38,12 @@ FROM sqldados.stk AS S
        LEFT JOIN sqldados.prdloc AS L1
                  USING (storeno, prdno, grade)
 WHERE (S.storeno = :loja OR :loja = 0)
+  AND CASE :caracter
+        WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
+        WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
+      END
 GROUP BY S.storeno, S.prdno, S.grade;
 
 SELECT *
