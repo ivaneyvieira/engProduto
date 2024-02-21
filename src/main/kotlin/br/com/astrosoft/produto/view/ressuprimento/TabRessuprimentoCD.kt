@@ -60,8 +60,8 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoRessuprimento> {
-    return dlgProduto?.itensSelecionados().orEmpty()
+  override fun listItens(): List<ProdutoRessuprimento> {
+    return dlgProduto?.listItens().orEmpty()
   }
 
   override fun produtosMarcados(): List<ProdutoRessuprimento> {
@@ -86,7 +86,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   }
 
   override val label: String
-    get() = "CD"
+    get() = "Separar"
 
   override fun updateComponent() {
     viewModel.updateView()

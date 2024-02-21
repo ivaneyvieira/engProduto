@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.integerField
@@ -43,12 +44,13 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
         viewModel.updateView()
       }
     }
-    colunaRessuprimentoChaveCD()
+    //colunaRessuprimentoChaveCD()
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    colunaRessuprimentoComprador()
+    //colunaRessuprimentoComprador()
+    colunaRessuprimentoUsuarioCD()
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {

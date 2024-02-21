@@ -17,7 +17,8 @@ class Ressuprimento(
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
 ) {
-
+  val usuarioLogin
+    get() = usuarioCD?.split("-")?.getOrNull(0) ?: ""
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 

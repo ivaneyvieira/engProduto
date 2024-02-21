@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
@@ -29,14 +30,6 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos de Ressuprimento ${ressuprimento.numero}", toolBar = {
-      button("Entregue") {
-        val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
-          viewModel.marcaEnt()
-        }
-      }
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
@@ -47,7 +40,16 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
           }
         }
       }
+      button("Entregue") {
+        val user = AppConfig.userLogin() as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
+        icon = VaadinIcon.ARROW_RIGHT.create()
+        onLeftClick {
+          viewModel.marcaEnt()
+        }
+      }
       button("Imprime") {
+        this.isVisible = false
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
           viewModel.salvaProdutos()
@@ -66,10 +68,11 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
 
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
+      this.addClassName("styling")
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      //setSelectionMode(Grid.SelectionMode.MULTI)
 
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
@@ -79,16 +82,18 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoQuantidade()
       produtoRessuprimentoEstoque()
 
-      this.setClassNameGenerator {
-        if (it.marca == EMarcaRessuprimento.ENT.num) "entregue" else null
+      this.setPartNameGenerator {
+        if (it.marca == EMarcaRessuprimento.ENT.num) {
+          "amarelo"
+        } else null
       }
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun itensSelecionados(): List<ProdutoRessuprimento> {
-    return gridDetail.selectedItems.toList()
+  fun listItens(): List<ProdutoRessuprimento> {
+    return gridDetail.list()
   }
 
   fun update() {
@@ -105,6 +110,6 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   }
 
   fun produtosMarcados(): List<ProdutoRessuprimento> {
-    return gridDetail.dataProvider.fetchAll().filter { it.marca == EMarcaRessuprimento.ENT.num }
+    return gridDetail.list().filter { it.marca == EMarcaRessuprimento.ENT.num }
   }
 }

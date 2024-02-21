@@ -160,7 +160,7 @@ object EtiquetaChave {
       DadosEtiquetaRessuprimento(
         titulo = "Entregue",
         usuario = produto.usuarioNameCD,
-        numero = produto.ordno,
+        numero = produto.ordno ?: 0,
         data = produto.dataCD,
         hora = produto.horaCD,
         local = produto.localizacao ?: ""

@@ -245,10 +245,10 @@ class QuerySaci : QueryDB(database) {
   fun salvaProdutosRessuprimento(podutoPedidoVenda: ProdutoRessuprimento) {
     val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
     script(sql) {
-      addOptionalParameter("ordno", podutoPedidoVenda.ordno)
-      addOptionalParameter("codigo", podutoPedidoVenda.codigo)
-      addOptionalParameter("grade", podutoPedidoVenda.grade)
-      addOptionalParameter("marca", podutoPedidoVenda.marca)
+      addOptionalParameter("ordno", podutoPedidoVenda.ordno ?: 0)
+      addOptionalParameter("codigo", podutoPedidoVenda.codigo ?: "")
+      addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
+      addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
       addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
     }
   }
