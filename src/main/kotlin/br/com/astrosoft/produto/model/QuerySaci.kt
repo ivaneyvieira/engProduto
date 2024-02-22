@@ -250,6 +250,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
       addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
       addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
+      addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: false)
     }
   }
 
@@ -831,6 +832,15 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", filter.grade)
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("localizacao", filter.localizacao)
+    }
+  }
+
+  fun autorizaRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/autorizaRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("userno", ressuprimento.singno ?: 0)
     }
   }
 

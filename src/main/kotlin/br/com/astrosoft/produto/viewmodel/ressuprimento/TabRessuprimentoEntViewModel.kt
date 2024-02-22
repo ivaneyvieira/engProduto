@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
@@ -39,6 +40,35 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     }
   }
 
+  fun formAutoriza(pedido: Ressuprimento) {
+    subView.formAutoriza(pedido)
+  }
+
+  fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    pedido.autoriza(user)
+
+    updateView()
+  }
+
+  fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
+    if (pedido.singno == 0)
+      fail("Pedido não autorizado")
+    val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
+    val relatorio = PrintRessuprimento()
+
+    relatorio.print(
+      dados = produtos,
+      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+    )
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoEnt
 }
@@ -48,4 +78,5 @@ interface ITabRessuprimentoEnt : ITabView {
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoRessuprimento>
+  fun formAutoriza(pedido: Ressuprimento)
 }

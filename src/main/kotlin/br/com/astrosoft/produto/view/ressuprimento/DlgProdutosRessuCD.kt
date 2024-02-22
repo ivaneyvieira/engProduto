@@ -34,7 +34,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           if (it.isFromClient) {
-            viewModel.marcaEntProdutos(it.value)
+            viewModel.selecionaProdutos(it.value)
             this@textField.value = ""
             this@textField.focus()
           }
@@ -46,6 +46,14 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaEnt()
+        }
+      }
+      button("Desmarcar") {
+        val user = AppConfig.userLogin() as? UserSaci
+        isVisible = user?.voltarCD == true || user?.admin == true
+        icon = VaadinIcon.ARROW_LEFT.create()
+        onLeftClick {
+          viewModel.desmarcar()
         }
       }
       button("Imprime") {
@@ -72,7 +80,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      //setSelectionMode(Grid.SelectionMode.MULTI)
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
@@ -83,7 +91,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoEstoque()
 
       this.setPartNameGenerator {
-        if (it.marca == EMarcaRessuprimento.ENT.num) {
+        if (it.selecionado == true) {
           "amarelo"
         } else null
       }
@@ -92,8 +100,8 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
     update()
   }
 
-  fun listItens(): List<ProdutoRessuprimento> {
-    return gridDetail.list()
+  fun produtosSelecionados(): List<ProdutoRessuprimento> {
+    return gridDetail.selectedItems.toList()
   }
 
   fun update() {

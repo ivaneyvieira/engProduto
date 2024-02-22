@@ -1,3 +1,5 @@
+use sqldados;
+
 DO @DATA := SUBDATE(CURRENT_DATE, 30) * 1;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
@@ -18,6 +20,7 @@ SELECT N.l2                                      AS ordno,
 FROM sqldados.nf AS N
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
+  AND N.issuedate >= 20240220
 GROUP BY ordno;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -152,7 +155,9 @@ SELECT N.no                                               AS numero,
        MAX(X.auxShort4)                                   AS marca,
        'N'                                                AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
-       NF.dataNota                                        AS dataBaixa
+       NF.dataNota                                        AS dataBaixa,
+       N.s4                                               AS singno,
+       SU.name                                            AS sing
 FROM sqldados.ords AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -160,6 +165,8 @@ FROM sqldados.ords AS N
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
+       LEFT JOIN sqldados.users AS SU
+                 ON N.s4 = SU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
@@ -184,7 +191,9 @@ SELECT N.no                                               AS numero,
        MAX(X.auxShort4)                                   AS marca,
        'N'                                                AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
-       NF.dataNota                                        AS dataBaixa
+       NF.dataNota                                        AS dataBaixa,
+       N.s4                                               AS singno,
+       SU.name                                            AS sing
 FROM sqldados.ordsRessu AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -192,6 +201,8 @@ FROM sqldados.ordsRessu AS N
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
+       LEFT JOIN sqldados.users AS SU
+                 ON N.s4 = SU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
@@ -215,7 +226,9 @@ SELECT numero,
        marca,
        cancelada,
        notaBaixa,
-       dataBaixa
+       dataBaixa,
+       singno,
+       sing
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -229,7 +242,9 @@ SELECT numero,
        marca,
        cancelada,
        notaBaixa,
-       dataBaixa
+       dataBaixa,
+       singno,
+       sing
 FROM T_PEDIDO_02;
 
 SELECT numero,
@@ -242,7 +257,9 @@ SELECT numero,
        marca,
        cancelada,
        MAX(notaBaixa) AS notaBaixa,
-       MAX(dataBaixa) AS dataBaixa
+       MAX(dataBaixa) AS dataBaixa,
+       singno         AS singno,
+       sing           AS sing
 FROM T_PEDIDO AS D
 GROUP BY numero,
          IF(:marca = 999, '', SUBSTRING_INDEX(usuarioCD, '-', 1)),

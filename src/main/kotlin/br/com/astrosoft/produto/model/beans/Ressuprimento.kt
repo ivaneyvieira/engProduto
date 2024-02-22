@@ -16,6 +16,8 @@ class Ressuprimento(
   var cancelada: String?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
+  var singno: Int?,
+  var sing: String?,
 ) {
   val usuarioLogin
     get() = usuarioCD?.split("-")?.getOrNull(0) ?: ""
@@ -35,6 +37,10 @@ class Ressuprimento(
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
+  fun autoriza(user: UserSaci) {
+    this.singno = user.no
+    saci.autorizaRessuprimento(this)
+  }
 
   companion object {
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userLocais())

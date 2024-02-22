@@ -17,14 +17,11 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun marcaEnt() = viewModel.exec {
-    val itens = subView.listItens()
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-    val itensDC = itens.filter { it.marca == EMarcaRessuprimento.CD.num }
-    if(itensDC.isNotEmpty()) {
-      fail("Existem produtos não marcados")
-    }
+
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
@@ -35,12 +32,11 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
-  fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
+  fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.marca = EMarcaRessuprimento.ENT.num
-    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
-    produto.usuarioCD = "$usuario-$dataHora"
+    produto.selecionado = true
+    produto.salva()
+
     subView.updateProduto(produto)
   }
 
@@ -72,6 +68,19 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     }
   }
 
+  fun desmarcar() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    itens.ifEmpty {
+      fail("Nenhum produto para desmarcar")
+    }
+
+    itens.forEach { produto ->
+      produto.selecionado = false
+      produto.salva()
+    }
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoCD
 }
@@ -80,7 +89,7 @@ interface ITabRessuprimentoCD : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
-  fun listItens(): List<ProdutoRessuprimento>
+  fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun produtosMarcados(): List<ProdutoRessuprimento>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun findRessuprimento(): Ressuprimento?

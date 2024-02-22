@@ -41,8 +41,11 @@ object RessuprimentoColumns {
     this.setHeader("Loc")
   }
 
-
   fun Grid<Ressuprimento>.colunaRessuprimentoUsuarioCD() = columnGrid(Ressuprimento::usuarioLogin) {
     this.setHeader("Usuário")
+  }
+
+  fun Grid<Ressuprimento>.colunaRessuprimentoSing() = columnGrid(Ressuprimento::sing) {
+    this.setHeader("Autorização")
   }
 }

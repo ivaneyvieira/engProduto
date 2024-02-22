@@ -60,8 +60,8 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     dlgProduto?.update()
   }
 
-  override fun listItens(): List<ProdutoRessuprimento> {
-    return dlgProduto?.listItens().orEmpty()
+  override fun produtosSelecionados(): List<ProdutoRessuprimento> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
   }
 
   override fun produtosMarcados(): List<ProdutoRessuprimento> {

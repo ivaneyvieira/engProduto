@@ -1,6 +1,7 @@
 UPDATE sqldados.oprd AS X
 SET X.auxShort4 = :marca,
-    X.obs       = :usuarioCD
+    X.obs       = :usuarioCD,
+    X.auxShort3 = if(:selecionado, 1, 0)
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')

@@ -2,14 +2,15 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoChaveCD
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
+import br.com.astrosoft.produto.view.pedidoTransf.FormAutoriza
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
@@ -35,8 +36,10 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
-    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { ressuprimento ->
-      viewModel.printEtiqueta(ressuprimento)
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido) { impressora ->
+        //viewModel.marcaImpressao(pedido, impressora)
+      }
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
@@ -49,7 +52,10 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    //colunaRessuprimentoComprador()
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
+      viewModel.formAutoriza(pedido)
+    }
+    colunaRessuprimentoSing()
     colunaRessuprimentoUsuarioCD()
   }
 
@@ -79,5 +85,12 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun formAutoriza(pedido: Ressuprimento) {
+    val form = FormAutoriza(pedido)
+    DialogHelper.showForm(caption = "Autoriza ressuprimento", form = form) {
+      viewModel.autorizaPedido(pedido, form.login, form.senha)
+    }
   }
 }
