@@ -97,20 +97,16 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun formAutoriza(pedido: Ressuprimento) {
-    //val form = FormAutoriza()
-    //DialogHelper.showForm(caption = "Autoriza ressuprimento", form = form) {
-    //  viewModel.autorizaPedido(pedido, form.login, form.senha)
-    //}
-    val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Entregue Por", form = form) {
-      viewModel.entreguePedido(pedido, form.numero)
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.autorizaPedido(pedido, form.login, form.senha)
     }
   }
 
   override fun formRecebido(pedido: Ressuprimento) {
-    val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Recebido Por", form = form) {
-      viewModel.recebePedido(pedido, form.numero)
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }
 

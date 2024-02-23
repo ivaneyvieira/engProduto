@@ -46,6 +46,11 @@ class Ressuprimento(
     saci.autorizaRessuprimento(this)
   }
 
+  fun autorizaRecebido(user: UserSaci) {
+    this.recebidoNo = user.no
+    saci.recebeRessuprimento(this)
+  }
+
   fun entregue(funcionario: Funcionario) {
     this.singno = funcionario.codigo
     saci.entregueRessuprimento(this)

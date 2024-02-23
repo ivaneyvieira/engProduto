@@ -15,7 +15,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateRessuprimentos(ressuprimento)
   }
 
-  fun marcaCD() {
+  fun marcaCD() = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
@@ -45,7 +45,20 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     subView.formAutoriza(pedido)
   }
 
-  fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) {
+  fun recebidoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    pedido.autorizaRecebido(user)
+
+    updateView()
+  }
+
+  fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -58,19 +71,19 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
 
-  fun entreguePedido(pedido: Ressuprimento, numero: Int) {
+  fun entreguePedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.entregue(funcionario)
     updateView()
   }
 
-  fun recebePedido(pedido: Ressuprimento, numero: Int) {
+  fun recebePedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.recebe(funcionario)
     updateView()
   }
 
-  fun transportadoPedido(pedido: Ressuprimento, numero: Int) {
+  fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.transportado(funcionario)
     updateView()
