@@ -11,7 +11,7 @@ class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprim
     writeln("")
     writeln("Data: ${pedido.data.format()}        Pedido   : ${pedido.numero}", negrito = true)
     writeln("Data: ${pedido.dataBaixa.format()}        NF Transf: ${pedido.notaBaixa}", negrito = true)
-    writeln("Usuario: ${pedido.usuario}", negrito = true)
+    writeln("Usuario: ${pedido.usuarioApp}", negrito = true)
 
     printLine()
   }

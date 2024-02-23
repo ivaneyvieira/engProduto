@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -25,6 +26,11 @@ class Ressuprimento(
   var usuarioNo: Int?,
   var usuario: String?,
 ) {
+  val usuarioApp: String?
+    get() {
+      val user = AppConfig.userLogin() as? UserSaci
+      return user?.name
+    }
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
