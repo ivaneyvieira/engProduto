@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
+import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
@@ -57,16 +58,36 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
 
+  fun recebePedido(pedido: Ressuprimento, numero: Int) {
+    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    pedido.recebe(funcionario)
+    updateView()
+  }
+
+  fun transportadoPedido(pedido: Ressuprimento, numero: Int) {
+    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    pedido.transportado(funcionario)
+    updateView()
+  }
+
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     if (pedido.singno == 0)
       fail("Pedido não autorizado")
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
-    val relatorio = PrintRessuprimento()
+    val relatorio = PrintRessuprimento(pedido)
 
     relatorio.print(
       dados = produtos,
       printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
+  }
+
+  fun formTransportado(pedido: Ressuprimento) {
+    subView.formTransportado(pedido)
+  }
+
+  fun formRecebido(pedido: Ressuprimento) {
+    subView.formRecebido(pedido)
   }
 
   val subView
@@ -79,4 +100,6 @@ interface ITabRessuprimentoEnt : ITabView {
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoRessuprimento>
   fun formAutoriza(pedido: Ressuprimento)
+  fun formTransportado(pedido: Ressuprimento)
+  fun formRecebido(pedido: Ressuprimento)
 }

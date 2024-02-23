@@ -125,7 +125,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       val textCenter = if (center) {
         val widthPageCalc = if (expand) widthPage / 2 else widthPage
         val margem = (widthPageCalc - textOrig.length) / 2
-        " ".repeat(margem) + textOrig
+        " ".repeat(if (margem < 0) 0 else margem) + textOrig
       } else textOrig
       val textNeg = if (negrito) {
         if (expand)

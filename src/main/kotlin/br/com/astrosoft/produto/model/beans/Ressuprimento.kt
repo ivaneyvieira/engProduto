@@ -18,6 +18,10 @@ class Ressuprimento(
   var dataBaixa: LocalDate?,
   var singno: Int?,
   var sing: String?,
+  var transportadoNo: Int?,
+  var transportadoPor: String?,
+  var recebidoNo: Int?,
+  var recebidoPor: String?,
 ) {
   val usuarioLogin
     get() = usuarioCD?.split("-")?.getOrNull(0) ?: ""
@@ -40,6 +44,16 @@ class Ressuprimento(
   fun autoriza(user: UserSaci) {
     this.singno = user.no
     saci.autorizaRessuprimento(this)
+  }
+
+  fun recebe(funcionario: Funcionario) {
+    this.recebidoNo = funcionario.codigo
+    saci.recebeRessuprimento(this)
+  }
+
+  fun transportado(funcionario: Funcionario) {
+    this.transportadoNo = funcionario.codigo
+    saci.transportadoRessuprimento(this)
   }
 
   companion object {

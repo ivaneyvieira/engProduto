@@ -1,12 +1,17 @@
 package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
+import br.com.astrosoft.produto.model.beans.Ressuprimento
 
-class PrintRessuprimento : PrintText<ProdutoRessuprimento>() {
+class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprimento>() {
   override fun printTitle(bean: ProdutoRessuprimento) {
-    val pedido = bean.ordno
-    writeln("Pedido ${pedido}", negrito = true, center = true)
+    writeln("Romaneio de Separacao do Ressuprimento da ROTA 45", negrito = true, center = true)
+    writeln("")
+    writeln("Data: ${pedido.data.format()}        Hora:                 Pedido: ${pedido.numero}", negrito = true)
+    writeln("Data: ${pedido.dataBaixa.format()}        Hora:                 Pedido: ${pedido.notaBaixa}", negrito = true)
+    writeln("Usuario: ${pedido.usuarioLogin}")
 
     printLine()
   }
@@ -21,7 +26,15 @@ class PrintRessuprimento : PrintText<ProdutoRessuprimento>() {
 
   override fun printSumary() {
     writeln("")
-    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("____________________________________", center = true)
+    writeln("Separado e Entregue Por", center = true)
+    writeln("${pedido.sing}", center = true)
+    writeln("")
+    writeln("")
+    writeln("_______________________________  _______________________________", center = true)
+    writeln("${"Tranportado Por".center(32)}${"Recebido Por".center(32)}")
+    writeln("${pedido.transportadoPor.center(32)}${pedido.recebidoPor.center(32)}", center = true)
     writeln("")
     writeln("")
   }

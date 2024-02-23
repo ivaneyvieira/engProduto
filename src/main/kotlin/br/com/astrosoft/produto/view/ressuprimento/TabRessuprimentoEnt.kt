@@ -10,7 +10,9 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
@@ -52,10 +54,18 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { pedido ->
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formAutoriza(pedido)
     }
     colunaRessuprimentoSing()
+    addColumnButton(VaadinIcon.SIGN_IN, "Transportado Por", "Transportado Por") { pedido ->
+      viewModel.formTransportado(pedido)
+    }
+    colunaRessuprimentoTransportadorPor()
+    addColumnButton(VaadinIcon.SIGN_IN, "Recebido Por", "Recebido Por") { pedido ->
+      viewModel.formRecebido(pedido)
+    }
+    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioCD()
   }
 
@@ -88,9 +98,21 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun formAutoriza(pedido: Ressuprimento) {
-    val form = FormAutoriza(pedido)
+    val form = FormAutoriza()
     DialogHelper.showForm(caption = "Autoriza ressuprimento", form = form) {
       viewModel.autorizaPedido(pedido, form.login, form.senha)
+    }
+  }
+  override fun formRecebido(pedido: Ressuprimento) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Recebido Por", form = form) {
+      viewModel.recebePedido(pedido, form.numero)
+    }
+  }
+  override fun formTransportado(pedido: Ressuprimento) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Transportado Por", form = form) {
+      viewModel.transportadoPedido(pedido, form.numero)
     }
   }
 }

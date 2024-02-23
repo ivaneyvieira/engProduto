@@ -844,6 +844,24 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun recebeRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/recebeRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("recebidoNo", ressuprimento.recebidoNo ?: 0)
+    }
+  }
+
+  fun transportadoRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/transportadoRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("transportadoNo", ressuprimento.transportadoNo ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
