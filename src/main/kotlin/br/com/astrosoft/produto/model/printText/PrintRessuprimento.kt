@@ -11,15 +11,15 @@ class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprim
     writeln("")
     writeln("Data: ${pedido.data.format()}        Hora:                 Pedido: ${pedido.numero}", negrito = true)
     writeln("Data: ${pedido.dataBaixa.format()}        Hora:              Nf Transf: ${pedido.notaBaixa}", negrito = true)
-    writeln("Usuario: ${pedido.usuarioLogin}")
+    writeln("Usuario: ${pedido.usuarioLogin}", negrito = true)
 
     printLine()
   }
 
   init {
     column(ProdutoRessuprimento::codigo, "Codigo", 6)
-    column(ProdutoRessuprimento::descricao, "Descricao", 35)
-    column(ProdutoRessuprimento::grade, "Grade", 9)
+    column(ProdutoRessuprimento::descricao, "Descricao", 36)
+    column(ProdutoRessuprimento::grade, "Grade", 8)
     column(ProdutoRessuprimento::localizacao, "Loc", 4)
     column(ProdutoRessuprimento::quantidade, "Quant", 6)
   }

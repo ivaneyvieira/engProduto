@@ -57,11 +57,11 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       viewModel.formAutoriza(pedido)
     }
     colunaRessuprimentoSing()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Transportado Por") { pedido ->
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formTransportado(pedido)
     }
     colunaRessuprimentoTransportadorPor()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Recebido Por") { pedido ->
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formRecebido(pedido)
     }
     colunaRessuprimentoRecebidoPor()
