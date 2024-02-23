@@ -46,14 +46,14 @@ object RessuprimentoColumns {
   }
 
   fun Grid<Ressuprimento>.colunaRessuprimentoSing() = columnGrid(Ressuprimento::sing) {
-    this.setHeader("Autorização")
+    this.setHeader("Entregue")
   }
 
   fun Grid<Ressuprimento>.colunaRessuprimentoTransportadorPor() = columnGrid(Ressuprimento::transportadoPor) {
-    this.setHeader("Transportado Por")
+    this.setHeader("Transportado")
   }
 
   fun Grid<Ressuprimento>.colunaRessuprimentoRecebidoPor() = columnGrid(Ressuprimento::recebidoPor) {
-    this.setHeader("Recebido Por")
+    this.setHeader("Recebido")
   }
 }

@@ -7,6 +7,16 @@ WHERE storeno = 1
   AND prdno = LPAD(:codigo, 16, ' ')
   AND grade = :grade;
 
+UPDATE sqldados.oprdRessu AS X
+SET X.auxShort4 = :marca,
+    X.obs       = :usuarioCD,
+    X.auxShort3 = if(:selecionado, 1, 0)
+WHERE storeno = 1
+  AND ordno = :ordno
+  AND prdno = LPAD(:codigo, 16, ' ')
+  AND grade = :grade;
+
+
 REPLACE INTO sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2,
                                 icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src,
                                 qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes, qttyVendaMesAnt,
