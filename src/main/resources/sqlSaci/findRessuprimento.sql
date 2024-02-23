@@ -200,7 +200,7 @@ SELECT N.no                                               AS numero,
        'N'                                                AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
        NF.dataNota                                        AS dataBaixa,
-       N.s4                                               AS singno,
+       SU.no                                              AS singno,
        SU.name                                            AS sing,
        TU.no                                              AS transportadoNo,
        TU.name                                            AS transportadoPor,
@@ -213,7 +213,7 @@ FROM sqldados.ordsRessu AS N
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
-       LEFT JOIN sqldados.users AS SU
+       LEFT JOIN sqldados.emp AS SU
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
                  ON N.s3 = TU.no

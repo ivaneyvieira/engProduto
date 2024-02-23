@@ -844,6 +844,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun entregueRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/entregueRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("singno", ressuprimento.singno ?: 0)
+    }
+  }
+
   fun recebeRessuprimento(ressuprimento: Ressuprimento) {
     val sql = "/sqlSaci/recebeRessuprimento.sql"
     script(sql) {

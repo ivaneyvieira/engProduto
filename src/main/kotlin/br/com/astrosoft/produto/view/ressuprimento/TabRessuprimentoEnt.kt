@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.pedidoTransf.FormAutoriza
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
@@ -98,17 +97,23 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun formAutoriza(pedido: Ressuprimento) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Autoriza ressuprimento", form = form) {
-      viewModel.autorizaPedido(pedido, form.login, form.senha)
+    //val form = FormAutoriza()
+    //DialogHelper.showForm(caption = "Autoriza ressuprimento", form = form) {
+    //  viewModel.autorizaPedido(pedido, form.login, form.senha)
+    //}
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Entregue Por", form = form) {
+      viewModel.entreguePedido(pedido, form.numero)
     }
   }
+
   override fun formRecebido(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Recebido Por", form = form) {
       viewModel.recebePedido(pedido, form.numero)
     }
   }
+
   override fun formTransportado(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
