@@ -161,7 +161,9 @@ SELECT N.no                                               AS numero,
        TU.no                                              AS transportadoNo,
        TU.name                                            AS transportadoPor,
        RU.no                                              AS recebidoNo,
-       RU.name                                            AS recebidoPor
+       RU.name                                            AS recebidoPor,
+       PU.no                                              AS usuarioNo,
+       PU.name                                            AS usuario
 FROM sqldados.ords AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -173,8 +175,10 @@ FROM sqldados.ords AS N
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
                  ON N.s3 = TU.no
-       LEFT JOIN sqldados.emp AS RU
+       LEFT JOIN sqldados.users AS RU
                  ON N.s2 = RU.no
+       LEFT JOIN sqldados.users AS PU
+                 ON N.padbyte = PU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
@@ -205,7 +209,9 @@ SELECT N.no                                               AS numero,
        TU.no                                              AS transportadoNo,
        TU.name                                            AS transportadoPor,
        RU.no                                              AS recebidoNo,
-       RU.name                                            AS recebidoPor
+       RU.name                                            AS recebidoPor,
+       PU.no                                              AS usuarioNo,
+       PU.name                                            AS usuario
 FROM sqldados.ordsRessu AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -213,12 +219,14 @@ FROM sqldados.ordsRessu AS N
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
-       LEFT JOIN sqldados.emp AS SU
+       LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
                  ON N.s3 = TU.no
-       LEFT JOIN sqldados.emp AS RU
+       LEFT JOIN sqldados.users AS RU
                  ON N.s2 = RU.no
+       LEFT JOIN sqldados.users AS PU
+                 ON N.padbyte = PU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
@@ -248,7 +256,9 @@ SELECT numero,
        transportadoNo,
        transportadoPor,
        recebidoNo,
-       recebidoPor
+       recebidoPor,
+       usuarioNo,
+       usuario
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -268,7 +278,9 @@ SELECT numero,
        transportadoNo,
        transportadoPor,
        recebidoNo,
-       recebidoPor
+       recebidoPor,
+       usuarioNo,
+       usuario
 FROM T_PEDIDO_02;
 
 SELECT numero,
@@ -287,7 +299,9 @@ SELECT numero,
        transportadoNo  AS transportadoNo,
        transportadoPor AS transportadoPor,
        recebidoNo      AS recebidoNo,
-       recebidoPor     AS recebidoPor
+       recebidoPor     AS recebidoPor,
+       usuarioNo       AS usuarioNo,
+       usuario         AS usuario
 FROM T_PEDIDO AS D
 GROUP BY numero,
          IF(:marca = 999, '', SUBSTRING_INDEX(usuarioCD, '-', 1)),

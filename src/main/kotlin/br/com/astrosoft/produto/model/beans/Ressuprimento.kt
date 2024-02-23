@@ -22,9 +22,9 @@ class Ressuprimento(
   var transportadoPor: String?,
   var recebidoNo: Int?,
   var recebidoPor: String?,
+  var usuarioNo: Int?,
+  var usuario: String?,
 ) {
-  val usuarioLogin
-    get() = usuarioCD?.split("-")?.getOrNull(0) ?: ""
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
