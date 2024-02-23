@@ -7,10 +7,10 @@ import br.com.astrosoft.produto.model.beans.Ressuprimento
 
 class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprimento>() {
   override fun printTitle(bean: ProdutoRessuprimento) {
-    writeln("Romaneio de Separacao do Ressuprimento da ROTA 45", negrito = true, center = true)
+    writeln("Romaneio de Separacao do Ressuprimento da Rota 45", negrito = true, center = true)
     writeln("")
     writeln("Data: ${pedido.data.format()}        Hora:                 Pedido: ${pedido.numero}", negrito = true)
-    writeln("Data: ${pedido.dataBaixa.format()}        Hora:                 Pedido: ${pedido.notaBaixa}", negrito = true)
+    writeln("Data: ${pedido.dataBaixa.format()}        Hora:              Nf Transf: ${pedido.notaBaixa}", negrito = true)
     writeln("Usuario: ${pedido.usuarioLogin}")
 
     printLine()
@@ -28,12 +28,12 @@ class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprim
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln("Separado e Entregue Por", center = true)
+    writeln("Separado e Entregue", center = true)
     writeln("${pedido.sing}", center = true)
     writeln("")
     writeln("")
     writeln("_______________________________  _______________________________", center = true)
-    writeln("${"Tranportado Por".center(32)}${"Recebido Por".center(32)}")
+    writeln("${"Tranportado".center(32)}${"Recebido".center(32)}")
     writeln("${pedido.transportadoPor.center(32)}${pedido.recebidoPor.center(32)}", center = true)
     writeln("")
     writeln("")

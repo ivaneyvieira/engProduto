@@ -77,7 +77,13 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val relatorio = PrintRessuprimento(pedido)
 
     relatorio.print(
-      dados = produtos,
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoRessuprimento::descricao,
+          ProdutoRessuprimento::codigo,
+          ProdutoRessuprimento::grade
+        )
+      ),
       printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
