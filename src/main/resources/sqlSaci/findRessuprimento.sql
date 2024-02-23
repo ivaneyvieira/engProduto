@@ -171,9 +171,9 @@ FROM sqldados.ords AS N
                  ON L.prdno = X.prdno AND L.storeno = 4
        LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
-       LEFT JOIN sqldados.users AS TU
+       LEFT JOIN sqldados.emp AS TU
                  ON N.s3 = TU.no
-       LEFT JOIN sqldados.users AS RU
+       LEFT JOIN sqldados.emp AS RU
                  ON N.s2 = RU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
@@ -215,9 +215,9 @@ FROM sqldados.ordsRessu AS N
                  ON L.prdno = X.prdno AND L.storeno = 4
        LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
-       LEFT JOIN sqldados.users AS TU
+       LEFT JOIN sqldados.emp AS TU
                  ON N.s3 = TU.no
-       LEFT JOIN sqldados.users AS RU
+       LEFT JOIN sqldados.emp AS RU
                  ON N.s2 = RU.no
 WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
