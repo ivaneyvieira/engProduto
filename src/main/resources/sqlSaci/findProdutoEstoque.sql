@@ -32,11 +32,16 @@ SELECT S.storeno                                                     AS loja,
        P.qttyPackClosed / 1000                                       AS embalagem,
        TRUNCATE(IFNULL(A.estoque, 0) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                          AS estoque,
-       COALESCE(A.localizacao, MID(L1.localizacao, 1, 4), '')        AS localizacao,
+       MID(L1.localizacao, 1, 4)                                     AS locSaci,
+       COALESCE(A.localizacao, MID(L1.localizacao, 1, 4), '')        AS locApp,
+       V.no                                                          AS codForn,
+       V.sname                                                       AS fornecedor,
        ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                AS saldo
 FROM sqldados.stk AS S
        INNER JOIN sqldados.prd AS P
                   ON S.prdno = P.no
+       LEFT JOIN sqldados.vend AS V
+                 ON V.no = P.mfno
        LEFT JOIN sqldados.prdAdicional AS A
                  USING (storeno, prdno, grade)
        LEFT JOIN sqldados.prdloc AS L1
@@ -59,4 +64,4 @@ WHERE (
   unidade LIKE @PESQUISA
   )
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
-  AND (localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')

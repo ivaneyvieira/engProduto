@@ -12,7 +12,10 @@ class ProdutoEstoque(
   var embalagem: Double?,
   var qtdEmbalagem: Int?,
   var estoque: Int?,
-  var localizacao: String?,
+  var locSaci: String?,
+  var locApp: String?,
+  var codForn: Int,
+  var fornecedor: String,
   var saldo: Int?,
 ) {
   fun update() {

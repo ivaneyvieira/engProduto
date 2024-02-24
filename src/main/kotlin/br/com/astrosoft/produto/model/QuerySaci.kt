@@ -880,7 +880,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
       addOptionalParameter("grade", produtoEstoque.grade ?: "")
       addOptionalParameter("estoque", produtoEstoque.estoque ?: 0)
-      addOptionalParameter("localizacao", produtoEstoque.localizacao)
+      addOptionalParameter("locApp", produtoEstoque.locApp)
     }
   }
 

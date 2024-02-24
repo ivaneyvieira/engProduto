@@ -48,7 +48,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       valueChangeMode = ValueChangeMode.TIMEOUT
       val userSaci = AppConfig.userLogin() as? UserSaci
       val local = userSaci?.localEstoque ?: ""
-      if((local != "TODOS") && (local != "")) {
+      if ((local != "TODOS") && (local != "")) {
         this.value = local
         this.isReadOnly = true
       }
@@ -78,8 +78,8 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
 
     this.withEditor(
       classBean = ProdutoEstoque::class,
-      openEditor ={
-        val edit = getColumnBy(ProdutoEstoque::localizacao) as? Focusable<*>
+      openEditor = {
+        val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
         edit?.focus()
       },
       closeEditor = {
@@ -92,7 +92,10 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
-    columnGrid(ProdutoEstoque::localizacao, header = "Loc", width = "100px").textFieldEditor()
+    columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci", width = "100px")
+    columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").textFieldEditor()
+    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
+    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr").expand()
   }
 
   override fun filtro(): FiltroProdutoEstoque {
