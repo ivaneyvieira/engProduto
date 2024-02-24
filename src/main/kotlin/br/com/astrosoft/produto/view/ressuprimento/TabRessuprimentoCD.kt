@@ -87,7 +87,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.pedidoCD == true
+    return username?.ressuprimentoCD == true
   }
 
   override val label: String

@@ -19,7 +19,7 @@ class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
-      if (userSaci?.pedido == true) route(
+      if (userSaci?.ressuprimento == true) route(
         icon = SHOP,
         title = "Ressuprimento",
         routeClass = RessuprimentoView::class
