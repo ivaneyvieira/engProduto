@@ -378,6 +378,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
+      addOptionalParameter("locApp", pedido.localizacao)
       addOptionalParameter("locais", locais)
     }
   }

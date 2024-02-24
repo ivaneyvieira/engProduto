@@ -43,6 +43,7 @@ FROM (SELECT ordno                                              AS ordno,
         AND X.ordno = :ordno
         AND (X.auxShort4 = :marca OR :marca = 999)
         AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+        AND (MID(L.localizacao, 1, 4) = :locApp)
       GROUP BY codigo, grade
       UNION
       DISTINCT
@@ -90,5 +91,6 @@ FROM (SELECT ordno                                              AS ordno,
         AND X.ordno = :ordno
         AND (X.auxShort4 = :marca OR :marca = 999)
         AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+        AND (MID(L.localizacao, 1, 4) = :locApp)
       GROUP BY codigo, grade) AS D
 GROUP BY codigo, grade
