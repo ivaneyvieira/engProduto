@@ -71,6 +71,7 @@ class UserSaci : IUser {
   var acertoMovManualEntrada by DelegateAuthorized(48)
   var acertoMovAtacado by DelegateAuthorized(49)
   var estoqueMF by DelegateAuthorized(50)
+  var estoqueCad by DelegateAuthorized(51)
 
   //Locais
   var localEstoque: String?
@@ -204,7 +205,7 @@ class UserSaci : IUser {
     get() = retiraImprimir || retiraImpresso || admin
 
   val estoqueCD
-    get() = estoqueMF || admin
+    get() = estoqueMF || estoqueCad || admin
 
   val fornecedor
     get() = produtoList

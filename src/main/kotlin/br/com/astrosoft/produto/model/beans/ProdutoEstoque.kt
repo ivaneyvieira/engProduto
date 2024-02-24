@@ -15,6 +15,10 @@ class ProdutoEstoque(
   var localizacao: String?,
   var saldo: Int?,
 ) {
+  fun update() {
+    saci.updateProdutoEstoque(this)
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)

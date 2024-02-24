@@ -14,8 +14,12 @@ create table sqldados.prdAdicional (
   grade varchar(10),
   estoque int,
   PRIMARY KEY (storeno, prdno, grade)
-)
+
+alter table sqldados.prdAdicional
+add column localizacao varchar(4)
+
 */
+
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa AS
@@ -28,7 +32,7 @@ SELECT S.storeno                                                     AS loja,
        P.qttyPackClosed / 1000                                       AS embalagem,
        TRUNCATE(IFNULL(A.estoque, 0) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                          AS estoque,
-       IFNULL(MID(L1.localizacao, 1, 4), '')                         AS localizacao,
+       COALESCE(A.localizacao, MID(L1.localizacao, 1, 4), '')        AS localizacao,
        ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                AS saldo
 FROM sqldados.stk AS S
        INNER JOIN sqldados.prd AS P
@@ -55,4 +59,4 @@ WHERE (
   unidade LIKE @PESQUISA
   )
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
-AND (localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND (localizacao LIKE CONCAT(:localizacao, '%') OR :localizacao = '')

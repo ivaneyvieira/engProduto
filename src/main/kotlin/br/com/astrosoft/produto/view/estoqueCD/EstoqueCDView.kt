@@ -20,6 +20,7 @@ import jakarta.annotation.security.PermitAll
 class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
   override val viewModel = EstoqueCDViewModel(this)
   override val tabEstoqueMF = TabEstoqueMF(viewModel.tabEstoqueMFViewModel)
+  override val tabEstoqueCad = TabEstoqueCad(viewModel.tabEstoqueCadViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
