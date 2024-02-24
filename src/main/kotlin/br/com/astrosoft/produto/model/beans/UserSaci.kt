@@ -110,7 +110,7 @@ class UserSaci : IUser {
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
       print.trim()
-    }
+    }.filter { it.isNotBlank() }
     set(value) {
       listaLoja = value.joinToString(",") { print ->
         print

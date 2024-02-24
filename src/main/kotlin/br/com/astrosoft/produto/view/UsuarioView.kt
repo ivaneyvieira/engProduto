@@ -91,7 +91,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             multiSelectComboBox<String>("Localização") {
               isReadOnly = readOnly
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
-              binder.bind(this, UserSaci::listaEstoque.name)
+              binder.bind(this, UserSaci::listaRessuprimento.name)
             }
           }
           formLayout {
