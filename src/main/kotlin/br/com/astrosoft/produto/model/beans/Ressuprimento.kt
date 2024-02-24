@@ -78,7 +78,11 @@ class Ressuprimento(
   }
 }
 
-data class FiltroRessuprimento(val numero: Int, val marca: EMarcaRessuprimento)
+data class FiltroRessuprimento(
+  val numero: Int,
+  val marca: EMarcaRessuprimento,
+  val lojaRessu: Int,
+)
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
   CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")

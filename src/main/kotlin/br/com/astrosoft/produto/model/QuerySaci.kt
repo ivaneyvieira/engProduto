@@ -332,6 +332,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("ordno", filtro.numero)
       addOptionalParameter("locais", locais)
+      addOptionalParameter("lojaRessu", filtro.lojaRessu)
     }
   }
 

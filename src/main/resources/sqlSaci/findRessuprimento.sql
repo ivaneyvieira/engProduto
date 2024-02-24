@@ -19,6 +19,7 @@ SELECT N.l2                                      AS ordno,
        CAST(N.issuedate AS DATE)                 AS dataNota
 FROM sqldados.nf AS N
 WHERE N.l2 BETWEEN 100000000 AND 999999999
+  AND (N.l2 LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240220
 GROUP BY ordno;
@@ -165,7 +166,7 @@ SELECT N.no                                               AS numero,
        PU.no                                              AS usuarioNo,
        PU.name                                            AS usuario
 FROM sqldados.ords AS N
-       LEFT JOIN T_PEDIDO_NOTA AS NF
+       INNER JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
@@ -213,7 +214,7 @@ SELECT N.no                                               AS numero,
        PU.no                                              AS usuarioNo,
        PU.name                                            AS usuario
 FROM sqldados.ordsRessu AS N
-       LEFT JOIN T_PEDIDO_NOTA AS NF
+       INNER JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
        INNER JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno

@@ -69,7 +69,12 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
-    return FiltroRessuprimento(numero = edtRessuprimento.value ?: 0, marca = marca)
+    val user = AppConfig.userLogin() as? UserSaci
+    return FiltroRessuprimento(
+      numero = edtRessuprimento.value ?: 0,
+      marca = marca,
+      lojaRessu = user?.lojaRessu ?: 0
+    )
   }
 
   override fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>) {

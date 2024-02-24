@@ -108,13 +108,9 @@ class UserSaci : IUser {
   //Lojas
 
   var lojas: List<String>
-    get() = listaLoja.split(",").map { print ->
-      print.trim()
-    }.filter { it.isNotBlank() }
+    get() = listaLoja.split(",")
     set(value) {
-      listaLoja = value.joinToString(",") { print ->
-        print
-      }
+      listaLoja = value.joinToString(",")
     }
 
   var lojaVale: Int?
@@ -172,6 +168,21 @@ class UserSaci : IUser {
         listLojas.getOrNull(4) ?: "",
       )
     }
+
+  var lojaRessu: Int?
+    get() = lojas.getOrNull(4)?.toIntOrNull()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        value?.toString() ?: "",
+      )
+    }
+
+  //
 
   val lojaUsuario
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0

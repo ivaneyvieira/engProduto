@@ -93,6 +93,20 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
               binder.bind(this, UserSaci::listaRessuprimento.name)
             }
+            select<Int>("Nome Loja") {
+              isReadOnly = readOnly
+              setItems(lojasNum.distinct().sorted())
+              this.isEmptySelectionAllowed = true
+              this.setItemLabelGenerator { storeno ->
+                when (storeno) {
+                  0    -> "Todas as lojas"
+                  else -> lojas.firstOrNull { loja ->
+                    loja.no == storeno
+                  }?.descricao ?: ""
+                }
+              }
+              binder.bind(this, UserSaci::lojaRessu.name)
+            }
           }
           formLayout {
             h4("Pedido Transf") {
