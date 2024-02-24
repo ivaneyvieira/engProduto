@@ -51,7 +51,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       )
       if (userSaci?.estoqueCD == true) route(
         icon = STORAGE,
-        title = "Estoque CD",
+        title = "CD MF",
         routeClass = EstoqueCDView::class,
       )
 

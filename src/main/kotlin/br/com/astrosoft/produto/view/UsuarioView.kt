@@ -238,10 +238,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
           }
           formLayout {
-            h4("Estoque CD") {
+            h4("CD MF") {
               colspan = 2
             }
-            checkBox("MF") {
+            checkBox("Estoque") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::estoqueMF.name)
             }

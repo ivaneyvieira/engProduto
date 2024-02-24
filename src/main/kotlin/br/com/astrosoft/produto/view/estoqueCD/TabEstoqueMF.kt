@@ -107,7 +107,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   }
 
   override val label: String
-    get() = "MF"
+    get() = "Estoque"
 
   override fun updateComponent() {
     viewModel.updateView()
