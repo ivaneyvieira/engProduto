@@ -42,7 +42,6 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       }
       button("Entregue") {
         val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaEnt()
@@ -50,7 +49,6 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       }
       button("Desmarcar") {
         val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.desmarcar()
