@@ -245,6 +245,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::estoqueMF.name)
             }
+            checkBox("Cad Loc") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::estoqueCad.name)
+            }
             select<String>("Localização") {
               isReadOnly = readOnly
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
