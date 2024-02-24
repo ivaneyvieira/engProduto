@@ -90,8 +90,15 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.singno == 0)
+    if (pedido.sing.isNullOrBlank())
       fail("Pedido não autorizado")
+
+    if(pedido.recebidoPor.isNullOrBlank())
+      fail("Pedido não recebido"      )
+
+    if(pedido.transportadoPor.isNullOrBlank())
+      fail("Pedido não transportado")
+
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
     val relatorio = PrintRessuprimento(pedido)
 
