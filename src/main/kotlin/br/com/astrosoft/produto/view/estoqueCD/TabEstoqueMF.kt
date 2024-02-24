@@ -48,7 +48,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       valueChangeMode = ValueChangeMode.TIMEOUT
       val userSaci = AppConfig.userLogin() as? UserSaci
       val local = userSaci?.localEstoque ?: ""
-      if((local != "TODOS") && (local != "")) {
+      if ((local != "TODOS") && (local != "")) {
         this.value = local
         this.isReadOnly = true
       }
@@ -93,7 +93,8 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
-      localizacao = edtLocalizacao.value ?: ""
+      localizacao = edtLocalizacao.value ?: "",
+      fornecedor = "",
     )
   }
 

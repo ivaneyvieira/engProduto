@@ -35,4 +35,5 @@ data class FiltroProdutoEstoque(
   val grade: String,
   val caracter: ECaracter,
   val localizacao: String?,
+  val fornecedor: String,
 )

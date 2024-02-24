@@ -10,10 +10,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueCad
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueCadViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
@@ -29,6 +26,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
+  private lateinit var edtFornecedor: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -54,6 +52,13 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         this.value = local
         this.isReadOnly = true
       }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtFornecedor = textField("Fornecedor") {
+      this.width = "100px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -113,7 +118,8 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
-      localizacao = edtLocalizacao.value ?: ""
+      localizacao = edtLocalizacao.value ?: "",
+      fornecedor = edtFornecedor.value ?: "",
     )
   }
 

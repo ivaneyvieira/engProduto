@@ -53,6 +53,7 @@ WHERE (S.storeno = :loja OR :loja = 0)
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
+  AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
 GROUP BY S.storeno, S.prdno, S.grade;
 
 SELECT *
