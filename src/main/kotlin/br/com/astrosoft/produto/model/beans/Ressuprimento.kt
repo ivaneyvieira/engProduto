@@ -74,7 +74,7 @@ class Ressuprimento(
   }
 
   companion object {
-    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userEstoqueLocais())
+    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
   }
 }
 
