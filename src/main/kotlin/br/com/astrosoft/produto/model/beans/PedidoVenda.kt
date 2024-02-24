@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
+import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userEstoqueLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -31,10 +31,10 @@ class PedidoVenda(
   val chaveNovaCD: String
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
-  fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userLocais())
+  fun produtos(marca: EMarcaPedido) = saci.findProdutoPedidoVenda(this, marca, userEstoqueLocais())
 
   companion object {
-    fun findVenda(filtro: FiltroPedidoVenda) = saci.findPedidoVenda(filtro, userLocais())
+    fun findVenda(filtro: FiltroPedidoVenda) = saci.findPedidoVenda(filtro, userEstoqueLocais())
   }
 }
 

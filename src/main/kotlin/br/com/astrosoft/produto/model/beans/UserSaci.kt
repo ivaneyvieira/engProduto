@@ -72,6 +72,41 @@ class UserSaci : IUser {
   var acertoMovAtacado by DelegateAuthorized(49)
   var estoqueMF by DelegateAuthorized(50)
 
+  //Locais
+  var localEstoque: String?
+    get() = locais.split(":").getOrNull(0)
+    set(value) {
+      val listLocais = locais.split(":")
+      locais = listOf(
+        value ?: "",
+        listLocais.getOrNull(1) ?: "",
+      ).joinToString(":")
+    }
+
+  var localRessuprimento: String?
+    get() = locais.split(":").getOrNull(1)
+    set(value) {
+      val listLocais = locais.split(":")
+      locais = listOf(
+        listLocais.getOrNull(0) ?: "",
+        value ?: "",
+      ).joinToString(":")
+    }
+
+  var listaEstoque: Set<String>
+    get() = localEstoque?.split(",").orEmpty().filter { it.isNotBlank() }.toSet()
+    set(value) {
+      localEstoque = value.distinct().sorted().joinToString(",")
+    }
+
+  var listaRessuprimento: Set<String>
+    get() = localRessuprimento?.split(",").orEmpty().filter { it.isNotBlank() }.toSet()
+    set(value) {
+      localRessuprimento = value.distinct().sorted().joinToString(",")
+    }
+
+  //Lojas
+
   var lojas: List<String>
     get() = listaLoja.split(",").map { print ->
       print.trim()
@@ -170,12 +205,6 @@ class UserSaci : IUser {
   val acertoEstoque
     get() = acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || acertoMovAtacado || admin
 
-  var listLocais: Set<String>
-    get() = locais.split(",").filter { it.isNotBlank() }.toSet()
-    set(value) {
-      locais = value.joinToString(separator = ",")
-    }
-
   override val admin
     get() = login == "ADM"
 
@@ -192,10 +221,16 @@ class UserSaci : IUser {
       return saci.findUser(login)
     }
 
-    fun userLocais(): List<String> {
+    fun userEstoqueLocais(): List<String> {
       val username = AppConfig.userLogin() as? UserSaci
       if (username?.admin == true) return listOf("TODOS")
-      return username?.listLocais?.toList() ?: emptyList()
+      return username?.listaEstoque?.toList() ?: emptyList()
+    }
+
+    fun userRessuprimentoLocais(): List<String> {
+      val username = AppConfig.userLogin() as? UserSaci
+      if (username?.admin == true) return listOf("TODOS")
+      return username?.listaRessuprimento?.toList() ?: emptyList()
     }
   }
 }

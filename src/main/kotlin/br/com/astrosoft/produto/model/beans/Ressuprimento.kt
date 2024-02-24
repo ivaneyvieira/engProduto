@@ -1,7 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
+import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userEstoqueLocais
+import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -46,7 +47,7 @@ class Ressuprimento(
   val chaveNovaCD: String
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
-  fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userLocais())
+  fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userRessuprimentoLocais())
   fun autoriza(user: UserSaci) {
     this.singno = user.no
     saci.autorizaRessuprimento(this)
@@ -73,7 +74,7 @@ class Ressuprimento(
   }
 
   companion object {
-    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userLocais())
+    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userEstoqueLocais())
   }
 }
 

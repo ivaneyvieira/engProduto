@@ -24,8 +24,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   override val viewModel = UsuarioViewModel(this)
 
   override fun columns(): List<String> {
-    return listOf(UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name,
-      UserSaci::ativoSaci.name)
+    return listOf(
+      UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name,
+      UserSaci::ativoSaci.name
+    )
   }
 
   override fun createGrid() = GridCrud(UserSaci::class.java)
@@ -85,6 +87,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             checkBox("Entrege") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoEnt.name)
+            }
+            multiSelectComboBox<String>("Localização") {
+              isReadOnly = readOnly
+              setItems(listOf("TODOS") + viewModel.allLocalizacao())
+              binder.bind(this, UserSaci::listaEstoque.name)
             }
           }
           formLayout {
@@ -227,7 +234,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             select<String>("Localização") {
               isReadOnly = readOnly
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
-              binder.bind(this, UserSaci::locais.name)
+              binder.bind(this, UserSaci::localEstoque.name)
             }
           }
         }

@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.EDirection
 import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.SqlOrder
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -61,14 +60,14 @@ class NotaSaida(
   val chaveNovaCD: String
     get() = "$usuarioNameCD-$dataCD-$horaCD-$locais"
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, userLocais())
+  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, UserSaci.userEstoqueLocais())
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
       val user = AppConfig.userLogin() as? UserSaci
       return saci.findNotaSaida(
         filtro = filtro,
-        locais = userLocais(),
+        locais = UserSaci.userEstoqueLocais(),
         user = user,
         SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC)))
       )
