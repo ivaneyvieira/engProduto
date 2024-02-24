@@ -34,9 +34,22 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
     bean ?: fail("Produto não informado")
     bean.update()
   }
+
+  fun copiaLocalizacao() {
+    val itens = subView.itensSelecionados()
+    if(itens.isEmpty()) fail("Nenhum item selecionado")
+
+    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
+    itens.forEach {item ->
+      item.locApp = primeiro.locApp
+      item.update()
+    }
+    updateView()
+  }
 }
 
 interface ITabEstoqueCad : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
+  fun itensSelecionados(): List<ProdutoEstoque>
 }

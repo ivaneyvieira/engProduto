@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueCad
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueCadViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
@@ -69,6 +71,13 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "EstoqueCad") {
       val produtos = itensSelecionados()
       viewModel.geraPlanilha(produtos)
+    }
+
+    this.button("Cópia") {
+      this.icon = VaadinIcon.COPY.create()
+      onLeftClick {
+        viewModel.copiaLocalizacao()
+      }
     }
   }
 
