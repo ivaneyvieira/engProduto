@@ -146,32 +146,36 @@ WHERE storeno = 1
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_01;
 CREATE TEMPORARY TABLE T_PEDIDO_01
-SELECT N.no                                               AS numero,
-       vendno                                             AS fornecedor,
-       CAST(NF.date AS DATE)                              AS data,
-       N.empno                                            AS comprador,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.obs                                              AS usuarioCD,
-       SUM((X.qtty / 1000) * X.cost)                      AS totalProdutos,
-       MAX(X.auxShort4)                                   AS marca,
-       'N'                                                AS cancelada,
-       CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
-       NF.dataNota                                        AS dataBaixa,
-       N.s4                                               AS singno,
-       SU.name                                            AS sing,
-       TU.no                                              AS transportadoNo,
-       TU.name                                            AS transportadoPor,
-       RU.no                                              AS recebidoNo,
-       RU.name                                            AS recebidoPor,
-       PU.no                                              AS usuarioNo,
-       PU.name                                            AS usuario
+SELECT N.no                                                                AS numero,
+       vendno                                                              AS fornecedor,
+       CAST(NF.date AS DATE)                                               AS data,
+       N.empno                                                             AS comprador,
+       CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
+       X.obs                                                               AS usuarioCD,
+       SUM((X.qtty / 1000) * X.cost)                                       AS totalProdutos,
+       MAX(X.auxShort4)                                                    AS marca,
+       'N'                                                                 AS cancelada,
+       CAST(IFNULL(NF.numero, '') AS CHAR)                                 AS notaBaixa,
+       NF.dataNota                                                         AS dataBaixa,
+       N.s4                                                                AS singno,
+       SU.name                                                             AS sing,
+       TU.no                                                               AS transportadoNo,
+       TU.name                                                             AS transportadoPor,
+       RU.no                                                               AS recebidoNo,
+       RU.name                                                             AS recebidoPor,
+       PU.no                                                               AS usuarioNo,
+       PU.name                                                             AS usuario
 FROM sqldados.ords AS N
        INNER JOIN T_PEDIDO_NOTA AS NF
-                 ON N.no = NF.ordno
+                  ON N.no = NF.ordno
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON X.prdno = A.prdno
+                   AND X.grade = A.grade
+                   AND X.storeno = 4
        LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
@@ -184,42 +188,46 @@ WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+  AND (CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
   AND N.date >= @DATA
 GROUP BY N.storeno,
          N.no,
          IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
-         IF(:marca = 999, '', MID(L.localizacao, 1, 4));
+         IF(:marca = 999, '', CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR));
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
 CREATE TEMPORARY TABLE T_PEDIDO_02
-SELECT N.no                                               AS numero,
-       vendno                                             AS fornecedor,
-       CAST(N.date AS DATE)                               AS data,
-       N.empno                                            AS comprador,
-       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       X.obs                                              AS usuarioCD,
-       SUM((X.qtty / 1000) * X.cost)                      AS totalProdutos,
-       MAX(X.auxShort4)                                   AS marca,
-       'N'                                                AS cancelada,
-       CAST(IFNULL(NF.numero, '') AS CHAR)                AS notaBaixa,
-       NF.dataNota                                        AS dataBaixa,
-       SU.no                                              AS singno,
-       SU.name                                            AS sing,
-       TU.no                                              AS transportadoNo,
-       TU.name                                            AS transportadoPor,
-       RU.no                                              AS recebidoNo,
-       RU.name                                            AS recebidoPor,
-       PU.no                                              AS usuarioNo,
-       PU.name                                            AS usuario
+SELECT N.no                                                                AS numero,
+       vendno                                                              AS fornecedor,
+       CAST(N.date AS DATE)                                                AS data,
+       N.empno                                                             AS comprador,
+       CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
+       X.obs                                                               AS usuarioCD,
+       SUM((X.qtty / 1000) * X.cost)                                       AS totalProdutos,
+       MAX(X.auxShort4)                                                    AS marca,
+       'N'                                                                 AS cancelada,
+       CAST(IFNULL(NF.numero, '') AS CHAR)                                 AS notaBaixa,
+       NF.dataNota                                                         AS dataBaixa,
+       SU.no                                                               AS singno,
+       SU.name                                                             AS sing,
+       TU.no                                                               AS transportadoNo,
+       TU.name                                                             AS transportadoPor,
+       RU.no                                                               AS recebidoNo,
+       RU.name                                                             AS recebidoPor,
+       PU.no                                                               AS usuarioNo,
+       PU.name                                                             AS usuario
 FROM sqldados.ordsRessu AS N
        INNER JOIN T_PEDIDO_NOTA AS NF
-                 ON N.no = NF.ordno
+                  ON N.no = NF.ordno
        INNER JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN sqldados.prdloc AS L
                  ON L.prdno = X.prdno AND L.storeno = 4
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON X.prdno = A.prdno
+                   AND X.grade = A.grade
+                   AND X.storeno = 4
        LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
@@ -232,12 +240,12 @@ WHERE N.date >= @DATA
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
-  AND (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+  AND (CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
 GROUP BY N.storeno,
          N.no,
          IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
-         IF(:marca = 999, '', MID(L.localizacao, 1, 4));
+         IF(:marca = 999, '', CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR));
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
