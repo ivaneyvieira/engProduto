@@ -92,9 +92,6 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.sing.isNullOrBlank())
       fail("Pedido não autorizado")
 
-    if(pedido.recebidoPor.isNullOrBlank())
-      fail("Pedido não recebido"      )
-
     if(pedido.transportadoPor.isNullOrBlank())
       fail("Pedido não transportado")
 
