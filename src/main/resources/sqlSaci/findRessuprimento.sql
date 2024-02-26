@@ -182,8 +182,8 @@ SELECT N.no                                AS numero,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario
 FROM sqldados.ords AS N
-       INNER JOIN T_PEDIDO_NOTA AS NF
-                  ON N.no = NF.ordno
+       LEFT JOIN T_PEDIDO_NOTA AS NF
+                 ON N.no = NF.ordno
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
@@ -198,6 +198,8 @@ FROM sqldados.ords AS N
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
+  AND N.date >= 20240226
+  AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
@@ -247,6 +249,8 @@ FROM sqldados.ordsRessu AS N
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
+  AND N.date >= 20240226
+  AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
