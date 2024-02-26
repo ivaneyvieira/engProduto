@@ -54,7 +54,7 @@ WHERE (S.storeno = :loja OR :loja = 0)
         ELSE FALSE
       END
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
-GROUP BY S.storeno, S.prdno, S.grade;
+GROUP BY S.storeno, S.prdno, S.grade, MID(L1.localizacao, 1, 4);
 
 SELECT *
 FROM temp_pesquisa
