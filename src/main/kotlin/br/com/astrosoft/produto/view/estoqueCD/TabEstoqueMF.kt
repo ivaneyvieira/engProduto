@@ -91,6 +91,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     return FiltroProdutoEstoque(
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
+      codigo = 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",

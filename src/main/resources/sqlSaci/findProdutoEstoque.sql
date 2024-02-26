@@ -47,6 +47,7 @@ FROM sqldados.stk AS S
        LEFT JOIN sqldados.prdloc AS L1
                  USING (storeno, prdno, grade)
 WHERE (S.storeno = :loja OR :loja = 0)
+  AND (TRIM(S.prdno) * 1 = :codigo OR :codigo = 0)
   AND CASE :caracter
         WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
         WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
@@ -60,7 +61,6 @@ SELECT *
 FROM temp_pesquisa
 WHERE (
   @PESQUISA = '' OR
-  codigo = @PESQUISANUM OR
   descricao LIKE @PESQUISALIKE OR
   unidade LIKE @PESQUISA
   )

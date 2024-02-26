@@ -17,6 +17,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -27,10 +28,18 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtFornecedor: TextField
+  private lateinit var edtCodigo: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtCodigo = integerField("Código") {
+      this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -116,6 +125,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     return FiltroProdutoEstoque(
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
+      codigo = edtCodigo.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
