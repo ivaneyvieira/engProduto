@@ -84,9 +84,19 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoCD.name)
             }
-            checkBox("Entrege") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::ressuprimentoEnt.name)
+            horizontalLayout {
+              this.isMargin = false
+              this.isPadding = false
+              checkBox("Entrege") {
+                isReadOnly = readOnly
+                binder.bind(this, UserSaci::ressuprimentoEnt.name)
+              }
+              select<String>("Impressora") {
+                this.isExpand = true
+                isReadOnly = readOnly
+                setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+                binder.bind(this, UserSaci::impressoraRessu.name)
+              }
             }
             multiSelectComboBox<String>("Localização") {
               isReadOnly = readOnly

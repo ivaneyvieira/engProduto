@@ -132,4 +132,10 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       viewModel.transportadoPedido(pedido, form.numero)
     }
   }
+
+  override fun printerUser(): List<String> {
+    val username = AppConfig.userLogin() as? UserSaci
+    val impressoraRessu = username?.impressoraRessu ?: return emptyList()
+    return if (impressoraRessu == "TODOS") emptyList() else listOf(impressoraRessu)
+  }
 }
