@@ -37,7 +37,7 @@ FROM sqldados.nf AS N
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND (N.l2 LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND N.issuedate >= @DATA
-  AND N.issuedate >= 20240220
+  AND N.issuedate >= 20240226
 GROUP BY ordno;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
