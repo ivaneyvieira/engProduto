@@ -51,7 +51,7 @@ class ColumnList<T> {
       val lineBreak = if (col.lineBreak) "\n" else " "
       val linha = process(col)
       "$linha$lineBreak"
-    }
+    }.trimEnd()
   }
 }
 
