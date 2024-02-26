@@ -24,18 +24,8 @@ class ProdutoRessuprimento(
   var total: Double?,
   var marca: Int?,
   var selecionado: Boolean?,
-  var usuarioCD: String?,
   var estoque: Int?,
 ) {
-  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
-
-  val usuarioNameCD
-    get() = splitCD(0)
-  val dataCD
-    get() = splitCD(1)
-  val horaCD
-    get() = splitCD(2)
-
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
 
   fun salva() {

@@ -9,10 +9,6 @@ object RessuprimentoColumns {
     this.setHeader("Número")
   }
 
-  fun Grid<Ressuprimento>.colunaRessuprimentoChaveCD() = columnGrid(Ressuprimento::chaveNovaCD) {
-    this.setHeader("Chave")
-  }
-
   fun Grid<Ressuprimento>.colunaRessuprimentoData() = columnGrid(Ressuprimento::data) {
     this.setHeader("Data")
   }

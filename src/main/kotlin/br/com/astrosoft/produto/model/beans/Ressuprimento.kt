@@ -12,7 +12,6 @@ class Ressuprimento(
   var data: LocalDate?,
   var comprador: Int,
   var localizacao: String?,
-  var usuarioCD: String?,
   var totalProdutos: Double,
   var marca: Int?,
   var cancelada: String?,
@@ -34,18 +33,6 @@ class Ressuprimento(
     }
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
-
-  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
-
-  val usuarioNameCD
-    get() = splitCD(0)
-  val dataCD
-    get() = splitCD(1)
-  val horaCD
-    get() = splitCD(2)
-
-  val chaveNovaCD: String
-    get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
 
   fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userRessuprimentoLocais())
   fun autoriza(user: UserSaci) {
@@ -80,6 +67,7 @@ class Ressuprimento(
 
 data class FiltroRessuprimento(
   val numero: Int,
+  val pesquisa: String,
   val marca: EMarcaRessuprimento,
   val lojaRessu: Int,
 )

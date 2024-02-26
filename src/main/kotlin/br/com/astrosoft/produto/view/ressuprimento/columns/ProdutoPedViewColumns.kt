@@ -5,11 +5,6 @@ import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoUsuarioNameCD() =
-      columnGrid(ProdutoRessuprimento::usuarioNameCD) {
-        this.setHeader("Usuário CD")
-      }
-
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = columnGrid(ProdutoRessuprimento::codigo) {
     this.setHeader("Código")
   }

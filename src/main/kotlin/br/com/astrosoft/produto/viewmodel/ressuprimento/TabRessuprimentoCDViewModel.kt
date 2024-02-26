@@ -24,9 +24,6 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
 
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = AppConfig.userLogin()?.login ?: ""
-      produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
     subView.updateProdutos()
@@ -48,7 +45,6 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = AppConfig.userLogin()?.login ?: ""
     itens.forEach { produto ->
-      produto.usuarioCD = "$usuario-$dataHora"
       produto.salva()
     }
 

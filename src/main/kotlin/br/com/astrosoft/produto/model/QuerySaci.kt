@@ -249,7 +249,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("codigo", podutoPedidoVenda.codigo ?: "")
       addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
       addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
-      addOptionalParameter("usuarioCD", podutoPedidoVenda.usuarioCD)
       addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: false)
     }
   }
@@ -331,6 +330,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, Ressuprimento::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("ordno", filtro.numero)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("locais", locais)
       addOptionalParameter("lojaRessu", filtro.lojaRessu)
     }

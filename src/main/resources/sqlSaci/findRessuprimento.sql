@@ -264,7 +264,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       usuarioCD,
        totalProdutos,
        marca,
        cancelada,
@@ -286,7 +285,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       usuarioCD,
        totalProdutos,
        marca,
        cancelada,
@@ -302,12 +300,16 @@ SELECT numero,
        usuario
 FROM T_PEDIDO_02;
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO @PESQUISA_START := CONCAT(:pesquisa, '%');
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, 0);
+
 SELECT numero,
        fornecedor,
        data,
        comprador,
        localizacao,
-       usuarioCD,
        totalProdutos,
        marca,
        cancelada,
@@ -322,6 +324,17 @@ SELECT numero,
        usuarioNo       AS usuarioNo,
        usuario         AS usuario
 FROM T_PEDIDO AS D
-GROUP BY numero,
-         IF(:marca = 999, '', SUBSTRING_INDEX(usuarioCD, '-', 1)),
-         IF(:marca = 999, '', localizacao)
+WHERE (@PESQUISA = '' OR
+       fornecedor LIKE @PESQUISA_NUM OR
+       comprador LIKE @PESQUISA_NUM OR
+       localizacao LIKE @PESQUISA OR
+       singno LIKE @PESQUISA_NUM OR
+       sing LIKE @PESQUISA_LIKE OR
+       transportadoNo LIKE @PESQUISA_NUM OR
+       transportadoPor LIKE @PESQUISA_LIKE OR
+       recebidoNo LIKE @PESQUISA_NUM OR
+       recebidoPor LIKE @PESQUISA_LIKE OR
+       usuarioNo LIKE @PESQUISA_NUM OR
+       usuario LIKE @PESQUISA_LIKE
+        )
+GROUP BY numero, localizacao

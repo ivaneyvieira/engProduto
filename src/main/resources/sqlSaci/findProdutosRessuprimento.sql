@@ -46,7 +46,6 @@ FROM (SELECT ordno                                  AS ordno,
              X.auxShort4                            AS marca,
              X.auxShort3 != 0                       AS selecionado,
              L.localizacao                          AS localizacao,
-             X.obs                                  AS usuarioCD,
              ROUND(IFNULL(S.qtty_varejo, 0) / 1000) AS estoque
       FROM sqldados.prd AS P
              INNER JOIN sqldados.oprd AS X
@@ -95,7 +94,6 @@ FROM (SELECT ordno                                  AS ordno,
              X.auxShort4                            AS marca,
              X.auxShort3 != 0                       AS selecionado,
              L.localizacao                          AS localizacao,
-             X.obs                                  AS usuarioCD,
              ROUND(IFNULL(S.qtty_varejo, 0) / 1000) AS estoque
       FROM sqldados.prd AS P
              INNER JOIN sqldados.oprdRessu AS X

@@ -159,10 +159,10 @@ object EtiquetaChave {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaRessuprimento(
         titulo = "Entregue",
-        usuario = produto.usuarioNameCD,
+        usuario = "",
         numero = produto.ordno ?: 0,
-        data = produto.dataCD,
-        hora = produto.horaCD,
+        data = "",
+        hora = "",
         local = produto.localizacao ?: ""
       )
     }.distinct()

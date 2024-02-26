@@ -13,19 +13,29 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
   private var dlgProduto: DlgProdutosRessuCD? = null
   private lateinit var edtRessuprimento: IntegerField
+  private lateinit var edtPesquisa: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtRessuprimento = integerField("Número") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -52,6 +62,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroRessuprimento(
       numero = edtRessuprimento.value ?: 0,
+      pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       lojaRessu = user?.lojaRessu ?: 0
     )

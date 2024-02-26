@@ -22,7 +22,6 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     }
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaRessuprimento.CD.num
-      produtoNF.usuarioCD = ""
       produtoNF.salva()
     }
     subView.updateProdutos()
