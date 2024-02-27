@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.Ressuprimento
 
 class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprimento>() {
   override fun printTitle(bean: ProdutoRessuprimento) {
-    writeln("Romaneio de Separacao do Ressuprimento da Rota45", negrito = true, center = true)
+    writeln("Romaneio de Separacao do Ressuprimento da ${pedido.rotaRessuprimento}", negrito = true, center = true)
     writeln("")
     writeln("Data: ${pedido.data.format()}        Pedido   : ${pedido.numero}", negrito = true)
     writeln("Data: ${pedido.dataBaixa.format()}        NF Transf: ${pedido.notaBaixa}", negrito = true)

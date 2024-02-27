@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userEstoqueLocais
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -26,6 +25,12 @@ class Ressuprimento(
   var usuarioNo: Int?,
   var usuario: String?,
 ) {
+  val lojaRessu
+    get() = numero.toString().substring(0, 1).toIntOrNull()
+
+  val rotaRessuprimento
+    get() = if (lojaRessu == null) "" else "Rota4${lojaRessu}"
+
   val usuarioApp: String?
     get() {
       val user = AppConfig.userLogin() as? UserSaci

@@ -24,9 +24,11 @@ class ProdutoRessuprimento(
   var total: Double?,
   var marca: Int?,
   var selecionado: Boolean?,
+  var posicao: Int?,
   var estoque: Int?,
 ) {
-  val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
+  val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
+  val selecionadoOrdem get() = if (selecionado == true) 0 else 1
 
   fun salva() {
     saci.salvaProdutosRessuprimento(this)

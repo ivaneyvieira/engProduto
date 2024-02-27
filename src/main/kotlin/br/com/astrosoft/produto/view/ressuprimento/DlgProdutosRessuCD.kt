@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
@@ -18,7 +19,7 @@ import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewMo
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -87,12 +88,23 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQuantidade()
       produtoRessuprimentoEstoque()
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdem, "Selecionado") {
+        this.isVisible = false
+      }
+      this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
+        this.isVisible = false
+      }
 
       this.setPartNameGenerator {
         if (it.selecionado == true) {
           "amarelo"
         } else null
       }
+      gridDetail.isMultiSort = true
+      gridDetail.sort(
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
+      )
     }
     this.addAndExpand(gridDetail)
     update()
@@ -113,6 +125,15 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
 
   fun updateProduto(produto: ProdutoRessuprimento) {
     gridDetail.dataProvider.refreshItem(produto)
+    gridDetail.isMultiSort = true
+    gridDetail.sort(
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
+    )
+    update()
+    val index = gridDetail.list().indexOf(produto)
+    gridDetail.scrollToIndex(index)
+    gridDetail.select(produto)
   }
 
   fun produtosMarcados(): List<ProdutoRessuprimento> {

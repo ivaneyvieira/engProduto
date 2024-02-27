@@ -45,6 +45,7 @@ FROM (SELECT ordno                                  AS ordno,
              (X.qtty * X.mult / 1000) * X.cost      AS total,
              X.auxShort4                            AS marca,
              X.auxShort3 != 0                       AS selecionado,
+             X.auxLong4                             AS posicao,
              L.localizacao                          AS localizacao,
              ROUND(IFNULL(S.qtty_varejo, 0) / 1000) AS estoque
       FROM sqldados.prd AS P
@@ -93,6 +94,7 @@ FROM (SELECT ordno                                  AS ordno,
              (X.qtty * X.mult / 1000) * X.cost      AS total,
              X.auxShort4                            AS marca,
              X.auxShort3 != 0                       AS selecionado,
+             X.auxLong4                             AS posicao,
              L.localizacao                          AS localizacao,
              ROUND(IFNULL(S.qtty_varejo, 0) / 1000) AS estoque
       FROM sqldados.prd AS P
