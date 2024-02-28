@@ -164,7 +164,7 @@ DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_01;
 CREATE TEMPORARY TABLE T_PEDIDO_01
 SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
-       CAST(NF.date AS DATE)               AS data,
+       CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
