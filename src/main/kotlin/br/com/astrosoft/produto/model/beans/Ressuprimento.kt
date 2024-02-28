@@ -82,5 +82,7 @@ data class FiltroRessuprimento(
 )
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
-  CD(0, "CD"), ENT(1, "Entregue"), TODOS(999, "Todos")
+  CD(0, "CD"),
+  ENT(1, "Entregue"),
+  REC(2, "Recebido")
 }

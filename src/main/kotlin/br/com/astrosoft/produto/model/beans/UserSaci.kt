@@ -72,6 +72,7 @@ class UserSaci : IUser {
   var acertoMovAtacado by DelegateAuthorized(49)
   var estoqueMF by DelegateAuthorized(50)
   var estoqueCad by DelegateAuthorized(51)
+  var ressuprimentoRec by DelegateAuthorized(52)
 
   //Locais
   var localEstoque: String?
@@ -217,7 +218,7 @@ class UserSaci : IUser {
     get() = pedidoTransfReserva || pedidoTransfImprimir || pedidoTransfRessu4 || pedidoTransfEnt ||
             pedidoTransfAutorizada || admin
   val ressuprimento
-    get() = ressuprimentoCD || ressuprimentoEnt || admin
+    get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoRec || admin
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
   val pedidoRetira

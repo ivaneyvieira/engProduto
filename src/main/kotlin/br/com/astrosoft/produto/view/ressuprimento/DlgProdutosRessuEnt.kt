@@ -1,11 +1,9 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
-import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
@@ -14,11 +12,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQuantidade
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimento: Ressuprimento) {
@@ -26,15 +21,6 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos do ressuprimento ${ressuprimento.numero}", toolBar = {
-      button("Volta") {
-        val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarEnt == true || user?.admin == true
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.marcaCD()
-          gridDetail.setItems(ressuprimento.produtos(EMarcaRessuprimento.ENT))
-        }
-      }
     }, onClose = {
       onClose()
     }) {

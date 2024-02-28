@@ -19,6 +19,7 @@ class RessuprimentoView : ViewLayout<RessuprimentoViewModel>(), IRessuprimentoVi
   override val viewModel = RessuprimentoViewModel(this)
   override val tabRessuprimentoCD = TabRessuprimentoCD(viewModel.tabRessuprimentoCDViewModel)
   override val tabRessuprimentoEnt = TabRessuprimentoEnt(viewModel.tabRessuprimentoEntViewModel)
+  override val tabRessuprimentoRec = TabRessuprimentoRec(viewModel.tabRessuprimentoRecViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
