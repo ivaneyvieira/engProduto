@@ -887,6 +887,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun excluiRessuprimento(ressuprimento: Ressuprimento): Int {
+    val sql = "/sqlSaci/excluiRessuprimento.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+    }.firstOrNull()?.value ?: 0
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
@@ -901,3 +909,7 @@ class QuerySaci : QueryDB(database) {
 }
 
 val saci = QuerySaci()
+
+class Count {
+  var value: Int = 0
+}

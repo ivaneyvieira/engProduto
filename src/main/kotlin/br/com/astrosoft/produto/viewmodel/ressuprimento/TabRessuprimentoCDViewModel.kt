@@ -77,6 +77,23 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
+  fun excluiRessuprimento() = viewModel.exec {
+    val lista = subView.itensSelecionados()
+    if (lista.isEmpty()) {
+      fail("Nenhum ressuprimento selecionado")
+    }
+    viewModel.view.showQuestion("Tem certeza que deseja excluir o ressuprimento selecionado?") {
+      var count = 0
+      lista.forEach { ressuprimento ->
+        count += ressuprimento.exclui()
+      }
+      if (count == 0) {
+        viewModel.view.showWarning("Nenhum ressuprimento excluído")
+      }
+      updateView()
+    }
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoCD
 }
@@ -90,4 +107,5 @@ interface ITabRessuprimentoCD : ITabView {
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun findRessuprimento(): Ressuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
+  fun itensSelecionados(): List<Ressuprimento>
 }

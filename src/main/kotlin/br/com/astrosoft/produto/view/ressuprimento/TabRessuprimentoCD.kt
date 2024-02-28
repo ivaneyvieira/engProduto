@@ -12,7 +12,9 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -41,6 +43,12 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
+    button ("Exclui") {
+      icon = VaadinIcon.TRASH.create()
+      onLeftClick {
+        viewModel.excluiRessuprimento()
+      }
+    }
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
@@ -50,6 +58,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()

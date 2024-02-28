@@ -92,12 +92,12 @@ WHERE storeno = 1
   AND (ordno = :ordno OR :ordno = 0)
   AND ordno >= 100000000;
 
-INSERT IGNORE sqldados.ordsRessu(no, date, vendno, discount, amt, package, custo_fin, others,
-                                 eord_ordno, dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem,
-                                 dataEntrega, discountOrig, l1, l2, l3, l4, m1, m2, m3, m4, deliv, storeno, carrno,
-                                 empno, prazo, eord_storeno, delivOriginal, bits, bits2, bits3, padbyte, indxno, repno,
-                                 auxShort1, auxShort2, noofinst, status, s1, s2, s3, s4, frete, remarks, ordnoFromVend,
-                                 remarksInv, remarksRcv, remarksOrd, auxChar, c1, c2, c3, c4)
+INSERT IGNORE sqldados.ordsRessu(no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno,
+                                 dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem, dataEntrega,
+                                 discountOrig, l1, l2, l3, l4, m1, m2, m3, m4, deliv, storeno, carrno, empno, prazo,
+                                 eord_storeno, delivOriginal, bits, bits2, bits3, padbyte, indxno, repno, auxShort1,
+                                 auxShort2, noofinst, status, s1, s2, s3, s4, frete, remarks, ordnoFromVend, remarksInv,
+                                 remarksRcv, remarksOrd, auxChar, c1, c2, c3, c4)
 SELECT no,
        date,
        vendno,
@@ -307,7 +307,7 @@ FROM T_PEDIDO_02;
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
-DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, 0);
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 SELECT numero,
        fornecedor,
