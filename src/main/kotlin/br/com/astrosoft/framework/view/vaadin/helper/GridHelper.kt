@@ -43,6 +43,13 @@ fun <T : Any> Grid<T>.withEditor(
   element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"
 }
 
+fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>){
+  if(this.editor.isOpen){
+    val component = this.getColumnBy(property) as? Focusable<*>
+    component?.focus()
+  }
+}
+
 fun <T : Any> Grid<T>.editorComponent(property: KProperty1<T, *>): Component? =
     getColumnBy(property).editorComponent
 

@@ -1,7 +1,8 @@
 UPDATE sqldados.oprd AS X
 SET X.auxShort4 = :marca,
     X.auxShort3 = if(:selecionado, 1, 0),
-    X.auxLong4 = if(:selecionado, unix_timestamp(), 0)
+    X.auxLong4 = if(:selecionado, unix_timestamp(), 0),
+    X.auxLong2 = :quantidade
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')
@@ -9,7 +10,9 @@ WHERE storeno = 1
 
 UPDATE sqldados.oprdRessu AS X
 SET X.auxShort4 = :marca,
-    X.auxShort3 = if(:selecionado, 1, 0)
+    X.auxShort3 = if(:selecionado, 1, 0),
+    X.auxLong4 = if(:selecionado, unix_timestamp(), 0),
+    X.auxLong2 = :quantidade
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')

@@ -250,6 +250,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
       addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
       addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: false)
+      addOptionalParameter("quantidade", podutoPedidoVenda.quantidade ?: 0)
     }
   }
 

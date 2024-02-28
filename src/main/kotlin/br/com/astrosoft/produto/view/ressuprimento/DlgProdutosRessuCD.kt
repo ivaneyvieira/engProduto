@@ -2,8 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
@@ -81,12 +80,21 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
+      this.withEditor(classBean = ProdutoRessuprimento::class,
+        openEditor = {
+          this.focusEditor(ProdutoRessuprimento::quantidade)
+        },
+        closeEditor = {
+          viewModel.saveQuant(it.bean)
+        }
+      )
+
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
-      produtoRessuprimentoQuantidade()
+      produtoRessuprimentoQuantidade().integerFieldEditor()
       produtoRessuprimentoEstoque()
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdem, "Selecionado") {
         this.isVisible = false
@@ -127,8 +135,8 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
-        gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()
     val index = gridDetail.list().indexOf(produto)
