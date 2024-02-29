@@ -10,10 +10,10 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoEstoque
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQuantidade
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -40,25 +40,18 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
           }
         }
       }
-      button("Entregue") {
+      button("Recebido") {
         val user = AppConfig.userLogin() as? UserSaci
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
-          //viewModel.marcaEnt()
+          viewModel.marcaRec()
         }
       }
       button("Desmarcar") {
         val user = AppConfig.userLogin() as? UserSaci
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
-          //viewModel.desmarcar()
-        }
-      }
-      button("Imprime") {
-        this.isVisible = false
-        icon = VaadinIcon.PRINT.create()
-        onLeftClick {
-          //viewModel.salvaProdutos()
+          viewModel.desmarcar()
         }
       }
     }, onClose = {
@@ -82,10 +75,10 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
 
       this.withEditor(classBean = ProdutoRessuprimento::class,
         openEditor = {
-          //this.focusEditor(ProdutoRessuprimento::quantidade)
+          this.focusEditor(ProdutoRessuprimento::qtRecebido)
         },
         closeEditor = {
-          //viewModel.saveQuant(it.bean)
+          viewModel.saveQuant(it.bean)
         }
       )
 
@@ -94,8 +87,8 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
-      produtoRessuprimentoQuantidade()//.integerFieldEditor()
-      produtoRessuprimentoEstoque()
+      produtoRessuprimentoQtEntregue()
+      produtoRessuprimentoQtRecebido().integerFieldEditor()
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdem, "Selecionado") {
         this.isVisible = false
       }
@@ -123,7 +116,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos(EMarcaRessuprimento.REC)
+    val listProdutos = ressuprimento.produtos(EMarcaRessuprimento.ENT)
     gridDetail.setItems(listProdutos)
   }
 

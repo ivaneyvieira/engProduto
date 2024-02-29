@@ -1,13 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.zpl.EtiquetaChave
-import java.time.LocalDate
-import java.time.LocalTime
+import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
+import br.com.astrosoft.produto.model.beans.FiltroRessuprimento
+import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
+import br.com.astrosoft.produto.model.beans.Ressuprimento
 
 class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
@@ -24,6 +22,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
 
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
+      produto.selecionado = false
       produto.salva()
     }
     subView.updateProdutos()
@@ -35,33 +34,6 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     produto.salva()
 
     subView.updateProduto(produto)
-  }
-
-  fun salvaProdutos() = viewModel.exec {
-    val itens = subView.produtosMarcados()
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
-    itens.forEach { produto ->
-      produto.salva()
-    }
-
-    imprimeEtiquetaEnt(itens)
-    subView.updateProdutos()
-  }
-
-  private fun imprimeEtiquetaEnt(produtos: List<ProdutoRessuprimento>) {
-    val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
-      try {
-        EtiquetaChave.printPreviewEnt(impressora, produtos)
-      } catch (e: Throwable) {
-        e.printStackTrace()
-        fail("Falha de impressão na impressora $impressora")
-      }
-    }
   }
 
   fun desmarcar() = viewModel.exec {
@@ -94,7 +66,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     }
   }
 
-  fun saveQuant(bean : ProdutoRessuprimento) {
+  fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
   }

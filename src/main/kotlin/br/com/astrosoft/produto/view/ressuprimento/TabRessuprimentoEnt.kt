@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -66,15 +67,15 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formAutoriza(pedido)
     }
-    colunaRessuprimentoSing()
+    colunaRessuprimentoSing().expand()
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formTransportado(pedido)
     }
-    colunaRessuprimentoTransportadorPor()
+    colunaRessuprimentoTransportadorPor().expand()
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formRecebido(pedido)
     }
-    colunaRessuprimentoRecebidoPor()
+    colunaRessuprimentoRecebidoPor().expand()
     colunaRessuprimentoUsuarioApp()
   }
 

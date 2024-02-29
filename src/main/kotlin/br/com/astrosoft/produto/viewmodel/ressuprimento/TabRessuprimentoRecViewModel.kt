@@ -22,7 +22,7 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.transportadoPor.isNullOrBlank())
       fail("Pedido não transportado")
 
-    val produtos = pedido.produtos(EMarcaRessuprimento.REC)
+    val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
     val relatorio = PrintRessuprimento(pedido)
 
     relatorio.print(
@@ -38,11 +38,43 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
-    //val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    // produto.selecionado = true
-    // produto.salva()
+    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.selecionado = true
+    produto.salva()
 
-    // subView.updateProduto(produto)
+    subView.updateProduto(produto)
+  }
+
+  fun saveQuant(bean : ProdutoRessuprimento) {
+    bean.salva()
+    subView.updateProdutos()
+  }
+
+  fun marcaRec() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach { produto ->
+      produto.marca = EMarcaRessuprimento.REC.num
+      produto.selecionado = false
+      produto.salva()
+    }
+    subView.updateProdutos()
+  }
+
+  fun desmarcar() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    itens.ifEmpty {
+      fail("Nenhum produto para desmarcar")
+    }
+
+    itens.forEach { produto ->
+      produto.selecionado = false
+      produto.salva()
+    }
+    subView.updateProdutos()
   }
 
   val subView
@@ -53,5 +85,7 @@ interface ITabRessuprimentoRec : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoRessuprimento>
+  fun produtosSelecionados(): List<ProdutoRessuprimento>
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
+  fun updateProduto(produto: ProdutoRessuprimento)
 }

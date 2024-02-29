@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -61,9 +62,9 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    colunaRessuprimentoSing()
-    colunaRessuprimentoTransportadorPor()
-    colunaRessuprimentoRecebidoPor()
+    colunaRessuprimentoSing().expand()
+    colunaRessuprimentoTransportadorPor().expand()
+    colunaRessuprimentoRecebidoPor().expand()
     colunaRessuprimentoUsuarioApp()
   }
 
@@ -85,8 +86,16 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoRessuprimento> {
+  override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun updateProduto(produto: ProdutoRessuprimento) {
+    dlgProduto?.updateProduto(produto)
   }
 
   override fun isAuthorized(): Boolean {
@@ -95,7 +104,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   }
 
   override val label: String
-    get() = "Recregue"
+    get() = "Recebido"
 
   override fun updateComponent() {
     viewModel.updateView()

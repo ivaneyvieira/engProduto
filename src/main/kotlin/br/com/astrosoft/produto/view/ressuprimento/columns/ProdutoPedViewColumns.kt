@@ -70,8 +70,16 @@ object ProdutoRessuViewColumns {
     this.setHeader("Preço a vista")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQuantidade() = columnGrid(ProdutoRessuprimento::quantidade) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtPedido() = columnGrid(ProdutoRessuprimento::qtPedido) {
     this.setHeader("Quant")
+  }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtEntregue() = columnGrid(ProdutoRessuprimento::qtEntregue) {
+    this.setHeader("Entregue")
+  }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtRecebido() = columnGrid(ProdutoRessuprimento::qtRecebido) {
+    this.setHeader("Recebido")
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = columnGrid(ProdutoRessuprimento::estoque) {

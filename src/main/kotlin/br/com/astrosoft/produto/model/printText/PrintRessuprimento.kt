@@ -21,7 +21,7 @@ class PrintRessuprimento(val pedido: Ressuprimento) : PrintText<ProdutoRessuprim
     column(ProdutoRessuprimento::descricao, "Descricao", 36)
     column(ProdutoRessuprimento::grade, "Grade", 8)
     column(ProdutoRessuprimento::localizacao, "Loc", 4)
-    column(ProdutoRessuprimento::quantidade, "_Quant", 6)
+    column(ProdutoRessuprimento::qtPedido, "_Quant", 6)
   }
 
   override fun printSumary() {
