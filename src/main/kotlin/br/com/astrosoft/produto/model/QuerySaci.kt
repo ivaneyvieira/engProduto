@@ -335,6 +335,10 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("locais", locais)
       addOptionalParameter("lojaRessu", filtro.lojaRessu)
+      addOptionalParameter("dataPedidoInicial", filtro.dataPedidoInicial.toSaciDate())
+      addOptionalParameter("dataPedidoFinal", filtro.dataPedidoFinal.toSaciDate())
+      addOptionalParameter("dataNotaInicial", filtro.dataNotaInicial.toSaciDate())
+      addOptionalParameter("dataNotaFinal", filtro.dataNotaFinal.toSaciDate())
     }
   }
 

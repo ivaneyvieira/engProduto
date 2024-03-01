@@ -79,6 +79,10 @@ data class FiltroRessuprimento(
   val pesquisa: String,
   val marca: EMarcaRessuprimento,
   val lojaRessu: Int,
+  val dataPedidoInicial: LocalDate? = null,
+  val dataPedidoFinal: LocalDate? = null,
+  val dataNotaInicial: LocalDate? = null,
+  val dataNotaFinal: LocalDate? = null,
 )
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {

@@ -329,6 +329,7 @@ SELECT numero,
        usuario         AS usuario
 FROM T_PEDIDO AS D
 WHERE (@PESQUISA = '' OR
+       numero LIKE @PESQUISA_START OR
        fornecedor LIKE @PESQUISA_NUM OR
        comprador LIKE @PESQUISA_NUM OR
        localizacao LIKE @PESQUISA OR
@@ -340,5 +341,9 @@ WHERE (@PESQUISA = '' OR
        recebidoPor LIKE @PESQUISA_LIKE OR
        usuarioNo LIKE @PESQUISA_NUM OR
        usuario LIKE @PESQUISA_LIKE
-        )
+  )
+  AND (data >= :dataPedidoInicial OR :dataPedidoInicial = 0)
+  AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
+  AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0)
+  AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0)
 GROUP BY numero, localizacao

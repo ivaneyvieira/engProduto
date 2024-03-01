@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -15,8 +16,10 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoRec
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -29,6 +32,8 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   private var dlgProduto: DlgProdutosRessuRec? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     edtRessuprimento = integerField("Número") {
@@ -40,6 +45,20 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      value = null
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      value = null
+      this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -74,7 +93,9 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
-      lojaRessu = user?.lojaRessu ?: 0
+      lojaRessu = user?.lojaRessu ?: 0,
+      dataNotaInicial = edtDataInicial.value,
+      dataNotaFinal = edtDataFinal.value,
     )
   }
 
