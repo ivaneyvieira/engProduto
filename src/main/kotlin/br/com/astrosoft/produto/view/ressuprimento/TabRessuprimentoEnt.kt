@@ -67,6 +67,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
+    val user = AppConfig.userLogin() as? UserSaci
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) { impressora ->
         //viewModel.marcaImpressao(pedido, impressora)
@@ -83,16 +84,22 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formAutoriza(pedido)
+    if (user?.ressuprimentoRecebedor == false) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formAutoriza(pedido)
+      }
     }
     colunaRessuprimentoSing().expand()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formTransportado(pedido)
+    if (user?.ressuprimentoRecebedor == false) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formTransportado(pedido)
+      }
     }
     colunaRessuprimentoTransportadorPor().expand()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formRecebido(pedido)
+    if (user?.ressuprimentoRecebedor == true) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formRecebido(pedido)
+      }
     }
     colunaRessuprimentoRecebidoPor().expand()
     colunaRessuprimentoUsuarioApp()

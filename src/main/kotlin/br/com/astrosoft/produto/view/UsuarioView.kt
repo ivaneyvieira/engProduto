@@ -102,6 +102,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoRec.name)
             }
+            checkBox("Usuário Recebedor") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::ressuprimentoRecebedor.name)
+            }
             multiSelectComboBox<String>("Localização") {
               isReadOnly = readOnly
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
