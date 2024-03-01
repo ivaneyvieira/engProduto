@@ -27,6 +27,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
@@ -51,14 +52,14 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       }
     }
     edtDataInicial = datePicker("Data Inicial") {
-      value = null
+      value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
-      value = null
+      value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
