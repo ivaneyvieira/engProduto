@@ -71,7 +71,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
     val user = AppConfig.userLogin() as? UserSaci
 
-    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true)
+    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin)
       fail("Pedido não recebido")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
