@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 
 class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
-    val filtro = subView.filtro(EMarcaRessuprimento.ENT)
+    val filtro = subView.filtro(EMarcaRessuprimento.REC)
     val ressuprimento = Ressuprimento.find(filtro)
     subView.updateRessuprimentos(ressuprimento)
   }

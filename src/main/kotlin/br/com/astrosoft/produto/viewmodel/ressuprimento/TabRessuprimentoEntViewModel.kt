@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -68,6 +69,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.transportadoPor.isNullOrBlank())
       fail("Pedido não transportado")
 
+    if (pedido.recebidoPor.isNullOrBlank())
+      fail("Pedido não recebido")
+
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
     val relatorio = PrintRessuprimento(pedido)
 
@@ -89,6 +93,18 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun formRecebido(pedido: Ressuprimento) {
     subView.formRecebido(pedido)
+  }
+
+  fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
+    val usuario = AppConfig.userLogin() as? UserSaci
+    if (usuario?.ressuprimentoRecebedor == true) {
+      if (pedido.recebidoPor.isNullOrBlank()) fail("Pedido não recebido")
+      pedido.produtos(EMarcaRessuprimento.ENT).forEach {
+        it.marca = EMarcaRessuprimento.REC.num
+        it.salva()
+      }
+      updateView()
+    }
   }
 
   val subView

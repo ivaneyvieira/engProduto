@@ -70,8 +70,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   override fun Grid<Ressuprimento>.gridPanel() {
     val user = AppConfig.userLogin() as? UserSaci
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido) { impressora ->
-        //viewModel.marcaImpressao(pedido, impressora)
+      viewModel.previewPedido(pedido) {
+        viewModel.marcaImpressao(pedido)
       }
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
