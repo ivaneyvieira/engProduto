@@ -85,19 +85,19 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    if (user?.ressuprimentoRecebedor == false) {
+    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formAutoriza(pedido)
       }
     }
     colunaRessuprimentoSing().expand()
-    if (user?.ressuprimentoRecebedor == false) {
+    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formTransportado(pedido)
       }
     }
     colunaRessuprimentoTransportadorPor().expand()
-    if (user?.ressuprimentoRecebedor == true) {
+    if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formRecebido(pedido)
       }
