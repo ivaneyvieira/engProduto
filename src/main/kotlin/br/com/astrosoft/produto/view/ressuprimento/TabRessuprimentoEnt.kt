@@ -44,7 +44,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       value = user?.lojaRessu
       if (value == 0)
         value = null
-      isReadOnly = value > 0
+      isReadOnly = (user?.lojaRessu ?: 0) > 0
+      valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
       }
