@@ -235,7 +235,7 @@ SELECT N.no                                AS numero,
 FROM sqldados.ordsRessu AS N
        INNER JOIN T_PEDIDO_NOTA AS NF
                   ON N.no = NF.ordno
-       INNER JOIN sqldados.oprdRessu AS X
+       LEFT JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno

@@ -36,8 +36,19 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var edtLoja: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
+    edtLoja = integerField("Loja") {
+      val user = AppConfig.userLogin() as? UserSaci
+      value = user?.lojaRessu
+      if (value == 0)
+        value = null
+      isReadOnly = value > 0
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtRessuprimento = integerField("Número") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -58,7 +69,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
         viewModel.updateView()
       }
     }
-    edtDataFinal = datePicker("Data Final") {
+    edtDataFinal = datePicker("Data Final")
+    {
       value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
@@ -107,12 +119,11 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
-    val user = AppConfig.userLogin() as? UserSaci
     return FiltroRessuprimento(
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
-      lojaRessu = user?.lojaRessu ?: 0,
+      lojaRessu = edtLoja.value ?:  0,
       dataPedidoInicial = edtDataInicial.value,
       dataPedidoFinal = edtDataFinal.value,
     )
