@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
@@ -78,6 +79,23 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtPedido()
       produtoRessuprimentoEstoque()
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
+        this.isVisible = false
+      }
+      this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
+        this.isVisible = false
+      }
+
+      this.setPartNameGenerator {
+        if (it.selecionado == EMarcaRessuprimento.REC.num) {
+          "amarelo"
+        } else null
+      }
+      gridDetail.isMultiSort = true
+      gridDetail.sort(
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
+      )
     }
     this.addAndExpand(gridDetail)
     update()
@@ -100,7 +118,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
       gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()

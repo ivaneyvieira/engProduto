@@ -25,12 +25,14 @@ class ProdutoRessuprimento(
   var preco: Double?,
   var total: Double?,
   var marca: Int?,
-  var selecionado: Boolean?,
+  var selecionado: Int?,
   var posicao: Int?,
   var estoque: Int?,
 ) {
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
-  val selecionadoOrdem get() = if (selecionado == true) 0 else 1
+  val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1
+  val selecionadoOrdemREC get() = if (selecionado == EMarcaRessuprimento.REC.num) 0 else 1
+  val selecionadoOrdemENT get() = if (selecionado == EMarcaRessuprimento.ENT.num) 0 else 1
 
   fun salva() {
     saci.salvaProdutosRessuprimento(this)

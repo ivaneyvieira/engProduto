@@ -15,14 +15,14 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun marcaEnt() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
 
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
-      produto.selecionado = false
+      produto.selecionado = EMarcaRessuprimento.ENT.num
       produto.salva()
     }
     subView.updateProdutos()
@@ -30,20 +30,20 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.selecionado = true
+    produto.selecionado = EMarcaRessuprimento.ENT.num
     produto.salva()
 
     subView.updateProduto(produto)
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
 
     itens.forEach { produto ->
-      produto.selecionado = false
+      produto.selecionado = EMarcaRessuprimento.CD.num
       produto.salva()
     }
     subView.updateProdutos()
@@ -80,7 +80,6 @@ interface ITabRessuprimentoCD : ITabView {
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
   fun produtosSelecionados(): List<ProdutoRessuprimento>
-  fun produtosMarcados(): List<ProdutoRessuprimento>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun findRessuprimento(): Ressuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)

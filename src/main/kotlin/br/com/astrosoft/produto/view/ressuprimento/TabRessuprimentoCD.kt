@@ -44,7 +44,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       }
     }
     val user = AppConfig.userLogin() as? UserSaci
-    button ("Exclui") {
+    button("Exclui") {
       this.isVisible = user?.ressuprimentoExclui == true
       icon = VaadinIcon.TRASH.create()
       onLeftClick {
@@ -89,10 +89,6 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
 
   override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.produtosSelecionados().orEmpty()
-  }
-
-  override fun produtosMarcados(): List<ProdutoRessuprimento> {
-    return dlgProduto?.produtosMarcados().orEmpty()
   }
 
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {

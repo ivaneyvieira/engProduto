@@ -249,7 +249,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("codigo", podutoPedidoVenda.codigo ?: "")
       addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
       addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
-      addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: false)
+      addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: 0)
       addOptionalParameter("qtEntregue", podutoPedidoVenda.qtEntregue ?: 0)
       addOptionalParameter("qtRecebido", podutoPedidoVenda.qtRecebido ?: 0)
     }

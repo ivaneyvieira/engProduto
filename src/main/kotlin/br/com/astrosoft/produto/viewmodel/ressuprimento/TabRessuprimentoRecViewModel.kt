@@ -39,39 +39,39 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.selecionado = true
+    produto.selecionado = EMarcaRessuprimento.REC.num
     produto.salva()
 
     subView.updateProduto(produto)
   }
 
-  fun saveQuant(bean : ProdutoRessuprimento) {
+  fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
   }
 
   fun marcaRec() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
 
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.REC.num
-      produto.selecionado = false
+      produto.selecionado = EMarcaRessuprimento.REC.num
       produto.salva()
     }
     subView.updateProdutos()
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
 
     itens.forEach { produto ->
-      produto.selecionado = false
+      produto.selecionado = 0
       produto.salva()
     }
     subView.updateProdutos()

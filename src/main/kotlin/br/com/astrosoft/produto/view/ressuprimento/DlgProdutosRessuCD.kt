@@ -85,7 +85,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtPedido().integerFieldEditor()
       produtoRessuprimentoEstoque()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdem, "Selecionado") {
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemCD, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
@@ -93,13 +93,13 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       }
 
       this.setPartNameGenerator {
-        if (it.selecionado == true) {
+        if (it.selecionado == EMarcaRessuprimento.ENT.num) {
           "amarelo"
         } else null
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(
-        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemCD).asc,
         gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
       )
     }
@@ -124,16 +124,12 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemCD).asc,
       gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()
     val index = gridDetail.list().indexOf(produto)
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
-  }
-
-  fun produtosMarcados(): List<ProdutoRessuprimento> {
-    return gridDetail.list().filter { it.marca == EMarcaRessuprimento.ENT.num }
   }
 }

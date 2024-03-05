@@ -30,30 +30,6 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos de Ressuprimento ${ressuprimento.numero}", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
-          }
-        }
-      }
-      button("Recebido") {
-        val user = AppConfig.userLogin() as? UserSaci
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
-          viewModel.marcaRec()
-        }
-      }
-      button("Desmarcar") {
-        val user = AppConfig.userLogin() as? UserSaci
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.desmarcar()
-        }
-      }
     }, onClose = {
       onClose()
     }) {
@@ -89,23 +65,6 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtEntregue()
       produtoRessuprimentoQtRecebido().integerFieldEditor()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdem, "Selecionado") {
-        this.isVisible = false
-      }
-      this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
-        this.isVisible = false
-      }
-
-      this.setPartNameGenerator {
-        if (it.selecionado == true) {
-          "amarelo"
-        } else null
-      }
-      gridDetail.isMultiSort = true
-      gridDetail.sort(
-        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
-        gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
-      )
     }
     this.addAndExpand(gridDetail)
     update()
@@ -128,17 +87,13 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdem).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemREC).asc,
       gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()
     val index = gridDetail.list().indexOf(produto)
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
-  }
-
-  fun produtosMarcados(): List<ProdutoRessuprimento> {
-    return gridDetail.list().filter { it.marca == EMarcaRessuprimento.ENT.num }
   }
 
   fun itensSelecionados(): List<ProdutoRessuprimento> {
