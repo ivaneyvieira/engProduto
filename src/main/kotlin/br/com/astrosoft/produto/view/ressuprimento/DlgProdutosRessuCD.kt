@@ -41,7 +41,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       button("Entregue") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
-          viewModel.marcaEnt()
+          viewModel.marca()
         }
       }
       button("Desmarcar") {

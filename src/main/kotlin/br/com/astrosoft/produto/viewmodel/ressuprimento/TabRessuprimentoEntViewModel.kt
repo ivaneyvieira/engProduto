@@ -117,7 +117,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProduto(produto)
   }
 
-  fun marcaRec() = viewModel.exec {
+  fun marca() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
