@@ -74,6 +74,7 @@ class UserSaci : IUser {
   var estoqueCad by DelegateAuthorized(51)
   var ressuprimentoRec by DelegateAuthorized(52)
   var ressuprimentoRecebedor by DelegateAuthorized(53)
+  var ressuprimentoExclui by DelegateAuthorized(54)
 
   //Locais
   var localEstoque: String?

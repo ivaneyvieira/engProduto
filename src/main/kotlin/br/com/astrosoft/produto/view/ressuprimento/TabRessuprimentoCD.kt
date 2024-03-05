@@ -43,7 +43,9 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
+    val user = AppConfig.userLogin() as? UserSaci
     button ("Exclui") {
+      this.isVisible = user?.ressuprimentoExclui == true
       icon = VaadinIcon.TRASH.create()
       onLeftClick {
         viewModel.excluiRessuprimento()
