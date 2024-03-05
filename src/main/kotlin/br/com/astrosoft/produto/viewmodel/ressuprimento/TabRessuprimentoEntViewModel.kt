@@ -109,6 +109,41 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     }
   }
 
+  fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
+    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.selecionado = true
+    produto.salva()
+
+    subView.updateProduto(produto)
+  }
+
+  fun marcaRec() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach { produto ->
+      produto.marca = EMarcaRessuprimento.REC.num
+      produto.selecionado = false
+      produto.salva()
+    }
+    subView.updateProdutos()
+  }
+
+  fun desmarcar() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == true }
+    itens.ifEmpty {
+      fail("Nenhum produto para desmarcar")
+    }
+
+    itens.forEach { produto ->
+      produto.selecionado = false
+      produto.salva()
+    }
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoEnt
 }
@@ -121,4 +156,7 @@ interface ITabRessuprimentoEnt : ITabView {
   fun formAutoriza(pedido: Ressuprimento)
   fun formTransportado(pedido: Ressuprimento)
   fun formRecebido(pedido: Ressuprimento)
+  fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
+  fun updateProduto(produto: ProdutoRessuprimento)
+  fun produtosSelecionados(): List<ProdutoRessuprimento>
 }

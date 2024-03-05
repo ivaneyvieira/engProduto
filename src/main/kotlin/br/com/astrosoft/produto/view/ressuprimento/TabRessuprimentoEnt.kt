@@ -170,6 +170,18 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     }
   }
 
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun updateProduto(produto: ProdutoRessuprimento) {
+    dlgProduto?.updateProduto(produto)
+  }
+
+  override fun produtosSelecionados(): List<ProdutoRessuprimento> {
+    return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
   override fun formTransportado(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
