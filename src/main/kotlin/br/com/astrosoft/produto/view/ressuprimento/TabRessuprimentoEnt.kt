@@ -137,8 +137,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       lojaRessu = edtLoja.value ?: 0,
-      dataPedidoInicial = edtDataInicial.value,
-      dataPedidoFinal = edtDataFinal.value,
+      dataNotaInicial = edtDataInicial.value,
+      dataNotaFinal = edtDataFinal.value,
     )
   }
 

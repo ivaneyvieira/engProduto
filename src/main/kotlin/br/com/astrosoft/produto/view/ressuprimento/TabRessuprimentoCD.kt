@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
@@ -13,22 +14,23 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
   private var dlgProduto: DlgProdutosRessuCD? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     edtRessuprimento = integerField("Número") {
@@ -44,7 +46,24 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
+    edtDataInicial = datePicker("Data Inicial") {
+      value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final")
+    {
+      value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     val user = AppConfig.userLogin() as? UserSaci
+
     button("Exclui") {
       this.isVisible = user?.ressuprimentoExclui == true
       icon = VaadinIcon.TRASH.create()
@@ -85,7 +104,9 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
-      lojaRessu = user?.lojaRessu ?: 0
+      lojaRessu = user?.lojaRessu ?: 0,
+      dataPedidoInicial = edtDataInicial.value,
+      dataPedidoFinal = edtDataFinal.value,
     )
   }
 
