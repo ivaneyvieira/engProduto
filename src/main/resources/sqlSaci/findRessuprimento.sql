@@ -169,7 +169,9 @@ SELECT N.no                                AS numero,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.cost)       AS totalProdutos,
-       MAX(X.auxShort4)                    AS marca,
+       SUM(X.auxShort4 = 0)                AS marcaCD,
+       SUM(X.auxShort4 = 1)                AS marcaEnt,
+       SUM(X.auxShort4 = 2)                AS marcaRec,
        'N'                                 AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
@@ -200,7 +202,6 @@ FROM sqldados.ords AS N
 WHERE N.date >= @DATA
   AND N.date >= 20240226
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
-  AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
@@ -208,8 +209,13 @@ WHERE N.date >= @DATA
   AND N.date >= @DATA
 GROUP BY N.storeno,
          N.no,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
-         IF(:marca = 999, '', L.localizacao);
+         L.localizacao
+HAVING CASE :marca
+         WHEN 0 THEN marcaCD > 0
+         WHEN 1 THEN marcaEnt > 0
+         WHEN 2 THEN marcaRec > 0
+         ELSE FALSE
+       END > 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
 CREATE TEMPORARY TABLE T_PEDIDO_02
@@ -220,7 +226,9 @@ SELECT N.no                                AS numero,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.cost)       AS totalProdutos,
-       MAX(X.auxShort4)                    AS marca,
+       SUM(X.auxShort4 = 0)                AS marcaCD,
+       SUM(X.auxShort4 = 1)                AS marcaEnt,
+       SUM(X.auxShort4 = 2)                AS marcaRec,
        'N'                                 AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
@@ -236,7 +244,7 @@ FROM sqldados.ordsRessu AS N
        INNER JOIN T_PEDIDO_NOTA AS NF
                   ON N.no = NF.ordno
        LEFT JOIN sqldados.oprdRessu AS X
-                  ON N.storeno = X.storeno AND N.no = X.ordno
+                 ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
@@ -251,15 +259,19 @@ FROM sqldados.ordsRessu AS N
 WHERE N.date >= @DATA
   AND N.date >= 20240226
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
-  AND (X.auxShort4 = :marca OR :marca = 999)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
 GROUP BY N.storeno,
          N.no,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.obs, '-', 1)),
-         IF(:marca = 999, '', L.localizacao);
+         L.localizacao
+HAVING CASE :marca
+         WHEN 0 THEN marcaCD > 0
+         WHEN 1 THEN marcaEnt > 0
+         WHEN 2 THEN marcaRec > 0
+         ELSE FALSE
+       END > 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
@@ -269,7 +281,9 @@ SELECT numero,
        comprador,
        localizacao,
        totalProdutos,
-       marca,
+       marcaCD,
+       marcaEnt,
+       marcaRec,
        cancelada,
        notaBaixa,
        dataBaixa,
@@ -290,7 +304,9 @@ SELECT numero,
        comprador,
        localizacao,
        totalProdutos,
-       marca,
+       marcaCD,
+       marcaEnt,
+       marcaRec,
        cancelada,
        notaBaixa,
        dataBaixa,
@@ -314,8 +330,9 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       totalProdutos,
-       marca,
+       marcaCD,
+       marcaEnt,
+       marcaRec,
        cancelada,
        MAX(notaBaixa)  AS notaBaixa,
        MAX(dataBaixa)  AS dataBaixa,

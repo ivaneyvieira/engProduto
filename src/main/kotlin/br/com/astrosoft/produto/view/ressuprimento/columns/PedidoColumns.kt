@@ -25,14 +25,6 @@ object RessuprimentoColumns {
     this.setHeader("Comprador")
   }
 
-  fun Grid<Ressuprimento>.colunaRessuprimentoValor() = columnGrid(Ressuprimento::totalProdutos) {
-    this.setHeader("Valor")
-  }
-
-  fun Grid<Ressuprimento>.colunaRessuprimentoSituacao() = columnGrid(Ressuprimento::situacao) {
-    this.setHeader("Situação")
-  }
-
   fun Grid<Ressuprimento>.colunaRessuprimentoLocalizacao() = columnGrid(Ressuprimento::localizacao) {
     this.setHeader("Loc")
   }

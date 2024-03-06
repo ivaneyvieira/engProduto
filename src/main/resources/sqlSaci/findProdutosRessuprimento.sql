@@ -42,8 +42,7 @@ FROM (SELECT ordno                                  AS ordno,
              P.sp / 100                             AS precoCheio,
              X.qtty                                 AS qtPedido,
              IF(X.auxLong2 = 0, X.qtty, X.auxLong2) AS qtEntregue,
-             IF(X.auxLong1 = 0, IF(X.auxLong2 = 0, X.qtty, X.auxLong2),
-                X.auxLong1)                         AS qtRecebido,
+             IF(X.auxLong1 = 0, NULL, X.auxLong1)   AS qtRecebido,
 
              X.cost                                 AS preco,
              (X.qtty * X.mult / 1000) * X.cost      AS total,
@@ -95,8 +94,7 @@ FROM (SELECT ordno                                  AS ordno,
              P.sp / 100                                              AS precoCheio,
              X.qtty                                                  AS qtPedido,
              IF(X.auxLong2 = 0, X.qtty, X.auxLong2)                  AS qtEntregue,
-             IF(X.auxLong1 = 0, IF(X.auxLong2 = 0, X.qtty, X.auxLong2),
-                X.auxLong1)                                          AS qtRecebido,
+             IF(X.auxLong1 = 0, NULL, X.auxLong1)                    AS qtRecebido,
              X.cost                                                  AS preco,
              (X.qtty * X.mult / 1000) * X.cost                       AS total,
              X.auxShort4                                             AS marca,
@@ -129,3 +127,15 @@ FROM (SELECT ordno                                  AS ordno,
         AND (L.localizacao = :locApp)
       GROUP BY codigo, grade) AS D
 GROUP BY codigo, grade
+
+/*
+update sqldados.oprdRessu
+set auxLong1 = 0
+where storeno = 1
+  and ordno > 100000000
+
+update sqldados.oprd
+set auxLong1 = 0
+where storeno = 1
+  and ordno > 100000000
+*/

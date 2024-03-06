@@ -32,7 +32,6 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.selecionado = EMarcaRessuprimento.ENT.num
     produto.salva()
-
     subView.updateProduto(produto)
   }
 

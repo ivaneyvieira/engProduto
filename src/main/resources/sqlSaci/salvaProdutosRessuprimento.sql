@@ -1,7 +1,7 @@
 UPDATE sqldados.oprd AS X
 SET X.auxShort4 = :marca,
     X.auxShort3 = :selecionado,
-    X.auxLong4  = IF(:selecionado > 0, UNIX_TIMESTAMP(), 0),
+    X.auxLong4  = UNIX_TIMESTAMP(),
     X.auxLong2  = :qtEntregue,
     X.auxLong1  = :qtRecebido
 WHERE storeno = 1
@@ -12,7 +12,7 @@ WHERE storeno = 1
 UPDATE sqldados.oprdRessu AS X
 SET X.auxShort4 = :marca,
     X.auxShort3 = :selecionado,
-    X.auxLong4  = IF(:selecionado > 0, UNIX_TIMESTAMP(), 0),
+    X.auxLong4  = UNIX_TIMESTAMP(),
     X.auxLong2  = :qtEntregue,
     X.auxLong1  = :qtRecebido
 WHERE storeno = 1

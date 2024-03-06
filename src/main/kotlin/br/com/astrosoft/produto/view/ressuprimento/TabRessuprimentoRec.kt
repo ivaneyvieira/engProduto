@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
@@ -67,6 +68,8 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
+    this.addClassName("styling")
+    this.format()
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) { impressora ->
         //viewModel.marcaImpressao(pedido, impressora)
@@ -86,6 +89,13 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     colunaRessuprimentoTransportadorPor().expand()
     colunaRessuprimentoRecebidoPor().expand()
     colunaRessuprimentoUsuarioApp()
+
+    this.setPartNameGenerator {
+      val marca = it.marcaEnt ?: 0
+      if (marca > 0) {
+        "amarelo"
+      } else null
+    }
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {

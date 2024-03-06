@@ -64,6 +64,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
+      this.format()
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
@@ -85,7 +86,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtPedido().integerFieldEditor()
       produtoRessuprimentoEstoque()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemCD, "Selecionado") {
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
@@ -99,7 +100,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(
-        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemCD).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
         gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
       )
     }
@@ -124,7 +125,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemCD).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
       gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()

@@ -118,7 +118,12 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
+    val itens = subView.produtosSelecionados().filter {
+      val qtRecebido = it.qtRecebido ?: 0
+      val qtPedido = it.qtPedido ?: 0
+      it.selecionado == EMarcaRessuprimento.REC.num &&
+      (qtRecebido == 0 || qtRecebido == qtPedido)
+    }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -141,6 +146,11 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       produto.selecionado = 0
       produto.salva()
     }
+    subView.updateProdutos()
+  }
+
+  fun saveQuant(bean: ProdutoRessuprimento) {
+    bean.salva()
     subView.updateProdutos()
   }
 

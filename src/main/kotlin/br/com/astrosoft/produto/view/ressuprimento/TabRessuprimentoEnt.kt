@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -83,6 +80,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
 
   override fun Grid<Ressuprimento>.gridPanel() {
     val user = AppConfig.userLogin() as? UserSaci
+    this.addClassName("styling")
+    this.format()
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
@@ -119,6 +118,13 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     }
     colunaRessuprimentoRecebidoPor().expand()
     colunaRessuprimentoUsuarioApp()
+
+    this.setPartNameGenerator {
+      val marca = it.marcaRec ?: 0
+      if (marca > 0) {
+        "amarelo"
+      } else null
+    }
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
@@ -126,7 +132,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
-      lojaRessu = edtLoja.value ?:  0,
+      lojaRessu = edtLoja.value ?: 0,
       dataPedidoInicial = edtDataInicial.value,
       dataPedidoFinal = edtDataFinal.value,
     )

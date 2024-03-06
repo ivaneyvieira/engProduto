@@ -2,8 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
@@ -15,6 +14,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -67,19 +67,39 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   }
 
   private fun HorizontalLayout.createGridProdutos() {
+    val user = AppConfig.userLogin() as? UserSaci
     gridDetail.apply {
+      this.addClassName("styling")
+      this.format()
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
+
+      if (user?.ressuprimentoRecebedor == true) {
+        this.withEditor(classBean = ProdutoRessuprimento::class,
+          openEditor = {
+            this.focusEditor(ProdutoRessuprimento::qtRecebido)
+          },
+          closeEditor = {
+            viewModel.saveQuant(it.bean)
+          }
+        )
+      }
+
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtPedido()
+      if (user?.ressuprimentoRecebedor == true) {
+        produtoRessuprimentoQtRecebido().integerFieldEditor()
+      } else {
+        produtoRessuprimentoQtRecebido()
+      }
       produtoRessuprimentoEstoque()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {

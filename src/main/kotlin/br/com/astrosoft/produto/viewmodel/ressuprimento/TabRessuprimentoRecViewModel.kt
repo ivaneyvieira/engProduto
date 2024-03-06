@@ -45,11 +45,6 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProduto(produto)
   }
 
-  fun saveQuant(bean: ProdutoRessuprimento) {
-    bean.salva()
-    subView.updateProdutos()
-  }
-
   fun marcaRec() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
     itens.ifEmpty {

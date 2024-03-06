@@ -11,6 +11,8 @@ import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
+import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.grid.GridVariant.*
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.data.renderer.LocalDateRenderer
@@ -372,4 +374,13 @@ fun <T : Any> Column<T>.left(): Column<T> {
 fun <T : Any> Column<T>.center(): Column<T> {
   this.textAlign = ColumnTextAlign.CENTER
   return this
+}
+
+fun <T:Any> Grid<T>.format() {
+  this.addThemeVariants(
+    LUMO_COMPACT,
+    LUMO_ROW_STRIPES,
+    LUMO_COLUMN_BORDERS,
+    //LUMO_WRAP_CELL_CONTENT
+  )
 }
