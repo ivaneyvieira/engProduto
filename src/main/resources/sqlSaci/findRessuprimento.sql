@@ -22,24 +22,18 @@ GROUP BY L.prdno, L.grade;
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
-  PRIMARY KEY (ordno)
+  PRIMARY KEY (storeno, ordno)
 )
-SELECT N.l2                                      AS ordno,
-       N.storeno,
-       N.pdvno,
-       N.custno,
-       N.xano,
-       N.storeno                                 AS storenoNota,
-       N.empno,
-       CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR) AS numero,
-       N.issuedate                               AS date,
-       CAST(N.issuedate AS DATE)                 AS dataNota
+SELECT 1                                                                                      AS storeno,
+       N.l2                                                                                   AS ordno,
+       MID(MAX(CONCAT(LPAD(N.issuedate, 8, '0'), ':', CONCAT(N.nfno, '/', N.nfse))), 10, 100) AS numero,
+       MAX(CAST(N.issuedate AS DATE))                                                         AS dataNota
 FROM sqldados.nf AS N
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND (N.l2 LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
-/*TODO Verificar nota cancelada*/
+  AND N.status <> 1
 GROUP BY ordno;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -170,7 +164,6 @@ SELECT N.no                                AS numero,
        N.empno                             AS comprador,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.cost)       AS totalProdutos,
        SUM(X.auxShort4 = 0)                AS marcaCD,
        SUM(X.auxShort4 = 1)                AS marcaEnt,
        SUM(X.auxShort4 = 2)                AS marcaRec,
@@ -188,6 +181,7 @@ SELECT N.no                                AS numero,
 FROM sqldados.ords AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
+                   AND N.storeno = NF.storeno
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
@@ -227,7 +221,6 @@ SELECT N.no                                AS numero,
        N.empno                             AS comprador,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.cost)       AS totalProdutos,
        SUM(X.auxShort4 = 0)                AS marcaCD,
        SUM(X.auxShort4 = 1)                AS marcaEnt,
        SUM(X.auxShort4 = 2)                AS marcaRec,
@@ -243,10 +236,12 @@ SELECT N.no                                AS numero,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario
 FROM sqldados.ordsRessu AS N
-       INNER JOIN T_PEDIDO_NOTA AS NF
+       LEFT JOIN T_PEDIDO_NOTA AS NF
                   ON N.no = NF.ordno
-       LEFT JOIN sqldados.oprdRessu AS X
-                 ON N.storeno = X.storeno AND N.no = X.ordno
+                    AND N.storeno = NF.storeno
+       INNER JOIN sqldados.oprdRessu AS X
+                 ON N.storeno = X.storeno
+                      AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
@@ -282,7 +277,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       totalProdutos,
        marcaCD,
        marcaEnt,
        marcaRec,
@@ -305,7 +299,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       totalProdutos,
        marcaCD,
        marcaEnt,
        marcaRec,
