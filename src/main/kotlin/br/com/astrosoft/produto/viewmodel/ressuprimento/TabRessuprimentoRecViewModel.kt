@@ -22,7 +22,7 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.transportadoPor.isNullOrBlank())
       fail("Pedido não transportado")
 
-    val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
+    val produtos = pedido.produtos(EMarcaRessuprimento.REC)
     val relatorio = PrintRessuprimento(pedido)
 
     relatorio.print(
