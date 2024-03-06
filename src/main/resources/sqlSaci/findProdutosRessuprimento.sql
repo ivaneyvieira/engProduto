@@ -43,6 +43,8 @@ FROM sqldados.nf AS N
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
+/*TODO Verificar nota cancelada*/
+
 GROUP BY N.l2, X.prdno, X.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA2;

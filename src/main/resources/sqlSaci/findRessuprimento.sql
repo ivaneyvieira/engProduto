@@ -39,6 +39,7 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND (N.l2 LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
+/*TODO Verificar nota cancelada*/
 GROUP BY ordno;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -362,6 +363,6 @@ WHERE (@PESQUISA = '' OR
   )
   AND (data >= :dataPedidoInicial OR :dataPedidoInicial = 0)
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
-  AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0)
-  AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0)
+  AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixa IS NULL)
+  AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixa IS NULL)
 GROUP BY numero, localizacao
