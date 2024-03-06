@@ -109,7 +109,6 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateProduto(it.bean)
       })
 
-
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()

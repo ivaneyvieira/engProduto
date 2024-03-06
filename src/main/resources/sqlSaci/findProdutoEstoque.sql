@@ -20,7 +20,6 @@ add column localizacao varchar(4)
 
 */
 
-
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa AS
 SELECT S.storeno                                                     AS loja,

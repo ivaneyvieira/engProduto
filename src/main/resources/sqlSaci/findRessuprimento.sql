@@ -7,17 +7,22 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT L.prdno                                                              AS prdno,
-       L.grade                                                              AS grade,
-       CAST(MID(COALESCE(A1.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS localizacao
-FROM sqldados.prdloc AS L
-       LEFT JOIN sqldados.prdAdicional AS A1
-                 ON L.storeno = A1.storeno
-                   AND L.prdno = A1.prdno
-                   AND L.grade = A1.grade
-                   AND A1.localizacao != ''
-WHERE L.storeno = 4
-GROUP BY L.prdno, L.grade;
+SELECT S.prdno                                               AS prdno,
+       S.grade                                               AS grade,
+       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
+FROM sqldados.stk AS S
+       LEFT JOIN sqldados.prdloc AS L
+                 ON S.storeno = L.storeno
+                   AND S.prdno = L.prdno
+                   AND S.grade = L.grade
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON S.storeno = A.storeno
+                   AND S.prdno = A.prdno
+                   AND S.grade = A.grade
+                   AND A.localizacao != ''
+WHERE S.storeno = 4
+GROUP BY S.storeno, S.prdno, S.grade;
+
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -237,11 +242,11 @@ SELECT N.no                                AS numero,
        PU.name                             AS usuario
 FROM sqldados.ordsRessu AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
-                  ON N.no = NF.ordno
-                    AND N.storeno = NF.storeno
+                 ON N.no = NF.ordno
+                   AND N.storeno = NF.storeno
        INNER JOIN sqldados.oprdRessu AS X
-                 ON N.storeno = X.storeno
-                      AND N.no = X.ordno
+                  ON N.storeno = X.storeno
+                    AND N.no = X.ordno
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade

@@ -7,16 +7,22 @@ CREATE TEMPORARY TABLE T_LOC1
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT L.prdno                                                                              AS prdno,
-       L.grade                                                                              AS grade,
-       CAST(MID(COALESCE(A1.localizacao, A2.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS localizacao
-FROM sqldados.prdloc AS L
-       LEFT JOIN sqldados.prdAdicional AS A1
-                 USING (storeno, prdno, grade)
-       LEFT JOIN sqldados.prdAdicional AS A2
-                 USING (storeno, prdno)
-WHERE storeno = 4
-GROUP BY L.prdno, L.grade;
+SELECT S.prdno                                               AS prdno,
+       S.grade                                               AS grade,
+       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
+FROM sqldados.stk AS S
+       LEFT JOIN sqldados.prdloc AS L
+                 ON S.storeno = L.storeno
+                   AND S.prdno = L.prdno
+                   AND S.grade = L.grade
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON S.storeno = A.storeno
+                   AND S.prdno = A.prdno
+                   AND S.grade = A.grade
+                   AND A.localizacao != ''
+WHERE S.storeno = 4
+GROUP BY S.storeno, S.prdno, S.grade;
+
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC2;
 CREATE TEMPORARY TABLE T_LOC2
@@ -159,7 +165,7 @@ FROM (SELECT ordno                                   AS ordno,
         AND X.ordno = :ordno
         AND (X.auxShort4 = :marca OR :marca = 999)
         AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-        AND (L.localizacao = :locApp)
+        AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
       GROUP BY codigo, grade) AS D
 GROUP BY codigo, grade
 
