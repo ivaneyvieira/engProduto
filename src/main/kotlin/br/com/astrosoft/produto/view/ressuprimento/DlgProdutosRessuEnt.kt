@@ -100,7 +100,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
         produtoRessuprimentoQtRecebido()
       }
       produtoRessuprimentoEstoque()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
@@ -114,7 +114,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(
-        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
+        gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemREC).asc,
         gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
       )
     }
@@ -139,7 +139,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemENT).asc,
+      gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemREC).asc,
       gridDetail.getColumnBy(ProdutoRessuprimento::posicao).desc,
     )
     update()
