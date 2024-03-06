@@ -74,6 +74,10 @@ object ProdutoRessuViewColumns {
     this.setHeader("Quant")
   }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtNf() = columnGrid(ProdutoRessuprimento::qtQuantNF) {
+    this.setHeader("Qnt NF")
+  }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtEntregue() = columnGrid(ProdutoRessuprimento::qtEntregue) {
     this.setHeader("Entregue")
   }

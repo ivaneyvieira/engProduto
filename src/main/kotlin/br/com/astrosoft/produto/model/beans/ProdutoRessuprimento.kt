@@ -20,6 +20,7 @@ class ProdutoRessuprimento(
   var precoCheio: Double?,
   var localizacao: String?,
   var qtPedido: Int?,
+  var qtQuantNF: Int?,
   var qtEntregue: Int?,
   var qtRecebido: Int?,
   var preco: Double?,
