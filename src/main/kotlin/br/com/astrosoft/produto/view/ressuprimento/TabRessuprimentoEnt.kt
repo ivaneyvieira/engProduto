@@ -88,9 +88,13 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       }
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+      if (ressuprimento.recebidoPor.isNullOrBlank()) {
+        DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
+      } else {
+        dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
+        dlgProduto?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
     //colunaRessuprimentoChaveCD()

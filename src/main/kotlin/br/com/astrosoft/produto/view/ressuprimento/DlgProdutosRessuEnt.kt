@@ -99,7 +99,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
         produtoRessuprimentoQtRecebido()
       }
       produtoRessuprimentoEstoque()
-      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
+      this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
