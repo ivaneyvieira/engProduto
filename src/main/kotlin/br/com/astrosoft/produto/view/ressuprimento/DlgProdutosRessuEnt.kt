@@ -102,17 +102,21 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
         produtoRessuprimentoQtRecebido()
       }
       produtoRessuprimentoEstoque()
-      produtoRessuprimentoCodigoCorrecao().textFieldEditor {
-        this.addValueChangeListener {
-          val codigo = it.value ?: ""
-          val listGrades = viewModel.findGrades(codigo)
-          val col = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
-          val comp = col.editorComponent as? Select<String>
-          comp?.setItems(listGrades)
+      if (user?.ressuprimentoRecebedor == true) {
+        produtoRessuprimentoCodigoCorrecao().textFieldEditor {
+          this.addValueChangeListener {
+            val codigo = it.value ?: ""
+            val listGrades = viewModel.findGrades(codigo)
+            val col = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
+            val comp = col.editorComponent as? Select<String>
+            comp?.setItems(listGrades)
+          }
         }
+        produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
+      }else {
+        produtoRessuprimentoCodigoCorrecao()
+        produtoRessuprimentoGradeCorrecao()
       }
-      produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
-
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }
