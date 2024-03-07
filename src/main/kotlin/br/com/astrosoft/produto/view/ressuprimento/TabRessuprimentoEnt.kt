@@ -88,9 +88,10 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       }
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      if (ressuprimento.recebidoPor.isNullOrBlank()) {
+      val user = AppConfig.userLogin() as? UserSaci
+      if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
-      } else if (ressuprimento.notaBaixa.isNullOrBlank()) {
+      } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não tem nota de transferencia")
       } else {
         dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
