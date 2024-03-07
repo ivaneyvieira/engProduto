@@ -374,6 +374,7 @@ WHERE (@PESQUISA = '' OR
        D.localizacao LIKE @PESQUISA OR
        singno LIKE @PESQUISA_NUM OR
        sing LIKE @PESQUISA_LIKE OR
+       notaBaixa LIKE @PESQUISA_START OR
        transportadoNo LIKE @PESQUISA_NUM OR
        transportadoPor LIKE @PESQUISA_LIKE OR
        recebidoNo LIKE @PESQUISA_NUM OR
