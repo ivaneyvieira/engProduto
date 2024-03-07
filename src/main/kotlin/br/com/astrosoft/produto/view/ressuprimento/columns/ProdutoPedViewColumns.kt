@@ -20,6 +20,11 @@ object ProdutoRessuViewColumns {
         this.setHeader("Grade Correção")
       }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDescricaoCorrecao() =
+      columnGrid(ProdutoRessuprimento::descricaoCorrecao) {
+        this.setHeader("Descrição")
+      }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() =
       columnGrid(ProdutoRessuprimento::grade) {
         this.setHeader("Grade")

@@ -32,6 +32,7 @@ class ProdutoRessuprimento(
   var posicao: Int?,
   var estoque: Int?,
   var codigoCorrecao: String?,
+  var descricaoCorrecao: String?,
   var gradeCorrecao: String?
 ) {
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""

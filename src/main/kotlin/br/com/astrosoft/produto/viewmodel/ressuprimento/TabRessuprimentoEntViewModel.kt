@@ -75,8 +75,8 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Pedido não recebido")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
-    val valorTotal = produtos.sumOf { it.vlPedido ?: 0.00 }
-    val relatorio = PrintRessuprimento(pedido, valorTotal, ProdutoRessuprimento::qtPedido)
+
+    val relatorio = PrintRessuprimento(pedido, produtos.size, ProdutoRessuprimento::qtPedido)
 
     relatorio.print(
       dados = produtos.sortedWith(
@@ -128,7 +128,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       (it.gradeCorrecao.isNullOrBlank())
     }
     itens.ifEmpty {
-      fail("Nenhum produto selecionado")
+      fail("Recebimento diferente da Entrega")
     }
 
     itens.forEach { produto ->
@@ -157,8 +157,8 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
-  fun findGrades(codigo: String): List<String> {
-    return saci.findGrades(codigo).map { it.grade }
+  fun findGrades(codigo: String): List<PrdGrade> {
+    return saci.findGrades(codigo)
   }
 
   val subView

@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricaoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoEstoque
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
@@ -92,7 +93,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
 
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
-      produtoRessuprimentoDescricao()
+      produtoRessuprimentoDescricao().expand()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtNf()
@@ -104,17 +105,22 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       //produtoRessuprimentoEstoque()
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoCodigoCorrecao().textFieldEditor {
-          this.addValueChangeListener {
-            val codigo = it.value ?: ""
+          this.addValueChangeListener { event ->
+            val codigo = event.value ?: ""
             val listGrades = viewModel.findGrades(codigo)
             val col = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
             val comp = col.editorComponent as? Select<String>
-            comp?.setItems(listGrades)
+            comp?.setItems(listGrades.map { it.grade })
+
+            val bean = this@apply.editor.binder.bean
+            bean.descricaoCorrecao = listGrades.firstOrNull()?.descricao ?: ""
           }
         }
+        produtoRessuprimentoDescricaoCorrecao().expand()
         produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
       }else {
         produtoRessuprimentoCodigoCorrecao()
+        produtoRessuprimentoDescricaoCorrecao().expand()
         produtoRessuprimentoGradeCorrecao()
       }
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {

@@ -17,6 +17,7 @@ class Ressuprimento(
   var cancelada: String?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
+  var valorNota: Double?,
   var singno: Int?,
   var sing: String?,
   var transportadoNo: Int?,

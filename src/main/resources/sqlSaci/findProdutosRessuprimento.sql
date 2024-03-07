@@ -108,6 +108,7 @@ SELECT X.ordno                                                     AS ordno,
        L.localizacao                                               AS localizacao,
        ROUND(IFNULL(S.qtty_varejo, 0) / 1000)                      AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                              AS codigoCorrecao,
+       TRIM(MID(PR.name, 1, 37))                                   AS descricaoCorrecao,
        SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1)    AS gradeCorrecao
 FROM T_OPRD AS X
        INNER JOIN T_ORDS AS N
@@ -136,6 +137,8 @@ FROM T_OPRD AS X
                  ON T.no = P.typeno
        LEFT JOIN sqldados.cl
                  ON cl.no = P.clno
+       LEFT JOIN sqldados.prd AS PR
+                 ON PR.no = LPAD(SUBSTRING_INDEX(X.obs, ':', 1), 16, ' ')
 WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca OR :marca = 999)
