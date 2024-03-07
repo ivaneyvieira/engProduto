@@ -75,7 +75,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Pedido não recebido")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
-    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtQuantNF)
+    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtPedido)
 
     relatorio.print(
       dados = produtos.sortedWith(
