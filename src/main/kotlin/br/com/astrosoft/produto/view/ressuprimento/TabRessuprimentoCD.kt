@@ -2,16 +2,14 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoComprador
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoObservacao
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoCD
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -76,6 +74,14 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   override fun Grid<Ressuprimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
+    this.withEditor(classBean = Ressuprimento::class,
+      openEditor = {
+        this.focusEditor(Ressuprimento::observacao)
+      },
+      closeEditor = {
+        viewModel.saveObservacao(it.bean)
+      }
+    )
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosRessuCD(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -88,7 +94,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
     colunaRessuprimentoLocalizacao()
-    colunaRessuprimentoComprador()
+    colunaRessuprimentoObservacao().expand().textFieldEditor()
 
     this.setPartNameGenerator {
       val marca = it.marcaEnt ?: 0

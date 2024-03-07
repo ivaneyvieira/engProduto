@@ -2,6 +2,17 @@ USE sqldados;
 
 DO @DATA := SUBDATE(CURRENT_DATE, 30) * 1;
 
+/*
+CREATE TABLE sqldados.ordsAdicional
+(
+  storeno     INT,
+  ordno       INT,
+  localizacao VARCHAR(4),
+  observacao varchar(100),
+  PRIMARY KEY (storeno, ordno, localizacao)
+)
+*/
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
@@ -181,7 +192,8 @@ SELECT N.no                                AS numero,
        RU.no                               AS recebidoNo,
        RU.name                             AS recebidoPor,
        PU.no                               AS usuarioNo,
-       PU.name                             AS usuario
+       PU.name                             AS usuario,
+       N.c1                                AS observacao
 FROM sqldados.ords AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -328,27 +340,32 @@ SELECT numero,
        fornecedor,
        data,
        comprador,
-       localizacao,
+       D.localizacao,
        marcaCD,
        marcaEnt,
        marcaRec,
        cancelada,
-       MAX(notaBaixa)  AS notaBaixa,
-       MAX(dataBaixa)  AS dataBaixa,
-       singno          AS singno,
-       sing            AS sing,
-       transportadoNo  AS transportadoNo,
-       transportadoPor AS transportadoPor,
-       recebidoNo      AS recebidoNo,
-       recebidoPor     AS recebidoPor,
-       usuarioNo       AS usuarioNo,
-       usuario         AS usuario
+       MAX(notaBaixa)           AS notaBaixa,
+       MAX(dataBaixa)           AS dataBaixa,
+       singno                   AS singno,
+       sing                     AS sing,
+       transportadoNo           AS transportadoNo,
+       transportadoPor          AS transportadoPor,
+       recebidoNo               AS recebidoNo,
+       recebidoPor              AS recebidoPor,
+       usuarioNo                AS usuarioNo,
+       usuario                  AS usuario,
+       IFNULL(A.observacao, '') AS observacao
 FROM T_PEDIDO AS D
+       LEFT JOIN sqldados.ordsAdicional AS A
+                 ON A.storeno = 1
+                   AND A.ordno = D.numero
+                   AND A.localizacao = D.localizacao
 WHERE (@PESQUISA = '' OR
        numero LIKE @PESQUISA_START OR
        fornecedor LIKE @PESQUISA_NUM OR
        comprador LIKE @PESQUISA_NUM OR
-       localizacao LIKE @PESQUISA OR
+       D.localizacao LIKE @PESQUISA OR
        singno LIKE @PESQUISA_NUM OR
        sing LIKE @PESQUISA_LIKE OR
        transportadoNo LIKE @PESQUISA_NUM OR
@@ -362,4 +379,4 @@ WHERE (@PESQUISA = '' OR
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
   AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixa IS NULL)
   AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixa IS NULL)
-GROUP BY numero, localizacao
+GROUP BY D.numero, D.localizacao

@@ -45,7 +45,7 @@ fun <T : Any> Grid<T>.withEditor(
 
 fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>) {
   if (this.editor.isOpen) {
-    val component = this.getColumnBy(property) as? Focusable<*>
+    val component = this.getColumnBy(property).editorComponent as? Focusable<*>
     component?.focus()
   }
 }

@@ -25,6 +25,7 @@ class Ressuprimento(
   var recebidoPor: String?,
   var usuarioNo: Int?,
   var usuario: String?,
+  var observacao: String?,
 ) {
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
@@ -68,6 +69,10 @@ class Ressuprimento(
 
   fun exclui(): Int {
     return saci.excluiRessuprimento(this)
+  }
+
+  fun salva() {
+    saci.salvaRessuprimento(this)
   }
 
   companion object {

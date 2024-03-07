@@ -70,6 +70,12 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
+  fun saveObservacao(bean: Ressuprimento?) = viewModel.exec {
+    bean ?: fail("Nenhum ressuprimento selecionado")
+    bean.salva()
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoCD
 }

@@ -903,6 +903,16 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.value ?: 0
   }
 
+  fun salvaRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/salvaRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("localizacao", ressuprimento.localizacao)
+      addOptionalParameter("observacao", ressuprimento.observacao)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
