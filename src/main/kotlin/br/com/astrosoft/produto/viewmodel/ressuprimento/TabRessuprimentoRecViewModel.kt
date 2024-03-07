@@ -7,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.FiltroRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
-import kotlin.math.roundToInt
 
 class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
@@ -23,8 +22,8 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.transportadoPor.isNullOrBlank())
       fail("Pedido não transportado")
 
-    val produtos = pedido.produtos(EMarcaRessuprimento.REC)
-    val relatorio = PrintRessuprimento(pedido, produtos.size, ProdutoRessuprimento::qtRecebido)
+    val produtos = pedido.produtos()
+    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtRecebido)
 
     relatorio.print(
       dados = produtos.sortedWith(

@@ -113,7 +113,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos(EMarcaRessuprimento.CD)
+    val listProdutos = ressuprimento.produtos()
     gridDetail.setItems(listProdutos)
   }
 

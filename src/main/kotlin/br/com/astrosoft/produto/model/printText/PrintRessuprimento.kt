@@ -6,16 +6,16 @@ import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
 import kotlin.reflect.KProperty1
 
-class PrintRessuprimento(
-  val pedido: Ressuprimento,
-  val quant: Int,
-  propertyQuant: KProperty1<ProdutoRessuprimento, Int?>,
-) : PrintText<ProdutoRessuprimento>() {
+class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<ProdutoRessuprimento, Int?>) :
+  PrintText<ProdutoRessuprimento>() {
   override fun printTitle(bean: ProdutoRessuprimento) {
+    val list = pedido.produtos()
+    val quant = list.size
+    val valorPedido = list.sumOf { it.vlPedido ?: 0.00 }
     writeln("Romaneio de Separacao do Ressuprimento da ${pedido.rotaRessuprimento}", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${pedido.data.format()}   Pedido   : ${pedido.numero}   Valor R$ : ${pedido.valorNota.format()}",
+      "Data: ${pedido.data.format()}   Pedido   : ${pedido.numero}   Valor R$ : ${valorPedido.format()}",
       negrito = true
     )
     writeln("Data: ${pedido.dataBaixa.format()}   NF Transf: ${pedido.notaBaixa}    Qnt Itens: $quant", negrito = true)

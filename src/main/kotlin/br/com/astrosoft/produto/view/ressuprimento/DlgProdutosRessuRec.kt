@@ -76,7 +76,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos(EMarcaRessuprimento.REC)
+    val listProdutos = ressuprimento.produtos()
     gridDetail.setItems(listProdutos)
   }
 

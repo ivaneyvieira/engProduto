@@ -150,7 +150,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos(EMarcaRessuprimento.ENT)
+    val listProdutos = ressuprimento.produtos()
     gridDetail.setItems(listProdutos)
   }
 

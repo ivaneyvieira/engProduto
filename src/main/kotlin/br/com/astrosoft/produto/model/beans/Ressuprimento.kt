@@ -11,6 +11,7 @@ class Ressuprimento(
   var data: LocalDate?,
   var comprador: Int,
   var localizacao: String?,
+  var marca: Int?,
   var marcaCD: Int?,
   var marcaEnt: Int?,
   var marcaRec: Int?,
@@ -42,7 +43,11 @@ class Ressuprimento(
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
 
-  fun produtos(marca: EMarcaRessuprimento) = saci.findProdutoRessuprimento(this, marca, userRessuprimentoLocais())
+  fun produtos(): List<ProdutoRessuprimento> {
+    val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
+    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais())
+  }
+
   fun autoriza(user: UserSaci) {
     this.singno = user.no
     saci.autorizaRessuprimento(this)

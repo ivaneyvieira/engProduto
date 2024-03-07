@@ -74,9 +74,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin)
       fail("Pedido não recebido")
 
-    val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
+    val produtos = pedido.produtos()
 
-    val relatorio = PrintRessuprimento(pedido, produtos.size, ProdutoRessuprimento::qtPedido)
+    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtPedido)
 
     relatorio.print(
       dados = produtos.sortedWith(
@@ -102,7 +102,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val usuario = AppConfig.userLogin() as? UserSaci
     if (usuario?.ressuprimentoRecebedor == true) {
       if (pedido.recebidoPor.isNullOrBlank()) fail("Pedido não recebido")
-      pedido.produtos(EMarcaRessuprimento.ENT).forEach {
+      pedido.produtos().forEach {
         it.marca = EMarcaRessuprimento.REC.num
         it.salva()
       }
