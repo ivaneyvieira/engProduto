@@ -2,8 +2,8 @@ USE sqldados;
 
 DO @DATA := SUBDATE(CURRENT_DATE, 30) * 1;
 
-DROP TEMPORARY TABLE IF EXISTS T_LOC1;
-CREATE TEMPORARY TABLE T_LOC1
+DROP TEMPORARY TABLE IF EXISTS T_LOC;
+CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
@@ -23,17 +23,8 @@ FROM sqldados.stk AS S
 WHERE S.storeno = 4
 GROUP BY S.storeno, S.prdno, S.grade;
 
-DROP TEMPORARY TABLE IF EXISTS T_LOC2;
-CREATE TEMPORARY TABLE T_LOC2
-(
-  PRIMARY KEY (prdno, grade)
-)
-SELECT *
-FROM T_LOC1;
-
-
-DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA1;
-CREATE TEMPORARY TABLE T_PEDIDO_NOTA1
+DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
+CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
   PRIMARY KEY (storeno, ordno, prdno, grade)
 )
@@ -51,123 +42,103 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.status <> 1
 GROUP BY N.l2, X.prdno, X.grade;
 
-DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA2;
-CREATE TEMPORARY TABLE T_PEDIDO_NOTA2
+DROP TEMPORARY TABLE IF EXISTS T_ORDS;
+CREATE TEMPORARY TABLE T_ORDS
 (
-  PRIMARY KEY (storeno, ordno, prdno, grade)
+  PRIMARY KEY (storeno, no)
 )
 SELECT *
-FROM T_PEDIDO_NOTA1;
-
-SELECT *
-FROM (SELECT ordno                                   AS ordno,
-             CAST(TRIM(P.no) AS CHAR)                AS codigo,
-             IFNULL(X.grade, '')                     AS grade,
-             TRIM(IFNULL(B.barcode, P.barcode))      AS barcode,
-             TRIM(MID(P.name, 1, 37))                AS descricao,
-             P.mfno                                  AS vendno,
-             IFNULL(F.auxChar1, '')                  AS fornecedor,
-             P.typeno                                AS typeno,
-             IFNULL(T.name, '')                      AS typeName,
-             CAST(LPAD(P.clno, 6, '0') AS CHAR)      AS clno,
-             IFNULL(cl.name, '')                     AS clname,
-             P.m6                                    AS altura,
-             P.m4                                    AS comprimento,
-             P.m5                                    AS largura,
-             P.sp / 100                              AS precoCheio,
-             X.qtty                                  AS qtPedido,
-             TN.qtty                                 AS qtQuantNF,
-             IF(X.auxLong2 = 0, X.qtty, X.auxLong2)  AS qtEntregue,
-             IF(X.auxLong1 = 0, TN.qtty, X.auxLong1) AS qtRecebido,
-             X.cost                                  AS preco,
-             (X.qtty * X.mult / 1000) * X.cost       AS total,
-             X.auxShort4                             AS marca,
-             X.auxShort3                             AS selecionado,
-             X.auxLong4                              AS posicao,
-             L.localizacao                           AS localizacao,
-             ROUND(IFNULL(S.qtty_varejo, 0) / 1000)  AS estoque
-      FROM sqldados.prd AS P
-             INNER JOIN sqldados.oprd AS X
-                        ON P.no = X.prdno
-             LEFT JOIN T_PEDIDO_NOTA1 AS TN
-                       USING (storeno, ordno, prdno, grade)
-             INNER JOIN sqldados.ords AS N
-                        ON N.storeno = X.storeno AND N.no = X.ordno
-             LEFT JOIN sqldados.stk AS S
-                       ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
-             LEFT JOIN sqldados.prdbar AS B
-                       ON P.no = B.prdno AND B.grade = X.grade
-             LEFT JOIN T_LOC1 AS L
-                       ON X.prdno = L.prdno
-                         AND X.grade = L.grade
-             LEFT JOIN sqldados.vend AS F
-                       ON F.no = P.mfno
-             LEFT JOIN sqldados.type AS T
-                       ON T.no = P.typeno
-             LEFT JOIN sqldados.cl
-                       ON cl.no = P.clno
-      WHERE X.storeno = 1
-        AND X.ordno = :ordno
-        AND (X.auxShort4 = :marca OR :marca = 999)
-        AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-        AND (L.localizacao = :locApp)
-      GROUP BY codigo, grade
+FROM (SELECT *
+      FROM sqldados.ords
+      WHERE storeno = 1
+        AND no = :ordno
       UNION
       DISTINCT
-      SELECT ordno                                                   AS ordno,
-             CAST(TRIM(P.no) AS CHAR)                                AS codigo,
-             IFNULL(X.grade, '')                                     AS grade,
-             TRIM(IFNULL(B.barcode, P.barcode))                      AS barcode,
-             TRIM(MID(P.name, 1, 37))                                AS descricao,
-             P.mfno                                                  AS vendno,
-             IFNULL(F.auxChar1, '')                                  AS fornecedor,
-             P.typeno                                                AS typeno,
-             IFNULL(T.name, '')                                      AS typeName,
-             CAST(LPAD(P.clno, 6, '0') AS CHAR)                      AS clno,
-             IFNULL(cl.name, '')                                     AS clname,
-             P.m6                                                    AS altura,
-             P.m4                                                    AS comprimento,
-             P.m5                                                    AS largura,
-             P.sp / 100                                              AS precoCheio,
-             X.qtty                                                  AS qtPedido,
-             TN.qtty                                                 AS qtQuantNF,
-             IF(X.auxLong2 = 0, X.qtty, X.auxLong2)                  AS qtEntregue,
-             IF(X.auxLong1 = 0, TN.qtty, X.auxLong1)                 AS qtRecebido,
-             X.cost                                                  AS preco,
-             (X.qtty * X.mult / 1000) * X.cost                       AS total,
-             X.auxShort4                                             AS marca,
-             X.auxShort3                                             AS selecionado,
-             X.auxLong4                                              AS posicao,
-             L.localizacao                                           AS localizacao,
-             ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000) AS estoque
-      FROM sqldados.prd AS P
-             INNER JOIN sqldados.oprdRessu AS X
-                        ON P.no = X.prdno
-             LEFT JOIN T_PEDIDO_NOTA2 AS TN
-                       USING (storeno, ordno, prdno, grade)
-             INNER JOIN sqldados.ordsRessu AS N
-                        ON N.storeno = X.storeno AND N.no = X.ordno
-             LEFT JOIN sqldados.stk AS S
-                       ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
-             LEFT JOIN sqldados.prdbar AS B
-                       ON P.no = B.prdno AND B.grade = X.grade
-             LEFT JOIN T_LOC2 AS L
-                       ON X.prdno = L.prdno
-                         AND X.grade = L.grade
-             LEFT JOIN sqldados.vend AS F
-                       ON F.no = P.mfno
-             LEFT JOIN sqldados.type AS T
-                       ON T.no = P.typeno
-             LEFT JOIN sqldados.cl
-                       ON cl.no = P.clno
-      WHERE X.storeno = 1
-        AND X.ordno = :ordno
-        AND (X.auxShort4 = :marca OR :marca = 999)
-        AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-        AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
-      GROUP BY codigo, grade) AS D
-GROUP BY codigo, grade
+      SELECT *
+      FROM sqldados.ordsRessu
+      WHERE storeno = 1
+        AND no = :ordno) AS D
+GROUP BY storeno, no;
 
+DROP TEMPORARY TABLE IF EXISTS T_OPRD;
+CREATE TEMPORARY TABLE T_OPRD
+(
+  PRIMARY KEY (storeno, ordno, prdno, grade, seqno)
+)
+SELECT *
+FROM (SELECT *
+      FROM sqldados.oprd
+      WHERE storeno = 1
+        AND ordno = :ordno
+      UNION
+      DISTINCT
+      SELECT *
+      FROM sqldados.oprdRessu
+      WHERE storeno = 1
+        AND ordno = :ordno) AS D
+GROUP BY storeno, ordno, prdno, grade, seqno;
+
+SELECT X.ordno                                                  AS ordno,
+       CAST(TRIM(P.no) AS CHAR)                                 AS codigo,
+       IFNULL(X.grade, '')                                      AS grade,
+       TRIM(IFNULL(B.barcode, P.barcode))                       AS barcode,
+       TRIM(MID(P.name, 1, 37))                                 AS descricao,
+       P.mfno                                                   AS vendno,
+       IFNULL(F.auxChar1, '')                                   AS fornecedor,
+       P.typeno                                                 AS typeno,
+       IFNULL(T.name, '')                                       AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)                       AS clno,
+       IFNULL(cl.name, '')                                      AS clname,
+       P.m6                                                     AS altura,
+       P.m4                                                     AS comprimento,
+       P.m5                                                     AS largura,
+       P.sp / 100                                               AS precoCheio,
+       X.qtty                                                   AS qtPedido,
+       TN.qtty                                                  AS qtQuantNF,
+  /*IF(X.auxLong2 = 0, X.qtty, X.auxLong2)  AS qtEntregue,*/
+       IF(X.auxLong1 = 0, TN.qtty, X.auxLong1)                  AS qtRecebido,
+       X.cost                                                   AS preco,
+       (X.qtty * X.mult / 1000) * X.cost                        AS total,
+       X.auxShort4                                              AS marca,
+       X.auxShort3                                              AS selecionado,
+       X.auxLong4                                               AS posicao,
+       L.localizacao                                            AS localizacao,
+       ROUND(IFNULL(S.qtty_varejo, 0) / 1000)                   AS estoque,
+       SUBSTRING_INDEX(X.obs, ':', 1)                           AS codigoCorrecao,
+       SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1) AS gradeCorrecao
+FROM T_OPRD AS X
+       INNER JOIN T_ORDS AS N
+                  ON N.storeno = X.storeno
+                    AND N.no = X.ordno
+       INNER JOIN sqldados.prd AS P
+                  ON P.no = X.prdno
+       LEFT JOIN T_PEDIDO_NOTA AS TN
+                 ON TN.storeno = X.storeno
+                   AND TN.ordno = X.ordno
+                   AND TN.prdno = X.prdno
+                   AND TN.grade = X.grade
+       LEFT JOIN sqldados.stk AS S
+                 ON S.prdno = X.prdno
+                   AND S.grade = X.grade
+                   AND S.storeno = 4
+       LEFT JOIN sqldados.prdbar AS B
+                 ON P.no = B.prdno
+                   AND B.grade = X.grade
+       LEFT JOIN T_LOC AS L
+                 ON X.prdno = L.prdno
+                   AND X.grade = L.grade
+       LEFT JOIN sqldados.vend AS F
+                 ON F.no = P.mfno
+       LEFT JOIN sqldados.type AS T
+                 ON T.no = P.typeno
+       LEFT JOIN sqldados.cl
+                 ON cl.no = P.clno
+WHERE X.storeno = 1
+  AND X.ordno = :ordno
+  AND (X.auxShort4 = :marca OR :marca = 999)
+  AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
+  AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
+GROUP BY codigo, IFNULL(X.grade, '')
 /*
 update sqldados.oprdRessu
 set auxLong1 = 0

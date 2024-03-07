@@ -23,7 +23,7 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Pedido não transportado")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.REC)
-    val relatorio = PrintRessuprimento(pedido)
+    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtRecebido)
 
     relatorio.print(
       dados = produtos.sortedWith(

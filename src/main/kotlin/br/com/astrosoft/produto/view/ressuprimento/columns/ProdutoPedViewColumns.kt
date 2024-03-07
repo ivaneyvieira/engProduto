@@ -5,13 +5,25 @@ import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = columnGrid(ProdutoRessuprimento::codigo) {
-    this.setHeader("Código")
-  }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() =
+      columnGrid(ProdutoRessuprimento::codigo) {
+        this.setHeader("Código")
+      }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() = columnGrid(ProdutoRessuprimento::grade) {
-    this.setHeader("Grade")
-  }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigoCorrecao() =
+      columnGrid(ProdutoRessuprimento::codigoCorrecao) {
+        this.setHeader("Código Correção")
+      }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGradeCorrecao() =
+      columnGrid(ProdutoRessuprimento::gradeCorrecao) {
+        this.setHeader("Grade Correção")
+      }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() =
+      columnGrid(ProdutoRessuprimento::grade) {
+        this.setHeader("Grade")
+      }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() =
       columnGrid(ProdutoRessuprimento::localizacao) {
@@ -76,10 +88,6 @@ object ProdutoRessuViewColumns {
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtNf() = columnGrid(ProdutoRessuprimento::qtQuantNF) {
     this.setHeader("Qnt NF")
-  }
-
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtEntregue() = columnGrid(ProdutoRessuprimento::qtEntregue) {
-    this.setHeader("Entregue")
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtRecebido() = columnGrid(ProdutoRessuprimento::qtRecebido) {

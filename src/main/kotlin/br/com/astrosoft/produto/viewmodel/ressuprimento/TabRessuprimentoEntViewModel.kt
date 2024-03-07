@@ -75,7 +75,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Pedido não recebido")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.ENT)
-    val relatorio = PrintRessuprimento(pedido)
+    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtQuantNF)
 
     relatorio.print(
       dados = produtos.sortedWith(
@@ -122,7 +122,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       val qtRecebido = it.qtRecebido ?: 0
       val qtPedido = it.qtPedido ?: 0
       it.selecionado == EMarcaRessuprimento.REC.num &&
-      (qtRecebido == 0 || qtRecebido == qtPedido)
+      (qtRecebido == qtPedido) &&
+      (it.codigoCorrecao.isNullOrBlank()) &&
+      (it.gradeCorrecao.isNullOrBlank())
     }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
@@ -152,6 +154,10 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
+  }
+
+  fun findGrades(codigo: String): List<String> {
+    return saci.findGrades(codigo).map { it.grade }
   }
 
   val subView

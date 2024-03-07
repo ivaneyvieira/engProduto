@@ -21,7 +21,6 @@ class ProdutoRessuprimento(
   var localizacao: String?,
   var qtPedido: Int?,
   var qtQuantNF: Int?,
-  var qtEntregue: Int?,
   var qtRecebido: Int?,
   var preco: Double?,
   var total: Double?,
@@ -29,6 +28,8 @@ class ProdutoRessuprimento(
   var selecionado: Int?,
   var posicao: Int?,
   var estoque: Int?,
+  var codigoCorrecao: String?,
+  var gradeCorrecao: String?
 ) {
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1

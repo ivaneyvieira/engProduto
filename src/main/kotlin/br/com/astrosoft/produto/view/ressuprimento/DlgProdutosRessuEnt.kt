@@ -9,12 +9,13 @@ import br.com.astrosoft.produto.model.beans.Ressuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoEstoque
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -25,6 +26,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimento: Ressuprimento) {
@@ -100,6 +102,17 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
         produtoRessuprimentoQtRecebido()
       }
       produtoRessuprimentoEstoque()
+      produtoRessuprimentoCodigoCorrecao().textFieldEditor {
+        this.addValueChangeListener {
+          val codigo = it.value ?: ""
+          val listGrades = viewModel.findGrades(codigo)
+          val col = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
+          val comp = col.editorComponent as? Select<String>
+          comp?.setItems(listGrades)
+        }
+      }
+      produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
+
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }

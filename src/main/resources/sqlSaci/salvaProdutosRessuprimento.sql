@@ -3,7 +3,8 @@ SET X.auxShort4 = :marca,
     X.auxShort3 = :selecionado,
     X.auxLong4  = UNIX_TIMESTAMP(),
     X.auxLong2  = :qtEntregue,
-    X.auxLong1  = :qtRecebido
+    X.auxLong1  = :qtRecebido,
+    X.obs       = CONCAT(IFNULL(:codigoCorrecao, ''), ':', IFNULL(:gradeCorrecao, ''))
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')
@@ -14,12 +15,12 @@ SET X.auxShort4 = :marca,
     X.auxShort3 = :selecionado,
     X.auxLong4  = UNIX_TIMESTAMP(),
     X.auxLong2  = :qtEntregue,
-    X.auxLong1  = :qtRecebido
+    X.auxLong1  = :qtRecebido,
+    X.obs       = CONCAT(IFNULL(:codigoCorrecao, ''), ':', IFNULL(:gradeCorrecao, ''))
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')
   AND grade = :grade;
-
 
 REPLACE INTO sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2,
                                 icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src,

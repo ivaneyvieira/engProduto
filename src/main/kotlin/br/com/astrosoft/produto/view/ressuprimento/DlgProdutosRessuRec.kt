@@ -13,7 +13,6 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -65,7 +64,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
-      produtoRessuprimentoQtEntregue()
+      // produtoRessuprimentoQtEntregue()
       produtoRessuprimentoQtRecebido()
     }
     this.addAndExpand(gridDetail)

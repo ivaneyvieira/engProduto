@@ -43,8 +43,8 @@ fun <T : Any> Grid<T>.withEditor(
   element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"
 }
 
-fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>){
-  if(this.editor.isOpen){
+fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>) {
+  if (this.editor.isOpen) {
     val component = this.getColumnBy(property) as? Focusable<*>
     component?.focus()
   }
@@ -86,9 +86,10 @@ fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit =
   return this
 }
 
-fun <T : Any> Grid.Column<T>.textFieldEditor(): Grid.Column<T> {
+fun <T : Any> Grid.Column<T>.textFieldEditor(block: TextField.() -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = textFieldComponente()
+  component.block()
   component.element.addEventListener("keydown") { _ ->
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
@@ -108,7 +109,7 @@ fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   return this
 }
 
-fun <T : Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit): Grid.Column<T> {
+fun <T : Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = Select<V>().apply {
     block(this)
