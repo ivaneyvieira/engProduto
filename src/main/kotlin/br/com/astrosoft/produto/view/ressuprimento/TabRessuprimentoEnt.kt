@@ -90,6 +90,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       if (ressuprimento.recebidoPor.isNullOrBlank()) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
+      } else if (ressuprimento.notaBaixa.isNullOrBlank()) {
+        DialogHelper.showError("O ressuprimento não tem nota de transferencia")
       } else {
         dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
         dlgProduto?.showDialog {
