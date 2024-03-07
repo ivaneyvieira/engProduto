@@ -23,7 +23,8 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
       fail("Pedido não transportado")
 
     val produtos = pedido.produtos(EMarcaRessuprimento.REC)
-    val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtRecebido)
+    val vlTotal = produtos.sumOf { it.vlRecebido ?: 0.0 }
+    val relatorio = PrintRessuprimento(pedido, vlTotal, ProdutoRessuprimento::qtRecebido)
 
     relatorio.print(
       dados = produtos.sortedWith(
@@ -74,7 +75,7 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun desfazer() = viewModel.exec {
     val selecionados = subView.produtosSelecionados()
-    if(selecionados.isEmpty()) {
+    if (selecionados.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
