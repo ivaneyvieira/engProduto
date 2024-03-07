@@ -72,6 +72,20 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
+  fun desfazer() = viewModel.exec {
+    val selecionados = subView.produtosSelecionados()
+    if(selecionados.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    selecionados.forEach { produto ->
+      produto.selecionado = 0
+      produto.marca = EMarcaRessuprimento.ENT.num
+      produto.salva()
+    }
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoRec
 }

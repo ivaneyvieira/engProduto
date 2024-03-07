@@ -1,11 +1,13 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
@@ -14,9 +16,12 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressuprimento: Ressuprimento) {
@@ -24,9 +29,19 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos de Ressuprimento ${ressuprimento.numero}", toolBar = {
+      val user = AppConfig.userLogin() as? UserSaci
+      if (user?.admin == true) {
+        button("Desfazer") {
+          this.icon = VaadinIcon.CLOSE.create()
+          this.onLeftClick {
+            viewModel.desfazer()
+          }
+        }
+      }
     }, onClose = {
       onClose()
-    }) {
+    })
+    {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()

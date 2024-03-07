@@ -23,7 +23,6 @@ FROM sqldados.stk AS S
 WHERE S.storeno = 4
 GROUP BY S.storeno, S.prdno, S.grade;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_LOC2;
 CREATE TEMPORARY TABLE T_LOC2
 (
