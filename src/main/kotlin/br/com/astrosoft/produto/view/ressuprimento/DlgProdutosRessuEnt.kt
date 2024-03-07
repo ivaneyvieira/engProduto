@@ -101,7 +101,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       } else {
         produtoRessuprimentoQtRecebido()
       }
-      produtoRessuprimentoEstoque()
+      //produtoRessuprimentoEstoque()
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoCodigoCorrecao().textFieldEditor {
           this.addValueChangeListener {
