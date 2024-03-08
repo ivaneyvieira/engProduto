@@ -106,7 +106,7 @@ SELECT X.ordno                                                     AS ordno,
        X.auxShort3                                                 AS selecionado,
        X.auxLong4                                                  AS posicao,
        L.localizacao                                               AS localizacao,
-       ROUND(IFNULL(S.qtty_varejo, 0) / 1000)                      AS estoque,
+       ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000)     AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                              AS codigoCorrecao,
        TRIM(MID(PR.name, 1, 37))                                   AS descricaoCorrecao,
        SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1)    AS gradeCorrecao
