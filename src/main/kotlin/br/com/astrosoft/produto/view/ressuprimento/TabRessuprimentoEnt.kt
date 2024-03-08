@@ -17,11 +17,13 @@ import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -34,18 +36,23 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private lateinit var edtLoja: IntegerField
+  private lateinit var cmbLoja: Select<Loja>
+
+  init {
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val user = AppConfig.userLogin() as? UserSaci
+    cmbLoja.isReadOnly = user?.storeno != 0
+    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtLoja = integerField("Loja") {
-      val user = AppConfig.userLogin() as? UserSaci
-      value = user?.lojaRessu
-      if (value == 0)
-        value = null
-      isReadOnly = (user?.lojaRessu ?: 0) > 0
-      valueChangeMode = ValueChangeMode.TIMEOUT
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
       addValueChangeListener {
-        viewModel.updateView()
+        if (it.isFromClient)
+          viewModel.updateView()
       }
     }
     edtRessuprimento = integerField("Número") {
@@ -88,7 +95,6 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       }
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      val user = AppConfig.userLogin() as? UserSaci
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
@@ -139,7 +145,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
-      lojaRessu = edtLoja.value ?: 0,
+      lojaRessu = cmbLoja.value?.no ?: 0,
       dataNotaInicial = edtDataInicial.value,
       dataNotaFinal = edtDataFinal.value,
     )

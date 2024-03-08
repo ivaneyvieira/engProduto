@@ -8,6 +8,15 @@ import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.saci
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
+    fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = Ressuprimento.find(filtro)
