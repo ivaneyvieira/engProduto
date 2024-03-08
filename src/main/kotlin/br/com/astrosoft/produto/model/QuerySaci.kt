@@ -895,12 +895,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun excluiRessuprimento(ressuprimento: Ressuprimento): Int {
+  fun excluiRessuprimento(ressuprimento: Ressuprimento) {
     val sql = "/sqlSaci/excluiRessuprimento.sql"
-    return query(sql, Count::class) {
+    script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-    }.firstOrNull()?.value ?: 0
+      addOptionalParameter("localizacao", ressuprimento.localizacao)
+      addOptionalParameter("marca", ressuprimento.marca ?: 0)
+    }
   }
 
   fun salvaRessuprimento(ressuprimento: Ressuprimento) {

@@ -73,8 +73,8 @@ class Ressuprimento(
     saci.transportadoRessuprimento(this)
   }
 
-  fun exclui(): Int {
-    return saci.excluiRessuprimento(this)
+  fun exclui() {
+    saci.excluiRessuprimento(this)
   }
 
   fun salva() {

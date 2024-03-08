@@ -51,8 +51,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
-    edtDataFinal = datePicker("Data Final")
-    {
+    edtDataFinal = datePicker("Data Final") {
       value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
