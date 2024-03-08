@@ -6,6 +6,5 @@ FROM sqldados.stk
        INNER JOIN sqldados.prd
                   ON prd.no = stk.prdno
 WHERE storeno = 4
-  AND grade != ''
-  AND qtty_varejo != 0
   AND prdno = LPAD(:codigo, 16, ' ')
+GROUP BY prdno, grade
