@@ -30,6 +30,7 @@ class Ressuprimento(
   var recebidoSPor: String?,
   var usuarioNo: Int?,
   var usuario: String?,
+  var login: String?,
   var observacao: String?,
 ) {
   val lojaRessu
@@ -41,7 +42,7 @@ class Ressuprimento(
   val usuarioApp: String?
     get() {
       val user = AppConfig.userLogin() as? UserSaci
-      return user?.name
+      return user?.login
     }
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""

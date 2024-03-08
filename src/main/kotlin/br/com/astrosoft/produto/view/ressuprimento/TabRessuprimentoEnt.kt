@@ -117,19 +117,19 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
         viewModel.formAutoriza(pedido)
       }
     }
-    colunaRessuprimentoSing().expand()
+    colunaRessuprimentoSing()
     if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formTransportado(pedido)
       }
     }
-    colunaRessuprimentoTransportadorPor().expand()
+    colunaRessuprimentoTransportadorPor()
     if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formRecebido(pedido)
       }
     }
-    colunaRessuprimentoRecebidoPor().expand()
+    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
 
     this.setPartNameGenerator {

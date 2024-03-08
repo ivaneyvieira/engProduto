@@ -198,7 +198,7 @@ SELECT N.no                                AS numero,
        RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
-       N.c1                                AS observacao
+       PU.login                            AS login
 FROM sqldados.ords AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -259,7 +259,8 @@ SELECT N.no                                AS numero,
        RU.name                             AS recebidoPor,
        RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
-       PU.name                             AS usuario
+       PU.name                             AS usuario,
+       PU.login                            AS login
 FROM sqldados.ordsRessu AS N
        LEFT JOIN T_PEDIDO_NOTA AS NF
                  ON N.no = NF.ordno
@@ -319,7 +320,8 @@ SELECT numero,
        recebidoPor,
        recebidoSPor,
        usuarioNo,
-       usuario
+       usuario,
+       login
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -345,7 +347,8 @@ SELECT numero,
        recebidoPor,
        recebidoSPor,
        usuarioNo,
-       usuario
+       usuario,
+       login
 FROM T_PEDIDO_02;
 
 DO @PESQUISA := :pesquisa;
@@ -377,6 +380,7 @@ SELECT numero,
        recebidoSPor             AS recebidoSPor,
        usuarioNo                AS usuarioNo,
        usuario                  AS usuario,
+       login                    AS login,
        IFNULL(A.observacao, '') AS observacao
 FROM T_PEDIDO AS D
        LEFT JOIN sqldados.ordsAdicional AS A

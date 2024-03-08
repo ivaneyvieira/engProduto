@@ -85,9 +85,9 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    colunaRessuprimentoSing().expand()
-    colunaRessuprimentoTransportadorPor().expand()
-    colunaRessuprimentoRecebidoPor().expand()
+    colunaRessuprimentoSing()
+    colunaRessuprimentoTransportadorPor()
+    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
 
     this.setPartNameGenerator {
