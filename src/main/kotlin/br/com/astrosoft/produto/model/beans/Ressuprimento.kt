@@ -19,12 +19,15 @@ class Ressuprimento(
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
   var valorNota: Double?,
-  var singno: Int?,
-  var sing: String?,
+  var entregueNo: Int?,
+  var entreguePor: String?,
+  var entregueSPor: String?,
   var transportadoNo: Int?,
   var transportadoPor: String?,
+  var transportadoSPor: String?,
   var recebidoNo: Int?,
   var recebidoPor: String?,
+  var recebidoSPor: String?,
   var usuarioNo: Int?,
   var usuario: String?,
   var observacao: String?,
@@ -49,7 +52,7 @@ class Ressuprimento(
   }
 
   fun autoriza(user: UserSaci) {
-    this.singno = user.no
+    this.entregueNo = user.no
     saci.autorizaRessuprimento(this)
   }
 
@@ -59,7 +62,7 @@ class Ressuprimento(
   }
 
   fun entregue(funcionario: Funcionario) {
-    this.singno = funcionario.codigo
+    this.entregueNo = funcionario.codigo
     saci.entregueRessuprimento(this)
   }
 

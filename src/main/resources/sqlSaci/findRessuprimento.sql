@@ -187,12 +187,15 @@ SELECT N.no                                AS numero,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
        NF.valorNota                        AS valorNota,
-       N.s4                                AS singno,
-       SU.name                             AS sing,
+       N.s4                                AS entregueNo,
+       SU.name                             AS entreguePor,
+       SU.login                            AS entregueSPor,
        TU.no                               AS transportadoNo,
        TU.name                             AS transportadoPor,
+       TRIM(MID(TU.sname, 1, 15))          AS transportadoSPor,
        RU.no                               AS recebidoNo,
        RU.name                             AS recebidoPor,
+       RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        N.c1                                AS observacao
@@ -246,12 +249,15 @@ SELECT N.no                                AS numero,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
        NF.valorNota                        AS valorNota,
-       SU.no                               AS singno,
-       SU.name                             AS sing,
+       N.s4                                AS entregueNo,
+       SU.name                             AS entreguePor,
+       SU.login                            AS entregueSPor,
        TU.no                               AS transportadoNo,
        TU.name                             AS transportadoPor,
+       TRIM(MID(TU.sname, 1, 15))          AS transportadoSPor,
        RU.no                               AS recebidoNo,
        RU.name                             AS recebidoPor,
+       RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario
 FROM sqldados.ordsRessu AS N
@@ -303,12 +309,15 @@ SELECT numero,
        notaBaixa,
        dataBaixa,
        valorNota,
-       singno,
-       sing,
+       entregueNo,
+       entreguePor,
+       entregueSPor,
        transportadoNo,
        transportadoPor,
+       transportadoSPor,
        recebidoNo,
        recebidoPor,
+       recebidoSPor,
        usuarioNo,
        usuario
 FROM T_PEDIDO_01
@@ -326,12 +335,15 @@ SELECT numero,
        notaBaixa,
        dataBaixa,
        valorNota,
-       singno,
-       sing,
+       entregueNo,
+       entreguePor,
+       entregueSPor,
        transportadoNo,
        transportadoPor,
+       transportadoSPor,
        recebidoNo,
        recebidoPor,
+       recebidoSPor,
        usuarioNo,
        usuario
 FROM T_PEDIDO_02;
@@ -346,7 +358,7 @@ SELECT numero,
        data,
        comprador,
        D.localizacao,
-       :marca as marca,
+       :marca                   AS marca,
        marcaCD,
        marcaEnt,
        marcaRec,
@@ -354,12 +366,15 @@ SELECT numero,
        MAX(notaBaixa)           AS notaBaixa,
        MAX(dataBaixa)           AS dataBaixa,
        MAX(valorNota)           AS valorNota,
-       singno                   AS singno,
-       sing                     AS sing,
+       entregueNo               AS entregueNo,
+       entreguePor              AS entreguePor,
+       entregueSPor             AS entregueSPor,
        transportadoNo           AS transportadoNo,
        transportadoPor          AS transportadoPor,
+       transportadoSPor         AS transportadoSPor,
        recebidoNo               AS recebidoNo,
        recebidoPor              AS recebidoPor,
+       recebidoSPor             AS recebidoSPor,
        usuarioNo                AS usuarioNo,
        usuario                  AS usuario,
        IFNULL(A.observacao, '') AS observacao
@@ -373,13 +388,16 @@ WHERE (@PESQUISA = '' OR
        fornecedor LIKE @PESQUISA_NUM OR
        comprador LIKE @PESQUISA_NUM OR
        D.localizacao LIKE @PESQUISA OR
-       singno LIKE @PESQUISA_NUM OR
-       sing LIKE @PESQUISA_LIKE OR
+       entregueNo LIKE @PESQUISA_NUM OR
+       entreguePor LIKE @PESQUISA_LIKE OR
+       entregueSPor LIKE @PESQUISA_LIKE OR
        notaBaixa LIKE @PESQUISA_START OR
        transportadoNo LIKE @PESQUISA_NUM OR
        transportadoPor LIKE @PESQUISA_LIKE OR
+       transportadoSPor LIKE @PESQUISA_LIKE OR
        recebidoNo LIKE @PESQUISA_NUM OR
        recebidoPor LIKE @PESQUISA_LIKE OR
+       recebidoSPor LIKE @PESQUISA_LIKE OR
        usuarioNo LIKE @PESQUISA_NUM OR
        usuario LIKE @PESQUISA_LIKE
   )

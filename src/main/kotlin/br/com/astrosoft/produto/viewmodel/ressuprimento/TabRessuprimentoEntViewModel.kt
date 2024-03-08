@@ -72,7 +72,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.sing.isNullOrBlank())
+    if (pedido.entreguePor.isNullOrBlank())
       fail("Pedido não autorizado")
 
     if (pedido.transportadoPor.isNullOrBlank())

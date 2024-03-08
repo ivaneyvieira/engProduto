@@ -852,7 +852,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-      addOptionalParameter("userno", ressuprimento.singno ?: 0)
+      addOptionalParameter("userno", ressuprimento.entregueNo ?: 0)
     }
   }
 
@@ -861,7 +861,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-      addOptionalParameter("singno", ressuprimento.singno ?: 0)
+      addOptionalParameter("singno", ressuprimento.entregueNo ?: 0)
     }
   }
 

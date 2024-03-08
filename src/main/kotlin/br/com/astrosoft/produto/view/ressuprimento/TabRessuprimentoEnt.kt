@@ -41,8 +41,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   init {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.storeno != 0
-    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+    cmbLoja.isReadOnly = user?.lojaRessu != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {

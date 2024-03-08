@@ -37,15 +37,15 @@ object RessuprimentoColumns {
     this.setHeader("Usuário do app")
   }
 
-  fun Grid<Ressuprimento>.colunaRessuprimentoSing() = columnGrid(Ressuprimento::sing) {
+  fun Grid<Ressuprimento>.colunaRessuprimentoSing() = columnGrid(Ressuprimento::entregueSPor) {
     this.setHeader("Entregue")
   }
 
-  fun Grid<Ressuprimento>.colunaRessuprimentoTransportadorPor() = columnGrid(Ressuprimento::transportadoPor) {
+  fun Grid<Ressuprimento>.colunaRessuprimentoTransportadorPor() = columnGrid(Ressuprimento::transportadoSPor) {
     this.setHeader("Transportado")
   }
 
-  fun Grid<Ressuprimento>.colunaRessuprimentoRecebidoPor() = columnGrid(Ressuprimento::recebidoPor) {
+  fun Grid<Ressuprimento>.colunaRessuprimentoRecebidoPor() = columnGrid(Ressuprimento::recebidoSPor) {
     this.setHeader("Recebido")
   }
 }

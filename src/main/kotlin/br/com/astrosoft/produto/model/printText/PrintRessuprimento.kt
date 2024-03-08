@@ -36,7 +36,7 @@ class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<Pr
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln("${pedido.sing}", center = true)
+    writeln("${pedido.entreguePor}", center = true)
     writeln("Separado/Entregue", center = true)
     writeln("")
     writeln("")
