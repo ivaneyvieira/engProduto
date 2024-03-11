@@ -75,6 +75,7 @@ class UserSaci : IUser {
   var ressuprimentoRec by DelegateAuthorized(52)
   var ressuprimentoRecebedor by DelegateAuthorized(53)
   var ressuprimentoExclui by DelegateAuthorized(54)
+  var estoqueCD1A by DelegateAuthorized(55)
 
   //Locais
   var localEstoque: String?
@@ -227,7 +228,7 @@ class UserSaci : IUser {
     get() = retiraImprimir || retiraImpresso || admin
 
   val estoqueCD
-    get() = estoqueMF || estoqueCad || admin
+    get() = estoqueMF || estoqueCad || estoqueCD1A || admin
 
   val fornecedor
     get() = produtoList
