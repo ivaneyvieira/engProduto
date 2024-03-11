@@ -37,7 +37,14 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
   AND CASE :caracter
         WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
         WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
-        ELSE TRUE
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
+      END
+  AND CASE :letraDup
+        WHEN 'S' THEN SUBSTRING_INDEX(P.name, ' ', 1) REGEXP 'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
+        WHEN 'N' THEN SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP 'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
+        WHEN 'T' THEN TRUE
+        ELSE FALSE
       END;
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;

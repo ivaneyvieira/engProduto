@@ -31,6 +31,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
+  private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
@@ -123,6 +124,16 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
+        cmbLetraDup = select("Letra Dup") {
+          this.setItems(ELetraDup.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = ELetraDup.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
         chkGrade = checkBox("Grade") {
           this.value = true
           addValueChangeListener {
@@ -190,6 +201,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       tipo = edtTipo.value ?: 0,
       cl = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
+      letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0

@@ -37,12 +37,19 @@ data class FiltroProdutoSaldo(
   val tipo: Int,
   val cl: Int,
   val caracter: ECaracter,
+  val letraDup: ELetraDup,
   val grade: Boolean,
   val estoque: EEstoque,
   val saldo: Int,
 )
 
 enum class ECaracter(val value: String, val descricao: String) {
+  SIM("S", "Sim"),
+  NAO("N", "Não"),
+  TODOS("T", "Todos"),
+}
+
+enum class ELetraDup(val value: String, val descricao: String) {
   SIM("S", "Sim"),
   NAO("N", "Não"),
   TODOS("T", "Todos"),
