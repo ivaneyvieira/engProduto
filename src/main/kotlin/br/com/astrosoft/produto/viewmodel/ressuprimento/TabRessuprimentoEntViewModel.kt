@@ -130,9 +130,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun marca() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter {
       val qtRecebido = it.qtRecebido ?: 0
-      val qtPedido = it.qtPedido ?: 0
+      val qtQuantNF = it.qtQuantNF ?: 0
       it.selecionado == EMarcaRessuprimento.REC.num &&
-      (qtRecebido == qtPedido) &&
+      (qtRecebido == qtQuantNF) &&
       (it.codigoCorrecao.isNullOrBlank()) &&
       (it.gradeCorrecao.isNullOrBlank())
     }
