@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -15,10 +18,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -50,37 +50,42 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      addValueChangeListener {
+      onLeftClick {
         if (it.isFromClient)
           viewModel.updateView()
       }
     }
     edtRessuprimento = integerField("Número") {
       valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
+      onLeftClick {
         viewModel.updateView()
       }
     }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
+      onLeftClick {
         viewModel.updateView()
       }
     }
     edtDataInicial = datePicker("Data Inicial") {
       value = LocalDate.now()
       this.localePtBr()
-      addValueChangeListener {
+      onLeftClick {
         viewModel.updateView()
       }
     }
-    edtDataFinal = datePicker("Data Final")
-    {
+    edtDataFinal = datePicker("Data Final") {
       value = LocalDate.now()
       this.localePtBr()
-      addValueChangeListener {
+      onLeftClick {
         viewModel.updateView()
+      }
+    }
+    button("Produtos") {
+      this.icon = VaadinIcon.FILE_TABLE.create()
+      onLeftClick {
+        viewModel.processamentoProdutos()
       }
     }
   }
@@ -89,6 +94,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     this.addClassName("styling")
     this.format()
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
@@ -100,7 +106,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não tem nota de transferencia")
       } else {
-        dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimento)
+        dlgProduto = DlgProdutosRessuEnt(viewModel, listOf(ressuprimento))
         dlgProduto?.showDialog {
           viewModel.updateView()
         }
@@ -199,6 +205,17 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
 
   override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun ressuprimentosSelecionados(): List<Ressuprimento> {
+    return this.itensSelecionados()
+  }
+
+  override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
+    dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimentos)
+    dlgProduto?.showDialog {
+      viewModel.updateView()
+    }
   }
 
   override fun formTransportado(pedido: Ressuprimento) {

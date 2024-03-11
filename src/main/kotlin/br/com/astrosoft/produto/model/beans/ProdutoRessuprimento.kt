@@ -35,6 +35,19 @@ class ProdutoRessuprimento(
   var descricaoCorrecao: String?,
   var gradeCorrecao: String?
 ) {
+  private var _ressuprimento: Ressuprimento? = null
+  var ressuprimento
+    get() = _ressuprimento
+    set(value) {
+      _ressuprimento = value
+    }
+
+  val nota
+    get() = _ressuprimento?.notaBaixa
+
+  val dataNota
+    get() = _ressuprimento?.dataBaixa
+
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1
   val selecionadoOrdemREC get() = if (selecionado == EMarcaRessuprimento.REC.num) 0 else 1

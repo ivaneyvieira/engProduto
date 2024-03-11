@@ -49,7 +49,10 @@ class Ressuprimento(
 
   fun produtos(): List<ProdutoRessuprimento> {
     val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
-    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais())
+    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais()).map {produto ->
+      produto.ressuprimento = this
+      produto
+    }
   }
 
   fun autoriza(user: UserSaci) {

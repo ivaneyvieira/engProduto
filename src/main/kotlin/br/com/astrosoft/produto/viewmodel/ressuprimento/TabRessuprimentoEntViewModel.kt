@@ -170,6 +170,12 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     return saci.findGrades(codigo)
   }
 
+  fun processamentoProdutos() {
+    val selecionados = subView.ressuprimentosSelecionados()
+    if(selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
+    subView.showDlgProdutos(selecionados)
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoEnt
 }
@@ -185,4 +191,6 @@ interface ITabRessuprimentoEnt : ITabView {
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
   fun produtosSelecionados(): List<ProdutoRessuprimento>
+  fun ressuprimentosSelecionados(): List<Ressuprimento>
+  fun showDlgProdutos(ressuprimentos: List<Ressuprimento>)
 }

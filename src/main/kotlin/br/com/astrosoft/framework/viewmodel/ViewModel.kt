@@ -17,7 +17,7 @@ abstract class ViewModel<V : IView>(val view: V) {
   fun showQuestion(msg: String, execYes: () -> Unit) = view.showQuestion(msg, execYes)
   fun showWarning(msg: String) = view.showWarning(msg)
   fun showInformation(msg: String) = view.showInformation(msg)
-  fun showReport(chave: String, report: ByteArray) = view.showReport(chave, report)
+  fun showReport(chave: String, report: ByteArray) = view
 }
 
 fun <T> exec(view: IView, block: () -> T): T {

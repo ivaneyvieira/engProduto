@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
@@ -10,11 +11,13 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigoCorrecao
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDataNF
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricaoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoNumeroNF
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
@@ -30,11 +33,18 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimento: Ressuprimento) {
+class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimentos: List<Ressuprimento>) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos do ressuprimento ${ressuprimento.numero}", toolBar = {
+    val ressuprimentoTitle = if(ressuprimentos.size == 1) {
+      val ressuprimento = ressuprimentos.first()
+      "${ressuprimento.numero}     NF ${ressuprimento.notaBaixa} DE ${ressuprimento.dataBaixa.format()}"
+    } else {
+      ""
+    }
+
+    form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
@@ -96,6 +106,8 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       produtoRessuprimentoDescricao().expand()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
+      produtoRessuprimentoDataNF()
+      produtoRessuprimentoNumeroNF()
       produtoRessuprimentoQtNf()
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoQtRecebido().integerFieldEditor()
@@ -155,7 +167,9 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos()
+    val listProdutos = ressuprimentos.flatMap {
+      it.produtos()
+    }
     gridDetail.setItems(listProdutos)
   }
 

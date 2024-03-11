@@ -35,6 +35,16 @@ object ProdutoRessuViewColumns {
         this.setHeader("Loc")
       }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDataNF() =
+      columnGrid(ProdutoRessuprimento::dataNota) {
+        this.setHeader("Data")
+      }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoNumeroNF() =
+      columnGrid(ProdutoRessuprimento::nota) {
+        this.setHeader("NF")
+      }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTipo() = columnGrid(ProdutoRessuprimento::statusStr) {
     this.setHeader("Status")
   }
