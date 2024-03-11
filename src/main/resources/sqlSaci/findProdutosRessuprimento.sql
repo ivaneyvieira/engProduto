@@ -116,7 +116,7 @@ FROM T_OPRD AS X
                     AND N.no = X.ordno
        INNER JOIN sqldados.prd AS P
                   ON P.no = X.prdno
-       INNER JOIN T_PEDIDO_NOTA AS TN
+       LEFT JOIN T_PEDIDO_NOTA AS TN
                  ON TN.storeno = X.storeno
                    AND TN.ordno = X.ordno
                    AND TN.prdno = X.prdno
