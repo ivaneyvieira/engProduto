@@ -56,14 +56,12 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
         }
       }
       button("Recebido") {
-        val user = AppConfig.userLogin() as? UserSaci
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marca()
         }
       }
       button("Desmarcar") {
-        val user = AppConfig.userLogin() as? UserSaci
         icon = VaadinIcon.ARROW_LEFT.create()
         onLeftClick {
           viewModel.desmarcar()

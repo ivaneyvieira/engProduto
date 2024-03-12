@@ -41,7 +41,7 @@ object ProdutoRessuViewColumns {
       }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoNumeroNF() =
-      columnGrid(ProdutoRessuprimento::nota) {
+      columnGrid(ProdutoRessuprimento::numeroNota) {
         this.setHeader("NF")
       }
 

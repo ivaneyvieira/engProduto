@@ -63,7 +63,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
     if (!user.admin) {
       val lojaUserSaci = user.lojaUsuario
-      val lojaNoto = nota.loja ?: fail("Loja destino não encontrada")
+      val lojaNoto = nota.loja
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
       if (!user.autorizaDevolucao) fail("Usuário não autorizado para esta operação")
     }

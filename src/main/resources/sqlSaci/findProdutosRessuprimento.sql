@@ -28,11 +28,14 @@ CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
   PRIMARY KEY (storeno, ordno, prdno, grade)
 )
-SELECT 1                  AS storeno,
-       N.l2               AS ordno,
-       X.prdno            AS prdno,
-       X.grade            AS grade,
-       SUM(X.qtty / 1000) AS qtty
+SELECT 1                                                      AS storeno,
+       N.l2                                                   AS ordno,
+       X.prdno                                                AS prdno,
+       X.grade                                                AS grade,
+       MID(MAX(CONCAT(LPAD(N.issuedate, 8, '0'), ':',
+                      CONCAT(N.nfno, '/', N.nfse))), 10, 100) AS numero,
+       MAX(CAST(N.issuedate AS DATE))                         AS dataNota,
+       SUM(X.qtty / 1000)                                     AS qtty
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
@@ -109,7 +112,9 @@ SELECT X.ordno                                                     AS ordno,
        ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000)     AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                              AS codigoCorrecao,
        TRIM(MID(PR.name, 1, 37))                                   AS descricaoCorrecao,
-       SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1)    AS gradeCorrecao
+       SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1)    AS gradeCorrecao,
+       TN.numero                                                   AS numeroNota,
+       TN.dataNota                                                 AS dataNota
 FROM T_OPRD AS X
        INNER JOIN T_ORDS AS N
                   ON N.storeno = X.storeno
@@ -141,10 +146,16 @@ FROM T_OPRD AS X
                  ON PR.no = LPAD(SUBSTRING_INDEX(X.obs, ':', 1), 16, ' ')
 WHERE X.storeno = 1
   AND X.ordno = :ordno
-  AND (X.auxShort4 = :marca OR :marca = 999)
+  AND (X.auxShort4 = :marca)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
 GROUP BY codigo, IFNULL(X.grade, '')
+HAVING CASE :marca
+         WHEN 0 THEN TRUE
+         WHEN 1 THEN qtQuantNF IS NOT NULL
+         WHEN 2 THEN qtQuantNF IS NOT NULL
+         ELSE FALSE
+       END
 /*
 update sqldados.oprdRessu
 set auxLong1 = 0

@@ -37,20 +37,23 @@ GROUP BY S.storeno, S.prdno, S.grade;
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
-  PRIMARY KEY (storeno, ordno)
+  PRIMARY KEY (storeno, ordno, prdno, grade)
 )
 SELECT 1                                                                                      AS storeno,
        N.l2                                                                                   AS ordno,
+       X.prdno                                                                                AS prdno,
+       X.grade                                                                                AS grade,
        MID(MAX(CONCAT(LPAD(N.issuedate, 8, '0'), ':', CONCAT(N.nfno, '/', N.nfse))), 10, 100) AS numero,
        MAX(CAST(N.issuedate AS DATE))                                                         AS dataNota,
        SUM(N.grossamt / 100)                                                                  AS valorNota
 FROM sqldados.nf AS N
+       INNER JOIN sqldados.xaprd2 AS X
+                  USING (storeno, pdvno, xano)
 WHERE N.l2 BETWEEN 100000000 AND 999999999
-  AND (N.l2 LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
   AND N.status <> 1
-GROUP BY ordno;
+GROUP BY storeno, ordno, prdno, grade;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
                                  auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv,
@@ -180,10 +183,6 @@ SELECT N.no                                AS numero,
        N.empno                             AS comprador,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
-       SUM(X.auxShort4 = 0)                AS marcaCD,
-       SUM(X.auxShort4 = 1)                AS marcaEnt,
-       SUM(X.auxShort4 = 2)                AS marcaRec,
-       'N'                                 AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
        NF.valorNota                        AS valorNota,
@@ -198,13 +197,18 @@ SELECT N.no                                AS numero,
        RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
-       PU.login                            AS login
+       PU.login                            AS login,
+       SUM(X.auxShort4 = 1)                AS marcaEnt,
+       SUM(X.auxShort4 = 2)                AS marcaRec
 FROM sqldados.ords AS N
-       LEFT JOIN T_PEDIDO_NOTA AS NF
-                 ON N.no = NF.ordno
-                   AND N.storeno = NF.storeno
        INNER JOIN sqldados.oprd AS X
-                  ON N.storeno = X.storeno AND N.no = X.ordno
+                  ON N.storeno = X.storeno
+                    AND N.no = X.ordno
+       LEFT JOIN T_PEDIDO_NOTA AS NF
+                 ON X.ordno = NF.ordno
+                   AND X.storeno = NF.storeno
+                   AND X.prdno = NF.prdno
+                   AND X.grade = NF.grade
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
@@ -224,15 +228,15 @@ WHERE N.date >= @DATA
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
   AND N.date >= @DATA
+  AND CASE :marca
+        WHEN 0 THEN X.auxShort4 = 0
+        WHEN 1 THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
+        WHEN 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
+        ELSE FALSE
+      END
 GROUP BY N.storeno,
          N.no,
-         L.localizacao
-HAVING CASE :marca
-         WHEN 0 THEN marcaCD > 0
-         WHEN 1 THEN marcaEnt > 0
-         WHEN 2 THEN marcaRec > 0
-         ELSE FALSE
-       END > 0;
+         L.localizacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
 CREATE TEMPORARY TABLE T_PEDIDO_02
@@ -242,10 +246,6 @@ SELECT N.no                                AS numero,
        N.empno                             AS comprador,
        L.localizacao                       AS localizacao,
        X.obs                               AS usuarioCD,
-       SUM(X.auxShort4 = 0)                AS marcaCD,
-       SUM(X.auxShort4 = 1)                AS marcaEnt,
-       SUM(X.auxShort4 = 2)                AS marcaRec,
-       'N'                                 AS cancelada,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
        NF.dataNota                         AS dataBaixa,
        NF.valorNota                        AS valorNota,
@@ -260,14 +260,18 @@ SELECT N.no                                AS numero,
        RU.login                            AS recebidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
-       PU.login                            AS login
+       PU.login                            AS login,
+       SUM(X.auxShort4 = 1)                AS marcaEnt,
+       SUM(X.auxShort4 = 2)                AS marcaRec
 FROM sqldados.ordsRessu AS N
-       LEFT JOIN T_PEDIDO_NOTA AS NF
-                 ON N.no = NF.ordno
-                   AND N.storeno = NF.storeno
        INNER JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno
                     AND N.no = X.ordno
+       LEFT JOIN T_PEDIDO_NOTA AS NF
+                 ON X.ordno = NF.ordno
+                   AND X.storeno = NF.storeno
+                   AND X.prdno = NF.prdno
+                   AND X.grade = NF.grade
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
@@ -286,15 +290,15 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
+  AND CASE :marca
+        WHEN 0 THEN X.auxShort4 = 0
+        WHEN 1 THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
+        WHEN 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
+        ELSE FALSE
+      END
 GROUP BY N.storeno,
          N.no,
-         L.localizacao
-HAVING CASE :marca
-         WHEN 0 THEN marcaCD > 0
-         WHEN 1 THEN marcaEnt > 0
-         WHEN 2 THEN marcaRec > 0
-         ELSE FALSE
-       END > 0;
+         L.localizacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
@@ -303,10 +307,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       marcaCD,
-       marcaEnt,
-       marcaRec,
-       cancelada,
        notaBaixa,
        dataBaixa,
        valorNota,
@@ -321,7 +321,9 @@ SELECT numero,
        recebidoSPor,
        usuarioNo,
        usuario,
-       login
+       login,
+       marcaEnt,
+       marcaRec
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -330,10 +332,6 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       marcaCD,
-       marcaEnt,
-       marcaRec,
-       cancelada,
        notaBaixa,
        dataBaixa,
        valorNota,
@@ -348,7 +346,9 @@ SELECT numero,
        recebidoSPor,
        usuarioNo,
        usuario,
-       login
+       login,
+       marcaEnt,
+       marcaRec
 FROM T_PEDIDO_02;
 
 DO @PESQUISA := :pesquisa;
@@ -362,10 +362,6 @@ SELECT numero,
        comprador,
        D.localizacao,
        :marca                   AS marca,
-       marcaCD,
-       marcaEnt,
-       marcaRec,
-       cancelada,
        MAX(notaBaixa)           AS notaBaixa,
        MAX(dataBaixa)           AS dataBaixa,
        MAX(valorNota)           AS valorNota,
@@ -381,7 +377,9 @@ SELECT numero,
        usuarioNo                AS usuarioNo,
        usuario                  AS usuario,
        login                    AS login,
-       IFNULL(A.observacao, '') AS observacao
+       IFNULL(A.observacao, '') AS observacao,
+       marcaEnt                 AS marcaEnt,
+       marcaRec                 AS marcaRec
 FROM T_PEDIDO AS D
        LEFT JOIN sqldados.ordsAdicional AS A
                  ON A.storeno = 1

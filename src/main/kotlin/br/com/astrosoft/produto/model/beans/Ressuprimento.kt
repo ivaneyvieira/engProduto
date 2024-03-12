@@ -12,10 +12,6 @@ class Ressuprimento(
   var comprador: Int,
   var localizacao: String?,
   var marca: Int?,
-  var marcaCD: Int?,
-  var marcaEnt: Int?,
-  var marcaRec: Int?,
-  var cancelada: String?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
   var valorNota: Double?,
@@ -32,6 +28,8 @@ class Ressuprimento(
   var usuario: String?,
   var login: String?,
   var observacao: String?,
+  var marcaEnt: Int?,
+  var marcaRec: Int?,
 ) {
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
@@ -44,15 +42,10 @@ class Ressuprimento(
       val user = AppConfig.userLogin() as? UserSaci
       return user?.login
     }
-  val situacao
-    get() = if (cancelada == "S") "Cancelada" else ""
 
   fun produtos(): List<ProdutoRessuprimento> {
     val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
-    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais()).map {produto ->
-      produto.ressuprimento = this
-      produto
-    }
+    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais())
   }
 
   fun autoriza(user: UserSaci) {

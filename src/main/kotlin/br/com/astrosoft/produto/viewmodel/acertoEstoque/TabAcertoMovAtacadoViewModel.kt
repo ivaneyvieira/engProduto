@@ -23,12 +23,6 @@ class TabAcertoMovAtacadoViewModel(val viewModel: AcertoEstoqueViewModel) {
     val notas = MovAtacado.findMovAtacado(filtro)
     subView.updateNotas(notas)
   }
-
-  fun geraPlanilha(mov: List<MovAtacado>): ByteArray {
-    //val planilha = PlanilhaMovManual()
-    //return planilha.write(mov)
-    TODO()
-  }
 }
 
 interface ITabAcertoMovAtacado : ITabView {

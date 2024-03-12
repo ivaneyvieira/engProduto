@@ -77,7 +77,6 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   }
 
   override fun Grid<EntradaDevCli>.gridPanel() {
-    val username = AppConfig.userLogin() as? UserSaci
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
