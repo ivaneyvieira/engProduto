@@ -58,6 +58,8 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     }
 
     edtRessuprimento = integerField("Número") {
+      this.isVisible = false
+      this.value = 0
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()

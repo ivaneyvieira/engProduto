@@ -56,6 +56,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       }
     }
     edtRessuprimento = integerField("Número") {
+      this.isVisible = false
+      this.value = 0
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
