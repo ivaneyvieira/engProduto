@@ -142,6 +142,19 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     subView.showDlgProdutos(selecionados)
   }
 
+  fun excluiRessuprimento() = viewModel.exec {
+    val lista = subView.itensSelecionados()
+    if (lista.isEmpty()) {
+      fail("Nenhum ressuprimento selecionado")
+    }
+    viewModel.view.showQuestion("Tem certeza que deseja excluir o ressuprimento selecionado?") {
+      lista.forEach { ressuprimento ->
+        ressuprimento.excluiProdutos()
+      }
+      updateView()
+    }
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoSep
 }
@@ -159,4 +172,5 @@ interface ITabRessuprimentoSep : ITabView {
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun ressuprimentosSelecionados(): List<Ressuprimento>
   fun showDlgProdutos(ressuprimentos: List<Ressuprimento>)
+  fun itensSelecionados(): List<Ressuprimento>
 }

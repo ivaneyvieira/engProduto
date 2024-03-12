@@ -86,6 +86,10 @@ class Ressuprimento(
     saci.salvaRessuprimento(this)
   }
 
+  fun excluiProdutos() {
+    saci.excluiProdutosRessuprimento(this)
+  }
+
   companion object {
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
   }

@@ -918,6 +918,19 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun excluiProdutosRessuprimento(ressuprimento: Ressuprimento) {
+    val produtos = ressuprimento.produtos()
+    val sql = "/sqlSaci/excluiProdutosRessuprimento.sql"
+    produtos.forEach { produto ->
+      script(sql) {
+        addOptionalParameter("ordno", ressuprimento.numero)
+        addOptionalParameter("storeno", 1)
+        addOptionalParameter("prdno", produto.codigo.lpad(16, " "))
+        addOptionalParameter("grade", produto.grade)
+      }
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
