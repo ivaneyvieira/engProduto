@@ -113,6 +113,7 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
       }
     }
     //colunaRessuprimentoChaveCD()
+
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
     colunaRessuprimentoLocalizacao()
