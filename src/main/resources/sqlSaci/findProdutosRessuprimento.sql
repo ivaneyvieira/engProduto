@@ -142,7 +142,7 @@ SELECT X.ordno                                                     AS ordno,
        TN.qtty                                                     AS qtQuantNF,
        X.qtty * S.cm_real / 10000                                  AS vlPedido,
        TN.qtty * S.cm_real / 10000                                 AS vlQuantNF,
-  /*IF(X.auxLong2 = 0, X.qtty, X.auxLong2)  AS qtEntregue,*/
+       IF(X.auxLong2 = 0, X.auxLong1, X.auxLong2)                  AS qtEntregue,
        IF(X.auxLong1 = 0, TN.qtty, X.auxLong1)                     AS qtRecebido,
        IF(X.auxLong1 = 0, TN.qtty, X.auxLong1) * S.cm_real / 10000 AS vlRecebido,
        X.cost                                                      AS preco,

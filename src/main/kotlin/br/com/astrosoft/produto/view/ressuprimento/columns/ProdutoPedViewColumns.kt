@@ -109,6 +109,10 @@ object ProdutoRessuViewColumns {
     this.setHeader("Recebido")
   }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtEntregue() = columnGrid(ProdutoRessuprimento::qtEntregue) {
+    this.setHeader("Entregue")
+  }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = columnGrid(ProdutoRessuprimento::estoque) {
     this.setHeader("Estoque")
   }

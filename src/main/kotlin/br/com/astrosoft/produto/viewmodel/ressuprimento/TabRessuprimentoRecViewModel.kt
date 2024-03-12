@@ -92,6 +92,11 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProdutos()
   }
 
+  fun saveQuant(bean: ProdutoRessuprimento) {
+    bean.salva()
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoRec
 }

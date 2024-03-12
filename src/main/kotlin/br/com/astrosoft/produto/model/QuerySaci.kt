@@ -242,18 +242,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun salvaProdutosRessuprimento(podutoPedidoVenda: ProdutoRessuprimento) {
+  fun salvaProdutosRessuprimento(produtoPedidoVenda: ProdutoRessuprimento) {
     val sql = "/sqlSaci/salvaProdutosRessuprimento.sql"
     script(sql) {
-      addOptionalParameter("ordno", podutoPedidoVenda.ordno ?: 0)
-      addOptionalParameter("codigo", podutoPedidoVenda.codigo ?: "")
-      addOptionalParameter("grade", podutoPedidoVenda.grade ?: "")
-      addOptionalParameter("marca", podutoPedidoVenda.marca ?: 0)
-      addOptionalParameter("selecionado", podutoPedidoVenda.selecionado ?: 0)
-      addOptionalParameter("qtEntregue", 0)
-      addOptionalParameter("qtRecebido", podutoPedidoVenda.qtRecebido ?: 0)
-      addOptionalParameter("codigoCorrecao", podutoPedidoVenda.codigoCorrecao)
-      addOptionalParameter("gradeCorrecao", podutoPedidoVenda.gradeCorrecao)
+      addOptionalParameter("ordno", produtoPedidoVenda.ordno ?: 0)
+      addOptionalParameter("codigo", produtoPedidoVenda.codigo ?: "")
+      addOptionalParameter("grade", produtoPedidoVenda.grade ?: "")
+      addOptionalParameter("marca", produtoPedidoVenda.marca ?: 0)
+      addOptionalParameter("selecionado", produtoPedidoVenda.selecionado ?: 0)
+      addOptionalParameter("qtEntregue", produtoPedidoVenda.qtEntregue ?: 0)
+      addOptionalParameter("qtRecebido", produtoPedidoVenda.qtRecebido ?: 0)
+      addOptionalParameter("codigoCorrecao", produtoPedidoVenda.codigoCorrecao)
+      addOptionalParameter("gradeCorrecao", produtoPedidoVenda.gradeCorrecao)
     }
   }
 

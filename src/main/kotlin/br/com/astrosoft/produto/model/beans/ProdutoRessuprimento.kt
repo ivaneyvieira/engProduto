@@ -23,6 +23,7 @@ class ProdutoRessuprimento(
   var qtPedido: Int?,
   var qtQuantNF: Int?,
   var qtRecebido: Int?,
+  var qtEntregue: Int?,
   var vlPedido: Double?,
   var vlQuantNF: Double?,
   var vlRecebido: Double?,
