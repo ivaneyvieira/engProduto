@@ -2,7 +2,8 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -11,7 +12,6 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -58,22 +58,21 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      this.withEditor(classBean = ProdutoRessuprimento::class,
-        openEditor = {
-          this.focusEditor(ProdutoRessuprimento::qtEntregue)
-        },
-        closeEditor = {
-          viewModel.saveQuant(it.bean)
-        }
-      )
-
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtRecebido()
-      produtoRessuprimentoQtEntregue().integerFieldEditor()
+      this.setPartNameGenerator {
+        when {
+          it.qtQuantNF != it.qtRecebido -> {
+            "amarelo"
+          }
+
+          else                          -> null
+        }
+      }
     }
     this.addAndExpand(gridDetail)
     update()

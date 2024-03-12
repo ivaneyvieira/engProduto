@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoNumeroNF
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
@@ -37,7 +38,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val ressuprimentoTitle = if(ressuprimentos.size == 1) {
+    val ressuprimentoTitle = if (ressuprimentos.size == 1) {
       val ressuprimento = ressuprimentos.first()
       "${ressuprimento.numero}     NF ${ressuprimento.notaBaixa} DE ${ressuprimento.dataBaixa.format()}"
     } else {
@@ -133,10 +134,12 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
           this.isReadOnly = true
         }
         produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
+        produtoRessuprimentoQtEntregue().integerFieldEditor()
       } else {
         produtoRessuprimentoCodigoCorrecao()
         produtoRessuprimentoDescricaoCorrecao().expand()
         produtoRessuprimentoGradeCorrecao()
+        produtoRessuprimentoQtEntregue()
       }
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
@@ -146,9 +149,17 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       }
 
       this.setPartNameGenerator {
-        if (it.selecionado == EMarcaRessuprimento.REC.num) {
-          "amarelo"
-        } else null
+        when {
+          it.selecionado == EMarcaRessuprimento.REC.num -> {
+            "amarelo"
+          }
+
+          it.qtQuantNF != it.qtRecebido                 -> {
+            "amarelo"
+          }
+
+          else                                          -> null
+        }
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(
