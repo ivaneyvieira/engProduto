@@ -84,6 +84,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoCD.name)
             }
+            checkBox("Separado") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::ressuprimentoSep.name)
+            }
             checkBox("Exclui") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoExclui.name)

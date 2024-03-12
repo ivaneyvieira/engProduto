@@ -333,7 +333,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/findRessuprimento.sql"
     return query(sql, Ressuprimento::class) {
       addOptionalParameter("marca", filtro.marca.num)
-      addOptionalParameter("temNota", if(filtro.temNota) "S" else "N")
+      addOptionalParameter("temNota", filtro.temNota.codigo)
       addOptionalParameter("ordno", filtro.numero)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("locais", locais)
@@ -389,6 +389,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("locApp", pedido.localizacao)
       addOptionalParameter("locais", locais)
+      addOptionalParameter("temNota", pedido.temNota)
     }
   }
 

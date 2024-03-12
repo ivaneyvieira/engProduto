@@ -150,10 +150,10 @@ WHERE X.storeno = 1
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
 GROUP BY codigo, IFNULL(X.grade, '')
-HAVING CASE :marca
-         WHEN 0 THEN TRUE
-         WHEN 1 THEN TRUE
-         WHEN 2 THEN TRUE
+HAVING CASE :temNota
+         WHEN 'T' THEN TRUE
+         WHEN 'S' THEN numeroNota IS NOT NULL
+         WHEN 'N' THEN numeroNota IS NULL
          ELSE FALSE
        END
 /*

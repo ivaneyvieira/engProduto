@@ -12,6 +12,7 @@ class Ressuprimento(
   var comprador: Int,
   var localizacao: String?,
   var marca: Int?,
+  var temNota: String,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
   var valorNota: Double?,
@@ -90,7 +91,7 @@ data class FiltroRessuprimento(
   val numero: Int,
   val pesquisa: String,
   val marca: EMarcaRessuprimento,
-  val temNota: Boolean,
+  val temNota: ETemNota,
   val lojaRessu: Int,
   val dataPedidoInicial: LocalDate? = null,
   val dataPedidoFinal: LocalDate? = null,
@@ -102,4 +103,10 @@ enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
   CD(0, "CD"),
   ENT(1, "Entregue"),
   REC(2, "Recebido")
+}
+
+enum class ETemNota(val codigo: String) {
+  TODOS("T"),
+  TEM_NOTA("S"),
+  SEM_NOTA("N")
 }

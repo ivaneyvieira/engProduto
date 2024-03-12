@@ -232,7 +232,8 @@ WHERE N.date >= @DATA
   AND N.date >= @DATA
   AND CASE
         WHEN :marca = 0 THEN X.auxShort4 = 0
-        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'T' THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1 AND NF.numero IS NULL
         WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
         WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
         ELSE FALSE
@@ -295,7 +296,8 @@ WHERE N.date >= @DATA
   AND N.no >= 100000000
   AND CASE
         WHEN :marca = 0 THEN X.auxShort4 = 0
-        WHEN :marca = 1 THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'T' THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1 AND NF.numero IS NULL
         WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
         WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
         ELSE FALSE
@@ -366,6 +368,7 @@ SELECT numero,
        comprador,
        D.localizacao,
        :marca                   AS marca,
+       :temNota                 AS temNota,
        MAX(notaBaixa)           AS notaBaixa,
        MAX(dataBaixa)           AS dataBaixa,
        MAX(valorNota)           AS valorNota,
