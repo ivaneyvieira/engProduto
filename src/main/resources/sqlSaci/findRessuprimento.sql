@@ -198,8 +198,10 @@ SELECT N.no                                AS numero,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        PU.login                            AS login,
-       SUM(X.auxShort4 = 1)                AS marcaEnt,
-       SUM(X.auxShort4 = 2)                AS marcaRec
+       SUM(X.auxShort4 = 1
+         AND NF.numero IS NOT NULL)        AS marcaEnt,
+       SUM(X.auxShort4 = 2
+         AND NF.numero IS NOT NULL)        AS marcaRec
 FROM sqldados.ords AS N
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno

@@ -152,8 +152,8 @@ WHERE X.storeno = 1
 GROUP BY codigo, IFNULL(X.grade, '')
 HAVING CASE :marca
          WHEN 0 THEN TRUE
-         WHEN 1 THEN qtQuantNF IS NOT NULL
-         WHEN 2 THEN qtQuantNF IS NOT NULL
+         WHEN 1 THEN TRUE
+         WHEN 2 THEN TRUE
          ELSE FALSE
        END
 /*
