@@ -50,35 +50,35 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      onLeftClick {
+      addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
       }
     }
     edtRessuprimento = integerField("Número") {
       valueChangeMode = ValueChangeMode.TIMEOUT
-      onLeftClick {
+      addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
-      onLeftClick {
+      addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataInicial = datePicker("Data Inicial") {
       value = LocalDate.now()
       this.localePtBr()
-      onLeftClick {
+      addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
       value = LocalDate.now()
       this.localePtBr()
-      onLeftClick {
+      addValueChangeListener {
         viewModel.updateView()
       }
     }
