@@ -29,6 +29,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.ENT.num
       produto.selecionado = EMarcaRessuprimento.ENT.num
+      produto.qtRecebido = produto.qtQuantNF ?: produto.qtPedido ?: 0
       produto.salva()
     }
     subView.updateProdutos()
