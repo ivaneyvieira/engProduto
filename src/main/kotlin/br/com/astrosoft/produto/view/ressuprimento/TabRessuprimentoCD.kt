@@ -109,6 +109,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
+      temNota = false,
       lojaRessu = user?.lojaRessu ?: 0,
       dataPedidoInicial = edtDataInicial.value,
       dataPedidoFinal = edtDataFinal.value,

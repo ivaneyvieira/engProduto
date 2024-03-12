@@ -228,10 +228,11 @@ WHERE N.date >= @DATA
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
   AND N.date >= @DATA
-  AND CASE :marca
-        WHEN 0 THEN X.auxShort4 = 0
-        WHEN 1 THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
-        WHEN 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
+  AND CASE
+        WHEN :marca = 0 THEN X.auxShort4 = 0
+        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
+        WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
         ELSE FALSE
       END
 GROUP BY N.storeno,
@@ -290,10 +291,11 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
-  AND CASE :marca
-        WHEN 0 THEN X.auxShort4 = 0
-        WHEN 1 THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
-        WHEN 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
+  AND CASE
+        WHEN :marca = 0 THEN X.auxShort4 = 0
+        WHEN :marca = 1 THEN X.auxShort4 = 1
+        WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
+        WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
         ELSE FALSE
       END
 GROUP BY N.storeno,

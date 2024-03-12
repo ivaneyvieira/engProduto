@@ -104,6 +104,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
+      temNota = false,
       lojaRessu = user?.lojaRessu ?: 0,
       dataNotaInicial = edtDataInicial.value,
       dataNotaFinal = edtDataFinal.value,

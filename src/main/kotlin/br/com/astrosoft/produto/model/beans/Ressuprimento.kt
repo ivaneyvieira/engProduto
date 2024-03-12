@@ -90,6 +90,7 @@ data class FiltroRessuprimento(
   val numero: Int,
   val pesquisa: String,
   val marca: EMarcaRessuprimento,
+  val temNota: Boolean,
   val lojaRessu: Int,
   val dataPedidoInicial: LocalDate? = null,
   val dataPedidoFinal: LocalDate? = null,
