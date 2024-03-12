@@ -56,18 +56,6 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
           }
         }
       }
-      button("Recebido") {
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
-          viewModel.marca()
-        }
-      }
-      button("Desmarcar") {
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.desmarcar()
-        }
-      }
     }, onClose = {
       onClose()
     }) {

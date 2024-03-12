@@ -115,9 +115,7 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
     //colunaRessuprimentoChaveCD()
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
-    colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoLocalizacao()
-    colunaRessuprimentoDataBaixa()
     if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formAutoriza(pedido)

@@ -127,40 +127,6 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateProduto(produto)
   }
 
-  fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter {
-      val qtRecebido = it.qtRecebido ?: 0
-      val qtQuantNF = it.qtQuantNF ?: 0
-      it.selecionado == EMarcaRessuprimento.REC.num &&
-      (qtRecebido == qtQuantNF) &&
-      (it.codigoCorrecao.isNullOrBlank()) &&
-      (it.gradeCorrecao.isNullOrBlank())
-    }
-    itens.ifEmpty {
-      fail("Recebimento diferente da Entrega")
-    }
-
-    itens.forEach { produto ->
-      produto.marca = EMarcaRessuprimento.REC.num
-      produto.selecionado = EMarcaRessuprimento.REC.num
-      produto.salva()
-    }
-    subView.updateProdutos()
-  }
-
-  fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
-    itens.ifEmpty {
-      fail("Nenhum produto para desmarcar")
-    }
-
-    itens.forEach { produto ->
-      produto.selecionado = 0
-      produto.salva()
-    }
-    subView.updateProdutos()
-  }
-
   fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
