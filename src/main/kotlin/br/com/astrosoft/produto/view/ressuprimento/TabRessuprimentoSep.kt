@@ -54,6 +54,8 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
       }
     }
     edtRessuprimento = integerField("Número") {
+      this.isVisible = false
+      this.value = 0
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -67,14 +69,16 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
       }
     }
     edtDataInicial = datePicker("Data Inicial") {
-      value = LocalDate.now()
+      this.isVisible = false
+      value = null
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
-      value = LocalDate.now()
+      this.isVisible = false
+      value = null
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()

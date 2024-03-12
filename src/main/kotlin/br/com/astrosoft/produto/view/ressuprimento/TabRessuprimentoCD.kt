@@ -45,14 +45,16 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       }
     }
     edtDataInicial = datePicker("Data Inicial") {
-      value = LocalDate.now()
+      isVisible = false
+      value = null
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
-      value = LocalDate.now()
+      isVisible = false
+      value = null
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
