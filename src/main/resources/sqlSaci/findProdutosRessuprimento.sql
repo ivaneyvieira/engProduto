@@ -68,15 +68,57 @@ CREATE TEMPORARY TABLE T_OPRD
 (
   PRIMARY KEY (storeno, ordno, prdno, grade, seqno)
 )
-SELECT *
-FROM (SELECT *
-      FROM sqldados.oprd
+SELECT ordno,
+       mult,
+       ipi,
+       freight,
+       icms,
+       auxLong1,
+       auxLong2,
+       auxMy1,
+       auxMy2,
+       icmsSubst,
+       auxLong3,
+       auxLong4,
+       auxMy3,
+       auxMy4,
+       qtty,
+       qtty_src,
+       qtty_xfr,
+       cost,
+       qttyRcv,
+       qttyCancel,
+       qttyVendaMes,
+       qttyVendaMesAnt,
+       qttyVendaMedia,
+       qttyPendente,
+       stkDisponivel,
+       qttyAbc,
+       storeno,
+       seqno,
+       status,
+       bits,
+       bits2,
+       auxShort1,
+       auxShort2,
+       auxShort3,
+       auxShort4,
+       prdno,
+       grade,
+       remarks,
+       padbyte,
+       gradeFechada,
+       obs,
+       auxStr,
+       SUM(origem) AS origem
+FROM (SELECT O1.*, 1 AS origem
+      FROM sqldados.oprd AS O1
       WHERE storeno = 1
         AND ordno = :ordno
       UNION
       DISTINCT
-      SELECT *
-      FROM sqldados.oprdRessu
+      SELECT O2.*, 10 AS origem
+      FROM sqldados.oprdRessu AS O2
       WHERE storeno = 1
         AND ordno = :ordno) AS D
 GROUP BY storeno, ordno, prdno, grade, seqno;
@@ -114,7 +156,9 @@ SELECT X.ordno                                                     AS ordno,
        TRIM(MID(PR.name, 1, 37))                                   AS descricaoCorrecao,
        SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1)    AS gradeCorrecao,
        TN.numero                                                   AS numeroNota,
-       TN.dataNota                                                 AS dataNota
+       TN.dataNota                                                 AS dataNota,
+       IF(origem IN (1, 11), 'S', 'N')                             AS origemSaci,
+       IF(origem IN (10, 11), 'S', 'N')                            AS origemApp
 FROM T_OPRD AS X
        INNER JOIN T_ORDS AS N
                   ON N.storeno = X.storeno

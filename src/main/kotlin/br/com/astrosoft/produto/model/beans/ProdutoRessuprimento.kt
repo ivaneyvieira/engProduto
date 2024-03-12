@@ -37,6 +37,8 @@ class ProdutoRessuprimento(
   var gradeCorrecao: String?,
   var numeroNota: String?,
   var dataNota: LocalDate?,
+  var origemSaci: String?,
+  var origemApp: String?
 ) {
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1

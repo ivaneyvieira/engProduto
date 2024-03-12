@@ -2,13 +2,19 @@ package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
-import br.com.astrosoft.produto.model.beans.FiltroRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.Ressuprimento
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 
 class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
+    fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.REC)
     val ressuprimento = Ressuprimento.find(filtro)

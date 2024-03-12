@@ -133,9 +133,15 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       }
 
       this.setPartNameGenerator {
-        if (it.selecionado == EMarcaRessuprimento.REC.num) {
-          "amarelo"
-        } else null
+        when  {
+          it.selecionado == EMarcaRessuprimento.REC.num -> {
+            "amarelo"
+          }
+          it.origemApp == "S" && it.origemSaci == "N" -> {
+            "amarelo"
+          }
+          else                        -> null
+        }
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(

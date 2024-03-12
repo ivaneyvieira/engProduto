@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.view.ressuprimento
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -19,11 +18,13 @@ import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoRec
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -36,8 +37,26 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var cmbLoja: Select<Loja>
+
+  init {
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val user = AppConfig.userLogin() as? UserSaci
+    cmbLoja.isReadOnly = user?.lojaRessu != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+
     edtRessuprimento = integerField("Número") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -105,7 +124,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       temNota = ETemNota.TODOS,
-      lojaRessu = user?.lojaRessu ?: 0,
+      lojaRessu = cmbLoja.value?.no ?: 0,
       dataNotaInicial = edtDataInicial.value,
       dataNotaFinal = edtDataFinal.value,
     )
