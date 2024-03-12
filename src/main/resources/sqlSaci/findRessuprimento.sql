@@ -51,7 +51,7 @@ FROM sqldados.nf AS N
                   USING (storeno, pdvno, xano)
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
-  AND N.issuedate >= 20240226
+  AND N.issuedate >= 20240307
   AND N.status <> 1
 GROUP BY storeno, ordno, prdno, grade;
 
@@ -223,7 +223,7 @@ FROM sqldados.ords AS N
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
-  AND N.date >= 20240226
+  AND N.date >= 20240307
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
@@ -288,7 +288,7 @@ FROM sqldados.ordsRessu AS N
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
-  AND N.date >= 20240226
+  AND N.date >= 20240307
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
