@@ -17,10 +17,10 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
@@ -29,9 +29,28 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var cmbLoja: Select<Loja>
+
+  init {
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val user = AppConfig.userLogin() as? UserSaci
+    cmbLoja.isReadOnly = user?.lojaRessu != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
     edtRessuprimento = integerField("Número") {
+      this.isVisible = false
+      this.value = 0
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -95,7 +114,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
     colunaRessuprimentoLocalizacao()
-    colunaRessuprimentoObservacao().expand().textFieldEditor()
+    colunaRessuprimentoObservacao().textFieldEditor()
 
     this.setPartNameGenerator {
       val marca = it.marcaEnt ?: 0
@@ -112,7 +131,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = marca,
       temNota = ETemNota.TODOS,
-      lojaRessu = user?.lojaRessu ?: 0,
+      lojaRessu = cmbLoja.value?.no ?: user?.lojaRessu ?: 0,
       dataPedidoInicial = edtDataInicial.value,
       dataPedidoFinal = edtDataFinal.value,
     )
