@@ -70,6 +70,20 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
           viewModel.desmarcar()
         }
       }
+      button("Relatório") {
+        icon = VaadinIcon.PRINT.create()
+        onLeftClick {
+          val ressuprimentoTitle = if (ressuprimentos.size == 1) {
+            val ressuprimento = ressuprimentos.first()
+            "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"
+          } else {
+            val loja = ressuprimentos.map { it.nomeLojaRessu }.distinct().joinToString(", ")
+            val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
+            "${loja} de $data"
+          }
+          viewModel.imprimeRelatorio(ressuprimentoTitle)
+        }
+      }
     }, onClose = {
       onClose()
     }) {

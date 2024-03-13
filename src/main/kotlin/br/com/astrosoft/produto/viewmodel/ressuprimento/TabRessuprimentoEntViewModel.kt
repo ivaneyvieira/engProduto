@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
+import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntrada
 import br.com.astrosoft.produto.model.saci
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
@@ -175,6 +176,13 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val selecionados = subView.ressuprimentosSelecionados()
     if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
+  }
+
+  fun imprimeRelatorio(ressuprimentoTitle: String) {
+    val produtos = subView.produtosSelecionados()
+    val report = ReportRessuprimentoEntrada(ressuprimentoTitle)
+    val file = report.processaRelatorio(produtos)
+    viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
   }
 
   val subView

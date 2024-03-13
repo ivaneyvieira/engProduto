@@ -9,6 +9,7 @@ import net.sf.dynamicreports.report.base.expression.AbstractValueFormatter
 import net.sf.dynamicreports.report.builder.DynamicReports.*
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder
+import net.sf.dynamicreports.report.builder.grid.ColumnTitleGroupBuilder
 import net.sf.dynamicreports.report.builder.subtotal.SubtotalBuilder
 import net.sf.dynamicreports.report.constant.*
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.LEFT
@@ -36,10 +37,20 @@ import kotlin.reflect.KProperty1
 abstract class ReportBuild<T> {
   private val localDateType = LocalDateType()
   private val localTimeType = LocalTimeType()
-  private val columnsMap = mutableMapOf<KProperty1<T, *>, TextColumnBuilder<*>>()
+
+  //private val columnsMap = mutableMapOf<KProperty1<T, *>, TextColumnBuilder<*>>()
   private val columnsList = mutableListOf<TextColumnBuilder<*>>()
+  private val groupList = mutableListOf<ColumnTitleGroupBuilder>()
 
   abstract fun config(itens: List<T>): PropriedadeRelatorio
+
+  fun addColumn(column: TextColumnBuilder<*>) {
+    columnsList.add(column)
+  }
+
+  fun addGrupo(group: ColumnTitleGroupBuilder) {
+    groupList.add(group)
+  }
 
   protected open fun labelTitleCol(): TextColumnBuilder<String>? = null
 
@@ -52,6 +63,7 @@ abstract class ReportBuild<T> {
     width: Int,
     pattern: String,
     oculto: Boolean,
+    register: Boolean,
     block: TextColumnBuilder<V?>.() -> Unit = {}
   ): TextColumnBuilder<V> {
     return col.column(if (oculto) "" else if (header == "") property.name else header, property.name, dataType).apply {
@@ -60,8 +72,10 @@ abstract class ReportBuild<T> {
       if (pattern != "") this.setPattern(pattern)
       block()
 
-      columnsMap[property] = this
-      columnsList.add(this)
+      if (register) {
+        //columnsMap[property] = this
+        addColumn(this)
+      }
       if (oculto) {
         this.setFixedWidth(0)
         this.setStyle(stl.style().setBackgroundColor(Color(0, 0, 0, 0)))
@@ -77,6 +91,7 @@ abstract class ReportBuild<T> {
     width: Int = -1,
     pattern: String = "0",
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<Int?>.() -> Unit = {}
   ): TextColumnBuilder<Int> {
     return columnReport(
@@ -87,6 +102,7 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = pattern,
       oculto = oculto,
+      register = register,
       block = block
     )
   }
@@ -99,6 +115,7 @@ abstract class ReportBuild<T> {
     width: Int = -1,
     pattern: String = "#,##0.00",
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<Double?>.() -> Unit = {}
   ): TextColumnBuilder<Double> {
     return columnReport(
@@ -109,6 +126,7 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = pattern,
       oculto = oculto,
+      register = register,
       block = block
     )
   }
@@ -120,6 +138,7 @@ abstract class ReportBuild<T> {
     aligment: HorizontalTextAlignment = LEFT,
     width: Int = -1,
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<String?>.() -> Unit = {}
   ): TextColumnBuilder<String> {
     return columnReport(
@@ -130,6 +149,7 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = "",
       oculto = oculto,
+      register = register,
       block = block
     )
   }
@@ -142,6 +162,7 @@ abstract class ReportBuild<T> {
     width: Int = -1,
     pattern: String = "dd/MM/yyyy",
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<LocalDate?>.() -> Unit = {}
   ): TextColumnBuilder<LocalDate> {
     val col = columnReport(
@@ -152,6 +173,7 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = pattern,
       oculto = oculto,
+      register = register,
       block = block
     )
     col.setValueFormatter(DateFormatter(pattern))
@@ -166,6 +188,7 @@ abstract class ReportBuild<T> {
     width: Int = -1,
     pattern: String = "hh:mm",
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<LocalTime?>.() -> Unit = {}
   ): TextColumnBuilder<LocalTime> {
     val col = columnReport(
@@ -176,6 +199,7 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = pattern,
       oculto = oculto,
+      register = register,
       block = block
     )
     col.setValueFormatter(TimeFormatter(pattern))
@@ -190,6 +214,7 @@ abstract class ReportBuild<T> {
     width: Int = -1,
     pattern: String = "dd/MM/yyyy",
     oculto: Boolean = false,
+    register: Boolean = true,
     block: TextColumnBuilder<Date?>.() -> Unit = {}
   ): TextColumnBuilder<Date> {
     return columnReport(
@@ -200,12 +225,17 @@ abstract class ReportBuild<T> {
       width = width,
       pattern = pattern,
       oculto = oculto,
+      register = register,
       block = block
     )
   }
 
   private fun columnBuilder(): List<TextColumnBuilder<out Any>> {
     return columnsList
+  }
+
+  private fun groupBuild() : List<ColumnTitleGroupBuilder> {
+    return groupList
   }
 
   protected open fun titleBuider(propriedades: PropriedadeRelatorio): ComponentBuilder<*, *> {
@@ -238,13 +268,17 @@ abstract class ReportBuild<T> {
     else grp.group(labelTitleCol).setTitleWidth(0).setHeaderLayout(GroupHeaderLayout.VALUE)
       .showColumnHeaderAndFooter()
     val colunms = columnBuilder().toTypedArray()
+    val grupos = groupBuild().toTypedArray()
     val propriedades = config(itens)
 
     return report()
       .title(titleBuider(propriedades))
       .setTemplate(Templates.reportTemplate)
       .columns(* colunms)
-      .columnGrid(* colunms)
+      .apply {
+        if(grupos.isNotEmpty()) this.columnGrid(* grupos)
+        else this.columnGrid(* colunms)
+      }
       .setDataSource(itens)
       .setPageFormat(propriedades.pageType, propriedades.pageOrientation)
       .setPageMargin(margin(propriedades.margem))
