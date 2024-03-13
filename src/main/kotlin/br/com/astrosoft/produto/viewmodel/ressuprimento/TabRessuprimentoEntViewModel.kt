@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
-import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntrada
+import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntradaSobra
 import br.com.astrosoft.produto.model.saci
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
@@ -179,8 +179,24 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun imprimeRelatorio(ressuprimentoTitle: String) {
     val produtos = subView.produtosSelecionados()
-    val report = ReportRessuprimentoEntrada(ressuprimentoTitle)
-    val file = report.processaRelatorio(produtos)
+    val produtosSobra = produtos.map {
+      ProdutoRessuprimentoSobra(
+        codigo = it.codigo ?: "",
+        descricao = it.descricao ?: "",
+        grade = it.grade ?: "",
+        nota = it.numeroNota ?: "",
+        quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
+        codigoSobra = it.codigoCorrecao ?: "",
+        descricaoSobra = it.descricaoCorrecao ?: "",
+        gradeSobra = it.gradeCorrecao ?: "",
+        quantidadeSobra = it.qtEntregue ?: 0
+      )
+    }
+
+
+
+    val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
+    val file = report.processaRelatorio(produtosSobra)
     viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
   }
 
