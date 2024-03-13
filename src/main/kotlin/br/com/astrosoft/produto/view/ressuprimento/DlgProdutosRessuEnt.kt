@@ -208,7 +208,10 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   }
 
   fun itensSelecionados(): List<ProdutoRessuprimento> {
-    return gridDetail.selectedItems.toList()
+    val list =  gridDetail.selectedItems.toList()
+    return gridDetail.list().filter {
+      it in list
+    }
   }
 
   fun update() {
