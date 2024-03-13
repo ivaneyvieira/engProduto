@@ -163,7 +163,6 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun saveQuant(bean: ProdutoRessuprimento) {
-    bean.qtEntregue = bean.qtRecebido
     bean.salva()
     subView.updateProdutos()
   }
