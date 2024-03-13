@@ -198,10 +198,9 @@ SELECT N.no                                AS numero,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        PU.login                            AS login,
-       SUM(X.auxShort4 = 1
-         AND NF.numero IS NOT NULL)        AS marcaEnt,
-       SUM(X.auxShort4 = 2
-         AND NF.numero IS NOT NULL)        AS marcaRec
+       SUM(X.auxShort4 = 0)                AS countCD,
+       SUM(X.auxShort4 = 1)                AS countENT,
+       SUM(X.auxShort4 = 2)                AS countREC
 FROM sqldados.ords AS N
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno
@@ -230,14 +229,6 @@ WHERE N.date >= @DATA
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
   AND N.date >= @DATA
-  AND CASE
-        WHEN :marca = 0 THEN X.auxShort4 = 0
-        WHEN :marca = 1 AND :temNota = 'T' THEN X.auxShort4 = 1
-        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1 AND NF.numero IS NULL
-        WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
-        WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
-        ELSE FALSE
-      END
 GROUP BY N.storeno,
          N.no,
          L.localizacao;
@@ -265,8 +256,9 @@ SELECT N.no                                AS numero,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        PU.login                            AS login,
-       SUM(X.auxShort4 = 1)                AS marcaEnt,
-       SUM(X.auxShort4 = 2)                AS marcaRec
+       SUM(X.auxShort4 = 0)                AS countCD,
+       SUM(X.auxShort4 = 1)                AS countENT,
+       SUM(X.auxShort4 = 2)                AS countREC
 FROM sqldados.ordsRessu AS N
        INNER JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno
@@ -294,14 +286,6 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
-  AND CASE
-        WHEN :marca = 0 THEN X.auxShort4 = 0
-        WHEN :marca = 1 AND :temNota = 'T' THEN X.auxShort4 = 1
-        WHEN :marca = 1 AND :temNota = 'N' THEN X.auxShort4 = 1 AND NF.numero IS NULL
-        WHEN :marca = 1 AND :temNota = 'S' THEN X.auxShort4 = 1 AND NF.numero IS NOT NULL
-        WHEN :marca = 2 THEN X.auxShort4 = 2 AND NF.numero IS NOT NULL
-        ELSE FALSE
-      END
 GROUP BY N.storeno,
          N.no,
          L.localizacao;
@@ -328,8 +312,9 @@ SELECT numero,
        usuarioNo,
        usuario,
        login,
-       marcaEnt,
-       marcaRec
+       countCD,
+       countENT,
+       countREC
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -353,8 +338,9 @@ SELECT numero,
        usuarioNo,
        usuario,
        login,
-       marcaEnt,
-       marcaRec
+       countCD,
+       countENT,
+       countREC
 FROM T_PEDIDO_02;
 
 DO @PESQUISA := :pesquisa;
@@ -385,8 +371,9 @@ SELECT numero,
        usuario                  AS usuario,
        login                    AS login,
        IFNULL(A.observacao, '') AS observacao,
-       marcaEnt                 AS marcaEnt,
-       marcaRec                 AS marcaRec
+       countCD                  AS countCD,
+       countENT                 AS countENT,
+       countREC                 AS countREC
 FROM T_PEDIDO AS D
        LEFT JOIN sqldados.ordsAdicional AS A
                  ON A.storeno = 1
@@ -414,4 +401,12 @@ WHERE (@PESQUISA = '' OR
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
   AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixa IS NULL)
   AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixa IS NULL)
+  AND CASE
+        WHEN :marca = 0 THEN countCD > 0
+        WHEN :marca = 1 AND :temNota = 'T' THEN countEnt > 0
+        WHEN :marca = 1 AND :temNota = 'N' THEN countEnt > 0 AND notaBaixa IS NULL
+        WHEN :marca = 1 AND :temNota = 'S' THEN countEnt > 0 AND notaBaixa IS NOT NULL
+        WHEN :marca = 2 THEN countRec > 0 AND notaBaixa IS NOT NULL
+        ELSE FALSE
+      END
 GROUP BY D.numero, D.localizacao

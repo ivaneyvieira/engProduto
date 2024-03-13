@@ -29,8 +29,9 @@ class Ressuprimento(
   var usuario: String?,
   var login: String?,
   var observacao: String?,
-  var marcaEnt: Int?,
-  var marcaRec: Int?,
+  var countCD: Int?,
+  var countENT: Int?,
+  var countREC: Int?,
 ) {
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
@@ -46,7 +47,15 @@ class Ressuprimento(
 
   fun produtos(): List<ProdutoRessuprimento> {
     val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
-    return saci.findProdutoRessuprimento(this, marcaRessu, userRessuprimentoLocais()).map {prd ->
+    return produtos(marcaRessu)
+  }
+
+  private fun produtos(marcaRessu: EMarcaRessuprimento): List<ProdutoRessuprimento> {
+    return saci.findProdutoRessuprimento(
+      pedido = this,
+      marca = marcaRessu,
+      locais = userRessuprimentoLocais()
+    ).map { prd ->
       prd.numeroNota = this.notaBaixa
       prd.dataNota = this.dataBaixa
       prd

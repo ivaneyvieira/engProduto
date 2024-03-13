@@ -142,7 +142,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoUsuarioApp()
 
     this.setPartNameGenerator {
-      val marca = it.marcaRec ?: 0
+      val marca = it.countREC ?: 0
       if (marca > 0) {
         "amarelo"
       } else null

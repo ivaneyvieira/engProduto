@@ -117,7 +117,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     colunaRessuprimentoObservacao().textFieldEditor()
 
     this.setPartNameGenerator {
-      val marca = it.marcaEnt ?: 0
+      val marca = it.countENT ?: 0
       if (marca > 0) {
         "amarelo"
       } else null
