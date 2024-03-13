@@ -12,12 +12,12 @@ object ProdutoRessuViewColumns {
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigoCorrecao() =
       columnGrid(ProdutoRessuprimento::codigoCorrecao) {
-        this.setHeader("Código Correção")
+        this.setHeader("Código")
       }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGradeCorrecao() =
       columnGrid(ProdutoRessuprimento::gradeCorrecao) {
-        this.setHeader("Grade Correção")
+        this.setHeader("Grade")
       }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDescricaoCorrecao() =
