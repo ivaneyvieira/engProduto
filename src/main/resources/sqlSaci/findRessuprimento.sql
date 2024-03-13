@@ -355,9 +355,9 @@ SELECT numero,
        D.localizacao,
        :marca                   AS marca,
        :temNota                 AS temNota,
-       MAX(notaBaixa)           AS notaBaixa,
-       MAX(dataBaixa)           AS dataBaixa,
-       MAX(valorNota)           AS valorNota,
+       notaBaixa                AS notaBaixa,
+       dataBaixa                AS dataBaixa,
+       valorNota                AS valorNota,
        entregueNo               AS entregueNo,
        entreguePor              AS entreguePor,
        entregueSPor             AS entregueSPor,
@@ -404,9 +404,9 @@ WHERE (@PESQUISA = '' OR
   AND CASE
         WHEN :marca = 0 THEN countCD > 0
         WHEN :marca = 1 AND :temNota = 'T' THEN countEnt > 0
-        WHEN :marca = 1 AND :temNota = 'N' THEN countEnt > 0 AND notaBaixa IS NULL
-        WHEN :marca = 1 AND :temNota = 'S' THEN countEnt > 0 AND notaBaixa IS NOT NULL
-        WHEN :marca = 2 THEN countRec > 0 AND notaBaixa IS NOT NULL
+        WHEN :marca = 1 AND :temNota = 'N' THEN countEnt > 0 AND notaBaixa = ''
+        WHEN :marca = 1 AND :temNota = 'S' THEN countEnt > 0 AND notaBaixa != ''
+        WHEN :marca = 2 THEN countRec > 0 AND notaBaixa != ''
         ELSE FALSE
       END
 GROUP BY D.numero, D.localizacao
