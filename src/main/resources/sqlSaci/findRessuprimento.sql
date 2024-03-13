@@ -200,7 +200,13 @@ SELECT N.no                                AS numero,
        PU.login                            AS login,
        SUM(X.auxShort4 = 0)                AS countCD,
        SUM(X.auxShort4 = 1)                AS countENT,
-       SUM(X.auxShort4 = 2)                AS countREC
+       SUM(X.auxShort4 = 2)                AS countREC,
+       SUM(X.auxShort4 = 0
+         AND X.auxShort3 != 0)             AS countSelCD,
+       SUM(X.auxShort4 = 1
+         AND X.auxShort3 != 0)             AS countSelENT,
+       SUM(X.auxShort4 = 2
+         AND X.auxShort3 != 0)             AS countSelREC
 FROM sqldados.ords AS N
        INNER JOIN sqldados.oprd AS X
                   ON N.storeno = X.storeno
@@ -258,7 +264,13 @@ SELECT N.no                                AS numero,
        PU.login                            AS login,
        SUM(X.auxShort4 = 0)                AS countCD,
        SUM(X.auxShort4 = 1)                AS countENT,
-       SUM(X.auxShort4 = 2)                AS countREC
+       SUM(X.auxShort4 = 2)                AS countREC,
+       SUM(X.auxShort4 = 0
+         AND X.auxShort3 != 0)             AS countSelCD,
+       SUM(X.auxShort4 = 1
+         AND X.auxShort3 != 0)             AS countSelENT,
+       SUM(X.auxShort4 = 2
+         AND X.auxShort3 != 0)             AS countSelREC
 FROM sqldados.ordsRessu AS N
        INNER JOIN sqldados.oprdRessu AS X
                   ON N.storeno = X.storeno
@@ -314,7 +326,10 @@ SELECT numero,
        login,
        countCD,
        countENT,
-       countREC
+       countREC,
+       countSelCD,
+       countSelENT,
+       countSelREC
 FROM T_PEDIDO_01
 UNION
 DISTINCT
@@ -340,7 +355,10 @@ SELECT numero,
        login,
        countCD,
        countENT,
-       countREC
+       countREC,
+       countSelCD,
+       countSelENT,
+       countSelREC
 FROM T_PEDIDO_02;
 
 DO @PESQUISA := :pesquisa;
@@ -373,7 +391,10 @@ SELECT numero,
        IFNULL(A.observacao, '') AS observacao,
        countCD                  AS countCD,
        countENT                 AS countENT,
-       countREC                 AS countREC
+       countREC                 AS countREC,
+       countSelCD               AS countSelCD,
+       countSelENT              AS countSelENT,
+       countSelREC              AS countSelREC
 FROM T_PEDIDO AS D
        LEFT JOIN sqldados.ordsAdicional AS A
                  ON A.storeno = 1

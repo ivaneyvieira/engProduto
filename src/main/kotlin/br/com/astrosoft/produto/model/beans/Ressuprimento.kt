@@ -32,6 +32,9 @@ class Ressuprimento(
   var countCD: Int?,
   var countENT: Int?,
   var countREC: Int?,
+  var countSelCD: Int?,
+  var countSelENT: Int?,
+  var countSelREC: Int?,
 ) {
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
