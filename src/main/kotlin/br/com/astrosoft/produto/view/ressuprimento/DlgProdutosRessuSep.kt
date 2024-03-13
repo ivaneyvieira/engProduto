@@ -88,40 +88,11 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoQtPedido()
-      if (user?.ressuprimentoRecebedor == true) {
-        produtoRessuprimentoQtRecebido().integerFieldEditor()
-      } else {
-        produtoRessuprimentoQtRecebido()
-      }
-      //produtoRessuprimentoEstoque()
-      if (user?.ressuprimentoRecebedor == true) {
-        produtoRessuprimentoCodigoCorrecao().textFieldEditor {
-          this.valueChangeMode = ValueChangeMode.ON_CHANGE
-          this.addValueChangeListener { event ->
-            val codigo = event.value ?: ""
-            val listGrades = viewModel.findGrades(codigo)
 
-            val colGrade = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
-            val compGrade = colGrade.editorComponent as? Select<String>
-            compGrade?.setItems(listGrades.map { it.grade })
-
-            val colDescricao = this@apply.getColumnBy(ProdutoRessuprimento::descricaoCorrecao)
-            val compDescricao = colDescricao.editorComponent as? TextField
-            compDescricao?.value = listGrades.firstOrNull()?.descricao ?: ""
-          }
-        }
-        produtoRessuprimentoDescricaoCorrecao().expand().textFieldEditor {
-          this.isReadOnly = true
-        }
-        produtoRessuprimentoGradeCorrecao().comboFieldEditor<ProdutoRessuprimento, String>()
-      } else {
-        produtoRessuprimentoCodigoCorrecao()
-        produtoRessuprimentoDescricaoCorrecao().expand()
-        produtoRessuprimentoGradeCorrecao()
-      }
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }
+
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }

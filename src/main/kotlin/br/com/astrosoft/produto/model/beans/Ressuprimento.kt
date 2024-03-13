@@ -39,6 +39,9 @@ class Ressuprimento(
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
 
+  val nomeLojaRessu
+    get() = saci.allLojas().firstOrNull { it.no == lojaRessu }?.sname ?: ""
+
   val rotaRessuprimento
     get() = if (lojaRessu == null) "" else "Rota4${lojaRessu}"
 

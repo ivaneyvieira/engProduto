@@ -42,7 +42,9 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       val ressuprimento = ressuprimentos.first()
       "${ressuprimento.numero}     NF ${ressuprimento.notaBaixa} DE ${ressuprimento.dataBaixa.format()}"
     } else {
-      ""
+      val loja = ressuprimentos.map { it.nomeLojaRessu }.distinct().joinToString(", ")
+      val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
+      "Loja: $loja    Data: $data"
     }
 
     form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
@@ -147,6 +149,26 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
+
+      val headerRow = this.prependHeaderRow()
+      headerRow.join(
+        this.getColumnBy(ProdutoRessuprimento::codigo),
+        this.getColumnBy(ProdutoRessuprimento::barcode),
+        this.getColumnBy(ProdutoRessuprimento::descricao),
+        this.getColumnBy(ProdutoRessuprimento::grade),
+        this.getColumnBy(ProdutoRessuprimento::localizacao),
+        this.getColumnBy(ProdutoRessuprimento::dataNota),
+        this.getColumnBy(ProdutoRessuprimento::numeroNota),
+        this.getColumnBy(ProdutoRessuprimento::qtQuantNF),
+      ).text = "Dados da Nota"
+
+      headerRow.join(
+        this.getColumnBy(ProdutoRessuprimento::qtRecebido),
+        this.getColumnBy(ProdutoRessuprimento::codigoCorrecao),
+        this.getColumnBy(ProdutoRessuprimento::descricaoCorrecao),
+        this.getColumnBy(ProdutoRessuprimento::gradeCorrecao),
+        this.getColumnBy(ProdutoRessuprimento::qtEntregue),
+      ).text = "Dados do recebimento"
 
       this.setPartNameGenerator {
         when {

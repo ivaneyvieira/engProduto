@@ -25,7 +25,6 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoSep {
@@ -105,11 +104,13 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
     this.addClassName("styling")
     this.format()
     this.setSelectionMode(Grid.SelectionMode.MULTI)
+
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
       }
     }
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")

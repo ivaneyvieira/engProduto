@@ -19,6 +19,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -98,12 +99,13 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     this.addClassName("styling")
     this.format()
     this.setSelectionMode(Grid.SelectionMode.MULTI)
-    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+    val colBntPrint = addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
       }
     }
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+
+    val colBntProduto = addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
