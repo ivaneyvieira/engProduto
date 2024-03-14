@@ -12,8 +12,7 @@ import net.sf.dynamicreports.report.builder.component.ComponentBuilder
 import net.sf.dynamicreports.report.builder.grid.ColumnTitleGroupBuilder
 import net.sf.dynamicreports.report.builder.subtotal.SubtotalBuilder
 import net.sf.dynamicreports.report.constant.*
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.LEFT
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.RIGHT
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
 import net.sf.dynamicreports.report.constant.PageOrientation.PORTRAIT
 import net.sf.dynamicreports.report.constant.PageType.A4
 import net.sf.dynamicreports.report.defaults.Defaults
@@ -242,7 +241,7 @@ abstract class ReportBuild<T> {
     val largura = -1
     return verticalBlock {
       horizontalList {
-        text(propriedades.titulo, HorizontalTextAlignment.CENTER, largura).apply {
+        text(propriedades.titulo, propriedades.tituloAlin, largura).apply {
           this.setStyle(stl.style(Templates.fieldFontGrande).setForegroundColor(propriedades.color))
         }
       }
@@ -393,5 +392,6 @@ data class PropriedadeRelatorio(
   val color: Color = Color.BLACK,
   val pageOrientation: PageOrientation = PORTRAIT,
   val pageType: PageType = A4,
-  val margem: Int = 28
+  val margem: Int = 28,
+  val tituloAlin: HorizontalTextAlignment = CENTER
 )

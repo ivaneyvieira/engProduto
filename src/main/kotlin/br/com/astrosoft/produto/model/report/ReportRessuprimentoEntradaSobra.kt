@@ -15,21 +15,19 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
   ReportBuild<ProdutoRessuprimentoSobra>() {
 
   init {
-    columnReport(ProdutoRessuprimentoSobra::codigo, "Código", width = 40, aligment = HorizontalTextAlignment.RIGHT)
-    columnReport(ProdutoRessuprimentoSobra::descricao, "Descrição", width = 200) {
+    columnReport(ProdutoRessuprimentoSobra::codigo, "Código", width = 45, aligment = HorizontalTextAlignment.RIGHT)
+    columnReport(ProdutoRessuprimentoSobra::descricao, "Descrição", width = 200)
+    columnReport(ProdutoRessuprimentoSobra::grade, "Grade", width = 60) {
       this.scaleFont()
     }
-    columnReport(ProdutoRessuprimentoSobra::grade, "Grade", width = 50) {
+    columnReport(ProdutoRessuprimentoSobra::nota, "Nota", width = 60) {
       this.scaleFont()
     }
-    columnReport(ProdutoRessuprimentoSobra::nota, "Nota", width = 50) {
-      this.scaleFont()
-    }
-    columnReport(ProdutoRessuprimentoSobra::quantidade, "Quant", width = 35)
+    columnReport(ProdutoRessuprimentoSobra::quantidade, "Quant", width = 40)
   }
 
   override fun labelTitleCol(): TextColumnBuilder<String>  {
-    return columnReport(ProdutoRessuprimentoSobra::grupo, "Grupo", width = 40) {
+    return columnReport(ProdutoRessuprimentoSobra::grupo, "Grupo") {
       this.scaleFont()
     }
   }
@@ -48,7 +46,8 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
 
   override fun config(itens: List<ProdutoRessuprimentoSobra>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
-      titulo = "Relatório com Divergência no Recebimento do Ressuprimento da $ressuprimentoTitle",
+      titulo = "Divergência no Recebimento do Ressuprimento da $ressuprimentoTitle",
+      tituloAlin = HorizontalTextAlignment.LEFT,
       subTitulo = "",
       detailFonteSize = 8,
       color = Color.WHITE,
