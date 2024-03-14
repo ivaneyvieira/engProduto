@@ -181,21 +181,23 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val produtos = subView.produtosSelecionados()
     val produtosSobra = mutableListOf<ProdutoRessuprimentoSobra>()
     produtos.forEach {
-      produtosSobra.add(
-        ProdutoRessuprimentoSobra(
-          grupo = "Falta",
-          codigo = it.codigo ?: "",
-          descricao = it.descricao ?: "",
-          grade = it.grade ?: "",
-          nota = it.numeroNota ?: "",
-          quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
+      if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
+        produtosSobra.add(
+          ProdutoRessuprimentoSobra(
+            grupo = "Falta",
+            codigo = it.codigo ?: "",
+            descricao = it.descricao ?: "",
+            grade = it.grade ?: "",
+            nota = it.numeroNota ?: "",
+            quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
+          )
         )
-      )
+      }
     }
 
     produtos.forEach {
       if (it.codigoCorrecao?.isNotEmpty() == true) {
-        val qtEntregue = if(it.qtEntregue == 0) null else it.qtEntregue
+        val qtEntregue = if (it.qtEntregue == 0) null else it.qtEntregue
         produtosSobra.add(
           ProdutoRessuprimentoSobra(
             grupo = "Sobra",
@@ -203,7 +205,19 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
             descricao = it.descricaoCorrecao ?: "",
             grade = it.gradeCorrecao ?: "",
             nota = "",
-            quantidade = qtEntregue ,
+            quantidade = qtEntregue,
+          )
+        )
+      }
+      if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
+        produtosSobra.add(
+          ProdutoRessuprimentoSobra(
+            grupo = "Sobra",
+            codigo = it.codigo ?: "",
+            descricao = it.descricao ?: "",
+            grade = it.grade ?: "",
+            nota = it.numeroNota ?: "",
+            quantidade = (it.qtRecebido ?: 0) - (it.qtQuantNF ?: 0),
           )
         )
       }
