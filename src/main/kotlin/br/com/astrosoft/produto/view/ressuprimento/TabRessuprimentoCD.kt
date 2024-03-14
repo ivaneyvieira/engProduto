@@ -6,7 +6,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoObservacao
@@ -113,7 +112,6 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    colunaRessuprimentoLocalizacao()
     colunaRessuprimentoObservacao().textFieldEditor()
 
     this.setPartNameGenerator {

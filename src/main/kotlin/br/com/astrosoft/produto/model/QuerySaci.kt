@@ -388,7 +388,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locApp", pedido.localizacao)
+      addOptionalParameter("locApp", pedido.localList())
       addOptionalParameter("locais", locais)
       addOptionalParameter("temNota", pedido.temNota)
     }
@@ -904,7 +904,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-      addOptionalParameter("localizacao", ressuprimento.localizacao)
+      addOptionalParameter("localizacao", ressuprimento.localList())
       addOptionalParameter("marca", ressuprimento.marca ?: 0)
     }
   }

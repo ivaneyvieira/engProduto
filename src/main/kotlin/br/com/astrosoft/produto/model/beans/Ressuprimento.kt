@@ -7,12 +7,12 @@ import java.time.LocalDate
 
 class Ressuprimento(
   var numero: Int,
-  var fornecedor: Int,
+  var fornecedor: Int?,
   var data: LocalDate?,
-  var comprador: Int,
+  var comprador: Int?,
   var localizacao: String?,
   var marca: Int?,
-  var temNota: String,
+  var temNota: String?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
   var valorNota: Double?,
@@ -36,6 +36,7 @@ class Ressuprimento(
   var countSelENT: Int?,
   var countSelREC: Int?,
 ) {
+  fun localList() = localizacao?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
 
@@ -107,6 +108,41 @@ class Ressuprimento(
 
   companion object {
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
+      .groupBy { "${it.numero}:${it.notaBaixa}" }
+      .map { entry ->
+        val ressu = entry.value.firstOrNull()
+        Ressuprimento(
+          numero = ressu?.numero ?: 0,
+          fornecedor = ressu?.fornecedor,
+          data = ressu?.data,
+          comprador = ressu?.comprador,
+          localizacao = entry.value.joinToString { it.localizacao ?: "" },
+          marca = ressu?.marca,
+          temNota = ressu?.temNota,
+          notaBaixa = ressu?.notaBaixa,
+          dataBaixa = ressu?.dataBaixa,
+          valorNota = ressu?.valorNota,
+          entregueNo = ressu?.entregueNo,
+          entreguePor = ressu?.entreguePor,
+          entregueSPor = ressu?.entregueSPor,
+          transportadoNo = ressu?.transportadoNo,
+          transportadoPor = ressu?.transportadoPor,
+          transportadoSPor = ressu?.transportadoSPor,
+          recebidoNo = ressu?.recebidoNo,
+          recebidoPor = ressu?.recebidoPor,
+          recebidoSPor = ressu?.recebidoSPor,
+          usuarioNo = ressu?.usuarioNo,
+          usuario = ressu?.usuario,
+          login = ressu?.login,
+          observacao = ressu?.observacao,
+          countCD = ressu?.countCD,
+          countENT = ressu?.countENT,
+          countREC = ressu?.countREC,
+          countSelCD = ressu?.countSelCD,
+          countSelENT = ressu?.countSelENT,
+          countSelREC = ressu?.countSelREC,
+        )
+      }
   }
 }
 

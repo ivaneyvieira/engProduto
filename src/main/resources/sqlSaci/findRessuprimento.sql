@@ -37,15 +37,15 @@ GROUP BY S.storeno, S.prdno, S.grade;
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
-  PRIMARY KEY (storeno, ordno, prdno, grade)
+  PRIMARY KEY (storeno, ordno, numero, prdno, grade)
 )
-SELECT 1                                                                                      AS storeno,
-       N.l2                                                                                   AS ordno,
-       X.prdno                                                                                AS prdno,
-       X.grade                                                                                AS grade,
-       MID(MAX(CONCAT(LPAD(N.issuedate, 8, '0'), ':', CONCAT(N.nfno, '/', N.nfse))), 10, 100) AS numero,
-       MAX(CAST(N.issuedate AS DATE))                                                         AS dataNota,
-       SUM(N.grossamt / 100)                                                                  AS valorNota
+SELECT 1                           AS storeno,
+       N.l2                        AS ordno,
+       X.prdno                     AS prdno,
+       X.grade                     AS grade,
+       CONCAT(N.nfno, '/', N.nfse) AS numero,
+       CAST(N.issuedate AS DATE)   AS dataNota,
+       SUM(N.grossamt / 100)       AS valorNota
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
@@ -53,7 +53,7 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240307
   AND N.status <> 1
-GROUP BY storeno, ordno, prdno, grade;
+GROUP BY storeno, ordno, numero, prdno, grade;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
                                  auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv,
@@ -237,7 +237,8 @@ WHERE N.date >= @DATA
   AND N.date >= @DATA
 GROUP BY N.storeno,
          N.no,
-         L.localizacao;
+         L.localizacao,
+         notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
 CREATE TEMPORARY TABLE T_PEDIDO_02
@@ -300,7 +301,8 @@ WHERE N.date >= @DATA
   AND N.no >= 100000000
 GROUP BY N.storeno,
          N.no,
-         L.localizacao;
+         L.localizacao,
+         notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
@@ -430,4 +432,4 @@ WHERE (@PESQUISA = '' OR
         WHEN :marca = 2 THEN countRec > 0 AND notaBaixa != ''
         ELSE FALSE
       END
-GROUP BY D.numero, D.localizacao
+GROUP BY D.numero, D.localizacao, D.notaBaixa

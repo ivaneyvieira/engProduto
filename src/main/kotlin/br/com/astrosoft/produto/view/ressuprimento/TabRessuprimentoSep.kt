@@ -8,9 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
@@ -127,7 +125,6 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
 
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
-    colunaRessuprimentoLocalizacao()
     if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formAutoriza(pedido)

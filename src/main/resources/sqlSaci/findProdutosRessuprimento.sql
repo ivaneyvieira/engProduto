@@ -26,16 +26,15 @@ GROUP BY S.storeno, S.prdno, S.grade;
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
-  PRIMARY KEY (storeno, ordno, prdno, grade)
+  PRIMARY KEY (storeno, numero, ordno, prdno, grade)
 )
-SELECT 1                                                      AS storeno,
-       N.l2                                                   AS ordno,
-       X.prdno                                                AS prdno,
-       X.grade                                                AS grade,
-       MID(MAX(CONCAT(LPAD(N.issuedate, 8, '0'), ':',
-                      CONCAT(N.nfno, '/', N.nfse))), 10, 100) AS numero,
-       MAX(CAST(N.issuedate AS DATE))                         AS dataNota,
-       SUM(X.qtty / 1000)                                     AS qtty
+SELECT 1                           AS storeno,
+       N.l2                        AS ordno,
+       X.prdno                     AS prdno,
+       X.grade                     AS grade,
+       CONCAT(N.nfno, '/', N.nfse) AS numero,
+       CAST(N.issuedate AS DATE)   AS dataNota,
+       SUM(X.qtty / 1000)          AS qtty
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
@@ -43,7 +42,7 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
   AND N.status <> 1
-GROUP BY N.l2, X.prdno, X.grade;
+GROUP BY N.l2, numero, X.prdno, X.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORDS;
 CREATE TEMPORARY TABLE T_ORDS
@@ -193,8 +192,8 @@ WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-  AND (IFNULL(L.localizacao, '') = :locApp OR :locApp = 'TODOS')
-GROUP BY codigo, IFNULL(X.grade, '')
+  AND (IFNULL(L.localizacao, '')  in (:locApp) OR 'TODOS' in (:locApp))
+GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 HAVING CASE :temNota
          WHEN 'T' THEN TRUE
          WHEN 'S' THEN numeroNota IS NOT NULL

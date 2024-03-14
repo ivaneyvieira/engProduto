@@ -17,7 +17,7 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
-  AND COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') = :localizacao
+  AND COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') IN (:localizacao)
 GROUP BY S.storeno, S.prdno, S.grade;
 
 UPDATE sqldados.oprd AS O
