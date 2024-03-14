@@ -47,7 +47,8 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
   override fun config(itens: List<ProdutoRessuprimentoSobra>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
       titulo = "Divergência no Recebimento do Ressuprimento da $ressuprimentoTitle",
-      tituloAlin = HorizontalTextAlignment.LEFT,
+      tituloAlin = HorizontalTextAlignment.CENTER,
+      tituloLargura = 405,
       subTitulo = "",
       detailFonteSize = 8,
       color = Color.WHITE,

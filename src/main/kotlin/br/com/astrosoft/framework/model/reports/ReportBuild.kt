@@ -233,12 +233,12 @@ abstract class ReportBuild<T> {
     return columnsList
   }
 
-  private fun groupBuild() : List<ColumnTitleGroupBuilder> {
+  private fun groupBuild(): List<ColumnTitleGroupBuilder> {
     return groupList
   }
 
   protected open fun titleBuider(propriedades: PropriedadeRelatorio): ComponentBuilder<*, *> {
-    val largura = -1
+    val largura = propriedades.tituloLargura
     return verticalBlock {
       horizontalList {
         text(propriedades.titulo, propriedades.tituloAlin, largura).apply {
@@ -275,7 +275,7 @@ abstract class ReportBuild<T> {
       .setTemplate(Templates.reportTemplate)
       .columns(* colunms)
       .apply {
-        if(grupos.isNotEmpty()) this.columnGrid(* grupos)
+        if (grupos.isNotEmpty()) this.columnGrid(* grupos)
         else this.columnGrid(* colunms)
       }
       .setDataSource(itens)
@@ -393,5 +393,6 @@ data class PropriedadeRelatorio(
   val pageOrientation: PageOrientation = PORTRAIT,
   val pageType: PageType = A4,
   val margem: Int = 28,
-  val tituloAlin: HorizontalTextAlignment = CENTER
+  val tituloAlin: HorizontalTextAlignment = CENTER,
+  val tituloLargura: Int = -1,
 )
