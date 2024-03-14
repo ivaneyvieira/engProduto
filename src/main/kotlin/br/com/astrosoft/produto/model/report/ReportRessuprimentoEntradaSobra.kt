@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.model.reports.ReportBuild
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimentoSobra
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
 import net.sf.dynamicreports.report.builder.DynamicReports
-import net.sf.dynamicreports.report.builder.DynamicReports.grid
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder
 import net.sf.dynamicreports.report.builder.style.Styles
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment
 import net.sf.dynamicreports.report.constant.PageOrientation
@@ -15,46 +15,23 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
   ReportBuild<ProdutoRessuprimentoSobra>() {
 
   init {
+    columnReport(ProdutoRessuprimentoSobra::codigo, "Código", width = 40, aligment = HorizontalTextAlignment.RIGHT)
+    columnReport(ProdutoRessuprimentoSobra::descricao, "Descrição", width = 200) {
+      this.scaleFont()
+    }
+    columnReport(ProdutoRessuprimentoSobra::grade, "Grade", width = 50) {
+      this.scaleFont()
+    }
+    columnReport(ProdutoRessuprimentoSobra::nota, "Nota", width = 50) {
+      this.scaleFont()
+    }
+    columnReport(ProdutoRessuprimentoSobra::quantidade, "Quant", width = 35)
+  }
 
-    val grupoDados = grid.titleGroup(
-      "Falta",
-      columnReport(ProdutoRessuprimentoSobra::codigo, "Código", width = 40, aligment = HorizontalTextAlignment.RIGHT),
-      columnReport(ProdutoRessuprimentoSobra::descricao, "Descrição") {
-        this.scaleFont()
-      },
-      columnReport(ProdutoRessuprimentoSobra::grade, "Grade", width = 50) {
-        this.scaleFont()
-      },
-      columnReport(ProdutoRessuprimentoSobra::nota, "Nota", width = 50) {
-        this.scaleFont()
-      },
-      columnReport(ProdutoRessuprimentoSobra::quantidade, "Quant", width = 35)
-    )
-
-    val espaco = grid.titleGroup("",
-      columnReport(ProdutoRessuprimentoSobra::espaco, " ", width = 30)
-    )
-
-    val grupoRecebimento = grid.titleGroup(
-      "Sobra",
-      columnReport(
-        ProdutoRessuprimentoSobra::codigoSobra,
-        "Código",
-        width = 45,
-        aligment = HorizontalTextAlignment.RIGHT
-      ),
-      columnReport(ProdutoRessuprimentoSobra::descricaoSobra, "Descrição") {
-        this.scaleFont()
-      },
-      columnReport(ProdutoRessuprimentoSobra::gradeSobra, "Grade", width = 50) {
-        this.scaleFont()
-      },
-      columnReport(ProdutoRessuprimentoSobra::quantidadeSobra, "Quant", width = 35)
-    )
-
-    addGrupo(grupoDados)
-    addGrupo(espaco)
-    addGrupo(grupoRecebimento)
+  override fun labelTitleCol(): TextColumnBuilder<String>  {
+    return columnReport(ProdutoRessuprimentoSobra::grupo, "Grupo", width = 40) {
+      this.scaleFont()
+    }
   }
 
   override fun makeReport(itens: List<ProdutoRessuprimentoSobra>): JasperReportBuilder {

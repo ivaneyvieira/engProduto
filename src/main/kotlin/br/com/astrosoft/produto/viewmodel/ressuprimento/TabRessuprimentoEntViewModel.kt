@@ -179,21 +179,35 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun imprimeRelatorio(ressuprimentoTitle: String) {
     val produtos = subView.produtosSelecionados()
-    val produtosSobra = produtos.map {
-      ProdutoRessuprimentoSobra(
-        codigo = it.codigo ?: "",
-        descricao = it.descricao ?: "",
-        grade = it.grade ?: "",
-        nota = it.numeroNota ?: "",
-        quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
-        codigoSobra = it.codigoCorrecao ?: "",
-        descricaoSobra = it.descricaoCorrecao ?: "",
-        gradeSobra = it.gradeCorrecao ?: "",
-        quantidadeSobra = it.qtEntregue ?: 0
+    val produtosSobra = mutableListOf<ProdutoRessuprimentoSobra>()
+    produtos.forEach {
+      produtosSobra.add(
+        ProdutoRessuprimentoSobra(
+          grupo = "Falta",
+          codigo = it.codigo ?: "",
+          descricao = it.descricao ?: "",
+          grade = it.grade ?: "",
+          nota = it.numeroNota ?: "",
+          quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
+        )
       )
     }
 
-
+    produtos.forEach {
+      if (it.codigoCorrecao?.isNotEmpty() == true) {
+        val qtEntregue = if(it.qtEntregue == 0) null else it.qtEntregue
+        produtosSobra.add(
+          ProdutoRessuprimentoSobra(
+            grupo = "Sobra",
+            codigo = it.codigoCorrecao ?: "",
+            descricao = it.descricaoCorrecao ?: "",
+            grade = it.gradeCorrecao ?: "",
+            nota = "",
+            quantidade = qtEntregue ,
+          )
+        )
+      }
+    }
 
     val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
     val file = report.processaRelatorio(produtosSobra)
