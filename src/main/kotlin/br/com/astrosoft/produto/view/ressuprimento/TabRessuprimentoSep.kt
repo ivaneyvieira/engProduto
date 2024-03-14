@@ -140,12 +140,6 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
       }
     }
     colunaRessuprimentoTransportadorPor()
-    if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
-      }
-    }
-    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
 
     this.setPartNameGenerator {
