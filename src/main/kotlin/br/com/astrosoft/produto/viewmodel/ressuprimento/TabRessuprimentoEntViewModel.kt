@@ -189,6 +189,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
             descricao = it.descricao ?: "",
             grade = it.grade ?: "",
             nota = it.numeroNota ?: "",
+            localizacao = it.localizacao ?: "",
             quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
           )
         )
@@ -205,6 +206,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
             descricao = it.descricaoCorrecao ?: "",
             grade = it.gradeCorrecao ?: "",
             nota = "",
+            localizacao = it.localizacao ?: "",
             quantidade = qtEntregue,
           )
         )
@@ -217,7 +219,24 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
             descricao = it.descricao ?: "",
             grade = it.grade ?: "",
             nota = it.numeroNota ?: "",
+            localizacao = it.localizacao ?: "",
             quantidade = (it.qtRecebido ?: 0) - (it.qtQuantNF ?: 0),
+          )
+        )
+      }
+    }
+
+    produtos.forEach{
+      if((it.qtAvaria ?: 0) > 0) {
+        produtosSobra.add(
+          ProdutoRessuprimentoSobra(
+            grupo = "Avaria",
+            codigo = it.codigo ?: "",
+            descricao = it.descricao ?: "",
+            grade = it.grade ?: "",
+            nota = it.numeroNota ?: "",
+            localizacao = it.localizacao ?: "",
+            quantidade = it.qtAvaria ?: 0,
           )
         )
       }

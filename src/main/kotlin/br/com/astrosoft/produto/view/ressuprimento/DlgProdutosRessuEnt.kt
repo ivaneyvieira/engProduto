@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoNumeroNF
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtAvaria
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
@@ -126,10 +127,11 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       produtoRessuprimentoQtNf()
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoQtRecebido().integerFieldEditor()
+        produtoRessuprimentoQtAvaria().integerFieldEditor()
       } else {
         produtoRessuprimentoQtRecebido()
+        produtoRessuprimentoQtAvaria()
       }
-      //produtoRessuprimentoEstoque()
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoCodigoCorrecao().textFieldEditor {
           this.valueChangeMode = ValueChangeMode.ON_CHANGE
@@ -178,6 +180,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
 
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::qtRecebido),
+        this.getColumnBy(ProdutoRessuprimento::qtAvaria),
         this.getColumnBy(ProdutoRessuprimento::codigoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::descricaoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::gradeCorrecao),
@@ -208,7 +211,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
   }
 
   fun itensSelecionados(): List<ProdutoRessuprimento> {
-    val list =  gridDetail.selectedItems.toList()
+    val list = gridDetail.selectedItems.toList()
     return gridDetail.list().filter {
       it in list
     }

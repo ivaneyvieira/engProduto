@@ -4,6 +4,7 @@ class ProdutoRessuprimentoSobra(
   val grupo: String,
   val codigo: String,
   val descricao: String,
+  val localizacao: String,
   val grade: String,
   val nota: String,
   val quantidade: Int?,

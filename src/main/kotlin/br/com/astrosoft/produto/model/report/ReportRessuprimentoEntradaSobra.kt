@@ -17,6 +17,7 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
   init {
     columnReport(ProdutoRessuprimentoSobra::codigo, "Código", width = 45, aligment = HorizontalTextAlignment.RIGHT)
     columnReport(ProdutoRessuprimentoSobra::descricao, "Descrição", width = 200)
+    columnReport(ProdutoRessuprimentoSobra::localizacao, "Loc", width = 45)
     columnReport(ProdutoRessuprimentoSobra::grade, "Grade", width = 60) {
       this.scaleFont()
     }
@@ -48,7 +49,7 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
     return PropriedadeRelatorio(
       titulo = "Divergência no Recebimento do Ressuprimento da $ressuprimentoTitle",
       tituloAlin = HorizontalTextAlignment.CENTER,
-      tituloLargura = 405,
+      tituloLargura = 445,
       subTitulo = "",
       detailFonteSize = 8,
       color = Color.WHITE,
