@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntradaSobra
 import br.com.astrosoft.produto.model.saci
 
-class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
+class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -21,7 +21,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = Ressuprimento.find(filtro).filter {
-      (it.countREC ?: 0) == 0
+      (it.countREC ?: 0) > 0
     }
     subView.updateRessuprimentos(ressuprimento)
   }
@@ -228,8 +228,8 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       }
     }
 
-    produtos.forEach{
-      if((it.qtAvaria ?: 0) > 0) {
+    produtos.forEach {
+      if ((it.qtAvaria ?: 0) > 0) {
         produtosSobra.add(
           ProdutoRessuprimentoSobra(
             grupo = "Avaria",
@@ -250,10 +250,10 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabRessuprimentoEnt
+    get() = viewModel.view.tabRessuprimentoPen
 }
 
-interface ITabRessuprimentoEnt : ITabView {
+interface ITabRessuprimentoPen : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()

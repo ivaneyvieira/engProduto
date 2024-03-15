@@ -4,28 +4,21 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.Ressuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricaoCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGradeCorrecao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoSepViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressuprimentos: List<Ressuprimento>) {
@@ -96,24 +89,25 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
+      /*
+            this.setPartNameGenerator {
+              when {
+                it.selecionado == EMarcaRessuprimento.REC.num -> {
+                  "amarelo"
+                }
 
-      this.setPartNameGenerator {
-        when {
-          it.selecionado == EMarcaRessuprimento.REC.num -> {
-            "amarelo"
-          }
+                it.origemApp == "S" && it.origemSaci == "N"   -> {
+                  "amarelo"
+                }
 
-          it.origemApp == "S" && it.origemSaci == "N"   -> {
-            "amarelo"
-          }
+                it.qtQuantNF != it.qtRecebido                 -> {
+                  "amarelo"
+                }
 
-          it.qtQuantNF != it.qtRecebido                 -> {
-            "amarelo"
-          }
-
-          else                                          -> null
-        }
-      }
+                else                                          -> null
+              }
+            }
+       */
       gridDetail.isMultiSort = true
       gridDetail.sort(
         gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemREC).asc,

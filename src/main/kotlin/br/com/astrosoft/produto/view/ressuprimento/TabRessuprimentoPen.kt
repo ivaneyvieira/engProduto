@@ -15,8 +15,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
-import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoEnt
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoPen
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoPenViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -27,9 +27,9 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
-  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
-  private var dlgProduto: DlgProdutosRessuEnt? = null
+class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
+  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoPen {
+  private var dlgProduto: DlgProdutosRessuPen? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -109,7 +109,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não tem nota de transferencia")
       } else {
-        dlgProduto = DlgProdutosRessuEnt(viewModel, listOf(ressuprimento))
+        dlgProduto = DlgProdutosRessuPen(viewModel, listOf(ressuprimento))
         dlgProduto?.showDialog {
           viewModel.updateView()
         }
@@ -175,11 +175,11 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.ressuprimentoEnt == true
+    return username?.ressuprimentoPen == true
   }
 
   override val label: String
-    get() = "Entregue"
+    get() = "Pendente"
 
   override fun updateComponent() {
     viewModel.updateView()
@@ -216,7 +216,7 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
   }
 
   override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
-    dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimentos)
+    dlgProduto = DlgProdutosRessuPen(viewModel, ressuprimentos)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }

@@ -106,6 +106,10 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
                 binder.bind(this, UserSaci::impressoraRessu.name)
               }
             }
+            checkBox("Pendente") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::ressuprimentoPen.name)
+            }
             checkBox("Recebido") {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::ressuprimentoRec.name)
