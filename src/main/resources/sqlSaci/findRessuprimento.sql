@@ -387,33 +387,37 @@ SELECT numero,
        fornecedor,
        data,
        comprador,
-       D.localizacao,
-       :marca                   AS marca,
-       :temNota                 AS temNota,
-       notaBaixa                AS notaBaixa,
-       dataBaixa                AS dataBaixa,
-       valorNota                AS valorNota,
-       entregueNo               AS entregueNo,
-       entreguePor              AS entreguePor,
-       entregueSPor             AS entregueSPor,
-       transportadoNo           AS transportadoNo,
-       transportadoPor          AS transportadoPor,
-       transportadoSPor         AS transportadoSPor,
-       recebidoNo               AS recebidoNo,
-       recebidoPor              AS recebidoPor,
-       recebidoSPor             AS recebidoSPor,
-       usuarioNo                AS usuarioNo,
-       usuario                  AS usuario,
-       login                    AS login,
-       IFNULL(A.observacao, '') AS observacao,
-       countCD                  AS countCD,
-       countENT                 AS countENT,
-       countREC                 AS countREC,
-       countCor                 AS countCor,
-       countNot                 AS countNot,
-       countSelCD               AS countSelCD,
-       countSelENT              AS countSelENT,
-       countSelREC              AS countSelREC
+       GROUP_CONCAT(DISTINCT
+                    IF(D.localizacao = '', NULL, D.localizacao)
+                    SEPARATOR ',') AS localizacao,
+       :marca                      AS marca,
+       :temNota                    AS temNota,
+       GROUP_CONCAT(DISTINCT
+                    IF(notaBaixa = '', NULL, notabaixa)
+                    SEPARATOR ',') AS notaBaixa,
+       dataBaixa                   AS dataBaixa,
+       valorNota                   AS valorNota,
+       entregueNo                  AS entregueNo,
+       entreguePor                 AS entreguePor,
+       entregueSPor                AS entregueSPor,
+       transportadoNo              AS transportadoNo,
+       transportadoPor             AS transportadoPor,
+       transportadoSPor            AS transportadoSPor,
+       recebidoNo                  AS recebidoNo,
+       recebidoPor                 AS recebidoPor,
+       recebidoSPor                AS recebidoSPor,
+       usuarioNo                   AS usuarioNo,
+       usuario                     AS usuario,
+       login                       AS login,
+       IFNULL(A.observacao, '')    AS observacao,
+       SUM(countCD)                AS countCD,
+       SUM(countENT)               AS countENT,
+       SUM(countREC)               AS countREC,
+       SUM(countCor)               AS countCor,
+       SUM(countNot)               AS countNot,
+       SUM(countSelCD)             AS countSelCD,
+       SUM(countSelENT)            AS countSelENT,
+       SUM(countSelREC)            AS countSelREC
 FROM T_PEDIDO AS D
        LEFT JOIN sqldados.ordsAdicional AS A
                  ON A.storeno = 1
@@ -441,12 +445,13 @@ WHERE (@PESQUISA = '' OR
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
   AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixa IS NULL)
   AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixa IS NULL)
-  AND CASE
-        WHEN :marca = 0 THEN countCD > 0
-        WHEN :marca = 1 AND :temNota = 'T' THEN countEnt > 0
-        WHEN :marca = 1 AND :temNota = 'N' THEN countEnt > 0 AND notaBaixa = ''
-        WHEN :marca = 1 AND :temNota = 'S' THEN countEnt > 0 AND notaBaixa != ''
-        WHEN :marca = 2 THEN countRec > 0 AND notaBaixa != ''
-        ELSE FALSE
-      END
-GROUP BY D.numero, D.localizacao, D.notaBaixa
+GROUP BY D.numero
+HAVING CASE
+         WHEN :marca = 0 THEN SUM(countCD) > 0
+         WHEN :marca = 1 AND :temNota = 'T' THEN SUM(countENT) > 0
+         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND notaBaixa = ''
+         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND notaBaixa != ''
+         WHEN :marca = 2 THEN SUM(countRec) > 0 AND notaBaixa != ''
+         ELSE FALSE
+       END
+
