@@ -206,6 +206,7 @@ SELECT N.no                                AS numero,
            SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1) != '' OR
            X.auxLong1 != NF.qtty OR
            X.auxLong2 != 0)                AS countCor,
+       SUM(Nf.ordno IS NOT NULL)           AS countNot,
        SUM(X.auxShort4 = 0
          AND X.auxShort3 != 0)             AS countSelCD,
        SUM(X.auxShort4 = 1
@@ -275,6 +276,7 @@ SELECT N.no                                AS numero,
            SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1) != '' OR
            X.auxLong1 != NF.qtty OR
            X.auxLong2 != 0)                AS countCor,
+       SUM(Nf.ordno IS NOT NULL)           AS countNot,
        SUM(X.auxShort4 = 0
          AND X.auxShort3 != 0)             AS countSelCD,
        SUM(X.auxShort4 = 1
@@ -339,6 +341,7 @@ SELECT numero,
        countENT,
        countREC,
        countCor,
+       countNot,
        countSelCD,
        countSelENT,
        countSelREC
@@ -369,6 +372,7 @@ SELECT numero,
        countENT,
        countREC,
        countCor,
+       countNot,
        countSelCD,
        countSelENT,
        countSelREC
@@ -406,6 +410,7 @@ SELECT numero,
        countENT                 AS countENT,
        countREC                 AS countREC,
        countCor                 AS countCor,
+       countNot                 AS countNot,
        countSelCD               AS countSelCD,
        countSelENT              AS countSelENT,
        countSelREC              AS countSelREC
