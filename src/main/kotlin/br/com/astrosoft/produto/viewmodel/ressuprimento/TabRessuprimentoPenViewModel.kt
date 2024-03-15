@@ -21,7 +21,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = Ressuprimento.find(filtro).filter {
-      (it.countREC ?: 0) > 0
+      (it.countCor ?: 0) > 0
     }
     subView.updateRessuprimentos(ressuprimento)
   }

@@ -45,7 +45,8 @@ SELECT 1                           AS storeno,
        X.grade                     AS grade,
        CONCAT(N.nfno, '/', N.nfse) AS numero,
        CAST(N.issuedate AS DATE)   AS dataNota,
-       SUM(N.grossamt / 100)       AS valorNota
+       SUM(N.grossamt / 100)       AS valorNota,
+       SUM(X.qtty / 1000)          AS qtty
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
@@ -201,6 +202,10 @@ SELECT N.no                                AS numero,
        SUM(X.auxShort4 = 0)                AS countCD,
        SUM(X.auxShort4 = 1)                AS countENT,
        SUM(X.auxShort4 = 2)                AS countREC,
+       SUM(SUBSTRING_INDEX(X.obs, ':', 1) != '' OR
+           SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1) != '' OR
+           X.auxLong1 != NF.qtty OR
+           X.auxLong2 != 0)                AS countCor,
        SUM(X.auxShort4 = 0
          AND X.auxShort3 != 0)             AS countSelCD,
        SUM(X.auxShort4 = 1
@@ -266,6 +271,10 @@ SELECT N.no                                AS numero,
        SUM(X.auxShort4 = 0)                AS countCD,
        SUM(X.auxShort4 = 1)                AS countENT,
        SUM(X.auxShort4 = 2)                AS countREC,
+       SUM(SUBSTRING_INDEX(X.obs, ':', 1) != '' OR
+           SUBSTRING_INDEX(SUBSTRING_INDEX(X.obs, ':', 2), ':', -1) != '' OR
+           X.auxLong1 != NF.qtty OR
+           X.auxLong2 != 0)                AS countCor,
        SUM(X.auxShort4 = 0
          AND X.auxShort3 != 0)             AS countSelCD,
        SUM(X.auxShort4 = 1
@@ -329,6 +338,7 @@ SELECT numero,
        countCD,
        countENT,
        countREC,
+       countCor,
        countSelCD,
        countSelENT,
        countSelREC
@@ -358,6 +368,7 @@ SELECT numero,
        countCD,
        countENT,
        countREC,
+       countCor,
        countSelCD,
        countSelENT,
        countSelREC
@@ -394,6 +405,7 @@ SELECT numero,
        countCD                  AS countCD,
        countENT                 AS countENT,
        countREC                 AS countREC,
+       countCor                 AS countCor,
        countSelCD               AS countSelCD,
        countSelENT              AS countSelENT,
        countSelREC              AS countSelREC
