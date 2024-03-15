@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 
 class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
-    fun findLoja(storeno: Int): Loja? {
+  fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
@@ -79,6 +79,12 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
 
+  fun processamentoProdutos() {
+    val selecionados = subView.ressuprimentosSelecionados()
+    if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
+    subView.showDlgProdutos(selecionados)
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoCD
 }
@@ -89,7 +95,8 @@ interface ITabRessuprimentoCD : ITabView {
   fun updateProdutos()
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
-  fun findRessuprimento(): Ressuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
   fun itensSelecionados(): List<Ressuprimento>
+  fun ressuprimentosSelecionados(): List<Ressuprimento>
+  fun showDlgProdutos(ressuprimentos: List<Ressuprimento>)
 }

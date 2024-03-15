@@ -88,6 +88,13 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.excluiRessuprimento()
       }
     }
+
+    button("Produtos") {
+      this.icon = VaadinIcon.FILE_TABLE.create()
+      onLeftClick {
+        viewModel.processamentoProdutos()
+      }
+    }
   }
 
   override fun Grid<Ressuprimento>.gridPanel() {
@@ -102,7 +109,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       }
     )
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosRessuCD(viewModel, pedido)
+      dlgProduto = DlgProdutosRessuCD(viewModel, listOf(pedido))
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -151,12 +158,19 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
-  override fun findRessuprimento(): Ressuprimento? {
-    return dlgProduto?.ressuprimento
-  }
-
   override fun updateProduto(produto: ProdutoRessuprimento) {
     dlgProduto?.updateProduto(produto)
+  }
+
+  override fun ressuprimentosSelecionados(): List<Ressuprimento> {
+    return this.itensSelecionados()
+  }
+
+  override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
+    dlgProduto = DlgProdutosRessuCD(viewModel, ressuprimentos)
+    dlgProduto?.showDialog {
+      viewModel.updateView()
+    }
   }
 
   override fun isAuthorized(): Boolean {

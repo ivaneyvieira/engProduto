@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
@@ -23,11 +24,19 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressuprimento: Ressuprimento) {
+class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressuprimentos: List<Ressuprimento>) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos de Ressuprimento ${ressuprimento.numero}", toolBar = {
+    val ressuprimentoTitle = if (ressuprimentos.size == 1) {
+      val ressuprimento = ressuprimentos.first()
+      "${ressuprimento.numero}     NF ${ressuprimento.notaBaixa} DE ${ressuprimento.dataBaixa.format()}"
+    } else {
+      val loja = ressuprimentos.map { it.nomeLojaRessu }.distinct().joinToString(", ")
+      val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
+      "Loja: $loja    Data: $data"
+    }
+    form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
@@ -113,7 +122,9 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos()
+    val listProdutos = ressuprimentos.flatMap {
+      it.produtos()
+    }
     gridDetail.setItems(listProdutos)
   }
 
