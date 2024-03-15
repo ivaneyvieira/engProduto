@@ -112,7 +112,8 @@ class Ressuprimento(
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
       .groupBy { "${it.numero}:${it.notaBaixa}" }
       .map { entry ->
-        val ressu = entry.value.firstOrNull()
+        val list = entry.value
+        val ressu = list.firstOrNull()
         Ressuprimento(
           numero = ressu?.numero ?: 0,
           fornecedor = ressu?.fornecedor,
@@ -137,14 +138,14 @@ class Ressuprimento(
           usuario = ressu?.usuario,
           login = ressu?.login,
           observacao = ressu?.observacao,
-          countCD = ressu?.countCD,
-          countENT = ressu?.countENT,
-          countREC = ressu?.countREC,
-          countCor = ressu?.countCor,
-          countNot = ressu?.countNot,
-          countSelCD = ressu?.countSelCD,
-          countSelENT = ressu?.countSelENT,
-          countSelREC = ressu?.countSelREC,
+          countCD = list.sumOf { it.countCD ?: 0 },
+          countENT = list.sumOf { it.countENT ?: 0 },
+          countREC = list.sumOf { it.countREC ?: 0 },
+          countCor = list.sumOf { it.countCor ?: 0 },
+          countNot = list.sumOf { it.countNot ?: 0 },
+          countSelCD = list.sumOf { it.countSelCD ?: 0 },
+          countSelENT = list.sumOf { it.countSelENT ?: 0 },
+          countSelREC = list.sumOf { it.countSelREC ?: 0 },
         )
       }
   }
