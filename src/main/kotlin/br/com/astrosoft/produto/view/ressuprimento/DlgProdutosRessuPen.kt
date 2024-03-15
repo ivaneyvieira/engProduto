@@ -219,8 +219,13 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimentos.flatMap {
-      it.produtos()
+    val listProdutos = ressuprimentos.flatMap {ress->
+      ress.produtos().filter {
+        it.codigoCorrecao?.isNotEmpty() == true ||
+        it.grade?.isNotEmpty() == true ||
+        (it.qtRecebido ?: 0) != (it.qtQuantNF ?: 0) ||
+        (it.qtEntregue ?: 0) > 0
+      }
     }
     gridDetail.setItems(listProdutos)
   }
