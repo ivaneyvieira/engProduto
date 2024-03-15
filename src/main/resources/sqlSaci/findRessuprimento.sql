@@ -395,7 +395,7 @@ SELECT numero,
        GROUP_CONCAT(DISTINCT
                     IF(notaBaixa = '', NULL, notabaixa)
                     SEPARATOR ',') AS notaBaixa,
-       dataBaixa                   AS dataBaixa,
+       MAX(dataBaixa)              AS dataBaixa,
        valorNota                   AS valorNota,
        entregueNo                  AS entregueNo,
        entreguePor                 AS entreguePor,
