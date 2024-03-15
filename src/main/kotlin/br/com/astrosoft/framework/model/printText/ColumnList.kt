@@ -41,7 +41,8 @@ class ColumnList<T> {
   ) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, property) { number ->
-      decimalFormat.format(number).lpad(size, " ")
+      val numberStr = if (number == null) "" else decimalFormat.format(number)
+      numberStr.lpad(size, " ")
     }
     itens.add(column)
   }

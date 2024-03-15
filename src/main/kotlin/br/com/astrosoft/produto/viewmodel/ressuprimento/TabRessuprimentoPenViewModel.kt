@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
+import br.com.astrosoft.produto.model.printText.PrintRessuprimentoSobra
 import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntradaSobra
 import br.com.astrosoft.produto.model.saci
 
@@ -102,6 +103,23 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     )
   }
 
+  fun previewPedidoSobras(
+    pedido: Ressuprimento,
+    ressuprimentoTitle: String
+  ) = viewModel.exec {
+    val produtos = subView.produtosSelecionados()
+    val produtosSobra = produtoRessuprimentoSobras(produtos)
+
+    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
+
+    val relatorio = PrintRessuprimentoSobra(pedido, ressuprimentoTitle)
+
+    relatorio.print(
+      dados = produtosSobra,
+      printer = subView.printerPreview(loja = 1, printEvent = { })
+    )
+  }
+
   fun formTransportado(pedido: Ressuprimento) {
     subView.formTransportado(pedido)
   }
@@ -181,72 +199,87 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun imprimeRelatorio(ressuprimentoTitle: String) {
     val produtos = subView.produtosSelecionados()
-    val produtosSobra = mutableListOf<ProdutoRessuprimentoSobra>()
-    produtos.forEach {
-      if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
-        produtosSobra.add(
-          ProdutoRessuprimentoSobra(
-            grupo = "Falta",
-            codigo = it.codigo ?: "",
-            descricao = it.descricao ?: "",
-            grade = it.grade ?: "",
-            nota = it.numeroNota ?: "",
-            localizacao = it.localizacao ?: "",
-            quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
-          )
-        )
-      }
-    }
 
-    produtos.forEach {
-      if (it.codigoCorrecao?.isNotEmpty() == true) {
-        val qtEntregue = if (it.qtEntregue == 0) null else it.qtEntregue
-        produtosSobra.add(
-          ProdutoRessuprimentoSobra(
-            grupo = "Sobra",
-            codigo = it.codigoCorrecao ?: "",
-            descricao = it.descricaoCorrecao ?: "",
-            grade = it.gradeCorrecao ?: "",
-            nota = "",
-            localizacao = it.localizacao ?: "",
-            quantidade = qtEntregue,
-          )
-        )
-      }
-      if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
-        produtosSobra.add(
-          ProdutoRessuprimentoSobra(
-            grupo = "Sobra",
-            codigo = it.codigo ?: "",
-            descricao = it.descricao ?: "",
-            grade = it.grade ?: "",
-            nota = it.numeroNota ?: "",
-            localizacao = it.localizacao ?: "",
-            quantidade = (it.qtRecebido ?: 0) - (it.qtQuantNF ?: 0),
-          )
-        )
-      }
-    }
+    val produtosSobra = produtoRessuprimentoSobras(produtos)
 
-    produtos.forEach {
-      if ((it.qtAvaria ?: 0) > 0) {
-        produtosSobra.add(
-          ProdutoRessuprimentoSobra(
-            grupo = "Avaria",
-            codigo = it.codigo ?: "",
-            descricao = it.descricao ?: "",
-            grade = it.grade ?: "",
-            nota = it.numeroNota ?: "",
-            localizacao = it.localizacao ?: "",
-            quantidade = it.qtAvaria ?: 0,
-          )
-        )
-      }
-    }
+    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
 
     val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
     val file = report.processaRelatorio(produtosSobra)
     viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
+  }
+
+  private fun produtoRessuprimentoSobras(produtos: List<ProdutoRessuprimento>): List<ProdutoRessuprimentoSobra> {
+    val listFalta = sequence {
+      produtos.forEach {
+        if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
+          yield(
+            ProdutoRessuprimentoSobra(
+              grupo = "Falta",
+              codigo = it.codigo ?: "",
+              descricao = it.descricao ?: "",
+              grade = it.grade ?: "",
+              nota = it.numeroNota ?: "",
+              localizacao = it.localizacao ?: "",
+              quantidade = (it.qtQuantNF ?: 0) - (it.qtRecebido ?: 0),
+            )
+          )
+        }
+      }
+    }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
+
+    val listaSobra = sequence {
+      produtos.forEach {
+        if (it.codigoCorrecao?.isNotEmpty() == true) {
+          val qtEntregue = if (it.qtEntregue == 0) null else it.qtEntregue
+          yield(
+            ProdutoRessuprimentoSobra(
+              grupo = "Sobra",
+              codigo = it.codigoCorrecao ?: "",
+              descricao = it.descricaoCorrecao ?: "",
+              grade = it.gradeCorrecao ?: "",
+              nota = "",
+              localizacao = it.localizacao ?: "",
+              quantidade = qtEntregue,
+            )
+          )
+        }
+        if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
+          yield(
+            ProdutoRessuprimentoSobra(
+              grupo = "Sobra",
+              codigo = it.codigo ?: "",
+              descricao = it.descricao ?: "",
+              grade = it.grade ?: "",
+              nota = it.numeroNota ?: "",
+              localizacao = it.localizacao ?: "",
+              quantidade = (it.qtRecebido ?: 0) - (it.qtQuantNF ?: 0),
+            )
+          )
+        }
+      }
+    }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
+
+    val listAvaria = sequence {
+      produtos.forEach {
+        if ((it.qtAvaria ?: 0) > 0) {
+          yield(
+            ProdutoRessuprimentoSobra(
+              grupo = "Avaria",
+              codigo = it.codigo ?: "",
+              descricao = it.descricao ?: "",
+              grade = it.grade ?: "",
+              nota = it.numeroNota ?: "",
+              localizacao = it.localizacao ?: "",
+              quantidade = it.qtAvaria ?: 0,
+            )
+          )
+        }
+      }
+    }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
+
+    val produtosSobra = listFalta + listaSobra + listAvaria
+    return produtosSobra
   }
 
   val subView

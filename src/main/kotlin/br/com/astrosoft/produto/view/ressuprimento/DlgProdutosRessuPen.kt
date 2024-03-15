@@ -22,7 +22,6 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoPenViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -84,6 +83,20 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
             "${loja} de $data"
           }
           viewModel.imprimeRelatorio(ressuprimentoTitle)
+        }
+      }
+      button("Imprimir") {
+        icon = VaadinIcon.PRINT.create()
+        onLeftClick {
+          val ressuprimentoTitle = if (ressuprimentos.size == 1) {
+            val ressuprimento = ressuprimentos.first()
+            "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"
+          } else {
+            val loja = ressuprimentos.map { it.nomeLojaRessu }.distinct().joinToString(", ")
+            val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
+            "${loja} de $data"
+          }
+          viewModel.previewPedidoSobras(pedido = ressuprimentos.first(), ressuprimentoTitle = ressuprimentoTitle)
         }
       }
     }, onClose = {
@@ -219,7 +232,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
   }
 
   fun update() {
-    val listProdutos = ressuprimentos.flatMap {ress->
+    val listProdutos = ressuprimentos.flatMap { ress ->
       ress.produtos().filter {
         it.codigoCorrecao?.isNotEmpty() == true ||
         it.grade?.isNotEmpty() == true ||

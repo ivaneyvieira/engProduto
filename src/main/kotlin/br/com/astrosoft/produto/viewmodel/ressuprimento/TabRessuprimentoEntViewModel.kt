@@ -181,6 +181,16 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun imprimeRelatorio(ressuprimentoTitle: String) {
     val produtos = subView.produtosSelecionados()
+    val produtosSobra = produtoRessuprimentoSobras(produtos)
+
+    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
+
+    val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
+    val file = report.processaRelatorio(produtosSobra)
+    viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
+  }
+
+  private fun produtoRessuprimentoSobras(produtos: List<ProdutoRessuprimento>): List<ProdutoRessuprimentoSobra> {
     val listFalta = sequence {
       produtos.forEach {
         if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
@@ -234,7 +244,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val listAvaria = sequence {
       produtos.forEach {
         if ((it.qtAvaria ?: 0) > 0) {
-         yield(
+          yield(
             ProdutoRessuprimentoSobra(
               grupo = "Avaria",
               codigo = it.codigo ?: "",
@@ -250,10 +260,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
 
     val produtosSobra = listFalta + listaSobra + listAvaria
-
-    val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
-    val file = report.processaRelatorio(produtosSobra)
-    viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
+    return produtosSobra
   }
 
   val subView
