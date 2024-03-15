@@ -322,8 +322,8 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       notaBaixa,
-       dataBaixa,
+       notaBaixa AS notaBaixaPedido,
+       dataBaixa AS dataBaixaPedido,
        valorNota,
        entregueNo,
        entreguePor,
@@ -353,8 +353,8 @@ SELECT numero,
        data,
        comprador,
        localizacao,
-       notaBaixa,
-       dataBaixa,
+       notaBaixa AS notaBaixaPedido,
+       dataBaixa AS dataBaixaPedido,
        valorNota,
        entregueNo,
        entreguePor,
@@ -393,9 +393,9 @@ SELECT numero,
        :marca                      AS marca,
        :temNota                    AS temNota,
        GROUP_CONCAT(DISTINCT
-                    IF(notaBaixa = '', NULL, notabaixa)
+                    IF(notaBaixaPedido = '', NULL, notabaixaPedido)
                     SEPARATOR ',') AS notaBaixa,
-       MAX(dataBaixa)              AS dataBaixa,
+       MAX(dataBaixaPedido)        AS dataBaixa,
        valorNota                   AS valorNota,
        entregueNo                  AS entregueNo,
        entreguePor                 AS entreguePor,
@@ -431,7 +431,7 @@ WHERE (@PESQUISA = '' OR
        entregueNo LIKE @PESQUISA_NUM OR
        entreguePor LIKE @PESQUISA_LIKE OR
        entregueSPor LIKE @PESQUISA_LIKE OR
-       notaBaixa LIKE @PESQUISA_START OR
+       notaBaixaPedido LIKE @PESQUISA_START OR
        transportadoNo LIKE @PESQUISA_NUM OR
        transportadoPor LIKE @PESQUISA_LIKE OR
        transportadoSPor LIKE @PESQUISA_LIKE OR
@@ -443,14 +443,14 @@ WHERE (@PESQUISA = '' OR
   )
   AND (data >= :dataPedidoInicial OR :dataPedidoInicial = 0)
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
-  AND (dataBaixa >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixa IS NULL)
-  AND (dataBaixa <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixa IS NULL)
+  AND (dataBaixaPedido >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixaPedido IS NULL)
+  AND (dataBaixaPedido <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixaPedido IS NULL)
 GROUP BY D.numero
 HAVING CASE
          WHEN :marca = 0 THEN SUM(countCD) > 0
          WHEN :marca = 1 AND :temNota = 'T' THEN SUM(countENT) > 0
-         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND notaBaixa = ''
-         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND notaBaixa != ''
+         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') = ''
+         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') != ''
          WHEN :marca = 2 THEN SUM(countRec) > 0 AND notaBaixa != ''
          ELSE FALSE
        END
