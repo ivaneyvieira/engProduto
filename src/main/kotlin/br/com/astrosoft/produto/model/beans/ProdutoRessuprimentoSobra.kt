@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 class ProdutoRessuprimentoSobra(
+  val orderGroup: Int,
   val grupo: String,
   val codigo: String,
   val descricao: String,

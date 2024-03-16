@@ -221,6 +221,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 1,
               grupo = "Falta",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -240,6 +241,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
           val qtEntregue = if (it.qtEntregue == 0) null else it.qtEntregue
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 2,
               grupo = "Sobra",
               codigo = it.codigoCorrecao ?: "",
               descricao = it.descricaoCorrecao ?: "",
@@ -253,6 +255,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 2,
               grupo = "Sobra",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -271,6 +274,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtAvaria ?: 0) > 0) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 3,
               grupo = "Avaria",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -282,10 +286,10 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
           )
         }
       }
-    }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
+    }.toList()
 
     val produtosSobra = listFalta + listaSobra + listAvaria
-    return produtosSobra
+    return produtosSobra.sortedWith(compareBy(ProdutoRessuprimentoSobra::orderGroup, ProdutoRessuprimentoSobra::descricao))
   }
 
   fun formDevolvido(pedido: Ressuprimento) {

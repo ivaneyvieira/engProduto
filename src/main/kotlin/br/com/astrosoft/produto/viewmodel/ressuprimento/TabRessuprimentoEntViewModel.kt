@@ -183,7 +183,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     val produtos = subView.produtosSelecionados()
     val produtosSobra = produtoRessuprimentoSobras(produtos)
 
-    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
+    if (produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
 
     val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
     val file = report.processaRelatorio(produtosSobra)
@@ -196,6 +196,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 1,
               grupo = "Falta",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -215,6 +216,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
           val qtEntregue = if (it.qtEntregue == 0) null else it.qtEntregue
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 2,
               grupo = "Sobra",
               codigo = it.codigoCorrecao ?: "",
               descricao = it.descricaoCorrecao ?: "",
@@ -228,6 +230,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 2,
               grupo = "Sobra",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -246,6 +249,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
         if ((it.qtAvaria ?: 0) > 0) {
           yield(
             ProdutoRessuprimentoSobra(
+              orderGroup = 3,
               grupo = "Avaria",
               codigo = it.codigo ?: "",
               descricao = it.descricao ?: "",
@@ -257,10 +261,10 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
           )
         }
       }
-    }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
+    }.toList()
 
     val produtosSobra = listFalta + listaSobra + listAvaria
-    return produtosSobra
+    return produtosSobra.sortedWith(compareBy(ProdutoRessuprimentoSobra::orderGroup, ProdutoRessuprimentoSobra::descricao))
   }
 
   val subView
