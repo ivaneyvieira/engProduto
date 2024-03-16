@@ -58,11 +58,11 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       val groupDados = dados.groupBy { groupBotton(it) }
 
       groupDados.forEach { (group, list) ->
+        if (group != "") {
+          writeln("")
+          writeln(group, negrito = true)
+        }
         list.forEach { beanDetail ->
-          if (group != "") {
-            writeln("")
-            writeln(group, negrito = true)
-          }
           printDetail(beanDetail)
         }
       }
