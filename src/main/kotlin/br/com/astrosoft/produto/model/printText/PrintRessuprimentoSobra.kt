@@ -39,7 +39,7 @@ class PrintRessuprimentoSobra(val pedido: Ressuprimento, val ressuprimentoTitle:
     writeln("")
     writeln("_______________________________  _______________________________", center = true)
     writeln("${pedido.devolvidoPor.center(32)}${pedido.entreguePor.center(32)}", center = true)
-    writeln("${"Tranportado".center(32)}${"Recebido".center(32)}")
+    writeln("${"Transportado".center(32)}${"Recebido".center(32)}")
     writeln("")
     writeln("")
   }

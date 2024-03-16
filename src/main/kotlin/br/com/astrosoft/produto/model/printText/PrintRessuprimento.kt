@@ -42,7 +42,7 @@ class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<Pr
     writeln("")
     writeln("_______________________________  _______________________________", center = true)
     writeln("${pedido.transportadoPor.center(32)}${pedido.recebidoPor.center(32)}", center = true)
-    writeln("${"Tranportado".center(32)}${"Recebido".center(32)}")
+    writeln("${"Transportado".center(32)}${"Recebido".center(32)}")
     writeln("")
     writeln("")
   }
