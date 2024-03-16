@@ -9,6 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDevolvidoPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
@@ -132,6 +133,12 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
       }
     }
     colunaRessuprimentoTransportadorPor()
+    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formDevolvido(pedido)
+      }
+    }
+    colunaRessuprimentoDevolvidoPor()
     if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formRecebido(pedido)
@@ -226,6 +233,13 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
       viewModel.transportadoPedido(pedido, form.numero)
+    }
+  }
+
+  override fun formDevolvido(pedido: Ressuprimento) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Devolvido Por", form = form) {
+      viewModel.devolvidoPedido(pedido, form.numero)
     }
   }
 

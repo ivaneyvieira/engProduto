@@ -196,6 +196,9 @@ SELECT N.no                                AS numero,
        RU.no                               AS recebidoNo,
        RU.name                             AS recebidoPor,
        RU.login                            AS recebidoSPor,
+       DU.no                               AS devolvidoNo,
+       DU.name                             AS devolvidoPor,
+       DU.login                            AS devolvidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        PU.login                            AS login,
@@ -231,6 +234,8 @@ FROM sqldados.ords AS N
                  ON N.s3 = TU.no
        LEFT JOIN sqldados.users AS RU
                  ON N.s2 = RU.no
+       LEFT JOIN sqldados.users AS DU
+                 ON N.s1 = DU.no
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
@@ -266,6 +271,9 @@ SELECT N.no                                AS numero,
        RU.no                               AS recebidoNo,
        RU.name                             AS recebidoPor,
        RU.login                            AS recebidoSPor,
+       DU.no                               AS devolvidoNo,
+       DU.name                             AS devolvidoPor,
+       DU.login                            AS devolvidoSPor,
        PU.no                               AS usuarioNo,
        PU.name                             AS usuario,
        PU.login                            AS login,
@@ -301,6 +309,8 @@ FROM sqldados.ordsRessu AS N
                  ON N.s3 = TU.no
        LEFT JOIN sqldados.users AS RU
                  ON N.s2 = RU.no
+       LEFT JOIN sqldados.users AS DU
+                 ON N.s1 = DU.no
        LEFT JOIN sqldados.users AS PU
                  ON N.padbyte = PU.no
 WHERE N.date >= @DATA
@@ -334,6 +344,9 @@ SELECT numero,
        recebidoNo,
        recebidoPor,
        recebidoSPor,
+       devolvidoNo,
+       devolvidoPor,
+       devolvidoSPor,
        usuarioNo,
        usuario,
        login,
@@ -365,6 +378,9 @@ SELECT numero,
        recebidoNo,
        recebidoPor,
        recebidoSPor,
+       devolvidoNo,
+       devolvidoPor,
+       devolvidoSPor,
        usuarioNo,
        usuario,
        login,
@@ -406,6 +422,9 @@ SELECT numero,
        recebidoNo                  AS recebidoNo,
        recebidoPor                 AS recebidoPor,
        recebidoSPor                AS recebidoSPor,
+       devolvidoNo                 AS devolvidoNo,
+       devolvidoPor                AS devolvidoPor,
+       devolvidoSPor               AS devolvidoSPor,
        usuarioNo                   AS usuarioNo,
        usuario                     AS usuario,
        login                       AS login,

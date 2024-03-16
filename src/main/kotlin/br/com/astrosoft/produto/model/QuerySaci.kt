@@ -887,6 +887,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun devolvidoRessuprimento(ressuprimento: Ressuprimento) {
+    val sql = "/sqlSaci/devolvidoRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ressuprimento.numero)
+      addOptionalParameter("storeno", 1)
+      addOptionalParameter("devolvidoNo", ressuprimento.devolvidoNo ?: 0)
+    }
+  }
+
   fun updateProdutoEstoque(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoEstoque.sql"
 

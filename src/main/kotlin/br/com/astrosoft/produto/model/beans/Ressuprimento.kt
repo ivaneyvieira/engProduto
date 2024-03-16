@@ -25,6 +25,9 @@ class Ressuprimento(
   var recebidoNo: Int?,
   var recebidoPor: String?,
   var recebidoSPor: String?,
+  var devolvidoNo: Int?,
+  var devolvidoPor: String?,
+  var devolvidoSPor: String?,
   var usuarioNo: Int?,
   var usuario: String?,
   var login: String?,
@@ -96,6 +99,11 @@ class Ressuprimento(
     saci.transportadoRessuprimento(this)
   }
 
+  fun devolvido(funcionario: Funcionario) {
+    this.devolvidoNo = funcionario.codigo
+    saci.devolvidoRessuprimento(this)
+  }
+
   fun exclui() {
     saci.excluiRessuprimento(this)
   }
@@ -134,6 +142,9 @@ class Ressuprimento(
           recebidoNo = ressu?.recebidoNo,
           recebidoPor = ressu?.recebidoPor,
           recebidoSPor = ressu?.recebidoSPor,
+          devolvidoNo = ressu?.devolvidoNo,
+          devolvidoPor = ressu?.devolvidoPor,
+          devolvidoSPor = ressu?.devolvidoSPor,
           usuarioNo = ressu?.usuarioNo,
           usuario = ressu?.usuario,
           login = ressu?.login,

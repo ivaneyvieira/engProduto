@@ -41,6 +41,10 @@ object RessuprimentoColumns {
     this.setHeader("Transportado")
   }
 
+  fun Grid<Ressuprimento>.colunaRessuprimentoDevolvidoPor() = columnGrid(Ressuprimento::devolvidoSPor) {
+    this.setHeader("Devolvido")
+  }
+
   fun Grid<Ressuprimento>.colunaRessuprimentoRecebidoPor() = columnGrid(Ressuprimento::recebidoSPor) {
     this.setHeader("Recebido")
   }

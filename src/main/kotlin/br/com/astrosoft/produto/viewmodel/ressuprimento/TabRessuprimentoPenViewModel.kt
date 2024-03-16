@@ -75,6 +75,12 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
 
+  fun devolvidoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
+    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    pedido.devolvido(funcionario)
+    updateView()
+  }
+
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     if (pedido.entreguePor.isNullOrBlank())
       fail("Pedido não autorizado")
@@ -282,6 +288,10 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     return produtosSobra
   }
 
+  fun formDevolvido(pedido: Ressuprimento) {
+    subView.formDevolvido(pedido)
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoPen
 }
@@ -293,6 +303,7 @@ interface ITabRessuprimentoPen : ITabView {
   fun produtosSelcionados(): List<ProdutoRessuprimento>
   fun formAutoriza(pedido: Ressuprimento)
   fun formTransportado(pedido: Ressuprimento)
+  fun formDevolvido(pedido: Ressuprimento)
   fun formRecebido(pedido: Ressuprimento)
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
