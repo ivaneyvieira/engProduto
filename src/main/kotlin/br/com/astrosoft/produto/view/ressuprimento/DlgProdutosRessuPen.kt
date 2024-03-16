@@ -235,7 +235,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
     val listProdutos = ressuprimentos.flatMap { ress ->
       ress.produtos().filter {
         it.codigoCorrecao?.isNotEmpty() == true ||
-        it.grade?.isNotEmpty() == true ||
+        it.gradeCorrecao?.isNotEmpty() == true ||
         (it.qtRecebido ?: 0) != (it.qtQuantNF ?: 0) ||
         (it.qtEntregue ?: 0) > 0
       }
