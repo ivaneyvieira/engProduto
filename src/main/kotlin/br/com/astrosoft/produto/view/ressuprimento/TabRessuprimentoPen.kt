@@ -133,10 +133,8 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
       }
     }
     colunaRessuprimentoTransportadorPor()
-    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formDevolvido(pedido)
-      }
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+      viewModel.formDevolvido(pedido)
     }
     colunaRessuprimentoDevolvidoPor()
     if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
