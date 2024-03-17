@@ -58,8 +58,8 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   fun mudaParaReservado(pedido: PedidoTransf) = viewModel.exec {
-    val situação = pedido.situacao ?: fail("Pedido sem situação")
-    if (situação != 1) fail("Pedido não está orçado")
+    val situacao = pedido.situacao ?: fail("Pedido sem situação")
+    if (situacao != 1) fail("Pedido não está orçado")
 
     viewModel.view.showQuestion("Confirma a mudança para reservado?") {
       val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")

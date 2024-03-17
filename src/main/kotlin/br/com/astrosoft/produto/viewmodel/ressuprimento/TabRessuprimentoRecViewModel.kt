@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 
 class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
-    fun findLoja(storeno: Int): Loja? {
+  fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
@@ -43,41 +43,6 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     )
   }
 
-  fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
-    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.selecionado = EMarcaRessuprimento.REC.num
-    produto.salva()
-
-    subView.updateProduto(produto)
-  }
-
-  fun marcaRec() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
-    itens.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach { produto ->
-      produto.marca = EMarcaRessuprimento.REC.num
-      produto.selecionado = EMarcaRessuprimento.REC.num
-      produto.salva()
-    }
-    subView.updateProdutos()
-  }
-
-  fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
-    itens.ifEmpty {
-      fail("Nenhum produto para desmarcar")
-    }
-
-    itens.forEach { produto ->
-      produto.selecionado = 0
-      produto.salva()
-    }
-    subView.updateProdutos()
-  }
-
   fun desfazer() = viewModel.exec {
     val selecionados = subView.produtosSelecionados()
     if (selecionados.isEmpty()) {
@@ -89,11 +54,6 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
       produto.marca = EMarcaRessuprimento.ENT.num
       produto.salva()
     }
-    subView.updateProdutos()
-  }
-
-  fun saveQuant(bean: ProdutoRessuprimento) {
-    bean.salva()
     subView.updateProdutos()
   }
 

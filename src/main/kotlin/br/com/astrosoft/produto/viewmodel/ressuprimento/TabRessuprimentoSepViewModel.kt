@@ -53,18 +53,6 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
 
-  fun entreguePedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    pedido.entregue(funcionario)
-    updateView()
-  }
-
-  fun recebePedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    pedido.recebe(funcionario)
-    updateView()
-  }
-
   fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.transportado(funcionario)
@@ -101,10 +89,6 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun formTransportado(pedido: Ressuprimento) {
     subView.formTransportado(pedido)
-  }
-
-  fun formRecebido(pedido: Ressuprimento) {
-    subView.formRecebido(pedido)
   }
 
   fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
