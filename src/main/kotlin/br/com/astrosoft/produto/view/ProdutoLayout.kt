@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
+import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.view.retira.PedidoRetiraView
 import com.github.mvysny.karibudsl.v23.route
@@ -23,6 +24,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = SHOP,
         title = "Ressuprimento",
         routeClass = RessuprimentoView::class
+      )
+      if (userSaci?.reposicao == true) route(
+        icon = SIGNAL,
+        title = "Reposição",
+        routeClass = ReposicaoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
         icon = EXCHANGE,

@@ -941,11 +941,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findResposicaoProduto(filtro: FiltroReposicao) : List<ReposicaoProduto> {
+  fun findResposicaoProduto(filtro: FiltroReposicao): List<ReposicaoProduto> {
     val sql = "/sqlSaci/reposicaoProdutos.sql"
     return query(sql, ReposicaoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
+  fun updateReposicao(reposicao: Reposicao) {
+    val sql = "/sqlSaci/updateReposicao.sql"
+    script(sql) {
+      addOptionalParameter("loja", reposicao.loja)
+      addOptionalParameter("numero", reposicao.numero)
+      addOptionalParameter("localizacao", reposicao.localizacao)
+      addOptionalParameter("recebidoNo", reposicao.recebidoNo)
+      addOptionalParameter("entregueNo", reposicao.entregueNo)
+      addOptionalParameter("observacao", reposicao.observacao)
     }
   }
 

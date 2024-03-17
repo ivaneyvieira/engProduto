@@ -35,10 +35,10 @@ SELECT O.storeno                          AS loja,
        IFNULL(OA.observacao, '')          AS observacao,
        IFNULL(EE.no, 0)                   AS entregueNo,
        IFNULL(EE.name, '')                AS entregueNome,
-       IFNULL(EE.sname, '')               AS entregueSNome,
+       IFNULL(EE.login, '')               AS entregueSNome,
        IFNULL(ER.no, 0)                   AS recebidoNo,
        IFNULL(ER.name, '')                AS recebidoNome,
-       IFNULL(ER.sname, '')               AS recebidoSNome,
+       IFNULL(ER.login, '')               AS recebidoSNome,
        E.prdno                            AS prdno,
        TRIM(E.prdno)                      AS codigo,
        IFNULL(EA.marca, 0)                AS marca,
@@ -57,9 +57,9 @@ FROM sqldados.eoprd AS E
                  USING (storeno, ordno, localizacao)
        LEFT JOIN sqldados.prdbar AS B
                  USING (prdno, grade)
-       LEFT JOIN sqldados.emp AS EE
+       LEFT JOIN sqldados.users AS EE
                  ON EE.no = OA.empEntregue
-       LEFT JOIN sqldados.emp AS ER
+       LEFT JOIN sqldados.users AS ER
                  ON ER.no = OA.empRecebido
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno

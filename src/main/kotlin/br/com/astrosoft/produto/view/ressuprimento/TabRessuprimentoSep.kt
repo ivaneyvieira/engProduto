@@ -138,14 +138,6 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
     }
     colunaRessuprimentoTransportadorPor()
     colunaRessuprimentoUsuarioApp()
-    /*
-        this.setPartNameGenerator {
-          val marca = it.countSelENT ?: 0
-          if (marca > 0) {
-            "amarelo"
-          } else null
-        }
-     */
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {

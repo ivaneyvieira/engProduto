@@ -89,25 +89,6 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
-      /*
-            this.setPartNameGenerator {
-              when {
-                it.selecionado == EMarcaRessuprimento.REC.num -> {
-                  "amarelo"
-                }
-
-                it.origemApp == "S" && it.origemSaci == "N"   -> {
-                  "amarelo"
-                }
-
-                it.qtQuantNF != it.qtRecebido                 -> {
-                  "amarelo"
-                }
-
-                else                                          -> null
-              }
-            }
-       */
       gridDetail.isMultiSort = true
       gridDetail.sort(
         gridDetail.getColumnBy(ProdutoRessuprimento::selecionadoOrdemREC).asc,

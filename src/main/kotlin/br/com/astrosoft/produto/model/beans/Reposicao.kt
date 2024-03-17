@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -20,6 +21,26 @@ class Reposicao(
 ) {
   fun countCD() = produtos.count { it.marca == EMarcaReposicao.CD.num }
   fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
+  fun entregue(user: UserSaci) {
+    this.entregueNo = user.no
+    this.salva()
+  }
+
+  fun recebe(user: UserSaci) {
+    this.recebidoNo = user.no
+    this.salva()
+  }
+
+  fun salva() {
+    saci.updateReposicao(this)
+  }
+
+  val usuarioApp: String?
+    get() {
+      val user = AppConfig.userLogin() as? UserSaci
+      return user?.login
+    }
+
   companion object {
     fun findAll(filtro: FiltroReposicao): List<Reposicao> {
       return saci.findResposicaoProduto(filtro).groupBy { "${it.loja}:${it.numero}:${it.localizacao}" }.map {

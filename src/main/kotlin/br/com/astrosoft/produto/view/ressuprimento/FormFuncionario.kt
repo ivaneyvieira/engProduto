@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
-import br.com.astrosoft.produto.model.beans.Ressuprimento
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.textfield.IntegerField

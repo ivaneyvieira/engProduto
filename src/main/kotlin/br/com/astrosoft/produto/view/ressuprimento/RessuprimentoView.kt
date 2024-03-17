@@ -25,7 +25,7 @@ class RessuprimentoView : ViewLayout<RessuprimentoViewModel>(), IRessuprimentoVi
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
-    return userSaci.nota
+    return userSaci.ressuprimento
   }
 
   init {

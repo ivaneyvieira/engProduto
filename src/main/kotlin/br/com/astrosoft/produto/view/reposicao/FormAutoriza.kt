@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.ressuprimento
+package br.com.astrosoft.produto.view.reposicao
 
 import com.github.mvysny.karibudsl.v10.passwordField
 import com.github.mvysny.karibudsl.v10.textField
