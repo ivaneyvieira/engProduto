@@ -138,6 +138,21 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               binder.bind(this, UserSaci::lojaRessu.name)
             }
           }
+
+          formLayout {
+            h4("Reposicao") {
+              colspan = 2
+            }
+            checkBox("Separar") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::reposicaoCD.name)
+            }
+            checkBox("Separado") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::reposicaoSep.name)
+            }
+          }
+
           formLayout {
             h4("Pedido Transf") {
               colspan = 2
