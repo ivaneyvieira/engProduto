@@ -941,6 +941,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findResposicaoProduto() : List<ReposicaoProduto> {
+    val sql = "/sqlSaci/reposicaoProdutos.sql"
+    return query(sql, ReposicaoProduto::class) {
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
