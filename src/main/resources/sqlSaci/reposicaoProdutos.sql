@@ -2,6 +2,11 @@ USE sqldados;
 
 SET SQL_MODE = '';
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO @PESQUISA_START := CONCAT(:pesquisa, '%');
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
@@ -26,8 +31,7 @@ GROUP BY S.storeno, S.prdno, S.grade;
 SELECT O.storeno                          AS loja,
        O.ordno                            AS numero,
        CAST(O.date AS DATE)               AS data,
-       IFNULL(localizacao, '')            AS localizacao,
-       IFNULL(OA.marca, 0)                AS marca,
+       IFNULL(L.localizacao, '')          AS localizacao,
        IFNULL(OA.observacao, '')          AS observacao,
        IFNULL(EE.no, 0)                   AS entregueNo,
        IFNULL(EE.name, '')                AS entregueNome,
@@ -37,6 +41,7 @@ SELECT O.storeno                          AS loja,
        IFNULL(ER.sname, '')               AS recebidoSNome,
        E.prdno                            AS prdno,
        TRIM(E.prdno)                      AS codigo,
+       IFNULL(EA.marca, 0)                AS marca,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
        TRIM(MID(P.name, 1, 37))           AS descricao,
        ROUND(E.qtty / 1000)               AS quantidade,
@@ -61,4 +66,11 @@ FROM sqldados.eoprd AS E
 WHERE O.paymno = 431
   AND O.date >= 20240216
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
+  AND (O.storeno = :loja OR :loja = 0)
+  AND (O.ordno = @PESQUISA_NUM OR
+       IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
+       IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR
+       IFNULL(EE.name, '') LIKE @PESQUISA_LIKE OR
+       IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR
+       @PESQUISA = '')
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade

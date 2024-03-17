@@ -10,7 +10,6 @@ CREATE TABLE sqldados.eordAdicional
   localizacao VARCHAR(4),
   empEntregue INT,
   empRecebido INT,
-  marca       INT,
   observacao  TEXT,
   PRIMARY KEY (ordno, storeno, localizacao)
 );
@@ -23,6 +22,7 @@ CREATE TABLE sqldados.eoprdAdicional
   ordno      INT,
   prdno      VARCHAR(16),
   grade      VARCHAR(8),
+  marca      INT,
   qtRecebido INT,
   PRIMARY KEY (ordno, storeno, prdno, grade)
 );

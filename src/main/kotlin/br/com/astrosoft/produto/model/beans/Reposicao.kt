@@ -18,9 +18,11 @@ class Reposicao(
   var recebidoSNome: String,
   val produtos: List<ReposicaoProduto>
 ) {
+  fun countCD() = produtos.count { it.marca == EMarcaReposicao.CD.num }
+  fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
   companion object {
-    fun findAll(): List<Reposicao> {
-      return saci.findResposicaoProduto().groupBy { "${it.loja}:${it.numero}:${it.localizacao}" }.map {
+    fun findAll(filtro: FiltroReposicao): List<Reposicao> {
+      return saci.findResposicaoProduto(filtro).groupBy { "${it.loja}:${it.numero}:${it.localizacao}" }.map {
         val produtos = it.value
         val first = produtos.firstOrNull()
         Reposicao(
@@ -41,4 +43,15 @@ class Reposicao(
       }
     }
   }
+}
+
+data class FiltroReposicao(
+  val loja: Int,
+  val pesquisa: String,
+  val marca: EMarcaReposicao,
+)
+
+enum class EMarcaReposicao(val num: Int) {
+  CD(0),
+  SEP(1)
 }
