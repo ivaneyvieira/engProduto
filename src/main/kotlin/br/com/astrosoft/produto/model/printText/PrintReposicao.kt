@@ -13,7 +13,7 @@ class PrintReposicao() :
     writeln("Reposição Loja", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${bean.data.format()}   Pedido   : ${bean.numero}}",
+      "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
       negrito = true
     )
     val user = AppConfig.userLogin()
@@ -43,9 +43,9 @@ class PrintReposicao() :
     writeln("Separado/Entregue", center = true)
     writeln("")
     writeln("")
-    writeln("_______________________________  _______________________________", center = true)
-    writeln("${"".center(32)}${(bean?.recebidoNome ?: "").center(32)}", center = true)
-    writeln("${"Transportado".center(32)}${"Recebido".center(32)}")
+    writeln("____________________________________", center = true)
+    writeln(bean?.recebidoNome ?: "", center = true)
+    writeln("Recebido", center = true)
     writeln("")
     writeln("")
   }
