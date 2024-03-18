@@ -27,7 +27,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       )
       if (userSaci?.reposicao == true) route(
         icon = SIGNAL,
-        title = "Reposição",
+        title = "Reposição Loja",
         routeClass = ReposicaoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
