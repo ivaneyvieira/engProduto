@@ -82,10 +82,17 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
   }
 
   override fun filtro(): FiltroReposicao {
+    val user = AppConfig.userLogin() as? UserSaci
+    val localizacao = if (user?.admin == true) {
+      listOf("TODOS")
+    } else {
+      user?.localizacaoRepo.orEmpty().toList()
+    }
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaReposicao.ENT
+      marca = EMarcaReposicao.ENT,
+      localizacao = localizacao,
     )
   }
 
@@ -121,5 +128,11 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    val impressora = user?.impressoraRepo ?: return emptyList()
+    return listOfNotNull(impressora)
   }
 }

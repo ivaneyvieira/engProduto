@@ -70,6 +70,7 @@ WHERE O.paymno = 431
   AND O.date >= :datacorte
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
   AND (O.storeno = :loja OR :loja = 0)
+  AND (L.localizacao in (:localizacao) OR 'TODOS' in (:localizacao) OR :localizacao = '')
   AND (O.ordno = @PESQUISA_NUM OR
        IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
        IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR

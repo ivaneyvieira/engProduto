@@ -958,6 +958,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ReposicaoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("localizacao", filtro.localizacao)
       addOptionalParameter("datacorte", datacorte)
     }
   }

@@ -80,6 +80,7 @@ data class FiltroReposicao(
   val loja: Int,
   val pesquisa: String,
   val marca: EMarcaReposicao,
+  val localizacao: List<String>,
 )
 
 enum class EMarcaReposicao(val num: Int) {

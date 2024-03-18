@@ -77,7 +77,8 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaReposicao.SEP
+      marca = EMarcaReposicao.SEP,
+      localizacao = listOf("TODOS"),
     )
   }
 
