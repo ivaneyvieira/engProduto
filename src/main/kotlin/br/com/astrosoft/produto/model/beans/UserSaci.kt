@@ -78,8 +78,8 @@ class UserSaci : IUser {
   var estoqueCD1A by DelegateAuthorized(55)
   var ressuprimentoSep by DelegateAuthorized(56)
   var ressuprimentoPen by DelegateAuthorized(57)
-  var reposicaoCD by DelegateAuthorized(58)
-  var reposicaoSep by DelegateAuthorized(59)
+  var reposicaoSep by DelegateAuthorized(58)
+  var reposicaoEnt by DelegateAuthorized(59)
 
   //Locais
   var localEstoque: String?
@@ -222,7 +222,7 @@ class UserSaci : IUser {
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
   val reposicao
-    get() = reposicaoCD || reposicaoSep || admin
+    get() = reposicaoSep || reposicaoEnt || admin
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   val pedidoTransf

@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoSep
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
@@ -19,6 +16,7 @@ import com.vaadin.flow.component.textfield.TextField
 
 class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoSep {
+  var dlgProduto: DlgProdutosReposSep? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -49,21 +47,30 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     this.addClassName("styling")
     this.format()
 
+    this.withEditor(classBean = Reposicao::class,
+      openEditor = {
+        this.focusEditor(Reposicao::observacao)
+      },
+      closeEditor = {
+        viewModel.salva(it.bean)
+      }
+    )
 
+    columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
+    columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
+  }
 
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formEntregue(pedido)
+  private fun Grid<Reposicao>.columnGridProduto() {
+    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+      dlgProduto = DlgProdutosReposSep(viewModel, listOf(ressuprimento))
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
     }
-    columnGrid(Reposicao::entregueSNome, "Entregue")
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formRecebido(pedido)
-    }
-    columnGrid(Reposicao::recebidoSNome, "Recebido")
-    columnGrid(Reposicao::usuarioApp, "Login")
   }
 
   override fun filtro(): FiltroReposicao {
@@ -78,18 +85,21 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     this.updateGrid(reposicoes)
   }
 
-  override fun formEntregue(pedido: Reposicao) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entreguePedido(pedido, form.login, form.senha)
-    }
+  override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
+    codigoBarra ?: return null
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
-  override fun formRecebe(pedido: Reposicao) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.recebePedido(pedido, form.login, form.senha)
-    }
+  override fun updateProduto(produto: ReposicaoProduto) {
+    dlgProduto?.updateProduto(produto)
+  }
+
+  override fun produtosSelecionados(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun updateProdutos(reposicoes: List<Reposicao>) {
+    dlgProduto?.update(reposicoes)
   }
 
   override fun isAuthorized(): Boolean {
@@ -98,7 +108,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   }
 
   override val label: String
-    get() = "Separado"
+    get() = "Separar"
 
   override fun updateComponent() {
     viewModel.updateView()

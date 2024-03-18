@@ -145,11 +145,11 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
             checkBox("Separar") {
               isReadOnly = readOnly
-              binder.bind(this, UserSaci::reposicaoCD.name)
-            }
-            checkBox("Separado") {
-              isReadOnly = readOnly
               binder.bind(this, UserSaci::reposicaoSep.name)
+            }
+            checkBox("Entregue") {
+              isReadOnly = readOnly
+              binder.bind(this, UserSaci::reposicaoEnt.name)
             }
           }
 

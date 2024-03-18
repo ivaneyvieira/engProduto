@@ -4,15 +4,15 @@ import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ReposicaoViewModel(view: IReposicaoView) : ViewModel<IReposicaoView>(view) {
-  val tabReposicaoCDViewModel = TabReposicaoCDViewModel(this)
   val tabReposicaoSepViewModel = TabReposicaoSepViewModel(this)
+  val tabReposicaoEntViewModel = TabReposicaoEntViewModel(this)
   override fun listTab() = listOf(
-    view.tabReposicaoCD,
     view.tabReposicaoSep,
+    view.tabReposicaoEnt,
   )
 }
 
 interface IReposicaoView : IView {
-  val tabReposicaoCD: ITabReposicaoCD
   val tabReposicaoSep: ITabReposicaoSep
+  val tabReposicaoEnt: ITabReposicaoEnt
 }

@@ -17,8 +17,8 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class ReposicaoView : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
-  override val tabReposicaoCD = TabReposicaoCD(viewModel.tabReposicaoCDViewModel)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
+  override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

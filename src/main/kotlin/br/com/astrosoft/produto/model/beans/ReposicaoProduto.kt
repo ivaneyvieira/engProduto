@@ -31,6 +31,6 @@ class ReposicaoProduto(
     saci.updateReposicaoProduto(this)
   }
 
-  val selecionadoOrdemSEP
-    get() = if (marca == EMarcaReposicao.SEP.num) selecionado else 0
+  val selecionadoOrdemENT
+    get() = if (marca == EMarcaReposicao.ENT.num) selecionado else 0
 }

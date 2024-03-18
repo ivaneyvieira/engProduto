@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaReposicao
 import br.com.astrosoft.produto.model.beans.Reposicao
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoCDViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
@@ -17,7 +17,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosReposCD(val viewModel: TabReposicaoCDViewModel, private val reposicoes: List<Reposicao>) {
+class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val reposicoes: List<Reposicao>) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -89,7 +89,7 @@ class DlgProdutosReposCD(val viewModel: TabReposicaoCDViewModel, private val rep
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtRecebido, "Recebido").integerFieldEditor()
 
-      this.columnGrid(ReposicaoProduto::selecionadoOrdemSEP, "Selecionado") {
+      this.columnGrid(ReposicaoProduto::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ReposicaoProduto::posicao, "Posicao") {
@@ -97,13 +97,13 @@ class DlgProdutosReposCD(val viewModel: TabReposicaoCDViewModel, private val rep
       }
 
       this.setPartNameGenerator {
-        if (it.selecionado == EMarcaReposicao.SEP.num) {
+        if (it.selecionado == EMarcaReposicao.ENT.num) {
           "amarelo"
         } else null
       }
       gridDetail.isMultiSort = true
       gridDetail.sort(
-        gridDetail.getColumnBy(ReposicaoProduto::selecionadoOrdemSEP).asc,
+        gridDetail.getColumnBy(ReposicaoProduto::selecionadoOrdemENT).asc,
         gridDetail.getColumnBy(ReposicaoProduto::posicao).desc,
       )
     }
@@ -144,7 +144,7 @@ class DlgProdutosReposCD(val viewModel: TabReposicaoCDViewModel, private val rep
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
     gridDetail.sort(
-      gridDetail.getColumnBy(ReposicaoProduto::selecionadoOrdemSEP).asc,
+      gridDetail.getColumnBy(ReposicaoProduto::selecionadoOrdemENT).asc,
       gridDetail.getColumnBy(ReposicaoProduto::posicao).desc,
     )
     update(reposicoes)

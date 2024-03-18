@@ -2,10 +2,13 @@ package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoCD
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoCDViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -14,9 +17,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 
-class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
-  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoCD {
-  var dlgProduto: DlgProdutosReposCD? = null
+class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
+  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -47,37 +49,28 @@ class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
     this.addClassName("styling")
     this.format()
 
-    this.withEditor(classBean = Reposicao::class,
-      openEditor = {
-        this.focusEditor(Reposicao::observacao)
-      },
-      closeEditor = {
-        viewModel.salva(it.bean)
-      }
-    )
 
-    columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
-  }
 
-  private fun Grid<Reposicao>.columnGridProduto() {
-    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      dlgProduto = DlgProdutosReposCD(viewModel, listOf(ressuprimento))
-      dlgProduto?.showDialog {
-        viewModel.updateView()
-      }
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+      viewModel.formEntregue(pedido)
     }
+    columnGrid(Reposicao::entregueSNome, "Entregue")
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+      viewModel.formRecebido(pedido)
+    }
+    columnGrid(Reposicao::recebidoSNome, "Recebido")
+    columnGrid(Reposicao::usuarioApp, "Login")
   }
 
   override fun filtro(): FiltroReposicao {
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaReposicao.CD
+      marca = EMarcaReposicao.ENT
     )
   }
 
@@ -85,30 +78,27 @@ class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
     this.updateGrid(reposicoes)
   }
 
-  override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
-    codigoBarra ?: return null
-    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  override fun formEntregue(pedido: Reposicao) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.entreguePedido(pedido, form.login, form.senha)
+    }
   }
 
-  override fun updateProduto(produto: ReposicaoProduto) {
-    dlgProduto?.updateProduto(produto)
-  }
-
-  override fun produtosSelecionados(): List<ReposicaoProduto> {
-    return dlgProduto?.produtosSelecionados().orEmpty()
-  }
-
-  override fun updateProdutos(reposicoes: List<Reposicao>) {
-    dlgProduto?.update(reposicoes)
+  override fun formRecebe(pedido: Reposicao) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.recebePedido(pedido, form.login, form.senha)
+    }
   }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.reposicaoCD == true
+    return username?.reposicaoEnt == true
   }
 
   override val label: String
-    get() = "Separar"
+    get() = "Entregue"
 
   override fun updateComponent() {
     viewModel.updateView()
