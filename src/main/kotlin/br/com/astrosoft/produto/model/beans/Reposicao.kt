@@ -32,8 +32,8 @@ class Reposicao(
     this.salva()
   }
 
-  fun recebe(user: UserSaci) {
-    this.recebidoNo = user.no
+  fun recebe(funcionario: Funcionario) {
+    this.recebidoNo = funcionario.codigo ?: 0
     this.salva()
   }
 

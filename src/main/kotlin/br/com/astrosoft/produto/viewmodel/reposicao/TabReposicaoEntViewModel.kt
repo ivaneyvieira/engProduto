@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintReposicao
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
+import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -51,15 +52,9 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun recebePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
-    val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
-      }
-    user ?: fail("Usuário ou senha inválidos")
-
-    pedido.recebe(user)
+  fun recebePedido(pedido: Reposicao, empNo: Int) = viewModel.exec {
+    val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
+    pedido.recebe(funcionario)
 
     updateView()
   }

@@ -101,9 +101,9 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
   }
 
   override fun formRecebe(pedido: Reposicao) {
-    val form = FormAutoriza()
+    val form = FormFuncionario()
     DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.recebePedido(pedido, form.login, form.senha)
+      viewModel.recebePedido(pedido, form.numero)
     }
   }
 

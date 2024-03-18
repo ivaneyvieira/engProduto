@@ -38,7 +38,7 @@ SELECT O.storeno                          AS loja,
        IFNULL(EE.login, '')               AS entregueSNome,
        IFNULL(ER.no, 0)                   AS recebidoNo,
        IFNULL(ER.name, '')                AS recebidoNome,
-       IFNULL(ER.login, '')               AS recebidoSNome,
+       IFNULL(ER.sname, '')               AS recebidoSNome,
        E.prdno                            AS prdno,
        TRIM(E.prdno)                      AS codigo,
        E.grade                            AS grade,
@@ -62,7 +62,7 @@ FROM sqldados.eoprd AS E
                  USING (prdno, grade)
        LEFT JOIN sqldados.users AS EE
                  ON EE.no = OA.empEntregue
-       LEFT JOIN sqldados.users AS ER
+       LEFT JOIN sqldados.emp AS ER
                  ON ER.no = OA.empRecebido
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno
