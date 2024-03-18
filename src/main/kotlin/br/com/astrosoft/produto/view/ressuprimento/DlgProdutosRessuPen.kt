@@ -22,6 +22,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtVencido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoPenViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -142,9 +143,11 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoQtRecebido().integerFieldEditor()
         produtoRessuprimentoQtAvaria().integerFieldEditor()
+        produtoRessuprimentoQtVencido().integerFieldEditor()
       } else {
         produtoRessuprimentoQtRecebido()
         produtoRessuprimentoQtAvaria()
+        produtoRessuprimentoQtVencido()
       }
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoCodigoCorrecao().textFieldEditor {
@@ -195,6 +198,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::qtRecebido),
         this.getColumnBy(ProdutoRessuprimento::qtAvaria),
+        this.getColumnBy(ProdutoRessuprimento::qtVencido),
         this.getColumnBy(ProdutoRessuprimento::codigoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::descricaoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::gradeCorrecao),

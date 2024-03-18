@@ -114,7 +114,7 @@ object ProdutoRessuViewColumns {
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtVencido() = columnGrid(ProdutoRessuprimento::qtVencido) {
-    this.setHeader("Avaria")
+    this.setHeader("Vencido")
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtEntregue() = columnGrid(ProdutoRessuprimento::qtEntregue) {

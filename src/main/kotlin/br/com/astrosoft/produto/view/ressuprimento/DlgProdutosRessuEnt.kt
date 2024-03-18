@@ -184,6 +184,7 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::qtRecebido),
         this.getColumnBy(ProdutoRessuprimento::qtAvaria),
+        this.getColumnBy(ProdutoRessuprimento::qtVencido),
         this.getColumnBy(ProdutoRessuprimento::codigoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::descricaoCorrecao),
         this.getColumnBy(ProdutoRessuprimento::gradeCorrecao),
