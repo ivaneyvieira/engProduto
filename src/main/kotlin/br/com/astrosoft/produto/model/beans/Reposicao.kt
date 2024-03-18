@@ -19,8 +19,11 @@ class Reposicao(
   var recebidoSNome: String,
   val produtos: List<ReposicaoProduto>
 ) {
-  fun countCD() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
-  fun countSEP() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
+  fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
+  fun countENT() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
+
+  fun produtosSEP() = produtos.filter { it.marca == EMarcaReposicao.SEP.num }
+  fun produtosENT() = produtos.filter { it.marca == EMarcaReposicao.ENT.num }
 
   fun chave() = "${loja}:${numero}:${localizacao}"
 

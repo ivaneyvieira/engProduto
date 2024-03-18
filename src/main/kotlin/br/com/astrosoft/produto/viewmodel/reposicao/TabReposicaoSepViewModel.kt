@@ -21,7 +21,9 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro)
+    val reposicoes = Reposicao.findAll(filtro).filter {
+      it.countSEP() > 0
+    }
     return reposicoes
   }
 

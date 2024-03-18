@@ -944,9 +944,12 @@ class QuerySaci : QueryDB(database) {
 
   fun findResposicaoProduto(filtro: FiltroReposicao): List<ReposicaoProduto> {
     val sql = "/sqlSaci/reposicaoProdutos.sql"
+    val datacorte = DB.test.let { if (it) 20240101 else 20240318 }
+
     return query(sql, ReposicaoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("datacorte", datacorte)
     }
   }
 

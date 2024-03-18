@@ -19,7 +19,9 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro)
+    val reposicoes = Reposicao.findAll(filtro).filter {
+      it.countENT() > 0
+    }
     subView.updateReposicoes(reposicoes)
   }
 
