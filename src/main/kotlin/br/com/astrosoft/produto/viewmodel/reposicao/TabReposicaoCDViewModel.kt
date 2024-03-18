@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.reposicao
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroReposicao
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.Reposicao
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.*
 
 class TabReposicaoCDViewModel(val viewModel: ReposicaoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -16,9 +15,65 @@ class TabReposicaoCDViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun updateView() = viewModel.exec {
+    val reposicoes = reposicoes()
+    subView.updateReposicoes(reposicoes)
+  }
+
+  private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro)
+    return reposicoes
+  }
+
+  fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
+    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.selecionado = EMarcaReposicao.SEP.num
+    produto.salva()
+    subView.updateProduto(produto)
+  }
+
+  fun marca() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.SEP.num }
+    itens.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach { produto ->
+      produto.marca = EMarcaReposicao.SEP.num
+      produto.selecionado = EMarcaReposicao.SEP.num
+      produto.qtRecebido = produto.quantidade
+      produto.salva()
+    }
+    updateProdutos()
+  }
+
+  fun desmarcar() = viewModel.exec {
+    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.SEP.num }
+    itens.ifEmpty {
+      fail("Nenhum produto para desmarcar")
+    }
+
+    itens.forEach { produto ->
+      produto.selecionado = EMarcaReposicao.CD.num
+      produto.salva()
+    }
+    updateProdutos()
+  }
+
+  fun saveQuant(bean: ReposicaoProduto) {
+    bean.salva()
+    updateProdutos()
+  }
+
+  fun updateProdutos() {
+    val reposicoes = reposicoes()
     subView.updateReposicoes(reposicoes)
+    subView.updateProdutos(reposicoes)
+  }
+
+  fun salva(bean: Reposicao) {
+    bean.salva()
+    updateView()
   }
 
   val subView
@@ -28,4 +83,8 @@ class TabReposicaoCDViewModel(val viewModel: ReposicaoViewModel) {
 interface ITabReposicaoCD : ITabView {
   fun filtro(): FiltroReposicao
   fun updateReposicoes(reposicoes: List<Reposicao>)
+  fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
+  fun produtosSelecionados(): List<ReposicaoProduto>
+  fun updateProduto(produto: ReposicaoProduto)
+  fun updateProdutos(reposicoes: List<Reposicao>)
 }

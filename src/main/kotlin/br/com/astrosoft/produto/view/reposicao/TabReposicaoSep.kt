@@ -49,6 +49,8 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     this.addClassName("styling")
     this.format()
 
+
+    columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")

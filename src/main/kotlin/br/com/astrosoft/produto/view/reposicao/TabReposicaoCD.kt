@@ -2,20 +2,21 @@ package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoCD
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoCDViewModel
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 
 class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoCD {
+  var dlgProduto: DlgProdutosReposCD? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -46,10 +47,30 @@ class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
     this.addClassName("styling")
     this.format()
 
+    this.withEditor(classBean = Reposicao::class,
+      openEditor = {
+        this.focusEditor(Reposicao::observacao)
+      },
+      closeEditor = {
+        viewModel.salva(it.bean)
+      }
+    )
+
+    columnGridProduto()
+    columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    columnGrid(Reposicao::observacao, "Observação")
+    columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
+  }
+
+  private fun Grid<Reposicao>.columnGridProduto() {
+    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+      dlgProduto = DlgProdutosReposCD(viewModel, listOf(ressuprimento))
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun filtro(): FiltroReposicao {
@@ -62,6 +83,23 @@ class TabReposicaoCD(val viewModel: TabReposicaoCDViewModel) :
 
   override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
+  }
+
+  override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
+    codigoBarra ?: return null
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun updateProduto(produto: ReposicaoProduto) {
+    dlgProduto?.updateProduto(produto)
+  }
+
+  override fun produtosSelecionados(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun updateProdutos(reposicoes: List<Reposicao>) {
+    dlgProduto?.update(reposicoes)
   }
 
   override fun isAuthorized(): Boolean {

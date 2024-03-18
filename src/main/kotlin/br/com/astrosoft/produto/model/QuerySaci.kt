@@ -961,6 +961,20 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateReposicaoProduto(reposicaoProduto: ReposicaoProduto) {
+    val sql = "/sqlSaci/updateReposicaoProduto.sql"
+    script(sql) {
+      addOptionalParameter("loja", reposicaoProduto.loja ?: 0)
+      addOptionalParameter("numero", reposicaoProduto.numero ?: 0)
+      addOptionalParameter("prdno", reposicaoProduto.prdno)
+      addOptionalParameter("grade", reposicaoProduto.grade)
+      addOptionalParameter("marca", reposicaoProduto.marca ?: 0)
+      addOptionalParameter("qtRecebido", reposicaoProduto.qtRecebido ?: 0)
+      addOptionalParameter("selecionado", reposicaoProduto.selecionado ?: 0)
+      addOptionalParameter("posicao", reposicaoProduto.posicao ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)

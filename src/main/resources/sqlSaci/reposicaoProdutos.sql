@@ -41,11 +41,14 @@ SELECT O.storeno                          AS loja,
        IFNULL(ER.login, '')               AS recebidoSNome,
        E.prdno                            AS prdno,
        TRIM(E.prdno)                      AS codigo,
+       E.grade                            AS grade,
        IFNULL(EA.marca, 0)                AS marca,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
        TRIM(MID(P.name, 1, 37))           AS descricao,
        ROUND(E.qtty / 1000)               AS quantidade,
-       IFNULL(EA.qtRecebido, 0)           AS qtRecebido
+       IFNULL(EA.qtRecebido, 0)           AS qtRecebido,
+       EA.selecionado                     AS selecionado,
+       EA.posicao                         AS posicao
 FROM sqldados.eoprd AS E
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)

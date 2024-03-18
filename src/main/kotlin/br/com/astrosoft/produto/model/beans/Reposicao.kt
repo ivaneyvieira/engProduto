@@ -21,6 +21,9 @@ class Reposicao(
 ) {
   fun countCD() = produtos.count { it.marca == EMarcaReposicao.CD.num }
   fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
+
+  fun chave() = "${loja}:${numero}:${localizacao}"
+
   fun entregue(user: UserSaci) {
     this.entregueNo = user.no
     this.salva()

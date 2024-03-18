@@ -18,11 +18,13 @@ CREATE TABLE sqldados.eordAdicional
 DROP TABLE IF EXISTS sqldados.eoprdAdicional;
 CREATE TABLE sqldados.eoprdAdicional
 (
-  storeno    INT,
-  ordno      INT,
-  prdno      VARCHAR(16),
-  grade      VARCHAR(8),
-  marca      INT,
-  qtRecebido INT,
+  storeno     INT,
+  ordno       INT,
+  prdno       VARCHAR(16),
+  grade       VARCHAR(8),
+  marca       INT,
+  qtRecebido  INT,
+  selecionado INT,
+  posicao     INT,
   PRIMARY KEY (ordno, storeno, prdno, grade)
 );
