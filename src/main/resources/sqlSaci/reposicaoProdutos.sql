@@ -67,7 +67,7 @@ FROM sqldados.eoprd AS E
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno
 WHERE O.paymno = 431
-  AND O.date >= 20240218
+  AND O.date >= 20240318
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.ordno = @PESQUISA_NUM OR
