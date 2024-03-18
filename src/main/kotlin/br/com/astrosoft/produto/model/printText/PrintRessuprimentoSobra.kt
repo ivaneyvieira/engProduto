@@ -29,7 +29,7 @@ class PrintRessuprimentoSobra(val pedido: Ressuprimento, val ressuprimentoTitle:
     column(ProdutoRessuprimentoSobra::quantidade, "_Quant", 6)
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: ProdutoRessuprimentoSobra?) {
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)

@@ -32,7 +32,7 @@ class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<Pr
     column(propertyQuant, "_Quant", 6)
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: ProdutoRessuprimento?) {
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)

@@ -48,7 +48,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return ""
   }
 
-  fun print(dados: List<T>, printer: IPrinter) {
+  open fun print(dados: List<T>, printer: IPrinter) {
     dados.firstOrNull()?.let { bean ->
       textBuffer.inicializePrint()
       printTitle(bean)
@@ -67,14 +67,14 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         }
       }
 
-      printSumary()
+      printSumary(bean)
 
       textBuffer.finalizePrint()
       printer.print(textBuffer)
     }
   }
 
-  open fun printSumary() {
+  open fun printSumary(bean: T? = null) {
     writeln("")
   }
 

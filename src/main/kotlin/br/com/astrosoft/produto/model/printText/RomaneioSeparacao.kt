@@ -37,7 +37,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     column(ProdutoPedido::qtd, "Quant", 6)
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: ProdutoPedido?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")

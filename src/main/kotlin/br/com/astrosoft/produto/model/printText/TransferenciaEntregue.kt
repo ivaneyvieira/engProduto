@@ -29,7 +29,7 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
     writeln("".padEnd(64, '-'))
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: ProdutoPedidoTransf?) {
     val entregueRelatorio = nota.entregueRelatorio()
     val lengthEntregue = entregueRelatorio.length
     val entregue = if (lengthEntregue >= 31) entregueRelatorio.substring(0, 31) else entregueRelatorio

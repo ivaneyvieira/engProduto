@@ -73,7 +73,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
     printLine('-')
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: EntradaDevCliPro?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")

@@ -27,7 +27,7 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
     printLine('-')
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: EntradaDevCliProList?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")

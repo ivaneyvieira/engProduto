@@ -23,7 +23,7 @@ class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {
     writeln("".lpad(64, "-"), negrito = true)
   }
 
-  override fun printSumary() {
+  override fun printSumary(bean: ProdutoTransfRessu4?) {
     writeln("")
     writeln("")
     writeln("")

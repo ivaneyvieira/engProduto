@@ -97,13 +97,13 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     this.addClassName("styling")
     this.format()
     this.setSelectionMode(Grid.SelectionMode.MULTI)
-    val colBntPrint = addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
       }
     }
 
-    val colBntProduto = addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {

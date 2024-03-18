@@ -50,6 +50,11 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
     this.addClassName("styling")
     this.format()
 
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido) {
+        viewModel.marcaImpressao(pedido)
+      }
+    }
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
