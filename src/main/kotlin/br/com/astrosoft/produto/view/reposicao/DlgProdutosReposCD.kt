@@ -87,7 +87,7 @@ class DlgProdutosReposCD(val viewModel: TabReposicaoCDViewModel, private val rep
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
-      columnGrid(ReposicaoProduto::qtRecebido, "Recebido")
+      columnGrid(ReposicaoProduto::qtRecebido, "Recebido").integerFieldEditor()
 
       this.columnGrid(ReposicaoProduto::selecionadoOrdemSEP, "Selecionado") {
         this.isVisible = false
