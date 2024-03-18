@@ -253,6 +253,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("qtEntregue", produtoPedidoVenda.qtEntregue ?: 0)
       addOptionalParameter("qtRecebido", produtoPedidoVenda.qtRecebido ?: 0)
       addOptionalParameter("qtAvaria", produtoPedidoVenda.qtAvaria ?: 0)
+      addOptionalParameter("qtVencido", produtoPedidoVenda.qtVencido ?: 0)
       addOptionalParameter("codigoCorrecao", produtoPedidoVenda.codigoCorrecao)
       addOptionalParameter("gradeCorrecao", produtoPedidoVenda.gradeCorrecao)
     }

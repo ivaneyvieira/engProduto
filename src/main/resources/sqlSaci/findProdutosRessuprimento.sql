@@ -144,6 +144,7 @@ SELECT X.ordno                                                  AS ordno,
        X.auxLong2                                               AS qtEntregue,
        X.auxLong1                                               AS qtRecebido,
        X.auxMy4                                                 AS qtAvaria,
+       X.auxMy3                                                 AS qtVencido,
   /* IF(X.auxLong1 = 99999, TN.qtty, X.auxLong1) * S.cm_real / 10000 AS vlRecebido,*/
        X.cost                                                   AS preco,
        (X.qtty * X.mult / 1000) * X.cost                        AS total,

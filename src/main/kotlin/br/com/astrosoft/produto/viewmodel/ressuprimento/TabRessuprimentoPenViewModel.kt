@@ -104,7 +104,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     val produtos = subView.produtosSelecionados()
     val produtosSobra = produtoRessuprimentoSobras(produtos)
 
-    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
+    if (produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
 
     val relatorio = PrintRessuprimentoSobra(pedido, ressuprimentoTitle)
 
@@ -196,7 +196,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
 
     val produtosSobra = produtoRessuprimentoSobras(produtos)
 
-    if(produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
+    if (produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
 
     val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
     val file = report.processaRelatorio(produtosSobra)
@@ -276,8 +276,32 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
       }
     }.toList()
 
+    val listVencido = sequence {
+      produtos.forEach {
+        if ((it.qtVencido ?: 0) > 0) {
+          yield(
+            ProdutoRessuprimentoSobra(
+              orderGroup = 4,
+              grupo = "Vencido",
+              codigo = it.codigo ?: "",
+              descricao = it.descricao ?: "",
+              grade = it.grade ?: "",
+              nota = it.numeroNota ?: "",
+              localizacao = it.localizacao ?: "",
+              quantidade = it.qtVencido ?: 0,
+            )
+          )
+        }
+      }
+    }.toList()
+
     val produtosSobra = listFalta + listaSobra + listAvaria
-    return produtosSobra.sortedWith(compareBy(ProdutoRessuprimentoSobra::orderGroup, ProdutoRessuprimentoSobra::descricao))
+    return produtosSobra.sortedWith(
+      compareBy(
+        ProdutoRessuprimentoSobra::orderGroup,
+        ProdutoRessuprimentoSobra::descricao
+      )
+    )
   }
 
   fun formDevolvido(pedido: Ressuprimento) {

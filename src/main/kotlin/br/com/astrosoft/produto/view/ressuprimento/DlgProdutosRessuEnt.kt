@@ -22,6 +22,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtVencido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -128,9 +129,11 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoQtRecebido().integerFieldEditor()
         produtoRessuprimentoQtAvaria().integerFieldEditor()
+        produtoRessuprimentoQtVencido().integerFieldEditor()
       } else {
         produtoRessuprimentoQtRecebido()
         produtoRessuprimentoQtAvaria()
+        produtoRessuprimentoQtVencido()
       }
       if (user?.ressuprimentoRecebedor == true) {
         produtoRessuprimentoCodigoCorrecao().textFieldEditor {

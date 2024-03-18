@@ -144,14 +144,6 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     }
     colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
-    /*
-        this.setPartNameGenerator {
-          val marca = it.countREC ?: 0
-          if (marca > 0) {
-            "amarelo"
-          } else null
-        }
-     */
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {

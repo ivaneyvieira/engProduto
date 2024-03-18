@@ -251,8 +251,32 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       }
     }.toList()
 
-    val produtosSobra = listFalta + listaSobra + listAvaria
-    return produtosSobra.sortedWith(compareBy(ProdutoRessuprimentoSobra::orderGroup, ProdutoRessuprimentoSobra::descricao))
+    val listVencido = sequence {
+      produtos.forEach {
+        if ((it.qtVencido ?: 0) > 0) {
+          yield(
+            ProdutoRessuprimentoSobra(
+              orderGroup = 4,
+              grupo = "Vencido",
+              codigo = it.codigo ?: "",
+              descricao = it.descricao ?: "",
+              grade = it.grade ?: "",
+              nota = it.numeroNota ?: "",
+              localizacao = it.localizacao ?: "",
+              quantidade = it.qtVencido ?: 0,
+            )
+          )
+        }
+      }
+    }.toList()
+
+    val produtosSobra = listFalta + listaSobra + listAvaria + listVencido
+    return produtosSobra.sortedWith(
+      compareBy(
+        ProdutoRessuprimentoSobra::orderGroup,
+        ProdutoRessuprimentoSobra::descricao
+      )
+    )
   }
 
   val subView

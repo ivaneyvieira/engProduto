@@ -25,6 +25,7 @@ class ProdutoRessuprimento(
   var qtRecebido: Int?,
   var qtEntregue: Int?,
   var qtAvaria: Int?,
+  var qtVencido: Int?,
   var vlPedido: Double?,
   var vlQuantNF: Double?,
   //var vlRecebido: Double?,
