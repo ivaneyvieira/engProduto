@@ -16,7 +16,7 @@ import com.vaadin.flow.component.textfield.TextField
 
 class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoSep {
-  var dlgProduto: DlgProdutosReposSep? = null
+  private var dlgProduto: DlgProdutosReposSep? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 

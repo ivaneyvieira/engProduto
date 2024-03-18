@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroReposicao
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.Reposicao
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 
 class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -18,11 +15,16 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun updateView() = viewModel.exec {
+    val reposicoes = reposicoes()
+    subView.updateReposicoes(reposicoes)
+  }
+
+  private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
       it.countENT() > 0
     }
-    subView.updateReposicoes(reposicoes)
+    return reposicoes
   }
 
   fun formEntregue(pedido: Reposicao) {
@@ -33,7 +35,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     subView.formRecebe(pedido)
   }
 
-  fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec{
+  fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -46,7 +48,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun recebePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec{
+  fun recebePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -59,6 +61,17 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
+  fun saveQuant(bean: ReposicaoProduto) {
+    bean.salva()
+    updateProdutos()
+  }
+
+  fun updateProdutos() {
+    val reposicoes = reposicoes()
+    subView.updateReposicoes(reposicoes)
+    subView.updateProdutos(reposicoes)
+  }
+
   val subView
     get() = viewModel.view.tabReposicaoEnt
 }
@@ -68,4 +81,5 @@ interface ITabReposicaoEnt : ITabView {
   fun updateReposicoes(reposicoes: List<Reposicao>)
   fun formEntregue(pedido: Reposicao)
   fun formRecebe(pedido: Reposicao)
+  fun updateProdutos(reposicoes: List<Reposicao>)
 }

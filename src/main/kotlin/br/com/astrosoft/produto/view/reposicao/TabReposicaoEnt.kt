@@ -19,6 +19,7 @@ import com.vaadin.flow.component.textfield.TextField
 
 class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
+  private var dlgProduto: DlgProdutosReposEnt? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -49,7 +50,7 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
     this.addClassName("styling")
     this.format()
 
-
+    columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::data, "Data")
@@ -64,6 +65,15 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
     }
     columnGrid(Reposicao::recebidoSNome, "Recebido")
     columnGrid(Reposicao::usuarioApp, "Login")
+  }
+
+  private fun Grid<Reposicao>.columnGridProduto() {
+    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+      dlgProduto = DlgProdutosReposEnt(viewModel, listOf(ressuprimento))
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun filtro(): FiltroReposicao {
@@ -90,6 +100,10 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
     DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.recebePedido(pedido, form.login, form.senha)
     }
+  }
+
+  override fun updateProdutos(reposicoes: List<Reposicao>) {
+    dlgProduto?.update(reposicoes)
   }
 
   override fun isAuthorized(): Boolean {
