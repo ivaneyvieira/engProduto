@@ -168,6 +168,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun statusPedido(pedido: Reposicao, status: EStatusPedido) {
+    val sql = "/sqlSaci/expiraPedido.sql"
+    script(sql) {
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.numero)
+      addOptionalParameter("status", status.codigo)
+    }
+  }
+
   fun statusPedido(pedido: ProdutoPedidoVenda, status: EStatusPedido) {
     val sql = "/sqlSaci/expiraPedidoProduto.sql"
     script(sql) {

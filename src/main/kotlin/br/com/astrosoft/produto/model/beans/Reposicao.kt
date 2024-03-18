@@ -41,6 +41,10 @@ class Reposicao(
     saci.updateReposicao(this)
   }
 
+  fun expiraPedido() {
+    saci.statusPedido(this, EStatusPedido.Expirado)
+  }
+
   val usuarioApp: String?
     get() {
       val user = AppConfig.userLogin() as? UserSaci

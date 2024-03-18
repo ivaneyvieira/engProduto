@@ -100,7 +100,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun marcaImpressao(pedido: Reposicao) {
-    TODO("Not yet implemented")
+    pedido.expiraPedido()
   }
 
   val subView
