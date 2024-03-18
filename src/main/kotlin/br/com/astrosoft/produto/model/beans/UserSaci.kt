@@ -133,6 +133,8 @@ class UserSaci : IUser {
         listLojas.getOrNull(3) ?: "",
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
       )
     }
 
@@ -151,6 +153,8 @@ class UserSaci : IUser {
         listLojas.getOrNull(3) ?: "",
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
       )
     }
 
@@ -165,6 +169,8 @@ class UserSaci : IUser {
         listLojas.getOrNull(3) ?: "",
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
       )
     }
 
@@ -179,6 +185,8 @@ class UserSaci : IUser {
         value ?: "",
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
       )
     }
 
@@ -193,6 +201,8 @@ class UserSaci : IUser {
         listLojas.getOrNull(3) ?: "",
         value?.toString() ?: "",
         listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
       )
     }
 
@@ -206,6 +216,38 @@ class UserSaci : IUser {
         listLojas.getOrNull(2) ?: "",
         listLojas.getOrNull(3) ?: "",
         listLojas.getOrNull(4) ?: "",
+        value ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
+      )
+    }
+  var localizacaoRepo: Set<String>
+    get() = lojas.getOrNull(6)?.toString()?.split(":").orEmpty().toSet()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
+        listLojas.getOrNull(5) ?: "",
+        value.joinToString(":"),
+        listLojas.getOrNull(7) ?: "",
+      )
+    }
+  var impressoraRepo: String?
+    get() = lojas.getOrNull(7)?.toString() ?: "TODAS"
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
+        listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
         value ?: "",
       )
     }

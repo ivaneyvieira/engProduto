@@ -151,6 +151,17 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               isReadOnly = readOnly
               binder.bind(this, UserSaci::reposicaoEnt.name)
             }
+            multiSelectComboBox<String>("Localização") {
+              isReadOnly = readOnly
+              setItems(listOf("TODOS") + viewModel.allLocalizacao())
+              binder.bind(this, UserSaci::localizacaoRepo.name)
+            }
+            select<String>("Impressora") {
+              this.isExpand = true
+              isReadOnly = readOnly
+              setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+              binder.bind(this, UserSaci::impressoraRepo.name)
+            }
           }
 
           formLayout {
