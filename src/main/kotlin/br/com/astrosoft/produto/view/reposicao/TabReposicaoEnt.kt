@@ -133,6 +133,6 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     val impressora = user?.impressoraRepo ?: return emptyList()
-    return listOfNotNull(impressora)
+    return impressora.toList()
   }
 }

@@ -236,8 +236,8 @@ class UserSaci : IUser {
         listLojas.getOrNull(7) ?: "",
       )
     }
-  var impressoraRepo: String?
-    get() = lojas.getOrNull(7)?.toString() ?: "TODAS"
+  var impressoraRepo: Set<String>
+    get() = lojas.getOrNull(7)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
       val listLojas = lojas
       lojas = listOf(
@@ -248,7 +248,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
-        value ?: "",
+        value.joinToString(":") ?: "",
       )
     }
 

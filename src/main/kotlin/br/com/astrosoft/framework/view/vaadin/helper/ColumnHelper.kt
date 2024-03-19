@@ -117,7 +117,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   width: String? = null,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumnFor(property).apply {
+  return this.addColumnFor(property = property, renderer = SetRenderer(property)).apply {
     this.setHeader(header ?: property.name)
     this.isExpand = false
     if (width != null) {

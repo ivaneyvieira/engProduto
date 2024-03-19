@@ -156,7 +156,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
               setItems(listOf("TODOS") + viewModel.allLocalizacao())
               binder.bind(this, UserSaci::localizacaoRepo.name)
             }
-            select<String>("Impressora") {
+            multiSelectComboBox<String>("Impressora") {
               this.isExpand = true
               isReadOnly = readOnly
               setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })

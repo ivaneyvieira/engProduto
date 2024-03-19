@@ -38,7 +38,7 @@ class FormUsuario(val userSaci: UserSaci) : FormLayout(), IUsuarioView {
       setItems(listOf("TODOS") + viewModel.allLocalizacao())
       binder.bind(this, UserSaci::localizacaoRepo.name)
     }
-    select<String>("Impressora") {
+    multiSelectComboBox<String>("Impressora") {
       this.isExpand = true
       setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
       binder.bind(this, UserSaci::impressoraRepo.name)
