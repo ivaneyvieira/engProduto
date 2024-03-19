@@ -193,7 +193,7 @@ WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-  AND (IFNULL(L.localizacao, '')  in (:locApp) OR 'TODOS' in (:locApp))
+  AND (IFNULL(L.localizacao, '')  in (:locApp) OR 'TODOS' in (:locApp) OR TRUE)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 HAVING CASE :temNota
          WHEN 'T' THEN TRUE
