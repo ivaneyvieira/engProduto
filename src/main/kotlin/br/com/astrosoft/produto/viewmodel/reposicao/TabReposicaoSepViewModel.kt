@@ -16,7 +16,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
-    subView.updateReposicoes(reposicoes)
+    subView.updateUsuarios(reposicoes)
   }
 
   private fun reposicoes(): List<Reposicao> {
@@ -69,7 +69,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateProdutos() {
     val reposicoes = reposicoes()
-    subView.updateReposicoes(reposicoes)
+    subView.updateUsuarios(reposicoes)
     subView.updateProdutos(reposicoes)
   }
 
@@ -84,7 +84,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
 interface ITabReposicaoSep : ITabView {
   fun filtro(): FiltroReposicao
-  fun updateReposicoes(reposicoes: List<Reposicao>)
+  fun updateUsuarios(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
   fun produtosSelecionados(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)

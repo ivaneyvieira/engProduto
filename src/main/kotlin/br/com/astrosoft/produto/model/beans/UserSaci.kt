@@ -254,6 +254,9 @@ class UserSaci : IUser {
 
   //
 
+  val localizacaoRepoStr
+    get() = localizacaoRepo.joinToString(", ")
+
   val lojaUsuario
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
@@ -263,8 +266,12 @@ class UserSaci : IUser {
     get() = notaExp || notaCD || notaEnt || admin
   val ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
-  val reposicao
+  var reposicao
     get() = reposicaoSep || reposicaoEnt || admin
+    set(value) {
+      reposicaoSep = value
+      reposicaoEnt = value
+    }
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   val pedidoTransf

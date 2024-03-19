@@ -82,7 +82,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     )
   }
 
-  override fun updateReposicoes(reposicoes: List<Reposicao>) {
+  override fun updateUsuarios(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
   }
 

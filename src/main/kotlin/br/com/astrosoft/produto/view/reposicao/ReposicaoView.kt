@@ -19,6 +19,7 @@ class ReposicaoView : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
   override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel)
+  override val tabReposicaoUsr = TabReposicaoUsr(viewModel.tabReposicaoUsrViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

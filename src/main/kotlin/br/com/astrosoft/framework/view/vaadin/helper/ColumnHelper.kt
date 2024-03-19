@@ -110,6 +110,29 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   }
 }
 
+@JvmName("columnSet")
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
+  property: KProperty1<T, Set<Any>>,
+  header: String? = null,
+  width: String? = null,
+  block: (@VaadinDsl Column<T>).() -> Unit = {}
+): Column<T> {
+  return this.addColumnFor(property).apply {
+    this.setHeader(header ?: property.name)
+    this.isExpand = false
+    if (width != null) {
+      this.isAutoWidth = false
+      this.width = width
+    } else {
+      this.isAutoWidth = true
+    }
+    this.isResizable = true
+    if (this.key == null) this.key = property.name
+    this.left()
+    this.block()
+  }
+}
+
 @JvmName("columnBoolean")
 fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Boolean?>,
