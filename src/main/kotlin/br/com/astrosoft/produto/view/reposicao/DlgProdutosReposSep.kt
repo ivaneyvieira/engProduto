@@ -87,7 +87,6 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
-      columnGrid(ReposicaoProduto::qtRecebido, "Recebido").integerFieldEditor()
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
 
       this.columnGrid(ReposicaoProduto::selecionadoOrdemENT, "Selecionado") {
