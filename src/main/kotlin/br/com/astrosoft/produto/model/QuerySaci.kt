@@ -960,6 +960,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("localizacao", filtro.localizacao)
       addOptionalParameter("datacorte", datacorte)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
   }
 

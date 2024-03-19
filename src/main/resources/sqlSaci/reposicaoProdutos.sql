@@ -72,6 +72,8 @@ FROM sqldados.eoprd AS E
 WHERE O.paymno = 431
   AND O.date >= :datacorte
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
+  AND (O.date >= :dataInicial OR :dataInicial = 0)
+  AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.storeno = :loja OR :loja = 0)
   AND (L.localizacao IN (:localizacao) OR 'TODOS' IN (:localizacao) OR :localizacao = '')
   AND (O.ordno = @PESQUISA_NUM OR

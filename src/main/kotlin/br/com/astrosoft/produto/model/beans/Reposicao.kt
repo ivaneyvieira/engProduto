@@ -81,6 +81,8 @@ data class FiltroReposicao(
   val pesquisa: String,
   val marca: EMarcaReposicao,
   val localizacao: List<String>,
+  val dataInicial: LocalDate? = null,
+  val dataFinal: LocalDate? = null,
 )
 
 enum class EMarcaReposicao(val num: Int) {

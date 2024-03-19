@@ -2,15 +2,14 @@ package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -20,6 +19,8 @@ import com.vaadin.flow.component.textfield.TextField
 class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
   private var dlgProduto: DlgProdutosReposEnt? = null
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -40,6 +41,20 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
     }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      this.value = null
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.value = null
+      this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -93,6 +108,8 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.ENT,
       localizacao = localizacao,
+      dataInicial = edtDataInicial.value,
+      dataFinal = edtDataFinal.value,
     )
   }
 

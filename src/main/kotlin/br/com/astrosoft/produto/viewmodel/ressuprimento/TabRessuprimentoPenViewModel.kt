@@ -295,7 +295,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
       }
     }.toList()
 
-    val produtosSobra = listFalta + listaSobra + listAvaria
+    val produtosSobra = listFalta + listaSobra + listAvaria + listVencido
     return produtosSobra.sortedWith(
       compareBy(
         ProdutoRessuprimentoSobra::orderGroup,
