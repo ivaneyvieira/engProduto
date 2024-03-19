@@ -206,7 +206,10 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
   private fun produtoRessuprimentoSobras(produtos: List<ProdutoRessuprimento>): List<ProdutoRessuprimentoSobra> {
     val listFalta = sequence {
       produtos.forEach {
-        if ((it.qtQuantNF ?: 0) > (it.qtRecebido ?: 0)) {
+        val qtQuantNF = it.qtQuantNF ?: 0
+        val qtRecebido = (it.qtRecebido ?: 0) + (it.qtAvaria ?: 0) + (it.qtVencido ?: 0)
+
+        if (qtQuantNF > qtRecebido) {
           yield(
             ProdutoRessuprimentoSobra(
               orderGroup = 1,
@@ -240,7 +243,11 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
             )
           )
         }
-        if ((it.qtQuantNF ?: 0) < (it.qtRecebido ?: 0)) {
+
+        val qtQuantNF = it.qtQuantNF ?: 0
+        val qtRecebido = (it.qtRecebido ?: 0) + (it.qtAvaria ?: 0) + (it.qtVencido ?: 0)
+
+        if (qtQuantNF < qtRecebido) {
           yield(
             ProdutoRessuprimentoSobra(
               orderGroup = 2,
@@ -250,7 +257,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
               grade = it.grade ?: "",
               nota = it.numeroNota ?: "",
               localizacao = it.localizacao ?: "",
-              quantidade = (it.qtRecebido ?: 0) - (it.qtQuantNF ?: 0),
+              quantidade = qtRecebido - qtQuantNF,
             )
           )
         }
