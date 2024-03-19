@@ -25,6 +25,7 @@ class ReposicaoProduto(
   var qtRecebido: Int?,
   var selecionado: Int?,
   var posicao: Int?,
+  var qtEstoque: Int?,
 ){
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
   fun salva() {

@@ -28,27 +28,28 @@ FROM sqldados.stk AS S
 WHERE S.storeno = 4
 GROUP BY S.storeno, S.prdno, S.grade;
 
-SELECT O.storeno                          AS loja,
-       O.ordno                            AS numero,
-       CAST(O.date AS DATE)               AS data,
-       IFNULL(L.localizacao, '')          AS localizacao,
-       IFNULL(OA.observacao, '')          AS observacao,
-       IFNULL(EE.no, 0)                   AS entregueNo,
-       IFNULL(EE.name, '')                AS entregueNome,
-       IFNULL(EE.login, '')               AS entregueSNome,
-       IFNULL(ER.no, 0)                   AS recebidoNo,
-       IFNULL(ER.name, '')                AS recebidoNome,
-       IFNULL(ER.sname, '')               AS recebidoSNome,
-       E.prdno                            AS prdno,
-       TRIM(E.prdno)                      AS codigo,
-       E.grade                            AS grade,
-       IFNULL(EA.marca, 0)                AS marca,
-       TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
-       TRIM(MID(P.name, 1, 37))           AS descricao,
-       ROUND(E.qtty / 1000)               AS quantidade,
-       IFNULL(EA.qtRecebido, 0)           AS qtRecebido,
-       EA.selecionado                     AS selecionado,
-       EA.posicao                         AS posicao
+SELECT O.storeno                               AS loja,
+       O.ordno                                 AS numero,
+       CAST(O.date AS DATE)                    AS data,
+       IFNULL(L.localizacao, '')               AS localizacao,
+       IFNULL(OA.observacao, '')               AS observacao,
+       IFNULL(EE.no, 0)                        AS entregueNo,
+       IFNULL(EE.name, '')                     AS entregueNome,
+       IFNULL(EE.login, '')                    AS entregueSNome,
+       IFNULL(ER.no, 0)                        AS recebidoNo,
+       IFNULL(ER.name, '')                     AS recebidoNome,
+       IFNULL(ER.sname, '')                    AS recebidoSNome,
+       E.prdno                                 AS prdno,
+       TRIM(E.prdno)                           AS codigo,
+       E.grade                                 AS grade,
+       IFNULL(EA.marca, 0)                     AS marca,
+       TRIM(IFNULL(B.barcode, P.barcode))      AS barcode,
+       TRIM(MID(P.name, 1, 37))                AS descricao,
+       ROUND(E.qtty / 1000)                    AS quantidade,
+       IFNULL(EA.qtRecebido, 0)                AS qtRecebido,
+       EA.selecionado                          AS selecionado,
+       EA.posicao                              AS posicao,
+       (S.qtty_atacado + S.qtty_varejo) / 1000 AS qtEstoque
 FROM sqldados.eoprd AS E
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)
@@ -58,6 +59,8 @@ FROM sqldados.eoprd AS E
                  USING (prdno, grade)
        LEFT JOIN sqldados.eordAdicional AS OA
                  USING (storeno, ordno, localizacao)
+       LEFT JOIN sqldados.stk AS S
+                 USING (storeno, prdno, grade)
        LEFT JOIN sqldados.prdbar AS B
                  USING (prdno, grade)
        LEFT JOIN sqldados.users AS EE
@@ -70,7 +73,7 @@ WHERE O.paymno = 431
   AND O.date >= :datacorte
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
   AND (O.storeno = :loja OR :loja = 0)
-  AND (L.localizacao in (:localizacao) OR 'TODOS' in (:localizacao) OR :localizacao = '')
+  AND (L.localizacao IN (:localizacao) OR 'TODOS' IN (:localizacao) OR :localizacao = '')
   AND (O.ordno = @PESQUISA_NUM OR
        IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
        IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR
