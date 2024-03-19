@@ -1,11 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.reposicao
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintReposicao
-import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
@@ -71,12 +69,19 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.entregueNome.isNullOrBlank())
+    if (pedido.entregueNome.isBlank())
       fail("Pedido não autorizado")
 
+    if (pedido.recebidoNome.isBlank())
+      fail("Pedido não recebido")
 
-    val user = AppConfig.userLogin() as? UserSaci
+    if (pedido.countSEP() > 0) {
+      fail("Pedido com produtos ainda em separação")
+    }
 
+    if (pedido.countDivergente() > 0) {
+      fail("Pedido com quantidade divergente")
+    }
 
     val produtos = pedido.produtosENT()
 

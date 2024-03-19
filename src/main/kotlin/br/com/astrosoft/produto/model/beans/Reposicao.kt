@@ -22,6 +22,8 @@ class Reposicao(
   fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
   fun countENT() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
 
+  fun countDivergente() = produtos.count { (it.qtRecebido ?: 0) != (it.quantidade ?: 0) }
+
   fun produtosSEP() = produtos.filter { it.marca == EMarcaReposicao.SEP.num }
   fun produtosENT() = produtos.filter { it.marca == EMarcaReposicao.ENT.num }
 
