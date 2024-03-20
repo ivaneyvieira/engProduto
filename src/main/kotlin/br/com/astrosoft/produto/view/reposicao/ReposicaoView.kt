@@ -15,7 +15,7 @@ import jakarta.annotation.security.PermitAll
 @PageTitle("Reposição")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
-class ReposicaoView : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
+class ReposicaoView(val init: Boolean = true) : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
   override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel)
@@ -27,6 +27,8 @@ class ReposicaoView : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   }
 
   init {
-    addTabSheat(viewModel)
+    if (init) {
+      addTabSheat(viewModel)
+    }
   }
 }

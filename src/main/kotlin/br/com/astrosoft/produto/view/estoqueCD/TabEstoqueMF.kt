@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
@@ -10,6 +12,7 @@ import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
 import com.github.mvysny.karibudsl.v10.select
@@ -75,6 +78,20 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
+    addColumnButton(VaadinIcon.SIGNAL, "Reposicao", "Reposicao") { produto ->
+      val dlg = SubWindowForm("Reposição") {
+        val codigo = produto.codigo?.toString() ?: ""
+        val grade = produto.grade ?: ""
+        val view = ReposicaoView(false)
+        val tab = view.tabReposicaoEnt
+        val form = tab.createComponent
+        tab.codigo = codigo
+        tab.grade = grade
+        tab.updateComponent()
+        form
+      }
+      dlg.open()
+    }
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()

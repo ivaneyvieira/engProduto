@@ -36,9 +36,7 @@ class SubWindowForm(
             this.style["font-weight"] = "bold"
             isExpand = true
           }
-
         }
-
       }
       horizontalLayout {
         content { align(left, baseline) }

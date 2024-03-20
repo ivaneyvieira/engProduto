@@ -54,6 +54,28 @@ class Reposicao(
     }
 
   companion object {
+    fun findAll(codigo: String, grade: String): List<Reposicao> {
+      return findAll(
+        FiltroReposicao(
+          loja = 0,
+          pesquisa = "",
+          marca = EMarcaReposicao.ENT,
+          localizacao = emptyList(),
+          codigo = codigo,
+          grade = grade
+        )
+      ).flatMap { repo ->
+        findAll(
+          FiltroReposicao(
+            loja = repo.loja,
+            pesquisa = "${repo.numero}",
+            marca = EMarcaReposicao.ENT,
+            localizacao = emptyList(),
+          )
+        )
+      }
+    }
+
     fun findAll(filtro: FiltroReposicao): List<Reposicao> {
       return saci.findResposicaoProduto(filtro).groupBy { "${it.loja}:${it.numero}:${it.localizacao}" }.map {
         val produtos = it.value
@@ -85,6 +107,8 @@ data class FiltroReposicao(
   val localizacao: List<String>,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
+  val codigo: String = "",
+  val grade: String = "",
 )
 
 enum class EMarcaReposicao(val num: Int) {

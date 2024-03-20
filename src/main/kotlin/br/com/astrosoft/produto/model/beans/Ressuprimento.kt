@@ -117,6 +117,20 @@ class Ressuprimento(
   }
 
   companion object {
+    fun find(codigo: String, grade: String): List<Ressuprimento> {
+      return find(
+        FiltroRessuprimento(
+          numero = 0,
+          pesquisa = "",
+          marca = EMarcaRessuprimento.ENT,
+          temNota = ETemNota.TODOS,
+          lojaRessu = 0,
+          codigo = codigo,
+          grade = grade,
+        )
+      )
+    }
+
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
       .groupBy { "${it.numero}:${it.notaBaixa}" }
       .map { entry ->
@@ -172,6 +186,8 @@ data class FiltroRessuprimento(
   val dataPedidoFinal: LocalDate? = null,
   val dataNotaInicial: LocalDate? = null,
   val dataNotaFinal: LocalDate? = null,
+  val codigo: String = "",
+  val grade: String = "",
 )
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {

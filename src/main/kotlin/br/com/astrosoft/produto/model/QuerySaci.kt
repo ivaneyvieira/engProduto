@@ -353,6 +353,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataPedidoFinal", filtro.dataPedidoFinal.toSaciDate())
       addOptionalParameter("dataNotaInicial", filtro.dataNotaInicial.toSaciDate())
       addOptionalParameter("dataNotaFinal", filtro.dataNotaFinal.toSaciDate())
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("grade", filtro.grade)
     }
   }
 
@@ -962,6 +964,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("datacorte", datacorte)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("grade", filtro.grade)
     }
   }
 

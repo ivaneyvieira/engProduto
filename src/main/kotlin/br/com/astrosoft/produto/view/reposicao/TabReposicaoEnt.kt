@@ -17,8 +17,11 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
-class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
-  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
+class TabReposicaoEnt(
+  val viewModel: TabReposicaoEntViewModel,
+) : TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
+  lateinit var codigo: String
+  lateinit var grade: String
   private var dlgProduto: DlgProdutosReposEnt? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -111,6 +114,8 @@ class TabReposicaoEnt(val viewModel: TabReposicaoEntViewModel) :
       localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
+      codigo = codigo,
+      grade = grade,
     )
   }
 
