@@ -246,8 +246,8 @@ WHERE N.date >= @DATA
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
   AND N.date >= @DATA
-  AND (X.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
-  AND (X.grade = :grade OR :grade = '')
+  AND ((X.prdno = LPAD(:codigo, 16, ' ') AND X.auxShort4 = :marca) OR :codigo = '')
+  AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
          L.localizacao,
@@ -322,8 +322,8 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND N.no >= 100000000
-  AND (X.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
-  AND (X.grade = :grade OR :grade = '')
+  AND ((X.prdno = LPAD(:codigo, 16, ' ') AND X.auxShort4 = :marca) OR :codigo = '')
+  AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
          L.localizacao,

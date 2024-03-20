@@ -15,11 +15,12 @@ import jakarta.annotation.security.PermitAll
 @PageTitle("Ressuprimento")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
-class RessuprimentoView : ViewLayout<RessuprimentoViewModel>(), IRessuprimentoView {
+class RessuprimentoView(val init: Boolean = true, codigo: String = "", grade: String = "") :
+  ViewLayout<RessuprimentoViewModel>(), IRessuprimentoView {
   override val viewModel = RessuprimentoViewModel(this)
   override val tabRessuprimentoCD = TabRessuprimentoCD(viewModel.tabRessuprimentoCDViewModel)
   override val tabRessuprimentoSep = TabRessuprimentoSep(viewModel.tabRessuprimentoSepViewModel)
-  override val tabRessuprimentoEnt = TabRessuprimentoEnt(viewModel.tabRessuprimentoEntViewModel)
+  override val tabRessuprimentoEnt = TabRessuprimentoEnt(viewModel.tabRessuprimentoEntViewModel, codigo, grade)
   override val tabRessuprimentoPen = TabRessuprimentoPen(viewModel.tabRessuprimentoPenViewModel)
   override val tabRessuprimentoRec = TabRessuprimentoRec(viewModel.tabRessuprimentoRecViewModel)
 
@@ -29,6 +30,8 @@ class RessuprimentoView : ViewLayout<RessuprimentoViewModel>(), IRessuprimentoVi
   }
 
   init {
-    addTabSheat(viewModel)
+    if (init) {
+      addTabSheat(viewModel)
+    }
   }
 }

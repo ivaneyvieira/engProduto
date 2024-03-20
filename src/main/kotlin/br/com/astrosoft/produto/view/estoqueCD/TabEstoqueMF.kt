@@ -13,6 +13,7 @@ import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
+import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
 import com.github.mvysny.karibudsl.v10.select
@@ -78,6 +79,19 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
+    addColumnButton(VaadinIcon.SHOP, "Ressuprimento", "Ressuprimento") { produto ->
+      val codigo = produto.codigo?.toString() ?: ""
+      val grade = produto.grade ?: ""
+      val descricao = produto.descricao ?: ""
+      val dlg = SubWindowForm("Reposição|$codigo : $descricao : $grade") {
+        val view = RessuprimentoView(false, codigo, grade)
+        val tab = view.tabRessuprimentoEnt
+        val form = tab.createComponent()
+        tab.updateComponent()
+        form
+      }
+      dlg.open()
+    }
     addColumnButton(VaadinIcon.SIGNAL, "Reposicao", "Reposicao") { produto ->
       val codigo = produto.codigo?.toString() ?: ""
       val grade = produto.grade ?: ""

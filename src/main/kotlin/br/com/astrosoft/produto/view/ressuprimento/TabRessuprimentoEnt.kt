@@ -27,7 +27,11 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
+class TabRessuprimentoEnt(
+  val viewModel: TabRessuprimentoEntViewModel,
+  val codigo: String,
+  val grade: String,
+) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
   private var dlgProduto: DlgProdutosRessuEnt? = null
   private lateinit var edtRessuprimento: IntegerField
@@ -43,7 +47,10 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
 
+  override fun filtroProduto(): Boolean = codigo != "" || grade != ""
+
   override fun HorizontalLayout.toolBarConfig() {
+    this.isVisible = !filtroProduto()
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -121,33 +128,29 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formAutoriza(pedido)
-      }
-    }
-    colunaRessuprimentoSing()
-    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formTransportado(pedido)
-      }
-    }
-    colunaRessuprimentoTransportadorPor()
-    if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
-      }
-    }
-    colunaRessuprimentoRecebidoPor()
-    colunaRessuprimentoUsuarioApp()
-    /*
-        this.setPartNameGenerator {
-          val marca = it.countREC ?: 0
-          if (marca > 0) {
-            "amarelo"
-          } else null
+    if (!filtroProduto())
+      if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
+        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+          viewModel.formAutoriza(pedido)
         }
-     */
+      }
+    colunaRessuprimentoSing()
+    if (!filtroProduto())
+      if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
+        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+          viewModel.formTransportado(pedido)
+        }
+      }
+    colunaRessuprimentoTransportadorPor()
+    if (!filtroProduto())
+      if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
+        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+          viewModel.formRecebido(pedido)
+        }
+      }
+    colunaRessuprimentoRecebidoPor()
+    if (!filtroProduto())
+      colunaRessuprimentoUsuarioApp()
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
@@ -159,6 +162,8 @@ class TabRessuprimentoEnt(val viewModel: TabRessuprimentoEntViewModel) :
       lojaRessu = cmbLoja.value?.no ?: 0,
       dataNotaInicial = edtDataInicial.value,
       dataNotaFinal = edtDataFinal.value,
+      codigo = codigo,
+      grade = grade,
     )
   }
 

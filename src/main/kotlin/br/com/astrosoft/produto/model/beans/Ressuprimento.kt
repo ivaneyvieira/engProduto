@@ -123,7 +123,7 @@ class Ressuprimento(
           numero = 0,
           pesquisa = "",
           marca = EMarcaRessuprimento.ENT,
-          temNota = ETemNota.TODOS,
+          temNota = ETemNota.TEM_NOTA,
           lojaRessu = 0,
           codigo = codigo,
           grade = grade,

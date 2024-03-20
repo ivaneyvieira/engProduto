@@ -20,10 +20,13 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
-    val ressuprimento = Ressuprimento.find(filtro).filter {
+    val ressuprimento = if (subView.filtroProduto())
+      Ressuprimento.find(filtro.codigo, filtro.grade)
+    else
+      Ressuprimento.find(filtro)
+    subView.updateRessuprimentos(ressuprimento.filter {
       (it.countCor ?: 0) == 0
-    }
-    subView.updateRessuprimentos(ressuprimento)
+    })
   }
 
   fun formAutoriza(pedido: Ressuprimento) {
@@ -303,4 +306,5 @@ interface ITabRessuprimentoEnt : ITabView {
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun ressuprimentosSelecionados(): List<Ressuprimento>
   fun showDlgProdutos(ressuprimentos: List<Ressuprimento>)
+  fun filtroProduto(): Boolean
 }
