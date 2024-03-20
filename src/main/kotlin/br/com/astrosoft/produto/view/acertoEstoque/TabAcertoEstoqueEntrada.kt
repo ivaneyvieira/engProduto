@@ -35,7 +35,7 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
@@ -52,6 +52,7 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

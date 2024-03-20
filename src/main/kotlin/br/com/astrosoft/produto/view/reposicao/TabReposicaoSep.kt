@@ -20,7 +20,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = viewModel.findLoja(0) ?: Loja.lojaZero
   }
@@ -35,6 +35,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {

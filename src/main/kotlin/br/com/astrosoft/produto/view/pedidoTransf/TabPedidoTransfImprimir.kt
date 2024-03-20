@@ -36,7 +36,7 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
@@ -58,6 +58,9 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
           viewModel.updateView()
       }
     }
+    //TODO Ajeitar isso
+    init()
+
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

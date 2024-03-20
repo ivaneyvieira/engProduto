@@ -79,14 +79,13 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnButton(VaadinIcon.SIGNAL, "Reposicao", "Reposicao") { produto ->
-      val dlg = SubWindowForm("Reposição") {
-        val codigo = produto.codigo?.toString() ?: ""
-        val grade = produto.grade ?: ""
-        val view = ReposicaoView(false)
+      val codigo = produto.codigo?.toString() ?: ""
+      val grade = produto.grade ?: ""
+      val descricao = produto.descricao ?: ""
+      val dlg = SubWindowForm("Reposição|$codigo : $descricao : $grade") {
+        val view = ReposicaoView(false, codigo, grade)
         val tab = view.tabReposicaoEnt
-        val form = tab.createComponent
-        tab.codigo = codigo
-        tab.grade = grade
+        val form = tab.createComponent()
         tab.updateComponent()
         form
       }

@@ -27,7 +27,7 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
@@ -44,6 +44,7 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

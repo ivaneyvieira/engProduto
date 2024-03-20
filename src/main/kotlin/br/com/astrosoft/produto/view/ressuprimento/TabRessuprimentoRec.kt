@@ -39,7 +39,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRessu != 0
@@ -56,6 +56,8 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
           viewModel.updateView()
       }
     }
+
+    init()
 
     edtRessuprimento = integerField("Número") {
       this.isVisible = false

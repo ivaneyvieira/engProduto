@@ -30,7 +30,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
@@ -52,6 +52,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

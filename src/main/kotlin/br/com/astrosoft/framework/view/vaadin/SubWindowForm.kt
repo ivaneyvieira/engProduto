@@ -22,17 +22,18 @@ class SubWindowForm(
     verticalLayout {
       content { align(stretch, top) }
       isPadding = false
-      horizontalLayout {
-        isSpacing = true
+      verticalLayout {
+        isSpacing = false
         isPadding = false
         if (fullSize) {
           setWidthFull()
         }
 
         title.split("|").forEach { linha ->
-          h2(linha) {
-            this.style["margin"] = "var(--lumo-space-m) 0 0 0"
-            this.style["font-size"] = "1.5em"
+          p(linha) {
+            this.style["margin"] = "0"
+            this.style["padding"] = "0"
+            this.style["font-size"] = "1em"
             this.style["font-weight"] = "bold"
             isExpand = true
           }

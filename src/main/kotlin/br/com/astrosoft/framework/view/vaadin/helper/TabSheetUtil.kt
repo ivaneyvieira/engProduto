@@ -12,11 +12,11 @@ fun TabSheet.tabPanel(tabPanel: ITabPanel) {
   }
   button.addThemeVariants(ButtonVariant.LUMO_SMALL)
 
-  this.add(button, tabPanel.createComponent)
+  this.add(button, tabPanel.createComponent())
 }
 
 interface ITabPanel : ITabView {
-  val createComponent: Component
+  fun createComponent(): Component
 }
 
 

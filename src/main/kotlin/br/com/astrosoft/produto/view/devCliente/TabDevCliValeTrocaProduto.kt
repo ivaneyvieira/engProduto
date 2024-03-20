@@ -30,7 +30,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
 
-  init {
+  fun init() {
     val listLojas = viewModel.findAllLojas()
     cmbLoja.setItems(listLojas)
     val user = AppConfig.userLogin() as? UserSaci
@@ -48,6 +48,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

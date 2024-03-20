@@ -15,10 +15,11 @@ import jakarta.annotation.security.PermitAll
 @PageTitle("Reposição")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
-class ReposicaoView(val init: Boolean = true) : ViewLayout<ReposicaoViewModel>(), IReposicaoView {
+class ReposicaoView(val init: Boolean = true, codigo: String = "", grade: String = "") :
+  ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
-  override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel)
+  override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel, codigo, grade)
   override val tabReposicaoUsr = TabReposicaoUsr(viewModel.tabReposicaoUsrViewModel)
 
   override fun isAccept(): Boolean {

@@ -20,7 +20,7 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   protected abstract fun HorizontalLayout.toolBarConfig()
   protected abstract fun Grid<T>.gridPanel()
 
-  override val createComponent = VerticalLayout().apply {
+  override fun createComponent() = VerticalLayout().apply {
     this.setSizeFull()
     isMargin = false
     isPadding = false

@@ -5,13 +5,13 @@ import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
 import br.com.astrosoft.framework.util.format
 import com.github.mvysny.karibudsl.v10.VaadinDsl
+import com.github.mvysny.karibudsl.v10.column
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
-import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.GridVariant.*
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,6 +19,7 @@ import com.vaadin.flow.data.renderer.LocalDateRenderer
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer
 import com.vaadin.flow.data.renderer.NumberRenderer
 import com.vaadin.flow.data.renderer.TextRenderer
+import com.vaadin.flow.function.ValueProvider
 import java.sql.Time
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -84,6 +85,28 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
       this.isAutoWidth = true
     }
     this.isResizable = true
+  }
+}
+
+@JvmName("columnProvider")
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
+  valueProvider: ValueProvider<T, *>,
+  header: String? = null,
+  width: String? = null,
+  block: (@VaadinDsl Column<T>).() -> Unit = {}
+): Column<T> {
+  return this.column(valueProvider) {
+    this.setHeader(header ?: "")
+    this.isExpand = false
+    if (width != null) {
+      this.isAutoWidth = false
+      this.width = width
+    } else {
+      this.isAutoWidth = true
+    }
+    this.isResizable = true
+    this.left()
+    this.block()
   }
 }
 
@@ -399,7 +422,7 @@ fun <T : Any> Column<T>.center(): Column<T> {
   return this
 }
 
-fun <T:Any> Grid<T>.format() {
+fun <T : Any> Grid<T>.format() {
   this.addThemeVariants(
     LUMO_COMPACT,
     LUMO_ROW_STRIPES,

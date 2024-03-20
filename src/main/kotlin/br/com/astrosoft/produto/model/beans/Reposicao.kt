@@ -55,25 +55,27 @@ class Reposicao(
 
   companion object {
     fun findAll(codigo: String, grade: String): List<Reposicao> {
-      return findAll(
+      val listBruto = findAll(
         FiltroReposicao(
           loja = 0,
           pesquisa = "",
           marca = EMarcaReposicao.ENT,
-          localizacao = emptyList(),
+          localizacao = listOf("TODOS"),
           codigo = codigo,
           grade = grade
         )
-      ).flatMap { repo ->
+      )
+      val listLiquido = listBruto.flatMap { repo ->
         findAll(
           FiltroReposicao(
             loja = repo.loja,
             pesquisa = "${repo.numero}",
             marca = EMarcaReposicao.ENT,
-            localizacao = emptyList(),
+            localizacao = listOf("TODOS"),
           )
         )
       }
+      return listLiquido
     }
 
     fun findAll(filtro: FiltroReposicao): List<Reposicao> {

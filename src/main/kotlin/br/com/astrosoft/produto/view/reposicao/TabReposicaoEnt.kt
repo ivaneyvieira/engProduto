@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
@@ -19,21 +20,24 @@ import java.time.LocalDate
 
 class TabReposicaoEnt(
   val viewModel: TabReposicaoEntViewModel,
+  val codigo: String,
+  val grade: String,
 ) : TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
-  var codigo: String = ""
-  var grade: String = ""
   private var dlgProduto: DlgProdutosReposEnt? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = viewModel.findLoja(0) ?: Loja.lojaZero
   }
 
+  override fun filtroProduto(): Boolean = codigo != "" || grade != ""
+
   override fun HorizontalLayout.toolBarConfig() {
+    this.isVisible = !filtroProduto()
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -43,6 +47,7 @@ class TabReposicaoEnt(
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -80,15 +85,30 @@ class TabReposicaoEnt(
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
 
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formEntregue(pedido)
+    if (!filtroProduto()) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formEntregue(pedido)
+      }
     }
     columnGrid(Reposicao::entregueSNome, "Entregue")
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formRecebido(pedido)
+    if (!filtroProduto()) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formRecebido(pedido)
+      }
     }
     columnGrid(Reposicao::recebidoSNome, "Recebido")
-    columnGrid(Reposicao::usuarioApp, "Login")
+    if (!filtroProduto()) {
+      columnGrid(Reposicao::usuarioApp, "Login")
+    }
+
+    if(filtroProduto()) {
+      columnGrid({
+        val reposicao = it.produtos.filter { prd ->
+          prd.codigo == codigo && prd.grade == grade
+        }.firstOrNull()
+        reposicao?.quantidade ?: 0
+      }, "Quant").right()
+    }
   }
 
   private fun Grid<Reposicao>.columnGridProduto() {

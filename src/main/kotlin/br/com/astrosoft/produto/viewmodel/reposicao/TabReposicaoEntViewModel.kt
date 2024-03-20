@@ -23,10 +23,13 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro).filter {
+    val reposicoes = if (subView.filtroProduto())
+      Reposicao.findAll(filtro.codigo, filtro.grade)
+    else
+      Reposicao.findAll(filtro)
+    return reposicoes.filter {
       it.countENT() > 0
     }
-    return reposicoes
   }
 
   fun formEntregue(pedido: Reposicao) {
@@ -113,4 +116,5 @@ interface ITabReposicaoEnt : ITabView {
   fun formEntregue(pedido: Reposicao)
   fun formRecebe(pedido: Reposicao)
   fun updateProdutos(reposicoes: List<Reposicao>)
+  fun filtroProduto(): Boolean
 }

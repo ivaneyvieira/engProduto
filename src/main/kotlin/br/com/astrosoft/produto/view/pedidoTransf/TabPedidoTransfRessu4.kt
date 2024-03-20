@@ -30,7 +30,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
@@ -52,6 +52,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
           viewModel.updateView()
       }
     }
+    init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT

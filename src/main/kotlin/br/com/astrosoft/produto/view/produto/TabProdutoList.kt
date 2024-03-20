@@ -36,7 +36,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
 
-  init {
+  fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
@@ -63,6 +63,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
               viewModel.updateView()
           }
         }
+        init()
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
