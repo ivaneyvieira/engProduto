@@ -20,8 +20,8 @@ import java.time.LocalDate
 class TabReposicaoEnt(
   val viewModel: TabReposicaoEntViewModel,
 ) : TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
-  lateinit var codigo: String
-  lateinit var grade: String
+  var codigo: String = ""
+  var grade: String = ""
   private var dlgProduto: DlgProdutosReposEnt? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
