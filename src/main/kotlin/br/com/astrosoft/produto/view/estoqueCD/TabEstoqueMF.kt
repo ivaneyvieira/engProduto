@@ -16,17 +16,20 @@ import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
+import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueMF {
+  private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
@@ -35,6 +38,13 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtProduto = integerField("Produto") {
+      this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -83,7 +93,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       val codigo = produto.codigo?.toString() ?: ""
       val grade = produto.grade ?: ""
       val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Reposição|$codigo : $descricao : $grade") {
+      val dlg = SubWindowForm("Ressuprimento|$codigo : $descricao : $grade") {
         val view = RessuprimentoView(false, codigo, grade)
         val tab = view.tabRessuprimentoEnt
         val form = tab.createComponent()
@@ -92,11 +102,11 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
       }
       dlg.open()
     }
-    addColumnButton(VaadinIcon.SIGNAL, "Reposicao", "Reposicao") { produto ->
+    addColumnButton(VaadinIcon.SIGNAL, "Reposição", "Reposição") { produto ->
       val codigo = produto.codigo?.toString() ?: ""
       val grade = produto.grade ?: ""
       val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Reposição|$codigo : $descricao : $grade") {
+      val dlg = SubWindowForm("Reposição Loja|$codigo : $descricao : $grade") {
         val view = ReposicaoView(false, codigo, grade)
         val tab = view.tabReposicaoEnt
         val form = tab.createComponent()
@@ -121,7 +131,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
     return FiltroProdutoEstoque(
       loja = 4,
       pesquisa = edtPesquisa.value ?: "",
-      codigo = 0,
+      codigo = edtProduto.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",

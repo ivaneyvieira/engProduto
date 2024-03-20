@@ -925,7 +925,6 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-      addOptionalParameter("localizacao", ressuprimento.localList())
       addOptionalParameter("marca", ressuprimento.marca ?: 0)
     }
   }
