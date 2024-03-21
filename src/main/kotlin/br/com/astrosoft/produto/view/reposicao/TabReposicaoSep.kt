@@ -6,17 +6,22 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoSep
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
+import java.time.LocalDate
 
 class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoSep {
   private var dlgProduto: DlgProdutosReposSep? = null
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -38,6 +43,20 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      this.value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.value = LocalDate.now()
+      this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -80,6 +99,8 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.SEP,
       localizacao = listOf("TODOS"),
+      dataInicial = edtDataInicial.value,
+      dataFinal = edtDataFinal.value
     )
   }
 
