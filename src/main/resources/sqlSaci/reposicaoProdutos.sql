@@ -62,7 +62,9 @@ FROM sqldados.eoprd AS E
        LEFT JOIN sqldados.stk AS S
                  USING (storeno, prdno, grade)
        LEFT JOIN sqldados.prdbar AS B
-                 USING (prdno, grade)
+                 ON B.prdno = E.prdno
+                   AND B.grade = E.grade
+                   AND B.grade != ''
        LEFT JOIN sqldados.users AS EE
                  ON EE.no = OA.empEntregue
        LEFT JOIN sqldados.emp AS ER

@@ -176,8 +176,9 @@ FROM T_OPRD AS X
                    AND S.grade = X.grade
                    AND S.storeno = 4
        LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno
+                 ON B.prdno = P.no
                    AND B.grade = X.grade
+                   AND B.grade != ''
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
@@ -193,7 +194,7 @@ WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca)
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-  AND (IFNULL(L.localizacao, '')  in (:locApp) OR 'TODOS' in (:locApp) OR TRUE)
+  AND (IFNULL(L.localizacao, '') IN (:locApp) OR 'TODOS' IN (:locApp) OR TRUE)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 HAVING CASE :temNota
          WHEN 'T' THEN TRUE
