@@ -12,7 +12,11 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosReposEnt(val viewModel: TabReposicaoEntViewModel, private val reposicoes: List<Reposicao>) {
+class DlgProdutosReposEnt(
+  val viewModel: TabReposicaoEntViewModel,
+  private val reposicoes: List<Reposicao>,
+  val filtroProduto: Boolean
+) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -46,14 +50,16 @@ class DlgProdutosReposEnt(val viewModel: TabReposicaoEntViewModel, private val r
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      this.withEditor(classBean = ReposicaoProduto::class,
-        openEditor = {
-          this.focusEditor(ReposicaoProduto::qtRecebido)
-        },
-        closeEditor = {
-          viewModel.saveQuant(it.bean)
-        }
-      )
+      if(filtroProduto) {
+        this.withEditor(classBean = ReposicaoProduto::class,
+          openEditor = {
+            this.focusEditor(ReposicaoProduto::qtRecebido)
+          },
+          closeEditor = {
+            viewModel.saveQuant(it.bean)
+          }
+        )
+      }
 
       columnGrid(ReposicaoProduto::codigo, "Código")
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")

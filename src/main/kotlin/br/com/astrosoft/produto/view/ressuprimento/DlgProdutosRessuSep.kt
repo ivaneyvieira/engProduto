@@ -64,17 +64,6 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      if (user?.ressuprimentoRecebedor == true) {
-        this.withEditor(classBean = ProdutoRessuprimento::class,
-          openEditor = {
-            this.focusEditor(ProdutoRessuprimento::qtRecebido)
-          },
-          closeEditor = {
-            viewModel.saveQuant(it.bean)
-          }
-        )
-      }
-
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao().expand()

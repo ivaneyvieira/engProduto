@@ -36,7 +36,11 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimentos: List<Ressuprimento>) {
+class DlgProdutosRessuEnt(
+  val viewModel: TabRessuprimentoEntViewModel,
+  val ressuprimentos: List<Ressuprimento>,
+  val filtroProduto: Boolean
+) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -50,26 +54,28 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
     }
 
     form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
+      if (!filtroProduto) {
+        textField("Código de barras") {
+          this.valueChangeMode = ValueChangeMode.ON_CHANGE
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.selecionaProdutos(it.value)
+              this@textField.value = ""
+              this@textField.focus()
+            }
           }
         }
-      }
-      button("Recebido") {
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
-          viewModel.marca()
+        button("Recebido") {
+          icon = VaadinIcon.ARROW_RIGHT.create()
+          onLeftClick {
+            viewModel.marca()
+          }
         }
-      }
-      button("Desmarcar") {
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.desmarcar()
+        button("Desmarcar") {
+          icon = VaadinIcon.ARROW_LEFT.create()
+          onLeftClick {
+            viewModel.desmarcar()
+          }
         }
       }
       button("Relatório") {
@@ -107,15 +113,17 @@ class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressu
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      if (user?.ressuprimentoRecebedor == true) {
-        this.withEditor(classBean = ProdutoRessuprimento::class,
-          openEditor = {
-            this.focusEditor(ProdutoRessuprimento::qtRecebido)
-          },
-          closeEditor = {
-            viewModel.saveQuant(it.bean)
-          }
-        )
+      if (!filtroProduto) {
+        if (user?.ressuprimentoRecebedor == true) {
+          this.withEditor(classBean = ProdutoRessuprimento::class,
+            openEditor = {
+              this.focusEditor(ProdutoRessuprimento::qtRecebido)
+            },
+            closeEditor = {
+              viewModel.saveQuant(it.bean)
+            }
+          )
+        }
       }
 
       produtoRessuprimentoCodigo()

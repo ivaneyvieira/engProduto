@@ -118,7 +118,7 @@ class Ressuprimento(
 
   companion object {
     fun find(codigo: String, grade: String): List<Ressuprimento> {
-      return find(
+      val reqEnt = find(
         FiltroRessuprimento(
           numero = 0,
           pesquisa = "",
@@ -129,6 +129,18 @@ class Ressuprimento(
           grade = grade,
         )
       )
+      val reqRec = find(
+        FiltroRessuprimento(
+          numero = 0,
+          pesquisa = "",
+          marca = EMarcaRessuprimento.REC,
+          temNota = ETemNota.TEM_NOTA,
+          lojaRessu = 0,
+          codigo = codigo,
+          grade = grade,
+        )
+      )
+      return (reqEnt + reqRec).distinctBy { it.numero }
     }
 
     fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())

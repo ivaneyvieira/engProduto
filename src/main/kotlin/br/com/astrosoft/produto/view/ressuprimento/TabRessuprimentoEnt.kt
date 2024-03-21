@@ -2,10 +2,8 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
@@ -117,7 +115,7 @@ class TabRessuprimentoEnt(
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não tem nota de transferencia")
       } else {
-        dlgProduto = DlgProdutosRessuEnt(viewModel, listOf(ressuprimento))
+        dlgProduto = DlgProdutosRessuEnt(viewModel, listOf(ressuprimento), filtroProduto())
         dlgProduto?.showDialog {
           viewModel.updateView()
         }
@@ -151,6 +149,13 @@ class TabRessuprimentoEnt(
     colunaRessuprimentoRecebidoPor()
     if (!filtroProduto())
       colunaRessuprimentoUsuarioApp()
+    if (filtroProduto())
+      columnGrid({ ressu ->
+        val produto = ressu.produtos().firstOrNull { prd ->
+          prd.codigo == codigo && prd.grade == grade
+        }
+        produto?.qtQuantNF ?: 0
+      }, "Quant").right()
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
@@ -222,7 +227,7 @@ class TabRessuprimentoEnt(
   }
 
   override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
-    dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimentos)
+    dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimentos, filtroProduto())
     dlgProduto?.showDialog {
       viewModel.updateView()
     }

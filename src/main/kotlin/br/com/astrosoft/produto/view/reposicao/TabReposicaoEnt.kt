@@ -113,7 +113,7 @@ class TabReposicaoEnt(
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      dlgProduto = DlgProdutosReposEnt(viewModel, listOf(ressuprimento))
+      dlgProduto = DlgProdutosReposEnt(viewModel, listOf(ressuprimento), filtroProduto())
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
