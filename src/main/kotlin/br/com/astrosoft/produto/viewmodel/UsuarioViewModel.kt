@@ -32,7 +32,7 @@ class UsuarioViewModel(view: IUsuarioView) : UserViewModel<UserSaci, IUsuarioVie
 
   fun allLojas() = Loja.allLojas()
 
-  fun allImpressoras() = Impressora.allTermica()
+  fun allImpressoras(): List<Impressora> = Impressora.allTermica()
 
   override fun createNew(): UserSaci {
     return UserSaci()
