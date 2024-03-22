@@ -46,7 +46,13 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
   }
 
   fun updateView() = vm.exec {
-    val usuarios = usuarios()
+    val filter = subView.filter()
+    val usuarios = usuarios().filter {
+      filter == "" ||
+      it.no.toString() == filter ||
+      it.name .contains(filter, ignoreCase = true) ||
+      it.login.startsWith(filter, ignoreCase = true)
+    }
     subView.updateUsuarios(usuarios)
   }
 
@@ -74,6 +80,7 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
 }
 
 interface ITabUser : ITabView {
+  fun filter(): String
   fun updateUsuarios(usuarios: List<UserSaci>)
   fun formAddUsuario()
   fun selectedItem(): UserSaci?

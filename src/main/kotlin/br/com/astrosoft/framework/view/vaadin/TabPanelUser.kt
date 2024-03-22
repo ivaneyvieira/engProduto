@@ -12,8 +12,12 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserSaci>(UserSaci::class) {
+  lateinit var edtPesquisa: TextField
+
   abstract fun Grid<UserSaci>.configGrid()
   override fun Grid<UserSaci>.gridPanel() {
     this.format()
@@ -25,7 +29,18 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     this.configGrid()
   }
 
+  fun filter(): String {
+    return edtPesquisa.value ?: ""
+  }
+
   override fun HorizontalLayout.toolBarConfig() {
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "300px"
+      this.valueChangeMode = ValueChangeMode.TIMEOUT
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
 
