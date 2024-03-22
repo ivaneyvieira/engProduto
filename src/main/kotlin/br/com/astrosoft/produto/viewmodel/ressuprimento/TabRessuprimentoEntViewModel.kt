@@ -24,9 +24,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       Ressuprimento.find(filtro.codigo, filtro.grade)
     else
       Ressuprimento.find(filtro)
-    subView.updateRessuprimentos(ressuprimento.filter {
+    subView.updateRessuprimentos(ressuprimento/*.filter {
       (it.countCor ?: 0) == 0
-    })
+    }*/)
   }
 
   fun formAutoriza(pedido: Ressuprimento) {

@@ -143,9 +143,10 @@ class Ressuprimento(
       return (reqEnt + reqRec).distinctBy { it.numero }
     }
 
-    fun find(filtro: FiltroRessuprimento) = saci.findRessuprimento(filtro, userRessuprimentoLocais())
-      .groupBy { "${it.numero}:${it.notaBaixa}" }
-      .map { entry ->
+    fun find(filtro: FiltroRessuprimento): List<Ressuprimento> {
+      val ressuprimentos = saci.findRessuprimento(filtro, userRessuprimentoLocais())
+      val grupos = ressuprimentos.groupBy { "${it.numero}:${it.notaBaixa}" }
+      return grupos.map { entry ->
         val list = entry.value
         val ressu = list.firstOrNull()
         Ressuprimento(
@@ -185,6 +186,7 @@ class Ressuprimento(
           countSelREC = list.sumOf { it.countSelREC ?: 0 },
         )
       }
+    }
   }
 }
 
