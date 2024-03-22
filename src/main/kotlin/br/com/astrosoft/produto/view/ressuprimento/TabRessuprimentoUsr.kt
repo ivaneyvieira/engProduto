@@ -23,7 +23,6 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     columnGrid(UserSaci::ressuprimentoRecebedor, "Recebedor")
   }
 
-
   override fun FormUsuario.configFields() {
     checkBox("Separar") {
       binder.bind(this, UserSaci::ressuprimentoCD.name)
