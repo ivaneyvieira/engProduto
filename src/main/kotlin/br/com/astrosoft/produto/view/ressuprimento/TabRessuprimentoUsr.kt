@@ -53,7 +53,6 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = false
-      this.style.set("border", "1px solid #9E9E9E")
 
       select<Int>("Nome Loja") {
         this.setWidthFull()
