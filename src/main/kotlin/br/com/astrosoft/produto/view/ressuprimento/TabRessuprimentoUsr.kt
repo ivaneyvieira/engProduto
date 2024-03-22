@@ -15,8 +15,12 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUser(viewModel), ITabRessuprimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
-    columnGrid(UserSaci::impressoraRepo, "Impressora")
-    columnGrid(UserSaci::localizacaoRepo, "Localização")
+    columnGrid(UserSaci::ressuprimentoCD, "Separar")
+    columnGrid(UserSaci::ressuprimentoSep, "Separado")
+    columnGrid(UserSaci::ressuprimentoEnt, "Entrege")
+    columnGrid(UserSaci::ressuprimentoPen, "Pendente")
+    columnGrid(UserSaci::ressuprimentoRec, "Recebido")
+    columnGrid(UserSaci::ressuprimentoRecebedor, "Recebedor")
   }
 
   override fun FormUsuario.configFields() {

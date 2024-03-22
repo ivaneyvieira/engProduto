@@ -289,8 +289,13 @@ class UserSaci : IUser {
   val pedidoRetira
     get() = retiraImprimir || retiraImpresso || admin
 
-  val estoqueCD
+  var estoqueCD
     get() = estoqueMF || estoqueCad || estoqueCD1A || admin
+    set(value) {
+      estoqueMF = value
+      estoqueCad = value
+      estoqueCD1A = value
+    }
 
   val fornecedor
     get() = produtoList

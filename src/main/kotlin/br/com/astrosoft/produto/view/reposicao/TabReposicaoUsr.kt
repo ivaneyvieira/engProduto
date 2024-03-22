@@ -14,6 +14,8 @@ import com.vaadin.flow.data.binder.Binder
 
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::reposicaoSep, "Separar")
+    columnGrid(UserSaci::reposicaoEnt, "Entregar")
     columnGrid(UserSaci::impressoraRepo, "Impressora")
     columnGrid(UserSaci::localizacaoRepo, "Localização")
   }
