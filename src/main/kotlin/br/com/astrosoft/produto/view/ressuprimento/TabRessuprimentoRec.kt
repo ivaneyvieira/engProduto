@@ -169,6 +169,6 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val impressoraRessu = username?.impressoraRessu ?: return emptyList()
-    return if (impressoraRessu == "TODOS") emptyList() else listOf(impressoraRessu)
+    return if (impressoraRessu.contains("TODOS")) emptyList() else impressoraRessu.toList()
   }
 }

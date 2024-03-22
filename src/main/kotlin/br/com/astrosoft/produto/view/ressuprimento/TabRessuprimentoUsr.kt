@@ -39,7 +39,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
       checkBox("Entrege") {
         binder.bind(this, UserSaci::ressuprimentoEnt.name)
       }
-      select<String>("Impressora") {
+      multiSelectComboBox<String>("Impressora") {
         this.isExpand = true
         setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
         binder.bind(this, UserSaci::impressoraRessu.name)
