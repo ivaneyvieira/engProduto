@@ -17,14 +17,6 @@ object NotaColumns {
     this.setHeader("NF Ent")
   }
 
-  fun Grid<NotaSaida>.colunaNFChaveExp() = columnGrid(NotaSaida::chaveNovaExp) {
-    this.setHeader("Chave Exp")
-  }
-
-  fun Grid<NotaSaida>.colunaNFChaveCD() = columnGrid(NotaSaida::chaveNovaCD) {
-    this.setHeader("Chave CD")
-  }
-
   fun Grid<NotaSaida>.colunaNFCliente() = columnGrid(NotaSaida::cliente) {
     this.setHeader("Cliente")
   }

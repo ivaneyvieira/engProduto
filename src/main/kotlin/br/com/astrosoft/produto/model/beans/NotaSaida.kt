@@ -13,17 +13,17 @@ class NotaSaida(
   var pdvno: Int,
   var xano: Long,
   var numero: Int,
-  var serie: String,
-  var cliente: Int,
-  var nomeCliente: String,
-  var data: LocalDate,
+  var serie: String?,
+  var cliente: Int?,
+  var nomeCliente: String?,
+  var data: LocalDate?,
   var hora: LocalTime?,
-  var vendedor: Int,
-  var nomeVendedor: String,
+  var vendedor: Int?,
+  var nomeVendedor: String?,
   var locais: String?,
   var usuarioExp: String?,
   var usuarioCD: String?,
-  var totalProdutos: Double,
+  var totalProdutos: Double?,
   var marca: Int?,
   var cancelada: String?,
   var tipoNotaSaida: String?,
@@ -45,9 +45,6 @@ class NotaSaida(
   val horaExp
     get() = splitExp(2)
 
-  val chaveNovaExp: String
-    get() = "$usuarioNameExp-$dataExp-$horaExp-$locais"
-
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
 
   val usuarioNameCD
@@ -56,9 +53,6 @@ class NotaSaida(
     get() = splitCD(1)
   val horaCD
     get() = splitCD(2)
-
-  val chaveNovaCD: String
-    get() = "$usuarioNameCD-$dataCD-$horaCD-$locais"
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, UserSaci.userEstoqueLocais())
 

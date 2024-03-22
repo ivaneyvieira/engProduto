@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFChaveExp
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
@@ -41,9 +40,6 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       }
     }
     edtLoja = integerField("Loja") {
-      //val user = AppConfig.userLogin() as? UserSaci
-      //isVisible = user?.lojaSaidaCDOk() == 0
-      // value = user?.lojaSaidaCDOk()
       valueChangeMode = ValueChangeMode.LAZY
 
       addValueChangeListener {
@@ -75,7 +71,6 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
         viewModel.updateView()
       }
     }
-    colunaNFChaveExp()
     colunaNFNota()
     colunaNFData()
     colunaHora()

@@ -282,9 +282,8 @@ class QuerySaci : QueryDB(database) {
           if (user?.vendaFExpedicao == true) "VENDAF" else null
         )
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
-    val dataFinal = filtro.dataFinal?.toSaciDate() ?: dataInicial
-    return if (dataInicial == 0 && dataFinal == 0) emptyList()
-    else query(sql, NotaSaida::class, sqlLazy) {
+    val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
+    return query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("storeno", filtro.storeno)
       addOptionalParameter("nfno", nfno)
@@ -292,7 +291,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("cliente", filtro.cliente)
       addOptionalParameter("vendedor", filtro.vendedor)
       addOptionalParameter("locais", locais)
-      addOptionalParameter("listaTipos", listaTipos)
+      addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
     }

@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
+import br.com.astrosoft.produto.view.notaSaida.NotaView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
@@ -24,6 +25,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = SHOP,
         title = "Ressuprimento",
         routeClass = RessuprimentoView::class
+      )
+      if (userSaci?.nota == true) route(
+        icon = OUT,
+        title = "Expedição",
+        routeClass = NotaView::class
       )
       if (userSaci?.reposicao == true) route(
         icon = SIGNAL,

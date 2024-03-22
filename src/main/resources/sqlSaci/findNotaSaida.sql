@@ -1,6 +1,6 @@
 USE sqldados;
 
-DO @DT := 20200101;
+DO @DT := 20240322;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
@@ -144,7 +144,8 @@ FROM sqldados.nf AS N
                  ON E.no = N.empno
        LEFT JOIN sqldados.custp AS C
                  ON C.no = N.custno
-WHERE issuedate BETWEEN :dataInicial AND :dataFinal
+WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
+  AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
   AND (CASE
          WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4

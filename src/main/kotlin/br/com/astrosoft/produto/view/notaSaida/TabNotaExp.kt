@@ -28,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaExp {
   private var dlgProduto: DlgProdutosExp? = null
@@ -41,12 +42,14 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   override fun HorizontalLayout.toolBarConfig() {
     edtDataInicial = datePicker("Data Inicial") {
       this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -58,9 +61,6 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     edtLoja = integerField("Loja") {
-      //val user = AppConfig.userLogin() as? UserSaci
-      //isVisible = user?.lojaSaidaExpOk() == 0
-      //value = user?.lojaSaidaExpOk()
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
