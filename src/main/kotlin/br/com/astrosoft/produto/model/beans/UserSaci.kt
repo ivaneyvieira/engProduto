@@ -264,8 +264,15 @@ class UserSaci : IUser {
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
   val nota
     get() = notaExp || notaCD || notaEnt || admin
-  val ressuprimento
+  var ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
+    set(value) {
+      ressuprimentoCD = value
+      ressuprimentoEnt = value
+      ressuprimentoPen = value
+      ressuprimentoSep = value
+    }
+
   var reposicao
     get() = reposicaoSep || reposicaoEnt || admin
     set(value) {

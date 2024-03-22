@@ -23,6 +23,7 @@ class RessuprimentoView(val init: Boolean = true, codigo: String = "", grade: St
   override val tabRessuprimentoEnt = TabRessuprimentoEnt(viewModel.tabRessuprimentoEntViewModel, codigo, grade)
   override val tabRessuprimentoPen = TabRessuprimentoPen(viewModel.tabRessuprimentoPenViewModel)
   override val tabRessuprimentoRec = TabRessuprimentoRec(viewModel.tabRessuprimentoRecViewModel)
+  override val tabRessuprimentoUsr = TabRessuprimentoUsr(viewModel.tabRessuprimentoUsrViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
