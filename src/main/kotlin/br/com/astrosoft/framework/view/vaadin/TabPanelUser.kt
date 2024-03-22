@@ -87,6 +87,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
 
   fun formUpdUsuario(usuario: UserSaci) {
     val form = FormUsuario(usuario) {
+      this.width = "60%"
       this.configFieldsDefault(true)
       this.configFields()
     }
@@ -97,6 +98,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
 
   fun formAddUsuario() {
     val form = FormUsuario(UserSaci()) {
+      this.width = "60%"
       this.configFieldsDefault(false)
       this.configFields()
     }

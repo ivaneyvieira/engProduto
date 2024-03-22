@@ -18,6 +18,8 @@ object DialogHelper {
       this.addConfirmListener {
         runConfirm()
       }
+      this.width = form.width
+      form.setWidthFull()
       this.setCancelable(true)
       this.setCancelText("Cancela")
       this.open()
@@ -25,29 +27,32 @@ object DialogHelper {
   }
 
   fun showError(msg: String) {
-    val dialog = ConfirmDialog()
-    dialog.setHeader("Erro do aplicativo")
-    dialog.setText(msg)
-    dialog.setConfirmText("OK")
-    dialog.open()
+    ConfirmDialog().apply {
+      this.setHeader("Erro do aplicativo")
+      this.setText(msg)
+      this.setConfirmText("OK")
+      this.open()
+    }
   }
 
   fun showWarning(msg: String) {
-    val dialog = ConfirmDialog()
-    dialog.setHeader("Aviso")
-    dialog.setText(msg)
-    dialog.setConfirmText("OK")
-    dialog.open()
+    ConfirmDialog().apply {
+      this.setHeader("Aviso")
+      this.setText(msg)
+      this.setConfirmText("OK")
+      this.open()
+    }
   }
 
   fun showInformation(msg: String, title: String = "Informação") {
-    val dialog = ConfirmDialog()
-    dialog.setHeader(title)
-    dialog.setText(Div().apply {
-      this.html(msg)
-    })
-    dialog.setConfirmText("OK")
-    dialog.open()
+    ConfirmDialog().apply {
+      this.setHeader(title)
+      this.setText(Div().apply {
+        this.html(msg)
+      })
+      this.setConfirmText("OK")
+      this.open()
+    }
   }
 
   fun showReport(chave: String, report: ByteArray) {

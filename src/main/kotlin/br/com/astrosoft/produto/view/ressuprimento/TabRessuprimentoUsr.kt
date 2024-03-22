@@ -51,9 +51,6 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     checkBox("Recebido") {
       binder.bind(this, UserSaci::ressuprimentoRec.name)
     }
-    checkBox("Usuário Recebedor") {
-      binder.bind(this, UserSaci::ressuprimentoRecebedor.name)
-    }
     multiSelectComboBox<String>("Localização") {
       setItems(listOf("TODOS") + viewModel.allLocalizacao())
       binder.bind(this, UserSaci::listaRessuprimento.name)
@@ -72,6 +69,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         }
       }
       binder.bind(this, UserSaci::lojaRessu.name)
+    }
+    checkBox("Usuário Recebedor") {
+      binder.bind(this, UserSaci::ressuprimentoRecebedor.name)
     }
   }
 }
