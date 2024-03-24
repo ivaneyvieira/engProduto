@@ -70,20 +70,12 @@ class NotaSaida(
 }
 
 data class FiltroNota(
-  val storeno: Int,
-  val nota: String,
   val marca: EMarcaNota,
   val loja: Int,
-  val cliente: Int,
-  val vendedor: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
-) {
-  val nfno: Int
-    get() = nota.split("/").getOrNull(0)?.toIntOrNull() ?: 0
-  val nfse: String
-    get() = nota.split("/").getOrNull(1) ?: ""
-}
+  val pesquisa: String,
+)
 
 enum class EMarcaNota(val num: Int, val descricao: String) {
   EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")

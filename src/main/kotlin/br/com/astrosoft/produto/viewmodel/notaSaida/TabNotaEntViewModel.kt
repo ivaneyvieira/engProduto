@@ -7,6 +7,10 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabNotaEntViewModel(val viewModel: NotaViewModel) {
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun updateView() {
     val filtro = subView.filtro(EMarcaNota.ENT)
     val notas = NotaSaida.find(filtro)

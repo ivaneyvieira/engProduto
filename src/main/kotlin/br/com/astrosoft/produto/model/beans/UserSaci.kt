@@ -248,7 +248,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(4) ?: "",
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
-        value.joinToString(":") ?: "",
+        value.joinToString(":"),
       )
     }
 

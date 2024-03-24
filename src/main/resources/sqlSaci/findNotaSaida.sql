@@ -74,6 +74,11 @@ SELECT prdno, CAST(GROUP_CONCAT(loc) AS CHAR) AS locais
 FROM T_LOC
 GROUP BY prdno;
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO @PESQUISA_START := CONCAT(:pesquisa, '%');
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
+
 SELECT N.storeno                          AS loja,
        N.pdvno                            AS pdvno,
        N.xano                             AS xano,
@@ -171,13 +176,19 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
          ELSE 'SP_REME'
        END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
   AND (X.s12 = :marca OR :marca = 999)
-  AND (N.storeno = :storeno OR :storeno = 0)
-  AND (N.nfno = :nfno OR :nfno = 0)
-  AND (N.nfse = :nfse OR :nfse = '')
-  AND (N.custno = :cliente OR :cliente = 0)
-  AND (E.sname = :vendedor OR :vendedor = '')
+  AND (N.storeno = :loja OR :loja = 0)
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
          IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '-', 1)),
          IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1))
+HAVING (
+         @PESQUISA = '' OR
+         numero LIKE @PESQUISA_START OR
+         notaEntrega LIKE @PESQUISA_START OR
+         cliente = @PESQUISA_NUM OR
+         nomeCliente LIKE @PESQUISA_LIKE OR
+         vendedor = @PESQUISA_NUM OR
+         nomeVendedor LIKE @PESQUISA_LIKE OR
+         locais LIKE @PESQUISA_LIKE
+         )

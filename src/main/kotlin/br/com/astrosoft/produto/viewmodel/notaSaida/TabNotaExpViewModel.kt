@@ -10,6 +10,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
   fun updateView() {
     val filtro = subView.filtro(EMarcaNota.TODOS)
     val notas = NotaSaida.find(filtro)

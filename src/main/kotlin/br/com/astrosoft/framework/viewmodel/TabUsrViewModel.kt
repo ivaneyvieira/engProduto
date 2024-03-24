@@ -70,10 +70,10 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
 
   fun addUser(userSaci: UserSaci) {
     val user = UserSaci.findUser(userSaci.login)
-    user.forEach { user ->
-      user.ativo = true
-      user.update(userSaci)
-      UserSaci.updateUser(user)
+    user.forEach { u ->
+      u.ativo = true
+      u.update(userSaci)
+      UserSaci.updateUser(u)
     }
     updateView()
   }

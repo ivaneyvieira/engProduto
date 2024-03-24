@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.notaSaida
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
@@ -15,44 +16,56 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCli
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaCD
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
-import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
   private var dlgProduto: DlgProdutosCD? = null
-  private lateinit var edtNota: TextField
-  private lateinit var edtLoja: IntegerField
-  private lateinit var edtCliente: IntegerField
-  private lateinit var edtVendedor: TextField
+  private lateinit var cmbLoja: Select<Loja>
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
+  private lateinit var edtPesquisa: TextField
+
+  fun init() {
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    cmbLoja.value = Loja.lojaZero
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtNota = textField("Nota") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+    init()
+    edtDataInicial = datePicker("Data Inicial") {
+      this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-    edtLoja = integerField("Loja") {
-      valueChangeMode = ValueChangeMode.LAZY
-
+    edtDataFinal = datePicker("Data Final") {
+      this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-    edtCliente = integerField("Cliente") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtVendedor = textField("Vendedor") {
+    edtPesquisa = textField("Pesquisa") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
@@ -83,14 +96,11 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
-      storeno = edtLoja.value ?: 0,
-      nota = edtNota.value,
       marca = marca,
-      loja = edtLoja.value ?: 0,
-      cliente = edtCliente.value ?: 0,
-      vendedor = edtVendedor.value ?: "",
-      dataInicial = LocalDate.now().minusDays(15),
-      dataFinal = LocalDate.now().plusDays(30),
+      loja = cmbLoja.value?.no ?: 0,
+      dataInicial = edtDataInicial.value,
+      dataFinal = edtDataFinal.value,
+      pesquisa = edtPesquisa.value ?: ""
     )
   }
 

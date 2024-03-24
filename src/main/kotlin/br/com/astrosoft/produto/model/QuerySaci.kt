@@ -270,8 +270,6 @@ class QuerySaci : QueryDB(database) {
 
   fun findNotaSaida(filtro: FiltroNota, locais: List<String>, user: UserSaci?, sqlLazy: SqlLazy): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
-    val nfno = filtro.nfno
-    val nfse = filtro.nfse
     val listaTipos =
         listOfNotNull(
           if (user?.nfceExpedicao == true) "NFCE" else null,
@@ -285,11 +283,8 @@ class QuerySaci : QueryDB(database) {
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
     return query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
-      addOptionalParameter("storeno", filtro.storeno)
-      addOptionalParameter("nfno", nfno)
-      addOptionalParameter("nfse", nfse)
-      addOptionalParameter("cliente", filtro.cliente)
-      addOptionalParameter("vendedor", filtro.vendedor)
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("locais", locais)
       addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
