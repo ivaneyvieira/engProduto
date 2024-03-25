@@ -31,6 +31,7 @@ import java.time.LocalDate
 class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
   private var dlgProduto: DlgProdutosCD? = null
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbNota: Select<ETipoNota>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
@@ -65,6 +66,17 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
         viewModel.updateView()
       }
     }
+    cmbNota = select("Nota") {
+      setItems(ETipoNota.entries)
+      value = ETipoNota.TODOS
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -97,6 +109,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
+      tipoNota = cmbNota.value ?: ETipoNota.TODOS,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

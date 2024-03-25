@@ -71,6 +71,7 @@ class NotaSaida(
 
 data class FiltroNota(
   val marca: EMarcaNota,
+  val tipoNota: ETipoNota,
   val loja: Int,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
@@ -79,4 +80,8 @@ data class FiltroNota(
 
 enum class EMarcaNota(val num: Int, val descricao: String) {
   EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
+}
+
+enum class ETipoNota(val num: Int, val descricao: String) {
+  NFCE(0, "NFCE"), NFE(1, "NFE"), TODOS(999, "Todos")
 }

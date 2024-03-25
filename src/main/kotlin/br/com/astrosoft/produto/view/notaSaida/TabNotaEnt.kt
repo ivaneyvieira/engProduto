@@ -35,6 +35,7 @@ import java.time.LocalDate
 class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEnt {
   private var dlgProduto: DlgProdutosEnt? = null
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbNota: Select<ETipoNota>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
@@ -67,6 +68,17 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+    cmbNota = select("Nota") {
+      setItems(ETipoNota.entries)
+      value = ETipoNota.TODOS
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
       }
     }
     edtPesquisa = textField("Pesquisa") {
@@ -105,6 +117,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
+      tipoNota = cmbNota.value ?: ETipoNota.TODOS,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

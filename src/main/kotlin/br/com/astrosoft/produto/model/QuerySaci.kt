@@ -283,6 +283,7 @@ class QuerySaci : QueryDB(database) {
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
     return query(sql, NotaSaida::class, sqlLazy) {
       addOptionalParameter("marca", filtro.marca.num)
+      addOptionalParameter("tipoNota", filtro.tipoNota.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("locais", locais)

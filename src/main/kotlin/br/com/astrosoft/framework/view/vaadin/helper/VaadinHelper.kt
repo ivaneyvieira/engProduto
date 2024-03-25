@@ -19,7 +19,7 @@ fun DatePicker.localePtBr() {
         this.setDateFormat("dd/MM/yyyy")
         this.today = "hoje"
         this.cancel = "cancelar"
-        this.firstDayOfWeek = 1
+        this.firstDayOfWeek = 0
         this.monthNames = listOf(
           "janeiro",
           "fevereiro",

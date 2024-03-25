@@ -175,6 +175,13 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
            THEN 'OUTRAS_NFS'
          ELSE 'SP_REME'
        END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
+  AND (CASE :tipoNota
+         WHEN 0 THEN tipo = 0 AND N.nfse >= 10
+         WHEN 1 THEN !(tipo = 0 AND N.nfse >= 10)
+         WHEN 999 THEN TRUE
+         ELSE FALSE
+       END
+  )
   AND (X.s12 = :marca OR :marca = 999)
   AND (N.storeno = :loja OR :loja = 0)
 GROUP BY N.storeno,
