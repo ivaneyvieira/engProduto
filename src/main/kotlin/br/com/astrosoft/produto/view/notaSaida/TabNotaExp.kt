@@ -69,8 +69,11 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     cmbNota = select("Nota") {
+      val user =  AppConfig.userLogin() as? UserSaci
       setItems(ETipoNota.entries)
-      value = ETipoNota.TODOS
+      val tipoNota = ETipoNota.entries.firstOrNull { it.num == user?.tipoNota }
+      this.isReadOnly = tipoNota != null
+      value =  tipoNota ?: ETipoNota.TODOS
       this.setItemLabelGenerator {
         it.descricao
       }

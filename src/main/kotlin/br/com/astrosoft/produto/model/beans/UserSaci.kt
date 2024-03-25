@@ -135,6 +135,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
 
@@ -155,6 +156,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
 
@@ -171,6 +173,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
 
@@ -187,6 +190,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
 
@@ -203,6 +207,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
 
@@ -219,6 +224,7 @@ class UserSaci : IUser {
         value.joinToString(":"),
         listLojas.getOrNull(6) ?: "",
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
   var localizacaoRepo: Set<String>
@@ -234,6 +240,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         value.joinToString(":"),
         listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
       )
     }
   var impressoraRepo: Set<String>
@@ -249,6 +256,24 @@ class UserSaci : IUser {
         listLojas.getOrNull(5) ?: "",
         listLojas.getOrNull(6) ?: "",
         value.joinToString(":"),
+        listLojas.getOrNull(8) ?: "",
+      )
+    }
+
+  var tipoNota: Int?
+    get() = lojas.getOrNull(8)?.toIntOrNull()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
+        listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
+        value?.toString() ?: "",
       )
     }
 
@@ -262,8 +287,13 @@ class UserSaci : IUser {
 
   val produto
     get() = produtoList || produtoReserva || produtoRetiraEntrega || produtoRetiraEntregaEdit || admin
-  val nota
+  var nota
     get() = notaExp || notaCD || notaEnt || admin
+    set(value) {
+      notaExp = value
+      notaCD = value
+      notaEnt = value
+    }
   var ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
     set(value) {
