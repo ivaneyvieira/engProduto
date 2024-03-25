@@ -9,6 +9,8 @@ import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.verticalLayout
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
@@ -22,23 +24,56 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
   }
 
   override fun FormUsuario.configFields() {
-    checkBox("Exp") {
-      binder.bind(this, UserSaci::notaExp.name)
-    }
-    checkBox("CD") {
-      binder.bind(this, UserSaci::notaCD.name)
-    }
-    checkBox("Entrege") {
-      binder.bind(this, UserSaci::notaEnt.name)
-    }
-    select<Int>("Nota") {
-      this.isEmptySelectionAllowed = true
-      setItems(ETipoNota.entries.map { it.num })
-      value = ETipoNota.TODOS.num
-      this.setItemLabelGenerator {
-        ETipoNota.entries.firstOrNull { et -> et.num == it }?.descricao ?: ""
+    verticalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.isSpacing = false
+
+      checkBox("Exp") {
+        binder.bind(this, UserSaci::notaExp.name)
       }
-      binder.bind(this, UserSaci::tipoNota.name)
+      checkBox("CD") {
+        binder.bind(this, UserSaci::notaCD.name)
+      }
+      checkBox("Entrege") {
+        binder.bind(this, UserSaci::notaEnt.name)
+      }
+    }
+    verticalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.isSpacing = false
+      select<Int>("Loja") {
+        this.setWidthFull()
+        val lojas = viewModel.findAllLojas()
+        val lojasNum = lojas.map { it.no } + listOf(0)
+        setItems(lojasNum.distinct().sorted())
+        this.isEmptySelectionAllowed = true
+        this.setItemLabelGenerator { storeno ->
+          when (storeno) {
+            0    -> "Todas as lojas"
+            else -> lojas.firstOrNull { loja ->
+              loja.no == storeno
+            }?.descricao ?: ""
+          }
+        }
+        binder.bind(this, UserSaci::lojaNota.name)
+      }
+      multiSelectComboBox<String>("Impressora") {
+        this.setWidthFull()
+        setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+        binder.bind(this, UserSaci::impressoraNota.name)
+      }
+      select<Int>("Nota") {
+        this.setWidthFull()
+        this.isEmptySelectionAllowed = true
+        setItems(ETipoNota.entries.map { it.num })
+        this.setItemLabelGenerator {
+          ETipoNota.entries.firstOrNull { et -> et.num == it }?.descricao ?: ""
+        }
+        binder.bind(this, UserSaci::tipoNota.name)
+        value = ETipoNota.TODOS.num
+      }
     }
   }
 }

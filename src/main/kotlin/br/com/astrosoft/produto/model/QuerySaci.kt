@@ -360,7 +360,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locais", locais)
+      addOptionalParameter("locais", "TODOS")
     }
     produtos.forEach {
       println(it.local)

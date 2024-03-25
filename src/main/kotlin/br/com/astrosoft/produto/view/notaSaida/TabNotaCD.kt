@@ -37,8 +37,12 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   private lateinit var edtPesquisa: TextField
 
   fun init() {
+    val user = AppConfig.userLogin() as? UserSaci
+    val loja = user?.lojaNota ?: 0
+    val lojaSelecionada = viewModel.findAllLojas().firstOrNull { it.no == loja }
+    cmbLoja.isReadOnly = lojaSelecionada != null
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    cmbLoja.value = Loja.lojaZero
+    cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -67,8 +71,11 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       }
     }
     cmbNota = select("Nota") {
+      val user = AppConfig.userLogin() as? UserSaci
       setItems(ETipoNota.entries)
       value = ETipoNota.TODOS
+      val tipoNota = ETipoNota.entries.firstOrNull { it.num == user?.tipoNota }
+      this.isReadOnly = tipoNota != null
       this.setItemLabelGenerator {
         it.descricao
       }
