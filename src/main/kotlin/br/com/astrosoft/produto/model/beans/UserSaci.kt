@@ -138,6 +138,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -161,6 +162,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -180,6 +182,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -199,6 +202,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -218,6 +222,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -237,6 +242,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
   var localizacaoRepo: Set<String>
@@ -255,6 +261,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
   var impressoraRepo: Set<String>
@@ -273,6 +280,7 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -292,6 +300,7 @@ class UserSaci : IUser {
         value?.toString() ?: "",
         listLojas.getOrNull(9) ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
@@ -311,11 +320,12 @@ class UserSaci : IUser {
         listLojas.getOrNull(8) ?: "",
         value.toString() ?: "",
         listLojas.getOrNull(10) ?: "",
+        listLojas.getOrNull(11) ?: "",
       )
     }
 
-  var impressoraNota: Set<String>
-    get() = lojas.getOrNull(10)?.toString()?.split(":").orEmpty().toSet()
+  var impressoraNota: String
+    get() = lojas.getOrNull(10) ?: ""
     set(value) {
       val listLojas = lojas
       lojas = listOf(
@@ -329,6 +339,27 @@ class UserSaci : IUser {
         listLojas.getOrNull(7) ?: "",
         listLojas.getOrNull(8) ?: "",
         listLojas.getOrNull(9) ?: "",
+        value,
+        listLojas.getOrNull(11) ?: "",
+      )
+    }
+
+  var localizacaoNota: Set<String>
+    get() = lojas.getOrNull(11)?.split(":").orEmpty().toSet()
+    set(value) {
+      val listLojas = lojas
+      lojas = listOf(
+        listLojas.getOrNull(0) ?: "",
+        listLojas.getOrNull(1) ?: "",
+        listLojas.getOrNull(2) ?: "",
+        listLojas.getOrNull(3) ?: "",
+        listLojas.getOrNull(4) ?: "",
+        listLojas.getOrNull(5) ?: "",
+        listLojas.getOrNull(6) ?: "",
+        listLojas.getOrNull(7) ?: "",
+        listLojas.getOrNull(8) ?: "",
+        listLojas.getOrNull(9) ?: "",
+        listLojas.getOrNull(10) ?: "",
         value.joinToString(":"),
       )
     }

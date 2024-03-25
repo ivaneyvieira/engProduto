@@ -54,15 +54,13 @@ class NotaSaida(
   val horaCD
     get() = splitCD(2)
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca, UserSaci.userEstoqueLocais())
+  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-      val user = AppConfig.userLogin() as? UserSaci
+
       return saci.findNotaSaida(
         filtro = filtro,
-        locais = UserSaci.userEstoqueLocais(),
-        user = user,
         SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC)))
       )
     }

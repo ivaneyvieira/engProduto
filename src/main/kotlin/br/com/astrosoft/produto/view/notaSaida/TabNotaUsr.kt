@@ -59,9 +59,9 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         }
         binder.bind(this, UserSaci::lojaNota.name)
       }
-      multiSelectComboBox<String>("Impressora") {
+      select<String>("Impressora") {
         this.setWidthFull()
-        setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+        setItems(viewModel.allImpressoras().map { it.name })
         binder.bind(this, UserSaci::impressoraNota.name)
       }
       select<Int>("Nota") {
@@ -73,6 +73,11 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         }
         binder.bind(this, UserSaci::tipoNota.name)
         value = ETipoNota.TODOS.num
+      }
+      multiSelectComboBox<String>("Localização") {
+        this.setWidthFull()
+        setItems(listOf("TODOS") + viewModel.allLocalizacao())
+        binder.bind(this, UserSaci::localizacaoNota.name)
       }
     }
   }

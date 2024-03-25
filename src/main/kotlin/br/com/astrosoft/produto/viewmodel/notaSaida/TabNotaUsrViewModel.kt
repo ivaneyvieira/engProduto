@@ -24,6 +24,7 @@ class TabNotaUsrViewModel(val viewModel: NotaViewModel) : TabUsrViewModel(viewMo
     this.tipoNota = usuario.tipoNota
     this.impressoraNota = usuario.impressoraNota
     this.lojaNota = usuario.lojaNota
+    this.localizacaoNota = usuario.localizacaoNota
   }
 }
 

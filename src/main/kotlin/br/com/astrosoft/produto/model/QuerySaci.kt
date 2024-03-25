@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.SqlLazy
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
@@ -268,8 +269,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota, locais: List<String>, user: UserSaci?, sqlLazy: SqlLazy): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota, sqlLazy: SqlLazy): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
+    val user = AppConfig.userLogin() as? UserSaci
     val listaTipos =
         listOfNotNull(
           if (user?.nfceExpedicao == true) "NFCE" else null,
@@ -286,7 +288,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoNota", filtro.tipoNota.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("locais", "TODOS")
+      addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
       addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
@@ -353,14 +355,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, locais: List<String>): List<ProdutoNFS> {
+  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val user = AppConfig.userLogin() as? UserSaci
     val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locais", "TODOS")
+      addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
     produtos.forEach {
       println(it.local)

@@ -81,7 +81,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma notaSaida selecionada")
     val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraNota?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, nota.produtos(EMarcaNota.CD))
       } catch (e: Throwable) {
