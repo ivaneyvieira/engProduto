@@ -27,8 +27,6 @@ open class Planilha<B>(private val sheatName: String) {
     }
   }
 
-
-
   @JvmName("campoString")
   fun columnSheet(property: KProperty1<B, String?>, header: String) {
     val campo = Column<B, String>(header = header, pattern = null) {

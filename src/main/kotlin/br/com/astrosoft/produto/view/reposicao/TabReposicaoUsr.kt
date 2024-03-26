@@ -10,7 +10,6 @@ import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.data.binder.Binder
 
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -33,7 +32,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     }
     multiSelectComboBox<String>("Impressora") {
       this.isExpand = true
-      setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+      setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
       binder.bind(this, UserSaci::impressoraRepo.name)
     }
   }

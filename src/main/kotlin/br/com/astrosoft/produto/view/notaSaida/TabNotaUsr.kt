@@ -61,7 +61,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
       }
       select<String>("Impressora") {
         this.setWidthFull()
-        setItems(viewModel.allImpressoras().map { it.name })
+        setItems(viewModel.allEtiqueta().map { it.name })
         binder.bind(this, UserSaci::impressoraNota.name)
       }
       select<Int>("Nota") {

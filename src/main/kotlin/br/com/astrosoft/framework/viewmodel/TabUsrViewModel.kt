@@ -12,7 +12,8 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
     return allLocais().mapNotNull { it.abreviacao }.distinct().sorted()
   }
 
-  fun allImpressoras(): List<Impressora> = Impressora.allTermica()
+  fun allTermica(): List<Impressora> = Impressora.allTermica()
+  fun allEtiqueta(): List<Impressora> = Impressora.allEtiqueta()
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()

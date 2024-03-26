@@ -75,7 +75,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       setItems(ETipoNota.entries)
       value = ETipoNota.TODOS
       val tipoNota = ETipoNota.entries.firstOrNull { it.num == user?.tipoNota }
-      this.isReadOnly = tipoNota != null
+      this.isReadOnly = tipoNota != null && tipoNota.num != ETipoNota.TODOS.num
       this.setItemLabelGenerator {
         it.descricao
       }

@@ -72,7 +72,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
       }
       multiSelectComboBox<String>("Impressora") {
         this.setWidthFull()
-        setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+        setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
         binder.bind(this, UserSaci::impressoraRessu.name)
       }
       multiSelectComboBox<String>("Localização") {

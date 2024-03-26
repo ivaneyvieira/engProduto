@@ -7,6 +7,7 @@ class Impressora(var no: Int, var name: String) {
   companion object {
     fun all() = saci.findImpressoras()
     fun allTermica() = all().filter { it.name.contains("Termica", ignoreCase = true) }
+    fun allEtiqueta() = all().filter { it.name.contains("Etiqueta", ignoreCase = true) }
     fun findImpressora(loja: Int?, tipoRota: ETipoRota): Impressora? {
       val impressoras = allTermica()
       loja ?: return null
