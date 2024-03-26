@@ -73,6 +73,7 @@ data class FiltroNota(
   val loja: Int,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val notaEntrega: String = "N",
   val pesquisa: String,
 )
 

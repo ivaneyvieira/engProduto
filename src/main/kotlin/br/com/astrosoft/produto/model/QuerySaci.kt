@@ -292,6 +292,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
+      addOptionalParameter("notaEntrega", filtro.notaEntrega)
     }
   }
 

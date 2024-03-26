@@ -68,7 +68,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraNota?.let { impressora ->
       try {
         EtiquetaChave.printPreviewEnt(impressora, produtos)
       } catch (e: Throwable) {

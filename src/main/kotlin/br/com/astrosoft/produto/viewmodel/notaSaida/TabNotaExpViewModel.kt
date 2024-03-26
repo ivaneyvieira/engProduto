@@ -45,7 +45,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
-    user?.impressora?.let { impressora ->
+    user?.impressoraNota?.let { impressora ->
       try {
         EtiquetaChave.printPreviewExp(impressora, produtos)
       } catch (e: Throwable) {
