@@ -35,8 +35,11 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
       checkBox("CD") {
         binder.bind(this, UserSaci::notaCD.name)
       }
-      checkBox("Entrege") {
+      checkBox("Entregue") {
         binder.bind(this, UserSaci::notaEnt.name)
+      }
+      checkBox("Nota Entrega") {
+        binder.bind(this, UserSaci::entregaNota.name)
       }
     }
     verticalLayout {

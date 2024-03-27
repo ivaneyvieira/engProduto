@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.model
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
-import br.com.astrosoft.framework.model.SqlLazy
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
@@ -269,7 +268,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaSaida(filtro: FiltroNota, sqlLazy: SqlLazy): List<NotaSaida> {
+  fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
     val listaTipos =
@@ -283,7 +282,7 @@ class QuerySaci : QueryDB(database) {
         )
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
-    return query(sql, NotaSaida::class, sqlLazy) {
+    return query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("tipoNota", filtro.tipoNota.num)
       addOptionalParameter("loja", filtro.loja)

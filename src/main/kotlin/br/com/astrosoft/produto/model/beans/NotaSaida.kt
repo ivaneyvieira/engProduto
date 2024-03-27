@@ -1,9 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.EDirection
-import br.com.astrosoft.framework.model.SqlLazy
-import br.com.astrosoft.framework.model.SqlOrder
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -58,11 +54,13 @@ class NotaSaida(
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-
-      return saci.findNotaSaida(
-        filtro = filtro,
-        SqlLazy(limit = 10000, orders = listOf(SqlOrder(property = "data", EDirection.DESC)))
-      )
+      return saci.findNotaSaida(filtro = filtro) +
+             saci.findNotaSaida(
+               filtro = filtro.copy(
+                 notaEntrega = "S",
+                 tipoNota = ETipoNota.TODOS,
+               )
+             )
     }
   }
 }
