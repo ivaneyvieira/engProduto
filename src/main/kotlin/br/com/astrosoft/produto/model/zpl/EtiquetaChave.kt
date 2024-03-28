@@ -65,33 +65,39 @@ object EtiquetaChave {
   }
 
   @JvmName("printPreviewNota")
-  private fun printPreview(impressora: String, dados: List<DadosEtiquetaNota>) {
+  private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaNota>) {
     val zpl = dados.joinToString("\n") {
       template(it)
     }
-    ZPLPreview.showZPLPreview(impressora, zpl) {
-      print(impressora, dados)
+    ZPLPreview.showZPLPreview(impressoras, zpl) {
+      impressoras.forEach { impressora ->
+        print(impressora, dados)
+      }
     }
   }
 
-  private fun printPreview(impressora: String, dados: List<DadosEtiquetaPedido>) {
+  private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaPedido>) {
     val zpl = dados.joinToString("\n") { dado -> template(dado) }
-    ZPLPreview.showZPLPreview(impressora, zpl) {
-      print(impressora, dados)
+    ZPLPreview.showZPLPreview(impressoras, zpl) {
+      impressoras.forEach { impressora ->
+        print(impressora, dados)
+      }
     }
   }
 
   @JvmName("printPreviewRessuprimento")
-  private fun printPreview(impressora: String, dados: List<DadosEtiquetaRessuprimento>) {
+  private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaRessuprimento>) {
     val zpl = dados.joinToString("\n") {
       template(it)
     }
-    ZPLPreview.showZPLPreview(impressora, zpl) {
-      print(impressora, dados)
+    ZPLPreview.showZPLPreview(impressoras, zpl) {
+      impressoras.forEach { impressora ->
+        print(impressora, dados)
+      }
     }
   }
 
-  fun printPreviewExp(impressora: String, produtos: List<ProdutoNFS>) {
+  fun printPreviewExp(impressoras: Set<String>, produtos: List<ProdutoNFS>) {
     val dadosEdtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Exp",
@@ -103,11 +109,11 @@ object EtiquetaChave {
         local = produto.local
       )
     }.distinct()
-    printPreview(impressora, dadosEdtiquetas)
+    printPreview(impressoras, dadosEdtiquetas)
   }
 
   @JvmName("printPreviewEntNota")
-  fun printPreviewEnt(impressora: String, produtos: List<ProdutoNFS>) {
+  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoNFS>) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Entregue",
@@ -119,11 +125,11 @@ object EtiquetaChave {
         local = produto.local
       )
     }.distinct()
-    printPreview(impressora, dadosEtiquetas)
+    printPreview(impressoras, dadosEtiquetas)
   }
 
   @JvmName("printPreviewEntVenda")
-  fun printPreviewEnt(impressora: String, produtos: List<ProdutoPedidoVenda>) {
+  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoPedidoVenda>) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaPedido(
         titulo = "Entregue",
@@ -135,11 +141,11 @@ object EtiquetaChave {
         local = produto.localizacao ?: ""
       )
     }.distinct()
-    printPreview(impressora, dadosEtiquetas)
+    printPreview(impressoras, dadosEtiquetas)
   }
 
   @JvmName("printPreviewEntTransf")
-  fun printPreviewEnt(impressora: String, produtos: List<ProdutoPedidoTransf>) {
+  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoPedidoTransf>) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaPedido(
         titulo = "Entregue",
@@ -151,11 +157,11 @@ object EtiquetaChave {
         local = produto.localizacao ?: ""
       )
     }.distinct()
-    printPreview(impressora, dadosEtiquetas)
+    printPreview(impressoras, dadosEtiquetas)
   }
 
   @JvmName("printPreviewEntRessuprimento")
-  fun printPreviewEnt(impressora: String, produtos: List<ProdutoRessuprimento>) {
+  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoRessuprimento>) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaRessuprimento(
         titulo = "Entregue",
@@ -166,7 +172,7 @@ object EtiquetaChave {
         local = produto.localizacao ?: ""
       )
     }.distinct()
-    printPreview(impressora, dadosEtiquetas)
+    printPreview(impressoras, dadosEtiquetas)
   }
 }
 

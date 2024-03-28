@@ -125,22 +125,7 @@ class UserSaci : IUser {
   var lojaVale: Int?
     get() = lojas.getOrNull(0)?.toIntOrNull()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        value?.toString() ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(0, value?.toString() ?: "")
     }
 
   var impressoraTrans: Set<String>
@@ -148,256 +133,81 @@ class UserSaci : IUser {
       print.trim()
     }.filter { it.isNotBlank() }.toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        value.joinToString(":") { print ->
-          print.trim()
-        },
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(1, value.joinToString(":"))
     }
 
   var impressoraDev: String?
     get() = lojas.getOrNull(2)
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        value ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(2, value ?: "")
     }
 
   var impressoraRet: String?
     get() = lojas.getOrNull(3)
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        value ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(3, value ?: "")
     }
 
   var lojaRessu: Int?
     get() = lojas.getOrNull(4)?.toIntOrNull()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        value?.toString() ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(4, value?.toString() ?: "")
     }
 
   var impressoraRessu: Set<String>
     get() = lojas.getOrNull(5)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        value.joinToString(":"),
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(5, value.joinToString(":"))
     }
   var localizacaoRepo: Set<String>
     get() = lojas.getOrNull(6)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        value.joinToString(":"),
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(6, value.joinToString(":"))
     }
   var impressoraRepo: Set<String>
     get() = lojas.getOrNull(7)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        value.joinToString(":"),
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(7, value.joinToString(":"))
     }
 
   var tipoNota: Int?
     get() = lojas.getOrNull(8)?.toIntOrNull()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        value?.toString() ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(8, value?.toString() ?: "")
     }
 
   var lojaNota: Int
     get() = lojas.getOrNull(9)?.toIntOrNull() ?: 0
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        value.toString(),
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(9, value.toString())
     }
 
-  var impressoraNota: String
-    get() = lojas.getOrNull(10) ?: ""
+  var impressoraNota: Set<String>
+    get() = lojas.getOrNull(10)?.split(":").orEmpty().toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        value,
-        listLojas.getOrNull(11) ?: "",
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(10, value.joinToString(":"))
     }
 
   var localizacaoNota: Set<String>
     get() = lojas.getOrNull(11)?.split(":").orEmpty().toSet()
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        value.joinToString(":"),
-        listLojas.getOrNull(12) ?: "",
-      )
+      lojas = lojas.setValue(11, value.joinToString(":"))
     }
 
   var entregaNota: Boolean
     get() = lojas.getOrNull(12) == "S"
     set(value) {
-      val listLojas = lojas
-      lojas = listOf(
-        listLojas.getOrNull(0) ?: "",
-        listLojas.getOrNull(1) ?: "",
-        listLojas.getOrNull(2) ?: "",
-        listLojas.getOrNull(3) ?: "",
-        listLojas.getOrNull(4) ?: "",
-        listLojas.getOrNull(5) ?: "",
-        listLojas.getOrNull(6) ?: "",
-        listLojas.getOrNull(7) ?: "",
-        listLojas.getOrNull(8) ?: "",
-        listLojas.getOrNull(9) ?: "",
-        listLojas.getOrNull(10) ?: "",
-        listLojas.getOrNull(11) ?: "",
-        if(value) "S" else "N",
-      )
+      lojas = lojas.setValue(12, if (value) "S" else "N")
     }
 
   //
+
+  fun List<String>.setValue(index: Int, value: String): List<String> {
+    val list = this.toMutableList()
+    while (index >= list.size) list.add("")
+    list[index] = value
+    return list.toList()
+  }
 
   val localizacaoRepoStr
     get() = localizacaoRepo.joinToString(", ")

@@ -185,8 +185,8 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (X.s12 = :marca OR :marca = 999)
 
 AND case :notaEntrega
-         WHEN 'S' THEN N.storeno != :loja AND N.nfse = '3'
-         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) AND N.nfse != '3'
+         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
+         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
          ELSE FALSE
        END
 GROUP BY N.storeno,

@@ -7,9 +7,7 @@ import br.com.astrosoft.produto.model.beans.ETipoNota
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
-import com.github.mvysny.karibudsl.v10.checkBox
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.verticalLayout
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 
@@ -27,7 +25,9 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
-      this.isSpacing = false
+      this.isSpacing = true
+
+      em("Paineis")
 
       checkBox("Exp") {
         binder.bind(this, UserSaci::notaExp.name)
@@ -51,7 +51,6 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         val lojas = viewModel.findAllLojas()
         val lojasNum = lojas.map { it.no } + listOf(0)
         setItems(lojasNum.distinct().sorted())
-        this.isEmptySelectionAllowed = true
         this.setItemLabelGenerator { storeno ->
           when (storeno) {
             0    -> "Todas as lojas"
@@ -62,7 +61,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         }
         binder.bind(this, UserSaci::lojaNota.name)
       }
-      select<String>("Impressora") {
+      multiSelectComboBox<String>("Impressora") {
         this.setWidthFull()
         setItems(viewModel.allEtiqueta().map { it.name })
         binder.bind(this, UserSaci::impressoraNota.name)
