@@ -86,7 +86,7 @@ SELECT N.storeno                          AS loja,
        N.nfse                             AS serie,
        N.custno                           AS cliente,
        IFNULL(C.name, '')                 AS nomeCliente,
-       CAST(issuedate AS DATE)            AS data,
+       CAST(N.issuedate AS DATE)          AS data,
        SEC_TO_TIME(P.time)                AS hora,
        N.empno                            AS vendedor,
        TRIM(MID(E.sname, 1, 20))          AS nomeVendedor,
@@ -97,37 +97,37 @@ SELECT N.storeno                          AS loja,
        MAX(X.s12)                         AS marca,
        IF(N.status <> 1, 'N', 'S')        AS cancelada,
        CASE
-         WHEN tipo = 0
+         WHEN N.tipo = 0
            THEN ''
-         WHEN tipo = 1
+         WHEN N.tipo = 1
            THEN ''
-         WHEN tipo = 2
+         WHEN N.tipo = 2
            THEN 'DEVOLUCAO'
-         WHEN tipo = 3
+         WHEN N.tipo = 3
            THEN 'SIMP REME'
-         WHEN tipo = 4
+         WHEN N.tipo = 4
            THEN 'ENTRE FUT'
-         WHEN tipo = 5
+         WHEN N.tipo = 5
            THEN 'RET DEMON'
-         WHEN tipo = 6
+         WHEN N.tipo = 6
            THEN 'VENDA USA'
-         WHEN tipo = 7
+         WHEN N.tipo = 7
            THEN 'OUTROS'
-         WHEN tipo = 8
+         WHEN N.tipo = 8
            THEN 'NF CF'
-         WHEN tipo = 9
+         WHEN N.tipo = 9
            THEN 'PERD/CONSER'
-         WHEN tipo = 10
+         WHEN N.tipo = 10
            THEN 'REPOSICAO'
-         WHEN tipo = 11
+         WHEN N.tipo = 11
            THEN 'RESSARCI'
-         WHEN tipo = 12
+         WHEN N.tipo = 12
            THEN 'COMODATO'
-         WHEN tipo = 13
+         WHEN N.tipo = 13
            THEN 'NF EMPRESA'
-         WHEN tipo = 14
+         WHEN N.tipo = 14
            THEN 'BONIFICA'
-         WHEN tipo = 15
+         WHEN N.tipo = 15
            THEN 'NFE'
          ELSE ''
        END                                AS tipoNotaSaida,
@@ -183,12 +183,11 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
        END
   )
   AND (X.s12 = :marca OR :marca = 999)
-
-AND case :notaEntrega
-         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
-         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
-         ELSE FALSE
-       END
+  AND CASE :notaEntrega
+        WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
+        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
+        ELSE FALSE
+      END
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
