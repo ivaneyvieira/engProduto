@@ -5,10 +5,9 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
-import br.com.astrosoft.produto.model.report.ReportImpresso
 import br.com.astrosoft.produto.model.report.ReportVenda
 
-class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -37,7 +36,7 @@ class TabDevVendaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevVenda
+    get() = viewModel.view.tabDevCliVenda
 }
 
 interface ITabDevVenda : ITabView {

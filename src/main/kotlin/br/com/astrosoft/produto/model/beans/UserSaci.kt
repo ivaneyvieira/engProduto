@@ -65,7 +65,7 @@ class UserSaci : IUser {
   var devCliSemPrd by DelegateAuthorized(42)
   var devCliSemPrdInsert by DelegateAuthorized(43)
   var devCliSemPrdDelete by DelegateAuthorized(44)
-  var devVenda by DelegateAuthorized(45)
+  var devCliVenda by DelegateAuthorized(45)
   var autorizaDevolucao by DelegateAuthorized(46)
   var acertoMovManualSaida by DelegateAuthorized(47)
   var acertoMovManualEntrada by DelegateAuthorized(48)
@@ -136,10 +136,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(1, value.joinToString(":"))
     }
 
-  var impressoraDev: String?
-    get() = lojas.getOrNull(2)
+  var impressoraDev: Set<String>
+    get() = lojas.getOrNull(2)?.split(":").orEmpty().map { print ->
+      print.trim()
+    }.filter { it.isNotBlank() }.toSet()
     set(value) {
-      lojas = lojas.setValue(2, value ?: "")
+      lojas = lojas.setValue(2, value.joinToString(":"))
     }
 
   var impressoraRet: String?
@@ -242,7 +244,7 @@ class UserSaci : IUser {
   val pedido
     get() = pedidoCD || pedidoEnt || admin
   var pedidoTransf
-    get() = pedidoTransfReserva  || pedidoTransfRessu4 || pedidoTransfEnt ||
+    get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt ||
             pedidoTransfAutorizada || admin
     set(value) {
       pedidoTransfReserva = value
@@ -266,9 +268,18 @@ class UserSaci : IUser {
   val fornecedor
     get() = produtoList
 
-  val devCliente
+  var devCliente
     get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito ||
             devCliEditor || devClienteTroca || devCliSemPrd || admin
+    set(value) {
+      devCliImprimir = value
+      devCliImpresso = value
+      devCliValeTrocaProduto = value
+      devCliCredito = value
+      devCliEditor = value
+      devClienteTroca = value
+      devCliSemPrd = value
+    }
 
   val acertoEstoque
     get() = acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || acertoMovAtacado || admin

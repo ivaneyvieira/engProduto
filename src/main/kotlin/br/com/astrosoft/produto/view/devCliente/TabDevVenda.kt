@@ -13,7 +13,7 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevVenda
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevVendaViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliVendaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -26,7 +26,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevVenda(val viewModel: TabDevVendaViewModel) :
+class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
   TabPanelGrid<NotaVenda>(NotaVenda::class),
   ITabDevVenda {
   private lateinit var cmbLoja: Select<Loja>
@@ -43,7 +43,7 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
 
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return listOfNotNull(username?.impressoraDev)
+    return username?.impressoraDev.orEmpty().toList()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -145,7 +145,7 @@ class TabDevVenda(val viewModel: TabDevVendaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devVenda == true
+    return username?.devCliVenda == true
   }
 
   override val label: String
