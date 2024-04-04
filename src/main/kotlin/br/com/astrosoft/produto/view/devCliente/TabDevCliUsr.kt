@@ -54,7 +54,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
       }
     }
     verticalBlock("Filtros") {
-      filtroImpressora(binder, UserSaci::impressoraDev)
+      filtroImpressoraTermica(binder, UserSaci::impressoraDev)
       filtroLoja(binder, UserSaci::lojaVale)
     }
   }

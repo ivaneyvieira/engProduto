@@ -82,7 +82,7 @@ class UserSaci : IUser {
   var reposicaoEnt by DelegateAuthorized(59)
 
   //Locais
-  var localEstoque: String?
+  private var localEstoque: String?
     get() = locais.split(":").getOrNull(0)
     set(value) {
       val listLocais = locais.split(":")

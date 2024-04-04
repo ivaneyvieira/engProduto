@@ -28,7 +28,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       }
     }
     verticalBlock("Filtros") {
-      filtroImpressora(binder, UserSaci::impressoraRepo)
+      filtroImpressoraTermica(binder, UserSaci::impressoraRepo)
       filtroLocalizacao(binder, UserSaci::localizacaoRepo)
     }
   }

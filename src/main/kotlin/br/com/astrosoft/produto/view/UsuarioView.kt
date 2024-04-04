@@ -75,54 +75,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             }
             binder.bind(this, UserSaci::storeno.name)
           }
-
-          formLayout {
-            h4("Acerto Estoque") {
-              colspan = 2
-            }
-            checkBox("Entrada") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::acertoEntrada.name)
-            }
-            checkBox("Saída") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::acertoSaida.name)
-            }
-            checkBox("Ent Manual") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::acertoMovManualEntrada.name)
-            }
-            checkBox("Sai Manual") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::acertoMovManualSaida.name)
-            }
-            checkBox("Atacado") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::acertoMovAtacado.name)
-            }
-          }
-          formLayout {
-            h4("CD MF") {
-              colspan = 2
-            }
-            checkBox("Estoque") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::estoqueMF.name)
-            }
-            checkBox("Cad Loc") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::estoqueCad.name)
-            }
-            checkBox("CD1A") {
-              isReadOnly = readOnly
-              binder.bind(this, UserSaci::estoqueCD1A.name)
-            }
-            select<String>("Localização") {
-              isReadOnly = readOnly
-              setItems(listOf("TODOS") + viewModel.allLocalizacao())
-              binder.bind(this, UserSaci::localEstoque.name)
-            }
-          }
         }
       }
     }

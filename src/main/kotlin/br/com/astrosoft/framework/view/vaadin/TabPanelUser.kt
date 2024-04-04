@@ -150,7 +150,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
   }
 
-  protected fun HasComponents.filtroImpressora(
+  protected fun HasComponents.filtroImpressoraTermica(
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>
   ) {
@@ -158,6 +158,18 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
+      binder.bind(this, property.name)
+    }
+  }
+
+  protected fun HasComponents.filtroImpressoraEtiqueta(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Set<String>>
+  ) {
+    multiSelectComboBox<String>("Impressora") {
+      this.setWidthFull()
+      this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+      setItems(listOf("TODAS") + viewModel.allEtiqueta().map { it.name })
       binder.bind(this, property.name)
     }
   }

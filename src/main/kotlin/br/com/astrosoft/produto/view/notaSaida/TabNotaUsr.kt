@@ -23,7 +23,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
   }
 
   override fun FormUsuario.configFields() {
-    verticalBlock("Paineis") {
+    verticalBlock("Menus") {
       checkBox("Exp") {
         binder.bind(this, UserSaci::notaExp.name)
       }
@@ -39,7 +39,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     }
     verticalBlock("Filtros"){
       filtroLoja(binder, UserSaci::lojaNota)
-      filtroImpressora(binder, UserSaci::impressoraNota)
+      filtroImpressoraEtiqueta(binder, UserSaci::impressoraNota)
       select<Int>("Nota") {
         this.setWidthFull()
         this.isEmptySelectionAllowed = true

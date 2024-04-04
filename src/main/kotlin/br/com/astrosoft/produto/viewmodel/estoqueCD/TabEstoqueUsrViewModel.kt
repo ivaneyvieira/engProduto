@@ -21,7 +21,7 @@ class TabEstoqueUsrViewModel(val viewModel: EstoqueCDViewModel) : TabUsrViewMode
     this.estoqueMF = usuario.estoqueMF
     this.estoqueCad = usuario.estoqueCad
     this.estoqueCD1A = usuario.estoqueCD1A
-    this.localEstoque = usuario.localEstoque
+    this.listaEstoque = usuario.listaEstoque
   }
 }
 

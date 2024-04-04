@@ -55,12 +55,6 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     edtLocalizacao = textField("Loc") {
       this.width = "60px"
       valueChangeMode = ValueChangeMode.TIMEOUT
-      val userSaci = AppConfig.userLogin() as? UserSaci
-      val local = userSaci?.localEstoque ?: ""
-      if ((local != "TODOS") && (local != "")) {
-        this.value = local
-        this.isReadOnly = true
-      }
       addValueChangeListener {
         viewModel.updateView()
       }

@@ -19,7 +19,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
   }
 
   override fun FormUsuario.configFields() {
-    verticalBlock("Menu") {
+    verticalBlock("Menus") {
       checkBox("Reserva") {
         binder.bind(this, UserSaci::pedidoTransfReserva.name)
       }
@@ -34,7 +34,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
       }
     }
     verticalBlock("Filtros") {
-      filtroImpressora(binder, UserSaci::impressoraTrans)
+      filtroImpressoraTermica(binder, UserSaci::impressoraTrans)
     }
   }
 }

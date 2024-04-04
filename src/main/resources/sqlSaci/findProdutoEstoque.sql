@@ -66,4 +66,5 @@ WHERE (
   )
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))
 GROUP BY codigo, grade, locApp
