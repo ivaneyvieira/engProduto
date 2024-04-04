@@ -56,6 +56,12 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       }
     }
     init()
+    edtPesquisa = textField("Pesquisa") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtDataInicial = datePicker("Data Inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
@@ -82,12 +88,6 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
-      }
-    }
-    edtPesquisa = textField("Pesquisa") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
       }
     }
   }
