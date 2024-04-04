@@ -287,8 +287,15 @@ class UserSaci : IUser {
       devCliSemPrd = value
     }
 
-  val acertoEstoque
+  var acertoEstoque
     get() = acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || acertoMovAtacado || admin
+    set(value) {
+      acertoEntrada = value
+      acertoSaida = value
+      acertoMovManualSaida = value
+      acertoMovManualEntrada = value
+      acertoMovAtacado = value
+    }
 
   override val admin
     get() = login == "ADM"

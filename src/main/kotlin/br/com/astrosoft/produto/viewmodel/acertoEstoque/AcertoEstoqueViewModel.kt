@@ -10,6 +10,7 @@ class AcertoEstoqueViewModel(view: IAcertoEstoqueView) : ViewModel<IAcertoEstoqu
   val tabAcertoMovManualSaidaViewModel = TabAcertoMovManualSaidaViewModel(this)
   val tabAcertoMovManualEntradaViewModel = TabAcertoMovManualEntradaViewModel(this)
   val tabAcertoMovAtacadoViewModel = TabAcertoMovAtacadoViewModel(this)
+  val tabAcertoUsrViewModel = TabAcertoUsrViewModel(this)
 
   override fun listTab() = listOf(
     view.tabAcertoEstoqueEntrada,
@@ -17,6 +18,7 @@ class AcertoEstoqueViewModel(view: IAcertoEstoqueView) : ViewModel<IAcertoEstoqu
     view.tabAcertoMovManualEntrada,
     view.tabAcertoMovManualSaida,
     view.tabAcertoMovAtacado,
+    view.tabAcertoUsr,
   )
 }
 
@@ -26,4 +28,5 @@ interface IAcertoEstoqueView : IView {
   val tabAcertoMovManualSaida: ITabAcertoMovManualSaida
   val tabAcertoMovManualEntrada: ITabAcertoMovManualEntrada
   val tabAcertoMovAtacado: ITabAcertoMovAtacado
+  val tabAcertoUsr: ITabAcertoUsr
 }

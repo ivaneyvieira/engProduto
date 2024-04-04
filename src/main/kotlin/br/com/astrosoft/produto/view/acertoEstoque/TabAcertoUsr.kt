@@ -1,0 +1,44 @@
+package br.com.astrosoft.produto.view.acertoEstoque
+
+import br.com.astrosoft.framework.view.FormUsuario
+import br.com.astrosoft.framework.view.vaadin.TabPanelUser
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
+import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
+import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoUsr
+import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoUsrViewModel
+import com.github.mvysny.karibudsl.v10.checkBox
+import com.vaadin.flow.component.grid.Grid
+
+class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), ITabAcertoUsr {
+  override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::acertoEntrada, "Entrada")
+    columnGrid(UserSaci::acertoSaida, "Saída")
+    columnGrid(UserSaci::acertoMovManualEntrada, "Ent Manual")
+    columnGrid(UserSaci::acertoMovManualSaida, "Sai Manual")
+    columnGrid(UserSaci::acertoMovAtacado, "Atacado")
+  }
+
+  override fun FormUsuario.configFields() {
+    horizontalBlock {
+      verticalBlock("Menu") {
+        checkBox("Entrada") {
+          binder.bind(this, UserSaci::acertoEntrada.name)
+        }
+        checkBox("Saída") {
+          binder.bind(this, UserSaci::acertoSaida.name)
+        }
+        checkBox("Ent Manual") {
+          binder.bind(this, UserSaci::acertoMovManualEntrada.name)
+        }
+        checkBox("Sai Manual") {
+          binder.bind(this, UserSaci::acertoMovManualSaida.name)
+        }
+        checkBox("Atacado") {
+          binder.bind(this, UserSaci::acertoMovAtacado.name)
+        }
+      }
+    }
+  }
+}
