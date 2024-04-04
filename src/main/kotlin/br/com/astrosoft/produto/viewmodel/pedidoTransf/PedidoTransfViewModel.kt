@@ -9,13 +9,14 @@ class PedidoTransfViewModel(view: IPedidoTransfView) : ViewModel<IPedidoTransfVi
   val tabPedidoTransfAutorizadaViewModel = TabPedidoTransfAutorizadaViewModel(this)
   val tabPedidoTransfEntViewModel = TabPedidoTransfEntViewModel(this)
   val tabPedidoTransfRessu4ViewModel = TabPedidoTransfRessu4ViewModel(this)
+  val tabPedidoTransfUsrViewModel = TabPedidoTransfUsrViewModel(this)
 
   override fun listTab() = listOf(
     view.tabPedidoTransfReserva,
-    //view.tabPedidoTransfImprimir,
     view.tabPedidoTransfAutorizada,
     view.tabPedidoTransfEnt,
-    view.tabPedidoTransfRessu4
+    view.tabPedidoTransfRessu4,
+    view.tabPedidoTransfUsr,
   )
 }
 
@@ -25,5 +26,6 @@ interface IPedidoTransfView : IView {
   val tabPedidoTransfReserva: ITabPedidoTransfReserva
   val tabPedidoTransfEnt: ITabPedidoTransfEnt
   val tabPedidoTransfRessu4: ITabPedidoTransfRessu4
+  val tabPedidoTransfUsr: ITabPedidoTransfUsr
 }
 

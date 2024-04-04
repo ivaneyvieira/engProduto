@@ -241,9 +241,15 @@ class UserSaci : IUser {
     }
   val pedido
     get() = pedidoCD || pedidoEnt || admin
-  val pedidoTransf
-    get() = pedidoTransfReserva || pedidoTransfImprimir || pedidoTransfRessu4 || pedidoTransfEnt ||
+  var pedidoTransf
+    get() = pedidoTransfReserva  || pedidoTransfRessu4 || pedidoTransfEnt ||
             pedidoTransfAutorizada || admin
+    set(value) {
+      pedidoTransfReserva = value
+      pedidoTransfRessu4 = value
+      pedidoTransfEnt = value
+      pedidoTransfAutorizada = value
+    }
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
   val pedidoRetira
