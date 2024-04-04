@@ -18,14 +18,11 @@ class TabPedidoTransfUsrViewModel(val viewModel: PedidoTransfViewModel) : TabUsr
   }
 
   override fun UserSaci.update(usuario: UserSaci) {
-    this.notaExp = usuario.notaExp
-    this.notaCD = usuario.notaCD
-    this.notaEnt = usuario.notaEnt
-    this.tipoNota = usuario.tipoNota
-    this.impressoraNota = usuario.impressoraNota
-    this.lojaNota = usuario.lojaNota
-    this.localizacaoNota = usuario.localizacaoNota
-    this.entregaNota = usuario.entregaNota
+    this.pedidoTransfReserva = usuario.pedidoTransfReserva
+    this.pedidoTransfAutorizada = usuario.pedidoTransfAutorizada
+    this.pedidoTransfEnt = usuario.pedidoTransfEnt
+    this.pedidoTransfRessu4 = usuario.pedidoTransfRessu4
+    this.impressoraTrans = usuario.impressoraTrans
   }
 }
 
