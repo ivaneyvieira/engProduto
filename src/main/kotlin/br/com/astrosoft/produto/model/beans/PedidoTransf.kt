@@ -15,6 +15,7 @@ class PedidoTransf(
   var clienteNome: String?,
   var userno: Int?,
   var usuario: String?,
+  var usuarioLogin: String?,
   var data: LocalDate?,
   var vendedor: Int?,
   var localizacao: String?,
@@ -38,6 +39,7 @@ class PedidoTransf(
   var observacaoTransf: String?,
   var userTransf: Int?,
   var nameTransf: String?,
+  var nameTransfLogin: String?,
   var userReserva: Int?,
   var nameReserva: String?,
 ) {
