@@ -144,10 +144,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(2, value.joinToString(":"))
     }
 
-  var impressoraRet: String?
-    get() = lojas.getOrNull(3)
+  var impressoraRet: Set<String>
+    get() = lojas.getOrNull(3)?.split(":").orEmpty().map { print ->
+      print.trim()
+    }.filter { it.isNotBlank() }.toSet()
     set(value) {
-      lojas = lojas.setValue(3, value ?: "")
+      lojas = lojas.setValue(3, value.joinToString(":"))
     }
 
   var lojaRessu: Int?
@@ -254,8 +256,12 @@ class UserSaci : IUser {
     }
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
-  val pedidoRetira
+  var pedidoRetira
     get() = retiraImprimir || retiraImpresso || admin
+    set(value) {
+      retiraImprimir = value
+      retiraImpresso = value
+    }
 
   var estoqueCD
     get() = estoqueMF || estoqueCad || estoqueCD1A || admin

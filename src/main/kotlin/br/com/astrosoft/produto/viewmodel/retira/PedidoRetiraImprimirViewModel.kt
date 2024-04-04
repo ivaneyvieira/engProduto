@@ -30,12 +30,12 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
     relatorio.print(dados = pedido.produtos(), printer = dummyPrinter)
 
     val userSaci = AppConfig.userLogin() as? UserSaci
-    val impressora = userSaci?.impressoraRet ?: ""
+    val impressora = userSaci?.impressoraRet.orEmpty()
 
     viewModel.view.showPrintText(
       dummyPrinter.textBuffer(),
       loja = 0,
-      printerUser = listOf(impressora)
+      printerUser = impressora.toList()
     ) {
       if (pedido.dataHoraPrint == null) {
         pedido.marcaImpresso()
