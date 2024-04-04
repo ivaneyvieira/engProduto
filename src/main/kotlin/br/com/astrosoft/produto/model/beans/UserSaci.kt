@@ -176,10 +176,10 @@ class UserSaci : IUser {
       lojas = lojas.setValue(8, value?.toString() ?: "")
     }
 
-  var lojaNota: Int
-    get() = lojas.getOrNull(9)?.toIntOrNull() ?: 0
+  var lojaNota: Int?
+    get() = lojas.getOrNull(9)?.toIntOrNull()
     set(value) {
-      lojas = lojas.setValue(9, value.toString())
+      lojas = lojas.setValue(9, value?.toString() ?: "")
     }
 
   var impressoraNota: Set<String>

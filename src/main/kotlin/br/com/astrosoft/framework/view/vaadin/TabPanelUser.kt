@@ -8,12 +8,19 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.SelectVariant
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
+import kotlin.reflect.KMutableProperty1
 
 abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserSaci>(UserSaci::class) {
   lateinit var edtPesquisa: TextField
@@ -119,6 +126,51 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
     DialogHelper.showForm(caption = "Usuário", form = form) {
       viewModel.addUser(form.userSaci)
+    }
+  }
+
+
+  protected fun HasComponents.filtroLoja(binder: Binder<UserSaci>, property: KMutableProperty1<UserSaci, Int?>) {
+    select<Int>("Nome Loja") {
+      this.setWidthFull()
+      this.addThemeVariants(SelectVariant.LUMO_SMALL)
+      val lojas = viewModel.findAllLojas()
+      val lojasNum = lojas.map { it.no } + listOf(0)
+      setItems(lojasNum.distinct().sorted())
+      this.isEmptySelectionAllowed = true
+      this.setItemLabelGenerator { storeno ->
+        when (storeno) {
+          0    -> "Todas as lojas"
+          else -> lojas.firstOrNull { loja ->
+            loja.no == storeno
+          }?.descricao ?: ""
+        }
+      }
+      binder.bind(this, property.name)
+    }
+  }
+
+  protected fun HasComponents.filtroImpressora(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Set<String>>
+  ) {
+    multiSelectComboBox<String>("Impressora") {
+      this.setWidthFull()
+      this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+      setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
+      binder.bind(this, property.name)
+    }
+  }
+
+  protected fun HasComponents.filtroLocalizacao(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Set<String>>
+  ) {
+    multiSelectComboBox<String>("Localização") {
+      this.setWidthFull()
+      this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+      setItems(listOf("TODOS") + viewModel.allLocalizacao())
+      binder.bind(this, property.name)
     }
   }
 }
