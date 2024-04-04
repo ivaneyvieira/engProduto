@@ -12,6 +12,7 @@ class NotaSaida(
   var serie: String?,
   var cliente: Int?,
   var nomeCliente: String?,
+  var valorNota: Double?,
   var data: LocalDate?,
   var hora: LocalTime?,
   var vendedor: Int?,

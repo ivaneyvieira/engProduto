@@ -33,7 +33,7 @@ object NotaColumns {
     this.setHeader("Vendedor")
   }
 
-  fun Grid<NotaSaida>.colunaNFValor() = columnGrid(NotaSaida::totalProdutos) {
+  fun Grid<NotaSaida>.colunaNFValor() = columnGrid(NotaSaida::valorNota) {
     this.setHeader("Valor")
   }
 
