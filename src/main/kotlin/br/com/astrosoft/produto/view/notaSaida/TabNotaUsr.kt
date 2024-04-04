@@ -48,7 +48,6 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           ETipoNota.entries.firstOrNull { et -> et.num == it }?.descricao ?: ""
         }
         binder.bind(this, UserSaci::tipoNota.name)
-        value = ETipoNota.TODOS.num
       }
       filtroLocalizacao(binder, UserSaci::localizacaoNota)
     }
