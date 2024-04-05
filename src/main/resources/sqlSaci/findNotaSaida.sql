@@ -230,6 +230,12 @@ WHERE (issuedate >= :dataInicial
           OR :loja = 0)
         ELSE FALSE
       END
+  AND CASE
+        WHEN :marca = 0 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Furura*/
+          OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
+          )
+        ELSE TRUE
+      END
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
