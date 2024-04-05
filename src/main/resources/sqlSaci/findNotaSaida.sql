@@ -2,6 +2,20 @@ USE sqldados;
 
 DO @DT := 20240401;
 
+DROP TEMPORARY TABLE IF EXISTS T_TIPO;
+CREATE TEMPORARY TABLE T_TIPO
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT storeno                     AS storeno,
+       ordno                       AS ordno,
+       SUM(E.bits & POW(2, 1))     AS tipoR,
+       SUM(NOT E.bits & POW(2, 1)) AS tipoE
+FROM sqldados.eoprdf AS E
+WHERE (storeno IN (2, 3, 4, 5, 8))
+  AND (date >= @DT)
+GROUP BY storeno, ordno;
+
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
@@ -141,9 +155,15 @@ FROM sqldados.nf AS N
                  USING (storeno, pdvno, xano)
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
+       LEFT JOIN T_TIPO AS T
+                 ON N.storeno = T.storeno AND
+                    N.eordno = T.ordno
        LEFT JOIN sqldados.nfrprd AS NP
-                 ON X.storeno = NP.storeno AND X.pdvno = NP.pdvno AND X.xano = NP.xano AND
-                    X.prdno = NP.prdno AND X.grade = NP.grade
+                 ON X.storeno = NP.storeno AND
+                    X.pdvno = NP.pdvno AND
+                    X.xano = NP.xano AND
+                    X.prdno = NP.prdno AND
+                    X.grade = NP.grade
        INNER JOIN T_LOCPRD AS L
                   ON L.prdno = X.prdno
        LEFT JOIN sqldados.emp AS E
@@ -175,20 +195,22 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
          WHEN tipo = 7
            THEN 'OUTRAS_NFS'
          ELSE 'SP_REME'
-       END IN (:listaTipos) OR 'TODOS' IN (:listaTipos))
-  AND (CASE :tipoNota
-         WHEN 0 THEN tipo = 0 AND N.nfse >= 10
-         WHEN 1 THEN !(tipo = 0 AND N.nfse >= 10)
-         WHEN 999 THEN TRUE
-         ELSE FALSE
-       END
-  )
+       END IN (:listaTipos) OR 'TODOS' IN ('TODOS'))
+  AND CASE :tipoNota
+        WHEN 0 THEN tipo = 0 AND N.nfse >= 10
+        WHEN 1 THEN !(tipo = 0 AND N.nfse >= 10)
+        WHEN 999 THEN TRUE
+        ELSE FALSE
+      END
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
         ELSE FALSE
       END
+  AND (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Furura*/
+  OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
+  )
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
