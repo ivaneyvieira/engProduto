@@ -39,7 +39,7 @@ SELECT X.storeno                                 AS loja,
        X.preco                                   AS preco,
        (X.qtty / 1000) * X.preco                 AS total,
        X.c6                                      AS gradeAlternativa,
-       X.s12                                     AS marca,
+       X.s11                                     AS marca,
        X.c5                                      AS usuarioExp,
        CAST(L.loc AS CHAR)                       AS local,
        X.c4                                      AS usuarioCD,
@@ -64,7 +64,7 @@ FROM sqldados.prd AS P
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND (X.s12 = :marca OR :marca = 999)
+  AND (X.s11 = :marca OR :marca = 999)
 GROUP BY codigo, grade, local;
 
 SELECT loja,

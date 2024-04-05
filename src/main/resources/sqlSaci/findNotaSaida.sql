@@ -13,7 +13,7 @@ SELECT P.storeno,
        P.date                                    AS data
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
-  AND storeno IN (2, 3, 4, 5)
+  AND storeno IN (2, 3, 4, 5, 6, 7, 8)
   AND date >= @DT
 GROUP BY storeno, ordno;
 
@@ -31,7 +31,7 @@ SELECT P.storeno,
        nfse
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
-  AND storeno IN (2, 3, 4, 5)
+  AND storeno IN (2, 3, 4, 5, 6, 7, 8)
   AND nfse = '1'
   AND date >= @DT
 GROUP BY storeno, ordno;
@@ -57,8 +57,8 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, loc)
 )
-SELECT P.no                                                                     AS prdno,
-       IF(:marca = 999, '', CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR)) AS loc
+SELECT P.no                                               AS prdno,
+       CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdloc AS L
                  ON P.no = L.prdno
@@ -95,7 +95,7 @@ SELECT N.storeno                          AS loja,
        X.c5                               AS usuarioExp,
        X.c4                               AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)     AS totalProdutos,
-       MAX(X.s12)                         AS marca,
+       MAX(X.s11)                         AS marca,
        IF(N.status <> 1, 'N', 'S')        AS cancelada,
        CASE
          WHEN N.tipo = 0
@@ -183,7 +183,7 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
          ELSE FALSE
        END
   )
-  AND (X.s12 = :marca OR :marca = 999)
+  AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
@@ -192,15 +192,13 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c5, '-', 1)),
-         IF(:marca = 999, '', SUBSTRING_INDEX(X.c4, '-', 1))
-HAVING (
-         @PESQUISA = '' OR
-         numero LIKE @PESQUISA_START OR
-         notaEntrega LIKE @PESQUISA_START OR
-         cliente = @PESQUISA_NUM OR
-         nomeCliente LIKE @PESQUISA_LIKE OR
-         vendedor = @PESQUISA_NUM OR
-         nomeVendedor LIKE @PESQUISA_LIKE OR
-         locais LIKE @PESQUISA_LIKE
-         )
+         SUBSTRING_INDEX(X.c5, '-', 1),
+         SUBSTRING_INDEX(X.c4, '-', 1)
+HAVING (@PESQUISA = '' OR
+        numero LIKE @PESQUISA_START OR
+        notaEntrega LIKE @PESQUISA_START OR
+        cliente = @PESQUISA_NUM OR
+        nomeCliente LIKE @PESQUISA_LIKE OR
+        vendedor = @PESQUISA_NUM OR
+        nomeVendedor LIKE @PESQUISA_LIKE OR
+        locais LIKE @PESQUISA_LIKE)
