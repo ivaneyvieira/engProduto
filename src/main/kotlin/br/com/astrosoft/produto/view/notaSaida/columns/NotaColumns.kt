@@ -45,6 +45,10 @@ object NotaColumns {
     this.setHeader("Tipo")
   }
 
+  fun Grid<NotaSaida>.colunaNFEntregaRetira() = columnGrid(NotaSaida::tipo) {
+    this.setHeader("Ent/RET")
+  }
+
   fun Grid<NotaSaida>.colunaNomeCliente() = columnGrid(NotaSaida::nomeCliente) {
     this.setHeader("Nome Cliente")
   }

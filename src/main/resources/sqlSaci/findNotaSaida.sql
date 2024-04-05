@@ -147,7 +147,16 @@ SELECT N.storeno                          AS loja,
          ELSE ''
        END                                AS tipoNotaSaida,
        IFNULL(ENT.notaEntrega, '')        AS notaEntrega,
-       CAST(ENT.dataEntrega AS DATE)      AS dataEntrega
+       CAST(ENT.dataEntrega AS DATE)      AS dataEntrega,
+       CASE
+         WHEN IFNULL(T.tipoE, 0) > 0
+           AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
+         WHEN IFNULL(T.tipoE, 0) = 0
+           AND IFNULL(T.tipoR, 0) > 0 THEN 'Retira'
+         WHEN IFNULL(T.tipoE, 0) > 0
+           AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
+         ELSE ''
+       END                                AS tipo
 FROM sqldados.nf AS N
        LEFT JOIN sqlpdv.pxa AS P
                  USING (storeno, pdvno, xano)
@@ -170,19 +179,25 @@ FROM sqldados.nf AS N
                  ON E.no = N.empno
        LEFT JOIN sqldados.custp AS C
                  ON C.no = N.custno
-WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
-  AND (issuedate <= :dataFinal OR :dataFinal = 0)
+WHERE (issuedate >= :dataInicial
+  OR :dataInicial = 0)
+  AND (issuedate <= :dataFinal
+  OR :dataFinal = 0)
   AND issuedate >= @DT
   AND (CASE
-         WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
+         WHEN (IFNULL(NP.optionEntrega
+                 , 0) % 100) = 4
            THEN 'RETIRAF'
-         WHEN (N.nfse = 1 AND N.cfo IN (5922, 6922)) OR (N.nfse = 7)
+         WHEN (N.nfse = 1
+           AND N.cfo IN (5922, 6922))
+           OR (N.nfse = 7)
            THEN 'VENDAF'
          WHEN N.nfse = '66'
            THEN 'ACERTO_S'
          WHEN N.nfse = '3'
            THEN 'ENT_RET'
-         WHEN tipo = 0 AND N.nfse >= 10
+         WHEN tipo = 0
+           AND N.nfse >= 10
            THEN 'NFCE'
          WHEN tipo = 0
            THEN 'VENDA'
@@ -195,32 +210,43 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
          WHEN tipo = 7
            THEN 'OUTRAS_NFS'
          ELSE 'SP_REME'
-       END IN (:listaTipos) OR 'TODOS' IN ('TODOS'))
+       END IN (:listaTipos)
+  OR 'TODOS' IN ('TODOS'))
   AND CASE :tipoNota
-        WHEN 0 THEN tipo = 0 AND N.nfse >= 10
-        WHEN 1 THEN !(tipo = 0 AND N.nfse >= 10)
+        WHEN 0 THEN tipo = 0
+          AND N.nfse >= 10
+        WHEN 1 THEN !(tipo = 0
+          AND N.nfse >= 10)
         WHEN 999 THEN TRUE
         ELSE FALSE
       END
-  AND (X.s11 = :marca OR :marca = 999)
+  AND (X.s11 = :marca
+  OR :marca = 999)
   AND CASE :notaEntrega
-        WHEN 'S' THEN (N.storeno != :loja OR :loja = 0) AND N.nfse = '3'
-        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0)
+        WHEN 'S' THEN (N.storeno != :loja
+          OR :loja = 0)
+          AND N.nfse = '3'
+        WHEN 'N' THEN (N.storeno = :loja
+          OR :loja = 0)
         ELSE FALSE
       END
-  AND (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Furura*/
-  OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
-  )
 GROUP BY N.storeno,
          N.pdvno,
          N.xano,
          SUBSTRING_INDEX(X.c5, '-', 1),
          SUBSTRING_INDEX(X.c4, '-', 1)
-HAVING (@PESQUISA = '' OR
-        numero LIKE @PESQUISA_START OR
-        notaEntrega LIKE @PESQUISA_START OR
-        cliente = @PESQUISA_NUM OR
-        nomeCliente LIKE @PESQUISA_LIKE OR
-        vendedor = @PESQUISA_NUM OR
-        nomeVendedor LIKE @PESQUISA_LIKE OR
+HAVING (@PESQUISA = ''
+  OR
+        numero LIKE @PESQUISA_START
+  OR
+        notaEntrega LIKE @PESQUISA_START
+  OR
+        cliente = @PESQUISA_NUM
+  OR
+        nomeCliente LIKE @PESQUISA_LIKE
+  OR
+        vendedor = @PESQUISA_NUM
+  OR
+        nomeVendedor LIKE @PESQUISA_LIKE
+  OR
         locais LIKE @PESQUISA_LIKE)

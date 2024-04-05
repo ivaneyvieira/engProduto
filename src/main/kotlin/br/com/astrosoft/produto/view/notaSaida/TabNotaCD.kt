@@ -8,8 +8,10 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFEntregaRetira
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
@@ -110,6 +112,9 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     colunaNomeCliente()
     colunaNFVendedor()
     colunaNomeVendedor()
+    colunaNFTipo()
+    colunaNFEntregaRetira()
+
     colunaNFValor()
   }
 
