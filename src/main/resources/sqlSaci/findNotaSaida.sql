@@ -211,7 +211,7 @@ WHERE (issuedate >= :dataInicial
            THEN 'OUTRAS_NFS'
          ELSE 'SP_REME'
        END IN (:listaTipos)
-  OR 'TODOS' IN ('TODOS'))
+  OR 'TODOS' IN (:listaTipos))
   AND CASE :tipoNota
         WHEN 0 THEN tipo = 0
           AND N.nfse >= 10

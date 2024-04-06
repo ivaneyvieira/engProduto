@@ -75,6 +75,7 @@ data class FiltroNota(
   val dataFinal: LocalDate?,
   val notaEntrega: String = "N",
   val pesquisa: String,
+  val tipoNF: String = "TODOS",
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {

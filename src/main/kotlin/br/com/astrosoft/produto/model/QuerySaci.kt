@@ -271,15 +271,7 @@ class QuerySaci : QueryDB(database) {
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
-    val listaTipos =
-        listOfNotNull(
-          if (user?.nfceExpedicao == true) "NFCE" else null,
-          if (user?.vendaExpedicao == true) "VENDA" else null,
-          if (user?.entRetExpedicao == true) "ENT_RET" else null,
-          if (user?.entRetExpedicao == true) "RETIRAF" else null,
-          if (user?.transfExpedicao == true) "TRANSFERENCIA" else null,
-          if (user?.vendaFExpedicao == true) "VENDAF" else null
-        )
+
     val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
     return query(sql, NotaSaida::class) {
@@ -292,6 +284,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
+    }.filter {
+      it.tipoNotaSaida == filtro.tipoNF || filtro.tipoNF == "TODOS"
     }
   }
 
