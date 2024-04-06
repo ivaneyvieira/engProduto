@@ -223,7 +223,7 @@ WHERE (issuedate >= :dataInicial
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
-          AND IFNULL(tipoE, 0) = 0
+          AND IFNULL(tipoR, 0) = 0
         WHEN 'N' THEN (N.storeno = :loja
           OR :loja = 0)
         ELSE FALSE
