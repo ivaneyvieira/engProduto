@@ -219,8 +219,11 @@ class UserSaci : IUser {
   val lojaUsuario
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
-  val produto
-    get() = produtoList  || admin
+  var produto
+    get() = produtoList || admin
+    set(value) {
+      produtoList = value
+    }
   var nota
     get() = notaExp || notaCD || notaEnt || admin
     set(value) {
