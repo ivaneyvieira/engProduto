@@ -41,7 +41,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     val loja = user?.storeno ?: 1
-    val lojaEscolhida = if(loja == 0) 1 else loja
+    val lojaEscolhida = if (loja == 0) 1 else loja
     cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
 
@@ -166,6 +166,13 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
+
+        this.button("Imprimir") {
+          this.icon = VaadinIcon.PRINT.create()
+          onLeftClick {
+            viewModel.imprimeProdutos()
+          }
+        }
       }
     }
   }
@@ -211,6 +218,10 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
   override fun updateProdutos(produtos: List<ProdutoSaldo>) {
     updateGrid(produtos)
+  }
+
+  override fun produtosSelecionados(): List<ProdutoSaldo> {
+    return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {

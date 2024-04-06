@@ -20,6 +20,7 @@ class ProdutoSaldo(
   var abrev: String?,
   var tipo: Int?,
   var cl: Int?,
+  var localizacao: String?,
 ) {
   companion object {
     fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {
@@ -41,7 +42,11 @@ data class FiltroProdutoSaldo(
   val grade: Boolean,
   val estoque: EEstoque,
   val saldo: Int,
-)
+){
+  fun lojaSigla(): String {
+    return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
+  }
+}
 
 enum class ECaracter(val value: String, val descricao: String) {
   SIM("S", "Sim"),
