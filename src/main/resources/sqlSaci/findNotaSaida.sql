@@ -113,9 +113,9 @@ SELECT N.storeno                          AS loja,
        IF(N.status <> 1, 'N', 'S')        AS cancelada,
        CASE
          WHEN N.tipo = 0
-           THEN ''
+           THEN 'VENDA'
          WHEN N.tipo = 1
-           THEN ''
+           THEN 'TRANSFERENCIA'
          WHEN N.tipo = 2
            THEN 'DEVOLUCAO'
          WHEN N.tipo = 3
@@ -231,6 +231,7 @@ WHERE (issuedate >= :dataInicial
   AND CASE
         WHEN :marca = 999 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
           OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
+          OR (N.tipo IN (0, 1))
           )
         ELSE TRUE
       END
