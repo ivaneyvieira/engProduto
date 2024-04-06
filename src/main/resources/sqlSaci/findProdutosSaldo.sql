@@ -114,9 +114,9 @@ FROM sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
 GROUP BY loja, prdno, gradeProduto
 HAVING CASE :estoque
-         WHEN '<' THEN SUM(S.qtty_varejo + S.qtty_atacado) < :saldo
-         WHEN '>' THEN SUM(S.qtty_varejo + S.qtty_atacado) > :saldo
-         WHEN '=' THEN SUM(S.qtty_varejo + S.qtty_atacado) = :saldo
+         WHEN '<' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) < :saldo
+         WHEN '>' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) > :saldo
+         WHEN '=' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) = :saldo
          WHEN 'T' THEN TRUE
          ELSE FALSE
        END;
