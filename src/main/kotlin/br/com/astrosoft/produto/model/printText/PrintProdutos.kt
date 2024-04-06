@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.rpad
+import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldo
 import br.com.astrosoft.produto.model.beans.ProdutoSaldo
 import java.time.LocalDate
@@ -20,15 +21,18 @@ class PrintProdutos(private val filtro: FiltroProdutoSaldo) : PrintText<ProdutoS
       negrito = true
     )
     writeln(
-      text = "Loja: ${filtro.lojaSigla()}   Fornecedor: ${filtro.fornecedor.toString().rpad(5, " ")}   Tipo: ${filtro.tipo.toString().rpad(5, " ")}  Cl:${filtro.cl.toString().rpad(5, " ")}",
+      text = "Loja: ${filtro.lojaSigla()}   Fornecedor: ${
+        filtro.fornecedor.toString().rpad(5, " ")
+      }   Tipo: ${filtro.tipo.toString().rpad(5, " ")}  Cl:${filtro.cl.toString().rpad(5, " ")}",
       negrito = true
     )
     writeln(
       text = "Caracter: ${filtro.caracter.descricao}                Letra Dup: ${filtro.letraDup.descricao}",
       negrito = true
     )
+    val saldo = if (filtro.estoque == EEstoque.TODOS) "" else filtro.saldo.toString()
     writeln(
-      text = "Estoque: ${filtro.estoque.descricao}",
+      text = "Estoque: ${filtro.estoque.descricao}  $saldo",
       negrito = true
     )
     writeln(
