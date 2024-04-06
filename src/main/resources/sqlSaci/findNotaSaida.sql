@@ -224,6 +224,7 @@ WHERE (issuedate >= :dataInicial
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
+          AND N.tipo not IN (0, 1)
         WHEN 'N' THEN (N.storeno = :loja
           OR :loja = 0)
         ELSE FALSE
