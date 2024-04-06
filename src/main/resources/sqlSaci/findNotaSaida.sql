@@ -220,18 +220,16 @@ WHERE (issuedate >= :dataInicial
         WHEN 999 THEN TRUE
         ELSE FALSE
       END
-  AND (X.s11 = :marca
-  OR :marca = 999)
+  AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
-        WHEN 'S' THEN (N.storeno != :loja
-          OR :loja = 0)
-          AND N.nfse = '3'
+        WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
+          AND IFNULL(tipoE, 0) = 0
         WHEN 'N' THEN (N.storeno = :loja
           OR :loja = 0)
         ELSE FALSE
       END
   AND CASE
-        WHEN :marca = 0 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Furura*/
+        WHEN :marca = 999 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
           OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
           )
         ELSE TRUE
