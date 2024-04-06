@@ -39,8 +39,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.storeno != 0
-    val loja = user?.storeno ?: 1
+    cmbLoja.isReadOnly = user?.lojaProduto != 0
+    val loja = user?.lojaProduto ?: 1
     val lojaEscolhida = if (loja == 0) 1 else loja
     cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
@@ -234,5 +234,10 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraProduto.orEmpty().toList()
   }
 }

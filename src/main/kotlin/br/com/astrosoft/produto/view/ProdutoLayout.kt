@@ -51,7 +51,7 @@ class ProdutoLayout : AppLayoutAbstract() {
         title = "Retira",
         routeClass = PedidoRetiraView::class,
       )
-      if (userSaci?.pedidoRetira == true) route(
+      if (userSaci?.produtoList == true) route(
         icon = CUBES,
         title = "Produto",
         routeClass = ProdutoView::class,

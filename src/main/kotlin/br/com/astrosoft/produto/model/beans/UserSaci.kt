@@ -204,7 +204,19 @@ class UserSaci : IUser {
       lojas = lojas.setValue(12, if (value) "S" else "N")
     }
 
-  //
+  var lojaProduto: Int?
+    get() = lojas.getOrNull(13)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(13, value?.toString() ?: "")
+    }
+
+  var impressoraProduto: Set<String>
+    get() = lojas.getOrNull(14)?.toString()?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(14, value.joinToString(":"))
+    }
+
+  //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
     val list = this.toMutableList()

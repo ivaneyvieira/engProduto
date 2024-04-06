@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoUsr
@@ -16,10 +17,17 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
   }
 
   override fun FormUsuario.configFields() {
-    verticalBlock("Menus") {
-      checkBox("Produto") {
-        binder.bind(this, UserSaci::produtoList.name)
+    horizontalBlock {
+      verticalBlock("Menus") {
+        checkBox("Produto") {
+          binder.bind(this, UserSaci::produtoList.name)
+        }
       }
+      verticalBlock("Comandos")
+    }
+    verticalBlock("Filtros") {
+      filtroLoja(binder, UserSaci::lojaProduto)
+      filtroImpressoraTermica(binder, UserSaci::impressoraProduto)
     }
   }
 }
