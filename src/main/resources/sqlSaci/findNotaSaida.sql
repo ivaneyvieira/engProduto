@@ -232,7 +232,8 @@ WHERE (issuedate >= :dataInicial
   AND CASE
         WHEN :marca = 999 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
           OR ((N.tipo = 3) AND IFNULL(tipoR, 0) > 0)/*Simples*/
-          OR (N.tipo IN (0, 1))
+          OR (N.tipo = 0 AND N.nfse = 1)
+          OR (N.tipo = 1 AND N.nfse = 5)
           )
         ELSE TRUE
       END
