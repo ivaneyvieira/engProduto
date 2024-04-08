@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
+import br.com.astrosoft.produto.model.beans.ETipoRota
 import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.select
@@ -143,7 +144,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.isEmptySelectionAllowed = true
       this.setItemLabelGenerator { storeno ->
         when (storeno) {
-          0 -> "Todas as lojas"
+          0    -> "Todas as lojas"
           else -> lojas.firstOrNull { loja ->
             loja.no == storeno
           }?.descricao ?: ""
@@ -161,6 +162,20 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
+      binder.bind(this, property.name)
+    }
+  }
+
+  protected fun HasComponents.filtroImpressoraExpedicao(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Set<String>>
+  ) {
+    multiSelectComboBox<String>("Impressora") {
+      this.setWidthFull()
+      this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+      val impressoras = viewModel.allTermica().map { it.name }
+      val itens = impressoras.distinct().sorted() + ETipoRota.entries.map { it.name }.sorted()
+      setItems(itens)
       binder.bind(this, property.name)
     }
   }
