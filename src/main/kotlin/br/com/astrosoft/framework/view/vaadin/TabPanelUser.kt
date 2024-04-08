@@ -178,7 +178,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>
   ) {
-    multiSelectComboBox<String>("Localização") {
+    multiSelectComboBox<String>("Loja Localização") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODOS") + viewModel.allLocalizacao())

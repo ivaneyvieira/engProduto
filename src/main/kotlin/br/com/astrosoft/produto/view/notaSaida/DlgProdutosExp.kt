@@ -1,12 +1,10 @@
 package br.com.astrosoft.produto.view.notaSaida
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
-import br.com.astrosoft.produto.model.beans.EMarcaNota
-import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.PrdGrade
-import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
@@ -40,7 +38,13 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaCD()
-          gridDetail.setItems(nota.produtos(EMarcaNota.EXP))
+          val user = AppConfig.userLogin() as? UserSaci
+          val marca = if (user?.admin == true)
+            EMarcaNota.TODOS
+          else
+            EMarcaNota.EXP
+
+          gridDetail.setItems(nota.produtos(marca))
         }
       }
     }, onClose = {
@@ -137,7 +141,12 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val listProdutos = nota.produtos(EMarcaNota.EXP)
+    val user = AppConfig.userLogin() as? UserSaci
+    val marca = if (user?.admin == true)
+      EMarcaNota.TODOS
+    else
+      EMarcaNota.EXP
+    val listProdutos = nota.produtos(marca)
     gridDetail.setItems(listProdutos)
   }
 }
