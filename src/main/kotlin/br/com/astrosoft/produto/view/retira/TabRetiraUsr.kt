@@ -29,7 +29,7 @@ class TabRetiraUsr(viewModel: PedidoRetiraUsrViewModel) : TabPanelUser(viewModel
       }
     }
     verticalBlock("Filtros") {
-      filtroImpressoraTermica(binder, UserSaci::impressoraRet)
+      filtroImpressoraTodas(binder, UserSaci::impressoraRet)
     }
   }
 }

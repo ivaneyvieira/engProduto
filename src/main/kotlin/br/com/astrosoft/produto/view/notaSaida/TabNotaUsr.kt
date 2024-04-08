@@ -39,7 +39,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     }
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaNota)
-      filtroImpressoraTodas(binder, UserSaci::impressoraNota)
+      filtroImpressoraEtiqueta(binder, UserSaci::impressoraNota)
       select<Int>("Nota") {
         this.setWidthFull()
         this.isEmptySelectionAllowed = true

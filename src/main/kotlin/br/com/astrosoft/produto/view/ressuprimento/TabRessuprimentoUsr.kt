@@ -51,7 +51,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     }
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaRessu)
-      filtroImpressoraTermica(binder, UserSaci::impressoraRessu)
+      filtroImpressoraTodas(binder, UserSaci::impressoraRessu)
       filtroLocalizacao(binder, UserSaci::listaRessuprimento)
     }
   }
