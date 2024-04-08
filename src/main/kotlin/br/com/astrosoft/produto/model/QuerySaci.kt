@@ -279,6 +279,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoNota", filtro.tipoNota.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
       addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
       addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
@@ -357,6 +358,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
+      addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
       addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
     produtos.forEach {

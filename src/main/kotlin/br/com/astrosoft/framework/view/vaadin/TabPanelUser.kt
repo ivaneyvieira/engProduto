@@ -129,9 +129,12 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
   }
 
-
-  protected fun HasComponents.filtroLoja(binder: Binder<UserSaci>, property: KMutableProperty1<UserSaci, Int?>) {
-    select<Int>("Nome Loja") {
+  protected fun HasComponents.filtroLoja(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Int?>,
+    label: String = "Nome Loja"
+  ) {
+    select<Int>(label) {
       this.setWidthFull()
       this.addThemeVariants(SelectVariant.LUMO_SMALL)
       val lojas = viewModel.findAllLojas()
@@ -140,7 +143,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.isEmptySelectionAllowed = true
       this.setItemLabelGenerator { storeno ->
         when (storeno) {
-          0    -> "Todas as lojas"
+          0 -> "Todas as lojas"
           else -> lojas.firstOrNull { loja ->
             loja.no == storeno
           }?.descricao ?: ""
@@ -178,7 +181,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>
   ) {
-    multiSelectComboBox<String>("Loja Localização") {
+    multiSelectComboBox<String>("Localização") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODOS") + viewModel.allLocalizacao())

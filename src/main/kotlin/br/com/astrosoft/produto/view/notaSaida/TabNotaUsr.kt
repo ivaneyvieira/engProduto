@@ -8,8 +8,8 @@ import br.com.astrosoft.produto.model.beans.ETipoNota
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
-import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.github.mvysny.karibudsl.v10.checkBox
+import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
 
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
@@ -37,7 +37,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         binder.bind(this, UserSaci::entregaNota.name)
       }
     }
-    verticalBlock("Filtros"){
+    verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaNota)
       filtroImpressoraEtiqueta(binder, UserSaci::impressoraNota)
       select<Int>("Nota") {
@@ -49,6 +49,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         }
         binder.bind(this, UserSaci::tipoNota.name)
       }
+      filtroLoja(binder, UserSaci::lojaLocExpedicao, "Loja Localização")
       filtroLocalizacao(binder, UserSaci::localizacaoNota)
     }
   }

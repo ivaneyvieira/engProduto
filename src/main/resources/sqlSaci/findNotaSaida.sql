@@ -77,6 +77,7 @@ FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdloc AS L
                  ON P.no = L.prdno
 WHERE (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+  AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOCPRD;
