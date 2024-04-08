@@ -40,7 +40,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onLeftClick {
           viewModel.marcaCD()
-          gridDetail.setItems(nota.produtos(EMarcaNota.TODOS))
+          gridDetail.setItems(nota.produtos(EMarcaNota.EXP))
         }
       }
     }, onClose = {
@@ -137,7 +137,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val listProdutos = nota.produtos(EMarcaNota.TODOS)
+    val listProdutos = nota.produtos(EMarcaNota.EXP)
     gridDetail.setItems(listProdutos)
   }
 }

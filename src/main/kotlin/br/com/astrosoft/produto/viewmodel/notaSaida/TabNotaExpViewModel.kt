@@ -15,7 +15,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun updateView() {
-    val filtro = subView.filtro(EMarcaNota.TODOS)
+    val filtro = subView.filtro(EMarcaNota.EXP)
     val notas = NotaSaida.find(filtro)
     subView.updateNotas(notas)
   }
