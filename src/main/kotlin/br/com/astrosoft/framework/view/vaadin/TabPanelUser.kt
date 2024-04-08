@@ -177,6 +177,18 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
   }
 
+  protected fun HasComponents.filtroImpressoraTodas(
+    binder: Binder<UserSaci>,
+    property: KMutableProperty1<UserSaci, Set<String>>
+  ) {
+    multiSelectComboBox<String>("Impressora") {
+      this.setWidthFull()
+      this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+      setItems(listOf("TODAS") + viewModel.allImpressoras().map { it.name })
+      binder.bind(this, property.name)
+    }
+  }
+
   protected fun HasComponents.filtroLocalizacao(
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>

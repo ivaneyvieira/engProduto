@@ -14,6 +14,7 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
 
   fun allTermica(): List<Impressora> = Impressora.allTermica()
   fun allEtiqueta(): List<Impressora> = Impressora.allEtiqueta()
+  fun allImpressoras(): List<Impressora> = Impressora.all()
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
