@@ -60,6 +60,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
+      this.addClassName("styling")
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
@@ -131,8 +132,15 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           else -> null
         }
       }
+      this.setPartNameGenerator {
+        val marca = it.marca
+        if (marca == EMarcaNota.ENT.num) {
+          "amarelo"
+        } else null
+      }
     }
     this.addAndExpand(gridDetail)
+
     update()
   }
 
