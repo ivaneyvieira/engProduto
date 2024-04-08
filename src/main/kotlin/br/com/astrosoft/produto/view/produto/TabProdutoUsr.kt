@@ -27,7 +27,7 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
     }
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaProduto)
-      filtroImpressoraTodas(binder, UserSaci::impressoraProduto)
+      filtroImpressoraTermica(binder, UserSaci::impressoraProduto)
     }
   }
 }
