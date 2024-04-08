@@ -27,6 +27,9 @@ class NotaSaida(
   var notaEntrega: String?,
   var dataEntrega: LocalDate?,
   var tipo: String?,
+  var countExp: Int?,
+  var countCD: Int?,
+  var countEnt: Int?
 ) {
   val nota
     get() = "$numero/$serie"

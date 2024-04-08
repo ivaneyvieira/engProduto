@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.notaSaida
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
@@ -105,6 +106,9 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
+    this.addClassName("styling")
+    this.format()
+
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosExp(viewModel, nota)
@@ -124,13 +128,11 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFEntregaRetira()
     colunaNFSituacao()
 
-    this.setClassNameGenerator {
-      when {
-        it.cancelada == "S" -> "cancelada"
-        it.marca == 1       -> "cd"
-        it.marca == 2       -> "entregue"
-        else                -> null
-      }
+    this.setPartNameGenerator {
+      val countEnt = it.countEnt ?: 0
+      if (countEnt > 0) {
+        "amarelo"
+      } else null
     }
   }
 

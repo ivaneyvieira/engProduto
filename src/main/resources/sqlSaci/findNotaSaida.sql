@@ -93,6 +93,8 @@ DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
 DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
+DROP TEMPORARY TABLE IF EXISTS T_QUERY;
+CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                          AS loja,
        N.pdvno                            AS pdvno,
        N.xano                             AS xano,
@@ -156,7 +158,9 @@ SELECT N.storeno                          AS loja,
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
-       END                                AS tipo
+       END                                AS tipo,
+       X.c5,
+       X.c4
 FROM sqldados.nf AS N
        LEFT JOIN sqlpdv.pxa AS P
                  USING (storeno, pdvno, xano)
@@ -224,14 +228,14 @@ WHERE (issuedate >= :dataInicial
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
-          AND N.tipo not IN (0, 1)
+          AND N.tipo NOT IN (0, 1)
         WHEN 'N' THEN (N.storeno = :loja
           OR :loja = 0)
         ELSE FALSE
       END
   AND CASE
-        WHEN :marca = 999 THEN (((N.tipo = 4) AND  IFNULL(tipoE, 0) > 0)/*Retira Futura*/
-          OR ((N.tipo in (3, 4)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
+        WHEN :marca = 999 THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
+          OR ((N.tipo IN (3, 4)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
           OR (N.tipo = 0 AND N.nfse = 1)
           OR (N.tipo = 1 AND N.nfse = 5)
           )
@@ -256,4 +260,40 @@ HAVING (@PESQUISA = ''
   OR
         nomeVendedor LIKE @PESQUISA_LIKE
   OR
-        locais LIKE @PESQUISA_LIKE)
+        locais LIKE @PESQUISA_LIKE);
+
+SELECT Q.loja,
+       Q.pdvno,
+       Q.xano,
+       Q.numero,
+       Q.serie,
+       Q.cliente,
+       Q.nomeCliente,
+       Q.valorNota,
+       Q.data,
+       Q.hora,
+       Q.vendedor,
+       Q.nomeVendedor,
+       Q.locais,
+       Q.usuarioExp,
+       Q.usuarioCD,
+       Q.totalProdutos,
+       Q.marca,
+       Q.cancelada,
+       Q.tipoNotaSaida,
+       Q.notaEntrega,
+       Q.dataEntrega,
+       Q.tipo,
+       SUM(X.s11 = 0) AS countExp,
+       SUM(X.s11 = 1) AS countCD,
+       SUM(X.s11 = 2) AS countEnt
+FROM T_QUERY AS Q
+       INNER JOIN sqldados.xaprd2 AS X
+                  ON X.storeno = Q.loja
+                    AND X.pdvno = Q.pdvno
+                    AND X.xano = Q.xano
+GROUP BY Q.loja,
+         Q.pdvno,
+         Q.xano,
+         SUBSTRING_INDEX(Q.c5, '-', 1),
+         SUBSTRING_INDEX(Q.c4, '-', 1)
