@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
 
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
@@ -48,6 +50,12 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           ETipoNota.entries.firstOrNull { et -> et.num == it }?.descricao ?: ""
         }
         binder.bind(this, UserSaci::tipoNota.name)
+      }
+      multiSelectComboBox<String>("Tipo NF") {
+        this.setWidthFull()
+        this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
+        setItems("VENDA", "TRANSFERENCIA", "ENTRE FUT", "SIMP REME", "TODOS")
+        binder.bind(this, UserSaci::tipoNotaExpedicao.name)
       }
       filtroLoja(binder, UserSaci::lojaLocExpedicao, "Loja Localização")
       filtroLocalizacao(binder, UserSaci::localizacaoNota)

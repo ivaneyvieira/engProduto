@@ -222,6 +222,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(15, value?.toString() ?: "")
     }
 
+  var tipoNotaExpedicao: Set<String>
+    get() = lojas.getOrNull(16)?.toString()?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(16, value.joinToString(":"))
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

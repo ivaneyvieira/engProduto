@@ -96,8 +96,13 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     cmbTipoNF = select("Tipo NF") {
-      setItems("VENDA", "TRANSFERENCIA", "ENTRE FUT", "SIMP REME", "TODOS")
-      value = "VENDA"
+      val user = AppConfig.userLogin() as? UserSaci
+      val itens = if(user?.tipoNotaExpedicao.orEmpty().isEmpty() || user?.admin == true)
+        listOf("VENDA", "TRANSFERENCIA", "ENTRE FUT", "SIMP REME", "TODOS")
+      else
+        user?.tipoNotaExpedicao.orEmpty().toList()
+      setItems(itens)
+      value = itens.getOrNull(0)
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
