@@ -190,8 +190,7 @@ WHERE (issuedate >= :dataInicial
   OR :dataFinal = 0)
   AND issuedate >= @DT
   AND (CASE
-         WHEN (IFNULL(NP.optionEntrega
-                 , 0) % 100) = 4
+         WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
            THEN 'RETIRAF'
          WHEN (N.nfse = 1
            AND N.cfo IN (5922, 6922))
@@ -218,10 +217,8 @@ WHERE (issuedate >= :dataInicial
        END IN (:listaTipos)
   OR 'TODOS' IN (:listaTipos))
   AND CASE :tipoNota
-        WHEN 0 THEN tipo = 0
-          AND N.nfse >= 10
-        WHEN 1 THEN !(tipo = 0
-          AND N.nfse >= 10)
+        WHEN 0 THEN tipo = 0 AND N.nfse >= 10
+        WHEN 1 THEN tipo = 0 AND N.nfse < 10
         WHEN 999 THEN TRUE
         ELSE FALSE
       END
@@ -238,6 +235,7 @@ WHERE (issuedate >= :dataInicial
         WHEN :marca IN (0, 999) THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
           OR ((N.tipo IN (3, 4)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
           OR (N.tipo = 0 AND N.nfse = 1)
+          OR (N.tipo = 0 AND N.nfse >= 10)
           OR (N.tipo = 1 AND N.nfse = 5)
           )
         ELSE TRUE
