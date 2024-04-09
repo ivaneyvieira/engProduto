@@ -291,8 +291,4 @@ FROM T_QUERY AS Q
                   ON X.storeno = Q.loja
                     AND X.pdvno = Q.pdvno
                     AND X.xano = Q.xano
-GROUP BY Q.loja,
-         Q.pdvno,
-         Q.xano,
-         SUBSTRING_INDEX(Q.c5, '-', 1),
-         SUBSTRING_INDEX(Q.c4, '-', 1)
+GROUP BY Q.loja, Q.pdvno, Q.xano
