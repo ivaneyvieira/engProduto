@@ -34,7 +34,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
       }
     }
     verticalBlock("Filtros") {
-      filtroImpressoraTermica(binder, UserSaci::impressoraTrans)
+      filtroImpressoraExpedicao(binder, UserSaci::impressoraTrans)
     }
   }
 }
