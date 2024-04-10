@@ -96,63 +96,63 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                          AS loja,
-       N.pdvno                            AS pdvno,
-       N.xano                             AS xano,
-       N.nfno                             AS numero,
-       N.nfse                             AS serie,
-       N.custno                           AS cliente,
-       IFNULL(C.name, '')                 AS nomeCliente,
-       N.grossamt / 100                   AS valorNota,
-       CAST(N.issuedate AS DATE)          AS data,
-       SEC_TO_TIME(P.time)                AS hora,
-       N.empno                            AS vendedor,
-       TRIM(MID(E.sname, 1, 20))          AS nomeVendedor,
-       CAST(IFNULL(L.locais, '') AS CHAR) AS locais,
-       X.c5                               AS usuarioExp,
-       X.c4                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)     AS totalProdutos,
-       MAX(X.s11)                         AS marca,
-       IF(N.status <> 1, 'N', 'S')        AS cancelada,
+SELECT P.storeno                                                                AS loja,
+       P.pdvno                                                                  AS pdvno,
+       P.xano                                                                   AS xano,
+       P.nfno                                                                   AS numero,
+       P.nfse                                                                   AS serie,
+       P.custno                                                                 AS cliente,
+       IFNULL(C.name, '')                                                       AS nomeCliente,
+       P.amt / 100                                                              AS valorNota,
+       CAST(P.date AS DATE)                                                     AS data,
+       SEC_TO_TIME(P.time)                                                      AS hora,
+       P.empno                                                                  AS vendedor,
+       TRIM(MID(E.sname, 1, 20))                                                AS nomeVendedor,
+       CAST(IFNULL(L.locais, '') AS CHAR)                                       AS locais,
+       A.usuarioExp                                                             AS usuarioExp,
+       A.usuarioCD                                                              AS usuarioCD,
+       SUM((X.qtty / 1000) * X.acc_price)                                       AS totalProdutos,
+       MAX(A.marca)                                                             AS marca,
+       IF(((P.bits % POW(2, 0)) != 0) OR ((P.bits % POW(2, 4)) != 0), 'S', 'N') AS cancelada,
        CASE
-         WHEN tipo = 0 AND N.nfse >= 10
+         WHEN tipo = 0 AND P.nfse >= 10
            THEN 'NFCE'
-         WHEN tipo = 0 AND N.nfse < 10
+         WHEN tipo = 0 AND P.nfse < 10
            THEN 'NFE'
-         WHEN N.tipo = 1
+         WHEN N1.tipo = 1
            THEN 'TRANSFERENCIA'
-         WHEN N.tipo = 2
+         WHEN N1.tipo = 2
            THEN 'DEVOLUCAO'
-         WHEN N.tipo = 3
+         WHEN N1.tipo = 3
            THEN 'SIMP_REME'
-         WHEN N.tipo = 4
+         WHEN N1.tipo = 4
            THEN 'ENTRE_FUT'
-         WHEN N.tipo = 5
+         WHEN N1.tipo = 5
            THEN 'RET_DEMON'
-         WHEN N.tipo = 6
+         WHEN N1.tipo = 6
            THEN 'VENDA_USA'
-         WHEN N.tipo = 7
+         WHEN N1.tipo = 7
            THEN 'OUTROS'
-         WHEN N.tipo = 8
+         WHEN N1.tipo = 8
            THEN 'NF_CF'
-         WHEN N.tipo = 9
+         WHEN N1.tipo = 9
            THEN 'PERD/CONSER'
-         WHEN N.tipo = 10
+         WHEN N1.tipo = 10
            THEN 'REPOSICAO'
-         WHEN N.tipo = 11
+         WHEN N1.tipo = 11
            THEN 'RESSARCI'
-         WHEN N.tipo = 12
+         WHEN N1.tipo = 12
            THEN 'COMODATO'
-         WHEN N.tipo = 13
+         WHEN N1.tipo = 13
            THEN 'NF_EMPRESA'
-         WHEN N.tipo = 14
+         WHEN N1.tipo = 14
            THEN 'BONIFICA'
-         WHEN N.tipo = 15
+         WHEN N1.tipo = 15
            THEN 'NFE'
          ELSE ''
-       END                                AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')        AS notaEntrega,
-       CAST(ENT.dataEntrega AS DATE)      AS dataEntrega,
+       END                                                                      AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')                                              AS notaEntrega,
+       CAST(ENT.dataEntrega AS DATE)                                            AS dataEntrega,
        CASE
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
@@ -161,53 +161,53 @@ SELECT N.storeno                          AS loja,
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
-       END                                AS tipo,
-       X.c5,
-       X.c4
-FROM sqldados.nf AS N
-       LEFT JOIN sqlpdv.pxa AS P
+       END                                                                      AS tipo
+FROM sqlpdv.pxa AS P
+       INNER JOIN sqlpdv.pxaprd AS X
+                  USING (storeno, pdvno, xano)
+       LEFT JOIN sqldados.nfSaidaAdiciona AS A
+                 USING (storeno, pdvno, xano, prdno, grade)
+       LEFT JOIN sqlpdv.pxanf AS N1
                  USING (storeno, pdvno, xano)
        LEFT JOIN T_ENTREGA AS ENT
                  USING (storeno, pdvno, xano)
-       INNER JOIN sqldados.xaprd2 AS X
-                  USING (storeno, pdvno, xano)
        LEFT JOIN T_TIPO AS T
-                 ON N.storeno = T.storeno AND
-                    N.eordno = T.ordno
+                 ON P.storeno = T.storeno AND
+                    P.eordno = T.ordno
        INNER JOIN T_LOCPRD AS L
                   ON L.prdno = X.prdno
        LEFT JOIN sqldados.emp AS E
-                 ON E.no = N.empno
+                 ON E.no = P.empno
        LEFT JOIN sqldados.custp AS C
-                 ON C.no = N.custno
+                 ON C.no = P.custno
 WHERE (issuedate >= :dataInicial
   OR :dataInicial = 0)
   AND (issuedate <= :dataFinal
   OR :dataFinal = 0)
   AND issuedate >= @DT
-  AND (X.s11 = :marca OR :marca = 999)
+  AND (IFNULL(A.marca, 0) = :marca OR :marca = 999)
   AND CASE :notaEntrega
-        WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
+        WHEN 'S' THEN (P.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
-          AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja
+          AND N1.tipo NOT IN (0, 1)
+        WHEN 'N' THEN (P.storeno = :loja
           OR :loja = 0)
         ELSE FALSE
       END
   AND CASE
-        WHEN :marca IN (0, 999) THEN (((N.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
-          OR ((N.tipo IN (3, 4)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
-          OR (N.tipo = 0 AND N.nfse = 1)
-          OR (N.tipo = 0 AND N.nfse >= 10)
-          OR (N.tipo = 1 AND N.nfse = 5)
+        WHEN :marca IN (0, 999) THEN (((N1.tipo = 4) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
+          OR ((N1.tipo IN (3, 4)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
+          OR (N1.tipo = 0 AND N1.nfse = 1)
+          OR (N1.tipo = 0 AND N1.nfse >= 10)
+          OR (N1.tipo = 1 AND N1.nfse = 5)
           )
         ELSE TRUE
       END
-GROUP BY N.storeno,
-         N.pdvno,
-         N.xano,
-         SUBSTRING_INDEX(X.c5, '-', 1),
-         SUBSTRING_INDEX(X.c4, '-', 1)
+GROUP BY P.storeno,
+         P.pdvno,
+         P.xano,
+         SUBSTRING_INDEX(A.usuarioExp, '-', 1),
+         SUBSTRING_INDEX(A.usuarioCD, '-', 1)
 HAVING (@PESQUISA = ''
   OR numero LIKE @PESQUISA_START
   OR notaEntrega LIKE @PESQUISA_START
