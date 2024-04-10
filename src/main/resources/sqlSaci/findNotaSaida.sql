@@ -174,12 +174,6 @@ FROM sqldados.nf AS N
        LEFT JOIN T_TIPO AS T
                  ON N.storeno = T.storeno AND
                     N.eordno = T.ordno
-       LEFT JOIN sqldados.nfrprd AS NP
-                 ON X.storeno = NP.storeno AND
-                    X.pdvno = NP.pdvno AND
-                    X.xano = NP.xano AND
-                    X.prdno = NP.prdno AND
-                    X.grade = NP.grade
        INNER JOIN T_LOCPRD AS L
                   ON L.prdno = X.prdno
        LEFT JOIN sqldados.emp AS E
@@ -191,33 +185,6 @@ WHERE (issuedate >= :dataInicial
   AND (issuedate <= :dataFinal
   OR :dataFinal = 0)
   AND issuedate >= @DT
-  AND (CASE
-         WHEN (IFNULL(NP.optionEntrega, 0) % 100) = 4
-           THEN 'RETIRAF'
-         WHEN (N.nfse = 1
-           AND N.cfo IN (5922, 6922))
-           OR (N.nfse = 7)
-           THEN 'VENDAF'
-         WHEN N.nfse = '66'
-           THEN 'ACERTO_S'
-         WHEN N.nfse = '3'
-           THEN 'ENT_RET'
-         WHEN tipo = 0
-           AND N.nfse >= 10
-           THEN 'NFCE'
-         WHEN tipo = 0
-           THEN 'VENDA'
-         WHEN tipo = 1
-           THEN 'TRANSFERENCIA'
-         WHEN tipo = 2
-           THEN 'DEV_FOR'
-         WHEN tipo = 3
-           THEN 'OUTRAS_NFS'
-         WHEN tipo = 7
-           THEN 'OUTRAS_NFS'
-         ELSE 'SP_REME'
-       END IN (:listaTipos)
-  OR 'TODOS' IN (:listaTipos))
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
@@ -242,20 +209,13 @@ GROUP BY N.storeno,
          SUBSTRING_INDEX(X.c5, '-', 1),
          SUBSTRING_INDEX(X.c4, '-', 1)
 HAVING (@PESQUISA = ''
-  OR
-        numero LIKE @PESQUISA_START
-  OR
-        notaEntrega LIKE @PESQUISA_START
-  OR
-        cliente = @PESQUISA_NUM
-  OR
-        nomeCliente LIKE @PESQUISA_LIKE
-  OR
-        vendedor = @PESQUISA_NUM
-  OR
-        nomeVendedor LIKE @PESQUISA_LIKE
-  OR
-        locais LIKE @PESQUISA_LIKE);
+  OR numero LIKE @PESQUISA_START
+  OR notaEntrega LIKE @PESQUISA_START
+  OR cliente = @PESQUISA_NUM
+  OR nomeCliente LIKE @PESQUISA_LIKE
+  OR vendedor = @PESQUISA_NUM
+  OR nomeVendedor LIKE @PESQUISA_LIKE
+  OR locais LIKE @PESQUISA_LIKE);
 
 SELECT Q.loja,
        Q.pdvno,

@@ -280,7 +280,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
       addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
-      addOptionalParameter("listaTipos", listOf("TODOS"))
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
