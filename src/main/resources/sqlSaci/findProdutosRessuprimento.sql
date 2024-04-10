@@ -196,12 +196,7 @@ WHERE X.storeno = 1
   AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
   AND (IFNULL(L.localizacao, '') IN (:locApp) OR 'TODOS' IN (:locApp) OR TRUE)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
-HAVING CASE :temNota
-         WHEN 'T' THEN TRUE
-         WHEN 'S' THEN numeroNota IS NOT NULL
-         WHEN 'N' THEN numeroNota IS NULL
-         ELSE FALSE
-       END
+
 /*
 update sqldados.oprdRessu
 set auxLong1 = 0

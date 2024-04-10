@@ -391,12 +391,12 @@ class QuerySaci : QueryDB(database) {
     locais: List<String>
   ): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
+    val localList = pedido.localList()
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locApp", pedido.localList())
+      addOptionalParameter("locApp", localList)
       addOptionalParameter("locais", locais)
-      addOptionalParameter("temNota", pedido.temNota)
     }
   }
 
@@ -933,7 +933,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("ordno", ressuprimento.numero)
       addOptionalParameter("storeno", 1)
-      addOptionalParameter("localizacao", ressuprimento.localizacao)
+      addOptionalParameter("localizacoes", ressuprimento.localizacoes)
       addOptionalParameter("observacao", ressuprimento.observacao)
     }
   }

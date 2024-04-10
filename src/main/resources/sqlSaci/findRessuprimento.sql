@@ -409,7 +409,7 @@ SELECT numero,
        comprador,
        GROUP_CONCAT(DISTINCT
                     IF(D.localizacao = '', NULL, D.localizacao)
-                    SEPARATOR ',') AS localizacao,
+                    SEPARATOR ',') AS localizacoes,
        :marca                      AS marca,
        :temNota                    AS temNota,
        GROUP_CONCAT(DISTINCT

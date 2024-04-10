@@ -122,7 +122,6 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   }
 
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
-    val user = AppConfig.userLogin() as? UserSaci
     return FiltroRessuprimento(
       numero = edtRessuprimento.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",

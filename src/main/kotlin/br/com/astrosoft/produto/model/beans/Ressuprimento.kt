@@ -10,7 +10,7 @@ class Ressuprimento(
   var fornecedor: Int?,
   var data: LocalDate?,
   var comprador: Int?,
-  var localizacao: String?,
+  var localizacoes: String?,
   var marca: Int?,
   var temNota: String?,
   var notaBaixa: String?,
@@ -41,7 +41,7 @@ class Ressuprimento(
   var countSelENT: Int?,
   var countSelREC: Int?,
 ) {
-  fun localList() = localizacao?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
+  fun localList() = localizacoes?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
 
@@ -154,7 +154,7 @@ class Ressuprimento(
           fornecedor = ressu?.fornecedor,
           data = ressu?.data,
           comprador = ressu?.comprador,
-          localizacao = entry.value.joinToString { it.localizacao ?: "" },
+          localizacoes = entry.value.joinToString { it.localizacoes ?: "" },
           marca = ressu?.marca,
           temNota = ressu?.temNota,
           notaBaixa = ressu?.notaBaixa,
