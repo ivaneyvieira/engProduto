@@ -111,7 +111,7 @@ SELECT P.storeno                                                                
        CAST(IFNULL(L.locais, '') AS CHAR)                                       AS locais,
        A.usuarioExp                                                             AS usuarioExp,
        A.usuarioCD                                                              AS usuarioCD,
-       SUM((X.qtty / 1000) * X.acc_price)                                       AS totalProdutos,
+       SUM((X.qtty / 1000) * X.ls_price / 100)                                  AS totalProdutos,
        MAX(A.marca)                                                             AS marca,
        IF(((P.bits % POW(2, 0)) != 0) OR ((P.bits % POW(2, 4)) != 0), 'S', 'N') AS cancelada,
        CASE
