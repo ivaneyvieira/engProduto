@@ -33,7 +33,7 @@ import java.time.LocalDate
 class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
   private var dlgProduto: DlgProdutosCD? = null
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbNota: Select<ETipoNota>
+  private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
@@ -80,10 +80,16 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     }
     cmbNota = select("Nota") {
       val user = AppConfig.userLogin() as? UserSaci
-      setItems(ETipoNota.entries)
-      value = ETipoNota.TODOS
-      val tipoNota = ETipoNota.entries.firstOrNull { it.num == user?.tipoNota }
-      this.isReadOnly = tipoNota != null && tipoNota.num != ETipoNota.TODOS.num
+      val tiposNota = user?.tipoNotaExpedicao.let { tipo ->
+        if (tipo == null) ETipoNotaFiscal.entries
+        else {
+          if (tipo.contains(ETipoNotaFiscal.TODOS)) ETipoNotaFiscal.entries
+          else tipo.ifEmpty { ETipoNotaFiscal.entries }
+        }
+      }
+      setItems(tiposNota)
+      value = tiposNota.firstOrNull()
+
       this.setItemLabelGenerator {
         it.descricao
       }
@@ -121,7 +127,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
-      tipoNota = cmbNota.value ?: ETipoNota.TODOS,
+      tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

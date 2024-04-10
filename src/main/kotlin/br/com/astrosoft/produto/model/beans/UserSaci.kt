@@ -174,7 +174,7 @@ class UserSaci : IUser {
       lojas = lojas.setValue(7, value.joinToString(":"))
     }
 
-  var tipoNota: Int?
+  var tipoNotaLivre: Int?
     get() = lojas.getOrNull(8)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(8, value?.toString() ?: "")
@@ -222,10 +222,15 @@ class UserSaci : IUser {
       lojas = lojas.setValue(15, value?.toString() ?: "")
     }
 
-  var tipoNotaExpedicao: Set<String>
-    get() = lojas.getOrNull(16)?.toString()?.split(":").orEmpty().toSet()
+  var tipoNotaExpedicao: Set<ETipoNotaFiscal>
+    get() = lojas.getOrNull(16)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
+      ETipoNotaFiscal.entries.firstOrNull { it.name == tipo }
+      ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+    }.toSet()
     set(value) {
-      lojas = lojas.setValue(16, value.joinToString(":"))
+      lojas = lojas.setValue(16, value.joinToString(":") {
+        it.name
+      })
     }
 
   //-------------------------------------------------

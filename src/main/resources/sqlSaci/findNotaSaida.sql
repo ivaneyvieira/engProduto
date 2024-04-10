@@ -115,24 +115,26 @@ SELECT N.storeno                          AS loja,
        MAX(X.s11)                         AS marca,
        IF(N.status <> 1, 'N', 'S')        AS cancelada,
        CASE
-         WHEN N.tipo = 0
-           THEN 'VENDA'
+         WHEN tipo = 0 AND N.nfse >= 10
+           THEN 'NFCE'
+         WHEN tipo = 0 AND N.nfse < 10
+           THEN 'NFE'
          WHEN N.tipo = 1
            THEN 'TRANSFERENCIA'
          WHEN N.tipo = 2
            THEN 'DEVOLUCAO'
          WHEN N.tipo = 3
-           THEN 'SIMP REME'
+           THEN 'SIMP_REME'
          WHEN N.tipo = 4
-           THEN 'ENTRE FUT'
+           THEN 'ENTRE_FUT'
          WHEN N.tipo = 5
-           THEN 'RET DEMON'
+           THEN 'RET_DEMON'
          WHEN N.tipo = 6
-           THEN 'VENDA USA'
+           THEN 'VENDA_USA'
          WHEN N.tipo = 7
            THEN 'OUTROS'
          WHEN N.tipo = 8
-           THEN 'NF CF'
+           THEN 'NF_CF'
          WHEN N.tipo = 9
            THEN 'PERD/CONSER'
          WHEN N.tipo = 10
@@ -142,7 +144,7 @@ SELECT N.storeno                          AS loja,
          WHEN N.tipo = 12
            THEN 'COMODATO'
          WHEN N.tipo = 13
-           THEN 'NF EMPRESA'
+           THEN 'NF_EMPRESA'
          WHEN N.tipo = 14
            THEN 'BONIFICA'
          WHEN N.tipo = 15
@@ -216,12 +218,6 @@ WHERE (issuedate >= :dataInicial
          ELSE 'SP_REME'
        END IN (:listaTipos)
   OR 'TODOS' IN (:listaTipos))
-  AND CASE :tipoNota
-        WHEN 0 THEN tipo = 0 AND N.nfse >= 10
-        WHEN 1 THEN tipo = 0 AND N.nfse < 10
-        WHEN 999 THEN TRUE
-        ELSE FALSE
-      END
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)

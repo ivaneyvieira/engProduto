@@ -4,12 +4,11 @@ import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
-import br.com.astrosoft.produto.model.beans.ETipoNota
+import br.com.astrosoft.produto.model.beans.ETipoNotaFiscal
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
-import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
@@ -19,9 +18,6 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::notaExp, "Exp")
     columnGrid(UserSaci::notaCD, "CD")
     columnGrid(UserSaci::notaEnt, "Entregue")
-    columnGrid({
-      ETipoNota.entries.firstOrNull { et -> et.num == it.tipoNota }?.descricao ?: ""
-    }, "Nota")
   }
 
   override fun FormUsuario.configFields() {
@@ -42,19 +38,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaNota)
       filtroImpressoraEtiqueta(binder, UserSaci::impressoraNota)
-      select<Int>("Nota") {
-        this.setWidthFull()
-        this.isEmptySelectionAllowed = true
-        setItems(ETipoNota.entries.map { it.num })
-        this.setItemLabelGenerator {
-          ETipoNota.entries.firstOrNull { et -> et.num == it }?.descricao ?: ""
-        }
-        binder.bind(this, UserSaci::tipoNota.name)
-      }
-      multiSelectComboBox<String>("Tipo NF") {
+      multiSelectComboBox<ETipoNotaFiscal>("Tipo NF") {
         this.setWidthFull()
         this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
-        setItems("VENDA", "TRANSFERENCIA", "ENTRE FUT", "SIMP REME", "TODOS")
+        setItems(ETipoNotaFiscal.entries)
         binder.bind(this, UserSaci::tipoNotaExpedicao.name)
       }
       filtroLoja(binder, UserSaci::lojaLocExpedicao, "Loja Localização")

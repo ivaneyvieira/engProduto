@@ -63,7 +63,7 @@ class NotaSaida(
              saci.findNotaSaida(
                filtro = filtro.copy(
                  notaEntrega = "S",
-                 tipoNota = ETipoNota.TODOS,
+                 tipoNota = ETipoNotaFiscal.TODOS,
                )
              )
     }
@@ -72,19 +72,20 @@ class NotaSaida(
 
 data class FiltroNota(
   val marca: EMarcaNota,
-  val tipoNota: ETipoNota,
+  val tipoNota: ETipoNotaFiscal,
   val loja: Int,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val notaEntrega: String = "N",
   val pesquisa: String,
-  val tipoNF: String = "TODOS",
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {
   EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
 }
 
-enum class ETipoNota(val num: Int, val descricao: String) {
-  NFCE(0, "NFCE"), NFE(1, "NFE"), TODOS(999, "Todos")
+enum class ETipoNotaFiscal(val descricao: String) {
+  NFCE("NFCE"), NFE("NFE"),
+  TRANSFERENCIA("Transferência"), ENTRE_FUT("Entrega Futura"),
+  SIMP_REME("Simples Remessa"), TODOS("Todos")
 }

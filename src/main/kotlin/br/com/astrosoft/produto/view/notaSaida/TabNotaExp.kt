@@ -35,11 +35,10 @@ import java.time.LocalDate
 class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaExp {
   private var dlgProduto: DlgProdutosExp? = null
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbNota: Select<ETipoNota>
+  private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
-  private lateinit var cmbTipoNF: Select<String>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -83,26 +82,19 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     }
     cmbNota = select("Nota") {
       val user = AppConfig.userLogin() as? UserSaci
-      setItems(ETipoNota.entries)
-      val tipoNota = ETipoNota.entries.firstOrNull { it.num == user?.tipoNota }
-      this.isReadOnly = tipoNota != null && tipoNota.num != ETipoNota.TODOS.num
-      value = tipoNota ?: ETipoNota.TODOS
+      val tiposNota = user?.tipoNotaExpedicao.let { tipo ->
+        if (tipo == null) ETipoNotaFiscal.entries
+        else {
+          if (tipo.contains(ETipoNotaFiscal.TODOS)) ETipoNotaFiscal.entries
+          else tipo.ifEmpty { ETipoNotaFiscal.entries }
+        }
+      }
+      setItems(tiposNota)
+      value = tiposNota.firstOrNull()
+
       this.setItemLabelGenerator {
         it.descricao
       }
-      addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
-      }
-    }
-    cmbTipoNF = select("Tipo NF") {
-      val user = AppConfig.userLogin() as? UserSaci
-      val itens = if(user?.tipoNotaExpedicao.orEmpty().isEmpty() || user?.admin == true)
-        listOf("VENDA", "TRANSFERENCIA", "ENTRE FUT", "SIMP REME", "TODOS")
-      else
-        user?.tipoNotaExpedicao.orEmpty().toList()
-      setItems(itens)
-      value = itens.getOrNull(0)
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
@@ -144,12 +136,11 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
-      tipoNota = cmbNota.value ?: ETipoNota.TODOS,
+      tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
-      tipoNF = cmbTipoNF.value ?: "TODOS",
     )
   }
 

@@ -276,7 +276,6 @@ class QuerySaci : QueryDB(database) {
     val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
     return query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
-      addOptionalParameter("tipoNota", filtro.tipoNota.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
@@ -286,7 +285,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
     }.filter {
-      it.tipoNotaSaida == filtro.tipoNF || filtro.tipoNF == "TODOS"
+      it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
     }
   }
 
