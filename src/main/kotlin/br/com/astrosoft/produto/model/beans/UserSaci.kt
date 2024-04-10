@@ -198,7 +198,7 @@ class UserSaci : IUser {
       lojas = lojas.setValue(11, value.joinToString(":"))
     }
 
-  var entregaNota: Boolean
+  var entregaNotaLiberado: Boolean
     get() = lojas.getOrNull(12) == "S"
     set(value) {
       lojas = lojas.setValue(12, if (value) "S" else "N")
