@@ -17,59 +17,55 @@ CREATE TEMPORARY TABLE T_DADOS
 (
   PRIMARY KEY (codigo, grade, local)
 )
-SELECT X.storeno                                     AS loja,
-       pdvno                                         AS pdvno,
-       xano                                          AS xano,
-       CAST(CONCAT(PXA.nfno, '/', PXA.nfse) AS CHAR) AS nota,
-       CAST(TRIM(PRD.no) AS CHAR)                    AS codigo,
-       IFNULL(X.grade, '')                           AS grade,
-       TRIM(IFNULL(B.barcode, PRD.barcode))          AS barcode,
-       TRIM(MID(PRD.name, 1, 37))                    AS descricao,
-       PRD.mfno                                      AS vendno,
-       IFNULL(F.auxChar1, '')                        AS fornecedor,
-       PRD.typeno                                    AS typeno,
-       IFNULL(T.name, '')                            AS typeName,
-       CAST(LPAD(PRD.clno, 6, '0') AS CHAR)          AS clno,
-       IFNULL(cl.name, '')                           AS clname,
-       PRD.m6                                        AS altura,
-       PRD.m4                                        AS comprimento,
-       PRD.m5                                        AS largura,
-       PRD.sp / 100                                  AS precoCheio,
-       IFNULL(S.ncm, '')                             AS ncm,
-       X.qtty / 1000                                 AS quantidade,
-       X.ls_price / 100                              AS preco,
-       (X.qtty / 1000) * (X.ls_price / 100)          AS total,
-       A.gradeAlternativa                            AS gradeAlternativa,
-       A.marca                                       AS marca,
-       A.usuarioExp                                  AS usuarioExp,
-       CAST(L.loc AS CHAR)                           AS local,
-       A.usuarioCD                                   AS usuarioCD,
-       IFNULL(N1.tipo, '')                           AS tipoNota
-FROM sqlpdv.pxa AS PXA
-       INNER JOIN sqlpdv.pxaprd AS X
-                  USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.nfSaidaAdiciona AS A
-                 USING (storeno, pdvno, xano, prdno, grade)
-       LEFT JOIN sqlpdv.pxanf AS N1
-                 USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.prd AS PRD
-                 ON PRD.no = X.prdno
+SELECT X.storeno                                 AS loja,
+       pdvno                                     AS pdvno,
+       xano                                      AS xano,
+       CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR) AS nota,
+       CAST(TRIM(P.no) AS CHAR)                  AS codigo,
+       IFNULL(X.grade, '')                       AS grade,
+       TRIM(IFNULL(B.barcode, P.barcode))        AS barcode,
+       TRIM(MID(P.name, 1, 37))                  AS descricao,
+       P.mfno                                    AS vendno,
+       IFNULL(F.auxChar1, '')                    AS fornecedor,
+       P.typeno                                  AS typeno,
+       IFNULL(T.name, '')                        AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)        AS clno,
+       IFNULL(cl.name, '')                       AS clname,
+       P.m6                                      AS altura,
+       P.m4                                      AS comprimento,
+       P.m5                                      AS largura,
+       P.sp / 100                                AS precoCheio,
+       IFNULL(S.ncm, '')                         AS ncm,
+       X.qtty / 1000                             AS quantidade,
+       X.preco                                   AS preco,
+       (X.qtty / 1000) * X.preco                 AS total,
+       X.c6                                      AS gradeAlternativa,
+       X.s11                                     AS marca,
+       X.c5                                      AS usuarioExp,
+       CAST(L.loc AS CHAR)                       AS local,
+       X.c4                                      AS usuarioCD,
+       N.tipo                                    AS tipoNota
+FROM sqldados.prd AS P
        INNER JOIN T_LOC AS L
-                  ON L.prdno = PRD.no
+                  ON L.prdno = P.no
+       INNER JOIN sqldados.xaprd2 AS X
+                  ON P.no = X.prdno
+       INNER JOIN sqldados.nf AS N
+                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.prdbar AS B
-                 ON PRD.no = B.prdno AND B.grade = X.grade
+                 ON P.no = B.prdno AND B.grade = X.grade
        LEFT JOIN sqldados.vend AS F
-                 ON F.no = PRD.mfno
+                 ON F.no = P.mfno
        LEFT JOIN sqldados.type AS T
-                 ON T.no = PRD.typeno
+                 ON T.no = P.typeno
        LEFT JOIN sqldados.cl
-                 ON cl.no = PRD.clno
+                 ON cl.no = P.clno
        LEFT JOIN sqldados.spedprd AS S
-                 ON PRD.no = S.prdno
+                 ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND (IFNULL(A.marca, '') = :marca OR :marca = 999)
+  AND (X.s11 = :marca OR :marca = 999)
 GROUP BY codigo, grade, local;
 
 SELECT loja,
