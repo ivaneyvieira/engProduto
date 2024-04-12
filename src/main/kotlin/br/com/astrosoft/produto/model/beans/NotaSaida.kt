@@ -63,7 +63,7 @@ class NotaSaida(
              saci.findNotaSaida(
                filtro = filtro.copy(
                  notaEntrega = "S",
-                 tipoNota = ETipoNotaFiscal.TODOS,
+                 tipoNota = filtro.tipoNota,
                )
              )
     }
