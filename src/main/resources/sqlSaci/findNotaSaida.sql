@@ -99,6 +99,18 @@ DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
 DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
+DROP TEMPORARY TABLE IF EXISTS T_CARGA;
+CREATE TEMPORARY TABLE T_CARGA
+(
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT storeno, pdvno, xano
+FROM sqldados.nfrprd
+WHERE ((storenoStk = :loja AND storeno != :loja) OR :loja = 0)
+  AND date > 20240401
+  AND optionEntrega % 10 = 4
+GROUP BY storeno, pdvno, xano;
+
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                          AS loja,
@@ -170,6 +182,8 @@ SELECT N.storeno                          AS loja,
        X.c5,
        X.c4
 FROM sqldados.nf AS N
+       LEFT JOIN T_CARGA AS CG
+                 USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
                  USING (storeno, pdvno, xano)
        LEFT JOIN T_ENTREGA AS ENT
@@ -185,18 +199,15 @@ FROM sqldados.nf AS N
                  ON E.no = N.empno
        LEFT JOIN sqldados.custp AS C
                  ON C.no = N.custno
-WHERE (issuedate >= :dataInicial
-  OR :dataInicial = 0)
-  AND (issuedate <= :dataFinal
-  OR :dataFinal = 0)
+WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
+  AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
           AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja
-          OR :loja = 0)
+        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0 OR CG.xano IS NOT NULL)
         ELSE FALSE
       END
   AND CASE
@@ -205,6 +216,7 @@ WHERE (issuedate >= :dataInicial
           OR (N.tipo = 0 AND N.nfse = 1)
           OR (N.tipo = 0 AND N.nfse >= 10)
           OR (N.tipo = 1 AND N.nfse = 5)
+          OR (CG.xano IS NOT NULL)
           )
         ELSE TRUE
       END
