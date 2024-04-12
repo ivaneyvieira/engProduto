@@ -67,6 +67,11 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
     updateView()
   }
 
+  fun allPrinters(): List<String> {
+    val impressoras = Impressora.allTermica().map { it.name }
+    return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
+  }
+
   val subView
     get() = viewModel.view.tabPedidoTransfImprimir
 }

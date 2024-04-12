@@ -74,7 +74,7 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun allPrinters(): List<String> {
     val impressoras = Impressora.allTermica().map { it.name }
-    return impressoras.distinct().sorted() + ETipoRota.impressoraLojas().map { it.name }
+    return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
 
   val subView

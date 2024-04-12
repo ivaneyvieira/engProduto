@@ -65,7 +65,7 @@ class SubWindowPrinter(
                   Impressora.allTermica().map { it.name }
                 } else {
                   Impressora.allTermica()
-                    .map { it.name } + ETipoRota.entries.map { it.nome }
+                    .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
                 }
             val lista =
                 when {

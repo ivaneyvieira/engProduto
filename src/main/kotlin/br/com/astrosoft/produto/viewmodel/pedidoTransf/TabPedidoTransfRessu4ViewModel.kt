@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroPedidoRessu4
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoTransfRessu4
-import br.com.astrosoft.produto.model.beans.TransfRessu4
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaRessu4
 import br.com.astrosoft.produto.model.printText.NotaTransferencia
 import br.com.astrosoft.produto.model.report.ReportRessu4
@@ -50,6 +47,11 @@ class TabPedidoTransfRessu4ViewModel(val viewModel: PedidoTransfViewModel) {
       dados = nota.produtos(),
       printer = subView.printerPreview(loja = nota.lojaDestinoNo ?: 0, printEvent = {})
     )
+  }
+
+  fun allPrinters(): List<String> {
+    val impressoras = Impressora.allTermica().map { it.name }
+    return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
 
   val subView
