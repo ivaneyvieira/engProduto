@@ -3,14 +3,18 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, loc)
 )
-SELECT P.no AS prdno, CAST(MID(IFNULL(L.localizacao, '****'), 1, 4) AS CHAR) AS loc
+SELECT P.no                                                                AS prdno,
+       CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdloc AS L
                  ON P.no = L.prdno
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON A.prdno = L.prdno
+                   AND A.grade = L.grade
+                   AND A.storeno = L.storeno
 WHERE (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
