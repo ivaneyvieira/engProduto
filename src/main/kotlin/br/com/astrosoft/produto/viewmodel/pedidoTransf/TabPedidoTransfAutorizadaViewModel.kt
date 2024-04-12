@@ -54,7 +54,11 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun previewPedido(pedido: PedidoTransf) {
     val relatorio = RequisicaoTransferencia(pedido)
-    relatorio.print(dados = pedido.produtos(), printer = subView.printerPreview(loja = pedido.lojaNoDes ?: 0))
+    val rota = pedido.rotaPedido()
+    relatorio.print(
+      dados = pedido.produtos(),
+      printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0)
+    )
   }
 
   fun mudaParaReservado(pedido: PedidoTransf) = viewModel.exec {
@@ -66,6 +70,11 @@ class TabPedidoTransfAutorizadaViewModel(val viewModel: PedidoTransfViewModel) {
       pedido.mudaParaReservado(user.no)
       updateView()
     }
+  }
+
+  fun allPrinters(): List<String> {
+    val impressoras = Impressora.allTermica().map { it.name }
+    return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
 
   val subView

@@ -1,9 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.pedidoTransf
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroPedidoTransf
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.PedidoTransf
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.TransferenciaEntregue
 
 class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
@@ -31,6 +29,11 @@ class TabPedidoTransfEntViewModel(val viewModel: PedidoTransfViewModel) {
       dados = pedido.produtos(),
       printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0)
     )
+  }
+
+  fun allPrinters(): List<String> {
+    val impressoras = Impressora.allTermica().map { it.name }
+    return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
 
   val subView

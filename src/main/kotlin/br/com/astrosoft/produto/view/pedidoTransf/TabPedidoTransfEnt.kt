@@ -49,7 +49,8 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
 
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.impressoraDev.orEmpty().toList()
+    val printerUser = username?.impressoraTrans.orEmpty().toList()
+    return if("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
 
   override fun HorizontalLayout.toolBarConfig() {
