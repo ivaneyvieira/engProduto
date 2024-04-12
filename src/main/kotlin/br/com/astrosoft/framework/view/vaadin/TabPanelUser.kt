@@ -174,8 +174,8 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       val impressoras = viewModel.allTermica().map { it.name }
-      val itens = impressoras.distinct().sorted() + ETipoRota.entries.map { it.name }.sorted()
-      setItems(itens)
+      val itens = impressoras.distinct().sorted() + ETipoRota.impressoraLojas().map { it.name }
+      setItems(itens.distinct().sorted())
       binder.bind(this, property.name)
     }
   }

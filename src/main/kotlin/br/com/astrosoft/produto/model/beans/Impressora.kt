@@ -59,6 +59,19 @@ enum class ETipoRota(val numero: Int, val nome: String, val impressora: String) 
 
   fun impressora() = Impressora(numero, nome)
   fun impressoraRota() = Impressora(numero, impressora)
+
+  fun impressoraLoja(loja: Int) = Impressora.findImpressora(loja, this)
+
+  fun impressoraLojas(): List<Impressora> {
+    val lojas = listOf(2, 3, 4, 5, 6, 7, 8)
+    return lojas.mapNotNull { loja -> impressoraLoja(loja) }.distinctBy { it.name }.sortedBy { it.name }
+  }
+
+  companion object {
+    fun impressoraLojas(): List<Impressora> {
+      return entries.flatMap { it.impressoraLojas() }.distinctBy { it.name }.sortedBy { it.name }
+    }
+  }
 }
 
 fun Impressora.tipoRota(): ETipoRota? {
