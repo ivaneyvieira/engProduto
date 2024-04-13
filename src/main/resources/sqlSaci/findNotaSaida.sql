@@ -143,7 +143,7 @@ SELECT N.storeno                          AS loja,
          WHEN N.tipo = 3
            THEN 'SIMP_REME'
          WHEN N.tipo = 4
-           THEN 'ENTRE_FUT'
+           THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0, 'SIMP_REME', 'ENTRE_FUT')
          WHEN N.tipo = 5
            THEN 'RET_DEMON'
          WHEN N.tipo = 6
@@ -207,7 +207,7 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
           AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0 OR CG.xano IS NOT NULL)
+        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0 OR IFNULL(CG.storeno, 0) != :loja)
         ELSE FALSE
       END
   AND CASE
@@ -216,7 +216,7 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
           OR (N.tipo = 0 AND N.nfse = 1)
           OR (N.tipo = 0 AND N.nfse >= 10)
           OR (N.tipo = 1 AND N.nfse = 5)
-          OR (CG.xano IS NOT NULL)
+          OR (IFNULL(CG.storeno, 0) != :loja)
           )
         ELSE TRUE
       END

@@ -41,12 +41,12 @@ object NotaColumns {
     this.setHeader("Situação")
   }
 
-  fun Grid<NotaSaida>.colunaNFTipo() = columnGrid(NotaSaida::tipoNotaSaida) {
+  fun Grid<NotaSaida>.colunaNFTipo() = columnGrid(NotaSaida::tipoNotaSaidaDesc, width = "120px") {
     this.setHeader("Tipo")
   }
 
   fun Grid<NotaSaida>.colunaNFEntregaRetira() = columnGrid(NotaSaida::tipo) {
-    this.setHeader("Ent/RET")
+    this.setHeader("Ent/Ret")
   }
 
   fun Grid<NotaSaida>.colunaNomeCliente() = columnGrid(NotaSaida::nomeCliente) {

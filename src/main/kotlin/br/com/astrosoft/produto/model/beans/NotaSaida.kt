@@ -55,6 +55,13 @@ class NotaSaida(
   val horaCD
     get() = splitCD(2)
 
+  val tipoNotaSaidaDesc: String
+    get() {
+      return ETipoNotaFiscal.entries.firstOrNull {
+        it.name == tipoNotaSaida
+      }?.descricao ?: ""
+    }
+
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
 
   companion object {
@@ -87,5 +94,5 @@ enum class EMarcaNota(val num: Int, val descricao: String) {
 enum class ETipoNotaFiscal(val descricao: String) {
   NFCE("NFCE"), NFE("NFE"),
   TRANSFERENCIA("Transferência"), ENTRE_FUT("Entrega Futura"),
-  SIMP_REME("Simples Remessa"), TODOS("Todos")
+  SIMP_REME("Retira Futura"), TODOS("Todos")
 }
