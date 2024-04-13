@@ -284,9 +284,19 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
     }.filter {
-      if (filtro.tipoNota == ETipoNotaFiscal.SIMP_REME_L) it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
-      else
-        it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
+      when (filtro.tipoNota) {
+        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
+                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
+                                       it.loja != filtro.loja &&
+                                       filtro.loja != 0
+
+        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
+                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
+                                       it.loja == filtro.loja &&
+                                       filtro.loja != 0
+
+        else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
+      }
     }
   }
 
