@@ -142,9 +142,11 @@ SELECT N.storeno                          AS loja,
          WHEN N.tipo = 2
            THEN 'DEVOLUCAO'
          WHEN N.tipo = 3
-           THEN 'SIMP_REME'
+           THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3,'', 'SIMP_REME')
          WHEN N.tipo = 4
-           THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0, 'SIMP_REME', 'ENTRE_FUT')
+           THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0,
+                   IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3,'', 'SIMP_REME'),
+                   'ENTRE_FUT')
          WHEN N.tipo = 5
            THEN 'RET_DEMON'
          WHEN N.tipo = 6
