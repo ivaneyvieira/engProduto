@@ -109,6 +109,7 @@ FROM sqldados.nfrprd
 WHERE ((storenoStk = :loja AND storeno != :loja) OR :loja = 0)
   AND date > 20240401
   AND optionEntrega % 10 = 4
+  AND nfse != 3
 GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
