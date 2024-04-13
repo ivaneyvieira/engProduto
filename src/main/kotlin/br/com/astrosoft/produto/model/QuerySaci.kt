@@ -284,7 +284,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
     }.filter {
-      it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
+      if (filtro.tipoNota == ETipoNotaFiscal.SIMP_REME_L) it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
+      else
+        it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
     }
   }
 

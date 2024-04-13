@@ -114,24 +114,24 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                          AS loja,
-       N.pdvno                            AS pdvno,
-       N.xano                             AS xano,
-       N.nfno                             AS numero,
-       N.nfse                             AS serie,
-       N.custno                           AS cliente,
-       IFNULL(C.name, '')                 AS nomeCliente,
-       N.grossamt / 100                   AS valorNota,
-       CAST(N.issuedate AS DATE)          AS data,
-       SEC_TO_TIME(P.time)                AS hora,
-       N.empno                            AS vendedor,
-       TRIM(MID(E.sname, 1, 20))          AS nomeVendedor,
-       CAST(IFNULL(L.locais, '') AS CHAR) AS locais,
-       X.c5                               AS usuarioExp,
-       X.c4                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)     AS totalProdutos,
-       MAX(X.s11)                         AS marca,
-       IF(N.status <> 1, 'N', 'S')        AS cancelada,
+SELECT N.storeno                                               AS loja,
+       N.pdvno                                                 AS pdvno,
+       N.xano                                                  AS xano,
+       N.nfno                                                  AS numero,
+       N.nfse                                                  AS serie,
+       N.custno                                                AS cliente,
+       IFNULL(C.name, '')                                      AS nomeCliente,
+       N.grossamt / 100                                        AS valorNota,
+       CAST(N.issuedate AS DATE)                               AS data,
+       SEC_TO_TIME(P.time)                                     AS hora,
+       N.empno                                                 AS vendedor,
+       TRIM(MID(E.sname, 1, 20))                               AS nomeVendedor,
+       CAST(IFNULL(L.locais, '') AS CHAR)                      AS locais,
+       X.c5                                                    AS usuarioExp,
+       X.c4                                                    AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco)                          AS totalProdutos,
+       MAX(X.s11)                                              AS marca,
+       IF(N.status <> 1, 'N', 'S')                             AS cancelada,
        CASE
          WHEN tipo = 0 AND N.nfse >= 10
            THEN 'NFCE'
@@ -142,10 +142,10 @@ SELECT N.storeno                          AS loja,
          WHEN N.tipo = 2
            THEN 'DEVOLUCAO'
          WHEN N.tipo = 3
-           THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3,'', 'SIMP_REME')
+           THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME')
          WHEN N.tipo = 4
            THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0,
-                   IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3,'', 'SIMP_REME'),
+                   IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME'),
                    'ENTRE_FUT')
          WHEN N.tipo = 5
            THEN 'RET_DEMON'
@@ -170,9 +170,9 @@ SELECT N.storeno                          AS loja,
          WHEN N.tipo = 15
            THEN 'NFE'
          ELSE ''
-       END                                AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')        AS notaEntrega,
-       CAST(ENT.dataEntrega AS DATE)      AS dataEntrega,
+       END                                                     AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')                             AS notaEntrega,
+       CAST(ENT.dataEntrega AS DATE)                           AS dataEntrega,
        CASE
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
@@ -181,9 +181,10 @@ SELECT N.storeno                          AS loja,
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
-       END                                AS tipo,
+       END                                                     AS tipo,
        X.c5,
-       X.c4
+       X.c4,
+       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja AS retiraFutura
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -261,7 +262,8 @@ SELECT Q.loja,
        Q.tipo,
        SUM(X.s11 = 0) AS countExp,
        SUM(X.s11 = 1) AS countCD,
-       SUM(X.s11 = 2) AS countEnt
+       SUM(X.s11 = 2) AS countEnt,
+       retiraFutura   AS retiraFutura
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja
