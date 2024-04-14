@@ -47,6 +47,13 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           gridDetail.setItems(nota.produtos(marca))
         }
       }
+      button("Imprimir") {
+        this.icon = VaadinIcon.PRINT.create()
+        onLeftClick {
+          val itensSelecionados = gridDetail.selectedItems.toList()
+          viewModel.imprimeProdutosNota(nota, itensSelecionados)
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -71,17 +78,14 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         when {
           it.bean?.clno?.startsWith("01") == false -> {
             Notification.show("O produto não está no grupo de piso")
-
           }
 
           it.bean.tipoNota != 4                    -> {
             Notification.show("Não é uma notaSaida de edtrega futura")
-
           }
 
           nota.cancelada == "S"                    -> {
             Notification.show("A notaSaida está cancelada")
-
           }
         }
       }, closeEditor = { binder ->

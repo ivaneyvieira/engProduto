@@ -32,6 +32,9 @@ class ProdutoNFS(
   var usuarioCD: String,
   var tipoNota: Int,
 ) {
+  val codigoFormat
+    get() = codigo.padStart(6, '0') ?: ""
+
   private fun splitExp(index: Int) = usuarioExp.split("-").getOrNull(index) ?: ""
 
   val usuarioNameExp
