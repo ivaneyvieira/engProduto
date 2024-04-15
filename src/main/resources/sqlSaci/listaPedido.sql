@@ -499,7 +499,8 @@ SELECT loja,
        obs7,
        tipo,
        metodo,
-       obsNota
+       obsNota,
+       'RETIRA_FUTURA' AS tipoRetira
 FROM VENDA_NORMAL AS VN
 UNION
 SELECT loja,
@@ -557,7 +558,8 @@ SELECT loja,
        obs7,
        tipo,
        metodo,
-       obsNota
+       obsNota,
+       'RETIRA_FUTURA_L' AS tipoRetira
 FROM VENDA_CARGA AS VC
 UNION
 SELECT loja,
@@ -615,7 +617,8 @@ SELECT loja,
        obs7,
        tipo,
        metodo,
-       obsNota
+       obsNota,
+       'RETIRA_WEB' AS tipoRetira
 FROM VENDA_ECOMERCE;
 
 DROP TEMPORARY TABLE IF EXISTS PEDIDO_PISO;
@@ -722,7 +725,8 @@ SELECT loja,
        IFNULL(piso, 0.00)                       AS piso,
        IFNULL(loc, '')                          AS loc,
        obsNota,
-       IF(vendno = 440 AND loja = 4, 'WEB', '') AS tipoEcommece
+       IF(vendno = 440 AND loja = 4, 'WEB', '') AS tipoEcommece,
+       tipoRetira                               AS tipoRetira
 FROM PEDIDOS
        LEFT JOIN PEDIDO_PISO
                  USING (loja, pedido)
@@ -730,5 +734,6 @@ FROM PEDIDOS
                  USING (loja, pedido)
        LEFT JOIN sqldados.users AS U
                  ON userPrint = U.no
+where tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS'
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
         nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)

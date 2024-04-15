@@ -238,6 +238,18 @@ class UserSaci : IUser {
     set(value) {
       lojas = lojas.setValue(17, value?.toString() ?: "")
     }
+
+  var retiraTipo: Set<ETipoRetira>
+    get() = lojas.getOrNull(18)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
+      ETipoRetira.entries.firstOrNull { it.name == tipo }
+      ?: ETipoRetira.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+    }.toSet()
+    set(value) {
+      lojas = lojas.setValue(18, value.joinToString(":") {
+        it.name
+      })
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

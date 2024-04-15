@@ -70,9 +70,13 @@ class Pedido(
   var piso: Int?,
   var loc: String?,
   var obsNota: String?,
-  var tipoEcommece : String?,
+  var tipoEcommece: String?,
+  var tipoRetira: String?,
 ) {
   var seq: Int = 0
+
+  val tipoRetiraEnum: ETipoRetira
+    get() = ETipoRetira.entries.firstOrNull { it.name == tipoRetira } ?: ETipoRetira.TODOS
 
   fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
     .mapNotNull { it?.trim() }
@@ -141,7 +145,13 @@ class Pedido(
   }
 
   fun marcaDataHora(dataHora: LocalDateTime) {
-    saci.ativaDataHoraImpressao(loja, pedido, dataHora.toLocalDate(), dataHora.toLocalTime(), AppConfig.userLogin()?.no ?: 0)
+    saci.ativaDataHoraImpressao(
+      loja,
+      pedido,
+      dataHora.toLocalDate(),
+      dataHora.toLocalTime(),
+      AppConfig.userLogin()?.no ?: 0
+    )
   }
 
   private fun desmarcaDataHora() {
@@ -292,7 +302,8 @@ data class FiltroPedido(
   val loja: Int,
   val pesquisa: String = "",
   val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?
+  val dataFinal: LocalDate?,
+  val tipoRetira: ETipoRetira,
 )
 
 data class PedidoChave(
@@ -345,4 +356,11 @@ enum class EZonaCarga(val codigo: Char, val descricao: String) {
   Timon('H', "Timon"),
   SemZona(' ', ""),
   Separado('Z', "Sem carga")
+}
+
+enum class ETipoRetira(val descricao: String) {
+  RETIRA_FUTURA("Retira Futura"),
+  RETIRA_FUTURA_L("Retira Futura L"),
+  RETIRA_WEB("Retira Web"),
+  TODOS("Todos")
 }

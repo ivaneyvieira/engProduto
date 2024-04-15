@@ -30,6 +30,7 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var cmbTipoRetira: Select<ETipoRetira>
 
   override val label = "Impresso"
 
@@ -52,6 +53,7 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value ?: LocalDate.now(),
       dataFinal = edtDataFinal.value ?: LocalDate.now(),
+      tipoRetira = cmbTipoRetira.value ?: ETipoRetira.TODOS
     )
   }
 
@@ -97,6 +99,16 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
+      addValueChangeListener {
+        viewModel.updateGridImpresso()
+      }
+    }
+    cmbTipoRetira = select("Tipo Retira") {
+      this.setItems(ETipoRetira.entries)
+      val userSaci = AppConfig.userLogin() as? UserSaci
+      this.value = userSaci?.retiraTipo?.firstOrNull() ?: ETipoRetira.TODOS
+      this.isReadOnly = userSaci?.admin != true
+      this.setItemLabelGenerator { it.descricao }
       addValueChangeListener {
         viewModel.updateGridImpresso()
       }
