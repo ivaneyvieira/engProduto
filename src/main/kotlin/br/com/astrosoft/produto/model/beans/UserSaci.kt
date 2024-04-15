@@ -233,6 +233,11 @@ class UserSaci : IUser {
       })
     }
 
+  var lojaRetira: Int?
+    get() = lojas.getOrNull(17)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(17, value?.toString() ?: "")
+    }
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
