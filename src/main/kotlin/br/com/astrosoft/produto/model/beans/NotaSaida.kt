@@ -67,13 +67,14 @@ class NotaSaida(
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-      return saci.findNotaSaida(filtro = filtro) +
-             saci.findNotaSaida(
-               filtro = filtro.copy(
-                 notaEntrega = "S",
-                 tipoNota = filtro.tipoNota,
-               )
-             )
+      val notas = saci.findNotaSaida(filtro = filtro) +
+                  saci.findNotaSaida(
+                    filtro = filtro.copy(
+                      notaEntrega = "S",
+                      tipoNota = filtro.tipoNota,
+                    )
+                  )
+      return notas.distinctBy { "${it.loja} ${it.numero} ${it.serie} ${it.xano} ${it.pdvno}" }
     }
   }
 }
