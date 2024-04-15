@@ -94,8 +94,11 @@ enum class EMarcaNota(val num: Int, val descricao: String) {
 }
 
 enum class ETipoNotaFiscal(val descricao: String) {
-  NFCE("NFCE"), NFE("NFE"),
-  TRANSFERENCIA("Transferência"), ENTRE_FUT("Entrega Futura"),
-  SIMP_REME("Retira Futura"), SIMP_REME_L("Retira Futura L"),
+  NFCE("NFCE"),
+  NFE("NFE"),
+  TRANSFERENCIA("Transferência"),
+  ENTRE_FUT("Entrega Futura"),
+  SIMP_REME("Retira Futura"),
+  SIMP_REME_L("Retira Futura L"),
   TODOS("Todos")
 }
