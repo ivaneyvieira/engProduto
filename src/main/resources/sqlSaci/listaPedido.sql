@@ -108,7 +108,7 @@ FROM sqldados.nfrprd AS P
        INNER JOIN T2
                   ON T2.storeno = N.storeno
                     AND T2.ordno = N.auxLong1
-WHERE (P.storeno != :storeno OR :storeno = 0)
+WHERE (P.storeno = :storeno OR :storeno = 0)
   AND P.storeno != P.storenoStk
   AND N.date > 20240401
   AND P.optionEntrega % 10 = 4
