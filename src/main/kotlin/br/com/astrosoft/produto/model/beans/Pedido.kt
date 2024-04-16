@@ -12,6 +12,7 @@ import java.time.LocalTime
 
 class Pedido(
   var loja: Int,
+  var storenoStk: Int?,
   var nomeLoja: String?,
   var siglaLoja: String?,
   var pedido: Int,
@@ -74,6 +75,9 @@ class Pedido(
   var tipoRetira: String?,
 ) {
   var seq: Int = 0
+
+  val lojaStk
+    get() = saci.allLojas().firstOrNull { it.no == storenoStk }?.sname ?: ""
 
   val tipoRetiraEnum: ETipoRetira
     get() = ETipoRetira.entries.firstOrNull { it.name == tipoRetira } ?: ETipoRetira.TODOS

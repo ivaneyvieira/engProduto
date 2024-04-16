@@ -88,6 +88,7 @@ CREATE TEMPORARY TABLE T_CARGA
   INDEX (storeno, ordno)
 )
 SELECT P.storeno,
+       P.storenoStk,
        P.pdvno,
        P.xano,
        N.auxLong1       AS ordno,
@@ -118,6 +119,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TEMPORARY TABLE IF EXISTS VENDA_CARGA;
 CREATE TEMPORARY TABLE VENDA_CARGA
 SELECT EO.storeno                                                             AS loja,
+       storenoStk                                                             AS storenoStk,
        S.name                                                                 AS nomeLoja,
        S.sname                                                                AS siglaLoja,
        EO.ordno                                                               AS pedido,
@@ -225,6 +227,7 @@ GROUP BY T2.storeno, T2.ordno;
 DROP TEMPORARY TABLE IF EXISTS VENDA_NORMAL;
 CREATE TEMPORARY TABLE VENDA_NORMAL
 SELECT EO.storeno                                                             AS loja,
+       EO.storeno                                                             AS storenoStk,
        S.name                                                                 AS nomeLoja,
        S.sname                                                                AS siglaLoja,
        EO.ordno                                                               AS pedido,
@@ -333,6 +336,7 @@ GROUP BY T2.storeno, T2.ordno;
 DROP TEMPORARY TABLE IF EXISTS VENDA_ECOMERCE;
 CREATE TEMPORARY TABLE VENDA_ECOMERCE
 SELECT EO.storeno                                                             AS loja,
+       EO.storeno                                                             AS storenoStk,
        S.name                                                                 AS nomeLoja,
        S.sname                                                                AS siglaLoja,
        EO.ordno                                                               AS pedido,
@@ -444,6 +448,7 @@ HAVING (enderecoEntrega LIKE '%MAGALHAES FILHO%2001%' AND @TIPO = 'R')
 DROP TEMPORARY TABLE IF EXISTS PEDIDOS;
 CREATE TEMPORARY TABLE PEDIDOS
 SELECT loja,
+       storenoStk,
        nomeLoja,
        siglaLoja,
        pedido,
@@ -503,6 +508,7 @@ SELECT loja,
 FROM VENDA_NORMAL AS VN
 UNION
 SELECT loja,
+       storenoStk,
        nomeLoja,
        siglaLoja,
        pedido,
@@ -562,6 +568,7 @@ SELECT loja,
 FROM VENDA_CARGA AS VC
 UNION
 SELECT loja,
+       storenoStk,
        nomeLoja,
        siglaLoja,
        pedido,
@@ -666,6 +673,7 @@ FROM sqldados.eoprd AS P
 GROUP BY P.storeno, P.ordno;
 
 SELECT loja,
+       storenoStk,
        nomeLoja,
        siglaLoja,
        pedido,

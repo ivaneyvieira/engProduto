@@ -9,9 +9,9 @@ class RomaneioSeparacaoL : PrintText<ProdutoPedido>() {
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
     val listObs = pedido?.listObs().orEmpty()
-    writeln("Documento de Autorizacao de Retira Futura na ${pedido?.siglaLoja ?: ""}", negrito = true, center = true)
+    writeln("Documento de Autorizacao de Retira Futura na ${pedido?.lojaStk ?: ""}", negrito = true, center = true)
 
-    //writeln("<B>Loja: </B>${pedido?.siglaLoja}")
+    writeln("<B>Loja: </B>${pedido?.siglaLoja}")
     //writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
     writeln("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
     writeln("<B>PDV: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
