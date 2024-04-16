@@ -78,6 +78,9 @@ class Pedido(
   val tipoRetiraEnum: ETipoRetira
     get() = ETipoRetira.entries.firstOrNull { it.name == tipoRetira } ?: ETipoRetira.TODOS
 
+  val tipoRetiraStr: String
+    get() = tipoRetiraEnum.descricao
+
   fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
     .mapNotNull { it?.trim() }
     .filter { it != "" }
@@ -119,9 +122,9 @@ class Pedido(
     }
 
   val paraImprimir: Boolean
-    get() = (marca != "S") && (nfnoEnt == "")
+    get() = (marca != "S") /*&& (nfnoEnt == "")*/
   val impressoSemNota: Boolean
-    get() = (marca == "S") && (nfnoEnt == "")
+    get() = (marca == "S") /*&& (nfnoEnt == "")*/
   val impresso: Boolean
     get() = (marca == "S")
   val impressoComNota: Boolean
@@ -140,10 +143,11 @@ class Pedido(
     desmarcaDataHora()
   }
 
-  fun marcaSeparado(marca: String) {
-    saci.marcaSeparado(loja, pedido, marca)
-  }
-
+  /*
+    fun marcaSeparado(marca: String) {
+      saci.marcaSeparado(loja, pedido, marca)
+    }
+  */
   fun marcaDataHora(dataHora: LocalDateTime) {
     saci.ativaDataHoraImpressao(
       loja,
@@ -158,13 +162,15 @@ class Pedido(
     saci.ativaDataHoraImpressao(loja, pedido, null, null, 0)
   }
 
-  fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)
-
+  /*
+    fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)
+  */
   fun produtos(): List<ProdutoPedido> = saci.produtoPedido(loja, pedido, tipo ?: "").map { produto ->
     produto.pedido = this
     produto
   }
 
+  /*
   fun marcaCarga(carga: EZonaCarga, entrega: LocalDate?) {
     saci.marcaCarga(loja, pedido, carga, entrega)
   }
@@ -172,7 +178,7 @@ class Pedido(
   fun removeCarga() {
     saci.marcaCarga(loja, pedido, EZonaCarga.SemZona, entrega = null)
   }
-
+*/
   companion object {
     fun listaPedido(filtro: FiltroPedido): List<Pedido> {
       val lista = saci.listaPedido(filtro)

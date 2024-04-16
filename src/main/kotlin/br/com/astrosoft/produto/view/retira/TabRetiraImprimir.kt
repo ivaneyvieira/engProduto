@@ -36,7 +36,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isVisible = user?.storeno == 0
+    cmbLoja.isReadOnly = user?.admin == false
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
@@ -112,7 +112,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       viewModel.confirmaPrint(pedido)
     }
 
-    columnGrid(Pedido::tipoEcommece, "Tipo")
+    columnGrid(Pedido::tipoRetiraStr, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
 

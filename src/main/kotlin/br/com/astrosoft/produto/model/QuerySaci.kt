@@ -613,15 +613,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaSeparado(storeno: Int, ordno: Int, marca: String) {
-    val sql = "/sqlSaci/marcaSeparado.sql"
-    script(sql) {
-      addOptionalParameter("storeno", storeno)
-      addOptionalParameter("ordno", ordno)
-      addOptionalParameter("marca", marca)
+  /*
+    fun marcaSeparado(storeno: Int, ordno: Int, marca: String) {
+      val sql = "/sqlSaci/marcaSeparado.sql"
+      script(sql) {
+        addOptionalParameter("storeno", storeno)
+        addOptionalParameter("ordno", ordno)
+        addOptionalParameter("marca", marca)
+      }
     }
-  }
-
+  */
   fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?, userno: Int) {
     val sql = "/sqlSaci/ativaDataHoraImpressao.sql"
     script(sql) {
@@ -642,17 +643,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaCarga(storeno: Int, ordno: Int, carga: EZonaCarga, entrega: LocalDate?) {
-    val sql = "/sqlSaci/marcaCarga.sql"
-    val dataEntrega = entrega.toSaciDate().toString()
-    script(sql) {
-      addOptionalParameter("storeno", storeno)
-      addOptionalParameter("ordno", ordno)
-      addOptionalParameter("marca", carga.codigo.toString())
-      addOptionalParameter("entrega", dataEntrega)
+  /*
+    fun marcaCarga(storeno: Int, ordno: Int, carga: EZonaCarga, entrega: LocalDate?) {
+      val sql = "/sqlSaci/marcaCarga.sql"
+      val dataEntrega = entrega.toSaciDate().toString()
+      script(sql) {
+        addOptionalParameter("storeno", storeno)
+        addOptionalParameter("ordno", ordno)
+        addOptionalParameter("marca", carga.codigo.toString())
+        addOptionalParameter("entrega", dataEntrega)
+      }
     }
-  }
-
+  */
   fun listaPedido(filtro: FiltroPedido): List<Pedido> {
     val sql = "/sqlSaci/listaPedido.sql"
 

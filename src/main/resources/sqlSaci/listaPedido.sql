@@ -100,7 +100,8 @@ SELECT P.storeno,
        N.date      AS data_entrega,
        N.nfno      AS nfno_entrega,
        N.nfse      AS nfse_entrega,
-       NF.grossamt AS valor_entrega
+       NF.grossamt AS valor_entrega,
+       N.c2        AS dados
 FROM sqldados.nfrprd AS P
        INNER JOIN sqldados.nfr AS N
                   USING (storeno, pdvno, xano)
@@ -122,10 +123,10 @@ SELECT EO.storeno                                                             AS
        S.name                                                                 AS nomeLoja,
        S.sname                                                                AS siglaLoja,
        EO.ordno                                                               AS pedido,
-       MID(EO.c3, 1, 1)                                                       AS marca,
-       MID(EO.c3, 3, 1)                                                       AS separado,
-       MID(EO.c3, 4, 1)                                                       AS zonaCarga,
-       MID(EO.c3, 5, 8) * 1                                                   AS entrega,
+       MID(T2.dados, 1, 1)                                                    AS marca,
+       MID(T2.dados, 3, 1)                                                    AS separado,
+       MID(T2.dados, 4, 1)                                                    AS zonaCarga,
+       MID(T2.dados, 5, 8) * 1                                                AS entrega,
        CAST(P.date AS DATE)                                                   AS data,
        CAST(IF(EO.dataEntrega = 0, NULL, EO.dataEntrega) AS DATE)             AS dataEntrega,
        EO.pdvno                                                               AS pdvno,
@@ -734,6 +735,7 @@ FROM PEDIDOS
                  USING (loja, pedido)
        LEFT JOIN sqldados.users AS U
                  ON userPrint = U.no
-where tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS'
+WHERE tipoRetira = :tipoRetira
+   OR :tipoRetira = 'TODOS'
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
         nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)
