@@ -90,26 +90,24 @@ CREATE TEMPORARY TABLE T_CARGA
 SELECT P.storeno,
        P.pdvno,
        P.xano,
-       N.auxLong1  AS ordno,
-       N.time,
-       E.other     AS fre_amt,
-       N.date      AS data_venda,
-       N.nfno      AS nfno_venda,
-       N.nfse      AS nfse_venda,
-       NF.grossamt AS valor_venda,
-       N.date      AS data_entrega,
-       N.nfno      AS nfno_entrega,
-       N.nfse      AS nfse_entrega,
-       NF.grossamt AS valor_entrega,
-       N.c2        AS dados
+       N.auxLong1       AS ordno,
+       T2.time          AS time,
+       T2.fre_amt       AS fre_amt,
+       T2.data_venda    AS data_venda,
+       T2.nfno_venda    AS nfno_venda,
+       T2.nfse_venda    AS nfse_venda,
+       T2.valor_venda   AS valor_venda,
+       T2.data_entrega  AS data_entrega,
+       T2.nfno_entrega  AS nfno_entrega,
+       T2.nfse_entrega  AS nfse_entrega,
+       T2.valor_entrega AS valor_entrega,
+       N.c2             AS dados
 FROM sqldados.nfrprd AS P
        INNER JOIN sqldados.nfr AS N
                   USING (storeno, pdvno, xano)
-       INNER JOIN sqldados.nf AS NF
-                  USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.eord AS E
-                 ON E.storeno = N.storeno
-                   AND E.ordno = N.auxLong1
+       INNER JOIN T2
+                  ON T2.storeno = N.storeno
+                    AND T2.ordno = N.auxLong1
 WHERE (P.storeno != :storeno OR :storeno = 0)
   AND P.storeno != P.storenoStk
   AND N.date > 20240401

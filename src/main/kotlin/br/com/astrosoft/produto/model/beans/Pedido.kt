@@ -122,9 +122,9 @@ class Pedido(
     }
 
   val paraImprimir: Boolean
-    get() = (marca != "S") /*&& (nfnoEnt == "")*/
+    get() = (marca != "S") && (nfnoEnt == "")
   val impressoSemNota: Boolean
-    get() = (marca == "S") /*&& (nfnoEnt == "")*/
+    get() = (marca == "S") && (nfnoEnt == "")
   val impresso: Boolean
     get() = (marca == "S")
   val impressoComNota: Boolean
