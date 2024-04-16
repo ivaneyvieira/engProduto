@@ -13,13 +13,15 @@ class PedidoRetiraUsrViewModel(val viewModel: PedidoRetiraViewModel) : TabUsrVie
   }
 
   override fun UserSaci.isActive(): Boolean {
-    return this.pedidoTransf
+    return this.pedidoRetira
   }
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.retiraImprimir = usuario.retiraImprimir
     this.retiraImpresso = usuario.retiraImpresso
+    this.lojaRetira = usuario.lojaRetira
     this.impressoraRet = usuario.impressoraRet
+    this.retiraTipo = usuario.retiraTipo
   }
 }
 
