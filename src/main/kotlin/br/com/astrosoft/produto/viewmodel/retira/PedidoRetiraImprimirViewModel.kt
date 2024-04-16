@@ -3,11 +3,9 @@ package br.com.astrosoft.produto.viewmodel.retira
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroPedido
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.Pedido
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
+import br.com.astrosoft.produto.model.printText.RomaneioSeparacaoL
 import java.time.LocalDateTime
 
 class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
@@ -24,7 +22,11 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   }
 
   fun confirmaPrint(pedido: Pedido) = viewModel.exec {
-    val relatorio = RomaneioSeparacao()
+    val relatorio = if(pedido.tipoRetiraEnum == ETipoRetira.RETIRA_FUTURA_L) {
+      RomaneioSeparacaoL()
+    }else {
+      RomaneioSeparacao()
+    }
     val dummyPrinter = DummyPrinter()
 
     relatorio.print(dados = pedido.produtos(), printer = dummyPrinter)
