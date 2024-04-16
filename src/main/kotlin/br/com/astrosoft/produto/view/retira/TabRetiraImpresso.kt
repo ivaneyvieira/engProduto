@@ -37,9 +37,8 @@ class TabRetiraImpresso(val viewModel: PedidoRetiraImpressoViewModel) :
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    val loja = user?.lojaRetira ?: 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaRetira ?: 0) ?: Loja.lojaZero
     cmbLoja.isReadOnly = user?.admin == false
-    cmbLoja.value = viewModel.findLoja(loja) ?: Loja.lojaZero
   }
 
   override fun updateComponent() {

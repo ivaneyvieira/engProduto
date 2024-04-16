@@ -36,8 +36,8 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
+    cmbLoja.value = viewModel.findLoja(user?.lojaRetira ?: 0) ?: Loja.lojaZero
     cmbLoja.isReadOnly = user?.admin == false
-    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
 
   override fun filtro(): FiltroPedido {
