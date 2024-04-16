@@ -6,4 +6,4 @@ WHERE ordno = :ordno
 UPDATE sqldados.nfr
 SET c2 = CONCAT(:marca, MID(c2, LENGTH(:marca) + 1, 50))
 WHERE auxLong1 = :ordno
-  AND storeno = :storeno;
+  AND storeno = :storeno
