@@ -293,7 +293,8 @@ class QuerySaci : QueryDB(database) {
         ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
                                        it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
                                        it.loja == filtro.loja &&
-                                       filtro.loja != 0
+                                       filtro.loja != 0 &&
+                                       it.serie == "3"
 
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
