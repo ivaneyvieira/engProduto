@@ -151,6 +151,6 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   }
 
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS? {
-    return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
+    return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodes }
   }
 }

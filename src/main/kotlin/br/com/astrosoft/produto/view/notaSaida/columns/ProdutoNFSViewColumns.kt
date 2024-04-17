@@ -29,7 +29,7 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Loc")
   }
 
-  fun Grid<ProdutoNFS>.produtoNFBarcode() = columnGrid(ProdutoNFS::barcode) {
+  fun Grid<ProdutoNFS>.produtoNFBarcode() = columnGrid(ProdutoNFS::barcodeStrList) {
     this.setHeader("Código de Barras")
   }
 

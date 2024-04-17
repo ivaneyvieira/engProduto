@@ -9,7 +9,7 @@ class ProdutoNFS(
   var nota: String,
   var codigo: String,
   var grade: String,
-  var barcode: String,
+  var barcodeStrList: String,
   var descricao: String,
   var vendno: Int,
   var fornecedor: String,
@@ -33,9 +33,12 @@ class ProdutoNFS(
   var tipoNota: Int,
 ) {
   val codigoFormat
-    get() = codigo.padStart(6, '0') ?: ""
+    get() = codigo.padStart(6, '0')
 
   private fun splitExp(index: Int) = usuarioExp.split("-").getOrNull(index) ?: ""
+
+  val barcodes
+    get() = barcodeStrList.split("|")
 
   val usuarioNameExp
     get() = splitExp(0)
