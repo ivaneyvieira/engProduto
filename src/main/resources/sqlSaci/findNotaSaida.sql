@@ -133,6 +133,8 @@ SELECT N.storeno                                               AS loja,
        MAX(X.s11)                                              AS marca,
        IF(N.status <> 1, 'N', 'S')                             AS cancelada,
        CASE
+         WHEN N.nfse = 7
+           THEN 'ENTREGA_WEB'
          WHEN tipo = 0 AND N.nfse >= 10
            THEN 'NFCE'
          WHEN tipo = 0 AND N.nfse < 10
@@ -221,6 +223,7 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
           OR (N.tipo = 0 AND N.nfse >= 10)
           OR (N.tipo = 1 AND N.nfse = 5)
           OR (IFNULL(CG.storeno, 0) != :loja)
+          OR (N.nfse = 7)
           )
         ELSE TRUE
       END
