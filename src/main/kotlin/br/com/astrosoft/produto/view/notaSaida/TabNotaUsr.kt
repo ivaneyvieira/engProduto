@@ -39,6 +39,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         this.setWidthFull()
         this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
         setItems(ETipoNotaFiscal.entries)
+        this.setItemLabelGenerator { it.descricao }
         binder.bind(this, UserSaci::tipoNotaExpedicao.name)
       }
       filtroLoja(binder, UserSaci::lojaLocExpedicao, "Loja Localização")
