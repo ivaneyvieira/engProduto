@@ -45,7 +45,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     val user = AppConfig.userLogin() as? UserSaci
     val loja = user?.lojaNota ?: 0
     val lojaSelecionada = viewModel.findAllLojas().firstOrNull { it.no == loja }
-    cmbLoja.isReadOnly = lojaSelecionada != null
+    cmbLoja.isReadOnly = (user?.admin == false) && (lojaSelecionada?.no != 0)
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
   }
