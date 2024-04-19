@@ -106,7 +106,8 @@ CREATE TEMPORARY TABLE T_CARGA
 )
 SELECT storeno, pdvno, xano
 FROM sqldados.nfrprd
-WHERE ((storenoStk = :loja AND storeno != :loja) OR :loja = 0)
+WHERE (storenoStk = :loja OR :loja = 0)
+  AND storeno != storenoStk
   AND date > 20240401
   AND optionEntrega % 10 = 4
   AND nfse != 3
@@ -213,7 +214,7 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
           AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0 OR IFNULL(CG.storeno, 0) != :loja)
+        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) AND IFNULL(CG.storeno, 0) != :loja
         ELSE FALSE
       END
   AND CASE
