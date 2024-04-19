@@ -38,7 +38,7 @@ class ProdutoNFS(
   private fun splitExp(index: Int) = usuarioExp.split("-").getOrNull(index) ?: ""
 
   val barcodes
-    get() = barcodeStrList.split("|")
+    get() = barcodeStrList.split(",").map { it.trim() }
 
   val usuarioNameExp
     get() = splitExp(0)
