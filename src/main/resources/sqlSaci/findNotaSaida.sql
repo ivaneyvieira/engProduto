@@ -214,7 +214,8 @@ WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
           AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) AND IFNULL(CG.storeno, 0) != :loja
+        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) OR
+                      (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0)
         ELSE FALSE
       END
   AND CASE
