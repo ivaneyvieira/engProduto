@@ -58,26 +58,6 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       }
     }
     init()
-    edtPesquisa = textField("Pesquisa") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataInicial = datePicker("Data Inicial") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     cmbNota = select("Nota") {
       val user = AppConfig.userLogin() as? UserSaci
       val tiposNota = user?.tipoNotaExpedicao.let { tipo ->
@@ -96,6 +76,26 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
+      }
+    }
+    edtPesquisa = textField("Pesquisa") {
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      this.localePtBr()
+      this.value = LocalDate.now()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.localePtBr()
+      this.value = LocalDate.now()
+      addValueChangeListener {
+        viewModel.updateView()
       }
     }
   }
