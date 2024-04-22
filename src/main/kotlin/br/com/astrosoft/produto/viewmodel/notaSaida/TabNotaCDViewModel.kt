@@ -26,6 +26,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
+      produtoNF.quantidadeEdt = 0
       produtoNF.marca = EMarcaNota.EXP.num
       produtoNF.usuarioExp = ""
       produtoNF.usuarioCD = ""
