@@ -24,6 +24,7 @@ class ProdutoNFS(
   var ncm: String,
   var local: String,
   var quantidade: Int,
+  var quantidadeEdt: Int,
   var preco: Double,
   var total: Double,
   var gradeAlternativa: String?,

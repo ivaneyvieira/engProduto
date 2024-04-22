@@ -13,3 +13,7 @@ vaadin-grid.styling::part(primary) {
 vaadin-grid.styling::part(amarelo) {
     color: yellow;
 }
+
+vaadin-grid.styling::part(azul) {
+    color: var(--lumo-primary-color);
+}

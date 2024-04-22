@@ -16,6 +16,13 @@ WHERE (MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) IN (:locais) OR 'TO
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
 
+UPDATE sqldados.xaprd2 AS X
+SET X.l12 = X.qtty
+WHERE X.l12 = 0
+  AND X.storeno = :storeno
+  AND X.pdvno = :pdvno
+  AND X.xano = :xano;
+
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
@@ -40,7 +47,8 @@ SELECT X.storeno                                                               A
        P.m5                                                                    AS largura,
        P.sp / 100                                                              AS precoCheio,
        IFNULL(S.ncm, '')                                                       AS ncm,
-       X.qtty / 1000                                                           AS quantidade,
+       ROUND(X.qtty / 1000)                                                    AS quantidade,
+       ROUND(X.l12 / 1000)                                                     AS quantidadeEdt,
        X.preco                                                                 AS preco,
        (X.qtty / 1000) * X.preco                                               AS total,
        X.c6                                                                    AS gradeAlternativa,
@@ -93,6 +101,7 @@ SELECT loja,
        precoCheio,
        ncm,
        quantidade,
+       quantidadeEdt,
        preco,
        total,
        gradeAlternativa,

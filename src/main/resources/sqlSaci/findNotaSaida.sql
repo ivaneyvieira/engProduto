@@ -265,10 +265,11 @@ SELECT Q.loja,
        Q.notaEntrega,
        Q.dataEntrega,
        Q.tipo,
-       SUM(X.s11 = 0) AS countExp,
-       SUM(X.s11 = 1) AS countCD,
-       SUM(X.s11 = 2) AS countEnt,
-       retiraFutura   AS retiraFutura
+       SUM(X.s11 = 0)                                        AS countExp,
+       SUM(X.s11 = 1)                                        AS countCD,
+       SUM(X.s11 = 2)                                        AS countEnt,
+       SUM(ROUND(X.l12) > 0 && ROUND(X.l12) < ROUND(X.qtty)) AS countPendente,
+       retiraFutura                                          AS retiraFutura
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja
