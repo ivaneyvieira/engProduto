@@ -14,6 +14,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeEnt
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeSaldo
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -135,6 +136,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       }
       produtoNFLocalizacao()
       produtoNFQuantidade()
+      produtoNFQuantidadeEnt()
       produtoNFQuantidadeSaldo()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
