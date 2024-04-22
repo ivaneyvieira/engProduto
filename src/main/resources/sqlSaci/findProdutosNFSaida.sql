@@ -16,13 +16,6 @@ WHERE (MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) IN (:locais) OR 'TO
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
 
-UPDATE sqldados.xaprd2 AS X
-SET X.l12 = X.qtty
-WHERE X.l12 = 0
-  AND X.storeno = :storeno
-  AND X.pdvno = :pdvno
-  AND X.xano = :xano;
-
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (

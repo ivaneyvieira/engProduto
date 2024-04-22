@@ -40,8 +40,9 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = AppConfig.userLogin()?.login ?: ""
     itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
-      if (produtoNF.quantidade >= produtoNF.quantidadeEdt) {
-        if (produtoNF.quantidade == produtoNF.quantidadeEdt)
+      produtoNF.quantidadeEdt = produtoNF.quantidadeEdt + (produtoNF.quantidadeAdd ?: 0)
+      if (produtoNF.quantidadeSaldo <= produtoNF.quantidade && produtoNF.quantidadeSaldo >= 0) {
+        if (produtoNF.quantidadeSaldo == 0)
           produtoNF.marca = EMarcaNota.CD.num
         produtoNF.usuarioExp = "$usuario-$dataHora"
         produtoNF.usuarioCD = ""

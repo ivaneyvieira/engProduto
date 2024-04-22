@@ -33,6 +33,10 @@ class ProdutoNFS(
   var usuarioCD: String,
   var tipoNota: Int,
 ) {
+  var quantidadeAdd : Int? = 0
+
+  val quantidadeSaldo
+    get() = quantidade - quantidadeEdt
   val codigoFormat
     get() = codigo.padStart(6, '0')
 
