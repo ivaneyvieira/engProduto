@@ -33,7 +33,7 @@ class ProdutoNFS(
   var usuarioCD: String,
   var tipoNota: Int,
 ) {
-  var quantidadeAdd : Int? = 0
+  var quantidadeAdd : Int? = quantidadeSaldo
 
   val quantidadeSaldo
     get() = quantidade - quantidadeEdt
