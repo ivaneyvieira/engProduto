@@ -41,11 +41,15 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaNota.ENT.num
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = AppConfig.userLogin()?.login ?: ""
-      produtoNF.usuarioCD = "$usuario-$dataHora"
-      produtoNF.salva()
+      if (produtoNF.quantidade >= produtoNF.quantidadeEdt) {
+        produtoNF.marca = EMarcaNota.ENT.num
+        val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
+        val usuario = AppConfig.userLogin()?.login ?: ""
+        produtoNF.usuarioCD = "$usuario-$dataHora"
+        produtoNF.salva()
+      } else {
+        fail("Quantidade de produtos marcados para entrega menor que a quantidade editada")
+      }
     }
     subView.updateProdutos()
     updateView()

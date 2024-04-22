@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.notaSaida
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -135,7 +136,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       }
       produtoNFLocalizacao()
       produtoNFQuantidade()
-      produtoNFQuantidadeEdt()
+      produtoNFQuantidadeEdt().integerFieldEditor()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
     }
