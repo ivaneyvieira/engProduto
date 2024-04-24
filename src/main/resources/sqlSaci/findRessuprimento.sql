@@ -398,6 +398,16 @@ SELECT numero,
        countSelREC
 FROM T_PEDIDO_02;
 
+
+DROP TEMPORARY TABLE IF EXISTS T_OBS;
+CREATE TEMPORARY TABLE T_OBS
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT storeno, ordno, observacao
+FROM sqldados.ordsAdicional
+GROUP BY storeno, ordno;
+
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
@@ -409,43 +419,42 @@ SELECT numero,
        comprador,
        GROUP_CONCAT(DISTINCT
                     IF(D.localizacao = '', NULL, D.localizacao)
-                    SEPARATOR ',') AS localizacoes,
-       :marca                      AS marca,
-       :temNota                    AS temNota,
+                    SEPARATOR ',')   AS localizacoes,
+       :marca                        AS marca,
+       :temNota                      AS temNota,
        GROUP_CONCAT(DISTINCT
                     IF(notaBaixaPedido = '', NULL, notabaixaPedido)
-                    SEPARATOR ',') AS notaBaixa,
-       MAX(dataBaixaPedido)        AS dataBaixa,
-       valorNota                   AS valorNota,
-       entregueNo                  AS entregueNo,
-       entreguePor                 AS entreguePor,
-       entregueSPor                AS entregueSPor,
-       transportadoNo              AS transportadoNo,
-       transportadoPor             AS transportadoPor,
-       transportadoSPor            AS transportadoSPor,
-       recebidoNo                  AS recebidoNo,
-       recebidoPor                 AS recebidoPor,
-       recebidoSPor                AS recebidoSPor,
-       devolvidoNo                 AS devolvidoNo,
-       devolvidoPor                AS devolvidoPor,
-       devolvidoSPor               AS devolvidoSPor,
-       usuarioNo                   AS usuarioNo,
-       usuario                     AS usuario,
-       login                       AS login,
-       IFNULL(A.observacao, '')    AS observacao,
-       SUM(countCD)                AS countCD,
-       SUM(countENT)               AS countENT,
-       SUM(countREC)               AS countREC,
-       SUM(countCor)               AS countCor,
-       SUM(countNot)               AS countNot,
-       SUM(countSelCD)             AS countSelCD,
-       SUM(countSelENT)            AS countSelENT,
-       SUM(countSelREC)            AS countSelREC
+                    SEPARATOR ',')   AS notaBaixa,
+       MAX(dataBaixaPedido)          AS dataBaixa,
+       valorNota                     AS valorNota,
+       entregueNo                    AS entregueNo,
+       entreguePor                   AS entreguePor,
+       entregueSPor                  AS entregueSPor,
+       transportadoNo                AS transportadoNo,
+       transportadoPor               AS transportadoPor,
+       transportadoSPor              AS transportadoSPor,
+       recebidoNo                    AS recebidoNo,
+       recebidoPor                   AS recebidoPor,
+       recebidoSPor                  AS recebidoSPor,
+       devolvidoNo                   AS devolvidoNo,
+       devolvidoPor                  AS devolvidoPor,
+       devolvidoSPor                 AS devolvidoSPor,
+       usuarioNo                     AS usuarioNo,
+       usuario                       AS usuario,
+       login                         AS login,
+       MAX(IFNULL(A.observacao, '')) AS observacao,
+       SUM(countCD)                  AS countCD,
+       SUM(countENT)                 AS countENT,
+       SUM(countREC)                 AS countREC,
+       SUM(countCor)                 AS countCor,
+       SUM(countNot)                 AS countNot,
+       SUM(countSelCD)               AS countSelCD,
+       SUM(countSelENT)              AS countSelENT,
+       SUM(countSelREC)              AS countSelREC
 FROM T_PEDIDO AS D
-       LEFT JOIN sqldados.ordsAdicional AS A
+       LEFT JOIN T_OBS AS A
                  ON A.storeno = 1
                    AND A.ordno = D.numero
-                   AND A.localizacao = D.localizacao
 WHERE (@PESQUISA = '' OR
        numero LIKE @PESQUISA_START OR
        fornecedor LIKE @PESQUISA_NUM OR
