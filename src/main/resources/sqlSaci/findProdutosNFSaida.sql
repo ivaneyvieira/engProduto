@@ -26,7 +26,6 @@ SELECT X.storeno                                                               A
        xano                                                                    AS xano,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                               AS nota,
        CAST(TRIM(P.no) AS CHAR)                                                AS codigo,
-       P.no                                                                    AS prdno,
        IFNULL(X.grade, '')                                                     AS grade,
        TRIM(IFNULL(GROUP_CONCAT(DISTINCT B.barcode SEPARATOR ','), P.barcode)) AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                                                AS descricao,
@@ -41,8 +40,7 @@ SELECT X.storeno                                                               A
        P.m5                                                                    AS largura,
        P.sp / 100                                                              AS precoCheio,
        IFNULL(S.ncm, '')                                                       AS ncm,
-       ROUND(X.qtty / 1000)                                                    AS quantidade,
-       ROUND(X.l12 / 1000)                                                     AS quantidadeEdt,
+       X.qtty / 1000                                                           AS quantidade,
        X.preco                                                                 AS preco,
        (X.qtty / 1000) * X.preco                                               AS total,
        X.c6                                                                    AS gradeAlternativa,
@@ -50,8 +48,7 @@ SELECT X.storeno                                                               A
        X.c5                                                                    AS usuarioExp,
        CAST(L.loc AS CHAR)                                                     AS local,
        X.c4                                                                    AS usuarioCD,
-       N.tipo                                                                  AS tipoNota,
-       X.l12 > 0 AND X.l12 < X.qtty                                            AS pendente
+       N.tipo                                                                  AS tipoNota
 FROM sqldados.prd AS P
        INNER JOIN T_LOC AS L
                   ON L.prdno = P.no
@@ -72,13 +69,7 @@ FROM sqldados.prd AS P
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND CASE :marca
-        WHEN 0 THEN (X.s11 = 0) OR (X.l12 >= 0 AND X.l12 < X.qtty)
-        WHEN 1 THEN (X.s11 = 1) OR (X.l12 > 0 AND X.l12 <= X.qtty)
-        WHEN 2 THEN (X.s11 = 2) OR (X.l12 = X.qtty)
-        WHEN 999 THEN X.s11 IN (0, 1, 2)
-        ELSE FALSE
-      END
+  AND (X.s11 = :marca OR :marca = 999)
 GROUP BY codigo, grade, local;
 
 SELECT loja,
@@ -86,7 +77,6 @@ SELECT loja,
        xano,
        nota,
        codigo,
-       prdno,
        grade,
        local,
        barcodeStrList,
@@ -103,13 +93,11 @@ SELECT loja,
        precoCheio,
        ncm,
        quantidade,
-       quantidadeEdt,
        preco,
        total,
        gradeAlternativa,
        marca,
        usuarioExp,
        usuarioCD,
-       tipoNota,
-       pendente
+       tipoNota
 FROM T_DADOS

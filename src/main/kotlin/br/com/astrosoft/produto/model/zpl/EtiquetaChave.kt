@@ -103,10 +103,10 @@ object EtiquetaChave {
         titulo = "Exp",
         usuario = produto.usuarioNameExp,
         loja = produto.loja,
-        nota = produto.nota ?: "",
+        nota = produto.nota,
         data = produto.dataExp,
         hora = produto.horaExp,
-        local = produto.local ?: ""
+        local = produto.local
       )
     }.distinct()
     printPreview(impressoras, dadosEdtiquetas)
@@ -119,10 +119,10 @@ object EtiquetaChave {
         titulo = "Entregue",
         usuario = produto.usuarioNameCD,
         loja = produto.loja,
-        nota = produto.nota ?: "",
+        nota = produto.nota,
         data = produto.dataCD,
         hora = produto.horaCD,
-        local = produto.local ?: ""
+        local = produto.local
       )
     }.distinct()
     printPreview(impressoras, dadosEtiquetas)

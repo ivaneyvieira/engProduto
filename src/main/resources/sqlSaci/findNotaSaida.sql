@@ -209,13 +209,7 @@ FROM sqldados.nf AS N
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
-  AND CASE :marca
-        WHEN 0 THEN X.s11 = 0 OR (X.l12 >= 0 AND X.l12 < X.qtty)
-        WHEN 1 THEN X.s11 = 1 OR (X.l12 > 0 AND X.l12 <= X.qtty)
-        WHEN 2 THEN X.s11 = 2 OR (X.l12 = X.qtty)
-        WHEN 999 THEN X.s11 IN (0, 1, 2)
-        ELSE FALSE
-      END
+  AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
@@ -271,11 +265,10 @@ SELECT Q.loja,
        Q.notaEntrega,
        Q.dataEntrega,
        Q.tipo,
-       SUM(X.s11 = 0)                                        AS countExp,
-       SUM(X.s11 = 1)                                        AS countCD,
-       SUM(X.s11 = 2)                                        AS countEnt,
-       SUM(ROUND(X.l12) > 0 && ROUND(X.l12) < ROUND(X.qtty)) AS countPendente,
-       retiraFutura                                          AS retiraFutura
+       SUM(X.s11 = 0) AS countExp,
+       SUM(X.s11 = 1) AS countCD,
+       SUM(X.s11 = 2) AS countEnt,
+       retiraFutura   AS retiraFutura
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja

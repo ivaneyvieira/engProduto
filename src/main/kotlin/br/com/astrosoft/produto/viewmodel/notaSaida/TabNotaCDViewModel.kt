@@ -26,7 +26,6 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
-      produtoNF.quantidadeEdt = 0
       produtoNF.marca = EMarcaNota.EXP.num
       produtoNF.usuarioExp = ""
       produtoNF.usuarioCD = ""
@@ -42,15 +41,11 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
-      if ((produtoNF.quantidade ?: 0) >= (produtoNF.quantidadeEdt ?: 0)) {
-        produtoNF.marca = EMarcaNota.ENT.num
-        val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-        val usuario = AppConfig.userLogin()?.login ?: ""
-        produtoNF.usuarioCD = "$usuario-$dataHora"
-        produtoNF.salva()
-      } else {
-        fail("Quantidade de produtos marcados para entrega menor que a quantidade editada")
-      }
+      produtoNF.marca = EMarcaNota.ENT.num
+      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
+      val usuario = AppConfig.userLogin()?.login ?: ""
+      produtoNF.usuarioCD = "$usuario-$dataHora"
+      produtoNF.salva()
     }
     subView.updateProdutos()
     updateView()
@@ -58,14 +53,6 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    val quantidade = produtoNF.quantidade ?: 0
-    val quantidadeEdt = produtoNF.quantidadeEdt ?: 0
-    if(quantidadeEdt < quantidade){
-      fail("Quantidade entregue é menor que a quantiade da nota")
-    }
-    if(quantidadeEdt > quantidade){
-      fail("Quantidade entregue é maior que a quantiade da nota")
-    }
     produtoNF.marca = EMarcaNota.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = AppConfig.userLogin()?.login ?: ""

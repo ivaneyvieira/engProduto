@@ -40,17 +40,10 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
     val usuario = AppConfig.userLogin()?.login ?: ""
     itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
-      produtoNF.quantidadeEdt = (produtoNF.quantidadeEdt ?: 0) + (produtoNF.quantidadeAdd ?: 0)
-      if ((produtoNF.quantidadeEdt ?: 0) >= 0 && (produtoNF.quantidadeEdt ?: 0) <= (produtoNF.quantidade ?: 0)) {
-        if (produtoNF.quantidadeEdt == produtoNF.quantidade)
-          produtoNF.marca = EMarcaNota.CD.num
-        produtoNF.usuarioExp = "$usuario-$dataHora"
-        produtoNF.usuarioCD = ""
-        produtoNF.salva()
-      } else {
-        subView.updateProdutos()
-        fail("Quantidade inválida do produto: ${produtoNF.codigo} ${produtoNF.descricao}")
-      }
+      produtoNF.marca = EMarcaNota.CD.num
+      produtoNF.usuarioExp = "$usuario-$dataHora"
+      produtoNF.usuarioCD = ""
+      produtoNF.salva()
     }
     imprimeEtiqueta(itens)
     subView.updateProdutos()
@@ -69,7 +62,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if (itensSelecionados.isEmpty())
+    if(itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
     val report = NotaExpedicao(nota)
     report.print(

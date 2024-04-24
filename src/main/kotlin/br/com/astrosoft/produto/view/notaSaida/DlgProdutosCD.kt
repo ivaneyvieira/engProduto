@@ -14,8 +14,6 @@ import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeEnt
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeSaldo
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -79,7 +77,6 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
-      this.addClassName("styling")
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
@@ -137,15 +134,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       }
       produtoNFLocalizacao()
       produtoNFQuantidade()
-      produtoNFQuantidadeEnt()
-      produtoNFQuantidadeSaldo()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
-      this.setPartNameGenerator {
-        if (it.marca == EMarcaNota.ENT.num) {
-          "amarelo"
-        } else null
-      }
     }
     this.addAndExpand(gridDetail)
     update()
