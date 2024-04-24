@@ -42,7 +42,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
     itens.forEach { produtoNF ->
-      if (produtoNF.quantidade >= produtoNF.quantidadeEdt) {
+      if ((produtoNF.quantidade ?: 0) >= (produtoNF.quantidadeEdt ?: 0)) {
         produtoNF.marca = EMarcaNota.ENT.num
         val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
         val usuario = AppConfig.userLogin()?.login ?: ""

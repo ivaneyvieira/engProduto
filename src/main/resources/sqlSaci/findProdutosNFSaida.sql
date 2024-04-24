@@ -49,7 +49,8 @@ SELECT X.storeno                                                               A
        X.c5                                                                    AS usuarioExp,
        CAST(L.loc AS CHAR)                                                     AS local,
        X.c4                                                                    AS usuarioCD,
-       N.tipo                                                                  AS tipoNota
+       N.tipo                                                                  AS tipoNota,
+       X.l12 > 0 AND X.l12 < X.qtty                                            AS pendente
 FROM sqldados.prd AS P
        INNER JOIN T_LOC AS L
                   ON L.prdno = P.no
@@ -70,7 +71,13 @@ FROM sqldados.prd AS P
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND (X.s11 = :marca OR :marca = 999)
+  AND CASE :marca
+        WHEN 0 THEN (X.s11 = 0) OR (X.l12 >= 0 AND X.l12 < X.qtty)
+        WHEN 1 THEN (X.s11 = 1) OR (X.l12 > 0 AND X.l12 <= X.qtty)
+        WHEN 2 THEN (X.s11 = 2) OR (X.l12 = X.qtty)
+        WHEN 999 THEN X.s11 IN (0, 1, 2)
+        ELSE FALSE
+      END
 GROUP BY codigo, grade, local;
 
 SELECT loja,
@@ -101,5 +108,6 @@ SELECT loja,
        marca,
        usuarioExp,
        usuarioCD,
-       tipoNota
+       tipoNota,
+       pendente
 FROM T_DADOS

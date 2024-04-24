@@ -209,7 +209,13 @@ FROM sqldados.nf AS N
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
-  AND (X.s11 = :marca OR :marca = 999)
+  AND CASE :marca
+        WHEN 0 THEN X.s11 = 0 OR (X.l12 >= 0 AND X.l12 < X.qtty)
+        WHEN 1 THEN X.s11 = 1 OR (X.l12 > 0 AND X.l12 <= X.qtty)
+        WHEN 2 THEN X.s11 = 2 OR (X.l12 = X.qtty)
+        WHEN 999 THEN X.s11 IN (0, 1, 2)
+        ELSE FALSE
+      END
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
