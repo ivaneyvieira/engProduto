@@ -134,13 +134,6 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
 
-      this.setClassNameGenerator {
-        when (it.marca) {
-          1    -> "cd"
-          2    -> "entregue"
-          else -> null
-        }
-      }
       this.setPartNameGenerator {
         val pendente = it.pendente ?: false
         if (pendente) {

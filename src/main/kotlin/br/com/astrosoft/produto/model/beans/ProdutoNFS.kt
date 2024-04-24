@@ -8,6 +8,7 @@ class ProdutoNFS(
   var xano: Long,
   var nota: String?,
   var codigo: String?,
+  var prdno: String?,
   var grade: String?,
   var barcodeStrList: String?,
   var descricao: String?,

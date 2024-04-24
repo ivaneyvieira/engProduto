@@ -216,7 +216,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", podutoNF.loja)
       addOptionalParameter("pdvno", podutoNF.pdvno)
       addOptionalParameter("xano", podutoNF.xano)
-      addOptionalParameter("codigo", podutoNF.codigo)
+      addOptionalParameter("prdno", podutoNF.prdno)
       addOptionalParameter("grade", podutoNF.grade)
       addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa ?: "")
       addOptionalParameter("quantidadeEdt", podutoNF.quantidadeEdt ?: 0)

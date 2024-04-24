@@ -79,6 +79,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
+      this.addClassName("styling")
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
@@ -140,6 +141,11 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFQuantidadeSaldo()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
+      this.setPartNameGenerator {
+        if (it.marca == EMarcaNota.ENT.num) {
+          "amarelo"
+        } else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()

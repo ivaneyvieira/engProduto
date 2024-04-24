@@ -7,5 +7,5 @@ SET X.c6  = :gradeAlternativa,
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano
-  AND prdno = LPAD(:codigo, 16, ' ')
+  AND prdno = :prdno
   AND grade = :grade
