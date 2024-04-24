@@ -25,6 +25,7 @@ class NotaSaida(
   var cancelada: String?,
   var tipoNotaSaida: String?,
   var notaEntrega: String?,
+  var usuarioEntrega: String?,
   var dataEntrega: LocalDate?,
   var tipo: String?,
   var countExp: Int?,

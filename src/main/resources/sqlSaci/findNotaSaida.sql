@@ -24,11 +24,15 @@ CREATE TEMPORARY TABLE T_E
 SELECT P.storeno,
        P.eordno                                  AS ordno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
-       P.date                                    AS data
+       P.date                                    AS data,
+       P.s3                                      AS userno,
+       U.login                                   AS usuario
 FROM sqlpdv.pxa AS P
+       LEFT JOIN sqldados.users AS U
+                 ON U.no = P.s3
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5, 6, 7, 8)
-  AND date >= @DT
+  AND DATE >= @DT
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -58,9 +62,10 @@ CREATE TEMPORARY TABLE T_ENTREGA
 SELECT V.storeno,
        V.pdvno,
        V.xano,
-       V.numero      AS notaVenda,
-       MAX(E.numero) AS notaEntrega,
-       MAX(E.data)   AS dataEntrega
+       V.numero       AS notaVenda,
+       MAX(E.numero)  AS notaEntrega,
+       MAX(E.usuario) AS usuario,
+       MAX(E.data)    AS dataEntrega
 FROM T_V AS V
        LEFT JOIN T_E AS E
                  USING (storeno, ordno)
@@ -175,6 +180,7 @@ SELECT N.storeno                                               AS loja,
          ELSE ''
        END                                                     AS tipoNotaSaida,
        IFNULL(ENT.notaEntrega, '')                             AS notaEntrega,
+       ENT.usuario                                             AS usuarioEntrega,
        CAST(ENT.dataEntrega AS DATE)                           AS dataEntrega,
        CASE
          WHEN IFNULL(T.tipoE, 0) > 0
@@ -263,6 +269,7 @@ SELECT Q.loja,
        Q.cancelada,
        Q.tipoNotaSaida,
        Q.notaEntrega,
+       Q.usuarioEntrega,
        Q.dataEntrega,
        Q.tipo,
        SUM(X.s11 = 0) AS countExp,
