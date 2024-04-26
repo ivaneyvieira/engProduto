@@ -47,7 +47,7 @@ SELECT I.invno,
        I.prdno,
        I.grade,
        N.storeno,
-       N.issue_date,
+       N.date,
        N.nfname,
        N.invse,
        N.vendno,
@@ -64,9 +64,9 @@ FROM sqldados.iprd AS I
                    AND A.prdno = I.prdno
                    AND A.grade = I.grade
 WHERE (N.bits & POW(2, 4) = 0)
-  AND (N.issue_date >= @DT)
-  AND (N.issue_date >= :dataInicial OR :dataInicial = 0)
-  AND (N.issue_date <= :dataFinal OR :dataFinal = 0)
+  AND (N.date >= @DT)
+  AND (N.date >= :dataInicial OR :dataInicial = 0)
+  AND (N.date <= :dataFinal OR :dataFinal = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.type = 0)
@@ -87,7 +87,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                    AS loja,
-       DATE(N.issue_date)                           AS data,
+       DATE(N.date)                                 AS data,
        N.invno                                      AS ni,
        CONCAT(N.nfname, '/', N.invse)               AS nfEntrada,
        C.no                                         AS custno,
