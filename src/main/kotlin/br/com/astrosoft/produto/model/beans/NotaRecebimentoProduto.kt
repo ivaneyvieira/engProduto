@@ -26,6 +26,7 @@ class NotaRecebimentoProduto(
   var quant: Int?,
   var estoque: Int?,
   var marca: Int?,
+  var marcaSelecionada: Int?,
 ) {
   var marcaEnum: EMarcaRecebimento = EMarcaRecebimento.TODOS
     get() = EMarcaRecebimento.entries.firstOrNull { it.codigo == marca } ?: EMarcaRecebimento.TODOS

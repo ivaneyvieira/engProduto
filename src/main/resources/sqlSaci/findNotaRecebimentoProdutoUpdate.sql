@@ -2,8 +2,5 @@ USE sqldados;
 
 SET SQL_MODE = '';
 
-UPDATE sqldados.iprdAdicional
-SET marcaRecebimento = :marca
-WHERE invno = :ni
-  AND prdno = :prdno
-  AND grade = :grade
+REPLACE sqldados.iprdAdicional(invno, prdno, grade, marcaRecebimento)
+VALUES(:ni, :prdno, :grade, :marca)

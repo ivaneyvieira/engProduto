@@ -17,23 +17,30 @@ class NotaRecebimento(
   var cte: String?,
   var volume: Int?,
   var peso: Int?,
+  val marcaSelecionada: Int?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
+  fun marcaSelecionadaEnt(): EMarcaRecebimento {
+    return EMarcaRecebimento.entries.firstOrNull { it.codigo == marcaSelecionada } ?: EMarcaRecebimento.TODOS
+  }
+
   fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProduto? {
     if (codigoBarra.isNullOrBlank()) return null
     return produtos.firstOrNull { it.containBarcode(codigoBarra) }
   }
 
-  fun refreshProdutos() {
-    val marcaEng = produtos.firstOrNull()?.marcaEnum ?: EMarcaRecebimento.TODOS
+  fun refreshProdutos(): NotaRecebimento? {
+    val marcaEng = marcaSelecionadaEnt()
     val notaRefresh = findAll(
       FiltroNotaRecebimentoProduto(
-        loja = this.loja ?: 0,
+        loja = this.loja ?: return null,
         pesquisa = "",
         marca = marcaEng,
-        invno = this.ni ?: -1
-      )).firstOrNull()
-      this.produtos = notaRefresh?.produtos ?: emptyList()
+        invno = this.ni ?: return null,
+      )
+    ).firstOrNull()
+    this.produtos = notaRefresh?.produtos ?: emptyList()
+    return notaRefresh
   }
 
   companion object {
@@ -63,7 +70,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         cte = nota.cte,
         volume = nota.volume,
         peso = nota.peso,
-        produtos = produtos
+        produtos = produtos,
+        marcaSelecionada = nota.marcaSelecionada
       )
     }
   }

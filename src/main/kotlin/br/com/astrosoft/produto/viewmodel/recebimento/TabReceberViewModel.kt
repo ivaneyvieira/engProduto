@@ -27,12 +27,16 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marcaEnum = EMarcaRecebimento.RECEBIDO
     produto.salva()
-    subView.updateProduto(produto)
+    val novaNota = subView.updateProduto()
+    if (novaNota == null || nota.produtos.isEmpty()){
+      subView.closeDialog()
+    }
   }
 }
 
 interface ITabReceber : ITabView {
   fun filtro(): FiltroNotaRecebimentoProduto
   fun updateNota(notas: List<NotaRecebimento>)
-  fun updateProduto(produto: NotaRecebimentoProduto)
+  fun updateProduto(): NotaRecebimento?
+  fun closeDialog()
 }

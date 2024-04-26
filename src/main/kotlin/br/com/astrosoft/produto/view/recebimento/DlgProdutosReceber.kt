@@ -14,9 +14,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaRecebimento) {
+  private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
+    this.onClose = onClose
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
@@ -77,9 +79,14 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
     }
   }
 
-  fun updateProduto(produto: NotaRecebimentoProduto) {
-    gridDetail.dataProvider.refreshItem(produto)
-    nota.refreshProdutos()
+  fun updateProduto() : NotaRecebimento?{
+    val nota =nota.refreshProdutos()
     update()
+    return nota
+  }
+
+  fun close() {
+    onClose?.invoke()
+    form?.close()
   }
 }

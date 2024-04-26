@@ -51,29 +51,29 @@ GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                      AS loja,
-       DATE(N.issue_date)             AS data,
-       N.invno                        AS ni,
-       CONCAT(N.nfname, '/', N.invse) AS nfEntrada,
-       C.no                           AS custno,
-       N.vendno                       AS vendno,
-       V.name                         AS fornecedor,
-       N.grossamt / 100               AS valorNF,
-       N.ordno                        AS pedComp,
-       N.carrno                       AS transp,
-       ''                             AS cte,
-       0                              AS volume,
-       0                              AS peso,
+SELECT N.storeno                                    AS loja,
+       DATE(N.issue_date)                           AS data,
+       N.invno                                      AS ni,
+       CONCAT(N.nfname, '/', N.invse)               AS nfEntrada,
+       C.no                                         AS custno,
+       N.vendno                                     AS vendno,
+       V.name                                       AS fornecedor,
+       N.grossamt / 100                             AS valorNF,
+       N.ordno                                      AS pedComp,
+       N.carrno                                     AS transp,
+       ''                                           AS cte,
+       0                                            AS volume,
+       0                                            AS peso,
   /*Produto*/
-       P.no                           AS prdno,
-       TRIM(P.no)                     AS codigo,
-       B.barcodeList                  AS barcodeStrList,
-       TRIM(MID(P.name, 1, 37))       AS descricao,
-       I.grade                        AS grade,
-       L.loc                          AS localizacao,
-       ROUND(I.qtty / 1000)           AS quant,
-       ROUND(E.estoque)               AS estoque,
-       IFNULL(A.marcaRecebimento, 0)  AS marca
+       P.no                                         AS prdno,
+       TRIM(P.no)                                   AS codigo,
+       COALESCE(B.barcodeList, TRIM(P.barcode), '') AS barcodeStrList,
+       TRIM(MID(P.name, 1, 37))                     AS descricao,
+       I.grade                                      AS grade,
+       L.loc                                        AS localizacao,
+       ROUND(I.qtty / 1000)                         AS quant,
+       ROUND(E.estoque)                             AS estoque,
+       IFNULL(A.marcaRecebimento, 0)                AS marca
 FROM sqldados.inv AS N
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
@@ -125,7 +125,8 @@ SELECT loja,
        localizacao,
        quant,
        estoque,
-       marca
+       marca,
+       :marca AS marcaSelecionada
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR
