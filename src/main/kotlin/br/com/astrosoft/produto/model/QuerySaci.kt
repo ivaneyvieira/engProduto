@@ -1007,6 +1007,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findNotaRecebimentoProduto(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
+    val sql = "/sqlSaci/notaRecebimentoProduto.sql"
+    return query(sql, NotaRecebimentoProduto::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
