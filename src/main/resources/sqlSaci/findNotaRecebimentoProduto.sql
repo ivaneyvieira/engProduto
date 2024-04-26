@@ -122,7 +122,7 @@ FROM T_NOTA AS N
        LEFT JOIN T_LOC AS L
                  ON L.prdno = N.prdno
                    AND L.grade = N.grade
-       INNER JOIN T_EST AS E
+       LEFT JOIN T_EST AS E
                   ON E.prdno = N.prdno
                     AND E.grade = N.grade;
 
@@ -162,3 +162,7 @@ WHERE (@PESQUISA = '' OR
        cte = @PESQUISA_NUM OR
        volume = @PESQUISA_NUM)
   AND (marca = :marca OR :marca = 999)
+
+/*
+ https://github.com/ivaneyvieira/devFornecedor/blob/3b0935e757c5326298810b894f0df92133f65dcc/src/main/resources/sqlSaci/createNFCte.sql
+ */
