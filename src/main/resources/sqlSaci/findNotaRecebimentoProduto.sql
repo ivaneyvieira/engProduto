@@ -65,6 +65,8 @@ FROM sqldados.iprd AS I
                    AND A.grade = I.grade
 WHERE N.bits & POW(2, 4) = 0
   AND N.issue_date >= @DT
+  AND (N.issue_date >= :dataInicial OR :dataInicial = 0)
+  AND (N.issue_date <= :dataFinal OR :dataFinal = 0)
   AND N.storeno IN (1, 2, 3, 4, 5, 8)
   AND (N.storeno = :loja OR :loja = 0)
   AND N.type = 0

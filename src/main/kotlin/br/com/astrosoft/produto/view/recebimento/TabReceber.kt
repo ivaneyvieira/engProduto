@@ -5,23 +5,29 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabReceber
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabReceber(val viewModel: TabReceberViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabReceber {
   private var dlgProduto: DlgProdutosReceber? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -44,6 +50,20 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      value = LocalDate.now()
+      this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -81,6 +101,8 @@ class TabReceber(val viewModel: TabReceberViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.RECEBER,
+      dataFinal = edtDataFinal.value,
+      dataInicial = edtDataInicial.value,
     )
   }
 
@@ -88,7 +110,7 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     this.updateGrid(notas)
   }
 
-  override fun updateProduto() : NotaRecebimento?{
+  override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
   }
 

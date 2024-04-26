@@ -54,6 +54,8 @@ data class FiltroNotaRecebimentoProduto(
   val loja: Int,
   val pesquisa: String,
   val marca: EMarcaRecebimento,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?,
   val invno: Int = 0,
 )
 

@@ -37,6 +37,8 @@ class NotaRecebimento(
         pesquisa = "",
         marca = marcaEng,
         invno = this.ni ?: return null,
+        dataFinal = data,
+        dataInicial = data,
       )
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()
