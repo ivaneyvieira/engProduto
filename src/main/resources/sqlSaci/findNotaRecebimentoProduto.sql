@@ -48,6 +48,7 @@ SELECT I.invno,
        I.grade,
        N.storeno,
        N.date,
+       N.issue_date,
        N.nfname,
        N.invse,
        N.vendno,
@@ -91,6 +92,7 @@ DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                    AS loja,
        DATE(N.date)                                 AS data,
+       DATE(N.issue_date)                           AS emissao,
        N.invno                                      AS ni,
        CONCAT(N.nfname, '/', N.invse)               AS nfEntrada,
        C.no                                         AS custno,
@@ -133,6 +135,7 @@ WHERE (P.dereg & POW(2, 6)) = 0
 
 SELECT loja,
        data,
+       emissao,
        ni,
        nfEntrada,
        custno,
@@ -167,7 +170,3 @@ WHERE (@PESQUISA = '' OR
        cte = @PESQUISA_NUM OR
        volume = @PESQUISA_NUM)
   AND (marca = :marca OR :marca = 999)
-
-/*
- https://github.com/ivaneyvieira/devFornecedor/blob/3b0935e757c5326298810b894f0df92133f65dcc/src/main/resources/sqlSaci/createNFCte.sql
- */
