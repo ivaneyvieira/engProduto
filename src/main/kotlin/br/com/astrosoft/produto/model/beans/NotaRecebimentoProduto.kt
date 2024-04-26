@@ -25,9 +25,21 @@ class NotaRecebimentoProduto(
   var localizacao: String?,
   var quant: Int?,
   var estoque: Int?,
+  var marca: Int?,
 ) {
+  var marcaEnum: EMarcaRecebimento = EMarcaRecebimento.TODOS
+    get() = EMarcaRecebimento.entries.firstOrNull { it.codigo == marca } ?: EMarcaRecebimento.TODOS
+    set(value) {
+      marca = value.codigo
+      field = value
+    }
+
   fun containBarcode(barcode: String): Boolean {
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
+  }
+
+  fun salva() {
+    saci.updateNotaRecebimentoProduto(this)
   }
 
   companion object {
@@ -40,4 +52,12 @@ class NotaRecebimentoProduto(
 data class FiltroNotaRecebimentoProduto(
   val loja: Int,
   val pesquisa: String,
+  val marca: EMarcaRecebimento,
+  val invno: Int = 0,
 )
+
+enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
+  TODOS(999, "Todos"),
+  RECEBER(0, "Receber"),
+  RECEBIDO(1, "Recebido")
+}

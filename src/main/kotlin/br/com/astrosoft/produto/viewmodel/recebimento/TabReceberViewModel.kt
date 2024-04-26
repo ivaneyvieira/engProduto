@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaRecebimento
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.*
 
 class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -24,12 +23,16 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     return lojas.firstOrNull { it.no == storeno }
   }
 
-  fun selecionaProdutos(barcode: String?) {
-    TODO("Not yet implemented")
+  fun selecionaProdutos(nota: NotaRecebimento, codigoBarra: String) = viewModel.exec {
+    val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.marcaEnum = EMarcaRecebimento.RECEBIDO
+    produto.salva()
+    subView.updateProduto(produto)
   }
 }
 
 interface ITabReceber : ITabView {
   fun filtro(): FiltroNotaRecebimentoProduto
   fun updateNota(notas: List<NotaRecebimento>)
+  fun updateProduto(produto: NotaRecebimentoProduto)
 }

@@ -20,16 +20,6 @@ class DlgProdutosRecebido(val viewModel: TabRecebidoViewModel, val nota: NotaRec
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
-          }
-        }
-      }
     }, onClose = {
       onClose()
     }) {

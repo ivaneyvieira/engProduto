@@ -23,10 +23,6 @@ class TabRecebidoViewModel(val viewModel: RecebimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
-  fun selecionaProdutos(barcode: String?) {
-    TODO("Not yet implemented")
-  }
 }
 
 interface ITabRecebido : ITabView {

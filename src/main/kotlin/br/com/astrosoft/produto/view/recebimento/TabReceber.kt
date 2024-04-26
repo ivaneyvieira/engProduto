@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.FiltroNotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabReceber
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
 import com.github.mvysny.karibudsl.v10.select
@@ -80,15 +77,19 @@ class TabReceber(val viewModel: TabReceberViewModel) :
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
-    val user = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
-      loja = cmbLoja.value.no ?: 0,
+      loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      marca = EMarcaRecebimento.RECEBER,
     )
   }
 
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
+  }
+
+  override fun updateProduto(produto: NotaRecebimentoProduto) {
+    dlgProduto?.updateProduto(produto)
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {

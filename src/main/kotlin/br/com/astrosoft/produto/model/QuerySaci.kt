@@ -1012,6 +1012,18 @@ class QuerySaci : QueryDB(database) {
     return query(sql, NotaRecebimentoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("marca", filtro.marca.codigo)
+      addOptionalParameter("invno", filtro.invno)
+    }
+  }
+
+  fun updateNotaRecebimentoProduto(notaRecebimentoProduto: NotaRecebimentoProduto) {
+    val sql = "/sqlSaci/findNotaRecebimentoProdutoUpdate.sql"
+    script(sql) {
+      addOptionalParameter("ni", notaRecebimentoProduto.ni ?: 0)
+      addOptionalParameter("prdno", notaRecebimentoProduto.prdno ?: "")
+      addOptionalParameter("grade", notaRecebimentoProduto.grade ?: "")
+      addOptionalParameter("marca", notaRecebimentoProduto.marca ?: 0)
     }
   }
 

@@ -72,7 +72,8 @@ SELECT N.storeno                      AS loja,
        I.grade                        AS grade,
        L.loc                          AS localizacao,
        ROUND(I.qtty / 1000)           AS quant,
-       ROUND(E.estoque)               AS estoque
+       ROUND(E.estoque)               AS estoque,
+       IFNULL(A.marcaRecebimento, 0)  AS marca
 FROM sqldados.inv AS N
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
@@ -80,6 +81,10 @@ FROM sqldados.inv AS N
                  ON C.cpf_cgc = V.cgc
        INNER JOIN sqldados.iprd AS I
                   ON N.invno = I.invno
+       LEFT JOIN sqldados.iprdAdicional AS A
+                 ON A.invno = I.invno
+                   AND A.prdno = I.prdno
+                   AND A.grade = I.grade
        INNER JOIN sqldados.prd AS P
                   ON P.no = I.prdno
        LEFT JOIN T_BARCODE AS B
@@ -95,7 +100,8 @@ WHERE N.bits & POW(2, 4) = 0
   AND N.issue_date >= @DT
   AND N.storeno IN (1, 2, 3, 4, 5, 8)
   AND (N.storeno = :loja OR :loja = 0)
-  AND N.type = 0;
+  AND N.type = 0
+  AND (N.invno = :invno OR :invno = 0);
 
 SELECT loja,
        data,
@@ -118,7 +124,8 @@ SELECT loja,
        grade,
        localizacao,
        quant,
-       estoque
+       estoque,
+       marca
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR
@@ -130,3 +137,4 @@ WHERE (@PESQUISA = '' OR
        transp = @PESQUISA_NUM OR
        cte = @PESQUISA_NUM OR
        volume = @PESQUISA_NUM)
+  AND (marca = :marca OR :marca = 999)

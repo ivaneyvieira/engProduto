@@ -1,13 +1,13 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.*
+import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -24,7 +24,7 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
+            viewModel.selecionaProdutos(nota, it.value)
             this@textField.value = ""
             this@textField.focus()
           }
@@ -75,5 +75,11 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
     return gridDetail.dataProvider.fetchAll().firstOrNull { prd ->
       prd.containBarcode(codigoBarra)
     }
+  }
+
+  fun updateProduto(produto: NotaRecebimentoProduto) {
+    gridDetail.dataProvider.refreshItem(produto)
+    nota.refreshProdutos()
+    update()
   }
 }

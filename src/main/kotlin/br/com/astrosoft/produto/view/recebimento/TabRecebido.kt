@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.FiltroNotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebido
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebidoViewModel
 import com.github.mvysny.karibudsl.v10.select
@@ -80,10 +77,10 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
-    val user = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
-      loja = cmbLoja.value.no ?: 0,
+      loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      marca = EMarcaRecebimento.RECEBIDO,
     )
   }
 
