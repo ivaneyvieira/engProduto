@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.notaSaida.NotaView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
+import br.com.astrosoft.produto.view.recebimento.RecebimentoView
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.view.retira.PedidoRetiraView
@@ -21,6 +22,11 @@ class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
+      if (userSaci?.recebimento == true) route(
+        icon = TRUCK,
+        title = "Recebimento",
+        routeClass = RecebimentoView::class
+      )
       if (userSaci?.ressuprimento == true) route(
         icon = SHOP,
         title = "Ressuprimento",

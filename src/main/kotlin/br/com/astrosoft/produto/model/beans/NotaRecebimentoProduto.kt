@@ -21,10 +21,15 @@ class NotaRecebimentoProduto(
   var codigo: String?,
   var barcodeStrList: String?,
   var descricao: String?,
+  var grade: String?,
   var localizacao: String?,
   var quant: Int?,
   var estoque: Int?,
-){
+) {
+  fun containBarcode(barcode: String): Boolean {
+    return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
       return saci.findNotaRecebimentoProduto(filtro)
