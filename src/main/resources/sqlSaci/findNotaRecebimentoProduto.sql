@@ -63,13 +63,13 @@ FROM sqldados.iprd AS I
                  ON A.invno = I.invno
                    AND A.prdno = I.prdno
                    AND A.grade = I.grade
-WHERE N.bits & POW(2, 4) = 0
-  AND N.issue_date >= @DT
+WHERE (N.bits & POW(2, 4) = 0)
+  AND (N.issue_date >= @DT)
   AND (N.issue_date >= :dataInicial OR :dataInicial = 0)
   AND (N.issue_date <= :dataFinal OR :dataFinal = 0)
-  AND N.storeno IN (1, 2, 3, 4, 5, 8)
+  AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
-  AND N.type = 0
+  AND (N.type = 0)
   AND (N.invno = :invno OR :invno = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -123,8 +123,10 @@ FROM T_NOTA AS N
                  ON L.prdno = N.prdno
                    AND L.grade = N.grade
        LEFT JOIN T_EST AS E
-                  ON E.prdno = N.prdno
-                    AND E.grade = N.grade;
+                 ON E.prdno = N.prdno
+                   AND E.grade = N.grade
+WHERE (P.dereg & POW(2, 6)) = 0
+  AND ((P.bits & POW(2, 13)) = 0);
 
 SELECT loja,
        data,
