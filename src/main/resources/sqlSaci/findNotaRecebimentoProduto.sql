@@ -38,15 +38,48 @@ FROM sqldados.prd AS P
 WHERE (L.storeno = 4)
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_NOTA;
+CREATE TEMPORARY TABLE T_NOTA
+(
+  PRIMARY KEY (invno, prdno, grade)
+)
+SELECT I.invno,
+       I.prdno,
+       I.grade,
+       N.storeno,
+       N.issue_date,
+       N.nfname,
+       N.invse,
+       N.vendno,
+       N.grossamt,
+       N.ordno,
+       N.carrno,
+       I.qtty,
+       A.marcaRecebimento
+FROM sqldados.iprd AS I
+       INNER JOIN sqldados.inv AS N
+                  USING (invno)
+       LEFT JOIN sqldados.iprdAdicional AS A
+                 ON A.invno = I.invno
+                   AND A.prdno = I.prdno
+                   AND A.grade = I.grade
+WHERE N.bits & POW(2, 4) = 0
+  AND N.issue_date >= @DT
+  AND N.storeno IN (1, 2, 3, 4, 5, 8)
+  AND (N.storeno = :loja OR :loja = 0)
+  AND N.type = 0
+  AND (N.invno = :invno OR :invno = 0);
+
 DROP TEMPORARY TABLE IF EXISTS T_EST;
 CREATE TEMPORARY TABLE T_EST
 (
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoque
-FROM sqldados.stk
-WHERE storeno IN (1, 2, 3, 4, 5, 8)
-  AND (storeno = :loja OR :loja = 0)
+FROM sqldados.stk AS S
+       INNER JOIN (SELECT prdno, grade FROM T_NOTA GROUP BY prdno, grade) AS N
+                  USING (prdno, grade)
+WHERE (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
@@ -69,39 +102,27 @@ SELECT N.storeno                                    AS loja,
        TRIM(P.no)                                   AS codigo,
        COALESCE(B.barcodeList, TRIM(P.barcode), '') AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                     AS descricao,
-       I.grade                                      AS grade,
+       N.grade                                      AS grade,
        L.loc                                        AS localizacao,
-       ROUND(I.qtty / 1000)                         AS quant,
+       ROUND(N.qtty / 1000)                         AS quant,
        ROUND(E.estoque)                             AS estoque,
-       IFNULL(A.marcaRecebimento, 0)                AS marca
-FROM sqldados.inv AS N
+       IFNULL(N.marcaRecebimento, 0)                AS marca
+FROM T_NOTA AS N
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
        LEFT JOIN custp AS C
                  ON C.cpf_cgc = V.cgc
-       INNER JOIN sqldados.iprd AS I
-                  ON N.invno = I.invno
-       LEFT JOIN sqldados.iprdAdicional AS A
-                 ON A.invno = I.invno
-                   AND A.prdno = I.prdno
-                   AND A.grade = I.grade
        INNER JOIN sqldados.prd AS P
-                  ON P.no = I.prdno
+                  ON P.no = N.prdno
        LEFT JOIN T_BARCODE AS B
-                 ON B.prdno = I.prdno
-                   AND B.grade = I.grade
+                 ON B.prdno = N.prdno
+                   AND B.grade = N.grade
        LEFT JOIN T_LOC AS L
-                 ON L.prdno = I.prdno
-                   AND L.grade = I.grade
+                 ON L.prdno = N.prdno
+                   AND L.grade = N.grade
        INNER JOIN T_EST AS E
-                  ON E.prdno = I.prdno
-                    AND E.grade = I.grade
-WHERE N.bits & POW(2, 4) = 0
-  AND N.issue_date >= @DT
-  AND N.storeno IN (1, 2, 3, 4, 5, 8)
-  AND (N.storeno = :loja OR :loja = 0)
-  AND N.type = 0
-  AND (N.invno = :invno OR :invno = 0);
+                  ON E.prdno = N.prdno
+                    AND E.grade = N.grade;
 
 SELECT loja,
        data,
