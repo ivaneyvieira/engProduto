@@ -14,9 +14,9 @@ class NotaRecebimento(
   var valorNF: Double?,
   var pedComp: Int?,
   var transp: Int?,
-  var cte: String?,
+  var cte: Int?,
   var volume: Int?,
-  var peso: Int?,
+  var peso: Double?,
   val marcaSelecionada: Int?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
