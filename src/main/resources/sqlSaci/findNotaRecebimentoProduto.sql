@@ -170,3 +170,4 @@ WHERE (@PESQUISA = '' OR
        cte = @PESQUISA_NUM OR
        volume = @PESQUISA_NUM)
   AND (marca = :marca OR :marca = 999)
+  AND (localizacao IN (:localizacao) OR :localizacao = 'TODOS')

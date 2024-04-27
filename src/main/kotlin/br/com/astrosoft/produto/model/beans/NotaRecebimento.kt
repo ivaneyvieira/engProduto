@@ -40,6 +40,7 @@ class NotaRecebimento(
         invno = this.ni ?: return null,
         dataFinal = data,
         dataInicial = data,
+        localizacao = listOf("TODOS")
       )
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()

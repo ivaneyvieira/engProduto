@@ -1016,6 +1016,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("invno", filtro.invno)
+      addOptionalParameter("localizacao", filtro.localizacao)
     }
   }
 

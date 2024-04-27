@@ -252,6 +252,18 @@ class UserSaci : IUser {
       })
     }
 
+  var lojaRec: Int?
+    get() = lojas.getOrNull(19)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(19, value?.toString() ?: "")
+    }
+
+  var localizacaoRec: Set<String>
+    get() = if(admin) setOf("TODOS") else lojas.getOrNull(20)?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(20, value.joinToString(":"))
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

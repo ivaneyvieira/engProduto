@@ -58,6 +58,7 @@ data class FiltroNotaRecebimentoProduto(
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val invno: Int = 0,
+  val localizacao: List<String>
 )
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {

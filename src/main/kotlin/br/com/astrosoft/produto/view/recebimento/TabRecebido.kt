@@ -32,8 +32,8 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaRessu != 0
-    cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
+    cmbLoja.isReadOnly = user?.lojaRec != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -98,12 +98,14 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
+    val usr = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.RECEBIDO,
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
+      localizacao = usr?.localizacaoRec.orEmpty().toList()
     )
   }
 

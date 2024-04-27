@@ -25,5 +25,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
         binder.bind(this, UserSaci::recebimentoRecebido.name)
       }
     }
+    verticalBlock("Filtros") {
+      filtroLoja(binder, UserSaci::lojaRec)
+      filtroLocalizacao(binder, UserSaci::localizacaoRec)
+    }
   }
 }
