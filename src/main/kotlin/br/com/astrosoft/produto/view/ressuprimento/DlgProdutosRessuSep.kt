@@ -55,7 +55,6 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
   }
 
   private fun HorizontalLayout.createGridProdutos() {
-    val user = AppConfig.userLogin() as? UserSaci
     gridDetail.apply {
       this.addClassName("styling")
       this.format()

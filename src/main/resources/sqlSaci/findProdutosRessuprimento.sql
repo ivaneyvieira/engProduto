@@ -126,8 +126,8 @@ SELECT X.ordno                                                  AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                 AS codigo,
        IFNULL(X.grade, '')                                      AS grade,
        IF(IFNULL(X.grade, '') = '',
-          CONCAT(TRIM(P.barcode), ',', GROUP_CONCAT(TRIM(B.barcode) SEPARATOR ',')),
-          GROUP_CONCAT(TRIM(B.barcode) SEPARATOR ',')
+          CONCAT(TRIM(P.barcode), ',', GROUP_CONCAT(TRIM(IFNULL(B.barcode, '')) SEPARATOR ',')),
+          GROUP_CONCAT(TRIM(IFNULL(B.barcode, '')) SEPARATOR ',')
        )                                                        AS barcodeListStr,
        TRIM(MID(P.name, 1, 37))                                 AS descricao,
        P.mfno                                                   AS vendno,
