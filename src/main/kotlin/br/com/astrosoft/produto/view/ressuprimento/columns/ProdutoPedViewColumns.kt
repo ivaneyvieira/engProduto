@@ -49,7 +49,7 @@ object ProdutoRessuViewColumns {
     this.setHeader("Status")
   }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoBarcode() = columnGrid(ProdutoRessuprimento::barcode) {
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoBarcode() = columnGrid(ProdutoRessuprimento::barcodes) {
     this.setHeader("Código de Barras")
   }
 

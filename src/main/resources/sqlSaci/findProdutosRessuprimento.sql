@@ -125,7 +125,10 @@ GROUP BY storeno, ordno, prdno, grade, seqno;
 SELECT X.ordno                                                  AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                 AS codigo,
        IFNULL(X.grade, '')                                      AS grade,
-       TRIM(IFNULL(B.barcode, P.barcode))                       AS barcode,
+       IF(IFNULL(X.grade, '') = '',
+          CONCAT(TRIM(P.barcode), ',', GROUP_CONCAT(TRIM(B.barcode) SEPARATOR ',')),
+          GROUP_CONCAT(TRIM(B.barcode) SEPARATOR ',')
+       )                                                        AS barcodeListStr,
        TRIM(MID(P.name, 1, 37))                                 AS descricao,
        P.mfno                                                   AS vendno,
        IFNULL(F.auxChar1, '')                                   AS fornecedor,
@@ -178,7 +181,6 @@ FROM T_OPRD AS X
        LEFT JOIN sqldados.prdbar AS B
                  ON B.prdno = P.no
                    AND B.grade = X.grade
-                   AND B.grade != ''
        LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade

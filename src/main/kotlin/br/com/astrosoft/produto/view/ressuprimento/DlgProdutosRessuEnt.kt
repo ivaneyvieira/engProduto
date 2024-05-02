@@ -109,7 +109,7 @@ class DlgProdutosRessuEnt(
       this.addClassName("styling")
       this.format()
       setSizeFull()
-      addThemeVariants(GridVariant.LUMO_COMPACT)
+      addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
@@ -180,7 +180,7 @@ class DlgProdutosRessuEnt(
       val headerRow = this.prependHeaderRow()
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::codigo),
-        this.getColumnBy(ProdutoRessuprimento::barcode),
+        this.getColumnBy(ProdutoRessuprimento::barcodes),
         this.getColumnBy(ProdutoRessuprimento::descricao),
         this.getColumnBy(ProdutoRessuprimento::grade),
         this.getColumnBy(ProdutoRessuprimento::localizacao),
@@ -237,7 +237,7 @@ class DlgProdutosRessuEnt(
   }
 
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
-    return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
+    return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodeList }
   }
 
   fun updateProduto(produto: ProdutoRessuprimento) {

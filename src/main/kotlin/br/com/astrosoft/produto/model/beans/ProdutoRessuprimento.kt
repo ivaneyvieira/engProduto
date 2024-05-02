@@ -7,7 +7,7 @@ class ProdutoRessuprimento(
   var ordno: Long?,
   var codigo: String?,
   var grade: String?,
-  var barcode: String?,
+  var barcodeListStr: String?,
   var descricao: String?,
   var vendno: Int?,
   var fornecedor: String?,
@@ -47,6 +47,16 @@ class ProdutoRessuprimento(
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1
   val selecionadoOrdemREC get() = if (selecionado == EMarcaRessuprimento.REC.num) 0 else 1
   val selecionadoOrdemENT get() = if (selecionado == EMarcaRessuprimento.ENT.num) 0 else 1
+
+  val barcodeList: List<String>
+    get() {
+      val list = barcodeListStr?.split(",") ?: emptyList()
+      return list.distinct().filter {
+        it.isNotBlank()
+      }
+    }
+
+  val barcodes get() = barcodeList.joinToString("\n")
 
   fun salva() {
     saci.salvaProdutosRessuprimento(this)
