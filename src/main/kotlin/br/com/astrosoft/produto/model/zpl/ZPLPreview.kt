@@ -30,7 +30,7 @@ object ZPLPreview {
     if (image != null) showImage(impressora, image, printRunnable)
   }
 
-  fun showImage(impressoras: Set<String>, image: ByteArray, printRunnable: () -> Unit) {
+  private fun showImage(impressoras: Set<String>, image: ByteArray, printRunnable: () -> Unit) {
     val filename = "etiqueta${System.currentTimeMillis()}.pdf"
     val resource = StreamResource(filename, InputStreamFactoryImage(image))
     val registration = VaadinSession.getCurrent().resourceRegistry.registerResource(resource)

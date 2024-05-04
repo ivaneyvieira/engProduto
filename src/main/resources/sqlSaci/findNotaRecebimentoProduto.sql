@@ -47,6 +47,7 @@ SELECT I.invno,
        I.prdno,
        I.grade,
        N.storeno,
+       U.login,
        N.date,
        N.issue_date,
        N.nfname,
@@ -67,6 +68,8 @@ FROM sqldados.iprd AS I
                  ON A.invno = I.invno
                    AND A.prdno = I.prdno
                    AND A.grade = I.grade
+       LEFT JOIN sqldados.users AS U
+                 ON U.no = N.usernoFirst
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
@@ -91,6 +94,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                    AS loja,
+       N.login                                      AS login,
        DATE(N.date)                                 AS data,
        DATE(N.issue_date)                           AS emissao,
        N.invno                                      AS ni,
@@ -134,6 +138,7 @@ WHERE (P.dereg & POW(2, 6)) = 0
   AND ((P.bits & POW(2, 13)) = 0);
 
 SELECT loja,
+       login,
        data,
        emissao,
        ni,

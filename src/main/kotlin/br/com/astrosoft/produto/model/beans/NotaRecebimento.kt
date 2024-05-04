@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 class NotaRecebimento(
   var loja: Int?,
+  var login: String?,
   var data: LocalDate?,
   var emissao: LocalDate?,
   var ni: Int?,
@@ -62,6 +63,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
     nota?.let {
       NotaRecebimento(
         loja = nota.loja,
+        login = nota.login,
         data = nota.data,
         emissao = nota.emissao,
         ni = nota.ni,

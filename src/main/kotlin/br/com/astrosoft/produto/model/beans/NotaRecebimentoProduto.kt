@@ -6,6 +6,7 @@ import java.time.LocalDate
 class NotaRecebimentoProduto(
   var loja: Int?,
   var data: LocalDate?,
+  var login: String?,
   var emissao: LocalDate?,
   var ni: Int?,
   var nfEntrada: String?,
