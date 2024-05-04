@@ -9,4 +9,7 @@ CREATE TABLE sqldados.iprdAdicional
   grade            VARCHAR(8)  NOT NULL,
   marcaRecebimento INT,
   PRIMARY KEY (invno, prdno, grade)
-)
+);
+
+alter table sqldados.iprdAdicional
+  add login VARCHAR(20) DEFAULT '';

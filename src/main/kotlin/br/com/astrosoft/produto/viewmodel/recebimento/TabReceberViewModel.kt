@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -24,8 +25,10 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   fun selecionaProdutos(nota: NotaRecebimento, codigoBarra: String) = viewModel.exec {
+    val user = AppConfig.userLogin() as? UserSaci
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marcaEnum = EMarcaRecebimento.RECEBIDO
+    produto.login = user?.login ?: ""
     produto.salva()
     val novaNota = subView.updateProduto()
     if (novaNota == null || nota.produtos.isEmpty()){

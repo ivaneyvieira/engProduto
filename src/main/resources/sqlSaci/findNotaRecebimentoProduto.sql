@@ -47,7 +47,7 @@ SELECT I.invno,
        I.prdno,
        I.grade,
        N.storeno,
-       U.login,
+       IFNULL(A.login, '') AS login,
        N.date,
        N.issue_date,
        N.nfname,
@@ -68,8 +68,6 @@ FROM sqldados.iprd AS I
                  ON A.invno = I.invno
                    AND A.prdno = I.prdno
                    AND A.grade = I.grade
-       LEFT JOIN sqldados.users AS U
-                 ON U.no = N.usernoFirst
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.date >= :dataInicial OR :dataInicial = 0)

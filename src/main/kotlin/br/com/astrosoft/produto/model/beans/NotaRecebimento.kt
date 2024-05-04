@@ -63,7 +63,11 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
     nota?.let {
       NotaRecebimento(
         loja = nota.loja,
-        login = nota.login,
+        login = produtos.asSequence().mapNotNull { it.login }
+          .filter {it != ""}
+          .distinct().sorted().joinToString(separator = ", ") { login ->
+          login
+        },
         data = nota.data,
         emissao = nota.emissao,
         ni = nota.ni,
