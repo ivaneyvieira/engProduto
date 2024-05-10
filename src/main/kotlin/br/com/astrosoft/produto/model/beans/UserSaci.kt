@@ -82,6 +82,7 @@ class UserSaci : IUser {
   var reposicaoEnt by DelegateAuthorized(59)
   var recebimentoReceber by DelegateAuthorized(60)
   var recebimentoRecebido by DelegateAuthorized(61)
+  var tabVendaRef by DelegateAuthorized(62)
 
   //Locais
   private var localEstoque: String?
@@ -259,7 +260,7 @@ class UserSaci : IUser {
     }
 
   var localizacaoRec: Set<String>
-    get() = if(admin) setOf("TODOS") else lojas.getOrNull(20)?.split(":").orEmpty().toSet()
+    get() = if (admin) setOf("TODOS") else lojas.getOrNull(20)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(20, value.joinToString(":"))
     }
@@ -291,6 +292,12 @@ class UserSaci : IUser {
       notaCD = value
       notaEnt = value
     }
+  var vendaRef: Boolean
+    get() = tabVendaRef || admin
+    set(value) {
+      tabVendaRef = value
+    }
+
   var recebimento: Boolean
     get() = recebimentoReceber || recebimentoRecebido || admin
     set(value) {

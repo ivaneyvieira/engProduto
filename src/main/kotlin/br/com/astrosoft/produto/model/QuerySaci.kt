@@ -804,6 +804,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findNotaVendaRef(filtro: FiltroNotaVendaRef): List<NotaVendaRef> {
+    val sql = "/sqlSaci/vendasRef.sql"
+    return query(sql, NotaVendaRef::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   fun autorizaNota(invno: Int, storeno: Int, pdvno: Int, xano: Int, user: UserSaci) {
     val sql = "/sqlSaci/autorizaNota.sql"
     script(sql) {

@@ -13,6 +13,7 @@ import br.com.astrosoft.produto.view.recebimento.RecebimentoView
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.view.retira.PedidoRetiraView
+import br.com.astrosoft.produto.view.vendaRef.VendaRefView
 import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
@@ -51,6 +52,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = REPLY,
         title = "Dev Cliente",
         routeClass = DevClienteView::class,
+      )
+      if (userSaci?.vendaRef == true) route(
+        icon = SHOP,
+        title = "Venda",
+        routeClass = VendaRefView::class,
       )
       if (userSaci?.pedidoRetira == true) route(
         icon = CART,
