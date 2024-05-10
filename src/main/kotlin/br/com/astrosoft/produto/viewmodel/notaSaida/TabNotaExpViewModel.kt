@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
+import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
 import java.time.LocalTime
@@ -64,7 +65,8 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
     if(itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
-    val report = NotaExpedicao(nota)
+    val tipo = nota.tipoNotaSaida ?: ""
+    val report = if(tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
       dados = itensSelecionados,
       printer = subView.printerPreview(loja = nota.loja),

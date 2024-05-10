@@ -9,7 +9,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
   override fun printTitle(bean: ProdutoPedido) {
     val pedido = bean.pedido
     val listObs = pedido?.listObs().orEmpty()
-    writeln("Romaneio de Separacao para Reteria: Reserva ${pedido?.pedido}", negrito = true, center = true)
+    writeln("Romaneio de Separacao para Retira: Reserva ${pedido?.pedido}", negrito = true, center = true)
 
     writeln("<B>Loja: </B>${pedido?.siglaLoja}")
     writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
