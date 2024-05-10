@@ -32,6 +32,7 @@ class NotaSaida(
   var countCD: Int?,
   var countEnt: Int?,
   var retiraFutura: Boolean?,
+  var rota: String?,
 ) {
   val nota
     get() = "$numero/$serie"

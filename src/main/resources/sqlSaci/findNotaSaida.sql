@@ -193,7 +193,8 @@ SELECT N.storeno                                               AS loja,
        END                                                     AS tipo,
        X.c5,
        X.c4,
-       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja AS retiraFutura
+       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja AS retiraFutura,
+       AR.name                                                 AS rota
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -212,6 +213,13 @@ FROM sqldados.nf AS N
                  ON E.no = N.empno
        LEFT JOIN sqldados.custp AS C
                  ON C.no = N.custno
+       LEFT JOIN sqldados.ctadd AS CA
+                 ON CA.custno = N.custno
+                   AND CA.seqno = N.custno_addno
+       LEFT JOIN sqldados.route AS RT
+                 ON RT.no = CA.routeno
+       LEFT JOIN sqldados.area AS AR
+                 ON AR.no = RT.areano
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
@@ -272,6 +280,7 @@ SELECT Q.loja,
        Q.usuarioEntrega,
        Q.dataEntrega,
        Q.tipo,
+       Q.rota,
        SUM(X.s11 = 0) AS countExp,
        SUM(X.s11 = 1) AS countCD,
        SUM(X.s11 = 2) AS countEnt,

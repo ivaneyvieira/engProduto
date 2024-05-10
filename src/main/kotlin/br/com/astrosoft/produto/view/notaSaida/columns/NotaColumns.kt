@@ -61,6 +61,10 @@ object NotaColumns {
     this.setHeader("Hora")
   }
 
+  fun Grid<NotaSaida>.colunaRota() = columnGrid(NotaSaida::rota) {
+    this.setHeader("Rota")
+  }
+
   fun Grid<NotaSaida>.colunaLoginEnt() = columnGrid(NotaSaida::usuarioEntrega) {
     this.setHeader("Login")
   }

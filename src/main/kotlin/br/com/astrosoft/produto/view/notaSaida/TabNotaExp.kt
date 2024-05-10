@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaExp
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -116,6 +117,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFNota()
     colunaNFData()
     colunaHora()
+    colunaRota()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()

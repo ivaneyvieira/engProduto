@@ -20,6 +20,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaEnt
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -118,6 +119,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFNota()
     colunaNFData()
     colunaHora()
+    colunaRota()
     colunaLoginEnt()
     colunaNFNotaEnt()
     colunaNFDataEnt()
