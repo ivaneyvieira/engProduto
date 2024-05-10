@@ -219,7 +219,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("codigo", podutoNF.codigo)
       addOptionalParameter("grade", podutoNF.grade)
       addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa)
-      addOptionalParameter("marca", podutoNF.marca)
+      addOptionalParameter("marca", podutoNF.marca ?: 0)
       addOptionalParameter("usuarioCD", podutoNF.usuarioCD)
       addOptionalParameter("usuarioExp", podutoNF.usuarioExp)
     }

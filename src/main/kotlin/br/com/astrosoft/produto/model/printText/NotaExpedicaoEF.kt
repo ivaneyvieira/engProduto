@@ -10,8 +10,8 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   override fun printTitle(bean: ProdutoNFS) {
     writeln("Romaneio de Separacao para Entrega: Reserva ${nota?.numero}", negrito = true, center = true)
 
+    writeln("Rota: ${nota.rota}", negrito = true, expand = true, center = true)
     writeln("<B>Loja: </B>${nota?.loja}")
-    writeln("Zona: ${nota.rota}", negrito = true, expand = true, center = true)
     writeln("<B>Usuario da Impressao: </B>${nota.usuarioEntrega ?: AppConfig.userLogin()?.name ?: ""}")
     writeln("<B>NF de Fatura: </B>${nota?.nota}/${nota?.nota}<B> Data: </B>${nota.data}<B> Hora: </B>${nota.hora}")
     writeln("<B>PDV: </B>${nota.pdvno}      <B> Valor: </B>${nota.valorNota.format()}")
@@ -25,7 +25,10 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     column(ProdutoNFS::codigo, "Codigo", 6)
     column(ProdutoNFS::descricao, "Descricao", 40)
     column(ProdutoNFS::grade, "Grade", 9)
-    column(ProdutoNFS::quantidade, "Quant", 6)
+    column(ProdutoNFS::quantidade, "Quant", 6, lineBreak = true)
+    column(ProdutoNFS::espaco, "", 6)
+    column(ProdutoNFS::estoqueStr, "", 40)
+
   }
 
   override fun printSumary(bean: ProdutoNFS?) {

@@ -48,7 +48,8 @@ SELECT X.storeno                                                               A
        X.c5                                                                    AS usuarioExp,
        CAST(L.loc AS CHAR)                                                     AS local,
        X.c4                                                                    AS usuarioCD,
-       N.tipo                                                                  AS tipoNota
+       N.tipo                                                                  AS tipoNota,
+       ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)           AS estoque
 FROM sqldados.prd AS P
        INNER JOIN T_LOC AS L
                   ON L.prdno = P.no
@@ -58,6 +59,10 @@ FROM sqldados.prd AS P
                   USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.prdbar AS B
                  ON P.no = B.prdno AND B.grade = X.grade
+       LEFT JOIN sqldados.stk AS STK
+                 ON X.storeno = STK.storeno
+                   AND X.prdno = STK.prdno
+                   AND X.grade = STK.grade
        LEFT JOIN sqldados.vend AS F
                  ON F.no = P.mfno
        LEFT JOIN sqldados.type AS T
@@ -99,5 +104,6 @@ SELECT loja,
        marca,
        usuarioExp,
        usuarioCD,
-       tipoNota
+       tipoNota,
+       estoque
 FROM T_DADOS
