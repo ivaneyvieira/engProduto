@@ -17,6 +17,7 @@ class NotaSaida(
   var hora: LocalTime?,
   var vendedor: Int?,
   var nomeVendedor: String?,
+  var nomeCompletoVendedor: String?,
   var locais: String?,
   var usuarioExp: String?,
   var usuarioCD: String?,
@@ -33,6 +34,7 @@ class NotaSaida(
   var countEnt: Int?,
   var retiraFutura: Boolean?,
   var rota: String?,
+  var enderecoCliente: String?,
 ) {
   val nota
     get() = "$numero/$serie"

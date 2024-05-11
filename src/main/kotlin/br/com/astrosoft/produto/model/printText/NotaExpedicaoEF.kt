@@ -11,12 +11,13 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     writeln("Romaneio de Separacao para Entrega: Reserva ${nota?.numero}", negrito = true, center = true)
 
     writeln("Rota: ${nota.rota}", negrito = true, expand = true, center = true)
-    writeln("<B>Loja: </B>${nota?.loja}")
+    writeln("<B>End Entrega: </B>${nota.enderecoCliente ?: ""}")
+    writeln("<B>Loja: </B>${nota.loja}")
     writeln("<B>Usuario da Impressao: </B>${nota.usuarioEntrega ?: AppConfig.userLogin()?.name ?: ""}")
     writeln("<B>NF de Fatura: </B>${nota?.nota}/${nota?.nota}<B> Data: </B>${nota.data}<B> Hora: </B>${nota.hora}")
     writeln("<B>PDV: </B>${nota.pdvno}      <B> Valor: </B>${nota.valorNota.format()}")
     writeln("<B>Cliente: </B>${nota.cliente}")
-    writeln("<B>Vendedor (a): </B>${nota.vendedor}")
+    writeln("<B>Vendedor (a): </B>${nota.vendedor ?: 0} - ${nota.nomeCompletoVendedor ?: ""}")
 
     printLine()
   }
