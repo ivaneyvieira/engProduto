@@ -83,6 +83,7 @@ class UserSaci : IUser {
   var recebimentoReceber by DelegateAuthorized(60)
   var recebimentoRecebido by DelegateAuthorized(61)
   var tabVendaRef by DelegateAuthorized(62)
+  var notaSep by DelegateAuthorized(63)
 
   //Locais
   private var localEstoque: String?
@@ -292,8 +293,9 @@ class UserSaci : IUser {
       produtoList = value
     }
   var nota
-    get() = notaExp || notaCD || notaEnt || admin
+    get() = notaSep || notaExp || notaCD || notaEnt || admin
     set(value) {
+      notaSep = value
       notaExp = value
       notaCD = value
       notaEnt = value
