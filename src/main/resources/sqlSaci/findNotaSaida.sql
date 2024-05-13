@@ -196,7 +196,8 @@ SELECT N.storeno                                               AS loja,
        X.c4,
        IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja AS retiraFutura,
        AR.name                                                 AS rota,
-       CA.addr                                                 AS enderecoCliente
+       CA.addr                                                 AS enderecoCliente,
+       CA.nei                                                  AS bairroCliente
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -285,6 +286,7 @@ SELECT Q.loja,
        Q.tipo,
        Q.rota,
        Q.enderecoCliente,
+       Q.bairroCliente,
        SUM(X.s11 = 0) AS countExp,
        SUM(X.s11 = 1) AS countCD,
        SUM(X.s11 = 2) AS countEnt,

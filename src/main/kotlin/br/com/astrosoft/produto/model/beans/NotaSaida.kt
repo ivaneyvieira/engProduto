@@ -35,6 +35,7 @@ class NotaSaida(
   var retiraFutura: Boolean?,
   var rota: String?,
   var enderecoCliente: String?,
+  var bairroCliente: String?,
 ) {
   val nota
     get() = "$numero/$serie"
