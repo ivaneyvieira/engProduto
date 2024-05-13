@@ -35,6 +35,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaNota)
       filtroImpressoraEtiqueta(binder, UserSaci::impressoraNota)
+      filtroImpressoraTermica(binder, UserSaci::impressoraNotaTermica)
       multiSelectComboBox<ETipoNotaFiscal>("Tipo NF") {
         this.setWidthFull()
         this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)

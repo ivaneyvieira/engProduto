@@ -158,7 +158,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>
   ) {
-    multiSelectComboBox<String>("Impressora") {
+    multiSelectComboBox<String>("Impressora Cupom") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
@@ -187,7 +187,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     binder: Binder<UserSaci>,
     property: KMutableProperty1<UserSaci, Set<String>>
   ) {
-    multiSelectComboBox<String>("Impressora") {
+    multiSelectComboBox<String>("Impressora Etiqueta") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODAS") + viewModel.allEtiqueta().map { it.name })

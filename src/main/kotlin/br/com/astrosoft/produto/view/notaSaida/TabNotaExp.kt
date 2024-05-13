@@ -175,4 +175,9 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraNotaTermica?.toList().orEmpty()
+  }
 }
