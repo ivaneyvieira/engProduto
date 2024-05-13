@@ -138,9 +138,12 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       }
       this.setPartNameGenerator {
         val marca = it.marca
-        if (marca == EMarcaNota.ENT.num) {
-          "amarelo"
-        } else null
+        val marcaImpressao = it.marcaImpressao ?: 0
+        when {
+          marcaImpressao > 0          -> "azul"
+          marca == EMarcaNota.ENT.num -> "amarelo"
+          else                        -> null
+        }
       }
     }
     this.addAndExpand(gridDetail)

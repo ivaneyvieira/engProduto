@@ -210,18 +210,19 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun salvaProdutosNFS(podutoNF: ProdutoNFS) {
+  fun salvaProdutosNFS(produtoNF: ProdutoNFS) {
     val sql = "/sqlSaci/salvaProdutosNFS.sql"
     script(sql) {
-      addOptionalParameter("storeno", podutoNF.loja)
-      addOptionalParameter("pdvno", podutoNF.pdvno)
-      addOptionalParameter("xano", podutoNF.xano)
-      addOptionalParameter("codigo", podutoNF.codigo)
-      addOptionalParameter("grade", podutoNF.grade)
-      addOptionalParameter("gradeAlternativa", podutoNF.gradeAlternativa)
-      addOptionalParameter("marca", podutoNF.marca ?: 0)
-      addOptionalParameter("usuarioCD", podutoNF.usuarioCD)
-      addOptionalParameter("usuarioExp", podutoNF.usuarioExp)
+      addOptionalParameter("storeno", produtoNF.loja)
+      addOptionalParameter("pdvno", produtoNF.pdvno)
+      addOptionalParameter("xano", produtoNF.xano)
+      addOptionalParameter("codigo", produtoNF.codigo)
+      addOptionalParameter("grade", produtoNF.grade)
+      addOptionalParameter("gradeAlternativa", produtoNF.gradeAlternativa)
+      addOptionalParameter("marca", produtoNF.marca ?: 0)
+      addOptionalParameter("marcaImpressao", produtoNF.marcaImpressao ?: 0)
+      addOptionalParameter("usuarioCD", produtoNF.usuarioCD)
+      addOptionalParameter("usuarioExp", produtoNF.usuarioExp)
     }
   }
 

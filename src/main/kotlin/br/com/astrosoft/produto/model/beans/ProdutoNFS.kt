@@ -29,6 +29,7 @@ class ProdutoNFS(
   var total: Double?,
   var gradeAlternativa: String?,
   var marca: Int?,
+  var marcaImpressao: Int?,
   var usuarioExp: String?,
   var usuarioCD: String?,
   var tipoNota: Int?,
@@ -72,5 +73,10 @@ class ProdutoNFS(
 
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo ?: "")
+  }
+
+  fun marcaImpressao() {
+    this.marcaImpressao = 1
+    saci.salvaProdutosNFS(this)
   }
 }

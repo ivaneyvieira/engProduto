@@ -32,6 +32,7 @@ class NotaSaida(
   var countExp: Int?,
   var countCD: Int?,
   var countEnt: Int?,
+  var countImp: Int?,
   var retiraFutura: Boolean?,
   var rota: String?,
   var enderecoCliente: String?,

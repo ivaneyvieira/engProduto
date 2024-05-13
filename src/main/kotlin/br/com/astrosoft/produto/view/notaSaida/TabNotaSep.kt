@@ -131,9 +131,14 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
 
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
-      if (countEnt > 0) {
-        "amarelo"
-      } else null
+      val countImp = it.countImp ?: 0
+      when {
+        countImp > 0 -> "azul"
+
+        countEnt > 0 -> "amarelo"
+
+        else         -> null
+      }
     }
   }
 

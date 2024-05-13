@@ -38,7 +38,9 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     report.print(
       dados = itensSelecionados,
       printer = subView.printerPreview(loja = nota.loja){
-        TODO("Marca impressao")
+        itensSelecionados.forEach {produto ->
+          produto.marcaImpressao()
+        }
       },
     )
   }

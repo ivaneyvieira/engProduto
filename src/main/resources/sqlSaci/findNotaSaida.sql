@@ -290,6 +290,7 @@ SELECT Q.loja,
        SUM(X.s11 = 0) AS countExp,
        SUM(X.s11 = 1) AS countCD,
        SUM(X.s11 = 2) AS countEnt,
+       SUM(X.s10 = 1) AS countImp,
        retiraFutura   AS retiraFutura
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
