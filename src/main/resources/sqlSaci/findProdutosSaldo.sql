@@ -32,17 +32,18 @@ CREATE TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (prdno)
 )
-SELECT P.no                     AS prdno,
-       TRIM(P.no) * 1           AS codigo,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       TRIM(MID(P.name, 38, 3)) AS unidade,
-       P.taxno                  AS tributacao,
-       IFNULL(R.form_label, '') AS rotulo,
-       N.ncm                    AS ncm,
-       P.mfno                   AS fornecedor,
-       V.sname                  AS abrev,
-       P.typeno                 AS tipo,
-       P.clno                   AS cl
+SELECT P.no                                 AS prdno,
+       TRIM(P.no) * 1                       AS codigo,
+       TRIM(MID(P.name, 1, 37))             AS descricao,
+       TRIM(MID(P.name, 38, 3))             AS unidade,
+       P.taxno                              AS tributacao,
+       IFNULL(R.form_label, '')             AS rotulo,
+       N.ncm                                AS ncm,
+       P.mfno                               AS fornecedor,
+       V.sname                              AS abrev,
+       P.typeno                             AS tipo,
+       P.clno                               AS cl,
+       IF(tipoGarantia = 2, garantia, NULL) AS mesesGarantia
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdalq AS R
                  ON R.prdno = P.no
@@ -105,6 +106,7 @@ SELECT S.storeno                                         AS loja,
        P.abrev                                           AS abrev,
        P.tipo                                            AS tipo,
        P.cl                                              AS cl,
+       mesesGarantia                                     AS mesesGarantia,
        MID(L.localizacao, 1, 4)                          AS localizacao
 FROM sqldados.stk AS S
        LEFT JOIN T_LOC AS L
@@ -114,9 +116,9 @@ FROM sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
 GROUP BY loja, prdno, gradeProduto
 HAVING CASE :estoque
-         WHEN '<' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) < :saldo
-         WHEN '>' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) > :saldo
-         WHEN '=' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado)/1000)) = :saldo
+         WHEN '<' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) < :saldo
+         WHEN '>' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) > :saldo
+         WHEN '=' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) = :saldo
          WHEN 'T' THEN TRUE
          ELSE FALSE
        END;
@@ -127,6 +129,7 @@ SELECT loja,
        descricao,
        gradeProduto,
        unidade,
+       mesesGarantia,
        L.estoqueLojas,
        qttyVarejo,
        qttyAtacado,

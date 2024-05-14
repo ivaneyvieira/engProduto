@@ -9,6 +9,7 @@ class ProdutoSaldo(
   var descricao: String?,
   var gradeProduto: String?,
   var unidade: String?,
+  var mesesGarantia: Int?,
   var estoqueLojas: Int?,
   var qttyVarejo: Int?,
   var qttyAtacado: Int?,
