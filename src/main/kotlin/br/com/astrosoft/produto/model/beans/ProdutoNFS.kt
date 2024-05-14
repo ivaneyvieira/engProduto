@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 
@@ -32,6 +33,7 @@ class ProdutoNFS(
   var marcaImpressao: Int?,
   var usuarioExp: String?,
   var usuarioCD: String?,
+  var usuarioSep: String?,
   var tipoNota: Int?,
   var estoque: Int?,
 ) {
@@ -76,7 +78,9 @@ class ProdutoNFS(
   }
 
   fun marcaImpressao() {
+    val user = AppConfig.userLogin() as? UserSaci
     this.marcaImpressao = 1
+    this.usuarioSep = user?.login ?: ""
     saci.salvaProdutosNFS(this)
   }
 }

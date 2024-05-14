@@ -14,6 +14,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -114,6 +115,7 @@ class DlgProdutosSep(val viewModel: TabNotaSepViewModel, val nota: NotaSaida) {
       produtoNFQuantidade()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
+      produtoNFUsuarioSep()
 
       this.setClassNameGenerator {
         when (it.marca) {

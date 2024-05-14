@@ -48,6 +48,7 @@ SELECT X.storeno                                                               A
        X.s10                                                                   AS marcaImpressao,
        X.c5                                                                    AS usuarioExp,
        CAST(L.loc AS CHAR)                                                     AS local,
+       X.c3                                                                    AS usuarioSep,
        X.c4                                                                    AS usuarioCD,
        N.tipo                                                                  AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)           AS estoque
@@ -106,6 +107,7 @@ SELECT loja,
        marcaImpressao,
        usuarioExp,
        usuarioCD,
+       usuarioSep,
        tipoNota,
        estoque
 FROM T_DADOS
