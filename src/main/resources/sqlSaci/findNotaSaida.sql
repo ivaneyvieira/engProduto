@@ -120,25 +120,25 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                                               AS loja,
-       N.pdvno                                                 AS pdvno,
-       N.xano                                                  AS xano,
-       N.nfno                                                  AS numero,
-       N.nfse                                                  AS serie,
-       N.custno                                                AS cliente,
-       IFNULL(C.name, '')                                      AS nomeCliente,
-       N.grossamt / 100                                        AS valorNota,
-       CAST(N.issuedate AS DATE)                               AS data,
-       SEC_TO_TIME(P.time)                                     AS hora,
-       N.empno                                                 AS vendedor,
-       TRIM(MID(E.sname, 1, 20))                               AS nomeVendedor,
-       TRIM(E.name)                                            AS nomeCompletoVendedor,
-       CAST(IFNULL(L.locais, '') AS CHAR)                      AS locais,
-       X.c5                                                    AS usuarioExp,
-       X.c4                                                    AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)                          AS totalProdutos,
-       MAX(X.s11)                                              AS marca,
-       IF(N.status <> 1, 'N', 'S')                             AS cancelada,
+SELECT N.storeno                                                              AS loja,
+       N.pdvno                                                                AS pdvno,
+       N.xano                                                                 AS xano,
+       N.nfno                                                                 AS numero,
+       N.nfse                                                                 AS serie,
+       N.custno                                                               AS cliente,
+       IFNULL(C.name, '')                                                     AS nomeCliente,
+       N.grossamt / 100                                                       AS valorNota,
+       CAST(N.issuedate AS DATE)                                              AS data,
+       SEC_TO_TIME(P.time)                                                    AS hora,
+       N.empno                                                                AS vendedor,
+       TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
+       TRIM(E.name)                                                           AS nomeCompletoVendedor,
+       CAST(IFNULL(L.locais, '') AS CHAR)                                     AS locais,
+       X.c5                                                                   AS usuarioExp,
+       X.c4                                                                   AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
+       MAX(X.s11)                                                             AS marca,
+       IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        CASE
          WHEN N.nfse = 7
            THEN 'ENTREGA_WEB'
@@ -179,10 +179,10 @@ SELECT N.storeno                                               AS loja,
          WHEN N.tipo = 15
            THEN 'NFE'
          ELSE ''
-       END                                                     AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')                             AS notaEntrega,
-       ENT.usuario                                             AS usuarioEntrega,
-       CAST(ENT.dataEntrega AS DATE)                           AS dataEntrega,
+       END                                                                    AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')                                            AS notaEntrega,
+       ENT.usuario                                                            AS usuarioEntrega,
+       CAST(ENT.dataEntrega AS DATE)                                          AS dataEntrega,
        CASE
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
@@ -191,13 +191,14 @@ SELECT N.storeno                                               AS loja,
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
-       END                                                     AS tipo,
+       END                                                                    AS tipo,
        X.c5,
        X.c4,
-       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja AS retiraFutura,
-       AR.name                                                 AS rota,
-       CA.addr                                                 AS enderecoCliente,
-       CA.nei                                                  AS bairroCliente
+       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                AS retiraFutura,
+       AR.name                                                                AS rota,
+       CA.addr                                                                AS enderecoCliente,
+       CA.nei                                                                 AS bairroCliente,
+       IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -223,6 +224,8 @@ FROM sqldados.nf AS N
                  ON RT.no = CA.routeno
        LEFT JOIN sqldados.area AS AR
                  ON AR.no = RT.areano
+       LEFT JOIN sqldados.eordrk AS OBS
+                 ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
@@ -285,6 +288,7 @@ SELECT Q.loja,
        Q.dataEntrega,
        Q.tipo,
        Q.rota,
+       Q.agendado,
        Q.enderecoCliente,
        Q.bairroCliente,
        SUM(X.s11 = 0) AS countExp,

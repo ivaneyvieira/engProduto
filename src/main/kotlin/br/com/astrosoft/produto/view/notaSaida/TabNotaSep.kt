@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendado
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
@@ -120,6 +121,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFData()
     colunaHora()
     colRota = colunaRota()
+    colunaAgendado()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()

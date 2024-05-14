@@ -36,6 +36,7 @@ class NotaSaida(
   var countNImp: Int?,
   var retiraFutura: Boolean?,
   var rota: String?,
+  var agendado: String?,
   var enderecoCliente: String?,
   var bairroCliente: String?,
 ) {
