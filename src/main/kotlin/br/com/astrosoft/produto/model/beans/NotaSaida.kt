@@ -88,7 +88,6 @@ class NotaSaida(
 
 data class FiltroNota(
   val marca: EMarcaNota,
-  val marcaImpressao: Boolean?,
   val tipoNota: ETipoNotaFiscal,
   val loja: Int,
   val dataInicial: LocalDate?,

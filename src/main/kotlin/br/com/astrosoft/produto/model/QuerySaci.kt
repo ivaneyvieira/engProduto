@@ -285,7 +285,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", dataInicial)
       addOptionalParameter("dataFinal", dataFinal)
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
-      addOptionalParameter("marcaImpressao", filtro.marcaImpressao?.let{ if (it) "S" else "N" } ?: "T")
     }.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&

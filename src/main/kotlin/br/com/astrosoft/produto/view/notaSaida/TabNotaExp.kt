@@ -150,7 +150,6 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
-      marcaImpressao = null
     )
   }
 
