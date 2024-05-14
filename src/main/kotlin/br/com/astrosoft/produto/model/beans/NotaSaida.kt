@@ -33,6 +33,7 @@ class NotaSaida(
   var countCD: Int?,
   var countEnt: Int?,
   var countImp: Int?,
+  var countNImp: Int?,
   var retiraFutura: Boolean?,
   var rota: String?,
   var enderecoCliente: String?,
@@ -87,6 +88,7 @@ class NotaSaida(
 
 data class FiltroNota(
   val marca: EMarcaNota,
+  val marcaImpressao: Boolean?,
   val tipoNota: ETipoNotaFiscal,
   val loja: Int,
   val dataInicial: LocalDate?,

@@ -291,6 +291,7 @@ SELECT Q.loja,
        SUM(X.s11 = 1) AS countCD,
        SUM(X.s11 = 2) AS countEnt,
        SUM(X.s10 = 1) AS countImp,
+       SUM(X.s10 = 0) AS countNImp,
        retiraFutura   AS retiraFutura
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
@@ -298,3 +299,9 @@ FROM T_QUERY AS Q
                     AND X.pdvno = Q.pdvno
                     AND X.xano = Q.xano
 GROUP BY Q.loja, Q.pdvno, Q.xano
+HAVING CASE :marcaImpressao
+  WHEN 'S' THEN countNImp = 0
+  WHEN 'N' THEN countNImp > 0
+  WHEN 'T' THEN TRUE
+  ELSE FALSE
+END
