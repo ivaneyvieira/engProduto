@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 
 class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   override fun printTitle(bean: ProdutoNFS) {
@@ -25,8 +26,9 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
 
   init {
     column(ProdutoNFS::codigo, "Codigo", 6)
-    column(ProdutoNFS::descricao, "Descricao", 40)
-    column(ProdutoNFS::grade, "Grade", 9)
+    column(ProdutoNFS::descricao, "Descricao", 36)
+    column(ProdutoNFS::grade, "Grade", 8)
+    column(ProdutoNFS::local, "Loc", 4)
     column(ProdutoNFS::quantidade, "Quant", 6, lineBreak = true)
     column(ProdutoNFS::espaco, "", 6)
     column(ProdutoNFS::estoqueStr, "", 40)
@@ -34,6 +36,10 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   }
 
   override fun printSumary(bean: ProdutoNFS?) {
+    writeln("")
+    writeln("")
+    writeln("________________________________________", center = true)
+    writeln("Separador", center = true)
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
