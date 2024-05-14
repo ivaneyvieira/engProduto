@@ -16,7 +16,7 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     writeln("<B>Bairro: </B>${nota.bairroCliente ?: ""}")
     writeln("<B>Loja: </B>${nota.loja}")
     writeln("<B>Usuario da Impressao: </B>${nota.usuarioEntrega ?: AppConfig.userLogin()?.name ?: ""}")
-    writeln("<B>NF de Fatura: </B>${nota?.nota}/${nota?.nota}<B> Data: </B>${nota.data}<B> Hora: </B>${nota.hora}")
+    writeln("<B>NF de Fatura: </B>${nota.nota}<B> Data: </B>${nota.data}<B> Hora: </B>${nota.hora}")
     writeln("<B>PDV: </B>${nota.pdvno}      <B> Valor: </B>${nota.valorNota.format()}")
     writeln("<B>Cliente: </B>${nota.cliente} - ${nota.nomeCliente ?: ""}")
     writeln("<B>Vendedor (a): </B>${nota.vendedor ?: 0} - ${nota.nomeCompletoVendedor ?: ""}")
