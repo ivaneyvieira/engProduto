@@ -4,10 +4,9 @@ import br.com.astrosoft.produto.model.beans.FiltroListaProduto
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.viewmodel.produto.ProdutoViewModel
 
-class TabEstoqueGeralViewModel(viewModel: ProdutoViewModel) :
-  TabAbstractProdutoViewModel<ITabEstoqueGeralViewModel>(viewModel) {
+class TabEstoqueGeralViewModel(viewModel: ProdutoViewModel) : TabAbstractProdutoViewModel<ITabEstoqueGeral>(viewModel) {
   override val subView
-    get() = viewModel.view.tabEstoqueGeralViewModel
+    get() = viewModel.view.tabEstoqueGeral
 
   override fun findPrecoAlteracao(filtro: FiltroListaProduto): List<Produtos> {
     return Produtos.find(filtro, false)
@@ -18,4 +17,4 @@ class TabEstoqueGeralViewModel(viewModel: ProdutoViewModel) :
   }
 }
 
-interface ITabEstoqueGeralViewModel : ITabAbstractProdutoViewModel
+interface ITabEstoqueGeral : ITabAbstractProdutoViewModel

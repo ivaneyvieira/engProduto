@@ -8,12 +8,9 @@ import br.com.astrosoft.promocao.viewmodel.produto.ITabAbstractProdutoViewModel
 import br.com.astrosoft.promocao.viewmodel.produto.TabAbstractProdutoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.header2
-import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -24,8 +21,6 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode.LAZY
 import com.vaadin.flow.function.SerializablePredicate
-import org.vaadin.stefan.LazyDownloadButton
-import java.io.ByteArrayInputStream
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

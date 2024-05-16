@@ -27,10 +27,10 @@ sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val v
     val report = RelatorioProduto(filtro.lojaEstoque)
     val listaProduto = produtos.map {
       ProdutoRelatorio(
-        codigo = it.codigo,
-        descricao = it.descricao,
-        grade = it.grade,
-        unidade = it.unidade,
+        codigo = it.codigo ?: 0,
+        descricao = it.descricao ?: "",
+        grade = it.grade ?: "",
+        unidade = it.unidade ?: "",
         quant = when (filtro.lojaEstoque) {
           0 -> it.estoque
           2 -> it.DS_TT
@@ -39,7 +39,7 @@ sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val v
           5 -> it.PK_TT
           8 -> it.TM_TT
           else -> 0
-        }
+        } ?: 0
       )
     }
     val file = report.processaRelatorio(listaProduto)

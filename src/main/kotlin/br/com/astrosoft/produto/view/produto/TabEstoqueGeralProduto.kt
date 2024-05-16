@@ -31,13 +31,13 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_e
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tipo
-import br.com.astrosoft.promocao.viewmodel.produto.ITabEstoqueGeralViewModel
+import br.com.astrosoft.promocao.viewmodel.produto.ITabEstoqueGeral
 import br.com.astrosoft.promocao.viewmodel.produto.TabEstoqueGeralViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class TabEstoqueGeralProduto(viewModel: TabEstoqueGeralViewModel) :
-  TabAbstractProduto<ITabEstoqueGeralViewModel>(viewModel, showDatas = false), ITabEstoqueGeralViewModel {
+  TabAbstractProduto<ITabEstoqueGeral>(viewModel, showDatas = false), ITabEstoqueGeral {
   override fun isAuthorized(): Boolean {
     val user = AppConfig.userLogin()
     return (user as? UserSaci)?.produtoEstoqueGeral ?: false
