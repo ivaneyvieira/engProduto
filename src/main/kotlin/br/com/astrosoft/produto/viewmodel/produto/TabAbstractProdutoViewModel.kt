@@ -1,4 +1,4 @@
-package br.com.astrosoft.promocao.viewmodel.produto
+package br.com.astrosoft.produto.viewmodel.produto
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroListaProduto
@@ -6,7 +6,6 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.report.ProdutoRelatorio
 import br.com.astrosoft.produto.model.report.RelatorioProduto
-import br.com.astrosoft.produto.viewmodel.produto.ProdutoViewModel
 
 sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val viewModel: ProdutoViewModel) {
   abstract val subView: T

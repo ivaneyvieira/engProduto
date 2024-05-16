@@ -4,8 +4,8 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.promocao.viewmodel.produto.ITabAbstractProdutoViewModel
-import br.com.astrosoft.promocao.viewmodel.produto.TabAbstractProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.header2
 import com.vaadin.flow.component.checkbox.Checkbox
