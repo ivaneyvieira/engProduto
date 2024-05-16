@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.produto
 
-
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -33,6 +32,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 ) :
   TabPanelGrid<Produtos>(Produtos::class), ITabAbstractProdutoViewModel {
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtCodigo: IntegerField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtListVend: TextField
   private lateinit var edtType: IntegerField
@@ -43,7 +43,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   private lateinit var edtDfVenda: DatePicker
   private lateinit var edtDiCompra: DatePicker
   private lateinit var edtDfCompra: DatePicker
-
+  private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkGrade: Checkbox
   private lateinit var edtGrade: TextField
 
@@ -57,15 +57,15 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     val size = dataProvider.items.size
     val dataCommunicator: DataCommunicator<Produtos> = gridPanel.dataCommunicator
     val stream: Stream<Produtos> =
-      dataProvider.fetch(
-        Query<Produtos, SerializablePredicate<Produtos>>(
-          0,
-          size,
-          dataCommunicator.backEndSorting,
-          dataCommunicator.inMemorySorting,
-          null
+        dataProvider.fetch(
+          Query<Produtos, SerializablePredicate<Produtos>>(
+            0,
+            size,
+            dataCommunicator.backEndSorting,
+            dataCommunicator.inMemorySorting,
+            null
+          )
         )
-      )
     val list: List<Produtos> = stream.collect(Collectors.toList())
     val selecionado = this.itensSelecionados()
     return list.filter { selecionado.contains(it) }
@@ -79,6 +79,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
       horizontalLayout {
         edtPesquisa = textField("Pesquisa") {
+          this.width = "200px"
           this.valueChangeMode = LAZY
           this.valueChangeTimeout = 1500
           addValueChangeListener {
@@ -86,15 +87,23 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
           }
         }
 
-        edtListVend = textField("Fornecedores") {
+        edtCodigo = integerField("Código") {
+          this.width = "100px"
           this.valueChangeMode = LAZY
-          this.width = "250px"
           addValueChangeListener {
             viewModel.updateView()
           }
         }
 
-        edtTributacao = textField("Tributação") {
+        edtListVend = textField("Fornecedores") {
+          this.valueChangeMode = LAZY
+          this.width = "150px"
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtTributacao = textField("Trib") {
           this.valueChangeMode = LAZY
           this.width = "80px"
           addValueChangeListener {
@@ -104,20 +113,23 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
         edtType = integerField("Tipo") {
           this.valueChangeMode = LAZY
+          this.width = "100px"
           addValueChangeListener {
             viewModel.updateView()
           }
         }
 
-        edtCl = integerField("Centro de Lucro") {
+        edtCl = integerField("CL") {
+          this.width = "100px"
           this.valueChangeMode = LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
         }
 
-        cmbPontos = select("Caracteres Especiais") {
-          setItems(EMarcaPonto.values().toList())
+        cmbPontos = select("Caracteres") {
+          this.width = "100px"
+          setItems(EMarcaPonto.entries)
           value = EMarcaPonto.TODOS
           this.setItemLabelGenerator {
             it.descricao
@@ -136,7 +148,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
         edtGrade = textField("Grade") {
           this.valueChangeMode = LAZY
-          this.width = "80px"
+          this.width = "100px"
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -144,7 +156,22 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
       }
 
       horizontalLayout {
-        edtDiCompra = datePicker("Data Compra Inicial") {
+        cmbLoja = select("Loja") {
+          val lojaTodas = Loja(0, "Todas", "Todas")
+          val lojas = listOf(lojaTodas) + viewModel.allLojas()
+          setItems(lojas)
+          value = lojaTodas
+          this.setItemLabelGenerator {
+            it.sname
+          }
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+          this.width = "6em"
+        }
+
+        edtDiCompra = datePicker("Compra Inicial") {
+          this.width = "150px"
           this.localePtBr()
           this.value = LocalDate.now().withDayOfMonth(1)
 
@@ -152,7 +179,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
             viewModel.updateView()
           }
         }
-        edtDfCompra = datePicker("Data Compra Final") {
+        edtDfCompra = datePicker("Compra Final") {
+          this.width = "150px"
           this.localePtBr()
           this.value = LocalDate.now()
 
@@ -160,7 +188,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
             viewModel.updateView()
           }
         }
-        edtDiVenda = datePicker("Data Venda Inicial") {
+        edtDiVenda = datePicker("Venda Inicial") {
+          this.width = "150px"
           this.localePtBr()
           this.value = LocalDate.now().withDayOfMonth(1)
 
@@ -168,7 +197,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
             viewModel.updateView()
           }
         }
-        edtDfVenda = datePicker("Data Venda Final") {
+        edtDfVenda = datePicker("Venda Final") {
+          this.width = "150px"
           this.localePtBr()
           this.value = LocalDate.now()
 
@@ -195,12 +225,12 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,
     todoEstoque = viewModel.todoEstoque(),
     inativo = EInativo.NAO,
-    codigo = 0,
+    codigo = edtCodigo.value ?: 0,
     listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
     tributacao = edtTributacao.value ?: "",
     typeno = edtType.value ?: 0,
     clno = edtCl.value ?: 0,
-    lojaEstoque = lojaEstoque(),
+    lojaEstoque = cmbLoja.value?.no ?: 0,
     estoqueTotal = estoqueTotal(),
     diVenda = edtDiVenda.value,
     dfVenda = edtDfVenda.value,
@@ -213,7 +243,6 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   )
 
   abstract fun estoqueTotal(): EEstoqueTotal
-  abstract fun lojaEstoque(): Int
   abstract fun estoque(): EEstoqueList
   abstract fun saldo(): Int
 

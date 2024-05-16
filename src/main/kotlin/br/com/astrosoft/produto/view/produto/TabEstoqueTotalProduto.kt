@@ -42,7 +42,6 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
   TabAbstractProduto<ITabEstoqueTotalViewModel>(viewModel, showDatas = false), ITabEstoqueTotalViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
-  private lateinit var cmbLoja: Select<Loja>
 
   override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueTotal ?: false
 
@@ -50,20 +49,6 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
     get() = "Estoque Total"
 
   override fun HorizontalLayout.addAditionaisFields() {
-    cmbLoja = select("Loja") {
-      val lojaTodas = Loja(0, "Todas", "Todas")
-      val lojas = listOf(lojaTodas) + viewModel.allLojas()
-      setItems(lojas)
-      value = lojaTodas
-      this.setItemLabelGenerator {
-        it.sname
-      }
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-      this.width = "5em"
-    }
-
     cmbEstoqueFiltro = select("Estoque") {
       setItems(EEstoqueList.entries)
       value = EEstoqueList.TODOS
@@ -122,10 +107,6 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
 
   override fun estoqueTotal(): EEstoqueTotal {
     return EEstoqueTotal.TODOS
-  }
-
-  override fun lojaEstoque(): Int {
-    return cmbLoja.value?.no ?: 0
   }
 
   override fun estoque(): EEstoqueList {
