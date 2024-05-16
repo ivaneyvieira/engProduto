@@ -264,4 +264,5 @@ WHERE (:pesquisa = ''
   OR localizacao LIKE @PESQUISA
   OR rotulo LIKE @PESQUISA)
   AND (R.grade LIKE @GRADE OR @GRADE = '')
+  AND (mesesGarantia = :validade OR :validade = 0)
 

@@ -39,6 +39,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   TabPanelGrid<Produtos>(Produtos::class), ITabAbstractProdutoViewModel {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: IntegerField
+  private lateinit var edtVal: IntegerField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtListVend: TextField
   private lateinit var edtType: IntegerField
@@ -95,6 +96,13 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
         edtCodigo = integerField("Código") {
           this.width = "100px"
+          this.valueChangeMode = LAZY
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtVal = integerField("Val") {
+          this.width = "80px"
           this.valueChangeMode = LAZY
           addValueChangeListener {
             viewModel.updateView()
@@ -247,6 +255,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     grade = edtGrade.value ?: "",
     estoque = estoque(),
     saldo = saldo(),
+    validade = edtVal.value ?: 0
   )
 
   abstract fun estoqueTotal(): EEstoqueTotal

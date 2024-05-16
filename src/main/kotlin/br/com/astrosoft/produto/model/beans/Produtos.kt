@@ -94,6 +94,7 @@ data class FiltroListaProduto(
   val loja: Int = 0,
   val estoque: EEstoqueList,
   val saldo: Int,
+  val validade: Int,
 ) {
   val pesquisaNumero: Int?
     get() = pesquisa?.toIntOrNull()
