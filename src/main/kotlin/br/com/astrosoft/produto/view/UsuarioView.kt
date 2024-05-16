@@ -41,8 +41,6 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
     return VerticalLayout().apply {
       val lojas = viewModel.allLojas()
       val lojasNum = lojas.map { it.no } + listOf(0)
-      val impressoras = viewModel.allImpressoras()
-        .map { it.name }
 
       isPadding = false
       isMargin = false

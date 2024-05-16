@@ -1043,6 +1043,88 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun listaProdutos(filtro: FiltroListaProduto): List<Produtos> {
+    val sql = "/sqlSaci/listaProdutos.sql"
+
+    val listVend = filtro.listVend.joinToString(separator = ",")
+
+    return query(sql, Produtos::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("marca", filtro.marcaPonto.codigo)
+      addOptionalParameter("inativo", filtro.inativo.codigo)
+      addOptionalParameter("todoEstoque", filtro.todoEstoque.let { if (it) "S" else "N" })
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("listVend", listVend)
+      addOptionalParameter("tributacao", filtro.tributacao)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("lojaEstoque", filtro.lojaEstoque)
+      addOptionalParameter("estoqueTotal", filtro.estoqueTotal.codigo)
+      addOptionalParameter("diCompra", filtro.diCompra.toSaciDate())
+      addOptionalParameter("dfCompra", filtro.dfCompra.toSaciDate())
+      addOptionalParameter("diVenda", filtro.diVenda.toSaciDate())
+      addOptionalParameter("dfVenda", filtro.dfVenda.toSaciDate())
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("temGrade", filtro.temGrade.let { if (it) "S" else "N" })
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("estoque", filtro.estoque.codigo)
+      addOptionalParameter("saldo", filtro.saldo)
+    }
+  }
+
+  fun consultaValidade(filtro: FiltroValidade): List<ComparaValidade> {
+    val sql = "/sqlSaci/consultaValidade.sql"
+
+    val listVend = filtro.listVend.joinToString(separator = ",")
+
+    return query(sql, ComparaValidade::class) {
+      addOptionalParameter("tipo", filtro.tipo.num)
+      addOptionalParameter("query", filtro.query)
+      addOptionalParameter("marca", filtro.marca.codigo)
+
+      addOptionalParameter("listVend", listVend)
+      addOptionalParameter("tributacao", filtro.tributacao)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+    }
+  }
+
+  fun findFornecedores(): List<Fornecedor> {
+    val sql = "/sqlSaci/fornecedores.sql"
+    return query(sql, Fornecedor::class)
+  }
+
+  fun findPrdNfe(numero: String): List<PrdCodigo> {
+    val sql = "/sqlSaci/findPrdNfe.sql"
+
+    return query(sql, PrdCodigo::class) {
+      if (numero.contains("/")) {
+        val nfno = numero.split("/").getOrNull(0) ?: ""
+        val nfse = numero.split("/").getOrNull(1) ?: ""
+        val invno = 0
+        addOptionalParameter("nfno", nfno)
+        addOptionalParameter("nfse", nfse)
+        addOptionalParameter("invno", invno)
+      } else {
+        val nfno = ""
+        val nfse = ""
+        val invno = numero.toIntOrNull() ?: 0
+        addOptionalParameter("nfno", nfno)
+        addOptionalParameter("nfse", nfse)
+        addOptionalParameter("invno", invno)
+      }
+    }
+  }
+
+  fun saldoData(diDate: LocalDate?, dfDate: LocalDate?): List<SaldoVenda> {
+    val sql = "/sqlSaci/totalVendas.sql"
+
+    return query(sql, SaldoVenda::class) {
+      addOptionalParameter("diVenda", diDate.toSaciDate())
+      addOptionalParameter("dfVenda", dfDate.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)

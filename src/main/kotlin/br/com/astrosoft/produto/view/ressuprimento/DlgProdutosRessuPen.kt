@@ -75,7 +75,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
       button("Relatório") {
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
-          val ressuprimentoTitle = if (ressuprimentos.size == 1) {
+          val ressuprimentoTitleNovo = if (ressuprimentos.size == 1) {
             val ressuprimento = ressuprimentos.first()
             "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"
           } else {
@@ -83,13 +83,13 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
             val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
             "${loja} de $data"
           }
-          viewModel.imprimeRelatorio(ressuprimentoTitle)
+          viewModel.imprimeRelatorio(ressuprimentoTitleNovo)
         }
       }
       button("Imprimir") {
         icon = VaadinIcon.PRINT.create()
         onLeftClick {
-          val ressuprimentoTitle = if (ressuprimentos.size == 1) {
+          val ressuprimentoTitleNovo = if (ressuprimentos.size == 1) {
             val ressuprimento = ressuprimentos.first()
             "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"
           } else {
@@ -97,7 +97,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
             val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
             "${loja} de $data"
           }
-          viewModel.previewPedidoSobras(pedido = ressuprimentos.first(), ressuprimentoTitle = ressuprimentoTitle)
+          viewModel.previewPedidoSobras(pedido = ressuprimentos.first(), ressuprimentoTitle = ressuprimentoTitleNovo)
         }
       }
     }, onClose = {

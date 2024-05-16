@@ -94,7 +94,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     this.addClassName("styling")
     this.format()
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido) { impressora ->
+      viewModel.previewPedido(pedido) {
         //viewModel.marcaImpressao(pedido, impressora)
       }
     }

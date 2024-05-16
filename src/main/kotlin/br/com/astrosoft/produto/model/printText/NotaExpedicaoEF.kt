@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 
 class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   override fun printTitle(bean: ProdutoNFS) {
-    writeln("Romaneio de Separacao para Entrega: Reserva ${nota?.numero}", negrito = true, center = true)
+    writeln("Romaneio de Separacao para Entrega: Reserva ${nota.numero}", negrito = true, center = true)
 
     writeln("Rota: ${nota.rota}", negrito = true, expand = true, center = true)
     writeln("<B>End Entrega: </B>${nota.enderecoCliente ?: ""}")
