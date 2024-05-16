@@ -27,6 +27,7 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_q
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tipo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tributacao
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
@@ -39,7 +40,6 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
   TabAbstractProduto<ITabEstoqueTotalViewModel>(viewModel, showDatas = false), ITabEstoqueTotalViewModel {
-  private lateinit var cmbEstoque: Select<EEstoqueTotal>
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbLoja: Select<Loja>
@@ -62,17 +62,6 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
         viewModel.updateView()
       }
       this.width = "5em"
-    }
-    cmbEstoque = select("Estoque Total") {
-      setItems(EEstoqueTotal.values().toList())
-      value = EEstoqueTotal.TODOS
-      this.setItemLabelGenerator {
-        it.descricao
-      }
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-      this.width = "8em"
     }
 
     cmbEstoqueFiltro = select("Estoque") {
@@ -114,6 +103,7 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
+    produto_val()
     produto_estoque()
     produto_quantCompra()
     produto_quantVenda()
@@ -122,19 +112,16 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
     produto_MF_TT()
     produto_PK_TT()
     produto_TM_TT()
-    produto_qtPedido()
-    produto_Localizacao()
     produto_forn()
     produto_abrev()
     produto_tributacao()
     produto_Rotulo()
     produto_tipo()
     produto_cl()
-    produto_codBar()
   }
 
   override fun estoqueTotal(): EEstoqueTotal {
-    return cmbEstoque.value ?: EEstoqueTotal.TODOS
+    return EEstoqueTotal.TODOS
   }
 
   override fun lojaEstoque(): Int {

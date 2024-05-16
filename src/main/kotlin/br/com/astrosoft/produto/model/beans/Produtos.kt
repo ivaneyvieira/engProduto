@@ -38,6 +38,7 @@ class Produtos(
   var pesoBruto: Double?,
   var uGar: String?,
   var tGar: Int?,
+  var mesesGarantia: Int?,
   var emb: Double?,
   var ncm: String?,
   var site: String?,

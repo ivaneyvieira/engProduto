@@ -52,7 +52,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_quantCompra() = columnGrid(Produtos::qttyCompra) {
-    this.setHeader("Qt Compra")
+    this.setHeader("Compra")
     this.config()
   }
 
@@ -72,7 +72,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_DS_TT() = columnGrid(Produtos::DS_TT) {
-    this.setHeader("DS TT")
+    this.setHeader("DS")
     this.config()
   }
 
@@ -87,7 +87,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_MR_TT() = columnGrid(Produtos::MR_TT) {
-    this.setHeader("MR TT")
+    this.setHeader("MR")
     this.config()
   }
 
@@ -102,7 +102,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_MF_TT() = columnGrid(Produtos::MF_TT) {
-    this.setHeader("MF TT")
+    this.setHeader("MF")
     this.config()
   }
 
@@ -127,7 +127,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_PK_TT() = columnGrid(Produtos::PK_TT) {
-    this.setHeader("PK TT")
+    this.setHeader("PK")
     this.config()
   }
 
@@ -142,7 +142,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_TM_TT() = columnGrid(Produtos::TM_TT) {
-    this.setHeader("TM TT")
+    this.setHeader("TM")
     this.config()
   }
 
@@ -153,6 +153,11 @@ object ProdutosColumns {
 
   fun Grid<Produtos>.produto_estoque() = columnGrid(Produtos::estoque) {
     this.setHeader("Total")
+    this.config()
+  }
+
+  fun Grid<Produtos>.produto_val() = columnGrid(Produtos::mesesGarantia) {
+    this.setHeader("Val")
     this.config()
   }
 
