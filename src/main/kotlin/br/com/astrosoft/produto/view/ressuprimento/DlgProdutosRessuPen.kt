@@ -95,7 +95,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
           } else {
             val loja = ressuprimentos.map { it.nomeLojaRessu }.distinct().joinToString(", ")
             val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
-            "${loja} de $data"
+            "$loja de $data"
           }
           viewModel.previewPedidoSobras(pedido = ressuprimentos.first(), ressuprimentoTitle = ressuprimentoTitleNovo)
         }
