@@ -3,13 +3,17 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
 import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.header2
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -20,6 +24,8 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode.LAZY
 import com.vaadin.flow.function.SerializablePredicate
+import org.vaadin.stefan.LazyDownloadButton
+import java.io.ByteArrayInputStream
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -208,6 +214,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         addAditionaisFields()
+        downloadExcel(PlanilhaProduto())
       }
     }
   }
@@ -260,6 +267,15 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     }
     println(label)
     println(colList)
+  }
+
+    private fun HasComponents.downloadExcel(planilha: PlanilhaProduto) {
+    val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
+      val bytes = planilha.write(itensSelecionados())
+      ByteArrayInputStream(bytes)
+    })
+    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    add(button)
   }
 }
 
