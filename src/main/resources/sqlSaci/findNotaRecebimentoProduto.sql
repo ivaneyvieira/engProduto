@@ -120,7 +120,7 @@ SELECT N.storeno                                        AS loja,
        ROUND(N.qtty / 1000)                             AS quant,
        ROUND(E.estoque)                                 AS estoque,
        IFNULL(N.marcaRecebimento, 0)                    AS marca,
-       validade                                         AS validade,
+       IF(tipoGarantia = 2, garantia, NULL)             AS validade,
        vencimento                                       AS vencimento
 FROM T_NOTA AS N
        LEFT JOIN sqldados.vend AS V

@@ -57,7 +57,7 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
 
       this.withEditor(NotaRecebimentoProduto::class,
         openEditor = {
-          this.focusEditor(NotaRecebimentoProduto::validade)
+          this.focusEditor(NotaRecebimentoProduto::vencimento)
         },
         closeEditor = {
           viewModel.salvaNotaProduto(it.bean)
@@ -74,11 +74,7 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
         NotaRecebimentoProduto::validade,
         "Val",
         width = "100px"
-      ).comboFieldEditor<NotaRecebimentoProduto, Int> {
-        it.setItems(Validade.findAll().map { validade ->
-          validade.validade
-        })
-      }
+      )
       columnGrid(
         NotaRecebimentoProduto::vencimento,
         "Venc",

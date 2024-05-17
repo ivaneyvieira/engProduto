@@ -13,7 +13,7 @@ class Validade(var validade: Int, var mesesFabricacao: Int) {
   }
 
   fun dataMaxima(localDate: LocalDate): LocalDate {
-    val dataVencimento = localDate.plusMonths(mesesFabricacao.toLong())
+    val dataVencimento = localDate.minusMonths(mesesFabricacao.toLong()).plusMonths(validade.toLong())
     return dataVencimento.lastDayOfMonth()
   }
 
