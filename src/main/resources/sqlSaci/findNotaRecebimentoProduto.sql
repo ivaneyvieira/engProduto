@@ -60,7 +60,9 @@ SELECT I.invno,
        N.weight,
        N.packages,
        I.qtty,
-       A.marcaRecebimento
+       A.marcaRecebimento,
+       A.validade,
+       A.vencimento
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -117,7 +119,9 @@ SELECT N.storeno                                        AS loja,
        L.loc                                            AS localizacao,
        ROUND(N.qtty / 1000)                             AS quant,
        ROUND(E.estoque)                                 AS estoque,
-       IFNULL(N.marcaRecebimento, 0)                    AS marca
+       IFNULL(N.marcaRecebimento, 0)                    AS marca,
+       validade                                         AS validade,
+       vencimento                                       AS vencimento
 FROM T_NOTA AS N
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
@@ -162,7 +166,9 @@ SELECT loja,
        quant,
        estoque,
        marca,
-       :marca AS marcaSelecionada
+       :marca AS marcaSelecionada,
+       validade,
+       vencimento
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR

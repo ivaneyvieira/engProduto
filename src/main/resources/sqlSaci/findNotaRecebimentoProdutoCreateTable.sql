@@ -11,5 +11,11 @@ CREATE TABLE sqldados.iprdAdicional
   PRIMARY KEY (invno, prdno, grade)
 );
 
-alter table sqldados.iprdAdicional
-  add login VARCHAR(20) DEFAULT '';
+ALTER TABLE sqldados.iprdAdicional
+  ADD login VARCHAR(20) DEFAULT '';
+
+ALTER TABLE sqldados.iprdAdicional
+  ADD validade INT DEFAULT 0;
+
+ALTER TABLE sqldados.iprdAdicional
+  ADD vencimento DATE NULL;

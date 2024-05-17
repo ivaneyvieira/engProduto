@@ -109,7 +109,7 @@ fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   return this
 }
 
-fun <T : Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
+fun <T: Any, V : Any> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = Select<V>().apply {
     block(this)

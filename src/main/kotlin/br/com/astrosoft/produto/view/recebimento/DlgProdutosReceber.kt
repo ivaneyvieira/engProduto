@@ -1,10 +1,12 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
+import br.com.astrosoft.produto.model.beans.Validade
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -12,6 +14,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaRecebimento) {
   private var onClose: (() -> Unit)? = null
@@ -52,6 +55,14 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
+      this.withEditor(NotaRecebimentoProduto::class,
+        openEditor = {
+          this.focusEditor(NotaRecebimentoProduto::validade)
+        },
+        closeEditor = {
+          viewModel.salvaNotaProduto(it.bean)
+        })
+
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
@@ -59,6 +70,28 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
+      columnGrid(
+        NotaRecebimentoProduto::validade,
+        "Val",
+        width = "100px"
+      ).comboFieldEditor<NotaRecebimentoProduto, Int> {
+        it.setItems(Validade.findAll().map { validade ->
+          validade.validade
+        })
+      }
+      columnGrid(
+        NotaRecebimentoProduto::vencimento,
+        "Venc",
+        width = "100px",
+        pattern = "MMM/yyyy"
+      ).comboFieldEditor<NotaRecebimentoProduto, LocalDate> {
+        it.setItems(MesAno.values().map { mesAno ->
+          mesAno.lastDay
+        })
+        it.setItemLabelGenerator { data ->
+          data.format("MMM/yyyy")
+        }
+      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -79,8 +112,8 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
     }
   }
 
-  fun updateProduto() : NotaRecebimento?{
-    val nota =nota.refreshProdutos()
+  fun updateProduto(): NotaRecebimento? {
+    val nota = nota.refreshProdutos()
     update()
     return nota
   }

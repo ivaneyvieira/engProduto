@@ -1040,6 +1040,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", notaRecebimentoProduto.grade ?: "")
       addOptionalParameter("marca", notaRecebimentoProduto.marca ?: 0)
       addOptionalParameter("login", notaRecebimentoProduto.login ?: "")
+      addOptionalParameter("validade", notaRecebimentoProduto.validade ?: 0)
+      addOptionalParameter("vencimento", notaRecebimentoProduto.vencimento)
     }
   }
 

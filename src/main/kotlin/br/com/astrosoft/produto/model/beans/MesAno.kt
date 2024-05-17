@@ -30,6 +30,15 @@ data class MesAno(val mes: Int, val ano: Int) {
       }
     }
 
+    fun valuesFutture() : List<MesAno> {
+      val mesAtual = LocalDate.now().withDayOfMonth(15)
+      val listNum = (0..12 * 10).toList()
+      return listNum.map {
+        val mes = mesAtual.plusMonths(it.toLong())
+        MesAno(mes.monthValue, mes.year)
+      }
+    }
+
     fun now() = MesAno(LocalDate.now().monthValue, LocalDate.now().year)
   }
 }

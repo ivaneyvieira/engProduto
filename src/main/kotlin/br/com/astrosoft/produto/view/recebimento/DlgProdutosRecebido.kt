@@ -1,17 +1,15 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebidoViewModel
-import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.*
+import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRecebido(val viewModel: TabRecebidoViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
@@ -47,6 +45,8 @@ class DlgProdutosRecebido(val viewModel: TabRecebidoViewModel, val nota: NotaRec
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
+      columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
+      columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "100px", pattern = "MMM/yyyy")
     }
     this.addAndExpand(gridDetail)
     update()
