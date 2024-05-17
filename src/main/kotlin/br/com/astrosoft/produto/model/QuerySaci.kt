@@ -1123,6 +1123,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun listValidade() : List<Validade>{
+    val sql = "/sqlSaci/validadeList.sql"
+    return query(sql, Validade::class)
+  }
+
+  fun saveValidade(bean: Validade){
+    val sql = "/sqlSaci/validadeSave.sql"
+    script(sql){
+      addOptionalParameter("validade", bean.validade)
+      addOptionalParameter("mesesFabricacao", bean.mesesFabricacao)
+    }
+  }
+
+  fun delValidade(bean: Validade){
+    val sql = "/sqlSaci/validadeDel.sql"
+    script(sql){
+      addOptionalParameter("validade", bean.validade)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
     val ipServer: String? = db.url.split("/").getOrNull(2)
