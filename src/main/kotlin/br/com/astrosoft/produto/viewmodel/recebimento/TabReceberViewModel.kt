@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import java.time.LocalDate
 
 class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -39,12 +38,16 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
 
   fun salvaNotaProduto(bean: NotaRecebimentoProduto?)= viewModel.exec {
     bean ?: fail("Produto não encontrado")
-    val numVal = bean.validade ?: fail("Validade não informada")
-    val validade = Validade.findValidade(numVal) ?: fail("Validade não encontrada")
-    val dataNota = bean.data ?: fail("Data da nota não informada")
-    val dataMaxima = validade.dataMaxima(dataNota)
-    val dataVencimento = bean.vencimento ?: fail("Vencimento não informado")
-    if(dataVencimento > dataMaxima) fail("Vencimento maior que a validade")
+    val numVal = bean.validade
+    val validade = Validade.findValidade(numVal ?: 0)
+    if(validade != null) {
+      val dataNota = bean.data ?: fail("Data da nota não informada")
+      val dataMaxima = validade.dataMaxima(dataNota)
+      val dataVencimento = bean.vencimento
+      if(dataVencimento != null) {
+        if (dataVencimento > dataMaxima) fail("Vencimento maior que a validade")
+      }
+    }
     bean.salva()
     updateView()
   }

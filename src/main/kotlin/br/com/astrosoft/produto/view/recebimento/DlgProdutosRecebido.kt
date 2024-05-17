@@ -46,7 +46,7 @@ class DlgProdutosRecebido(val viewModel: TabRecebidoViewModel, val nota: NotaRec
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
       columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
-      columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "100px", pattern = "MMM/yyyy")
+      columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "120px", pattern = "MMM/yyyy")
     }
     this.addAndExpand(gridDetail)
     update()
