@@ -45,7 +45,7 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
   override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueTotal ?: false
 
   override val label: String
-    get() = "Estoque Total"
+    get() = "Giro"
 
   override fun HorizontalLayout.addAditionaisFields() {
     cmbEstoqueFiltro = select("Estoque") {

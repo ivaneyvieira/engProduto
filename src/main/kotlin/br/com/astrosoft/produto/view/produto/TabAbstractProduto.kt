@@ -106,6 +106,14 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
           }
         }
 
+        edtGrade = textField("Grade") {
+          this.valueChangeMode = LAZY
+          this.width = "100px"
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
         edtListVend = textField("Fornecedores") {
           this.valueChangeMode = LAZY
           this.width = "150px"
@@ -130,7 +138,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
           }
         }
 
-        edtCl = integerField("CL") {
+        edtCl = integerField("C Lucro") {
           this.width = "100px"
           this.valueChangeMode = LAZY
           addValueChangeListener {
@@ -153,14 +161,6 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         chkGrade = checkBox("Grade") {
           this.value = true
           this.addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        edtGrade = textField("Grade") {
-          this.valueChangeMode = LAZY
-          this.width = "100px"
-          addValueChangeListener {
             viewModel.updateView()
           }
         }

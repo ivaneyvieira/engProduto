@@ -42,7 +42,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_cl() = columnGrid(Produtos::cl) {
-    this.setHeader("CL")
+    this.setHeader("C Lucro")
     this.config()
   }
 
@@ -57,7 +57,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_quantVenda() = columnGrid(Produtos::qttyVendas) {
-    this.setHeader("Qt Venda")
+    this.setHeader("Venda")
     this.config()
   }
 
