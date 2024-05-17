@@ -105,7 +105,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
-        edtCl = integerField("Cl") {
+        edtCl = integerField("C Lucro") {
           this.width = "100px"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
@@ -197,7 +197,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::fornecedor, header = "For")
     columnGrid(ProdutoSaldo::abrev, header = "Abrev")
     columnGrid(ProdutoSaldo::tipo, header = "Tipo")
-    columnGrid(ProdutoSaldo::cl, header = "Cl")
+    columnGrid(ProdutoSaldo::cl, header = "C Lucro")
   }
 
   override fun filtro(): FiltroProdutoSaldo {
