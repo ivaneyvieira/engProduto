@@ -61,43 +61,13 @@ object ProdutosColumns {
     this.config()
   }
 
-  fun Grid<Produtos>.produto_DS_VA() = columnGrid(Produtos::DS_VA) {
-    this.setHeader("DS VA")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_DS_AT() = columnGrid(Produtos::DS_AT) {
-    this.setHeader("DS AT")
-    this.config()
-  }
-
   fun Grid<Produtos>.produto_DS_TT() = columnGrid(Produtos::DS_TT) {
     this.setHeader("DS")
     this.config()
   }
 
-  fun Grid<Produtos>.produto_MR_VA() = columnGrid(Produtos::MR_VA) {
-    this.setHeader("MR VA")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_MR_AT() = columnGrid(Produtos::MR_AT) {
-    this.setHeader("MR AT")
-    this.config()
-  }
-
   fun Grid<Produtos>.produto_MR_TT() = columnGrid(Produtos::MR_TT) {
     this.setHeader("MR")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_MF_VA() = columnGrid(Produtos::MF_VA) {
-    this.setHeader("MF VA")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_MF_AT() = columnGrid(Produtos::MF_AT) {
-    this.setHeader("MF AT")
     this.config()
   }
 
@@ -116,38 +86,13 @@ object ProdutosColumns {
     this.config()
   }
 
-  fun Grid<Produtos>.produto_PK_VA() = columnGrid(Produtos::PK_VA) {
-    this.setHeader("PK VA")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_PK_AT() = columnGrid(Produtos::PK_AT) {
-    this.setHeader("PK AT")
-    this.config()
-  }
-
   fun Grid<Produtos>.produto_PK_TT() = columnGrid(Produtos::PK_TT) {
     this.setHeader("PK")
     this.config()
   }
 
-  fun Grid<Produtos>.produto_TM_VA() = columnGrid(Produtos::TM_VA) {
-    this.setHeader("TM VA")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_TM_AT() = columnGrid(Produtos::TM_AT) {
-    this.setHeader("TM AT")
-    this.config()
-  }
-
   fun Grid<Produtos>.produto_TM_TT() = columnGrid(Produtos::TM_TT) {
     this.setHeader("TM")
-    this.config()
-  }
-
-  fun Grid<Produtos>.produto_qtPedido() = columnGrid(Produtos::qtPedido) {
-    this.setHeader("Qtd Ped")
     this.config()
   }
 

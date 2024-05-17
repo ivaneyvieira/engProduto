@@ -3,11 +3,12 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EEstoqueList
+import br.com.astrosoft.produto.model.beans.Produtos
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueTotalViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueTotalViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_DS_TT
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Localizacao
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MF_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MR_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_PK_TT
@@ -16,13 +17,11 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_T
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Unidade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_abrev
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_cl
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codBar
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_estoque
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_qtPedido
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantCompra
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tipo
@@ -103,10 +102,6 @@ class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
     produto_Rotulo()
     produto_tipo()
     produto_cl()
-  }
-
-  override fun estoqueTotal(): EEstoqueTotal {
-    return EEstoqueTotal.TODOS
   }
 
   override fun estoque(): EEstoqueList {

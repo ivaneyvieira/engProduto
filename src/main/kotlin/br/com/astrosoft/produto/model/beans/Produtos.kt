@@ -16,23 +16,12 @@ class Produtos(
   var tipo: Int?,
   var cl: Int?,
   var codBar: String?,
-  var DS_VA: Int?,
-  var DS_AT: Int?,
   var DS_TT: Int?,
-  var MR_VA: Int?,
-  var MR_AT: Int?,
   var MR_TT: Int?,
-  var MF_VA: Int?,
-  var MF_AT: Int?,
   var MF_TT: Int?,
-  var PK_VA: Int?,
-  var PK_AT: Int?,
   var PK_TT: Int?,
-  var TM_VA: Int?,
-  var TM_AT: Int?,
   var TM_TT: Int?,
   var estoque: Int?,
-  var qtPedido: Int?,
   var trib: String?,
   var refForn: String?,
   var pesoBruto: Double?,
@@ -76,34 +65,31 @@ data class PrdGradeList(val codigo: Int?, val grade: String)
 data class FiltroListaProduto(
   val pesquisa: String,
   val marcaPonto: EMarcaPonto,
-  val todoEstoque: Boolean,
   val inativo: EInativo,
   val codigo: Int,
   val listVend: List<Int>,
   val tributacao: String,
   val typeno: Int,
   val clno: Int,
-  val lojaEstoque: Int,
-  val estoqueTotal: EEstoqueTotal,
   val diVenda: LocalDate?,
   val dfVenda: LocalDate?,
   val diCompra: LocalDate?,
   val dfCompra: LocalDate?,
   val temGrade: Boolean,
   val grade: String,
-  val loja: Int = 0,
+  val loja: Int,
   val estoque: EEstoqueList,
   val saldo: Int,
   val validade: Int,
 ) {
   val pesquisaNumero: Int?
-    get() = pesquisa?.toIntOrNull()
+    get() = pesquisa.toIntOrNull()
 
   val pesquisaData: LocalDate?
-    get() = pesquisa?.parserDate()
+    get() = pesquisa.parserDate()
 
   val pesquisaString: String?
-    get() = if (pesquisa?.matches("^[0-9]$".toRegex()) == true) null else pesquisa
+    get() = if (pesquisa.matches("^[0-9]$".toRegex()) == true) null else pesquisa
 }
 
 enum class EMarcaPonto(val codigo: String?, val descricao: String) {

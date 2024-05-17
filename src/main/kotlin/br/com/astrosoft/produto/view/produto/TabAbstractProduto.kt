@@ -11,7 +11,6 @@ import com.github.mvysny.kaributools.header2
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.checkbox.Checkbox
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexLayout
@@ -46,10 +45,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   private lateinit var edtCl: IntegerField
   private lateinit var edtTributacao: TextField
 
-  private lateinit var edtDiVenda: DatePicker
-  private lateinit var edtDfVenda: DatePicker
-  private lateinit var edtDiCompra: DatePicker
-  private lateinit var edtDfCompra: DatePicker
+  private lateinit var edtVenda: Select<MesAno>
+  private lateinit var edtCompra: Select<MesAno>
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkGrade: Checkbox
   private lateinit var edtGrade: TextField
@@ -184,37 +181,26 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
           this.width = "6em"
         }
 
-        edtDiCompra = datePicker("Compra Inicial") {
+        edtCompra = select("Compra ") {
           this.width = "150px"
-          this.localePtBr()
-          this.value = LocalDate.now().withDayOfMonth(1)
+          this.setItems(MesAno.values())
+          this.value = MesAno.now()
+          this.setItemLabelGenerator {
+            it.mesAnoFormat
+          }
 
           this.addValueChangeListener {
             viewModel.updateView()
           }
         }
-        edtDfCompra = datePicker("Compra Final") {
-          this.width = "150px"
-          this.localePtBr()
-          this.value = LocalDate.now()
 
-          this.addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        edtDiVenda = datePicker("Venda Inicial") {
+        edtVenda = select("Venda") {
           this.width = "150px"
-          this.localePtBr()
-          this.value = LocalDate.now().withDayOfMonth(1)
-
-          this.addValueChangeListener {
-            viewModel.updateView()
+          this.setItems(MesAno.values())
+          this.value = MesAno.now()
+          this.setItemLabelGenerator {
+            it.mesAnoFormat
           }
-        }
-        edtDfVenda = datePicker("Venda Final") {
-          this.width = "150px"
-          this.localePtBr()
-          this.value = LocalDate.now()
 
           this.addValueChangeListener {
             viewModel.updateView()
@@ -238,19 +224,17 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   override fun filtro() = FiltroListaProduto(
     pesquisa = edtPesquisa.value ?: "",
     marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,
-    todoEstoque = viewModel.todoEstoque(),
     inativo = EInativo.NAO,
     codigo = edtCodigo.value ?: 0,
     listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
     tributacao = edtTributacao.value ?: "",
     typeno = edtType.value ?: 0,
     clno = edtCl.value ?: 0,
-    lojaEstoque = cmbLoja.value?.no ?: 0,
-    estoqueTotal = estoqueTotal(),
-    diVenda = edtDiVenda.value,
-    dfVenda = edtDfVenda.value,
-    diCompra = edtDiCompra.value,
-    dfCompra = edtDfCompra.value,
+    loja = cmbLoja.value?.no ?: 0,
+    diVenda = edtVenda.value.firstDay,
+    dfVenda = edtVenda.value.lastDay,
+    diCompra = edtCompra.value.firstDay,
+    dfCompra = edtCompra.value.lastDay,
     temGrade = chkGrade.value,
     grade = edtGrade.value ?: "",
     estoque = estoque(),
@@ -258,7 +242,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     validade = edtVal.value ?: 0
   )
 
-  abstract fun estoqueTotal(): EEstoqueTotal
+
   abstract fun estoque(): EEstoqueList
   abstract fun saldo(): Int
 

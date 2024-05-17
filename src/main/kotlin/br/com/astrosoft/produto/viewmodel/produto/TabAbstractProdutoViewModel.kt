@@ -18,19 +18,18 @@ sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val v
 
   abstract fun findPrecoAlteracao(filtro: FiltroListaProduto): List<Produtos>
 
-  abstract fun todoEstoque(): Boolean
   fun allLojas() = Loja.allLojas()
   fun geraRelatorio() {
     val produtos = subView.produtosSelecionados()
     val filtro = subView.filtro()
-    val report = RelatorioProduto(filtro.lojaEstoque)
+    val report = RelatorioProduto(filtro.loja)
     val listaProduto = produtos.map {
       ProdutoRelatorio(
         codigo = it.codigo ?: 0,
         descricao = it.descricao ?: "",
         grade = it.grade ?: "",
         unidade = it.unidade ?: "",
-        quant = when (filtro.lojaEstoque) {
+        quant = when (filtro.loja) {
           0 -> it.estoque
           2 -> it.DS_TT
           3 -> it.MR_TT
