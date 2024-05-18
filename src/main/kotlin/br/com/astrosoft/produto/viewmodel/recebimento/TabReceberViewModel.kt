@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -29,25 +30,32 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marcaEnum = EMarcaRecebimento.RECEBIDO
     produto.login = user?.login ?: ""
+    produto.validaProduto()
     produto.salva()
+    subView.focusCodigoBarra()
     val novaNota = subView.updateProduto()
-    if (novaNota == null || nota.produtos.isEmpty()){
+    if (novaNota == null || nota.produtos.isEmpty()) {
       subView.closeDialog()
     }
   }
 
-  fun salvaNotaProduto(bean: NotaRecebimentoProduto?)= viewModel.exec {
-    bean ?: fail("Produto não encontrado")
-    val numVal = bean.validade
+  private fun NotaRecebimentoProduto.validaProduto() {
+    val numVal = this.validade
     val validade = Validade.findValidade(numVal ?: 0)
-    if(validade != null) {
-      val dataNota = bean.data ?: fail("Data da nota não informada")
-      val dataMaxima = validade.dataMaxima(dataNota)
-      val dataVencimento = bean.vencimento
-      if(dataVencimento != null) {
-        if (dataVencimento > dataMaxima) fail("Vencimento maior que a validade")
+    if (validade != null) {
+      val dataRecebimento = this.data ?: fail("Data da nota não informada")
+      val dataVencimento = this.vencimento ?: fail("Data de vencimento obrigatório")
+      val dataFabricacaoVencimento = validade.dataFabricacaoVencimento(dataVencimento)
+      val dataFabricacaoRecebimento = validade.dataFabricacaoRecebimento(dataRecebimento)
+      if(dataFabricacaoVencimento < dataFabricacaoRecebimento){
+        fail("Data de fabricação inferior a ${dataFabricacaoRecebimento.format()}")
       }
     }
+  }
+
+  fun salvaNotaProduto(bean: NotaRecebimentoProduto?) = viewModel.exec {
+    bean ?: fail("Produto não encontrado")
+    bean.validaProduto()
     bean.salva()
     updateView()
   }
@@ -58,4 +66,5 @@ interface ITabReceber : ITabView {
   fun updateNota(notas: List<NotaRecebimento>)
   fun updateProduto(): NotaRecebimento?
   fun closeDialog()
+  fun focusCodigoBarra()
 }

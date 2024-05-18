@@ -6,13 +6,13 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.Validade
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
@@ -20,18 +20,18 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
+  private var edtCodigoBarra: TextField? = null
+
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
-      textField("Código de barras") {
+      edtCodigoBarra = textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.selecionaProdutos(nota, it.value)
-            this@textField.value = ""
-            this@textField.focus()
           }
         }
       }
@@ -119,5 +119,10 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
   fun close() {
     onClose?.invoke()
     form?.close()
+  }
+
+  fun focusCodigoBarra() {
+    edtCodigoBarra?.value = ""
+    edtCodigoBarra?.focus()
   }
 }

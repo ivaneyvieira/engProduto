@@ -12,12 +12,19 @@ class Validade(var validade: Int, var mesesFabricacao: Int) {
     saci.delValidade(this)
   }
 
-  fun dataMaxima(localDate: LocalDate): LocalDate {
-    val dataVencimento = localDate.minusMonths(mesesFabricacao.toLong()).plusMonths(validade.toLong())
-    return dataVencimento.lastDayOfMonth()
+  fun dataFabricacaoVencimento(dataVencimento: LocalDate): LocalDate {
+    return dataVencimento.minusMonths(validade.toLong()).firstDayOfMonth()
   }
 
-  private fun LocalDate.lastDayOfMonth(): LocalDate{
+  fun dataFabricacaoRecebimento(dataRecebimento: LocalDate): LocalDate {
+    return dataRecebimento.minusMonths(mesesFabricacao.toLong()).firstDayOfMonth()
+  }
+
+  private fun LocalDate.firstDayOfMonth(): LocalDate {
+    return this.withDayOfMonth(1)
+  }
+
+  private fun LocalDate.lastDayOfMonth(): LocalDate {
     return this.withDayOfMonth(this.lengthOfMonth())
   }
 
