@@ -12,22 +12,6 @@ class Validade(var validade: Int, var mesesFabricacao: Int) {
     saci.delValidade(this)
   }
 
-  fun dataFabricacaoVencimento(dataVencimento: LocalDate): LocalDate {
-    return dataVencimento.minusMonths(validade.toLong()).firstDayOfMonth()
-  }
-
-  fun dataFabricacaoRecebimento(dataRecebimento: LocalDate): LocalDate {
-    return dataRecebimento.minusMonths(mesesFabricacao.toLong()).firstDayOfMonth()
-  }
-
-  private fun LocalDate.firstDayOfMonth(): LocalDate {
-    return this.withDayOfMonth(1)
-  }
-
-  private fun LocalDate.lastDayOfMonth(): LocalDate {
-    return this.withDayOfMonth(this.lengthOfMonth())
-  }
-
   companion object {
     fun findAll(): List<Validade> {
       return saci.listValidade()

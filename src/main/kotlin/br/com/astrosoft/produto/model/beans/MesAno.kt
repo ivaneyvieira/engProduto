@@ -30,7 +30,7 @@ data class MesAno(val mes: Int, val ano: Int) {
       }
     }
 
-    fun valuesFutture() : List<MesAno> {
+    fun valuesFuture() : List<MesAno> {
       val mesAtual = LocalDate.now().withDayOfMonth(15)
       val listNum = (0..12 * 10).toList()
       return listNum.map {

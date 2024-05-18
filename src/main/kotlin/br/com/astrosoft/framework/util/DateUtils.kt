@@ -144,3 +144,11 @@ fun String?.parserDate(): LocalDate? {
     null
   }
 }
+
+fun LocalDate.firstDayOfMonth(): LocalDate {
+  return this.withDayOfMonth(1)
+}
+
+fun LocalDate.lastDayOfMonth(): LocalDate {
+  return this.withDayOfMonth(this.lengthOfMonth())
+}

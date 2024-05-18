@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.firstDayOfMonth
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -44,11 +45,11 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     val validade = Validade.findValidade(numVal ?: 0)
     if (validade != null) {
       val dataRecebimento = this.data ?: fail("Data da nota não informada")
-      val dataVencimento = this.vencimento ?: fail("Data de vencimento obrigatório")
-      val dataFabricacaoVencimento = validade.dataFabricacaoVencimento(dataVencimento)
-      val dataFabricacaoRecebimento = validade.dataFabricacaoRecebimento(dataRecebimento)
-      if(dataFabricacaoVencimento < dataFabricacaoRecebimento){
-        fail("Data de fabricação inferior a ${dataFabricacaoRecebimento.format()}")
+      this.vencimento ?: fail("Data de vencimento obrigatório")
+      val dataFabricacao = this.fabricacao ?: fail("Data de fabricação obrigatório")
+      val dataFabricacaoLimite = dataRecebimento.minusMonths(validade.mesesFabricacao.toLong()).firstDayOfMonth()
+      if(dataFabricacao < dataFabricacaoLimite){
+        fail("Data de fabricação inferior a ${dataFabricacaoLimite.format()}")
       }
     }
   }

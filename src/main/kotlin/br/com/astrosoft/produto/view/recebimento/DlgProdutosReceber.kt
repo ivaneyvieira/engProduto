@@ -70,18 +70,15 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
-      columnGrid(
-        NotaRecebimentoProduto::validade,
-        "Val",
-        width = "100px"
-      )
+      columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
+      columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MMM/yyyy")
       columnGrid(
         NotaRecebimentoProduto::vencimento,
         "Venc",
         width = "120px",
         pattern = "MMM/yyyy"
       ).comboFieldEditor<NotaRecebimentoProduto, LocalDate?> {
-        val datas = MesAno.values().map { mesAno ->
+        val datas = MesAno.valuesFuture().map { mesAno ->
           mesAno.lastDay
         }
         it.setItems(datas)

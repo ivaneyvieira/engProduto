@@ -32,6 +32,9 @@ class NotaRecebimentoProduto(
   var validade: Int?,
   var vencimento: LocalDate?,
 ) {
+  val fabricacao: LocalDate?
+    get() = vencimento?.minusMonths(validade?.toLong() ?: 0)?.withDayOfMonth(1)
+
   var marcaEnum: EMarcaRecebimento = EMarcaRecebimento.TODOS
     get() = EMarcaRecebimento.entries.firstOrNull { it.codigo == marca } ?: EMarcaRecebimento.TODOS
     set(value) {
