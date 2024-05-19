@@ -71,12 +71,12 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
       columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
-      columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MMM/yyyy")
+      columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
       columnGrid(
         NotaRecebimentoProduto::vencimento,
         "Venc",
         width = "120px",
-        pattern = "MMM/yyyy"
+        pattern = "MM/yy"
       ).comboFieldEditor<NotaRecebimentoProduto, LocalDate?> {
         val datas = MesAno.valuesFuture().map { mesAno ->
           mesAno.lastDay
@@ -84,7 +84,7 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
         it.setItems(datas)
         it.isEmptySelectionAllowed = true
         it.setItemLabelGenerator { data ->
-          data.format("MMM/yyyy")
+          data.format("MM/yy")
         }
       }
     }

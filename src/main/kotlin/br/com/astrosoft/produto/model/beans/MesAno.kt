@@ -1,21 +1,26 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
+import java.text.DecimalFormat
 import java.time.LocalDate
 
 data class MesAno(val mes: Int, val ano: Int) {
   val mesAnoFormat: String
-    get() = "${mesAnoFormat(mes)}/$ano"
-  val nomeMes: String
-    get() = mesAnoFormat(mes)
+    get() = "${mesFormat(mes)}/${anoFormat(ano)}"
   val firstDay: LocalDate
     get() = LocalDate.of(ano, mes, 1)
   val lastDay: LocalDate
     get() = firstDay.plusMonths(1).minusDays(1)
 
-  private val meses = listOf("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez")
+  private fun mesFormat(mes: Int): String {
+    val formatInteger = DecimalFormat("00")
+    return formatInteger.format(mes)
+  }
 
-  private fun mesAnoFormat(mes: Int): String {
-    return meses.getOrNull(mes - 1) ?: "???"
+  private fun anoFormat(ano: Int): String {
+    val anoSimles = ano % 100
+    val formatInteger = DecimalFormat("00")
+    return formatInteger.format(anoSimles)
   }
 
   fun ym() = ano * 100 + mes
