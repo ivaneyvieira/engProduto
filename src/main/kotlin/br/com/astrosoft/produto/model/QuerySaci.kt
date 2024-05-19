@@ -1069,6 +1069,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoque", filtro.estoque.codigo)
       addOptionalParameter("saldo", filtro.saldo)
       addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("temValidade", filtro.temValidade)
     }
   }
 

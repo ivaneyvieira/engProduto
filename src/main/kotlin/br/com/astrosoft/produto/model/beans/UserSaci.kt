@@ -21,7 +21,7 @@ class UserSaci : IUser {
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
   var produtoEstoqueGiro by DelegateAuthorized(2)
-  var produtoRetiraEntrega by DelegateAuthorized(3)
+  var produtoEstoqueValidade by DelegateAuthorized(3)
   var produtoRetiraEntregaEdit by DelegateAuthorized(4)
   var notaExp by DelegateAuthorized(5)
   var notaCD by DelegateAuthorized(6)

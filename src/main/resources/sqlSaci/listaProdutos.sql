@@ -70,7 +70,8 @@ WHERE (P.no = @PRDNO OR @CODIGO = 0)
         WHEN 'N' THEN (P.dereg & POW(2, 2)) = 0
         ELSE FALSE
       END
-  AND (IF(tipoGarantia = 2, garantia, 0) = :validade OR :validade = 0);
+  AND (IF(tipoGarantia = 2, garantia, 0) = :validade OR :validade = 0)
+  AND IF(:temValidade, IF(tipoGarantia = 2, garantia, 0) > 0, TRUE);
 
 DROP TABLE IF EXISTS T_STK_JS;
 CREATE TEMPORARY TABLE T_STK_JS
@@ -170,8 +171,12 @@ CREATE TEMPORARY TABLE T_BAR
 (
   PRIMARY KEY (prdno, gradeOpt)
 )
-SELECT prdno, IF(@TEMGRADE = 'S', grade, '') AS gradeOpt, barcode
-FROM sqldados.prdbar
+SELECT P.prdno                                    AS prdno,
+       IFNULL(IF(@TEMGRADE = 'S', grade, ''), '') AS gradeOpt,
+       TRIM(IFNULL(B.barcode, P.barcode))         AS barcode
+FROM T_PRD AS P
+       LEFT JOIN sqldados.prdbar AS B
+                 ON P.prdno = B.prdno
 GROUP BY prdno, gradeOpt;
 
 DROP TABLE IF EXISTS T_LOC;
@@ -249,7 +254,7 @@ FROM T_BAR AS B
        LEFT JOIN T_STK_TM AS TM
                  USING (prdno, gradeOpt)
        INNER JOIN T_PRD AS P
-                 USING (prdno)
+                  USING (prdno)
        LEFT JOIN sqldados.prdalq AS R
                  USING (prdno)
        LEFT JOIN sqldados.prd2 AS P2
@@ -288,26 +293,54 @@ CREATE TEMPORARY TABLE T_PRDVENDA
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT R.prdno, R.grade, MAX(date) AS date, SUM(quant / 1000) AS qtty
-FROM T_RESULT AS R
-       INNER JOIN sqldados.vendaDate AS X ON X.prdno = R.prdno AND X.grade = R.grade
+SELECT R.prdno, IF(@TEMGRADE = 'S', X.grade, '') AS grade, MAX(date) AS date, SUM(quant / 1000) AS qtty
+FROM T_PRD AS R
+       INNER JOIN sqldados.vendaDate AS X ON X.prdno = R.prdno
 WHERE (X.storeno IN (1, 2, 3, 4, 5, 6, 8))
   AND (X.storeno = @LOJA OR @LOJA = 0)
   AND date BETWEEN @DIVENDA AND @DFVENDA
-GROUP BY R.prdno, R.grade;
+GROUP BY R.prdno, IF(@TEMGRADE = 'S', X.grade, '');
 
 DROP TABLE IF EXISTS T_PRDCOMPRA;
 CREATE TEMPORARY TABLE T_PRDCOMPRA
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT R.prdno, R.grade, MAX(date) AS date, SUM(quant / 1000) AS qtty
-FROM T_RESULT AS R
-       INNER JOIN sqldados.compraDate P ON P.prdno = R.prdno AND P.grade = R.grade
+SELECT R.prdno, IF(@TEMGRADE = 'S', P.grade, '') AS grade, MAX(date) AS date, SUM(quant / 1000) AS qtty
+FROM T_PRD AS R
+       INNER JOIN sqldados.compraDate P ON P.prdno = R.prdno
 WHERE (storeno IN (1, 2, 3, 4, 5, 6, 8))
   AND (storeno = @LOJA OR @LOJA = 0)
   AND date BETWEEN @DICOMPRA AND @DFCOMPRA
-GROUP BY R.prdno, R.grade;
+GROUP BY R.prdno, IF(@TEMGRADE = 'S', P.grade, '');
+
+DROP TABLE IF EXISTS T_PRDVENCIMENTO;
+CREATE TEMPORARY TABLE T_PRDVENCIMENTO
+(
+  INDEX (prdno, grade)
+)
+SELECT A.prdno                                                                 AS prdno,
+       IF(@TEMGRADE = 'S', grade, '')                                          AS grade,
+       V.mesesFabricacao                                                       AS mesesFabricacao,
+       I.qtty / 1000                                                           AS entrada,
+       CONCAT(N.nfname, '/', N.invse)                                          AS nfEntrada,
+       DATE(N.date)                                                            AS dataEntrada,
+       SUBDATE(A.vencimento, INTERVAL IF(tipoGarantia = 2, garantia, 0) MONTH) AS fabricacao,
+       A.vencimento                                                            AS vencimento
+FROM sqldados.iprdAdicional AS A
+       INNER JOIN T_PRD AS P
+                  USING (prdno)
+       INNER JOIN sqldados.iprd AS I
+                  USING (invno, prdno, grade)
+       INNER JOIN sqldados.inv AS N
+                  USING (invno)
+       LEFT JOIN sqldados.validadeAdicional AS V
+                 ON V.validade = IF(tipoGarantia = 2, garantia, 0)
+WHERE A.vencimento IS NOT NULL
+  AND IF(tipoGarantia = 2, garantia, 0) > 0
+  AND (:temValidade = TRUE)
+  AND N.date BETWEEN @DICOMPRA AND @DFCOMPRA
+GROUP BY prdno, IF(@TEMGRADE = 'S', grade, '');
 
 SELECT R.prdno,
        codigo,
@@ -341,10 +374,17 @@ SELECT R.prdno,
        ROUND(IFNULL(V.qtty, 0)) AS qttyVendas,
        ROUND(IFNULL(C.qtty, 0)) AS qttyCompra,
        localizacao,
-       rotulo
+       rotulo,
+       VC.mesesFabricacao,
+       VC.entrada,
+       VC.nfEntrada,
+       VC.dataEntrada,
+       VC.fabricacao,
+       VC.vencimento
 FROM T_RESULT AS R
        LEFT JOIN T_PRDVENDA AS V ON (R.prdno = V.prdno AND R.grade = V.grade)
        LEFT JOIN T_PRDCOMPRA AS C ON (R.prdno = C.prdno AND R.grade = C.grade)
+       LEFT JOIN T_PRDVENCIMENTO AS VC ON (R.prdno = VC.prdno AND R.grade = VC.grade)
 WHERE (:pesquisa = ''
   OR codigo LIKE @PESQUISA
   OR descricao LIKE @PESQUISA_LIKE

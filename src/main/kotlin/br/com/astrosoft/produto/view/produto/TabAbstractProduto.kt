@@ -41,9 +41,9 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   private lateinit var edtVal: IntegerField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtListVend: TextField
-  private lateinit var edtType: IntegerField
-  private lateinit var edtCl: IntegerField
-  private lateinit var edtTributacao: TextField
+  protected lateinit var edtType: IntegerField
+  protected lateinit var edtCl: IntegerField
+  protected lateinit var edtTributacao: TextField
 
   private lateinit var edtVenda: Select<MesAno>
   private lateinit var edtCompra: Select<MesAno>
@@ -239,12 +239,14 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     grade = edtGrade.value ?: "",
     estoque = estoque(),
     saldo = saldo(),
-    validade = edtVal.value ?: 0
+    validade = edtVal.value ?: 0,
+    temValidade = temValidade()
   )
 
 
   abstract fun estoque(): EEstoqueList
   abstract fun saldo(): Int
+  abstract fun temValidade(): Boolean
 
   override fun Grid<Produtos>.gridPanel() {
     setSelectionMode(Grid.SelectionMode.MULTI)

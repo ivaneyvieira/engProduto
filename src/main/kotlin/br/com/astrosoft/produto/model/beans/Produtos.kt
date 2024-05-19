@@ -40,6 +40,12 @@ class Produtos(
   var MF_App: Int? = null,
   var localizacao: String?,
   var rotulo: String?,
+  var mesesFabricacao: Int?,
+  var entrada: Int?,
+  var nfEntrada: String?,
+  var dataEntrada: LocalDate?,
+  var fabricacao: LocalDate?,
+  var vencimento: LocalDate?,
 ) {
   val MF_Dif
     get() = (MF_TT ?: 0) - (MF_App ?: 0)
@@ -81,6 +87,7 @@ data class FiltroListaProduto(
   val estoque: EEstoqueList,
   val saldo: Int,
   val validade: Int,
+  val temValidade: Boolean,
 ) {
   val pesquisaNumero: Int?
     get() = pesquisa.toIntOrNull()

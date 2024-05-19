@@ -2,21 +2,20 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.EEstoqueList
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueGiroViewModel
-import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueGiroViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
+import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_DS_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MF_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MR_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_PK_TT
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Rotulo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_TM_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Unidade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_abrev
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_cl
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_estoque
@@ -24,8 +23,6 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_f
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantCompra
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tipo
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_tributacao
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -37,15 +34,15 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
-  TabAbstractProduto<ITabEstoqueGiroViewModel>(viewModel, showDatas = false), ITabEstoqueGiroViewModel {
+class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
+  TabAbstractProduto<ITabEstoqueValidadeViewModel>(viewModel, showDatas = false), ITabEstoqueValidadeViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
 
-  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueGiro ?: false
+  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueValidade ?: false
 
   override val label: String
-    get() = "Giro"
+    get() = "Validade"
 
   override fun HorizontalLayout.addAditionaisFields() {
     cmbEstoqueFiltro = select("Estoque") {
@@ -77,6 +74,10 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
         viewModel.geraRelatorio()
       }
     }
+
+    edtTributacao.isVisible = false
+    edtType.isVisible = false
+    edtCl.isVisible = false
   }
 
   override fun Grid<Produtos>.colunasGrid() {
@@ -98,10 +99,12 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     produto_TM_TT()
     produto_forn()
     produto_abrev()
-    produto_tributacao()
-    produto_Rotulo()
-    produto_tipo()
-    produto_cl()
+    columnGrid(Produtos::mesesFabricacao, "M Fab")
+    columnGrid(Produtos::entrada, "Entrada")
+    columnGrid(Produtos::nfEntrada, "NF")
+    columnGrid(Produtos::dataEntrada, "Data")
+    columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy")
+    columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy")
   }
 
   override fun estoque(): EEstoqueList {
@@ -113,6 +116,6 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
   }
 
   override fun temValidade(): Boolean {
-    return false
+    return true
   }
 }

@@ -20,7 +20,8 @@ class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
 
   override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
   override val tabProdutoUsr = TabProdutoUsr(viewModel.tabProdutoUsrViewModel)
-  override val tabEstoqueGirolViewModel = TabEstoqueGiroProduto(viewModel.tabEstoqueGiroViewModel)
+  override val tabEstoqueGiroViewModel = TabEstoqueGiroProduto(viewModel.tabEstoqueGiroViewModel)
+  override val tabEstoqueValidadeViewModel = TabEstoqueValidadeProduto(viewModel.tabEstoqueValidadeViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
