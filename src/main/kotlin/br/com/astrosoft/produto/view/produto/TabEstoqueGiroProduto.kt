@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.EEstoqueList
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueTotalViewModel
-import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueTotalViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueGiroViewModel
+import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueGiroViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_DS_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MF_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MR_TT
@@ -37,12 +37,12 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueTotalProduto(viewModel: TabEstoqueTotalViewModel) :
-  TabAbstractProduto<ITabEstoqueTotalViewModel>(viewModel, showDatas = false), ITabEstoqueTotalViewModel {
+class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
+  TabAbstractProduto<ITabEstoqueGiroViewModel>(viewModel, showDatas = false), ITabEstoqueGiroViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
 
-  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueTotal ?: false
+  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueGiro ?: false
 
   override val label: String
     get() = "Giro"

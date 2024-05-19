@@ -20,7 +20,7 @@ class UserSaci : IUser {
   var ativoSaci: String = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
-  var produtoEstoqueTotal by DelegateAuthorized(2)
+  var produtoEstoqueGiro by DelegateAuthorized(2)
   var produtoRetiraEntrega by DelegateAuthorized(3)
   var produtoRetiraEntregaEdit by DelegateAuthorized(4)
   var notaExp by DelegateAuthorized(5)
