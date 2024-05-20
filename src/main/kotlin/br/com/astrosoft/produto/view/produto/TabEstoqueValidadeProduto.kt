@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.EEstoqueList
+import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
@@ -78,6 +79,8 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     edtTributacao.isVisible = false
     edtType.isVisible = false
     edtCl.isVisible = false
+    edtCompra.isVisible = false
+    edtCompra.value = null
   }
 
   override fun Grid<Produtos>.colunasGrid() {
@@ -88,23 +91,22 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
-    produto_val()
     produto_estoque()
-    produto_quantCompra()
+    produto_val()
+    columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy", width="80px")
+    columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy", width="80px")
     produto_quantVenda()
     produto_DS_TT()
     produto_MR_TT()
     produto_MF_TT()
     produto_PK_TT()
     produto_TM_TT()
-    produto_forn()
-    produto_abrev()
-    columnGrid(Produtos::mesesFabricacao, "M Fab")
+    //columnGrid(Produtos::mesesFabricacao, "M Fab")
     columnGrid(Produtos::entrada, "Entrada")
     columnGrid(Produtos::nfEntrada, "NF")
     columnGrid(Produtos::dataEntrada, "Data")
-    columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy")
-    columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy")
+    produto_forn()
+    produto_abrev()
   }
 
   override fun estoque(): EEstoqueList {

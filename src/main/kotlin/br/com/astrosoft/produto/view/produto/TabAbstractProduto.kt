@@ -46,7 +46,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   protected lateinit var edtTributacao: TextField
 
   private lateinit var edtVenda: Select<MesAno>
-  private lateinit var edtCompra: Select<MesAno>
+  protected lateinit var edtCompra: Select<MesAno>
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkGrade: Checkbox
   private lateinit var edtGrade: TextField
@@ -231,9 +231,9 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     typeno = edtType.value ?: 0,
     clno = edtCl.value ?: 0,
     loja = cmbLoja.value?.no ?: 0,
-    diVenda = edtVenda.value.firstDay,
+    diVenda = edtVenda.value?.firstDay,
     dfVenda = MesAno.now().lastDay,
-    diCompra = edtCompra.value.firstDay,
+    diCompra = edtCompra.value?.firstDay,
     dfCompra = MesAno.now().lastDay,
     temGrade = chkGrade.value,
     grade = edtGrade.value ?: "",
