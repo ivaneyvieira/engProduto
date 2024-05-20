@@ -96,7 +96,7 @@ object ProdutosColumns {
     this.config()
   }
 
-  fun Grid<Produtos>.produto_estoque() = columnGrid(Produtos::estoque) {
+  fun Grid<Produtos>.produto_total() = columnGrid(Produtos::estoque) {
     this.setHeader("Total")
     this.config()
   }

@@ -19,7 +19,7 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_a
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_cl
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_estoque
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantCompra
@@ -88,7 +88,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     produto_grade()
     produto_Unidade()
     produto_val()
-    produto_estoque()
+    produto_total()
     produto_quantCompra()
     produto_quantVenda()
     produto_DS_TT()

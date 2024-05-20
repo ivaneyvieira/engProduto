@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.EEstoqueList
-import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
@@ -19,10 +18,9 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_U
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_abrev
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_estoque
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantCompra
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.button
@@ -91,20 +89,19 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
-    produto_estoque()
+    produto_total()
+    produto_quantVenda()
     produto_val()
     columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy", width="80px")
     columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy", width="80px")
-    produto_quantVenda()
+    columnGrid(Produtos::entrada, "Entrada")
+    columnGrid(Produtos::nfEntrada, "NF")
+    columnGrid(Produtos::dataEntrada, "Data")
     produto_DS_TT()
     produto_MR_TT()
     produto_MF_TT()
     produto_PK_TT()
     produto_TM_TT()
-    //columnGrid(Produtos::mesesFabricacao, "M Fab")
-    columnGrid(Produtos::entrada, "Entrada")
-    columnGrid(Produtos::nfEntrada, "NF")
-    columnGrid(Produtos::dataEntrada, "Data")
     produto_forn()
     produto_abrev()
   }
