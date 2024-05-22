@@ -3,13 +3,15 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class ProdutoValidade(
+class ProdutoInventario(
   var prdno: String?,
   var codigo: String?,
   var descricao: String?,
   var grade: String?,
   var unidade: String?,
   var validade: Int?,
+  var vendno: Int?,
+  var fornecedorAbrev: String?,
   var estoqueTotal: Int?,
   var estoqueDS: Int?,
   var estoqueMR: Int?,
@@ -27,13 +29,13 @@ class ProdutoValidade(
   }
 
   companion object {
-    fun find(filtro: FiltroProdutoValidade): List<ProdutoValidade> {
+    fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       return saci.produtoValidade(filtro)
     }
   }
 }
 
-data class FiltroProdutoValidade(
+data class FiltroProdutoInventario(
   val pesquisa: String,
   val codigo: String,
   val validade: Int,

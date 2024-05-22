@@ -6,12 +6,12 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.ECaracter
-import br.com.astrosoft.produto.model.beans.FiltroProdutoValidade
-import br.com.astrosoft.produto.model.beans.ProdutoValidade
+import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
+import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoValidade
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoValidade
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoValidadeViewModel
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
+import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
+import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -30,12 +30,12 @@ import java.io.ByteArrayInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
-  TabPanelGrid<ProdutoValidade>(ProdutoValidade::class),
-  ITabProdutoValidade {
+class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
+  TabPanelGrid<ProdutoInventario>(ProdutoInventario::class),
+  ITabProdutoInventario {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: TextField
-  private lateinit var edtValidade: IntegerField
+  private lateinit var edtInventario: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCartacer: Select<ECaracter>
 
@@ -56,7 +56,7 @@ class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
         viewModel.updateView()
       }
     }
-    edtValidade = integerField("Validade") {
+    edtInventario = integerField("Validade") {
       this.width = "100px"
       this.isClearButtonVisible = true
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -85,97 +85,94 @@ class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
       }
     }
 
-    downloadExcel(PlanilhaProdutoValidade())
+    downloadExcel(PlanilhaProdutoInventario())
   }
 
-  override fun Grid<ProdutoValidade>.gridPanel() {
+  override fun Grid<ProdutoInventario>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoValidade::codigo, header = "Código")
-    columnGrid(ProdutoValidade::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoValidade::grade, header = "Grade")
-    columnGrid(ProdutoValidade::unidade, header = "Un")
-    columnGrid(ProdutoValidade::validade, header = "Val")
-    columnGrid(ProdutoValidade::estoqueTotal, header = "Total")
-    columnGrid(ProdutoValidade::estoqueDS, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoDS, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoValidade::estoqueMR, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoMR, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoValidade::estoqueMF, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoMF, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoValidade::estoquePK, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoPK, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoValidade::estoqueTM, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoTM, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::codigo, header = "Código")
+    columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
+    columnGrid(ProdutoInventario::grade, header = "Grade")
+    columnGrid(ProdutoInventario::unidade, header = "Un")
+    columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
+    columnGrid(ProdutoInventario::validade, header = "Val")
+    columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
+    columnGrid(ProdutoInventario::estoqueDS, header = "Est")
+    columnGrid(ProdutoInventario::vencimentoDS, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::estoqueMR, header = "Est")
+    columnGrid(ProdutoInventario::vencimentoMR, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::estoqueMF, header = "Est")
+    columnGrid(ProdutoInventario::vencimentoMF, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::estoquePK, header = "Est")
+    columnGrid(ProdutoInventario::vencimentoPK, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::estoqueTM, header = "Est")
+    columnGrid(ProdutoInventario::vencimentoTM, header = "Venc", pattern = "mm/yy")
 
     val headerRow = prependHeaderRow()
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::codigo),
-      this.getColumnBy(ProdutoValidade::descricao),
-      this.getColumnBy(ProdutoValidade::grade),
-      this.getColumnBy(ProdutoValidade::unidade),
-      this.getColumnBy(ProdutoValidade::validade),
-      this.getColumnBy(ProdutoValidade::estoqueTotal),
+      this.getColumnBy(ProdutoInventario::codigo),
+      this.getColumnBy(ProdutoInventario::descricao),
+      this.getColumnBy(ProdutoInventario::grade),
+      this.getColumnBy(ProdutoInventario::unidade),
+      this.getColumnBy(ProdutoInventario::validade),
+      this.getColumnBy(ProdutoInventario::fornecedorAbrev),
+      this.getColumnBy(ProdutoInventario::estoqueTotal),
     ).text = "Produto"
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::estoqueDS),
-      this.getColumnBy(ProdutoValidade::vencimentoDS),
+      this.getColumnBy(ProdutoInventario::estoqueDS),
+      this.getColumnBy(ProdutoInventario::vencimentoDS),
     ).text = "DS"
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::estoqueMR),
-      this.getColumnBy(ProdutoValidade::vencimentoMR),
+      this.getColumnBy(ProdutoInventario::estoqueMR),
+      this.getColumnBy(ProdutoInventario::vencimentoMR),
     ).text = "MR"
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::estoqueMF),
-      this.getColumnBy(ProdutoValidade::vencimentoMF),
+      this.getColumnBy(ProdutoInventario::estoqueMF),
+      this.getColumnBy(ProdutoInventario::vencimentoMF),
     ).text = "MF"
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::estoquePK),
-      this.getColumnBy(ProdutoValidade::vencimentoPK),
+      this.getColumnBy(ProdutoInventario::estoquePK),
+      this.getColumnBy(ProdutoInventario::vencimentoPK),
     ).text = "PK"
     headerRow.join(
-      this.getColumnBy(ProdutoValidade::estoqueTM),
-      this.getColumnBy(ProdutoValidade::vencimentoTM),
+      this.getColumnBy(ProdutoInventario::estoqueTM),
+      this.getColumnBy(ProdutoInventario::vencimentoTM),
     ).text = "TM"
   }
 
-  override fun filtro(): FiltroProdutoValidade {
-    return FiltroProdutoValidade(
+  override fun filtro(): FiltroProdutoInventario {
+    return FiltroProdutoInventario(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtCodigo.value ?: "",
-      validade = edtValidade.value ?: 0,
+      validade = edtInventario.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
     )
   }
 
-  override fun updateProdutos(produtos: List<ProdutoValidade>) {
+  override fun updateProdutos(produtos: List<ProdutoInventario>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<ProdutoValidade> {
+  override fun produtosSelecionados(): List<ProdutoInventario> {
     return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.produtoValidade == true
+    return username?.produtoInventario == true
   }
 
   override val label: String
-    get() = "Val Inv"
+    get() = "Inventário"
 
   override fun updateComponent() {
     viewModel.updateView()
   }
 
-  override fun printerUser(): List<String> {
-    val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraProduto.orEmpty().toList()
-  }
-
-  private fun HasComponents.downloadExcel(planilha: PlanilhaProdutoValidade) {
+  private fun HasComponents.downloadExcel(planilha: PlanilhaProdutoInventario) {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(itensSelecionados())
       ByteArrayInputStream(bytes)

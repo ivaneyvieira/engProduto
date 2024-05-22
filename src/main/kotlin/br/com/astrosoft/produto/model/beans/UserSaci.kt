@@ -22,7 +22,7 @@ class UserSaci : IUser {
   var produtoList by DelegateAuthorized(1)
   var produtoEstoqueGiro by DelegateAuthorized(2)
   var produtoEstoqueValidade by DelegateAuthorized(3)
-  var produtoValidade by DelegateAuthorized(4)
+  var produtoInventario by DelegateAuthorized(4)
   var notaExp by DelegateAuthorized(5)
   var notaCD by DelegateAuthorized(6)
   var notaEnt by DelegateAuthorized(7)

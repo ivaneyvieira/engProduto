@@ -1146,9 +1146,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun produtoValidade(filtro: FiltroProdutoValidade): List<ProdutoValidade> {
+  fun produtoValidade(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
     val sql = "/sqlSaci/produtoValidade.sql"
-    return query(sql, ProdutoValidade::class) {
+    return query(sql, ProdutoInventario::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("validade", filtro.validade)
@@ -1157,7 +1157,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateProdutoValidade(produtoValidade: ProdutoValidade) {
+  fun updateProdutoValidade(produtoValidade: ProdutoInventario) {
     updateProdutoValidade(
       storeno = 2,
       prdno = produtoValidade.prdno ?: "",

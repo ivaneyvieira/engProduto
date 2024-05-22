@@ -1,28 +1,28 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.produto.model.beans.ProdutoValidade
+import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFSheet
 
-class PlanilhaProdutoValidade : Planilha<ProdutoValidade>("Validade Inventário") {
+class PlanilhaProdutoInventario : Planilha<ProdutoInventario>("Validade Inventário") {
   init {
-    columnSheet(ProdutoValidade::codigo, header = "Código")
-    columnSheet(ProdutoValidade::descricao, header = "Descrição")
-    columnSheet(ProdutoValidade::grade, header = "Grade")
-    columnSheet(ProdutoValidade::unidade, header = "Un")
-    columnSheet(ProdutoValidade::validade, header = "Val")
-    columnSheet(ProdutoValidade::estoqueTotal, header = "Total")
-    columnSheet(ProdutoValidade::estoqueDS, header = "Est")
-    columnSheet(ProdutoValidade::vencimentoDS, header = "Venc", pattern = "mm/yy")
-    columnSheet(ProdutoValidade::estoqueMR, header = "Est")
-    columnSheet(ProdutoValidade::vencimentoMR, header = "Venc", pattern = "mm/yy")
-    columnSheet(ProdutoValidade::estoqueMF, header = "Est")
-    columnSheet(ProdutoValidade::vencimentoMF, header = "Venc", pattern = "mm/yy")
-    columnSheet(ProdutoValidade::estoquePK, header = "Est")
-    columnSheet(ProdutoValidade::vencimentoPK, header = "Venc", pattern = "mm/yy")
-    columnSheet(ProdutoValidade::estoqueTM, header = "Est")
-    columnSheet(ProdutoValidade::vencimentoTM, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::codigo, header = "Código")
+    columnSheet(ProdutoInventario::descricao, header = "Descrição")
+    columnSheet(ProdutoInventario::grade, header = "Grade")
+    columnSheet(ProdutoInventario::unidade, header = "Un")
+    columnSheet(ProdutoInventario::validade, header = "Val")
+    columnSheet(ProdutoInventario::estoqueTotal, header = "Total")
+    columnSheet(ProdutoInventario::estoqueDS, header = "Est")
+    columnSheet(ProdutoInventario::vencimentoDS, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::estoqueMR, header = "Est")
+    columnSheet(ProdutoInventario::vencimentoMR, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::estoqueMF, header = "Est")
+    columnSheet(ProdutoInventario::vencimentoMF, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::estoquePK, header = "Est")
+    columnSheet(ProdutoInventario::vencimentoPK, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::estoqueTM, header = "Est")
+    columnSheet(ProdutoInventario::vencimentoTM, header = "Venc", pattern = "mm/yy")
   }
 
   override fun XSSFSheet.beforeWrite() {
