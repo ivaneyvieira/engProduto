@@ -288,9 +288,12 @@ class UserSaci : IUser {
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
   var produto
-    get() = produtoList || admin
+    get() = produtoList  || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario || admin
     set(value) {
       produtoList = value
+      produtoEstoqueGiro = value
+      produtoEstoqueValidade = value
+      produtoInventario = value
     }
   var nota
     get() = notaSep || notaExp || notaCD || notaEnt || admin
