@@ -17,7 +17,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (prdno, grade)
 )
 SELECT P.no                              AS prdno,
-       TRIM(P.no)                        AS codigo,
+       TRIM(P.no) * 1                    AS codigo,
        TRIM(MID(P.name, 1, 37))          AS descricao,
        IFNULL(B.grade, '')               AS grade,
        TRIM(MID(P.name, 37, 3))          AS unidade,
@@ -56,24 +56,24 @@ GROUP BY prdno, grade;
 DROP TABLE IF EXISTS T_VAL;
 CREATE TEMPORARY TABLE T_VAL
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, grade, seq)
 )
-SELECT prdno                               AS prdno,
-       grade                               AS grade,
-       SUM(IF(storeno = 2, estoque, 0))    AS estoqueDS,
-       SUM(IF(storeno = 3, estoque, 0))    AS estoqueMR,
-       SUM(IF(storeno = 4, estoque, 0))    AS estoqueMF,
-       SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
-       SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM,
-       MAX(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
-       MAX(IF(storeno = 3, vencimento, 0)) AS vencimentoMR,
-       MAX(IF(storeno = 4, vencimento, 0)) AS vencimentoMF,
-       MAX(IF(storeno = 5, vencimento, 0)) AS vencimentoPK,
-       MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM
-FROM sqldados.produtoValidade
+SELECT seq          AS seq,
+       prdno        AS prdno,
+       grade        AS grade,
+       estoqueDS    AS estoqueDS,
+       estoqueMR    AS estoqueMR,
+       estoqueMF    AS estoqueMF,
+       estoquePK    AS estoquePK,
+       estoqueTM    AS estoqueTM,
+       vencimentoDS AS vencimentoDS,
+       vencimentoMR AS vencimentoMR,
+       vencimentoMF AS vencimentoMF,
+       vencimentoPK AS vencimentoPK,
+       vencimentoTM AS vencimentoTM
+FROM sqldados.produtoValidadeLoja
        INNER JOIN T_PRD
-                  USING (prdno, grade)
-GROUP BY prdno, grade;
+                  USING (prdno, grade);
 
 SELECT P.prdno,
        P.codigo,
@@ -84,6 +84,7 @@ SELECT P.prdno,
        P.vendno,
        P.fornecedorAbrev,
        IFNULL(S.estoqueTotal, 0)     AS estoqueTotal,
+       V.seq,
        V.estoqueDS,
        V.estoqueMR,
        V.estoqueMF,
@@ -104,5 +105,6 @@ WHERE (@PESQUISA = '' OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
-GROUP BY prdno, grade, descricao, unidade
+GROUP BY prdno, codigo, grade, descricao, unidade, seq
+ORDER BY codigo, grade, seq
 

@@ -10,10 +10,12 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
+import com.github.mvysny.kaributools.sortProperty
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
@@ -71,7 +73,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
-
     cmbCartacer = select("Caracter") {
       this.setItems(ECaracter.entries)
       this.setItemLabelGenerator { item ->
@@ -84,6 +85,20 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
 
     downloadExcel(PlanilhaProdutoInventario())
+
+    button("Adicionar") {
+      this.icon = VaadinIcon.PLUS.create()
+      addClickListener {
+        viewModel.adicionarLinha()
+      }
+    }
+
+    button("Remover") {
+      this.icon = VaadinIcon.TRASH.create()
+      addClickListener {
+        viewModel.removerLinha()
+      }
+    }
   }
 
   override fun Grid<ProdutoInventario>.gridPanel() {

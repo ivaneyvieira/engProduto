@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 
 class ProdutoInventario(
   var prdno: String?,
-  var codigo: String?,
+  var codigo: Int?,
   var descricao: String?,
   var grade: String?,
   var unidade: String?,
@@ -12,6 +12,7 @@ class ProdutoInventario(
   var vendno: Int?,
   var fornecedorAbrev: String?,
   var estoqueTotal: Int?,
+  var seq: Int?,
   var estoqueDS: Int?,
   var estoqueMR: Int?,
   var estoqueMF: Int?,
@@ -70,6 +71,10 @@ class ProdutoInventario(
 
   fun update() {
     saci.updateProdutoValidade(this)
+  }
+
+  fun remove() {
+    saci.removeProdutoValidade(this)
   }
 
   companion object {

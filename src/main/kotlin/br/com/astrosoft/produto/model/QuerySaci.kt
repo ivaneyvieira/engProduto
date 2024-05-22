@@ -1157,53 +1157,29 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateProdutoValidade(produtoValidade: ProdutoInventario) {
-    updateProdutoValidade(
-      storeno = 2,
-      prdno = produtoValidade.prdno ?: "",
-      grade = produtoValidade.grade ?: "",
-      vencimento = produtoValidade.vencimentoDS,
-      estoque = produtoValidade.estoqueDS
-    )
-    updateProdutoValidade(
-      storeno = 3,
-      prdno = produtoValidade.prdno ?: "",
-      grade = produtoValidade.grade ?: "",
-      vencimento = produtoValidade.vencimentoMR,
-      estoque = produtoValidade.estoqueMR
-    )
-    updateProdutoValidade(
-      storeno = 4,
-      prdno = produtoValidade.prdno ?: "",
-      grade = produtoValidade.grade ?: "",
-      vencimento = produtoValidade.vencimentoMF,
-      estoque = produtoValidade.estoqueMF
-    )
-    updateProdutoValidade(
-      storeno = 5,
-      prdno = produtoValidade.prdno ?: "",
-      grade = produtoValidade.grade ?: "",
-      vencimento = produtoValidade.vencimentoPK,
-      estoque = produtoValidade.estoquePK
-    )
-    updateProdutoValidade(
-      storeno = 8,
-      prdno = produtoValidade.prdno ?: "",
-      grade = produtoValidade.grade ?: "",
-      vencimento = produtoValidade.vencimentoTM,
-      estoque = produtoValidade.estoqueTM
-    )
-
-  }
-
-  fun updateProdutoValidade(storeno: Int, prdno: String, grade: String, vencimento: Int?, estoque: Int?) {
+  fun updateProdutoValidade(produtoInventario: ProdutoInventario) {
     val sql = "/sqlSaci/produtoValidadeUpdate.sql"
     script(sql) {
-      addOptionalParameter("storeno", storeno)
-      addOptionalParameter("prdno", prdno)
-      addOptionalParameter("grade", grade)
-      addOptionalParameter("vencimento", vencimento ?: 0)
-      addOptionalParameter("estoque", estoque ?: 0)
+      addOptionalParameter("seq", produtoInventario.seq ?: 0)
+      addOptionalParameter("prdno", produtoInventario.prdno)
+      addOptionalParameter("grade", produtoInventario.grade)
+      addOptionalParameter("vencimentoDS", produtoInventario.vencimentoDS ?: 0)
+      addOptionalParameter("estoqueDS", produtoInventario.estoqueDS ?: 0)
+      addOptionalParameter("vencimentoMR", produtoInventario.vencimentoMR ?: 0)
+      addOptionalParameter("estoqueMR", produtoInventario.estoqueMR ?: 0)
+      addOptionalParameter("vencimentoMF", produtoInventario.vencimentoMF ?: 0)
+      addOptionalParameter("estoqueMF", produtoInventario.estoqueMF ?: 0)
+      addOptionalParameter("vencimentoPK", produtoInventario.vencimentoPK ?: 0)
+      addOptionalParameter("estoquePK", produtoInventario.estoquePK ?: 0)
+      addOptionalParameter("vencimentoTM", produtoInventario.vencimentoTM ?: 0)
+      addOptionalParameter("estoqueTM", produtoInventario.estoqueTM ?: 0)
+    }
+  }
+
+  fun removeProdutoValidade(produtoInventario: ProdutoInventario) {
+    val sql = "/sqlSaci/produtoValidadeRemove.sql"
+    script(sql) {
+      addOptionalParameter("seq", produtoInventario.seq ?: 0)
     }
   }
 
