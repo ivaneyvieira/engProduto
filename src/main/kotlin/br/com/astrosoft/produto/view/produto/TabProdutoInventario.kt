@@ -15,7 +15,6 @@ import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
-import com.github.mvysny.kaributools.sortProperty
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
@@ -109,7 +108,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.withEditor(
       ProdutoInventario::class,
       openEditor = {
-        when(user?.lojaProduto) {
+        when (user?.lojaProduto) {
           2 -> this.focusEditor(ProdutoInventario::estoqueDS)
           3 -> this.focusEditor(ProdutoInventario::estoqueMR)
           4 -> this.focusEditor(ProdutoInventario::estoqueMF)
@@ -130,8 +129,16 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::vendno, header = "Cod For")
     columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
     columnGrid(ProdutoInventario::validade, header = "Val")
-    columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
 
+    val colEstoqueTotal = when (user?.lojaProduto) {
+      2 -> this.columnGrid(ProdutoInventario::estoqueTotalDS, header = "Total")
+      3 -> this.columnGrid(ProdutoInventario::estoqueTotalMR, header = "Total")
+      4 -> this.columnGrid(ProdutoInventario::estoqueTotalMF, header = "Total")
+      5 -> this.columnGrid(ProdutoInventario::estoqueTotalPK, header = "Total")
+      8 -> this.columnGrid(ProdutoInventario::estoqueTotalTM, header = "Total")
+      0 -> this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
+      else -> null
+    }
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
@@ -162,7 +169,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.getColumnBy(ProdutoInventario::validade),
       this.getColumnBy(ProdutoInventario::vendno),
       this.getColumnBy(ProdutoInventario::fornecedorAbrev),
-      this.getColumnBy(ProdutoInventario::estoqueTotal),
+      colEstoqueTotal,
     ).text = "Produto"
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       headerRow.join(

@@ -50,5 +50,12 @@ SELECT prdno                               AS prdno,
 FROM sqldados.produtoValidade
 GROUP BY prdno, grade;
 
+ALTER TABLE sqldados.produtoValidadeLoja
+  ADD COLUMN dataEntrada INT NOT NULL DEFAULT 0;
+
+UPDATE sqldados.produtoValidadeLoja
+SET dataEntrada = CURRENT_DATE() * 1
+WHERE dataEntrada = 0;
+
 SELECT *
 FROM sqldados.produtoValidadeLoja;
