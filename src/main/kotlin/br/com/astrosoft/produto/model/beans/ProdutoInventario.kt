@@ -24,37 +24,38 @@ class ProdutoInventario(
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
 ) {
-  var vencimentoDSStr: String
+  var vencimentoDSStr: String?
     get() = vencimento(vencimentoDS)
     set(value) {
       vencimentoDS = mesAno(value)
     }
 
-  var vencimentoMRStr: String
+  var vencimentoMRStr: String?
     get() = vencimento(vencimentoMR)
     set(value) {
       vencimentoMR = mesAno(value)
     }
 
-  var vencimentoMFStr: String
+  var vencimentoMFStr: String?
     get() = vencimento(vencimentoMF)
     set(value) {
       vencimentoMF = mesAno(value)
     }
 
-  var vencimentoPKStr: String
+  var vencimentoPKStr: String?
     get() = vencimento(vencimentoPK)
     set(value) {
       vencimentoPK = mesAno(value)
     }
 
-  var vencimentoTMStr: String
+  var vencimentoTMStr: String?
     get() = vencimento(vencimentoTM)
     set(value) {
       vencimentoTM = mesAno(value)
     }
 
-  fun mesAno(value: String): Int {
+  fun mesAno(value: String?): Int {
+    value ?: return 0
     val mes = value.substring(0, 2).toIntOrNull() ?: return 0
     val ano = value.substring(3, 5).toIntOrNull() ?: return 0
     return mes + (ano + 2000) * 100

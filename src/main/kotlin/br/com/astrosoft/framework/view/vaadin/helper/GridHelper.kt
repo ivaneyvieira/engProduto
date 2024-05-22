@@ -172,6 +172,7 @@ private fun mesAnoFieldComponente() = ComboBox<String>().apply {
   this.isClearButtonVisible = true
   this.setWidthFull()
   this.setSizeFull()
+  this.isAllowCustomValue = true
   val dateList :List<String> = (0..12*15).map { num ->
     LocalDate.now().withDayOfMonth(15).plusMonths(num.toLong()).format("MM/yy")
   }
