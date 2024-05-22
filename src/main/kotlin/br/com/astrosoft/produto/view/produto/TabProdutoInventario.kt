@@ -84,8 +84,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
-    downloadExcel(PlanilhaProdutoInventario())
-
     button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
       addClickListener {
@@ -99,6 +97,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         viewModel.removerLinha()
       }
     }
+
+    downloadExcel(PlanilhaProdutoInventario())
   }
 
   override fun Grid<ProdutoInventario>.gridPanel() {
