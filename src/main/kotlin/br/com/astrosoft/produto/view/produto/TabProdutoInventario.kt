@@ -107,17 +107,29 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
-    columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
 
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
+      columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    }
+    if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
+      columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    }
+    if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
+      columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    }
+    if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
+      columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    }
+    if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
+      columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    }
     val headerRow = prependHeaderRow()
     headerRow.join(
       this.getColumnBy(ProdutoInventario::codigo),
@@ -129,26 +141,36 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.getColumnBy(ProdutoInventario::fornecedorAbrev),
       this.getColumnBy(ProdutoInventario::estoqueTotal),
     ).text = "Produto"
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::estoqueDS),
-      this.getColumnBy(ProdutoInventario::vencimentoDSStr),
-    ).text = "DS"
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::estoqueMR),
-      this.getColumnBy(ProdutoInventario::vencimentoMRStr),
-    ).text = "MR"
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::estoqueMF),
-      this.getColumnBy(ProdutoInventario::vencimentoMFStr),
-    ).text = "MF"
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::estoquePK),
-      this.getColumnBy(ProdutoInventario::vencimentoPKStr),
-    ).text = "PK"
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::estoqueTM),
-      this.getColumnBy(ProdutoInventario::vencimentoTMStr),
-    ).text = "TM"
+    if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
+      headerRow.join(
+        this.getColumnBy(ProdutoInventario::estoqueDS),
+        this.getColumnBy(ProdutoInventario::vencimentoDSStr),
+      ).text = "DS"
+    }
+    if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
+      headerRow.join(
+        this.getColumnBy(ProdutoInventario::estoqueMR),
+        this.getColumnBy(ProdutoInventario::vencimentoMRStr),
+      ).text = "MR"
+    }
+    if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
+      headerRow.join(
+        this.getColumnBy(ProdutoInventario::estoqueMF),
+        this.getColumnBy(ProdutoInventario::vencimentoMFStr),
+      ).text = "MF"
+    }
+    if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
+      headerRow.join(
+        this.getColumnBy(ProdutoInventario::estoquePK),
+        this.getColumnBy(ProdutoInventario::vencimentoPKStr),
+      ).text = "PK"
+    }
+    if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
+      headerRow.join(
+        this.getColumnBy(ProdutoInventario::estoqueTM),
+        this.getColumnBy(ProdutoInventario::vencimentoTMStr),
+      ).text = "TM"
+    }
   }
 
   override fun filtro(): FiltroProdutoInventario {
