@@ -9,18 +9,26 @@ import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoValidade
 import br.com.astrosoft.produto.model.beans.ProdutoValidade
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoValidade
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoValidadeViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.stefan.LazyDownloadButton
+import java.io.ByteArrayInputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
   TabPanelGrid<ProdutoValidade>(ProdutoValidade::class),
@@ -76,6 +84,8 @@ class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
         viewModel.updateView()
       }
     }
+
+    downloadExcel(PlanilhaProdutoValidade())
   }
 
   override fun Grid<ProdutoValidade>.gridPanel() {
@@ -89,15 +99,15 @@ class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
     columnGrid(ProdutoValidade::validade, header = "Val")
     columnGrid(ProdutoValidade::estoqueTotal, header = "Total")
     columnGrid(ProdutoValidade::estoqueDS, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoDS, header = "Venc")
+    columnGrid(ProdutoValidade::vencimentoDS, header = "Venc", pattern = "mm/yy")
     columnGrid(ProdutoValidade::estoqueMR, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoMR, header = "Venc")
+    columnGrid(ProdutoValidade::vencimentoMR, header = "Venc", pattern = "mm/yy")
     columnGrid(ProdutoValidade::estoqueMF, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoMF, header = "Venc")
+    columnGrid(ProdutoValidade::vencimentoMF, header = "Venc", pattern = "mm/yy")
     columnGrid(ProdutoValidade::estoquePK, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoPK, header = "Venc")
+    columnGrid(ProdutoValidade::vencimentoPK, header = "Venc", pattern = "mm/yy")
     columnGrid(ProdutoValidade::estoqueTM, header = "Est")
-    columnGrid(ProdutoValidade::vencimentoTM, header = "Venc")
+    columnGrid(ProdutoValidade::vencimentoTM, header = "Venc", pattern = "mm/yy")
 
     val headerRow = prependHeaderRow()
     headerRow.join(
@@ -163,5 +173,21 @@ class TabProdutoValidade(val viewModel: TabProdutoValidadeViewModel) :
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()
+  }
+
+  private fun HasComponents.downloadExcel(planilha: PlanilhaProdutoValidade) {
+    val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
+      val bytes = planilha.write(itensSelecionados())
+      ByteArrayInputStream(bytes)
+    })
+    button.text = "Planilha"
+    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    add(button)
+  }
+
+  private fun filename(): String {
+    val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
+    val textTime = LocalDateTime.now().format(sdf)
+    return "produto$textTime.xlsx"
   }
 }

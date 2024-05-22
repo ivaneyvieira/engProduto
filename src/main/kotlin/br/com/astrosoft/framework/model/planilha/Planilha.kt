@@ -1,11 +1,8 @@
 package br.com.astrosoft.framework.model.planilha
 
-import org.apache.poi.ss.usermodel.CellStyle
-import org.apache.poi.ss.usermodel.FillPatternType
-import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.ss.usermodel.Sheet
-import org.apache.poi.ss.usermodel.VerticalAlignment
-import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.ss.usermodel.*
+import org.apache.poi.xssf.usermodel.XSSFCellStyle
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
@@ -15,11 +12,12 @@ import java.util.*
 import kotlin.reflect.KProperty1
 
 open class Planilha<B>(private val sheatName: String) {
+  protected var headerStyle: XSSFCellStyle? = null
   protected val columns: MutableList<Column<B, *>> = mutableListOf()
 
   private val mapStyles = mutableMapOf<String, CellStyle>()
 
-  private fun Workbook.createStyle(pattern : String): CellStyle{
+  private fun Workbook.createStyle(pattern: String): CellStyle {
     return mapStyles.getOrPut(pattern) {
       val style = this.createCellStyle()
       style.dataFormat = this.creationHelper.createDataFormat().getFormat(pattern)
@@ -78,10 +76,8 @@ open class Planilha<B>(private val sheatName: String) {
   private fun Sheet.row(bean: B) {
     val row = this.createRow(this.physicalNumberOfRows)
 
-
     columns.forEachIndexed { index, column ->
       val cellValue = column.property.value(bean)
-
 
       row.createCell(index).apply {
         when (cellValue) {
@@ -125,14 +121,19 @@ open class Planilha<B>(private val sheatName: String) {
 
   fun write(listBean: List<B>): ByteArray {
     val wb = XSSFWorkbook()
-    val headerStyle = wb.createCellStyle().apply {
+    headerStyle = wb.createCellStyle().apply {
       fillForegroundColor = IndexedColors.GREY_25_PERCENT.index
       fillPattern = FillPatternType.SOLID_FOREGROUND
       verticalAlignment = VerticalAlignment.TOP
+      this.borderTop = BorderStyle.THIN
+      this.borderBottom = BorderStyle.THIN
+      this.borderLeft = BorderStyle.THIN
+      this.borderRight = BorderStyle.THIN
     }
 
     val stNotas = wb.createSheet(sheatName).apply {
-      val headerRow = this.createRow(0)
+      this.beforeWrite()
+      val headerRow = this.createRow(this.physicalNumberOfRows)
       val headers = columns.map { it.header }
       headers.forEachIndexed { index, header ->
         headerRow.createCell(index).apply {
@@ -157,5 +158,10 @@ open class Planilha<B>(private val sheatName: String) {
     wb.write(outBytes)
     return outBytes.toByteArray()
   }
+
+  protected open fun XSSFSheet.beforeWrite() {
+  }
 }
+
+
 

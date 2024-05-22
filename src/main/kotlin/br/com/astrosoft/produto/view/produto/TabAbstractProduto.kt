@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
 import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
@@ -25,7 +24,6 @@ import com.vaadin.flow.data.value.ValueChangeMode.LAZY
 import com.vaadin.flow.function.SerializablePredicate
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
@@ -243,7 +241,6 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     temValidade = temValidade()
   )
 
-
   abstract fun estoque(): EEstoqueList
   abstract fun saldo(): Int
   abstract fun temValidade(): Boolean
@@ -264,7 +261,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     println(colList)
   }
 
-    private fun HasComponents.downloadExcel(planilha: PlanilhaProduto) {
+  private fun HasComponents.downloadExcel(planilha: PlanilhaProduto) {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(itensSelecionados())
       ByteArrayInputStream(bytes)
