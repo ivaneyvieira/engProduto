@@ -4,7 +4,7 @@ SET SQL_MODE = '';
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+DO @PESQUISALIKE := IF(@PESQUISA NOT REGEXP '[0-9]+', CONCAT('%', @PESQUISA, '%'), '');
 DO @CODIGO := :codigo;
 DO @PRDNO := LPAD(@CODIGO, 16, ' ');
 DO @VALIDADE := :validade;
@@ -65,11 +65,11 @@ SELECT prdno                               AS prdno,
        SUM(IF(storeno = 4, estoque, 0))    AS estoqueMF,
        SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
        SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM,
-       SUM(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
-       SUM(IF(storeno = 3, vencimento, 0)) AS vencimentoMR,
-       SUM(IF(storeno = 4, vencimento, 0)) AS vencimentoMF,
-       SUM(IF(storeno = 5, vencimento, 0)) AS vencimentoPK,
-       SUM(IF(storeno = 8, vencimento, 0)) AS vencimentoTM
+       MAX(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
+       MAX(IF(storeno = 3, vencimento, 0)) AS vencimentoMR,
+       MAX(IF(storeno = 4, vencimento, 0)) AS vencimentoMF,
+       MAX(IF(storeno = 5, vencimento, 0)) AS vencimentoPK,
+       MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM
 FROM sqldados.produtoValidade
        INNER JOIN T_PRD
                   USING (prdno, grade)
@@ -83,17 +83,17 @@ SELECT P.prdno,
        P.validade,
        P.vendno,
        P.fornecedorAbrev,
-       IFNULL(S.estoqueTotal, 0) AS estoqueTotal,
+       IFNULL(S.estoqueTotal, 0)     AS estoqueTotal,
        V.estoqueDS,
        V.estoqueMR,
        V.estoqueMF,
        V.estoquePK,
        V.estoqueTM,
-       DATE(V.vencimentoDS)      AS vencimentoDS,
-       DATE(V.vencimentoMR)      AS vencimentoMR,
-       DATE(V.vencimentoMF)      AS vencimentoMF,
-       DATE(V.vencimentoPK)      AS vencimentoPK,
-       DATE(V.vencimentoTM)      AS vencimentoTM
+       MID(V.vencimentoDS, 1, 6) * 1 AS vencimentoDS,
+       MID(V.vencimentoMR, 1, 6) * 1 AS vencimentoMR,
+       MID(V.vencimentoMF, 1, 6) * 1 AS vencimentoMF,
+       MID(V.vencimentoPK, 1, 6) * 1 AS vencimentoPK,
+       MID(V.vencimentoTM, 1, 6) * 1 AS vencimentoTM
 FROM T_PRD AS P
        LEFT JOIN T_STK AS S
                  USING (prdno, grade)
@@ -102,6 +102,7 @@ FROM T_PRD AS P
 WHERE (@PESQUISA = '' OR
        descricao LIKE @PESQUISALIKE OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
-       unidade = @PESQUISA)
+       unidade = @PESQUISA OR
+       vendno = @PESQUISANUM)
 GROUP BY prdno, grade, descricao, unidade
 

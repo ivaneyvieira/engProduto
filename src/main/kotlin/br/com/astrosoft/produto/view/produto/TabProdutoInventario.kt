@@ -2,9 +2,7 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
@@ -91,24 +89,34 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   override fun Grid<ProdutoInventario>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
+    this.withEditor(
+      ProdutoInventario::class,
+      openEditor = {
+        this.focusEditor(ProdutoInventario::estoqueDS)
+      },
+      closeEditor = {
+        viewModel.salvaInventario(it.bean)
+      })
+
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoInventario::codigo, header = "Código")
     columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
     columnGrid(ProdutoInventario::grade, header = "Grade")
     columnGrid(ProdutoInventario::unidade, header = "Un")
+    columnGrid(ProdutoInventario::vendno, header = "Cod For")
     columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
-    columnGrid(ProdutoInventario::estoqueDS, header = "Est")
-    columnGrid(ProdutoInventario::vencimentoDS, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoInventario::estoqueMR, header = "Est")
-    columnGrid(ProdutoInventario::vencimentoMR, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoInventario::estoqueMF, header = "Est")
-    columnGrid(ProdutoInventario::vencimentoMF, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoInventario::estoquePK, header = "Est")
-    columnGrid(ProdutoInventario::vencimentoPK, header = "Venc", pattern = "mm/yy")
-    columnGrid(ProdutoInventario::estoqueTM, header = "Est")
-    columnGrid(ProdutoInventario::vencimentoTM, header = "Venc", pattern = "mm/yy")
+    columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+    columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
 
     val headerRow = prependHeaderRow()
     headerRow.join(
@@ -117,28 +125,29 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.getColumnBy(ProdutoInventario::grade),
       this.getColumnBy(ProdutoInventario::unidade),
       this.getColumnBy(ProdutoInventario::validade),
+      this.getColumnBy(ProdutoInventario::vendno),
       this.getColumnBy(ProdutoInventario::fornecedorAbrev),
       this.getColumnBy(ProdutoInventario::estoqueTotal),
     ).text = "Produto"
     headerRow.join(
       this.getColumnBy(ProdutoInventario::estoqueDS),
-      this.getColumnBy(ProdutoInventario::vencimentoDS),
+      this.getColumnBy(ProdutoInventario::vencimentoDSStr),
     ).text = "DS"
     headerRow.join(
       this.getColumnBy(ProdutoInventario::estoqueMR),
-      this.getColumnBy(ProdutoInventario::vencimentoMR),
+      this.getColumnBy(ProdutoInventario::vencimentoMRStr),
     ).text = "MR"
     headerRow.join(
       this.getColumnBy(ProdutoInventario::estoqueMF),
-      this.getColumnBy(ProdutoInventario::vencimentoMF),
+      this.getColumnBy(ProdutoInventario::vencimentoMFStr),
     ).text = "MF"
     headerRow.join(
       this.getColumnBy(ProdutoInventario::estoquePK),
-      this.getColumnBy(ProdutoInventario::vencimentoPK),
+      this.getColumnBy(ProdutoInventario::vencimentoPKStr),
     ).text = "PK"
     headerRow.join(
       this.getColumnBy(ProdutoInventario::estoqueTM),
-      this.getColumnBy(ProdutoInventario::vencimentoTM),
+      this.getColumnBy(ProdutoInventario::vencimentoTMStr),
     ).text = "TM"
   }
 

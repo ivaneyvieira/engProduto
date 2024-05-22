@@ -1,8 +1,11 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
+import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lastDayOfMonth
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.select.Select
@@ -14,6 +17,7 @@ import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
@@ -109,6 +113,17 @@ fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
   return this
 }
 
+fun <T : Any> Grid.Column<T>.mesAnoFieldEditor(): Grid.Column<T> {
+  val grid = this.grid
+  val component = mesAnoFieldComponente()
+  component.element.addEventListener("keydown") { _ ->
+    grid.editor.cancel()
+  }.filter = "event.key === 'Enter'"
+  grid.editor.binder.forField(component).bind(this.key)
+  this.editorComponent = component
+  return this
+}
+
 fun <T: Any, V : Any?> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = Select<V>().apply {
@@ -151,6 +166,16 @@ private fun dateFieldComponente() = DatePicker().apply {
   this.isClearButtonVisible = true
   this.setWidthFull()
   setSizeFull()
+}
+
+private fun mesAnoFieldComponente() = ComboBox<String>().apply {
+  this.isClearButtonVisible = true
+  this.setWidthFull()
+  this.setSizeFull()
+  val dateList :List<String> = (0..12*15).map { num ->
+    LocalDate.now().withDayOfMonth(15).plusMonths(num.toLong()).format("MM/yy")
+  }
+  this.setItems(dateList)
 }
 
 private fun integerFieldComponente() = IntegerField().apply {

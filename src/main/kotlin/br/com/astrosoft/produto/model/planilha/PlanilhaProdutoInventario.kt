@@ -14,15 +14,15 @@ class PlanilhaProdutoInventario : Planilha<ProdutoInventario>("Validade Inventá
     columnSheet(ProdutoInventario::validade, header = "Val")
     columnSheet(ProdutoInventario::estoqueTotal, header = "Total")
     columnSheet(ProdutoInventario::estoqueDS, header = "Est")
-    columnSheet(ProdutoInventario::vencimentoDS, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::vencimentoDSStr, header = "Venc")
     columnSheet(ProdutoInventario::estoqueMR, header = "Est")
-    columnSheet(ProdutoInventario::vencimentoMR, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::vencimentoMRStr, header = "Venc")
     columnSheet(ProdutoInventario::estoqueMF, header = "Est")
-    columnSheet(ProdutoInventario::vencimentoMF, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::vencimentoMFStr, header = "Venc")
     columnSheet(ProdutoInventario::estoquePK, header = "Est")
-    columnSheet(ProdutoInventario::vencimentoPK, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::vencimentoPKStr, header = "Venc")
     columnSheet(ProdutoInventario::estoqueTM, header = "Est")
-    columnSheet(ProdutoInventario::vencimentoTM, header = "Venc", pattern = "mm/yy")
+    columnSheet(ProdutoInventario::vencimentoTMStr, header = "Venc")
   }
 
   override fun XSSFSheet.beforeWrite() {

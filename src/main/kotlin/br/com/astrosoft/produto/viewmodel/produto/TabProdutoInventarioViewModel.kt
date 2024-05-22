@@ -11,6 +11,11 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
     subView.updateProdutos(produtos)
   }
 
+  fun salvaInventario(bean: ProdutoInventario?) {
+    bean?.update()
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabProdutoInventario
 }

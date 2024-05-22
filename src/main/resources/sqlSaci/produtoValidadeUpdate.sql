@@ -1,6 +1,2 @@
-UPDATE sqldados.produtoValidade
-SET estoque = :estoque
-WHERE storeno = :storeno
-  AND prdno = :prdno
-  AND grade = :grade
-  AND vencimento = :vencimento
+REPLACE INTO sqldados.produtoValidade(storeno, prdno, grade, vencimento, estoque)
+VALUES (:storeno, :prdno, :grade, MID(:vencimento, 1, 6) * 1, :estoque)

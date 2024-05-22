@@ -1196,13 +1196,13 @@ class QuerySaci : QueryDB(database) {
 
   }
 
-  fun updateProdutoValidade(storeno: Int, prdno: String, grade: String, vencimento: LocalDate?, estoque: Int?) {
+  fun updateProdutoValidade(storeno: Int, prdno: String, grade: String, vencimento: Int?, estoque: Int?) {
     val sql = "/sqlSaci/produtoValidadeUpdate.sql"
     script(sql) {
       addOptionalParameter("storeno", storeno)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
-      addOptionalParameter("vencimento", vencimento.toSaciDate())
+      addOptionalParameter("vencimento", vencimento ?: 0)
       addOptionalParameter("estoque", estoque ?: 0)
     }
   }
