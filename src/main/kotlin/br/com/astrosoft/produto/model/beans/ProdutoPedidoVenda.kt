@@ -38,7 +38,7 @@ class ProdutoPedidoVenda(
   val horaCD
     get() = splitCD(2)
 
-  val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
+  val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
 
   fun salva() {
     saci.salvaProdutosPedidoVenda(this)

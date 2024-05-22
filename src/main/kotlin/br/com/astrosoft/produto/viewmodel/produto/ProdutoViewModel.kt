@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
   val tabProdutoListViewModel = TabProdutoListViewModel(this)
+  val tabProdutoValidadeViewModel = TabProdutoValidadeViewModel(this)
   val tabProdutoUsrViewModel = TabProdutoUsrViewModel(this)
   val tabEstoqueGiroViewModel = TabEstoqueGiroViewModel(this)
   val tabEstoqueValidadeViewModel = TabEstoqueValidadeViewModel(this)
@@ -13,12 +14,14 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
     view.tabProdutoList,
     view.tabEstoqueGiroViewModel,
     view.tabEstoqueValidadeViewModel,
+    view.tabProdutoValidade,
     view.tabProdutoUsr,
   )
 }
 
 interface IProdutoView : IView {
   val tabProdutoList: ITabProdutoList
+  val tabProdutoValidade: ITabProdutoValidade
   val tabProdutoUsr: ITabProdutoUsr
   val tabEstoqueGiroViewModel: ITabEstoqueGiroViewModel
   val tabEstoqueValidadeViewModel: ITabEstoqueValidadeViewModel

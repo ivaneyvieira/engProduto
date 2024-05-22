@@ -1126,29 +1126,89 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun listValidade() : List<Validade>{
+  fun listValidade(): List<Validade> {
     val sql = "/sqlSaci/validadeList.sql"
     return query(sql, Validade::class)
   }
 
-  fun saveValidade(bean: Validade){
+  fun saveValidade(bean: Validade) {
     val sql = "/sqlSaci/validadeSave.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("validade", bean.validade)
       addOptionalParameter("mesesFabricacao", bean.mesesFabricacao)
     }
   }
 
-  fun delValidade(bean: Validade){
+  fun delValidade(bean: Validade) {
     val sql = "/sqlSaci/validadeDel.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("validade", bean.validade)
+    }
+  }
+
+  fun produtoValidade(filtro: FiltroProdutoValidade): List<ProdutoValidade> {
+    val sql = "/sqlSaci/produtoValidade.sql"
+    return query(sql, ProdutoValidade::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("caracter", filtro.caracter.value)
+    }
+  }
+
+  fun updateProdutoValidade(produtoValidade: ProdutoValidade) {
+    updateProdutoValidade(
+      storeno = 2,
+      prdno = produtoValidade.prdno ?: "",
+      grade = produtoValidade.grade ?: "",
+      vencimento = produtoValidade.vencimentoDS,
+      estoque = produtoValidade.estoqueDS
+    )
+    updateProdutoValidade(
+      storeno = 3,
+      prdno = produtoValidade.prdno ?: "",
+      grade = produtoValidade.grade ?: "",
+      vencimento = produtoValidade.vencimentoMR,
+      estoque = produtoValidade.estoqueMR
+    )
+    updateProdutoValidade(
+      storeno = 4,
+      prdno = produtoValidade.prdno ?: "",
+      grade = produtoValidade.grade ?: "",
+      vencimento = produtoValidade.vencimentoMF,
+      estoque = produtoValidade.estoqueMF
+    )
+    updateProdutoValidade(
+      storeno = 5,
+      prdno = produtoValidade.prdno ?: "",
+      grade = produtoValidade.grade ?: "",
+      vencimento = produtoValidade.vencimentoPK,
+      estoque = produtoValidade.estoquePK
+    )
+    updateProdutoValidade(
+      storeno = 8,
+      prdno = produtoValidade.prdno ?: "",
+      grade = produtoValidade.grade ?: "",
+      vencimento = produtoValidade.vencimentoTM,
+      estoque = produtoValidade.estoqueTM
+    )
+
+  }
+
+  fun updateProdutoValidade(storeno: Int, prdno: String, grade: String, vencimento: LocalDate?, estoque: Int?) {
+    val sql = "/sqlSaci/produtoValidadeUpdate.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("vencimento", vencimento.toSaciDate())
+      addOptionalParameter("estoque", estoque ?: 0)
     }
   }
 
   companion object {
     private val db = DB("saci")
-    val ipServer: String? = db.url.split("/").getOrNull(2)
 
     internal val database = DatabaseConfig(
       driver = db.driver,
