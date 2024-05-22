@@ -33,6 +33,11 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         vendno = produto.vendno,
         fornecedorAbrev = produto.fornecedorAbrev,
         estoqueTotal = produto.estoqueTotal,
+        estoqueTotalDS = produto.estoqueTotalDS,
+        estoqueTotalMR = produto.estoqueTotalMR,
+        estoqueTotalMF = produto.estoqueTotalMF,
+        estoqueTotalPK = produto.estoqueTotalPK,
+        estoqueTotalTM = produto.estoqueTotalTM,
         seq = 0,
         estoqueDS = null,
         estoqueMR = null,
@@ -44,6 +49,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         vencimentoMF = null,
         vencimentoPK = null,
         vencimentoTM = null,
+
       )
       novo.update()
     }

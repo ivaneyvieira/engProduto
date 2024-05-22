@@ -46,7 +46,14 @@ CREATE TEMPORARY TABLE T_STK
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno, grade, ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueTotal
+SELECT prdno,
+       grade,
+       ROUND(SUM(IF(storeno = 2, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalDS,
+       ROUND(SUM(IF(storeno = 3, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalMR,
+       ROUND(SUM(IF(storeno = 4, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalMF,
+       ROUND(SUM(IF(storeno = 5, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalPK,
+       ROUND(SUM(IF(storeno = 8, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalTM,
+       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000)                     AS estoqueTotal
 FROM sqldados.stk
        INNER JOIN T_PRD
                   USING (prdno, grade)
@@ -83,6 +90,11 @@ SELECT P.prdno,
        P.validade,
        P.vendno,
        P.fornecedorAbrev,
+       IFNULL(S.estoqueTotalDS, 0)   AS estoqueTotalDS,
+       IFNULL(S.estoqueTotalMR, 0)   AS estoqueTotalMR,
+       IFNULL(S.estoqueTotalMF, 0)   AS estoqueTotalMF,
+       IFNULL(S.estoqueTotalPK, 0)   AS estoqueTotalPK,
+       IFNULL(S.estoqueTotalTM, 0)   AS estoqueTotalTM,
        IFNULL(S.estoqueTotal, 0)     AS estoqueTotal,
        V.seq,
        V.estoqueDS,

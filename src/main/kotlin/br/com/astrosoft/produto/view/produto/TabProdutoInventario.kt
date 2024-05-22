@@ -102,12 +102,21 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   }
 
   override fun Grid<ProdutoInventario>.gridPanel() {
+    val user = AppConfig.userLogin() as? UserSaci
+
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.withEditor(
       ProdutoInventario::class,
       openEditor = {
-        this.focusEditor(ProdutoInventario::estoqueDS)
+        when(user?.lojaProduto) {
+          2 -> this.focusEditor(ProdutoInventario::estoqueDS)
+          3 -> this.focusEditor(ProdutoInventario::estoqueMR)
+          4 -> this.focusEditor(ProdutoInventario::estoqueMF)
+          5 -> this.focusEditor(ProdutoInventario::estoquePK)
+          8 -> this.focusEditor(ProdutoInventario::estoqueTM)
+          0 -> this.focusEditor(ProdutoInventario::estoqueDS)
+        }
       },
       closeEditor = {
         viewModel.salvaInventario(it.bean)
@@ -123,7 +132,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
 
-    val user = AppConfig.userLogin() as? UserSaci
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
