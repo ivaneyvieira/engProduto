@@ -51,15 +51,15 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
   }
 
   fun removerLinha() = viewModel.exec {
+    val selecionado = subView.produtosSelecionados().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
     viewModel.view.showQuestion("Confirma a exclusão dos produtos selecionados?") {
-      val selecionado = subView.produtosSelecionados().ifEmpty {
-        fail("Nenhum produto selecionado")
-      }
       selecionado.forEach { produto ->
         produto.remove()
       }
+      updateView()
     }
-    updateView()
   }
 
   val subView

@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import kotlin.concurrent.thread
 
 class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
@@ -240,5 +242,14 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()
+  }
+
+  override fun execThread(block: () -> Unit) {
+    val ui = UI.getCurrent()
+    thread {
+      ui.access {
+        block()
+      }
+    }
   }
 }

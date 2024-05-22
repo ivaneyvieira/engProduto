@@ -29,21 +29,26 @@ CREATE TABLE sqldados.produtoValidadeLoja
   INDEX (prdno, grade)
 );
 
-INSERT INTO sqldados.produtoValidadeLoja (prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR, vencimentoMF,
-                                          estoqueMF, vencimentoPK, estoquePK, vencimentoTM, estoqueTM)
+INSERT INTO sqldados.produtoValidadeLoja (prdno, grade,
+                                          vencimentoDS, estoqueDS,
+                                          vencimentoMR, estoqueMR,
+                                          vencimentoMF, estoqueMF,
+                                          vencimentoPK, estoquePK,
+                                          vencimentoTM, estoqueTM)
 SELECT prdno                               AS prdno,
        grade                               AS grade,
-       SUM(IF(storeno = 2, estoque, 0))    AS estoqueDS,
        MAX(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
-       SUM(IF(storeno = 3, estoque, 0))    AS estoqueMR,
+       SUM(IF(storeno = 2, estoque, 0))    AS estoqueDS,
        MAX(IF(storeno = 3, vencimento, 0)) AS vencimentoMR,
-       SUM(IF(storeno = 4, estoque, 0))    AS estoqueMF,
+       SUM(IF(storeno = 3, estoque, 0))    AS estoqueMR,
        MAX(IF(storeno = 4, vencimento, 0)) AS vencimentoMF,
-       SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
+       SUM(IF(storeno = 4, estoque, 0))    AS estoqueMF,
        MAX(IF(storeno = 5, vencimento, 0)) AS vencimentoPK,
-       SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM,
-       MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM
+       SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
+       MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM,
+       SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM
 FROM sqldados.produtoValidade
 GROUP BY prdno, grade;
 
-SELECT * FROM sqldados.produtoValidadeLoja;
+SELECT *
+FROM sqldados.produtoValidadeLoja;

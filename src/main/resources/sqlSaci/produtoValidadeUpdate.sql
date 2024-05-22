@@ -1,5 +1,9 @@
-REPLACE INTO sqldados.produtoValidadeLoja (prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR, vencimentoMF,
-                                           estoqueMF, vencimentoPK, estoquePK, vencimentoTM, estoqueTM)
+REPLACE INTO sqldados.produtoValidadeLoja (prdno, grade,
+                                           vencimentoDS, estoqueDS,
+                                           vencimentoMR, estoqueMR,
+                                           vencimentoMF, estoqueMF,
+                                           vencimentoPK, estoquePK,
+                                           vencimentoTM, estoqueTM)
 SELECT :prdno,
        :grade,
        :vencimentoDS,
