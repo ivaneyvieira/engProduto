@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
+import java.time.LocalDate
 
 class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
 
@@ -49,7 +50,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         vencimentoMF = null,
         vencimentoPK = null,
         vencimentoTM = null,
-
+        dataEntrada = LocalDate.now(),
       )
       novo.update()
     }

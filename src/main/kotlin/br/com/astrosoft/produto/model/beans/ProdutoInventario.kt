@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class ProdutoInventario(
   var prdno: String?,
@@ -11,6 +13,7 @@ class ProdutoInventario(
   var validade: Int?,
   var vendno: Int?,
   var fornecedorAbrev: String?,
+  var dataEntrada: LocalDate?,
   var estoqueTotalDS: Int?,
   var estoqueTotalMR: Int?,
   var estoqueTotalMF: Int?,
@@ -23,6 +26,11 @@ class ProdutoInventario(
   var estoqueMF: Int?,
   var estoquePK: Int?,
   var estoqueTM: Int?,
+  var vendasDS: Int? = null,
+  var vendasMR: Int? = null,
+  var vendasMF: Int? = null,
+  var vendasPK: Int? = null,
+  var vendasTM: Int? = null,
   var vencimentoDS: Int?,
   var vencimentoMR: Int?,
   var vencimentoMF: Int?,
@@ -85,7 +93,80 @@ class ProdutoInventario(
 
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
-      return saci.produtoValidade(filtro)
+      val produtos = saci.produtoValidade(filtro)
+      val dataInicial = produtos.filter {
+        it.estoqueDS != 0 || it.estoqueMR != 0 || it.estoqueMF != 0 || it.estoquePK != 0 || it.estoqueTM != 0
+      }.mapNotNull { it.dataEntrada }.minOrNull() ?: return produtos
+      val saidas = ProdutoInventarioSaida.find(dataInicial)
+
+      val produtosGrupo = produtos.groupBy { "${it.prdno} ${it.grade} ${it.dataEntrada}" }
+      val produtosNovos = produtosGrupo.flatMap { (chave, produtosList) ->
+        val prdno = produtosList.first().prdno
+        val grade = produtosList.first().grade
+        val data = produtosList.first().dataEntrada
+
+        var saidaLoja2 = saidas.filter {
+          it.prdno == prdno && it.grade == grade && it.loja == 2 && it.date.toSaciDate() >= data.toSaciDate()
+        }.sumOf { it.qtty ?: 0 }
+        var saidaLoja3 = saidas.filter {
+          it.prdno == prdno && it.grade == grade && it.loja == 3 && it.date.toSaciDate() >= data.toSaciDate()
+        }.sumOf { it.qtty ?: 0 }
+        var saidaLoja4 = saidas.filter {
+          it.prdno == prdno && it.grade == grade && it.loja == 4 && it.date.toSaciDate() >= data.toSaciDate()
+        }.sumOf { it.qtty ?: 0 }
+        var saidaLoja5 = saidas.filter {
+          it.prdno == prdno && it.grade == grade && it.loja == 5 && it.date.toSaciDate() >= data.toSaciDate()
+        }.sumOf { it.qtty ?: 0 }
+        var saidaLoja8 = saidas.filter {
+          it.prdno == prdno && it.grade == grade && it.loja == 8 && it.date.toSaciDate() >= data.toSaciDate()
+        }.sumOf { it.qtty ?: 0 }
+
+        produtosList.forEach { produtoInventario ->
+          val estoqueDS = produtoInventario.estoqueDS ?: 0
+          if (estoqueDS > 0) {
+            if (saidaLoja2 > 0) {
+              val saida = minOf(estoqueDS, saidaLoja2)
+              produtoInventario.vendasDS = saida
+              saidaLoja2 -= saida
+            }
+          }
+          val estoqueMR = produtoInventario.estoqueMR ?: 0
+          if (estoqueMR > 0) {
+            if (saidaLoja3 > 0) {
+              val saida = minOf(estoqueMR, saidaLoja3)
+              produtoInventario.vendasDS = saida
+              saidaLoja3 -= saida
+            }
+          }
+          val estoqueMF = produtoInventario.estoqueMF ?: 0
+          if (estoqueMF > 0) {
+            if (saidaLoja4 > 0) {
+              val saida = minOf(estoqueMF, saidaLoja4)
+              produtoInventario.vendasMF = saida
+              saidaLoja4 -= saida
+            }
+          }
+          val estoquePK = produtoInventario.estoquePK ?: 0
+          if (estoquePK > 0) {
+            if (saidaLoja5 > 0) {
+              val saida = minOf(estoquePK, saidaLoja5)
+              produtoInventario.vendasPK = saida
+              saidaLoja5 -= saida
+            }
+          }
+          val estoqueTM = produtoInventario.estoqueTM ?: 0
+          if (estoqueTM > 0) {
+            if (saidaLoja8 > 0) {
+              val saida = minOf(estoqueTM, saidaLoja8)
+              produtoInventario.vendasTM = saida
+              saidaLoja8 -= saida
+            }
+          }
+        }
+
+        produtosList
+      }
+      return produtosNovos
     }
   }
 }

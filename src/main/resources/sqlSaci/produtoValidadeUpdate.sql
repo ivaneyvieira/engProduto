@@ -1,4 +1,4 @@
-REPLACE INTO sqldados.produtoValidadeLoja (prdno, grade,
+REPLACE INTO sqldados.produtoValidadeLoja (prdno, grade, dataEntrada,
                                            vencimentoDS, estoqueDS,
                                            vencimentoMR, estoqueMR,
                                            vencimentoMF, estoqueMF,
@@ -6,6 +6,7 @@ REPLACE INTO sqldados.produtoValidadeLoja (prdno, grade,
                                            vencimentoTM, estoqueTM)
 SELECT :prdno,
        :grade,
+       :dataEntrada,
        :vencimentoDS,
        :estoqueDS,
        :vencimentoMR,
@@ -19,11 +20,16 @@ SELECT :prdno,
 FROM dual
 WHERE :seq = 0;
 
-REPLACE INTO sqldados.produtoValidadeLoja (seq, prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR,
-                                           vencimentoMF, estoqueMF, vencimentoPK, estoquePK, vencimentoTM, estoqueTM)
+REPLACE INTO sqldados.produtoValidadeLoja (seq, prdno, grade, dataEntrada,
+                                           vencimentoDS, estoqueDS,
+                                           vencimentoMR, estoqueMR,
+                                           vencimentoMF, estoqueMF,
+                                           vencimentoPK, estoquePK,
+                                           vencimentoTM, estoqueTM)
 SELECT :seq,
        :prdno,
        :grade,
+       :dataEntrada,
        :vencimentoDS,
        :estoqueDS,
        :vencimentoMR,

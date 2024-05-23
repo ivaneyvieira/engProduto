@@ -1163,6 +1163,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("seq", produtoInventario.seq ?: 0)
       addOptionalParameter("prdno", produtoInventario.prdno)
       addOptionalParameter("grade", produtoInventario.grade)
+      addOptionalParameter("dataEntrada", produtoInventario.dataEntrada.toSaciDate())
       addOptionalParameter("vencimentoDS", produtoInventario.vencimentoDS ?: 0)
       addOptionalParameter("estoqueDS", produtoInventario.estoqueDS ?: 0)
       addOptionalParameter("vencimentoMR", produtoInventario.vencimentoMR ?: 0)
@@ -1180,6 +1181,13 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/produtoValidadeRemove.sql"
     script(sql) {
       addOptionalParameter("seq", produtoInventario.seq ?: 0)
+    }
+  }
+
+  fun produtoValidadeSaida(dataInicial: LocalDate): List<ProdutoInventarioSaida> {
+    val sql = "/sqlSaci/produtoValidadeSaida.sql"
+    return query(sql, ProdutoInventarioSaida::class) {
+      this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
     }
   }
 
