@@ -39,7 +39,7 @@ WHERE IF(tipoGarantia = 2, garantia, 0) > 0
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
-GROUP BY prdno, TRIM(MID(P.name, 1, 37));
+GROUP BY prdno, TRIM(MID(P.name, 1, 37)), grade;
 
 DROP TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
