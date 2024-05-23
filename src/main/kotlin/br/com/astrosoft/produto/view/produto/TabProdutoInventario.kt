@@ -147,38 +147,38 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
       }
+      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
       }
+      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
       }
+      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoPKStr, header = "VendasVenc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
       }
+      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
       }
+      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
     }
     val headerRow = prependHeaderRow()
     headerRow.join(
