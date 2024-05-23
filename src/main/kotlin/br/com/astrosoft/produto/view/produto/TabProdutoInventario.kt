@@ -26,6 +26,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -140,41 +141,43 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px")
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor(){
+      it.value = LocalDate.now()
+    }
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
-        columnGrid(ProdutoInventario::vendasDS, "Vendas", width = "80px")
+        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
-        columnGrid(ProdutoInventario::vendasMR, "Vendas", width = "80px")
+        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
-        columnGrid(ProdutoInventario::vendasMF, "Vendas", width = "80px")
+        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoPKStr, header = "VendasVenc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
-        columnGrid(ProdutoInventario::vendasPK, "Vendas", width = "80px")
+        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
       if (user.admin) {
-        columnGrid(ProdutoInventario::vendasTM, "Vendas", width = "80px")
+        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
       }
     }
     val headerRow = prependHeaderRow()

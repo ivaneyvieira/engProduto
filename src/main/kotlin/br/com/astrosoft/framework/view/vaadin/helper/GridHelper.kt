@@ -102,9 +102,10 @@ fun <T : Any> Grid.Column<T>.textFieldEditor(block: TextField.() -> Unit = {}): 
   return this
 }
 
-fun <T : Any> Grid.Column<T>.dateFieldEditor(): Grid.Column<T> {
+fun <T : Any> Grid.Column<T>.dateFieldEditor(block: (DatePicker) -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = dateFieldComponente()
+  block(component)
   component.element.addEventListener("keydown") { _ ->
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"

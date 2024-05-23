@@ -57,5 +57,10 @@ UPDATE sqldados.produtoValidadeLoja
 SET dataEntrada = CURRENT_DATE() * 1
 WHERE dataEntrada = 0;
 
+
+UPDATE sqldados.produtoValidadeLoja
+SET dataEntrada = 0
+WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM ) =0;
+
 SELECT *
 FROM sqldados.produtoValidadeLoja;

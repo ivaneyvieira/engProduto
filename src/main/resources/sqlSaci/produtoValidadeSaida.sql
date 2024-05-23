@@ -22,5 +22,8 @@ FROM sqldados.nf AS N
                   USING (prdno)
 WHERE N.issuedate >= :dataInicial
   AND N.storeno IN (2, 3, 4, 5, 8)
+  AND N.status <> 1
 GROUP BY N.storeno, X.prdno, X.grade, N.issuedate
 ORDER BY N.storeno, X.prdno, X.grade, N.issuedate
+
+
