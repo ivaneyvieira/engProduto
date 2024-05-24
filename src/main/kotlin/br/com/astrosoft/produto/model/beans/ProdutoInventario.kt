@@ -178,4 +178,5 @@ data class FiltroProdutoInventario(
   val grade: String,
   val caracter: ECaracter,
   val ano: Int,
+  val loja: Int,
 )

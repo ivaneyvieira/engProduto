@@ -287,13 +287,15 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   }
 
   override fun filtro(): FiltroProdutoInventario {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroProdutoInventario(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtCodigo.value ?: "",
       validade = edtInventario.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
-      ano = edtAno.value ?: 0
+      ano = edtAno.value ?: 0,
+      loja = user?.lojaProduto ?: 0
     )
   }
 

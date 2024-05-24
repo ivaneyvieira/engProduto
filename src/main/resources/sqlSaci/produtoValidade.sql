@@ -126,11 +126,12 @@ WHERE (@PESQUISA = '' OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
   AND (:ano = 0 OR
-       MID(vencimentoDS, 1, 4) = :ano OR
-       MID(vencimentoMR, 1, 4) = :ano OR
-       MID(vencimentoMF, 1, 4) = :ano OR
-       MID(vencimentoPK, 1, 4) = :ano OR
-       MID(vencimentoTM, 1, 4) = :ano)
+       (MID(vencimentoDS, 1, 4) = :ano AND :loja IN (0, 2)) OR
+       (MID(vencimentoMR, 1, 4) = :ano AND :loja IN (0, 3)) OR
+       (MID(vencimentoMF, 1, 4) = :ano AND :loja IN (0, 4)) OR
+       (MID(vencimentoPK, 1, 4) = :ano AND :loja IN (0, 5)) OR
+       (MID(vencimentoTM, 1, 4) = :ano AND :loja IN (0, 8))
+  )
 GROUP BY prdno, codigo, grade, descricao, unidade, seq
 ORDER BY codigo, grade, seq
 
