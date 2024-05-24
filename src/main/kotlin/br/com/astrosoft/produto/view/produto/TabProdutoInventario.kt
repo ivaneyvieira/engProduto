@@ -36,6 +36,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: TextField
   private lateinit var edtInventario: IntegerField
+  private lateinit var edtAno: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCartacer: Select<ECaracter>
 
@@ -48,6 +49,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         viewModel.updateView()
       }
     }
+
     edtCodigo = textField("Código") {
       this.width = "100px"
       this.isClearButtonVisible = true
@@ -56,6 +58,16 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         viewModel.updateView()
       }
     }
+
+    edtGrade = textField("Grade") {
+      this.width = "100px"
+      this.isClearButtonVisible = true
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     edtInventario = integerField("Validade") {
       this.width = "100px"
       this.isClearButtonVisible = true
@@ -64,7 +76,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         viewModel.updateView()
       }
     }
-    edtGrade = textField("Grade") {
+
+    edtAno = integerField("Ano") {
       this.width = "100px"
       this.isClearButtonVisible = true
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -141,7 +154,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor(){
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor() {
       it.value = LocalDate.now()
     }
 
@@ -150,35 +163,45 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
       }
-      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimentoDS")
+      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
       }
-      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimentoMR")
+      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
       }
-      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimentoMF")
+      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
       }
-      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimentoPK")
+      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
       }
-      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px").mesAnoFieldEditor()
+      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimentoTM")
+      }.mesAnoFieldEditor()
     }
     val headerRow = prependHeaderRow()
     headerRow.join(
@@ -270,6 +293,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       validade = edtInventario.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
+      ano = edtAno.value ?: 0
     )
   }
 

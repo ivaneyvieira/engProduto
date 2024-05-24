@@ -81,7 +81,13 @@ SELECT seq          AS seq,
        vencimentoTM AS vencimentoTM
 FROM sqldados.produtoValidadeLoja
        INNER JOIN T_PRD
-                  USING (prdno, grade);
+                  USING (prdno, grade)
+WHERE (:ano = 0 OR
+       MID(vencimentoDS, 1, 4) = :ano OR
+       MID(vencimentoMR, 1, 4) = :ano OR
+       MID(vencimentoMF, 1, 4) = :ano OR
+       MID(vencimentoPK, 1, 4) = :ano OR
+       MID(vencimentoTM, 1, 4) = :ano);
 
 SELECT P.prdno,
        P.codigo,
@@ -119,6 +125,12 @@ WHERE (@PESQUISA = '' OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
+  AND (:ano = 0 OR
+       MID(vencimentoDS, 1, 4) = :ano OR
+       MID(vencimentoMR, 1, 4) = :ano OR
+       MID(vencimentoMF, 1, 4) = :ano OR
+       MID(vencimentoPK, 1, 4) = :ano OR
+       MID(vencimentoTM, 1, 4) = :ano)
 GROUP BY prdno, codigo, grade, descricao, unidade, seq
 ORDER BY codigo, grade, seq
 

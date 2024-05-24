@@ -1148,10 +1148,12 @@ class QuerySaci : QueryDB(database) {
 
   fun produtoValidade(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
     val sql = "/sqlSaci/produtoValidade.sql"
+    val ano = if(filtro.ano < 2000) filtro.ano + 2000 else filtro.ano
     return query(sql, ProdutoInventario::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("ano", ano)
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("caracter", filtro.caracter.value)
     }
