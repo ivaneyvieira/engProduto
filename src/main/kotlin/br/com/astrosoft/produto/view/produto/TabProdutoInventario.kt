@@ -37,6 +37,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private lateinit var edtCodigo: TextField
   private lateinit var edtInventario: IntegerField
   private lateinit var edtAno: IntegerField
+  private lateinit var edtMes: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCartacer: Select<ECaracter>
 
@@ -77,10 +78,21 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
+    edtMes = integerField("Mês") {
+      this.width = "100px"
+      this.isClearButtonVisible = true
+      valueChangeMode = ValueChangeMode.LAZY
+      valueChangeTimeout = 500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     edtAno = integerField("Ano") {
       this.width = "100px"
       this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      valueChangeMode = ValueChangeMode.LAZY
+      valueChangeTimeout = 500
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -152,6 +164,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
 
     this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
     if (user?.admin == true) {
+      this.columnGrid(ProdutoInventario::venda, header = "Saída")
       columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
         this.setSortProperty("vencimento")
       }.mesAnoFieldEditor()
@@ -159,9 +172,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-      if (user.admin) {
-        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
-      } else {
+      columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
+      if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
           this.setSortProperty("vencimentoDS")
         }.mesAnoFieldEditor()
@@ -169,9 +181,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-      if (user.admin) {
-        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
-      } else {
+      columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
+      if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
           this.setSortProperty("vencimentoMR")
         }.mesAnoFieldEditor()
@@ -179,9 +190,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-      if (user.admin) {
-        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
-      } else {
+      columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
+      if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
           this.setSortProperty("vencimentoMF")
         }.mesAnoFieldEditor()
@@ -189,9 +199,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-      if (user.admin) {
-        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
-      } else {
+      columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
+      if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
           this.setSortProperty("vencimentoPK")
         }.mesAnoFieldEditor()
@@ -199,9 +208,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-      if (user.admin) {
-        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
-      } else {
+      columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
+      if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
           this.setSortProperty("vencimentoTM")
         }.mesAnoFieldEditor()
@@ -231,6 +239,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       } else {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueDS),
+          this.getColumnBy(ProdutoInventario::vendasDS),
           this.getColumnBy(ProdutoInventario::vencimentoDSStr),
         ).text = "DS"
       }
@@ -244,6 +253,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       } else {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMR),
+          this.getColumnBy(ProdutoInventario::vendasMR),
           this.getColumnBy(ProdutoInventario::vencimentoMRStr),
         ).text = "MR"
       }
@@ -257,6 +267,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       } else {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMF),
+          this.getColumnBy(ProdutoInventario::vendasMF),
           this.getColumnBy(ProdutoInventario::vencimentoMFStr),
         ).text = "MF"
       }
@@ -270,6 +281,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       } else {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoquePK),
+          this.getColumnBy(ProdutoInventario::vendasPK),
           this.getColumnBy(ProdutoInventario::vencimentoPKStr),
         ).text = "PK"
       }
@@ -283,6 +295,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       } else {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueTM),
+          this.getColumnBy(ProdutoInventario::vendasTM),
           this.getColumnBy(ProdutoInventario::vencimentoTMStr),
         ).text = "TM"
       }
@@ -298,6 +311,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       grade = edtGrade.value ?: "",
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       ano = edtAno.value ?: 0,
+      mes = edtMes.value ?: 0,
       loja = user?.lojaProduto ?: 0
     )
   }

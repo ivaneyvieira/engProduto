@@ -38,8 +38,12 @@ class ProdutoInventario(
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
 ) {
+  val venda : Int
+    get() = (vendasDS ?: 0) + (vendasMR ?: 0) + (vendasMF ?: 0) + (vendasPK ?: 0) + (vendasTM ?: 0)
+
   val saldo: Int
     get() = (estoqueDS ?: 0) + (estoqueMR ?: 0) + (estoqueMF ?: 0) + (estoquePK ?: 0) + (estoqueTM ?: 0)
+
   var vencimentoStr: String?
     get() = vencimento(vencimento)
     set(value) {
@@ -186,6 +190,7 @@ data class FiltroProdutoInventario(
   val validade: Int,
   val grade: String,
   val caracter: ECaracter,
+  val mes: Int,
   val ano: Int,
   val loja: Int,
 )

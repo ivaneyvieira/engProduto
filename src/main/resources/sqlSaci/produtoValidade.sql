@@ -88,7 +88,13 @@ WHERE (:ano = 0 OR
        MID(vencimentoMR, 1, 4) = :ano OR
        MID(vencimentoMF, 1, 4) = :ano OR
        MID(vencimentoPK, 1, 4) = :ano OR
-       MID(vencimentoTM, 1, 4) = :ano);
+       MID(vencimentoTM, 1, 4) = :ano)
+  AND (:mes = 0 OR
+       MID(vencimentoDS, 5, 6) = :mes OR
+       MID(vencimentoMR, 5, 6) = :mes OR
+       MID(vencimentoMF, 5, 6) = :mes OR
+       MID(vencimentoPK, 5, 6) = :mes OR
+       MID(vencimentoTM, 5, 6) = :mes);
 
 SELECT P.prdno,
        P.codigo,
@@ -133,6 +139,13 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoMF, 1, 4) = :ano AND :loja IN (0, 4)) OR
        (MID(vencimentoPK, 1, 4) = :ano AND :loja IN (0, 5)) OR
        (MID(vencimentoTM, 1, 4) = :ano AND :loja IN (0, 8))
+  )
+  AND (:mes = 0 OR
+       (MID(vencimentoDS, 5, 6) = :mes AND :loja IN (0, 2)) OR
+       (MID(vencimentoMR, 5, 6) = :mes AND :loja IN (0, 3)) OR
+       (MID(vencimentoMF, 5, 6) = :mes AND :loja IN (0, 4)) OR
+       (MID(vencimentoPK, 5, 6) = :mes AND :loja IN (0, 5)) OR
+       (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
   )
 GROUP BY prdno, codigo, grade, descricao, unidade, seq
 ORDER BY codigo, grade, seq
