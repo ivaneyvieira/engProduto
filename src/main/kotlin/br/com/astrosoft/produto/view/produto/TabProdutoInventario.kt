@@ -150,6 +150,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
+    this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setSortProperty("vencimento")
     }.mesAnoFieldEditor()
@@ -158,46 +160,51 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
+      } else {
+        columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
+          this.setSortProperty("vencimentoDS")
+        }.mesAnoFieldEditor()
       }
-      columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimentoDS")
-      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
+      } else {
+        columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
+          this.setSortProperty("vencimentoMR")
+        }.mesAnoFieldEditor()
       }
-      columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimentoMR")
-      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
+      } else {
+        columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
+          this.setSortProperty("vencimentoMF")
+        }.mesAnoFieldEditor()
       }
-      columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimentoMF")
-      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
+      } else {
+        columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
+          this.setSortProperty("vencimentoPK")
+        }.mesAnoFieldEditor()
       }
-      columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimentoPK")
-      }.mesAnoFieldEditor()
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
       if (user.admin) {
         columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
+      } else {
+        columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
+          this.setSortProperty("vencimentoTM")
+        }.mesAnoFieldEditor()
       }
-      columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimentoTM")
-      }.mesAnoFieldEditor()
     }
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor() {
       it.value = LocalDate.now()
@@ -218,7 +225,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueDS),
-          this.getColumnBy(ProdutoInventario::vencimentoDSStr),
           this.getColumnBy(ProdutoInventario::vendasDS),
         ).text = "DS"
       } else {
@@ -232,7 +238,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMR),
-          this.getColumnBy(ProdutoInventario::vencimentoMRStr),
           this.getColumnBy(ProdutoInventario::vendasMR),
         ).text = "MR"
       } else {
@@ -246,7 +251,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMF),
-          this.getColumnBy(ProdutoInventario::vencimentoMFStr),
           this.getColumnBy(ProdutoInventario::vendasMF),
         ).text = "MF"
       } else {
@@ -260,7 +264,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoquePK),
-          this.getColumnBy(ProdutoInventario::vencimentoPKStr),
           this.getColumnBy(ProdutoInventario::vendasPK),
         ).text = "PK"
       } else {
@@ -274,7 +277,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       if (user.admin) {
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueTM),
-          this.getColumnBy(ProdutoInventario::vencimentoTMStr),
           this.getColumnBy(ProdutoInventario::vendasTM),
         ).text = "TM"
       } else {

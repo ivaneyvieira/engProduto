@@ -38,6 +38,8 @@ class ProdutoInventario(
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
 ) {
+  val saldo: Int
+    get() = (estoqueDS ?: 0) + (estoqueMR ?: 0) + (estoqueMF ?: 0) + (estoquePK ?: 0) + (estoqueTM ?: 0)
   var vencimentoStr: String?
     get() = vencimento(vencimento)
     set(value) {

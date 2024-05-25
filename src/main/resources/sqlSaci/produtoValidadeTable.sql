@@ -60,7 +60,7 @@ WHERE dataEntrada = 0;
 
 UPDATE sqldados.produtoValidadeLoja
 SET dataEntrada = 0
-WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM ) =0;
+WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM) = 0;
 
 SELECT *
 FROM sqldados.produtoValidadeLoja;
@@ -68,3 +68,8 @@ FROM sqldados.produtoValidadeLoja;
 
 ALTER TABLE sqldados.produtoValidadeLoja
   ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
+
+UPDATE sqldados.produtoValidadeLoja
+SET vencimento = vencimentoTM
+WHERE vencimentoTM > 0
+  AND vencimento = 0;
