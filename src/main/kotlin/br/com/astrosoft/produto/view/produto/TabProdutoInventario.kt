@@ -151,10 +151,11 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
 
     this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
-
-    columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
-      this.setSortProperty("vencimento")
-    }.mesAnoFieldEditor()
+    if (user?.admin == true) {
+      columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
+        this.setSortProperty("vencimento")
+      }.mesAnoFieldEditor()
+    }
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
