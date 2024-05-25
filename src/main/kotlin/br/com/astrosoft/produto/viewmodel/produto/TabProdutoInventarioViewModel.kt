@@ -45,6 +45,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         estoqueMF = null,
         estoquePK = null,
         estoqueTM = null,
+        vencimento = null,
         vencimentoDS = null,
         vencimentoMR = null,
         vencimentoMF = null,

@@ -14,6 +14,7 @@ class ProdutoInventario(
   var vendno: Int?,
   var fornecedorAbrev: String?,
   var dataEntrada: LocalDate?,
+  var vencimento: Int?,
   var estoqueTotalDS: Int?,
   var estoqueTotalMR: Int?,
   var estoqueTotalMF: Int?,
@@ -37,6 +38,12 @@ class ProdutoInventario(
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
 ) {
+  var vencimentoStr: String?
+    get() = vencimento(vencimento)
+    set(value) {
+      vencimento = mesAno(value)
+    }
+
   var vencimentoDSStr: String?
     get() = vencimento(vencimentoDS)
     set(value) {

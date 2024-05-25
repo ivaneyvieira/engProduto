@@ -139,10 +139,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::codigo, header = "Código")
     columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
     columnGrid(ProdutoInventario::grade, header = "Grade")
-    columnGrid(ProdutoInventario::unidade, header = "Un")
-    columnGrid(ProdutoInventario::vendno, header = "Cod For")
-    columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
-    columnGrid(ProdutoInventario::validade, header = "Val")
 
     val colEstoqueTotal = when (user?.lojaProduto) {
       2 -> this.columnGrid(ProdutoInventario::estoqueTotalDS, header = "Total")
@@ -154,9 +150,9 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor() {
-      it.value = LocalDate.now()
-    }
+    columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
+      this.setSortProperty("vencimento")
+    }.mesAnoFieldEditor()
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
@@ -203,15 +199,19 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         this.setSortProperty("vencimentoTM")
       }.mesAnoFieldEditor()
     }
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor() {
+      it.value = LocalDate.now()
+    }
+    columnGrid(ProdutoInventario::validade, header = "Val")
+    columnGrid(ProdutoInventario::unidade, header = "Un")
+    columnGrid(ProdutoInventario::vendno, header = "Cod For")
+    columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
+
     val headerRow = prependHeaderRow()
     headerRow.join(
       this.getColumnBy(ProdutoInventario::codigo),
       this.getColumnBy(ProdutoInventario::descricao),
       this.getColumnBy(ProdutoInventario::grade),
-      this.getColumnBy(ProdutoInventario::unidade),
-      this.getColumnBy(ProdutoInventario::validade),
-      this.getColumnBy(ProdutoInventario::vendno),
-      this.getColumnBy(ProdutoInventario::fornecedorAbrev),
       colEstoqueTotal,
     ).text = "Produto"
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {

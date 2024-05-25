@@ -1171,6 +1171,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", produtoInventario.prdno)
       addOptionalParameter("grade", produtoInventario.grade)
       addOptionalParameter("dataEntrada", produtoInventario.dataEntrada.toSaciDate())
+      addOptionalParameter("vencimento", produtoInventario.vencimento ?: 0)
       addOptionalParameter("vencimentoDS", produtoInventario.vencimentoDS ?: 0)
       addOptionalParameter("estoqueDS", produtoInventario.estoqueDS ?: 0)
       addOptionalParameter("vencimentoMR", produtoInventario.vencimentoMR ?: 0)

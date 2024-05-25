@@ -64,3 +64,7 @@ WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM ) =0;
 
 SELECT *
 FROM sqldados.produtoValidadeLoja;
+
+
+ALTER TABLE sqldados.produtoValidadeLoja
+  ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
