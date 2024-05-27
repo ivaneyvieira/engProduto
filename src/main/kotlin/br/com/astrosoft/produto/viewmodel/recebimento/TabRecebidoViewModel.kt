@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaRecebimentoProduto
 import br.com.astrosoft.produto.model.beans.InvFile
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
+import java.time.LocalDate
 
 class TabRecebidoViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -26,7 +27,8 @@ class TabRecebidoViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   fun addArquivo(nota: NotaRecebimento, title: String, fileName: String, dados: ByteArray) {
-    val invFile = InvFile(seq = null, invno = nota.ni, title = title, fileName = fileName, file = dados)
+    val invFile =
+        InvFile(seq = null, invno = nota.ni, title = title, date = LocalDate.now(), fileName = fileName, file = dados)
     invFile.update()
     updateView()
     subView.updateArquivos()

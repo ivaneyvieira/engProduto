@@ -1,3 +1,3 @@
 DELETE
 FROM sqldados.invAdicionalArquivos
-WHERE invno = :invno
+WHERE seq = :seq

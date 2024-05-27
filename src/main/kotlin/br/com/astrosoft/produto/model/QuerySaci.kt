@@ -1213,6 +1213,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("invno", file.invno ?: 0)
       addOptionalParameter("title", file.title)
       addOptionalParameter("file", file.file)
+      addOptionalParameter("date", file.date.toSaciDate())
       addOptionalParameter("filename", file.fileName)
     }
   }
@@ -1220,7 +1221,7 @@ class QuerySaci : QueryDB(database) {
   fun deleteInvFile(file: InvFile) {
     val sql = "/sqlSaci/invArquivoDelete.sql"
     script(sql) {
-      addOptionalParameter("invno", file.invno ?: 0)
+      addOptionalParameter("seq", file.seq ?: 0)
     }
   }
 

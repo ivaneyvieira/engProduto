@@ -62,6 +62,8 @@ class DlgArquivo(val viewModel: TabRecebidoViewModel, val nota: NotaRecebimento)
       columnGrid(InvFile::title, "Titulo"){
         this.isExpand = true
       }
+      columnGrid(InvFile::fileName, "Nome do Arquivo")
+      columnGrid(InvFile::date, "Data")
       addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton

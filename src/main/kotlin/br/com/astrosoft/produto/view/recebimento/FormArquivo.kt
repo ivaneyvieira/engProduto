@@ -20,9 +20,18 @@ class FormArquivo(val addAnexo: (title: String, fileName: String, dados: ByteArr
     val buffer = uploadPair.first
     val upload = uploadPair.second
     upload.addSucceededListener {
-      val fileName = it.fileName
+      val fileName = it.fileName ?: ""
       val bytes = buffer.inputStream.readBytes()
-      addAnexo(edtTitulo.value ?: "", fileName, bytes)
+      val title = edtTitulo.value ?: ""
+      if(title.isNotBlank() && fileName.isNotBlank() && bytes.isNotEmpty()) {
+        addAnexo(title, fileName, bytes)
+      }else {
+        if(title.isBlank()) {
+          edtTitulo.isInvalid = true
+          edtTitulo.errorMessage = "Informe o titulo"
+          upload.clearFileList()
+        }
+      }
     }
     add(upload)
   }

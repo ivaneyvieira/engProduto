@@ -1,3 +1,5 @@
-SELECT seq, invno, title, filename, file
+SET SQL_MODE = '';
+
+SELECT seq, invno, title, CAST(date AS DATE) AS date, filename, file
 FROM sqldados.invAdicionalArquivos
-where invno = :invno
+WHERE invno = :invno
