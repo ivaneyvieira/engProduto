@@ -150,13 +150,15 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
   )
   AND CASE :loja
-        WHEN 0 THEN IFNULL(estoqueTotal, 0) > 0
-        WHEN 2 THEN IFNULL(estoqueTotalDS, 0) > 0
-        WHEN 3 THEN IFNULL(estoqueTotalMR, 0) > 0
-        WHEN 4 THEN IFNULL(estoqueTotalMF, 0) > 0
-        WHEN 5 THEN IFNULL(estoqueTotalPK, 0) > 0
-        WHEN 8 THEN IFNULL(estoqueTotalTM, 0) > 0
+        WHEN 0 THEN TRUE
+        WHEN 2 THEN IFNULL(estoqueDS, 0) > 0 OR IFNULL(vencimentoDS, 0) > 0
+        WHEN 3 THEN IFNULL(estoqueMR, 0) > 0 OR IFNULL(vencimentoMR, 0) > 0
+        WHEN 4 THEN IFNULL(estoqueMF, 0) > 0 OR IFNULL(vencimentoMF, 0) > 0
+        WHEN 5 THEN IFNULL(estoquePK, 0) > 0 OR IFNULL(vencimentoPK, 0) > 0
+        WHEN 8 THEN IFNULL(estoqueTM, 0) > 0 OR IFNULL(vencimentoTM, 0) > 0
       END
 GROUP BY prdno, codigo, grade, descricao, unidade, seq
 ORDER BY codigo, grade, seq
+
+
 
