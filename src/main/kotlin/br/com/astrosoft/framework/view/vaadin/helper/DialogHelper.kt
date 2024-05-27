@@ -1,13 +1,16 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
+import br.com.astrosoft.framework.model.config.AppConfig.title
 import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.view.vaadin.SubWindowPDF
 import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
+import br.com.astrosoft.framework.view.vaadin.SubWindowView
 import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.html
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
+import org.apache.tools.ant.types.FileList.FileName
 
 object DialogHelper {
   fun showForm(caption: String, form: FormLayout, runConfirm: (() -> Unit)) {
@@ -57,6 +60,12 @@ object DialogHelper {
 
   fun showReport(chave: String, report: ByteArray) {
     SubWindowPDF(chave, report).open()
+  }
+
+  fun showFile(title: String, fileName: String, report: ByteArray) {
+    val dlg = SubWindowView(fileName, report)
+    dlg.headerTitle = title
+    dlg.open()
   }
 
   fun showPrintText(

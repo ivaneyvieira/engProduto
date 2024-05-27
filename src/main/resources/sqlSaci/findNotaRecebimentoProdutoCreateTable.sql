@@ -19,3 +19,4 @@ ALTER TABLE sqldados.iprdAdicional
 
 ALTER TABLE sqldados.iprdAdicional
   ADD vencimento DATE NULL;
+

@@ -48,6 +48,10 @@ class NotaRecebimento(
     return notaRefresh
   }
 
+  fun arquivos(): List<InvFile> {
+    return InvFile.findAll(this.ni ?: 0)
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimento> {
       return saci.findNotaRecebimentoProduto(filtro).toNota()

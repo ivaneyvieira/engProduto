@@ -1200,6 +1200,30 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findInvFile(invno: Int): List<InvFile> {
+    val sql = "/sqlSaci/invArquivo.sql"
+    return query(sql, InvFile::class) {
+      addOptionalParameter("invno", invno)
+    }
+  }
+
+  fun updateInvFile(file: InvFile) {
+    val sql = "/sqlSaci/invArquivoUpdate.sql"
+    script(sql) {
+      addOptionalParameter("invno", file.invno ?: 0)
+      addOptionalParameter("title", file.title)
+      addOptionalParameter("file", file.file)
+      addOptionalParameter("filename", file.fileName)
+    }
+  }
+
+  fun deleteInvFile(file: InvFile) {
+    val sql = "/sqlSaci/invArquivoDelete.sql"
+    script(sql) {
+      addOptionalParameter("invno", file.invno ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

@@ -24,6 +24,7 @@ import java.time.LocalDate
 class TabRecebido(val viewModel: TabRecebidoViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabRecebido {
   private var dlgProduto: DlgProdutosRecebido? = null
+  private var dlgArquivo: DlgArquivo? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -81,6 +82,13 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       }
     }
 
+    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
+      dlgArquivo = DlgArquivo(viewModel, nota)
+      dlgArquivo?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::login, header = "Login")
     columnGrid(NotaRecebimento::data, header = "Data")
@@ -112,6 +120,14 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
 
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
+  }
+
+  override fun updateArquivos() {
+    dlgArquivo?.update()
+  }
+
+  override fun arquivosSelecionados(): List<InvFile> {
+    return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
