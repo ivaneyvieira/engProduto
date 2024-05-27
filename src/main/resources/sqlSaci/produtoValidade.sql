@@ -134,6 +134,7 @@ WHERE (@PESQUISA = '' OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
   AND (:ano = 0 OR
+       (MID(vencimento, 1, 4) = :ano AND :loja IN (0)) OR
        (MID(vencimentoDS, 1, 4) = :ano AND :loja IN (0, 2)) OR
        (MID(vencimentoMR, 1, 4) = :ano AND :loja IN (0, 3)) OR
        (MID(vencimentoMF, 1, 4) = :ano AND :loja IN (0, 4)) OR
@@ -141,6 +142,7 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoTM, 1, 4) = :ano AND :loja IN (0, 8))
   )
   AND (:mes = 0 OR
+       (MID(vencimento, 5, 6) = :mes AND :loja IN (0)) OR
        (MID(vencimentoDS, 5, 6) = :mes AND :loja IN (0, 2)) OR
        (MID(vencimentoMR, 5, 6) = :mes AND :loja IN (0, 3)) OR
        (MID(vencimentoMF, 5, 6) = :mes AND :loja IN (0, 4)) OR
@@ -148,13 +150,13 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
   )
   AND CASE :loja
-         WHEN 0 THEN IFNULL(estoqueTotal, 0) > 0
-         WHEN 2 THEN IFNULL(estoqueTotalDS, 0) > 0
-         WHEN 3 THEN IFNULL(estoqueTotalMR, 0) > 0
-         WHEN 4 THEN IFNULL(estoqueTotalMF, 0) > 0
-         WHEN 5 THEN IFNULL(estoqueTotalPK, 0) > 0
-         WHEN 8 THEN IFNULL(estoqueTotalTM, 0) > 0
-       END
+        WHEN 0 THEN IFNULL(estoqueTotal, 0) > 0
+        WHEN 2 THEN IFNULL(estoqueTotalDS, 0) > 0
+        WHEN 3 THEN IFNULL(estoqueTotalMR, 0) > 0
+        WHEN 4 THEN IFNULL(estoqueTotalMF, 0) > 0
+        WHEN 5 THEN IFNULL(estoqueTotalPK, 0) > 0
+        WHEN 8 THEN IFNULL(estoqueTotalTM, 0) > 0
+      END
 GROUP BY prdno, codigo, grade, descricao, unidade, seq
 ORDER BY codigo, grade, seq
 
