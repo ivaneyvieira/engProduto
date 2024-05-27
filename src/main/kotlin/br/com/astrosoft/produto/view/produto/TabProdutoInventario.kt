@@ -220,8 +220,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::unidade, header = "Un")
-    columnGrid(ProdutoInventario::vendno, header = "Cod For")
-    columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
+    columnGrid(ProdutoInventario::vendno, header = "For")
+    //columnGrid(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
 
     val headerRow = prependHeaderRow()
     headerRow.join(

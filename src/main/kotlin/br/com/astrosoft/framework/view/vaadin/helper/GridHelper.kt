@@ -1,7 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.util.lastDayOfMonth
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -122,10 +121,11 @@ fun <T : Any> Grid.Column<T>.mesAnoFieldEditor(): Grid.Column<T> {
   }.filter = "event.key === 'Enter'"
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
+
   return this
 }
 
-fun <T: Any, V : Any?> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
+fun <T : Any, V : Any?> Grid.Column<T>.comboFieldEditor(block: (Select<V>) -> Unit = {}): Grid.Column<T> {
   val grid = this.grid
   val component = Select<V>().apply {
     block(this)
@@ -174,10 +174,14 @@ private fun mesAnoFieldComponente() = ComboBox<String>().apply {
   this.setWidthFull()
   this.setSizeFull()
   this.isAllowCustomValue = true
-  val dateList :List<String> = (0..12*15).map { num ->
-    LocalDate.now().withDayOfMonth(15).plusMonths(num.toLong()).format("MM/yy")
+  val dateListDepois = (0..12 * 15).map { num ->
+    LocalDate.now().withDayOfMonth(15).plusMonths(num.toLong())
   }
-  this.setItems(dateList)
+  val dateListAntes = (1..6).map { num ->
+    LocalDate.now().withDayOfMonth(15).minusMonths(num.toLong())
+  }
+  val dateList = dateListAntes + dateListDepois
+  this.setItems(dateList.sorted().map { it.format("MM/yy") }.distinct())
 }
 
 private fun integerFieldComponente() = IntegerField().apply {
