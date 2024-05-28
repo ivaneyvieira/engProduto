@@ -162,8 +162,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
-    this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
     if (user?.admin == true) {
+      this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
       this.columnGrid(ProdutoInventario::venda, header = "Saída")
       columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
         this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
