@@ -166,7 +166,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.admin == true) {
       this.columnGrid(ProdutoInventario::venda, header = "Saída")
       columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
-        this.setSortProperty("vencimento")
+        this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
       }.mesAnoFieldEditor()
     }
 
@@ -175,7 +175,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
       if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
-          this.setSortProperty("vencimentoDS")
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
@@ -184,7 +184,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
       if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
-          this.setSortProperty("vencimentoMR")
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
@@ -193,7 +193,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
       if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
-          this.setSortProperty("vencimentoMF")
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
@@ -202,7 +202,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
       if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
-          this.setSortProperty("vencimentoPK")
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
@@ -211,7 +211,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
       if (!user.admin) {
         columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
-          this.setSortProperty("vencimentoTM")
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
