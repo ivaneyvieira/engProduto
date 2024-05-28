@@ -16,7 +16,7 @@ SELECT N.storeno                 AS loja,
        CAST(N.issuedate AS DATE) AS date,
        ROUND(SUM(X.qtty / 1000)) AS qtty
 FROM sqldados.nf AS N
-       INNER JOIN sqldados.xalog2 AS X
+       INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
        INNER JOIN T_PRD AS P
                   USING (prdno)
