@@ -10,13 +10,12 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -40,6 +39,9 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private lateinit var edtMes: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCartacer: Select<ECaracter>
+  private lateinit var chkOrganiza: Checkbox
+  private lateinit var btnAdiciona: Button
+  private lateinit var btnRemover: Button
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -109,14 +111,14 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
-    button("Adicionar") {
+   btnAdiciona = button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
       addClickListener {
         viewModel.adicionarLinha()
       }
     }
 
-    button("Remover") {
+    btnRemover = button("Remover") {
       this.icon = VaadinIcon.TRASH.create()
       addClickListener {
         viewModel.removerLinha()
@@ -124,6 +126,12 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
 
     downloadExcel(PlanilhaProdutoInventario())
+
+    chkOrganiza = checkBox("Organiza") {
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
   }
 
   override fun Grid<ProdutoInventario>.gridPanel() {
@@ -173,7 +181,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
-      if (!user.admin) {
+      if (!user.admin || true) {
         columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
         }.mesAnoFieldEditor()
@@ -182,7 +190,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
-      if (!user.admin) {
+      if (!user.admin || true) {
         columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
         }.mesAnoFieldEditor()
@@ -191,7 +199,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
-      if (!user.admin) {
+      if (!user.admin || true) {
         columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
         }.mesAnoFieldEditor()
@@ -200,7 +208,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
-      if (!user.admin) {
+      if (!user.admin || true) {
         columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
         }.mesAnoFieldEditor()
@@ -209,13 +217,13 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
       columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
       columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
-      if (!user.admin) {
+      if (!user.admin || true) {
         columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
         }.mesAnoFieldEditor()
       }
     }
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "100px").dateFieldEditor() {
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor() {
       it.value = LocalDate.now()
     }
     columnGrid(ProdutoInventario::validade, header = "Val")
@@ -235,6 +243,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueDS),
           this.getColumnBy(ProdutoInventario::vendasDS),
+          this.getColumnBy(ProdutoInventario::vencimentoDSStr),
         ).text = "DS"
       } else {
         headerRow.join(
@@ -249,6 +258,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMR),
           this.getColumnBy(ProdutoInventario::vendasMR),
+          this.getColumnBy(ProdutoInventario::vencimentoMRStr),
         ).text = "MR"
       } else {
         headerRow.join(
@@ -263,6 +273,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueMF),
           this.getColumnBy(ProdutoInventario::vendasMF),
+          this.getColumnBy(ProdutoInventario::vencimentoMFStr),
         ).text = "MF"
       } else {
         headerRow.join(
@@ -277,6 +288,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoquePK),
           this.getColumnBy(ProdutoInventario::vendasPK),
+          this.getColumnBy(ProdutoInventario::vencimentoPKStr),
         ).text = "PK"
       } else {
         headerRow.join(
@@ -291,6 +303,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         headerRow.join(
           this.getColumnBy(ProdutoInventario::estoqueTM),
           this.getColumnBy(ProdutoInventario::vendasTM),
+          this.getColumnBy(ProdutoInventario::vencimentoTMStr),
         ).text = "TM"
       } else {
         headerRow.join(
@@ -312,12 +325,16 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
-      loja = user?.lojaProduto ?: 0
+      loja = user?.lojaProduto ?: 0,
+      organiza = chkOrganiza.value ?: false
     )
   }
 
   override fun updateProdutos(produtos: List<ProdutoInventario>) {
     updateGrid(produtos)
+    val organiza = chkOrganiza.value ?: false
+    btnAdiciona.isEnabled = !organiza
+    btnRemover.isEnabled = !organiza
   }
 
   override fun produtosSelecionados(): List<ProdutoInventario> {

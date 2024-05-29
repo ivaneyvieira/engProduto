@@ -38,7 +38,7 @@ class ProdutoInventario(
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
 ) {
-  val venda : Int
+  val venda: Int
     get() = (vendasDS ?: 0) + (vendasMR ?: 0) + (vendasMF ?: 0) + (vendasPK ?: 0) + (vendasTM ?: 0)
 
   val saldo: Int
@@ -104,13 +104,91 @@ class ProdutoInventario(
     saci.removeProdutoValidade(this)
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as ProdutoInventario
+
+    if (prdno != other.prdno) return false
+    if (codigo != other.codigo) return false
+    if (descricao != other.descricao) return false
+    if (grade != other.grade) return false
+    if (unidade != other.unidade) return false
+    if (validade != other.validade) return false
+    if (vendno != other.vendno) return false
+    if (fornecedorAbrev != other.fornecedorAbrev) return false
+    if (dataEntrada != other.dataEntrada) return false
+    if (vencimento != other.vencimento) return false
+    if (estoqueTotalDS != other.estoqueTotalDS) return false
+    if (estoqueTotalMR != other.estoqueTotalMR) return false
+    if (estoqueTotalMF != other.estoqueTotalMF) return false
+    if (estoqueTotalPK != other.estoqueTotalPK) return false
+    if (estoqueTotalTM != other.estoqueTotalTM) return false
+    if (estoqueTotal != other.estoqueTotal) return false
+    if (seq != other.seq) return false
+    if (estoqueDS != other.estoqueDS) return false
+    if (estoqueMR != other.estoqueMR) return false
+    if (estoqueMF != other.estoqueMF) return false
+    if (estoquePK != other.estoquePK) return false
+    if (estoqueTM != other.estoqueTM) return false
+    if (vendasDS != other.vendasDS) return false
+    if (vendasMR != other.vendasMR) return false
+    if (vendasMF != other.vendasMF) return false
+    if (vendasPK != other.vendasPK) return false
+    if (vendasTM != other.vendasTM) return false
+    if (vencimentoDS != other.vencimentoDS) return false
+    if (vencimentoMR != other.vencimentoMR) return false
+    if (vencimentoMF != other.vencimentoMF) return false
+    if (vencimentoPK != other.vencimentoPK) return false
+    if (vencimentoTM != other.vencimentoTM) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = prdno?.hashCode() ?: 0
+    result = 31 * result + (codigo ?: 0)
+    result = 31 * result + (descricao?.hashCode() ?: 0)
+    result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + (unidade?.hashCode() ?: 0)
+    result = 31 * result + (validade ?: 0)
+    result = 31 * result + (vendno ?: 0)
+    result = 31 * result + (fornecedorAbrev?.hashCode() ?: 0)
+    result = 31 * result + (dataEntrada?.hashCode() ?: 0)
+    result = 31 * result + (vencimento ?: 0)
+    result = 31 * result + (estoqueTotalDS ?: 0)
+    result = 31 * result + (estoqueTotalMR ?: 0)
+    result = 31 * result + (estoqueTotalMF ?: 0)
+    result = 31 * result + (estoqueTotalPK ?: 0)
+    result = 31 * result + (estoqueTotalTM ?: 0)
+    result = 31 * result + (estoqueTotal ?: 0)
+    result = 31 * result + (seq ?: 0)
+    result = 31 * result + (estoqueDS ?: 0)
+    result = 31 * result + (estoqueMR ?: 0)
+    result = 31 * result + (estoqueMF ?: 0)
+    result = 31 * result + (estoquePK ?: 0)
+    result = 31 * result + (estoqueTM ?: 0)
+    result = 31 * result + (vendasDS ?: 0)
+    result = 31 * result + (vendasMR ?: 0)
+    result = 31 * result + (vendasMF ?: 0)
+    result = 31 * result + (vendasPK ?: 0)
+    result = 31 * result + (vendasTM ?: 0)
+    result = 31 * result + (vencimentoDS ?: 0)
+    result = 31 * result + (vencimentoMR ?: 0)
+    result = 31 * result + (vencimentoMF ?: 0)
+    result = 31 * result + (vencimentoPK ?: 0)
+    result = 31 * result + (vencimentoTM ?: 0)
+    return result
+  }
+
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = produtos.filter {
         it.estoqueDS != 0 || it.estoqueMR != 0 || it.estoqueMF != 0 || it.estoquePK != 0 || it.estoqueTM != 0
       }.mapNotNull { it.dataEntrada }.minOrNull() ?: return produtos
-      val saidas = ProdutoInventarioSaida.find(dataInicial)
+      val saidas = ProdutoInventarioSaida.find(dataInicial).groupBy { ChaveSaida(it.loja, it.prdno, it.grade) }
 
       val produtosGrupo = produtos.groupBy { "${it.prdno} ${it.grade} ${it.dataEntrada}" }
       val produtosNovos = produtosGrupo.flatMap { (chave, produtosList) ->
@@ -118,23 +196,43 @@ class ProdutoInventario(
         val grade = produtosList.first().grade
         val data = produtosList.first().dataEntrada
 
-        var saidaLoja2 = saidas.filter {
-          it.prdno == prdno && it.grade == grade && it.loja == 2 && it.date.toSaciDate() >= data.toSaciDate()
+        var saidaLoja2 = saidas[ChaveSaida(2, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
         }.sumOf { it.qtty ?: 0 }
-        var saidaLoja3 = saidas.filter {
-          it.prdno == prdno && it.grade == grade && it.loja == 3 && it.date.toSaciDate() >= data.toSaciDate()
+        var saidaLoja3 = saidas[ChaveSaida(3, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
         }.sumOf { it.qtty ?: 0 }
-        var saidaLoja4 = saidas.filter {
-          it.prdno == prdno && it.grade == grade && it.loja == 4 && it.date.toSaciDate() >= data.toSaciDate()
+        var saidaLoja4 = saidas[ChaveSaida(4, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
         }.sumOf { it.qtty ?: 0 }
-        var saidaLoja5 = saidas.filter {
-          it.prdno == prdno && it.grade == grade && it.loja == 5 && it.date.toSaciDate() >= data.toSaciDate()
+        var saidaLoja5 = saidas[ChaveSaida(5, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
         }.sumOf { it.qtty ?: 0 }
-        var saidaLoja8 = saidas.filter {
-          it.prdno == prdno && it.grade == grade && it.loja == 8 && it.date.toSaciDate() >= data.toSaciDate()
+        var saidaLoja8 = saidas[ChaveSaida(8, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
         }.sumOf { it.qtty ?: 0 }
 
-        produtosList.forEach { produtoInventario ->
+        val produtosList2 = produtosList.filter {
+          (it.estoqueDS ?: 0) > 0 && (it.vencimentoDS ?: 0) > 0
+        }.sortedByDescending { it.vencimentoDS }
+
+        val produtosList3 = produtosList.filter {
+          (it.estoqueMR ?: 0) > 0 && (it.vencimentoMR ?: 0) > 0
+        }.sortedByDescending { it.vencimentoMR }
+
+        val produtosList4 = produtosList.filter {
+          (it.estoqueMF ?: 0) > 0 && (it.vencimentoMF ?: 0) > 0
+        }.sortedByDescending { it.vencimentoMF }
+
+        val produtosList5 = produtosList.filter {
+          (it.estoquePK ?: 0) > 0 && (it.vencimentoPK ?: 0) > 0
+        }.sortedByDescending { it.vencimentoPK }
+
+        val produtosList8 = produtosList.filter {
+          (it.estoqueTM ?: 0) > 0 && (it.vencimentoTM ?: 0) > 0
+        }.sortedByDescending { it.vencimentoTM }
+
+        produtosList2.forEach { produtoInventario ->
           val estoqueDS = produtoInventario.estoqueDS ?: 0
           if (estoqueDS > 0) {
             if (saidaLoja2 > 0) {
@@ -143,6 +241,9 @@ class ProdutoInventario(
               saidaLoja2 -= saida
             }
           }
+        }
+
+        produtosList3.forEach { produtoInventario ->
           val estoqueMR = produtoInventario.estoqueMR ?: 0
           if (estoqueMR > 0) {
             if (saidaLoja3 > 0) {
@@ -151,6 +252,9 @@ class ProdutoInventario(
               saidaLoja3 -= saida
             }
           }
+        }
+
+        produtosList4.forEach { produtoInventario ->
           val estoqueMF = produtoInventario.estoqueMF ?: 0
           if (estoqueMF > 0) {
             if (saidaLoja4 > 0) {
@@ -159,6 +263,9 @@ class ProdutoInventario(
               saidaLoja4 -= saida
             }
           }
+        }
+
+        produtosList5.forEach { produtoInventario ->
           val estoquePK = produtoInventario.estoquePK ?: 0
           if (estoquePK > 0) {
             if (saidaLoja5 > 0) {
@@ -167,6 +274,9 @@ class ProdutoInventario(
               saidaLoja5 -= saida
             }
           }
+        }
+
+        produtosList8.forEach { produtoInventario ->
           val estoqueTM = produtoInventario.estoqueTM ?: 0
           if (estoqueTM > 0) {
             if (saidaLoja8 > 0) {
@@ -184,6 +294,56 @@ class ProdutoInventario(
   }
 }
 
+fun List<ProdutoInventario>.organiza(): List<ProdutoInventario> {
+  val produtosList = this.flatMap { produto ->
+    val vencDS = if ((produto.vencimentoDS ?: 0) > 0) produto.vencimentoDS else null
+    val vencMR = if ((produto.vencimentoMR ?: 0) > 0) produto.vencimentoMR else null
+    val vencMF = if ((produto.vencimentoMF ?: 0) > 0) produto.vencimentoMF else null
+    val vencPK = if ((produto.vencimentoPK ?: 0) > 0) produto.vencimentoPK else null
+    val vencTM = if ((produto.vencimentoTM ?: 0) > 0) produto.vencimentoTM else null
+
+    val vencList = listOfNotNull(vencDS, vencMR, vencMF, vencPK, vencTM)
+
+    vencList.map { venc ->
+      ProdutoInventario(
+        prdno = produto.prdno,
+        codigo = produto.codigo,
+        descricao = produto.descricao,
+        grade = produto.grade,
+        unidade = produto.unidade,
+        validade = produto.validade,
+        vendno = produto.vendno,
+        fornecedorAbrev = produto.fornecedorAbrev,
+        dataEntrada = produto.dataEntrada,
+        vencimento = venc,
+        estoqueTotalDS = produto.estoqueTotalDS,
+        estoqueTotalMR = produto.estoqueTotalMR,
+        estoqueTotalMF = produto.estoqueTotalMF,
+        estoqueTotalPK = produto.estoqueTotalPK,
+        estoqueTotalTM = produto.estoqueTotalTM,
+        estoqueTotal = produto.estoqueTotal,
+        seq = produto.seq,
+        estoqueDS = if (vencDS == null) 0 else produto.estoqueDS,
+        estoqueMR = if (vencMR == null) 0 else produto.estoqueMR,
+        estoqueMF = if (vencMF == null) 0 else produto.estoqueMF,
+        estoquePK = if (vencPK == null) 0 else produto.estoquePK,
+        estoqueTM = if (vencTM == null) 0 else produto.estoqueTM,
+        vendasDS = if (vencDS == null) 0 else produto.vendasDS,
+        vendasMR = if (vencMR == null) 0 else produto.vendasMR,
+        vendasMF = if (vencMF == null) 0 else produto.vendasMF,
+        vendasPK = if (vencPK == null) 0 else produto.vendasPK,
+        vendasTM = if (vencTM == null) 0 else produto.vendasTM,
+        vencimentoDS = vencDS,
+        vencimentoMR = vencMR,
+        vencimentoMF = vencMF,
+        vencimentoPK = vencPK,
+        vencimentoTM = vencTM,
+      )
+    }
+  }
+  return produtosList.distinct()
+}
+
 data class FiltroProdutoInventario(
   val pesquisa: String,
   val codigo: String,
@@ -193,4 +353,6 @@ data class FiltroProdutoInventario(
   val mes: Int,
   val ano: Int,
   val loja: Int,
+  val organiza: Boolean,
 )
+

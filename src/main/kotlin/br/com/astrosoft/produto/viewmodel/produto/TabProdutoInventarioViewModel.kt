@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
+import br.com.astrosoft.produto.model.beans.organiza
 import java.time.LocalDate
 
 class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
@@ -11,7 +12,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoInventario.find(filtro)
-    subView.updateProdutos(produtos)
+    subView.updateProdutos(if (filtro.organiza) produtos.organiza() else produtos)
   }
 
   fun salvaInventario(bean: ProdutoInventario?) {

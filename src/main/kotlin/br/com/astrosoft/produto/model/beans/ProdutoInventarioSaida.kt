@@ -16,3 +16,5 @@ class ProdutoInventarioSaida(
     }
   }
 }
+
+data class ChaveSaida(val loja: Int?, val prdno: String?, val grade: String?)
