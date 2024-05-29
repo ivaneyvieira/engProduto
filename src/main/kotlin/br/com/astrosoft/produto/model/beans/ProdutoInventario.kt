@@ -44,6 +44,17 @@ class ProdutoInventario(
   val saldo: Int
     get() = (estoqueDS ?: 0) + (estoqueMR ?: 0) + (estoqueMF ?: 0) + (estoquePK ?: 0) + (estoqueTM ?: 0) - venda
 
+  val saldoDS: Int
+    get() = (estoqueDS ?: 0) - (vendasDS ?: 0)
+  val saldoMR: Int
+    get() = (estoqueMR ?: 0) - (vendasMR ?: 0)
+  val saldoMF: Int
+    get() = (estoqueMF ?: 0) - (vendasMF ?: 0)
+  val saldoPK: Int
+    get() = (estoquePK ?: 0) - (vendasPK ?: 0)
+  val saldoTM: Int
+    get() = (estoqueTM ?: 0) - (vendasTM ?: 0)
+
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
     set(value) {

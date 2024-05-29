@@ -172,7 +172,14 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       else -> null
     }
 
-    this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+    when (user?.lojaProduto) {
+      2 -> this.columnGrid(ProdutoInventario::saldoDS, header = "Saldo")
+      3 -> this.columnGrid(ProdutoInventario::saldoMR, header = "Saldo")
+      4 -> this.columnGrid(ProdutoInventario::saldoMF, header = "Saldo")
+      5 -> this.columnGrid(ProdutoInventario::saldoPK, header = "Saldo")
+      8 -> this.columnGrid(ProdutoInventario::saldoTM, header = "Saldo")
+      0 -> this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+    }
 
     if (user?.admin == true) {
       this.columnGrid(ProdutoInventario::venda, header = "Saída")
