@@ -104,84 +104,6 @@ class ProdutoInventario(
     saci.removeProdutoValidade(this)
   }
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as ProdutoInventario
-
-    if (prdno != other.prdno) return false
-    if (codigo != other.codigo) return false
-    if (descricao != other.descricao) return false
-    if (grade != other.grade) return false
-    if (unidade != other.unidade) return false
-    if (validade != other.validade) return false
-    if (vendno != other.vendno) return false
-    if (fornecedorAbrev != other.fornecedorAbrev) return false
-    if (dataEntrada != other.dataEntrada) return false
-    if (vencimento != other.vencimento) return false
-    if (estoqueTotalDS != other.estoqueTotalDS) return false
-    if (estoqueTotalMR != other.estoqueTotalMR) return false
-    if (estoqueTotalMF != other.estoqueTotalMF) return false
-    if (estoqueTotalPK != other.estoqueTotalPK) return false
-    if (estoqueTotalTM != other.estoqueTotalTM) return false
-    if (estoqueTotal != other.estoqueTotal) return false
-    if (seq != other.seq) return false
-    if (estoqueDS != other.estoqueDS) return false
-    if (estoqueMR != other.estoqueMR) return false
-    if (estoqueMF != other.estoqueMF) return false
-    if (estoquePK != other.estoquePK) return false
-    if (estoqueTM != other.estoqueTM) return false
-    if (vendasDS != other.vendasDS) return false
-    if (vendasMR != other.vendasMR) return false
-    if (vendasMF != other.vendasMF) return false
-    if (vendasPK != other.vendasPK) return false
-    if (vendasTM != other.vendasTM) return false
-    if (vencimentoDS != other.vencimentoDS) return false
-    if (vencimentoMR != other.vencimentoMR) return false
-    if (vencimentoMF != other.vencimentoMF) return false
-    if (vencimentoPK != other.vencimentoPK) return false
-    if (vencimentoTM != other.vencimentoTM) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var result = prdno?.hashCode() ?: 0
-    result = 31 * result + (codigo ?: 0)
-    result = 31 * result + (descricao?.hashCode() ?: 0)
-    result = 31 * result + (grade?.hashCode() ?: 0)
-    result = 31 * result + (unidade?.hashCode() ?: 0)
-    result = 31 * result + (validade ?: 0)
-    result = 31 * result + (vendno ?: 0)
-    result = 31 * result + (fornecedorAbrev?.hashCode() ?: 0)
-    result = 31 * result + (dataEntrada?.hashCode() ?: 0)
-    result = 31 * result + (vencimento ?: 0)
-    result = 31 * result + (estoqueTotalDS ?: 0)
-    result = 31 * result + (estoqueTotalMR ?: 0)
-    result = 31 * result + (estoqueTotalMF ?: 0)
-    result = 31 * result + (estoqueTotalPK ?: 0)
-    result = 31 * result + (estoqueTotalTM ?: 0)
-    result = 31 * result + (estoqueTotal ?: 0)
-    result = 31 * result + (seq ?: 0)
-    result = 31 * result + (estoqueDS ?: 0)
-    result = 31 * result + (estoqueMR ?: 0)
-    result = 31 * result + (estoqueMF ?: 0)
-    result = 31 * result + (estoquePK ?: 0)
-    result = 31 * result + (estoqueTM ?: 0)
-    result = 31 * result + (vendasDS ?: 0)
-    result = 31 * result + (vendasMR ?: 0)
-    result = 31 * result + (vendasMF ?: 0)
-    result = 31 * result + (vendasPK ?: 0)
-    result = 31 * result + (vendasTM ?: 0)
-    result = 31 * result + (vencimentoDS ?: 0)
-    result = 31 * result + (vencimentoMR ?: 0)
-    result = 31 * result + (vencimentoMF ?: 0)
-    result = 31 * result + (vencimentoPK ?: 0)
-    result = 31 * result + (vencimentoTM ?: 0)
-    return result
-  }
-
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val produtos = saci.produtoValidade(filtro)
@@ -214,23 +136,23 @@ class ProdutoInventario(
 
         val produtosList2 = produtosList.filter {
           (it.estoqueDS ?: 0) > 0 && (it.vencimentoDS ?: 0) > 0
-        }.sortedByDescending { it.vencimentoDS }
+        }.sortedBy { it.vencimentoDS }
 
         val produtosList3 = produtosList.filter {
           (it.estoqueMR ?: 0) > 0 && (it.vencimentoMR ?: 0) > 0
-        }.sortedByDescending { it.vencimentoMR }
+        }.sortedBy { it.vencimentoMR }
 
         val produtosList4 = produtosList.filter {
           (it.estoqueMF ?: 0) > 0 && (it.vencimentoMF ?: 0) > 0
-        }.sortedByDescending { it.vencimentoMF }
+        }.sortedBy { it.vencimentoMF }
 
         val produtosList5 = produtosList.filter {
           (it.estoquePK ?: 0) > 0 && (it.vencimentoPK ?: 0) > 0
-        }.sortedByDescending { it.vencimentoPK }
+        }.sortedBy { it.vencimentoPK }
 
         val produtosList8 = produtosList.filter {
           (it.estoqueTM ?: 0) > 0 && (it.vencimentoTM ?: 0) > 0
-        }.sortedByDescending { it.vencimentoTM }
+        }.sortedBy { it.vencimentoTM }
 
         produtosList2.forEach { produtoInventario ->
           val estoqueDS = produtoInventario.estoqueDS ?: 0
@@ -296,11 +218,11 @@ class ProdutoInventario(
 
 fun List<ProdutoInventario>.organiza(): List<ProdutoInventario> {
   val produtosList = this.flatMap { produto ->
-    val vencDS = if ((produto.vencimentoDS ?: 0) > 0) produto.vencimentoDS else null
-    val vencMR = if ((produto.vencimentoMR ?: 0) > 0) produto.vencimentoMR else null
-    val vencMF = if ((produto.vencimentoMF ?: 0) > 0) produto.vencimentoMF else null
-    val vencPK = if ((produto.vencimentoPK ?: 0) > 0) produto.vencimentoPK else null
-    val vencTM = if ((produto.vencimentoTM ?: 0) > 0) produto.vencimentoTM else null
+    val vencDS = if ((produto.vencimentoDS ?: 0) > 0 && (produto.estoqueDS ?: 0) > 0) produto.vencimentoDS else null
+    val vencMR = if ((produto.vencimentoMR ?: 0) > 0 && (produto.estoqueMR ?: 0) > 0) produto.vencimentoMR else null
+    val vencMF = if ((produto.vencimentoMF ?: 0) > 0 && (produto.estoqueMF ?: 0) > 0) produto.vencimentoMF else null
+    val vencPK = if ((produto.vencimentoPK ?: 0) > 0 && (produto.estoquePK ?: 0) > 0) produto.vencimentoPK else null
+    val vencTM = if ((produto.vencimentoTM ?: 0) > 0 && (produto.estoqueTM ?: 0) > 0) produto.vencimentoTM else null
 
     val vencList = listOfNotNull(vencDS, vencMR, vencMF, vencPK, vencTM)
 
@@ -341,7 +263,9 @@ fun List<ProdutoInventario>.organiza(): List<ProdutoInventario> {
       )
     }
   }
-  return produtosList.distinct()
+  return produtosList.distinctBy { prd ->
+    "${prd.prdno} ${prd.grade} ${prd.dataEntrada} ${prd.vencimento}"
+  }
 }
 
 data class FiltroProdutoInventario(
