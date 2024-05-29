@@ -11,7 +11,9 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.desc
 import com.github.mvysny.kaributools.getColumnBy
+import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
@@ -335,6 +337,10 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     val organiza = chkOrganiza.value ?: false
     btnAdiciona.isEnabled = !organiza
     btnRemover.isEnabled = !organiza
+    if(organiza) {
+      val order = ProdutoInventario::vencimentoStr.desc
+      gridPanel.sort(order)
+    }
   }
 
   override fun produtosSelecionados(): List<ProdutoInventario> {

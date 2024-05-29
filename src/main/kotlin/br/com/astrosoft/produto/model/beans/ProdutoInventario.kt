@@ -45,37 +45,37 @@ class ProdutoInventario(
     get() = (estoqueDS ?: 0) + (estoqueMR ?: 0) + (estoqueMF ?: 0) + (estoquePK ?: 0) + (estoqueTM ?: 0) - venda
 
   var vencimentoStr: String?
-    get() = vencimento(vencimento)
+    get() = vencimentoToStr(vencimento)
     set(value) {
       vencimento = mesAno(value)
     }
 
   var vencimentoDSStr: String?
-    get() = vencimento(vencimentoDS)
+    get() = vencimentoToStr(vencimentoDS)
     set(value) {
       vencimentoDS = mesAno(value)
     }
 
   var vencimentoMRStr: String?
-    get() = vencimento(vencimentoMR)
+    get() = vencimentoToStr(vencimentoMR)
     set(value) {
       vencimentoMR = mesAno(value)
     }
 
   var vencimentoMFStr: String?
-    get() = vencimento(vencimentoMF)
+    get() = vencimentoToStr(vencimentoMF)
     set(value) {
       vencimentoMF = mesAno(value)
     }
 
   var vencimentoPKStr: String?
-    get() = vencimento(vencimentoPK)
+    get() = vencimentoToStr(vencimentoPK)
     set(value) {
       vencimentoPK = mesAno(value)
     }
 
   var vencimentoTMStr: String?
-    get() = vencimento(vencimentoTM)
+    get() = vencimentoToStr(vencimentoTM)
     set(value) {
       vencimentoTM = mesAno(value)
     }
@@ -87,7 +87,7 @@ class ProdutoInventario(
     return mes + (ano + 2000) * 100
   }
 
-  fun vencimento(vencimento: Int?): String {
+  fun vencimentoToStr(vencimento: Int?): String {
     vencimento ?: return ""
     val vencimentoStr = vencimento.toString()
     if (vencimentoStr.length != 6) return ""
