@@ -113,7 +113,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
-   btnAdiciona = button("Adicionar") {
+    btnAdiciona = button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
       addClickListener {
         viewModel.adicionarLinha()
@@ -182,48 +182,78 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
 
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
-      columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
-      if (!user.admin || true) {
+      if (user.admin) {
+        columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
         columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
         }.mesAnoFieldEditor()
+      } else {
+        columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
+        }.mesAnoFieldEditor()
+        columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
-      columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
-      if (!user.admin || true) {
+      if (user.admin) {
+        columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
         columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
         }.mesAnoFieldEditor()
+      } else {
+        columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
+        }.mesAnoFieldEditor()
+        columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
-      columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
-      if (!user.admin || true) {
+      if (user.admin) {
+        columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
         columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
         }.mesAnoFieldEditor()
+      } else {
+        columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
+        }.mesAnoFieldEditor()
+        columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
-      columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
-      if (!user.admin || true) {
+      if (user.admin) {
+        columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
         columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
         }.mesAnoFieldEditor()
+      } else {
+        columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
+        }.mesAnoFieldEditor()
+        columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
       }
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
-      columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
-      if (!user.admin || true) {
+      if (user.admin) {
+        columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
         columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
         }.mesAnoFieldEditor()
+      } else {
+        columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
+        }.mesAnoFieldEditor()
+        columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
       }
     }
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor() {
@@ -337,7 +367,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     val organiza = chkOrganiza.value ?: false
     btnAdiciona.isEnabled = !organiza
     btnRemover.isEnabled = !organiza
-    if(organiza) {
+    if (organiza) {
       val order = ProdutoInventario::vencimentoStr.desc
       gridPanel.sort(order)
     }
