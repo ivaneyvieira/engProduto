@@ -483,6 +483,6 @@ fun <T : Any> Grid<T>.format() {
     LUMO_COMPACT,
     LUMO_ROW_STRIPES,
     LUMO_COLUMN_BORDERS,
-    //LUMO_WRAP_CELL_CONTENT
+    LUMO_WRAP_CELL_CONTENT
   )
 }

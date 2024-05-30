@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
@@ -18,10 +19,10 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_U
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_abrev
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -85,6 +86,12 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     this.setSelectionMode(Grid.SelectionMode.MULTI)
     this.shiftSelect()
     addColumnSeq("Seq")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { produto ->
+      val dlgProduto = DlgProdutosValidade(viewModel, produto)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     produto_codigo()
     produto_descricao()
     produto_grade()
@@ -92,8 +99,8 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_total()
     produto_quantVenda()
     produto_val()
-    columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy", width="80px")
-    columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy", width="80px")
+    columnGrid(Produtos::vencimento, "Venc", pattern = "MM/yy", width = "80px")
+    columnGrid(Produtos::fabricacao, "Fab", pattern = "MM/yy", width = "80px")
     columnGrid(Produtos::entrada, "Entrada")
     columnGrid(Produtos::nfEntrada, "NF")
     columnGrid(Produtos::dataEntrada, "Data")

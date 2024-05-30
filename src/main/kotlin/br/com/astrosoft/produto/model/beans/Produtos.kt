@@ -47,6 +47,23 @@ class Produtos(
   var fabricacao: LocalDate?,
   var vencimento: LocalDate?,
 ) {
+  fun produtosValidade(): List<ProdutoInventario> {
+    val prdno = prdno ?: return emptyList()
+    val grade = grade ?: return emptyList()
+    val filtro = FiltroProdutoInventario(
+        pesquisa = "",
+        codigo = prdno.trim(),
+        validade = 0,
+        grade = grade,
+        caracter = ECaracter.TODOS,
+        mes = 0,
+        ano = 0,
+        loja = 0,
+        organiza = true,
+      )
+    return ProdutoInventario.find(filtro)
+  }
+
   val MF_Dif
     get() = (MF_TT ?: 0) - (MF_App ?: 0)
 

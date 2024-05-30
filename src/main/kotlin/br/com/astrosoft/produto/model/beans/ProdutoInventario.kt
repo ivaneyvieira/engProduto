@@ -27,11 +27,16 @@ class ProdutoInventario(
   var estoqueMF: Int?,
   var estoquePK: Int?,
   var estoqueTM: Int?,
-  var vendasDS: Int? = null,
-  var vendasMR: Int? = null,
-  var vendasMF: Int? = null,
-  var vendasPK: Int? = null,
-  var vendasTM: Int? = null,
+  var entradaDS: Int? = null,
+  var entradaMR: Int? = null,
+  var entradaMF: Int? = null,
+  var entradaPK: Int? = null,
+  var entradaTM: Int? = null,
+  var saidaDS: Int? = null,
+  var saidaMR: Int? = null,
+  var saidaMF: Int? = null,
+  var saidaPK: Int? = null,
+  var saidaTM: Int? = null,
   var vencimentoDS: Int?,
   var vencimentoMR: Int?,
   var vencimentoMF: Int?,
@@ -39,21 +44,21 @@ class ProdutoInventario(
   var vencimentoTM: Int?,
 ) {
   val venda: Int
-    get() = (vendasDS ?: 0) + (vendasMR ?: 0) + (vendasMF ?: 0) + (vendasPK ?: 0) + (vendasTM ?: 0)
+    get() = (saidaDS ?: 0) + (saidaMR ?: 0) + (saidaMF ?: 0) + (saidaPK ?: 0) + (saidaTM ?: 0)
 
   val saldo: Int
     get() = (estoqueDS ?: 0) + (estoqueMR ?: 0) + (estoqueMF ?: 0) + (estoquePK ?: 0) + (estoqueTM ?: 0) - venda
 
   val saldoDS: Int
-    get() = (estoqueDS ?: 0) - (vendasDS ?: 0)
+    get() = (estoqueDS ?: 0) - (saidaDS ?: 0)
   val saldoMR: Int
-    get() = (estoqueMR ?: 0) - (vendasMR ?: 0)
+    get() = (estoqueMR ?: 0) - (saidaMR ?: 0)
   val saldoMF: Int
-    get() = (estoqueMF ?: 0) - (vendasMF ?: 0)
+    get() = (estoqueMF ?: 0) - (saidaMF ?: 0)
   val saldoPK: Int
-    get() = (estoquePK ?: 0) - (vendasPK ?: 0)
+    get() = (estoquePK ?: 0) - (saidaPK ?: 0)
   val saldoTM: Int
-    get() = (estoqueTM ?: 0) - (vendasTM ?: 0)
+    get() = (estoqueTM ?: 0) - (saidaTM ?: 0)
 
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
@@ -170,7 +175,7 @@ class ProdutoInventario(
           if (estoqueDS > 0) {
             if (saidaLoja2 > 0) {
               val saida = minOf(estoqueDS, saidaLoja2)
-              produtoInventario.vendasDS = saida
+              produtoInventario.saidaDS = saida
               saidaLoja2 -= saida
             }
           }
@@ -181,7 +186,7 @@ class ProdutoInventario(
           if (estoqueMR > 0) {
             if (saidaLoja3 > 0) {
               val saida = minOf(estoqueMR, saidaLoja3)
-              produtoInventario.vendasDS = saida
+              produtoInventario.saidaDS = saida
               saidaLoja3 -= saida
             }
           }
@@ -192,7 +197,7 @@ class ProdutoInventario(
           if (estoqueMF > 0) {
             if (saidaLoja4 > 0) {
               val saida = minOf(estoqueMF, saidaLoja4)
-              produtoInventario.vendasMF = saida
+              produtoInventario.saidaMF = saida
               saidaLoja4 -= saida
             }
           }
@@ -203,7 +208,7 @@ class ProdutoInventario(
           if (estoquePK > 0) {
             if (saidaLoja5 > 0) {
               val saida = minOf(estoquePK, saidaLoja5)
-              produtoInventario.vendasPK = saida
+              produtoInventario.saidaPK = saida
               saidaLoja5 -= saida
             }
           }
@@ -214,7 +219,7 @@ class ProdutoInventario(
           if (estoqueTM > 0) {
             if (saidaLoja8 > 0) {
               val saida = minOf(estoqueTM, saidaLoja8)
-              produtoInventario.vendasTM = saida
+              produtoInventario.saidaTM = saida
               saidaLoja8 -= saida
             }
           }
@@ -261,11 +266,11 @@ fun List<ProdutoInventario>.organiza(): List<ProdutoInventario> {
         estoqueMF = if (vencMF == null) 0 else produto.estoqueMF,
         estoquePK = if (vencPK == null) 0 else produto.estoquePK,
         estoqueTM = if (vencTM == null) 0 else produto.estoqueTM,
-        vendasDS = if (vencDS == null) 0 else produto.vendasDS,
-        vendasMR = if (vencMR == null) 0 else produto.vendasMR,
-        vendasMF = if (vencMF == null) 0 else produto.vendasMF,
-        vendasPK = if (vencPK == null) 0 else produto.vendasPK,
-        vendasTM = if (vencTM == null) 0 else produto.vendasTM,
+        saidaDS = if (vencDS == null) 0 else produto.saidaDS,
+        saidaMR = if (vencMR == null) 0 else produto.saidaMR,
+        saidaMF = if (vencMF == null) 0 else produto.saidaMF,
+        saidaPK = if (vencPK == null) 0 else produto.saidaPK,
+        saidaTM = if (vencTM == null) 0 else produto.saidaTM,
         vencimentoDS = vencDS,
         vencimentoMR = vencMR,
         vencimentoMF = vencMF,
