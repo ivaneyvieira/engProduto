@@ -93,16 +93,21 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   valueProvider: ValueProvider<T, *>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.column(valueProvider) {
     this.setHeader(header ?: "")
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if (isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     this.left()
@@ -115,16 +120,21 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, String?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if (isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -138,16 +148,21 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Set<Any>>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property = property, renderer = SetRenderer(property)).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -168,12 +183,17 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     if (boleanValue) VaadinIcon.CHECK_CIRCLE_O.create()
     else VaadinIcon.CIRCLE_THIN.create()
   }
-  column.isExpand = false
-  if (width != null) {
-    column.isAutoWidth = false
-    column.width = width
-  } else {
-    column.isAutoWidth = true
+  if(isExpand) {
+    column.isExpand = true
+  }
+  else {
+    column.isExpand = false
+    if (width != null) {
+      column.isAutoWidth = false
+      column.width = width
+    } else {
+      column.isAutoWidth = true
+    }
   }
   column.isResizable = true
   column.setHeader(header ?: property.name)
@@ -188,17 +208,23 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, LocalDate?>,
   header: String? = null,
   width: String? = "120px",
+  isExpand: Boolean = false,
   pattern: String = DATE_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateRenderer(property, pattern)).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+
+   if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -217,6 +243,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Date?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = DATE_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
@@ -225,12 +252,16 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     date.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -245,6 +276,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, LocalTime?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = TIME_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
@@ -253,12 +285,16 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     hora.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -272,6 +308,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Time?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = TIME_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
@@ -280,12 +317,16 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     hora.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     if (this.key == null) this.key = property.name
@@ -304,18 +345,23 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, LocalDateTime?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = DATETIME_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateTimeRenderer(property, pattern)).apply {
     this.setHeader(header ?: property.name)
     if (this.key == null) this.key = property.name
-    this.isExpand = false
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand) {
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+      }
     }
     this.isResizable = true
     this.left()
@@ -334,19 +380,24 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Double?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = "#,##0.00",
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer(property, DecimalFormat(pattern))).apply {
     this.setHeader(header ?: property.name)
     this.isResizable = true
-    this.isExpand = false
-    this.setFlexGrow(0)
-    this.isAutoWidth = false
-    if (width != null) {
-      this.width = width
+    if(isExpand){
+      this.isExpand = true
     } else {
-      this.width = "120px"
+      this.isExpand = false
+      this.setFlexGrow(0)
+      this.isAutoWidth = false
+      if (width != null) {
+        this.width = width
+      } else {
+        this.width = "120px"
+      }
     }
     this.setComparator { a, b ->
       val dataA = property.get(a) ?: Double.MIN_VALUE
@@ -364,20 +415,25 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   property: KProperty1<T, Int?>,
   header: String? = null,
   width: String? = null,
+  isExpand: Boolean = false,
   pattern: String = "0",
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer(property, DecimalFormat(pattern))).apply {
     this.setHeader(header ?: property.name)
     if (this.key == null) this.key = property.name
-    if (width != null) {
-      this.isAutoWidth = false
-      this.width = width
+    if(isExpand){
+      this.isExpand = true
     } else {
-      this.isAutoWidth = true
-      this.width = "120px"
+      this.isExpand = false
+      if (width != null) {
+        this.isAutoWidth = false
+        this.width = width
+      } else {
+        this.isAutoWidth = true
+        this.width = "120px"
+      }
     }
-    this.isExpand = false
     this.isResizable = true
     this.setComparator { a, b ->
       val dataA = property.get(a) ?: Int.MIN_VALUE

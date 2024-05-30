@@ -2,6 +2,8 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.columnGrid
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
@@ -12,7 +14,6 @@ import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.desc
-import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
@@ -158,109 +159,120 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       })
 
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoInventario::codigo, header = "Código")
-    columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoInventario::grade, header = "Grade")
+    columnGroup("Produtos") {
+      columnGrid(ProdutoInventario::codigo, header = "Código")
+      columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
+      columnGrid(ProdutoInventario::grade, header = "Grade")
 
-    val colEstoqueTotal = when (user?.lojaProduto) {
-      2 -> this.columnGrid(ProdutoInventario::estoqueTotalDS, header = "Total")
-      3 -> this.columnGrid(ProdutoInventario::estoqueTotalMR, header = "Total")
-      4 -> this.columnGrid(ProdutoInventario::estoqueTotalMF, header = "Total")
-      5 -> this.columnGrid(ProdutoInventario::estoqueTotalPK, header = "Total")
-      8 -> this.columnGrid(ProdutoInventario::estoqueTotalTM, header = "Total")
-      0 -> this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
-      else -> null
+      val colEstoqueTotal = when (user?.lojaProduto) {
+        2 -> this.columnGrid(ProdutoInventario::estoqueTotalDS, header = "Total")
+        3 -> this.columnGrid(ProdutoInventario::estoqueTotalMR, header = "Total")
+        4 -> this.columnGrid(ProdutoInventario::estoqueTotalMF, header = "Total")
+        5 -> this.columnGrid(ProdutoInventario::estoqueTotalPK, header = "Total")
+        8 -> this.columnGrid(ProdutoInventario::estoqueTotalTM, header = "Total")
+        0 -> this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
+        else -> null
+      }
+
+      when (user?.lojaProduto) {
+        2 -> this.columnGrid(ProdutoInventario::saldoDS, header = "Saldo")
+        3 -> this.columnGrid(ProdutoInventario::saldoMR, header = "Saldo")
+        4 -> this.columnGrid(ProdutoInventario::saldoMF, header = "Saldo")
+        5 -> this.columnGrid(ProdutoInventario::saldoPK, header = "Saldo")
+        8 -> this.columnGrid(ProdutoInventario::saldoTM, header = "Saldo")
+        0 -> this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+      }
+
+      if (user?.admin == true) {
+        this.columnGrid(ProdutoInventario::venda, header = "Saída")
+        columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
+        }.mesAnoFieldEditor()
+      }
     }
-
-    when (user?.lojaProduto) {
-      2 -> this.columnGrid(ProdutoInventario::saldoDS, header = "Saldo")
-      3 -> this.columnGrid(ProdutoInventario::saldoMR, header = "Saldo")
-      4 -> this.columnGrid(ProdutoInventario::saldoMF, header = "Saldo")
-      5 -> this.columnGrid(ProdutoInventario::saldoPK, header = "Saldo")
-      8 -> this.columnGrid(ProdutoInventario::saldoTM, header = "Saldo")
-      0 -> this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
-    }
-
-    if (user?.admin == true) {
-      this.columnGrid(ProdutoInventario::venda, header = "Saída")
-      columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
-        this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
-      }.mesAnoFieldEditor()
-    }
-
     if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
-        columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
-        }.mesAnoFieldEditor()
-      } else {
-        columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
-        }.mesAnoFieldEditor()
-        columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
+      columnGroup("DS") {
+        if (user.admin) {
+          columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
+          columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
+          }.mesAnoFieldEditor()
+        } else {
+          columnGrid(ProdutoInventario::vencimentoDSStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
+          }.mesAnoFieldEditor()
+          columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasDS, "Saída", width = "80px")
+        }
       }
     }
     if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
-        columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
-        }.mesAnoFieldEditor()
-      } else {
-        columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
-        }.mesAnoFieldEditor()
-        columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
+      columnGroup("MR") {
+        if (user.admin) {
+          columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
+          columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
+          }.mesAnoFieldEditor()
+        } else {
+          columnGrid(ProdutoInventario::vencimentoMRStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
+          }.mesAnoFieldEditor()
+          columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasMR, "Saída", width = "80px")
+        }
       }
     }
     if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
-        columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
-        }.mesAnoFieldEditor()
-      } else {
-        columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
-        }.mesAnoFieldEditor()
-        columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
+      columnGroup("MF") {
+        if (user.admin) {
+          columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
+          columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
+          }.mesAnoFieldEditor()
+        } else {
+          columnGrid(ProdutoInventario::vencimentoMFStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
+          }.mesAnoFieldEditor()
+          columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasMF, "Saída", width = "80px")
+        }
       }
     }
     if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
-        columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
-        }.mesAnoFieldEditor()
-      } else {
-        columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
-        }.mesAnoFieldEditor()
-        columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
+      columnGroup("PK") {
+        if (user.admin) {
+          columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
+          columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
+          }.mesAnoFieldEditor()
+        } else {
+          columnGrid(ProdutoInventario::vencimentoPKStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
+          }.mesAnoFieldEditor()
+          columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasPK, "Saída", width = "80px")
+        }
       }
     }
     if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
-        columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
-        }.mesAnoFieldEditor()
-      } else {
-        columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
-          this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
-        }.mesAnoFieldEditor()
-        columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-        columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
+      columnGroup("TM") {
+        if (user.admin) {
+          columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
+          columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
+          }.mesAnoFieldEditor()
+        } else {
+          columnGrid(ProdutoInventario::vencimentoTMStr, header = "Venc", width = "130px") {
+            this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
+          }.mesAnoFieldEditor()
+          columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
+          columnGrid(ProdutoInventario::vendasTM, "Saída", width = "80px")
+        }
       }
     }
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor() {
@@ -269,89 +281,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::unidade, header = "Un")
     columnGrid(ProdutoInventario::vendno, header = "For")
-
-    val headerRow = prependHeaderRow()
-    headerRow.join(
-      this.getColumnBy(ProdutoInventario::codigo),
-      this.getColumnBy(ProdutoInventario::descricao),
-      this.getColumnBy(ProdutoInventario::grade),
-      colEstoqueTotal,
-    ).text = "Produto"
-    if (user?.lojaProduto == 2 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueDS),
-          this.getColumnBy(ProdutoInventario::vendasDS),
-          this.getColumnBy(ProdutoInventario::vencimentoDSStr),
-        ).text = "DS"
-      } else {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueDS),
-          this.getColumnBy(ProdutoInventario::vendasDS),
-          this.getColumnBy(ProdutoInventario::vencimentoDSStr),
-        ).text = "DS"
-      }
-    }
-    if (user?.lojaProduto == 3 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueMR),
-          this.getColumnBy(ProdutoInventario::vendasMR),
-          this.getColumnBy(ProdutoInventario::vencimentoMRStr),
-        ).text = "MR"
-      } else {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueMR),
-          this.getColumnBy(ProdutoInventario::vendasMR),
-          this.getColumnBy(ProdutoInventario::vencimentoMRStr),
-        ).text = "MR"
-      }
-    }
-    if (user?.lojaProduto == 4 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueMF),
-          this.getColumnBy(ProdutoInventario::vendasMF),
-          this.getColumnBy(ProdutoInventario::vencimentoMFStr),
-        ).text = "MF"
-      } else {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueMF),
-          this.getColumnBy(ProdutoInventario::vendasMF),
-          this.getColumnBy(ProdutoInventario::vencimentoMFStr),
-        ).text = "MF"
-      }
-    }
-    if (user?.lojaProduto == 5 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoquePK),
-          this.getColumnBy(ProdutoInventario::vendasPK),
-          this.getColumnBy(ProdutoInventario::vencimentoPKStr),
-        ).text = "PK"
-      } else {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoquePK),
-          this.getColumnBy(ProdutoInventario::vendasPK),
-          this.getColumnBy(ProdutoInventario::vencimentoPKStr),
-        ).text = "PK"
-      }
-    }
-    if (user?.lojaProduto == 8 || user?.lojaProduto == 0) {
-      if (user.admin) {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueTM),
-          this.getColumnBy(ProdutoInventario::vendasTM),
-          this.getColumnBy(ProdutoInventario::vencimentoTMStr),
-        ).text = "TM"
-      } else {
-        headerRow.join(
-          this.getColumnBy(ProdutoInventario::estoqueTM),
-          this.getColumnBy(ProdutoInventario::vendasTM),
-          this.getColumnBy(ProdutoInventario::vencimentoTMStr),
-        ).text = "TM"
-      }
-    }
   }
 
   override fun filtro(): FiltroProdutoInventario {
