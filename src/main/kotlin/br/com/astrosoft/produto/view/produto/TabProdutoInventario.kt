@@ -50,15 +50,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -69,10 +60,19 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
     }
 
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "300px"
+      this.isClearButtonVisible = true
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     init()
 
     edtCodigo = textField("Código") {
-      this.width = "100px"
+      this.width = "110px"
       this.isClearButtonVisible = true
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -161,11 +161,12 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(ProdutoInventario::codigo, header = "Código")
     this.columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
-    this.columnGrid(ProdutoInventario::grade, header = "Grade")
-    this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja") {
+    this.columnGrid(ProdutoInventario::grade, header = "Grade", width="100px")
+    this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja", width="70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.loja ?: 0 })
     }
     this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
+    this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()

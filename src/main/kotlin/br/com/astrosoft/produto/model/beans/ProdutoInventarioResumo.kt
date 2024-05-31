@@ -14,6 +14,7 @@ data class ProdutoInventarioResumo(
   val estoquePK: Int?,
   val estoqueTM: Int?,
   val saldo: Int?,
+  val vencimento: Int?,
   val vencimentoStr: String?,
   val saldoDS: Int?,
   val saldoMR: Int?,

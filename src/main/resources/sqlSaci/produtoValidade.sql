@@ -54,13 +54,22 @@ CREATE TEMPORARY TABLE T_STK
 SELECT storeno,
        prdno,
        grade,
-       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueTotal
+       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueSaci
 FROM sqldados.stk
        INNER JOIN T_PRD
                   USING (storeno, prdno, grade)
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND (:loja = 0 OR storeno = :loja)
 GROUP BY storeno, prdno, grade;
+
+DROP TABLE IF EXISTS T_STK_TOTAL;
+CREATE TEMPORARY TABLE T_STK_TOTAL
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, SUM(estoqueSaci) AS estoqueTotal
+FROM T_STK
+GROUP BY prdno, grade;
 
 DROP TABLE IF EXISTS T_VAL;
 CREATE TEMPORARY TABLE T_VAL
@@ -91,11 +100,13 @@ SELECT P.storeno                                              AS loja,
        P.vendno                                               AS vendno,
        P.fornecedorAbrev                                      AS fornecedorAbrev,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
-       IFNULL(S.estoqueTotal, 0)                              AS estoqueTotal,
+       IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
        V.estoque                                              AS estoque,
        MID(V.vencimento, 1, 6) * 1                            AS vencimento,
        0                                                      AS saida
 FROM T_STK AS S
+       INNER JOIN T_STK_TOTAL AS T
+                  USING (prdno, grade)
        INNER JOIN T_PRD AS P
                   USING (storeno, prdno, grade)
        LEFT JOIN T_VAL AS V
@@ -105,12 +116,6 @@ WHERE (@PESQUISA = '' OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
-  AND (:ano = 0)
-   OR (MID(vencimento, 1, 4) = :ano)
-  AND (:mes = 0)
-   OR (MID(vencimento, 5, 6) = :mes)
+  AND ((:ano = 0) OR (MID(vencimento, 1, 4) = :ano))
+  AND ((:mes = 0) OR (MID(vencimento, 5, 6) = :mes))
 GROUP BY S.storeno, prdno, codigo, grade, descricao, unidade, vencimento
-ORDER BY S.storeno, codigo, grade, vencimento
-
-
-

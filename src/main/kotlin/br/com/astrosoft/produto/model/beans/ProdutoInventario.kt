@@ -169,6 +169,7 @@ class ProdutoInventario(
 
 fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
   val produtosGroup = this.groupBy { "${it.prdno} ${it.grade} ${it.vencimento}" }
+
   return produtosGroup.map { (_, produtos) ->
     ProdutoInventarioResumo(
       prdno = produtos.firstOrNull()?.prdno ?: "",
@@ -183,6 +184,7 @@ fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
       estoqueTM = produtos.filter { it.loja == 8 }.sumOf { it.estoque ?: 0 },
       saldo = produtos.sumOf { it.saldo },
       vencimentoStr = produtos.firstOrNull()?.vencimentoStr,
+      vencimento = produtos.firstOrNull()?.vencimento,
       saldoDS = produtos.filter { it.loja == 2 }.sumOf { it.saldo },
       saldoMR = produtos.filter { it.loja == 3 }.sumOf { it.saldo },
       saldoMF = produtos.filter { it.loja == 4 }.sumOf { it.saldo },

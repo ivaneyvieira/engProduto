@@ -9,7 +9,9 @@ import br.com.astrosoft.produto.model.beans.ProdutoInventarioResumo
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
+import com.github.mvysny.kaributools.asc
 import com.github.mvysny.kaributools.getColumnBy
+import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
@@ -61,7 +63,9 @@ class DlgProdutosValidade(
       columnGroup("Estoque / Vencimento") {
         this.columnGrid(ProdutoInventarioResumo::estoqueTotal, "Sist", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::saldo, "Saldo", width = defaultWidth)
-        this.columnGrid(ProdutoInventarioResumo::vencimentoStr, "Venc", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::vencimentoStr, "Venc", width = defaultWidth) {
+          this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
+        }
       }
 
       columnGroup("Saldo por Loja") {
@@ -81,6 +85,7 @@ class DlgProdutosValidade(
       }
     }
     this.addAndExpand(gridDetail)
+    gridDetail.sort(ProdutoInventarioResumo::vencimentoStr.asc)
     update()
   }
 
@@ -101,6 +106,8 @@ class DlgProdutosValidade(
       .setFooter(listProdutos.sumOf { it.estoquePK ?: 0 }.format())
     gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueTM)
       .setFooter(listProdutos.sumOf { it.estoqueTM ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueTotal)
+      .setFooter(listProdutos.firstOrNull()?.estoqueTotal?.format() ?: "")
     gridDetail.getColumnBy(ProdutoInventarioResumo::saldo).setFooter(listProdutos.sumOf { it.saldo ?: 0 }.format())
     gridDetail.getColumnBy(ProdutoInventarioResumo::saldoDS).setFooter(listProdutos.sumOf { it.saldoDS ?: 0 }.format())
     gridDetail.getColumnBy(ProdutoInventarioResumo::saldoMR).setFooter(listProdutos.sumOf { it.saldoMR ?: 0 }.format())

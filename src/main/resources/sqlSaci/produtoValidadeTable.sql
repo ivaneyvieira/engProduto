@@ -123,3 +123,6 @@ where storeno = 3;
 SELECT *
 FROM sqldados.produtoValidadeLoja
 ;
+
+select * from sqldados.stk
+where prdno = 113613
