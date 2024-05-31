@@ -14,9 +14,11 @@ DO @CARACTER := :caracter;
 DROP TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT P.no                              AS prdno,
+SELECT S.no                              AS storeno,
+       S.sname                           AS abrevLoja,
+       P.no                              AS prdno,
        TRIM(P.no) * 1                    AS codigo,
        TRIM(MID(P.name, 1, 37))          AS descricao,
        IFNULL(B.grade, '')               AS grade,
@@ -29,6 +31,9 @@ FROM sqldados.prd AS P
                  ON P.no = B.prdno
        LEFT JOIN sqldados.vend AS V
                  ON V.no = P.mfno
+       INNER JOIN sqldados.store AS S
+                  ON S.no IN (2, 3, 4, 5, 8)
+                    AND (S.no = :loja OR :loja = 0)
 WHERE IF(tipoGarantia = 2, garantia, 0) > 0
   AND (P.no = @PRDNO OR @CODIGO = '')
   AND (IF(tipoGarantia = 2, garantia, 0) = @VALIDADE OR @VALIDADE = 0)
@@ -39,134 +44,73 @@ WHERE IF(tipoGarantia = 2, garantia, 0) > 0
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
-GROUP BY prdno, TRIM(MID(P.name, 1, 37)), grade;
+GROUP BY S.no, prdno, TRIM(MID(P.name, 1, 37)), grade;
 
 DROP TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT prdno,
+SELECT storeno,
+       prdno,
        grade,
-       ROUND(SUM(IF(storeno = 2, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalDS,
-       ROUND(SUM(IF(storeno = 3, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalMR,
-       ROUND(SUM(IF(storeno = 4, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalMF,
-       ROUND(SUM(IF(storeno = 5, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalPK,
-       ROUND(SUM(IF(storeno = 8, qtty_varejo + stk.qtty_atacado, 0)) / 1000) AS estoqueTotalTM,
-       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000)                     AS estoqueTotal
+       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueTotal
 FROM sqldados.stk
        INNER JOIN T_PRD
-                  USING (prdno, grade)
+                  USING (storeno, prdno, grade)
 WHERE storeno IN (2, 3, 4, 5, 8)
-GROUP BY prdno, grade;
+  AND (:loja = 0 OR storeno = :loja)
+GROUP BY storeno, prdno, grade;
 
 DROP TABLE IF EXISTS T_VAL;
 CREATE TEMPORARY TABLE T_VAL
 (
-  PRIMARY KEY (prdno, grade, seq)
+  PRIMARY KEY (storeno, prdno, grade, vencimento)
 )
-SELECT seq          AS seq,
-       prdno        AS prdno,
-       grade        AS grade,
-       dataEntrada  AS dataEntrada,
-       estoqueDS    AS estoqueDS,
-       estoqueMR    AS estoqueMR,
-       estoqueMF    AS estoqueMF,
-       estoquePK    AS estoquePK,
-       estoqueTM    AS estoqueTM,
-       vencimento   AS vencimento,
-       vencimentoDS AS vencimentoDS,
-       vencimentoMR AS vencimentoMR,
-       vencimentoMF AS vencimentoMF,
-       vencimentoPK AS vencimentoPK,
-       vencimentoTM AS vencimentoTM
-FROM sqldados.produtoValidadeLoja
+SELECT storeno     AS storeno,
+       prdno       AS prdno,
+       grade       AS grade,
+       dataEntrada AS dataEntrada,
+       estoque     AS estoque,
+       vencimento  AS vencimento
+FROM sqldados.produtoValidade
        INNER JOIN T_PRD
-                  USING (prdno, grade)
-WHERE (:ano = 0 OR
-       MID(vencimentoDS, 1, 4) = :ano OR
-       MID(vencimentoMR, 1, 4) = :ano OR
-       MID(vencimentoMF, 1, 4) = :ano OR
-       MID(vencimentoPK, 1, 4) = :ano OR
-       MID(vencimentoTM, 1, 4) = :ano)
-  AND (:mes = 0 OR
-       MID(vencimentoDS, 5, 6) = :mes OR
-       MID(vencimentoMR, 5, 6) = :mes OR
-       MID(vencimentoMF, 5, 6) = :mes OR
-       MID(vencimentoPK, 5, 6) = :mes OR
-       MID(vencimentoTM, 5, 6) = :mes);
+                  USING (storeno, prdno, grade)
+WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
+  AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
+  AND (:loja = 0 OR storeno = :loja);
 
-SELECT P.prdno,
-       P.codigo,
-       P.descricao,
-       grade,
-       P.unidade,
-       P.validade,
-       P.vendno,
-       P.fornecedorAbrev,
-       CAST(IF(dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
-       IFNULL(S.estoqueTotalDS, 0)                          AS estoqueTotalDS,
-       IFNULL(S.estoqueTotalMR, 0)                          AS estoqueTotalMR,
-       IFNULL(S.estoqueTotalMF, 0)                          AS estoqueTotalMF,
-       IFNULL(S.estoqueTotalPK, 0)                          AS estoqueTotalPK,
-       IFNULL(S.estoqueTotalTM, 0)                          AS estoqueTotalTM,
-       IFNULL(S.estoqueTotal, 0)                            AS estoqueTotal,
-       V.seq,
-       V.estoqueDS,
-       V.estoqueMR,
-       V.estoqueMF,
-       V.estoquePK,
-       V.estoqueTM,
-       CASE :loja
-         WHEN 0 THEN NULL
-         WHEN 2 THEN V.estoqueDS
-         WHEN 3 THEN V.estoqueMR
-         WHEN 4 THEN V.estoqueMF
-         WHEN 5 THEN V.estoquePK
-         WHEN 8 THEN V.estoqueTM
-       END                                                  AS estoqueLoja,
-       MID(V.vencimento, 1, 6) * 1                          AS vencimento,
-       MID(V.vencimentoDS, 1, 6) * 1                        AS vencimentoDS,
-       MID(V.vencimentoMR, 1, 6) * 1                        AS vencimentoMR,
-       MID(V.vencimentoMF, 1, 6) * 1                        AS vencimentoMF,
-       MID(V.vencimentoPK, 1, 6) * 1                        AS vencimentoPK,
-       MID(V.vencimentoTM, 1, 6) * 1                        AS vencimentoTM,
-       CASE :loja
-         WHEN 0 THEN NULL
-         WHEN 2 THEN MID(V.vencimentoDS, 1, 6) * 1
-         WHEN 3 THEN MID(V.vencimentoMR, 1, 6) * 1
-         WHEN 4 THEN MID(V.vencimentoMF, 1, 6) * 1
-         WHEN 5 THEN MID(V.vencimentoPK, 1, 6) * 1
-         WHEN 8 THEN MID(V.vencimentoTM, 1, 6) * 1
-       END                                                  AS vencimentoLoja
-FROM T_PRD AS P
-       LEFT JOIN T_STK AS S
-                 USING (prdno, grade)
+SELECT P.storeno                                              AS loja,
+       P.abrevLoja                                            AS lojaAbrev,
+       P.prdno                                                AS prdno,
+       P.codigo                                               AS codigo,
+       P.descricao                                            AS descricao,
+       P.grade                                                AS grade,
+       P.unidade                                              AS unidade,
+       P.validade                                             AS validade,
+       P.vendno                                               AS vendno,
+       P.fornecedorAbrev                                      AS fornecedorAbrev,
+       CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
+       IFNULL(S.estoqueTotal, 0)                              AS estoqueTotal,
+       V.estoque                                              AS estoque,
+       MID(V.vencimento, 1, 6) * 1                            AS vencimento,
+       0                                                      AS saida
+FROM T_STK AS S
+       INNER JOIN T_PRD AS P
+                  USING (storeno, prdno, grade)
        LEFT JOIN T_VAL AS V
-                 USING (prdno, grade)
+                 USING (storeno, prdno, grade)
 WHERE (@PESQUISA = '' OR
        descricao LIKE @PESQUISALIKE OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
        unidade = @PESQUISA OR
        vendno = @PESQUISANUM)
-  AND (:ano = 0 OR
-       (MID(vencimento, 1, 4) = :ano AND :loja IN (0)) OR
-       (MID(vencimentoDS, 1, 4) = :ano AND :loja IN (0, 2)) OR
-       (MID(vencimentoMR, 1, 4) = :ano AND :loja IN (0, 3)) OR
-       (MID(vencimentoMF, 1, 4) = :ano AND :loja IN (0, 4)) OR
-       (MID(vencimentoPK, 1, 4) = :ano AND :loja IN (0, 5)) OR
-       (MID(vencimentoTM, 1, 4) = :ano AND :loja IN (0, 8))
-  )
-  AND (:mes = 0 OR
-       (MID(vencimento, 5, 6) = :mes AND :loja IN (0)) OR
-       (MID(vencimentoDS, 5, 6) = :mes AND :loja IN (0, 2)) OR
-       (MID(vencimentoMR, 5, 6) = :mes AND :loja IN (0, 3)) OR
-       (MID(vencimentoMF, 5, 6) = :mes AND :loja IN (0, 4)) OR
-       (MID(vencimentoPK, 5, 6) = :mes AND :loja IN (0, 5)) OR
-       (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
-  )
-GROUP BY prdno, codigo, grade, descricao, unidade, estoqueLoja, vencimentoLoja, if(:loja = 0, seq, 0)
-ORDER BY codigo, grade, vencimentoLoja
+  AND (:ano = 0)
+   OR (MID(vencimento, 1, 4) = :ano)
+  AND (:mes = 0)
+   OR (MID(vencimento, 5, 6) = :mes)
+GROUP BY S.storeno, prdno, codigo, grade, descricao, unidade, vencimento
+ORDER BY S.storeno, codigo, grade, vencimento
 
 
 

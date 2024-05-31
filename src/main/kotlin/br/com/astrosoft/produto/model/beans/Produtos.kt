@@ -47,7 +47,7 @@ class Produtos(
   var fabricacao: LocalDate?,
   var vencimento: LocalDate?,
 ) {
-  fun produtosValidade(): List<ProdutoInventario> {
+  fun produtosInventarioResumo(): List<ProdutoInventarioResumo> {
     val prdno = prdno ?: return emptyList()
     val grade = grade ?: return emptyList()
     val filtro = FiltroProdutoInventario(
@@ -58,10 +58,9 @@ class Produtos(
         caracter = ECaracter.TODOS,
         mes = 0,
         ano = 0,
-        loja = 0,
-        organiza = true,
+        storeno = 0,
       )
-    return ProdutoInventario.find(filtro)
+    return ProdutoInventario.find(filtro).resumo()
   }
 
   val MF_Dif

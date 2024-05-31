@@ -79,36 +79,47 @@ WHERE vencimentoTM > 0
 SELECT *
 FROM sqldados.produtoValidade;
 
+ALTER TABLE sqldados.produtoValidade
+  ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
+
 TRUNCATE TABLE sqldados.produtoValidade;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
-SELECT 2 AS storeno, prdno, grade, vencimentoDS, estoqueDS
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+SELECT 2 AS storeno, prdno, grade, dataEntrada, vencimentoDS, estoqueDS
 FROM sqldados.produtoValidadeLoja
-WHERE vencimentoDS > 0 AND estoqueDS > 0;
+WHERE vencimentoDS > 0
+  AND estoqueDS > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
-SELECT 3 AS storeno, prdno, grade, vencimentoMR, estoqueMR
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+SELECT 3 AS storeno, prdno, grade, dataEntrada, vencimentoMR, estoqueMR
 FROM sqldados.produtoValidadeLoja
-WHERE vencimentoMR > 0 AND estoqueMR > 0;
+WHERE vencimentoMR > 0
+  AND estoqueMR > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
-SELECT 4 AS storeno, prdno, grade, vencimentoMF, estoqueMF
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+SELECT 4 AS storeno, prdno, grade, dataEntrada, vencimentoMF, estoqueMF
 FROM sqldados.produtoValidadeLoja
-WHERE vencimentoMF > 0 AND estoqueMF > 0;
+WHERE vencimentoMF > 0
+  AND estoqueMF > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
-SELECT 5 AS storeno, prdno, grade, vencimentoPK, estoquePK
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+SELECT 5 AS storeno, prdno, grade, dataEntrada, vencimentoPK, estoquePK
 FROM sqldados.produtoValidadeLoja
-WHERE vencimentoPK > 0 AND estoquePK > 0;
+WHERE vencimentoPK > 0
+  AND estoquePK > 0;
 
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
-SELECT 8 AS storeno, prdno, grade, vencimentoTM, estoqueTM
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+SELECT 8 AS storeno, prdno, grade, dataEntrada, vencimentoTM, estoqueTM
 FROM sqldados.produtoValidadeLoja
-WHERE vencimentoTM > 0 AND estoqueTM > 0;
+WHERE vencimentoTM > 0
+  AND estoqueTM > 0;
 
 
 SELECT *
-FROM sqldados.produtoValidade;
+FROM sqldados.produtoValidade
+where storeno = 3;
 
-
+SELECT *
+FROM sqldados.produtoValidadeLoja
+;

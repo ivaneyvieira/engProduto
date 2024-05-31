@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.ProdutoInventario
+import br.com.astrosoft.produto.model.beans.ProdutoInventarioResumo
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
@@ -19,7 +19,7 @@ class DlgProdutosValidade(
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoInventario::class.java, false)
+  private val gridDetail = Grid(ProdutoInventarioResumo::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
@@ -48,65 +48,70 @@ class DlgProdutosValidade(
       val defaultWidth = "80px"
 
       columnGroup("Dados Entrada") {
-        this.columnGrid(ProdutoInventario::dataEntrada, "Data") {
+        this.columnGrid(ProdutoInventarioResumo::dataEntrada, "Data") {
           this.setFooter("Total")
         }
-        this.columnGrid(ProdutoInventario::estoqueDS, "DS", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::estoqueMR, "MR", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::estoqueMF, "MF", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::estoquePK, "PK", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::estoqueTM, "TM", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoqueDS, "DS", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoqueMR, "MR", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoqueMF, "MF", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoquePK, "PK", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoqueTM, "TM", width = defaultWidth)
       }
 
       columnGroup("Estoque / Vencimento") {
-        this.columnGrid(ProdutoInventario::estoqueTotal, "Sist", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saldo, "Saldo", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::vencimentoStr, "Venc", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::estoqueTotal, "Sist", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldo, "Saldo", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::vencimentoStr, "Venc", width = defaultWidth)
       }
 
       columnGroup("Saldo por Loja") {
-        this.columnGrid(ProdutoInventario::saldoDS, "DS", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saldoMR, "MR", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saldoMF, "MF", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saldoPK, "PK", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saldoTM, "TM", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldoDS, "DS", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldoMR, "MR", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldoMF, "MF", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldoPK, "PK", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saldoTM, "TM", width = defaultWidth)
       }
 
       columnGroup("Dados Venda") {
-        this.columnGrid(ProdutoInventario::saidaDS, "DS", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saidaMR, "MR", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saidaMF, "MF", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saidaPK, "PK", width = defaultWidth)
-        this.columnGrid(ProdutoInventario::saidaTM, "TM", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saidaDS, "DS", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saidaMR, "MR", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saidaMF, "MF", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saidaPK, "PK", width = defaultWidth)
+        this.columnGrid(ProdutoInventarioResumo::saidaTM, "TM", width = defaultWidth)
       }
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun produtosSelecionados(): List<ProdutoInventario> {
+  fun produtosSelecionados(): List<ProdutoInventarioResumo> {
     return gridDetail.selectedItems.toList()
   }
 
   fun update() {
-    val listProdutos = produtos.produtosValidade()
+    val listProdutos = produtos.produtosInventarioResumo()
     gridDetail.setItems(listProdutos)
-    gridDetail.getColumnBy(ProdutoInventario::estoqueDS).setFooter(listProdutos.sumOf { it.estoqueDS ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::estoqueMR).setFooter(listProdutos.sumOf { it.estoqueMR ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::estoqueMF).setFooter(listProdutos.sumOf { it.estoqueMF ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::estoquePK).setFooter(listProdutos.sumOf { it.estoquePK ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::estoqueTM).setFooter(listProdutos.sumOf { it.estoqueTM ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldo).setFooter(listProdutos.sumOf { it.saldo }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldoDS).setFooter(listProdutos.sumOf { it.saldoDS }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldoMR).setFooter(listProdutos.sumOf { it.saldoMR }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldoMF).setFooter(listProdutos.sumOf { it.saldoMF }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldoPK).setFooter(listProdutos.sumOf { it.saldoPK }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saldoTM).setFooter(listProdutos.sumOf { it.saldoTM }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saidaDS).setFooter(listProdutos.sumOf { it.saidaDS ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saidaMR).setFooter(listProdutos.sumOf { it.saidaMR ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saidaMF).setFooter(listProdutos.sumOf { it.saidaMF ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saidaPK).setFooter(listProdutos.sumOf { it.saidaPK ?: 0 }.format())
-    gridDetail.getColumnBy(ProdutoInventario::saidaTM).setFooter(listProdutos.sumOf { it.saidaTM ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueDS)
+      .setFooter(listProdutos.sumOf { it.estoqueDS ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueMR)
+      .setFooter(listProdutos.sumOf { it.estoqueMR ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueMF)
+      .setFooter(listProdutos.sumOf { it.estoqueMF ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoquePK)
+      .setFooter(listProdutos.sumOf { it.estoquePK ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::estoqueTM)
+      .setFooter(listProdutos.sumOf { it.estoqueTM ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldo).setFooter(listProdutos.sumOf { it.saldo ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldoDS).setFooter(listProdutos.sumOf { it.saldoDS ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldoMR).setFooter(listProdutos.sumOf { it.saldoMR ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldoMF).setFooter(listProdutos.sumOf { it.saldoMF ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldoPK).setFooter(listProdutos.sumOf { it.saldoPK ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saldoTM).setFooter(listProdutos.sumOf { it.saldoTM ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saidaDS).setFooter(listProdutos.sumOf { it.saidaDS ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saidaMR).setFooter(listProdutos.sumOf { it.saidaMR ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saidaMF).setFooter(listProdutos.sumOf { it.saidaMF ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saidaPK).setFooter(listProdutos.sumOf { it.saidaPK ?: 0 }.format())
+    gridDetail.getColumnBy(ProdutoInventarioResumo::saidaTM).setFooter(listProdutos.sumOf { it.saidaTM ?: 0 }.format())
   }
 
   fun close() {
