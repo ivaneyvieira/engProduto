@@ -165,7 +165,7 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoPK, 5, 6) = :mes AND :loja IN (0, 5)) OR
        (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
   )
-GROUP BY prdno, codigo, grade, descricao, unidade, estoqueLoja, vencimentoLoja
+GROUP BY prdno, codigo, grade, descricao, unidade, estoqueLoja, vencimentoLoja, if(:loja = 0, seq, 0)
 ORDER BY codigo, grade, vencimentoLoja
 
 
