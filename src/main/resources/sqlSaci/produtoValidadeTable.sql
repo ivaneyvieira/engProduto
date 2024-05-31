@@ -73,3 +73,42 @@ UPDATE sqldados.produtoValidadeLoja
 SET vencimento = vencimentoTM
 WHERE vencimentoTM > 0
   AND vencimento = 0;
+
+
+
+SELECT *
+FROM sqldados.produtoValidade;
+
+TRUNCATE TABLE sqldados.produtoValidade;
+
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
+SELECT 2 AS storeno, prdno, grade, vencimentoDS, estoqueDS
+FROM sqldados.produtoValidadeLoja
+WHERE vencimentoDS > 0 AND estoqueDS > 0;
+
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
+SELECT 3 AS storeno, prdno, grade, vencimentoMR, estoqueMR
+FROM sqldados.produtoValidadeLoja
+WHERE vencimentoMR > 0 AND estoqueMR > 0;
+
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
+SELECT 4 AS storeno, prdno, grade, vencimentoMF, estoqueMF
+FROM sqldados.produtoValidadeLoja
+WHERE vencimentoMF > 0 AND estoqueMF > 0;
+
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
+SELECT 5 AS storeno, prdno, grade, vencimentoPK, estoquePK
+FROM sqldados.produtoValidadeLoja
+WHERE vencimentoPK > 0 AND estoquePK > 0;
+
+
+INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, vencimento, estoque)
+SELECT 8 AS storeno, prdno, grade, vencimentoTM, estoqueTM
+FROM sqldados.produtoValidadeLoja
+WHERE vencimentoTM > 0 AND estoqueTM > 0;
+
+
+SELECT *
+FROM sqldados.produtoValidade;
+
+

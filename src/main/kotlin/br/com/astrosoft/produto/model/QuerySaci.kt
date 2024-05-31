@@ -1190,10 +1190,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun removeProdutoValidade(produtoInventario: ProdutoInventario) {
+  fun removeProdutoValidade(produtoInventario: ProdutoInventario, storeno: Int) {
     val sql = "/sqlSaci/produtoValidadeRemove.sql"
     script(sql) {
       addOptionalParameter("seq", produtoInventario.seq ?: 0)
+      addOptionalParameter("storeno", storeno)
     }
   }
 

@@ -164,25 +164,24 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
       columnGrid(ProdutoInventario::grade, header = "Grade")
 
-      val colEstoqueTotal = when (user?.lojaProduto) {
+      when (user?.lojaProduto) {
         2 -> this.columnGrid(ProdutoInventario::estoqueTotalDS, header = "Total")
         3 -> this.columnGrid(ProdutoInventario::estoqueTotalMR, header = "Total")
         4 -> this.columnGrid(ProdutoInventario::estoqueTotalMF, header = "Total")
         5 -> this.columnGrid(ProdutoInventario::estoqueTotalPK, header = "Total")
         8 -> this.columnGrid(ProdutoInventario::estoqueTotalTM, header = "Total")
         0 -> this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
-        else -> null
       }
-
-      when (user?.lojaProduto) {
-        2 -> this.columnGrid(ProdutoInventario::saldoDS, header = "Saldo")
-        3 -> this.columnGrid(ProdutoInventario::saldoMR, header = "Saldo")
-        4 -> this.columnGrid(ProdutoInventario::saldoMF, header = "Saldo")
-        5 -> this.columnGrid(ProdutoInventario::saldoPK, header = "Saldo")
-        8 -> this.columnGrid(ProdutoInventario::saldoTM, header = "Saldo")
-        0 -> this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
-      }
-
+      /*
+            when (user?.lojaProduto) {
+              2 -> this.columnGrid(ProdutoInventario::saldoDS, header = "Saldo")
+              3 -> this.columnGrid(ProdutoInventario::saldoMR, header = "Saldo")
+              4 -> this.columnGrid(ProdutoInventario::saldoMF, header = "Saldo")
+              5 -> this.columnGrid(ProdutoInventario::saldoPK, header = "Saldo")
+              8 -> this.columnGrid(ProdutoInventario::saldoTM, header = "Saldo")
+              0 -> this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+            }
+      */
       if (user?.admin == true) {
         this.columnGrid(ProdutoInventario::venda, header = "Saída")
         columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
@@ -203,7 +202,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoDS ?: 0 })
           }.mesAnoFieldEditor()
           columnGrid(ProdutoInventario::estoqueDS, header = "Est", width = "70px").integerFieldEditor()
-          columnGrid(ProdutoInventario::saidaDS, "Saída", width = "80px")
+          //columnGrid(ProdutoInventario::saidaDS, "Saída", width = "80px")
         }
       }
     }
@@ -220,7 +219,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMR ?: 0 })
           }.mesAnoFieldEditor()
           columnGrid(ProdutoInventario::estoqueMR, header = "Est", width = "70px").integerFieldEditor()
-          columnGrid(ProdutoInventario::saidaMR, "Saída", width = "80px")
+          //columnGrid(ProdutoInventario::saidaMR, "Saída", width = "80px")
         }
       }
     }
@@ -237,7 +236,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoMF ?: 0 })
           }.mesAnoFieldEditor()
           columnGrid(ProdutoInventario::estoqueMF, header = "Est", width = "70px").integerFieldEditor()
-          columnGrid(ProdutoInventario::saidaMF, "Saída", width = "80px")
+          //columnGrid(ProdutoInventario::saidaMF, "Saída", width = "80px")
         }
       }
     }
@@ -254,7 +253,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoPK ?: 0 })
           }.mesAnoFieldEditor()
           columnGrid(ProdutoInventario::estoquePK, header = "Est", width = "70px").integerFieldEditor()
-          columnGrid(ProdutoInventario::saidaPK, "Saída", width = "80px")
+          //columnGrid(ProdutoInventario::saidaPK, "Saída", width = "80px")
         }
       }
     }
@@ -271,7 +270,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             this.setComparator(Comparator.comparingInt { produto -> produto.vencimentoTM ?: 0 })
           }.mesAnoFieldEditor()
           columnGrid(ProdutoInventario::estoqueTM, header = "Est", width = "70px").integerFieldEditor()
-          columnGrid(ProdutoInventario::saidaTM, "Saída", width = "80px")
+          //columnGrid(ProdutoInventario::saidaTM, "Saída", width = "80px")
         }
       }
     }

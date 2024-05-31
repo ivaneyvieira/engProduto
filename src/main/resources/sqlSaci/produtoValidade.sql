@@ -117,12 +117,28 @@ SELECT P.prdno,
        V.estoqueMF,
        V.estoquePK,
        V.estoqueTM,
+       CASE :loja
+         WHEN 0 THEN NULL
+         WHEN 2 THEN V.estoqueDS
+         WHEN 3 THEN V.estoqueMR
+         WHEN 4 THEN V.estoqueMF
+         WHEN 5 THEN V.estoquePK
+         WHEN 8 THEN V.estoqueTM
+       END                                                  AS estoqueLoja,
        MID(V.vencimento, 1, 6) * 1                          AS vencimento,
        MID(V.vencimentoDS, 1, 6) * 1                        AS vencimentoDS,
        MID(V.vencimentoMR, 1, 6) * 1                        AS vencimentoMR,
        MID(V.vencimentoMF, 1, 6) * 1                        AS vencimentoMF,
        MID(V.vencimentoPK, 1, 6) * 1                        AS vencimentoPK,
-       MID(V.vencimentoTM, 1, 6) * 1                        AS vencimentoTM
+       MID(V.vencimentoTM, 1, 6) * 1                        AS vencimentoTM,
+       CASE :loja
+         WHEN 0 THEN NULL
+         WHEN 2 THEN MID(V.vencimentoDS, 1, 6) * 1
+         WHEN 3 THEN MID(V.vencimentoMR, 1, 6) * 1
+         WHEN 4 THEN MID(V.vencimentoMF, 1, 6) * 1
+         WHEN 5 THEN MID(V.vencimentoPK, 1, 6) * 1
+         WHEN 8 THEN MID(V.vencimentoTM, 1, 6) * 1
+       END                                                  AS vencimentoLoja
 FROM T_PRD AS P
        LEFT JOIN T_STK AS S
                  USING (prdno, grade)
@@ -149,16 +165,8 @@ WHERE (@PESQUISA = '' OR
        (MID(vencimentoPK, 5, 6) = :mes AND :loja IN (0, 5)) OR
        (MID(vencimentoTM, 5, 6) = :mes AND :loja IN (0, 8))
   )
-  AND CASE :loja
-        WHEN 0 THEN TRUE
-        WHEN 2 THEN IFNULL(estoqueDS, 0) > 0 OR IFNULL(vencimentoDS, 0) > 0
-        WHEN 3 THEN IFNULL(estoqueMR, 0) > 0 OR IFNULL(vencimentoMR, 0) > 0
-        WHEN 4 THEN IFNULL(estoqueMF, 0) > 0 OR IFNULL(vencimentoMF, 0) > 0
-        WHEN 5 THEN IFNULL(estoquePK, 0) > 0 OR IFNULL(vencimentoPK, 0) > 0
-        WHEN 8 THEN IFNULL(estoqueTM, 0) > 0 OR IFNULL(vencimentoTM, 0) > 0
-      END
-GROUP BY prdno, codigo, grade, descricao, unidade, seq
-ORDER BY codigo, grade, seq
+GROUP BY prdno, codigo, grade, descricao, unidade, estoqueLoja, vencimentoLoja
+ORDER BY codigo, grade, vencimentoLoja
 
 
 

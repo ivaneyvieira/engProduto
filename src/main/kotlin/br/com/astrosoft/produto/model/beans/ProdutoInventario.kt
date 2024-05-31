@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -27,6 +28,7 @@ class ProdutoInventario(
   var estoqueMF: Int?,
   var estoquePK: Int?,
   var estoqueTM: Int?,
+  var estoqueLoja: Int?,
   var entradaDS: Int? = null,
   var entradaMR: Int? = null,
   var entradaMF: Int? = null,
@@ -42,6 +44,7 @@ class ProdutoInventario(
   var vencimentoMF: Int?,
   var vencimentoPK: Int?,
   var vencimentoTM: Int?,
+  var vencimentoLoja: Int?,
 ) {
   val venda: Int
     get() = (saidaDS ?: 0) + (saidaMR ?: 0) + (saidaMF ?: 0) + (saidaPK ?: 0) + (saidaTM ?: 0)
@@ -117,7 +120,8 @@ class ProdutoInventario(
   }
 
   fun remove() {
-    saci.removeProdutoValidade(this)
+    val user = AppConfig.userLogin() as? UserSaci ?: return
+    saci.removeProdutoValidade(this, user.lojaProduto ?: 0)
   }
 
   companion object {
@@ -276,6 +280,8 @@ fun List<ProdutoInventario>.organiza(): List<ProdutoInventario> {
         vencimentoMF = vencMF,
         vencimentoPK = vencPK,
         vencimentoTM = vencTM,
+        vencimentoLoja = null,
+        estoqueLoja = null,
       )
     }
   }
