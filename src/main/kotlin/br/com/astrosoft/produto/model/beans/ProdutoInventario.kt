@@ -72,7 +72,7 @@ class ProdutoInventario(
 
       val produtosSaida = produtoInventariosSaidas(produtos, saidas)
 
-      return produtosSaida.filter { it.loja == filtro.storeno || filtro.storeno == 0}
+      return produtosSaida.filter { it.loja == filtro.storeno || filtro.storeno == 0 }
     }
 
     private fun produtoInventariosSaidas(
@@ -89,63 +89,65 @@ class ProdutoInventario(
         val listaSaida = saidas[ChaveMovimentacao(loja, prdno, grade)].orEmpty().filter {
           it.date.toSaciDate() >= data.toSaciDate()
         }
+        if (listaSaida.isEmpty()) {
+          produtosList
+        } else {
+          listaSaida.flatMap { produtoMov ->
+            var qttySaidaLoja = produtoMov.qtty ?: 0
 
-        listaSaida.flatMap { produtoMov ->
-          var saidaLoja = produtoMov.qtty ?: 0
+            val produtosListFilter = produtosList.filter {
+              (it.vencimento ?: 0) > 0 && it.loja == loja
+            }.sortedBy { it.vencimento }
 
-          val produtosListFilter = produtosList.filter {
-            (it.vencimento ?: 0) > 0 && it.loja == loja
-          }.sortedBy { it.vencimento }
+            sequence {
+              produtosListFilter.forEach { produtoInventario ->
+                val estoque = produtoInventario.saldo
+                if (estoque > 0) {
+                  if (qttySaidaLoja > 0) {
+                    val saida = minOf(estoque, qttySaidaLoja)
+                    produtoInventario.saida = saida
+                    qttySaidaLoja -= saida
+                    yield(produtoInventario)
 
-          sequence {
-            produtosListFilter.forEach { produtoInventario ->
-              val estoque = produtoInventario.saldo
-              if (estoque > 0) {
-                if (saidaLoja > 0) {
-                  val saida = minOf(estoque, saidaLoja)
-                  produtoInventario.saida = saida
-                  saidaLoja -= saida
-                  yield(produtoInventario)
-
-                  val lojaDestino = produtoMov.lojaDestino
-                  if (lojaDestino != null && lojaDestino != loja) {
-                    val produtosEntrada = produtos.firstOrNull {
-                      it.loja == lojaDestino &&
-                      it.prdno == produtoInventario.prdno &&
-                      it.grade == produtoInventario.grade &&
-                      it.vencimento == produtoInventario.vencimento
-                    }
-                    if (produtosEntrada != null) {
-                      produtosEntrada.entrada = (produtosEntrada.entrada ?: 0) + saida
-                      yield(produtosEntrada)
-                    } else {
-                      val novo = ProdutoInventario(
-                        loja = lojaDestino,
-                        lojaAbrev = produtoMov.abrevDestino,
-                        entrada = saida,
-                        estoque = null,
-                        saida = null,
-                        prdno = produtoInventario.prdno,
-                        codigo = produtoInventario.codigo,
-                        descricao = produtoInventario.descricao,
-                        grade = produtoInventario.grade,
-                        unidade = produtoInventario.unidade,
-                        validade = produtoInventario.validade,
-                        vendno = produtoInventario.vendno,
-                        fornecedorAbrev = produtoInventario.fornecedorAbrev,
-                        dataEntrada = produtoInventario.dataEntrada,
-                        estoqueTotal = produtoInventario.estoqueTotal,
-                        vencimento = produtoInventario.vencimento
-                      )
-                      novo.update()
-                      yield(novo)
+                    val lojaDestino = produtoMov.lojaDestino
+                    if (lojaDestino != null && lojaDestino != loja) {
+                      val produtosEntrada = produtos.firstOrNull {
+                        it.loja == lojaDestino &&
+                        it.prdno == produtoInventario.prdno &&
+                        it.grade == produtoInventario.grade &&
+                        it.vencimento == produtoInventario.vencimento
+                      }
+                      if (produtosEntrada != null) {
+                        produtosEntrada.entrada = (produtosEntrada.entrada ?: 0) + saida
+                        yield(produtosEntrada)
+                      } else {
+                        val novo = ProdutoInventario(
+                          loja = lojaDestino,
+                          lojaAbrev = produtoMov.abrevDestino,
+                          entrada = saida,
+                          estoque = null,
+                          saida = null,
+                          prdno = produtoInventario.prdno,
+                          codigo = produtoInventario.codigo,
+                          descricao = produtoInventario.descricao,
+                          grade = produtoInventario.grade,
+                          unidade = produtoInventario.unidade,
+                          validade = produtoInventario.validade,
+                          vendno = produtoInventario.vendno,
+                          fornecedorAbrev = produtoInventario.fornecedorAbrev,
+                          dataEntrada = produtoInventario.dataEntrada,
+                          estoqueTotal = produtoInventario.estoqueTotal,
+                          vencimento = produtoInventario.vencimento
+                        )
+                        novo.update()
+                        yield(novo)
+                      }
                     }
                   }
                 }
               }
-            }
-          }.toList()
-
+            }.toList()
+          }
         }
       }
       return produtosNovos.distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }

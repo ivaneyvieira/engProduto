@@ -170,7 +170,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoque, header = "Est", width = "70px").integerFieldEditor()
+    columnGrid(ProdutoInventario::estoque, header = "Inv", width = "70px").integerFieldEditor()
     columnGrid(ProdutoInventario::saida, header = "Saída", width = "70px")
     columnGrid(ProdutoInventario::entrada, header = "Ent", width = "70px")
 

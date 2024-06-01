@@ -20,16 +20,14 @@ SELECT N.storeno                 AS lojaOrigem,
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
+       INNER JOIN T_PRD
+                  USING (prdno)
        LEFT JOIN sqldados.inv AS I
                  ON N.invno = I.invno
        LEFT JOIN sqldados.store AS SD
-                 ON I.storeno = SD.no
-       INNER JOIN T_PRD AS P
-                  USING (prdno)
+                 ON SD.no = I.storeno
 WHERE N.issuedate >= :dataInicial
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.status <> 1
-GROUP BY N.storeno, X.prdno, X.grade, N.issuedate
-ORDER BY N.storeno, X.prdno, X.grade, N.issuedate
-
+GROUP BY lojaOrigem, lojaDestino, abrevDestino, prdno, grade, date
 
