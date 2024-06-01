@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import java.time.LocalDate
 
@@ -38,7 +39,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         fornecedorAbrev = produto.fornecedorAbrev,
         estoqueTotal = produto.estoqueTotal,
         estoque = null,
-        vencimento = null,
+        vencimento = MesAno.now().ym(),
         dataEntrada = LocalDate.now(),
         saida = null,
         entrada = null,
