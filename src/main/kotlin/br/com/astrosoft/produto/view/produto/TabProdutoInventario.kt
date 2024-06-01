@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -15,6 +16,9 @@ import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.checkbox.Checkbox
+import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.datepicker.DatePicker
+import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -211,6 +215,50 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     return itensSelecionados()
   }
 
+  override fun formAdd(produtoInicial: ProdutoInventario, callback: (novoEditado: ProdutoInventario) -> Unit) {
+    val edtMesAno = mesAnoFieldComponente().apply {
+      this.label = "Validade"
+      this.value = produtoInicial.vencimentoStr
+    }
+    val edtInventario = IntegerField().apply {
+      this.label = "Inventário"
+      this.value = produtoInicial.estoque
+    }
+    val edtDataEntrada = DatePicker().apply {
+      this.localePtBr()
+      this.label = "Data Entrada"
+      this.value = LocalDate.now()
+    }
+    val form=  FormLayout().apply {
+      textField("Loja") {
+        this.value = produtoInicial.lojaAbrev
+        this.isReadOnly = true
+      }
+      textField("Código") {
+        this.value = produtoInicial.codigo
+        this.isReadOnly = true
+      }
+      textField("Descrição") {
+        this.value = produtoInicial.descricao
+        this.isReadOnly = true
+      }
+      textField("Grade") {
+        this.value = produtoInicial.grade
+        this.isReadOnly = true
+      }
+      add(edtMesAno)
+      add(edtInventario)
+      add(edtDataEntrada)
+    }
+
+    DialogHelper.showForm("Inventário", form) {
+      produtoInicial.vencimentoStr = edtMesAno.value
+      produtoInicial.estoque = edtInventario.value
+      produtoInicial.dataEntrada = edtDataEntrada.value
+      callback(produtoInicial)
+    }
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoInventario == true
@@ -238,4 +286,19 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     val textTime = LocalDateTime.now().format(sdf)
     return "produto$textTime.xlsx"
   }
+}
+
+private fun mesAnoFieldComponente() = ComboBox<String>().apply {
+  this.isClearButtonVisible = true
+  this.setWidthFull()
+  this.setSizeFull()
+  this.isAllowCustomValue = true
+  val dateListDepois = (0..12 * 15).map { num ->
+    LocalDate.now().withDayOfMonth(15).plusMonths(num.toLong())
+  }
+  val dateListAntes = (1..6).map { num ->
+    LocalDate.now().withDayOfMonth(15).minusMonths(num.toLong())
+  }
+  val dateList = dateListAntes + dateListDepois
+  this.setItems(dateList.sorted().map { it.format("MM/yy") }.distinct())
 }
