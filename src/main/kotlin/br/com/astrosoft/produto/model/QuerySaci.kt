@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
@@ -1160,7 +1159,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("validade", filtro.validade)
       addOptionalParameter("mes", filtro.mes)
       addOptionalParameter("ano", ano)
-      addOptionalParameter("loja", filtro.storeno)
+      addOptionalParameter("loja", 0)
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("caracter", filtro.caracter.value)
     }
@@ -1189,9 +1188,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun produtoValidadeSaida(dataInicial: LocalDate): List<ProdutoInventarioSaida> {
+  fun produtoValidadeSaida(dataInicial: LocalDate): List<ProdutoMovimentacao> {
     val sql = "/sqlSaci/produtoValidadeSaida.sql"
-    return query(sql, ProdutoInventarioSaida::class) {
+    return query(sql, ProdutoMovimentacao::class) {
+      this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+    }
+  }
+
+  fun produtoValidadeEntrada(dataInicial: LocalDate): List<ProdutoMovimentacao> {
+    val sql = "/sqlSaci/produtoValidadeEntrada.sql"
+    return query(sql, ProdutoMovimentacao::class) {
       this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
     }
   }

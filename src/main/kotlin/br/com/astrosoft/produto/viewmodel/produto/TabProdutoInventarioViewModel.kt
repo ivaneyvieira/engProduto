@@ -40,7 +40,8 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         estoque = null,
         vencimento = null,
         dataEntrada = LocalDate.now(),
-        saida = null
+        saida = null,
+        entrada = null,
       )
       novo.update()
     }

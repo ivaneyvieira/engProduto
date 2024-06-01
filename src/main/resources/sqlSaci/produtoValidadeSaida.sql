@@ -1,4 +1,4 @@
-set SQL_MODE = '';
+SET SQL_MODE = '';
 
 DROP TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
@@ -10,7 +10,9 @@ FROM sqldados.prd AS P
 WHERE garantia > 0
   AND tipoGarantia = 2;
 
-SELECT N.storeno                 AS loja,
+SELECT N.storeno                 AS lojaOrigem,
+       I.storeno                 AS lojaDestino,
+       SD.sname                  AS abrevDestino,
        X.prdno                   AS prdno,
        X.grade                   AS grade,
        CAST(N.issuedate AS DATE) AS date,
@@ -18,6 +20,10 @@ SELECT N.storeno                 AS loja,
 FROM sqldados.nf AS N
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
+       LEFT JOIN sqldados.inv AS I
+                 ON N.invno = I.invno
+       LEFT JOIN sqldados.store AS SD
+                 ON I.storeno = SD.no
        INNER JOIN T_PRD AS P
                   USING (prdno)
 WHERE N.issuedate >= :dataInicial

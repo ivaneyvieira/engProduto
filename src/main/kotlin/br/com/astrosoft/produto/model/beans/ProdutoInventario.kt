@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -20,10 +21,10 @@ class ProdutoInventario(
   var estoque: Int?,
   var vencimento: Int?,
   var saida: Int?,
+  var entrada: Int?,
 ) {
-
   val saldo: Int
-    get() = (estoque ?: 0) - (saida ?: 0)
+    get() = (estoque ?: 0) - (saida ?: 0) + (entrada ?: 0)
 
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
@@ -61,114 +62,99 @@ class ProdutoInventario(
       val dataInicial = produtos.filter {
         it.estoque != 0
       }.mapNotNull { it.dataEntrada }.minOrNull() ?: return produtos
-      val saidas = ProdutoInventarioSaida.find(dataInicial).groupBy { ChaveSaida(it.loja, it.prdno, it.grade) }
-
-      val produtosGrupo = produtos.groupBy { "${it.prdno} ${it.grade} ${it.dataEntrada}" }
-      val produtosNovos = produtosGrupo.flatMap { (_, produtosList) ->
-        val prdno = produtosList.first().prdno
-        val grade = produtosList.first().grade
-        val data = produtosList.first().dataEntrada
-
-        var saidaLoja2 = saidas[ChaveSaida(2, prdno, grade)].orEmpty().filter {
-          it.date.toSaciDate() >= data.toSaciDate()
-        }.sumOf { it.qtty ?: 0 }
-        var saidaLoja3 = saidas[ChaveSaida(3, prdno, grade)].orEmpty().filter {
-          it.date.toSaciDate() >= data.toSaciDate()
-        }.sumOf { it.qtty ?: 0 }
-        var saidaLoja4 = saidas[ChaveSaida(4, prdno, grade)].orEmpty().filter {
-          it.date.toSaciDate() >= data.toSaciDate()
-        }.sumOf { it.qtty ?: 0 }
-        var saidaLoja5 = saidas[ChaveSaida(5, prdno, grade)].orEmpty().filter {
-          it.date.toSaciDate() >= data.toSaciDate()
-        }.sumOf { it.qtty ?: 0 }
-        var saidaLoja8 = saidas[ChaveSaida(8, prdno, grade)].orEmpty().filter {
-          it.date.toSaciDate() >= data.toSaciDate()
-        }.sumOf { it.qtty ?: 0 }
-
-        val produtosList2 = produtosList.filter {
-          (it.estoque ?: 0) > 0 && (it.vencimento ?: 0) > 0 && it.loja == 2
-        }.sortedBy { it.vencimento }
-
-        val produtosList3 = produtosList.filter {
-          (it.vencimento ?: 0) > 0 && it.loja == 3
-        }.sortedBy { it.vencimento }
-
-        val produtosList4 = produtosList.filter {
-          (it.vencimento ?: 0) > 0 && it.loja == 4
-        }.sortedBy { it.vencimento }
-
-        val produtosList5 = produtosList.filter {
-          (it.vencimento ?: 0) > 0 && it.loja == 5
-        }.sortedBy { it.vencimento }
-
-        val produtosList8 = produtosList.filter {
-          (it.vencimento ?: 0) > 0 && it.loja == 8
-        }.sortedBy { it.vencimento }
-
-        produtosList2.forEach { produtoInventario ->
-          val estoqueDS = produtoInventario.estoque ?: 0
-          if (estoqueDS > 0) {
-            if (saidaLoja2 > 0) {
-              val saida = minOf(estoqueDS, saidaLoja2)
-              produtoInventario.saida = saida
-              saidaLoja2 -= saida
-            }
-          }
-        }
-
-        produtosList3.forEach { produtoInventario ->
-          val estoqueMR = produtoInventario.estoque ?: 0
-          if (estoqueMR > 0) {
-            if (saidaLoja3 > 0) {
-              val saida = minOf(estoqueMR, saidaLoja3)
-              produtoInventario.saida = saida
-              saidaLoja3 -= saida
-            }
-          }
-        }
-
-        produtosList4.forEach { produtoInventario ->
-          val estoqueMF = produtoInventario.estoque ?: 0
-          if (estoqueMF > 0) {
-            if (saidaLoja4 > 0) {
-              val saida = minOf(estoqueMF, saidaLoja4)
-              produtoInventario.saida = saida
-              saidaLoja4 -= saida
-            }
-          }
-        }
-
-        produtosList5.forEach { produtoInventario ->
-          val estoquePK = produtoInventario.estoque ?: 0
-          if (estoquePK > 0) {
-            if (saidaLoja5 > 0) {
-              val saida = minOf(estoquePK, saidaLoja5)
-              produtoInventario.saida = saida
-              saidaLoja5 -= saida
-            }
-          }
-        }
-
-        produtosList8.forEach { produtoInventario ->
-          val estoqueTM = produtoInventario.estoque ?: 0
-          if (estoqueTM > 0) {
-            if (saidaLoja8 > 0) {
-              val saida = minOf(estoqueTM, saidaLoja8)
-              produtoInventario.saida = saida
-              saidaLoja8 -= saida
-            }
-          }
-        }
-
-        produtosList
+      val saidas = ProdutoMovimentacao.findSaidas(dataInicial).groupBy {
+        ChaveMovimentacao(
+          lojaOrigem = it.lojaOrigem,
+          prdno = it.prdno,
+          grade = it.grade
+        )
       }
-      return produtosNovos
+
+      val produtosSaida = produtoInventariosSaidas(produtos, saidas)
+
+      return produtosSaida.filter { it.loja == filtro.storeno || filtro.storeno == 0}
+    }
+
+    private fun produtoInventariosSaidas(
+      produtos: List<ProdutoInventario>,
+      saidas: Map<ChaveMovimentacao, List<ProdutoMovimentacao>>
+    ): List<ProdutoInventario> {
+      val produtosGrupo = produtos.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }
+      val produtosNovos = produtosGrupo.flatMap { (_, produtosList) ->
+        val loja = produtosList.firstOrNull()?.loja
+        val prdno = produtosList.firstOrNull()?.prdno
+        val grade = produtosList.firstOrNull()?.grade
+        val data = produtosList.mapNotNull { it.dataEntrada }.minOrNull()
+
+        val listaSaida = saidas[ChaveMovimentacao(loja, prdno, grade)].orEmpty().filter {
+          it.date.toSaciDate() >= data.toSaciDate()
+        }
+
+        listaSaida.flatMap { produtoMov ->
+          var saidaLoja = produtoMov.qtty ?: 0
+
+          val produtosListFilter = produtosList.filter {
+            (it.vencimento ?: 0) > 0 && it.loja == loja
+          }.sortedBy { it.vencimento }
+
+          sequence {
+            produtosListFilter.forEach { produtoInventario ->
+              val estoque = produtoInventario.saldo
+              if (estoque > 0) {
+                if (saidaLoja > 0) {
+                  val saida = minOf(estoque, saidaLoja)
+                  produtoInventario.saida = saida
+                  saidaLoja -= saida
+                  yield(produtoInventario)
+
+                  val lojaDestino = produtoMov.lojaDestino
+                  if (lojaDestino != null && lojaDestino != loja) {
+                    val produtosEntrada = produtos.firstOrNull {
+                      it.loja == lojaDestino &&
+                      it.prdno == produtoInventario.prdno &&
+                      it.grade == produtoInventario.grade &&
+                      it.vencimento == produtoInventario.vencimento
+                    }
+                    if (produtosEntrada != null) {
+                      produtosEntrada.entrada = (produtosEntrada.entrada ?: 0) + saida
+                      yield(produtosEntrada)
+                    } else {
+                      val novo = ProdutoInventario(
+                        loja = lojaDestino,
+                        lojaAbrev = produtoMov.abrevDestino,
+                        entrada = saida,
+                        estoque = null,
+                        saida = null,
+                        prdno = produtoInventario.prdno,
+                        codigo = produtoInventario.codigo,
+                        descricao = produtoInventario.descricao,
+                        grade = produtoInventario.grade,
+                        unidade = produtoInventario.unidade,
+                        validade = produtoInventario.validade,
+                        vendno = produtoInventario.vendno,
+                        fornecedorAbrev = produtoInventario.fornecedorAbrev,
+                        dataEntrada = produtoInventario.dataEntrada,
+                        estoqueTotal = produtoInventario.estoqueTotal,
+                        vencimento = produtoInventario.vencimento
+                      )
+                      novo.update()
+                      yield(novo)
+                    }
+                  }
+                }
+              }
+            }
+          }.toList()
+
+        }
+      }
+      return produtosNovos.distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
     }
   }
 }
 
 fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
-  val produtosGroup = this.groupBy { "${it.prdno} ${it.grade} ${it.vencimento}" }
+  val produtosGroup = this.groupBy { "${it.prdno} ${it.grade} ${it.vencimento} ${it.dataEntrada?.format()}" }
 
   return produtosGroup.map { (_, produtos) ->
     ProdutoInventarioResumo(

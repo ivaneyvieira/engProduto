@@ -172,6 +172,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }.mesAnoFieldEditor()
     columnGrid(ProdutoInventario::estoque, header = "Est", width = "70px").integerFieldEditor()
     columnGrid(ProdutoInventario::saida, header = "Saída", width = "70px")
+    columnGrid(ProdutoInventario::entrada, header = "Ent", width = "70px")
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {
       it.value = LocalDate.now()
