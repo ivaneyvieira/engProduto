@@ -143,6 +143,8 @@ class ProdutoInventario(
                         yield(novo)
                       }
                     }
+                  }else{
+                    yield(produtoInventario)
                   }
                 }
               }
