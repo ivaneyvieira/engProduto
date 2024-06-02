@@ -3,19 +3,21 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.asc
-import com.github.mvysny.kaributools.desc
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -165,8 +167,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(ProdutoInventario::codigo, header = "Código")
     this.columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
-    this.columnGrid(ProdutoInventario::grade, header = "Grade", width="100px")
-    this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja", width="70px") {
+    this.columnGrid(ProdutoInventario::grade, header = "Grade", width = "100px")
+    this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.loja ?: 0 })
     }
     this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
@@ -174,9 +176,15 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
-    columnGrid(ProdutoInventario::estoque, header = "Inv", width = "70px").integerFieldEditor()
-    columnGrid(ProdutoInventario::saida, header = "Saída", width = "70px")
-    columnGrid(ProdutoInventario::entrada, header = "Ent", width = "70px")
+    columnGroup("Entrada") {
+      columnGrid(ProdutoInventario::estoque, header = "Inv", width = "70px").integerFieldEditor()
+      columnGrid(ProdutoInventario::entradaTransf, header = "Tranf", width = "70px")
+      columnGrid(ProdutoInventario::entradaCompra, header = "Compra", width = "70px")
+    }
+    columnGroup("Saída") {
+      columnGrid(ProdutoInventario::saidaVenda, header = "Venda", width = "70px")
+      columnGrid(ProdutoInventario::saidaTransf, header = "Transf", width = "70px")
+    }
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {
       it.value = LocalDate.now()
@@ -229,7 +237,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.label = "Data Entrada"
       this.value = LocalDate.now()
     }
-    val form=  FormLayout().apply {
+    val form = FormLayout().apply {
       textField("Loja") {
         this.value = produtoInicial.lojaAbrev
         this.isReadOnly = true

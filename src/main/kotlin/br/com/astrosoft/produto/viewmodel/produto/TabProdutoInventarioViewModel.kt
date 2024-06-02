@@ -38,8 +38,10 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       estoque = null,
       vencimento = null,
       dataEntrada = LocalDate.now(),
-      saida = null,
-      entrada = null,
+      saidaVenda = null,
+      saidaTransf = null,
+      entradaTransf = null,
+      entradaCompra = null
     )
     subView.formAdd(novo) { novoEditado ->
       novoEditado.update()

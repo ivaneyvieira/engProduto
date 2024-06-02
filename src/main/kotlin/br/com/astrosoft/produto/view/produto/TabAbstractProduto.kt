@@ -54,7 +54,6 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   }
 
   override fun produtosSelecionados(): List<Produtos> {
-    val sortGrid = this.gridPanel.sortOrder
     val dataProvider: ListDataProvider<Produtos> = gridPanel.dataProvider as ListDataProvider<Produtos>
     val size = dataProvider.items.size
     val dataCommunicator: DataCommunicator<Produtos> = gridPanel.dataCommunicator

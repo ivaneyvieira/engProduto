@@ -20,11 +20,18 @@ class ProdutoInventario(
   var estoqueTotal: Int?,
   var estoque: Int?,
   var vencimento: Int?,
-  var saida: Int?,
-  var entrada: Int?,
+  var saidaVenda: Int?,
+  var saidaTransf: Int?,
+  var entradaCompra: Int?,
+  var entradaTransf: Int?,
 ) {
+  val saida: Int
+    get() = (saidaVenda ?: 0) + (saidaTransf ?: 0)
+  val entrada: Int
+    get() = (entradaCompra ?: 0) + (entradaTransf ?: 0)
+
   val saldo: Int
-    get() = (estoque ?: 0) - (saida ?: 0) + (entrada ?: 0)
+    get() = (estoque ?: 0) - saida + entrada
 
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
@@ -104,12 +111,16 @@ class ProdutoInventario(
                 val estoque = produtoInventario.saldo
                 if (estoque > 0) {
                   if (qttySaidaLoja > 0) {
+                    val lojaDestino = produtoMov.lojaDestino
                     val saida = minOf(estoque, qttySaidaLoja)
-                    produtoInventario.saida = saida
+                    if (lojaDestino == null) {
+                      produtoInventario.saidaVenda = (produtoInventario.saidaVenda ?: 0) + saida
+                    } else {
+                      produtoInventario.saidaTransf = (produtoInventario.saidaTransf ?: 0) + saida
+                    }
                     qttySaidaLoja -= saida
                     yield(produtoInventario)
 
-                    val lojaDestino = produtoMov.lojaDestino
                     if (lojaDestino != null && lojaDestino != loja) {
                       val produtosEntrada = produtos.firstOrNull {
                         it.loja == lojaDestino &&
@@ -118,15 +129,17 @@ class ProdutoInventario(
                         it.vencimento == produtoInventario.vencimento
                       }
                       if (produtosEntrada != null) {
-                        produtosEntrada.entrada = (produtosEntrada.entrada ?: 0) + saida
+                        produtosEntrada.entradaTransf = (produtosEntrada.entradaTransf ?: 0) + saida
                         yield(produtosEntrada)
                       } else {
                         val novo = ProdutoInventario(
                           loja = lojaDestino,
                           lojaAbrev = produtoMov.abrevDestino,
-                          entrada = saida,
+                          entradaTransf = saida,
+                          entradaCompra = null,
                           estoque = null,
-                          saida = null,
+                          saidaVenda = null,
+                          saidaTransf = null,
                           prdno = produtoInventario.prdno,
                           codigo = produtoInventario.codigo,
                           descricao = produtoInventario.descricao,
@@ -143,7 +156,7 @@ class ProdutoInventario(
                         yield(novo)
                       }
                     }
-                  }else{
+                  } else {
                     yield(produtoInventario)
                   }
                 }
@@ -180,11 +193,11 @@ fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
       saldoMF = produtos.filter { it.loja == 4 }.sumOf { it.saldo },
       saldoPK = produtos.filter { it.loja == 5 }.sumOf { it.saldo },
       saldoTM = produtos.filter { it.loja == 8 }.sumOf { it.saldo },
-      saidaDS = produtos.filter { it.loja == 2 }.sumOf { it.saida ?: 0 },
-      saidaMR = produtos.filter { it.loja == 3 }.sumOf { it.saida ?: 0 },
-      saidaMF = produtos.filter { it.loja == 4 }.sumOf { it.saida ?: 0 },
-      saidaPK = produtos.filter { it.loja == 5 }.sumOf { it.saida ?: 0 },
-      saidaTM = produtos.filter { it.loja == 8 }.sumOf { it.saida ?: 0 },
+      saidaDS = produtos.filter { it.loja == 2 }.sumOf { it.saida },
+      saidaMR = produtos.filter { it.loja == 3 }.sumOf { it.saida },
+      saidaMF = produtos.filter { it.loja == 4 }.sumOf { it.saida },
+      saidaPK = produtos.filter { it.loja == 5 }.sumOf { it.saida },
+      saidaTM = produtos.filter { it.loja == 8 }.sumOf { it.saida },
     )
   }
 }

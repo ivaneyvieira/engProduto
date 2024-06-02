@@ -103,8 +103,10 @@ SELECT P.storeno                                              AS loja,
        IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
        V.estoque                                              AS estoque,
        MID(V.vencimento, 1, 6) * 1                            AS vencimento,
-       0                                                      AS saida,
-       0                                                      AS entrada
+       0                                                      AS saidaVenda,
+       0                                                      AS saidaTransf,
+       0                                                      AS entradaCompra,
+       0                                                      AS entradaTransf
 FROM T_STK AS S
        INNER JOIN T_STK_TOTAL AS T
                   USING (prdno, grade)

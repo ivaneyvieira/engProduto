@@ -88,7 +88,7 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     addColumnSeq("Seq")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { produto ->
       val dlgProduto = DlgProdutosValidade(viewModel, produto)
-      dlgProduto?.showDialog {
+      dlgProduto.showDialog {
         viewModel.updateView()
       }
     }
