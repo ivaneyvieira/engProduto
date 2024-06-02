@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -177,13 +178,13 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
     columnGroup("Entrada") {
-      columnGrid(ProdutoInventario::estoque, header = "Inv", width = "70px").integerFieldEditor()
-      columnGrid(ProdutoInventario::entradaTransf, header = "Tranf", width = "70px")
-      columnGrid(ProdutoInventario::entradaCompra, header = "Compra", width = "70px")
+      this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
+      this.columnGrid(ProdutoInventario::entradaTransf, header = "Tranf", width = "85px")
+      this.columnGrid(ProdutoInventario::entradaCompra, header = "Compra", width = "85px")
     }
     columnGroup("Saída") {
-      columnGrid(ProdutoInventario::saidaVenda, header = "Venda", width = "70px")
-      columnGrid(ProdutoInventario::saidaTransf, header = "Transf", width = "70px")
+      this.columnGrid(ProdutoInventario::saidaVenda, header = "Venda", width = "85px")
+      this.columnGrid(ProdutoInventario::saidaTransf, header = "Transf", width = "85px")
     }
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {

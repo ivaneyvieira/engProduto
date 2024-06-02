@@ -1188,17 +1188,42 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun produtoValidadeSaida(dataInicial: LocalDate): List<ProdutoMovimentacao> {
+  fun produtoValidadeSaida(filtro: FiltroProdutoInventario, dataInicial: LocalDate?): List<ProdutoSaida> {
     val sql = "/sqlSaci/produtoValidadeSaida.sql"
-    return query(sql, ProdutoMovimentacao::class) {
+    val ano = when {
+      filtro.ano == 0   -> 0
+      filtro.ano < 2000 -> filtro.ano + 2000
+      else              -> filtro.ano
+    }
+    return query(sql, ProdutoSaida::class) {
       this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("mes", filtro.mes)
+      addOptionalParameter("ano", ano)
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("caracter", filtro.caracter.value)
     }
   }
 
-  fun produtoValidadeEntrada(dataInicial: LocalDate): List<ProdutoMovimentacao> {
+  fun produtoValidadeEntrada(filtro: FiltroProdutoInventario, dataInicial: LocalDate?): List<ProdutoRecebimento> {
     val sql = "/sqlSaci/produtoValidadeEntrada.sql"
-    return query(sql, ProdutoMovimentacao::class) {
+    val ano = when {
+      filtro.ano == 0   -> 0
+      filtro.ano < 2000 -> filtro.ano + 2000
+      else              -> filtro.ano
+    }
+    return query(sql, ProdutoRecebimento::class) {
       this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("mes", filtro.mes)
+      addOptionalParameter("ano", ano)
+      addOptionalParameter("loja", 0)
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("caracter", filtro.caracter.value)
     }
   }
 

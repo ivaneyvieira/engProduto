@@ -3,22 +3,26 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class ProdutoMovimentacao(
+class ProdutoSaida(
   var lojaOrigem: Int?,
+  var abrevLoja: String?,
   var lojaDestino: Int?,
   var abrevDestino: String?,
   var prdno: String?,
+  var codigo: String?,
+  var descricao: String?,
+  var unidade: String?,
+  var validade: Int?,
+  var vendno: Int?,
+  var fornecedorAbrev: String?,
+  var estoqueTotal: Int?,
   var grade: String?,
   var date: LocalDate?,
   var qtty: Int?,
 ){
   companion object{
-    fun findSaidas(dataIncial: LocalDate): List<ProdutoMovimentacao> {
-      return saci.produtoValidadeSaida(dataIncial)
-    }
-
-    fun findEntradas(dataIncial: LocalDate): List<ProdutoMovimentacao> {
-      return saci.produtoValidadeEntrada(dataIncial)
+    fun findSaidas(filtro: FiltroProdutoInventario, dataIncial: LocalDate?): List<ProdutoSaida> {
+      return saci.produtoValidadeSaida(filtro, dataIncial)
     }
   }
 }
