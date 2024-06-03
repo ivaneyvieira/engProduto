@@ -98,7 +98,7 @@ class ProdutoInventario(
 
       //val produtosEntrada = produtoInventariosEntradas(produtos, entradas)
 
-      val produtosSaida = produtoInventariosSaidas(entradas, saidas)
+      val produtosSaida = produtoInventariosSaidas(produtos, saidas)
 
       return produtosSaida
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
