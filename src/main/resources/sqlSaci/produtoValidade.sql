@@ -87,7 +87,11 @@ FROM sqldados.produtoValidade
                   USING (storeno, prdno, grade)
 WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
-  AND (:loja = 0 OR storeno = :loja);
+  AND (:loja = 0 OR storeno = :loja)
+  AND (estoque != 0)
+  AND (vencimento != 0);
+
+
 
 SELECT P.storeno                                              AS loja,
        P.abrevLoja                                            AS lojaAbrev,

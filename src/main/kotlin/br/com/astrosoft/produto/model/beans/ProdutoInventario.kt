@@ -102,7 +102,6 @@ class ProdutoInventario(
 
       return produtosSaida
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
-        .filter { it.entrada > 0 || it.saida > 0 || (it.estoque ?: 0) > 0 }
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
     }
 
