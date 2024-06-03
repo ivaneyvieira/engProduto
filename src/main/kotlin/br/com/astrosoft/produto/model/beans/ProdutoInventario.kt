@@ -94,7 +94,7 @@ class ProdutoInventario(
       val dataInicial = produtos.mapNotNull { it.dataEntrada }.minOrNull()
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
 
-      val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
+      //val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
 
       //val produtosEntrada = produtoInventariosEntradas(produtos, entradas)
 
