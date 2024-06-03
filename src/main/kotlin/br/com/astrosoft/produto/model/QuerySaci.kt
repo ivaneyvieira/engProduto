@@ -1252,6 +1252,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun atualizarTabelas() {
+    updateProdutoValidadeSaida()
+    updateProdutoValidadeRecebimento()
+  }
+
+  fun updateProdutoValidadeRecebimento() {
+    val sql = "/sqlSaci/produtoValidadeEntradaTable.sql"
+    script(sql) {
+      addOptionalParameter("dataInicial", 20240501)
+    }
+  }
+
+  fun updateProdutoValidadeSaida() {
+    val sql = "/sqlSaci/produtoValidadeSaidaTable.sql"
+    script(sql) {
+      addOptionalParameter("dataInicial", 20240501)
+    }
+
+  }
+
   companion object {
     private val db = DB("saci")
 

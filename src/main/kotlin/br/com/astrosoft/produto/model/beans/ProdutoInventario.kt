@@ -186,40 +186,49 @@ class ProdutoInventario(
         bothChave.forEach { chave ->
           val produtosList = produtosGroup[chave].orEmpty().sortedBy { it.vencimento }
           val saidasList = saidasGroup[chave].orEmpty()
-          var saidasQuant = saidasList.sumOf { it.qtty ?: 0 }
-          produtosList.forEach { produto ->
-            val qtty = min(saidasQuant, produto.estoque ?: 0)
-            produto.saidaVenda = (produto.saidaVenda ?: 0) + qtty
-            saidasQuant -= qtty
-            yield(produto)
+          saidasList.forEach { saida ->
+            var saidasQuant = saida.qtty ?: 0
+            produtosList.forEach { produto ->
+              val lojaDestino = saida.lojaDestino ?: 0
+              val qtty = min(saidasQuant, produto.estoque ?: 0)
+              if (lojaDestino == 0)
+                produto.saidaVenda = (produto.saidaVenda ?: 0) + qtty
+              else
+                produto.saidaTransf = (produto.saidaTransf ?: 0) + qtty
+              saidasQuant -= qtty
+              yield(produto)
 
-            val lojaDestino = saidasList.firstOrNull()?.lojaDestino ?: 0
-            if (lojaDestino != 0) {
-              val iventarioDestino = produtos.firstOrNull {
-                it.loja == lojaDestino &&
-                it.prdno == produto.prdno &&
-                it.grade == produto.grade &&
-                it.vencimento == produto.vencimento
-              }
-              if (iventarioDestino == null) {
-                val novo = produto.copy {
-                  loja = lojaDestino
-                  lojaAbrev = saidasList.firstOrNull()?.abrevDestino
-                  entradaTransf = qtty
-                  entradaCompra = null
-                  estoque = null
-                  saidaVenda = null
-                  saidaTransf = null
+              if (lojaDestino != 0) {
+                val inventarioDestino = produtos.firstOrNull {
+                  it.loja == lojaDestino &&
+                  it.prdno == produto.prdno &&
+                  it.grade == produto.grade &&
+                  it.vencimento == produto.vencimento
                 }
-                yield(novo)
-              } else {
-                iventarioDestino.entradaTransf = (iventarioDestino.entradaTransf ?: 0) + qtty
-                yield(iventarioDestino)
+                if (inventarioDestino == null) {
+                  val novo = produto.copy {
+                    loja = saida.lojaDestino
+                    lojaAbrev = saida.abrevDestino
+                    entradaTransf = saida.qtty
+                    entradaCompra = null
+                    estoque = null
+                    saidaVenda = null
+                    saidaTransf = null
+                  }
+                  yield(novo)
+                } else {
+                  inventarioDestino.entradaTransf = (inventarioDestino.entradaTransf ?: 0) + qtty
+                  yield(inventarioDestino)
+                }
               }
             }
           }
         }
       }.toList()
+    }
+
+    fun atualizaTabelas() {
+      saci.atualizarTabelas()
     }
   }
 }

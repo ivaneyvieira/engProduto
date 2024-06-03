@@ -10,10 +10,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
@@ -57,100 +54,117 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    cmbLoja = select("Loja") {
-      this.setItemLabelGenerator { item ->
-        item.descricao
+    verticalBlock {
+      horizontalBlock {
+        isSpacing = true
+        cmbLoja = select("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient)
+              viewModel.updateView()
+          }
+        }
+
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        init()
+
+        edtCodigo = textField("Código") {
+          this.width = "110px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtGrade = textField("Grade") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtInventario = integerField("Validade") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtMes = integerField("Mês") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.LAZY
+          valueChangeTimeout = 500
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtAno = integerField("Ano") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.LAZY
+          valueChangeTimeout = 500
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        cmbCartacer = select("Caracter") {
+          this.setItems(ECaracter.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = ECaracter.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
-      addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+      horizontalBlock {
+        isSpacing = true
+
+        btnAdiciona = button("Adicionar") {
+          this.icon = VaadinIcon.PLUS.create()
+          addClickListener {
+            viewModel.adicionarLinha()
+          }
+        }
+
+        btnRemover = button("Remover") {
+          this.icon = VaadinIcon.TRASH.create()
+          addClickListener {
+            viewModel.removerLinha()
+          }
+        }
+
+        downloadExcel(PlanilhaProdutoInventario())
+
+        val user = AppConfig.userLogin() as? UserSaci
+        if(user?.admin == true){
+          button("Atualizar") {
+            onLeftClick {
+              viewModel.atualizarTabelas()
+            }
+          }
+        }
       }
     }
-
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    init()
-
-    edtCodigo = textField("Código") {
-      this.width = "110px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    edtGrade = textField("Grade") {
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    edtInventario = integerField("Validade") {
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    edtMes = integerField("Mês") {
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.LAZY
-      valueChangeTimeout = 500
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    edtAno = integerField("Ano") {
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.LAZY
-      valueChangeTimeout = 500
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    cmbCartacer = select("Caracter") {
-      this.setItems(ECaracter.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = ECaracter.TODOS
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    btnAdiciona = button("Adicionar") {
-      this.icon = VaadinIcon.PLUS.create()
-      addClickListener {
-        viewModel.adicionarLinha()
-      }
-    }
-
-    btnRemover = button("Remover") {
-      this.icon = VaadinIcon.TRASH.create()
-      addClickListener {
-        viewModel.removerLinha()
-      }
-    }
-
-    downloadExcel(PlanilhaProdutoInventario())
   }
 
   override fun Grid<ProdutoInventario>.gridPanel() {
@@ -286,7 +300,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ByteArrayInputStream(bytes)
     })
     button.text = "Planilha"
-    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    //button.addThemeVariants(ButtonVariant.LUMO_SMALL)
     add(button)
   }
 

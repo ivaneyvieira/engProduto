@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
@@ -68,6 +69,11 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun atualizarTabelas() {
+    ProdutoInventario.atualizaTabelas()
+    updateView()
   }
 
   val subView
