@@ -35,5 +35,9 @@ WHERE date >= :dataInicial
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
-
+  AND (@PESQUISA = '' OR
+       descricao LIKE @PESQUISALIKE OR
+       fornecedorAbrev LIKE @PESQUISALIKE OR
+       unidade = @PESQUISA OR
+       vendno = @PESQUISANUM)
 

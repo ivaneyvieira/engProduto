@@ -91,8 +91,6 @@ WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (estoque != 0)
   AND (vencimento != 0);
 
-
-
 SELECT P.storeno                                              AS loja,
        P.abrevLoja                                            AS lojaAbrev,
        P.prdno                                                AS prdno,
