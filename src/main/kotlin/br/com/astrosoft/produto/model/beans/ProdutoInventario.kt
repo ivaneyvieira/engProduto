@@ -233,6 +233,7 @@ class ProdutoInventario(
   }
 }
 
+
 fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
   val produtosGroup = this.groupBy { "${it.prdno} ${it.grade} ${it.vencimento} ${it.dataEntrada?.format()}" }
 
