@@ -94,11 +94,11 @@ class ProdutoInventario(
       val dataInicial = produtos.mapNotNull { it.dataEntrada }.minOrNull()
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
 
-      //val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
+      val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
 
-      //val produtosEntrada = produtoInventariosEntradas(produtos, entradas)
+      val produtosEntrada = produtoInventariosEntradas(produtos, entradas)
 
-      val produtosSaida = produtoInventariosSaidas(produtos, saidas)
+      val produtosSaida = produtoInventariosSaidas(produtosEntrada, saidas)
 
       return produtosSaida
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
@@ -193,8 +193,8 @@ class ProdutoInventario(
             saidasQuant -= qtty
             yield(produto)
 
-            val lojaDestino = saidasList.firstOrNull()?.lojaDestino
-            if (lojaDestino != null) {
+            val lojaDestino = saidasList.firstOrNull()?.lojaDestino ?: 0
+            if (lojaDestino != 0) {
               val iventarioDestino = produtos.firstOrNull {
                 it.loja == lojaDestino &&
                 it.prdno == produto.prdno &&
