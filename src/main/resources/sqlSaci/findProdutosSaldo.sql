@@ -9,10 +9,10 @@ DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, gradeProduto)
 )
 SELECT S.prdno                                               AS prdno,
-       S.grade                                               AS grade,
+       IF(:grade = 'S', S.grade, '')                         AS gradeProduto,
        COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
 FROM sqldados.stk AS S
        LEFT JOIN sqldados.prdloc AS L
@@ -25,7 +25,7 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
-GROUP BY S.prdno, S.grade;
+GROUP BY S.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
@@ -85,43 +85,57 @@ FROM sqldados.stk
 WHERE storeno IN (2, 3, 4, 5, 8)
 GROUP BY prdno, gradeProduto;
 
+DROP TEMPORARY TABLE IF EXISTS T_STK;
+CREATE TEMPORARY TABLE T_STK
+(
+  PRIMARY KEY (loja, prdno, gradeProduto),
+  INDEX(qttyTotal)
+)
+SELECT S.storeno                                                AS loja,
+       S.prdno                                                  AS prdno,
+       IF(:grade = 'S', S.grade, '')                            AS gradeProduto,
+       ROUND(SUM(S.qtty_varejo / 1000))                         AS qttyVarejo,
+       ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
+       ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal
+FROM sqldados.stk AS S
+WHERE (S.storeno = :loja OR :loja = 0)
+GROUP BY loja, prdno, gradeProduto;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
 CREATE TEMPORARY TABLE T_PRDSTK
 (
   PRIMARY KEY (loja, prdno, gradeProduto)
 )
-SELECT S.storeno                                         AS loja,
-       S.prdno                                           AS prdno,
-       P.codigo                                          AS codigo,
-       P.descricao                                       AS descricao,
-       IF(:grade = 'S', S.grade, '')                     AS gradeProduto,
-       P.unidade                                         AS unidade,
-       SUM(S.qtty_varejo / 1000)                         AS qttyVarejo,
-       SUM(S.qtty_atacado / 1000)                        AS qttyAtacado,
-       SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000) AS qttyTotal,
-       P.tributacao                                      AS tributacao,
-       P.rotulo                                          AS rotulo,
-       P.ncm                                             AS ncm,
-       P.fornecedor                                      AS fornecedor,
-       P.abrev                                           AS abrev,
-       P.tipo                                            AS tipo,
-       P.cl                                              AS cl,
-       mesesGarantia                                     AS mesesGarantia,
-       MID(L.localizacao, 1, 4)                          AS localizacao
-FROM sqldados.stk AS S
+SELECT S.loja                   AS loja,
+       S.prdno                  AS prdno,
+       P.codigo                 AS codigo,
+       P.descricao              AS descricao,
+       S.gradeProduto           AS gradeProduto,
+       P.unidade                AS unidade,
+       S.qttyVarejo             AS qttyVarejo,
+       S.qttyAtacado            AS qttyAtacado,
+       S.qttyTotal              AS qttyTotal,
+       P.tributacao             AS tributacao,
+       P.rotulo                 AS rotulo,
+       P.ncm                    AS ncm,
+       P.fornecedor             AS fornecedor,
+       P.abrev                  AS abrev,
+       P.tipo                   AS tipo,
+       P.cl                     AS cl,
+       mesesGarantia            AS mesesGarantia,
+       MID(L.localizacao, 1, 4) AS localizacao
+FROM T_STK AS S
        LEFT JOIN T_LOC AS L
-                 USING (prdno, grade)
+                 USING (prdno, gradeProduto)
        INNER JOIN T_PRD AS P
                   USING (prdno)
-WHERE (S.storeno = :loja OR :loja = 0)
-GROUP BY loja, prdno, gradeProduto
-HAVING CASE :estoque
-         WHEN '<' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) < :saldo
-         WHEN '>' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) > :saldo
-         WHEN '=' THEN ROUND(SUM((S.qtty_varejo + S.qtty_atacado) / 1000)) = :saldo
-         WHEN 'T' THEN TRUE
-         ELSE FALSE
-       END;
+WHERE (S.loja = :loja OR :loja = 0)
+  AND (:estoque = '<' AND S.qttyTotal < :saldo
+    OR :estoque = '>' AND S.qttyTotal > :saldo
+    OR :estoque = '=' AND S.qttyTotal = :saldo
+    OR :estoque = 'T'
+  );
 
 SELECT loja,
        prdno,

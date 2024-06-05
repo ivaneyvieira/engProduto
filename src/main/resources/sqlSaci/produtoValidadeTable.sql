@@ -118,11 +118,14 @@ WHERE vencimentoTM > 0
 
 SELECT *
 FROM sqldados.produtoValidade
-where storeno = 3;
+WHERE storeno = 3;
 
 SELECT *
-FROM sqldados.produtoValidadeLoja
-;
+FROM sqldados.produtoValidadeLoja;
 
-select * from sqldados.stk
-where prdno = 113613
+SELECT *
+FROM sqldados.stk
+WHERE prdno = 113613;
+
+ALTER TABLE sqldados.produtoValidade
+  ADD COLUMN compras INT NOT NULL DEFAULT 0;

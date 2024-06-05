@@ -148,7 +148,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-          this.value = EEstoque.TODOS
+          this.value = EEstoque.MAIOR
           addValueChangeListener {
             viewModel.updateView()
           }

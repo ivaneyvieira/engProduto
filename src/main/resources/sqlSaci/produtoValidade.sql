@@ -81,6 +81,7 @@ SELECT storeno     AS storeno,
        grade       AS grade,
        dataEntrada AS dataEntrada,
        estoque     AS estoque,
+       compras     AS compras,
        vencimento  AS vencimento
 FROM sqldados.produtoValidade
        INNER JOIN T_PRD
@@ -88,8 +89,8 @@ FROM sqldados.produtoValidade
 WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
   AND (:loja = 0 OR storeno = :loja)
-  AND (estoque != 0)
-  AND (vencimento != 0);
+  AND ((estoque != 0 AND vencimento != 0 AND compras = 0)
+  OR (vencimento = 0 AND dataEntrada != 0));
 
 SELECT P.storeno                                              AS loja,
        P.abrevLoja                                            AS lojaAbrev,
@@ -103,7 +104,8 @@ SELECT P.storeno                                              AS loja,
        P.fornecedorAbrev                                      AS fornecedorAbrev,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
        IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
-       V.estoque                                              AS estoque,
+       IF(V.vencimento = 0, NULL, V.estoque)                  AS estoque,
+       V.compras                                              AS compras,
        MID(V.vencimento, 1, 6) * 1                            AS vencimento,
        0                                                      AS saidaVenda,
        0                                                      AS saidaTransf,
