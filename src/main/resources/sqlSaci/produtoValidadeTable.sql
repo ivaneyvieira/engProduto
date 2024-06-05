@@ -129,3 +129,7 @@ WHERE prdno = 113613;
 
 ALTER TABLE sqldados.produtoValidade
   ADD COLUMN compras INT NOT NULL DEFAULT 0;
+
+ALTER TABLE sqldados.produtoValidade
+  ADD COLUMN vencimentoEdit INT NULL;
+

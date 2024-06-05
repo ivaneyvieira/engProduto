@@ -23,6 +23,7 @@ class ProdutoInventario(
   var estoque: Int?,
   var compras: Int?,
   var vencimento: Int?,
+  var vencimentoEdit: Int?,
   var saidaVenda: Int?,
   var saidaTransf: Int?,
   var entradaCompra: Int?,
@@ -40,6 +41,12 @@ class ProdutoInventario(
     get() = vencimentoToStr(vencimento)
     set(value) {
       vencimento = mesAno(value)
+    }
+
+  var vencimentoEditStr: String?
+    get() = vencimentoToStr(vencimentoEdit)
+    set(value) {
+      vencimentoEdit = mesAno(value)
     }
 
   private fun mesAno(value: String?): Int {
@@ -88,6 +95,7 @@ class ProdutoInventario(
       entradaTransf = entradaTransf,
       compras = compras,
       estoqueLoja = estoqueLoja,
+      vencimentoEdit = vencimentoEdit,
     )
     block(produto)
     return produto
@@ -204,7 +212,8 @@ class ProdutoInventario(
         entradaCompra = qtty,
         entradaTransf = 0,
         compras = 0,
-        estoqueLoja = 0
+        estoqueLoja = 0,
+        vencimentoEdit = mesAno,
       )
     }
 

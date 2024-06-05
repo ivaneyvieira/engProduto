@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoInventario
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
-import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
@@ -45,6 +44,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       entradaCompra = null,
       compras = null,
       estoqueLoja = null,
+      vencimentoEdit = null,
     )
     subView.formAdd(novo) { novoEditado ->
       novoEditado.update()
