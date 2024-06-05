@@ -107,6 +107,7 @@ class ProdutoInventario(
 
       return produtosInventarioCompras(produtos, saidas)
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
+        .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
     }
 
     fun produtosInventarioCompras(
