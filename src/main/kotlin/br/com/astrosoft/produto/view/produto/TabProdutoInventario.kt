@@ -183,7 +183,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.loja ?: 0 })
     }
-    this.columnGrid(ProdutoInventario::estoqueTotal, header = "Total")
+    this.columnGrid(ProdutoInventario::estoqueLoja, header = "Total")
     this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })

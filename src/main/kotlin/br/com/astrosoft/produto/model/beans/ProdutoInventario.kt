@@ -19,6 +19,7 @@ class ProdutoInventario(
   var fornecedorAbrev: String?,
   var dataEntrada: LocalDate?,
   var estoqueTotal: Int?,
+  var estoqueLoja: Int?,
   var estoque: Int?,
   var compras: Int?,
   var vencimento: Int?,
@@ -86,6 +87,7 @@ class ProdutoInventario(
       entradaCompra = entradaCompra,
       entradaTransf = entradaTransf,
       compras = compras,
+      estoqueLoja = estoqueLoja,
     )
     block(produto)
     return produto
@@ -134,7 +136,6 @@ class ProdutoInventario(
             if (copy != null)
               yield(copy)
           } else {
-            val dataEntrada = produtoCompra.dataEntrada
             val saidasProduto = saidas.filter {
               it.lojaOrigem == produtoCompra.loja
               && it.prdno == produtoCompra.prdno
@@ -203,6 +204,7 @@ class ProdutoInventario(
         entradaCompra = qtty,
         entradaTransf = 0,
         compras = 0,
+        estoqueLoja = 0
       )
     }
 

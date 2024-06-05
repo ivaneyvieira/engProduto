@@ -54,7 +54,7 @@ CREATE TEMPORARY TABLE T_STK
 SELECT storeno,
        prdno,
        grade,
-       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueSaci
+       ROUND(SUM(qtty_varejo + stk.qtty_atacado) / 1000) AS estoqueLoja
 FROM sqldados.stk
        INNER JOIN T_PRD
                   USING (storeno, prdno, grade)
@@ -67,7 +67,7 @@ CREATE TEMPORARY TABLE T_STK_TOTAL
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno, grade, SUM(estoqueSaci) AS estoqueTotal
+SELECT prdno, grade, SUM(estoqueLoja) AS estoqueTotal
 FROM T_STK
 GROUP BY prdno, grade;
 
@@ -104,6 +104,7 @@ SELECT P.storeno                                              AS loja,
        P.fornecedorAbrev                                      AS fornecedorAbrev,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
        IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
+       IFNULL(S.estoqueLoja, 0)                               AS estoqueLoja,
        IF(V.vencimento = 0, NULL, V.estoque)                  AS estoque,
        V.compras                                              AS compras,
        MID(V.vencimento, 1, 6) * 1                            AS vencimento,
