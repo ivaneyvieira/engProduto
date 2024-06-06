@@ -31,6 +31,7 @@ class ProdutoInventario(
 ) {
   val saida: Int
     get() = (saidaVenda ?: 0) + (saidaTransf ?: 0)
+
   val entrada: Int
     get() = (entradaCompra ?: 0) + (entradaTransf ?: 0) + (compras ?: 0)
 
@@ -43,12 +44,6 @@ class ProdutoInventario(
       vencimento = mesAno(value)
     }
 
-  var vencimentoEditStr: String?
-    get() = vencimentoToStr(vencimentoEdit)
-    set(value) {
-      vencimentoEdit = mesAno(value)
-    }
-
   private fun mesAno(value: String?): Int {
     value ?: return 0
     val mes = value.substring(0, 2).toIntOrNull() ?: return 0
@@ -56,13 +51,22 @@ class ProdutoInventario(
     return mes + (ano + 2000) * 100
   }
 
-  private fun vencimentoToStr(vencimento: Int?): String {
-    vencimento ?: return ""
-    val vencimentoStr = vencimento.toString()
-    if (vencimentoStr.length != 6) return ""
-    val mes = vencimentoStr.substring(4, 6)
-    val ano = vencimentoStr.substring(2, 4)
-    return "$mes/$ano"
+  private fun vencimentoToStr(vencimentoPar: Int?): String {
+    val venc = vencimentoPar ?: 0
+    val vencimentoStr = venc.toString()
+    if (vencimentoStr.length != 6) {
+      return when (venc) {
+        0 -> "Saida"
+
+        1 -> "Transf"
+
+        else -> ""
+      }
+    } else {
+      val mes = vencimentoStr.substring(4, 6)
+      val ano = vencimentoStr.substring(2, 4)
+      return "$mes/$ano"
+    }
   }
 
   fun update() {
@@ -116,11 +120,11 @@ class ProdutoInventario(
       //  .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
 
       return produtosInventarioCompras(produtos, saidas)
-        .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
+        .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr}" }
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
     }
 
-    fun produtosInventarioCompras(
+    private fun produtosInventarioCompras(
       produtos: List<ProdutoInventario>,
       saidas: List<ProdutoSaida>
     ): List<ProdutoInventario> {
@@ -137,7 +141,7 @@ class ProdutoInventario(
               saidaTransf = null
               entradaTransf = null
               entradaCompra = null
-              vencimento = null
+              vencimento = 0
               dataEntrada = null
               compras = null
             }
@@ -152,6 +156,34 @@ class ProdutoInventario(
             }
             val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
             produtoCompra.saidaVenda = quantSaidas
+          }
+
+          val produtoTransferencia = produtos.firstOrNull { it.vencimento == 1 }
+          if (produtoTransferencia == null) {
+            val produto = produtos.firstOrNull()
+
+            val copy = produto?.copy {
+              estoque = null
+              saidaVenda = null
+              saidaTransf = null
+              entradaTransf = null
+              entradaCompra = null
+              vencimento = 1
+              vencimentoEdit = 1
+              dataEntrada = null
+              compras = null
+            }
+            if (copy != null)
+              yield(copy)
+          } else {
+            val saidasProduto = saidas.filter {
+              it.lojaDestino == produtoTransferencia.loja
+              && it.prdno == produtoTransferencia.prdno
+              && it.grade == produtoTransferencia.grade
+              && it.date.toSaciDate() >= produtoTransferencia.dataEntrada.toSaciDate()
+            }
+            val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
+            produtoTransferencia.compras = quantSaidas
           }
         }
       }.toList()

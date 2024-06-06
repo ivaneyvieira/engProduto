@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.util.format
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -50,6 +51,13 @@ fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>) {
   if (this.editor.isOpen) {
     val component = this.getColumnBy(property).editorComponent as? Focusable<*>
     component?.focus()
+  }
+}
+
+fun <T : Any> Grid<T>.setReadOnly(property: KProperty1<T, *>) {
+  if (this.editor.isOpen) {
+    val component = this.getColumnBy(property).editorComponent as? HasValue<*, *>
+    component?.isReadOnly = true
   }
 }
 

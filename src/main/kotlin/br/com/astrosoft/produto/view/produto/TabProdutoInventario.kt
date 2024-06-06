@@ -171,6 +171,13 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ProdutoInventario::class,
       openEditor = {
         this.focusEditor(ProdutoInventario::estoque)
+
+        val bean = it.bean
+        if ((bean.vencimento ?: 0) < 10) {
+          // this.setReadOnly(ProdutoInventario::vencimentoStr)
+          // this.setReadOnly(ProdutoInventario::estoque)
+          // this.setReadOnly(ProdutoInventario::compras)
+        }
       },
       closeEditor = {
         viewModel.salvaInventario(it.bean)
