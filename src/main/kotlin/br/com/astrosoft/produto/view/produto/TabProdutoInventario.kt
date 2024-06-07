@@ -223,7 +223,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private fun updateTotais(){
     if(!edtCodigo.value.isNullOrBlank()) {
       val list = gridPanel.dataProvider.fetchAll()
-      val totalEstoqueLoja = list.sumOf { it.estoqueLoja ?: 0 }
+      val totalEstoqueLoja = list.firstOrNull()?.estoqueLoja ?: 0
       val totalSaldo = list.sumOf { it.saldo ?: 0 }
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter(totalEstoqueLoja.format())
       gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter(totalSaldo.format())
