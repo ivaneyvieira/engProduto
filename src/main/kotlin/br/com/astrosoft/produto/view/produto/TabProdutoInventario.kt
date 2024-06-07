@@ -174,10 +174,10 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
 
         val bean = it.bean
         if ((bean.vencimento ?: 0) == 1) {
-          this.setReadOnly(ProdutoInventario::vencimentoStr)
-          this.setReadOnly(ProdutoInventario::estoque)
-          this.setReadOnly(ProdutoInventario::compras)
-          this.setReadOnly(ProdutoInventario::dataEntrada)
+          //this.setReadOnly(ProdutoInventario::vencimentoStr)
+          //this.setReadOnly(ProdutoInventario::estoque)
+          //this.setReadOnly(ProdutoInventario::compras)
+          //this.setReadOnly(ProdutoInventario::dataEntrada)
         }
       },
       closeEditor = {
