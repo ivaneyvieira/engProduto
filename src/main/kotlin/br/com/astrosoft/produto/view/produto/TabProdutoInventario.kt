@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
+import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
@@ -198,15 +200,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }.mesAnoFieldEditor()
     this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
     this.columnGrid(ProdutoInventario::compras, header = "Entrada", width = "85px").integerFieldEditor()
-    // columnGroup("Entrada") {
-    //    this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
-    //  this.columnGrid(ProdutoInventario::entradaTransf, header = "Tranf", width = "85px")
-    //  this.columnGrid(ProdutoInventario::entradaCompra, header = "Compra", width = "85px")
-    // }
-    // columnGroup("Saída") {
-    //   this.columnGrid(ProdutoInventario::saidaVenda, header = "Venda", width = "85px")
-    //   this.columnGrid(ProdutoInventario::saidaTransf, header = "Transf", width = "85px")
-    // }
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {
       it.value = LocalDate.now()
@@ -221,6 +214,23 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ProdutoInventario::grade.asc,
       ProdutoInventario::vencimentoStr.asc
     )
+
+    this.dataProvider.addDataProviderListener {
+      updateTotais()
+    }
+  }
+
+  private fun updateTotais(){
+    if(!edtCodigo.value.isNullOrBlank()) {
+      val list = gridPanel.dataProvider.fetchAll()
+      val totalEstoqueLoja = list.sumOf { it.estoqueLoja ?: 0 }
+      val totalSaldo = list.sumOf { it.saldo ?: 0 }
+      gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter(totalEstoqueLoja.format())
+      gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter(totalSaldo.format())
+    }else{
+      gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter("")
+      gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter("")
+    }
   }
 
   override fun filtro(): FiltroProdutoInventario {
