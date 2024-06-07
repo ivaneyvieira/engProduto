@@ -58,7 +58,7 @@ class ProdutoInventario(
       return when (venc) {
         0 -> "Saida"
 
-        1 -> "Transf"
+        1 -> ""
 
         else -> ""
       }
