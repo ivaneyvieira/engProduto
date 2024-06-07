@@ -158,32 +158,41 @@ class ProdutoInventario(
             produtoCompra.saidaVenda = quantSaidas
           }
 
-          val produtoTransferencia = produtos.firstOrNull { it.vencimento == 1 }
-          if (produtoTransferencia == null) {
-            val produto = produtos.firstOrNull()
+          //Transferencias
+          val produto = produtos.firstOrNull()
+          val loja = produto?.loja ?: 0
+          val prdno = produto?.prdno ?: ""
+          val grade = produto?.grade ?: ""
+          val dataEntradaTransf = produtos.mapNotNull { it.dataEntrada }.minOrNull()
 
-            val copy = produto?.copy {
-              estoque = null
-              saidaVenda = null
-              saidaTransf = null
-              entradaTransf = null
-              entradaCompra = null
-              vencimento = 1
-              vencimentoEdit = 1
-              dataEntrada = null
-              compras = null
+          val saidasProduto = saidas.filter {
+            it.lojaDestino == loja
+            && it.prdno == prdno
+            && it.grade == grade
+            && it.date.toSaciDate() >= dataEntradaTransf.toSaciDate()
+          }
+          val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
+
+          if (quantSaidas > 0) {
+            val produtoTransferencia = produtos.firstOrNull { it.vencimento == 1 }
+
+            if (produtoTransferencia == null) {
+              val copy = produto?.copy {
+                estoque = null
+                saidaVenda = null
+                saidaTransf = null
+                entradaTransf = null
+                entradaCompra = null
+                vencimento = 1
+                vencimentoEdit = 1
+                dataEntrada = dataEntradaTransf
+                compras = quantSaidas
+              }
+              if (copy != null)
+                yield(copy)
+            } else {
+              produtoTransferencia.compras = quantSaidas
             }
-            if (copy != null)
-              yield(copy)
-          } else {
-            val saidasProduto = saidas.filter {
-              it.lojaDestino == produtoTransferencia.loja
-              && it.prdno == produtoTransferencia.prdno
-              && it.grade == produtoTransferencia.grade
-              && it.date.toSaciDate() >= produtoTransferencia.dataEntrada.toSaciDate()
-            }
-            val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
-            produtoTransferencia.compras = quantSaidas
           }
         }
       }.toList()

@@ -173,10 +173,11 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         this.focusEditor(ProdutoInventario::estoque)
 
         val bean = it.bean
-        if ((bean.vencimento ?: 0) < 10) {
-          // this.setReadOnly(ProdutoInventario::vencimentoStr)
-          // this.setReadOnly(ProdutoInventario::estoque)
-          // this.setReadOnly(ProdutoInventario::compras)
+        if ((bean.vencimento ?: 0) == 1) {
+          this.setReadOnly(ProdutoInventario::vencimentoStr)
+          this.setReadOnly(ProdutoInventario::estoque)
+          this.setReadOnly(ProdutoInventario::compras)
+          this.setReadOnly(ProdutoInventario::dataEntrada)
         }
       },
       closeEditor = {
@@ -196,7 +197,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
     this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
-    this.columnGrid(ProdutoInventario::compras, header = "Compra", width = "85px").integerFieldEditor()
+    this.columnGrid(ProdutoInventario::compras, header = "Entrada", width = "85px").integerFieldEditor()
     // columnGroup("Entrada") {
     //    this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
     //  this.columnGrid(ProdutoInventario::entradaTransf, header = "Tranf", width = "85px")
