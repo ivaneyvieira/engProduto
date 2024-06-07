@@ -142,6 +142,7 @@ class ProdutoInventario(
               entradaTransf = null
               entradaCompra = null
               vencimento = 0
+              vencimentoEdit = 0
               dataEntrada = null
               compras = null
             }
