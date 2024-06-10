@@ -119,7 +119,6 @@ class ProdutoInventario(
       //return produtosSaida
       //  .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
       //  .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
-
       return produtosEntrada
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr}" }
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
