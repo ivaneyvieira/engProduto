@@ -111,15 +111,16 @@ class ProdutoInventario(
       val dataInicial = produtos.mapNotNull { it.dataEntrada }.minOrNull()
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
 
-      //val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
+      val entradas = ProdutoRecebimento.findEntradas(filtro, LocalDate.of(2024, 6, 1))
 
-      //val produtosEntrada = produtoInventariosEntradas(produtos, entradas)
+      val produtosCompra = produtosInventarioCompras(produtos, saidas)
+      val produtosEntrada = produtoInventariosEntradas(produtosCompra, entradas)
       //val produtosSaida = produtoInventariosSaidas(produtos, saidas)
       //return produtosSaida
       //  .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
       //  .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
 
-      return produtosInventarioCompras(produtos, saidas)
+      return produtosEntrada
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr}" }
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
     }
@@ -210,7 +211,6 @@ class ProdutoInventario(
       val chaveOnlyEntradas = entradasGrupo.keys - produtosGrupo.keys
       val chaveBoth = produtosGrupo.keys.intersect(entradasGrupo.keys)
 
-
       return sequence {
         chaveOnlyProdutos.forEach { chave ->
           val produtosList = produtosGrupo[chave].orEmpty()
@@ -225,7 +225,7 @@ class ProdutoInventario(
           val entradasList = entradasGrupo[chave].orEmpty()
           val entradaQtty = entradasList.sumOf { it.qtty ?: 0 }
           produtosList.forEach { produto ->
-            produto.entradaCompra = entradaQtty
+            produto.compras = (produto.compras ?: 0) + entradaQtty
             yield(produto)
           }
         }
@@ -251,9 +251,9 @@ class ProdutoInventario(
         vencimento = mesAno,
         saidaVenda = 0,
         saidaTransf = 0,
-        entradaCompra = qtty,
+        entradaCompra = 0,
         entradaTransf = 0,
-        compras = 0,
+        compras = qtty,
         estoqueLoja = 0,
         vencimentoEdit = mesAno,
       )
