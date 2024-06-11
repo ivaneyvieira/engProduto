@@ -133,3 +133,65 @@ ALTER TABLE sqldados.produtoValidade
 ALTER TABLE sqldados.produtoValidade
   ADD COLUMN vencimentoEdit INT NULL;
 
+/**********************************************************/
+
+CREATE TABLE sqldados.produtoValidadeBak
+SELECT *
+FROM sqldados.produtoValidade;
+
+ALTER TABLE sqldados.produtoValidade
+  DROP COLUMN vencimentoEdit;
+
+ALTER TABLE sqldados.produtoValidade
+  ADD COLUMN tipo VARCHAR(3) NOT NULL DEFAULT '' AFTER vencimento;
+
+ALTER TABLE sqldados.produtoValidade
+  DROP PRIMARY KEY;
+
+ALTER TABLE sqldados.produtoValidade
+  ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo);
+
+UPDATE sqldados.produtoValidade
+SET tipo = 'SAI'
+WHERE vencimento = 0
+  AND tipo = '';
+
+UPDATE sqldados.produtoValidade
+SET tipo = 'TRA'
+WHERE vencimento = 1
+  AND tipo = '';
+
+UPDATE sqldados.produtoValidade
+SET tipo = 'INV'
+WHERE vencimento > 10
+  AND estoque > 0
+  AND tipo = '';
+
+UPDATE sqldados.produtoValidade
+SET estoque = compras
+WHERE estoque = 0
+  AND compras > 0;
+
+UPDATE sqldados.produtoValidade
+SET vencimento = 0
+WHERE vencimento < 10;
+
+ALTER TABLE sqldados.produtoValidade
+  DROP COLUMN compras;
+
+DELETE
+FROM sqldados.produtoValidade
+WHERE estoque = 0
+  AND tipo = '';
+
+SELECT DISTINCT tipo
+FROM sqldados.produtoValidade;
+
+ALTER TABLE sqldados.produtoValidade
+  RENAME COLUMN estoque TO movimento;
+
+DELETE
+FROM sqldados.produtoValidade
+WHERE movimento = 0;
+
+select distinct tipo FROM sqldados.produtoValidade;

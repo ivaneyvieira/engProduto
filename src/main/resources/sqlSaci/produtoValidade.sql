@@ -74,22 +74,22 @@ GROUP BY prdno, grade;
 DROP TABLE IF EXISTS T_VAL;
 CREATE TEMPORARY TABLE T_VAL
 (
-  PRIMARY KEY (storeno, prdno, grade, vencimento)
+  PRIMARY KEY (storeno, prdno, grade, vencimento, tipo)
 )
-SELECT storeno        AS storeno,
-       prdno          AS prdno,
-       grade          AS grade,
-       dataEntrada    AS dataEntrada,
-       estoque        AS estoque,
-       compras        AS compras,
-       vencimento     AS vencimento,
-       vencimentoEdit AS vencimentoEdit
+SELECT storeno     AS storeno,
+       prdno       AS prdno,
+       grade       AS grade,
+       dataEntrada AS dataEntrada,
+       vencimento  AS vencimento,
+       tipo        AS tipo,
+       movimento   AS movimento
 FROM sqldados.produtoValidade
        INNER JOIN T_PRD
                   USING (storeno, prdno, grade)
 WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
-  AND (:loja = 0 OR storeno = :loja);
+  AND (:loja = 0 OR storeno = :loja)
+  AND (movimento != 0);
 
 SELECT P.storeno                                              AS loja,
        P.abrevLoja                                            AS lojaAbrev,
@@ -104,14 +104,11 @@ SELECT P.storeno                                              AS loja,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
        IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
        IFNULL(S.estoqueLoja, 0)                               AS estoqueLoja,
-       IF(V.vencimento = 0, NULL, V.estoque)                  AS estoque,
-       IF(V.vencimento = 0, V.compras, NULL)                  AS compras,
+       IFNULL(V.movimento, 0)                                 AS movimento,
+       IFNULL(V.tipo, 'INV')                                  AS tipo,
+       IFNULL(V.tipo, 'INV')                                  AS tipoEdit,
        MID(V.vencimento, 1, 6) * 1                            AS vencimento,
-       MID(V.vencimento, 1, 6) * 1                            AS vencimentoEdit,
-       0                                                      AS saidaVenda,
-       0                                                      AS saidaTransf,
-       0                                                      AS entradaCompra,
-       0                                                      AS entradaTransf
+       MID(V.vencimento, 1, 6) * 1                            AS vencimentoEdit
 FROM T_STK AS S
        INNER JOIN T_STK_TOTAL AS T
                   USING (prdno, grade)

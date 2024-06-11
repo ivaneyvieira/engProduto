@@ -2,8 +2,6 @@ package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
-import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.xssf.usermodel.XSSFSheet
 
 class PlanilhaProdutoInventario : Planilha<ProdutoInventario>("Validade Inventário") {
   init {
@@ -15,7 +13,8 @@ class PlanilhaProdutoInventario : Planilha<ProdutoInventario>("Validade Inventá
     columnSheet(ProdutoInventario::fornecedorAbrev, header = "Fornecedor")
     columnSheet(ProdutoInventario::validade, header = "Val")
     columnSheet(ProdutoInventario::estoqueTotal, header = "Total")
-    columnSheet(ProdutoInventario::estoque, header = "Est")
+    columnSheet(ProdutoInventario::tipoStr, header = "Tipo")
+    columnSheet(ProdutoInventario::movimento, header = "Est")
     columnSheet(ProdutoInventario::saida, header = "Saída")
     columnSheet(ProdutoInventario::vencimentoStr, header = "Venc")
   }

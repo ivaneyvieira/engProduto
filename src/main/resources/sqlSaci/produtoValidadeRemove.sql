@@ -4,3 +4,4 @@ WHERE storeno = :storeno
   AND prdno = :prdno
   AND grade = :grade
   AND IFNULL(vencimento, 0) = :vencimento
+  AND tipo = :tipo

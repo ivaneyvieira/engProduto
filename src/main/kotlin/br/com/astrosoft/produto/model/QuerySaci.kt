@@ -1175,8 +1175,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataEntrada", produtoInventario.dataEntrada.toSaciDate())
       addOptionalParameter("vencimento", produtoInventario.vencimento ?: 0)
       addOptionalParameter("vencimentoEdit", produtoInventario.vencimentoEdit ?: 0)
-      addOptionalParameter("estoque", produtoInventario.estoque ?: 0)
-      addOptionalParameter("compras", produtoInventario.compras ?: 0)
+      addOptionalParameter("tipo", produtoInventario.tipo ?: "")
+      addOptionalParameter("tipoEdit", produtoInventario.tipoEdit ?: "")
+      addOptionalParameter("movimento", produtoInventario.movimento ?: 0)
     }
   }
 
@@ -1186,7 +1187,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", produtoInventario.loja ?: 0)
       addOptionalParameter("prdno", produtoInventario.prdno)
       addOptionalParameter("grade", produtoInventario.grade)
-      addOptionalParameter("vencimento", produtoInventario.vencimento ?: 0)
+      addOptionalParameter("vencimento", produtoInventario.vencimentoEdit ?: 0)
+      addOptionalParameter("tipo", produtoInventario.tipoEdit ?: "")
     }
   }
 

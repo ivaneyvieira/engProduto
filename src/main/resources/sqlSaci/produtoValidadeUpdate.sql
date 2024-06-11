@@ -1,35 +1,20 @@
-/*edit header*/
-REPLACE INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque, compras)
-SELECT :storeno,
-       :prdno,
-       :grade,
-       :dataEntrada,
-       :vencimentoEdit AS vencimento,
-       :estoque,
-       :compras
-FROM dual
-WHERE :vencimentoEdit < 10 && :vencimento < 10 && :dataEntrada != 0;
+UPDATE sqldados.produtoValidade
+SET vencimento  = :vencimento,
+    tipo        = :tipo,
+    dataEntrada = :dataEntrada,
+    movimento   = :movimento
+WHERE storeno = :storeno
+  AND prdno = :prdno
+  AND grade = :grade
+  AND vencimento = :vencimentoEdit
+  AND tipo = :tipoEdit;
 
-/* add by header*/
-REPLACE INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque, compras)
+REPLACE INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, movimento, tipo)
 SELECT :storeno,
        :prdno,
        :grade,
        :dataEntrada,
        :vencimento,
-       :estoque,
-       0 AS compras
+       :movimento,
+       :tipo
 FROM dual
-WHERE :vencimentoEdit < 10 && :vencimento >= 10 && :dataEntrada != 0;
-
-/* Outros casos */
-UPDATE sqldados.produtoValidade
-SET dataEntrada = :dataEntrada,
-    vencimento  = :vencimento,
-    estoque     = :estoque,
-    compras     = :compras
-WHERE storeno = :storeno
-  AND prdno = :prdno
-  AND grade = :grade
-  AND vencimento = :vencimentoEdit
-  AND :vencimentoEdit >= 10

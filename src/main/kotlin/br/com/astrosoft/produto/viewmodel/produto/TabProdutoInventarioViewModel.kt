@@ -35,16 +35,13 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       vendno = produto.vendno,
       fornecedorAbrev = produto.fornecedorAbrev,
       estoqueTotal = produto.estoqueTotal,
-      estoque = null,
+      movimento = null,
       vencimento = null,
       dataEntrada = LocalDate.now(),
-      saidaVenda = null,
-      saidaTransf = null,
-      entradaTransf = null,
-      entradaCompra = null,
-      compras = null,
       estoqueLoja = null,
       vencimentoEdit = null,
+      tipoEdit = null,
+      tipo = null,
     )
     subView.formAdd(novo) { novoEditado ->
       novoEditado.update()

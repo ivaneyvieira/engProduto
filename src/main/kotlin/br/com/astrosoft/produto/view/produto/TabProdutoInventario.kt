@@ -172,7 +172,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.withEditor(
       ProdutoInventario::class,
       openEditor = {
-        this.focusEditor(ProdutoInventario::estoque)
+        this.focusEditor(ProdutoInventario::movimento)
 
         val bean = it.bean
         if ((bean.vencimento ?: 0) == 1) {
@@ -185,7 +185,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       closeEditor = {
         viewModel.salvaInventario(it.bean)
       })
-
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(ProdutoInventario::codigo, header = "Código")
     this.columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
@@ -198,8 +197,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
-    this.columnGrid(ProdutoInventario::estoque, header = "Inv", width = "85px").integerFieldEditor()
-    this.columnGrid(ProdutoInventario::compras, header = "Entrada", width = "85px").integerFieldEditor()
+    this.columnGrid(ProdutoInventario::movimento, header = "Mov", width = "85px").integerFieldEditor()
+    this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px")
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {
       it.value = LocalDate.now()
@@ -220,8 +219,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     }
   }
 
-  private fun updateTotais(){
-    if(!edtCodigo.value.isNullOrBlank()) {
+  private fun updateTotais() {
+    if (!edtCodigo.value.isNullOrBlank()) {
       val list = gridPanel.dataProvider.fetchAll()
       val totalEstoqueLoja = list.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.map {
         it.value.firstOrNull()?.estoqueLoja ?: 0
@@ -229,7 +228,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       val totalSaldo = list.sumOf { it.saldo }
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter(totalEstoqueLoja.format())
       gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter(totalSaldo.format())
-    }else{
+    } else {
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter("")
       gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter("")
     }
@@ -263,8 +262,8 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       this.value = produtoInicial.vencimentoStr
     }
     val edtInventario = IntegerField().apply {
-      this.label = "Inventário"
-      this.value = produtoInicial.estoque
+      this.label = "Movimentação"
+      this.value = produtoInicial.movimento
     }
     val edtDataEntrada = DatePicker().apply {
       this.localePtBr()
@@ -295,8 +294,9 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
 
     DialogHelper.showForm("Inventário", form) {
       produtoInicial.vencimentoStr = edtMesAno.value
-      produtoInicial.estoque = edtInventario.value
+      produtoInicial.movimento = edtInventario.value
       produtoInicial.dataEntrada = edtDataEntrada.value
+      produtoInicial.eTipo = ETipo.INV
       callback(produtoInicial)
     }
   }
