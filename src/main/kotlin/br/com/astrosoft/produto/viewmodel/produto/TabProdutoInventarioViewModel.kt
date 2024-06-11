@@ -23,26 +23,15 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
   fun adicionarLinha() = viewModel.exec {
     val selecionado = subView.produtosSelecionados()
     val produto = selecionado.firstOrNull() ?: fail("Nenhum produto selecionado")
-    val novo = ProdutoInventario(
-      loja = produto.loja,
-      lojaAbrev = produto.lojaAbrev,
-      prdno = produto.prdno,
-      codigo = produto.codigo,
-      descricao = produto.descricao,
-      grade = produto.grade,
-      unidade = produto.unidade,
-      validade = produto.validade,
-      vendno = produto.vendno,
-      fornecedorAbrev = produto.fornecedorAbrev,
-      estoqueTotal = produto.estoqueTotal,
-      movimento = null,
-      vencimento = null,
-      dataEntrada = LocalDate.now(),
-      estoqueLoja = null,
-      vencimentoEdit = null,
-      tipoEdit = null,
-      tipo = null,
-    )
+    val novo = produto.copy {
+      movimento = null
+      vencimento = null
+      vencimentoEdit = null
+      dataEntrada = LocalDate.now()
+      dataEntradaEdit = LocalDate.now()
+      tipoEdit = null
+      tipo = null
+    }
     subView.formAdd(novo) { novoEditado ->
       novoEditado.update()
       updateView()

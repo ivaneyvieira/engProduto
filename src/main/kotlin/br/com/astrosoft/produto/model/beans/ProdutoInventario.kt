@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -16,6 +17,7 @@ class ProdutoInventario(
   var vendno: Int?,
   var fornecedorAbrev: String?,
   var dataEntrada: LocalDate?,
+  var dataEntradaEdit: LocalDate?,
   var estoqueTotal: Int?,
   var estoqueLoja: Int?,
   var vencimento: Int?,
@@ -94,6 +96,7 @@ class ProdutoInventario(
       vendno = vendno,
       fornecedorAbrev = fornecedorAbrev,
       dataEntrada = dataEntrada,
+      dataEntradaEdit = dataEntradaEdit,
       estoqueTotal = estoqueTotal,
       movimento = movimento,
       vencimento = vencimento,
@@ -110,110 +113,109 @@ class ProdutoInventario(
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = LocalDate.of(2024, 6, 1)
-
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
 
-      val produtosCompra = produtosInventarioSaida(produtos, saidas)
-      val produtosEntrada = produtoInventariosEntradas(produtosCompra, entradas)
-      //val produtosSaida = produtoInventariosSaidas(produtos, saidas)
-      //return produtosSaida
-      //  .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
-      //  .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimento}" }
+      val produtosSaida = produtos.produtosInventarioSaida(saidas)
+      val produtosEntrada = produtosSaida.produtoInventariosEntradas(entradas)
+
       return produtosEntrada
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
-        .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr} ${it.tipo}" }
+        .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
     }
 
-    private fun produtosInventarioSaida(
-      produtos: List<ProdutoInventario>,
+    private fun List<ProdutoInventario>.produtosInventarioSaida(
       saidas: List<ProdutoSaida>
     ): List<ProdutoInventario> {
       return sequence {
-        yieldAll(produtos)
-        produtos.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.forEach { (_, produtos) ->
-          val loja = produtos.firstOrNull()?.loja ?: 0
-          val prdno = produtos.firstOrNull()?.prdno ?: ""
-          val grade = produtos.firstOrNull()?.grade ?: ""
+        yieldAll(this@produtosInventarioSaida)
+        this@produtosInventarioSaida.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.forEach { (_, produtos) ->
+          val produto = produtos.firstOrNull()
+          val loja = produto?.loja ?: 0
+          val prdno = produto?.prdno ?: ""
+          val grade = produto?.grade ?: ""
+
+          val produtoValidadeSaida = produtos.firstOrNull { it.eTipo == ETipo.SAI }
+          val dataSaida = produtoValidadeSaida?.dataEntrada ?: LocalDate.of(2024, 6, 1)
           val saidasProduto = saidas.filter {
             it.lojaOrigem == loja
             && it.prdno == prdno
             && it.grade == grade
+            && it.date.toSaciDate() >= dataSaida.toSaciDate()
           }
           val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
-          val dataSaída = saidasProduto.mapNotNull { it.date }.maxOrNull()
-          val produtoSaida = produtos.firstOrNull { it.eTipo == ETipo.SAI && it.vencimento == 0 }
-          if (produtoSaida == null) {
-            val produto = produtos.firstOrNull()
-
+          if (produtoValidadeSaida == null) {
             val copy = produto?.copy {
               movimento = quantSaidas
               vencimento = 0
               vencimentoEdit = 0
-              dataEntrada = dataSaída
+              dataEntrada = dataSaida
+              dataEntradaEdit = dataSaida
               eTipo = ETipo.SAI
               tipoEdit = eTipo?.tipo
             }
             if (copy != null)
               yield(copy)
           } else {
-            produtoSaida.movimento = quantSaidas
-            produtoSaida.dataEntrada = dataSaída
+            produtoValidadeSaida.movimento = quantSaidas
           }
 
-          val saidaProdutoTransf = saidas.filter {
+          val produtosTransf = saidas.filter {
             it.lojaDestino == loja
             && it.prdno == prdno
             && it.grade == grade
           }
-          val quantSaidasTransf = saidaProdutoTransf.sumOf { it.qtty ?: 0 }
-          if (quantSaidasTransf > 0) {
-            val dataSaídaTransf = saidaProdutoTransf.mapNotNull { it.date }.maxOrNull()
-            val copy = produtos.firstOrNull()?.copy {
-              movimento = quantSaidasTransf
-              vencimento = 0
-              vencimentoEdit = 0
-              dataEntrada = dataSaídaTransf
-              eTipo = ETipo.TRA
-              tipoEdit = eTipo?.tipo
+          produtosTransf.forEach { produtoTransf ->
+            val produtosValidadeTrans = this@produtosInventarioSaida.firstOrNull {
+              it.loja == produtoTransf.lojaDestino
+              && it.prdno == produtoTransf.prdno
+              && it.grade == produtoTransf.grade
+              && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate()
             }
-            if (copy != null)
-              yield(copy)
+
+            val quantSaidasTransf = produtoTransf.qtty ?: 0
+            if (quantSaidasTransf > 0) {
+              if (produtosValidadeTrans == null) {
+                val dataSaidaTransf = produtoTransf.date
+                val copy = produtos.firstOrNull()?.copy {
+                  movimento = quantSaidasTransf
+                  vencimento = 0
+                  vencimentoEdit = 0
+                  dataEntrada = dataSaidaTransf
+                  dataEntradaEdit = dataSaidaTransf
+                  eTipo = ETipo.TRA
+                  tipoEdit = eTipo?.tipo
+                }
+                if (copy != null)
+                  yield(copy)
+              } else {
+                produtosValidadeTrans.movimento = quantSaidasTransf
+              }
+            }
           }
         }
       }.toList()
     }
 
-    private fun produtoInventariosEntradas(
-      produtos: List<ProdutoInventario>,
+    private fun List<ProdutoInventario>.produtoInventariosEntradas(
       entradas: List<ProdutoRecebimento>
     ): List<ProdutoInventario> {
-      val produtosGrupo = produtos.groupBy { ChaveProdutoInventario(it.loja, it.prdno, it.grade, it.vencimento) }
-      val entradasGrupo = entradas.groupBy { ChaveProdutoInventario(it.loja, it.prdno, it.grade, it.mesAno) }
-
-      val chaveOnlyProdutos = produtosGrupo.keys - entradasGrupo.keys
-      val chaveOnlyEntradas = entradasGrupo.keys - produtosGrupo.keys
-      val chaveBoth = produtosGrupo.keys.intersect(entradasGrupo.keys)
-
       return sequence {
-        chaveOnlyProdutos.forEach { chave ->
-          val produtosList = produtosGrupo[chave].orEmpty()
-          yieldAll(produtosList)
-        }
-        chaveOnlyEntradas.forEach { chave ->
-          val entradasList = entradasGrupo[chave].orEmpty()
-          yieldAll(entradasList.map { it.toProdutoInventario() })
-        }
-        chaveBoth.forEach { chave ->
-          val produtosList = produtosGrupo[chave].orEmpty()
-          val entradasList = entradasGrupo[chave].orEmpty()
-          val entradaQtty = entradasList.sumOf { it.qtty ?: 0 }
-          produtosList.forEach { produto ->
-            produto.movimento = (produto.movimento ?: 0) + entradaQtty
+        yieldAll(this@produtoInventariosEntradas)
+
+        entradas.forEach { entrada ->
+          val produtoValidade = this@produtoInventariosEntradas.firstOrNull {
+            it.loja == entrada.loja
+            && it.prdno == entrada.prdno
+            && it.grade == entrada.grade
+            && it.tipo == ETipo.REC.tipo
+          }
+
+          if (produtoValidade == null) {
+            val produto = entrada.toProdutoInventario()
             yield(produto)
           }
         }
-
       }.toList()
     }
 
@@ -230,12 +232,13 @@ class ProdutoInventario(
         vendno = vendno,
         fornecedorAbrev = fornecedorAbrev,
         dataEntrada = date,
+        dataEntradaEdit = date,
         estoqueTotal = qtty,
         movimento = qtty,
         vencimento = mesAno,
-        tipo = ETipo.INV.tipo,
-        tipoEdit = ETipo.INV.tipo,
-        estoqueLoja = 0,
+        tipo = ETipo.REC.tipo,
+        tipoEdit = ETipo.REC.tipo,
+        estoqueLoja = estoqueLoja,
         vencimentoEdit = mesAno,
       )
     }
@@ -296,6 +299,7 @@ data class ChaveProdutoInventario(
   val prdno: String?,
   val grade: String?,
   val vencimento: Int?,
+  val dataEntrada: Int?,
 )
 
 enum class ETipo(val tipo: String, val descricao: String) {

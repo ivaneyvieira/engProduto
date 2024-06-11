@@ -5,3 +5,4 @@ WHERE storeno = :storeno
   AND grade = :grade
   AND IFNULL(vencimento, 0) = :vencimento
   AND tipo = :tipo
+  AND dataEntrada = :dataEntrada

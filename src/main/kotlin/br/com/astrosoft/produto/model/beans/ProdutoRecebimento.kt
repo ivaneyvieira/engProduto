@@ -15,6 +15,7 @@ class ProdutoRecebimento(
   var vendno: Int?,
   var fornecedorAbrev: String?,
   var estoqueTotal: Int?,
+  var estoqueLoja: Int?,
   var date: LocalDate?,
   var mesAno: Int?,
   var qtty: Int?

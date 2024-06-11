@@ -74,7 +74,7 @@ GROUP BY prdno, grade;
 DROP TABLE IF EXISTS T_VAL;
 CREATE TEMPORARY TABLE T_VAL
 (
-  PRIMARY KEY (storeno, prdno, grade, vencimento, tipo)
+  PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada)
 )
 SELECT storeno     AS storeno,
        prdno       AS prdno,
@@ -102,6 +102,7 @@ SELECT P.storeno                                              AS loja,
        P.vendno                                               AS vendno,
        P.fornecedorAbrev                                      AS fornecedorAbrev,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
+       CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntradaEdit,
        IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
        IFNULL(S.estoqueLoja, 0)                               AS estoqueLoja,
        IFNULL(V.movimento, 0)                                 AS movimento,

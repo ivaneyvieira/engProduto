@@ -194,4 +194,20 @@ DELETE
 FROM sqldados.produtoValidade
 WHERE movimento = 0;
 
-select distinct tipo FROM sqldados.produtoValidade;
+SELECT DISTINCT tipo
+FROM sqldados.produtoValidade;
+
+SELECT *
+FROM sqldados.produtoValidade
+where prdno = 105769
+and storeno = 2;
+
+/***************************************************************************/
+
+ALTER TABLE sqldados.produtoValidade
+  DROP PRIMARY KEY;
+
+ALTER TABLE sqldados.produtoValidade
+add PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada);
+
+

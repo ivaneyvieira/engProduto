@@ -200,7 +200,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
     this.columnGrid(ProdutoInventario::movimento, header = "Mov", width = "85px").integerFieldEditor()
     this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px")
 
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Entrada", width = "120px").dateFieldEditor {
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px").dateFieldEditor {
       it.value = LocalDate.now()
     }
     columnGrid(ProdutoInventario::validade, header = "Val")
