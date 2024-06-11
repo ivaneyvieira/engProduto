@@ -109,6 +109,10 @@ class ProdutoInventario(
     return produto
   }
 
+  override fun toString(): String {
+    return "ProdutoInventario(loja=$loja, lojaAbrev=$lojaAbrev, prdno=$prdno, codigo=$codigo, descricao=$descricao, grade=$grade, unidade=$unidade, validade=$validade, vendno=$vendno, fornecedorAbrev=$fornecedorAbrev, dataEntrada=$dataEntrada, dataEntradaEdit=$dataEntradaEdit, estoqueTotal=$estoqueTotal, estoqueLoja=$estoqueLoja, vencimento=$vencimento, vencimentoEdit=$vencimentoEdit, movimento=$movimento, tipo=$tipo, tipoEdit=$tipoEdit)"
+  }
+
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val produtos = saci.produtoValidade(filtro)
@@ -171,6 +175,7 @@ class ProdutoInventario(
               && it.prdno == produtoTransf.prdno
               && it.grade == produtoTransf.grade
               && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate()
+              && it.tipo == ETipo.TRA.tipo
             }
 
             val quantSaidasTransf = produtoTransf.qtty ?: 0
