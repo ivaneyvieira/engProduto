@@ -18,6 +18,7 @@ import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -75,15 +76,6 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
 
         init()
 
-        edtCodigo = textField("Código") {
-          this.width = "110px"
-          this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -135,6 +127,16 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
       }
       horizontalBlock {
         isSpacing = true
+        this.alignItems = FlexComponent.Alignment.BASELINE
+
+        edtCodigo = textField("Código") {
+          this.width = "110px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
 
         btnAdiciona = button("Adicionar") {
           this.icon = VaadinIcon.PLUS.create()

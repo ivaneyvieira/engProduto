@@ -1298,11 +1298,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun dadosValidadeInsert(loja: Int, codigo: String): Int {
+  fun dadosValidadeInsert(loja: Int, codigo: String, grade : String): Int {
     val sql = "/sqlSaci/dadosValidadeInsert.sql"
     return query(sql, Count::class) {
       addOptionalParameter("loja", loja)
       addOptionalParameter("codigo", codigo)
+      addOptionalParameter("grade", grade)
     }.firstOrNull()?.quant ?: 0
   }
 

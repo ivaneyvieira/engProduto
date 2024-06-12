@@ -24,10 +24,20 @@ class TabDadosValidadeViewModel(val viewModel: ProdutoViewModel) {
   }
 
   fun adicionarLinha() = viewModel.exec {
-    val filtro = subView.filtro()
-    if (filtro.codigo == "") fail("Informe o código do produto")
-    val result = DadosValidade.insert(filtro.storeno, filtro.codigo)
-    if (result == 0) fail("Produto não encontrado")
+    val selecionado = subView.produtosSelecionados()
+    if (selecionado.isEmpty()) {
+      val filtro = subView.filtro()
+      if (filtro.codigo == "") {
+        fail("Informe o código do produto")
+      }
+
+      val result = DadosValidade.insert(filtro.storeno, filtro.codigo, "")
+      if (result == 0) fail("Produto não encontrado")
+    } else {
+      selecionado.forEach {
+        DadosValidade.insert(it.loja, it.codigo.toString(), it.grade)
+      }
+    }
     updateView()
   }
 

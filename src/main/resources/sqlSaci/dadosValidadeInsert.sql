@@ -16,6 +16,7 @@ FROM sqldados.prd AS P
                     AND (S.no = :loja)
 WHERE IF(tipoGarantia = 2, garantia, 0) > 0
   AND (TRIM(P.no) * 1 = :codigo)
+  AND (grade = :grade OR :grade = '')
 GROUP BY S.no, B.grade;
 
 DELETE

@@ -57,8 +57,8 @@ class DadosValidade {
       return saci.dadosValidade(filtro)
     }
 
-    fun insert(loja: Int, codigo: String): Int {
-      return saci.dadosValidadeInsert(loja, codigo)
+    fun insert(loja: Int, codigo: String, grade: String): Int {
+      return saci.dadosValidadeInsert(loja, codigo, grade)
     }
   }
 }
