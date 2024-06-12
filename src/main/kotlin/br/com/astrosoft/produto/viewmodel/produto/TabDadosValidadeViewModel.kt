@@ -67,6 +67,15 @@ class TabDadosValidadeViewModel(val viewModel: ProdutoViewModel) {
     updateView()
   }
 
+  fun limparLinha() = viewModel.exec {
+    val filtro = subView.filtro()
+    val dados = DadosValidade.findAll(filtro)
+    dados.filter { it.inventario == 0 }.forEach {
+      it.delete()
+    }
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDadosValidade
 }

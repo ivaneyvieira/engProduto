@@ -152,6 +152,13 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
           }
         }
 
+        btnRemover = button("Limpar") {
+          this.icon = VaadinIcon.RECYCLE.create()
+          addClickListener {
+            viewModel.limparLinha()
+          }
+        }
+
         downloadExcel(PlanilhaDadosValidade())
       }
     }
