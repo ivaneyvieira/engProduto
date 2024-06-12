@@ -13,4 +13,6 @@ interface ITabView {
     loja: Int,
     printEvent: (impressora: String) -> Unit = {}
   ): IPrinter
+
+  fun execThread(block: () -> Unit)
 }

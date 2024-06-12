@@ -25,6 +25,7 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
+  AND :update = TRUE
 GROUP BY S.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
@@ -69,7 +70,8 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
                       'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
         WHEN 'T' THEN TRUE
         ELSE FALSE
-      END;
+      END
+  AND :update = TRUE;
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
 CREATE TEMPORARY TABLE T_STKLOJA
@@ -83,13 +85,14 @@ FROM sqldados.stk
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE storeno IN (2, 3, 4, 5, 8)
+  AND :update = TRUE
 GROUP BY prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
   PRIMARY KEY (loja, prdno, gradeProduto),
-  INDEX(qttyTotal)
+  INDEX (qttyTotal)
 )
 SELECT S.storeno                                                AS loja,
        S.prdno                                                  AS prdno,
@@ -99,6 +102,7 @@ SELECT S.storeno                                                AS loja,
        ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal
 FROM sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
+  AND :update = TRUE
 GROUP BY loja, prdno, gradeProduto;
 
 
@@ -132,9 +136,9 @@ FROM T_STK AS S
                   USING (prdno)
 WHERE (S.loja = :loja OR :loja = 0)
   AND (:estoque = '<' AND S.qttyTotal < :saldo
-    OR :estoque = '>' AND S.qttyTotal > :saldo
-    OR :estoque = '=' AND S.qttyTotal = :saldo
-    OR :estoque = 'T'
+  OR :estoque = '>' AND S.qttyTotal > :saldo
+  OR :estoque = '=' AND S.qttyTotal = :saldo
+  OR :estoque = 'T'
   );
 
 SELECT loja,

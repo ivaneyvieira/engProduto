@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -20,7 +19,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import kotlin.concurrent.thread
+import java.util.concurrent.TimeUnit
 
 class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
@@ -37,6 +36,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private var updateFlag: Boolean = false
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
@@ -61,8 +61,10 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
 
           addValueChangeListener {
-            if (it.isFromClient)
+            if (it.isFromClient) {
+              updateFlag = true
               viewModel.updateView()
+            }
           }
         }
         init()
@@ -71,6 +73,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -79,6 +82,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -87,6 +91,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -96,6 +101,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -104,6 +110,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -112,6 +119,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -124,6 +132,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = ECaracter.TODOS
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -134,6 +143,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = ELetraDup.TODOS
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -150,6 +160,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = EEstoque.MAIOR
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -160,6 +171,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.value = 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           addValueChangeListener {
+            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -215,7 +227,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
-      saldo = edtSaldo.value ?: 0
+      saldo = edtSaldo.value ?: 0,
+      update = updateFlag
     )
   }
 
@@ -242,14 +255,5 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()
-  }
-
-  override fun execThread(block: () -> Unit) {
-    val ui = UI.getCurrent()
-    thread {
-      ui.access {
-        block()
-      }
-    }
   }
 }

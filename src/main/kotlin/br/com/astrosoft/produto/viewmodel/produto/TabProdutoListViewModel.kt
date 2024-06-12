@@ -19,10 +19,12 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
   }
 
   fun updateView() = viewModel.exec {
-    val filtro = subView.filtro()
-    val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
+    subView.execThread {
+      val filtro = subView.filtro()
+      val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
 
-    subView.updateProdutos(produtos)
+      subView.updateProdutos(produtos)
+    }
   }
 
   fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
@@ -53,5 +55,4 @@ interface ITabProdutoList : ITabView {
   fun filtro(): FiltroProdutoSaldo
   fun updateProdutos(produtos: List<ProdutoSaldo>)
   fun produtosSelecionados(): List<ProdutoSaldo>
-  fun execThread(block: () -> Unit)
 }

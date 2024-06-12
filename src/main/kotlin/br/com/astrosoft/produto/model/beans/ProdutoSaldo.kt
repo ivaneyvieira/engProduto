@@ -43,6 +43,7 @@ data class FiltroProdutoSaldo(
   val grade: Boolean,
   val estoque: EEstoque,
   val saldo: Int,
+  val update: Boolean,
 ){
   fun lojaSigla(): String {
     return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""

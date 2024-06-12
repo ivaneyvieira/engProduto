@@ -2,11 +2,13 @@ package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
+import br.com.astrosoft.framework.view.vaadin.helper.UIThread
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.framework.view.vaadin.helper.updateItens
 import br.com.astrosoft.produto.model.beans.Rota
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant.*
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -63,4 +65,8 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   }
 
   open fun printerUser(): List<String> = emptyList()
+
+  override fun execThread(block: () -> Unit) {
+    UIThread(UI.getCurrent(), block).start()
+  }
 }
