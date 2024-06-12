@@ -177,7 +177,7 @@ private fun dateFieldComponente() = DatePicker().apply {
   setSizeFull()
 }
 
-private fun mesAnoFieldComponente() = ComboBox<String>().apply {
+public fun mesAnoFieldComponente() = ComboBox<String>().apply {
   this.isClearButtonVisible = true
   this.setWidthFull()
   this.setSizeFull()

@@ -1279,6 +1279,50 @@ class QuerySaci : QueryDB(database) {
 
   }
 
+  fun dadosValidade(filtro: FiltroDadosValidade): List<DadosValidade> {
+    val sql = "/sqlSaci/dadosValidade.sql"
+    val ano = when {
+      filtro.ano == 0   -> 0
+      filtro.ano < 2000 -> filtro.ano + 2000
+      else              -> filtro.ano
+    }
+    return query(sql, DadosValidade::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("codigo", filtro.codigo)
+      addOptionalParameter("validade", filtro.validade)
+      addOptionalParameter("mes", filtro.mes)
+      addOptionalParameter("ano", ano)
+      addOptionalParameter("loja", filtro.storeno)
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("caracter", filtro.caracter.value)
+    }
+  }
+
+  fun dadosValidadeInsert(loja: Int, codigo: String): Int {
+    val sql = "/sqlSaci/dadosValidadeInsert.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("codigo", codigo)
+    }.firstOrNull()?.quant ?: 0
+  }
+
+  fun dadosValidadeUpdate(dadosValidade: DadosValidade) {
+    val sql = "/sqlSaci/dadosValidadeUpdate.sql"
+    script(sql) {
+      addOptionalParameter("seq", dadosValidade.seq)
+      addOptionalParameter("validade", dadosValidade.validade)
+      addOptionalParameter("inventario", dadosValidade.inventario)
+      addOptionalParameter("dataEntrada", dadosValidade.dataEntrada.toSaciDate())
+    }
+  }
+
+  fun dadosValidadeDelete(dadosValidade: DadosValidade) {
+    val sql = "/sqlSaci/dadosValidadeDelete.sql"
+    script(sql) {
+      addOptionalParameter("seq", dadosValidade.seq)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
@@ -1294,5 +1338,5 @@ class QuerySaci : QueryDB(database) {
 val saci = QuerySaci()
 
 class Count {
-  var value: Int = 0
+  var quant: Int = 0
 }
