@@ -6,7 +6,6 @@ DO @PESQUISA := :pesquisa;
 DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISALIKE := IF(@PESQUISA NOT REGEXP '[0-9]+', CONCAT('%', @PESQUISA, '%'), '');
 DO @CODIGO := :codigo;
-DO @PRDNO := LPAD(@CODIGO, 16, ' ');
 DO @VALIDADE := :validade;
 DO @GRADE := :grade;
 DO @CARACTER := :caracter;
@@ -36,7 +35,7 @@ FROM sqldados.prd AS P
                     AND (S.no = :loja OR :loja = 0)
 WHERE garantia > 0
   AND tipoGarantia = 2
-  AND (P.no = @PRDNO OR @CODIGO = '')
+  AND (TRIM(P.no) = @CODIGO OR @CODIGO = '')
   AND (IF(tipoGarantia = 2, garantia, 0) = @VALIDADE OR @VALIDADE = 0)
   AND (B.grade = @GRADE OR @GRADE = '')
   AND CASE :caracter
@@ -45,7 +44,7 @@ WHERE garantia > 0
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
-GROUP BY S.no, B.grade;
+GROUP BY S.no, P.no, B.grade;
 
 DROP TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
@@ -95,4 +94,3 @@ FROM sqldados.dadosValidade AS V
                  USING (prdno, grade)
 WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
-  AND (:loja = 0 OR storeno = :loja)

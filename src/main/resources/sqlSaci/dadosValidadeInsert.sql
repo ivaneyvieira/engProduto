@@ -18,9 +18,17 @@ WHERE IF(tipoGarantia = 2, garantia, 0) > 0
   AND (TRIM(P.no) * 1 = :codigo)
 GROUP BY S.no, B.grade;
 
+DELETE
+FROM sqldados.dadosValidade
+WHERE storeno = :loja
+  AND (TRIM(prdno) * 1 = :codigo)
+  AND vencimento = 0
+  AND inventario = 0
+  AND dataEntrada = 0;
+
 INSERT INTO sqldados.dadosValidade(storeno, prdno, grade, vencimento, inventario, dataEntrada)
 SELECT storeno, prdno, grade, vencimento, inventario, dataEntrada
 FROM T_DADOS;
 
-SELECT COUNT(*) as quant
+SELECT COUNT(*) AS quant
 FROM T_DADOS
