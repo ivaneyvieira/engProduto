@@ -15,10 +15,13 @@ import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -41,6 +44,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbCartacer: Select<ECaracter>
+  private lateinit var chkAgrupar: Checkbox
   private lateinit var btnAdiciona: Button
   private lateinit var btnRemover: Button
 
@@ -136,6 +140,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       }
       horizontalBlock {
         isSpacing = true
+        this.alignItems = FlexComponent.Alignment.BASELINE
 
         btnAdiciona = button("Adicionar") {
           this.icon = VaadinIcon.PLUS.create()
@@ -159,6 +164,12 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             onLeftClick {
               viewModel.atualizarTabelas()
             }
+          }
+        }
+
+        chkAgrupar = checkBox("Agrupar") {
+          addValueChangeListener {
+            viewModel.updateView()
           }
         }
       }
@@ -236,6 +247,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
+      agrupar = chkAgrupar.value ?: false
     )
   }
 

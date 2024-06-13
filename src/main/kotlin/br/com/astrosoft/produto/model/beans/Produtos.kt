@@ -51,15 +51,16 @@ class Produtos(
     val prdno = prdno ?: return emptyList()
     val grade = grade ?: return emptyList()
     val filtro = FiltroProdutoInventario(
-        pesquisa = "",
-        codigo = prdno.trim(),
-        validade = 0,
-        grade = grade,
-        caracter = ECaracter.TODOS,
-        mes = 0,
-        ano = 0,
-        storeno = 0,
-      )
+      pesquisa = "",
+      codigo = prdno.trim(),
+      validade = 0,
+      grade = grade,
+      caracter = ECaracter.TODOS,
+      mes = 0,
+      ano = 0,
+      storeno = 0,
+      agrupar = false,
+    )
     return ProdutoInventario.find(filtro).resumo()
   }
 

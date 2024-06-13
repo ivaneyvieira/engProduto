@@ -115,9 +115,13 @@ class ProdutoInventario(
 
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
+      val agrupado = filtro.agrupar
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = LocalDate.of(2024, 6, 1)
-      val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
+      val saidas = ProdutoSaida.findSaidas(filtro, dataInicial).filter {
+        if(agrupado) (it.lojaDestino ?: 0) == 0
+        else true
+      }
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
 
       val produtosSaida = produtos.produtosInventarioSaida(saidas)
@@ -297,6 +301,7 @@ data class FiltroProdutoInventario(
   val mes: Int,
   val ano: Int,
   val storeno: Int,
+  val agrupar: Boolean,
 )
 
 data class ChaveProdutoInventario(
