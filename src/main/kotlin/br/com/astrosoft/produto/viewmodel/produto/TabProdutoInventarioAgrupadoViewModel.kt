@@ -14,35 +14,8 @@ class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoInventario.find(filtro).let { list ->
-        if (filtro.agrupar)
-          list.agrupar()
-        else
-          list
-      }
+      val produtos = ProdutoInventario.find(filtro)
       subView.updateProdutos(produtos)
-    }
-  }
-
-  private fun List<ProdutoInventario>.agrupar(): List<ProdutoInventario> {
-    return this.filter { produto ->
-      produto.eTipo != ETipo.TRA
-    }.groupBy { "${it.prdno} ${it.grade}" }.flatMap { (_, produtoList) ->
-      val list = produtoList.groupBy { it.loja }.map {
-        it.value.firstOrNull()?.estoqueLoja ?: 0
-      }
-
-      val estoqueLoja = list.sum()
-
-      produtoList.groupBy { "${it.vencimento} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
-        .mapNotNull { (_, produtosVenc) ->
-          val produtoVenc = produtosVenc.firstOrNull()
-          produtoVenc?.estoqueLoja = estoqueLoja
-          produtoVenc?.movimento = produtosVenc.sumOf { it.movimento ?: 0 }
-          produtoVenc?.loja = 0
-          produtoVenc?.lojaAbrev = "Todas"
-          produtoVenc
-        }
     }
   }
 

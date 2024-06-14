@@ -31,6 +31,9 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
         checkBox("Inventario") {
           binder.bind(this, UserSaci::produtoInventario.name)
         }
+        checkBox("Agrupado") {
+          binder.bind(this, UserSaci::produtoInventarioAgrupado.name)
+        }
         checkBox("Editor") {
           binder.bind(this, UserSaci::produtoEditor.name)
         }

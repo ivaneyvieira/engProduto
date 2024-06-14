@@ -44,7 +44,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbCartacer: Select<ECaracter>
-  private lateinit var chkAgrupar: Checkbox
   private lateinit var btnAdiciona: Button
   private lateinit var btnRemover: Button
 
@@ -166,12 +165,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
             }
           }
         }
-
-        chkAgrupar = checkBox("Agrupar") {
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
       }
     }
   }
@@ -247,7 +240,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
-      agrupar = chkAgrupar.value ?: false
+      agrupar = false
     )
   }
 

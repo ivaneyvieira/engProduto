@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventarioAgrupado
+import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioAgrupadoViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
@@ -34,7 +35,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel) :
+class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoViewModel) :
   TabPanelGrid<ProdutoInventario>(ProdutoInventario::class),
   ITabProdutoInventarioAgrupado {
   private lateinit var edtPesquisa: TextField
@@ -45,7 +46,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
   private lateinit var edtGrade: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbCartacer: Select<ECaracter>
-  private lateinit var chkAgrupar: Checkbox
   private lateinit var btnAdiciona: Button
   private lateinit var btnRemover: Button
 
@@ -143,20 +143,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
         isSpacing = true
         this.alignItems = FlexComponent.Alignment.BASELINE
 
-        btnAdiciona = button("Adicionar") {
-          this.icon = VaadinIcon.PLUS.create()
-          addClickListener {
-            viewModel.adicionarLinha()
-          }
-        }
-
-        btnRemover = button("Remover") {
-          this.icon = VaadinIcon.TRASH.create()
-          addClickListener {
-            viewModel.removerLinha()
-          }
-        }
-
         downloadExcel(PlanilhaProdutoInventario())
 
         val user = AppConfig.userLogin() as? UserSaci
@@ -165,12 +151,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
             onLeftClick {
               viewModel.atualizarTabelas()
             }
-          }
-        }
-
-        chkAgrupar = checkBox("Agrupar") {
-          addValueChangeListener {
-            viewModel.updateView()
           }
         }
       }
@@ -200,7 +180,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }.mesAnoFieldEditor()
-    this.columnGrid(ProdutoInventario::movimento, header = "Mov", width = "85px").integerFieldEditor()
     this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px")
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px").dateFieldEditor {
@@ -248,7 +227,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
-      agrupar = chkAgrupar.value ?: false
+      agrupar = true
     )
   }
 
@@ -307,11 +286,11 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioViewModel)
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.produtoInventario == true
+    return username?.produtoInventarioAgrupado == true
   }
 
   override val label: String
-    get() = "Inventário"
+    get() = "Agrupado"
 
   override fun updateComponent() {
     viewModel.updateView()

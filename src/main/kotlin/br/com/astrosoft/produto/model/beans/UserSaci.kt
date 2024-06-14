@@ -35,7 +35,7 @@ class UserSaci : IUser {
   var notaEntradaReceber by DelegateAuthorized(14)
   var produtoEditor by DelegateAuthorized(15)
   var notaEntradaRecebido by DelegateAuthorized(16)
-  var nfceExpedicao by DelegateAuthorized(17)
+  var produtoInventarioAgrupado by DelegateAuthorized(17)
   var vendaExpedicao by DelegateAuthorized(18)
   var entRetExpedicao by DelegateAuthorized(19)
   var transfExpedicao by DelegateAuthorized(20)
@@ -288,12 +288,14 @@ class UserSaci : IUser {
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
   var produto
-    get() = produtoList  || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario || produtoEditor || admin
+    get() = produtoList  || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario || produtoEditor ||
+            produtoInventarioAgrupado || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
       produtoEstoqueValidade = value
       produtoInventario = value
+      produtoInventarioAgrupado = value
       produtoEditor = value
     }
   var nota

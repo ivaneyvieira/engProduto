@@ -119,7 +119,7 @@ class ProdutoInventario(
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = LocalDate.of(2024, 6, 1)
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial).filter {
-        if(agrupado) (it.lojaDestino ?: 0) == 0
+        if (agrupado) (it.lojaDestino ?: 0) == 0
         else true
       }
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
@@ -130,6 +130,32 @@ class ProdutoInventario(
       return produtosEntrada
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
+        .let {produtoInventarios ->
+          if(filtro.agrupar) produtoInventarios.agrupar()
+          else produtoInventarios
+        }
+    }
+
+    private fun List<ProdutoInventario>.agrupar(): List<ProdutoInventario> {
+      return this.filter { produto ->
+        produto.eTipo != ETipo.TRA
+      }.groupBy { "${it.prdno} ${it.grade}" }.flatMap { (_, produtoList) ->
+        val list = produtoList.groupBy { it.loja }.map {
+          it.value.firstOrNull()?.estoqueLoja ?: 0
+        }
+
+        val estoqueLoja = list.sum()
+
+        produtoList.groupBy { "${it.vencimento} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
+          .mapNotNull { (_, produtosVenc) ->
+            val produtoVenc = produtosVenc.firstOrNull()
+            produtoVenc?.estoqueLoja = estoqueLoja
+            produtoVenc?.movimento = produtosVenc.sumOf { it.movimento ?: 0 }
+            produtoVenc?.loja = 0
+            produtoVenc?.lojaAbrev = "Todas"
+            produtoVenc
+          }
+      }
     }
 
     private fun List<ProdutoInventario>.produtosInventarioSaida(
