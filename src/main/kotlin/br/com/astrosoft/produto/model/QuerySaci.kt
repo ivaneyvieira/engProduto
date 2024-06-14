@@ -1267,14 +1267,14 @@ class QuerySaci : QueryDB(database) {
   fun updateProdutoValidadeRecebimento() {
     val sql = "/sqlSaci/produtoValidadeEntradaTable.sql"
     script(sql) {
-      addOptionalParameter("dataInicial", 20240501)
+      addOptionalParameter("dataInicial", 20240101)
     }
   }
 
   fun updateProdutoValidadeSaida() {
     val sql = "/sqlSaci/produtoValidadeSaidaTable.sql"
     script(sql) {
-      addOptionalParameter("dataInicial", 20240501)
+      addOptionalParameter("dataInicial", 20240101)
     }
 
   }

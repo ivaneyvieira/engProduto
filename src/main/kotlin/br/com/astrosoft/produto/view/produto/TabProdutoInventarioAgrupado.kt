@@ -169,11 +169,14 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       this.setComparator(Comparator.comparingInt { produto -> produto.loja ?: 0 })
     }
     this.columnGrid(ProdutoInventario::estoqueLoja, header = "Total")
-    this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
+    this.columnGrid(ProdutoInventario::saldo, header = "Mov")
+    this.columnGrid(ProdutoInventario::saldoAcumuladoDepois, header = "Saldo")
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }
-    this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px")
+    this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px"){
+      this.setComparator(Comparator.comparingInt { produto -> produto.eTipo?.pos ?: 0 })
+    }
 
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px")
     columnGrid(ProdutoInventario::validade, header = "Val")
@@ -200,10 +203,8 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       }.sum()
       val totalSaldo = list.sumOf { it.saldo }
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter(totalEstoqueLoja.format())
-      gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter(totalSaldo.format())
     } else {
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter("")
-      gridPanel.getColumnBy(ProdutoInventario::saldo).setFooter("")
     }
   }
 
