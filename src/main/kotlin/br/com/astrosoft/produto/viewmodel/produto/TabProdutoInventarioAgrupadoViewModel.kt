@@ -9,12 +9,17 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import java.time.LocalDate
 
-class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
+class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
 
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoInventario.find(filtro)
+      val produtos = ProdutoInventario.find(filtro).let { list ->
+        if (filtro.agrupar)
+          list.agrupar()
+        else
+          list
+      }
       subView.updateProdutos(produtos)
     }
   }
@@ -95,10 +100,10 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabProdutoInventario
+    get() = viewModel.view.tabProdutoInventarioAgrupado
 }
 
-interface ITabProdutoInventario : ITabView {
+interface ITabProdutoInventarioAgrupado : ITabView {
   fun filtro(): FiltroProdutoInventario
   fun updateProdutos(produtos: List<ProdutoInventario>)
   fun produtosSelecionados(): List<ProdutoInventario>
