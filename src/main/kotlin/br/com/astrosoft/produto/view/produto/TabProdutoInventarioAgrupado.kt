@@ -160,14 +160,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
   override fun Grid<ProdutoInventario>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
-    this.withEditor(
-      ProdutoInventario::class,
-      openEditor = {
-        this.focusEditor(ProdutoInventario::movimento)
-      },
-      closeEditor = {
-        viewModel.salvaInventario(it.bean)
-      })
+
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(ProdutoInventario::codigo, header = "Código")
     this.columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
@@ -179,21 +172,19 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
     this.columnGrid(ProdutoInventario::saldo, header = "Saldo")
     columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
-    }.mesAnoFieldEditor()
+    }
     this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px")
 
-    columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px").dateFieldEditor {
-      it.value = LocalDate.now()
-    }
+    columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px")
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::unidade, header = "Un")
     columnGrid(ProdutoInventario::vendno, header = "For")
 
     this.sort(
-      ProdutoInventario::lojaAbrev.asc,
       ProdutoInventario::codigo.asc,
       ProdutoInventario::grade.asc,
-      ProdutoInventario::vencimentoStr.asc
+      ProdutoInventario::dataEntrada.asc,
+      ProdutoInventario::tipoStr.asc,
     )
 
     this.dataProvider.addDataProviderListener {
@@ -227,7 +218,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
-      agrupar = true
     )
   }
 

@@ -15,13 +15,11 @@ import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -240,7 +238,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ano = edtAno.value ?: 0,
       mes = edtMes.value ?: 0,
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
-      agrupar = false
     )
   }
 
@@ -315,7 +312,6 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
       ByteArrayInputStream(bytes)
     })
     button.text = "Planilha"
-    //button.addThemeVariants(ButtonVariant.LUMO_SMALL)
     add(button)
   }
 

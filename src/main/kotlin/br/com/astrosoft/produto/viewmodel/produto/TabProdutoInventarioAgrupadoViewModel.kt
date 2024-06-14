@@ -14,7 +14,7 @@ class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoInventario.find(filtro)
+      val produtos = ProdutoInventario.findAgrupado(filtro)
       subView.updateProdutos(produtos)
     }
   }

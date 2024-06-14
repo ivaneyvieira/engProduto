@@ -59,7 +59,6 @@ class Produtos(
       mes = 0,
       ano = 0,
       storeno = 0,
-      agrupar = false,
     )
     return ProdutoInventario.find(filtro).resumo()
   }

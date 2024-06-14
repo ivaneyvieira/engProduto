@@ -115,13 +115,9 @@ class ProdutoInventario(
 
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
-      val agrupado = filtro.agrupar
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = LocalDate.of(2024, 6, 1)
-      val saidas = ProdutoSaida.findSaidas(filtro, dataInicial).filter {
-        if (agrupado) (it.lojaDestino ?: 0) == 0
-        else true
-      }
+      val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
 
       val produtosSaida = produtos.produtosInventarioSaida(saidas)
@@ -130,10 +126,46 @@ class ProdutoInventario(
       return produtosEntrada
         .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
-        .let {produtoInventarios ->
-          if(filtro.agrupar) produtoInventarios.agrupar()
-          else produtoInventarios
+    }
+
+    fun findAgrupado(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
+      val dataInicial = LocalDate.of(2024, 6, 1)
+      val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
+      val dataInicialSaida = entradas.mapNotNull { it.date }.minOrNull()
+      val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
+
+      val produtosEntrada = entradas.map { it.toProdutoInventario() }.agrupar()
+      val produtosSaida = produtosEntrada.saidasAgrupadas(saidas).agrupar()
+
+      return produtosSaida
+    }
+
+    private fun List<ProdutoInventario>.saidasAgrupadas(saidas: List<ProdutoSaida>): List<ProdutoInventario>{
+      return sequence {
+        yieldAll(this@saidasAgrupadas)
+        this@saidasAgrupadas.groupBy { "${it.prdno} ${it.grade}" }.forEach {(_, produtoList)->
+          val produto = produtoList.firstOrNull()
+          if(produto != null) {
+            saidas.filter {
+              it.lojaDestino == 0
+              && it.prdno == produto.prdno
+              && it.grade == produto.grade
+              && it.date.toSaciDate() >= produto.dataEntrada.toSaciDate()
+            }.forEach {saida ->
+              val produtoCopy = produto.copy {
+                movimento = saida.qtty ?: 0
+                vencimento = 0
+                vencimentoEdit = 0
+                dataEntrada = saida.date
+                dataEntradaEdit = saida.date
+                eTipo = ETipo.SAI
+                tipoEdit = eTipo?.tipo
+              }
+              yield(produtoCopy)
+            }
+          }
         }
+      }.toList()
     }
 
     private fun List<ProdutoInventario>.agrupar(): List<ProdutoInventario> {
@@ -327,7 +359,6 @@ data class FiltroProdutoInventario(
   val mes: Int,
   val ano: Int,
   val storeno: Int,
-  val agrupar: Boolean,
 )
 
 data class ChaveProdutoInventario(
