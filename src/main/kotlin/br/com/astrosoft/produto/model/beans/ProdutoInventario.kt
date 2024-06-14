@@ -136,13 +136,15 @@ class ProdutoInventario(
     fun findAgrupado(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val dataInicial = LocalDate.of(2024, 5, 1)
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
-      val dataInicialSaida = entradas.mapNotNull { it.date }.minOrNull()
-      val saidas = ProdutoSaida.findSaidas(filtro, dataInicialSaida)
+      //val dataInicialSaida = entradas.mapNotNull { it.date }.minOrNull()
+      //val saidas = ProdutoSaida.findSaidas(filtro, dataInicialSaida)
 
       val produtosEntrada = entradas.map { it.toProdutoInventario() }.agrupar()
-      val produtosSaida = produtosEntrada.saidasAgrupadas(saidas).agrupar()
+      //val produtosSaida = produtosEntrada.saidasAgrupadas(saidas).agrupar()
 
-      return produtosSaida.saldoAcumulado().distribuiVencimento().saldoAcumulado()
+      //return produtosSaida.saldoAcumulado().distribuiVencimento().saldoAcumulado()
+
+      return produtosEntrada
     }
 
     private fun List<ProdutoInventario>.distribuiVencimento(): List<ProdutoInventario> {
