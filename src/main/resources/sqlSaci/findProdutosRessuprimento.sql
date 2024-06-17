@@ -122,6 +122,18 @@ FROM (SELECT O1.*, 1 AS origem
         AND ordno = :ordno) AS D
 GROUP BY storeno, ordno, prdno, grade, seqno;
 
+DROP TEMPORARY TABLE IF EXISTS T_VENC;
+CREATE TEMPORARY TABLE T_VENC
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, GROUP_CONCAT(mesAno) AS vencimentoStrList
+FROM sqldados.produtoEntrada
+WHERE mesAno > 0
+  AND loja = 4
+  AND date >= 20240501
+GROUP BY prdno, grade;
+
 SELECT X.ordno                                                  AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                 AS codigo,
        IFNULL(X.grade, '')                                      AS grade,
@@ -162,8 +174,12 @@ SELECT X.ordno                                                  AS ordno,
        TN.numero                                                AS numeroNota,
        TN.dataNota                                              AS dataNota,
        IF(origem IN (1, 11), 'S', 'N')                          AS origemSaci,
-       IF(origem IN (10, 11), 'S', 'N')                         AS origemApp
+       IF(origem IN (10, 11), 'S', 'N')                         AS origemApp,
+       IF(P.tipoGarantia = 2, P.garantia, 0)                    AS validade,
+       IFNULL(V.vencimentoStrList, '')                          AS vencimentoStrList
 FROM T_OPRD AS X
+       LEFT JOIN T_VENC AS V
+                 USING (prdno, grade)
        INNER JOIN T_ORDS AS N
                   ON N.storeno = X.storeno
                     AND N.no = X.ordno

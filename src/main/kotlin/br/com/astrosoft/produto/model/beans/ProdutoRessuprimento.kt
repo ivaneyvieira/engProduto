@@ -41,8 +41,27 @@ class ProdutoRessuprimento(
   var numeroNota: String?,
   var dataNota: LocalDate?,
   var origemSaci: String?,
-  var origemApp: String?
+  var origemApp: String?,
+  var validade: Int?,
+  var vencimentoStrList: String?,
 ) {
+  val vencimento
+    get() = vencimentoStrList?.split(",")?.lastOrNull()?.toIntOrNull()
+
+  val vencimentoStr = vencimentoToStr(vencimento)
+
+  private fun vencimentoToStr(vencimentoPar: Int?): String {
+    val venc = vencimentoPar ?: 0
+    val vencimentoStr = venc.toString()
+    if (vencimentoStr.length != 6) {
+      return ""
+    } else {
+      val mes = vencimentoStr.substring(4, 6)
+      val ano = vencimentoStr.substring(2, 4)
+      return "$mes/$ano"
+    }
+  }
+
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1
   val selecionadoOrdemREC get() = if (selecionado == EMarcaRessuprimento.REC.num) 0 else 1

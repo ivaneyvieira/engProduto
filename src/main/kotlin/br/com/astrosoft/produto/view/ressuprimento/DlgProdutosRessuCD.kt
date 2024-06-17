@@ -13,6 +13,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoVencimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onLeftClick
@@ -93,6 +95,7 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       produtoRessuprimentoDescricao()
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
+      produtoRessuprimentoValidade()
       produtoRessuprimentoQtPedido().integerFieldEditor()
       produtoRessuprimentoEstoque()
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {

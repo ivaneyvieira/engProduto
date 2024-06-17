@@ -6,24 +6,19 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoInventario
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventario
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoInventarioAgrupado
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioAgrupadoViewModel
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoInventarioViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -46,8 +41,6 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
   private lateinit var edtGrade: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbCartacer: Select<ECaracter>
-  private lateinit var btnAdiciona: Button
-  private lateinit var btnRemover: Button
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -174,7 +167,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
     this.columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }
-    this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px"){
+    this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.eTipo?.pos ?: 0 })
     }
 

@@ -35,6 +35,17 @@ object ProdutoRessuViewColumns {
         this.setHeader("Loc")
       }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVencimento() =
+      columnGrid(ProdutoRessuprimento::vencimentoStr) {
+        this.setHeader("Venc")
+        this.setComparator(Comparator.comparingInt { it.vencimento ?: 0 })
+      }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValidade() =
+      columnGrid(ProdutoRessuprimento::validade) {
+        this.setHeader("Val")
+      }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDataNF() =
       columnGrid(ProdutoRessuprimento::dataNota) {
         this.setHeader("Data")
