@@ -30,6 +30,9 @@ class ProdutoInventario(
   var saldoAcumuladoDepois = 0
   var saldoDisponivel = 0
 
+  val saldoDif: Int
+    get() = if((estoqueLoja ?: 0) > saldo) saldo else estoqueLoja ?: 0
+
   var eTipo: ETipo?
     get() = ETipo.entries.firstOrNull { it.tipo == tipo }
     set(value) {

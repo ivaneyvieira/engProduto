@@ -168,10 +168,10 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
     this.columnGrid(ProdutoInventario::lojaAbrev, header = "Loja", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.loja ?: 0 })
     }
-    this.columnGrid(ProdutoInventario::estoqueLoja, header = "Total")
-    this.columnGrid(ProdutoInventario::saldo, header = "Mov")
-    this.columnGrid(ProdutoInventario::saldoAcumuladoDepois, header = "Saldo")
-    columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
+    this.columnGrid(ProdutoInventario::estoqueLoja, header = "Est")
+    this.columnGrid(ProdutoInventario::saldo, header = "Ent")
+    this.columnGrid(ProdutoInventario::saldoDif, header = "Saldo")
+    this.columnGrid(ProdutoInventario::vencimentoStr, header = "Venc", width = "130px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
     }
     this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px"){

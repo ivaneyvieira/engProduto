@@ -48,7 +48,7 @@ FROM sqldados.nf AS N
 WHERE N.issuedate >= :dataInicial
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.status <> 1
-GROUP BY lojaOrigem, lojaDestino, abrevDestino, prdno, grade, date;
+GROUP BY lojaOrigem, lojaDestino, prdno, grade, date;
 
 DROP TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
