@@ -16,7 +16,6 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoVencimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoSepViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
