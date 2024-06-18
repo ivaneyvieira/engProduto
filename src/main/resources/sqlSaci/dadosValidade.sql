@@ -95,4 +95,6 @@ FROM T_PRD AS P
 WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:mes = 0 OR MID(vencimento, 5, 6) = :mes)
   AND (@PESQUISA = '' OR
-       descricao LIKE @PESQUISALIKE)
+       descricao LIKE @PESQUISALIKE OR
+       vendno = @PESQUISANUM OR
+       unidade = @PESQUISA)
