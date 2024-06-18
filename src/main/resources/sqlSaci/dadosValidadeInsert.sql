@@ -5,7 +5,7 @@ SELECT S.no                AS storeno,
        IFNULL(B.grade, '') AS grade,
        0                   AS vencimento,
        0                   AS inventario,
-       0                   AS dataEntrada
+       CURRENT_DATE * 1    AS dataEntrada
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdbar AS B
                  ON P.no = B.prdno
@@ -23,9 +23,7 @@ DELETE
 FROM sqldados.dadosValidade
 WHERE storeno = :loja
   AND (TRIM(prdno) * 1 = :codigo)
-  AND vencimento = 0
-  AND inventario = 0
-  AND dataEntrada = 0;
+  AND inventario = 0;
 
 INSERT INTO sqldados.dadosValidade(storeno, prdno, grade, vencimento, inventario, dataEntrada)
 SELECT storeno, prdno, grade, vencimento, inventario, dataEntrada

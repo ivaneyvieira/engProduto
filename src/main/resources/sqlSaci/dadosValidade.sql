@@ -3,8 +3,8 @@ USE sqldados;
 SET SQL_MODE = '';
 
 DO @PESQUISA := :pesquisa;
-DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISALIKE := IF(@PESQUISA NOT REGEXP '[0-9]+', CONCAT('%', @PESQUISA, '%'), '');
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, '');
+DO @PESQUISALIKE := IF(@PESQUISA NOT REGEXP '^[0-9]+$', CONCAT('%', @PESQUISA, '%'), '');
 DO @CODIGO := :codigo;
 DO @VALIDADE := :validade;
 DO @GRADE := :grade;
@@ -71,23 +71,23 @@ SELECT prdno, grade, SUM(estoqueLoja) AS estoqueTotal
 FROM T_STK
 GROUP BY prdno, grade;
 
-SELECT seq                                                    AS seq,
-       storeno                                                AS loja,
-       abrevLoja                                              AS abrevLoja,
-       prdno                                                  AS prdno,
-       TRIM(prdno) * 1                                        AS codigo,
-       P.descricao                                            AS descricao,
-       P.grade                                                AS grade,
-       IFNULL(S.estoqueLoja, 0)                               AS estoqueLoja,
-       MID(V.vencimento, 1, 6) * 1                            AS vencimento,
-       inventario                                             AS inventario,
-       CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
-       validade                                               AS validade,
-       unidade                                                AS unidade,
-       vendno                                                 AS vendno
-FROM sqldados.dadosValidade AS V
-       INNER JOIN T_PRD AS P
-                  USING (storeno, prdno, grade)
+SELECT IFNULL(V.seq, 0)                                         AS seq,
+       storeno                                                  AS loja,
+       abrevLoja                                                AS abrevLoja,
+       prdno                                                    AS prdno,
+       TRIM(prdno) * 1                                          AS codigo,
+       P.descricao                                              AS descricao,
+       P.grade                                                  AS grade,
+       IFNULL(S.estoqueLoja, 0)                                 AS estoqueLoja,
+       MID(V.vencimento, 1, 6) * 1                              AS vencimento,
+       V.inventario                                             AS inventario,
+       CAST(IF(V.dataEntrada = 0, NULL, V.dataEntrada) AS DATE) AS dataEntrada,
+       validade                                                 AS validade,
+       unidade                                                  AS unidade,
+       vendno                                                   AS vendno
+FROM T_PRD AS P
+       LEFT JOIN sqldados.dadosValidade AS V
+                 USING (storeno, prdno, grade)
        LEFT JOIN T_STK AS S
                  USING (storeno, prdno, grade)
        LEFT JOIN T_STK_TOTAL AS ST

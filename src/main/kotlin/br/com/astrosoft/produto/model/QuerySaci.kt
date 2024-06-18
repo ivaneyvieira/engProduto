@@ -1311,6 +1311,9 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/dadosValidadeUpdate.sql"
     script(sql) {
       addOptionalParameter("seq", dadosValidade.seq)
+      addOptionalParameter("storeno", dadosValidade.loja)
+      addOptionalParameter("prdno", dadosValidade.prdno)
+      addOptionalParameter("grade", dadosValidade.grade)
       addOptionalParameter("vencimento", dadosValidade.vencimento)
       addOptionalParameter("inventario", dadosValidade.inventario)
       addOptionalParameter("dataEntrada", dadosValidade.dataEntrada.toSaciDate())
