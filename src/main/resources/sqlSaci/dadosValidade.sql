@@ -33,9 +33,7 @@ FROM sqldados.prd AS P
        INNER JOIN sqldados.store AS S
                   ON S.no IN (2, 3, 4, 5, 8)
                     AND (S.no = :loja OR :loja = 0)
-WHERE garantia > 0
-  AND tipoGarantia = 2
-  AND (TRIM(P.no) = @CODIGO OR @CODIGO = '')
+WHERE (TRIM(P.no) = @CODIGO OR @CODIGO = '')
   AND (IF(tipoGarantia = 2, garantia, 0) = @VALIDADE OR @VALIDADE = 0)
   AND (B.grade = @GRADE OR @GRADE = '')
   AND CASE :caracter
@@ -44,6 +42,9 @@ WHERE garantia > 0
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
+  AND (@PESQUISA = '' OR
+       P.name LIKE @PESQUISALIKE OR
+       P.mfno = @PESQUISANUM)
 GROUP BY S.no, P.no, B.grade;
 
 DROP TABLE IF EXISTS T_STK;
