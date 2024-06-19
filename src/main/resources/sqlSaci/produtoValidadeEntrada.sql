@@ -35,6 +35,8 @@ WHERE date >= :dataInicial
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
+  AND ((:ano = 0) OR (MID(mesAno, 1, 4) = :ano))
+  AND ((:mes = 0) OR (MID(mesAno, 5, 6) = :mes))
   AND (@PESQUISA = '' OR
        descricao LIKE @PESQUISALIKE OR
        fornecedorAbrev LIKE @PESQUISALIKE OR
