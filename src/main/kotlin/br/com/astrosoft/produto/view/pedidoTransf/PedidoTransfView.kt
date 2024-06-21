@@ -20,6 +20,7 @@ class PedidoTransfView : ViewLayout<PedidoTransfViewModel>(), IPedidoTransfView 
   override val tabPedidoTransfReserva = TabPedidoTransfReserva(viewModel.tabPedidoTransfReservaViewModel)
   override val tabPedidoTransfImprimir = TabPedidoTransfImprimir(viewModel.tabPedidoTransfImprimirViewModel)
   override val tabPedidoTransfAutorizada = TabPedidoTransfAutorizada(viewModel.tabPedidoTransfAutorizadaViewModel)
+  override val tabPedidoTransfCD5A = TabPedidoTransfCD5A(viewModel.tabPedidoTransfCD5AViewModel)
   override val tabPedidoTransfEnt = TabPedidoTransfEnt(viewModel.tabPedidoTransfEntViewModel)
   override val tabPedidoTransfRessu4 = TabPedidoTransfRessu4(viewModel.tabPedidoTransfRessu4ViewModel)
   override val tabPedidoTransfUsr = TabPedidoTransfUsr(viewModel.tabPedidoTransfUsrViewModel)

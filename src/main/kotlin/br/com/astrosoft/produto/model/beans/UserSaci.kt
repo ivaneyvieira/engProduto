@@ -36,7 +36,7 @@ class UserSaci : IUser {
   var produtoEditor by DelegateAuthorized(15)
   var notaEntradaRecebido by DelegateAuthorized(16)
   var produtoInventarioAgrupado by DelegateAuthorized(17)
-  var vendaExpedicao by DelegateAuthorized(18)
+  var pedidoTransfCD5A by DelegateAuthorized(18)
   var entRetExpedicao by DelegateAuthorized(19)
   var transfExpedicao by DelegateAuthorized(20)
   var vendaFExpedicao by DelegateAuthorized(21)
@@ -64,6 +64,7 @@ class UserSaci : IUser {
   var acertoSaida by DelegateAuthorized(41)
   var devCliSemPrd by DelegateAuthorized(42)
   var devCliSemPrdInsert by DelegateAuthorized(43)
+
   //var devCliSemPrdDelete by DelegateAuthorized(44)
   var devCliVenda by DelegateAuthorized(45)
   var autorizaDevolucao by DelegateAuthorized(46)
@@ -288,7 +289,7 @@ class UserSaci : IUser {
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
   var produto
-    get() = produtoList  || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario || produtoEditor ||
+    get() = produtoList || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario || produtoEditor ||
             produtoInventarioAgrupado || admin
     set(value) {
       produtoList = value
@@ -337,12 +338,13 @@ class UserSaci : IUser {
     get() = pedidoCD || pedidoEnt || admin
   var pedidoTransf
     get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt ||
-            pedidoTransfAutorizada || admin
+            pedidoTransfAutorizada || pedidoTransfCD5A || admin
     set(value) {
       pedidoTransfReserva = value
       pedidoTransfRessu4 = value
       pedidoTransfEnt = value
       pedidoTransfAutorizada = value
+      pedidoTransfCD5A = value
     }
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
