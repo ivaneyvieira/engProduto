@@ -11,7 +11,7 @@ import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
-    val pedidos = PedidoTransf.findTransf(filtro)
+    val pedidos = PedidoTransf.findTransf(filtro, false)
     subView.updatePedidos(pedidos)
   }
 

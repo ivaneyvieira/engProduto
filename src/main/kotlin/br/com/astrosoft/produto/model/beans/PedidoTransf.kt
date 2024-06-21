@@ -160,7 +160,7 @@ class PedidoTransf(
   }
 
   companion object {
-    fun findTransf(filtro: FiltroPedidoTransf) = saci.findPedidoTransf(filtro)
+    fun findTransf(filtro: FiltroPedidoTransf, filtraCD5A: Boolean) = saci.findPedidoTransf(filtro, filtraCD5A)
   }
 }
 

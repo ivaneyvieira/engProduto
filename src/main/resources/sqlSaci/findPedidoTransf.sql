@@ -112,6 +112,7 @@ WHERE N.date > 20231106
         WHEN 'T' THEN TRUE
         ELSE FALSE
       END
+  AND (L.localizacao LIKE 'CD5A%' OR :filtraCD5A = 'N')
 GROUP BY N.storeno, N.ordno;
 
 SELECT lojaNoOri,
