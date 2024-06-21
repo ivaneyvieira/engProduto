@@ -14,6 +14,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::pedidoTransfReserva, "Reserva")
     columnGrid(UserSaci::pedidoTransfAutorizada, "Autorizada")
+    columnGrid(UserSaci::pedidoTransfCD5A, "Autorizada")
     columnGrid(UserSaci::pedidoTransfEnt, "Entregue")
     columnGrid(UserSaci::pedidoTransfRessu4, "Ressu4")
   }
@@ -25,6 +26,9 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
       }
       checkBox("Autorizada") {
         binder.bind(this, UserSaci::pedidoTransfAutorizada.name)
+      }
+      checkBox("CD54") {
+        binder.bind(this, UserSaci::pedidoTransfCD5A.name)
       }
       checkBox("Entregue") {
         binder.bind(this, UserSaci::pedidoTransfEnt.name)
