@@ -15,10 +15,11 @@ class DadosCliente {
   var ddd: String = ""
   var telefone: String = ""
   var celular: String = ""
+  var rota: String? = ""
 
   val fone: String
     get() {
-      val dddStr = if(ddd.isEmpty()) "" else "($ddd)"
+      val dddStr = if (ddd.isEmpty()) "" else "($ddd)"
       val numeros = listOf(telefone, celular).distinct().filter { it.isNotEmpty() }.joinToString("/")
       return "$dddStr $numeros"
     }

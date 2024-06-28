@@ -44,6 +44,7 @@ class TabCliente(val viewModel: TabClienteViewModel) :
     columnGrid(DadosCliente::rg, header = "RG")
     columnGrid(DadosCliente::endereco, header = "Endereço").expand()
     columnGrid(DadosCliente::bairro, header = "Bairro")
+    columnGrid(DadosCliente::rota, header = "Rota")
     columnGrid(DadosCliente::cidade, header = "Cidade")
     columnGrid(DadosCliente::estado, header = "Estado")
     columnGrid(DadosCliente::fone, header = "Fone")

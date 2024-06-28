@@ -31,8 +31,12 @@ SELECT C.no                                       AS custno,
        state1                                     AS estado,
        TRIM(MID(ddd, 1, 5)) * 1                   AS ddd,
        TRIM(MID(tel, 1, 10)) * 1                  AS telefone,
-       IF(celular = 0, '', CAST(celular AS CHAR)) AS celular
+       IF(celular = 0, '', CAST(celular AS CHAR)) AS celular,
+       IF(C.city1 = 'TIMON', 'Timon', R.rota)     AS rota
 FROM sqldados.custp AS C
+       LEFT JOIN sqldados.rotasAdd AS R
+                 ON C.city1 = R.cidade
+                   AND (C.nei1 = R.bairro)
 WHERE (@PESQUISA = '' OR
        C.no = @PESQUISA_NUM OR
        C.name LIKE @PESQUISA_LIKE OR
@@ -44,7 +48,8 @@ WHERE (@PESQUISA = '' OR
        C.state1 LIKE @PESQUISA_START OR
        ddd LIKE @PESQUISA_START OR
        TRIM(MID(tel, 1, 10)) LIKE @PESQUISA_START OR
-       IF(celular = 0, '', CAST(celular AS CHAR)) LIKE @PESQUISA_LIKE);
+       IF(celular = 0, '', CAST(celular AS CHAR)) LIKE @PESQUISA_LIKE OR
+       R.rota LIKE @PESQUISA_LIKE);
 
 
 SELECT custno                                       AS custno,
@@ -58,5 +63,6 @@ SELECT custno                                       AS custno,
        estado                                       AS estado,
        IF(ddd = 0, '', CAST(ddd AS CHAR))           AS ddd,
        IF(telefone = 0, '', CAST(telefone AS CHAR)) AS telefone,
-       celular                                      AS celular
+       celular                                      AS celular,
+       rota                                         AS rota
 FROM T_CLI
