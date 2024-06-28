@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.layout.AppLayoutAbstract
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
+import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.notaSaida.NotaView
@@ -17,7 +18,9 @@ import br.com.astrosoft.produto.view.vendaRef.VendaRefView
 import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.icon.VaadinIcon.*
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder.PEOPLE
 
 class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
@@ -52,6 +55,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = REPLY,
         title = "Dev Cliente",
         routeClass = DevClienteView::class,
+      )
+      if (userSaci?.cliente == true) route(
+        icon = USER,
+        title = "Cliente",
+        routeClass = ClienteView::class,
       )
       if (userSaci?.vendaRef == true) route(
         icon = SHOP,

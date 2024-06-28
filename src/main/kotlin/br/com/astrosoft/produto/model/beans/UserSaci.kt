@@ -37,7 +37,7 @@ class UserSaci : IUser {
   var notaEntradaRecebido by DelegateAuthorized(16)
   var produtoInventarioAgrupado by DelegateAuthorized(17)
   var pedidoTransfCD5A by DelegateAuthorized(18)
-  var entRetExpedicao by DelegateAuthorized(19)
+  var clienteCadastro by DelegateAuthorized(19)
   var transfExpedicao by DelegateAuthorized(20)
   var vendaFExpedicao by DelegateAuthorized(21)
 
@@ -365,6 +365,12 @@ class UserSaci : IUser {
 
   val fornecedor
     get() = produtoList
+
+  var cliente
+    get() = clienteCadastro || admin
+    set(value) {
+      clienteCadastro = value
+    }
 
   var devCliente
     get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito ||

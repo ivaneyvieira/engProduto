@@ -1299,7 +1299,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun dadosValidadeInsert(loja: Int, codigo: String, grade : String): Int {
+  fun dadosValidadeInsert(loja: Int, codigo: String, grade: String): Int {
     val sql = "/sqlSaci/dadosValidadeInsert.sql"
     return query(sql, Count::class) {
       addOptionalParameter("loja", loja)
@@ -1325,6 +1325,13 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/dadosValidadeDelete.sql"
     script(sql) {
       addOptionalParameter("seq", dadosValidade.seq)
+    }
+  }
+
+  fun selectCliente(filtro: FiltroDadosCliente): List<DadosCliente> {
+    val sql = "/sqlSaci/selectClientes.sql"
+    return query(sql, DadosCliente::class){
+      this.addOptionalParameter("pesquisa", filtro.pesquisa)
     }
   }
 
