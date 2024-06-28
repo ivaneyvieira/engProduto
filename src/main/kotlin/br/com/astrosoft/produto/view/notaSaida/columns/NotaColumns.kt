@@ -63,7 +63,6 @@ object NotaColumns {
 
   fun Grid<NotaSaida>.colunaRota() = columnGrid(NotaSaida::rota) {
     this.setHeader("Rota")
-    this.isVisible = false
   }
 
   fun Grid<NotaSaida>.colunaAgendado() = columnGrid(NotaSaida::agendado) {

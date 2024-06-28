@@ -35,7 +35,6 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaSep {
-  private var colRota: Grid.Column<NotaSaida>? = null
   private var dlgProduto: DlgProdutosSep? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
@@ -81,7 +80,6 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
-        colRota?.isVisible = it.value == ETipoNotaFiscal.ENTRE_FUT
       }
     }
     edtPesquisa = textField("Pesquisa") {
@@ -117,10 +115,10 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
         viewModel.updateView()
       }
     }
+    colunaRota()
     colunaNFNota()
     colunaNFData()
     colunaHora()
-    colRota = colunaRota()
     colunaAgendado()
     colunaNFCliente()
     colunaNomeCliente()
