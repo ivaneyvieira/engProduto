@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.cliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.format
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import net.sf.dynamicreports.report.builder.DynamicReports.col
 
 class TabCliente(val viewModel: TabClienteViewModel) :
   TabPanelGrid<DadosCliente>(DadosCliente::class), ITabCliente {
@@ -35,6 +37,7 @@ class TabCliente(val viewModel: TabClienteViewModel) :
     this.addClassName("styling")
     this.format()
 
+    addColumnSeq("Seq")
     columnGrid(DadosCliente::custno, header = "Número")
     columnGrid(DadosCliente::nome, header = "Nome").expand()
     columnGrid(DadosCliente::cpfCnpj, header = "CPF/CNPJ")
