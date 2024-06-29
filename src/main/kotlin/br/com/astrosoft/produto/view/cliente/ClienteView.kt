@@ -18,7 +18,8 @@ import jakarta.annotation.security.PermitAll
 class ClienteView() : ViewLayout<ClienteViewModel>(), IClienteView {
   override val viewModel = ClienteViewModel(this)
 
-  override val tabCadastro = TabCadastro(viewModel.tabCaastroViewModel)
+  override val tabCadastro = TabCadastro(viewModel.tabCadastroViewModel)
+  override val tabClienteUsr = TabClienteUsr(viewModel.tabClienteUsrViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
