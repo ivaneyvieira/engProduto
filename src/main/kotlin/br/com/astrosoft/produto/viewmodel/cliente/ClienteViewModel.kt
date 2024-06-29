@@ -2,17 +2,15 @@ package br.com.astrosoft.produto.viewmodel.cliente
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.*
-import br.com.astrosoft.produto.viewmodel.devCliente.*
 
 class ClienteViewModel(view: IClienteView) : ViewModel<IClienteView>(view) {
-  val tabClienteViewModel = TabClienteViewModel(this)
+  val tabCaastroViewModel = TabCadastroViewModel(this)
 
   override fun listTab() = listOf(
-    view.tabCliente,
+    view.tabCadastro,
   )
 }
 
 interface IClienteView : IView {
-  val tabCliente: ITabCliente
+  val tabCadastro: ITabCadastro
 }

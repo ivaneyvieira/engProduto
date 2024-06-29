@@ -3,12 +3,11 @@ package br.com.astrosoft.produto.viewmodel.cliente
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.DadosCliente
 import br.com.astrosoft.produto.model.beans.FiltroDadosCliente
-import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
 import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCliente
 
-class TabClienteViewModel(val viewModel: ClienteViewModel) {
+class TabCadastroViewModel(val viewModel: ClienteViewModel) {
   val subView
-    get() = viewModel.view.tabCliente
+    get() = viewModel.view.tabCadastro
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
@@ -28,7 +27,7 @@ class TabClienteViewModel(val viewModel: ClienteViewModel) {
   }
 }
 
-interface ITabCliente : ITabView {
+interface ITabCadastro : ITabView {
   fun filtro(): FiltroDadosCliente
   fun updateNotas(movManualList: List<DadosCliente>)
   fun clientesSelecionados(): List<DadosCliente>

@@ -10,8 +10,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.DadosCliente
 import br.com.astrosoft.produto.model.beans.FiltroDadosCliente
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.cliente.ITabCliente
-import br.com.astrosoft.produto.viewmodel.cliente.TabClienteViewModel
+import br.com.astrosoft.produto.viewmodel.cliente.ITabCadastro
+import br.com.astrosoft.produto.viewmodel.cliente.TabCadastroViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabCliente(val viewModel: TabClienteViewModel) :
-  TabPanelGrid<DadosCliente>(DadosCliente::class), ITabCliente {
+class TabCadastro(val viewModel: TabCadastroViewModel) :
+  TabPanelGrid<DadosCliente>(DadosCliente::class), ITabCadastro {
 
   lateinit var edtPesquisa: TextField
 
