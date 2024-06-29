@@ -57,7 +57,7 @@ class ProdutoLayout : AppLayoutAbstract() {
         routeClass = DevClienteView::class,
       )
       if (userSaci?.cliente == true) route(
-        icon = USER,
+        icon = SMILEY_O,
         title = "Cliente",
         routeClass = ClienteView::class,
       )
