@@ -24,6 +24,7 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     printLine()
   }
 
+
   init {
     column(ProdutoNFS::codigo, "Codigo", 6)
     column(ProdutoNFS::descricao, "Descricao", 36)
