@@ -9,6 +9,7 @@ class NotaSaida(
   var pdvno: Int,
   var xano: Long,
   var numero: Int,
+  var pedido: String?,
   var serie: String?,
   var cliente: Int?,
   var nomeCliente: String?,
