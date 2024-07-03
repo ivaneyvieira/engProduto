@@ -59,6 +59,9 @@ object NotaColumns {
 
   fun Grid<NotaSaida>.colunaHora() = columnGrid(NotaSaida::hora) {
     this.setHeader("Hora")
+    this.setComparator{t ->
+      t.hotaTime
+    }
   }
 
   fun Grid<NotaSaida>.colunaRota() = columnGrid(NotaSaida::rota) {
