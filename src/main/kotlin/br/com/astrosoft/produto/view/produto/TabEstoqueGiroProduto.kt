@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueGiroViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_DS_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MF_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_MR_TT
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Ncm
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_PK_TT
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Rotulo
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_TM_TT
@@ -102,6 +103,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     produto_Rotulo()
     produto_tipo()
     produto_cl()
+    produto_Ncm()
   }
 
   override fun estoque(): EEstoqueList {

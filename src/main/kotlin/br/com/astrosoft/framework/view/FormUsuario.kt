@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.data.binder.Binder
 
-class FormUsuario(val userSaci: UserSaci, val init : FormUsuario.() -> Unit) : FormLayout() {
+class FormUsuario(userSaci: UserSaci, val init : FormUsuario.() -> Unit) : FormLayout() {
   val binder: Binder<UserSaci> = Binder(UserSaci::class.java)
 
   init {
@@ -12,4 +12,6 @@ class FormUsuario(val userSaci: UserSaci, val init : FormUsuario.() -> Unit) : F
     init()
   }
 
+  val userSaci: UserSaci
+    get() = binder.bean
 }
