@@ -106,6 +106,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     produto_Ncm()
   }
 
+
   override fun estoque(): EEstoqueList {
     return cmbEstoqueFiltro.value ?: EEstoqueList.TODOS
   }
