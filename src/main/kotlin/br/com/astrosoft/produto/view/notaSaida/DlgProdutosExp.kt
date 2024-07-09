@@ -17,6 +17,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
@@ -37,7 +38,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       button("CD") {
         isEnabled = nota.cancelada == "N"
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marcaCD()
           val user = AppConfig.userLogin() as? UserSaci
           val marca = if (user?.admin == true)
@@ -50,7 +51,8 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       }
       button("Imprimir") {
         this.icon = VaadinIcon.PRINT.create()
-        onLeftClick {
+        this.isVisible = nota.cancelada == "N"
+        onClick {
           val itensSelecionados = gridDetail.selectedItems.toList()
           viewModel.imprimeProdutosNota(nota, itensSelecionados)
         }
