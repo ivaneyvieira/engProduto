@@ -196,7 +196,7 @@ SELECT N.storeno                                                              AS
        X.c5,
        X.c4,
        IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                AS retiraFutura,
-       IF(CA.city = 'TIMON', 'Timon', RA.rota)                                AS rota,
+       IF(AR.city = 'TIMON', 'Timon', AR.name)                                AS rota,
        CA.addr                                                                AS enderecoCliente,
        CA.nei                                                                 AS bairroCliente,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado
@@ -229,8 +229,8 @@ FROM sqldados.nf AS N
        LEFT JOIN sqldados.rotasAdd AS RA
                  ON RA.cidade = 'TERESINA'
                    AND RA.bairro = TRIM(MID(RT.name, LOCATE(' ', RT.name, 1), 100))
-  /*LEFT JOIN sqldados.area AS AR
-            ON AR.no = RT.areano*/
+       LEFT JOIN sqldados.area AS AR
+                 ON AR.no = RT.areano
        LEFT JOIN sqldados.eordrk AS OBS
                  ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
