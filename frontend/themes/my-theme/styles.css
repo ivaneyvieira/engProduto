@@ -11,7 +11,11 @@ vaadin-grid.styling::part(primary) {
 }
 
 vaadin-grid.styling::part(amarelo) {
-    color: yellow;
+    color: var(--lumo-warning-color);
+}
+
+vaadin-grid.styling::part(vermelho) {
+    color: var(--lumo-error-color);
 }
 
 vaadin-grid.styling::part(azul) {
