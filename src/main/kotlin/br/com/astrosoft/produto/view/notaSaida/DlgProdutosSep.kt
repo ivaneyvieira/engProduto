@@ -17,6 +17,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
@@ -35,8 +36,9 @@ class DlgProdutosSep(val viewModel: TabNotaSepViewModel, val nota: NotaSaida) {
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da notaSaida ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
       button("Imprimir") {
+        this.isVisible = nota.cancelada == "N"
         this.icon = VaadinIcon.PRINT.create()
-        onLeftClick {
+        onClick {
           val itensSelecionados = gridDetail.selectedItems.toList()
           viewModel.imprimeProdutosNota(nota, itensSelecionados)
         }

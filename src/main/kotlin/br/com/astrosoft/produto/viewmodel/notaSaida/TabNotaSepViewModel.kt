@@ -33,6 +33,8 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
     if(itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
+    if(nota.cancelada == "S")
+      fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
     val report = if(tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
