@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
-import br.com.astrosoft.produto.model.zpl.EtiquetaChave
+import br.com.astrosoft.produto.model.saci
 
 class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -31,16 +31,16 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   }
 
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if(itensSelecionados.isEmpty())
+    if (itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
-    if(nota.cancelada == "S")
+    if (nota.cancelada == "S")
       fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
-    val report = if(tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
+    val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
       dados = itensSelecionados,
-      printer = subView.printerPreview(loja = nota.loja){
-        itensSelecionados.forEach {produto ->
+      printer = subView.printerPreview(loja = nota.loja) {
+        itensSelecionados.forEach { produto ->
           produto.marcaImpressao()
         }
       },
@@ -50,6 +50,19 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun save(bean: NotaSaida?) {
     bean ?: return
     bean.save()
+    updateView()
+  }
+
+  fun formAutoriza(nota: NotaSaida) {
+    subView.formTransportado(nota)
+  }
+
+  fun transportadoNota(nota: NotaSaida, numero: Int) = viewModel.exec {
+    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    if (funcionario.funcao != "MOTORISTA")
+      fail("Funcionário não é motorista")
+    nota.empnoMotorista = funcionario.codigo
+    nota.save()
     updateView()
   }
 
@@ -63,4 +76,5 @@ interface ITabNotaSep : ITabView {
   fun findNota(): NotaSaida?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
+  fun formTransportado(nota: NotaSaida)
 }

@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendado
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaEntrega
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaMotoristaSing
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFEntregaRetira
@@ -20,6 +21,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCli
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
+import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -130,6 +132,10 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaAgendado()
     colunaPedido()
     colunaEntrega().dateFieldEditor()
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+      viewModel.formAutoriza(pedido)
+    }
+    colunaMotoristaSing()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
@@ -180,6 +186,13 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
 
   override fun produtosSelcionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun formTransportado(nota: NotaSaida) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Transportado Por", form = form) {
+      viewModel.transportadoNota(nota, form.numero)
+    }
   }
 
   override fun isAuthorized(): Boolean {

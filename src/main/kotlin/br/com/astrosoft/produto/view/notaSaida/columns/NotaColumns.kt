@@ -80,6 +80,10 @@ object NotaColumns {
     this.setHeader("Entrega")
   }
 
+  fun Grid<NotaSaida>.colunaMotoristaSing() = columnGrid(NotaSaida::nomeMotorista) {
+    this.setHeader("Motorista")
+  }
+
   fun Grid<NotaSaida>.colunaLoginEnt() = columnGrid(NotaSaida::usuarioEntrega) {
     this.setHeader("Login")
   }

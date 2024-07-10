@@ -1,7 +1,6 @@
-USE sqldados;
-
 UPDATE sqldados.nf
-SET l16 = :entrada
+SET l16 = :entrega,
+    s16 = :empnoM
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano

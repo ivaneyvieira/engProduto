@@ -200,7 +200,9 @@ SELECT N.storeno                                                              AS
        CA.addr                                                                AS enderecoCliente,
        CA.nei                                                                 AS bairroCliente,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
-       CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega
+       CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
+       M.no                                                                   AS empnoMotorista,
+       M.sname                                                                AS nomeMotorista
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -234,6 +236,8 @@ FROM sqldados.nf AS N
                  ON AR.no = RT.areano
        LEFT JOIN sqldados.eordrk AS OBS
                  ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
+       LEFT JOIN sqldados.emp AS M
+                 ON N.s16 = M.no
 WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
@@ -306,7 +310,9 @@ SELECT Q.loja,
        SUM(X.s11 = 2) AS countEnt,
        SUM(X.s10 = 1) AS countImp,
        SUM(X.s10 = 0) AS countNImp,
-       retiraFutura   AS retiraFutura
+       retiraFutura   AS retiraFutura,
+       empnoMotorista,
+       nomeMotorista
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja

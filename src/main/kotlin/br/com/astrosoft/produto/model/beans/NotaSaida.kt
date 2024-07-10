@@ -40,7 +40,9 @@ class NotaSaida(
   var agendado: String?,
   var entrega: LocalDate?,
   var enderecoCliente: String?,
-  var bairroCliente: String?
+  var bairroCliente: String?,
+  var empnoMotorista: Int?,
+  var nomeMotorista: String?,
 ) {
   val hotaTime
     get() = hora?.toString() ?: ""
