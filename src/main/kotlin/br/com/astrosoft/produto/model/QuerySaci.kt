@@ -357,6 +357,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+
   fun findRessuprimento(filtro: FiltroRessuprimento, locais: List<String>): List<Ressuprimento> {
     val sql = "/sqlSaci/findRessuprimento.sql"
     return query(sql, Ressuprimento::class) {
