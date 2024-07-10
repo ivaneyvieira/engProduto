@@ -72,6 +72,10 @@ object NotaColumns {
     this.setHeader("Agendado")
   }
 
+  fun Grid<NotaSaida>.colunaPedido() = columnGrid(NotaSaida::pedido) {
+    this.setHeader("Pedido")
+  }
+
   fun Grid<NotaSaida>.colunaEntrega() = columnGrid(NotaSaida::entrega) {
     this.setHeader("Entrega")
   }

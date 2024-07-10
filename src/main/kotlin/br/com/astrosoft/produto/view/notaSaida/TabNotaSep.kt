@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
@@ -127,6 +128,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFData()
     colunaHora()
     colunaAgendado()
+    colunaPedido()
     colunaEntrega().dateFieldEditor()
     colunaNFCliente()
     colunaNomeCliente()
