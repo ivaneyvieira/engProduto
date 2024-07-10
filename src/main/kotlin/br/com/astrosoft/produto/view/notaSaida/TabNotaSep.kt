@@ -2,11 +2,10 @@ package br.com.astrosoft.produto.view.notaSaida
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendado
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaEntrega
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
@@ -25,6 +24,8 @@ import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -108,6 +109,12 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     this.addClassName("styling")
     this.format()
 
+    withEditor(NotaSaida::class, openEditor = {
+      (getColumnBy(NotaSaida::entrega).editorComponent as? Focusable<*>)?.focus()
+    }, closeEditor = { binder ->
+      viewModel.save(binder.bean)
+    })
+
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosSep(viewModel, nota)
@@ -120,6 +127,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFData()
     colunaHora()
     colunaAgendado()
+    colunaEntrega().dateFieldEditor()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
@@ -136,11 +144,11 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0 -> "azul"
+        countImp > 0     -> "azul"
 
-        countEnt > 0 -> "amarelo"
+        countEnt > 0     -> "amarelo"
 
-        else         -> null
+        else             -> null
       }
     }
   }

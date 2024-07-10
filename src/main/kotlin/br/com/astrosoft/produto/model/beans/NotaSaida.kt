@@ -38,6 +38,7 @@ class NotaSaida(
   var retiraFutura: Boolean?,
   var rota: String?,
   var agendado: String?,
+  var entrega: LocalDate?,
   var enderecoCliente: String?,
   var bairroCliente: String?
 ) {
@@ -73,6 +74,10 @@ class NotaSaida(
         it.name == tipoNotaSaida
       }?.descricao ?: ""
     }
+
+  fun save() {
+    saci.saveNotaSaida(this)
+  }
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
 

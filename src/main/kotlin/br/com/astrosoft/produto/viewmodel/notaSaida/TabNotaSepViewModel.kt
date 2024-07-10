@@ -47,6 +47,12 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     )
   }
 
+  fun save(bean: NotaSaida?) {
+    bean ?: return
+    bean.save()
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabNotaSep
 }

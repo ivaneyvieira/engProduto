@@ -199,7 +199,8 @@ SELECT N.storeno                                                              AS
        IF(AR.city = 'TIMON', 'Timon', AR.name)                                AS rota,
        CA.addr                                                                AS enderecoCliente,
        CA.nei                                                                 AS bairroCliente,
-       IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado
+       IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
+       CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega
 FROM sqldados.nf AS N
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
@@ -297,6 +298,7 @@ SELECT Q.loja,
        Q.tipo,
        Q.rota,
        Q.agendado,
+       Q.entrega,
        Q.enderecoCliente,
        Q.bairroCliente,
        SUM(X.s11 = 0) AS countExp,

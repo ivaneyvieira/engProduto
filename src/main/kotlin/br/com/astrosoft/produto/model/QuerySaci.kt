@@ -270,6 +270,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun saveNotaSaida(nota: NotaSaida){
+    val sql = "/sqlSaci/saveNotaSaida.sql"
+    script(sql){
+      this.addOptionalParameter("storeno", nota.loja)
+      this.addOptionalParameter("pdvno", nota.pdvno)
+      this.addOptionalParameter("xano", nota.xano)
+      this.addOptionalParameter("entrega", nota.entrega.toSaciDate())
+    }
+  }
+
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
