@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
+import br.com.astrosoft.produto.model.printText.NotaSeparacao
 import br.com.astrosoft.produto.model.saci
 
 class TabNotaSepViewModel(val viewModel: NotaViewModel) {
@@ -66,6 +67,20 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     updateView()
   }
 
+  fun print() = viewModel.exec {
+    val listNota = subView.itensSelecionados().ifEmpty { fail("Nenhuma nota selecionada") }
+
+    val listaRota = listNota.mapNotNull { it.rota }.distinct().sorted()
+
+    val report = NotaSeparacao(listaRota)
+
+
+    report.print(
+      dados = listNota,
+      printer = subView.printerPreview(loja = 0)
+    )
+  }
+
   val subView
     get() = viewModel.view.tabNotaSep
 }
@@ -77,4 +92,5 @@ interface ITabNotaSep : ITabView {
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
   fun formTransportado(nota: NotaSaida)
+  fun itensSelecionados(): List<NotaSaida>
 }

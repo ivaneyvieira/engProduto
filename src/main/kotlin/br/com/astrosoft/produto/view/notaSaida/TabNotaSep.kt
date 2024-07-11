@@ -24,10 +24,12 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
 import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaSep
 import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
+import com.github.mvysny.kaributools.selectionMode
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -106,11 +108,18 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
         viewModel.updateView()
       }
     }
+    button("Relatório") {
+      this.icon = VaadinIcon.PRINT.create()
+      addClickListener {
+        viewModel.print()
+      }
+    }
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
     this.addClassName("styling")
     this.format()
+    this.selectionMode = Grid.SelectionMode.MULTI
 
     withEditor(NotaSaida::class, openEditor = {
       (getColumnBy(NotaSaida::entrega).editorComponent as? Focusable<*>)?.focus()

@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -44,8 +45,12 @@ class NotaSaida(
   var empnoMotorista: Int?,
   var nomeMotorista: String?,
 ) {
+  val dataStr
+    get() = data?.format() ?: ""
+
   val hotaTime
     get() = hora?.toString() ?: ""
+
   val nota
     get() = "$numero/$serie"
 
