@@ -32,7 +32,7 @@ SELECT S.storeno                                                     AS loja,
        TRUNCATE(IFNULL(A.estoque, 0) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                          AS estoque,
        MID(L1.localizacao, 1, 4)                                     AS locSaci,
-       COALESCE(A.localizacao, MID(L1.localizacao, 1, 4), '')        AS locApp,
+       COALESCE(A.localizacao, /*MID(L1.localizacao, 1, 4),*/ '')    AS locApp,
        V.no                                                          AS codForn,
        V.sname                                                       AS fornecedor,
        ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                AS saldo
