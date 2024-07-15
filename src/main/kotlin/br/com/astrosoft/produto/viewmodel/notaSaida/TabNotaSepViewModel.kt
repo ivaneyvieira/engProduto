@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.printText.NotaSeparacao
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -58,11 +59,13 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     subView.formTransportado(nota)
   }
 
-  fun transportadoNota(nota: NotaSaida, numero: Int) = viewModel.exec {
+  fun transportadoNota(nota: NotaSaida, numero: Int, data: LocalDate?) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    val data = data ?: fail("Data não informada")
     if (funcionario.funcao != "MOTORISTA")
       fail("Funcionário não é motorista")
     nota.empnoMotorista = funcionario.codigo
+    nota.entrega = data
     nota.save()
     updateView()
   }
