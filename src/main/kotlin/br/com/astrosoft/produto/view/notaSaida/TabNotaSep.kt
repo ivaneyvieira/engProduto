@@ -121,12 +121,6 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     this.format()
     this.selectionMode = Grid.SelectionMode.MULTI
 
-    withEditor(NotaSaida::class, openEditor = {
-      (getColumnBy(NotaSaida::entrega).editorComponent as? Focusable<*>)?.focus()
-    }, closeEditor = { binder ->
-      viewModel.save(binder.bean)
-    })
-
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosSep(viewModel, nota)
@@ -140,7 +134,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaHora()
     colunaAgendado()
     colunaPedido()
-    colunaEntrega().dateFieldEditor()
+    colunaEntrega()
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formAutoriza(pedido)
     }
