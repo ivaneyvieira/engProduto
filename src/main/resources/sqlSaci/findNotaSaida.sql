@@ -85,7 +85,7 @@ FROM sqldados.prd AS P
                  ON A.prdno = L.prdno
                    AND A.grade = L.grade
                    AND A.storeno = L.storeno
-WHERE CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) IN (:locais) OR 'TODOS' IN (:locais))
+WHERE (CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) IN (:locais) OR 'TODOS' IN (:locais))
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
 

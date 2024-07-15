@@ -20,7 +20,7 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     val marca = if (user?.admin == true)
       EMarcaNota.TODOS
     else
-      EMarcaNota.EXP
+      EMarcaNota.TODOS
     val filtro = subView.filtro(marca)
     val notas = NotaSaida.find(filtro)
     subView.updateNotas(notas)
