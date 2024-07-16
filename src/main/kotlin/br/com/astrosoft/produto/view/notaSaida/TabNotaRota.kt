@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.notaSaida
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -24,9 +23,8 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCli
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
-import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
-import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaSep
-import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
+import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaRota
+import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaRotaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
@@ -41,8 +39,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaSep {
-  private var dlgProduto: DlgProdutosSep? = null
+class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaRota {
+  private var dlgProduto: DlgProdutosRota? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
@@ -124,7 +122,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
 
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosSep(viewModel, nota)
+      dlgProduto = DlgProdutosRota(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -136,9 +134,6 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaAgendado()
     colunaPedido()
     colunaEntrega()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formAutoriza(pedido)
-    }
     colunaMotoristaSing()
     colunaNFCliente()
     colunaNomeCliente()
@@ -170,8 +165,10 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       marca = marca,
       tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
       loja = cmbLoja.value?.no ?: 0,
-      dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value,
+      dataInicial = null,
+      dataFinal = null,
+      dataEntregaInicial = edtDataInicial.value,
+      dataEntregaFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
     )
   }
@@ -192,20 +189,13 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun formTransportado(nota: NotaSaida) {
-    val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Transportado Por", form = form) {
-      viewModel.transportadoNota(nota, form.numero, form.data)
-    }
-  }
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.notaSep == true
+    return username?.notaRota == true
   }
 
   override val label: String
-    get() = "Sep"
+    get() = "Rota"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -238,7 +238,9 @@ FROM sqldados.nf AS N
                  ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
        LEFT JOIN sqldados.emp AS M
                  ON N.s16 = M.no
-WHERE (issuedate >= :dataInicial OR :dataInicial = 0)
+WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
+  AND (l16 <= :dataEntregaFinal OR :dataEntregaFinal = 0)
+  AND (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
   AND (X.s11 = :marca OR :marca = 999)

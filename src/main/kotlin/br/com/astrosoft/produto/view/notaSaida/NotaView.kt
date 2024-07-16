@@ -19,6 +19,7 @@ import jakarta.annotation.security.PermitAll
 class NotaView : ViewLayout<NotaViewModel>(), INotaView, BeforeEnterObserver {
   override val viewModel = NotaViewModel(this)
   override val tabNotaSep = TabNotaSep(viewModel.tabNotaSepViewModel)
+  override val tabNotaRota = TabNotaRota(viewModel.tabNotaRotaViewModel)
   override val tabNotaExp = TabNotaExp(viewModel.tabNotaExpViewModel)
   override val tabNotaCD = TabNotaCD(viewModel.tabNotaCDViewModel)
   override val tabNotaEnt = TabNotaEnt(viewModel.tabNotaEntViewModel)

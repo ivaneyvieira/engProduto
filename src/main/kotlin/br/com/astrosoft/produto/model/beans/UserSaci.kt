@@ -38,7 +38,7 @@ class UserSaci : IUser {
   var produtoInventarioAgrupado by DelegateAuthorized(17)
   var pedidoTransfCD5A by DelegateAuthorized(18)
   var clienteCadastro by DelegateAuthorized(19)
-  var transfExpedicao by DelegateAuthorized(20)
+  var notaRota by DelegateAuthorized(20)
   var vendaFExpedicao by DelegateAuthorized(21)
 
   //Permissões da tela receber
@@ -300,12 +300,13 @@ class UserSaci : IUser {
       produtoEditor = value
     }
   var nota
-    get() = notaSep || notaExp || notaCD || notaEnt || admin
+    get() = notaSep || notaExp || notaCD || notaEnt || notaRota || admin
     set(value) {
       notaSep = value
       notaExp = value
       notaCD = value
       notaEnt = value
+      notaRota = value
     }
   var vendaRef: Boolean
     get() = tabVendaRef || admin

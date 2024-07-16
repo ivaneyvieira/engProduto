@@ -270,9 +270,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveNotaSaida(nota: NotaSaida){
+  fun saveNotaSaida(nota: NotaSaida) {
     val sql = "/sqlSaci/saveNotaSaida.sql"
-    script(sql){
+    script(sql) {
       this.addOptionalParameter("storeno", nota.loja)
       this.addOptionalParameter("pdvno", nota.pdvno)
       this.addOptionalParameter("xano", nota.xano)
@@ -285,16 +285,16 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/findNotaSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
 
-    val dataInicial = filtro.dataInicial?.toSaciDate() ?: 0
-    val dataFinal = filtro.dataFinal?.toSaciDate() ?: 0
     return query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
       addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
-      addOptionalParameter("dataInicial", dataInicial)
-      addOptionalParameter("dataFinal", dataFinal)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
+      addOptionalParameter("dataEntregaFinal", filtro.dataEntregaFinal.toSaciDate())
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
     }.filter {
       when (filtro.tipoNota) {
@@ -356,7 +356,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
   }
-
 
   fun findRessuprimento(filtro: FiltroRessuprimento, locais: List<String>): List<Ressuprimento> {
     val sql = "/sqlSaci/findRessuprimento.sql"
@@ -1342,7 +1341,7 @@ class QuerySaci : QueryDB(database) {
 
   fun selectCliente(filtro: FiltroDadosCliente): List<DadosCliente> {
     val sql = "/sqlSaci/selectClientes.sql"
-    return query(sql, DadosCliente::class){
+    return query(sql, DadosCliente::class) {
       this.addOptionalParameter("pesquisa", filtro.pesquisa)
     }
   }
