@@ -66,7 +66,7 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
 
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
-      onLeftClick {
+      onClick {
         viewModel.imprimeProdutos()
       }
     }

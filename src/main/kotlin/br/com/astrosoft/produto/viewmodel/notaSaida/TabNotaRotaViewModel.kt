@@ -71,13 +71,37 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
   fun print() = viewModel.exec {
     val listNota = subView.itensSelecionados().ifEmpty { fail("Nenhuma nota selecionada") }
 
+    val listNotaProduto = listNota.flatMap { nota ->
+      val produtos = nota.produtos(EMarcaNota.TODOS)
+      produtos.filter {
+        it.local?.startsWith("CD5A") == true
+      }.map { produto ->
+        NotaSaidaProduto(
+          motorista = nota.nomeMotorista ?: "",
+          dataEntrega = nota.entrega,
+          loja = nota.loja,
+          pedido = nota.pedido.toString(),
+          nota = nota.nota,
+          data = nota.data,
+          cliente = nota.cliente?.toString() ?: "",
+          valorNota = nota.valorNota ?: 0.0,
+          codigo = produto.codigo ?: "",
+          descricao = produto.descricao ?: "",
+          grade = produto.grade ?: "",
+          quantidade = produto.quantidade ?: 0,
+        )
+      }
+    }
+
+    listNotaProduto.ifEmpty { fail("Nenhum produto selecionado com localização CD5A") }
+
     val listaRota = listNota.mapNotNull { it.rota }.distinct().sorted()
 
     val report = NotaSeparacao(listaRota)
 
 
     report.print(
-      dados = listNota,
+      dados = listNotaProduto,
       printer = subView.printerPreview(loja = 0)
     )
   }
