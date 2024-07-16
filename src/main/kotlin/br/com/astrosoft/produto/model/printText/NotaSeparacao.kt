@@ -32,7 +32,7 @@ class NotaSeparacao(val rotas: List<String>) : PrintText<NotaSaidaProduto>() {
   }
 
   override fun groupBotton(beanDetail: NotaSaidaProduto): String {
-    return "Lj:${beanDetail.loja} Ped:${beanDetail.pedido} NF:${beanDetail.nota} Dt:${beanDetail.data.format("dd/MM")} Cli:${beanDetail.cliente} Vl:${beanDetail.valorNota}"
+    return "Lj:${beanDetail.loja} Ped:${beanDetail.pedido} NF:${beanDetail.nota} Dt:${beanDetail.data.format("dd/MM/yy")} Cli:${beanDetail.cliente} Vl:${beanDetail.valorNota}"
   }
 
   override fun printSumary(bean: NotaSaidaProduto?) {
