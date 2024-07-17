@@ -78,7 +78,11 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
         }
       }
       setItems(tiposNota)
-      value = tiposNota.firstOrNull()
+      value = if(tiposNota.contains(ETipoNotaFiscal.ENTRE_FUT)) {
+        ETipoNotaFiscal.ENTRE_FUT
+      } else {
+        tiposNota.firstOrNull()
+      }
 
       this.setItemLabelGenerator {
         it.descricao
