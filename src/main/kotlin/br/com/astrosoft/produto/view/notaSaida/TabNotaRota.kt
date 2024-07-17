@@ -134,10 +134,10 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       }
     }
     colunaRota()
+    colunaPedido()
     colunaNFNota()
     colunaNFData()
     colunaHora()
-    colunaPedido()
     colunaEntrega()
     colunaMotoristaSing()
     colunaNFCliente()
