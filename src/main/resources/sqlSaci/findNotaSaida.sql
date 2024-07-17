@@ -279,6 +279,8 @@ HAVING (@PESQUISA = ''
   OR nomeCliente LIKE @PESQUISA_LIKE
   OR vendedor = @PESQUISA_NUM
   OR nomeVendedor LIKE @PESQUISA_LIKE
+  OR nomeMotorista LIKE @PESQUISA_LIKE
+  OR usuarioPrint LIKE @PESQUISA_LIKE
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE);
 

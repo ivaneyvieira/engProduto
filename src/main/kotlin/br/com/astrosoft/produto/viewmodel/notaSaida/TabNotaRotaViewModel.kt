@@ -79,6 +79,8 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
         NotaSaidaProduto(
           motorista = nota.nomeMotorista ?: "",
           dataEntrega = nota.entrega,
+          usernoPrint = nota.usernoPrint,
+          usuarioPrint = nota.usuarioPrint,
           loja = nota.loja,
           pedido = nota.pedido.toString(),
           nota = nota.nota,
@@ -95,10 +97,12 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
 
     listNotaProduto.ifEmpty { fail("Nenhum produto selecionado com localização CD5A") }
 
+    val user = AppConfig.userLogin() as? UserSaci
     val listaRota = listNota.mapNotNull { it.rota }.distinct().sorted()
+    val userList = listNota.mapNotNull { it.usuarioPrint }.distinct().filter { it.trim().isNotEmpty() }.sorted()
+      .ifEmpty { listOf(user?.name ?: "") }
 
-    val report = NotaSeparacao(listaRota)
-
+    val report = NotaSeparacao(listaRota, userList)
 
     report.print(
       dados = listNotaProduto,

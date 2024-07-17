@@ -1,13 +1,11 @@
 package br.com.astrosoft.produto.model.printText
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.NotaSaida
-import br.com.astrosoft.produto.model.beans.NotaSaidaProduto
-import br.com.astrosoft.produto.model.beans.ProdutoPedido
+import br.com.astrosoft.produto.model.beans.*
 
-class NotaSeparacao(val rotas: List<String>) : PrintText<NotaSaidaProduto>() {
+class NotaSeparacao(val rotas: List<String>, val userList: List<String>) : PrintText<NotaSaidaProduto>() {
   override fun printTitle(bean: NotaSaidaProduto) {
     writeln("Roteiro de Entrega CD5A", negrito = true, center = true)
 
@@ -20,6 +18,10 @@ class NotaSeparacao(val rotas: List<String>) : PrintText<NotaSaidaProduto>() {
     printLine()
 
     writeln("Motorista: ${bean.motorista}      Data Entrega: ${bean.dataEntrega.format()}")
+
+    val userPrint = userList.joinToString(" / ")
+
+    writeln("Usuario da Impressao: $userPrint")
 
     printLine()
   }
