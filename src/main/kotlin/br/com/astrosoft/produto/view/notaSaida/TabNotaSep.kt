@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendado
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaEntrega
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaImpresso
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaMotoristaSing
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
@@ -140,6 +141,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       viewModel.formAutoriza(pedido)
     }
     colunaMotoristaSing()
+    colunaImpresso()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()

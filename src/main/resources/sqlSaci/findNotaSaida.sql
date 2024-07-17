@@ -202,8 +202,12 @@ SELECT N.storeno                                                              AS
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
        CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
        M.no                                                                   AS empnoMotorista,
-       M.sname                                                                AS nomeMotorista
+       M.sname                                                                AS nomeMotorista,
+       EP.no                                                                  AS usernoPrint,
+       EP.login                                                               AS usuarioPrint
 FROM sqldados.nf AS N
+       LEFT JOIN sqldados.users AS EP
+                 ON EP.no = N.s15
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
@@ -315,7 +319,9 @@ SELECT Q.loja,
        SUM(X.s10 = 0) AS countNImp,
        retiraFutura   AS retiraFutura,
        empnoMotorista,
-       nomeMotorista
+       nomeMotorista,
+       usernoPrint,
+       usuarioPrint
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja

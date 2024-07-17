@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -44,6 +45,8 @@ class NotaSaida(
   var bairroCliente: String?,
   var empnoMotorista: Int?,
   var nomeMotorista: String?,
+  var usernoPrint: Int?,
+  var usuarioPrint: String?,
 ) {
   val dataStr
     get() = data?.format() ?: ""
@@ -87,6 +90,12 @@ class NotaSaida(
   }
 
   fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
+
+  fun marcaImpressao() {
+    val user = AppConfig.userLogin() as? UserSaci
+    this.usernoPrint = user?.no
+    this.save()
+  }
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
