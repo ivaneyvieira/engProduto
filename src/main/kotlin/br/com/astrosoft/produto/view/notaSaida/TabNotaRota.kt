@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.notaSaida
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -120,6 +121,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     this.format()
     this.selectionMode = Grid.SelectionMode.MULTI
 
+    addColumnSeq("Item")
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosRota(viewModel, nota)
@@ -131,16 +133,13 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     colunaNFNota()
     colunaNFData()
     colunaHora()
-    colunaAgendado()
     colunaPedido()
     colunaEntrega()
     colunaMotoristaSing()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNFVendedor()
     colunaNomeVendedor()
     colunaNFValor()
-    colunaNFTipo()
     colunaNFEntregaRetira()
     colunaNFSituacao()
 
