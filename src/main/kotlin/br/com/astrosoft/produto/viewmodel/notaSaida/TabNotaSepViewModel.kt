@@ -59,13 +59,17 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     subView.formTransportado(nota)
   }
 
-  fun transportadoNota(nota: NotaSaida, numero: Int, data: LocalDate?) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    val data = data ?: fail("Data não informada")
-    if (funcionario.funcao != "MOTORISTA")
-      fail("Funcionário não é motorista")
-    nota.empnoMotorista = funcionario.codigo
-    nota.entrega = data
+  fun transportadoNota(nota: NotaSaida, numero: Int?, data: LocalDate?) = viewModel.exec {
+    if (numero == null || data == null) {
+      nota.empnoMotorista = null
+      nota.entrega = null
+    } else {
+      val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+      if (funcionario.funcao != "MOTORISTA")
+        fail("Funcionário não é motorista")
+      nota.empnoMotorista = funcionario.codigo
+      nota.entrega = data
+    }
     nota.save()
     updateView()
   }

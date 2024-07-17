@@ -223,14 +223,14 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
   override fun formTransportado(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
-      viewModel.transportadoPedido(pedido, form.numero)
+      viewModel.transportadoPedido(pedido, form.numero ?: 0)
     }
   }
 
   override fun formDevolvido(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Devolvido Por", form = form) {
-      viewModel.devolvidoPedido(pedido, form.numero)
+      viewModel.devolvidoPedido(pedido, form.numero ?: 0)
     }
   }
 

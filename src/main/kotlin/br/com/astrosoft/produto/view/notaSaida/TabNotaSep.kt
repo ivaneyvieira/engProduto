@@ -193,7 +193,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun formTransportado(nota: NotaSaida) {
-    val form = FormFuncionario()
+    val form = FormFuncionario(numeroI = nota.empnoMotorista, dataI = nota.entrega)
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
       viewModel.transportadoNota(nota, form.numero, form.data)
     }
