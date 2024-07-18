@@ -206,8 +206,10 @@ SELECT N.storeno                                                              AS
        EP.no                                                                  AS usernoPrint,
        EP.login                                                               AS usuarioPrint
 FROM sqldados.nf AS N
+       LEFT JOIN sqldados.nfUserPrint AS UP
+                 USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EP
-                 ON EP.no = N.s15
+                 ON EP.no = UP.userno
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
