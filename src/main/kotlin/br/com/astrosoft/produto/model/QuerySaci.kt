@@ -278,6 +278,15 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("entrega", nota.entrega.toSaciDate())
       this.addOptionalParameter("empnoM", nota.empnoMotorista ?: 0)
+    }
+  }
+
+  fun saveNotaSaidaPrint(nota: NotaSaida) {
+    val sql = "/sqlSaci/saveNotaSaidaPrint.sql"
+    script(sql) {
+      this.addOptionalParameter("storeno", nota.loja)
+      this.addOptionalParameter("pdvno", nota.pdvno)
+      this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("userPrint", nota.usernoPrint ?: 0)
     }
   }

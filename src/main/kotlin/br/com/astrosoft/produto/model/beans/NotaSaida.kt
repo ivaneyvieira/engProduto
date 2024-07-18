@@ -94,7 +94,7 @@ class NotaSaida(
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
     this.usernoPrint = user?.no
-    this.save()
+    saci.saveNotaSaidaPrint(this)
   }
 
   companion object {
