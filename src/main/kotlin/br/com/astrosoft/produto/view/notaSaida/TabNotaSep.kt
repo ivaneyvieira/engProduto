@@ -134,7 +134,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFNota()
     colunaNFData()
     colunaHora()
-    colunaAgendado()
+    //colunaAgendado()
     colunaPedido()
     colunaEntrega()
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
@@ -144,10 +144,10 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaImpresso()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNFVendedor()
+    //colunaNFVendedor()
     colunaNomeVendedor()
     colunaNFValor()
-    colunaNFTipo()
+    //colunaNFTipo()
     colunaNFEntregaRetira()
     colunaNFSituacao()
 
