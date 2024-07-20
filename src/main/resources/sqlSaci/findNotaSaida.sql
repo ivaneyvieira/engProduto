@@ -271,20 +271,7 @@ WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
       END
 GROUP BY N.storeno,
          N.pdvno,
-         N.xano,
-         SUBSTRING_INDEX(X.c5, '-', 1),
-         SUBSTRING_INDEX(X.c4, '-', 1)
-HAVING (@PESQUISA = ''
-  OR numero LIKE @PESQUISA_START
-  OR notaEntrega LIKE @PESQUISA_START
-  OR cliente = @PESQUISA_NUM
-  OR nomeCliente LIKE @PESQUISA_LIKE
-  OR vendedor = @PESQUISA_NUM
-  OR nomeVendedor LIKE @PESQUISA_LIKE
-  OR nomeMotorista LIKE @PESQUISA_LIKE
-  OR usuarioPrint LIKE @PESQUISA_LIKE
-  OR pedido LIKE @PESQUISA
-  OR locais LIKE @PESQUISA_LIKE);
+         N.xano;
 
 SELECT Q.loja,
        Q.pdvno,
@@ -331,4 +318,15 @@ FROM T_QUERY AS Q
                   ON X.storeno = Q.loja
                     AND X.pdvno = Q.pdvno
                     AND X.xano = Q.xano
+WHERE (@PESQUISA = ''
+  OR numero LIKE @PESQUISA_START
+  OR notaEntrega LIKE @PESQUISA_START
+  OR cliente = @PESQUISA_NUM
+  OR nomeCliente LIKE @PESQUISA_LIKE
+  OR vendedor = @PESQUISA_NUM
+  OR nomeVendedor LIKE @PESQUISA_LIKE
+  OR nomeMotorista LIKE @PESQUISA_LIKE
+  OR usuarioPrint LIKE @PESQUISA_LIKE
+  OR pedido LIKE @PESQUISA
+  OR locais LIKE @PESQUISA_LIKE)
 GROUP BY Q.loja, Q.pdvno, Q.xano

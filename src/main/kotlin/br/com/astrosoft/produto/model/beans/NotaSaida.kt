@@ -59,7 +59,7 @@ class NotaSaida(
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
-
+/*
   private fun splitExp(index: Int) = usuarioExp?.split("-")?.getOrNull(index) ?: ""
 
   val usuarioNameExp
@@ -77,7 +77,7 @@ class NotaSaida(
     get() = splitCD(1)
   val horaCD
     get() = splitCD(2)
-
+*/
   val tipoNotaSaidaDesc: String
     get() {
       return ETipoNotaFiscal.entries.firstOrNull {
