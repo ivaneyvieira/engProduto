@@ -15,10 +15,10 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     val dataEntrada = nota.entrega.format()
     when {
       motorista.isNotBlank() && dataEntrada.isNotBlank() -> {
-        writeln("Motorista: $motorista Entrega: $dataEntrada", expand = true)
+        writeln("$motorista Entrega: $dataEntrada", expand = true)
       }
       motorista.isNotBlank()                             -> {
-        writeln("Motorista: $motorista", expand = true)
+        writeln(motorista, expand = true)
       }
       dataEntrada.isNotBlank()                           -> {
         writeln("Data Entrega: $dataEntrada", expand = true)
