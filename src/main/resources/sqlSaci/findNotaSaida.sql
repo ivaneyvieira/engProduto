@@ -1,5 +1,21 @@
 USE sqldados;
 
+
+/*
+
+SHOW INDEX FROM sqldados.nf
+
+CREATE INDEX e6 ON sqldados.nf (l16)
+
+ */
+/*
+ SHOW INDEX FROM sqldados.nf
+
+DROP INDEX e6 ON sqldados.nf
+CREATE INDEX e6 ON sqldados.nf (l16, issuedate)
+
+ */
+
 DO @DT := 20240401;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;

@@ -12,6 +12,8 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     writeln("Romaneio de Separacao para Entrega: Reserva ${nota.pedido}", negrito = true, center = true)
 
     writeln("Rota: ${nota.rota ?: ""}", negrito = true, expand = true, center = true)
+    writeln("Motorista: ${nota.nomeMotorista}  Data Entrega: ${nota.entrega.format()}")
+
     writeln("<B>End Entrega: </B>${nota.enderecoCliente ?: ""}")
     writeln("<B>Bairro: </B>${nota.bairroCliente ?: ""}")
     writeln("<B>Loja: </B>${nota.loja}")
