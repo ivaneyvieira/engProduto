@@ -5,14 +5,25 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 
 class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   override fun printTitle(bean: ProdutoNFS) {
     writeln("Romaneio de Separacao para Entrega: Reserva ${nota.pedido}", negrito = true, center = true)
 
     writeln("Rota: ${nota.rota ?: ""}", negrito = true, expand = true, center = true)
-    writeln("Motorista: ${nota.nomeMotorista}  Data Entrega: ${nota.entrega.format()}")
+    val motorista = nota.nomeMotorista ?: ""
+    val dataEntrada = nota.entrega.format()
+    when {
+      motorista.isNotBlank() && dataEntrada.isNotBlank() -> {
+        writeln("Motorista: $motorista  Data Entrega: $dataEntrada", expand = true)
+      }
+      motorista.isNotBlank()                             -> {
+        writeln("Motorista: $motorista", expand = true)
+      }
+      dataEntrada.isNotBlank()                           -> {
+        writeln("Data Entrega: $dataEntrada", expand = true)
+      }
+    }
 
     writeln("<B>End Entrega: </B>${nota.enderecoCliente ?: ""}")
     writeln("<B>Bairro: </B>${nota.bairroCliente ?: ""}")
@@ -25,7 +36,6 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
 
     printLine()
   }
-
 
   init {
     column(ProdutoNFS::codigo, "Codigo", 6)
