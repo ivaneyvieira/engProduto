@@ -149,7 +149,7 @@ class DlgProdutosRota(val viewModel: TabNotaRotaViewModel, val nota: NotaSaida) 
     val marca = if (user?.admin == true)
       EMarcaNota.TODOS
     else
-      EMarcaNota.EXP
+      EMarcaNota.TODOS
     val listProdutos = nota.produtos(marca)
     gridDetail.setItems(listProdutos)
   }

@@ -150,7 +150,7 @@ class DlgProdutosSep(val viewModel: TabNotaSepViewModel, val nota: NotaSaida) {
     val marca = if (user?.admin == true)
       EMarcaNota.TODOS
     else
-      EMarcaNota.EXP
+      EMarcaNota.TODOS
     val listProdutos = nota.produtos(marca)
     gridDetail.setItems(listProdutos)
   }
