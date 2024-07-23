@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendad
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaEntrega
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaImpresso
+import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaImpressoSep
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaMotoristaSing
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
@@ -141,7 +142,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     colunaHora()
     colunaEntrega()
     colunaMotoristaSing()
-    colunaImpresso()
+    colunaImpressoSep()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNomeVendedor()

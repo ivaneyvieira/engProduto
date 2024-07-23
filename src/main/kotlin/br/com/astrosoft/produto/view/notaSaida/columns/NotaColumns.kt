@@ -88,6 +88,10 @@ object NotaColumns {
     this.setHeader("Impresso")
   }
 
+  fun Grid<NotaSaida>.colunaImpressoSep() = columnGrid(NotaSaida::usuarioSep) {
+    this.setHeader("Impresso")
+  }
+
   fun Grid<NotaSaida>.colunaLoginEnt() = columnGrid(NotaSaida::usuarioEntrega) {
     this.setHeader("Login")
   }

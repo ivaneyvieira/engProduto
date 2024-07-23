@@ -47,6 +47,7 @@ class NotaSaida(
   var nomeMotorista: String?,
   var usernoPrint: Int?,
   var usuarioPrint: String?,
+  var usuarioSep: String?,
 ) {
   val dataStr
     get() = data?.format() ?: ""
@@ -59,25 +60,7 @@ class NotaSaida(
 
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
-/*
-  private fun splitExp(index: Int) = usuarioExp?.split("-")?.getOrNull(index) ?: ""
 
-  val usuarioNameExp
-    get() = splitExp(0)
-  val dataExp
-    get() = splitExp(1)
-  val horaExp
-    get() = splitExp(2)
-
-  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
-
-  val usuarioNameCD
-    get() = splitCD(0)
-  val dataCD
-    get() = splitCD(1)
-  val horaCD
-    get() = splitCD(2)
-*/
   val tipoNotaSaidaDesc: String
     get() {
       return ETipoNotaFiscal.entries.firstOrNull {

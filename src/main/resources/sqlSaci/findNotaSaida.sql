@@ -220,7 +220,8 @@ SELECT N.storeno                                                              AS
        M.no                                                                   AS empnoMotorista,
        M.sname                                                                AS nomeMotorista,
        EP.no                                                                  AS usernoPrint,
-       EP.login                                                               AS usuarioPrint
+       EP.login                                                               AS usuarioPrint,
+       MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS UP
                  USING (storeno, pdvno, xano)
@@ -246,14 +247,8 @@ FROM sqldados.nf AS N
        LEFT JOIN sqldados.ctadd AS CA
                  ON CA.custno = N.custno
                    AND CA.seqno = N.custno_addno
-  /*LEFT JOIN sqldados.rotasAdd AS RA
-            ON RA.cidade = CA.city
-              AND RA.bairro = CA.nei*/
        LEFT JOIN sqldados.route AS RT
                  ON RT.no = CA.routeno
-/*       LEFT JOIN sqldados.rotasAdd AS RA
-                 ON RA.cidade = 'TERESINA'
-                   AND RA.bairro = TRIM(MID(RT.name, LOCATE(' ', RT.name, 1), 100))*/
        LEFT JOIN sqldados.area AS AR
                  ON AR.no = RT.areano
        LEFT JOIN sqldados.eordrk AS OBS
@@ -328,7 +323,8 @@ SELECT Q.loja,
        empnoMotorista,
        nomeMotorista,
        usernoPrint,
-       usuarioPrint
+       usuarioPrint,
+       usuarioSep
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
                   ON X.storeno = Q.loja
