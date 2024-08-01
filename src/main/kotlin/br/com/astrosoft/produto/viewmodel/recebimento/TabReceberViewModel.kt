@@ -57,6 +57,7 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     }
   }
 
+
   fun salvaNotaProduto(bean: NotaRecebimentoProduto?) = viewModel.exec {
     bean ?: fail("Produto não encontrado")
     bean.validaProduto()
