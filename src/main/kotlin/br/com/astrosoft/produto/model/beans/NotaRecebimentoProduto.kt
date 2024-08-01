@@ -29,6 +29,7 @@ class NotaRecebimentoProduto(
   var estoque: Int?,
   var marca: Int?,
   var marcaSelecionada: Int?,
+  var validadeValida: String?,
   var validade: Int?,
   var vencimento: LocalDate?,
 ) {

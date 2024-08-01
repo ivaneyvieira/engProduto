@@ -41,6 +41,9 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {
+    if(this.validadeValida != "S"){
+      fail("O produto não possui validade adequada")
+    }
     val numVal = this.validade
     val validade = Validade.findValidade(numVal ?: 0)
     if (validade != null) {
