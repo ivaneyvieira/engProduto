@@ -35,6 +35,12 @@ class NotaRecebimentoProduto(
   var tipoValidade: String?,
   var tempoValidade: Int?,
 ) {
+  val validadeStr
+    get() = when (validade) {
+      null -> ""
+      999  -> "Indefinida"
+      else -> validade.toString()
+    }
   val fabricacao: LocalDate?
     get() = vencimento?.minusMonths(validade?.toLong() ?: 0)?.withDayOfMonth(1)
 
