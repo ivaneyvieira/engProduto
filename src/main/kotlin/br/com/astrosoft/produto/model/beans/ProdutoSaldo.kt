@@ -9,6 +9,7 @@ class ProdutoSaldo(
   var descricao: String?,
   var gradeProduto: String?,
   var unidade: String?,
+  var tipoValidade: String?,
   var mesesGarantia: Int?,
   var estoqueLojas: Int?,
   var qttyVarejo: Int?,
@@ -44,7 +45,7 @@ data class FiltroProdutoSaldo(
   val estoque: EEstoque,
   val saldo: Int,
   val update: Boolean,
-){
+) {
   fun lojaSigla(): String {
     return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
   }

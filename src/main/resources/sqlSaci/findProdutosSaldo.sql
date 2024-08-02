@@ -44,6 +44,13 @@ SELECT P.no                                 AS prdno,
        V.sname                              AS abrev,
        P.typeno                             AS tipo,
        P.clno                               AS cl,
+       CASE tipoGarantia
+         WHEN 0 THEN 'Dias'
+         WHEN 1 THEN 'Semanas'
+         WHEN 2 THEN 'Meses'
+         WHEN 3 THEN 'Anos'
+         ELSE ''
+       END                                  AS tipoValidade,
        IF(tipoGarantia = 2, garantia, NULL) AS mesesGarantia
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdalq AS R
@@ -127,6 +134,7 @@ SELECT S.loja                   AS loja,
        P.abrev                  AS abrev,
        P.tipo                   AS tipo,
        P.cl                     AS cl,
+       tipoValidade             AS tipoValidade,
        mesesGarantia            AS mesesGarantia,
        MID(L.localizacao, 1, 4) AS localizacao
 FROM T_STK AS S
@@ -147,6 +155,7 @@ SELECT loja,
        descricao,
        gradeProduto,
        unidade,
+       tipoValidade,
        mesesGarantia,
        L.estoqueLojas,
        qttyVarejo,

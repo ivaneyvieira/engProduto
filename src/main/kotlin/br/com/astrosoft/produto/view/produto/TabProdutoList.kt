@@ -200,6 +200,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldo::unidade, header = "Un")
+    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
     columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
     columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
