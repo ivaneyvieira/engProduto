@@ -182,4 +182,5 @@ WHERE (@PESQUISA = '' OR
        ncm LIKE @PESQUISA_START OR
        fornecedor = @PESQUISA OR
        abrev LIKE @PESQUISA_LIKE OR
+       tipoValidade LIKE @PESQUISA_LIKE OR
        cl = @PESQUISA)

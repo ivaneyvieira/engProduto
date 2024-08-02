@@ -192,6 +192,7 @@ WHERE (@PESQUISA = '' OR
        pedComp = @PESQUISA_NUM OR
        transp = @PESQUISA_NUM OR
        cte = @PESQUISA_NUM OR
-       volume = @PESQUISA_NUM)
+       volume = @PESQUISA_NUM OR
+       tipoValidade LIKE @PESQUISA_LIKE)
   AND (marca = :marca OR :marca = 999)
   AND (localizacao IN (:localizacao) OR 'TODOS' IN (:localizacao))
