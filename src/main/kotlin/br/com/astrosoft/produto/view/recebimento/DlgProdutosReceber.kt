@@ -70,6 +70,8 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
+      columnGrid(NotaRecebimentoProduto::tempoValidade, "Tempo")
+      columnGrid(NotaRecebimentoProduto::tipoValidade, "Tipo")
       columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
       columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
       columnGrid(

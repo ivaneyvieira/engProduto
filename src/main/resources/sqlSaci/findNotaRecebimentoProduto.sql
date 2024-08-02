@@ -123,6 +123,14 @@ SELECT N.storeno                                                   AS loja,
        @VALID := IF((tipoGarantia = 3 AND garantia = 999) ||
                     (tipoGarantia = 2 AND garantia > 0), 'S', 'N') AS validadeValida,
        IF(@VALID = 'S', garantia, NULL)                            AS validade,
+       CASE tipoGarantia
+         WHEN 0 THEN 'Dias'
+         WHEN 1 THEN 'Semanas'
+         WHEN 2 THEN 'Meses'
+         WHEN 3 THEN 'Anos'
+         ELSE ''
+       END                                                         AS tipoValidade,
+       garantia                                                    AS tempoValidade,
        vencimento                                                  AS vencimento
 FROM T_NOTA AS N
        LEFT JOIN sqldados.vend AS V
@@ -171,7 +179,9 @@ SELECT loja,
        :marca AS marcaSelecionada,
        validadeValida,
        validade,
-       vencimento
+       vencimento,
+       tipoValidade,
+       tempoValidade
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR

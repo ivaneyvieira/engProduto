@@ -32,6 +32,8 @@ class NotaRecebimentoProduto(
   var validadeValida: String?,
   var validade: Int?,
   var vencimento: LocalDate?,
+  var tipoValidade: String?,
+  var tempoValidade: Int?,
 ) {
   val fabricacao: LocalDate?
     get() = vencimento?.minusMonths(validade?.toLong() ?: 0)?.withDayOfMonth(1)
