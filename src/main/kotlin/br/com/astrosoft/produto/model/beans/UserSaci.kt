@@ -63,7 +63,7 @@ class UserSaci : IUser {
   var acertoEntrada by DelegateAuthorized(40)
   var acertoSaida by DelegateAuthorized(41)
   var devCliSemPrd by DelegateAuthorized(42)
-  var devCliSemPrdInsert by DelegateAuthorized(43)
+  var recebimentoCadastraValidade by DelegateAuthorized(43)
 
   //var devCliSemPrdDelete by DelegateAuthorized(44)
   var devCliVenda by DelegateAuthorized(45)
@@ -85,6 +85,7 @@ class UserSaci : IUser {
   var recebimentoRecebido by DelegateAuthorized(61)
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized(44)
+
 
   //Locais
   private var localEstoque: String?

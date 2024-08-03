@@ -24,6 +24,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       checkBox("Recebido") {
         binder.bind(this, UserSaci::recebimentoRecebido.name)
       }
+      checkBox("Cadastra Validade") {
+        binder.bind(this, UserSaci::recebimentoCadastraValidade.name)
+      }
     }
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaRec)
