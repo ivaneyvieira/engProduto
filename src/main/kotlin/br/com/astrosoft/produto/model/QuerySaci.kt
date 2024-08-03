@@ -1356,6 +1356,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateValidadeSaci(validade: ValidadeSaci){
+    val sql = "/sqlSaci/updateValidadeSaci.sql"
+    script(sql) {
+      addOptionalParameter("tipoValidade", validade.tipoValidade ?: 0)
+      addOptionalParameter("tempoValidade", validade.tempoValidade ?: 0)
+      addOptionalParameter("prdno", validade.prdno ?: "")
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

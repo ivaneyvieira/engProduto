@@ -125,6 +125,14 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     dlgProduto?.focusCodigoBarra()
   }
 
+  override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+    return this.dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun openValidade(tipoValidade: Int, tempoValidade: Int,block: (ValidadeSaci) -> Unit) {
+    dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
+  }
+
   fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosReceber(viewModel, nota)
     dlgProduto?.showDialog {

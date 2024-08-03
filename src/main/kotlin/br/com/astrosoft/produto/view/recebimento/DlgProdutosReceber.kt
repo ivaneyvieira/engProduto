@@ -6,7 +6,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.MesAno
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
+import br.com.astrosoft.produto.model.beans.ValidadeSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -33,6 +36,12 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
           if (it.isFromClient) {
             viewModel.selecionaProdutos(nota, it.value)
           }
+        }
+      }
+
+      button("Cadastra Validade") {
+        onClick {
+          viewModel.cadastraValidade()
         }
       }
     }, onClose = {
@@ -123,5 +132,12 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
   fun focusCodigoBarra() {
     edtCodigoBarra?.value = ""
     edtCodigoBarra?.focus()
+  }
+
+  fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
+    val form = FormValidade(tipoValidade, tempoValidade)
+    DialogHelper.showForm(caption = "Validade", form = form) {
+      block(form.validadeSaci)
+    }
   }
 }

@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.recebimento
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.firstDayOfMonth
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -41,7 +42,7 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {
-    if(this.validadeValida != "S"){
+    if (this.validadeValida != "S") {
       fail("Validade não cadastrada")
     }
     val numVal = this.validade
@@ -50,19 +51,43 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
       val dataRecebimento = this.data ?: fail("Data da nota não informada")
       this.vencimento ?: fail("Data de vencimento obrigatório")
       val dataFabricacao = this.fabricacao ?: fail("Data de fabricação obrigatório")
-      val dataFabricacaoLimite = dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
-      if(dataFabricacao < dataFabricacaoLimite){
+      val dataFabricacaoLimite =
+          dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
+      if (dataFabricacao < dataFabricacaoLimite) {
         fail("Data de fabricação inferior a ${dataFabricacaoLimite.format("MM/yy")}")
       }
     }
   }
-
 
   fun salvaNotaProduto(bean: NotaRecebimentoProduto?) = viewModel.exec {
     bean ?: fail("Produto não encontrado")
     bean.validaProduto()
     bean.salva()
     updateView()
+  }
+
+  fun cadastraValidade() = viewModel.exec {
+    val itens = subView.produtosSelecionados()
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val tipoValidade = 2
+    val tempoValidade = itens.firstOrNull()?.tempoValidade ?: 0
+
+    subView.openValidade(tipoValidade, tempoValidade) { validade: ValidadeSaci ->
+      if(validade.isErro()) {
+        DialogHelper.showError("Os dados fornecidos para a validade estão incorretos:\n${validade.msgErro()}")
+      }else {
+        itens.forEach { item ->
+          validade.prdno = item.prdno
+          validade.save()
+        }
+        subView.updateProduto()
+      }
+    }
   }
 }
 
@@ -72,4 +97,6 @@ interface ITabReceber : ITabView {
   fun updateProduto(): NotaRecebimento?
   fun closeDialog()
   fun focusCodigoBarra()
+  fun produtosSelecionados(): List<NotaRecebimentoProduto>
+  fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
 }
