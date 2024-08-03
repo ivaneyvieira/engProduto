@@ -78,7 +78,7 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     val tempoValidade = itens.firstOrNull()?.tempoValidade ?: 0
 
     subView.openValidade(tipoValidade, tempoValidade) { validade: ValidadeSaci ->
-      if(validade.isErro()) {
+      if(validade.isErro() && user?.admin != true) {
         DialogHelper.showError("Os dados fornecidos para a validade estão incorretos:\n${validade.msgErro()}")
       }else {
         itens.forEach { item ->
