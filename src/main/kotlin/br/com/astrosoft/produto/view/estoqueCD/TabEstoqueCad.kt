@@ -53,7 +53,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       }
     }
     edtLocalizacao = textField("Loc App") {
-      this.width = "60px"
+      this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
