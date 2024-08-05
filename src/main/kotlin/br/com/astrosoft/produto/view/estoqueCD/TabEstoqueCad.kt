@@ -52,7 +52,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
-    edtLocalizacao = textField("Loc") {
+    edtLocalizacao = textField("Loc App") {
       this.width = "60px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -83,7 +83,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
 
     this.button("Cópia") {
       this.icon = VaadinIcon.COPY.create()
-      onLeftClick {
+      onClick {
         viewModel.copiaLocalizacao()
       }
     }

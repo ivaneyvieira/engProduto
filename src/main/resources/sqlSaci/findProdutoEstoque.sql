@@ -60,6 +60,7 @@ SELECT *
 FROM temp_pesquisa
 WHERE (
   @PESQUISA = '' OR
+  locSaci LIKE @PESQUISALIKE OR
   codigo = @PESQUISANUM OR
   descricao LIKE @PESQUISALIKE OR
   unidade LIKE @PESQUISA
