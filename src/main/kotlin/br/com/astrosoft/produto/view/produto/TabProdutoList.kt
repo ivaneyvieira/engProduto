@@ -202,7 +202,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::unidade, header = "Un")
     columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
     columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relacionado").right()
+    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
     columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
     columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
