@@ -164,6 +164,7 @@ WHERE (S.loja = :loja OR :loja = 0)
   OR :estoque = 'T'
   );
 
+
 SELECT loja,
        prdno,
        codigo,
