@@ -5,7 +5,7 @@ import br.com.astrosoft.produto.model.saci
 class ProdutoSaldo(
   var loja: Int?,
   var prdno: String?,
-  var codigo: String?,
+  var codigo: Int?,
   var descricao: String?,
   var gradeProduto: String?,
   var unidade: String?,
@@ -23,6 +23,8 @@ class ProdutoSaldo(
   var tipo: Int?,
   var cl: Int?,
   var localizacao: String?,
+  var prdnoRel: String?,
+  var codigoRel: Int?
 ) {
   companion object {
     fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {

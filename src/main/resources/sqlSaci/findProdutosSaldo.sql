@@ -28,30 +28,41 @@ WHERE S.storeno = 4
   AND :update = TRUE
 GROUP BY S.prdno, gradeProduto;
 
+DROP TEMPORARY TABLE IF EXISTS T_REL;
+CREATE TEMPORARY TABLE T_REL
+(
+  PRIMARY KEY (prdno, temRelacionado)
+)
+SELECT prdno AS prdnoRel, prdno_rel AS prdno, 'S' AS temRelacionado
+FROM sqldados.prdrel
+GROUP BY prdno_rel;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (prdno)
 )
-SELECT P.no                                 AS prdno,
-       TRIM(P.no) * 1                       AS codigo,
-       TRIM(MID(P.name, 1, 37))             AS descricao,
-       TRIM(MID(P.name, 38, 3))             AS unidade,
-       P.taxno                              AS tributacao,
-       IFNULL(R.form_label, '')             AS rotulo,
-       N.ncm                                AS ncm,
-       P.mfno                               AS fornecedor,
-       V.sname                              AS abrev,
-       P.typeno                             AS tipo,
-       P.clno                               AS cl,
+SELECT P.no                                    AS prdno,
+       TRIM(P.no) * 1                          AS codigo,
+       TRIM(MID(P.name, 1, 37))                AS descricao,
+       TRIM(MID(P.name, 38, 3))                AS unidade,
+       P.taxno                                 AS tributacao,
+       IFNULL(R.form_label, '')                AS rotulo,
+       N.ncm                                   AS ncm,
+       P.mfno                                  AS fornecedor,
+       V.sname                                 AS abrev,
+       P.typeno                                AS tipo,
+       P.clno                                  AS cl,
        CASE tipoGarantia
          WHEN 0 THEN 'Dias'
          WHEN 1 THEN 'Semanas'
          WHEN 2 THEN 'Meses'
          WHEN 3 THEN 'Anos'
          ELSE ''
-       END                                  AS tipoValidade,
-       IF(tipoGarantia = 2, garantia, NULL) AS mesesGarantia
+       END                                     AS tipoValidade,
+       IF(tipoGarantia = 2, garantia, NULL)    AS mesesGarantia,
+       IF((P.bits % POW(2, 10)) > 0, 'S', 'N') AS temRelacionado
 FROM sqldados.prd AS P
        LEFT JOIN sqldados.prdalq AS R
                  ON R.prdno = P.no
@@ -120,7 +131,7 @@ CREATE TEMPORARY TABLE T_PRDSTK
 )
 SELECT S.loja                   AS loja,
        S.prdno                  AS prdno,
-       P.codigo                 AS codigo,
+       P.codigo*1               AS codigo,
        P.descricao              AS descricao,
        S.gradeProduto           AS gradeProduto,
        P.unidade                AS unidade,
@@ -136,12 +147,16 @@ SELECT S.loja                   AS loja,
        P.cl                     AS cl,
        tipoValidade             AS tipoValidade,
        mesesGarantia            AS mesesGarantia,
-       MID(L.localizacao, 1, 4) AS localizacao
+       MID(L.localizacao, 1, 4) AS localizacao,
+       R.prdnoRel               AS prdnoRel,
+       TRIM(R.prdnoRel)*1       AS codigoRel
 FROM T_STK AS S
        LEFT JOIN T_LOC AS L
                  USING (prdno, gradeProduto)
        INNER JOIN T_PRD AS P
                   USING (prdno)
+       LEFT JOIN T_REL AS R
+                 USING (prdno, temRelacionado)
 WHERE (S.loja = :loja OR :loja = 0)
   AND (:estoque = '<' AND S.qttyTotal < :saldo
   OR :estoque = '>' AND S.qttyTotal > :saldo
@@ -168,7 +183,9 @@ SELECT loja,
        abrev,
        tipo,
        cl,
-       localizacao
+       localizacao,
+       prdnoRel,
+       codigoRel
 FROM T_PRDSTK AS S
        LEFT JOIN T_STKLOJA AS L
                  USING (prdno, gradeProduto)

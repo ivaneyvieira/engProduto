@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
@@ -19,7 +20,6 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.util.concurrent.TimeUnit
 
 class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
@@ -196,12 +196,13 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoSaldo::loja, header = "Loja")
-    columnGrid(ProdutoSaldo::codigo, header = "Código")
+    columnGrid(ProdutoSaldo::codigo, header = "Código").right()
     columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldo::unidade, header = "Un")
     columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
     columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
+    columnGrid(ProdutoSaldo::codigoRel, header = "Relacionado").right()
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
     columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
     columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
