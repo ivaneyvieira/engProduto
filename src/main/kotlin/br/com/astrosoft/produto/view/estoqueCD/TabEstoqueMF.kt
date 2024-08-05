@@ -57,8 +57,8 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
         viewModel.updateView()
       }
     }
-    edtLocalizacao = textField("Loc") {
-      this.width = "60px"
+    edtLocalizacao = textField("Loc App") {
+      this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
         viewModel.updateView()
