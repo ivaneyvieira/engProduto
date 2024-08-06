@@ -18,7 +18,8 @@ class TabEstoqueUsrViewModel(val viewModel: EstoqueCDViewModel) : TabUsrViewMode
   }
 
   override fun UserSaci.update(usuario: UserSaci) {
-    this.estoqueMF = usuario.estoqueMF
+    this.estoqueMov = usuario.estoqueMov
+    this.estoqueSaldo = usuario.estoqueSaldo
     this.estoqueCad = usuario.estoqueCad
     this.estoqueCD1A = usuario.estoqueCD1A
     this.listaEstoque = usuario.listaEstoque

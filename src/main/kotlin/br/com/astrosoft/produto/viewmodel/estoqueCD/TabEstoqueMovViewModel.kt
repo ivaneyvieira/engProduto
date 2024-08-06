@@ -2,12 +2,11 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaMovManual
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 
-class TabEstoqueMFViewModel(val viewModel: EstoqueCDViewModel) {
+class TabEstoqueMovViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
-    get() = viewModel.view.tabEstoqueMF
+    get() = viewModel.view.tabEstoqueMov
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -30,7 +29,7 @@ class TabEstoqueMFViewModel(val viewModel: EstoqueCDViewModel) {
   }
 }
 
-interface ITabEstoqueMF : ITabView {
+interface ITabEstoqueMov : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
 }

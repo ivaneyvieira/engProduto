@@ -14,8 +14,8 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMF
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueMFViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -27,8 +27,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueMF {
+class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
+  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
@@ -74,7 +74,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
         viewModel.updateView()
       }
     }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueMF") {
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
       val produtos = itensSelecionados()
       viewModel.geraPlanilha(produtos)
     }
@@ -83,32 +83,6 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
-    addColumnButton(VaadinIcon.SHOP, "Ressuprimento", "Ressuprimento") { produto ->
-      val codigo = produto.codigo?.toString() ?: ""
-      val grade = produto.grade ?: ""
-      val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Ressuprimento|$codigo : $descricao : $grade") {
-        val view = RessuprimentoView(false, codigo, grade)
-        val tab = view.tabRessuprimentoEnt
-        val form = tab.createComponent()
-        tab.updateComponent()
-        form
-      }
-      dlg.open()
-    }
-    addColumnButton(VaadinIcon.SIGNAL, "Reposição", "Reposição") { produto ->
-      val codigo = produto.codigo?.toString() ?: ""
-      val grade = produto.grade ?: ""
-      val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Reposição Loja|$codigo : $descricao : $grade") {
-        val view = ReposicaoView(false, codigo, grade)
-        val tab = view.tabReposicaoEnt
-        val form = tab.createComponent()
-        tab.updateComponent()
-        form
-      }
-      dlg.open()
-    }
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
@@ -139,7 +113,7 @@ class TabEstoqueMF(val viewModel: TabEstoqueMFViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueMF == true
+    return username?.estoqueSaldo == true
   }
 
   override val label: String

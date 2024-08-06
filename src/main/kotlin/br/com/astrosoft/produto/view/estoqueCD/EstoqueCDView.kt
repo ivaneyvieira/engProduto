@@ -4,8 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.ViewLayout
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.AcertoEstoqueViewModel
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.IAcertoEstoqueView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.EstoqueCDViewModel
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IEstoqueCDView
 import com.vaadin.flow.component.dependency.CssImport
@@ -19,14 +17,15 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
   override val viewModel = EstoqueCDViewModel(this)
-  override val tabEstoqueMF = TabEstoqueMF(viewModel.tabEstoqueMFViewModel)
+  override val tabEstoqueMov = TabEstoqueMov(viewModel.tabEstoqueMFViewModel)
+  override val tabEstoqueSaldo = TabEstoqueSaldo(viewModel.tabEstoqueSaldoViewModel)
   override val tabEstoqueCad = TabEstoqueCad(viewModel.tabEstoqueCadViewModel)
   override val tabEstoqueCD1A = TabEstoqueCD1A(viewModel.tabEstoqueCD1AViewModel)
   override val tabEstoqueUsr = TabEstoqueUsr(viewModel.tabEstoqueUsrViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
-    return userSaci.estoqueMF
+    return userSaci.estoqueCD
   }
 
   init {

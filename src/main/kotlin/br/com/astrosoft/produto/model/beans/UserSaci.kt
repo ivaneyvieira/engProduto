@@ -39,7 +39,7 @@ class UserSaci : IUser {
   var pedidoTransfCD5A by DelegateAuthorized(18)
   var clienteCadastro by DelegateAuthorized(19)
   var notaRota by DelegateAuthorized(20)
-  var vendaFExpedicao by DelegateAuthorized(21)
+  var estoqueSaldo by DelegateAuthorized(21)
 
   //Permissões da tela receber
   var receberQuantidade by DelegateAuthorized(22)
@@ -71,7 +71,7 @@ class UserSaci : IUser {
   var acertoMovManualSaida by DelegateAuthorized(47)
   var acertoMovManualEntrada by DelegateAuthorized(48)
   var acertoMovAtacado by DelegateAuthorized(49)
-  var estoqueMF by DelegateAuthorized(50)
+  var estoqueMov by DelegateAuthorized(50)
   var estoqueCad by DelegateAuthorized(51)
   var ressuprimentoRec by DelegateAuthorized(52)
   var ressuprimentoRecebedor by DelegateAuthorized(53)
@@ -358,9 +358,9 @@ class UserSaci : IUser {
     }
 
   var estoqueCD
-    get() = estoqueMF || estoqueCad || estoqueCD1A || admin
+    get() = estoqueMov || estoqueCad || estoqueCD1A || estoqueSaldo || admin
     set(value) {
-      estoqueMF = value
+      estoqueMov = value
       estoqueCad = value
       estoqueCD1A = value
     }
