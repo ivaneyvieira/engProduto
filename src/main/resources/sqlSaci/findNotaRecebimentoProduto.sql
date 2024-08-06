@@ -149,7 +149,9 @@ FROM T_NOTA AS N
                  ON E.prdno = N.prdno
                    AND E.grade = N.grade
 WHERE (P.dereg & POW(2, 6)) = 0
-  AND ((P.bits & POW(2, 13)) = 0);
+  AND ((P.bits & POW(2, 13)) = 0)
+  AND (P.no = :prdno OR :prdno = '')
+  AND (N.grade = :grade OR :grade = 'SEM GRADE');
 
 SELECT loja,
        login,

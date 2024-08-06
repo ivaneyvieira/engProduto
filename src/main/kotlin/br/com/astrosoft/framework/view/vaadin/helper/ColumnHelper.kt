@@ -178,7 +178,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   width: String? = null,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  val column = this.addComponentColumn { bean ->
+  val column: Column<T> = this.addComponentColumn { bean ->
     val boleanValue = property.get(bean) ?: false
     if (boleanValue) VaadinIcon.CHECK_CIRCLE_O.create()
     else VaadinIcon.CIRCLE_THIN.create()

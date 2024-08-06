@@ -27,6 +27,15 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
+
+  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    val lista: List<ProdutoKardec> =  produto.recebimentos()
+    var saldoAcumulado = 0
+    return lista.sortedWith(compareBy({it.data}, {it.loja}, {it.doc})).map {
+      saldoAcumulado += it.qtde
+      it.copy(saldo = saldoAcumulado)
+    }
+  }
 }
 
 interface ITabEstoqueSaldo : ITabView {

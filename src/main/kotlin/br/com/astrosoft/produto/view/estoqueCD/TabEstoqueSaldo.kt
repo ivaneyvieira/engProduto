@@ -1,19 +1,13 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.reposicao.ReposicaoView
-import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.integerField
@@ -29,6 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
+  private var dlgKardec: DlgProdutoKardec? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
@@ -82,8 +77,15 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
+    this.format()
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnSeq("Seq")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
+      dlgKardec = DlgProdutoKardec(viewModel, produto)
+      dlgKardec?.showDialog {
+        viewModel.updateView()
+      }
+    }
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")

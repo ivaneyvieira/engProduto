@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class ProdutoEstoque(
   var loja: Int?,
@@ -20,6 +21,31 @@ class ProdutoEstoque(
 ) {
   fun update() {
     saci.updateProdutoEstoque(this)
+  }
+
+  fun recebimentos(): List<ProdutoKardec> {
+    val filtro = FiltroNotaRecebimentoProduto(
+      loja = 0,
+      pesquisa = "",
+      marca = EMarcaRecebimento.RECEBIDO,
+      dataFinal = null,
+      dataInicial = LocalDate.of(2024, 8, 1),
+      localizacao = listOf("TODOS"),
+      prdno = prdno ?: "",
+      grade = grade ?: "SEM GRADE"
+    )
+    return saci.findNotaRecebimentoProduto(filtro).mapNotNull { nota ->
+      ProdutoKardec(
+        loja = nota.loja ?: return@mapNotNull null,
+        prdno = prdno ?: "",
+        grade = grade ?: "",
+        data = nota.data ?: return@mapNotNull null,
+        doc = nota.nfEntrada?: "",
+        tipo = "Recebimento",
+        qtde = nota.quant ?: 0,
+        saldo = 0
+      )
+    }
   }
 
   companion object {

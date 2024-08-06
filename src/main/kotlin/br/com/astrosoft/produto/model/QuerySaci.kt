@@ -1052,6 +1052,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("invno", filtro.invno)
       addOptionalParameter("localizacao", filtro.localizacao)
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("grade", filtro.grade)
     }
   }
 
