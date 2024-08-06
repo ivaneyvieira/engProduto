@@ -22,20 +22,20 @@ add column localizacao varchar(4)
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa AS
-SELECT S.storeno                                                     AS loja,
-       P.no                                                          AS prdno,
-       TRIM(P.no) * 1                                                AS codigo,
-       TRIM(MID(P.name, 1, 37))                                      AS descricao,
-       TRIM(MID(P.name, 38, 3))                                      AS unidade,
-       S.grade                                                       AS grade,
-       P.qttyPackClosed / 1000                                       AS embalagem,
-       TRUNCATE(IFNULL(A.estoque, 0) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
-       IFNULL(A.estoque, 0)                                          AS estoque,
-       MID(L1.localizacao, 1, 4)                                     AS locSaci,
-       COALESCE(A.localizacao, /*MID(L1.localizacao, 1, 4),*/ '')    AS locApp,
-       V.no                                                          AS codForn,
-       V.sname                                                       AS fornecedor,
-       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                AS saldo
+SELECT S.storeno                                                                            AS loja,
+       P.no                                                                                 AS prdno,
+       TRIM(P.no) * 1                                                                       AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                             AS descricao,
+       TRIM(MID(P.name, 38, 3))                                                             AS unidade,
+       S.grade                                                                              AS grade,
+       ROUND(P.qttyPackClosed / 1000)                                                       AS embalagem,
+       ROUND(ROUND((S.qtty_atacado + S.qtty_varejo) / 1000) / (P.qttyPackClosed / 1000), 2) AS qtdEmbalagem,
+       IFNULL(A.estoque, 0)                                                                 AS estoque,
+       MID(L1.localizacao, 1, 4)                                                            AS locSaci,
+       COALESCE(A.localizacao, /*MID(L1.localizacao, 1, 4),*/ '')                           AS locApp,
+       V.no                                                                                 AS codForn,
+       V.sname                                                                              AS fornecedor,
+       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                                       AS saldo
 FROM sqldados.stk AS S
        INNER JOIN sqldados.prd AS P
                   ON S.prdno = P.no
