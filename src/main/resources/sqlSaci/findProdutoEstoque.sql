@@ -56,12 +56,26 @@ WHERE (S.storeno = :loja OR :loja = 0)
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
 GROUP BY S.storeno, S.prdno, S.grade, MID(L1.localizacao, 1, 4);
 
-SELECT *
+SELECT loja,
+       prdno,
+       codigo,
+       descricao,
+       unidade,
+       grade,
+       embalagem,
+       qtdEmbalagem,
+       estoque,
+       locSaci,
+       locApp,
+       codForn,
+       fornecedor,
+       saldo
 FROM temp_pesquisa
 WHERE (
   @PESQUISA = '' OR
   locSaci LIKE @PESQUISALIKE OR
   codigo = @PESQUISANUM OR
+  locSaci LIKE @PESQUISALIKE OR
   descricao LIKE @PESQUISALIKE OR
   unidade LIKE @PESQUISA
   )
