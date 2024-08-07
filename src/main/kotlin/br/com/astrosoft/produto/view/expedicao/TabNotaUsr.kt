@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.notaSaida
+package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.ETipoNotaFiscal
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaUsr
-import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaUsrViewModel
+import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaUsr
+import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant

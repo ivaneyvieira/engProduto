@@ -1,28 +1,24 @@
-package br.com.astrosoft.produto.view.notaSaida
+package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaLoginEnt
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFDataEnt
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFEntregaRetira
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNotaEnt
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFSituacao
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFTipo
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
-import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaEnt
-import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaEntViewModel
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFCliente
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFData
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFEntregaRetira
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFLoja
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFTipo
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
+import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaCD
+import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -35,9 +31,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEnt {
+class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaCD {
   private var colRota: Grid.Column<NotaSaida>? = null
-  private var dlgProduto: DlgProdutosEnt? = null
+  private var dlgProduto: DlgProdutosCD? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
@@ -110,10 +106,10 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
-      viewModel.printEtiquetaEnt(nota)
+      viewModel.printEtiquetaExp(nota)
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosEnt(viewModel, nota)
+      dlgProduto = DlgProdutosCD(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -122,17 +118,14 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFData()
     colunaHora()
     colRota = colunaRota()
-    colunaLoginEnt()
-    colunaNFNotaEnt()
-    colunaNFDataEnt()
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
     colunaNomeVendedor()
-    colunaNFValor()
     colunaNFTipo()
     colunaNFEntregaRetira()
-    colunaNFSituacao()
+
+    colunaNFValor()
   }
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
@@ -158,13 +151,21 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
+  override fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS? {
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  }
+
+  override fun findNota(): NotaSaida? {
+    return dlgProduto?.nota
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.notaEnt == true
+    return username?.notaCD == true
   }
 
   override val label: String
-    get() = "Entregue"
+    get() = "CD"
 
   override fun updateComponent() {
     viewModel.updateView()

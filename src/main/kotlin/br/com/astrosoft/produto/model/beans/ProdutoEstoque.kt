@@ -49,7 +49,7 @@ class ProdutoEstoque(
     }
   }
 
-  private fun filtroRessuprimento(marca :EMarcaRessuprimento): FiltroRessuprimento {
+  private fun filtroRessuprimento(marca: EMarcaRessuprimento): FiltroRessuprimento {
     return FiltroRessuprimento(
       numero = 0,
       pesquisa = "",
@@ -91,6 +91,10 @@ class ProdutoEstoque(
 
   fun ressuprimento(): List<ProdutoKardec> {
     return ressuprimento(EMarcaRessuprimento.ENT) + ressuprimento(EMarcaRessuprimento.REC)
+  }
+
+  fun expedicao(): List<ProdutoKardec> {
+    TODO()
   }
 
   companion object {

@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
-import br.com.astrosoft.produto.view.notaSaida.NotaView
+import br.com.astrosoft.produto.view.expedicao.NotaView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.recebimento.RecebimentoView
@@ -18,9 +18,7 @@ import br.com.astrosoft.produto.view.vendaRef.VendaRefView
 import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.icon.VaadinIcon.*
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder.PEOPLE
 
 class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {

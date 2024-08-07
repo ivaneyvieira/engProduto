@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.notaSaida
+package br.com.astrosoft.produto.view.expedicao
 
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.formlayout.FormLayout

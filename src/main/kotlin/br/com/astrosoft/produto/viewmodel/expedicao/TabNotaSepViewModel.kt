@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.notaSaida
+package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.printText.NotaSeparacao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
+class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
@@ -22,9 +22,7 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
     else
       EMarcaNota.TODOS
     val filtro = subView.filtro(marca)
-    val notas = NotaSaida.find(filtro).filter {
-      it.empnoMotorista != null && it.entrega != null
-    }
+    val notas = NotaSaida.find(filtro)
     subView.updateNotas(notas)
   }
 
@@ -57,13 +55,21 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
     updateView()
   }
 
-  fun transportadoNota(nota: NotaSaida, numero: Int, data: LocalDate?) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    val data = data ?: fail("Data não informada")
-    if (funcionario.funcao != "MOTORISTA")
-      fail("Funcionário não é motorista")
-    nota.empnoMotorista = funcionario.codigo
-    nota.entrega = data
+  fun formAutoriza(nota: NotaSaida) {
+    subView.formTransportado(nota)
+  }
+
+  fun transportadoNota(nota: NotaSaida, numero: Int?, data: LocalDate?) = viewModel.exec {
+    if (numero == null || data == null) {
+      nota.empnoMotorista = null
+      nota.entrega = null
+    } else {
+      val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+      if (funcionario.funcao != "MOTORISTA")
+        fail("Funcionário não é motorista")
+      nota.empnoMotorista = funcionario.codigo
+      nota.entrega = data
+    }
     nota.save()
     updateView()
   }
@@ -79,8 +85,8 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
         NotaSaidaProduto(
           motorista = nota.nomeMotorista ?: "",
           dataEntrega = nota.entrega,
-          usernoPrint = nota.usernoPrint,
           usuarioPrint = nota.usuarioPrint,
+          usernoPrint = nota.usernoPrint,
           loja = nota.loja,
           pedido = nota.pedido.toString(),
           nota = nota.nota,
@@ -116,14 +122,15 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabNotaRota
+    get() = viewModel.view.tabNotaSep
 }
 
-interface ITabNotaRota : ITabView {
+interface ITabNotaSep : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
+  fun formTransportado(nota: NotaSaida)
   fun itensSelecionados(): List<NotaSaida>
 }

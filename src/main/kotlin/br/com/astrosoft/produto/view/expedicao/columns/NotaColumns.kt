@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.notaSaida.columns
+package br.com.astrosoft.produto.view.expedicao.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaSaida

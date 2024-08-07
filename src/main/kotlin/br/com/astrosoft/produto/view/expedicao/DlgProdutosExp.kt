@@ -1,67 +1,59 @@
-package br.com.astrosoft.produto.view.notaSaida
+package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFGrade
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.notaSaida.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
-import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaCDViewModel
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGrade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
+import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.notification.Notification.show
+import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
+class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da notaSaida ${nota.nota} loja: ${nota.loja}$lblCancel", toolBar = {
-      button("Volta") {
-        val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
-          viewModel.marcaExp()
-        }
-      }
-      button("Entregue") {
+    form = SubWindowForm("Produtos da expedicao ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
+      button("CD") {
         isEnabled = nota.cancelada == "N"
-        val user = AppConfig.userLogin() as? UserSaci
-        isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
-          viewModel.marcaEnt()
+        onClick {
+          viewModel.marcaCD()
+          val user = AppConfig.userLogin() as? UserSaci
+          val marca = if (user?.admin == true)
+            EMarcaNota.TODOS
+          else
+            EMarcaNota.EXP
+
+          gridDetail.setItems(nota.produtos(marca))
         }
       }
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.marcaEntProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
-          }
+      button("Imprimir") {
+        this.icon = VaadinIcon.PRINT.create()
+        this.isVisible = nota.cancelada == "N"
+        onClick {
+          val itensSelecionados = gridDetail.selectedItems.toList()
+          viewModel.imprimeProdutosNota(nota, itensSelecionados)
         }
       }
     }, onClose = {
@@ -77,6 +69,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
 
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
+      this.addClassName("styling")
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
@@ -86,15 +79,15 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
         when {
           it.bean?.clno?.startsWith("01") == false -> {
-            show("O produto não está no grupo de piso")
+            Notification.show("O produto não está no grupo de piso")
           }
 
           it.bean.tipoNota != 4                    -> {
-            show("Não é uma notaSaida de edtrega futura")
+            Notification.show("Não é uma expedicao de edtrega futura")
           }
 
           nota.cancelada == "S"                    -> {
-            show("A notaSaida está cancelada")
+            Notification.show("A expedicao está cancelada")
           }
         }
       }, closeEditor = { binder ->
@@ -138,8 +131,26 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
+
+      this.setClassNameGenerator {
+        when (it.marca) {
+          1    -> "cd"
+          2    -> "entregue"
+          else -> null
+        }
+      }
+      this.setPartNameGenerator {
+        val marca = it.marca
+        val marcaImpressao = it.marcaImpressao ?: 0
+        when {
+          marcaImpressao > 0          -> "azul"
+          marca == EMarcaNota.ENT.num -> "amarelo"
+          else                        -> null
+        }
+      }
     }
     this.addAndExpand(gridDetail)
+
     update()
   }
 
@@ -148,14 +159,12 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val listProdutos = nota.produtos(EMarcaNota.CD)
+    val user = AppConfig.userLogin() as? UserSaci
+    val marca = if (user?.admin == true)
+      EMarcaNota.TODOS
+    else
+      EMarcaNota.EXP
+    val listProdutos = nota.produtos(marca)
     gridDetail.setItems(listProdutos)
-  }
-
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS? {
-    return gridDetail.dataProvider.fetchAll().firstOrNull {
-      val barcodes = it.barcodes
-      codigoBarra.trim() in barcodes
-    }
   }
 }

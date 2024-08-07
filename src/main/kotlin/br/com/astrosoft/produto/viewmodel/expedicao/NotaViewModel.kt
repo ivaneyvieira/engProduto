@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.notaSaida
+package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel

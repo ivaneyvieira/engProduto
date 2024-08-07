@@ -1,39 +1,31 @@
-package br.com.astrosoft.produto.view.notaSaida
+package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaAgendado
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaEntrega
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaHora
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaImpresso
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaImpressoSep
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaMotoristaSing
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFCliente
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFEntregaRetira
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFLoja
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFSituacao
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFTipo
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNFVendedor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaNomeVendedor
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaPedido
-import br.com.astrosoft.produto.view.notaSaida.columns.NotaColumns.colunaRota
-import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
-import br.com.astrosoft.produto.viewmodel.notaSaida.ITabNotaSep
-import br.com.astrosoft.produto.viewmodel.notaSaida.TabNotaSepViewModel
-import com.github.mvysny.karibudsl.v10.button
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaLoginEnt
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFCliente
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFData
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFDataEnt
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFEntregaRetira
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFLoja
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFNota
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFNotaEnt
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFSituacao
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFTipo
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFVendedor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
+import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaEnt
+import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.selectionMode
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -43,8 +35,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaSep {
-  private var dlgProduto: DlgProdutosSep? = null
+class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaEnt {
+  private var colRota: Grid.Column<NotaSaida>? = null
+  private var dlgProduto: DlgProdutosEnt? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
@@ -89,6 +82,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       addValueChangeListener {
         if (it.isFromClient)
           viewModel.updateView()
+        colRota?.isVisible = it.value == ETipoNotaFiscal.ENTRE_FUT
       }
     }
     edtPesquisa = textField("Pesquisa") {
@@ -111,58 +105,34 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
         viewModel.updateView()
       }
     }
-    button("Relatório") {
-      this.icon = VaadinIcon.PRINT.create()
-      addClickListener {
-        viewModel.print()
-      }
-    }
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
-    this.addClassName("styling")
-    this.format()
-    this.selectionMode = Grid.SelectionMode.MULTI
-
     colunaNFLoja()
+    addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
+      viewModel.printEtiquetaEnt(nota)
+    }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosSep(viewModel, nota)
+      dlgProduto = DlgProdutosEnt(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    colunaRota()
     colunaNFNota()
     colunaNFData()
     colunaHora()
-    colunaPedido()
-    colunaEntrega()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formAutoriza(pedido)
-    }
-    colunaMotoristaSing()
-    colunaImpressoSep()
+    colRota = colunaRota()
+    colunaLoginEnt()
+    colunaNFNotaEnt()
+    colunaNFDataEnt()
     colunaNFCliente()
     colunaNomeCliente()
+    colunaNFVendedor()
     colunaNomeVendedor()
     colunaNFValor()
+    colunaNFTipo()
     colunaNFEntregaRetira()
     colunaNFSituacao()
-
-    this.setPartNameGenerator {
-      val countEnt = it.countEnt ?: 0
-      val countImp = it.countImp ?: 0
-      val cancelada = it.cancelada ?: "N"
-      when {
-        cancelada == "S" -> "vermelho"
-
-        countImp > 0     -> "azul"
-
-        countEnt > 0     -> "amarelo"
-
-        else             -> null
-      }
-    }
   }
 
   override fun filtro(marca: EMarcaNota): FiltroNota {
@@ -180,10 +150,6 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     updateGrid(notas)
   }
 
-  override fun findNota(): NotaSaida? {
-    return dlgProduto?.nota
-  }
-
   override fun updateProdutos() {
     dlgProduto?.update()
   }
@@ -192,27 +158,15 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun formTransportado(nota: NotaSaida) {
-    val form = FormFuncionario(numeroI = nota.empnoMotorista, dataI = nota.entrega)
-    DialogHelper.showForm(caption = "Transportado Por", form = form) {
-      viewModel.transportadoNota(nota, form.numero, form.data)
-    }
-  }
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.notaSep == true
+    return username?.notaEnt == true
   }
 
   override val label: String
-    get() = "Sep"
+    get() = "Entregue"
 
   override fun updateComponent() {
     viewModel.updateView()
-  }
-
-  override fun printerUser(): List<String> {
-    val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraNotaTermica?.toList().orEmpty()
   }
 }

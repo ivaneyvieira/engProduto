@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.notaSaida
+package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
@@ -79,7 +79,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
-    nota ?: fail("Nenhuma notaSaida selecionada")
+    nota ?: fail("Nenhuma expedicao selecionada")
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
       try {

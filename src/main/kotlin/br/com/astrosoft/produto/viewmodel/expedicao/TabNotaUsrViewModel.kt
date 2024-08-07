@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.notaSaida
+package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.viewmodel.ITabUser
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel

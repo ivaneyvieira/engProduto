@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.notaSaida
+package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
