@@ -260,6 +260,8 @@ WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND (issuedate >= :dataInicial OR :dataInicial = 0)
   AND (issuedate <= :dataFinal OR :dataFinal = 0)
   AND issuedate >= @DT
+  AND (X.prdno = :prdno OR :prdno = '')
+  AND (X.grade = :grade OR :grade = '')
   AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
@@ -267,6 +269,11 @@ WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
           AND N.tipo NOT IN (0, 1)
         WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) OR
                       (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0)
+        WHEN 'T' THEN ((N.storeno != :loja OR :loja = 0)
+          AND IFNULL(tipoR, 0) = 0
+          AND N.tipo NOT IN (0, 1)) OR
+                      ((N.storeno = :loja OR :loja = 0) OR
+                       (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))
         ELSE FALSE
       END
   AND CASE

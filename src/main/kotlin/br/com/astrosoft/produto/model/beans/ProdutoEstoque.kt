@@ -37,10 +37,10 @@ class ProdutoEstoque(
     )
     return saci.findNotaRecebimentoProduto(filtro).mapNotNull { nota ->
       ProdutoKardec(
-        loja = nota.loja ?: return@mapNotNull null,
+        loja = nota.loja ?: 0,
         prdno = prdno ?: "",
         grade = grade ?: "",
-        data = nota.data ?: return@mapNotNull null,
+        data = nota.data,
         doc = nota.nfEntrada ?: "",
         tipo = "Recebimento",
         qtde = nota.quant ?: 0,
@@ -79,7 +79,7 @@ class ProdutoEstoque(
           loja = ressuprimento.loja ?: 0,
           prdno = prdno,
           grade = grade,
-          data = ressuprimento.dataBaixa ?: return@mapNotNull null,
+          data = ressuprimento.dataBaixa,
           doc = ressuprimento.notaBaixa ?: "",
           tipo = "Ressuprimento",
           qtde = (produto.qtQuantNF ?: 0) * mult,
@@ -94,7 +94,34 @@ class ProdutoEstoque(
   }
 
   fun expedicao(): List<ProdutoKardec> {
-    TODO()
+    val filtro = FiltroNota(
+      marca = EMarcaNota.CD,
+      tipoNota = ETipoNotaFiscal.TODOS,
+      loja =  0,
+      //dataEntregaInicial = LocalDate.of(2024, 8, 1),
+      //dataEntregaFinal = null,
+      pesquisa = "",
+      notaEntrega = "T",
+      prdno = prdno ?: "",
+      grade = grade ?: "",
+      dataInicial = LocalDate.of(2024, 8, 1),
+      dataFinal = null
+    )
+    val notas = saci.findNotaSaida(filtro = filtro)
+    return notas.flatMap { nota ->
+      nota.produtos(EMarcaNota.CD, prdno ?: "", grade ?: "").mapNotNull { produto ->
+        ProdutoKardec(
+          loja = nota.loja,
+          prdno = prdno ?: "",
+          grade = grade ?: "",
+          data = nota.data,
+          doc = "${nota.numero}/${nota.serie}",
+          tipo = "Expedição",
+          qtde = produto.quantidade ?: 0,
+          saldo = 0
+        )
+      }
+    }
   }
 
   companion object {

@@ -77,6 +77,8 @@ WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
   AND (X.s11 = :marca OR :marca = 999)
+  AND (X.prdno = :prdno OR :prdno = '')
+  AND (X.grade = :grade OR :grade = '')
 GROUP BY codigo, grade, local;
 
 SELECT loja,

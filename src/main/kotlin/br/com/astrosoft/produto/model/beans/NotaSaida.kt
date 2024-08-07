@@ -72,7 +72,8 @@ class NotaSaida(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos(marca: EMarcaNota) = saci.findProdutoNF(this, marca)
+  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "") =
+      saci.findProdutoNF(this, marca, prdno, grade)
 
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -104,6 +105,8 @@ data class FiltroNota(
   val dataEntregaFinal: LocalDate? = null,
   val notaEntrega: String = "N",
   val pesquisa: String,
+  val prdno: String = "",
+  val grade: String = "",
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {

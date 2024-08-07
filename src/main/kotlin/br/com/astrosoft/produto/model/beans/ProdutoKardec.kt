@@ -6,7 +6,7 @@ data class ProdutoKardec(
   val loja: Int,
   val prdno: String,
   val grade: String,
-  val data: LocalDate,
+  val data: LocalDate?,
   val doc: String,
   val tipo: String,
   val qtde: Int,

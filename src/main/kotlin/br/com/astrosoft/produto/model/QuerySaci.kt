@@ -306,6 +306,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
       addOptionalParameter("dataEntregaFinal", filtro.dataEntregaFinal.toSaciDate())
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("grade", filtro.grade)
     }.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
@@ -385,7 +387,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota): List<ProdutoNFS> {
+  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
     val produtos = query(sql, ProdutoNFS::class) {
@@ -393,6 +395,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
       addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
       addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
@@ -1362,7 +1366,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateValidadeSaci(validade: ValidadeSaci){
+  fun updateValidadeSaci(validade: ValidadeSaci) {
     val sql = "/sqlSaci/updateValidadeSaci.sql"
     script(sql) {
       addOptionalParameter("tipoValidade", validade.tipoValidade ?: 0)
