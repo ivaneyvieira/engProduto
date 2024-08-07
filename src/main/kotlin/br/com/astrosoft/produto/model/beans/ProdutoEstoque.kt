@@ -90,7 +90,7 @@ class ProdutoEstoque(
   }
 
   fun ressuprimento(): List<ProdutoKardec> {
-    return ressuprimento(EMarcaRessuprimento.ENT)
+    return ressuprimento(EMarcaRessuprimento.ENT) + ressuprimento(EMarcaRessuprimento.REC)
   }
 
   companion object {
