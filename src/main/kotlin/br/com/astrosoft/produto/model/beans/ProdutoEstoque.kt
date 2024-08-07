@@ -70,7 +70,7 @@ class ProdutoEstoque(
       val prdno = prdno ?: return emptyList()
       val grade = grade ?: return emptyList()
       val mult = when (marca) {
-        EMarcaRessuprimento.REC -> 1
+        EMarcaRessuprimento.REC -> -1
         EMarcaRessuprimento.ENT -> -1
         else                    -> 0
       }
