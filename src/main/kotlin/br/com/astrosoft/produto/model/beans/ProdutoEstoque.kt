@@ -117,7 +117,7 @@ class ProdutoEstoque(
           data = nota.data,
           doc = "${nota.numero}/${nota.serie}",
           tipo = "Expedição",
-          qtde = produto.quantidade ?: 0,
+          qtde = - (produto.quantidade ?: 0),
           saldo = 0
         )
       }
