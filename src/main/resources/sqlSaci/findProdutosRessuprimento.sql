@@ -114,12 +114,16 @@ FROM (SELECT O1.*, 1 AS origem
       FROM sqldados.oprd AS O1
       WHERE storeno = 1
         AND ordno = :ordno
+        AND (prdno = :prdno OR :prdno = '')
+        AND (grade = :grade OR :grade = '')
       UNION
       DISTINCT
       SELECT O2.*, 10 AS origem
       FROM sqldados.oprdRessu AS O2
       WHERE storeno = 1
-        AND ordno = :ordno) AS D
+        AND ordno = :ordno
+        AND (prdno = :prdno OR :prdno = '')
+        AND (grade = :grade OR :grade = '')) AS D
 GROUP BY storeno, ordno, prdno, grade, seqno;
 
 DROP TEMPORARY TABLE IF EXISTS T_VENC;

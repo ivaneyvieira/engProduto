@@ -92,7 +92,7 @@ class TabRessuprimentoEnt(
     }
     button("Produtos") {
       this.icon = VaadinIcon.FILE_TABLE.create()
-      onLeftClick {
+      onClick {
         viewModel.processamentoProdutos()
       }
     }

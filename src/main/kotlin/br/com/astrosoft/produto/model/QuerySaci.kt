@@ -422,6 +422,8 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoRessuprimento(
     pedido: Ressuprimento,
+    prdno: String,
+    grade: String,
     marca: EMarcaRessuprimento,
     locais: List<String>
   ): List<ProdutoRessuprimento> {
@@ -432,6 +434,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("locApp", localList)
       addOptionalParameter("locais", locais)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
     }
   }
 

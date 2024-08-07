@@ -13,6 +13,7 @@ class Ressuprimento(
   var localizacoes: String?,
   var marca: Int?,
   var temNota: String?,
+  var loja: Int?,
   var notaBaixa: String?,
   var dataBaixa: LocalDate?,
   var valorNota: Double?,
@@ -57,14 +58,16 @@ class Ressuprimento(
       return user?.login
     }
 
-  fun produtos(): List<ProdutoRessuprimento> {
+  fun produtos(prdno: String = "", grade: String = ""): List<ProdutoRessuprimento> {
     val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
-    return produtos(marcaRessu)
+    return produtos(marcaRessu, prdno, grade)
   }
 
-  private fun produtos(marcaRessu: EMarcaRessuprimento): List<ProdutoRessuprimento> {
+  private fun produtos(marcaRessu: EMarcaRessuprimento, prdno: String, grade: String): List<ProdutoRessuprimento> {
     return saci.findProdutoRessuprimento(
       pedido = this,
+      prdno = prdno,
+      grade = grade,
       marca = marcaRessu,
       locais = userRessuprimentoLocais()
     ).map { prd ->
@@ -157,6 +160,7 @@ class Ressuprimento(
           localizacoes = entry.value.joinToString { it.localizacoes ?: "" },
           marca = ressu?.marca,
           temNota = ressu?.temNota,
+          loja = ressu?.loja,
           notaBaixa = ressu?.notaBaixa,
           dataBaixa = ressu?.dataBaixa,
           valorNota = ressu?.valorNota,
