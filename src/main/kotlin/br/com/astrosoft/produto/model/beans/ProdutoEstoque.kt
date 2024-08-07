@@ -95,7 +95,7 @@ class ProdutoEstoque(
 
   fun expedicao(): List<ProdutoKardec> {
     val filtro = FiltroNota(
-      marca = EMarcaNota.CD,
+      marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
       loja =  0,
       //dataEntregaInicial = LocalDate.of(2024, 8, 1),
