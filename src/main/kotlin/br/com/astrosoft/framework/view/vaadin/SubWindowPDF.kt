@@ -1,9 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin
 
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.horizontalLayout
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.verticalLayout
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -28,7 +25,7 @@ class SubWindowPDF(chave: String, bytesPDF: ByteArray) : Dialog() {
         add(Anchor(resourcePDF, "Download"))
         button("Fechar") {
           icon = VaadinIcon.CLOSE.create()
-          onLeftClick {
+          onClick {
             close()
           }
         }

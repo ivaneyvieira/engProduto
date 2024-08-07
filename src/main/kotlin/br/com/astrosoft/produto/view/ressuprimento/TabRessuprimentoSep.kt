@@ -84,7 +84,7 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
     }
     button("Produtos") {
       this.icon = VaadinIcon.FILE_TABLE.create()
-      onLeftClick {
+      onClick {
         viewModel.processamentoProdutos()
       }
     }
@@ -92,7 +92,7 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
       val user = AppConfig.userLogin() as? UserSaci
       this.isVisible = user?.ressuprimentoExclui == true || user?.admin == true
       icon = VaadinIcon.TRASH.create()
-      onLeftClick {
+      onClick {
         viewModel.excluiRessuprimento()
       }
     }

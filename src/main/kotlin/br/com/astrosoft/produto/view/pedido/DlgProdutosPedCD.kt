@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produtoPedidoQuantidade
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -33,7 +34,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
         val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marcaEnt()
         }
       }
@@ -49,7 +50,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       }
       button("Imprime") {
         icon = VaadinIcon.PRINT.create()
-        onLeftClick {
+        onClick {
           viewModel.salvaProdutos()
         }
       }

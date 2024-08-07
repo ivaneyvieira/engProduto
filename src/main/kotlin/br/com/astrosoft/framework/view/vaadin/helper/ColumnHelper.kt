@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
 import br.com.astrosoft.framework.util.format
-import com.github.mvysny.karibudsl.v10.VaadinDsl
-import com.github.mvysny.karibudsl.v10.column
-import com.github.mvysny.karibudsl.v10.isExpand
-import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
@@ -40,7 +37,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
       configIcon(this, bean)
       this.style.set("cursor", "pointer")
       if (tooltip != null) this.setTooltipText(tooltip)
-      onLeftClick {
+      onClick {
         execButton(bean)
       }
     }

@@ -183,7 +183,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
-          onLeftClick {
+          onClick {
             viewModel.imprimeProdutos()
           }
         }

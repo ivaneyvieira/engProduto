@@ -88,7 +88,7 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     }
     button("Produtos") {
       this.icon = VaadinIcon.FILE_TABLE.create()
-      onLeftClick {
+      onClick {
         viewModel.processamentoProdutos()
       }
     }

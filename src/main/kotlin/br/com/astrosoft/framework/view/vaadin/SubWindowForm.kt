@@ -43,7 +43,7 @@ class SubWindowForm(
         content { align(left, baseline) }
         button("Fechar") {
           icon = VaadinIcon.CLOSE.create()
-          onLeftClick {
+          onClick {
             onClose(this@SubWindowForm)
             this@SubWindowForm.close()
           }

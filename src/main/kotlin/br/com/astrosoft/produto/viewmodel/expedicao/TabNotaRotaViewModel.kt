@@ -59,7 +59,7 @@ class TabNotaRotaViewModel(val viewModel: NotaViewModel) {
 
   fun transportadoNota(nota: NotaSaida, numero: Int, data: LocalDate?) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    val data = data ?: fail("Data não informada")
+    data ?: fail("Data não informada")
     if (funcionario.funcao != "MOTORISTA")
       fail("Funcionário não é motorista")
     nota.empnoMotorista = funcionario.codigo

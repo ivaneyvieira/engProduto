@@ -17,6 +17,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -41,7 +42,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
+        onClick {
           viewModel.marcaExp()
         }
       }
@@ -50,7 +51,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marcaEnt()
         }
       }

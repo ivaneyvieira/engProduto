@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -34,7 +35,7 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
         val user = AppConfig.userLogin() as? UserSaci
         isVisible = user?.voltarEnt == true || user?.admin == true
         icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
+        onClick {
           viewModel.marcaCD()
           gridDetail.setItems(nota.produtos(EMarcaNota.ENT))
         }

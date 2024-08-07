@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.Reposicao
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
@@ -42,13 +43,13 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       }
       button("Entregue") {
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marca()
         }
       }
       button("Desmarcar") {
         icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
+        onClick {
           viewModel.desmarcar()
         }
       }

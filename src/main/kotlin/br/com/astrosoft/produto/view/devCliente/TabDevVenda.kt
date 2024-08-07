@@ -80,7 +80,7 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     }
     button("Relatorio") {
       icon = VaadinIcon.PRINT.create()
-      onLeftClick {
+      onClick {
         viewModel.imprimeRelatorio()
       }
     }

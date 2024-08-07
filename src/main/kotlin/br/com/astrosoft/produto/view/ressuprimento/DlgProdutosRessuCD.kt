@@ -17,7 +17,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoVencimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoCDViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
@@ -51,13 +51,13 @@ class DlgProdutosRessuCD(val viewModel: TabRessuprimentoCDViewModel, val ressupr
       }
       button("Entregue") {
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marca()
         }
       }
       button("Desmarcar") {
         icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
+        onClick {
           viewModel.desmarcar()
         }
       }

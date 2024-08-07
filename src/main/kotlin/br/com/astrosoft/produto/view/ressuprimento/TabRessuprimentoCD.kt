@@ -85,14 +85,14 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
     button("Exclui") {
       this.isVisible = user?.ressuprimentoExclui == true
       icon = VaadinIcon.TRASH.create()
-      onLeftClick {
+      onClick {
         viewModel.excluiRessuprimento()
       }
     }
 
     button("Produtos") {
       this.icon = VaadinIcon.FILE_TABLE.create()
-      onLeftClick {
+      onClick {
         viewModel.processamentoProdutos()
       }
     }

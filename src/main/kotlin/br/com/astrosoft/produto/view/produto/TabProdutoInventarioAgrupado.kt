@@ -141,7 +141,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
         val user = AppConfig.userLogin() as? UserSaci
         if (user?.admin == true) {
           button("Atualizar") {
-            onLeftClick {
+            onClick {
               viewModel.atualizarTabelas()
             }
           }
@@ -194,7 +194,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       val totalEstoqueLoja = list.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.map {
         it.value.firstOrNull()?.estoqueLoja ?: 0
       }.sum()
-      val totalSaldo = list.sumOf { it.saldo }
+      list.sumOf { it.saldo }
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter(totalEstoqueLoja.format())
     } else {
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter("")

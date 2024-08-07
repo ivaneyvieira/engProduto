@@ -53,7 +53,7 @@ class SubWindowPrinter(
       horizontalLayout {
         button("Fechar") {
           icon = VaadinIcon.CLOSE.create()
-          onLeftClick {
+          onClick {
             close()
           }
         }
@@ -80,7 +80,7 @@ class SubWindowPrinter(
           }
           this.button("Imprimir") {
             icon = VaadinIcon.PRINT.create()
-            this.onLeftClick {
+            this.onClick {
               DialogHelper.showQuestion("Confirma a impressão?") {
                 val impressoraName = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
                 val impressora = Impressora.findImpressora(impressoraName)

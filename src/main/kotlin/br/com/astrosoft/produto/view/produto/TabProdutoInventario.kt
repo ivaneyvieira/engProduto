@@ -158,7 +158,7 @@ class TabProdutoInventario(val viewModel: TabProdutoInventarioViewModel) :
         val user = AppConfig.userLogin() as? UserSaci
         if (user?.admin == true) {
           button("Atualizar") {
-            onLeftClick {
+            onClick {
               viewModel.atualizarTabelas()
             }
           }

@@ -17,10 +17,7 @@ import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.p
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEReferencia
 import br.com.astrosoft.produto.view.notaEntrada.columns.ProdutoNFEViewColumns.produtoNFEUnidade
 import br.com.astrosoft.produto.viewmodel.notaEntrada.TabNotaEntradaReceberViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onLeftClick
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.github.mvysny.kaributools.selectAll
@@ -94,13 +91,13 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private fun HasComponents.botaoProcessar() {
     if (userSaci?.receberProcessar == true) {
       button("Processa") {
-        onLeftClick {
+        onClick {
           viewModel.processaProdutos()
         }
       }
     } else {
       button("Concluir") {
-        onLeftClick {
+        onClick {
           viewModel.receberConcluir()
         }
       }
@@ -155,7 +152,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private fun HasComponents.botaoExcluir() {
     if (userSaci?.receberExcluir == true) {
       button("Remover") {
-        onLeftClick {
+        onClick {
           viewModel.removeProduto()
         }
       }

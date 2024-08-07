@@ -72,7 +72,7 @@ class TabAcertoMovManualEntrada(val viewModel: TabAcertoMovManualEntradaViewMode
     }
     this.button("Estorno") {
       icon = VaadinIcon.OUTBOX.create()
-      onLeftClick {
+      onClick {
         viewModel.estorno(itensSelecionados())
       }
     }

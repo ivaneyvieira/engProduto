@@ -135,9 +135,9 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFSituacao()
   }
 
-  override fun filtro(marca: EMarcaNota): FiltroNota {
+  override fun filtro(): FiltroNota {
     return FiltroNota(
-      marca = marca,
+      marca = EMarcaNota.ENT,
       tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,

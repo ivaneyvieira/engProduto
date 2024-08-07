@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.Validade
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabValidadeList
 import br.com.astrosoft.produto.viewmodel.recebimento.TabValidadeListViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -20,7 +21,7 @@ class TabValidadeList(val viewModel: TabValidadeListViewModel) :
   override fun HorizontalLayout.toolBarConfig() {
     button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
-      onLeftClick {
+      onClick {
         viewModel.addValidade()
       }
     }

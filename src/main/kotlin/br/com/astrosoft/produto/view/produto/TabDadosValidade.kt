@@ -209,12 +209,9 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
   private fun updateTotais() {
     if (!edtCodigo.value.isNullOrBlank()) {
       val list = gridPanel.dataProvider.fetchAll()
-      val totalEstoqueLoja = list.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.map {
+      list.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.map {
         it.value.firstOrNull()?.estoqueLoja ?: 0
       }.sum()
-
-    } else {
-
     }
   }
 

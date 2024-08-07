@@ -67,7 +67,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
     }
     button("Relatorio") {
       icon = VaadinIcon.PRINT.create()
-      onLeftClick {
+      onClick {
         viewModel.imprimeRelatorio()
       }
     }
@@ -77,7 +77,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
 
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
-      onLeftClick {
+      onClick {
         viewModel.imprimeProdutos()
       }
     }

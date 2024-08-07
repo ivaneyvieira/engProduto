@@ -25,7 +25,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtVencido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoPenViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onLeftClick
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
@@ -62,19 +62,19 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
       }
       button("Recebido") {
         icon = VaadinIcon.ARROW_RIGHT.create()
-        onLeftClick {
+        onClick {
           viewModel.marca()
         }
       }
       button("Desmarcar") {
         icon = VaadinIcon.ARROW_LEFT.create()
-        onLeftClick {
+        onClick {
           viewModel.desmarcar()
         }
       }
       button("Relatório") {
         icon = VaadinIcon.PRINT.create()
-        onLeftClick {
+        onClick {
           val ressuprimentoTitleNovo = if (ressuprimentos.size == 1) {
             val ressuprimento = ressuprimentos.first()
             "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"
@@ -88,7 +88,7 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
       }
       button("Imprimir") {
         icon = VaadinIcon.PRINT.create()
-        onLeftClick {
+        onClick {
           val ressuprimentoTitleNovo = if (ressuprimentos.size == 1) {
             val ressuprimento = ressuprimentos.first()
             "${ressuprimento.nomeLojaRessu} de ${ressuprimento.dataBaixa.format()}"

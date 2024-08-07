@@ -17,7 +17,7 @@ abstract class AppLayoutAbstract : AppLayout() {
         isExpand = true
       }
       button("Sair") {
-        onLeftClick {
+        onClick {
           LoginService.get().logout()
         }
       }
