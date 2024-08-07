@@ -96,4 +96,8 @@ object ProdutoNFNFSViewColumns {
   fun Grid<ProdutoNFS>.produtoNFUsuarioSep() = columnGrid(ProdutoNFS::usuarioSep) {
     this.setHeader("Impresso")
   }
+
+  fun Grid<ProdutoNFS>.produtoNFEstoque() = columnGrid(ProdutoNFS::estoque) {
+    this.setHeader("Estoque")
+  }
 }

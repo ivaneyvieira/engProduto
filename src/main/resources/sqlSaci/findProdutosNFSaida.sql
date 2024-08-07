@@ -61,9 +61,11 @@ FROM sqldados.prd AS P
                   USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.prdbar AS B
                  ON P.no = B.prdno AND B.grade = X.grade
-       LEFT JOIN sqldados.stk AS STK
-                 ON X.storeno = STK.storeno
-                   AND X.prdno = STK.prdno
+       LEFT JOIN (SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
+                  FROM sqldados.stk
+                  WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+                  GROUP BY prdno, grade) AS STK
+                 ON X.prdno = STK.prdno
                    AND X.grade = STK.grade
        LEFT JOIN sqldados.vend AS F
                  ON F.no = P.mfno
