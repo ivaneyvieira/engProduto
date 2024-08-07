@@ -109,7 +109,7 @@ class ProdutoEstoque(
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
-      nota.produtos(EMarcaNota.CD, prdno ?: "", grade ?: "").mapNotNull { produto ->
+      nota.produtos(EMarcaNota.ENT, prdno ?: "", grade ?: "").map { produto ->
         ProdutoKardec(
           loja = nota.loja,
           prdno = prdno ?: "",
