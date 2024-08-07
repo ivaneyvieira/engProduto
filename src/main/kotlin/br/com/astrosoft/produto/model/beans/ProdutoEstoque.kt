@@ -81,7 +81,7 @@ class ProdutoEstoque(
           grade = grade,
           data = ressuprimento.dataBaixa ?: return@mapNotNull null,
           doc = ressuprimento.notaBaixa ?: "",
-          tipo = "Ressuprimento ${marca.descricao.subSequence(0, 3)}",
+          tipo = "Ressuprimento",
           qtde = (produto.qtQuantNF ?: 0) * mult,
           saldo = 0
         )
@@ -90,7 +90,7 @@ class ProdutoEstoque(
   }
 
   fun ressuprimento(): List<ProdutoKardec> {
-    return ressuprimento(EMarcaRessuprimento.REC) + ressuprimento(EMarcaRessuprimento.ENT)
+    return ressuprimento(EMarcaRessuprimento.ENT)
   }
 
   companion object {
