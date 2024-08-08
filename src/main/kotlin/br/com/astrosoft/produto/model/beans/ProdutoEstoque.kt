@@ -108,7 +108,7 @@ class ProdutoEstoque(
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
-      val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.descricao) {
+      val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         "Entrega"
       }
       else {
