@@ -25,13 +25,13 @@ class ProdutoEstoque(
     saci.updateProdutoEstoque(this)
   }
 
-  fun recebimentos(): List<ProdutoKardec> {
+  fun recebimentos(dataInicial: LocalDate): List<ProdutoKardec> {
     val filtro = FiltroNotaRecebimentoProduto(
       loja = 0,
       pesquisa = "",
       marca = EMarcaRecebimento.RECEBIDO,
       dataFinal = null,
-      dataInicial = LocalDate.of(2024, 8, 1),
+      dataInicial = dataInicial,
       localizacao = listOf("TODOS"),
       prdno = prdno ?: "",
       grade = grade ?: "SEM GRADE"
@@ -50,12 +50,12 @@ class ProdutoEstoque(
     }
   }
 
-  private fun filtroRessuprimento(marca: EMarcaRessuprimento): FiltroRessuprimento {
+  private fun filtroRessuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): FiltroRessuprimento {
     return FiltroRessuprimento(
       numero = 0,
       pesquisa = "",
-      dataNotaInicial = LocalDate.of(2024, 8, 1),
-      dataPedidoInicial = LocalDate.of(2024, 7, 1),
+      dataNotaInicial = dataInicial,
+      dataPedidoInicial = dataInicial,
       marca = marca,
       temNota = ETemNota.TEM_NOTA,
       lojaRessu = 0,
@@ -64,8 +64,8 @@ class ProdutoEstoque(
     )
   }
 
-  private fun ressuprimento(marca: EMarcaRessuprimento): List<ProdutoKardec> {
-    val filtro = filtroRessuprimento(marca)
+  private fun ressuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): List<ProdutoKardec> {
+    val filtro = filtroRessuprimento(marca, dataInicial)
     val ressuprimentos = saci.findRessuprimento(filtro, userRessuprimentoLocais())
     return ressuprimentos.flatMap { ressuprimento ->
       val prdno = prdno ?: return emptyList()
@@ -90,22 +90,20 @@ class ProdutoEstoque(
     }
   }
 
-  fun ressuprimento(): List<ProdutoKardec> {
-    return ressuprimento(EMarcaRessuprimento.ENT) + ressuprimento(EMarcaRessuprimento.REC)
+  fun ressuprimento(dataInicial: LocalDate): List<ProdutoKardec> {
+    return ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
   }
 
-  fun expedicao(): List<ProdutoKardec> {
+  fun expedicao(dataInicial: LocalDate): List<ProdutoKardec> {
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
       loja = 0,
-      //dataEntregaInicial = LocalDate.of(2024, 8, 1),
-      //dataEntregaFinal = null,
       pesquisa = "",
       notaEntrega = "T",
       prdno = prdno ?: "",
       grade = grade ?: "",
-      dataInicial = LocalDate.of(2024, 8, 1),
+      dataInicial = dataInicial,
       dataFinal = null
     )
     val notas = saci.findNotaSaida(filtro = filtro)
@@ -125,7 +123,7 @@ class ProdutoEstoque(
     }
   }
 
-  fun reposicao(): List<ProdutoKardec> {
+  fun reposicao(dataInicial: LocalDate): List<ProdutoKardec> {
     val user = AppConfig.userLogin() as? UserSaci
     val localizacao = if (user?.admin == true) {
       listOf("TODOS")
@@ -137,7 +135,7 @@ class ProdutoEstoque(
       pesquisa = "",
       marca = EMarcaReposicao.ENT,
       localizacao = localizacao,
-      dataInicial = LocalDate.of(2024, 8, 1),
+      dataInicial = dataInicial,
       dataFinal = null,
       codigo = codigo?.toString() ?: "",
       grade = grade ?: "",

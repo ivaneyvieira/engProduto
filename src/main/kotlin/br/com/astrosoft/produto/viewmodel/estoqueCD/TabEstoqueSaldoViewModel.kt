@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
+import java.time.LocalDate
 
 class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -29,8 +30,9 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val lista: List<ProdutoKardec> = produto.recebimentos() + produto.ressuprimento() +
-                                     produto.expedicao() + produto.reposicao()
+    val dataInicial = LocalDate.of(2024, 8, 1)
+    val lista: List<ProdutoKardec> = produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) +
+                                     produto.expedicao(dataInicial) + produto.reposicao(dataInicial)
     var saldoAcumulado = 0
     return lista.sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
       saldoAcumulado += it.qtde
