@@ -103,24 +103,29 @@ class ProdutoEstoque(
       notaEntrega = "T",
       prdno = prdno ?: "",
       grade = grade ?: "",
-      dataInicial = dataInicial,
+      dataInicial = dataInicial.minusDays(30),
+      dataEntregaInicial = null,
       dataFinal = null
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
       val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         "Entrega"
-      }
-      else {
+      } else {
         "Expedição"
       }
+
+      //Validações
+      val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
+      if (data < dataInicial) return@flatMap emptyList()
+
       nota.produtos(EMarcaNota.ENT, prdno ?: "", grade ?: "").map { produto ->
         ProdutoKardec(
           loja = nota.loja,
           prdno = prdno ?: "",
           grade = grade ?: "",
-          data = nota.data,
-          doc = "${nota.numero}/${nota.serie}",
+          data = data,
+          doc = if (nota.notaEntrega.isNullOrBlank()) "${nota.numero}/${nota.serie}" else nota.notaEntrega ?: "",
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0
