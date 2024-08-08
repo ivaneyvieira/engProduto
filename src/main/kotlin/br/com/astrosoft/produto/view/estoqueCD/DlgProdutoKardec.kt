@@ -26,6 +26,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
     val locApp = produto.locApp
     val locSaci = produto.locSaci
 
+
     val localizacao = if(locApp.isNullOrBlank()) locSaci ?: "" else locApp
     val dataInicial = UserSaci.userAdmin()?.dataIncialKardec ?: LocalDate.now().withDayOfMonth(1)
 
