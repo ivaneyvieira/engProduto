@@ -29,9 +29,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val lista: List<ProdutoKardec> =  produto.recebimentos() + produto.ressuprimento() + produto.expedicao()
+    val lista: List<ProdutoKardec> = produto.recebimentos() + produto.ressuprimento() +
+                                     produto.expedicao() + produto.reposicao()
     var saldoAcumulado = 0
-    return lista.sortedWith(compareBy({it.data}, {it.loja}, {it.doc})).map {
+    return lista.sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
       saldoAcumulado += it.qtde
       it.copy(saldo = saldoAcumulado)
     }

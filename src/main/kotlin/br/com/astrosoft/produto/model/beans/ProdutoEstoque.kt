@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -97,7 +98,7 @@ class ProdutoEstoque(
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
-      loja =  0,
+      loja = 0,
       //dataEntregaInicial = LocalDate.of(2024, 8, 1),
       //dataEntregaFinal = null,
       pesquisa = "",
@@ -117,10 +118,41 @@ class ProdutoEstoque(
           data = nota.data,
           doc = "${nota.numero}/${nota.serie}",
           tipo = "Expedição",
-          qtde = - (produto.quantidade ?: 0),
+          qtde = -(produto.quantidade ?: 0),
           saldo = 0
         )
       }
+    }
+  }
+
+  fun reposicao(): List<ProdutoKardec> {
+    val user = AppConfig.userLogin() as? UserSaci
+    val localizacao = if (user?.admin == true) {
+      listOf("TODOS")
+    } else {
+      user?.localizacaoRepo.orEmpty().toList()
+    }
+    val filtro = FiltroReposicao(
+      loja = 0,
+      pesquisa = "",
+      marca = EMarcaReposicao.ENT,
+      localizacao = localizacao,
+      dataInicial = LocalDate.of(2024, 8, 1),
+      dataFinal = null,
+      codigo = codigo?.toString() ?: "",
+      grade = grade ?: "",
+    )
+    return saci.findResposicaoProduto(filtro).map { produto ->
+      ProdutoKardec(
+        loja = produto.loja ?: 0,
+        prdno = produto.prdno ?: "",
+        grade = produto.grade ?: "",
+        data = produto.data,
+        doc = produto.numero.toString(),
+        tipo = "Reposição",
+        qtde = produto.quantidade ?: 0,
+        saldo = 0
+      )
     }
   }
 
