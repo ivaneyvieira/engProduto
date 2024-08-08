@@ -18,6 +18,9 @@ create table sqldados.prdAdicional (
 alter table sqldados.prdAdicional
 add column localizacao varchar(4)
 
+alter table sqldados.prdAdicional
+add column dataInicial int default 0
+
 */
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
@@ -35,7 +38,8 @@ SELECT S.storeno                                                                
        COALESCE(A.localizacao, /*MID(L1.localizacao, 1, 4),*/ '')                              AS locApp,
        V.no                                                                                    AS codForn,
        V.sname                                                                                 AS fornecedor,
-       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                                          AS saldo
+       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                                          AS saldo,
+       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE)          AS dataInicial
 FROM sqldados.stk AS S
        INNER JOIN sqldados.prd AS P
                   ON S.prdno = P.no
@@ -69,7 +73,8 @@ SELECT loja,
        locApp,
        codForn,
        fornecedor,
-       saldo
+       saldo,
+       dataInicial
 FROM temp_pesquisa
 WHERE (
   @PESQUISA = '' OR

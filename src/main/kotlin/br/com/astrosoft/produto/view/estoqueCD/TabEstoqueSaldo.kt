@@ -13,6 +13,8 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -79,6 +81,21 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     this.addClassName("styling")
     this.format()
     setSelectionMode(Grid.SelectionMode.MULTI)
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if(user?.admin == true) {
+      this.withEditor(
+        classBean = ProdutoEstoque::class,
+        openEditor = {
+          val edit = getColumnBy(ProdutoEstoque::dataInicial) as? Focusable<*>
+          edit?.focus()
+        },
+        closeEditor = {
+          viewModel.updateProduto(it.bean)
+        })
+    }
+
     addColumnSeq("Seq")
     addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
       dlgKardec = DlgProdutoKardec(viewModel, produto)
@@ -96,6 +113,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::estoque, header = "Estoque")
     columnGrid(ProdutoEstoque::saldo, header = "Saldo")
+    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
   }
 
   override fun filtro(): FiltroProdutoEstoque {

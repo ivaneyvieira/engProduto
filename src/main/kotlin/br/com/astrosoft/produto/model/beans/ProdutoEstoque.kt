@@ -20,6 +20,7 @@ class ProdutoEstoque(
   var codForn: Int,
   var fornecedor: String,
   var saldo: Int?,
+  var dataInicial: LocalDate?,
 ) {
   fun update() {
     saci.updateProdutoEstoque(this)

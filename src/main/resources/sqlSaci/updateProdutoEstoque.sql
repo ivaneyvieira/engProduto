@@ -1,2 +1,2 @@
-REPLACE INTO sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao)
-SELECT :loja, :prdno, :grade, :estoque, :locApp
+REPLACE INTO sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao, dataInicial)
+SELECT :loja, :prdno, :grade, :estoque, :locApp, :dataInicial

@@ -973,6 +973,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produtoEstoque.grade ?: "")
       addOptionalParameter("estoque", produtoEstoque.estoque ?: 0)
       addOptionalParameter("locApp", produtoEstoque.locApp)
+      addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
     }
   }
 

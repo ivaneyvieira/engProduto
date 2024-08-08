@@ -27,7 +27,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
     val locSaci = produto.locSaci
 
     val localizacao = if(locApp.isNullOrBlank()) locSaci ?: "" else locApp
-    val dataInicial = UserSaci.userAdmin()?.dataIncialKardec ?: LocalDate.now().withDayOfMonth(1)
+    val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
     form = SubWindowForm("$codigo $descricao$grade ($localizacao)\nData Inicial: ${dataInicial.format()}", toolBar = {
     }, onClose = {

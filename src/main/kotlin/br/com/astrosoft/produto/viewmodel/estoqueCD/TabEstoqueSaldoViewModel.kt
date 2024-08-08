@@ -31,8 +31,8 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val userAdmin = UserSaci.userAdmin()
-    val dataInicial = userAdmin?.dataIncialKardec ?: LocalDate.now().withDayOfMonth(1)
+    //val userAdmin = UserSaci.userAdmin()
+    val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
     val lista: List<ProdutoKardec> = produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) +
                                      produto.expedicao(dataInicial) + produto.reposicao(dataInicial)
     var saldoAcumulado = 0
@@ -40,6 +40,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
       saldoAcumulado += it.qtde
       it.copy(saldo = saldoAcumulado)
     }
+  }
+
+  fun updateProduto(bean: ProdutoEstoque?) {
+    bean?.update()
   }
 }
 
