@@ -36,7 +36,7 @@ class ProdutoEstoque(
       prdno = prdno ?: "",
       grade = grade ?: "SEM GRADE"
     )
-    return saci.findNotaRecebimentoProduto(filtro).mapNotNull { nota ->
+    return saci.findNotaRecebimentoProduto(filtro).map { nota ->
       ProdutoKardec(
         loja = nota.loja ?: 0,
         prdno = prdno ?: "",

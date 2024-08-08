@@ -139,6 +139,7 @@ fun LocalDate?.toSaciDate(): Int {
 
 fun String?.parserDate(): LocalDate? {
   return try {
+    this ?: return null
     LocalDate.parse(this, DATE_FORMATTER)
   } catch (e: Exception) {
     null

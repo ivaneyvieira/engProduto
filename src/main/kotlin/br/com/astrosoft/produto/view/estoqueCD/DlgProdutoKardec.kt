@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -8,12 +9,12 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
+import java.time.LocalDate
 
 class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: ProdutoEstoque) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoKardec::class.java, false)
-  private var edtCodigoBarra: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
@@ -22,8 +23,13 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
     val grade = produto.grade.let {gd ->
       if(gd.isNullOrBlank()) "" else " - $gd"
     }
+    val locApp = produto.locApp
+    val locSaci = produto.locSaci
 
-    form = SubWindowForm("$codigo $descricao$grade", toolBar = {
+    val localizacao = if(locApp.isNullOrBlank()) locSaci ?: "" else locApp
+    val dataInicial = UserSaci.userAdmin()?.dataIncialKardec ?: LocalDate.now().withDayOfMonth(1)
+
+    form = SubWindowForm("$codigo $descricao$grade ($localizacao)\nData Inicial: ${dataInicial.format()}", toolBar = {
     }, onClose = {
       onClose()
     }) {

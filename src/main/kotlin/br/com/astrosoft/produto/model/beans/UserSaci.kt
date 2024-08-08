@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.localDate
+import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 import kotlin.math.pow
 import kotlin.reflect.KProperty
 
@@ -274,6 +277,13 @@ class UserSaci : IUser {
       lojas = lojas.setValue(21, value.joinToString(":"))
     }
 
+
+  var dataIncialKardec: LocalDate
+    get() = lojas.getOrNull(22)?.toIntOrNull()?.localDate() ?: LocalDate.now().withDayOfMonth(1)
+    set(value) {
+      lojas = lojas.setValue(22, value.toSaciDate().toString())
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
@@ -423,6 +433,10 @@ class UserSaci : IUser {
       val username = AppConfig.userLogin() as? UserSaci
       if (username?.admin == true) return listOf("TODOS")
       return username?.listaRessuprimento?.toList() ?: emptyList()
+    }
+
+    fun userAdmin(): UserSaci? {
+      return findUser("ADM").firstOrNull()
     }
   }
 }
