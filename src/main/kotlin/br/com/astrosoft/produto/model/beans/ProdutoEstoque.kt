@@ -108,6 +108,12 @@ class ProdutoEstoque(
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
+      val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.descricao) {
+        "Entrega"
+      }
+      else {
+        "Expedição"
+      }
       nota.produtos(EMarcaNota.ENT, prdno ?: "", grade ?: "").map { produto ->
         ProdutoKardec(
           loja = nota.loja,
@@ -115,7 +121,7 @@ class ProdutoEstoque(
           grade = grade ?: "",
           data = nota.data,
           doc = "${nota.numero}/${nota.serie}",
-          tipo = "Expedição",
+          tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0
         )
