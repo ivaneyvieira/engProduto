@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.ECaracter
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.integerField
@@ -21,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
@@ -31,6 +29,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
+  private lateinit var cmdEstoque: Select<EEstoque>
+  private lateinit var edtSaldo: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -71,6 +71,26 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         viewModel.updateView()
       }
     }
+    cmdEstoque = select("Estoque") {
+      this.setItems(EEstoque.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EEstoque.MAIOR
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtSaldo = integerField("Saldo") {
+      this.width = "100px"
+      this.isClearButtonVisible = true
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.value = 0
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
       val produtos = itensSelecionados()
       viewModel.geraPlanilha(produtos)
@@ -84,7 +104,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
     val user = AppConfig.userLogin() as? UserSaci
 
-    if(user?.admin == true) {
+    if (user?.admin == true) {
       this.withEditor(
         classBean = ProdutoEstoque::class,
         openEditor = {
@@ -125,6 +145,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = "",
+      estoque = cmdEstoque.value ?: EEstoque.TODOS,
+      saldo = edtSaldo.value ?: 0,
     )
   }
 
