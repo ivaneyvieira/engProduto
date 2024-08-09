@@ -3,11 +3,9 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -176,6 +174,12 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
         }
 
+        button("Cadastra Validade") {
+          onClick {
+            viewModel.cadastraValidade()
+          }
+        }
+
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -240,6 +244,13 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
   override fun produtosSelecionados(): List<ProdutoSaldo> {
     return itensSelecionados()
+  }
+
+  override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
+    val form = FormValidade(tipoValidade, tempoValidade)
+    DialogHelper.showForm(caption = "Validade", form = form) {
+      block(form.validadeSaci)
+    }
   }
 
   override fun isAuthorized(): Boolean {
