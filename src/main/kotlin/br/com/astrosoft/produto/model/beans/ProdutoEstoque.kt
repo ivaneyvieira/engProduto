@@ -131,7 +131,7 @@ class ProdutoEstoque(
           qtde = -(produto.quantidade ?: 0),
           saldo = 0
         )
-      }
+      }.distinctBy { it.doc }
     }
   }
 
