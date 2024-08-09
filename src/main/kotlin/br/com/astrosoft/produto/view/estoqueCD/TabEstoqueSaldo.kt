@@ -76,7 +76,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      this.value = EEstoque.MAIOR
+      this.value = EEstoque.TODOS
       addValueChangeListener {
         viewModel.updateView()
       }
