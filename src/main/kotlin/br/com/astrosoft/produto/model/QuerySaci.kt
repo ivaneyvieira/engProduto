@@ -1378,6 +1378,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findSaldoData(loja: Int, codigo: String, grade: String, dataInicial: LocalDate): List<SaldoData> {
+    val sql = "/sqlSaci/saldoData.sql"
+    return query(sql, SaldoData::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("codigo", codigo)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

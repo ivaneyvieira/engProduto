@@ -166,6 +166,22 @@ class ProdutoEstoque(
     }
   }
 
+  fun saldoAnterior(dataInicial: LocalDate): List<ProdutoKardec> {
+    val list = saci.findSaldoData(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+    return list.map { saldo ->
+      ProdutoKardec(
+        loja = saldo.storeno,
+        prdno = saldo.prdno,
+        grade = saldo.grade,
+        data = saldo.date,
+        doc = "Estoque",
+        tipo = "Inicial",
+        qtde = saldo.quant ?: 0,
+        saldo = 0
+      )
+    }
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
