@@ -45,7 +45,7 @@ WHERE M.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND (M.storeno = :loja OR :loja = 0)
   AND (M.date >= :dataInicial OR :dataInicial = 0)
   AND (M.date <= :dataFinal OR :dataFinal = 0)
-  AND (M.remarks LIKE '66:PED E%' OR M.remarks LIKE '66:PED S%')
+  AND (M.remarks LIKE '66:PED E%' OR M.remarks LIKE '66:PED S%' OR TRUE)
   AND CASE :tipo
         WHEN 'E' THEN M.qtty > 0
         WHEN 'S' THEN M.qtty < 0
