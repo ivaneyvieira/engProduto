@@ -1397,6 +1397,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", dataInicial.toSaciDate())
     }
   }
+
   companion object {
     private val db = DB("saci")
 
