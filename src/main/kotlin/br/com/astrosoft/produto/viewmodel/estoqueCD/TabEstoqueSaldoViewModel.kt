@@ -35,7 +35,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
     val lista: List<ProdutoKardec> = produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) +
                                      produto.expedicao(dataInicial) + produto.reposicao(dataInicial) +
-                                     produto.saldoAnterior(dataInicial)
+                                     produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
     var saldoAcumulado = 0
     return lista.sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
       saldoAcumulado += it.qtde

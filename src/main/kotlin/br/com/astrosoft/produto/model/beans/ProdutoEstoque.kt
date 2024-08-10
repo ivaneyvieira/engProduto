@@ -160,7 +160,7 @@ class ProdutoEstoque(
         data = produto.data,
         doc = produto.numero.toString(),
         tipo = "Reposição",
-        qtde = produto.quantidade ?: 0,
+        qtde = -(produto.quantidade ?: 0),
         saldo = 0
       )
     }
@@ -177,6 +177,22 @@ class ProdutoEstoque(
         doc = "Estoque",
         tipo = "Inicial",
         qtde = saldo.quant ?: 0,
+        saldo = 0
+      )
+    }
+  }
+
+    fun acertoEstoque(dataInicial: LocalDate): List<ProdutoKardec> {
+    val list = saci.findAcertoEstoque(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+    return list.map { saldo ->
+      ProdutoKardec(
+        loja = saldo.loja,
+        prdno = saldo.prdno,
+        grade = saldo.grade,
+        data = saldo.data,
+        doc = saldo.pedido.toString(),
+        tipo = "Acerto de Estoque",
+        qtde = saldo.quantidade,
         saldo = 0
       )
     }

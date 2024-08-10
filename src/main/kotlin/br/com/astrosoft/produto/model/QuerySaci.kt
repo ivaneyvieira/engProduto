@@ -1388,6 +1388,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findAcertoEstoque(loja: Int, codigo: String, grade: String, dataInicial: LocalDate): List<AcertoEstoque> {
+    val sql = "/sqlSaci/acertoEstoque.sql"
+    return query(sql, AcertoEstoque::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("codigo", codigo)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+    }
+  }
   companion object {
     private val db = DB("saci")
 
