@@ -159,7 +159,7 @@ class ProdutoEstoque(
         grade = produto.grade ?: "",
         data = produto.data,
         doc = produto.numero.toString(),
-        tipo = "Reposição",
+        tipo = "Reposição Loja",
         qtde = -(produto.quantidade ?: 0),
         saldo = 0
       )
@@ -191,7 +191,7 @@ class ProdutoEstoque(
         grade = saldo.grade,
         data = saldo.data,
         doc = saldo.pedido.toString(),
-        tipo = "Acerto de Estoque",
+        tipo = "Acerto Estoque",
         qtde = saldo.quantidade,
         saldo = 0
       )
