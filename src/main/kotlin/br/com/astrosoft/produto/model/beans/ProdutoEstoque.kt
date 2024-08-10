@@ -45,6 +45,7 @@ class ProdutoEstoque(
         data = nota.data,
         doc = nota.nfEntrada ?: "",
         tipo = "Recebimento",
+        vencimento = nota.vencimento,
         qtde = nota.quant ?: 0,
         saldo = 0
       )
@@ -76,7 +77,7 @@ class ProdutoEstoque(
         EMarcaRessuprimento.ENT -> -1
         else                    -> 0
       }
-      ressuprimento.produtos(prdno, grade).mapNotNull { produto ->
+      ressuprimento.produtos(prdno, grade).map { produto ->
         ProdutoKardec(
           loja = ressuprimento.loja ?: 0,
           prdno = prdno,
@@ -176,7 +177,7 @@ class ProdutoEstoque(
         data = saldo.date,
         doc = "Estoque",
         tipo = "Inicial",
-        qtde = saldo.quant ?: 0,
+        qtde = saldo.quant,
         saldo = 0
       )
     }

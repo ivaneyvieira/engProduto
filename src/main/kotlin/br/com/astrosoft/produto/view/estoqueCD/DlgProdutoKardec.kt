@@ -2,13 +2,14 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
 class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: ProdutoEstoque) {
@@ -20,19 +21,22 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
     this.onClose = onClose
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
-    val grade = produto.grade.let {gd ->
-      if(gd.isNullOrBlank()) "" else " - $gd"
+    val grade = produto.grade.let { gd ->
+      if (gd.isNullOrBlank()) "" else " - $gd"
     }
     val locApp = produto.locApp
     val locSaci = produto.locSaci
 
-    val localizacao = if(locApp.isNullOrBlank()) locSaci ?: "" else locApp
+    val localizacao = if (locApp.isNullOrBlank()) locSaci ?: "" else locApp
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
-    form = SubWindowForm("$codigo $descricao$grade ($localizacao)\nData Inicial: ${dataInicial.format()}", toolBar = {
-    }, onClose = {
-      onClose()
-    }) {
+    form = SubWindowForm(
+      "$codigo $descricao$grade ($localizacao) Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
+      toolBar = {
+      },
+      onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -54,6 +58,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::doc, "Doc")
       columnGrid(ProdutoKardec::tipo, "Tipo")
+      columnGrid(ProdutoKardec::vencimento, "Venc", pattern = "MM/yyyy", width = null)
       columnGrid(ProdutoKardec::qtde, "Qrd")
       columnGrid(ProdutoKardec::saldo, "Saldo")
     }

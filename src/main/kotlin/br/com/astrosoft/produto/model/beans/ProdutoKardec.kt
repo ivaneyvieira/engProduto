@@ -9,6 +9,7 @@ data class ProdutoKardec(
   val data: LocalDate?,
   val doc: String,
   val tipo: String,
+  val vencimento: LocalDate? = null,
   val qtde: Int,
   val saldo: Int = 0,
 ){
