@@ -921,6 +921,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+
   fun autorizaRessuprimento(ressuprimento: Ressuprimento) {
     val sql = "/sqlSaci/autorizaRessuprimento.sql"
     script(sql) {
