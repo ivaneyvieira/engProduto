@@ -18,3 +18,4 @@ WHERE E.paymno = 430
   AND E.date >= :dataInicial
   AND P.prdno = LPAD(:codigo, 16, ' ')
   AND P.grade = :grade
+  AND E.status = 4
