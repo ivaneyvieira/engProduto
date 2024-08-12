@@ -36,6 +36,8 @@ FROM sqldados.prd AS P
                    AND A.grade = L.grade
                    AND A.storeno = L.storeno
 WHERE (L.storeno = 4)
+  AND (P.no = :prdno OR :prdno = '')
+  AND (COALESCE(A.grade, L.grade, '') = :grade OR :grade = 'SEM GRADE')
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;

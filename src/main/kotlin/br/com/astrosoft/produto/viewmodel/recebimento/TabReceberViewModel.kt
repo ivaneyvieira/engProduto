@@ -94,7 +94,7 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
 interface ITabReceber : ITabView {
   fun filtro(): FiltroNotaRecebimentoProduto
   fun updateNota(notas: List<NotaRecebimento>)
-  fun updateProduto()
+  fun updateProduto() : NotaRecebimento?
   fun closeDialog()
   fun focusCodigoBarra()
   fun produtosSelecionados(): List<NotaRecebimentoProduto>

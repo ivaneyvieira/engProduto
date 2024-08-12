@@ -59,6 +59,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(ProdutoKardec::loja, "Loja")
+      columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::doc, "Doc")
       columnGrid(ProdutoKardec::tipo, "Tipo")
@@ -75,6 +76,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
   }
 
   fun update() {
+    /*
     ViewThread.execAsync(ui = UI.getCurrent()) {
       this.block {
         viewModel.kardec(produto)
@@ -83,7 +85,8 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       this.update { list: List<ProdutoKardec> ->
         gridDetail.setItems(list)
       }
-    }
+    }*/
+    gridDetail.setItems(viewModel.kardec(produto))
   }
 
   fun close() {

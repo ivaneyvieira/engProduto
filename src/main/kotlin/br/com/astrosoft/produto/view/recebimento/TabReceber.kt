@@ -113,8 +113,8 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     this.updateGrid(notas)
   }
 
-  override fun updateProduto() {
-    dlgProduto?.updateProduto()
+  override fun updateProduto(): NotaRecebimento?  {
+    return dlgProduto?.updateProduto()
   }
 
   override fun closeDialog() {

@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 data class ProdutoKardec(
   val loja: Int,
+  val userLogin: String,
   val prdno: String,
   val grade: String,
   val data: LocalDate?,
