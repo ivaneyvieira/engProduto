@@ -2,15 +2,11 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.ViewThread
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.viewmodel.block
-import br.com.astrosoft.framework.viewmodel.update
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -59,7 +55,6 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(ProdutoKardec::loja, "Loja")
-      columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::doc, "Doc")
       columnGrid(ProdutoKardec::tipo, "Tipo")
@@ -76,17 +71,8 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
   }
 
   fun update() {
-    /*
-    ViewThread.execAsync(ui = UI.getCurrent()) {
-      this.block {
-        viewModel.kardec(produto)
-      }
-
-      this.update { list: List<ProdutoKardec> ->
-        gridDetail.setItems(list)
-      }
-    }*/
-    gridDetail.setItems(viewModel.kardec(produto))
+    val kardec = viewModel.kardec(produto)
+    gridDetail.setItems(kardec)
   }
 
   fun close() {

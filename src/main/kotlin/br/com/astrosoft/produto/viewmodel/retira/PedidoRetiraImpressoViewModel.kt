@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.retira
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.exec
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
@@ -21,7 +22,7 @@ class PedidoRetiraImpressoViewModel(val viewModel: PedidoRetiraViewModel) {
     subView.updateGrid(listPedidosEntregaImpressoSemNota())
   }
 
-  fun desmarcaSemNota() = viewModel.exec {
+  fun desmarcaSemNota() = exec(viewModel.view) {
     val pedidos = subView.itensSelecionados().ifEmpty { fail("Não há pedido selecionado") }
     pedidos.forEach { pedido ->
       pedido.desmarcaImpresso()

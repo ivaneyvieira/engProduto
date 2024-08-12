@@ -6,13 +6,7 @@ import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.produto.model.beans.Rota
 
 abstract class ViewModel<V : IView>(val view: V) {
-  fun <T> exec(block: () -> T) = view.exec(block)
-  fun <T> execAsync(blockDataViewThread: DataViewThread<T>.() ->Unit )  {
-    val dataViewThread = DataViewThread<T>()
-    dataViewThread.blockDataViewThread()
-    view.execAsync(dataViewThread)
-  }
-
+  fun <T> exec(block: () -> T) = exec(view, block)
   protected abstract fun listTab(): List<ITabView>
 
   fun tabsAuthorized() = listTab().filter {
@@ -23,6 +17,18 @@ abstract class ViewModel<V : IView>(val view: V) {
   fun showQuestion(msg: String, execYes: () -> Unit) = view.showQuestion(msg, execYes)
   fun showWarning(msg: String) = view.showWarning(msg)
   fun showInformation(msg: String) = view.showInformation(msg)
+}
+
+fun <T> exec(view: IView, block: () -> T): T {
+  return try {
+    block()
+  } catch (e: EViewModelFail) {
+    view.showError(e.message ?: "Erro generico")
+    throw e
+  } catch (e: EModelFail) {
+    view.showError("Erro de banco de dados: ${e.message ?: "Erro generico"}")
+    throw e
+  }
 }
 
 interface IViewModelUpdate {
@@ -47,18 +53,4 @@ interface IView {
     loja: Int,
     printEvent: (impressora: String) -> Unit
   )
-
-  fun <T> exec(block: () -> T): T {
-    return try {
-      block()
-    } catch (e: EViewModelFail) {
-      showError(e.message ?: "Erro generico")
-      throw e
-    } catch (e: EModelFail) {
-      showError("Erro de banco de dados: ${e.message ?: "Erro generico"}")
-      throw e
-    }
-  }
-
-  fun <T> execAsync(dataViewThread: DataViewThread<T>)
 }

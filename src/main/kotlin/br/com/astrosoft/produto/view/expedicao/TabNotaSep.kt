@@ -169,7 +169,6 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
-      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

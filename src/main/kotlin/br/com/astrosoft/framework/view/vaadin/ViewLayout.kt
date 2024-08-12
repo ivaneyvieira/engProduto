@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.ITabPanel
 import br.com.astrosoft.framework.view.vaadin.helper.style
 import br.com.astrosoft.framework.view.vaadin.helper.tabPanel
-import br.com.astrosoft.framework.viewmodel.DataViewThread
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.produto.model.beans.Rota
@@ -14,7 +13,6 @@ import com.github.mvysny.karibudsl.v23.tab
 import com.github.mvysny.karibudsl.v23.tabSheet
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -88,18 +86,13 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
 
   override fun showPrintText(
     text: TextBuffer,
-    showPrinter: Boolean,
+    showPrinter : Boolean,
     printerUser: List<String>,
     rota: Rota?,
     loja: Int,
     printEvent: (impressora: String) -> Unit
   ) {
     DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, printEvent)
-  }
-
-  override fun <T> execAsync(dataViewThread: DataViewThread<T>) {
-    val ui = UI.getCurrent()
-    ViewThread.execAsync(ui, dataViewThread)
   }
 
   override fun beforeLeave(event: BeforeLeaveEvent?) {

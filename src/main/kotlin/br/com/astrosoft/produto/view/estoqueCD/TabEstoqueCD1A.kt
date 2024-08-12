@@ -82,7 +82,6 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = "CD1A",
       fornecedor = "",
-      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

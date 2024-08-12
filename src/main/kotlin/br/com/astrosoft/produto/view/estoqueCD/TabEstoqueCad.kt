@@ -123,7 +123,6 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = edtFornecedor.value ?: "",
-      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

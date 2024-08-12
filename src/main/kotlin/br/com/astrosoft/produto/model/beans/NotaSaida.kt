@@ -107,7 +107,6 @@ data class FiltroNota(
   val pesquisa: String,
   val prdno: String = "",
   val grade: String = "",
-  val user: UserSaci?,
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {

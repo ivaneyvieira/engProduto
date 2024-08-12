@@ -47,8 +47,7 @@ class ProdutoEstoque(
         tipo = "Recebimento",
         vencimento = nota.vencimento,
         qtde = nota.quant ?: 0,
-        saldo = 0,
-        userLogin = nota.login ?: ""
+        saldo = 0
       )
     }
   }
@@ -87,8 +86,7 @@ class ProdutoEstoque(
           doc = ressuprimento.notaBaixa ?: "",
           tipo = "Ressuprimento",
           qtde = (produto.qtQuantNF ?: 0) * mult,
-          saldo = 0,
-          userLogin = ressuprimento.login ?: ""
+          saldo = 0
         )
       }
     }
@@ -99,7 +97,6 @@ class ProdutoEstoque(
   }
 
   fun expedicao(dataInicial: LocalDate): List<ProdutoKardec> {
-    val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
@@ -110,8 +107,7 @@ class ProdutoEstoque(
       grade = grade ?: "",
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
-      dataFinal = null,
-      user = user
+      dataFinal = null
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
@@ -134,8 +130,7 @@ class ProdutoEstoque(
           doc = if (nota.notaEntrega.isNullOrBlank()) "${nota.numero}/${nota.serie}" else nota.notaEntrega ?: "",
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
-          saldo = 0,
-          userLogin = (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
+          saldo = 0
         )
       }.distinctBy { it.doc }
     }
@@ -167,8 +162,7 @@ class ProdutoEstoque(
         doc = produto.numero.toString(),
         tipo = "Reposição Loja",
         qtde = -(produto.quantidade ?: 0),
-        saldo = 0,
-        userLogin = produto.entregueSNome ?: ""
+        saldo = 0
       )
     }
   }
@@ -184,8 +178,7 @@ class ProdutoEstoque(
         doc = "Estoque",
         tipo = "Inicial",
         qtde = saldo.quant,
-        saldo = 0,
-        userLogin = "ADM"
+        saldo = 0
       )
     }
   }
@@ -201,8 +194,7 @@ class ProdutoEstoque(
         doc = saldo.pedido.toString(),
         tipo = "Acerto Estoque",
         qtde = saldo.quantidade,
-        saldo = 0,
-        userLogin = "ADM"
+        saldo = 0
       )
     }
   }
@@ -224,5 +216,4 @@ data class FiltroProdutoEstoque(
   val fornecedor: String,
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
-  val user: UserSaci?,
 )
