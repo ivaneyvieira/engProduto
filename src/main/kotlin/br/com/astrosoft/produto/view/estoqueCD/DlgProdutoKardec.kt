@@ -55,6 +55,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(ProdutoKardec::loja, "Loja")
+      columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::doc, "Doc")
       columnGrid(ProdutoKardec::tipo, "Tipo")
