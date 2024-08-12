@@ -121,5 +121,6 @@ enum class ETipoNotaFiscal(val descricao: String) {
   SIMP_REME("Retira Futura"),
   SIMP_REME_L("Retira Futura L"),
   ENTREGA_WEB("Entrega Web"),
+  DEVOLUCAO("Dev Fornecedor"),
   TODOS("Todos"),
 }
