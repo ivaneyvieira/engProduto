@@ -131,6 +131,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = "",
+      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

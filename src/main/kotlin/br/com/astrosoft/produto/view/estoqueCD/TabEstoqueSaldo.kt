@@ -146,6 +146,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       fornecedor = "",
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
+      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

@@ -172,6 +172,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       dataEntregaInicial = edtDataInicial.value,
       dataEntregaFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
+      user = AppConfig.userLogin() as? UserSaci
     )
   }
 

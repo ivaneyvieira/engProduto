@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
@@ -14,6 +13,7 @@ import java.time.LocalTime
 
 class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): List<UserSaci> {
+    val appName = AppConfig.appName
     login ?: return emptyList()
     val sql = "/sqlSaci/userSenha.sql"
     return query(sql, UserSaci::class) {
@@ -23,6 +23,7 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findAllUser(): List<UserSaci> {
+    val appName = AppConfig.appName
     val sql = "/sqlSaci/userSenha.sql"
     return query(sql, UserSaci::class) {
       addParameter("login", "TODOS")
@@ -98,6 +99,7 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun updateUser(user: UserSaci) {
+    val appName = AppConfig.appName
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {
       addOptionalParameter("login", user.login)
@@ -293,7 +295,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
-    val user = AppConfig.userLogin() as? UserSaci
+    val user = filtro.user
 
     return query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
@@ -388,8 +390,8 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String): List<ProdutoNFS> {
+    val user: UserSaci? = AppConfig.userLogin() as? UserSaci
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    val user = AppConfig.userLogin() as? UserSaci
     val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
@@ -903,8 +905,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
     val sql = "/sqlSaci/findProdutoEstoque.sql"
-    val user = AppConfig.userLogin() as? UserSaci
-    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+    val listaUser = filter.user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
     return query(sql, ProdutoEstoque::class) {

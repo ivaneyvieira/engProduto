@@ -97,6 +97,7 @@ class ProdutoEstoque(
   }
 
   fun expedicao(dataInicial: LocalDate): List<ProdutoKardec> {
+    val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
@@ -107,7 +108,8 @@ class ProdutoEstoque(
       grade = grade ?: "",
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
-      dataFinal = null
+      dataFinal = null,
+      user = user
     )
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
@@ -216,4 +218,5 @@ data class FiltroProdutoEstoque(
   val fornecedor: String,
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
+  val user: UserSaci?,
 )

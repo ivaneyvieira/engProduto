@@ -40,9 +40,14 @@ object AppConfig {
 
   val test: Boolean = properties.getProperty("app.test").toBoolean()
 
+  private var user: IUser? = null
+
   fun userLogin(): IUser? {
-    val currentUser = LoginService.get().currentUser
-    return findUser(currentUser?.username, currentUser?.hashedPassword)
+    if(user == null) {
+      val currentUser = LoginService.get().currentUser
+      user = findUser(currentUser?.username, currentUser?.hashedPassword)
+    }
+    return user
   }
 
   val isAdmin: Boolean

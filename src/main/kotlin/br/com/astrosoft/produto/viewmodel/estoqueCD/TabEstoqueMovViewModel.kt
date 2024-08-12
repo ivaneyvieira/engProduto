@@ -1,8 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.framework.viewmodel.block
+import br.com.astrosoft.framework.viewmodel.update
+import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement.block
 
 class TabEstoqueMovViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -18,9 +23,16 @@ class TabEstoqueMovViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun updateView() = viewModel.exec {
-    val filtro = subView.filtro()
-    val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
-    subView.updateProduto(produtos)
+    viewModel.execAsync {
+      block {
+        val filtro = subView.filtro()
+        val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
+        produtos
+      }
+      update {
+        subView.updateProduto(it)
+      }
+    }
   }
 
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
