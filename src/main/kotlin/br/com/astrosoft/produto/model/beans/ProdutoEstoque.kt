@@ -157,7 +157,7 @@ class ProdutoEstoque(
       grade = grade ?: "",
     )
     return saci.findResposicaoProduto(filtro).mapNotNull { produto ->
-      if(produto.marca == EMarcaReposicao.ENT.num) return@mapNotNull null
+      if(produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
       ProdutoKardec(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
