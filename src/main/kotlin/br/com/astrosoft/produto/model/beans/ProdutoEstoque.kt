@@ -47,7 +47,8 @@ class ProdutoEstoque(
         tipo = "Recebimento",
         vencimento = nota.vencimento,
         qtde = nota.quant ?: 0,
-        saldo = 0
+        saldo = 0,
+        userLogin = nota.login ?: ""
       )
     }
   }
@@ -86,7 +87,8 @@ class ProdutoEstoque(
           doc = ressuprimento.notaBaixa ?: "",
           tipo = "Ressuprimento",
           qtde = (produto.qtQuantNF ?: 0) * mult,
-          saldo = 0
+          saldo = 0,
+          userLogin = ressuprimento.login ?: ""
         )
       }
     }
@@ -130,7 +132,8 @@ class ProdutoEstoque(
           doc = if (nota.notaEntrega.isNullOrBlank()) "${nota.numero}/${nota.serie}" else nota.notaEntrega ?: "",
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
-          saldo = 0
+          saldo = 0,
+          userLogin = (nota.usuarioExp ?: "").split("-").firstOrNull() ?: "",
         )
       }.distinctBy { it.doc }
     }
@@ -162,7 +165,8 @@ class ProdutoEstoque(
         doc = produto.numero.toString(),
         tipo = "Reposição Loja",
         qtde = -(produto.quantidade ?: 0),
-        saldo = 0
+        saldo = 0,
+        userLogin = produto.entregueSNome ?: ""
       )
     }
   }
@@ -178,7 +182,8 @@ class ProdutoEstoque(
         doc = "Estoque",
         tipo = "Inicial",
         qtde = saldo.quant,
-        saldo = 0
+        saldo = 0,
+        userLogin = "ADM"
       )
     }
   }
@@ -194,7 +199,8 @@ class ProdutoEstoque(
         doc = saldo.pedido.toString(),
         tipo = "Acerto Estoque",
         qtde = saldo.quantidade,
-        saldo = 0
+        saldo = 0,
+        userLogin = "ADM"
       )
     }
   }

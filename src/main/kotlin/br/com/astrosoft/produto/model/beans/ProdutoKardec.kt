@@ -12,6 +12,7 @@ data class ProdutoKardec(
   val vencimento: LocalDate? = null,
   val qtde: Int,
   val saldo: Int = 0,
+  val userLogin: String,
 ){
   val codigo: Int
     get() = prdno.trim().toIntOrNull() ?: 0
