@@ -127,8 +127,8 @@ enum class EMarcaReposicao(val num: Int) {
 }
 
 enum class EMetodo(val num: Int, val descricao: String) {
-  Reposicao(431, "Reposição"),
-  Retorno(432, "Retorno"),
-  Acerto(433, "Acerto"),
+  Reposicao(431, "Reposição Loja"),
+  Retorno(432, "Retorno Loja"),
+  Acerto(433, "Acerto App"),
   Todos(0, "Todos"),
 }
