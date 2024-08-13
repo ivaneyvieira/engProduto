@@ -7,9 +7,11 @@ import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
+import com.github.mvysny.karibudsl.v10.comboBox
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -28,6 +30,7 @@ class TabReposicaoEnt(
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -48,6 +51,17 @@ class TabReposicaoEnt(
       }
     }
     init()
+    cmbMetodo = select("Tipo") {
+      val user = AppConfig.userLogin() as? UserSaci
+      val tipo = user?.tipoMetodo ?: EMetodo.Todos
+      this.setItems(EMetodo.entries.filter {
+        it == tipo || tipo == EMetodo.Todos || user?.admin == true
+      })
+      this.setItemLabelGenerator { it.descricao }
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -137,6 +151,7 @@ class TabReposicaoEnt(
       dataFinal = edtDataFinal.value,
       codigo = codigo,
       grade = grade,
+      metodo = cmbMetodo.value ?: EMetodo.Todos,
     )
   }
 

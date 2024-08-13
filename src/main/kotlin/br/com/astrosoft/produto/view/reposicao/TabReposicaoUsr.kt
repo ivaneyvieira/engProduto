@@ -4,10 +4,12 @@ import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
+import br.com.astrosoft.produto.model.beans.EMetodo
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoUsr
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
+import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
 
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
@@ -30,6 +32,14 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraRepo)
       filtroLocalizacao(binder, UserSaci::localizacaoRepo)
+      select<EMetodo>("Tipo") {
+        this.setItems(EMetodo.entries)
+        this.setItemLabelGenerator { it.descricao }
+        this.addValueChangeListener {
+          viewModel.updateView()
+        }
+        binder.bind(this, UserSaci::tipoMetodo.name)
+      }
     }
   }
 }

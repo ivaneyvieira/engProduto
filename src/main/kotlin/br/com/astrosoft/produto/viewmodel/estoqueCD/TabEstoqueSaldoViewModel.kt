@@ -77,6 +77,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
         dataFinal = null,
         codigo = "",
         grade = "",
+        metodo = EMetodo.Todos,
       )
       val listaProduto = saci.findResposicaoProduto(filtro).filter {
         it.numero == (produto.doc.toIntOrNull() ?: "")

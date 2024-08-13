@@ -1024,6 +1024,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("metodo", filtro.metodo.num)
     }
   }
 

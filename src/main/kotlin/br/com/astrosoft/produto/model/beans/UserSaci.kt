@@ -89,7 +89,6 @@ class UserSaci : IUser {
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized(44)
 
-
   //Locais
   private var localEstoque: String?
     get() = locais.split(":").getOrNull(0)
@@ -277,11 +276,18 @@ class UserSaci : IUser {
       lojas = lojas.setValue(21, value.joinToString(":"))
     }
 
-
   var dataIncialKardec: LocalDate
     get() = lojas.getOrNull(22)?.toIntOrNull()?.localDate() ?: LocalDate.now().withDayOfMonth(1)
     set(value) {
       lojas = lojas.setValue(22, value.toSaciDate().toString())
+    }
+
+  var tipoMetodo: EMetodo?
+    get() = lojas.getOrNull(23)?.toIntOrNull()?.let { num ->
+      EMetodo.entries.firstOrNull { it.num == num }
+    }
+    set(value) {
+      lojas = lojas.setValue(23, value?.num?.toString() ?: "")
     }
 
   //-------------------------------------------------

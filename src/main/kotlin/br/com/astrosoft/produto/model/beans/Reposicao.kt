@@ -21,12 +21,7 @@ class Reposicao(
   val produtos: List<ReposicaoProduto>
 ) {
   val tipoMetodo: String
-    get() = when (metodo) {
-      431  -> "Reposição"
-      432  -> "Retorno"
-      433  -> "Acerto"
-      else -> ""
-    }
+    get() = EMetodo.entries.firstOrNull { it.num == metodo }?.descricao ?: ""
 
   fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
   fun countENT() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
@@ -71,7 +66,8 @@ class Reposicao(
           marca = EMarcaReposicao.ENT,
           localizacao = listOf("TODOS"),
           codigo = codigo,
-          grade = grade
+          grade = grade,
+          metodo = EMetodo.Todos,
         )
       )
       val listLiquido = listBruto.flatMap { repo ->
@@ -81,6 +77,7 @@ class Reposicao(
             pesquisa = "${repo.numero}",
             marca = EMarcaReposicao.ENT,
             localizacao = listOf("TODOS"),
+            metodo = EMetodo.Todos,
           )
         )
       }
@@ -121,9 +118,17 @@ data class FiltroReposicao(
   val dataFinal: LocalDate? = null,
   val codigo: String = "",
   val grade: String = "",
+  val metodo: EMetodo,
 )
 
 enum class EMarcaReposicao(val num: Int) {
   SEP(0),
   ENT(1)
+}
+
+enum class EMetodo(val num: Int, val descricao: String) {
+  Reposicao(431, "Reposição"),
+  Retorno(432, "Retorno"),
+  Acerto(433, "Acerto"),
+  Todos(0, "Todos"),
 }

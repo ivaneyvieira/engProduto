@@ -22,6 +22,7 @@ class TabReposicaoUsrViewModel(val viewModel: ReposicaoViewModel) : TabUsrViewMo
     this.reposicaoSep = usuario.reposicaoSep
     this.impressoraRepo = usuario.impressoraRepo
     this.localizacaoRepo = usuario.localizacaoRepo
+    this.tipoMetodo = usuario.tipoMetodo
   }
 }
 
