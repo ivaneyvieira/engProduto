@@ -44,7 +44,7 @@ class ProdutoEstoque(
         grade = grade ?: "",
         data = nota.data,
         doc = nota.nfEntrada ?: "",
-        tipo = "Recebimento",
+        tipo = ETipoKardec.RECEBIMENTO,
         vencimento = nota.vencimento,
         qtde = nota.quant ?: 0,
         saldo = 0,
@@ -85,7 +85,7 @@ class ProdutoEstoque(
           grade = grade,
           data = ressuprimento.dataBaixa,
           doc = ressuprimento.notaBaixa ?: "",
-          tipo = "Ressuprimento",
+          tipo = ETipoKardec.RESSUPRIMENTO,
           qtde = (produto.qtQuantNF ?: 0) * mult,
           saldo = 0,
           userLogin = ressuprimento.login ?: ""
@@ -114,9 +114,9 @@ class ProdutoEstoque(
     val notas = saci.findNotaSaida(filtro = filtro)
     return notas.flatMap { nota ->
       val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
-        "Entrega"
+        ETipoKardec.ENTREGA
       } else {
-        "Expedição"
+        ETipoKardec.EXPEDICAO
       }
 
       //Validações
@@ -164,7 +164,7 @@ class ProdutoEstoque(
         grade = produto.grade ?: "",
         data = produto.data,
         doc = produto.numero.toString(),
-        tipo = "Reposição Loja",
+        tipo = ETipoKardec.REPOSICAO,
         qtde = -(produto.quantidade ?: 0),
         saldo = 0,
         userLogin = produto.entregueSNome ?: ""
@@ -181,7 +181,7 @@ class ProdutoEstoque(
         grade = saldo.grade,
         data = saldo.date,
         doc = "Estoque",
-        tipo = "Inicial",
+        tipo = ETipoKardec.INICIAL,
         qtde = saldo.quant,
         saldo = 0,
         userLogin = "ADM"
@@ -198,7 +198,7 @@ class ProdutoEstoque(
         grade = saldo.grade,
         data = saldo.data,
         doc = saldo.pedido.toString(),
-        tipo = "Acerto Estoque",
+        tipo = ETipoKardec.ACERTO_ESTOQUE,
         qtde = saldo.quantidade,
         saldo = 0,
         userLogin = "ADM"

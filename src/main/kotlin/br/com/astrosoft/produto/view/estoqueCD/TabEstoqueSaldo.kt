@@ -153,6 +153,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     updateGrid(produtos)
   }
 
+  override fun updateKardec() {
+    dlgKardec?.update()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueSaldo == true

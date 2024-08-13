@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
@@ -9,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import java.time.LocalDate
 
@@ -54,11 +57,19 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
+      val user = AppConfig.userLogin()
+
+      if(user?.admin == true) {
+        this.addColumnButton(VaadinIcon.TRASH, "Remover", "Remover") { produto ->
+          viewModel.removeProdutoKardec(produto)
+        }
+      }
+
       columnGrid(ProdutoKardec::loja, "Loja")
       columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::doc, "Doc")
-      columnGrid(ProdutoKardec::tipo, "Tipo")
+      columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
       columnGrid(ProdutoKardec::vencimento, "Venc", pattern = "MM/yyyy", width = null)
       columnGrid(ProdutoKardec::qtde, "Qrd")
       columnGrid(ProdutoKardec::saldo, "Saldo")
