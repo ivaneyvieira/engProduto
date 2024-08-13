@@ -32,6 +32,8 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
+  AND (S.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
+  AND (S.grade = :grade OR :grade = '')
 GROUP BY S.storeno, S.prdno, S.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
@@ -55,6 +57,8 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240307
   AND N.status <> 1
+  AND ((X.prdno = LPAD(:codigo, 16, ' ')) OR :codigo = '')
+  AND ((X.grade = :grade) OR :grade = '')
 GROUP BY storeno, ordno, numero, prdno, grade;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,

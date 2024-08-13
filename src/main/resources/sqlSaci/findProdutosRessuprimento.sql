@@ -42,6 +42,8 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240226
   AND N.status <> 1
+  AND (X.prdno = :prdno OR :prdno = '')
+  AND (X.grade = :grade OR :grade = '')
 GROUP BY N.l2, numero, X.prdno, X.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORDS;

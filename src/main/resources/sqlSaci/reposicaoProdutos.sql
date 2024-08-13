@@ -26,6 +26,8 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
+  AND (S.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
+  AND (S.grade = :grade OR :grade = '')
 GROUP BY S.storeno, S.prdno, S.grade;
 
 SELECT O.storeno                               AS loja,

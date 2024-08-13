@@ -14,6 +14,7 @@ FROM sqldados.prd AS P
                    AND A.storeno = L.storeno
 WHERE (MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
+  AND (P.no = :prdno OR :prdno = '')
 GROUP BY prdno, loc;
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
