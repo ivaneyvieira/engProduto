@@ -119,6 +119,12 @@ class ProdutoEstoque(
         ETipoKardec.EXPEDICAO
       }
 
+      val usuario = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
+        (nota.usuarioCD ?: "").split("-").firstOrNull() ?: ""
+      } else {
+        (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
+      }
+
       //Validações
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
@@ -133,7 +139,7 @@ class ProdutoEstoque(
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
-          userLogin = (nota.usuarioExp ?: "").split("-").firstOrNull() ?: "",
+          userLogin = usuario,
         )
       }.distinctBy { it.doc }
     }
