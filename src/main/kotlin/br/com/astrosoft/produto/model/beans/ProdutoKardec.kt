@@ -28,5 +28,7 @@ enum class ETipoKardec(val descricao: String) {
   ACERTO_ESTOQUE("Acerto Estoque"),
   ENTREGA("Entrega"),
   INICIAL("Inicial"),
+  RETORNO("Retorno Loja"),
+  ACERTO("Acerto Estoque"),
 }
 

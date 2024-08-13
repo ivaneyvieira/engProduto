@@ -26,7 +26,17 @@ class ReposicaoProduto(
   var selecionado: Int?,
   var posicao: Int?,
   var qtEstoque: Int?,
-){
+  var metodo: Int?,
+  var mult: Int?,
+) {
+  val tipoMetodo: String
+    get() = when (metodo) {
+      431  -> "Reposição"
+      432  -> "Retorno"
+      433  -> "Acerto"
+      else -> ""
+    }
+
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
   fun salva() {
     saci.updateReposicaoProduto(this)

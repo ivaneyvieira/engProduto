@@ -82,6 +82,7 @@ class TabReposicaoEnt(
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
+    columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
 
@@ -101,7 +102,7 @@ class TabReposicaoEnt(
       columnGrid(Reposicao::usuarioApp, "Login")
     }
 
-    if(filtroProduto()) {
+    if (filtroProduto()) {
       columnGrid({
         val reposicao = it.produtos.filter { prd ->
           prd.codigo == codigo && prd.grade == grade

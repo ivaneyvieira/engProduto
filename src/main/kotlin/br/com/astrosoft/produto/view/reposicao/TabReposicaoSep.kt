@@ -79,6 +79,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
+    columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()

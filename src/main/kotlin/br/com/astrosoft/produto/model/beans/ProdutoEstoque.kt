@@ -163,15 +163,30 @@ class ProdutoEstoque(
       grade = grade ?: "",
     )
     return saci.findResposicaoProduto(filtro).mapNotNull { produto ->
-      if(produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
+      if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
+
+      val tipo = when (produto.metodo) {
+        431  -> ETipoKardec.REPOSICAO
+        432  -> ETipoKardec.RETORNO
+        433  -> ETipoKardec.ACERTO
+        else -> return@mapNotNull null
+      }
+
+      val mult = when (produto.metodo) {
+        431  -> -1
+        432  -> 1
+        433  -> produto.mult ?: 0
+        else -> return@mapNotNull null
+      }
+
       ProdutoKardec(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
         grade = produto.grade ?: "",
         data = produto.data,
         doc = produto.numero.toString(),
-        tipo = ETipoKardec.REPOSICAO,
-        qtde = -(produto.quantidade ?: 0),
+        tipo = tipo,
+        qtde = mult * (produto.quantidade ?: 0),
         saldo = 0,
         userLogin = produto.entregueSNome ?: ""
       )
@@ -195,8 +210,9 @@ class ProdutoEstoque(
     }
   }
 
-    fun acertoEstoque(dataInicial: LocalDate): List<ProdutoKardec> {
-    val list = saci.findAcertoEstoque(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+  fun acertoEstoque(dataInicial: LocalDate): List<ProdutoKardec> {
+    val list =
+        saci.findAcertoEstoque(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
     return list.map { saldo ->
       ProdutoKardec(
         loja = saldo.loja,

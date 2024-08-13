@@ -61,6 +61,8 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
       ETipoKardec.ACERTO_ESTOQUE -> naoImplementado()
       ETipoKardec.ENTREGA        -> naoImplementado()
       ETipoKardec.INICIAL        -> naoImplementado()
+      ETipoKardec.RETORNO        -> naoImplementado()
+      ETipoKardec.ACERTO         -> naoImplementado()
     }
   }
 

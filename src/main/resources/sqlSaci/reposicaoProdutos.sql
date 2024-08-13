@@ -51,12 +51,20 @@ SELECT O.storeno                               AS loja,
        IFNULL(EA.qtRecebido, 0)                AS qtRecebido,
        EA.selecionado                          AS selecionado,
        EA.posicao                              AS posicao,
-       (S.qtty_atacado + S.qtty_varejo) / 1000 AS qtEstoque
+       (S.qtty_atacado + S.qtty_varejo) / 1000 AS qtEstoque,
+       O.paymno                                AS metodo,
+       ROUND(CASE
+               WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
+               WHEN R.remarks__480 LIKE 'SAIDA%' THEN -1
+               ELSE 0
+             END)                              AS mult
 FROM sqldados.eoprd AS E
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)
        INNER JOIN sqldados.eord AS O
                   USING (storeno, ordno)
+       LEFT JOIN sqldados.eordrk AS R
+                 USING (storeno, ordno)
        LEFT JOIN T_LOC AS L
                  USING (prdno, grade)
        LEFT JOIN sqldados.eordAdicional AS OA
@@ -73,7 +81,7 @@ FROM sqldados.eoprd AS E
                  ON ER.no = OA.empRecebido
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno
-WHERE O.paymno = 431
+WHERE O.paymno IN (431, 432, 433)
   AND O.date >= :datacorte
   AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
   AND (O.date >= :dataInicial OR :dataInicial = 0)

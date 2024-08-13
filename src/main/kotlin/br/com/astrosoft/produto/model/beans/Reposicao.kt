@@ -17,8 +17,17 @@ class Reposicao(
   var recebidoNo: Int,
   var recebidoNome: String,
   var recebidoSNome: String,
+  var metodo: Int?,
   val produtos: List<ReposicaoProduto>
 ) {
+  val tipoMetodo: String
+    get() = when (metodo) {
+      431  -> "Reposição"
+      432  -> "Retorno"
+      433  -> "Acerto"
+      else -> ""
+    }
+
   fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
   fun countENT() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
 
@@ -95,6 +104,7 @@ class Reposicao(
           recebidoNo = first?.recebidoNo ?: 0,
           recebidoNome = first?.recebidoNome ?: "",
           recebidoSNome = first?.recebidoSNome ?: "",
+          metodo = first?.metodo,
           produtos = produtos
         )
       }
