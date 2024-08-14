@@ -7,13 +7,11 @@ import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
-import com.github.mvysny.karibudsl.v10.comboBox
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridSelectionModel
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -38,6 +36,10 @@ class TabReposicaoEnt(
   }
 
   override fun filtroProduto(): Boolean = codigo != "" || grade != ""
+
+  override fun pedidosSelecionados(): List<Reposicao> {
+    return itensSelecionados()
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
     this.isVisible = !filtroProduto()
@@ -82,11 +84,19 @@ class TabReposicaoEnt(
         viewModel.updateView()
       }
     }
+
+    button("Remove Pedido") {
+      onClick {
+        viewModel.removePedidos()
+      }
+    }
   }
 
   override fun Grid<Reposicao>.gridPanel() {
     this.addClassName("styling")
     this.format()
+    
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {

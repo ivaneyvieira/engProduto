@@ -106,6 +106,21 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     pedido.expiraPedido()
   }
 
+  fun removePedidos() = viewModel.exec {
+    val pedidos = subView.pedidosSelecionados().ifEmpty {
+      fail("Nenhum pedido selecionado")
+    }
+    viewModel.view.showQuestion("Confirma a remoção dos predidos?") {
+      pedidos.forEach { reposicao ->
+        reposicao.produtos.forEach { produto ->
+          produto.marca = EMarcaReposicao.SEP.num
+          produto.salva()
+        }
+      }
+      updateView()
+    }
+  }
+
   val subView
     get() = viewModel.view.tabReposicaoEnt
 }
@@ -117,4 +132,5 @@ interface ITabReposicaoEnt : ITabView {
   fun formRecebe(pedido: Reposicao)
   fun updateProdutos(reposicoes: List<Reposicao>)
   fun filtroProduto(): Boolean
+  fun pedidosSelecionados(): List<Reposicao>
 }
