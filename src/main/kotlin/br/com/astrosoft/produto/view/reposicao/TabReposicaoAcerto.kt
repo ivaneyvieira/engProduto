@@ -173,7 +173,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
   }
 
   override val label: String
-    get() = "Separar"
+    get() = "Acerto"
 
   override fun updateComponent() {
     viewModel.updateView()
