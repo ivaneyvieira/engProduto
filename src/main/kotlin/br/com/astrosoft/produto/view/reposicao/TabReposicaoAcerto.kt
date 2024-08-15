@@ -100,7 +100,6 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    columnGrid(Reposicao::entregueSNome, "Entregue")
     if (user?.autorizaAcerto == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formEntregue(pedido)
