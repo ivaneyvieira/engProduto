@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoUsr
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
@@ -19,6 +20,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     columnGrid(UserSaci::reposicaoEnt, "Entregar")
     columnGrid(UserSaci::impressoraRepo, "Impressora")
     columnGrid(UserSaci::localizacaoRepo, "Localização")
+    columnGrid(UserSaci::autorizaAcerto, "Autoriza Acerto")
   }
 
   override fun FormUsuario.configFields() {
@@ -36,7 +38,8 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraRepo)
       filtroLocalizacao(binder, UserSaci::localizacaoRepo)
-      select<EMetodo>("Tipo") {
+
+      multiSelectComboBox<EMetodo>("Tipo") {
         this.setItems(EMetodo.entries)
         this.setItemLabelGenerator { it.descricao }
         this.addValueChangeListener {
@@ -44,6 +47,9 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
         }
         binder.bind(this, UserSaci::tipoMetodo.name)
       }
+    }
+    checkBox("Autoriza Acerto") {
+      binder.bind(this, UserSaci::autorizaAcerto.name)
     }
   }
 }

@@ -78,6 +78,23 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
+  fun formEntregue(pedido: Reposicao) {
+    subView.formEntregue(pedido)
+  }
+
+  fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    pedido.entregue(user)
+
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabReposicaoAcerto
 }
@@ -89,4 +106,5 @@ interface ITabReposicaoAcerto : ITabView {
   fun produtosSelecionados(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
   fun updateProdutos(reposicoes: List<Reposicao>)
+  fun formEntregue(pedido: Reposicao)
 }

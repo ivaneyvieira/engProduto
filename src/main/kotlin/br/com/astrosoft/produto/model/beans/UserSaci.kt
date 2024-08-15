@@ -89,6 +89,7 @@ class UserSaci : IUser {
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized(44)
   var reposicaoAcerto by DelegateAuthorized(45)
+  var autorizaAcerto by DelegateAuthorized(46)
 
   //Locais
   private var localEstoque: String?
@@ -283,12 +284,16 @@ class UserSaci : IUser {
       lojas = lojas.setValue(22, value.toSaciDate().toString())
     }
 
-  var tipoMetodo: EMetodo?
-    get() = lojas.getOrNull(23)?.toIntOrNull()?.let { num ->
-      EMetodo.entries.firstOrNull { it.num == num }
-    }
+  var tipoMetodo: Set<EMetodo>
+    get() = lojas.getOrNull(23)?.split(",").orEmpty().mapNotNull { tipo ->
+      tipo.toIntOrNull()?.let { num ->
+        EMetodo.entries.firstOrNull { it.num == num }
+      }
+    }.toSet()
     set(value) {
-      lojas = lojas.setValue(23, value?.num?.toString() ?: "")
+      lojas = lojas.setValue(23, value.joinToString(",") {
+        it.num.toString()
+      })
     }
 
   //-------------------------------------------------
