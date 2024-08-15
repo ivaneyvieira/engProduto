@@ -53,10 +53,11 @@ class TabReposicaoEnt(
     init()
     cmbMetodo = select("Tipo") {
       val user = AppConfig.userLogin() as? UserSaci
-      val tipo = user?.tipoMetodo ?: EMetodo.TODOS
+      val tipos = user?.tipoMetodo ?: EMetodo.entries
       this.setItems(EMetodo.entries.filter {
-        it == tipo || tipo == EMetodo.TODOS || user?.admin == true
+        it in tipos || EMetodo.TODOS in tipos || user?.admin == true
       })
+      this.value = tipos.firstOrNull()
       this.setItemLabelGenerator { it.descricao }
       this.addValueChangeListener {
         viewModel.updateView()
