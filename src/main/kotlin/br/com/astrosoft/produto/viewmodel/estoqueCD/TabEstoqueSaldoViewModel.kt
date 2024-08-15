@@ -47,54 +47,6 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   fun updateProduto(bean: ProdutoEstoque?) {
     bean?.update()
   }
-
-  fun removeProdutoKardec(produto: ProdutoKardec?) = viewModel.exec {
-    if (produto == null) {
-      fail("Produto não selecionado")
-    }
-
-    when (produto.tipo) {
-      ETipoKardec.RECEBIMENTO    -> naoImplementado()
-      ETipoKardec.RESSUPRIMENTO  -> naoImplementado()
-      ETipoKardec.EXPEDICAO      -> naoImplementado()
-      ETipoKardec.REPOSICAO      -> apagaReposicao(produto)
-      ETipoKardec.ACERTO_ESTOQUE -> naoImplementado()
-      ETipoKardec.ENTREGA        -> naoImplementado()
-      ETipoKardec.INICIAL        -> naoImplementado()
-      ETipoKardec.RETORNO        -> naoImplementado()
-      ETipoKardec.ACERTO         -> naoImplementado()
-    }
-  }
-
-  private fun apagaReposicao(produto: ProdutoKardec) {
-    viewModel.view.showQuestion("A reposição será excluida. Confirma?") {
-      val filtro = FiltroReposicao(
-        loja = produto.loja,
-        pesquisa = produto.doc,
-        marca = EMarcaReposicao.ENT,
-        localizacao = listOf("TODOS"),
-        dataInicial = null,
-        dataFinal = null,
-        codigo = "",
-        grade = "",
-        metodo = EMetodo.Todos,
-      )
-      val listaProduto = saci.findResposicaoProduto(filtro).filter {
-        it.numero == (produto.doc.toIntOrNull() ?: "")
-      }
-
-      listaProduto.forEach {
-        it.marca = EMarcaReposicao.SEP.num
-        it.salva()
-      }
-
-      subView.updateKardec()
-    }
-  }
-
-  private fun naoImplementado() {
-    print("Função não implementada")
-  }
 }
 
 interface ITabEstoqueSaldo : ITabView {

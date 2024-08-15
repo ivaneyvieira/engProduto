@@ -3,11 +3,12 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEnt
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEntViewModel
-import com.github.mvysny.karibudsl.v10.*
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoAcerto
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoAcertoViewModel
+import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -16,12 +17,9 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
-class TabReposicaoEnt(
-  val viewModel: TabReposicaoEntViewModel,
-  val codigo: String,
-  val grade: String,
-) : TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
-  private var dlgProduto: DlgProdutosReposEnt? = null
+class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
+  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoAcerto {
+  private var dlgProduto: DlgProdutosReposAcerto? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
@@ -33,14 +31,7 @@ class TabReposicaoEnt(
     cmbLoja.value = viewModel.findLoja(0) ?: Loja.lojaZero
   }
 
-  override fun filtroProduto(): Boolean = codigo != "" || grade != ""
-
-  override fun pedidosSelecionados(): List<Reposicao> {
-    return itensSelecionados()
-  }
-
   override fun HorizontalLayout.toolBarConfig() {
-    this.isVisible = !filtroProduto()
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -54,9 +45,11 @@ class TabReposicaoEnt(
     cmbMetodo = select("Tipo") {
       val user = AppConfig.userLogin() as? UserSaci
       val tipo = user?.tipoMetodo ?: EMetodo.TODOS
-      this.setItems(EMetodo.entries.filter {
+      val metodos = listOf(EMetodo.ACERTO, EMetodo.RETORNO, EMetodo.TODOS)
+      this.setItems(metodos.filter {
         it == tipo || tipo == EMetodo.TODOS || user?.admin == true
       })
+      this.value = tipo
       this.setItemLabelGenerator { it.descricao }
       this.addValueChangeListener {
         viewModel.updateView()
@@ -82,61 +75,33 @@ class TabReposicaoEnt(
         viewModel.updateView()
       }
     }
-
-    button("Remove Pedido") {
-      onClick {
-        viewModel.removePedidos()
-      }
-    }
   }
 
   override fun Grid<Reposicao>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
 
-    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido) {
-        viewModel.marcaImpressao(pedido)
+    this.withEditor(classBean = Reposicao::class,
+      openEditor = {
+        this.focusEditor(Reposicao::observacao)
+      },
+      closeEditor = {
+        viewModel.salva(it.bean)
       }
-    }
+    )
+
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-
-    if (!filtroProduto()) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formEntregue(pedido)
-      }
-    }
-    columnGrid(Reposicao::entregueSNome, "Entregue")
-    if (!filtroProduto()) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
-      }
-    }
-    columnGrid(Reposicao::recebidoSNome, "Recebido")
-    if (!filtroProduto()) {
-      columnGrid(Reposicao::usuarioApp, "Login")
-    }
-
-    if (filtroProduto()) {
-      columnGrid({
-        val reposicao = it.produtos.filter { prd ->
-          prd.codigo == codigo && prd.grade == grade
-        }.firstOrNull()
-        reposicao?.quantidade ?: 0
-      }, "Quant").right()
-    }
+    columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      dlgProduto = DlgProdutosReposEnt(viewModel, listOf(ressuprimento), filtroProduto())
+      dlgProduto = DlgProdutosReposAcerto(viewModel, listOf(ressuprimento))
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -144,41 +109,36 @@ class TabReposicaoEnt(
   }
 
   override fun filtro(): FiltroReposicao {
-    val user = AppConfig.userLogin() as? UserSaci
-    val localizacao = if (user?.admin == true) {
-      listOf("TODOS")
-    } else {
-      user?.localizacaoRepo.orEmpty().toList()
-    }
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaReposicao.ENT,
-      localizacao = localizacao,
+      marca = EMarcaReposicao.SEP,
+      localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      codigo = codigo,
-      grade = grade,
-      listMetodo = listOf(cmbMetodo.value),
+      listMetodo = when(cmbMetodo.value){
+        EMetodo.ACERTO -> listOf(EMetodo.ACERTO)
+        EMetodo.RETORNO -> listOf(EMetodo.RETORNO)
+        else -> listOf(EMetodo.ACERTO, EMetodo.RETORNO)
+      },
     )
   }
 
-  override fun updateReposicoes(reposicoes: List<Reposicao>) {
+  override fun updateUsuarios(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
   }
 
-  override fun formEntregue(pedido: Reposicao) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entreguePedido(pedido, form.login, form.senha)
-    }
+  override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
+    codigoBarra ?: return null
+    return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
-  override fun formRecebe(pedido: Reposicao) {
-    val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Recebido", form = form) {
-      viewModel.recebePedido(pedido, form.numero)
-    }
+  override fun updateProduto(produto: ReposicaoProduto) {
+    dlgProduto?.updateProduto(produto)
+  }
+
+  override fun produtosSelecionados(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosSelecionados().orEmpty()
   }
 
   override fun updateProdutos(reposicoes: List<Reposicao>) {
@@ -187,19 +147,13 @@ class TabReposicaoEnt(
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.reposicaoEnt == true
+    return username?.reposicaoAcerto == true
   }
 
   override val label: String
-    get() = "Entregue"
+    get() = "Separar"
 
   override fun updateComponent() {
     viewModel.updateView()
-  }
-
-  override fun printerUser(): List<String> {
-    val user = AppConfig.userLogin() as? UserSaci
-    val impressora = user?.impressoraRepo ?: return emptyList()
-    return impressora.toList()
   }
 }

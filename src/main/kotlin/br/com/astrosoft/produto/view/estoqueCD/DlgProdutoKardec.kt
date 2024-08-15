@@ -57,14 +57,6 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      val user = AppConfig.userLogin()
-
-      if(user?.admin == true) {
-        this.addColumnButton(VaadinIcon.TRASH, "Remover", "Remover") { produto ->
-          viewModel.removeProdutoKardec(produto)
-        }
-      }
-
       columnGrid(ProdutoKardec::loja, "Loja")
       columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")

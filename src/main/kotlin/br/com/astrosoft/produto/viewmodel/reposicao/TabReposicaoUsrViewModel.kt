@@ -19,6 +19,7 @@ class TabReposicaoUsrViewModel(val viewModel: ReposicaoViewModel) : TabUsrViewMo
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.reposicaoEnt = usuario.reposicaoEnt
+    this.reposicaoAcerto = usuario.reposicaoAcerto
     this.reposicaoSep = usuario.reposicaoSep
     this.impressoraRepo = usuario.impressoraRepo
     this.localizacaoRepo = usuario.localizacaoRepo

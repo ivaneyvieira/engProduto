@@ -24,7 +24,6 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -42,18 +41,6 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       }
     }
     init()
-    cmbMetodo = select("Tipo") {
-      val user = AppConfig.userLogin() as? UserSaci
-      val tipo = user?.tipoMetodo ?: EMetodo.Todos
-      this.setItems(EMetodo.entries.filter {
-        it == tipo || tipo == EMetodo.Todos || user?.admin == true
-      })
-      this.value = tipo
-      this.setItemLabelGenerator { it.descricao }
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -115,7 +102,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      metodo = cmbMetodo.value ?: EMetodo.Todos,
+      listMetodo = listOf(EMetodo.REPOSICAO),
     )
   }
 

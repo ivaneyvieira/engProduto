@@ -88,6 +88,7 @@ class UserSaci : IUser {
   var recebimentoRecebido by DelegateAuthorized(61)
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized(44)
+  var reposicaoAcerto by DelegateAuthorized(45)
 
   //Locais
   private var localEstoque: String?
@@ -347,10 +348,11 @@ class UserSaci : IUser {
     }
 
   var reposicao
-    get() = reposicaoSep || reposicaoEnt || admin
+    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || admin
     set(value) {
       reposicaoSep = value
       reposicaoEnt = value
+      reposicaoAcerto = value
     }
   val pedido
     get() = pedidoCD || pedidoEnt || admin
