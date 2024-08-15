@@ -104,7 +104,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formEntregue(pedido)
       }
-      columnGrid(Reposicao::entregueSNome, "Entregue")
+      columnGrid(Reposicao::entregueSNome, "Autoriza")
     }
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }

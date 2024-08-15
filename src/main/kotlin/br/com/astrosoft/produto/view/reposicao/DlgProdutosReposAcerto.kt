@@ -30,16 +30,6 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, private
       "Loja: $loja    Data: $data"
     }
     form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
-          }
-        }
-      }
       button("Entregue") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {

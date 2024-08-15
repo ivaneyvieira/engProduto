@@ -49,7 +49,7 @@ class PrintProdutos(private val filtro: FiltroProdutoSaldo) : PrintText<ProdutoS
   }
 
   init {
-    column(ProdutoSaldo::codigo, "Codigo", 6)
+    column(ProdutoSaldo::codigoStr, "Codigo", 6)
     column(ProdutoSaldo::descricao, "Descricao", 36)
     column(ProdutoSaldo::gradeProduto, "Grade", 8)
     column(ProdutoSaldo::localizacao, "Loc", 4)
