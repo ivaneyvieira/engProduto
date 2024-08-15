@@ -88,7 +88,7 @@ class ProdutoEstoque(
           tipo = ETipoKardec.RESSUPRIMENTO,
           qtde = (produto.qtQuantNF ?: 0) * mult,
           saldo = 0,
-          userLogin = ressuprimento.recebidoSPor ?: ""
+          userLogin = ressuprimento.entregueSPor ?: ""
         )
       }
     }
