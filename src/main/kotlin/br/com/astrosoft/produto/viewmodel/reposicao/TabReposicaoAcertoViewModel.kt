@@ -35,7 +35,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.ENT.num }
+    val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -50,7 +50,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.ENT.num }
+    val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
