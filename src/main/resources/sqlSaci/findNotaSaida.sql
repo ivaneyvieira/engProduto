@@ -222,12 +222,16 @@ SELECT N.storeno                                                              AS
        M.sname                                                                AS nomeMotorista,
        EP.no                                                                  AS usernoPrint,
        EP.login                                                               AS usuarioPrint,
+       ES.no                                                                  AS usernoSing,
+       ES.login                                                               AS usuarioSing,
        MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS UP
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EP
                  ON EP.no = UP.userno
+       LEFT JOIN sqldados.users AS ES
+                 ON EP.no = UP.usernoSing
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
@@ -332,6 +336,8 @@ SELECT Q.loja,
        nomeMotorista,
        usernoPrint,
        usuarioPrint,
+       usernoSing,
+       usuarioSing,
        usuarioSep
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X
@@ -347,6 +353,7 @@ WHERE (@PESQUISA = ''
   OR nomeVendedor LIKE @PESQUISA_LIKE
   OR nomeMotorista LIKE @PESQUISA_LIKE
   OR usuarioPrint LIKE @PESQUISA_LIKE
+  OR usuarioSing LIKE @PESQUISA_LIKE
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
 GROUP BY Q.loja, Q.pdvno, Q.xano

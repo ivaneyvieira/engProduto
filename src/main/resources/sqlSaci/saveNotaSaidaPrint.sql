@@ -7,8 +7,12 @@ CREATE TABLE sqldados.nfUserPrint
   userno  INT      DEFAULT 0 NOT NULL,
   PRIMARY KEY (storeno, pdvno, xano)
 )
+
+alter table sqldados.nfUserPrint
+add COLUMN usernoSing INT DEFAULT 0 NOT NULL
+
  */
 
-replace sqldados.nfUserPrint(storeno, pdvno, xano, userno)
-values(:storeno, :pdvno, :xano, :userPrint)
+replace sqldados.nfUserPrint(storeno, pdvno, xano, userno, usernoSing)
+values(:storeno, :pdvno, :xano, :userPrint, :usernoSing)
 

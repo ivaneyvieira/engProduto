@@ -47,6 +47,8 @@ class NotaSaida(
   var nomeMotorista: String?,
   var usernoPrint: Int?,
   var usuarioPrint: String?,
+  var usernoSing: Int?,
+  var usuarioSing: String?,
   var usuarioSep: String?,
 ) {
   val dataStr
@@ -78,6 +80,11 @@ class NotaSaida(
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
     this.usernoPrint = user?.no
+    saci.saveNotaSaidaPrint(this)
+  }
+
+  fun entregue(user: UserSaci) {
+    this.usernoSing = user.no
     saci.saveNotaSaidaPrint(this)
   }
 

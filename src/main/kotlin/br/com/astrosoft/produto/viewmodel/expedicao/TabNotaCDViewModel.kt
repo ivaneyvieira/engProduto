@@ -97,6 +97,23 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     block(list)
   }
 
+  fun formEntregue(nota: NotaSaida) {
+    subView.formEntregue(nota)
+  }
+
+  fun entreguePedido(nota: NotaSaida, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    nota.entregue(user)
+
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabNotaCD
 }
@@ -108,4 +125,5 @@ interface ITabNotaCD : ITabView {
   fun produtosSelcionados(): List<ProdutoNFS>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
   fun findNota(): NotaSaida?
+  fun formEntregue(saida: NotaSaida)
 }

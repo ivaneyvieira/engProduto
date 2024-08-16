@@ -2,7 +2,9 @@ package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
@@ -108,6 +110,10 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
       viewModel.printEtiquetaExp(nota)
     }
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
+      viewModel.formEntregue(nota)
+    }
+    columnGrid(NotaSaida::usuarioSing, "Entregue")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosCD(viewModel, nota)
       dlgProduto?.showDialog {
@@ -170,4 +176,12 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun formEntregue(nota: NotaSaida) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.entreguePedido(nota, form.login, form.senha)
+    }
+  }
 }
+
