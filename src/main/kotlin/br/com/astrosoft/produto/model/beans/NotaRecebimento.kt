@@ -12,6 +12,7 @@ class NotaRecebimento(
   var nfEntrada: String?,
   var custno: Int?,
   var vendno: Int?,
+  var vendnoProduto: Int?,
   var fornecedor: String?,
   var valorNF: Double?,
   var pedComp: Int?,
@@ -86,6 +87,9 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         volume = nota.volume,
         peso = nota.peso,
         produtos = produtos,
+        vendnoProduto = produtos.groupBy { it.vendnoProduto }.entries.sortedBy {
+          - it.value.size
+        }.firstOrNull()?.key,
         marcaSelecionada = nota.marcaSelecionada
       )
     }

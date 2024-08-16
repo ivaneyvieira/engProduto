@@ -21,6 +21,7 @@ class NotaRecebimentoProduto(
   var peso: Double?,
   var prdno: String?,
   var codigo: String?,
+  var vendnoProduto: Int?,
   var barcodeStrList: String?,
   var descricao: String?,
   var grade: String?,
