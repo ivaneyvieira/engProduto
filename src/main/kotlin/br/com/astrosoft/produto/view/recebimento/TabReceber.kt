@@ -86,7 +86,7 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
     columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada")
-    columnGrid(NotaRecebimento::custno, header = "For Cad")
+    columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")

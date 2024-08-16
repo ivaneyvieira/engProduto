@@ -14,7 +14,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class TabValidadeList(val viewModel: TabValidadeListViewModel) :
+class sTabValidadeList(val viewModel: TabValidadeListViewModel) :
   TabPanelGrid<Validade>(Validade::class),
   ITabValidadeList {
 
