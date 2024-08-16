@@ -111,7 +111,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { reposicao ->
-      val userEntregue = reposicao.entregueNo ?: 0
+      val userEntregue = reposicao.entregueNo
       if (userEntregue == 0) {
         showError("Pedido não assinado")
       } else {

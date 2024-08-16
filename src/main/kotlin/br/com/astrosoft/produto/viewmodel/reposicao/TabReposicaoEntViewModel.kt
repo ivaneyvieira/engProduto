@@ -32,7 +32,11 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun formEntregue(pedido: Reposicao) {
+  fun formEntregue(pedido: Reposicao) = viewModel.exec{
+    if(pedido.entregueNo == 0){
+      fail("Pedido não autorizado")
+    }
+
     subView.formEntregue(pedido)
   }
 
