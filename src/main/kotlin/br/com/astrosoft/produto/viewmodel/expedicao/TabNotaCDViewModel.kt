@@ -101,7 +101,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     subView.formEntregue(nota)
   }
 
-  fun entreguePedido(nota: NotaSaida, login: String, senha: String) {
+  fun entregueNota(nota: NotaSaida, login: String, senha: String) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {

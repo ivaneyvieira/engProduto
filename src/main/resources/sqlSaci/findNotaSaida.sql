@@ -231,7 +231,7 @@ FROM sqldados.nf AS N
        LEFT JOIN sqldados.users AS EP
                  ON EP.no = UP.userno
        LEFT JOIN sqldados.users AS ES
-                 ON EP.no = UP.usernoSing
+                 ON ES.no = UP.usernoSing
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P

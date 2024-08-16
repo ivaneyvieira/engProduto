@@ -180,7 +180,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
   override fun formEntregue(nota: NotaSaida) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entreguePedido(nota, form.login, form.senha)
+      viewModel.entregueNota(nota, form.login, form.senha)
     }
   }
 }
