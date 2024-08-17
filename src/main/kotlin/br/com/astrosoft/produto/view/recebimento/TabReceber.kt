@@ -75,14 +75,17 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     this.addClassName("styling")
     this.format()
 
+    columnGrid(NotaRecebimento::loja, header = "Loja")
+
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
       viewModel.formRecebe(nota)
     }
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if ((nota.usernoRecebe ?: 0) == 0) {
-        DialogHelper.showError("Nota não recebida")
+      val user = AppConfig.userLogin() as? UserSaci
+      if ((nota.usernoRecebe ?: 0) == 0 && user?.admin == false) {
+        DialogHelper.showError("Assinar nota para receber")
       } else {
         dlgProduto = DlgProdutosReceber(viewModel, nota)
         dlgProduto?.showDialog {
@@ -91,7 +94,6 @@ class TabReceber(val viewModel: TabReceberViewModel) :
       }
     }
 
-    columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
