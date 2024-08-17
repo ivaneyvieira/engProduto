@@ -78,9 +78,9 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     val tempoValidade = itens.firstOrNull()?.tempoValidade ?: 0
 
     subView.openValidade(tipoValidade, tempoValidade) { validade: ValidadeSaci ->
-      if(validade.isErro() && user?.admin != true) {
+      if (validade.isErro() && user?.admin != true) {
         DialogHelper.showError("Os dados fornecidos para a validade estão incorretos:\n${validade.msgErro()}")
-      }else {
+      } else {
         itens.forEach { item ->
           validade.prdno = item.prdno
           validade.save()
@@ -88,6 +88,23 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
         subView.updateProduto()
       }
     }
+  }
+
+  fun formRecebe(nota: NotaRecebimento) {
+    subView.formRecebe(nota)
+  }
+
+  fun recebeNota(nota: NotaRecebimento, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    nota.recebe(user)
+
+    updateView()
   }
 }
 
@@ -99,4 +116,5 @@ interface ITabReceber : ITabView {
   fun focusCodigoBarra()
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
+  fun formRecebe(nota: NotaRecebimento)
 }

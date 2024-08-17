@@ -19,6 +19,8 @@ class NotaRecebimentoProduto(
   var cte: Int?,
   var volume: Int?,
   var peso: Double?,
+  var usernoRecebe: Int?,
+  var usuarioRecebe: String?,
   var prdno: String?,
   var codigo: String?,
   var vendnoProduto: Int?,
@@ -75,8 +77,8 @@ data class FiltroNotaRecebimentoProduto(
   val dataFinal: LocalDate?,
   val invno: Int = 0,
   val localizacao: List<String>,
-  val prdno : String = "",
-  val grade : String = "SEM GRADE",
+  val prdno: String = "",
+  val grade: String = "SEM GRADE",
 )
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {

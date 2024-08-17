@@ -63,7 +63,8 @@ SELECT I.invno,
        I.qtty,
        A.marcaRecebimento,
        A.validade,
-       A.vencimento
+       A.vencimento,
+       N.s26               AS usernoRecebe
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -78,6 +79,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.type = 0)
+  AND (N.account = '2.01.20')
   AND (N.invno = :invno OR :invno = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -133,8 +135,12 @@ SELECT N.storeno                                                   AS loja,
          ELSE ''
        END                                                         AS tipoValidade,
        garantia                                                    AS tempoValidade,
-       vencimento                                                  AS vencimento
+       vencimento                                                  AS vencimento,
+       ER.no                                                       AS usernoRecebe,
+       ER.login                                                    AS usuarioRecebe
 FROM T_NOTA AS N
+       LEFT JOIN sqldados.users AS ER
+                 ON ER.no = N.usernoRecebe
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
        LEFT JOIN custp AS C
@@ -170,6 +176,8 @@ SELECT loja,
        cte,
        volume,
        peso,
+       usernoRecebe,
+       usuarioRecebe,
   /*Produto*/
        prdno,
        codigo,

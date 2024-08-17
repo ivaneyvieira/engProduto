@@ -21,6 +21,8 @@ class NotaRecebimento(
   var volume: Int?,
   var peso: Double?,
   val marcaSelecionada: Int?,
+  var usernoRecebe: Int?,
+  var usuarioRecebe: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   fun marcaSelecionadaEnt(): EMarcaRecebimento {
@@ -53,12 +55,16 @@ class NotaRecebimento(
     return InvFile.findAll(this.ni ?: 0)
   }
 
+  fun recebe(user:UserSaci) {
+    this.usernoRecebe = user.no
+    saci.updateNotaRecebimento(this)
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimento> {
       return saci.findNotaRecebimentoProduto(filtro).toNota()
     }
   }
-
 }
 
 fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
@@ -69,10 +75,10 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
       NotaRecebimento(
         loja = nota.loja,
         login = produtos.asSequence().mapNotNull { it.login }
-          .filter {it != ""}
+          .filter { it != "" }
           .distinct().sorted().joinToString(separator = ", ") { login ->
-          login
-        },
+            login
+          },
         data = nota.data,
         emissao = nota.emissao,
         ni = nota.ni,
@@ -88,8 +94,10 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         peso = nota.peso,
         produtos = produtos,
         vendnoProduto = produtos.groupBy { it.vendnoProduto }.entries.sortedBy {
-          - it.value.size
+          -it.value.size
         }.firstOrNull()?.key,
+        usernoRecebe = nota.usernoRecebe,
+        usuarioRecebe = nota.usuarioRecebe,
         marcaSelecionada = nota.marcaSelecionada
       )
     }

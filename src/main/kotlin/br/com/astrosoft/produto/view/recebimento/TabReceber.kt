@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
@@ -74,10 +75,19 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     this.addClassName("styling")
     this.format()
 
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
+      viewModel.formRecebe(nota)
+    }
+    columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosReceber(viewModel, nota)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+      if ((nota.usernoRecebe ?: 0) == 0) {
+        DialogHelper.showError("Nota não recebida")
+      } else {
+        dlgProduto = DlgProdutosReceber(viewModel, nota)
+        dlgProduto?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
 
@@ -129,8 +139,15 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
 
-  override fun openValidade(tipoValidade: Int, tempoValidade: Int,block: (ValidadeSaci) -> Unit) {
+  override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
+  }
+
+  override fun formRecebe(nota: NotaRecebimento) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Recebe", form = form) {
+      viewModel.recebeNota(nota, form.login, form.senha)
+    }
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
