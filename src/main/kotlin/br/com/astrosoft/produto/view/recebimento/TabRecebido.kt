@@ -75,6 +75,8 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
     this.addClassName("styling")
     this.format()
 
+    columnGrid(NotaRecebimento::loja, header = "Loja")
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosRecebido(viewModel, nota)
       dlgProduto?.showDialog {
@@ -89,7 +91,6 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       }
     }
 
-    columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")

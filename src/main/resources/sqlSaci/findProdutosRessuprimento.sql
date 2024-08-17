@@ -21,6 +21,8 @@ FROM sqldados.stk AS S
                    AND S.grade = A.grade
                    AND A.localizacao != ''
 WHERE S.storeno = 4
+  AND (S.prdno = :prdno OR :prdno = '')
+  AND (S.grade = :grade OR :grade = '')
 GROUP BY S.storeno, S.prdno, S.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;

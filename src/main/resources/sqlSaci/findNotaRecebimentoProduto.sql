@@ -29,11 +29,15 @@ SELECT S.prdno                                                             AS pr
        S.grade                                                             AS grade,
        CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.stk AS S
-       INNER JOIN sqldados.prd AS P ON S.prdno = P.no
-       LEFT JOIN sqldados.prdloc AS L USING (storeno, prdno, grade)
-       LEFT JOIN sqldados.prdAdicional AS A USING (storeno, prdno, grade)
+       INNER JOIN sqldados.prd AS P
+                  ON S.prdno = P.no
+       LEFT JOIN sqldados.prdloc AS L
+                 USING (storeno, prdno, grade)
+       LEFT JOIN sqldados.prdAdicional AS A
+                 USING (storeno, prdno, grade)
 WHERE (S.storeno = 4)
   AND (S.prdno = :prdno OR :prdno = '')
+  AND (S.grade = :grade OR :grade = 'SEM GRADE')
 GROUP BY S.prdno, S.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
