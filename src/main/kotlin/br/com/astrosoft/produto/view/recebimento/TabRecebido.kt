@@ -90,7 +90,7 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
     }
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
-    columnGrid(NotaRecebimento::usuarioLogin, header = "Login")
+    columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
