@@ -26,7 +26,7 @@ class NotaRecebimento(
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val usuarioLogin: String
-    get() = if(login.isNullOrBlank()) usuarioRecebe ?: "" else login ?: ""
+    get() = if(usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
 
   fun marcaSelecionadaEnt(): EMarcaRecebimento {
     return EMarcaRecebimento.entries.firstOrNull { it.codigo == marcaSelecionada } ?: EMarcaRecebimento.TODOS
