@@ -30,6 +30,13 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
   fun selecionaProdutos(nota: NotaRecebimento, codigoBarra: String) = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    if ((nota.usernoRecebe ?: 0) == 0) {
+      if (user?.admin == true) {
+        nota.recebe(user)
+      } else {
+        fail("A nota ainda não foi recebida")
+      }
+    }
     produto.marcaEnum = EMarcaRecebimento.RECEBIDO
     produto.login = user?.login ?: ""
     produto.validaProduto()
