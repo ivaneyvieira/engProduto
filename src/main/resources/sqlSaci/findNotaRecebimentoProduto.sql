@@ -34,7 +34,10 @@ FROM sqldados.stk AS S
        LEFT JOIN sqldados.prdloc AS L
                  USING (storeno, prdno, grade)
        LEFT JOIN sqldados.prdAdicional AS A
-                 USING (storeno, prdno, grade)
+                 ON A.prdno = S.prdno
+                   AND A.grade = S.grade
+                   AND A.storeno = S.storeno
+                   AND A.localizacao != ''
 WHERE (S.storeno = 4)
   AND (S.prdno = :prdno OR :prdno = '')
   AND (S.grade = :grade OR :grade = 'SEM GRADE')
