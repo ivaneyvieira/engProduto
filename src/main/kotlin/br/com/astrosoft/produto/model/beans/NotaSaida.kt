@@ -49,6 +49,8 @@ class NotaSaida(
   var usuarioPrint: String?,
   var usernoSing: Int?,
   var usuarioSing: String?,
+  var usernoSingExp: Int?,
+  var usuarioSingExp: String?,
   var usuarioSep: String?,
 ) {
   val dataStr
@@ -85,6 +87,11 @@ class NotaSaida(
 
   fun entregue(user: UserSaci) {
     this.usernoSing = user.no
+    saci.saveNotaSaidaPrint(this)
+  }
+
+  fun entregueExp(user: UserSaci) {
+    this.usernoSingExp = user.no
     saci.saveNotaSaidaPrint(this)
   }
 

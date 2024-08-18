@@ -224,6 +224,8 @@ SELECT N.storeno                                                              AS
        EP.login                                                               AS usuarioPrint,
        ES.no                                                                  AS usernoSing,
        ES.login                                                               AS usuarioSing,
+       ES.no                                                                  AS usernoSingExp,
+       ES.login                                                               AS usuarioSingExp,
        MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS UP
@@ -232,6 +234,8 @@ FROM sqldados.nf AS N
                  ON EP.no = UP.userno
        LEFT JOIN sqldados.users AS ES
                  ON ES.no = UP.usernoSing
+       LEFT JOIN sqldados.users AS EE
+                 ON EE.no = UP.usernoSingExt
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
@@ -338,6 +342,8 @@ SELECT Q.loja,
        usuarioPrint,
        usernoSing,
        usuarioSing,
+       usernoSingExp,
+       usuarioSingExp,
        usuarioSep
 FROM T_QUERY AS Q
        INNER JOIN sqldados.xaprd2 AS X

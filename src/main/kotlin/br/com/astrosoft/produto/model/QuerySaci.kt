@@ -289,6 +289,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("userPrint", nota.usernoPrint ?: 0)
       this.addOptionalParameter("usernoSing", nota.usernoSing ?: 0)
+      this.addOptionalParameter("usernoSingExp", nota.usernoSingExp ?: 0)
     }
   }
 

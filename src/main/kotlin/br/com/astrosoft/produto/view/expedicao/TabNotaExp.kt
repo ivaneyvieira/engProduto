@@ -2,7 +2,9 @@ package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -110,6 +112,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     this.format()
 
     colunaNFLoja()
+
+    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
+      viewModel.formEntregue(nota)
+    }
+    columnGrid(NotaSaida::usuarioSingExp, "Entregue")
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosExp(viewModel, nota)
       dlgProduto?.showDialog {
@@ -136,11 +144,11 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0 -> "azul"
+        countImp > 0     -> "azul"
 
-        countEnt > 0 -> "amarelo"
+        countEnt > 0     -> "amarelo"
 
-        else         -> null
+        else             -> null
       }
     }
   }
@@ -187,5 +195,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraNotaTermica?.toList().orEmpty()
+  }
+
+  override fun formEntregue(nota: NotaSaida) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.entregueNota(nota, form.login, form.senha)
+    }
   }
 }

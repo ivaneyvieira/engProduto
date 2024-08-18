@@ -63,16 +63,33 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if(itensSelecionados.isEmpty())
+    if (itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
-    if(nota.cancelada == "N")
+    if (nota.cancelada == "N")
       fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
-    val report = if(tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
+    val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
       dados = itensSelecionados,
       printer = subView.printerPreview(loja = nota.loja),
     )
+  }
+
+  fun formEntregue(nota: NotaSaida) {
+    subView.formEntregue(nota)
+  }
+
+  fun entregueNota(nota: NotaSaida, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    nota.entregueExp(user)
+
+    updateView()
   }
 
   val subView
@@ -85,4 +102,5 @@ interface ITabNotaExp : ITabView {
   fun findNota(): NotaSaida?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
+  fun formEntregue(notaSaida: NotaSaida)
 }
