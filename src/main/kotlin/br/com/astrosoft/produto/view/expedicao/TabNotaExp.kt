@@ -119,9 +119,14 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     columnGrid(NotaSaida::usuarioSingExp, "Entregue")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosExp(viewModel, nota)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+      val user = AppConfig.userLogin() as? UserSaci
+      if ((nota.usernoSing == null || nota.usernoSing == 0) && (user?.admin == false)) {
+        DialogHelper.showError("Autorizar entrega")
+      } else {
+        dlgProduto = DlgProdutosExp(viewModel, nota)
+        dlgProduto?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
     colunaNFNota()
