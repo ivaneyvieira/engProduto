@@ -116,7 +116,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
       viewModel.formEntregue(nota)
     }
-    columnGrid(NotaSaida::usuarioSingExp, "Entregue")
+    columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       val user = AppConfig.userLogin() as? UserSaci
