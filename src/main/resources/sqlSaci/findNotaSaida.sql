@@ -225,8 +225,8 @@ SELECT N.storeno                                                              AS
        EP.login                                                               AS usuarioPrint,
        ES.no                                                                  AS usernoSing,
        ES.login                                                               AS usuarioSing,
-       ES.no                                                                  AS usernoSingExp,
-       ES.login                                                               AS usuarioSingExp,
+       EE.no                                                                  AS usernoSingExp,
+       EE.login                                                               AS usuarioSingExp,
        MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS UP
