@@ -36,3 +36,4 @@ frontend/generated/
 src/main/dev-bundle
 src/main/bundle
 cahche/*
+.kotlin
