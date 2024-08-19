@@ -2,9 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val vaadinVersion: String by extra
 val karibuDslVersion: String by extra
+val vaadinBootVersion: String by extra
+val vaadinSimpleSecurityVersion: String by extra
+val slf4jVersion: String by extra
 
 plugins {
-  kotlin("jvm") version "1.9.22"
+  kotlin("jvm") version "2.0.0"
   id("application")
   id("com.vaadin")
 }
@@ -35,12 +38,12 @@ dependencies {
       }
     }
   }
-  implementation("com.github.mvysny.vaadin-boot:vaadin-boot:12.2")
-  implementation("com.github.mvysny.vaadin-simple-security:vaadin-simple-security:0.2")
+  implementation("com.github.mvysny.vaadin-boot:vaadin-boot:$vaadinBootVersion")
+  implementation("com.github.mvysny.vaadin-simple-security:vaadin-simple-security:$vaadinSimpleSecurityVersion")
 
   // logging
   // currently we are logging through the SLF4J API to slf4j-simple. See src/main/resources/simplelogger.properties file for the logger configuration
-  implementation("org.slf4j:slf4j-simple:2.0.7")
+  implementation("org.slf4j:slf4j-simple:$slf4jVersion")
 
   implementation(kotlin("stdlib-jdk8"))
   implementation(kotlin("reflect"))

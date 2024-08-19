@@ -23,6 +23,7 @@ FROM sqldados.store
 WHERE no = @LOJA
    OR @LOJA = 0;
 
+/*
 DROP TABLE IF EXISTS Saldo;
 CREATE TEMPORARY TABLE Saldo
 SELECT storeno AS loja, prdno, grade, date, 'SaldoAnterior' AS tipo, qtty / 1000 AS quant
@@ -31,7 +32,20 @@ FROM sqldados.stkchk
                   USING (storeno)
 WHERE (prdno = @PRDNO OR @PRDNO = '')
   AND (grade = @GRADE OR @GRADE = '')
-  AND ym = @MES_ANTEIROR;
+  AND ym = @MES_ANTEIROR
+*/
+
+SELECT storeno                                 AS loja,
+       prdno,
+       grade,
+       1                                       AS date,
+       'SaldoAnterior'                         AS tipo,
+       (qtty_atacado + stk.qtty_varejo) / 1000 AS quant
+FROM sqldados.stk
+       INNER JOIN Lojas
+                  USING (storeno)
+WHERE (prdno = @PRDNO OR @PRDNO = '')
+  AND (grade = @GRADE OR @GRADE = '');
 
 DROP TABLE IF EXISTS PreSaida;
 CREATE TEMPORARY TABLE PreSaida

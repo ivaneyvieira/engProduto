@@ -150,7 +150,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 ): Column<T> {
   return this.addColumnFor(property = property, renderer = SetRenderer(property)).apply {
     this.setHeader(header ?: property.name)
-    if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -180,10 +180,9 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     if (boleanValue) VaadinIcon.CHECK_CIRCLE_O.create()
     else VaadinIcon.CIRCLE_THIN.create()
   }
-  if(isExpand) {
+  if (isExpand) {
     column.isExpand = true
-  }
-  else {
+  } else {
     column.isExpand = false
     if (width != null) {
       column.isAutoWidth = false
@@ -209,10 +208,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   pattern: String = DATE_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumnFor(property, renderer = LocalDateRenderer(property, pattern)).apply {
+  return this.addColumnFor(property, renderer = LocalDateRenderer({
+    property.get(it)
+  }, pattern)).apply {
     this.setHeader(header ?: property.name)
 
-   if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -249,7 +250,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     date.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -282,7 +283,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     hora.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -314,7 +315,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     hora.format(pattern)
   }).apply {
     this.setHeader(header ?: property.name)
-    if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -346,10 +347,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   pattern: String = DATETIME_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumnFor(property, renderer = LocalDateTimeRenderer(property, pattern)).apply {
+  return this.addColumnFor(property, renderer = LocalDateTimeRenderer({
+    property.get(it)
+  }, pattern)).apply {
     this.setHeader(header ?: property.name)
     if (this.key == null) this.key = property.name
-    if(isExpand) {
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -381,10 +384,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   pattern: String = "#,##0.00",
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumnFor(property, renderer = NumberRenderer(property, DecimalFormat(pattern))).apply {
+  return this.addColumnFor(property, renderer = NumberRenderer({
+    property.get(it)
+  }, DecimalFormat(pattern))).apply {
     this.setHeader(header ?: property.name)
     this.isResizable = true
-    if(isExpand){
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
@@ -416,10 +421,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
   pattern: String = "0",
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumnFor(property, renderer = NumberRenderer(property, DecimalFormat(pattern))).apply {
+  return this.addColumnFor(property, renderer = NumberRenderer({
+    property.get(it)
+  }, DecimalFormat(pattern))).apply {
     this.setHeader(header ?: property.name)
     if (this.key == null) this.key = property.name
-    if(isExpand){
+    if (isExpand) {
       this.isExpand = true
     } else {
       this.isExpand = false
