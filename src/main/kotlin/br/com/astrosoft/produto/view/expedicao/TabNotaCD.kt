@@ -110,6 +110,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
       viewModel.printEtiquetaExp(nota)
     }
+    columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
       viewModel.formEntregue(nota)
     }

@@ -39,7 +39,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         isEnabled = nota.cancelada == "N"
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
-          viewModel.marcaCD()
+          viewModel.marcaCD(nota.usuarioSingExp)
           val user = AppConfig.userLogin() as? UserSaci
           val marca = if (user?.admin == true)
             EMarcaNota.TODOS

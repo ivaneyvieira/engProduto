@@ -33,13 +33,13 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     block(list)
   }
 
-  fun marcaCD() = viewModel.exec {
+  fun marcaCD(userSing: String?) = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
+    val usuario = userSing ?: AppConfig.userLogin()?.login ?: ""
     itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
       produtoNF.usuarioExp = "$usuario-$dataHora"

@@ -35,7 +35,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     updateView()
   }
 
-  fun marcaEnt() = viewModel.exec {
+  fun marcaEnt(userSing: String?) = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
@@ -43,7 +43,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.ENT.num
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = AppConfig.userLogin()?.login ?: ""
+      val usuario = userSing ?: AppConfig.userLogin()?.login ?: ""
       produtoNF.usuarioCD = "$usuario-$dataHora"
       produtoNF.salva()
     }

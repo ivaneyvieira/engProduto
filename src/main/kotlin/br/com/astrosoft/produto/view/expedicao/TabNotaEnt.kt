@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.expedicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
@@ -112,6 +113,8 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
       viewModel.printEtiquetaEnt(nota)
     }
+    columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
+    columnGrid(NotaSaida::usuarioSing, "Entregue")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEnt(viewModel, nota)
       dlgProduto?.showDialog {
