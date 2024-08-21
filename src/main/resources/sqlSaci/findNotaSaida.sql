@@ -135,6 +135,7 @@ WHERE (storenoStk = :loja OR :loja = 0)
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
 
+
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                              AS loja,
