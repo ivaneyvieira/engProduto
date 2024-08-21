@@ -111,7 +111,9 @@ class ProdutoEstoque(
       dataEntregaInicial = null,
       dataFinal = null
     )
-    val notas = saci.findNotaSaida(filtro = filtro)
+    val notas = saci.findNotaSaida(filtro = filtro).filter {
+      it.cancelada != "S"
+    }
     return notas.flatMap { nota ->
       val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         ETipoKardec.ENTREGA

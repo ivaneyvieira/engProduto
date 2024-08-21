@@ -13,7 +13,9 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaSaida.find(filtro)
+    val notas = NotaSaida.find(filtro).filter {
+      it.cancelada != "S"
+    }
     subView.updateNotas(notas)
   }
 

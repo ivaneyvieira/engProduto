@@ -137,7 +137,6 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-  EXPLAIN
 SELECT N.storeno                                                              AS loja,
        N.pdvno                                                                AS pdvno,
        N.xano                                                                 AS xano,
