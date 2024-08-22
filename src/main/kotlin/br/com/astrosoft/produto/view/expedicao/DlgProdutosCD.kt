@@ -52,7 +52,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
-          viewModel.marcaEnt(nota.usuarioSing)
+          viewModel.marcaEnt(nota.usuarioSingCD)
         }
       }
       textField("Código de barras") {

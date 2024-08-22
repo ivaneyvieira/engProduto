@@ -135,7 +135,6 @@ WHERE (storenoStk = :loja OR :loja = 0)
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                              AS loja,
@@ -223,20 +222,16 @@ SELECT N.storeno                                                              AS
        M.sname                                                                AS nomeMotorista,
        EP.no                                                                  AS usernoPrint,
        EP.login                                                               AS usuarioPrint,
-       ES.no                                                                  AS usernoSing,
-       ES.login                                                               AS usuarioSing,
-       EE.no                                                                  AS usernoSingExp,
-       EE.login                                                               AS usuarioSingExp,
+       MAX(EC.no)                                                             AS usernoSingCD,
+       GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                            AS usuarioSingCD,
+       MAX(EE.no)                                                             AS usernoSingExp,
+       GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                            AS usuarioSingExp,
        MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
 FROM sqldados.nf AS N
-       LEFT JOIN sqldados.nfUserPrint AS UP
+       LEFT JOIN sqldados.nfUserPrint AS PT
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EP
-                 ON EP.no = UP.userno
-       LEFT JOIN sqldados.users AS ES
-                 ON ES.no = UP.usernoSing
-       LEFT JOIN sqldados.users AS EE
-                 ON EE.no = UP.usernoSingExt
+                 ON EP.no = PT.userno
        LEFT JOIN T_CARGA AS CG
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqlpdv.pxa AS P
@@ -245,6 +240,10 @@ FROM sqldados.nf AS N
                  USING (storeno, pdvno, xano)
        INNER JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
+       LEFT JOIN sqldados.users AS EC
+                 ON EC.no = X.s4
+       LEFT JOIN sqldados.users AS EE
+                 ON EE.no = X.s5
        LEFT JOIN T_TIPO AS T
                  ON N.storeno = T.storeno AND
                     N.eordno = T.ordno
@@ -341,8 +340,8 @@ SELECT Q.loja,
        nomeMotorista,
        usernoPrint,
        usuarioPrint,
-       usernoSing,
-       usuarioSing,
+       usernoSingCD,
+       usuarioSingCD,
        usernoSingExp,
        usuarioSingExp,
        usuarioSep
@@ -360,7 +359,7 @@ WHERE (@PESQUISA = ''
   OR nomeVendedor LIKE @PESQUISA_LIKE
   OR nomeMotorista LIKE @PESQUISA_LIKE
   OR usuarioPrint LIKE @PESQUISA_LIKE
-  OR usuarioSing LIKE @PESQUISA_LIKE
+  OR usuarioSingCD LIKE @PESQUISA_LIKE
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
 GROUP BY Q.loja, Q.pdvno, Q.xano

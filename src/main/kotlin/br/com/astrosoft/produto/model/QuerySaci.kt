@@ -222,8 +222,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", produtoNF.marca ?: 0)
       addOptionalParameter("marcaImpressao", produtoNF.marcaImpressao ?: 0)
       addOptionalParameter("usuarioSep", produtoNF.usuarioSep)
-      addOptionalParameter("usuarioCD", produtoNF.usuarioCD)
-      addOptionalParameter("usuarioExp", produtoNF.usuarioExp)
+      addOptionalParameter("usuarioCD", produtoNF.usernoCD ?: 0)
+      addOptionalParameter("usuarioExp", produtoNF.usernoExp ?: 0)
     }
   }
 
@@ -288,7 +288,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("pdvno", nota.pdvno)
       this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("userPrint", nota.usernoPrint ?: 0)
-      this.addOptionalParameter("usernoSing", nota.usernoSing ?: 0)
+      this.addOptionalParameter("usernoSing", nota.usernoSingCD ?: 0)
       this.addOptionalParameter("usernoSingExp", nota.usernoSingExp ?: 0)
     }
   }

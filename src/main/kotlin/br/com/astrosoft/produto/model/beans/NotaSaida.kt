@@ -47,8 +47,8 @@ class NotaSaida(
   var nomeMotorista: String?,
   var usernoPrint: Int?,
   var usuarioPrint: String?,
-  var usernoSing: Int?,
-  var usuarioSing: String?,
+  var usernoSingCD: Int?,
+  var usuarioSingCD: String?,
   var usernoSingExp: Int?,
   var usuarioSingExp: String?,
   var usuarioSep: String?,
@@ -85,14 +85,20 @@ class NotaSaida(
     saci.saveNotaSaidaPrint(this)
   }
 
-  fun entregue(user: UserSaci) {
-    this.usernoSing = user.no
-    saci.saveNotaSaidaPrint(this)
+  fun entregueCD(user: UserSaci) {
+    val marca = EMarcaNota.entries.firstOrNull { it.num == this.marca } ?: return
+    produtos(marca).forEach { produto ->
+      produto.usernoCD = user.no
+      produto.salva()
+    }
   }
 
   fun entregueExp(user: UserSaci) {
-    this.usernoSingExp = user.no
-    saci.saveNotaSaidaPrint(this)
+    val marca = EMarcaNota.entries.firstOrNull { it.num == this.marca } ?: return
+    produtos(marca).forEach { produto ->
+      produto.usernoExp = user.no
+      produto.salva()
+    }
   }
 
   companion object {

@@ -15,8 +15,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_NF
 )
 SELECT storeno, pdvno, xano
 FROM sqldados.nf
-WHERE storeno = 4
-  AND issuedate >= 20240701;
+WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+  AND issuedate >= 20240501;
 
 UPDATE sqldados.xaprd2 AS X
   INNER JOIN T_NF
@@ -43,7 +43,7 @@ WHERE X.c5 != '';
 SELECT storeno,
        pdvno,
        xano,
-       s5 AS exp,
+       s4 AS cd,
        s3 AS sep,
        P.userno,
        P.usernoSingExt,
@@ -57,13 +57,13 @@ WHERE usernoSingExt > 0
 UPDATE sqldados.xaprd2 AS X
   INNER JOIN sqldados.nfUserPrint AS P
   USING (storeno, pdvno, xano)
-SET X.s3 = P.usernoSing
-WHERE X.s3 = 0
+SET X.s4 = P.usernoSing
+WHERE X.s4 = 0
   AND P.usernoSing > 0;
 
 UPDATE sqldados.xaprd2 AS X
   INNER JOIN sqldados.nfUserPrint AS P
   USING (storeno, pdvno, xano)
-SET X.s3 = P.usernoSingExt
-WHERE X.s3 = 0
+SET X.s5 = P.usernoSingExt
+WHERE X.s5 = 0
   AND P.usernoSingExt > 0;

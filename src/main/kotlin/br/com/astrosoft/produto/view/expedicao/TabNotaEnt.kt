@@ -115,7 +115,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       viewModel.printEtiquetaEnt(nota)
     }
     columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
-    columnGrid(NotaSaida::usuarioSing, "Entregue")
+    columnGrid(NotaSaida::usuarioSingCD, "Entregue")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEnt(viewModel, nota)
       dlgProduto?.showDialog {

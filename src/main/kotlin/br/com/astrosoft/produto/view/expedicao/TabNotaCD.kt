@@ -114,10 +114,10 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
       viewModel.formEntregue(nota)
     }
-    columnGrid(NotaSaida::usuarioSing, "Entregue")
+    columnGrid(NotaSaida::usuarioSingCD, "Entregue")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       val user = AppConfig.userLogin() as? UserSaci
-      if ((nota.usernoSing == null || nota.usernoSing == 0) && (user?.admin == false)) {
+      if ((nota.usernoSingCD == null || nota.usernoSingCD == 0) && (user?.admin == false)) {
         DialogHelper.showError("Autorizar entrega")
       } else {
         dlgProduto = DlgProdutosCD(viewModel, nota)

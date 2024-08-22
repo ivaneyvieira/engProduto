@@ -111,7 +111,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    nota.entregue(user)
+    nota.entregueCD(user)
 
     updateView()
   }
