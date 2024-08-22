@@ -19,7 +19,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
@@ -29,7 +28,6 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.selectionMode
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -140,7 +138,7 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
     colunaImpressoSep()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNomeVendedor()
+    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFEntregaRetira()
     colunaNFSituacao()

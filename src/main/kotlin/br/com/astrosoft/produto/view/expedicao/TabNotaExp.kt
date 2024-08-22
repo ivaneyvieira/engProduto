@@ -19,7 +19,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaExp
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaExpViewModel
@@ -136,7 +135,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
-    colunaNomeVendedor()
+    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
     colunaNFEntregaRetira()

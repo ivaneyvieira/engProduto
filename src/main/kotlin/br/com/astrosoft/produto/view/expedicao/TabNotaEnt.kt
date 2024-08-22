@@ -20,7 +20,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaEnt
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaEntViewModel
@@ -108,7 +107,6 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     }
   }
 
-
   override fun Grid<NotaSaida>.gridPanel() {
     colunaNFLoja()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { nota ->
@@ -132,7 +130,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
-    colunaNomeVendedor()
+    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
     colunaNFEntregaRetira()

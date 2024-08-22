@@ -53,13 +53,13 @@ object NotaColumns {
     this.setHeader("Nome Cliente")
   }
 
-  fun Grid<NotaSaida>.colunaNomeVendedor() = columnGrid(NotaSaida::nomeVendedor) {
-    this.setHeader("Nome Vendedor")
-  }
+  //fun Grid<NotaSaida>.colunaNomeVendedor() = columnGrid(NotaSaida::nomeVendedor) {
+  //  this.setHeader("Nome Vendedor")
+  //}
 
   fun Grid<NotaSaida>.colunaHora() = columnGrid(NotaSaida::hora) {
     this.setHeader("Hora")
-    this.setComparator{t ->
+    this.setComparator { t ->
       t.hotaTime
     }
   }

@@ -19,7 +19,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFNota
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeVendedor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaRota
@@ -28,7 +27,6 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.selectionMode
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -76,7 +74,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
         }
       }
       setItems(tiposNota)
-      value = if(tiposNota.contains(ETipoNotaFiscal.ENTRE_FUT)) {
+      value = if (tiposNota.contains(ETipoNotaFiscal.ENTRE_FUT)) {
         ETipoNotaFiscal.ENTRE_FUT
       } else {
         tiposNota.firstOrNull()
@@ -141,7 +139,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     colunaImpressoSep()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNomeVendedor()
+    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFEntregaRetira()
     colunaNFSituacao()
