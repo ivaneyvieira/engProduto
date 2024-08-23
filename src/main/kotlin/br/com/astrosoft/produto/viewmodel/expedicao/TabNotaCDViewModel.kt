@@ -29,8 +29,8 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.EXP.num
-      produtoNF.usuarioExp = ""
-      produtoNF.usuarioCD = ""
+      produtoNF.usernoExp = 0
+      produtoNF.usernoCD = 0
       produtoNF.salva()
     }
     subView.updateProdutos()
@@ -44,12 +44,10 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.formAutoriza(itens) { userSing ->
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = userSing ?: AppConfig.userLogin()?.login ?: ""
+    subView.formAutoriza(itens) { userno ->
       itens.forEach { produtoNF ->
         produtoNF.marca = EMarcaNota.ENT.num
-        produtoNF.usuarioCD = "$usuario-$dataHora"
+        produtoNF.usernoCD = userno
         produtoNF.salva()
       }
       subView.updateProdutos()
@@ -61,8 +59,8 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produtoNF.marca = EMarcaNota.ENT.num
     val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.login ?: ""
-    produtoNF.usuarioCD = "$usuario-$dataHora"
+    val usuario = AppConfig.userLogin()?.no ?: 0
+    produtoNF.usernoCD = usuario
     produtoNF.salva()
     subView.updateProdutos()
     val nota = subView.findNota() ?: fail("Nota não encontrada")
@@ -103,7 +101,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     block(list)
   }
 
-  fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): Boolean {
+  fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -112,15 +110,14 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
-      return false
+    }else {
+      listaPrd.forEach { produto ->
+        produto.usernoCD = user.no
+        produto.salva()
+      }
     }
 
-    listaPrd.forEach { produto ->
-      produto.usernoCD = user.no
-      produto.salva()
-    }
-
-    return true
+    return user
   }
 
   val subView
@@ -134,5 +131,5 @@ interface ITabNotaCD : ITabView {
   fun produtosSelcionados(): List<ProdutoNFS>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
   fun findNota(): NotaSaida?
-  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userSing: String?) -> Unit)
+  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
 }

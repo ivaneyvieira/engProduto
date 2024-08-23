@@ -49,10 +49,12 @@ SELECT X.storeno                                                               A
        X.s10                                                                   AS marcaImpressao,
        EE.no                                                                   AS usernoExp,
        EE.login                                                                AS usuarioExp,
+       X.c5                                                                    AS dataHoraExp,
        CAST(L.loc AS CHAR)                                                     AS local,
        X.c3                                                                    AS usuarioSep,
        EC.no                                                                   AS usernoCD,
        EC.login                                                                AS usuarioCD,
+       X.c4                                                                    AS dataHoraCD,
        N.tipo                                                                  AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)           AS estoque
 FROM sqldados.prd AS P
@@ -118,8 +120,10 @@ SELECT loja,
        marcaImpressao,
        usernoExp,
        usuarioExp,
+       dataHoraExp,
        usernoCD,
        usuarioCD,
+       dataHoraCD,
        usuarioSep,
        tipoNota,
        estoque

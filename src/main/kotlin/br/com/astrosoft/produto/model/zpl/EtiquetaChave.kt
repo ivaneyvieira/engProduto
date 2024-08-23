@@ -101,7 +101,7 @@ object EtiquetaChave {
     val dadosEdtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Exp",
-        usuario = produto.usuarioNameExp,
+        usuario = produto.usuarioExp ?: "",
         loja = produto.loja,
         nota = produto.nota ?: "",
         data = produto.dataExp,
@@ -117,7 +117,7 @@ object EtiquetaChave {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Entregue",
-        usuario = produto.usuarioNameCD,
+        usuario = produto.usuarioCD ?: "",
         loja = produto.loja,
         nota = produto.nota ?: "",
         data = produto.dataCD,

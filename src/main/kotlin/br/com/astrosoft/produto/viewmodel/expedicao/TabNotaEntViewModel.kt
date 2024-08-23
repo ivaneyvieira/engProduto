@@ -26,7 +26,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     }
     itens.forEach { produtoNF ->
       produtoNF.marca = EMarcaNota.CD.num
-      produtoNF.usuarioCD = ""
+      produtoNF.usernoCD = 0
       produtoNF.salva()
     }
     subView.updateProdutos()

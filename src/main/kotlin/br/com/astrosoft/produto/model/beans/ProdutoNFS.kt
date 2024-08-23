@@ -33,8 +33,10 @@ class ProdutoNFS(
   var marcaImpressao: Int?,
   var usernoExp: Int?,
   var usuarioExp: String?,
+  var dataHoraExp: String?,
   var usernoCD: Int?,
   var usuarioCD: String?,
+  var dataHoraCD: String?,
   var usuarioSep: String?,
   var tipoNota: Int?,
   var estoque: Int?,
@@ -48,22 +50,18 @@ class ProdutoNFS(
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 
-  private fun splitExp(index: Int) = usuarioExp?.split("-")?.getOrNull(index) ?: ""
+  private fun splitExp(index: Int) = dataHoraExp?.split("-")?.getOrNull(index) ?: ""
 
   val barcodes
     get() = barcodeStrList?.split(",")?.map { it.trim() }.orEmpty()
 
-  val usuarioNameExp
-    get() = splitExp(0)
   val dataExp
     get() = splitExp(1)
   val horaExp
     get() = splitExp(2)
 
-  private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
+  private fun splitCD(index: Int) = dataHoraCD?.split("-")?.getOrNull(index) ?: ""
 
-  val usuarioNameCD
-    get() = splitCD(0)
   val dataCD
     get() = splitCD(1)
   val horaCD
@@ -73,6 +71,13 @@ class ProdutoNFS(
 
   fun salva() {
     saci.salvaProdutosNFS(this)
+    val prd = saci.findProdutoNF(this).firstOrNull()
+    prd?.let {
+      this.dataHoraExp = it.dataHoraExp
+      this.dataHoraCD = it.dataHoraCD
+      this.usuarioExp = it.usuarioExp
+      this.usuarioCD = it.usuarioCD
+    }
   }
 
   fun findGrades(): List<PrdGrade> {

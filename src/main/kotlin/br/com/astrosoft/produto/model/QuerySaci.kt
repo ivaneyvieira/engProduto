@@ -408,6 +408,26 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
 
+    fun findProdutoNF(prd : ProdutoNFS): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val user = AppConfig.userLogin() as? UserSaci
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", prd.loja)
+      addOptionalParameter("pdvno", prd.pdvno)
+      addOptionalParameter("xano", prd.xano)
+      addOptionalParameter("marca", EMarcaNota.TODOS.num)
+      addOptionalParameter("prdno", prd.codigo.lpad(16, " "))
+      addOptionalParameter("grade", prd.grade)
+      addOptionalParameter("lojaLocal", 0)
+      addOptionalParameter("locais", listOf("TODOS"))
+    }
+    produtos.forEach {
+      println(it.local)
+    }
+    return produtos
+  }
+
+
   fun findProdutoPedidoVenda(pedido: PedidoVenda, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoVenda> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
     return query(sql, ProdutoPedidoVenda::class) {

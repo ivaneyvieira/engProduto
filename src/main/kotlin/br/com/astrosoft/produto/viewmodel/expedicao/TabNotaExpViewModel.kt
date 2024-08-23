@@ -1,15 +1,12 @@
 package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
-import java.time.LocalDate
-import java.time.LocalTime
 
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -39,13 +36,11 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.formAutoriza(itens) { userSing ->
-      val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-      val usuario = userSing ?: AppConfig.userLogin()?.login ?: ""
+    subView.formAutoriza(itens) { userno ->
       itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
         produtoNF.marca = EMarcaNota.CD.num
-        produtoNF.usuarioExp = "$usuario-$dataHora"
-        produtoNF.usuarioCD = ""
+        produtoNF.usernoExp = userno
+        produtoNF.usernoCD = 0
         produtoNF.salva()
       }
       imprimeEtiqueta(itens)
@@ -78,7 +73,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     )
   }
 
-  fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): Boolean {
+  fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -87,15 +82,14 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
-      return false
+    } else {
+      listaPrd.forEach { produto ->
+        produto.usernoExp = user.no
+        produto.salva()
+      }
     }
 
-    listaPrd.forEach { produto ->
-      produto.usernoExp = user.no
-      produto.salva()
-    }
-
-    return true
+    return user
   }
 
   val subView
@@ -108,5 +102,5 @@ interface ITabNotaExp : ITabView {
   fun findNota(): NotaSaida?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
-  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userSing: String?) -> Unit)
+  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
 }
