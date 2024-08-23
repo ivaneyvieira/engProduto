@@ -57,16 +57,16 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produtoNF.marca = EMarcaNota.ENT.num
-    val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
-    val usuario = AppConfig.userLogin()?.no ?: 0
-    produtoNF.usernoCD = usuario
-    produtoNF.salva()
-    subView.updateProdutos()
-    val nota = subView.findNota() ?: fail("Nota não encontrada")
-    val produtosRestantes = nota.produtos(EMarcaNota.CD)
-    if (produtosRestantes.isEmpty()) {
-      imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT))
+    subView.formAutoriza(listOf(produtoNF)) { userno ->
+      produtoNF.marca = EMarcaNota.ENT.num
+      produtoNF.usernoCD = userno
+      produtoNF.salva()
+      subView.updateProdutos()
+      val nota = subView.findNota() ?: fail("Nota não encontrada")
+      val produtosRestantes = nota.produtos(EMarcaNota.CD)
+      if (produtosRestantes.isEmpty()) {
+        imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT))
+      }
     }
   }
 
@@ -110,7 +110,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
-    }else {
+    } else {
       listaPrd.forEach { produto ->
         produto.usernoCD = user.no
         produto.salva()
