@@ -153,7 +153,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFUsuarioSep()
 
       this.setPartNameGenerator {
-        if(it?.selecionado == true) "vermelho" else null
+        if(it?.selecionado == true) "amarelo" else null
       }
     }
     this.addAndExpand(gridDetail)
