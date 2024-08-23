@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
@@ -39,14 +40,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         isEnabled = nota.cancelada == "N"
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
-          viewModel.marcaCD(nota.usuarioSingExp)
-          val user = AppConfig.userLogin() as? UserSaci
-          val marca = if (user?.admin == true)
-            EMarcaNota.TODOS
-          else
-            EMarcaNota.EXP
-
-          gridDetail.setItems(nota.produtos(marca))
+          viewModel.marcaCD()
         }
       }
       button("Imprimir") {
@@ -74,7 +68,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
       withEditor(ProdutoNFS::class, openEditor = {
         (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
@@ -105,6 +99,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
       produtoNFCodigo()
       produtoNFBarcode()
+      produtoAutorizacaoExp ()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa().comboFieldEditor { combo: Select<String> ->

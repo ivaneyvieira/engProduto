@@ -37,20 +37,24 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     updateView()
   }
 
-  fun marcaEnt(userSing: String?) = viewModel.exec {
+  fun marcaEnt() = viewModel.exec {
     val itens = subView.produtosSelcionados()
+
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-    itens.forEach { produtoNF ->
-      produtoNF.marca = EMarcaNota.ENT.num
+
+    subView.formAutoriza(itens) { userSing ->
       val dataHora = LocalDate.now().format() + "-" + LocalTime.now().format()
       val usuario = userSing ?: AppConfig.userLogin()?.login ?: ""
-      produtoNF.usuarioCD = "$usuario-$dataHora"
-      produtoNF.salva()
+      itens.forEach { produtoNF ->
+        produtoNF.marca = EMarcaNota.ENT.num
+        produtoNF.usuarioCD = "$usuario-$dataHora"
+        produtoNF.salva()
+      }
+      subView.updateProdutos()
+      updateView()
     }
-    subView.updateProdutos()
-    updateView()
   }
 
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
@@ -99,21 +103,24 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     block(list)
   }
 
-  fun formEntregue(nota: NotaSaida) {
-    subView.formEntregue(nota)
-  }
-
-  fun entregueNota(nota: NotaSaida, login: String, senha: String) {
+  fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): Boolean {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
         it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
       }
-    user ?: fail("Usuário ou senha inválidos")
 
-    nota.entregueCD(user)
+    if (user == null) {
+      viewModel.view.showError("Usuário ou senha inválidos")
+      return false
+    }
 
-    updateView()
+    listaPrd.forEach { produto ->
+      produto.usernoCD = user.no
+      produto.salva()
+    }
+
+    return true
   }
 
   val subView
@@ -127,5 +134,5 @@ interface ITabNotaCD : ITabView {
   fun produtosSelcionados(): List<ProdutoNFS>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
   fun findNota(): NotaSaida?
-  fun formEntregue(saida: NotaSaida)
+  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userSing: String?) -> Unit)
 }

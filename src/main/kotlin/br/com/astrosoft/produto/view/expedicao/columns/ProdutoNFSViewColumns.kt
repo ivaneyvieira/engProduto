@@ -33,6 +33,14 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Código de Barras")
   }
 
+  fun Grid<ProdutoNFS>.produtoAutorizacaoExp() = columnGrid(ProdutoNFS::usuarioExp) {
+    this.setHeader("Expedicao")
+  }
+
+  fun Grid<ProdutoNFS>.produtoAutorizacaoCD() = columnGrid(ProdutoNFS::usuarioCD) {
+    this.setHeader("Entrega")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFDescricao() = columnGrid(ProdutoNFS::descricao) {
     this.setHeader("Descrição")
   }

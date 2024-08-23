@@ -112,20 +112,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
 
     colunaNFLoja()
 
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
-      viewModel.formEntregue(nota)
-    }
     columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      val user = AppConfig.userLogin() as? UserSaci
-      if ((nota.usernoSingExp == null || nota.usernoSingExp == 0) && (user?.admin == false)) {
-        DialogHelper.showError("Autorizar entrega")
-      } else {
-        dlgProduto = DlgProdutosExp(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+      dlgProduto = DlgProdutosExp(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
     colunaNFNota()
@@ -201,10 +193,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     return user?.impressoraNotaTermica?.toList().orEmpty()
   }
 
-  override fun formEntregue(nota: NotaSaida) {
+  override fun formAutoriza(lista: List<ProdutoNFS>, marca: (userSing: String?) -> Unit) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entregueNota(nota, form.login, form.senha)
+      if (viewModel.autorizaProduto(lista, form.login, form.senha)) {
+        marca(form.login)
+      }
     }
   }
 }

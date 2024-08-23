@@ -5,6 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoCD
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
@@ -18,7 +20,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -52,7 +53,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         isVisible = user?.voltarCD == true || user?.admin == true
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
-          viewModel.marcaEnt(nota.usuarioSingCD)
+          viewModel.marcaEnt()
         }
       }
       textField("Código de barras") {
@@ -112,6 +113,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
 
       produtoNFCodigo()
       produtoNFBarcode()
+      produtoAutorizacaoExp()
+      produtoAutorizacaoCD()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa().comboFieldEditor { combo: Select<String> ->

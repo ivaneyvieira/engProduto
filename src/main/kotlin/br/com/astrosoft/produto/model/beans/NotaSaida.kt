@@ -85,22 +85,6 @@ class NotaSaida(
     saci.saveNotaSaidaPrint(this)
   }
 
-  fun entregueCD(user: UserSaci) {
-    val marca = EMarcaNota.entries.firstOrNull { it.num == this.marca } ?: return
-    produtos(marca).forEach { produto ->
-      produto.usernoCD = user.no
-      produto.salva()
-    }
-  }
-
-  fun entregueExp(user: UserSaci) {
-    val marca = EMarcaNota.entries.firstOrNull { it.num == this.marca } ?: return
-    produtos(marca).forEach { produto ->
-      produto.usernoExp = user.no
-      produto.salva()
-    }
-  }
-
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
       val notas = saci.findNotaSaida(filtro = filtro) +
