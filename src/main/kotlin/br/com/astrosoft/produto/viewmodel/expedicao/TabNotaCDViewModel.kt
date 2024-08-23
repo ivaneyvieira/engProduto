@@ -1,13 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
-import java.time.LocalDate
-import java.time.LocalTime
 
 class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -23,7 +20,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   fun marcaExp() = viewModel.exec {
-    val itens = subView.produtosSelcionados()
+    val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -38,7 +35,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   fun marcaEnt() = viewModel.exec {
-    val itens = subView.produtosSelcionados()
+    val itens = subView.produtosSelecionados()
 
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
@@ -55,19 +52,37 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
   }
 
-  fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
-    val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    subView.formAutoriza(listOf(produtoNF)) { userno ->
-      produtoNF.marca = EMarcaNota.ENT.num
-      produtoNF.usernoCD = userno
-      produtoNF.salva()
-      subView.updateProdutos()
-      val nota = subView.findNota() ?: fail("Nota não encontrada")
-      val produtosRestantes = nota.produtos(EMarcaNota.CD)
-      if (produtosRestantes.isEmpty()) {
-        imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT))
+  fun marcaEntProdutos() = viewModel.exec {
+    val produtosNaoMarcados = subView.produtosNaoMarcados()
+    var continua = false
+    if (produtosNaoMarcados.isNotEmpty()) {
+      viewModel.view.showQuestion("Existem produtos não marcados. Deseja continuar?") {
+        continua = true
+      }
+    } else {
+      continua = true
+    }
+    if (continua) {
+      val produtos = subView.produtosMarcados()
+      subView.formAutoriza(produtos) { userno ->
+        produtos.forEach { produtoNF ->
+          produtoNF.marca = EMarcaNota.ENT.num
+          produtoNF.usernoCD = userno
+          produtoNF.salva()
+        }
+        subView.updateProdutos()
+        val nota = subView.findNota() ?: fail("Nota não encontrada")
+        val produtosRestantes = nota.produtos(EMarcaNota.CD)
+        if (produtosRestantes.isEmpty()) {
+          imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT))
+        }
       }
     }
+  }
+
+  fun selecionaProduto(codigoBarra: String) = viewModel.exec {
+    val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produtoNF.selecionado = true
   }
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
@@ -128,7 +143,9 @@ interface ITabNotaCD : ITabView {
   fun filtro(): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
+  fun produtosMarcados(): List<ProdutoNFS>
+  fun produtosNaoMarcados(): List<ProdutoNFS>
   fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
   fun findNota(): NotaSaida?
   fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)

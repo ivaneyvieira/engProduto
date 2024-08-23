@@ -60,10 +60,18 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
         addValueChangeListener {
           if (it.isFromClient) {
-            viewModel.marcaEntProdutos(it.value)
+            viewModel.selecionaProduto(it.value)
+
             this@textField.value = ""
             this@textField.focus()
+            gridDetail.dataProvider.refreshAll()
           }
+        }
+      }
+      button("Enviar"){
+        icon = VaadinIcon.ARROW_RIGHT.create()
+        onClick {
+          viewModel.marcaEntProdutos()
         }
       }
     }, onClose = {
@@ -82,7 +90,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
+      this.addClassName("styling")
 
       withEditor(ProdutoNFS::class, openEditor = {
         (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
@@ -142,6 +151,10 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
+
+      this.setPartNameGenerator {
+        if(it?.selecionado == true) "vermelho" else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -161,5 +174,13 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       val barcodes = it.barcodes
       codigoBarra.trim() in barcodes
     }
+  }
+
+  fun itensMarcados(): List<ProdutoNFS> {
+    return gridDetail.dataProvider.fetchAll().filter { it.selecionado }
+  }
+
+  fun itensNaoMarcados(): List<ProdutoNFS> {
+    return gridDetail.dataProvider.fetchAll().filter { !it.selecionado }
   }
 }

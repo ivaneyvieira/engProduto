@@ -41,6 +41,8 @@ class ProdutoNFS(
   var tipoNota: Int?,
   var estoque: Int?,
 ) {
+  var selecionado :Boolean = false
+
   val espaco: String
     get() = ""
 
