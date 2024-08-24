@@ -71,7 +71,7 @@ object EtiquetaChave {
     }
     val zplNvezes = zpl.repeat(copias)
     ZPLPreview.showZPLPreview(impressoras, zplNvezes) {
-      impressoras.distinct().forEach { impressora ->
+      it.distinct().forEach { impressora ->
         print(impressora, dados)
       }
     }
@@ -80,7 +80,7 @@ object EtiquetaChave {
   private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaPedido>) {
     val zpl = dados.joinToString("\n") { dado -> template(dado) }
     ZPLPreview.showZPLPreview(impressoras, zpl) {
-      impressoras.distinct().forEach { impressora ->
+      it.distinct().forEach { impressora ->
         print(impressora, dados)
       }
     }
@@ -92,7 +92,7 @@ object EtiquetaChave {
       template(it)
     }
     ZPLPreview.showZPLPreview(impressoras, zpl) {
-      impressoras.distinct().forEach { impressora ->
+      it.distinct().forEach { impressora ->
         print(impressora, dados)
       }
     }
