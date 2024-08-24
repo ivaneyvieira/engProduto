@@ -65,11 +65,12 @@ object EtiquetaChave {
   }
 
   @JvmName("printPreviewNota")
-  private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaNota>) {
+  private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaNota>, copias: Int) {
     val zpl = dados.joinToString("\n") {
       template(it)
     }
-    ZPLPreview.showZPLPreview(impressoras, zpl) {
+    val zplNvezes = zpl.repeat(copias)
+    ZPLPreview.showZPLPreview(impressoras, zplNvezes) {
       impressoras.distinct().forEach { impressora ->
         print(impressora, dados)
       }
@@ -97,7 +98,7 @@ object EtiquetaChave {
     }
   }
 
-  fun printPreviewExp(impressoras: Set<String>, produtos: List<ProdutoNFS>) {
+  fun printPreviewExp(impressoras: Set<String>, produtos: List<ProdutoNFS>, copia: Int) {
     val dadosEdtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Exp",
@@ -109,11 +110,11 @@ object EtiquetaChave {
         local = produto.local ?: ""
       )
     }.distinct()
-    printPreview(impressoras, dadosEdtiquetas)
+    printPreview(impressoras, dadosEdtiquetas, copia)
   }
 
   @JvmName("printPreviewEntNota")
-  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoNFS>) {
+  fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoNFS>, copias: Int) {
     val dadosEtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
         titulo = "Entregue",
@@ -125,7 +126,7 @@ object EtiquetaChave {
         local = produto.local ?: ""
       )
     }.distinct()
-    printPreview(impressoras, dadosEtiquetas)
+    printPreview(impressoras, dadosEtiquetas, copias)
   }
 
   @JvmName("printPreviewEntVenda")

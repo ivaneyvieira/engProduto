@@ -52,7 +52,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewExp(impressora, produtos)
+        EtiquetaChave.printPreviewExp(impressora, produtos, 1)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
