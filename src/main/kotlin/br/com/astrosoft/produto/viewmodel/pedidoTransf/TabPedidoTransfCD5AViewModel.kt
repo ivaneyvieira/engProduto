@@ -28,7 +28,7 @@ class TabPedidoTransfCD5AViewModel(val viewModel: PedidoTransfViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(setOf(impressora), produto)
+        EtiquetaChave.printPreviewEnt(setOf(impressora), produto, 1)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
