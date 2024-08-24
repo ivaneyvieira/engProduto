@@ -85,11 +85,11 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     produtoNF.selecionado = true
   }
 
-  private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>, copia: Int = 1) {
+  private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
       try {
-        EtiquetaChave.printPreviewEnt(impressora, produtos, copia)
+        EtiquetaChave.printPreviewEnt(impressora, produtos, 2)
       } catch (e: Throwable) {
         e.printStackTrace()
         fail("Falha de impressão na impressora $impressora")
