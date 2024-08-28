@@ -82,8 +82,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
-  AND (N.type = 0)
-  AND (N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02'))
+  AND (N.account IN (:listaContas))
   AND (N.invno = :invno OR :invno = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;

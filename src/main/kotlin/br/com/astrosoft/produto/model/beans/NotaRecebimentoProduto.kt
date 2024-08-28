@@ -79,7 +79,14 @@ data class FiltroNotaRecebimentoProduto(
   val localizacao: List<String>,
   val prdno: String = "",
   val grade: String = "SEM GRADE",
+  val listaContas: EListaContas = EListaContas.RECEBIMENTO
 )
+
+enum class EListaContas(val values: List<String>) {
+  RECEBIMENTO(listOf("2.01.20", "2.01.21", "4.01.01.04.02", "6.03.01.01.01", "6.03.01.01.02")),
+  DEVOLUCAO(listOf("2.01.25")),
+  TODOS(values = RECEBIMENTO.values + DEVOLUCAO.values)
+}
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   TODOS(999, "Todos"),

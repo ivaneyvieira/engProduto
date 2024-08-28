@@ -14,12 +14,16 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::recebimentoReceber, "Receber")
     columnGrid(UserSaci::recebimentoRecebido, "Recebido")
+    columnGrid(UserSaci::recebimentoDevClientes, "Dev Clientes")
   }
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menu") {
       checkBox("Receber") {
         binder.bind(this, UserSaci::recebimentoReceber.name)
+      }
+      checkBox("Dev Clientes") {
+        binder.bind(this, UserSaci::recebimentoDevClientes.name)
       }
       checkBox("Recebido") {
         binder.bind(this, UserSaci::recebimentoRecebido.name)
