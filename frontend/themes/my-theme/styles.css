@@ -36,5 +36,28 @@
       --lumo-line-height-m: 1.4;
       --lumo-line-height-s: 1.2;
       --lumo-line-height-xs: 1.1;
-
     }
+
+vaadin-grid.styling::part(success) {
+    background-color: var(--lumo-success-color-10pct);
+}
+
+vaadin-grid.styling::part(error) {
+    background-color: var(--lumo-error-color-10pct);
+}
+
+vaadin-grid.styling::part(primary) {
+    background-color: var(--lumo-primary-color);
+}
+
+vaadin-grid.styling::part(amarelo) {
+    color: var(--lumo-warning-color);
+}
+
+vaadin-grid.styling::part(vermelho) {
+    color: var(--lumo-error-color);
+}
+
+vaadin-grid.styling::part(azul) {
+    color: var(--lumo-primary-color);
+}
