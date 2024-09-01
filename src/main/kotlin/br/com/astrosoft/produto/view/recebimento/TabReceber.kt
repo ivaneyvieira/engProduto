@@ -76,10 +76,6 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     this.format()
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
-
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
-      viewModel.formRecebe(nota)
-    }
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -145,11 +141,15 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
   }
 
-  override fun formRecebe(nota: NotaRecebimento) {
+  override fun formAssina(produtos: List<NotaRecebimentoProduto>) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Recebe", form = form) {
-      viewModel.recebeNota(nota, form.login, form.senha)
+      viewModel.recebeNotaProduto(produtos, form.login, form.senha)
     }
+  }
+
+  override fun reloadGrid() {
+    dlgProduto?.reloadGrid()
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {

@@ -1092,7 +1092,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateNotaRecebimento(notaRecebimento: NotaRecebimento) {
+  private fun updateNotaRecebimento(notaRecebimento: NotaRecebimentoProduto) {
     val sql = "/sqlSaci/findNotaRecebimentoUpdate.sql"
     script(sql) {
       addOptionalParameter("ni", notaRecebimento.ni ?: 0)
@@ -1110,6 +1110,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("login", notaRecebimentoProduto.login ?: "")
       addOptionalParameter("validade", notaRecebimentoProduto.validade ?: 0)
       addOptionalParameter("vencimento", notaRecebimentoProduto.vencimento)
+      addOptionalParameter("usernoRecebe", notaRecebimentoProduto.usernoRecebe ?: 0)
     }
   }
 

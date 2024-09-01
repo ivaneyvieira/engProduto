@@ -38,6 +38,8 @@ class NotaRecebimentoProduto(
   var tipoValidade: String?,
   var tempoValidade: Int?,
 ) {
+  var selecionado : Boolean = false
+
   val validadeStr
     get() = when (validade) {
       null -> ""
@@ -60,6 +62,12 @@ class NotaRecebimentoProduto(
 
   fun salva() {
     saci.updateNotaRecebimentoProduto(this)
+  }
+
+  fun recebe(user:UserSaci) {
+    this.usernoRecebe = user.no
+    this.marcaEnum = EMarcaRecebimento.RECEBIDO
+    salva()
   }
 
   companion object {

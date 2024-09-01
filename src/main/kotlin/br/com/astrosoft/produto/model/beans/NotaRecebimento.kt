@@ -26,7 +26,7 @@ class NotaRecebimento(
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val usuarioLogin: String
-    get() = if(usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
+    get() = if (usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
 
   fun marcaSelecionadaEnt(): EMarcaRecebimento {
     return EMarcaRecebimento.entries.firstOrNull { it.codigo == marcaSelecionada } ?: EMarcaRecebimento.TODOS
@@ -58,14 +58,12 @@ class NotaRecebimento(
     return InvFile.findAll(this.ni ?: 0)
   }
 
-  fun recebe(user:UserSaci) {
-    this.usernoRecebe = user.no
-    saci.updateNotaRecebimento(this)
-  }
-
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimento> {
-      return saci.findNotaRecebimentoProduto(filtro).toNota()
+      val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
+      return saci.findNotaRecebimentoProduto(filtroTodos).toNota().filter { nota ->
+        nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
+      }
     }
   }
 }
@@ -96,11 +94,12 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         volume = nota.volume,
         peso = nota.peso,
         produtos = produtos,
-        vendnoProduto = produtos.groupBy { it.vendnoProduto }.entries.sortedBy {
+        vendnoProduto = produtos.groupBy { it.vendnoProduto }.entries.minByOrNull {
           -it.value.size
-        }.firstOrNull()?.key,
-        usernoRecebe = nota.usernoRecebe,
-        usuarioRecebe = nota.usuarioRecebe,
+        }?.key,
+        usernoRecebe = produtos.firstOrNull { it.usernoRecebe != 0 }?.usernoRecebe,
+        usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.distinct()
+          .joinToString { it.usuarioRecebe ?: "" },
         marcaSelecionada = nota.marcaSelecionada
       )
     }

@@ -64,11 +64,11 @@ SELECT I.invno,
        N.auxLong2,
        N.weight,
        N.packages,
-       I.qtty,
+       SUM(I.qtty)         AS qtty,
        A.marcaRecebimento,
        A.validade,
        A.vencimento,
-       N.s26               AS usernoRecebe
+       I.s26               AS usernoRecebe
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -83,7 +83,8 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.account IN (:listaContas))
-  AND (N.invno = :invno OR :invno = 0);
+  AND (N.invno = :invno OR :invno = 0)
+GROUP BY I.invno, I.prdno, I.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
 CREATE TEMPORARY TABLE T_EST

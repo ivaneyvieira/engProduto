@@ -28,24 +28,10 @@ class TabDevClientesViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   fun selecionaProdutos(nota: NotaRecebimento, codigoBarra: String) = viewModel.exec {
-    val user = AppConfig.userLogin() as? UserSaci
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    if ((nota.usernoRecebe ?: 0) == 0) {
-      if (user?.admin == true) {
-        nota.recebe(user)
-      } else {
-        fail("A nota ainda não foi recebida")
-      }
-    }
-    produto.marcaEnum = EMarcaRecebimento.RECEBIDO
-    produto.login = user?.login ?: ""
     produto.validaProduto()
-    produto.salva()
-    subView.focusCodigoBarra()
-    val novaNota = subView.updateProduto()
-    if (novaNota == null || nota.produtos.isEmpty()) {
-      subView.closeDialog()
-    }
+    produto.selecionado = true
+    subView.reloadGrid()
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {
@@ -97,11 +83,7 @@ class TabDevClientesViewModel(val viewModel: RecebimentoViewModel) {
     }
   }
 
-  fun formRecebe(nota: NotaRecebimento) {
-    subView.formRecebe(nota)
-  }
-
-  fun recebeNota(nota: NotaRecebimento, login: String, senha: String) {
+  fun recebeNotaProduto(produtos: List<NotaRecebimentoProduto>, login: String, senha: String) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -109,9 +91,21 @@ class TabDevClientesViewModel(val viewModel: RecebimentoViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    nota.recebe(user)
+    produtos.forEach {
+      it.recebe(user)
+      it.salva()
+    }
 
     updateView()
+  }
+
+  fun enviaProdutoSelecionado() = viewModel.exec {
+    val produtosSelecionados = subView.produtosSelecionados()
+    if (produtosSelecionados.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    subView.formAssina(produtosSelecionados)
   }
 }
 
@@ -123,5 +117,6 @@ interface ITabDevClientes : ITabView {
   fun focusCodigoBarra()
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
-  fun formRecebe(nota: NotaRecebimento)
+  fun formAssina(produtos: List<NotaRecebimentoProduto>)
+  fun reloadGrid()
 }

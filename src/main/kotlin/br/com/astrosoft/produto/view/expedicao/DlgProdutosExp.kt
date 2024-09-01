@@ -157,10 +157,11 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
 
   fun update() {
     val user = AppConfig.userLogin() as? UserSaci
-    val marca = if (user?.admin == true)
+    var marca = if (user?.admin == true)
       EMarcaNota.TODOS
     else
       EMarcaNota.EXP
+    marca = EMarcaNota.TODOS
     val listProdutos = nota.produtos(marca)
     gridDetail.setItems(listProdutos)
   }

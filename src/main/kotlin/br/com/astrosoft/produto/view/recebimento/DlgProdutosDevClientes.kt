@@ -1,12 +1,10 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.MesAno
-import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.ValidadeSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabDevClientesViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
@@ -36,6 +34,12 @@ class DlgProdutosDevClientes(val viewModel: TabDevClientesViewModel, val nota: N
           if (it.isFromClient) {
             viewModel.selecionaProdutos(nota, it.value)
           }
+        }
+      }
+
+      button("Envia") {
+        onClick {
+          viewModel.enviaProdutoSelecionado()
         }
       }
 
@@ -77,6 +81,7 @@ class DlgProdutosDevClientes(val viewModel: TabDevClientesViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade")
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
+      columnGrid(NotaRecebimentoProduto::usuarioRecebe, "Recebe")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
       columnGrid(NotaRecebimentoProduto::tempoValidade, "Tempo")
@@ -104,7 +109,13 @@ class DlgProdutosDevClientes(val viewModel: TabDevClientesViewModel, val nota: N
   }
 
   fun produtosSelecionados(): List<NotaRecebimentoProduto> {
-    return gridDetail.selectedItems.toList()
+    val user = AppConfig.userLogin() as? UserSaci
+    val selecionados = gridDetail.selectedItems.toList()
+    val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado }
+    return if (user?.admin == true)
+      (selecionados + marcados).distinctBy { "${it.ni} ${it.prdno} ${it.grade}" }
+    else
+      selecionados
   }
 
   fun update() {
@@ -139,5 +150,9 @@ class DlgProdutosDevClientes(val viewModel: TabDevClientesViewModel, val nota: N
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
+  }
+
+  fun reloadGrid() {
+    gridDetail.dataProvider.refreshAll()
   }
 }

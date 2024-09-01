@@ -2,11 +2,7 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabDevClientes
 import br.com.astrosoft.produto.viewmodel.recebimento.TabDevClientesViewModel
@@ -21,7 +17,6 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
-
 
 class TabDevClientes(val viewModel: TabDevClientesViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabDevClientes {
@@ -77,10 +72,6 @@ class TabDevClientes(val viewModel: TabDevClientesViewModel) :
     this.format()
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
-
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
-      viewModel.formRecebe(nota)
-    }
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -147,11 +138,15 @@ class TabDevClientes(val viewModel: TabDevClientesViewModel) :
     dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
   }
 
-  override fun formRecebe(nota: NotaRecebimento) {
+  override fun formAssina(produtos: List<NotaRecebimentoProduto>) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Recebe", form = form) {
-      viewModel.recebeNota(nota, form.login, form.senha)
+      viewModel.recebeNotaProduto(produtos, form.login, form.senha)
     }
+  }
+
+  override fun reloadGrid() {
+    dlgProduto?.reloadGrid()
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
