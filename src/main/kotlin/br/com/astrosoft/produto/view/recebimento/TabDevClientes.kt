@@ -81,6 +81,7 @@ class TabDevClientes(val viewModel: TabDevClientesViewModel) :
       }
     }
 
+
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
