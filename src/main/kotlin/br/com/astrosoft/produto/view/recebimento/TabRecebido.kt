@@ -124,6 +124,7 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
     this.updateGrid(notas)
   }
 
+
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
