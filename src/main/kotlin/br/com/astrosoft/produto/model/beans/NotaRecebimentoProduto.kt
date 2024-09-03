@@ -87,7 +87,7 @@ data class FiltroNotaRecebimentoProduto(
   val localizacao: List<String>,
   val prdno: String = "",
   val grade: String = "SEM GRADE",
-  val listaContas: EListaContas = EListaContas.RECEBIMENTO
+  val listaContas: EListaContas
 )
 
 enum class EListaContas(val values: List<String>) {

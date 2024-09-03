@@ -115,7 +115,8 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       marca = EMarcaRecebimento.RECEBIDO,
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
-      localizacao = usr?.localizacaoRec.orEmpty().toList()
+      localizacao = usr?.localizacaoRec.orEmpty().toList(),
+      listaContas = EListaContas.TODOS
     )
   }
 
