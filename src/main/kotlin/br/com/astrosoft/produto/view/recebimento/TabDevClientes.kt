@@ -75,14 +75,9 @@ class TabDevClientes(val viewModel: TabDevClientesViewModel) :
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      val user = AppConfig.userLogin() as? UserSaci
-      if ((nota.usernoRecebe ?: 0) == 0 && user?.admin == false) {
-        DialogHelper.showError("Assinar nota para receber")
-      } else {
-        dlgProduto = DlgProdutosDevClientes(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+      dlgProduto = DlgProdutosDevClientes(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
 

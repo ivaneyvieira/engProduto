@@ -2,11 +2,7 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabReceber
 import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberViewModel
@@ -79,14 +75,9 @@ class TabReceber(val viewModel: TabReceberViewModel) :
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      val user = AppConfig.userLogin() as? UserSaci
-      if ((nota.usernoRecebe ?: 0) == 0 && user?.admin == false) {
-        DialogHelper.showError("Assinar nota para receber")
-      } else {
-        dlgProduto = DlgProdutosReceber(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+      dlgProduto = DlgProdutosReceber(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
 
