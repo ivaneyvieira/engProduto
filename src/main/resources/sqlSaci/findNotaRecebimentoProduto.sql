@@ -82,8 +82,12 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
-  AND (N.account IN (:listaContas) OR 'TODOS' IN (:listaContas))
-  AND ((:tipoNota != 'TRANSFERENCIA') OR (N.type = 1 AND N.remarks LIKE '%CDMF%' AND N.storeno = 4))
+  AND (
+  :tipoNota = 'R' AND N.account IN (:listaContas) OR
+  :tipoNota = 'D' AND N.account IN (:listaContas) OR
+  :tipoNota = 'X' AND (N.type = 1 AND N.remarks LIKE '%CDMF%' AND N.storeno = 4) OR
+  :tipoNota = 'T' AND (N.account IN (:listaContas) || (N.type = 1 AND N.remarks LIKE '%CDMF%' AND N.storeno = 4))
+  )
   AND (N.invno = :invno OR :invno = 0)
 GROUP BY I.invno, I.prdno, I.grade;
 

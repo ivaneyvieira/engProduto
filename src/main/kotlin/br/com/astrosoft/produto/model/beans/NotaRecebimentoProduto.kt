@@ -38,7 +38,7 @@ class NotaRecebimentoProduto(
   var tipoValidade: String?,
   var tempoValidade: Int?,
 ) {
-  var selecionado : Boolean = false
+  var selecionado: Boolean = false
 
   val validadeStr
     get() = when (validade) {
@@ -64,7 +64,7 @@ class NotaRecebimentoProduto(
     saci.updateNotaRecebimentoProduto(this)
   }
 
-  fun recebe(user:UserSaci) {
+  fun recebe(user: UserSaci) {
     this.usernoRecebe = user.no
     this.marcaEnum = EMarcaRecebimento.RECEBIDO
     salva()
@@ -90,11 +90,11 @@ data class FiltroNotaRecebimentoProduto(
   val listaContas: EListaContas
 )
 
-enum class EListaContas(val values: List<String>) {
-  RECEBIMENTO(listOf("2.01.20", "2.01.21", "4.01.01.04.02", "6.03.01.01.01", "6.03.01.01.02")),
-  DEVOLUCAO(listOf("2.01.25")),
-  TRANSFERENCIA(listOf("TODOS")),
-  TODOS(values = RECEBIMENTO.values + DEVOLUCAO.values)
+enum class EListaContas(val codigo: String, val values: List<String>) {
+  RECEBIMENTO("R", listOf("2.01.20", "2.01.21", "4.01.01.04.02", "6.03.01.01.01", "6.03.01.01.02")),
+  DEVOLUCAO("D", listOf("2.01.25")),
+  TRANSFERENCIA("X", listOf("TODOS")),
+  TODOS("T", values = RECEBIMENTO.values + DEVOLUCAO.values)
 }
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
