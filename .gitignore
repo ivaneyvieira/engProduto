@@ -37,3 +37,4 @@ src/main/dev-bundle
 src/main/bundle
 cahche/*
 .kotlin
+src/main/bundles/
