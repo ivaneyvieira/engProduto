@@ -93,6 +93,7 @@ class UserSaci : IUser {
   var recebimentoDevClientes by DelegateAuthorized(47)
   var recebimentoTransferencia by DelegateAuthorized(48)
   var recebimentoTransfReceb by DelegateAuthorized(49)
+  var recebimentoDevCliRec by DelegateAuthorized(50)
 
   //Locais
   private var localEstoque: String?
@@ -341,13 +342,15 @@ class UserSaci : IUser {
     }
 
   var recebimento: Boolean
-    get() = recebimentoReceber || recebimentoRecebido || recebimentoDevClientes || recebimentoTransferencia || recebimentoTransfReceb || admin
+    get() = recebimentoReceber || recebimentoRecebido || recebimentoDevClientes || recebimentoTransferencia ||
+            recebimentoTransfReceb || recebimentoDevCliRec || admin
     set(value) {
       recebimentoReceber = value
       recebimentoRecebido = value
       recebimentoDevClientes = value
       recebimentoTransferencia = value
       recebimentoTransfReceb = value
+      recebimentoDevCliRec = value
     }
   var ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin

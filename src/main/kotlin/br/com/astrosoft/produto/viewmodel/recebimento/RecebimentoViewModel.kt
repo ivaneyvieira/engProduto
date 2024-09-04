@@ -6,12 +6,12 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>(view) {
   val tabReceberViewModel = TabReceberViewModel(this)
   val tabDevClientesViewModel = TabDevClientesViewModel(this)
+  val tabDevCliRecViewModel = TabDevCliRecViewModel(this)
   val tabTransferenciaViewModel = TabTransferenciaViewModel(this)
   val tabRecebidoViewModel = TabRecebidoViewModel(this)
   val tabTransfRecebViewModel = TabTransfRecebViewModel(this)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
   val tabRecebimentoUsrViewModel = TabRecebimentoUsrViewModel(this)
-
 
   override fun listTab() = listOf(
     view.tabReceber,
@@ -19,14 +19,16 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
     view.tabTransferencia,
     view.tabRecebido,
     view.tabTransfReceb,
+    view.tabDevCliRec,
     view.tabValidadeList,
-    view.tabRecebimentoUsr
-    )
+    view.tabRecebimentoUsr,
+  )
 }
 
 interface IRecebimentoView : IView {
   val tabReceber: ITabReceber
   val tabDevClientes: ITabDevClientes
+  val tabDevCliRec: ITabDevCliRec
   val tabTransferencia: ITabTransferencia
   val tabRecebido: ITabRecebido
   val tabTransfReceb: ITabTransfReceb

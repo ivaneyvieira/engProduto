@@ -15,6 +15,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoReceber, "Receber")
     columnGrid(UserSaci::recebimentoRecebido, "Recebido")
     columnGrid(UserSaci::recebimentoDevClientes, "Dev Clientes")
+    columnGrid(UserSaci::recebimentoDevCliRec, "Dev Cli Rec")
     columnGrid(UserSaci::recebimentoTransferencia, "Transferência")
     columnGrid(UserSaci::recebimentoTransfReceb, "Transf. Receb.")
   }
@@ -24,14 +25,17 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       checkBox("Receber") {
         binder.bind(this, UserSaci::recebimentoReceber.name)
       }
+      checkBox("Recebido") {
+        binder.bind(this, UserSaci::recebimentoRecebido.name)
+      }
       checkBox("Dev Clientes") {
         binder.bind(this, UserSaci::recebimentoDevClientes.name)
       }
+      checkBox("Dev Cli Rec") {
+        binder.bind(this, UserSaci::recebimentoDevCliRec.name)
+      }
       checkBox("Transferência") {
         binder.bind(this, UserSaci::recebimentoTransferencia.name)
-      }
-      checkBox("Recebido") {
-        binder.bind(this, UserSaci::recebimentoRecebido.name)
       }
       checkBox("Transf. Receb.") {
         binder.bind(this, UserSaci::recebimentoTransfReceb.name)

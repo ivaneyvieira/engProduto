@@ -26,6 +26,7 @@ class TabRecebimentoUsrViewModel(val viewModel: RecebimentoViewModel) : TabUsrVi
     this.recebimentoDevClientes = usuario.recebimentoDevClientes
     this.recebimentoTransferencia = usuario.recebimentoTransferencia
     this.recebimentoTransfReceb = usuario.recebimentoTransfReceb
+    this.recebimentoDevCliRec = usuario.recebimentoDevCliRec
   }
 }
 
