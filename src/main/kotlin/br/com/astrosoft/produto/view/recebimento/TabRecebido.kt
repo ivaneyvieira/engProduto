@@ -116,7 +116,7 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      listaContas = EListaContas.RECEBIMENTO
+      tipoNota = EListaContas.RECEBIMENTO
     )
   }
 

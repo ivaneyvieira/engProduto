@@ -48,7 +48,7 @@ class NotaRecebimento(
         dataFinal = data,
         dataInicial = data,
         localizacao = listOf("TODOS"),
-        listaContas = EListaContas.TODOS
+        tipoNota = EListaContas.TODOS
       )
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()

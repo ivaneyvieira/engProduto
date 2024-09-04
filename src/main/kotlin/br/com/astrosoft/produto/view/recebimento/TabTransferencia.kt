@@ -106,7 +106,7 @@ class TabTransferencia(val viewModel: TabTransferenciaViewModel) :
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      listaContas = EListaContas.TRANSFERENCIA
+      tipoNota = EListaContas.TRANSFERENCIA
     )
   }
 

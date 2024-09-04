@@ -36,7 +36,7 @@ class ProdutoEstoque(
       localizacao = listOf("TODOS"),
       prdno = prdno ?: "",
       grade = grade ?: "SEM GRADE",
-      listaContas = EListaContas.TODOS
+      tipoNota = EListaContas.TODOS
     )
     return saci.findNotaRecebimentoProduto(filtro).map { nota ->
       ProdutoKardec(

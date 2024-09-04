@@ -8,6 +8,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
   val tabDevClientesViewModel = TabDevClientesViewModel(this)
   val tabTransferenciaViewModel = TabTransferenciaViewModel(this)
   val tabRecebidoViewModel = TabRecebidoViewModel(this)
+  val tabTransfRecebViewModel = TabTransfRecebViewModel(this)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
   val tabRecebimentoUsrViewModel = TabRecebimentoUsrViewModel(this)
 
@@ -17,6 +18,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
     view.tabDevClientes,
     view.tabTransferencia,
     view.tabRecebido,
+    view.tabTransfReceb,
     view.tabValidadeList,
     view.tabRecebimentoUsr
     )
@@ -27,6 +29,7 @@ interface IRecebimentoView : IView {
   val tabDevClientes: ITabDevClientes
   val tabTransferencia: ITabTransferencia
   val tabRecebido: ITabRecebido
+  val tabTransfReceb: ITabTransfReceb
   val tabValidadeList: ITabValidadeList
   val tabRecebimentoUsr: ITabRecebimentoUsr
 }
