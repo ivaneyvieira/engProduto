@@ -1088,7 +1088,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("localizacao", filtro.localizacao)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
-      addOptionalParameter("listaContas", filtro.listaContas.values)
       addOptionalParameter("tipoNota", filtro.listaContas.codigo)
     }
   }

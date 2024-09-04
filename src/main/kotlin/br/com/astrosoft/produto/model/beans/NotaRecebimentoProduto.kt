@@ -90,11 +90,12 @@ data class FiltroNotaRecebimentoProduto(
   val listaContas: EListaContas
 )
 
-enum class EListaContas(val codigo: String, val values: List<String>) {
-  RECEBIMENTO("R", listOf("2.01.20", "2.01.21", "4.01.01.04.02", "6.03.01.01.01", "6.03.01.01.02")),
-  DEVOLUCAO("D", listOf("2.01.25")),
-  TRANSFERENCIA("X", listOf("TODOS")),
-  TODOS("T", values = RECEBIMENTO.values + DEVOLUCAO.values)
+enum class EListaContas(val codigo: String) {
+  RECEBIMENTO(codigo = "R"),
+  DEVOLUCAO(codigo = "D"),
+  TRANSFERENCIA(codigo = "X"),
+  RECLASSIFICA(codigo = "C"),
+  TODOS(codigo = "T"),
 }
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
