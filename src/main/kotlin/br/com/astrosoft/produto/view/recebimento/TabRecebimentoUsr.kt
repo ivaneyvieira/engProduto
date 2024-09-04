@@ -15,6 +15,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoReceber, "Receber")
     columnGrid(UserSaci::recebimentoRecebido, "Recebido")
     columnGrid(UserSaci::recebimentoDevClientes, "Dev Clientes")
+    columnGrid(UserSaci::recebimentoTransferencia, "Transferência")
   }
 
   override fun FormUsuario.configFields() {
@@ -24,6 +25,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       }
       checkBox("Dev Clientes") {
         binder.bind(this, UserSaci::recebimentoDevClientes.name)
+      }
+      checkBox("Transferência") {
+        binder.bind(this, UserSaci::recebimentoTransferencia.name)
       }
       checkBox("Recebido") {
         binder.bind(this, UserSaci::recebimentoRecebido.name)

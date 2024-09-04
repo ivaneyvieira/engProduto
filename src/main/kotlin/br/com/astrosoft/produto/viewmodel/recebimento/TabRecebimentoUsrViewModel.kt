@@ -24,6 +24,7 @@ class TabRecebimentoUsrViewModel(val viewModel: RecebimentoViewModel) : TabUsrVi
     this.localizacaoRec = usuario.localizacaoRec
     this.recebimentoCadastraValidade = usuario.recebimentoCadastraValidade
     this.recebimentoDevClientes = usuario.recebimentoDevClientes
+    this.recebimentoTransferencia = usuario.recebimentoTransferencia
   }
 }
 

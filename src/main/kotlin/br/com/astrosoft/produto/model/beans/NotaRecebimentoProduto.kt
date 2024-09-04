@@ -93,6 +93,7 @@ data class FiltroNotaRecebimentoProduto(
 enum class EListaContas(val values: List<String>) {
   RECEBIMENTO(listOf("2.01.20", "2.01.21", "4.01.01.04.02", "6.03.01.01.01", "6.03.01.01.02")),
   DEVOLUCAO(listOf("2.01.25")),
+  TRANSFERENCIA(listOf("TODOS")),
   TODOS(values = RECEBIMENTO.values + DEVOLUCAO.values)
 }
 

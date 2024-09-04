@@ -99,8 +99,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
           -it.value.size
         }?.key,
         usernoRecebe = produtos.firstOrNull { it.usernoRecebe != 0 }?.usernoRecebe,
-        usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.distinct()
-          .joinToString { it.usuarioRecebe ?: "" },
+        usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.mapNotNull { it.usuarioRecebe }.distinct()
+          .joinToString(),
         marcaSelecionada = nota.marcaSelecionada
       )
     }
