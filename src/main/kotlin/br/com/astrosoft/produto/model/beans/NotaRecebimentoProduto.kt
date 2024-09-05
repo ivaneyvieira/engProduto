@@ -37,6 +37,7 @@ class NotaRecebimentoProduto(
   var vencimento: LocalDate?,
   var tipoValidade: String?,
   var tempoValidade: Int?,
+  var observacaoNota: String?,
 ) {
   var selecionado: Boolean = false
 

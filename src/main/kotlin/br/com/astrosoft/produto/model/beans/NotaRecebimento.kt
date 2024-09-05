@@ -23,6 +23,7 @@ class NotaRecebimento(
   val marcaSelecionada: Int?,
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
+  var observacaoNota: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val usuarioLogin: String
@@ -101,7 +102,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         usernoRecebe = produtos.firstOrNull { it.usernoRecebe != 0 }?.usernoRecebe,
         usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.mapNotNull { it.usuarioRecebe }.distinct()
           .joinToString(),
-        marcaSelecionada = nota.marcaSelecionada
+        marcaSelecionada = nota.marcaSelecionada,
+        observacaoNota = nota.observacaoNota
       )
     }
   }

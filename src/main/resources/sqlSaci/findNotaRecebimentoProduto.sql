@@ -68,7 +68,8 @@ SELECT I.invno,
        A.marcaRecebimento,
        A.validade,
        A.vencimento,
-       I.s26               AS usernoRecebe
+       I.s26               AS usernoRecebe,
+       N.remarks           AS observacaoNota
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -83,11 +84,12 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (
-  (:tipoNota IN ('R', 'T') AND N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02')) OR
+  (:tipoNota IN ('R', 'T') AND
+   N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02')) OR
   (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR
-  (:tipoNota IN ('X', 'T') AND (N.type = 1 AND N.remarks REGEXP '[^A-Z0-9]CD[A-Z0-9]{2,3}[^A-Z0-9]')) OR
+  (:tipoNota IN ('X', 'T') AND (N.type = 1 AND N.remarks REGEXP 'CD[A-Z0-9]{2,3}')) OR
   (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' AND
-                       N.remarks REGEXP '[^A-Z0-9]CD[A-Z0-9]{2,3}[^A-Z0-9]'))
+                                N.remarks REGEXP '[^A-Z0-9]CD[A-Z0-9]{2,3}[^A-Z0-9]'))
   )
   AND (N.invno = :invno OR :invno = 0)
 GROUP BY I.invno, I.prdno, I.grade;
@@ -147,7 +149,8 @@ SELECT N.storeno                                                   AS loja,
        garantia                                                    AS tempoValidade,
        vencimento                                                  AS vencimento,
        ER.no                                                       AS usernoRecebe,
-       ER.login                                                    AS usuarioRecebe
+       ER.login                                                    AS usuarioRecebe,
+       observacaoNota                                              AS observacaoNota
 FROM T_NOTA AS N
        LEFT JOIN sqldados.users AS ER
                  ON ER.no = N.usernoRecebe
@@ -204,7 +207,8 @@ SELECT loja,
        validade,
        vencimento,
        tipoValidade,
-       tempoValidade
+       tempoValidade,
+       observacaoNota
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR
