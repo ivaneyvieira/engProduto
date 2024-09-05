@@ -142,7 +142,7 @@ class ProdutoEstoque(
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
-          userLogin = usuario,
+          userLogin = nota.usuarioSingCD ?: usuario,
         )
       }.distinctBy { it.doc }
     }
