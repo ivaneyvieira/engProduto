@@ -116,7 +116,7 @@ class TabReclassRec(val viewModel: TabReclassRecViewModel) :
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      tipoNota = EListaContas.DEVOLUCAO
+      tipoNota = EListaContas.RECLASSIFICA
     )
   }
 
