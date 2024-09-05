@@ -18,6 +18,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoDevCliRec, "Dev Cli Rec")
     columnGrid(UserSaci::recebimentoTransferencia, "Transferência")
     columnGrid(UserSaci::recebimentoTransfReceb, "Transf. Receb.")
+    columnGrid(UserSaci::recebimentoReclassifica, "Reclassifica")
   }
 
   override fun FormUsuario.configFields() {
@@ -42,6 +43,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       }
       checkBox("Cadastra Validade") {
         binder.bind(this, UserSaci::recebimentoCadastraValidade.name)
+      }
+      checkBox("Reclassifica") {
+        binder.bind(this, UserSaci::recebimentoReclassifica.name)
       }
     }
     verticalBlock("Filtros") {

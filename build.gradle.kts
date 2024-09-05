@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val vaadinVersion: String by extra
 val karibuDslVersion: String by extra
@@ -88,7 +89,7 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "17"
+  compilerOptions.jvmTarget = JvmTarget.JVM_17
 }
 
 java {

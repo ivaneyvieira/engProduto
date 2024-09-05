@@ -2,13 +2,10 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabDevCliRec
-import br.com.astrosoft.produto.viewmodel.recebimento.TabDevCliRecViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabReclassifica
+import br.com.astrosoft.produto.viewmodel.recebimento.TabReclassificaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,10 +18,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabDevCliRec {
-  private var dlgProduto: DlgProdutosDevCliRec? = null
-  private var dlgArquivo: DlgArquivo? = null
+class TabReclassifica(val viewModel: TabReclassificaViewModel) :
+  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabReclassifica {
+  private var dlgProduto: DlgProdutosReclassifica? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -76,21 +72,15 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
     this.format()
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
-    columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
+    columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosDevCliRec(viewModel, nota)
+      dlgProduto = DlgProdutosReclassifica(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
 
-    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
-      //dlgArquivo = DlgArquivo(viewModel, nota)
-      //dlgArquivo?.showDialog {
-      //  viewModel.updateView()
-      //}
-    }
 
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
@@ -112,7 +102,7 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
     return FiltroNotaRecebimentoProduto(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaRecebimento.RECEBIDO,
+      marca = EMarcaRecebimento.RECEBER,
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
@@ -124,16 +114,39 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
     this.updateGrid(notas)
   }
 
-  override fun updateArquivos() {
-    dlgArquivo?.update()
+  override fun updateProduto(): NotaRecebimento? {
+    return dlgProduto?.updateProduto()
   }
 
-  override fun arquivosSelecionados(): List<InvFile> {
-    return dlgArquivo?.produtosSelecionados().orEmpty()
+  override fun closeDialog() {
+    dlgProduto?.close()
+  }
+
+  override fun focusCodigoBarra() {
+    dlgProduto?.focusCodigoBarra()
+  }
+
+  override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+    return this.dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
+    dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
+  }
+
+  override fun formAssina(produtos: List<NotaRecebimentoProduto>) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Recebe", form = form) {
+      viewModel.recebeNotaProduto(produtos, form.login, form.senha)
+    }
+  }
+
+  override fun reloadGrid() {
+    dlgProduto?.reloadGrid()
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
-    dlgProduto = DlgProdutosDevCliRec(viewModel, nota)
+    dlgProduto = DlgProdutosReclassifica(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -141,11 +154,11 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.recebimentoDevCliRec == true
+    return username?.recebimentoReclassifica == true
   }
 
   override val label: String
-    get() = "DevCliRec"
+    get() = "Reclassifica"
 
   override fun updateComponent() {
     viewModel.updateView()
