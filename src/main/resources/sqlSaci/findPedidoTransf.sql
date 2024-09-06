@@ -61,7 +61,6 @@ SELECT N.storeno                                          AS lojaNoOri,
        UT.name                                            AS nameTransf,
        UT.login                                           AS nameTransfLogin,
        N.s16                                              AS numImpressora,
-       IF(N.paymno IN (69, 434)),
        CASE N.paymno
          WHEN 69 THEN 'FISCAL'
          WHEN 434 THEN 'INTERNA'
