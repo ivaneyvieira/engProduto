@@ -20,6 +20,7 @@ class ReposicaoView(val init: Boolean = true, codigo: String = "", grade: String
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
   override val tabReposicaoAcerto = TabReposicaoAcerto(viewModel.tabReposicaoAcertoViewModel)
+  override val tabReposicaoRetorno = TabReposicaoRetorno(viewModel.tabReposicaoRetornoViewModel)
   override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel, codigo, grade)
   override val tabReposicaoUsr = TabReposicaoUsr(viewModel.tabReposicaoUsrViewModel)
 

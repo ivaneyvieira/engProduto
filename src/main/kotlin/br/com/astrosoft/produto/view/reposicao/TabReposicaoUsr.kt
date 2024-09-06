@@ -17,6 +17,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::reposicaoSep, "Separar")
     columnGrid(UserSaci::reposicaoAcerto, "Acerto")
+    columnGrid(UserSaci::reposicaoRetorno, "Retorno")
     columnGrid(UserSaci::reposicaoEnt, "Entregar")
     columnGrid(UserSaci::impressoraRepo, "Impressora")
     columnGrid(UserSaci::localizacaoRepo, "Localização")
@@ -31,6 +32,9 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       checkBox("Acerto") {
         binder.bind(this, UserSaci::reposicaoAcerto.name)
       }
+      checkBox("Retorno") {
+        binder.bind(this, UserSaci::reposicaoRetorno.name)
+      }
       checkBox("Entregar") {
         binder.bind(this, UserSaci::reposicaoEnt.name)
       }
@@ -38,6 +42,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraRepo)
       filtroLocalizacao(binder, UserSaci::localizacaoRepo)
+
 
       multiSelectComboBox<EMetodo>("Tipo") {
         this.setItems(EMetodo.entries)

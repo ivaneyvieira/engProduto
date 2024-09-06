@@ -25,6 +25,7 @@ class TabReposicaoUsrViewModel(val viewModel: ReposicaoViewModel) : TabUsrViewMo
     this.localizacaoRepo = usuario.localizacaoRepo
     this.tipoMetodo = usuario.tipoMetodo
     this.autorizaAcerto = usuario.autorizaAcerto
+    this.reposicaoRetorno = usuario.reposicaoRetorno
   }
 }
 
