@@ -1,6 +1,11 @@
 package br.com.astrosoft.produto.model.beans
 
-class Funcionario(var codigo: Int?, var nome: String?, var funcao: String?){
+class Funcionario {
+  var codigo: Int = 0
+  var nome: String = ""
+  var funcao: String = ""
+  var senha: String = ""
+
   val nomeFuncao
     get() = "$nome ($funcao)"
 }

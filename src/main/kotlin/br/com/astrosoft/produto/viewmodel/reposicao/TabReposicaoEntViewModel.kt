@@ -53,8 +53,13 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun recebePedido(pedido: Reposicao, empNo: Int) = viewModel.exec {
+  fun recebePedido(pedido: Reposicao, empNo: Int, senha: String) = viewModel.exec {
     val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
+
+    if(funcionario.senha != senha) {
+      fail("Senha inválida")
+    }
+
     pedido.recebe(funcionario)
 
     updateView()
