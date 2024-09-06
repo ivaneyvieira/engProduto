@@ -42,6 +42,7 @@ class PedidoTransf(
   var nameTransfLogin: String?,
   var userReserva: Int?,
   var nameReserva: String?,
+  var tipoTransf: String?,
 ) {
 
   private fun extrairNumeros(str: String): List<Int> {
@@ -160,7 +161,9 @@ class PedidoTransf(
   }
 
   companion object {
-    fun findTransf(filtro: FiltroPedidoTransf, filtraCD5A: Boolean) = saci.findPedidoTransf(filtro, filtraCD5A)
+    fun findTransf(filtro: FiltroPedidoTransf, filtraCD5A: Boolean): List<PedidoTransf> {
+      return saci.findPedidoTransf(filtro, filtraCD5A)
+    }
   }
 }
 

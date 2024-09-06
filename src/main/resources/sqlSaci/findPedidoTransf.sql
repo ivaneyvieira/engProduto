@@ -60,7 +60,13 @@ SELECT N.storeno                                          AS lojaNoOri,
        T.padbits                                          AS userTransf,
        UT.name                                            AS nameTransf,
        UT.login                                           AS nameTransfLogin,
-       N.s16                                              AS numImpressora
+       N.s16                                              AS numImpressora,
+       IF(N.paymno IN (69, 434)),
+       CASE N.paymno
+         WHEN 69 THEN 'FISCAL'
+         WHEN 434 THEN 'INTERNA'
+         ELSE 'OUTRA'
+       END                                                AS tipoTransf
 FROM sqldados.eord AS N
        INNER JOIN sqldados.eoprd AS X
                   USING (storeno, ordno)
@@ -89,7 +95,7 @@ FROM sqldados.eord AS N
        LEFT JOIN sqldados.users AS UR
                  ON UR.no = N.s11
 WHERE N.date > 20231106
-  AND N.paymno = 69
+  AND N.paymno IN (69, 434)
   AND CASE :marca
         WHEN 0 THEN N.status IN (1, 2, 3, 5, 6, 7, 8)
         WHEN 1 THEN N.status IN (4)
@@ -151,7 +157,8 @@ SELECT lojaNoOri,
        nameTransf,
        nameTransfLogin,
        userReserva,
-       nameReserva
+       nameReserva,
+       tipoTransf
 FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR
        lojaDestino = @PESQUISA OR
