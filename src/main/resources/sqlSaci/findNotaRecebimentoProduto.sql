@@ -20,14 +20,61 @@ SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
 FROM sqldados.prdbar
 GROUP BY prdno, grade;
 
+DROP TABLE IF EXISTS T_LOC_SEM;
+CREATE TEMPORARY TABLE T_LOC_SEM
+(
+  INDEX (vendno)
+)
+SELECT S.prdno                                                             AS prdno,
+       S.grade                                                             AS grade,
+       CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS loc,
+       P.mfno                                                              AS vendno
+FROM sqldados.stk AS S
+       INNER JOIN sqldados.prd AS P
+                  ON S.prdno = P.no
+       LEFT JOIN sqldados.prdloc AS L
+                 USING (storeno, prdno, grade)
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON A.prdno = S.prdno AND A.grade = S.grade AND A.storeno = S.storeno AND A.localizacao != ''
+WHERE (S.storeno = 4)
+  AND (S.prdno = :prdno OR :prdno = '')
+  AND (S.grade = :grade OR :grade = 'SEM GRADE')
+  AND CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) = '';
+
+DROP TABLE IF EXISTS T_LOC_COM;
+CREATE TEMPORARY TABLE T_LOC_COM
+(
+  INDEX (vendno)
+)
+SELECT CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS loc, P.mfno AS vendno
+FROM sqldados.stk AS S
+       INNER JOIN sqldados.prd AS P
+                  ON S.prdno = P.no
+       LEFT JOIN sqldados.prdloc AS L
+                 USING (storeno, prdno, grade)
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON A.prdno = S.prdno AND A.grade = S.grade AND A.storeno = S.storeno AND A.localizacao != ''
+WHERE (S.storeno = 4)
+  AND (S.prdno = :prdno OR :prdno = '')
+  AND (S.grade = :grade OR :grade = 'SEM GRADE')
+  AND CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) != ''
+GROUP BY vendno, loc;
+
+DROP TABLE IF EXISTS T_LOC2;
+CREATE TEMPORARY TABLE T_LOC2
+SELECT S.prdno, S.grade, C.loc
+FROM T_LOC_SEM AS S
+       INNER JOIN T_LOC_COM AS C
+                  USING (vendno);
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT S.prdno                                                             AS prdno,
-       S.grade                                                             AS grade,
-       CAST(MID(COALESCE(A.localizacao, L.localizacao, ''), 1, 4) AS CHAR) AS loc
+SELECT S.prdno                                                                     AS prdno,
+       S.grade                                                                     AS grade,
+       CAST(MID(COALESCE(A.localizacao, L.localizacao, L2.loc, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.stk AS S
        INNER JOIN sqldados.prd AS P
                   ON S.prdno = P.no
@@ -38,9 +85,13 @@ FROM sqldados.stk AS S
                    AND A.grade = S.grade
                    AND A.storeno = S.storeno
                    AND A.localizacao != ''
+       LEFT JOIN T_LOC2 AS L2
+                 ON L2.prdno = S.prdno
+                   AND L2.grade = S.grade
 WHERE (S.storeno = 4)
   AND (S.prdno = :prdno OR :prdno = '')
   AND (S.grade = :grade OR :grade = 'SEM GRADE')
+  AND (CAST(MID(COALESCE(A.localizacao, L.localizacao, L2.loc, ''), 1, 4) AS CHAR) IN (:localizacao) OR 'TODOS' IN (:localizacao))
 GROUP BY S.prdno, S.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
