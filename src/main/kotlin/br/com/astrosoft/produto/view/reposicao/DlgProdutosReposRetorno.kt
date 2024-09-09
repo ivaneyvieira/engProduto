@@ -15,7 +15,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, private val reposicao: Reposicao) {
+class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, val reposicao: Reposicao) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -24,7 +24,7 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, priva
       button("Entregue") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
-          viewModel.marca(reposicao)
+          viewModel.marca()
         }
       }
       button("Desmarcar") {
@@ -67,6 +67,7 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, priva
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::entregueSNome, "Autoriza")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
 

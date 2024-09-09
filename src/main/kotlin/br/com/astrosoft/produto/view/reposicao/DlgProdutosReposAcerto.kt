@@ -9,13 +9,11 @@ import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoAcertoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, private val reposicoes: List<Reposicao>) {
   private var form: SubWindowForm? = null
@@ -76,6 +74,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, private
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::entregueSNome, "Autoriza")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
 
@@ -106,7 +105,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, private
   }
 
   fun update(reposicoesNovas: List<Reposicao>) {
-    val reposicoesFiltradas = reposicoesNovas.filter {nova ->
+    val reposicoesFiltradas = reposicoesNovas.filter { nova ->
       val chave = nova.chave()
       reposicoes.any { it.chave() == chave }
     }

@@ -35,8 +35,42 @@ ALTER TABLE sqldados.eoprdAdicional
 ALTER TABLE sqldados.eoprdAdicional
   ADD COLUMN empRecebido INT NULL;
 
-REPLACE INTO sqldados.eoprdAdicional (ordno, storeno, prdno, grade, qtRecebido, selecionado)
-SELECT ordno, storeno, E.prdno, E.grade, empEntregue, empRecebido
+DROP TEMPORARY TABLE IF EXISTS T_LOC;
+CREATE TEMPORARY TABLE T_LOC
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT S.prdno                                               AS prdno,
+       S.grade                                               AS grade,
+       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
+FROM sqldados.stk AS S
+       LEFT JOIN sqldados.prdloc AS L
+                 ON S.storeno = L.storeno
+                   AND S.prdno = L.prdno
+                   AND S.grade = L.grade
+       LEFT JOIN sqldados.prdAdicional AS A
+                 ON S.storeno = A.storeno
+                   AND S.prdno = A.prdno
+                   AND S.grade = A.grade
+                   AND A.localizacao != ''
+WHERE S.storeno = 4
+GROUP BY S.storeno, S.prdno, S.grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_LOC_PRD;
+CREATE TEMPORARY TABLE T_LOC_PRD
+(
+  PRIMARY KEY (ordno, storeno, prdno, grade)
+)
+SELECT ordno, storeno, E.prdno, E.grade, OA.empEntregue, OA.empRecebido
 FROM sqldados.eordAdicional AS OA
        INNER JOIN sqldados.eoprd AS E
-                  USING (ordno, storeno);
+                  USING (ordno, storeno)
+       INNER JOIN T_LOC AS L
+                  ON E.prdno = L.prdno
+                    AND E.grade = L.grade
+                    AND OA.localizacao = L.localizacao
+WHERE storeno = 4;
+
+REPLACE INTO sqldados.eoprdAdicional (ordno, storeno, prdno, grade, empEntregue, empRecebido)
+SELECT ordno, storeno, prdno, grade, empEntregue, empRecebido
+FROM T_LOC_PRD;

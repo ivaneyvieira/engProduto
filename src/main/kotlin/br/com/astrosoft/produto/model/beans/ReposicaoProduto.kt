@@ -38,6 +38,7 @@ class ReposicaoProduto(
     }
 
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
+
   fun salva() {
     saci.updateReposicaoProduto(this)
   }

@@ -88,7 +88,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { reposicao ->
-      dlgProduto = DlgProdutosReposRetorno(viewModel, listOf(reposicao))
+      dlgProduto = DlgProdutosReposRetorno(viewModel, reposicao)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -107,7 +107,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     )
   }
 
-  override fun updateUsuarios(reposicoes: List<Reposicao>) {
+  override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
   }
 
@@ -124,8 +124,10 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     return dlgProduto?.produtosSelecionados().orEmpty()
   }
 
-  override fun updateProdutos(reposicoes: List<Reposicao>) {
-    dlgProduto?.update(reposicoes)
+  override fun updateProdutos(reposicao: Reposicao?) {
+    if (reposicao != null) {
+      dlgProduto?.update(reposicao)
+    }
   }
 
   override fun assinaProdutos(marca: (UserSaci) -> Unit) {
@@ -133,6 +135,10 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.entregueProdutos(form.login, form.senha, marca)
     }
+  }
+
+  override fun reposicaoDlg(): Reposicao? {
+    return dlgProduto?.reposicao
   }
 
   override fun isAuthorized(): Boolean {

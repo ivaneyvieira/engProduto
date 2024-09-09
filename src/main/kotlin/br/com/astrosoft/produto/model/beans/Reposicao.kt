@@ -36,11 +36,19 @@ class Reposicao(
   fun entregue(user: UserSaci) {
     this.entregueNo = user.no
     this.salva()
+    produtos.forEach { produto ->
+      produto.entregueNo = user.no
+      produto.salva()
+    }
   }
 
   fun recebe(funcionario: Funcionario) {
     this.recebidoNo = funcionario.codigo
     this.salva()
+    produtos.forEach { produto ->
+      produto.recebidoNo = funcionario.codigo
+      produto.salva()
+    }
   }
 
   fun salva() {
@@ -123,7 +131,7 @@ data class FiltroReposicao(
 
 enum class EMarcaReposicao(val num: Int) {
   SEP(0),
-  ENT(1)
+  ENT(1),
 }
 
 enum class EMetodo(val num: Int, val descricao: String) {

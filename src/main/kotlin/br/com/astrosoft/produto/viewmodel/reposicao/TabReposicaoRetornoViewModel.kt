@@ -16,39 +16,32 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
+    subView.updateReposicoes(reposicoes)
   }
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSEP() > 0
-    }
+    val reposicoes = Reposicao.findAll(filtro)
     return reposicoes
   }
 
-  fun marca(pedido: Reposicao) = viewModel.exec {
+  fun marca() = viewModel.exec {
     val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
 
-    itens.forEach { produto ->
-      produto.marca = EMarcaReposicao.ENT.num
-      produto.selecionado = EMarcaReposicao.ENT.num
-      produto.qtRecebido = produto.quantidade
-      produto.salva()
-    }
-
-    val produtosFalta = pedido.produtos.filter { it.marca == EMarcaReposicao.ENT.num }
-
-    if (produtosFalta.isEmpty()) {
-      subView.assinaProdutos { user ->
-        pedido.entregue(user)
+    subView.assinaProdutos { user ->
+      itens.forEach { produto ->
+        produto.marca = EMarcaReposicao.ENT.num
+        produto.selecionado = EMarcaReposicao.ENT.num
+        produto.qtRecebido = produto.quantidade
+        produto.entregueNo = user.no
+        produto.salva()
       }
-    }
 
-    updateProdutos()
+      updateProdutos()
+    }
   }
 
   fun desmarcar() = viewModel.exec {
@@ -59,6 +52,8 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
     itens.forEach { produto ->
       produto.selecionado = EMarcaReposicao.SEP.num
+      produto.qtRecebido = 0
+      produto.entregueNo = 0
       produto.salva()
     }
     updateProdutos()
@@ -71,8 +66,10 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateProdutos() {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
-    subView.updateProdutos(reposicoes)
+    val reposicaoDlg = subView.reposicaoDlg()
+    subView.updateReposicoes(reposicoes)
+    val reposicaoNova = reposicoes.firstOrNull { it.chave() == reposicaoDlg?.chave() }
+    subView.updateProdutos(reposicaoNova)
   }
 
   fun salva(bean: Reposicao) {
@@ -97,10 +94,11 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
 interface ITabReposicaoRetorno : ITabView {
   fun filtro(): FiltroReposicao
-  fun updateUsuarios(reposicoes: List<Reposicao>)
+  fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
   fun produtosSelecionados(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
-  fun updateProdutos(reposicoes: List<Reposicao>)
+  fun updateProdutos(reposicao: Reposicao?)
   fun assinaProdutos(marca: (UserSaci) -> Unit)
+  fun reposicaoDlg(): Reposicao?
 }
