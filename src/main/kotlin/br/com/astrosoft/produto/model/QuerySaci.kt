@@ -408,7 +408,7 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
 
-    fun findProdutoNF(prd : ProdutoNFS): List<ProdutoNFS> {
+  fun findProdutoNF(prd: ProdutoNFS): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val user = AppConfig.userLogin() as? UserSaci
     val produtos = query(sql, ProdutoNFS::class) {
@@ -426,7 +426,6 @@ class QuerySaci : QueryDB(database) {
     }
     return produtos
   }
-
 
   fun findProdutoPedidoVenda(pedido: PedidoVenda, marca: EMarcaPedido, locais: List<String>): List<ProdutoPedidoVenda> {
     val sql = "/sqlSaci/findProdutosPedidoVenda.sql"
@@ -1046,7 +1045,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("grade", filtro.grade)
-      addOptionalParameter("metodos", filtro.listMetodo.filterNotNull().map { it.num })
+      addOptionalParameter("metodos", filtro.metodos.map { it.num })
     }
   }
 
@@ -1073,6 +1072,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("qtRecebido", reposicaoProduto.qtRecebido ?: 0)
       addOptionalParameter("selecionado", reposicaoProduto.selecionado ?: 0)
       addOptionalParameter("posicao", reposicaoProduto.posicao ?: 0)
+      addOptionalParameter("recebidoNo", reposicaoProduto.recebidoNo ?: 0)
+      addOptionalParameter("entregueNo", reposicaoProduto.entregueNo ?: 0)
     }
   }
 

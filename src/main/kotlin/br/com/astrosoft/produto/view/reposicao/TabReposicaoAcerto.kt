@@ -26,7 +26,6 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -44,19 +43,6 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       }
     }
     init()
-    cmbMetodo = select("Tipo") {
-      val user = AppConfig.userLogin() as? UserSaci
-      val tipos = user?.tipoMetodo ?: setOf(EMetodo.TODOS)
-      val metodos = listOf(EMetodo.ACERTO, EMetodo.RETORNO, EMetodo.TODOS)
-      this.setItems(metodos.filter {
-        it in tipos || EMetodo.TODOS in tipos || user?.admin == true
-      })
-      this.value = tipos.firstOrNull()
-      this.setItemLabelGenerator { it.descricao }
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -131,11 +117,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      listMetodo = when (cmbMetodo.value) {
-        EMetodo.ACERTO -> listOf(EMetodo.ACERTO)
-        EMetodo.RETORNO -> listOf(EMetodo.RETORNO)
-        else -> listOf(EMetodo.ACERTO, EMetodo.RETORNO)
-      },
+      metodos = listOf(EMetodo.ACERTO),
     )
   }
 

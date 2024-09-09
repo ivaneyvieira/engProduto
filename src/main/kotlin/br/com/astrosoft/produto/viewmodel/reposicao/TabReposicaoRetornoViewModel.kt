@@ -27,14 +27,7 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
     return reposicoes
   }
 
-  fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
-    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.selecionado = EMarcaReposicao.ENT.num
-    produto.salva()
-    subView.updateProduto(produto)
-  }
-
-  fun marca() = viewModel.exec {
+  fun marca(pedido: Reposicao) = viewModel.exec {
     val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
@@ -46,6 +39,15 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
       produto.qtRecebido = produto.quantidade
       produto.salva()
     }
+
+    val produtosFalta = pedido.produtos.filter { it.marca == EMarcaReposicao.ENT.num }
+
+    if (produtosFalta.isEmpty()) {
+      subView.assinaProdutos { user ->
+        pedido.entregue(user)
+      }
+    }
+
     updateProdutos()
   }
 
@@ -78,11 +80,7 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun formEntregue(pedido: Reposicao) {
-    subView.formEntregue(pedido)
-  }
-
-  fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
+  fun entregueProdutos(login: String, senha: String, marca: (UserSaci) -> Unit) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -90,9 +88,7 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    pedido.entregue(user)
-
-    updateView()
+    marca(user)
   }
 
   val subView
@@ -106,5 +102,5 @@ interface ITabReposicaoRetorno : ITabView {
   fun produtosSelecionados(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
   fun updateProdutos(reposicoes: List<Reposicao>)
-  fun formEntregue(pedido: Reposicao)
+  fun assinaProdutos(marca: (UserSaci) -> Unit)
 }

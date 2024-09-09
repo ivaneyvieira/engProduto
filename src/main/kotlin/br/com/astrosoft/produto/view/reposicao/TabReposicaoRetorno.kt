@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showError
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoRetorno
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRetornoViewModel
@@ -25,7 +24,6 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -43,19 +41,6 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
       }
     }
     init()
-    cmbMetodo = select("Tipo") {
-      val user = AppConfig.userLogin() as? UserSaci
-      val tipos = user?.tipoMetodo ?: setOf(EMetodo.TODOS)
-      val metodos = listOf(EMetodo.RETORNO, EMetodo.RETORNO, EMetodo.TODOS)
-      this.setItems(metodos.filter {
-        it in tipos || EMetodo.TODOS in tipos || user?.admin == true
-      })
-      this.value = tipos.firstOrNull()
-      this.setItemLabelGenerator { it.descricao }
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -91,31 +76,21 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
       }
     )
 
-    val user = AppConfig.userLogin() as? UserSaci
-
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formEntregue(pedido)
-    }
     columnGrid(Reposicao::entregueSNome, "Autoriza")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { reposicao ->
-      val userEntregue = reposicao.entregueNo
-      if (userEntregue == 0) {
-        showError("Pedido não assinado")
-      } else {
-        dlgProduto = DlgProdutosReposRetorno(viewModel, listOf(reposicao))
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+      dlgProduto = DlgProdutosReposRetorno(viewModel, listOf(reposicao))
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
   }
@@ -128,11 +103,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
       localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      listMetodo = when (cmbMetodo.value) {
-        EMetodo.ACERTO -> listOf(EMetodo.ACERTO)
-        EMetodo.RETORNO -> listOf(EMetodo.RETORNO)
-        else -> listOf(EMetodo.ACERTO, EMetodo.RETORNO)
-      },
+      metodos = listOf(EMetodo.RETORNO),
     )
   }
 
@@ -157,10 +128,10 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     dlgProduto?.update(reposicoes)
   }
 
-  override fun formEntregue(pedido: Reposicao) {
+  override fun assinaProdutos(marca: (UserSaci) -> Unit) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entreguePedido(pedido, form.login, form.senha)
+      viewModel.entregueProdutos(form.login, form.senha, marca)
     }
   }
 

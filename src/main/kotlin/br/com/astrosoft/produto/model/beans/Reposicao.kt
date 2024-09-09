@@ -39,7 +39,7 @@ class Reposicao(
   }
 
   fun recebe(funcionario: Funcionario) {
-    this.recebidoNo = funcionario.codigo ?: 0
+    this.recebidoNo = funcionario.codigo
     this.salva()
   }
 
@@ -67,7 +67,7 @@ class Reposicao(
           localizacao = listOf("TODOS"),
           codigo = codigo,
           grade = grade,
-          listMetodo = listOf(EMetodo.TODOS),
+          metodos = listOf(EMetodo.TODOS),
         )
       )
       val listLiquido = listBruto.flatMap { repo ->
@@ -77,7 +77,7 @@ class Reposicao(
             pesquisa = "${repo.numero}",
             marca = EMarcaReposicao.ENT,
             localizacao = listOf("TODOS"),
-            listMetodo = listOf(EMetodo.TODOS),
+            metodos = listOf(EMetodo.TODOS),
           )
         )
       }
@@ -118,7 +118,7 @@ data class FiltroReposicao(
   val dataFinal: LocalDate? = null,
   val codigo: String = "",
   val grade: String = "",
-  val listMetodo: List<EMetodo>,
+  val metodos: List<EMetodo>,
 )
 
 enum class EMarcaReposicao(val num: Int) {

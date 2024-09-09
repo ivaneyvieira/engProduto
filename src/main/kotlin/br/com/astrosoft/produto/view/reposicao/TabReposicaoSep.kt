@@ -102,7 +102,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      listMetodo = listOf(EMetodo.REPOSICAO),
+      metodos = listOf(EMetodo.REPOSICAO),
     )
   }
 

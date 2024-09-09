@@ -76,15 +76,15 @@ FROM sqldados.eoprd AS E
                    AND B.grade = E.grade
                    AND B.grade != ''
        LEFT JOIN sqldados.users AS EE
-                 ON EE.no = OA.empEntregue
+                 ON EE.no = EA.empEntregue
        LEFT JOIN sqldados.emp AS ER
-                 ON ER.no = OA.empRecebido
+                 ON ER.no = EA.empRecebido
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno
-WHERE O.paymno IN (431, 432, 433)
+WHERE (O.paymno IN (431, 432, 433))
   AND (O.paymno in (:metodos) OR 0 IN (:metodos))
-  AND O.date >= :datacorte
-  AND O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR)
+  AND (O.date >= :datacorte)
+  AND (O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR))
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.storeno = :loja OR :loja = 0)

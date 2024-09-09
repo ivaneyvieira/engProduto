@@ -28,3 +28,15 @@ CREATE TABLE sqldados.eoprdAdicional
   posicao     INT,
   PRIMARY KEY (ordno, storeno, prdno, grade)
 );
+
+ALTER TABLE sqldados.eoprdAdicional
+  ADD COLUMN empEntregue INT NULL;
+
+ALTER TABLE sqldados.eoprdAdicional
+  ADD COLUMN empRecebido INT NULL;
+
+REPLACE INTO sqldados.eoprdAdicional (ordno, storeno, prdno, grade, qtRecebido, selecionado)
+SELECT ordno, storeno, E.prdno, E.grade, empEntregue, empRecebido
+FROM sqldados.eordAdicional AS OA
+       INNER JOIN sqldados.eoprd AS E
+                  USING (ordno, storeno);
