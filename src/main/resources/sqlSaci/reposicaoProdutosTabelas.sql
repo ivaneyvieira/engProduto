@@ -71,6 +71,18 @@ FROM sqldados.eordAdicional AS OA
                     AND OA.localizacao = L.localizacao
 WHERE storeno = 4;
 
-REPLACE INTO sqldados.eoprdAdicional (ordno, storeno, prdno, grade, empEntregue, empRecebido)
-SELECT ordno, storeno, prdno, grade, empEntregue, empRecebido
-FROM T_LOC_PRD;
+REPLACE INTO sqldados.eoprdAdicional (storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao,
+                                      empEntregue, empRecebido)
+SELECT storeno,
+       ordno,
+       prdno,
+       grade,
+       marca,
+       qtRecebido,
+       selecionado,
+       posicao,
+       P.empEntregue,
+       P.empRecebido
+FROM T_LOC_PRD AS P
+       INNER JOIN sqldados.eoprdAdicional AS EA
+                  USING (storeno, ordno, prdno, grade);
