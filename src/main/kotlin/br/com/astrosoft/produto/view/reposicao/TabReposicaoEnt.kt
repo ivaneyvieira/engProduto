@@ -108,18 +108,7 @@ class TabReposicaoEnt(
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-
-    if (!filtroProduto()) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formEntregue(pedido)
-      }
-    }
     columnGrid(Reposicao::entregueSNome, "Entregue")
-    if (!filtroProduto()) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
-      }
-    }
     columnGrid(Reposicao::recebidoSNome, "Recebido")
     if (!filtroProduto()) {
       columnGrid(Reposicao::usuarioApp, "Login")

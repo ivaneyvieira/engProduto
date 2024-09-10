@@ -86,3 +86,29 @@ SELECT storeno,
 FROM T_LOC_PRD AS P
        INNER JOIN sqldados.eoprdAdicional AS EA
                   USING (storeno, ordno, prdno, grade);
+
+
+SELECT *
+FROM sqldados.eordAdicional;
+
+SELECT ordno
+FROM sqldados.eord
+WHERE date = 20240909;
+
+
+
+SELECT *
+FROM sqldados.eoprdAdicional
+WHERE marca IS NOT NULL
+  AND ordno IN (SELECT ordno
+                FROM sqldados.eord
+                WHERE date = 20240909);
+
+UPDATE sqldados.eoprdAdicional
+SET marca       = 1,
+    selecionado = 1,
+    posicao     = 0
+WHERE marca IS NULL
+  AND ordno IN (SELECT ordno
+                FROM sqldados.eord
+                WHERE date >= 20240901);
