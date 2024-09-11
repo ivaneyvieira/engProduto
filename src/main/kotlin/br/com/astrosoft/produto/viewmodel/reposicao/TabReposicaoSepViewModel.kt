@@ -36,7 +36,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.ENT.num }
+    val itens = subView.produtosSelecionados().filter { it.isSelecionado() }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -44,7 +44,6 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     itens.forEach { produto ->
       produto.marca = EMarcaReposicao.ENT.num
       produto.selecionado = EMarcaReposicao.ENT.num
-      produto.marca = EMarcaReposicao.ENT.num
       produto.qtRecebido = produto.quantidade
       produto.salva()
     }
