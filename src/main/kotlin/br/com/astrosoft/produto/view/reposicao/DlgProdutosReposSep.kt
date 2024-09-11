@@ -150,7 +150,6 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Recebido", form = form) {
       viewModel.recebeReposicao(reposicao, form.numero, form.senha)
-      this.form?.close()
     }
   }
 
@@ -158,7 +157,6 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.entregaReposicao(reposicao, form.login, form.senha)
-      this.form?.close()
     }
   }
 
