@@ -27,8 +27,8 @@ class Reposicao(
     rep.isSep()
   }
 
-  fun countSelecionado() = produtos.count { rep ->
-    rep.selecionado == EMarcaReposicao.ENT.num
+  fun countNaoSelecionado() = produtos.count { rep ->
+    !rep.isSelecionado()
   }
 
   fun countSelecionadoNaoAssinado() = produtos.count { rep ->
@@ -60,7 +60,7 @@ class Reposicao(
   }
 
   fun isProntoAssinar(): Boolean {
-    return (countSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+    return (countNaoSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
   }
 
   fun chave() = "${loja}:${numero}:${localizacao}"
