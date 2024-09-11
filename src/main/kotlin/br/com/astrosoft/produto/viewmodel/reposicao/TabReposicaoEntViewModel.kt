@@ -32,7 +32,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun formEntregue(pedido: Reposicao) = viewModel.exec{
+  fun formEntregue(pedido: Reposicao) = viewModel.exec {
     subView.formEntregue(pedido)
   }
 
@@ -56,7 +56,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   fun recebePedido(pedido: Reposicao, empNo: Int, senha: String) = viewModel.exec {
     val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
 
-    if(funcionario.senha != senha) {
+    if (funcionario.senha != senha) {
       fail("Senha inválida")
     }
 
@@ -87,9 +87,9 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido com produtos ainda em separação")
     }
 
-    if (pedido.countDivergente() > 0) {
-      fail("Pedido com quantidade divergente")
-    }
+    //if (pedido.countDivergente() > 0) {
+    //  fail("Pedido com quantidade divergente")
+    // }
 
     val produtos = pedido.produtosENT()
 
