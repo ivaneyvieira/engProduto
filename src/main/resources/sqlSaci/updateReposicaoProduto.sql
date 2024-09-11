@@ -11,3 +11,7 @@ WHERE empEntregue > 0
   AND empRecebido > 0
   AND selecionado > 0
   AND marca = 0
+  AND storeno = :loja
+  AND ordno = :numero
+  AND prdno = :prdno
+  AND grade = :grade
