@@ -98,11 +98,16 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
 
   override fun filtro(): FiltroReposicao {
     val user = AppConfig.userLogin() as? UserSaci
+    val localizacao = if (user?.admin == true) {
+      listOf("TODOS")
+    } else {
+      user?.localizacaoRepo.orEmpty().toList()
+    }
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.SEP,
-      localizacao = user?.localizacaoRepo?.toList() ?: listOf("TODOS"),
+      localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       metodos = listOf(EMetodo.REPOSICAO),
