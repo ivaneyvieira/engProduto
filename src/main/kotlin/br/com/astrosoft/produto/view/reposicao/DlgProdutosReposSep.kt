@@ -49,9 +49,9 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
           viewModel.desmarcar()
         }
       }
-      btnAssina = button("Assina") {
+      button("Assina") {
         icon = VaadinIcon.SIGN_IN.create()
-        this.isVisible = reposicao.isProntoAssinar()
+        //this.isVisible = reposicao.isProntoAssinar()
         onClick {
           tentaAssinar()
         }
