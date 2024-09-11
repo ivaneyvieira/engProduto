@@ -97,11 +97,12 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   }
 
   override fun filtro(): FiltroReposicao {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.SEP,
-      localizacao = listOf("TODOS"),
+      localizacao = user?.localizacaoRepo?.toList() ?: listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       metodos = listOf(EMetodo.REPOSICAO),
@@ -110,7 +111,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
 
   override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
-    dlgProduto?.reposicao?.let {rep ->
+    dlgProduto?.reposicao?.let { rep ->
       reposicoes.firstOrNull { it.chave() == rep.chave() }?.let {
         dlgProduto?.update(it)
       }
@@ -129,7 +130,6 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   override fun produtosSelecionados(): List<ReposicaoProduto> {
     return dlgProduto?.produtosSelecionados().orEmpty()
   }
-
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
