@@ -23,16 +23,24 @@ class Reposicao(
   val tipoMetodo: String
     get() = EMetodo.entries.firstOrNull { it.num == metodo }?.descricao ?: ""
 
-  fun countSEP() = produtos.count { rep ->
-    rep.isSEP()
+  fun countSep() = produtos.count { rep ->
+    rep.isSep()
   }
 
-  fun countSEPNaoAssinado() = produtos.count { rep ->
-    rep.isSEPNaoAssinado()
+  fun countSelecionado() = produtos.count { rep ->
+    rep.selecionado == EMarcaReposicao.ENT.num
   }
 
-  fun countENT() = produtos.count { rep ->
-    rep.isENT()
+  fun countSelecionadoNaoAssinado() = produtos.count { rep ->
+    rep.isSelecionadoNaoAssinado()
+  }
+
+  fun countSepNaoAssinado() = produtos.count { rep ->
+    rep.isSepNaoAssinado()
+  }
+
+  fun countEnt() = produtos.count { rep ->
+    rep.isEnt()
   }
 
   fun countNaoRecebido() = produtos.count { rep ->
@@ -45,14 +53,14 @@ class Reposicao(
 
   fun countDivergente() = produtos.count { (it.qtRecebido ?: 0) != (it.quantidade ?: 0) }
 
-  fun produtosSEP() = produtos.filter { it.isSEP() }
-  fun produtosENT() = produtos.filter { it.isENT() }
-  fun produtosSEPNaoAssinado() = produtos.filter { rep ->
-    rep.isSEPNaoAssinado()
+  fun produtosSep() = produtos.filter { it.isSep() }
+  fun produtosEnt() = produtos.filter { it.isEnt() }
+  fun produtosSelecionadoNaoAssinado() = produtos.filter { rep ->
+    rep.isSelecionadoNaoAssinado()
   }
 
   fun isProntoAssinar(): Boolean {
-    return (countSEP() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+    return (countSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
   }
 
   fun chave() = "${loja}:${numero}:${localizacao}"

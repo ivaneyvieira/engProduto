@@ -22,7 +22,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSEP() > 0
+      it.countSep() > 0
     }
     return reposicoes
   }

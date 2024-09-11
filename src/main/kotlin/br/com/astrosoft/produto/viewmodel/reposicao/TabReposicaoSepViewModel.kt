@@ -23,7 +23,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSEPNaoAssinado() > 0
+      it.countSepNaoAssinado() > 0
     }
     return reposicoes
   }
@@ -31,7 +31,6 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.selecionado = EMarcaReposicao.ENT.num
-    produto.marca = EMarcaReposicao.ENT.num
     produto.salva()
     subView.updateProduto(produto)
   }
@@ -45,6 +44,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     itens.forEach { produto ->
       produto.marca = EMarcaReposicao.ENT.num
       produto.selecionado = EMarcaReposicao.ENT.num
+      produto.marca = EMarcaReposicao.ENT.num
       produto.qtRecebido = produto.quantidade
       produto.salva()
     }

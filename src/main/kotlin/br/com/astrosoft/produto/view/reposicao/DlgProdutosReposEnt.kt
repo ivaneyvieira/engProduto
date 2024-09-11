@@ -103,11 +103,11 @@ class DlgProdutosReposEnt(
     }
 
     val listProdutosFiltradas = reposicoesFiltradas.flatMap {
-      it.produtosENT()
+      it.produtosEnt()
     }
 
     val listProdutos = reposicoes.flatMap {
-      it.produtosENT()
+      it.produtosEnt()
     }
 
     val listProdutosNovos = listProdutosFiltradas.filter { produto ->

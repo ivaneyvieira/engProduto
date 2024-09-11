@@ -111,11 +111,11 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, private
     }
 
     val listProdutosFiltradas = reposicoesFiltradas.flatMap {
-      it.produtosSEP()
+      it.produtosSep()
     }
 
     val listProdutos = reposicoes.flatMap {
-      it.produtosSEP()
+      it.produtosSep()
     }
 
     val listProdutosNovos = listProdutosFiltradas.filter { produto ->

@@ -28,7 +28,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     else
       Reposicao.findAll(filtro)
     return reposicoes.filter {
-      it.countENT() > 0
+      it.countSepNaoAssinado() == 0
     }
   }
 
@@ -83,7 +83,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     if (pedido.recebidoNome.isBlank())
       fail("Pedido não recebido")
 
-    if (pedido.countSEP() > 0) {
+    if (pedido.countSep() > 0) {
       fail("Pedido com produtos ainda em separação")
     }
 
@@ -91,7 +91,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     //  fail("Pedido com quantidade divergente")
     // }
 
-    val produtos = pedido.produtosENT()
+    val produtos = pedido.produtosEnt()
 
     val relatorio = PrintReposicao()
 

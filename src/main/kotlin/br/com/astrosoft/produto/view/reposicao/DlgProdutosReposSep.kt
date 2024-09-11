@@ -103,7 +103,7 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
       }
 
       this.setPartNameGenerator {
-        if (it.marca == EMarcaReposicao.ENT.num) {
+        if (it.selecionado == EMarcaReposicao.ENT.num) {
           "amarelo"
         } else null
       }
