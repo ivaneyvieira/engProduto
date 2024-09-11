@@ -23,13 +23,37 @@ class Reposicao(
   val tipoMetodo: String
     get() = EMetodo.entries.firstOrNull { it.num == metodo }?.descricao ?: ""
 
-  fun countSEP() = produtos.count { it.marca == EMarcaReposicao.SEP.num }
-  fun countENT() = produtos.count { it.marca == EMarcaReposicao.ENT.num }
+  fun countSEP() = produtos.count { rep ->
+    rep.isSEP()
+  }
+
+  fun countSEPNaoAssinado() = produtos.count { rep ->
+    rep.isSEPNaoAssinado()
+  }
+
+  fun countENT() = produtos.count { rep ->
+    rep.isENT()
+  }
+
+  fun countNaoRecebido() = produtos.count { rep ->
+    rep.isNaoRecebido()
+  }
+
+  fun countNaoEntregue() = produtos.count { rep ->
+    rep.isNaoEntregue()
+  }
 
   fun countDivergente() = produtos.count { (it.qtRecebido ?: 0) != (it.quantidade ?: 0) }
 
-  fun produtosSEP() = produtos.filter { it.marca == EMarcaReposicao.SEP.num }
-  fun produtosENT() = produtos.filter { it.marca == EMarcaReposicao.ENT.num }
+  fun produtosSEP() = produtos.filter { it.isSEP() }
+  fun produtosENT() = produtos.filter { it.isENT() }
+  fun produtosSEPNaoAssinado() = produtos.filter { rep ->
+    rep.isSEPNaoAssinado()
+  }
+
+  fun isProntoAssinar(): Boolean {
+    return (countSEP() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+  }
 
   fun chave() = "${loja}:${numero}:${localizacao}"
 

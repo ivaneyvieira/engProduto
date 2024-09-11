@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -16,13 +17,13 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
+    subView.updateReposicoes(reposicoes)
   }
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSEP() > 0
+      it.countSEPNaoAssinado() > 0
     }
     return reposicoes
   }
@@ -69,12 +70,36 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateProdutos() {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
-    subView.updateProdutos(reposicoes)
+    subView.updateReposicoes(reposicoes)
   }
 
   fun salva(bean: Reposicao) {
     bean.salva()
+    updateView()
+  }
+
+  fun recebeReposicao(reposicao: Reposicao, empNo: Int, senha: String) {
+    val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
+
+    if (funcionario.senha != senha) {
+      fail("Senha inválida")
+    }
+
+    reposicao.recebe(funcionario)
+
+    updateView()
+  }
+
+  fun entregaReposicao(reposicao: Reposicao, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    reposicao.entregue(user)
+
     updateView()
   }
 
@@ -84,9 +109,8 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
 interface ITabReposicaoSep : ITabView {
   fun filtro(): FiltroReposicao
-  fun updateUsuarios(reposicoes: List<Reposicao>)
+  fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
   fun produtosSelecionados(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
-  fun updateProdutos(reposicoes: List<Reposicao>)
 }

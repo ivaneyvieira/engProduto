@@ -43,6 +43,16 @@ class ReposicaoProduto(
     saci.updateReposicaoProduto(this)
   }
 
+  fun isSEP() = marca == EMarcaReposicao.SEP.num
+
+  fun isNaoRecebido() = recebidoNo == 0
+
+  fun isNaoEntregue() = entregueNo == 0
+
+  fun isSEPNaoAssinado() = isSEP() || isNaoRecebido() || isNaoEntregue()
+
+  fun isENT() = marca == EMarcaReposicao.ENT.num
+
   val selecionadoOrdemENT
     get() = if (marca == EMarcaReposicao.ENT.num) selecionado else 0
 }

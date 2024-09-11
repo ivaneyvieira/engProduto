@@ -89,7 +89,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
 
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
-      dlgProduto = DlgProdutosReposSep(viewModel, listOf(ressuprimento))
+      dlgProduto = DlgProdutosReposSep(viewModel, ressuprimento)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -108,8 +108,13 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     )
   }
 
-  override fun updateUsuarios(reposicoes: List<Reposicao>) {
+  override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
+    dlgProduto?.reposicao?.let {rep ->
+      reposicoes.firstOrNull { it.chave() == rep.chave() }?.let {
+        dlgProduto?.update(it)
+      }
+    }
   }
 
   override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
@@ -125,9 +130,6 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     return dlgProduto?.produtosSelecionados().orEmpty()
   }
 
-  override fun updateProdutos(reposicoes: List<Reposicao>) {
-    dlgProduto?.update(reposicoes)
-  }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci

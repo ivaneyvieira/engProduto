@@ -9,27 +9,21 @@ import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val reposicoes: List<Reposicao>) {
+class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao: Reposicao) {
+  private var btnAssina: Button? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val reposicaoTitle = if (reposicoes.size == 1) {
-      val reposicao = reposicoes.first()
-      "${reposicao.numero}     ${reposicao.data.format()}"
-    } else {
-      val loja = reposicoes.map { it.loja }.distinct().joinToString(", ")
-      val data = reposicoes.map { it.data.format() }.distinct().joinToString(", ")
-      "Loja: $loja    Data: $data"
-    }
+    val reposicaoTitle = "${reposicao.numero}     ${reposicao.data.format()}"
     form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
@@ -38,10 +32,12 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
             viewModel.selecionaProdutos(it.value)
             this@textField.value = ""
             this@textField.focus()
+            tentaAssinar()
           }
         }
       }
       button("Entregue") {
+        this.isVisible = false
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
           viewModel.marca()
@@ -51,6 +47,13 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
         icon = VaadinIcon.ARROW_LEFT.create()
         onClick {
           viewModel.desmarcar()
+        }
+      }
+      btnAssina = button("Assina") {
+        icon = VaadinIcon.SIGN_IN.create()
+        this.isVisible = reposicao.isProntoAssinar()
+        onClick {
+          tentaAssinar()
         }
       }
     }, onClose = {
@@ -71,7 +74,7 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
       this.withEditor(classBean = ReposicaoProduto::class,
         openEditor = {
@@ -88,7 +91,7 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
       columnGrid(ReposicaoProduto::entregueSNome, "Entregue")
-      columnGrid(ReposicaoProduto::recebidoSNome, "Entregue")
+      columnGrid(ReposicaoProduto::recebidoSNome, "Recebido")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
 
@@ -111,32 +114,52 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       )
     }
     this.addAndExpand(gridDetail)
-    update(reposicoes)
+    update(reposicao)
   }
 
   fun produtosSelecionados(): List<ReposicaoProduto> {
     return gridDetail.selectedItems.toList()
   }
 
-  fun update(reposicoesNovas: List<Reposicao>) {
-    val reposicoesFiltradas = reposicoesNovas.filter {nova ->
-      val chave = nova.chave()
-      reposicoes.any { it.chave() == chave }
-    }
-
-    val listProdutosFiltradas = reposicoesFiltradas.flatMap {
-      it.produtosSEP()
-    }
-
-    val listProdutos = reposicoes.flatMap {
-      it.produtosSEP()
-    }
-
-    val listProdutosNovos = listProdutosFiltradas.filter { produto ->
-      listProdutos.any { it.chave() == produto.chave() }
-    }
-
+  fun update(reposicaoNovas: Reposicao) {
+    this.reposicao = reposicaoNovas
+    val listProdutosNovos = reposicao.produtos
     gridDetail.setItems(listProdutosNovos)
+  }
+
+  private fun tentaAssinar() {
+    btnAssina?.isVisible = reposicao.isProntoAssinar()
+    if (reposicao.isProntoAssinar()) {
+      assinaReposicao()
+    }
+  }
+
+  private fun assinaReposicao() {
+    when {
+      reposicao.countNaoEntregue() > 0 -> {
+        assinaEntrega()
+      }
+
+      reposicao.countNaoRecebido() > 0 -> {
+        assinaRecebimento()
+      }
+    }
+  }
+
+  private fun assinaRecebimento() {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Recebido", form = form) {
+      viewModel.recebeReposicao(reposicao, form.numero, form.senha)
+      this.form?.close()
+    }
+  }
+
+  private fun assinaEntrega() {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entregue", form = form) {
+      viewModel.entregaReposicao(reposicao, form.login, form.senha)
+      this.form?.close()
+    }
   }
 
   fun produtosCodigoBarras(codigoBarra: String): ReposicaoProduto? {
@@ -150,7 +173,7 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, private val r
       gridDetail.getColumnBy(ReposicaoProduto::selecionadoOrdemENT).asc,
       gridDetail.getColumnBy(ReposicaoProduto::posicao).desc,
     )
-    update(reposicoes)
+    update(reposicao)
     val index = gridDetail.list().indexOf(produto)
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
