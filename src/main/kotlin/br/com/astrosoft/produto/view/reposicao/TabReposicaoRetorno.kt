@@ -115,6 +115,11 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
 
   override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
+    dlgProduto?.reposicao?.let { rep ->
+      reposicoes.firstOrNull { it.chave() == rep.chave() }?.let {
+        dlgProduto?.update(it)
+      }
+    }
   }
 
   override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
