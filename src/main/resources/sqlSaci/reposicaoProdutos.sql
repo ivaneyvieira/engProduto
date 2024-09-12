@@ -82,7 +82,7 @@ FROM sqldados.eoprd AS E
        INNER JOIN sqldados.prd AS P
                   ON P.no = E.prdno
 WHERE (O.paymno IN (431, 432, 433))
-  AND (O.paymno in (:metodos) OR 0 IN (:metodos))
+  AND (O.paymno = :metodo OR :metodo = 0)
   AND (O.date >= :datacorte)
   AND (O.date >= SUBDATE(CURDATE(), INTERVAL 60 YEAR))
   AND (O.date >= :dataInicial OR :dataInicial = 0)

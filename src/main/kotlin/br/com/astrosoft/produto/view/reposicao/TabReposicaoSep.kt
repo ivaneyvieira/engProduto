@@ -110,7 +110,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      metodos = listOf(EMetodo.REPOSICAO),
+      metodo = EMetodo.REPOSICAO,
     )
   }
 
@@ -132,8 +132,8 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     dlgProduto?.updateProduto(produto)
   }
 
-  override fun produtosSelecionados(): List<ReposicaoProduto> {
-    return dlgProduto?.produtosSelecionados().orEmpty()
+  override fun produtosList(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosList().orEmpty()
   }
 
   override fun isAuthorized(): Boolean {

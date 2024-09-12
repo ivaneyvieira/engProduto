@@ -164,7 +164,7 @@ class ProdutoEstoque(
       dataFinal = null,
       codigo = codigo?.toString() ?: "",
       grade = grade ?: "",
-      metodos = listOf(EMetodo.TODOS),
+      metodo = EMetodo.TODOS,
     )
     return saci.findResposicaoProduto(filtro).mapNotNull { produto ->
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null

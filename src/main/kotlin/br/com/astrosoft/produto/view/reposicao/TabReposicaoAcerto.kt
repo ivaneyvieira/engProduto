@@ -117,7 +117,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       localizacao = listOf("TODOS"),
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      metodos = listOf(EMetodo.ACERTO),
+      metodo = EMetodo.ACERTO,
     )
   }
 

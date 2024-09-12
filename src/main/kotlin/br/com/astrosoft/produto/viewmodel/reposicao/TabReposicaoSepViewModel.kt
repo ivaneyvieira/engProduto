@@ -36,7 +36,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.isSelecionado() }
+    val itens = subView.produtosList().filter { it.isSelecionado() }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -51,7 +51,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaReposicao.ENT.num }
+    val itens = subView.produtosList().filter { it.selecionado == EMarcaReposicao.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
@@ -111,6 +111,6 @@ interface ITabReposicaoSep : ITabView {
   fun filtro(): FiltroReposicao
   fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
-  fun produtosSelecionados(): List<ReposicaoProduto>
+  fun produtosList(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
 }

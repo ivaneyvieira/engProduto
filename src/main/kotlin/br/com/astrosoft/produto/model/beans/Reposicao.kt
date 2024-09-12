@@ -107,7 +107,7 @@ class Reposicao(
           localizacao = listOf("TODOS"),
           codigo = codigo,
           grade = grade,
-          metodos = listOf(EMetodo.TODOS),
+          metodo = EMetodo.TODOS,
         )
       )
       val listLiquido = listBruto.flatMap { repo ->
@@ -117,7 +117,7 @@ class Reposicao(
             pesquisa = "${repo.numero}",
             marca = EMarcaReposicao.ENT,
             localizacao = listOf("TODOS"),
-            metodos = listOf(EMetodo.TODOS),
+            metodo = EMetodo.TODOS,
           )
         )
       }
@@ -158,7 +158,7 @@ data class FiltroReposicao(
   val dataFinal: LocalDate? = null,
   val codigo: String = "",
   val grade: String = "",
-  val metodos: List<EMetodo>,
+  val metodo: EMetodo,
 )
 
 enum class EMarcaReposicao(val num: Int) {

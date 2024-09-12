@@ -117,8 +117,8 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
     update(reposicao)
   }
 
-  fun produtosSelecionados(): List<ReposicaoProduto> {
-    return gridDetail.selectedItems.toList()
+  fun produtosList(): List<ReposicaoProduto> {
+    return gridDetail.dataProvider.fetchAll()
   }
 
   fun update(reposicaoNovas: Reposicao) {

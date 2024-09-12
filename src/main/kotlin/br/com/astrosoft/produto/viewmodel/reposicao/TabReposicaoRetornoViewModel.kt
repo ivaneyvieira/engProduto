@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -21,39 +22,42 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro)
+    val reposicoes = Reposicao.findAll(filtro).filter {
+      it.countSepNaoAssinado() > 0
+    }
     return reposicoes
   }
 
+  fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
+    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    produto.selecionado = EMarcaReposicao.ENT.num
+    produto.salva()
+    subView.updateProduto(produto)
+  }
+
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
+    val itens = subView.produtosList().filter { it.isSelecionado() }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
 
-    subView.assinaProdutos { user ->
-      itens.forEach { produto ->
-        produto.marca = EMarcaReposicao.ENT.num
-        produto.selecionado = EMarcaReposicao.ENT.num
-        produto.qtRecebido = produto.quantidade
-        produto.entregueNo = user.no
-        produto.salva()
-      }
-
-      updateProdutos()
+    itens.forEach { produto ->
+      produto.marca = EMarcaReposicao.ENT.num
+      produto.selecionado = EMarcaReposicao.ENT.num
+      produto.qtRecebido = produto.quantidade
+      produto.salva()
     }
+    updateProdutos()
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
+    val itens = subView.produtosList().filter { it.selecionado == EMarcaReposicao.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
 
     itens.forEach { produto ->
       produto.selecionado = EMarcaReposicao.SEP.num
-      produto.qtRecebido = 0
-      produto.entregueNo = 0
       produto.salva()
     }
     updateProdutos()
@@ -66,10 +70,7 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateProdutos() {
     val reposicoes = reposicoes()
-    val reposicaoDlg = subView.reposicaoDlg()
     subView.updateReposicoes(reposicoes)
-    val reposicaoNova = reposicoes.firstOrNull { it.chave() == reposicaoDlg?.chave() }
-    subView.updateProdutos(reposicaoNova)
   }
 
   fun salva(bean: Reposicao) {
@@ -77,7 +78,19 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun entregueProdutos(login: String, senha: String, marca: (UserSaci) -> Unit) = viewModel.exec {
+  fun recebeReposicao(reposicao: Reposicao, empNo: Int, senha: String) {
+    val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
+
+    if (funcionario.senha != senha) {
+      fail("Senha inválida")
+    }
+
+    reposicao.recebe(funcionario)
+
+    updateView()
+  }
+
+  fun entregaReposicao(reposicao: Reposicao, login: String, senha: String) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -85,7 +98,9 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    marca(user)
+    reposicao.entregue(user)
+
+    updateView()
   }
 
   val subView
@@ -96,9 +111,6 @@ interface ITabReposicaoRetorno : ITabView {
   fun filtro(): FiltroReposicao
   fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
-  fun produtosSelecionados(): List<ReposicaoProduto>
+  fun produtosList(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
-  fun updateProdutos(reposicao: Reposicao?)
-  fun assinaProdutos(marca: (UserSaci) -> Unit)
-  fun reposicaoDlg(): Reposicao?
 }

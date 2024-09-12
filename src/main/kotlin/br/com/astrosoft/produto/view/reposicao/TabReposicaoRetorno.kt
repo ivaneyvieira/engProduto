@@ -96,14 +96,20 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
   }
 
   override fun filtro(): FiltroReposicao {
+    val user = AppConfig.userLogin() as? UserSaci
+    val localizacao = if (user?.admin == true) {
+      listOf("TODOS")
+    } else {
+      user?.localizacaoRepo.orEmpty().toList()
+    }
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.SEP,
-      localizacao = listOf("TODOS"),
+      localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      metodos = listOf(EMetodo.RETORNO),
+      metodo = EMetodo.RETORNO,
     )
   }
 
@@ -120,25 +126,8 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     dlgProduto?.updateProduto(produto)
   }
 
-  override fun produtosSelecionados(): List<ReposicaoProduto> {
-    return dlgProduto?.produtosSelecionados().orEmpty()
-  }
-
-  override fun updateProdutos(reposicao: Reposicao?) {
-    if (reposicao != null) {
-      dlgProduto?.update(reposicao)
-    }
-  }
-
-  override fun assinaProdutos(marca: (UserSaci) -> Unit) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entregueProdutos(form.login, form.senha, marca)
-    }
-  }
-
-  override fun reposicaoDlg(): Reposicao? {
-    return dlgProduto?.reposicao
+  override fun produtosList(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosList().orEmpty()
   }
 
   override fun isAuthorized(): Boolean {

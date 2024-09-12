@@ -149,7 +149,7 @@ class TabReposicaoEnt(
       dataFinal = edtDataFinal.value,
       codigo = codigo,
       grade = grade,
-      metodos = listOf(cmbMetodo.value),
+      metodo = cmbMetodo.value,
     )
   }
 
