@@ -82,7 +82,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    columnGrid(Reposicao::entregueSNome, "Autoriza")
+    columnGrid(Reposicao::recebidoSNome, "Autoriza")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }
 

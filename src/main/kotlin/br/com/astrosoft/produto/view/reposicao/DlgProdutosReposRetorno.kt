@@ -91,8 +91,8 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, var r
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
       columnGrid(ReposicaoProduto::localizacao, "Loc")
-      columnGrid(ReposicaoProduto::entregueSNome, "Entregue")
-      columnGrid(ReposicaoProduto::recebidoSNome, "Recebido")
+      columnGrid(ReposicaoProduto::recebidoSNome, "Entregue")
+      columnGrid(ReposicaoProduto::entregueSNome, "Recebido")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
 
@@ -137,26 +137,25 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, var r
 
   private fun assinaReposicao() {
     when {
-      reposicao.countNaoEntregue() > 0 -> {
-        assinaEntrega()
-      }
-
       reposicao.countNaoRecebido() > 0 -> {
         assinaRecebimento()
+      }
+      reposicao.countNaoEntregue() > 0 -> {
+        assinaEntrega()
       }
     }
   }
 
   private fun assinaRecebimento() {
     val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Recebido", form = form) {
+    DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.recebeReposicao(reposicao, form.numero, form.senha)
     }
   }
 
   private fun assinaEntrega() {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
+    DialogHelper.showForm(caption = "Recebido", form = form) {
       viewModel.entregaReposicao(reposicao, form.login, form.senha)
     }
   }
