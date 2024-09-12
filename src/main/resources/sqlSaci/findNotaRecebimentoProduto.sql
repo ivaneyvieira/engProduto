@@ -95,6 +95,15 @@ WHERE (S.storeno = 4)
   AND (S.grade = :grade OR :grade = 'SEM GRADE')
 GROUP BY S.prdno, S.grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
+CREATE TEMPORARY TABLE T_NOTA_FILE
+(
+  PRIMARY KEY (invno)
+)
+SELECT invno, COUNT(*) AS quant
+FROM sqldados.invAdicionalArquivos
+GROUP BY invno;
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -121,10 +130,13 @@ SELECT I.invno,
        A.validade,
        A.vencimento,
        I.s26               AS usernoRecebe,
-       N.remarks           AS observacaoNota
+       N.remarks           AS observacaoNota,
+       IFNULL(F.quant, 0)  AS quantFile
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
+       LEFT JOIN T_NOTA_FILE AS F
+                 ON F.invno = I.invno
        LEFT JOIN sqldados.iprdAdicional AS A
                  ON A.invno = I.invno
                    AND A.prdno = I.prdno
@@ -175,6 +187,7 @@ SELECT N.storeno                                                   AS loja,
        N.auxLong2                                                  AS cte,
        N.packages                                                  AS volume,
        N.weight                                                    AS peso,
+       N.quantFile                                                 AS quantFile,
   /*Produto*/
        P.no                                                        AS prdno,
        TRIM(P.no)                                                  AS codigo,
@@ -243,6 +256,7 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
+       quantFile,
   /*Produto*/
        prdno,
        codigo,

@@ -26,9 +26,15 @@ class TabRecebidoViewModel(val viewModel: RecebimentoViewModel) {
     return lojas.firstOrNull { it.no == storeno }
   }
 
-  fun addArquivo(nota: NotaRecebimento, title: String, fileName: String, dados: ByteArray) {
-    val invFile =
-        InvFile(seq = null, invno = nota.ni, title = title, date = LocalDate.now(), fileName = fileName, file = dados)
+  fun addArquivo(nota: NotaRecebimento, fileName: String, dados: ByteArray) {
+    val invFile = InvFile(
+      seq = null,
+      invno = nota.ni,
+      title = fileName,
+      date = LocalDate.now(),
+      fileName = fileName,
+      file = dados,
+    )
     invFile.update()
     updateView()
     subView.updateArquivos()

@@ -90,6 +90,9 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
+      this.setPartNameGenerator {
+        if (it.quantFile > 0) "amarelo" else null
+      }
     }
 
     columnGrid(NotaRecebimento::data, header = "Data")

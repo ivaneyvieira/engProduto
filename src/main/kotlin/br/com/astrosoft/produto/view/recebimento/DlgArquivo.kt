@@ -25,8 +25,8 @@ class DlgArquivo(val viewModel: TabRecebidoViewModel, val nota: NotaRecebimento)
       button("Adicionar") {
         this.icon = VaadinIcon.PLUS.create()
         this.addClickListener {
-          val formArquivo = FormArquivo { title, fileName, dados ->
-            viewModel.addArquivo(nota, title, fileName, dados)
+          val formArquivo = FormArquivo {fileName, dados ->
+            viewModel.addArquivo(nota, fileName, dados)
           }
           DialogHelper.showForm("Adicionar arquivo", form = formArquivo) {
             viewModel.updateView()

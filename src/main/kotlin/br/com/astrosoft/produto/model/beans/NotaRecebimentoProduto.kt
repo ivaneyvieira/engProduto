@@ -38,6 +38,7 @@ class NotaRecebimentoProduto(
   var tipoValidade: String?,
   var tempoValidade: Int?,
   var observacaoNota: String?,
+  var quantFile: Int?,
 ) {
   var selecionado: Boolean = false
 

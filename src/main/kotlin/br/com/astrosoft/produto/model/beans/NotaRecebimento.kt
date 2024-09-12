@@ -24,6 +24,7 @@ class NotaRecebimento(
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
   var observacaoNota: String?,
+  var quantFile: Int = 0,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val usuarioLogin: String
@@ -103,6 +104,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.mapNotNull { it.usuarioRecebe }.distinct()
           .joinToString(),
         marcaSelecionada = nota.marcaSelecionada,
+        quantFile = nota.quantFile ?: 0,
         observacaoNota = nota.observacaoNota
       )
     }

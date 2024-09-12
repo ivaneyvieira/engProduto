@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.model.config.AppConfig.title
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -8,29 +9,18 @@ import com.vaadin.flow.component.upload.FileRejectedEvent
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 
-class FormArquivo(val addAnexo: (title: String, fileName: String, dados: ByteArray) -> Unit) : FormLayout() {
-  private val edtTitulo = TextField("Titulo").apply {
-    this.width = "300px"
-  }
-
+class FormArquivo(val addAnexo: (fileName: String, dados: ByteArray) -> Unit) : FormLayout() {
   private val uploadPair = uploadFile()
 
   init {
-    add(edtTitulo)
     val buffer = uploadPair.first
     val upload = uploadPair.second
     upload.addSucceededListener {
       val fileName = it.fileName ?: ""
       val bytes = buffer.inputStream.readBytes()
-      val title = edtTitulo.value ?: ""
-      if(title.isNotBlank() && fileName.isNotBlank() && bytes.isNotEmpty()) {
-        addAnexo(title, fileName, bytes)
-      }else {
-        if(title.isBlank()) {
-          edtTitulo.isInvalid = true
-          edtTitulo.errorMessage = "Informe o titulo"
-          upload.clearFileList()
-        }
+
+      if(fileName.isNotBlank() && bytes.isNotEmpty()) {
+        addAnexo(fileName, bytes)
       }
     }
     add(upload)
