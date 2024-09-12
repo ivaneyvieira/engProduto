@@ -90,6 +90,7 @@ class TabRecebido(val viewModel: TabRecebidoViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
+    }.apply {
       this.setPartNameGenerator {
         if (it.quantFile > 0) "amarelo" else null
       }

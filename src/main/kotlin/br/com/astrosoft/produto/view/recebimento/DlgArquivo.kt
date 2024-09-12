@@ -59,17 +59,17 @@ class DlgArquivo(val viewModel: TabRecebidoViewModel, val nota: NotaRecebimento)
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      columnGrid(InvFile::title, "Titulo"){
-        this.isExpand = true
-      }
-      columnGrid(InvFile::fileName, "Nome do Arquivo")
-      columnGrid(InvFile::date, "Data")
       addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton
         val title = invFile.title ?: return@addColumnButton
         DialogHelper.showFile(title, fileName, file)
       }
+      columnGrid(InvFile::fileName, "Nome do Arquivo"){
+        this.isExpand = true
+      }
+      columnGrid(InvFile::date, "Data")
+      columnGrid(InvFile::filesize, "Tamanho")
     }
     this.addAndExpand(gridDetail)
     update()
