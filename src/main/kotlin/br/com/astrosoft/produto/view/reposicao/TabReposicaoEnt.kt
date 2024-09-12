@@ -108,8 +108,8 @@ class TabReposicaoEnt(
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    columnGrid(Reposicao::entregueSNome, "Entregue")
-    columnGrid(Reposicao::recebidoSNome, "Recebido")
+    columnGrid(Reposicao::entregueSNomeAjuste, "Entregue")
+    columnGrid(Reposicao::recebidoSNomeAjuste, "Recebido")
     if (!filtroProduto()) {
       columnGrid(Reposicao::usuarioApp, "Login")
     }

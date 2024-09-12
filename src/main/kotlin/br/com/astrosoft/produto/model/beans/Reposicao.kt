@@ -20,6 +20,16 @@ class Reposicao(
   var metodo: Int?,
   val produtos: List<ReposicaoProduto>
 ) {
+  val recebidoSNomeAjuste: String = if (metodo == EMetodo.RETORNO.num) {
+    entregueSNome
+  } else {
+    recebidoSNome
+  }
+  val entregueSNomeAjuste: String = if (metodo == EMetodo.RETORNO.num) {
+    recebidoSNome
+  } else {
+    entregueSNome
+  }
   val tipoMetodo: String
     get() = EMetodo.entries.firstOrNull { it.num == metodo }?.descricao ?: ""
 

@@ -29,13 +29,16 @@ class ReposicaoProduto(
   var metodo: Int?,
   var mult: Int?,
 ) {
-  val tipoMetodo: String
-    get() = when (metodo) {
-      431  -> "Reposição"
-      432  -> "Retorno"
-      433  -> "Acerto"
-      else -> ""
-    }
+  val recebidoNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
+    recebidoNome
+  } else {
+    entregueNome
+  }
+  val entregueNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
+    entregueNome
+  } else {
+    recebidoNome
+  }
 
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
 
