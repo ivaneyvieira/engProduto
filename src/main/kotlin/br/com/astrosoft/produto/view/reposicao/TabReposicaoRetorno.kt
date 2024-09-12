@@ -76,6 +76,12 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
       }
     )
 
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido) {
+        viewModel.marcaImpressao(pedido)
+      }
+    }
+
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")

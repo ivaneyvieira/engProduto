@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintReposicao
 import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
@@ -99,6 +100,37 @@ class TabReposicaoRetornoViewModel(val viewModel: ReposicaoViewModel) {
     reposicao.entregue(user)
 
     updateView()
+  }
+
+  fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit) = viewModel.exec {
+    if (pedido.entregueNome.isBlank())
+      fail("Pedido não autorizado")
+
+    if (pedido.recebidoNome.isBlank())
+      fail("Pedido não recebido")
+
+    if (pedido.countSep() > 0) {
+      fail("Pedido com produtos ainda em separação")
+    }
+
+    val produtos = pedido.produtosEnt()
+
+    val relatorio = PrintReposicao()
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ReposicaoProduto::descricao,
+          ReposicaoProduto::codigo,
+          ReposicaoProduto::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+    )
+  }
+
+  fun marcaImpressao(pedido: Reposicao) {
+    pedido.expiraPedido()
   }
 
   val subView

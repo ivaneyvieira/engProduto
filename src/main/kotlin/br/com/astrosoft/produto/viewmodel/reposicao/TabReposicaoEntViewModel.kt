@@ -87,10 +87,6 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido com produtos ainda em separação")
     }
 
-    //if (pedido.countDivergente() > 0) {
-    //  fail("Pedido com quantidade divergente")
-    // }
-
     val produtos = pedido.produtosEnt()
 
     val relatorio = PrintReposicao()
