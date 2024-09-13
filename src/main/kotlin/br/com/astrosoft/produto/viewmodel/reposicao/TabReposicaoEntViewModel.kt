@@ -115,6 +115,10 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
       pedidos.forEach { reposicao ->
         reposicao.produtos.forEach { produto ->
           produto.marca = EMarcaReposicao.SEP.num
+          produto.selecionado = EMarcaReposicao.SEP.num
+          produto.recebidoNo = 0
+          produto.entregueNo = 0
+          produto.recebidoNo = 0
           produto.salva()
         }
       }
