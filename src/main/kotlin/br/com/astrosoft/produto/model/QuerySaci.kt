@@ -1057,6 +1057,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("localizacao", reposicao.localizacao)
       addOptionalParameter("recebidoNo", reposicao.recebidoNo)
       addOptionalParameter("entregueNo", reposicao.entregueNo)
+      addOptionalParameter("finalizadoNo", reposicao.finalizadoNo)
       addOptionalParameter("observacao", reposicao.observacao)
     }
   }
@@ -1073,6 +1074,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("selecionado", reposicaoProduto.selecionado ?: 0)
       addOptionalParameter("posicao", reposicaoProduto.posicao ?: 0)
       addOptionalParameter("recebidoNo", reposicaoProduto.recebidoNo ?: 0)
+      addOptionalParameter("finalizadoNo", reposicaoProduto.finalizadoNo ?: 0)
       addOptionalParameter("entregueNo", reposicaoProduto.entregueNo ?: 0)
     }
   }

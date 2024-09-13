@@ -112,3 +112,15 @@ WHERE marca IS NULL
   AND ordno IN (SELECT ordno
                 FROM sqldados.eord
                 WHERE date >= 20240901);
+
+
+/**************************************************************/
+
+ALTER TABLE sqldados.eoprdAdicional
+  ADD COLUMN empFinalizado INT NULL;
+
+UPDATE sqldados.eoprdAdicional
+SET empFinalizado = empEntregue
+WHERE empFinalizado = 0
+   OR empFinalizado IS NULL;
+

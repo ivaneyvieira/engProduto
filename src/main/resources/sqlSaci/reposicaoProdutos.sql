@@ -38,6 +38,9 @@ SELECT O.storeno                               AS loja,
        IFNULL(EE.no, 0)                        AS entregueNo,
        IFNULL(EE.name, '')                     AS entregueNome,
        IFNULL(EE.login, '')                    AS entregueSNome,
+       IFNULL(EF.no, 0)                        AS finalizadoNo,
+       IFNULL(EF.name, '')                     AS finalizadoNome,
+       IFNULL(EF.login, '')                    AS finalizadoSNome,
        IFNULL(ER.no, 0)                        AS recebidoNo,
        IFNULL(ER.name, '')                     AS recebidoNome,
        IFNULL(ER.sname, '')                    AS recebidoSNome,
@@ -78,6 +81,8 @@ FROM sqldados.eoprd AS E
                    AND B.grade != ''
        LEFT JOIN sqldados.users AS EE
                  ON EE.no = EA.empEntregue
+       LEFT JOIN sqldados.users AS EF
+                 ON EF.no = EA.empFinalizado
        LEFT JOIN sqldados.emp AS ER
                  ON ER.no = EA.empRecebido
        INNER JOIN sqldados.prd AS P

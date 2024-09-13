@@ -16,13 +16,13 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
+    subView.updateReposicoes(reposicoes)
   }
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSep() > 0
+      it.countSepNaoAssinado() > 0
     }
     return reposicoes
   }
@@ -35,7 +35,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun marca() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
+    val itens = subView.produtosList().filter { it.isSelecionado() }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -50,7 +50,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
+    val itens = subView.produtosList().filter { it.selecionado == EMarcaReposicao.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
@@ -69,8 +69,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun updateProdutos() {
     val reposicoes = reposicoes()
-    subView.updateUsuarios(reposicoes)
-    subView.updateProdutos(reposicoes)
+    subView.updateReposicoes(reposicoes)
   }
 
   fun salva(bean: Reposicao) {
@@ -78,11 +77,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
     updateView()
   }
 
-  fun formEntregue(pedido: Reposicao) {
-    subView.formEntregue(pedido)
-  }
-
-  fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
+  fun recebeFinalizacao(reposicao: Reposicao, login: String, senha: String) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -90,7 +85,20 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    pedido.entregue(user)
+    reposicao.finaliza(user)
+
+    updateView()
+  }
+
+  fun entregaReposicao(reposicao: Reposicao, login: String, senha: String) {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    reposicao.entregue(user)
 
     updateView()
   }
@@ -101,10 +109,8 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
 
 interface ITabReposicaoAcerto : ITabView {
   fun filtro(): FiltroReposicao
-  fun updateUsuarios(reposicoes: List<Reposicao>)
+  fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
-  fun produtosSelecionados(): List<ReposicaoProduto>
+  fun produtosList(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
-  fun updateProdutos(reposicoes: List<Reposicao>)
-  fun formEntregue(pedido: Reposicao)
 }

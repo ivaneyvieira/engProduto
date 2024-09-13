@@ -13,6 +13,9 @@ class ReposicaoProduto(
   var entregueNo: Int?,
   var entregueNome: String?,
   var entregueSNome: String?,
+  var finalizadoNo: Int?,
+  var finalizadoNome: String?,
+  var finalizadoSNome: String?,
   var recebidoNo: Int?,
   var recebidoNome: String?,
   var recebidoSNome: String?,
@@ -29,15 +32,24 @@ class ReposicaoProduto(
   var metodo: Int?,
   var multAcerto: Int?,
 ) {
-  val recebidoNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
-    entregueNome
-  } else {
-    recebidoNome
+  val recebidoNomeAjuste: String? = when (metodo) {
+    EMetodo.RETORNO.num -> {
+      entregueNome
+    }
+    EMetodo.ACERTO.num -> {
+      finalizadoNome
+    }
+    else                -> {
+      recebidoNome
+    }
   }
-  val entregueNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
-    recebidoNome
-  } else {
-    entregueNome
+  val entregueNomeAjuste: String? = when (metodo) {
+    EMetodo.RETORNO.num -> {
+      recebidoNome
+    }
+    else                -> {
+      entregueNome
+    }
   }
 
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
@@ -48,7 +60,7 @@ class ReposicaoProduto(
 
   fun isSep() = marca == EMarcaReposicao.SEP.num
 
-  fun isNaoRecebido() = recebidoNo == 0
+  fun isNaoRecebido() = recebidoNo == 0 && finalizadoNo == 0
 
   fun isNaoEntregue() = entregueNo == 0
 

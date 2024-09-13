@@ -14,21 +14,33 @@ class Reposicao(
   var entregueNo: Int,
   var entregueNome: String,
   var entregueSNome: String,
+  var finalizadoNo: Int,
+  var finalizadoNome: String,
+  var finalizadoSNome: String,
   var recebidoNo: Int,
   var recebidoNome: String,
   var recebidoSNome: String,
-  var metodo: Int?,
+  var metodo: Int,
   val produtos: List<ReposicaoProduto>
 ) {
-  val recebidoSNomeAjuste: String = if (metodo == EMetodo.RETORNO.num) {
-    entregueSNome
-  } else {
-    recebidoSNome
+  val recebidoSNomeAjuste: String = when (metodo) {
+    EMetodo.RETORNO.num -> {
+      entregueSNome
+    }
+    EMetodo.ACERTO.num -> {
+      finalizadoSNome
+    }
+    else                -> {
+      recebidoSNome
+    }
   }
-  val entregueSNomeAjuste: String = if (metodo == EMetodo.RETORNO.num) {
-    recebidoSNome
-  } else {
-    entregueSNome
+  val entregueSNomeAjuste: String = when (metodo) {
+    EMetodo.RETORNO.num -> {
+      recebidoSNome
+    }
+    else                -> {
+      entregueSNome
+    }
   }
   val tipoMetodo: String
     get() = EMetodo.entries.firstOrNull { it.num == metodo }?.descricao ?: ""
@@ -80,6 +92,15 @@ class Reposicao(
     this.salva()
     produtos.forEach { produto ->
       produto.entregueNo = user.no
+      produto.salva()
+    }
+  }
+
+  fun finaliza(user: UserSaci) {
+    this.finalizadoNo = user.no
+    this.salva()
+    produtos.forEach { produto ->
+      produto.finalizadoNo = user.no
       produto.salva()
     }
   }
@@ -148,10 +169,13 @@ class Reposicao(
           entregueNo = first?.entregueNo ?: 0,
           entregueNome = first?.entregueNome ?: "",
           entregueSNome = first?.entregueSNome ?: "",
+          finalizadoNo = first?.finalizadoNo ?: 0,
+          finalizadoNome = first?.finalizadoNome ?: "",
+          finalizadoSNome = first?.finalizadoSNome ?: "",
           recebidoNo = first?.recebidoNo ?: 0,
           recebidoNome = first?.recebidoNome ?: "",
           recebidoSNome = first?.recebidoSNome ?: "",
-          metodo = first?.metodo,
+          metodo = first?.metodo ?: 0,
           produtos = produtos
         )
       }

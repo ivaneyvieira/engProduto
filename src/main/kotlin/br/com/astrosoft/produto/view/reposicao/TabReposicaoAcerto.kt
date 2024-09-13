@@ -3,8 +3,6 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showError
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showWarning
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoAcerto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoAcertoViewModel
@@ -78,51 +76,52 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       }
     )
 
-    val user = AppConfig.userLogin() as? UserSaci
-
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc")
-    if (user?.autorizaAcerto == true || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formEntregue(pedido)
-      }
-      columnGrid(Reposicao::entregueSNome, "Autoriza")
-    }
+    columnGrid(Reposicao::entregueSNome, "Conferido")
+    columnGrid(Reposicao::finalizadoSNome, "Finalizado")
+    columnGrid(Reposicao::usuarioApp, "Login")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }
 
   private fun Grid<Reposicao>.columnGridProduto() {
-    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { reposicao ->
-      val userEntregue = reposicao.entregueNo
-      if (userEntregue == 0) {
-        showError("Pedido não assinado")
-      } else {
-        dlgProduto = DlgProdutosReposAcerto(viewModel, listOf(reposicao))
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+    this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+      dlgProduto = DlgProdutosReposAcerto(viewModel, ressuprimento)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
   }
 
   override fun filtro(): FiltroReposicao {
+    val user = AppConfig.userLogin() as? UserSaci
+    val localizacao = if (user?.admin == true) {
+      listOf("TODOS")
+    } else {
+      user?.localizacaoRepo.orEmpty().toList()
+    }
     return FiltroReposicao(
       loja = cmbLoja.value.no,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaReposicao.SEP,
-      localizacao = listOf("TODOS"),
+      localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       metodo = EMetodo.ACERTO,
     )
   }
 
-  override fun updateUsuarios(reposicoes: List<Reposicao>) {
+  override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
+    dlgProduto?.reposicao?.let { rep ->
+      reposicoes.firstOrNull { it.chave() == rep.chave() }?.let {
+        dlgProduto?.update(it)
+      }
+    }
   }
 
   override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
@@ -130,24 +129,15 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
 
+  override fun produtosList(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosList().orEmpty()
+  }
+
   override fun updateProduto(produto: ReposicaoProduto) {
     dlgProduto?.updateProduto(produto)
   }
 
-  override fun produtosSelecionados(): List<ReposicaoProduto> {
-    return dlgProduto?.produtosSelecionados().orEmpty()
-  }
 
-  override fun updateProdutos(reposicoes: List<Reposicao>) {
-    dlgProduto?.update(reposicoes)
-  }
-
-  override fun formEntregue(pedido: Reposicao) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
-      viewModel.entreguePedido(pedido, form.login, form.senha)
-    }
-  }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
