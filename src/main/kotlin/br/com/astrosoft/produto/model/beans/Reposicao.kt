@@ -27,9 +27,11 @@ class Reposicao(
     EMetodo.RETORNO.num -> {
       entregueSNome
     }
-    EMetodo.ACERTO.num -> {
+
+    EMetodo.ACERTO.num  -> {
       finalizadoSNome
     }
+
     else                -> {
       recebidoSNome
     }
@@ -38,6 +40,7 @@ class Reposicao(
     EMetodo.RETORNO.num -> {
       recebidoSNome
     }
+
     else                -> {
       entregueSNome
     }
@@ -69,6 +72,10 @@ class Reposicao(
     rep.isNaoRecebido()
   }
 
+  fun countNaoFinalizado() = produtos.count { rep ->
+    rep.isNaoFinalizado()
+  }
+
   fun countNaoEntregue() = produtos.count { rep ->
     rep.isNaoEntregue()
   }
@@ -82,24 +89,30 @@ class Reposicao(
   }
 
   fun isProntoAssinar(): Boolean {
-    return (countNaoSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+    return if (metodo == EMetodo.ACERTO.num) {
+      (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+    } else {
+      (countNaoSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+    }
   }
 
   fun chave() = "${loja}:${numero}:${localizacao}"
 
-  fun entregue(user: UserSaci) {
+  fun entregue(user: UserSaci, produtosPar: List<ReposicaoProduto> = emptyList()) {
     this.entregueNo = user.no
     this.salva()
-    produtos.forEach { produto ->
+    val produtosList = produtosPar.ifEmpty { produtos }
+    produtosList.forEach { produto ->
       produto.entregueNo = user.no
       produto.salva()
     }
   }
 
-  fun finaliza(user: UserSaci) {
+  fun finaliza(user: UserSaci, produtosPar: List<ReposicaoProduto> = emptyList()) {
     this.finalizadoNo = user.no
     this.salva()
-    produtos.forEach { produto ->
+    val produtosList = produtosPar.ifEmpty { produtos }
+    produtosList.forEach { produto ->
       produto.finalizadoNo = user.no
       produto.salva()
     }

@@ -27,13 +27,6 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
     return reposicoes
   }
 
-  fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
-    val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produto.selecionado = EMarcaReposicao.ENT.num
-    produto.salva()
-    subView.updateProduto(produto)
-  }
-
   fun marca() = viewModel.exec {
     val itens = subView.produtosList().filter { it.isSelecionado() }
     itens.ifEmpty {
@@ -44,19 +37,6 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
       produto.marca = EMarcaReposicao.ENT.num
       produto.selecionado = EMarcaReposicao.ENT.num
       produto.qtRecebido = produto.quantidade
-      produto.salva()
-    }
-    updateProdutos()
-  }
-
-  fun desmarcar() = viewModel.exec {
-    val itens = subView.produtosList().filter { it.selecionado == EMarcaReposicao.ENT.num }
-    itens.ifEmpty {
-      fail("Nenhum produto para desmarcar")
-    }
-
-    itens.forEach { produto ->
-      produto.selecionado = EMarcaReposicao.SEP.num
       produto.salva()
     }
     updateProdutos()
@@ -79,13 +59,16 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
 
   fun recebeFinalizacao(reposicao: Reposicao, login: String, senha: String) {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
 
-    reposicao.finaliza(user)
+    val produtosSelecionado = subView.produtosSelecionado().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    reposicao.finaliza(user, produtosSelecionado)
 
     updateView()
   }
@@ -98,7 +81,11 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    reposicao.entregue(user)
+    val produtosSelecionado = subView.produtosSelecionado().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    reposicao.entregue(user, produtosSelecionado)
 
     updateView()
   }
@@ -112,5 +99,6 @@ interface ITabReposicaoAcerto : ITabView {
   fun updateReposicoes(reposicoes: List<Reposicao>)
   fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto?
   fun produtosList(): List<ReposicaoProduto>
+  fun produtosSelecionado(): List<ReposicaoProduto>
   fun updateProduto(produto: ReposicaoProduto)
 }

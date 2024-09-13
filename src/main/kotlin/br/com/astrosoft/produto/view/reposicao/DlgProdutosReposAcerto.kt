@@ -9,46 +9,18 @@ import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoAcertoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var reposicao: Reposicao) {
-  private var btnAssina: Button? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val reposicaoTitle = "${reposicao.numero}     ${reposicao.data.format()}"
     form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
-            tentaAssinar()
-          }
-        }
-      }
-      button("Entregue") {
-        this.isVisible = false
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onClick {
-          viewModel.marca()
-        }
-      }
-      button("Desmarcar") {
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onClick {
-          viewModel.desmarcar()
-        }
-      }
       button("Assina") {
         icon = VaadinIcon.SIGN_IN.create()
         //this.isVisible = reposicao.isProntoAssinar()
@@ -128,7 +100,6 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
   }
 
   private fun tentaAssinar() {
-    btnAssina?.isVisible = reposicao.isProntoAssinar()
     if (reposicao.isProntoAssinar()) {
       assinaReposicao()
     }
@@ -140,13 +111,13 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
         assinaEntrega()
       }
 
-      reposicao.countNaoRecebido() > 0 -> {
-        assinaRecebimento()
+      reposicao.countNaoFinalizado() > 0 -> {
+        assinaFinalizado()
       }
     }
   }
 
-  private fun assinaRecebimento() {
+  private fun assinaFinalizado() {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Finalizado", form = form) {
       viewModel.recebeFinalizacao(reposicao, form.login, form.senha)
@@ -175,5 +146,9 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
     val index = gridDetail.list().indexOf(produto)
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
+  }
+
+  fun produtosSelecionado(): List<ReposicaoProduto> {
+    return gridDetail.selectedItems.toList()
   }
 }

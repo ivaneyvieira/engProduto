@@ -62,6 +62,8 @@ class ReposicaoProduto(
 
   fun isNaoRecebido() = recebidoNo == 0 && finalizadoNo == 0
 
+  fun isNaoFinalizado() = finalizadoNo == 0
+
   fun isNaoEntregue() = entregueNo == 0
 
   fun isSelecionadoNaoAssinado() = isSelecionado() || isNaoRecebido() || isNaoEntregue()

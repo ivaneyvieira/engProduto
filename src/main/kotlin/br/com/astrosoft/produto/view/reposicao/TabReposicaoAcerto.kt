@@ -133,6 +133,10 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     return dlgProduto?.produtosList().orEmpty()
   }
 
+  override fun produtosSelecionado(): List<ReposicaoProduto> {
+    return dlgProduto?.produtosSelecionado().orEmpty()
+  }
+
   override fun updateProduto(produto: ReposicaoProduto) {
     dlgProduto?.updateProduto(produto)
   }
