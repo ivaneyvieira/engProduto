@@ -110,6 +110,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci", width = "100px")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").textFieldEditor()
+    columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     columnGrid(ProdutoEstoque::fornecedor, header = "For Abr").expand()
   }

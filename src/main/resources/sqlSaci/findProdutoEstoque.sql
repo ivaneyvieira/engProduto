@@ -24,8 +24,6 @@ alter table sqldados.prdAdicional
   MODIFY COLUMN localizacao varchar(20) DEFAULT ''
 */
 
-
-
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa AS
 SELECT S.storeno                                                                               AS loja,
