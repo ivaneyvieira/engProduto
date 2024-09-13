@@ -179,7 +179,7 @@ class ProdutoEstoque(
       val mult = when (produto.metodo) {
         431  -> -1
         432  -> 1
-        433  -> produto.mult ?: 0
+        433  -> produto.multAcerto  ?: 0
         else -> return@mapNotNull null
       }
 

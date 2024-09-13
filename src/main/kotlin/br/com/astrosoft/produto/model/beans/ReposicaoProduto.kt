@@ -27,17 +27,17 @@ class ReposicaoProduto(
   var posicao: Int?,
   var qtEstoque: Int?,
   var metodo: Int?,
-  var mult: Int?,
+  var multAcerto: Int?,
 ) {
   val recebidoNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
-    recebidoNome
-  } else {
     entregueNome
+  } else {
+    recebidoNome
   }
   val entregueNomeAjuste: String? = if (metodo == EMetodo.RETORNO.num) {
-    entregueNome
-  } else {
     recebidoNome
+  } else {
+    entregueNome
   }
 
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"

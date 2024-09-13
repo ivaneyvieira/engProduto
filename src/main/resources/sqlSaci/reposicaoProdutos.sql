@@ -53,11 +53,12 @@ SELECT O.storeno                               AS loja,
        EA.posicao                              AS posicao,
        (S.qtty_atacado + S.qtty_varejo) / 1000 AS qtEstoque,
        O.paymno                                AS metodo,
-       ROUND(CASE
-               WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
-               WHEN R.remarks__480 LIKE 'SAIDA%' THEN -1
-               ELSE 0
-             END)                              AS mult
+       IF(O.paymno = 433,
+          ROUND(CASE
+                  WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
+                  WHEN R.remarks__480 LIKE 'SAIDA%' THEN -1
+                  ELSE 0
+                END), 1)                       AS multAcerto
 FROM sqldados.eoprd AS E
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)

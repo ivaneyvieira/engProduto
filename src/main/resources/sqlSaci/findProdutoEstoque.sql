@@ -20,8 +20,11 @@ add column localizacao varchar(4)
 
 alter table sqldados.prdAdicional
 add column dataInicial int default 0
-
+alter table sqldados.prdAdicional
+  MODIFY COLUMN localizacao varchar(20) DEFAULT '';
 */
+
+
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa AS
