@@ -21,7 +21,7 @@ add column localizacao varchar(4)
 alter table sqldados.prdAdicional
 add column dataInicial int default 0
 alter table sqldados.prdAdicional
-  MODIFY COLUMN localizacao varchar(20) DEFAULT '';
+  MODIFY COLUMN localizacao varchar(20) DEFAULT ''
 */
 
 
