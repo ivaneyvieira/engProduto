@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.produto.model.beans.EMetodo
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 
 class PrintReposicao() :
@@ -36,16 +37,26 @@ class PrintReposicao() :
   }
 
   override fun printSumary(bean: ReposicaoProduto?) {
+    val titlulo01 = if(bean?.metodo == EMetodo.RETORNO.num) {
+      "Conferido"
+    } else {
+      "Separado/Entregue"
+    }
+    val titlulo02 = if(bean?.metodo == EMetodo.RETORNO.num) {
+      "Finalizado"
+    } else {
+      "Recebido"
+    }
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
     writeln(bean?.entregueNomeAjuste ?: "", center = true)
-    writeln("Separado/Entregue", center = true)
+    writeln(titlulo01, center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
     writeln(bean?.recebidoNomeAjuste ?: "", center = true)
-    writeln("Recebido", center = true)
+    writeln(titlulo02, center = true)
     writeln("")
     writeln("")
   }
