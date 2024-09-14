@@ -29,7 +29,7 @@ class Reposicao(
     }
 
     EMetodo.ACERTO.num  -> {
-      finalizadoSNome
+      ""
     }
 
     else                -> {
@@ -39,6 +39,10 @@ class Reposicao(
   val entregueSNomeAjuste: String = when (metodo) {
     EMetodo.RETORNO.num -> {
       recebidoSNome
+    }
+
+    EMetodo.ACERTO.num  -> {
+      ""
     }
 
     else                -> {
