@@ -36,9 +36,11 @@ class ReposicaoProduto(
     EMetodo.RETORNO.num -> {
       entregueNome
     }
-    EMetodo.ACERTO.num -> {
+
+    EMetodo.ACERTO.num  -> {
       finalizadoNome
     }
+
     else                -> {
       recebidoNome
     }
@@ -47,6 +49,7 @@ class ReposicaoProduto(
     EMetodo.RETORNO.num -> {
       recebidoNome
     }
+
     else                -> {
       entregueNome
     }
@@ -60,15 +63,19 @@ class ReposicaoProduto(
 
   fun isSep() = marca == EMarcaReposicao.SEP.num
 
-  fun isNaoRecebido() = recebidoNo == 0 && finalizadoNo == 0
+  fun isNaoRecebido() = recebidoNo == 0
 
   fun isNaoFinalizado() = finalizadoNo == 0
 
   fun isNaoEntregue() = entregueNo == 0
 
-  fun isSelecionadoNaoAssinado() = isSelecionado() || isNaoRecebido() || isNaoEntregue()
+  private fun isNaoAssinado() = if (metodo == EMetodo.ACERTO.num) {
+    isNaoEntregue() || isNaoFinalizado()
+  } else {
+    isNaoEntregue() || isNaoRecebido()
+  }
 
-  fun isSepNaoAssinado() = isSep() || isNaoRecebido() || isNaoEntregue()
+  fun isSepNaoAssinado() = isSep() || isNaoAssinado()
 
   fun isSelecionado() = selecionado == EMarcaReposicao.ENT.num
 

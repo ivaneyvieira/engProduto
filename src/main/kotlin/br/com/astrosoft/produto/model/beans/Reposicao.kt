@@ -60,16 +60,8 @@ class Reposicao(
     !rep.isSelecionado()
   }
 
-  fun countSelecionadoNaoAssinado() = produtos.count { rep ->
-    rep.isSelecionadoNaoAssinado()
-  }
-
   fun countSepNaoAssinado() = produtos.count { rep ->
     rep.isSepNaoAssinado()
-  }
-
-  fun countEnt() = produtos.count { rep ->
-    rep.isEnt()
   }
 
   fun countNaoRecebido() = produtos.count { rep ->
@@ -84,17 +76,12 @@ class Reposicao(
     rep.isNaoEntregue()
   }
 
-  fun countDivergente() = produtos.count { (it.qtRecebido ?: 0) != (it.quantidade ?: 0) }
-
-  fun produtosSep() = produtos.filter { it.isSep() }
   fun produtosEnt() = produtos.filter { it.isEnt() }
-  fun produtosSelecionadoNaoAssinado() = produtos.filter { rep ->
-    rep.isSelecionadoNaoAssinado()
-  }
+
 
   fun isProntoAssinar(): Boolean {
     return if (metodo == EMetodo.ACERTO.num) {
-      (countNaoRecebido() > 0 || countNaoEntregue() > 0)
+      (countNaoRecebido() > 0 || countNaoFinalizado() > 0)
     } else {
       (countNaoSelecionado() == 0) && (countNaoRecebido() > 0 || countNaoEntregue() > 0)
     }

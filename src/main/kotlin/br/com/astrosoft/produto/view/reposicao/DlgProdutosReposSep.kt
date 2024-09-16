@@ -19,7 +19,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao: Reposicao) {
-  private var btnAssina: Button? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -128,7 +127,6 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
   }
 
   private fun tentaAssinar() {
-    btnAssina?.isVisible = reposicao.isProntoAssinar()
     if (reposicao.isProntoAssinar()) {
       assinaReposicao()
     }
