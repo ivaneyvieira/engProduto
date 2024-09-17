@@ -78,7 +78,6 @@ class Reposicao(
 
   fun produtosEnt() = produtos.filter { it.isEnt() }
 
-
   fun isProntoAssinar(): Boolean {
     return if (metodo == EMetodo.ACERTO.num) {
       (countNaoRecebido() > 0 || countNaoFinalizado() > 0)
@@ -120,6 +119,19 @@ class Reposicao(
 
   fun salva() {
     saci.updateReposicao(this)
+    if (metodo == EMetodo.ACERTO.num) {
+      if (this.isAssinado()) {
+        expiraPedido()
+      }
+    }
+  }
+
+  private fun isAssinado(): Boolean {
+    return if (metodo == EMetodo.ACERTO.num) {
+      countNaoRecebido() == 0 && countNaoFinalizado() == 0
+    } else {
+      countNaoRecebido() == 0 && countNaoEntregue() == 0
+    }
   }
 
   fun expiraPedido() {

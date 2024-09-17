@@ -104,3 +104,4 @@ WHERE (O.paymno IN (431, 432, 433))
        IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR
        @PESQUISA = '')
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade
+HAVING multAcerto != 0

@@ -77,11 +77,23 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.entregueNome.isBlank())
-      fail("Pedido não autorizado")
+    if (pedido.countNaoEntregue() > 0) {
+      if (pedido.metodo == EMetodo.ACERTO.num) {
+        fail("Pedido não Conferido")
+      }else {
+        fail("Pedido não Entregue")
+      }
+    }
 
-    if (pedido.recebidoNome.isBlank())
-      fail("Pedido não recebido")
+    if (pedido.metodo == EMetodo.ACERTO.num) {
+      if (pedido.countNaoFinalizado() > 0) {
+        fail("Pedido não Finalizado")
+      }
+    } else {
+      if (pedido.countNaoRecebido() > 0) {
+        fail("Pedido não recebido")
+      }
+    }
 
     if (pedido.countSep() > 0) {
       fail("Pedido com produtos ainda em separação")

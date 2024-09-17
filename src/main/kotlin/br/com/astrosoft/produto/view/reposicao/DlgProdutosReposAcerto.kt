@@ -23,7 +23,6 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
     form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
       button("Assina") {
         icon = VaadinIcon.SIGN_IN.create()
-        //this.isVisible = reposicao.isProntoAssinar()
         onClick {
           tentaAssinar()
         }
