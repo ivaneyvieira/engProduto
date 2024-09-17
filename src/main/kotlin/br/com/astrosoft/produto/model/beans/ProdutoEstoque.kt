@@ -107,7 +107,7 @@ class ProdutoEstoque(
       pesquisa = "",
       notaEntrega = "T",
       prdno = prdno ?: "",
-      grade = grade ?: "",
+      grade = "",
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
       dataFinal = null
@@ -132,11 +132,13 @@ class ProdutoEstoque(
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
 
-      nota.produtos(EMarcaNota.ENT, prdno ?: "", grade ?: "").map { produto ->
+      nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "").filter { produto ->
+        produto.gradeEfetiva == (grade ?: "")
+      }.map { produto ->
         ProdutoKardec(
           loja = nota.loja,
           prdno = prdno ?: "",
-          grade = grade ?: "",
+          grade = produto.gradeEfetiva,
           data = data,
           doc = if (nota.notaEntrega.isNullOrBlank()) "${nota.numero}/${nota.serie}" else nota.notaEntrega ?: "",
           tipo = tipo,
@@ -144,6 +146,7 @@ class ProdutoEstoque(
           saldo = 0,
           userLogin = nota.usuarioSingCD ?: usuario,
         )
+
       }.distinctBy { it.doc }
     }
   }
@@ -179,7 +182,7 @@ class ProdutoEstoque(
       val mult = when (produto.metodo) {
         431  -> -1
         432  -> 1
-        433  -> produto.multAcerto  ?: 0
+        433  -> produto.multAcerto ?: 0
         else -> return@mapNotNull null
       }
 

@@ -41,7 +41,20 @@ class ProdutoNFS(
   var tipoNota: Int?,
   var estoque: Int?,
 ) {
-  var selecionado :Boolean = false
+  val gradeEfetiva: String
+    get() {
+      return if (grade.isNullOrBlank()) {
+        gradeAlternativa ?: ""
+      } else {
+        if (gradeAlternativa.isNullOrBlank()) {
+          grade ?: ""
+        } else {
+          gradeAlternativa ?: ""
+        }
+      }
+    }
+
+  var selecionado: Boolean = false
 
   val espaco: String
     get() = ""
