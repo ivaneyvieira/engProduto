@@ -99,6 +99,8 @@ class NotaSaida(
   }
 }
 
+private val user = AppConfig.userLogin() as? UserSaci
+
 data class FiltroNota(
   val marca: EMarcaNota,
   val tipoNota: ETipoNotaFiscal,
@@ -111,6 +113,8 @@ data class FiltroNota(
   val pesquisa: String,
   val prdno: String = "",
   val grade: String = "",
+  val lojaLocExpedicao: Int = user?.lojaLocExpedicao ?: 0,
+  val localizacaoNota: List<String> = user?.localizacaoNota?.toList() ?: listOf("TODOS"),
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {

@@ -295,14 +295,13 @@ class QuerySaci : QueryDB(database) {
 
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
-    val user = AppConfig.userLogin() as? UserSaci
 
     return query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
-      addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
+      addOptionalParameter("lojaLocal", filtro.lojaLocExpedicao)
+      addOptionalParameter("locais", filtro.localizacaoNota)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
@@ -391,7 +390,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    val user = AppConfig.userLogin() as? UserSaci
+    val user = if(prdno == "") AppConfig.userLogin() as? UserSaci else null
     val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)

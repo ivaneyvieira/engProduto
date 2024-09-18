@@ -110,7 +110,9 @@ class ProdutoEstoque(
       grade = "",
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
-      dataFinal = null
+      dataFinal = null,
+      lojaLocExpedicao = 0,
+      localizacaoNota = listOf("TODOS"),
     )
     val notas = saci.findNotaSaida(filtro = filtro).filter {
       it.cancelada != "S"
@@ -218,8 +220,12 @@ class ProdutoEstoque(
   }
 
   fun acertoEstoque(dataInicial: LocalDate): List<ProdutoKardec> {
-    val list =
-        saci.findAcertoEstoque(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+    val list = saci.findAcertoEstoque(
+      loja = 4,
+      codigo = codigo.toString(),
+      grade = grade ?: "",
+      dataInicial = dataInicial
+    )
     return list.map { saldo ->
       ProdutoKardec(
         loja = saldo.loja,
