@@ -153,7 +153,7 @@ class TabReposicaoEnt(
       dataFinal = edtDataFinal.value,
       codigo = codigo,
       grade = grade,
-      metodo = EMetodo.RETORNO,
+      metodo = EMetodo.REPOSICAO,
     )
   }
 
