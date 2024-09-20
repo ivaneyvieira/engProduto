@@ -21,9 +21,7 @@ class TabReposicaoAcertoViewModel(val viewModel: ReposicaoViewModel) {
 
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = Reposicao.findAll(filtro).filter {
-      it.countSepNaoAssinado() > 0
-    }
+    val reposicoes = Reposicao.findAll(filtro)
     return reposicoes
   }
 

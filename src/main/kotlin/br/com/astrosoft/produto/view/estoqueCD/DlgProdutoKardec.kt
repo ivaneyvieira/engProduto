@@ -55,15 +55,15 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(ProdutoKardec::loja, "Loja")
-      columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::data, "Data")
+      columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::doc, "Doc")
       columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
-      columnGrid(ProdutoKardec::vencimento, "Venc", pattern = "MM/yyyy", width = null)
-      columnGrid(ProdutoKardec::qtde, "Qrd")
+      columnGrid(ProdutoKardec::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
+      columnGrid(ProdutoKardec::qtde, "Qtd")
       columnGrid(ProdutoKardec::saldo, "Saldo")
     }
     this.addAndExpand(gridDetail)

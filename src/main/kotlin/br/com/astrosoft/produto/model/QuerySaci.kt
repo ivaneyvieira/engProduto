@@ -296,7 +296,7 @@ class QuerySaci : QueryDB(database) {
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
     val sql = "/sqlSaci/findNotaSaida.sql"
 
-    return query(sql, NotaSaida::class) {
+    val list = query(sql, NotaSaida::class) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
@@ -309,7 +309,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("notaEntrega", filtro.notaEntrega)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
-    }.filter {
+    }
+
+    val listFilter = list.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
                                        it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
@@ -325,6 +327,8 @@ class QuerySaci : QueryDB(database) {
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
     }
+
+    return listFilter
   }
 
   fun findPedidoVenda(filtro: FiltroPedidoVenda, locais: List<String>): List<PedidoVenda> {
@@ -390,7 +394,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    val user = if(prdno == "") AppConfig.userLogin() as? UserSaci else null
+    val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
     val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)

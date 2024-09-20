@@ -26,7 +26,7 @@ class TabReposicaoEnt(
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  private lateinit var cmbMetodo: Select<EMetodo>
+ // private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -51,6 +51,7 @@ class TabReposicaoEnt(
       }
     }
     init()
+    /*
     cmbMetodo = select("Tipo") {
       val user = AppConfig.userLogin() as? UserSaci
       val tipos = user?.tipoMetodo ?: EMetodo.entries
@@ -63,6 +64,7 @@ class TabReposicaoEnt(
         viewModel.updateView()
       }
     }
+    */
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {
@@ -151,7 +153,7 @@ class TabReposicaoEnt(
       dataFinal = edtDataFinal.value,
       codigo = codigo,
       grade = grade,
-      metodo = cmbMetodo.value,
+      metodo = EMetodo.RETORNO,
     )
   }
 
