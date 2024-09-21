@@ -18,12 +18,15 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.theme.lumo.LumoUtility
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
   private var dlgKardec: DlgProdutoKardec? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtFornecedor: TextField
+  private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
@@ -31,6 +34,9 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtSaldo: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
+    this.addClassNames(
+      LumoUtility.FlexWrap.WRAP
+    )
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -53,6 +59,20 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     edtLocalizacao = textField("Loc App") {
+      this.width = "100px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtFornecedor = textField("Fornecedor") {
+      this.width = "150px"
+      valueChangeMode = ValueChangeMode.TIMEOUT
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtCentroLucro = integerField("C. Lucro") {
       this.width = "100px"
       valueChangeMode = ValueChangeMode.TIMEOUT
       addValueChangeListener {
@@ -132,10 +152,12 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-    columnGrid(ProdutoEstoque::locApp, header = "Loc App")
+    columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").textFieldEditor()
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
+    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
+    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr").expand()
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
   }
 
@@ -147,7 +169,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
-      fornecedor = "",
+      fornecedor = edtFornecedor.value ?: "",
+      centroLucro = edtCentroLucro.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
     )

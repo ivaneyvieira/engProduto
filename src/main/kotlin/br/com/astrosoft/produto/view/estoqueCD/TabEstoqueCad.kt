@@ -91,7 +91,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
 
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
 
     this.withEditor(
       classBean = ProdutoEstoque::class,
