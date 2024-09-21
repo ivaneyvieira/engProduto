@@ -35,7 +35,7 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
     bean.update()
   }
 
-  fun copiaLocalizacao() {
+  fun copiaLocalizacao() = viewModel.exec {
     val itens = subView.itensSelecionados()
     if(itens.isEmpty()) fail("Nenhum item selecionado")
 

@@ -47,10 +47,23 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   fun updateProduto(bean: ProdutoEstoque?) {
     bean?.update()
   }
+
+  fun copiaLocalizacao() = viewModel.exec {
+    val itens = subView.itensSelecionados()
+    if(itens.isEmpty()) fail("Nenhum item selecionado")
+
+    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
+    itens.forEach {item ->
+      item.locApp = primeiro.locApp
+      item.update()
+    }
+    updateView()
+  }
 }
 
 interface ITabEstoqueSaldo : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
   fun updateKardec()
+  fun itensSelecionados(): List<ProdutoEstoque>
 }

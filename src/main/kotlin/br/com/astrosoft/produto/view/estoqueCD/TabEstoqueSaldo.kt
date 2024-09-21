@@ -7,9 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
@@ -89,6 +87,12 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+    this.button("Cópia") {
+      this.icon = VaadinIcon.COPY.create()
+      onClick {
+        viewModel.copiaLocalizacao()
       }
     }
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
