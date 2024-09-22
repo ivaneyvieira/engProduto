@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.saci
+import br.com.astrosoft.produto.model.printText.PrintProdutosEstoque
 import java.time.LocalDate
 
 class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
@@ -58,6 +58,21 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
       item.update()
     }
     updateView()
+  }
+
+  fun imprimeProdutos() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val filtro = subView.filtro()
+
+    val report = PrintProdutosEstoque(filtro)
+
+    report.print(
+      dados = produtos,
+      printer = subView.printerPreview(loja = 0)
+    )
   }
 }
 

@@ -22,6 +22,9 @@ class ProdutoEstoque(
   var saldo: Int?,
   var dataInicial: LocalDate?,
 ) {
+  val codigoStr
+    get() = this.codigo?.toString() ?: ""
+
   fun update() {
     saci.updateProdutoEstoque(this)
   }
@@ -259,4 +262,8 @@ data class FiltroProdutoEstoque(
   val centroLucro: Int = 0,
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
-)
+) {
+  fun lojaSigla(): String {
+    return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
+  }
+}

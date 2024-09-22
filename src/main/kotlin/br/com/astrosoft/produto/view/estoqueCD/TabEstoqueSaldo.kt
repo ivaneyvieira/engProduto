@@ -18,7 +18,6 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.theme.lumo.LumoUtility
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
@@ -34,97 +33,106 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtSaldo: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
-    this.addClassNames(
-      LumoUtility.FlexWrap.WRAP
-    )
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
+    verticalBlock {
+      horizontalLayout {
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtProduto = integerField("Produto") {
+          this.width = "100px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtGrade = textField("Grade") {
+          this.width = "100px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtLocalizacao = textField("Loc App") {
+          this.width = "100px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtFornecedor = textField("Fornecedor") {
+          this.width = "150px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtCentroLucro = integerField("C. Lucro") {
+          this.width = "100px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
-    }
-    edtProduto = integerField("Produto") {
-      this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
+      horizontalLayout {
+        cmbCaracter = select("Caracter") {
+          this.setItems(ECaracter.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = ECaracter.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        cmdEstoque = select("Estoque") {
+          this.setItems(EEstoque.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EEstoque.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtSaldo = integerField("Saldo") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.value = 0
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        this.button("Cópia") {
+          this.icon = VaadinIcon.COPY.create()
+          onClick {
+            viewModel.copiaLocalizacao()
+          }
+        }
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
+          val produtos = itensSelecionados()
+          viewModel.geraPlanilha(produtos)
+        }
+        this.button("Imprimir") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeProdutos()
+          }
+        }
       }
-    }
-    edtGrade = textField("Grade") {
-      this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtLocalizacao = textField("Loc App") {
-      this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtFornecedor = textField("Fornecedor") {
-      this.width = "150px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtCentroLucro = integerField("C. Lucro") {
-      this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    cmbCaracter = select("Caracter") {
-      this.setItems(ECaracter.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = ECaracter.TODOS
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    cmdEstoque = select("Estoque") {
-      this.setItems(EEstoque.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = EEstoque.TODOS
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtSaldo = integerField("Saldo") {
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      this.value = 0
-      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    this.button("Cópia") {
-      this.icon = VaadinIcon.COPY.create()
-      onClick {
-        viewModel.copiaLocalizacao()
-      }
-    }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
-      val produtos = itensSelecionados()
-      viewModel.geraPlanilha(produtos)
     }
   }
 
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
 
     val user = AppConfig.userLogin() as? UserSaci
 

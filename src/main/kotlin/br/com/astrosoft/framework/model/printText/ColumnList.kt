@@ -51,7 +51,10 @@ class ColumnList<T> {
     return itens.joinToString(separator = "") { col ->
       val lineBreak = if (col.lineBreak) "\n" else " "
       val linha = process(col)
-      "$linha$lineBreak"
+      val dados = "$linha$lineBreak"
+      val length = dados.length
+      println(length)
+      dados
     }.trimEnd()
   }
 }
