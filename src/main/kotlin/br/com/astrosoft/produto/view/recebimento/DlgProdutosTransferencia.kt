@@ -66,7 +66,7 @@ class DlgProdutosTransferencia(val viewModel: TabTransferenciaViewModel, val not
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
       this.withEditor(NotaRecebimentoProduto::class,
         openEditor = {

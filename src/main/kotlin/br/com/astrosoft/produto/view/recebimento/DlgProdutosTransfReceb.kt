@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.recebimento
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.produto.model.beans.EMarcaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabTransfRecebViewModel
@@ -36,7 +37,7 @@ class DlgProdutosTransfReceb(val viewModel: TabTransfRecebViewModel, val nota: N
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
@@ -58,7 +59,9 @@ class DlgProdutosTransfReceb(val viewModel: TabTransfRecebViewModel, val nota: N
   }
 
   fun update() {
-    val listProdutos = nota.produtos
+    val listProdutos = nota.produtos.filter {
+      it.marcaEnum == EMarcaRecebimento.RECEBIDO
+    }
     gridDetail.setItems(listProdutos)
   }
 
