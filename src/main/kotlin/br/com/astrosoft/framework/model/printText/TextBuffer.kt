@@ -66,3 +66,4 @@ class TextBuffer {
       .replace(padrao3, "")
   }
 }
+
