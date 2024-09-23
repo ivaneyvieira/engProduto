@@ -165,7 +165,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr").expand()
+    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
   }
 
