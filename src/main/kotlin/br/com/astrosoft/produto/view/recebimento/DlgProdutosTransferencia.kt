@@ -105,6 +105,12 @@ class DlgProdutosTransferencia(val viewModel: TabTransferenciaViewModel, val not
       }
     }
     this.addAndExpand(gridDetail)
+    gridDetail.setPartNameGenerator {
+      when {
+        it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "amarelo"
+        else -> null
+      }
+    }
     update()
   }
 
