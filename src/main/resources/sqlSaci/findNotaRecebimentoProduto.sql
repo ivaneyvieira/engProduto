@@ -74,26 +74,20 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT S.prdno                                                                     AS prdno,
-       S.grade                                                                     AS grade,
-       CAST(MID(COALESCE(A.localizacao, L.localizacao, L2.loc, ''), 1, 4) AS CHAR) AS loc
+SELECT S.prdno                                            AS prdno,
+       S.grade                                            AS grade,
+       CAST(MID(IFNULL(A.localizacao, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.stk AS S
-       INNER JOIN sqldados.prd AS P
-                  ON S.prdno = P.no
-       LEFT JOIN sqldados.prdloc AS L
-                 USING (storeno, prdno, grade)
        LEFT JOIN sqldados.prdAdicional AS A
                  ON A.prdno = S.prdno
                    AND A.grade = S.grade
                    AND A.storeno = S.storeno
                    AND A.localizacao != ''
-       LEFT JOIN T_LOC2 AS L2
-                 ON L2.prdno = S.prdno
-                   AND L2.grade = S.grade
 WHERE (S.storeno = 4)
   AND (S.prdno = :prdno OR :prdno = '')
   AND (S.grade = :grade OR :grade = 'SEM GRADE')
-GROUP BY S.prdno, S.grade;
+GROUP BY S.prdno, S.grade
+HAVING (loc IN (:localizacao) OR 'TODOS' IN (:localizacao));
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
 CREATE TEMPORARY TABLE T_NOTA_FILE
@@ -200,7 +194,7 @@ SELECT N.storeno                                                   AS loja,
           COALESCE(B.barcodeList, TRIM(P.barcode), ''))            AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                                    AS descricao,
        N.grade                                                     AS grade,
-       L.loc                                                       AS localizacao,
+       IFNULL(L.loc, '')                                           AS localizacao,
        P.mfno                                                      AS vendnoProduto,
        ROUND(N.qtty / 1000)                                        AS quant,
        ROUND(E.estoque)                                            AS estoque,
@@ -294,4 +288,3 @@ WHERE (@PESQUISA = '' OR
        volume = @PESQUISA_NUM OR
        tipoValidade LIKE @PESQUISA_LIKE)
   AND (marca = :marca OR :marca = 999)
-  AND (localizacao IN (:localizacao) OR 'TODOS' IN (:localizacao))
