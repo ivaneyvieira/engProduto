@@ -132,7 +132,8 @@ SELECT I.invno,
          WHEN N.type = 1 THEN 'Transferência'
          WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
          ELSE ''
-       END                 AS tipoNota
+       END                 AS tipoNota,
+       selecionado         AS selecionado
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -214,7 +215,8 @@ SELECT N.storeno                                                   AS loja,
        ER.no                                                       AS usernoRecebe,
        ER.login                                                    AS usuarioRecebe,
        observacaoNota                                              AS observacaoNota,
-       tipoNota                                                    AS tipoNota
+       tipoNota                                                    AS tipoNota,
+       selecionado                                                 AS selecionado
 FROM T_NOTA AS N
        LEFT JOIN sqldados.users AS ER
                  ON ER.no = N.usernoRecebe
@@ -274,7 +276,8 @@ SELECT loja,
        tipoValidade,
        tempoValidade,
        observacaoNota,
-       tipoNota
+       tipoNota,
+       selecionado
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR

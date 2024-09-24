@@ -40,9 +40,8 @@ class NotaRecebimentoProduto(
   var observacaoNota: String?,
   var quantFile: Int?,
   var tipoNota: String?,
+  var selecionado: Boolean? = false
 ) {
-  var selecionado: Boolean = false
-
   val validadeStr
     get() = when (validade) {
       null -> ""

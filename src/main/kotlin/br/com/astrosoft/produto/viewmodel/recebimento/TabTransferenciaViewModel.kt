@@ -31,7 +31,9 @@ class TabTransferenciaViewModel(val viewModel: RecebimentoViewModel) {
     val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.validaProduto()
     produto.selecionado = true
+    produto.salva()
     subView.reloadGrid()
+    subView.focusCodigoBarra()
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {

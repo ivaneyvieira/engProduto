@@ -1118,6 +1118,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("validade", notaRecebimentoProduto.validade ?: 0)
       addOptionalParameter("vencimento", notaRecebimentoProduto.vencimento)
       addOptionalParameter("usernoRecebe", notaRecebimentoProduto.usernoRecebe ?: 0)
+      addOptionalParameter("selecionado", notaRecebimentoProduto.selecionado ?: false)
     }
   }
 

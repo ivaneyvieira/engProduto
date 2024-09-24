@@ -37,3 +37,9 @@ WHERE s26 > 0
 UPDATE sqldados.iprd AS I INNER JOIN T_NOTA_RECEBIMENTO AS N USING (invno)
 SET I.s26 = N.s26
 WHERE I.s26 != N.s26;
+
+
+ALTER TABLE sqldados.iprdAdicional
+  ADD selecionado BOOLEAN DEFAULT FALSE;
+
+select * from sqldados.iprdAdicional;

@@ -107,8 +107,8 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
     this.addAndExpand(gridDetail)
     gridDetail.setPartNameGenerator {
       when {
-        it.selecionado -> "amarelo"
         it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "primary"
+        it.selecionado == true -> "amarelo"
         else -> null
       }
     }
@@ -118,7 +118,7 @@ class DlgProdutosReceber(val viewModel: TabReceberViewModel, val nota: NotaReceb
   fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     val user = AppConfig.userLogin() as? UserSaci
     val selecionados = gridDetail.selectedItems.toList()
-    val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado }
+    val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado == true }
     return if (user?.admin == true)
       (selecionados + marcados).distinctBy { "${it.ni} ${it.prdno} ${it.grade}" }
     else

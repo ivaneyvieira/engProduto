@@ -111,7 +111,7 @@ class DlgProdutosDevClientes(val viewModel: TabDevClientesViewModel, val nota: N
   fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     val user = AppConfig.userLogin() as? UserSaci
     val selecionados = gridDetail.selectedItems.toList()
-    val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado }
+    val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado == true }
     return if (user?.admin == true)
       (selecionados + marcados).distinctBy { "${it.ni} ${it.prdno} ${it.grade}" }
     else
