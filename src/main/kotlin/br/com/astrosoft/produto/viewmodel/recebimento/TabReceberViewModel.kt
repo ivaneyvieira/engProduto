@@ -40,6 +40,9 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     if (this.validadeValida != "S") {
       fail("Validade não cadastrada")
     }
+    if (this.localizacao.isNullOrBlank()) {
+      fail("Localização do produto não informada")
+    }
     val numVal = this.validade
     val validade = Validade.findValidade(numVal ?: 0)
     if (validade != null) {
