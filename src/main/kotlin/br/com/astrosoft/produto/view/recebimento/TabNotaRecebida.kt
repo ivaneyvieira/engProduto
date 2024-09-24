@@ -117,6 +117,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     columnGrid(NotaRecebimento::cte, header = "CTe")
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
+    columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
