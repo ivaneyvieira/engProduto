@@ -14,9 +14,7 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro).filter {
-      it.countLocalizacao > 0
-    }
+    val notas = NotaRecebimento.findAll(filtro)
     subView.updateNota(notas)
   }
 
