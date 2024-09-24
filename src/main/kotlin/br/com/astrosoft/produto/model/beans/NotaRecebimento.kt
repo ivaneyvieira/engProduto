@@ -25,6 +25,7 @@ class NotaRecebimento(
   var usuarioRecebe: String?,
   var observacaoNota: String?,
   var quantFile: Int = 0,
+  var tipoNota: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val usuarioLogin: String
@@ -105,7 +106,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
           .joinToString(),
         marcaSelecionada = nota.marcaSelecionada,
         quantFile = nota.quantFile ?: 0,
-        observacaoNota = nota.observacaoNota
+        observacaoNota = nota.observacaoNota,
+        tipoNota = nota.tipoNota,
       )
     }
   }

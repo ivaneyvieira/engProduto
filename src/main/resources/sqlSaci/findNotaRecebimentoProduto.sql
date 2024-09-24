@@ -131,7 +131,14 @@ SELECT I.invno,
        A.vencimento,
        I.s26               AS usernoRecebe,
        N.remarks           AS observacaoNota,
-       IFNULL(F.quant, 0)  AS quantFile
+       IFNULL(F.quant, 0)  AS quantFile,
+       CASE
+         WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02') THEN 'Recebimento'
+         WHEN N.account IN ('2.01.25') THEN 'Devolução'
+         WHEN N.type = 1 THEN 'Transferência'
+         WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
+         ELSE ''
+       END                 AS tipoNota
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
@@ -150,11 +157,8 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND ((:tipoNota IN ('R', 'T') AND
         N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02')) OR
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR
-       (:tipoNota IN ('X', 'T') AND
-        ((N.type = 1) AND (N.remarks REGEXP '([^[:alnum:]]|^)CD[A-Z0-9]{2,3}([^[:alnum:]]|$)'))) OR
-       (:tipoNota IN ('C', 'T') AND
-        (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' AND
-         N.remarks REGEXP '([^[:alnum:]]|^)CD[A-Z0-9]{2,3}([^[:alnum:]]|$)')))
+       (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
+       (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
 GROUP BY I.invno, I.prdno, I.grade;
 
@@ -215,7 +219,8 @@ SELECT N.storeno                                                   AS loja,
        vencimento                                                  AS vencimento,
        ER.no                                                       AS usernoRecebe,
        ER.login                                                    AS usuarioRecebe,
-       observacaoNota                                              AS observacaoNota
+       observacaoNota                                              AS observacaoNota,
+       tipoNota                                                    AS tipoNota
 FROM T_NOTA AS N
        LEFT JOIN sqldados.users AS ER
                  ON ER.no = N.usernoRecebe
@@ -274,7 +279,8 @@ SELECT loja,
        vencimento,
        tipoValidade,
        tempoValidade,
-       observacaoNota
+       observacaoNota,
+       tipoNota
 FROM T_QUERY
 WHERE (@PESQUISA = '' OR
        ni = @PESQUISA_NUM OR

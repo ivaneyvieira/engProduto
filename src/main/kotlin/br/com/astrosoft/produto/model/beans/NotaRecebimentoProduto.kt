@@ -39,6 +39,7 @@ class NotaRecebimentoProduto(
   var tempoValidade: Int?,
   var observacaoNota: String?,
   var quantFile: Int?,
+  var tipoNota: String?,
 ) {
   var selecionado: Boolean = false
 
@@ -92,12 +93,12 @@ data class FiltroNotaRecebimentoProduto(
   val tipoNota: EListaContas
 )
 
-enum class EListaContas(val codigo: String) {
-  RECEBIMENTO(codigo = "R"),
-  DEVOLUCAO(codigo = "D"),
-  TRANSFERENCIA(codigo = "X"),
-  RECLASSIFICA(codigo = "C"),
-  TODOS(codigo = "T"),
+enum class EListaContas(val codigo: String, val descricao: String) {
+  RECEBIMENTO(codigo = "R", "Recebimento"),
+  DEVOLUCAO(codigo = "D", "Devolução"),
+  TRANSFERENCIA(codigo = "X", "Transferência"),
+  RECLASSIFICA(codigo = "C", "Reclassificação"),
+  TODOS(codigo = "T", "Todos"),
 }
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
