@@ -14,7 +14,9 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro)
+    val notas = NotaRecebimento.findAll(filtro).filter {
+      it.countLocalizacao > 0
+    }
     subView.updateNota(notas)
   }
 
@@ -28,10 +30,11 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
   }
 
   fun selecionaProdutos(nota: NotaRecebimento, codigoBarra: String) = viewModel.exec {
-    val produto = nota.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
+    val produto = nota.produtosCodigoBarras(codigoBarra.trim()) ?: fail("Produto não encontrado")
     produto.validaProduto()
     produto.selecionado = true
     subView.reloadGrid()
+    subView.focusCodigoBarra()
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {

@@ -32,6 +32,7 @@ class TabReceberViewModel(val viewModel: RecebimentoViewModel) {
     produto.validaProduto()
     produto.selecionado = true
     subView.reloadGrid()
+    subView.focusCodigoBarra()
   }
 
   private fun NotaRecebimentoProduto.validaProduto() {
