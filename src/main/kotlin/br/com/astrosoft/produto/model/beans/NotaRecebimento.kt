@@ -69,7 +69,7 @@ class NotaRecebimento(
       return saci.findNotaRecebimentoProduto(filtroTodos).toNota().filter { nota ->
         nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
       }.filter {
-        it.countLocalizacao > 0
+        it.countLocalizacao > 0 || filtro.localizacao.contains("TODOS")
       }
     }
   }

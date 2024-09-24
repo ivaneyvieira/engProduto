@@ -56,14 +56,13 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
 
   fun salvaNotaProduto(bean: NotaRecebimentoProduto?) = viewModel.exec {
     bean ?: fail("Produto não encontrado")
-    if(bean.localizacao.isNullOrBlank()) {
+    if (bean.localizacao.isNullOrBlank()) {
       fail("Localização do produto não informada")
     }
     bean.validaProduto()
     bean.salva()
     updateView()
   }
-
 
   fun cadastraValidade() = viewModel.exec {
     val itens = subView.produtosSelecionados()
@@ -110,7 +109,7 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
     if (produtosSelecionados.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-    if(produtosSelecionados.any{it.localizacao.isNullOrBlank()}) {
+    if (produtosSelecionados.any { it.localizacao.isNullOrBlank() }) {
       fail("Localização não informada")
     }
 
