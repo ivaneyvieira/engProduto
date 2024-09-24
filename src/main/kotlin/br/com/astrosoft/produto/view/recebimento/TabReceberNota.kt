@@ -169,6 +169,7 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
     return username?.recebimentoReceberNota == true
   }
 
+
   override val label: String
     get() = "Recebe Nota"
 
