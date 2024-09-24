@@ -112,12 +112,12 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
+    columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
     columnGrid(NotaRecebimento::pedComp, header = "Ped Comp")
     columnGrid(NotaRecebimento::transp, header = "Transp")
     columnGrid(NotaRecebimento::cte, header = "CTe")
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
-    columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
