@@ -24,7 +24,7 @@ import java.time.LocalDate
 class TabTransfReceb(val viewModel: TabTransfRecebViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabTransfReceb {
   private var dlgProduto: DlgProdutosTransfReceb? = null
-  private var dlgArquivo: DlgArquivo? = null
+  private var dlgArquivo: DlgArquivoRecebido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker

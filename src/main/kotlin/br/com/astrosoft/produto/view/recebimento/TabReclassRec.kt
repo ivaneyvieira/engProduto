@@ -24,7 +24,7 @@ import java.time.LocalDate
 class TabReclassRec(val viewModel: TabReclassRecViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabReclassRec {
   private var dlgProduto: DlgProdutosReclassRec? = null
-  private var dlgArquivo: DlgArquivo? = null
+  private var dlgArquivo: DlgArquivoRecebido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker

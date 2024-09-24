@@ -11,6 +11,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
   val tabDevCliRecViewModel = TabDevCliRecViewModel(this)
   val tabTransferenciaViewModel = TabTransferenciaViewModel(this)
   val tabReceberNotaViewModel = TabReceberNotaViewModel(this)
+  val tabNotaRecebidaViewModel = TabNotaRecebidaViewModel(this)
   val tabRecebidoViewModel = TabRecebidoViewModel(this)
   val tabTransfRecebViewModel = TabTransfRecebViewModel(this)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
@@ -18,6 +19,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
 
   override fun listTab() = listOf(
     view.tabReceberNota,
+    view.tabNotaRecebida,
     view.tabReceber,
     view.tabDevClientes,
     view.tabReclassifica,
@@ -41,6 +43,7 @@ interface IRecebimentoView : IView {
   val tabReceberNota: ITabReceberNota
   val tabRecebido: ITabRecebido
   val tabTransfReceb: ITabTransfReceb
+  val tabNotaRecebida: ITabNotaRecebida
   val tabValidadeList: ITabValidadeList
   val tabRecebimentoUsr: ITabRecebimentoUsr
 }

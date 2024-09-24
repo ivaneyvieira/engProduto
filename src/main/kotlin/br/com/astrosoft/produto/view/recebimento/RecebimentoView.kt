@@ -29,6 +29,7 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
   override val tabDevCliRec = TabDevCliRec(viewModel.tabDevCliRecViewModel)
   override val tabTransferencia = TabTransferencia(viewModel.tabTransferenciaViewModel)
   override val tabReceberNota = TabReceberNota(viewModel.tabReceberNotaViewModel)
+  override val tabNotaRecebida = TabNotaRecebida(viewModel.tabNotaRecebidaViewModel)
   override val tabRecebido = TabRecebido(viewModel.tabRecebidoViewModel)
   override val tabTransfReceb = TabTransfReceb(viewModel.tabTransfRecebViewModel)
   override val tabValidadeList = TabValidadeList(viewModel.tabValidadeListViewModel)

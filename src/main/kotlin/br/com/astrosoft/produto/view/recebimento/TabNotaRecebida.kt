@@ -7,8 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabDevCliRec
-import br.com.astrosoft.produto.viewmodel.recebimento.TabDevCliRecViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaRecebida
+import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,14 +21,15 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabDevCliRec {
-  private var dlgProduto: DlgProdutosDevCliRec? = null
-  private var dlgArquivo: DlgArquivoRecebido? = null
+class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
+  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaRecebida {
+  private var dlgProduto: DlgProdutosNotaRecebida? = null
+  private var dlgArquivo: DlgArquivoNotaRecebida? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var edtTipoNota: Select<EListaContas>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -48,6 +49,16 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
       }
     }
     init()
+    edtTipoNota = select("Tipo Nota") {
+      this.setItems(EListaContas.entries)
+      this.value = EListaContas.TODOS
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -77,19 +88,20 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
+    columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosDevCliRec(viewModel, nota)
+      dlgProduto = DlgProdutosNotaRecebida(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
-      //dlgArquivo = DlgArquivo(viewModel, nota)
-      //dlgArquivo?.showDialog {
-      //  viewModel.updateView()
-      //}
+      dlgArquivo = DlgArquivoNotaRecebida(viewModel, nota)
+      dlgArquivo?.showDialog {
+        viewModel.updateView()
+      }
     }
 
     columnGrid(NotaRecebimento::data, header = "Data")
@@ -100,11 +112,7 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
-    columnGrid(NotaRecebimento::pedComp, header = "Ped Comp")
-    columnGrid(NotaRecebimento::transp, header = "Transp")
-    columnGrid(NotaRecebimento::cte, header = "CTe")
-    columnGrid(NotaRecebimento::volume, header = "Volume")
-    columnGrid(NotaRecebimento::peso, header = "Peso")
+    columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
@@ -116,7 +124,7 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
       dataFinal = edtDataFinal.value,
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      tipoNota = EListaContas.DEVOLUCAO
+      tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
     )
   }
 
@@ -133,7 +141,7 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
-    dlgProduto = DlgProdutosDevCliRec(viewModel, nota)
+    dlgProduto = DlgProdutosNotaRecebida(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -141,11 +149,11 @@ class TabDevCliRec(val viewModel: TabDevCliRecViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.recebimentoDevCliRec == true
+    return username?.recebimentoNotaRecebida == true
   }
 
   override val label: String
-    get() = "DevCliRec"
+    get() = "Nota Recebida"
 
   override fun updateComponent() {
     viewModel.updateView()

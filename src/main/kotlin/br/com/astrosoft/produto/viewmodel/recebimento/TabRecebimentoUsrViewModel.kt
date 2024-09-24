@@ -30,6 +30,7 @@ class TabRecebimentoUsrViewModel(val viewModel: RecebimentoViewModel) : TabUsrVi
     this.recebimentoReclassifica = usuario.recebimentoReclassifica
     this.recebimentoReclassRec = usuario.recebimentoReclassRec
     this.recebimentoReceberNota = usuario.recebimentoReceberNota
+    this.recebimentoNotaRecebida = usuario.recebimentoNotaRecebida
   }
 }
 

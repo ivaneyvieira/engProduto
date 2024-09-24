@@ -7,7 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.InvFile
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebidoViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
@@ -15,7 +15,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgArquivo(val viewModel: TabRecebidoViewModel, val nota: NotaRecebimento) {
+class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(InvFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
