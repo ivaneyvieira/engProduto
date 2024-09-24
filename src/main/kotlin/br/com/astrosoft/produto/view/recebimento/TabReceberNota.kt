@@ -119,6 +119,11 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
 
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
+    dlgProduto?.nota?.let { notaDlg ->
+      notas.firstOrNull { it.ni == notaDlg.ni }?.let { notaAtualizada ->
+        dlgProduto?.update(notaAtualizada)
+      }
+    }
   }
 
   override fun updateProduto(): NotaRecebimento? {

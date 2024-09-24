@@ -17,7 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, val nota: NotaRecebimento) {
+class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: NotaRecebimento) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
@@ -127,6 +127,11 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, val nota: N
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
+  }
+
+  fun update(nota: NotaRecebimento) {
+    this.nota = nota
+    update()
   }
 
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {
