@@ -64,6 +64,7 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
     updateView()
   }
 
+
   fun cadastraValidade() = viewModel.exec {
     val itens = subView.produtosSelecionados()
     val user = AppConfig.userLogin() as? UserSaci
