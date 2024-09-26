@@ -7,23 +7,17 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT S.prdno                                               AS prdno,
-       S.grade                                               AS grade,
-       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
-FROM sqldados.stk AS S
-       LEFT JOIN sqldados.prdloc AS L
-                 ON S.storeno = L.storeno
-                   AND S.prdno = L.prdno
-                   AND S.grade = L.grade
-       LEFT JOIN sqldados.prdAdicional AS A
-                 ON S.storeno = A.storeno
-                   AND S.prdno = A.prdno
-                   AND S.grade = A.grade
-                   AND A.localizacao != ''
-WHERE S.storeno = 4
-  AND (S.prdno = :prdno OR :prdno = '')
-  AND (S.grade = :grade OR :grade = '')
-GROUP BY S.storeno, S.prdno, S.grade;
+SELECT A.prdno                  AS prdno,
+       A.grade                  AS grade,
+       MID(A.localizacao, 1, 4) AS localizacao
+FROM sqldados.prdAdicional AS A
+WHERE A.storeno = 4
+  AND A.localizacao != ''
+  AND (A.prdno = LPAD(:prdno, 16, ' ') OR :prdno = '')
+  AND (A.grade = :grade OR :grade = '')
+  AND (MID(A.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+  AND (MID(A.localizacao, 1, 4) IN (:locApp) OR 'TODOS' IN (:locApp))
+GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -219,8 +213,6 @@ FROM T_OPRD AS X
 WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca)
-  AND (L.localizacao IN (:locais) OR 'TODOS' IN (:locais))
-  AND (IFNULL(L.localizacao, '') IN (:locApp) OR 'TODOS' IN (:locApp) OR TRUE)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 
 /*

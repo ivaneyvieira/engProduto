@@ -88,7 +88,7 @@ data class FiltroNotaRecebimentoProduto(
   val invno: Int = 0,
   val localizacao: List<String>,
   val prdno: String = "",
-  val grade: String = "SEM GRADE",
+  val grade: String = "",
   val tipoNota: EListaContas
 )
 
