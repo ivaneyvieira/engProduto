@@ -1,10 +1,10 @@
-package br.com.astrosoft.produto.viewmodel.recebimento
+package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.Validade
 
-class TabValidadeListViewModel(val viewModel: RecebimentoViewModel) {
+class TabValidadeListViewModel(val viewModel: EstoqueCDViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }

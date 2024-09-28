@@ -1,15 +1,14 @@
-package br.com.astrosoft.produto.view.recebimento
+package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.beans.Validade
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabValidadeList
-import br.com.astrosoft.produto.viewmodel.recebimento.TabValidadeListViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabValidadeList
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabValidadeListViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
