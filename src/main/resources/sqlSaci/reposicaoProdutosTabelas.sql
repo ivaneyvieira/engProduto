@@ -40,21 +40,13 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT S.prdno                                               AS prdno,
-       S.grade                                               AS grade,
-       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
-FROM sqldados.stk AS S
-       LEFT JOIN sqldados.prdloc AS L
-                 ON S.storeno = L.storeno
-                   AND S.prdno = L.prdno
-                   AND S.grade = L.grade
-       LEFT JOIN sqldados.prdAdicional AS A
-                 ON S.storeno = A.storeno
-                   AND S.prdno = A.prdno
-                   AND S.grade = A.grade
-                   AND A.localizacao != ''
-WHERE S.storeno = 4
-GROUP BY S.storeno, S.prdno, S.grade;
+SELECT A.prdno                                AS prdno,
+       A.grade                                AS grade,
+       MID(COALESCE(A.localizacao, ''), 1, 4) AS localizacao
+FROM sqldados.prdAdicional AS A
+WHERE A.storeno = 4
+  AND A.localizacao != ''
+GROUP BY A.storeno, A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_PRD;
 CREATE TEMPORARY TABLE T_LOC_PRD

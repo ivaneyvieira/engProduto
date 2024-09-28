@@ -195,15 +195,6 @@ class Pedido(
 
     fun listaPedidoImpressoSemNota(filtro: FiltroPedido): List<Pedido> =
         listaPedido(filtro).filter { it.impressoSemNota }
-
-    fun listaPedidoImpressoSeparar(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.impresso }
-    fun listaPedidoImpressoCarga(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.impressoSemNota }
-    fun listaPedidoImpressoSeparado(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.impresso }
-
-    fun listaPedidoImpressoComNota(filtro: FiltroPedido): List<Pedido> =
-        listaPedido(filtro).filter { it.impressoComNota }
-
-    fun listaPedidoPendente(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.pedidoPendente }
   }
 }
 

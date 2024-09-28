@@ -14,3 +14,5 @@ class TabEstoqueGiroViewModel(viewModel: ProdutoViewModel) :
 }
 
 interface ITabEstoqueGiroViewModel : ITabAbstractProdutoViewModel
+
+//TODO usa localizacao saci

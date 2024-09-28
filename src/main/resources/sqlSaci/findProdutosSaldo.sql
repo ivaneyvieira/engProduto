@@ -11,22 +11,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT S.prdno                                               AS prdno,
-       IF(:grade = 'S', S.grade, '')                         AS gradeProduto,
-       COALESCE(A.localizacao, MID(L.localizacao, 1, 4), '') AS localizacao
-FROM sqldados.stk AS S
-       LEFT JOIN sqldados.prdloc AS L
-                 ON S.storeno = L.storeno
-                   AND S.prdno = L.prdno
-                   AND S.grade = L.grade
-       LEFT JOIN sqldados.prdAdicional AS A
-                 ON S.storeno = A.storeno
-                   AND S.prdno = A.prdno
-                   AND S.grade = A.grade
-                   AND A.localizacao != ''
-WHERE S.storeno = 4
+SELECT A.prdno                       AS prdno,
+       IF(:grade = 'S', A.grade, '') AS gradeProduto,
+       COALESCE(A.localizacao, '')   AS localizacao
+FROM sqldados.prdAdicional AS A
+WHERE A.storeno = 4
+  AND A.localizacao != ''
   AND :update = TRUE
-GROUP BY S.prdno, gradeProduto;
+GROUP BY A.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_REL;
 CREATE TEMPORARY TABLE T_REL
@@ -131,7 +123,7 @@ CREATE TEMPORARY TABLE T_PRDSTK
 )
 SELECT S.loja                   AS loja,
        S.prdno                  AS prdno,
-       P.codigo*1               AS codigo,
+       P.codigo * 1             AS codigo,
        P.descricao              AS descricao,
        S.gradeProduto           AS gradeProduto,
        P.unidade                AS unidade,
@@ -149,7 +141,7 @@ SELECT S.loja                   AS loja,
        mesesGarantia            AS mesesGarantia,
        MID(L.localizacao, 1, 4) AS localizacao,
        R.prdnoRel               AS prdnoRel,
-       TRIM(R.prdnoRel)*1       AS codigoRel
+       TRIM(R.prdnoRel) * 1     AS codigoRel
 FROM T_STK AS S
        LEFT JOIN T_LOC AS L
                  USING (prdno, gradeProduto)

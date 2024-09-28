@@ -19,6 +19,7 @@ WHERE A.storeno = 4
   AND (MID(A.localizacao, 1, 4) IN (:locApp) OR 'TODOS' IN (:locApp))
 GROUP BY A.prdno, A.grade;
 
+
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (

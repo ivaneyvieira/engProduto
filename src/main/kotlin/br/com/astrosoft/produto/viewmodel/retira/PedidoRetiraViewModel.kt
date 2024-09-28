@@ -16,3 +16,4 @@ interface IPedidoRetiraView : IView {
   val tabRetiraImpresso: IPedidoRetiraImpresso
   val tabRetiraUsr: ITabPedidoRetiraUsr
 }
+//TODO: Usa o pedido loc
