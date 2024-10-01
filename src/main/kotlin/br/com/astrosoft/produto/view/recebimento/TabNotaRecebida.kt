@@ -102,6 +102,12 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
+    }.setPartNameGenerator {
+      if(it.quantFile > 0) {
+        "amarelo"
+      } else {
+        ""
+      }
     }
 
     columnGrid(NotaRecebimento::data, header = "Data")
