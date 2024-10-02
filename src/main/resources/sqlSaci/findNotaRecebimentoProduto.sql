@@ -25,15 +25,15 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS               prdno,
-       A.grade AS               grade,
-       MID(A.localizacao, 1, 4) localizacao
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')
   AND A.localizacao != ''
-  AND (MID(A.localizacao, 1, 4) IN (:localizacao) OR 'TODOS' IN (:localizacao))
+  AND (MID(A.localizacao, 1, 4) IN (:local) OR 'TODOS' IN (:local))
 GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
@@ -142,7 +142,7 @@ SELECT N.storeno                                                   AS loja,
           COALESCE(B.barcodeList, TRIM(P.barcode), ''))            AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                                    AS descricao,
        N.grade                                                     AS grade,
-       IFNULL(L.localizacao, '')                                   AS localizacao,
+       IFNULL(L.localizacaoList, '')                               AS localizacao,
        P.mfno                                                      AS vendnoProduto,
        ROUND(N.qtty / 1000)                                        AS quant,
        ROUND(E.estoque)                                            AS estoque,
@@ -169,7 +169,7 @@ FROM T_NOTA AS N
                  ON ER.no = N.usernoRecebe
        LEFT JOIN sqldados.vend AS V
                  ON V.no = N.vendno
-       LEFT JOIN custp AS C
+       LEFT JOIN sqldados.custp AS C
                  ON C.cpf_cgc = V.cgc
        INNER JOIN sqldados.prd AS P
                   ON P.no = N.prdno

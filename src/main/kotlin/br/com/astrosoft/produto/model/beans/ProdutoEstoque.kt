@@ -114,7 +114,6 @@ class ProdutoEstoque(
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
       dataFinal = null,
-      lojaLocExpedicao = 0,
       localizacaoNota = listOf("TODOS"),
     )
     val notas = saci.findNotaSaida(filtro = filtro).filter {

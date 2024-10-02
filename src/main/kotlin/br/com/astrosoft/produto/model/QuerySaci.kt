@@ -300,7 +300,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("lojaLocal", filtro.lojaLocExpedicao)
       addOptionalParameter("locais", filtro.localizacaoNota)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
@@ -456,11 +455,11 @@ class QuerySaci : QueryDB(database) {
     locais: List<String>
   ): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
-    val localList = pedido.localList()
+    //val localList = pedido.localList()
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("locApp", localList)
+      //addOptionalParameter("locApp", localList)
       addOptionalParameter("locais", locais)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
@@ -1092,7 +1091,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("invno", filtro.invno)
-      addOptionalParameter("localizacao", filtro.localizacao)
+      addOptionalParameter("local", filtro.localizacao)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("tipoNota", filtro.tipoNota.codigo)

@@ -1,21 +1,23 @@
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, loc)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                                AS prdno,
-       MID(IFNULL(A.localizacao, ''), 1, 4) AS loc
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
-WHERE (MID(IFNULL(A.localizacao, ''), 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+WHERE (MID(A.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND A.localizacao != ''
   AND (A.storeno = :lojaLocal OR :lojaLocal = 0)
   AND (A.prdno = :prdno OR :prdno = '')
-GROUP BY prdno, loc;
+  AND (A.grade = :grade OR :grade = '')
+GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
-  PRIMARY KEY (codigo, grade, local)
+  PRIMARY KEY (codigo, grade)
 )
 SELECT X.storeno                                                               AS loja,
        pdvno                                                                   AS pdvno,
@@ -45,7 +47,7 @@ SELECT X.storeno                                                               A
        EE.no                                                                   AS usernoExp,
        EE.login                                                                AS usuarioExp,
        X.c5                                                                    AS dataHoraExp,
-       CAST(L.loc AS CHAR)                                                     AS local,
+       CAST(L.localizacaoList AS CHAR)                                         AS local,
        X.c3                                                                    AS usuarioSep,
        EC.no                                                                   AS usernoCD,
        EC.login                                                                AS usuarioCD,
@@ -53,10 +55,11 @@ SELECT X.storeno                                                               A
        N.tipo                                                                  AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)           AS estoque
 FROM sqldados.prd AS P
-       INNER JOIN T_LOC AS L
-                  ON L.prdno = P.no
        INNER JOIN sqldados.xaprd2 AS X
                   ON P.no = X.prdno
+       LEFT JOIN T_LOC AS L
+                 ON L.prdno = X.prdno
+                   AND L.grade = X.grade
        LEFT JOIN sqldados.users AS EC
                  ON EC.no = X.s4
        LEFT JOIN sqldados.users AS EE
@@ -85,7 +88,7 @@ WHERE X.storeno = :storeno
   AND (X.s11 = :marca OR :marca = 999)
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-GROUP BY codigo, grade, local;
+GROUP BY codigo, grade;
 
 SELECT loja,
        pdvno,

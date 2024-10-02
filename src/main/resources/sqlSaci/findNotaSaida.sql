@@ -89,26 +89,18 @@ GROUP BY V.storeno, V.pdvno, V.xano;
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, loc)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                            AS prdno,
-       CAST(MID(IFNULL(A.localizacao, ''), 1, 4) AS CHAR) AS loc
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
-WHERE (CAST(MID(IFNULL(A.localizacao, ''), 1, 4) AS CHAR) IN (:locais) OR 'TODOS' IN (:locais))
+WHERE (MID(A.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND A.localizacao != ''
-  AND (A.storeno = :lojaLocal OR :lojaLocal = 0)
+  AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
-GROUP BY prdno, loc;
-
-
-DROP TEMPORARY TABLE IF EXISTS T_LOCPRD;
-CREATE TEMPORARY TABLE T_LOCPRD
-(
-  PRIMARY KEY (prdno)
-)
-SELECT prdno, CAST(GROUP_CONCAT(loc) AS CHAR) AS locais
-FROM T_LOC
-GROUP BY prdno;
+  AND (A.grade = :grade OR :grade = '')
+GROUP BY prdno, grade;
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
@@ -145,7 +137,7 @@ SELECT N.storeno                                                              AS
        N.empno                                                                AS vendedor,
        TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
        TRIM(E.name)                                                           AS nomeCompletoVendedor,
-       CAST(IFNULL(L.locais, '') AS CHAR)                                     AS locais,
+       CAST(IFNULL(L.localizacaoList, '') AS CHAR)                            AS locais,
        X.c5                                                                   AS usuarioExp,
        X.c4                                                                   AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
@@ -220,7 +212,7 @@ SELECT N.storeno                                                              AS
        GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                            AS usuarioSingCD,
        MAX(EE.no)                                                             AS usernoSingExp,
        GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                            AS usuarioSingExp,
-       MAX(IF(LOCATE('CD5A', L.locais) > 0, IFNULL(X.c3, ''), ''))            AS usuarioSep
+       MAX(IF(LOCATE('CD5A', L.localizacaoList) > 0, IFNULL(X.c3, ''), ''))   AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS PT
                  USING (storeno, pdvno, xano)
@@ -241,8 +233,9 @@ FROM sqldados.nf AS N
        LEFT JOIN T_TIPO AS T
                  ON N.storeno = T.storeno AND
                     N.eordno = T.ordno
-       INNER JOIN T_LOCPRD AS L
-                  ON L.prdno = X.prdno
+       LEFT JOIN T_LOC AS L
+                 ON L.prdno = X.prdno
+                   AND L.grade = X.grade
        LEFT JOIN sqldados.emp AS E
                  ON E.no = N.empno
        LEFT JOIN sqldados.custp AS C

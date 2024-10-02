@@ -18,9 +18,9 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                  AS prdno,
-       A.grade                  AS grade,
-       MID(A.localizacao, 1, 4) AS localizacao
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
@@ -180,7 +180,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       L.localizacao                       AS localizacao,
+       L.localizacaoList                   AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
@@ -248,7 +248,7 @@ WHERE N.date >= @DATA
   AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
-         L.localizacao,
+         L.localizacaoList,
          notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
@@ -257,7 +257,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       L.localizacao                       AS localizacao,
+       L.localizacaoList                   AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
@@ -324,7 +324,7 @@ WHERE N.date >= @DATA
   AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
-         L.localizacao,
+         L.localizacaoList,
          notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;

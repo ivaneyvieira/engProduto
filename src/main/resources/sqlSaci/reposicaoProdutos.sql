@@ -12,21 +12,21 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                AS prdno,
-       A.grade                                AS grade,
-       MID(COALESCE(A.localizacao, ''), 1, 4) AS localizacao
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
   AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
   AND (A.grade = :grade OR :grade = '')
-  AND (MID(COALESCE(A.localizacao, ''), 1, 4) IN (:localizacao) OR 'TODOS' IN (:localizacao))
-GROUP BY A.storeno, A.prdno, A.grade;
+  AND (MID(A.localizacao, 1, 4) IN (:localizacao) OR 'TODOS' IN (:localizacao))
+GROUP BY A.prdno, A.grade;
 
 SELECT O.storeno                               AS loja,
        O.ordno                                 AS numero,
        CAST(O.date AS DATE)                    AS data,
-       IFNULL(L.localizacao, '')               AS localizacao,
+       IFNULL(L.localizacaoList, '')           AS localizacao,
        IFNULL(OA.observacao, '')               AS observacao,
        IFNULL(EE.no, 0)                        AS entregueNo,
        IFNULL(EE.name, '')                     AS entregueNome,
@@ -65,9 +65,14 @@ FROM sqldados.eoprd AS E
        LEFT JOIN T_LOC AS L
                  USING (prdno, grade)
        LEFT JOIN sqldados.eordAdicional AS OA
-                 USING (storeno, ordno, localizacao)
+                 ON OA.storeno = O.storeno
+                   AND OA.ordno = O.ordno
+                   AND OA.localizacao != ''
+                   AND LOCATE(OA.localizacao, L.localizacaoList) > 0
        LEFT JOIN sqldados.stk AS S
-                 USING (storeno, prdno, grade)
+                 ON S.prdno = E.prdno
+                   AND S.grade = E.grade
+                   AND S.storeno = E.storeno
        LEFT JOIN sqldados.prdbar AS B
                  ON B.prdno = E.prdno
                    AND B.grade = E.grade
@@ -90,7 +95,7 @@ WHERE (O.paymno IN (431, 432, 433))
   AND (E.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
   AND (E.grade = :grade OR :grade = '')
   AND (O.ordno = @PESQUISA_NUM OR
-       IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
+       IFNULL(L.localizacaoList, '') LIKE @PESQUISA_START OR
        IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR
        IFNULL(EE.name, '') LIKE @PESQUISA_LIKE OR
        IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR

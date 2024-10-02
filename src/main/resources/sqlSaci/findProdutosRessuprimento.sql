@@ -7,18 +7,16 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                  AS prdno,
-       A.grade                  AS grade,
-       MID(A.localizacao, 1, 4) AS localizacao
+SELECT A.prdno                                                    AS prdno,
+       A.grade                                                    AS grade,
+       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
   AND (A.prdno = LPAD(:prdno, 16, ' ') OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')
   AND (MID(A.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
-  AND (MID(A.localizacao, 1, 4) IN (:locApp) OR 'TODOS' IN (:locApp))
 GROUP BY A.prdno, A.grade;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -169,7 +167,7 @@ SELECT X.ordno                                                  AS ordno,
        X.auxShort4                                              AS marca,
        X.auxShort3                                              AS selecionado,
        X.auxLong4                                               AS posicao,
-       L.localizacao                                            AS localizacao,
+       L.localizacaoList                                        AS localizacao,
        ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000)  AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                           AS codigoCorrecao,
        TRIM(MID(PR.name, 1, 37))                                AS descricaoCorrecao,
