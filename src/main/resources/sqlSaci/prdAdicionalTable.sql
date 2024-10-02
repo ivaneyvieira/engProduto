@@ -1,12 +1,13 @@
-select * from sqldados.prdAdicional
-where localizacao is null;
+SELECT *
+FROM sqldados.prdAdicional
+WHERE localizacao IS NULL;
 
 UPDATE sqldados.prdAdicional
 SET localizacao = ''
 WHERE localizacao IS NULL;
 
-alter table sqldados.prdAdicional
-  drop primary key;
+ALTER TABLE sqldados.prdAdicional
+  DROP PRIMARY KEY;
 
-alter table sqldados.prdAdicional
-  add primary key(storeno, prdno, grade, localizacao);
+ALTER TABLE sqldados.prdAdicional
+  ADD PRIMARY KEY (storeno, prdno, grade, localizacao);
