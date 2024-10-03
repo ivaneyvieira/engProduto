@@ -22,16 +22,8 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
-      button("Adicionar") {
-        this.icon = VaadinIcon.PLUS.create()
-        this.addClickListener {
-          val formArquivo = FormArquivo {fileName, dados ->
-            viewModel.addArquivo(nota, fileName, dados)
-          }
-          DialogHelper.showForm("Adicionar arquivo", form = formArquivo) {
-            viewModel.updateView()
-          }
-        }
+      this.upload("Adicionar") { fileName, dados ->
+        viewModel.addArquivo(nota, fileName, dados)
       }
       button("Remover") {
         this.icon = VaadinIcon.TRASH.create()
@@ -65,7 +57,7 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
         val title = invFile.title ?: return@addColumnButton
         DialogHelper.showFile(title, fileName, file)
       }
-      columnGrid(InvFile::fileName, "Nome do Arquivo"){
+      columnGrid(InvFile::fileName, "Nome do Arquivo") {
         this.isExpand = true
       }
       columnGrid(InvFile::date, "Data")

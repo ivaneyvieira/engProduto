@@ -33,6 +33,7 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
   fun updateProduto(bean: ProdutoEstoque?) = viewModel.exec{
     bean ?: fail("Produto não informado")
     bean.update()
+    updateView()
   }
 
   fun copiaLocalizacao() = viewModel.exec {

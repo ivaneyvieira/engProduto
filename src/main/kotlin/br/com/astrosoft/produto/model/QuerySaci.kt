@@ -993,13 +993,17 @@ class QuerySaci : QueryDB(database) {
   fun updateProdutoEstoque(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoEstoque.sql"
 
-    script(sql) {
-      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
-      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
-      addOptionalParameter("grade", produtoEstoque.grade ?: "")
-      addOptionalParameter("estoque", produtoEstoque.estoque ?: 0)
-      addOptionalParameter("locApp", produtoEstoque.locApp)
-      addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
+    val localList = produtoEstoque.locApp?.split(",").orEmpty().map { it.trim() }.distinct()
+
+    localList.forEach { localItem ->
+      script(sql) {
+        addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+        addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+        addOptionalParameter("grade", produtoEstoque.grade ?: "")
+        addOptionalParameter("estoque", produtoEstoque.estoque ?: 0)
+        addOptionalParameter("locApp", localItem)
+        addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
+      }
     }
   }
 

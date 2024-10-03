@@ -24,8 +24,35 @@ alter table sqldados.prdAdicional
   MODIFY COLUMN localizacao varchar(20) DEFAULT ''
 */
 
+DROP TEMPORARY TABLE IF EXISTS T_LOC_SACI;
+CREATE TEMPORARY TABLE T_LOC_SACI
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT storeno, prdno, grade, GROUP_CONCAT(DISTINCT MID(localizacao, 1, 4) ORDER BY 1) AS locSaci
+FROM sqldados.prdloc
+WHERE localizacao <> ''
+  AND storeno = 4
+GROUP BY storeno, prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
+CREATE TEMPORARY TABLE T_LOC_APP
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT storeno,
+       prdno,
+       grade,
+       GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locApp,
+       MAX(dataInicial)                              AS dataInicial,
+       MAX(estoque)                                  AS estoque
+FROM sqldados.prdAdicional
+WHERE localizacao <> ''
+  AND storeno = 4
+GROUP BY storeno, prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
-CREATE TEMPORARY TABLE temp_pesquisa AS
+CREATE TEMPORARY TABLE temp_pesquisa
 SELECT S.storeno                                                                               AS loja,
        P.no                                                                                    AS prdno,
        TRIM(P.no) * 1                                                                          AS codigo,
@@ -35,8 +62,8 @@ SELECT S.storeno                                                                
        ROUND(P.qttyPackClosed / 1000)                                                          AS embalagem,
        TRUNCATE(ROUND((S.qtty_atacado + S.qtty_varejo) / 1000) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                                    AS estoque,
-       MID(L1.localizacao, 1, 4)                                                               AS locSaci,
-       A.localizacao                                                                           AS locApp,
+       MID(L1.locSaci, 1, 4)                                                                   AS locSaci,
+       A.locApp                                                                                AS locApp,
        V.no                                                                                    AS codForn,
        V.sname                                                                                 AS fornecedor,
        ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                                          AS saldo,
@@ -46,11 +73,12 @@ FROM sqldados.stk AS S
                   ON S.prdno = P.no
        LEFT JOIN sqldados.vend AS V
                  ON V.no = P.mfno
-       LEFT JOIN sqldados.prdAdicional AS A
+       LEFT JOIN T_LOC_APP AS A
                  USING (storeno, prdno, grade)
-       LEFT JOIN sqldados.prdloc AS L1
+       LEFT JOIN T_LOC_SACI AS L1
                  USING (storeno, prdno, grade)
 WHERE (S.storeno = :loja OR :loja = 0)
+  AND S.storeno = 4
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND (TRIM(S.prdno) * 1 = :codigo OR :codigo = 0)
   AND CASE :caracter
@@ -60,7 +88,7 @@ WHERE (S.storeno = :loja OR :loja = 0)
         ELSE FALSE
       END
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
-GROUP BY S.storeno, S.prdno, S.grade, MID(L1.localizacao, 1, 4)
+GROUP BY S.storeno, S.prdno, S.grade
 HAVING CASE :estoque
          WHEN '>' THEN saldo > :saldo
          WHEN '<' THEN saldo < :saldo
@@ -96,4 +124,4 @@ WHERE (
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))
-GROUP BY codigo, grade, locApp
+

@@ -10,4 +10,4 @@ ALTER TABLE sqldados.prdAdicional
   DROP PRIMARY KEY;
 
 ALTER TABLE sqldados.prdAdicional
-  ADD PRIMARY KEY (storeno, prdno, grade, localizacao);
+  ADD PRIMARY KEY (storeno, prdno, grade);

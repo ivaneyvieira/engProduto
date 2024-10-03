@@ -22,16 +22,8 @@ class DlgArquivoRecebido(val viewModel: TabRecebidoViewModel, val nota: NotaRece
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
-      button("Adicionar") {
-        this.icon = VaadinIcon.PLUS.create()
-        this.addClickListener {
-          val formArquivo = FormArquivo {fileName, dados ->
-            viewModel.addArquivo(nota, fileName, dados)
-          }
-          DialogHelper.showForm("Adicionar arquivo", form = formArquivo) {
-            viewModel.updateView()
-          }
-        }
+      this.upload("Adicionar") { fileName, dados ->
+        viewModel.addArquivo(nota, fileName, dados)
       }
       button("Remover") {
         this.icon = VaadinIcon.TRASH.create()
