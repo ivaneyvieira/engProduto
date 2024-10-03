@@ -38,6 +38,9 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
 
     subView.formAutoriza(itens) { userno ->
       itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
+        if (produtoNF.local.isNullOrBlank()) {
+          fail("Produto sem localização")
+        }
         produtoNF.marca = EMarcaNota.CD.num
         produtoNF.usernoExp = userno
         produtoNF.usernoCD = 0

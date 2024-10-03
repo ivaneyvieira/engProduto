@@ -27,6 +27,9 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     }
 
     itens.forEach { produto ->
+      if (produto.localizacao.isNullOrBlank()) {
+        fail("Produto sem localização")
+      }
       produto.marca = EMarcaRessuprimento.ENT.num
       produto.selecionado = EMarcaRessuprimento.ENT.num
       produto.qtRecebido = produto.qtQuantNF ?: produto.qtPedido ?: 0
@@ -38,6 +41,9 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.selecionado = EMarcaRessuprimento.ENT.num
+    if (produto.localizacao.isNullOrBlank()) {
+      fail("Produto sem localização")
+    }
     produto.salva()
     subView.updateProduto(produto)
   }
