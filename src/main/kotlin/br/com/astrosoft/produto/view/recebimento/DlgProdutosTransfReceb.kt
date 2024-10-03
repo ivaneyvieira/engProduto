@@ -43,7 +43,7 @@ class DlgProdutosTransfReceb(val viewModel: TabTransfRecebViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade")
-      columnGrid(NotaRecebimentoProduto::localizacao, "Loc")
+      columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
       columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")

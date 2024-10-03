@@ -60,7 +60,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
-      columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::localizacao, "Loc App")
       columnGrid(ReposicaoProduto::entregueSNome, "Conferido")
       columnGrid(ReposicaoProduto::finalizadoSNome, "Finalizado")
       columnGrid(ReposicaoProduto::quantidade, "Quant")

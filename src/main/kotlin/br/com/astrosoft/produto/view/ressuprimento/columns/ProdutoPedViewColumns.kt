@@ -32,7 +32,7 @@ object ProdutoRessuViewColumns {
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() =
       columnGrid(ProdutoRessuprimento::localizacao) {
-        this.setHeader("Loc")
+        this.setHeader("Loc App")
       }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVencimento() =

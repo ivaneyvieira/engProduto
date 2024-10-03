@@ -87,7 +87,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
-    columnGrid(Reposicao::localizacao, "Loc")
+    columnGrid(Reposicao::localizacao, "Loc App")
     columnGrid(Reposicao::recebidoSNome, "Entregue")
     columnGrid(Reposicao::entregueSNome, "Recebido")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()

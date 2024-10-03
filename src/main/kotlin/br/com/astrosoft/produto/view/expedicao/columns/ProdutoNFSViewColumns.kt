@@ -18,7 +18,7 @@ object ProdutoNFNFSViewColumns {
   }
 
   fun Grid<ProdutoNFS>.produtoNFLocalizacao() = columnGrid(ProdutoNFS::local) {
-    this.setHeader("Loc")
+    this.setHeader("Loc App")
   }
 
   fun Grid<ProdutoNFS>.produtoNFBarcode() = columnGrid(ProdutoNFS::barcodeStrList) {

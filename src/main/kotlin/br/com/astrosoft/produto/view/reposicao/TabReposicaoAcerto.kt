@@ -81,7 +81,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
-    columnGrid(Reposicao::localizacao, "Loc")
+    columnGrid(Reposicao::localizacao, "Loc App")
     columnGrid(Reposicao::entregueSNome, "Conferido")
     columnGrid(Reposicao::finalizadoSNome, "Finalizado")
     columnGrid(Reposicao::usuarioApp, "Login")

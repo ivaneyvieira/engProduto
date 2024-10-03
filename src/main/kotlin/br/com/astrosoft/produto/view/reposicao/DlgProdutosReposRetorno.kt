@@ -90,7 +90,7 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, var r
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
-      columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::localizacao, "Loc App")
       columnGrid(ReposicaoProduto::recebidoSNome, "Entregue")
       columnGrid(ReposicaoProduto::entregueSNome, "Recebido")
       columnGrid(ReposicaoProduto::quantidade, "Quant")

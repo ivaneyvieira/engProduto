@@ -65,7 +65,7 @@ class DlgProdutosReposEnt(
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
-      columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::localizacao, "Loc App")
       columnGrid(ReposicaoProduto::entregueSNome, "Autoriza")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtRecebido, "Recebido").integerFieldEditor()

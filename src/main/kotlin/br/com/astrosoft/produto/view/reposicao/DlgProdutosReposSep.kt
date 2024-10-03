@@ -88,7 +88,7 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
       columnGrid(ReposicaoProduto::grade, "Grade")
-      columnGrid(ReposicaoProduto::localizacao, "Loc")
+      columnGrid(ReposicaoProduto::localizacao, "Loc App")
       columnGrid(ReposicaoProduto::entregueSNome, "Entregue")
       columnGrid(ReposicaoProduto::recebidoSNome, "Recebido")
       columnGrid(ReposicaoProduto::quantidade, "Quant")

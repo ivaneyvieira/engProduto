@@ -109,7 +109,7 @@ class TabReposicaoEnt(
     columnGrid(Reposicao::numero, "Pedido")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
-    columnGrid(Reposicao::localizacao, "Loc")
+    columnGrid(Reposicao::localizacao, "Loc App")
     columnGrid(Reposicao::entregueSNomeAjuste, "Entregue")
     columnGrid(Reposicao::recebidoSNomeAjuste, "Recebido")
     columnGrid(Reposicao::entregueSNome, "Conferido")
