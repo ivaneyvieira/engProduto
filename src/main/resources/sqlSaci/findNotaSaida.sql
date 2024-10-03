@@ -95,7 +95,7 @@ SELECT A.prdno                                                    AS prdno,
        A.grade                                                    AS grade,
        GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
-WHERE ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao != ''))
+WHERE ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')

@@ -401,7 +401,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", marca.num)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
-      addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
+      addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
     produtos.forEach {

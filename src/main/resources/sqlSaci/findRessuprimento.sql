@@ -25,7 +25,7 @@ FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
   AND (A.grade = :grade OR :grade = '')
-  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao != ''))
+  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
 GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
