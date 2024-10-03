@@ -23,10 +23,9 @@ SELECT A.prdno                                                    AS prdno,
        GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
-  AND A.localizacao != ''
   AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
   AND (A.grade = :grade OR :grade = '')
-  AND (MID(A.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
+  AND (MID(A.localizacao, 1, 4) IN (:local) OR 'TODOS' IN (:local) OR A.localizacao != '')
 GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
@@ -224,7 +223,7 @@ FROM sqldados.ords AS N
                    AND X.storeno = NF.storeno
                    AND X.prdno = NF.prdno
                    AND X.grade = NF.grade
-       LEFT JOIN T_LOC AS L
+       INNER JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
        LEFT JOIN sqldados.users AS SU

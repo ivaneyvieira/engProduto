@@ -32,8 +32,7 @@ FROM sqldados.prdAdicional AS A
 WHERE (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')
-  AND A.localizacao != ''
-  AND (MID(A.localizacao, 1, 4) IN (:local) OR 'TODOS' IN (:local))
+  AND (MID(A.localizacao, 1, 4) IN (:local) OR 'TODOS' IN (:local) OR A.localizacao != '')
 GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
@@ -176,9 +175,9 @@ FROM T_NOTA AS N
        LEFT JOIN T_BARCODE AS B
                  ON B.prdno = N.prdno
                    AND B.grade = N.grade
-       LEFT JOIN T_LOC AS L
-                 ON L.prdno = N.prdno
-                   AND L.grade = N.grade
+       INNER JOIN T_LOC AS L
+                  ON L.prdno = N.prdno
+                    AND L.grade = N.grade
        LEFT JOIN T_EST AS E
                  ON E.prdno = N.prdno
                    AND E.grade = N.grade

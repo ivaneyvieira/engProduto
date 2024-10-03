@@ -17,10 +17,9 @@ SELECT A.prdno                                                    AS prdno,
        GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
-  AND A.localizacao != ''
   AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
   AND (A.grade = :grade OR :grade = '')
-  AND (MID(A.localizacao, 1, 4) IN (:localizacao) OR 'TODOS' IN (:localizacao))
+  AND (MID(A.localizacao, 1, 4) IN (:local) OR 'TODOS' IN (:local) OR A.localizacao != '')
 GROUP BY A.prdno, A.grade;
 
 SELECT O.storeno                               AS loja,
@@ -56,14 +55,14 @@ SELECT O.storeno                               AS loja,
                   ELSE 0
                 END), 1)                       AS multAcerto
 FROM sqldados.eoprd AS E
+       INNER JOIN T_LOC AS L
+                 USING (prdno, grade)
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)
        INNER JOIN sqldados.eord AS O
                   USING (storeno, ordno)
        LEFT JOIN sqldados.eordrk AS R
                  USING (storeno, ordno)
-       LEFT JOIN T_LOC AS L
-                 USING (prdno, grade)
        LEFT JOIN sqldados.eordAdicional AS OA
                  ON OA.storeno = O.storeno
                    AND OA.ordno = O.ordno

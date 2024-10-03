@@ -300,7 +300,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("locais", filtro.localizacaoNota)
+      addOptionalParameter("local", filtro.localizacaoNota)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
@@ -380,7 +380,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("temNota", filtro.temNota.codigo)
       addOptionalParameter("ordno", filtro.numero)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("locais", locais)
+      addOptionalParameter("local", locais)
       addOptionalParameter("lojaRessu", filtro.lojaRessu)
       addOptionalParameter("dataPedidoInicial", filtro.dataPedidoInicial.toSaciDate())
       addOptionalParameter("dataPedidoFinal", filtro.dataPedidoFinal.toSaciDate())
@@ -402,7 +402,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
       addOptionalParameter("lojaLocal", user?.lojaLocExpedicao ?: 0)
-      addOptionalParameter("locais", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
+      addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
     produtos.forEach {
       println(it.local)
@@ -421,7 +421,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", prd.codigo.lpad(16, " "))
       addOptionalParameter("grade", prd.grade)
       addOptionalParameter("lojaLocal", 0)
-      addOptionalParameter("locais", listOf("TODOS"))
+      addOptionalParameter("local", listOf("TODOS"))
     }
     produtos.forEach {
       println(it.local)
@@ -460,7 +460,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("ordno", pedido.numero)
       addOptionalParameter("marca", marca.num)
       //addOptionalParameter("locApp", localList)
-      addOptionalParameter("locais", locais)
+      addOptionalParameter("local", locais)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
     }
@@ -1046,7 +1046,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ReposicaoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("localizacao", filtro.localizacao)
+      addOptionalParameter("local", filtro.localizacao)
       addOptionalParameter("datacorte", datacorte)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
