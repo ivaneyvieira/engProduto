@@ -261,6 +261,7 @@ data class FiltroProdutoEstoque(
   val centroLucro: Int = 0,
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
+  val inativo: EInativo,
 ) {
   fun lojaSigla(): String {
     return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""

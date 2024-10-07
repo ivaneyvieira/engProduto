@@ -78,6 +78,11 @@ FROM sqldados.stk AS S
        LEFT JOIN T_LOC_SACI AS L1
                  USING (storeno, prdno, grade)
 WHERE (S.storeno = :loja OR :loja = 0)
+  AND (
+  ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
+  ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
+  (:inativo = 'T')
+  )
   AND S.storeno = 4
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND (TRIM(S.prdno) * 1 = :codigo OR :codigo = 0)

@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.ECaracter
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueCad
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueCadViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -29,6 +26,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var edtFornecedor: TextField
   private lateinit var edtCodigo: IntegerField
+  private lateinit var cmbInativo: Select<EInativo>
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -72,6 +70,16 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         item.descricao
       }
       this.value = ECaracter.TODOS
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbInativo = select("Inativo") {
+      this.setItems(EInativo.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EInativo.TODOS
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -124,6 +132,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = edtFornecedor.value ?: "",
+      inativo = cmbInativo.value ?: EInativo.TODOS
     )
   }
 

@@ -8,10 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.produto.model.beans.ECaracter
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueMov
@@ -34,6 +31,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
+  private lateinit var cmbInativo: Select<EInativo>
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -70,6 +68,16 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
         item.descricao
       }
       this.value = ECaracter.TODOS
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbInativo = select("Inativo") {
+      this.setItems(EInativo.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EInativo.TODOS
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -131,6 +139,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = "",
+      inativo = cmbInativo.value ?: EInativo.TODOS
     )
   }
 

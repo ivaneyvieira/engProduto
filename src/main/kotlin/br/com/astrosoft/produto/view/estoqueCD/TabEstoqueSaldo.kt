@@ -28,6 +28,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
+  private lateinit var cmbInativo: Select<EInativo>
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
@@ -85,6 +86,16 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             item.descricao
           }
           this.value = ECaracter.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        cmbInativo = select("Inativo") {
+          this.setItems(EInativo.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EInativo.TODOS
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -181,6 +192,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       centroLucro = edtCentroLucro.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
+      inativo = cmbInativo.value ?: EInativo.TODOS
     )
   }
 
