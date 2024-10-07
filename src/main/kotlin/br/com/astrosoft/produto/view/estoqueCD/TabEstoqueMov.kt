@@ -143,6 +143,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
     )
   }
 
+
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
   }
