@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
@@ -7,9 +8,12 @@ import br.com.astrosoft.produto.model.beans.EMarcaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: NotaRecebimento) {
@@ -19,6 +23,15 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     val numeroNota = nota.nfEntrada ?: ""
 
     form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
+      val user = AppConfig.userLogin()
+      if (user?.admin == true) {
+        this.button("Volta") {
+          this.icon = VaadinIcon.ARROW_LEFT.create()
+          this.onClick {
+            viewModel.voltar()
+          }
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -69,5 +82,11 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     return gridDetail.dataProvider.fetchAll().firstOrNull { prd ->
       prd.containBarcode(codigoBarra)
     }
+  }
+
+  fun updateProduto(): NotaRecebimento? {
+    val nota = nota.refreshProdutos()
+    update()
+    return nota
   }
 }

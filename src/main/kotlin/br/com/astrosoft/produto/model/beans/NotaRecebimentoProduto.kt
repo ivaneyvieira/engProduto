@@ -72,6 +72,12 @@ class NotaRecebimentoProduto(
     salva()
   }
 
+  fun devolver() {
+    this.usernoRecebe = 0
+    this.marcaEnum = EMarcaRecebimento.RECEBER
+    salva()
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
       return saci.findNotaRecebimentoProduto(filtro)

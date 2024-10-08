@@ -151,6 +151,14 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 
+  override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+    return this.dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun updateProduto(): NotaRecebimento? {
+    return dlgProduto?.updateProduto()
+  }
+
   fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosNotaRecebida(viewModel, nota)
     dlgProduto?.showDialog {
