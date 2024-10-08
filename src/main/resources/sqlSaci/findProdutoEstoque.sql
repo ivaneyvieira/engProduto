@@ -29,7 +29,7 @@ CREATE TEMPORARY TABLE T_LOC_SACI
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT storeno, prdno, grade, GROUP_CONCAT(DISTINCT MID(localizacao, 1, 4) ORDER BY 1) AS locSaci
+SELECT storeno, prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
 FROM sqldados.prdloc
 WHERE localizacao <> ''
   AND storeno = 4
@@ -62,7 +62,7 @@ SELECT S.storeno                                                                
        ROUND(P.qttyPackClosed / 1000)                                                          AS embalagem,
        TRUNCATE(ROUND((S.qtty_atacado + S.qtty_varejo) / 1000) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                                    AS estoque,
-       MID(L1.locSaci, 1, 4)                                                                   AS locSaci,
+       L1.locSaci                                                                              AS locSaci,
        A.locApp                                                                                AS locApp,
        V.no                                                                                    AS codForn,
        V.sname                                                                                 AS fornecedor,
