@@ -20,7 +20,7 @@ class ReportImpresso : ReportBuild<EntradaDevCli>() {
     columnReport(EntradaDevCli::notaFiscal, header = "NF Dev", aligment = CENTER)
     columnReport(EntradaDevCli::data, header = "Data", aligment = CENTER)
     columnReport(EntradaDevCli::valor, header = "Valor Dev")
-    columnReport(EntradaDevCli::observacao02, header = "Tipo", aligment = CENTER, width = 70)
+    columnReport(EntradaDevCli::tipoObs, header = "Tipo", aligment = CENTER, width = 70)
     columnReport(EntradaDevCli::nfVenda, header = "NF Venda", aligment = CENTER)
     columnReport(EntradaDevCli::nfData, header = "Data", aligment = CENTER)
     columnReport(EntradaDevCli::custno, header = "Cód Cli", aligment = RIGHT)

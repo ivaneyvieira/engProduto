@@ -15,40 +15,44 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
 
   private fun tituloValeTroca() {
     when {
-      nota.observacao02.contains("TROCA")      -> {
+      nota.tipoObs.contains("TROCA")      -> {
         writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("ENTREGA")    -> {
+      nota.tipoObs.contains("ENTREGA")    -> {
         writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("RETIRA")     -> {
+      nota.tipoObs.contains("RETIRA")     -> {
         writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("REEMBOLSO")  -> {
+      nota.tipoObs.contains("REEMBOLSO")  -> {
         writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("MUDA NF")    -> {
+      nota.tipoObs.contains("GARANTIA")  -> {
+        writeln("Vale Credito: GARANTIA", negrito = true, center = true, expand = true)
+      }
+
+      nota.tipoObs.contains("MUDA NF")    -> {
         writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("MUDA")       -> {
+      nota.tipoObs.contains("MUDA")       -> {
         writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
-      nota.observacao02.contains("EST CARTAO") -> {
+      nota.tipoObs.contains("EST CARTAO") -> {
         writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("EST BOLETO") -> {
+      nota.tipoObs.contains("EST BOLETO") -> {
         writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
       }
 
-      nota.observacao02.contains("EST DEP")    -> {
+      nota.tipoObs.contains("EST DEP")    -> {
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }
@@ -83,11 +87,11 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
-    if(autorizacao.isBlank()) {
+    if (autorizacao.isBlank()) {
       writeln("_______________________________  _______________________________")
       writeln("            Gerencia                           Caixa")
-    }else{
-      val len = ("_______________________________  ".length - autorizacao.length) /2
+    } else {
+      val len = ("_______________________________  ".length - autorizacao.length) / 2
       val str = " ".repeat(len)
 
       writeln("_______________________________  _______________________________")

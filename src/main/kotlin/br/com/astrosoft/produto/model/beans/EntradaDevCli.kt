@@ -45,13 +45,13 @@ class EntradaDevCli(
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
 
-  val observacao01: String
+  val observacao: String
     get() {
       val parte1 = remarks?.split(")")?.getOrNull(0) ?: return ""
       return "$parte1)"
     }
 
-  val observacao02: String
+  val tipoObs: String
     get() {
       val parte2 = remarks?.split(")")?.getOrNull(1) ?: return ""
       return parte2.trim()
@@ -73,7 +73,7 @@ class EntradaDevCli(
           invno = invno,
           custnoDev = custno ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
-          tipo = this.observacao02,
+          tipo = this.tipoObs,
           notaDev = this,
           saldo = valor ?: 0.00
         )
@@ -87,7 +87,7 @@ class EntradaDevCli(
           invno = invno,
           custnoDev = custno,
           custnoMuda = mudaCliente,
-          tipo = this.observacao02,
+          tipo = this.tipoObs,
           saldo = valor ?: 0.00
         )
         saci.marcaMudaCliente(saldoDevolucao)
@@ -116,6 +116,7 @@ class EntradaDevCli(
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
            remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
            remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||
+           remarks?.contains("GARANTIA", ignoreCase = true) == true ||
            remarks?.contains("EST DEP", ignoreCase = true) == true
   }
 
