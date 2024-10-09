@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model
 
+import br.com.astrosoft.devolucao.model.beans.Agenda
+import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
@@ -1440,6 +1442,14 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("codigo", codigo)
       addOptionalParameter("grade", grade)
       addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+    }
+  }
+
+  fun listaAgenda(filtro: FiltroAgenda): List<Agenda> {
+    val sql = "/sqlSaci/listaAgenda.sql"
+    return query(sql, Agenda::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("filtro", filtro.pesquisa)
     }
   }
 

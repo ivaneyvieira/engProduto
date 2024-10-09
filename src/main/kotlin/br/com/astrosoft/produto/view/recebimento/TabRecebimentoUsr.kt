@@ -12,52 +12,21 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(viewModel), ITabRecebimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::recebimentoAgenda, "Pré-entrada")
     columnGrid(UserSaci::recebimentoReceberNota, "ReceberNota")
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
-    columnGrid(UserSaci::recebimentoReceber, "Receber")
-    columnGrid(UserSaci::recebimentoRecebido, "Recebido")
-    columnGrid(UserSaci::recebimentoDevClientes, "Dev Clientes")
-    columnGrid(UserSaci::recebimentoDevCliRec, "Dev Cli Rec")
-    columnGrid(UserSaci::recebimentoTransferencia, "Transferência")
-    columnGrid(UserSaci::recebimentoTransfReceb, "Transf. Receb.")
-    columnGrid(UserSaci::recebimentoReclassifica, "Reclassifica")
-    columnGrid(UserSaci::recebimentoReclassRec, "Reclass. Rec")
   }
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menu") {
+      checkBox("Agenda") {
+        binder.bind(this, UserSaci::recebimentoAgenda.name)
+      }
       checkBox("Receber Nota") {
         binder.bind(this, UserSaci::recebimentoReceberNota.name)
       }
       checkBox("Nota Recebida") {
         binder.bind(this, UserSaci::recebimentoNotaRecebida.name)
-      }
-      checkBox("Receber") {
-        binder.bind(this, UserSaci::recebimentoReceber.name)
-      }
-      checkBox("Recebido") {
-        binder.bind(this, UserSaci::recebimentoRecebido.name)
-      }
-      checkBox("Dev Clientes") {
-        binder.bind(this, UserSaci::recebimentoDevClientes.name)
-      }
-      checkBox("Dev Cli Rec") {
-        binder.bind(this, UserSaci::recebimentoDevCliRec.name)
-      }
-      checkBox("Transferência") {
-        binder.bind(this, UserSaci::recebimentoTransferencia.name)
-      }
-      checkBox("Transf. Receb.") {
-        binder.bind(this, UserSaci::recebimentoTransfReceb.name)
-      }
-      checkBox("Cadastra Validade") {
-        binder.bind(this, UserSaci::recebimentoCadastraValidade.name)
-      }
-      checkBox("Reclassifica") {
-        binder.bind(this, UserSaci::recebimentoReclassifica.name)
-      }
-      checkBox("Reclass. Rec") {
-        binder.bind(this, UserSaci::recebimentoReclassRec.name)
       }
     }
     verticalBlock("Filtros") {
