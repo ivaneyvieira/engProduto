@@ -22,7 +22,7 @@ class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCap
     val numeroNota: Int = pedido.pedido
     val loja = pedido.loja
 
-    form = SubWindowForm("Produtos do pedido $numeroNota LOJA: $loja", toolBar = {
+    form = SubWindowForm("Produtos do pedido $numeroNota Loja: $loja", toolBar = {
     }, onClose = {
       onClose()
     }) {

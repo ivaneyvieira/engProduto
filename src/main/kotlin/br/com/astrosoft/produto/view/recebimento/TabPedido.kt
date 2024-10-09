@@ -96,6 +96,9 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "400px")
     columnGrid(PedidoCapa::totalProduto, "Total Pedido")
     columnGrid(PedidoCapa::totalProdutoPendente, "Total Pendente")
+    columnGrid(PedidoCapa::dataEmissao, "Emissão")
+    columnGrid(PedidoCapa::dataEntrada, "Entrada")
+    columnGrid(PedidoCapa::nfEntrada, "NF", width = "100px")
   }
 
   override fun filtro(): FiltroPedidoCapa {

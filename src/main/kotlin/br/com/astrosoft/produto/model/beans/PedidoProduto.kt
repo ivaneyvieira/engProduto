@@ -9,6 +9,10 @@ class PedidoProduto {
   var status: Int = 0
   var no: Int = 0
   var fornecedor: String = ""
+  var invno: Int? = null
+  var dataEmissao: LocalDate? = null
+  var dataEntrada: LocalDate? = null
+  var nfEntrada: String? = null
   var total: Double = 0.0
   var codigo: String = ""
   var prdno: String = ""
