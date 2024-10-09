@@ -10,11 +10,13 @@ data class PedidoCapa(
   val status: Int,
   val no: Int,
   val fornecedor: String,
-  val total: Double,
+  var totalProduto: Double,
+  var totalProdutoPendente: Double,
   val produtos: List<PedidoProduto>,
 ) {
   val statusPedido: String
     get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
+
   companion object {
     fun findPedidoCapa(filtro: FiltroPedidoCapa): List<PedidoCapa> {
       val produtos = saci.findPedidoProduto(filtro)
@@ -36,7 +38,8 @@ fun List<PedidoProduto>.toPedidoCapa(): List<PedidoCapa> {
         status = pedidoCapa?.status ?: 0,
         no = pedidoCapa?.no ?: 0,
         fornecedor = pedidoCapa?.fornecedor ?: "",
-        total = pedidoCapa?.total ?: 0.0,
+        totalProduto = list.sumOf { it.totalProduto },
+        totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
         produtos = list
       )
     }

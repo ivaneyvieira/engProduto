@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
@@ -12,6 +13,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
@@ -20,6 +22,7 @@ import java.time.LocalDate
 
 class TabPedido(val viewModel: TabPedidoViewModel) :
   TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
+  private var dlgProduto: DlgProdutosPedido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbStatus: Select<EPedidosStatus>
   private lateinit var edtPesquisa: TextField
@@ -81,11 +84,18 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   override fun Grid<PedidoCapa>.gridPanel() {
     columnGrid(PedidoCapa::loja, "Loja")
     columnGrid(PedidoCapa::pedido, "Pedido")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
+      dlgProduto = DlgProdutosPedido(viewModel, pedido)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     columnGrid(PedidoCapa::data, "Data")
     columnGrid(PedidoCapa::statusPedido, "Situação")
     columnGrid(PedidoCapa::no, "No")
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "400px")
-    columnGrid(PedidoCapa::total, "Total")
+    columnGrid(PedidoCapa::totalProduto, "Total Pedido")
+    columnGrid(PedidoCapa::totalProdutoPendente, "Total Pendente")
   }
 
   override fun filtro(): FiltroPedidoCapa {
