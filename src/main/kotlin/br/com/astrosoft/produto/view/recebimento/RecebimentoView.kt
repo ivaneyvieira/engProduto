@@ -22,6 +22,7 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
     return userSaci.recebimento
   }
 
+  override val tabPedido = TabPedido(viewModel.tabPedidoViewModel)
   override val tabAgenda = TabAgenda(viewModel.tabAgendaViewModel)
   override val tabReceber = TabReceber(viewModel.tabReceberViewModel)
   override val tabDevClientes = TabDevClientes(viewModel.tabDevClientesViewModel)

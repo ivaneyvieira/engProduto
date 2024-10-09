@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabValidadeListViewModel
 
 class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>(view) {
+  val tabPedidoViewModel = TabPedidoViewModel(this)
   val tabAgendaViewModel = TabAgendaViewModel(this)
   val tabReceberViewModel = TabReceberViewModel(this)
   val tabDevClientesViewModel = TabDevClientesViewModel(this)
@@ -19,6 +20,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
   val tabRecebimentoUsrViewModel = TabRecebimentoUsrViewModel(this)
 
   override fun listTab() = listOf(
+    view.tabPedido,
     view.tabAgenda,
     view.tabReceberNota,
     view.tabNotaRecebida,
@@ -35,6 +37,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
 }
 
 interface IRecebimentoView : IView {
+  val tabPedido: ITabPedido
   val tabAgenda: ITabAgenda
   val tabReceber: ITabReceber
   val tabReclassifica: ITabReclassifica

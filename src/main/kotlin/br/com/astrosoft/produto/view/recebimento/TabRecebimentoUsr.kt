@@ -12,6 +12,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(viewModel), ITabRecebimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::recebimentoPedido, "Pedidos")
     columnGrid(UserSaci::recebimentoAgenda, "Pré-entrada")
     columnGrid(UserSaci::recebimentoReceberNota, "ReceberNota")
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
@@ -19,6 +20,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menu") {
+      checkBox("Pedidos") {
+        binder.bind(this, UserSaci::recebimentoPedido.name)
+      }
       checkBox("Agenda") {
         binder.bind(this, UserSaci::recebimentoAgenda.name)
       }
