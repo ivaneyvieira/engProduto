@@ -1,11 +1,17 @@
 SET SQL_MODE = '';
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO @PESQUISA_START := CONCAT(:pesquisa, '%');
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
+
 SELECT O.storeno                        AS loja,
        O.no                             AS pedido,
        CAST(O.date AS DATE)             AS data,
+       O.status                         AS status,
        O.vendno                         AS no,
        V.name                           AS fornecedor,
-       O.amt / 2                        AS total,
+       O.amtOrigem / 100                AS total,
        TRIM(I.prdno)                    AS codigo,
        I.prdno                          AS prdno,
        TRIM(MID(P.name, 1, 37))         AS descricao,
@@ -24,4 +30,10 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
+  AND I.status != 2
+  AND (I.status = :status OR :status = 999)
+HAVING pedido = @PESQUISA_NUM
+    OR fornecedor LIKE @PESQUISA
+    OR no = @PESQUISA_NUM
+    OR @PESQUISA = ''
 ORDER BY O.storeno, O.no

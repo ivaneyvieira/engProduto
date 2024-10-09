@@ -6,6 +6,7 @@ class PedidoProduto {
   var loja: Int = 0
   var pedido: Int = 0
   var data: LocalDate? = null
+  var status: Int = 0
   var no: Int = 0
   var fornecedor: String = ""
   var total: Double = 0.0

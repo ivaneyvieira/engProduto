@@ -1458,6 +1458,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, PedidoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("status", filtro.status.cod)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
