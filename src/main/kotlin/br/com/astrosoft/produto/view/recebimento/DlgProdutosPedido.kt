@@ -46,8 +46,6 @@ class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCap
       columnGrid(PedidoProduto::grade, "Grade")
       columnGrid(PedidoProduto::qtty, "Qtde Pedido")
       columnGrid(PedidoProduto::qttyPendente, "Qtde Pendente")
-      columnGrid(PedidoProduto::totalProduto, "Total Pedido")
-      columnGrid(PedidoProduto::totalProdutoPendente, "Total Pendente")
     }
     this.addAndExpand(gridDetail)
     update()
