@@ -30,7 +30,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
     //view.tabDevCliRec,
     //view.tabReclassRec,
     //view.tabTransfReceb,
-    //view.tabRecebimentoUsr,
+    view.tabRecebimentoUsr,
   )
 }
 
