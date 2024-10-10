@@ -237,3 +237,4 @@ WHERE (@PESQUISA = '' OR
        volume = @PESQUISA_NUM OR
        tipoValidade LIKE @PESQUISA_LIKE)
   AND (marca = :marca OR :marca = 999)
+  AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))

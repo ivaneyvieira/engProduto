@@ -24,16 +24,18 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
 
   override val tabPedido = TabPedido(viewModel.tabPedidoViewModel)
   override val tabAgenda = TabAgenda(viewModel.tabAgendaViewModel)
-  override val tabReceber = TabReceber(viewModel.tabReceberViewModel)
-  override val tabDevClientes = TabDevClientes(viewModel.tabDevClientesViewModel)
-  override val tabReclassifica = TabReclassifica(viewModel.tabReclassificaViewModel)
-  override val tabReclassRec = TabReclassRec(viewModel.tabReclassRecViewModel)
-  override val tabDevCliRec = TabDevCliRec(viewModel.tabDevCliRecViewModel)
-  override val tabTransferencia = TabTransferencia(viewModel.tabTransferenciaViewModel)
+
+  //override val tabReceber = TabReceber(viewModel.tabReceberViewModel)
+  //override val tabDevClientes = TabDevClientes(viewModel.tabDevClientesViewModel)
+  //override val tabReclassifica = TabReclassifica(viewModel.tabReclassificaViewModel)
+  //override val tabReclassRec = TabReclassRec(viewModel.tabReclassRecViewModel)
+  //override val tabDevCliRec = TabDevCliRec(viewModel.tabDevCliRecViewModel)
+  //override val tabTransferencia = TabTransferencia(viewModel.tabTransferenciaViewModel)
   override val tabReceberNota = TabReceberNota(viewModel.tabReceberNotaViewModel)
   override val tabNotaRecebida = TabNotaRecebida(viewModel.tabNotaRecebidaViewModel)
-  override val tabRecebido = TabRecebido(viewModel.tabRecebidoViewModel)
-  override val tabTransfReceb = TabTransfReceb(viewModel.tabTransfRecebViewModel)
+
+  //override val tabRecebido = TabRecebido(viewModel.tabRecebidoViewModel)
+  //override val tabTransfReceb = TabTransfReceb(viewModel.tabTransfRecebViewModel)
   override val tabRecebimentoUsr = TabRecebimentoUsr(viewModel.tabRecebimentoUsrViewModel)
 
   init {

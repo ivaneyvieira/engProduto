@@ -30,6 +30,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtTipoNota: Select<EListaContas>
+  private lateinit var edtTemAnexo: Select<ETemAnexo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -52,6 +53,16 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     edtTipoNota = select("Tipo Nota") {
       this.setItems(EListaContas.entries)
       this.value = EListaContas.TODOS
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtTemAnexo = select("Tem Anexo") {
+      this.setItems(ETemAnexo.entries)
+      this.value = ETemAnexo.TODOS
       this.setItemLabelGenerator {
         it.descricao
       }
@@ -136,6 +147,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       dataInicial = edtDataInicial.value,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
       tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
+      temAnexo = edtTemAnexo.value ?: ETemAnexo.TODOS,
     )
   }
 

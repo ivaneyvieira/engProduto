@@ -95,8 +95,15 @@ data class FiltroNotaRecebimentoProduto(
   val localizacao: List<String>,
   val prdno: String = "",
   val grade: String = "",
-  val tipoNota: EListaContas
+  val tipoNota: EListaContas,
+  val temAnexo: ETemAnexo = ETemAnexo.TODOS,
 )
+
+enum class ETemAnexo(val codigo: String, val descricao: String) {
+  TEM_ANEXO(codigo = "S", "Sim"),
+  SEM_ANEXO(codigo = "N", "Não"),
+  TODOS(codigo = "T", "Todos"),
+}
 
 enum class EListaContas(val codigo: String, val descricao: String) {
   RECEBIMENTO(codigo = "R", "Recebimento"),
