@@ -102,6 +102,8 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::nfEntrada, "NF", width = "100px")
   }
 
+
+
   override fun filtro(): FiltroPedidoCapa {
     return FiltroPedidoCapa(
       loja = cmbLoja.value?.no ?: 0,
