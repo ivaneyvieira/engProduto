@@ -15,8 +15,8 @@ SELECT O.storeno      AS storeno,
        MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
        INNER JOIN sqldados.inv AS I02
-                 ON I02.ordno = O.no
-                   AND I02.storeno = O.storeno
+                  ON I02.ordno = O.no
+                    AND I02.storeno = O.storeno
 GROUP BY O.storeno, O.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV2;
@@ -29,8 +29,8 @@ SELECT O.storeno      AS storeno,
        MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
        INNER JOIN sqldados.inv2 AS I02
-                 ON I02.ordno = O.no
-                   AND I02.storeno = O.storeno
+                  ON I02.ordno = O.no
+                    AND I02.storeno = O.storeno
 GROUP BY O.storeno, O.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
@@ -98,10 +98,10 @@ SELECT loja,
        custo,
        totalProduto,
        totalProdutoPendente,
-       I.invno                                           AS invno,
-       CAST(IFNULL(I.issue_date, I2.issue_date) AS DATE) AS dataEmissao,
-       CAST(IFNULL(I.date, I2.date) AS DATE)             AS dataEntrada,
-       CONCAT(I.nfname, '/', I.invse)                    AS nfEntrada
+       I.invno                                                                  AS invno,
+       CAST(IFNULL(I.issue_date, I2.issue_date) AS DATE)                        AS dataEmissao,
+       CAST(IFNULL(I.date, I2.date) AS DATE)                                    AS dataEntrada,
+       IFNULL(CONCAT(I.nfname, '/', I.invse), CONCAT(I2.nfname, '/', I2.invse)) AS nfEntrada
 FROM T_ORD AS O
        LEFT JOIN sqldados.inv AS I
                  USING (invno)

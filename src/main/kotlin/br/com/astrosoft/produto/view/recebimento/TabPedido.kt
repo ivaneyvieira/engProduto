@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabPedido
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
@@ -99,7 +100,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::dataEmissao, "Emissão")
     columnGrid(PedidoCapa::dataEntrada, "Entrada")
     columnGrid(PedidoCapa::invno, "NI")
-    columnGrid(PedidoCapa::nfEntrada, "NF", width = "100px")
+    columnGrid(PedidoCapa::nfEntrada, "NF", width = "100px").right()
   }
 
   override fun filtro(): FiltroPedidoCapa {
