@@ -10,34 +10,28 @@ CREATE TEMPORARY TABLE T_INV1
 (
   PRIMARY KEY (storeno, ordno)
 )
-SELECT O.storeno                              AS storeno,
-       O.no                                   AS ordno,
-       IFNULL(MAX(I01.invno), MAX(I02.invno)) AS invnoMax
+SELECT O.storeno      AS storeno,
+       O.no           AS ordno,
+       MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
-       LEFT JOIN sqldados.inv AS I01
-                 ON I01.invno = O.invno
-       LEFT JOIN sqldados.inv AS I02
+       INNER JOIN sqldados.inv AS I02
                  ON I02.ordno = O.no
                    AND I02.storeno = O.storeno
-GROUP BY O.storeno, O.no
-HAVING invnoMAx IS NOT NULL;
+GROUP BY O.storeno, O.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV2;
 CREATE TEMPORARY TABLE T_INV2
 (
   PRIMARY KEY (storeno, ordno)
 )
-SELECT O.storeno                              AS storeno,
-       O.no                                   AS ordno,
-       IFNULL(MAX(I01.invno), MAX(I02.invno)) AS invnoMax
+SELECT O.storeno      AS storeno,
+       O.no           AS ordno,
+       MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
-       LEFT JOIN sqldados.inv2 AS I01
-                 ON I01.invno = O.invno
-       LEFT JOIN sqldados.inv2 AS I02
+       INNER JOIN sqldados.inv2 AS I02
                  ON I02.ordno = O.no
                    AND I02.storeno = O.storeno
-GROUP BY O.storeno, O.no
-HAVING invnoMAx IS NOT NULL;
+GROUP BY O.storeno, O.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
