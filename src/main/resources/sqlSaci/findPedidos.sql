@@ -5,6 +5,40 @@ DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
 DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
+DROP TEMPORARY TABLE IF EXISTS T_INV1;
+CREATE TEMPORARY TABLE T_INV1
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT O.storeno                              AS storeno,
+       O.no                                   AS ordno,
+       IFNULL(MAX(I01.invno), MAX(I02.invno)) AS invnoMax
+FROM sqldados.ords AS O
+       LEFT JOIN sqldados.inv AS I01
+                 ON I01.invno = O.invno
+       LEFT JOIN sqldados.inv AS I02
+                 ON I02.ordno = O.no
+                   AND I02.storeno = O.storeno
+GROUP BY O.storeno, O.no
+HAVING invnoMAx IS NOT NULL;
+
+DROP TEMPORARY TABLE IF EXISTS T_INV2;
+CREATE TEMPORARY TABLE T_INV2
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT O.storeno                              AS storeno,
+       O.no                                   AS ordno,
+       IFNULL(MAX(I01.invno), MAX(I02.invno)) AS invnoMax
+FROM sqldados.ords AS O
+       LEFT JOIN sqldados.inv2 AS I01
+                 ON I01.invno = O.invno
+       LEFT JOIN sqldados.inv2 AS I02
+                 ON I02.ordno = O.no
+                   AND I02.storeno = O.storeno
+GROUP BY O.storeno, O.no
+HAVING invnoMAx IS NOT NULL;
+
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
 SELECT O.storeno                                              AS loja,
@@ -25,7 +59,8 @@ SELECT O.storeno                                              AS loja,
        I.cost                                                 AS custo,
        ROUND(I.qtty * I.cost, 2)                              AS totalProduto,
        ROUND((I.qtty - I.qttyCancel - I.qttyRcv) * I.cost, 2) AS totalProdutoPendente,
-       IFNULL(I01.invno, I02.invno)                           AS invno
+       I01.invnoMAX                                           AS invno,
+       I02.invnoMAX                                           AS invno2
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON O.storeno = I.storeno
@@ -34,9 +69,10 @@ FROM sqldados.ords AS O
                   ON O.vendno = V.no
        INNER JOIN sqldados.prd AS P
                   ON P.no = I.prdno
-       LEFT JOIN sqldados.inv AS I01
-                 ON I01.invno = O.invno
-       LEFT JOIN sqldados.inv AS I02
+       LEFT JOIN T_INV1 AS I01
+                 ON I01.ordno = I.ordno
+                   AND I01.storeno = I.storeno
+       LEFT JOIN T_INV2 AS I02
                  ON I02.ordno = I.ordno
                    AND I02.storeno = I.storeno
 WHERE V.name NOT LIKE 'ENGECOPI%'
@@ -68,13 +104,15 @@ SELECT loja,
        custo,
        totalProduto,
        totalProdutoPendente,
-       invno                          AS invno,
-       CAST(I.issue_date AS DATE)     AS dataEmissao,
-       CAST(I.date AS DATE)           AS dataEntrada,
-       CONCAT(I.nfname, '/', I.invse) AS nfEntrada
+       I.invno                                           AS invno,
+       CAST(IFNULL(I.issue_date, I2.issue_date) AS DATE) AS dataEmissao,
+       CAST(IFNULL(I.date, I2.date) AS DATE)             AS dataEntrada,
+       CONCAT(I.nfname, '/', I.invse)                    AS nfEntrada
 FROM T_ORD AS O
        LEFT JOIN sqldados.inv AS I
                  USING (invno)
+       LEFT JOIN sqldados.inv2 AS I2
+                 ON I2.invno = O.invno2
 WHERE pedido = @PESQUISA_NUM
    OR fornecedor LIKE @PESQUISA
    OR no = @PESQUISA_NUM
