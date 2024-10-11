@@ -117,4 +117,4 @@ WHERE pedido = @PESQUISA_NUM
    OR fornecedor LIKE @PESQUISA
    OR no = @PESQUISA_NUM
    OR @PESQUISA = ''
-ORDER BY data DESC, storeno, pedido DESC, invno, prdno, grade
+ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade
