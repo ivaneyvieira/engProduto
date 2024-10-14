@@ -211,7 +211,7 @@ SELECT N.storeno                                                              AS
        GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                            AS usuarioSingCD,
        MAX(EE.no)                                                             AS usernoSingExp,
        GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                            AS usuarioSingExp,
-       MAX(IF(LOCATE('CD5A', L.localizacaoList) > 0, IFNULL(X.c3, ''), ''))   AS usuarioSep
+       MAX(IF(LOCATE('CD5A', IFNULL(L.localizacaoList, '')) > 0, IFNULL(X.c3, ''), ''))   AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS PT
                  USING (storeno, pdvno, xano)
@@ -223,7 +223,7 @@ FROM sqldados.nf AS N
                  USING (storeno, pdvno, xano)
        LEFT JOIN T_ENTREGA AS ENT
                  USING (storeno, pdvno, xano)
-       INNER JOIN sqldados.xaprd2 AS X
+       LEFT JOIN sqldados.xaprd2 AS X
                   USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EC
                  ON EC.no = X.s4
