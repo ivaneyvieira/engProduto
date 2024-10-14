@@ -8,7 +8,7 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 DROP TEMPORARY TABLE IF EXISTS T_INV1;
 CREATE TEMPORARY TABLE T_INV1
 (
-  PRIMARY KEY (storeno, ordno)
+  PRIMARY KEY (storeno, ordno, vendno)
 )
 SELECT O.storeno      AS storeno,
        O.no           AS ordno,
@@ -18,12 +18,13 @@ FROM sqldados.ords AS O
        INNER JOIN sqldados.inv AS I02
                   ON I02.ordno = O.no
                     AND I02.storeno = O.storeno
-GROUP BY O.storeno, O.no;
+                    AND I02.vendno = O.vendno
+GROUP BY O.storeno, O.no, O.vendno;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV2;
 CREATE TEMPORARY TABLE T_INV2
 (
-  PRIMARY KEY (storeno, ordno)
+  PRIMARY KEY (storeno, ordno, vendno)
 )
 SELECT O.storeno      AS storeno,
        O.no           AS ordno,
@@ -33,7 +34,8 @@ FROM sqldados.ords AS O
        INNER JOIN sqldados.inv2 AS I02
                   ON I02.ordno = O.no
                     AND I02.storeno = O.storeno
-GROUP BY O.storeno, O.no;
+                    AND I02.vendno = O.vendno
+GROUP BY O.storeno, O.no, O.vendno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
