@@ -100,7 +100,7 @@ SELECT loja,
        totalProdutoPendente,
        I.invno                                                                  AS invno,
        CAST(IFNULL(I.issue_date, I2.issue_date) AS DATE)                        AS dataEmissao,
-       CAST(IFNULL(I.date, I2.date) AS DATE)                                    AS dataEntrada,
+       CAST(I.date AS DATE)                                                     AS dataEntrada,
        IFNULL(CONCAT(I.nfname, '/', I.invse), CONCAT(I2.nfname, '/', I2.invse)) AS nfEntrada
 FROM T_ORD AS O
        LEFT JOIN sqldados.inv AS I
