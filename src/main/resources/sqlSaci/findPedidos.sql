@@ -12,6 +12,7 @@ CREATE TEMPORARY TABLE T_INV1
 )
 SELECT O.storeno      AS storeno,
        O.no           AS ordno,
+       O.vendno      AS vendno,
        MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
        INNER JOIN sqldados.inv AS I02
@@ -26,6 +27,7 @@ CREATE TEMPORARY TABLE T_INV2
 )
 SELECT O.storeno      AS storeno,
        O.no           AS ordno,
+       O.vendno      AS vendno,
        MAX(I02.invno) AS invnoMax
 FROM sqldados.ords AS O
        INNER JOIN sqldados.inv2 AS I02
@@ -64,11 +66,13 @@ FROM sqldados.ords AS O
        INNER JOIN sqldados.prd AS P
                   ON P.no = I.prdno
        LEFT JOIN T_INV1 AS I01
-                 ON I01.ordno = I.ordno
-                   AND I01.storeno = I.storeno
+                 ON I01.ordno = O.no
+                   AND I01.storeno = O.storeno
+                   AND I01.vendno = O.vendno
        LEFT JOIN T_INV2 AS I02
-                 ON I02.ordno = I.ordno
-                   AND I02.storeno = I.storeno
+                 ON I02.ordno = O.no
+                   AND I02.storeno = O.storeno
+                   AND I02.vendno = O.vendno
 WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
