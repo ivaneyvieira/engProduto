@@ -232,7 +232,7 @@ FROM sqldados.nf AS N
        LEFT JOIN T_TIPO AS T
                  ON N.storeno = T.storeno AND
                     N.eordno = T.ordno
-       INNER JOIN T_LOC AS L
+       LEFT JOIN T_LOC AS L
                  ON L.prdno = X.prdno
                    AND L.grade = X.grade
        LEFT JOIN sqldados.emp AS E
