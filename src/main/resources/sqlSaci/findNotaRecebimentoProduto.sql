@@ -175,7 +175,7 @@ FROM T_NOTA AS N
        LEFT JOIN T_BARCODE AS B
                  ON B.prdno = N.prdno
                    AND B.grade = N.grade
-       INNER JOIN T_LOC AS L
+       LEFT JOIN T_LOC AS L
                   ON L.prdno = N.prdno
                     AND L.grade = N.grade
        LEFT JOIN T_EST AS E

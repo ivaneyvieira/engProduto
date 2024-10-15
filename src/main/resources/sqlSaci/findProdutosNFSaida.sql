@@ -57,7 +57,7 @@ SELECT X.storeno                                                               A
 FROM sqldados.prd AS P
        INNER JOIN sqldados.xaprd2 AS X
                   ON P.no = X.prdno
-       INNER JOIN T_LOC AS L
+       LEFT JOIN T_LOC AS L
                  ON L.prdno = X.prdno
                    AND L.grade = X.grade
        LEFT JOIN sqldados.users AS EC

@@ -55,7 +55,7 @@ SELECT O.storeno                               AS loja,
                   ELSE 0
                 END), 1)                       AS multAcerto
 FROM sqldados.eoprd AS E
-       INNER JOIN T_LOC AS L
+       LEFT JOIN T_LOC AS L
                  USING (prdno, grade)
        LEFT JOIN sqldados.eoprdAdicional AS EA
                  USING (storeno, ordno, prdno, grade)

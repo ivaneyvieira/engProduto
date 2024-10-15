@@ -179,7 +179,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       L.localizacaoList                   AS localizacao,
+       IFNULL(L.localizacaoList, '')       AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
@@ -223,9 +223,9 @@ FROM sqldados.ords AS N
                    AND X.storeno = NF.storeno
                    AND X.prdno = NF.prdno
                    AND X.grade = NF.grade
-       INNER JOIN T_LOC AS L
-                  ON X.prdno = L.prdno
-                    AND X.grade = L.grade
+       LEFT JOIN T_LOC AS L
+                 ON X.prdno = L.prdno
+                   AND X.grade = L.grade
        LEFT JOIN sqldados.users AS SU
                  ON N.s4 = SU.no
        LEFT JOIN sqldados.emp AS TU
@@ -256,7 +256,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       L.localizacaoList                   AS localizacao,
+       IFNULL(L.localizacaoList, '')       AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,

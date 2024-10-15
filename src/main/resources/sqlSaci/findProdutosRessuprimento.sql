@@ -166,7 +166,7 @@ SELECT X.ordno                                                  AS ordno,
        X.auxShort4                                              AS marca,
        X.auxShort3                                              AS selecionado,
        X.auxLong4                                               AS posicao,
-       L.localizacaoList                                        AS localizacao,
+       IFNULL(L.localizacaoList, '')                            AS localizacao,
        ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000)  AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                           AS codigoCorrecao,
        TRIM(MID(PR.name, 1, 37))                                AS descricaoCorrecao,
@@ -197,7 +197,7 @@ FROM T_OPRD AS X
        LEFT JOIN sqldados.prdbar AS B
                  ON B.prdno = P.no
                    AND B.grade = X.grade
-       INNER JOIN T_LOC AS L
+       LEFT JOIN T_LOC AS L
                  ON X.prdno = L.prdno
                    AND X.grade = L.grade
        LEFT JOIN sqldados.vend AS F
