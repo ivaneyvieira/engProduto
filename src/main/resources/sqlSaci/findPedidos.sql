@@ -108,29 +108,29 @@ GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
-SELECT O.storeno                                    AS loja,
-       O.no                                         AS pedido,
-       CAST(O.date AS DATE)                         AS data,
-       O.status                                     AS status,
-       O.vendno                                     AS no,
-       V.name                                       AS fornecedor,
-       O.amtOrigem / 100                            AS total,
-       TRIM(IO.prdno)                               AS codigo,
-       IO.prdno                                     AS prdno,
-       TRIM(MID(P.name, 1, 37))                     AS descricao,
-       IO.grade                                     AS grade,
-       ROUND(IO.qtty)                               AS qtty,
-       ROUND(IO.qttyRcv)                            AS qttyRcv,
-       ROUND(IO.qtty - - IO.qttyRcv)                AS qttyPendente,
-       IO.cost                                      AS custo,
-       ROUND(IO.qtty * IO.cost, 2)                  AS totalProduto,
-       ROUND((IO.qtty - - IO.qttyRcv) * IO.cost, 2) AS totalProdutoPendente,
-       IF(IO.invno IS NOT NULL, 'N', 'P')           AS tipo,
-       IO.invno                                     AS invno,
-       IO.invno2                                    AS invno2,
-       dataEmissao                                  AS dataEmissao,
-       dataEntrada                                  AS dataEntrada,
-       nfEntrada                                    AS nfEntrada
+SELECT O.storeno                                  AS loja,
+       O.no                                       AS pedido,
+       CAST(O.date AS DATE)                       AS data,
+       O.status                                   AS status,
+       O.vendno                                   AS no,
+       V.name                                     AS fornecedor,
+       O.amtOrigem / 100                          AS total,
+       TRIM(IO.prdno)                             AS codigo,
+       IO.prdno                                   AS prdno,
+       TRIM(MID(P.name, 1, 37))                   AS descricao,
+       IO.grade                                   AS grade,
+       ROUND(IO.qtty)                             AS qtty,
+       ROUND(IO.qttyRcv)                          AS qttyRcv,
+       ROUND(IO.qtty - IO.qttyRcv)                AS qttyPendente,
+       IO.cost                                    AS custo,
+       ROUND(IO.qtty * IO.cost, 2)                AS totalProduto,
+       ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) AS totalProdutoPendente,
+       IF(IO.invno IS NOT NULL, 'N', 'P')         AS tipo,
+       IO.invno                                   AS invno,
+       IO.invno2                                  AS invno2,
+       dataEmissao                                AS dataEmissao,
+       dataEntrada                                AS dataEntrada,
+       nfEntrada                                  AS nfEntrada
 FROM sqldados.ords AS O
        INNER JOIN sqldados.vend AS V
                   ON O.vendno = V.no
@@ -145,6 +145,7 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.status != 2)
+  AND (O.amt > 0)
   AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) > 0)
   OR (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0)
   OR (:status = 999)
