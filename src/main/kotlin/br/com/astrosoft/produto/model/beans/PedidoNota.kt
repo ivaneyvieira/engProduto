@@ -9,6 +9,7 @@ data class PedidoNota(
   val status: Int,
   val no: Int,
   val fornecedor: String,
+  val total: Double,
   val invno: Int?,
   val tipo: String,
   val dataEmissao: LocalDate?,
@@ -44,9 +45,10 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
         status = pedidoCapa.status,
         no = pedidoCapa.no,
         fornecedor = pedidoCapa.fornecedor,
+        total = pedidoCapa.total,
         totalProduto = produtos.sumOf { it.totalProduto },
         totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
-        produtos = produtos,
+        produtos = produtos.filter { it.prdno != "" },
       )
     }
 }

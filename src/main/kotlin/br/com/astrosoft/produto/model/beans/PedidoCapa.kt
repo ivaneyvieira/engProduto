@@ -10,10 +10,14 @@ data class PedidoCapa(
   val status: Int,
   val no: Int,
   val fornecedor: String,
+  val total: Double,
   val totalProduto: Double,
   val totalProdutoPendente: Double,
   val notas: List<PedidoNota>,
 ) {
+  val totalPendente: Double
+    get() = total - totalProduto
+
   val statusPedido: String
     get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
 
@@ -38,9 +42,10 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       status = pedido.status,
       no = pedido.no,
       fornecedor = pedido.fornecedor,
+      total = pedido.total,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
-      notas = list
+      notas = list.filter { it.produtos.isNotEmpty() }
     )
 
   }

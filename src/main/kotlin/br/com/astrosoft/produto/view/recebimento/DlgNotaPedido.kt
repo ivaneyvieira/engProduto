@@ -56,8 +56,7 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
       columnGrid(PedidoNota::dataEntrada, "Entrada")
       columnGrid(PedidoNota::invno, "NI")
       columnGrid(PedidoNota::tipoNota, "Tipo")
-      columnGrid(PedidoNota::totalProduto, "Total Pedido")
-      columnGrid(PedidoNota::totalProdutoPendente, "Total Pendente")
+      columnGrid(PedidoNota::totalProduto, "Total")
     }
     this.addAndExpand(gridDetail)
     update()

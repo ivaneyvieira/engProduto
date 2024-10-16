@@ -93,49 +93,44 @@ CREATE TEMPORARY TABLE T_INVORD
 SELECT storeno,
        ordno,
        vendno,
-       invno                       AS ni,
-       IF(tipo = 'N', invno, NULL) AS invno,
-       IF(tipo = 'P', invno, NULL) AS invno2,
-       dataEmissao,
-       dataEntrada,
+       MAX(IF(tipo = 'N', invno, NULL)) AS invno,
+       MAX(IF(tipo = 'P', invno, NULL)) AS invno2,
+       MAX(dataEmissao)                 AS dataEmissao,
+       MAX(dataEntrada)                 AS dataEntrada,
        nfEntrada,
        prdno,
        grade,
-       SUM(qtty)                   AS qtty,
-       SUM(IF(tipo = 'R', qtty, 0))   qttyRcv,
-       0                           AS qttyCancel,
-       cost,
-       tipo
+       SUM(qtty)                        AS qtty,
+       SUM(IF(tipo = 'R', qtty, 0))     AS qttyRcv,
+       MAX(cost)                        AS cost
 FROM T_INV
-WHERE (:preEntrada != 'N' OR tipo = 'P')
-GROUP BY storeno, ordno, vendno, ni, prdno, grade, tipo;
+GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
-SELECT O.storeno                                                  AS loja,
-       O.no                                                       AS pedido,
-       CAST(O.date AS DATE)                                       AS data,
-       O.status                                                   AS status,
-       O.vendno                                                   AS no,
-       V.name                                                     AS fornecedor,
-       O.amt / 100                                                AS total,
-       TRIM(IO.prdno)                                             AS codigo,
-       IO.prdno                                                   AS prdno,
-       TRIM(MID(P.name, 1, 37))                                   AS descricao,
-       IO.grade                                                   AS grade,
-       ROUND(IO.qtty)                                             AS qtty,
-       ROUND(IO.qttyCancel)                                       AS qttyCancel,
-       ROUND(IO.qttyRcv)                                          AS qttyRcv,
-       ROUND(IO.qtty - IO.qttyCancel - IO.qttyRcv)                AS qttyPendente,
-       IO.cost                                                    AS custo,
-       ROUND(IO.qtty * IO.cost, 2)                                AS totalProduto,
-       ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) AS totalProdutoPendente,
-       IO.invno                                                   AS invno,
-       IO.invno2                                                  AS invno2,
-       tipo                                                       AS tipo,
-       dataEmissao                                                AS dataEmissao,
-       dataEntrada                                                AS dataEntrada,
-       nfEntrada                                                  AS nfEntrada
+SELECT O.storeno                                    AS loja,
+       O.no                                         AS pedido,
+       CAST(O.date AS DATE)                         AS data,
+       O.status                                     AS status,
+       O.vendno                                     AS no,
+       V.name                                       AS fornecedor,
+       O.amtOrigem / 100                            AS total,
+       TRIM(IO.prdno)                               AS codigo,
+       IO.prdno                                     AS prdno,
+       TRIM(MID(P.name, 1, 37))                     AS descricao,
+       IO.grade                                     AS grade,
+       ROUND(IO.qtty)                               AS qtty,
+       ROUND(IO.qttyRcv)                            AS qttyRcv,
+       ROUND(IO.qtty - - IO.qttyRcv)                AS qttyPendente,
+       IO.cost                                      AS custo,
+       ROUND(IO.qtty * IO.cost, 2)                  AS totalProduto,
+       ROUND((IO.qtty - - IO.qttyRcv) * IO.cost, 2) AS totalProdutoPendente,
+       IF(IO.invno IS NOT NULL, 'N', 'P')           AS tipo,
+       IO.invno                                     AS invno,
+       IO.invno2                                    AS invno2,
+       dataEmissao                                  AS dataEmissao,
+       dataEntrada                                  AS dataEntrada,
+       nfEntrada                                    AS nfEntrada
 FROM sqldados.ords AS O
        INNER JOIN sqldados.vend AS V
                   ON O.vendno = V.no
@@ -150,8 +145,8 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.status != 2)
-  AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) > 0)
-  OR (:status = 1 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) = 0)
+  AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) > 0)
+  OR (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0)
   OR (:status = 999)
   OR (IO.storeno IS NULL));
 
@@ -162,28 +157,27 @@ SELECT loja,
        no,
        fornecedor,
        total,
+       tipo,
        IFNULL(codigo, '')                 AS codigo,
        IFNULL(prdno, '')                  AS prdno,
        IFNULL(descricao, '')              AS descricao,
        IFNULL(grade, '')                  AS grade,
        IFNULL(qtty, 0)                    AS qtty,
-       IFNULL(qttyCancel, 0)              AS qttyCancel,
        IFNULL(qttyRcv, 0)                 AS qttyRcv,
        IFNULL(qttyPendente, 0)            AS qttyPendente,
        IFNULL(custo, 0)                   AS custo,
        IFNULL(totalProduto, 0.00)         AS totalProduto,
        IFNULL(totalProdutoPendente, 0.00) AS totalProdutoPendente,
-       IFNULL(invno, 0)                   AS invno,
+       IFNULL(invno2, invno)              AS invno,
        dataEmissao                        AS dataEmissao,
        dataEntrada                        AS dataEntrada,
-       IFNULL(nfEntrada, '')              AS nfEntrada,
-       IFNULL(tipo, '')                   AS tipo
+       IFNULL(nfEntrada, '')              AS nfEntrada
 FROM T_ORD
 WHERE (pedido = @PESQUISA_NUM
   OR fornecedor LIKE @PESQUISA
   OR no = @PESQUISA_NUM
   OR @PESQUISA = '')
-  AND (((:preEntrada = 'S') AND (tipo = 'P')) OR
-       ((:preEntrada = 'N') AND (invno2 IS NULL)) OR
+  AND (((:preEntrada = 'S') AND (invno2 IS NOT NULL AND invno IS NULL)) OR
+       ((:preEntrada = 'N') AND (prdno IS NULL)) OR
        (:preEntrada = ''))
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade
