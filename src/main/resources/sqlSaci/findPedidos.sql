@@ -5,84 +5,153 @@ DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
 DO @PESQUISA_START := CONCAT(:pesquisa, '%');
 DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
-DROP TEMPORARY TABLE IF EXISTS T_INV1;
-CREATE TEMPORARY TABLE T_INV1
+DROP TEMPORARY TABLE IF EXISTS T_INVN;
+CREATE TEMPORARY TABLE T_INVN
 (
-  PRIMARY KEY (storeno, ordno, vendno)
+  PRIMARY KEY (invno, prdno, grade)
 )
-SELECT O.storeno      AS storeno,
-       O.no           AS ordno,
-       O.vendno      AS vendno,
-       MAX(I02.invno) AS invnoMax
-FROM sqldados.ords AS O
-       INNER JOIN sqldados.inv AS I02
-                  ON I02.ordno = O.no
-                    AND I02.storeno = O.storeno
-                    AND I02.vendno = O.vendno
-GROUP BY O.storeno, O.no, O.vendno;
+SELECT O.storeno                      AS storeno,
+       O.no                           AS ordno,
+       O.vendno                       AS vendno,
+       I.invno                        AS invno,
+       CAST(I.issue_date AS DATE)     AS dataEmissao,
+       CAST(I.date AS DATE)           AS dataEntrada,
+       CONCAT(I.nfname, '/', I.invse) AS nfEntrada,
+       P.prdno                        AS prdno,
+       P.grade                        AS grade,
+       ROUND(P.qtty / 1000)           AS qtty,
+       P.cost4 / 10000                AS cost
+FROM sqldados.iprd AS P
+       INNER JOIN sqldados.inv AS I
+                  USING (invno)
+       INNER JOIN sqldados.ords AS O
+                  ON I.ordno = O.no
+                    AND I.storeno = O.storeno
+                    AND I.vendno = O.vendno
+GROUP BY P.invno, P.prdno, P.grade;
 
-DROP TEMPORARY TABLE IF EXISTS T_INV2;
-CREATE TEMPORARY TABLE T_INV2
+
+
+DROP TEMPORARY TABLE IF EXISTS T_INVP;
+CREATE TEMPORARY TABLE T_INVP
 (
-  PRIMARY KEY (storeno, ordno, vendno)
+  PRIMARY KEY (invno, prdno, grade)
 )
-SELECT O.storeno      AS storeno,
-       O.no           AS ordno,
-       O.vendno      AS vendno,
-       MAX(I02.invno) AS invnoMax
-FROM sqldados.ords AS O
-       INNER JOIN sqldados.inv2 AS I02
-                  ON I02.ordno = O.no
-                    AND I02.storeno = O.storeno
-                    AND I02.vendno = O.vendno
-GROUP BY O.storeno, O.no, O.vendno;
+SELECT O.storeno                      AS storeno,
+       O.no                           AS ordno,
+       O.vendno                       AS vendno,
+       I.invno                        AS invno,
+       CAST(I.issue_date AS DATE)     AS dataEmissao,
+       CAST(I.date AS DATE)           AS dataEntrada,
+       CONCAT(I.nfname, '/', I.invse) AS nfEntrada,
+       P.prdno                        AS prdno,
+       P.grade                        AS grade,
+       ROUND(P.qtty / 1000)           AS qtty,
+       P.cost4 / 10000                AS cost
+FROM sqldados.iprd2 AS P
+       INNER JOIN sqldados.inv2 AS I
+                  USING (invno)
+       INNER JOIN sqldados.ords AS O
+                  ON I.ordno = O.no
+                    AND I.storeno = O.storeno
+                    AND I.vendno = O.vendno
+GROUP BY P.invno, P.prdno, P.grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_INV;
+CREATE TEMPORARY TABLE T_INV
+SELECT storeno,
+       ordno,
+       vendno,
+       invno,
+       dataEmissao,
+       dataEntrada,
+       nfEntrada,
+       prdno,
+       grade,
+       qtty,
+       cost,
+       'N' AS tipo
+FROM T_INVN
+UNION
+DISTINCT
+SELECT storeno,
+       ordno,
+       vendno,
+       invno,
+       dataEmissao,
+       dataEntrada,
+       nfEntrada,
+       prdno,
+       grade,
+       qtty,
+       cost,
+       'P' AS tipo
+FROM T_INVP;
+
+DROP TEMPORARY TABLE IF EXISTS T_INVORD;
+CREATE TEMPORARY TABLE T_INVORD
+SELECT storeno,
+       ordno,
+       vendno,
+       IF(tipo = 'R', invno, NULL) AS invno,
+       IF(tipo = 'P', invno, NULL) AS invno2,
+       dataEmissao,
+       dataEntrada,
+       nfEntrada,
+       prdno,
+       grade,
+       SUM(qtty)                   AS qtty,
+       SUM(IF(tipo = 'R', qtty, 0))   qttyRcv,
+       0                           AS qttyCancel,
+       cost,
+       tipo
+FROM T_INV
+GROUP BY storeno, ordno, vendno, invno, prdno, grade, tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
-SELECT O.storeno                                              AS loja,
-       O.no                                                   AS pedido,
-       CAST(O.date AS DATE)                                   AS data,
-       O.status                                               AS status,
-       O.vendno                                               AS no,
-       V.name                                                 AS fornecedor,
-       O.amt / 100                                            AS total,
-       TRIM(I.prdno)                                          AS codigo,
-       I.prdno                                                AS prdno,
-       TRIM(MID(P.name, 1, 37))                               AS descricao,
-       I.grade                                                AS grade,
-       ROUND(I.qtty)                                          AS qtty,
-       ROUND(I.qttyCancel)                                    AS qttyCancel,
-       ROUND(I.qttyRcv)                                       AS qttyRcv,
-       ROUND(I.qtty - I.qttyCancel - I.qttyRcv)               AS qttyPendente,
-       I.cost                                                 AS custo,
-       ROUND(I.qtty * I.cost, 2)                              AS totalProduto,
-       ROUND((I.qtty - I.qttyCancel - I.qttyRcv) * I.cost, 2) AS totalProdutoPendente,
-       I01.invnoMAX                                           AS invno,
-       I02.invnoMAX                                           AS invno2
+SELECT O.storeno                                                  AS loja,
+       O.no                                                       AS pedido,
+       CAST(O.date AS DATE)                                       AS data,
+       O.status                                                   AS status,
+       O.vendno                                                   AS no,
+       V.name                                                     AS fornecedor,
+       O.amt / 100                                                AS total,
+       TRIM(IO.prdno)                                             AS codigo,
+       IO.prdno                                                   AS prdno,
+       TRIM(MID(P.name, 1, 37))                                   AS descricao,
+       IO.grade                                                   AS grade,
+       ROUND(IO.qtty)                                             AS qtty,
+       ROUND(IO.qttyCancel)                                       AS qttyCancel,
+       ROUND(IO.qttyRcv)                                          AS qttyRcv,
+       ROUND(IO.qtty - IO.qttyCancel - IO.qttyRcv)                AS qttyPendente,
+       IO.cost                                                    AS custo,
+       ROUND(IO.qtty * IO.cost, 2)                                AS totalProduto,
+       ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) AS totalProdutoPendente,
+       IO.invno                                                   AS invno,
+       IO.invno2                                                  AS invno2,
+       tipo                                                       AS tipo,
+       dataEmissao                                                AS dataEmissao,
+       dataEntrada                                                AS dataEntrada,
+       nfEntrada                                                  AS nfEntrada
 FROM sqldados.ords AS O
-       INNER JOIN sqldados.oprd AS I
-                  ON O.storeno = I.storeno
-                    AND O.no = I.ordno
        INNER JOIN sqldados.vend AS V
                   ON O.vendno = V.no
+       LEFT JOIN T_INVORD AS IO
+                 ON IO.ordno = O.no
+                   AND IO.storeno = O.storeno
+                   AND IO.vendno = O.vendno
        INNER JOIN sqldados.prd AS P
-                  ON P.no = I.prdno
-       LEFT JOIN T_INV1 AS I01
-                 ON I01.ordno = O.no
-                   AND I01.storeno = O.storeno
-                   AND I01.vendno = O.vendno
-       LEFT JOIN T_INV2 AS I02
-                 ON I02.ordno = O.no
-                   AND I02.storeno = O.storeno
-                   AND I02.vendno = O.vendno
+                  ON P.no = IO.prdno
 WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
-  AND I.status != 2
-  AND ((:status = 0 AND ROUND((I.qtty - I.qttyCancel - I.qttyRcv) * I.cost, 2) > 0)
-  OR (:status = 1 AND ROUND((I.qtty - I.qttyCancel - I.qttyRcv) * I.cost, 2) = 0)
-  OR (:status = 999))
+  AND (O.status != 2)
+  AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) > 0)
+  OR (:status = 1 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) = 0)
+  OR (:status = 999)
+  OR (IO.storeno IS NULL))
 GROUP BY loja, pedido, invno, prdno, grade;
 
 
@@ -104,15 +173,12 @@ SELECT loja,
        custo,
        totalProduto,
        totalProdutoPendente,
-       I.invno                                                                  AS invno,
-       CAST(IFNULL(I.issue_date, I2.issue_date) AS DATE)                        AS dataEmissao,
-       CAST(I.date AS DATE)                                                     AS dataEntrada,
-       IFNULL(CONCAT(I.nfname, '/', I.invse), CONCAT(I2.nfname, '/', I2.invse)) AS nfEntrada
-FROM T_ORD AS O
-       LEFT JOIN sqldados.inv AS I
-                 USING (invno)
-       LEFT JOIN sqldados.inv2 AS I2
-                 ON I2.invno = O.invno2
+       invno       AS invno,
+       dataEmissao AS dataEmissao,
+       dataEntrada AS dataEntrada,
+       nfEntrada   AS nfEntrada,
+       tipo        AS tipo
+FROM T_ORD
 WHERE pedido = @PESQUISA_NUM
    OR fornecedor LIKE @PESQUISA
    OR no = @PESQUISA_NUM

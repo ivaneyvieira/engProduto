@@ -2,27 +2,28 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.PedidoNota
-import br.com.astrosoft.produto.model.beans.PedidoProduto
-import br.com.astrosoft.produto.model.beans.ValidadeSaci
+import br.com.astrosoft.framework.view.vaadin.right
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoNota) {
+class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(PedidoProduto::class.java, false)
+  private val gridDetail = Grid(PedidoNota::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
-    val numeroNota: String = pedido.nfEntrada ?: ""
+    val numeroNota: Int = pedido.pedido
     val loja = pedido.loja
 
-    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja", toolBar = {
+    form = SubWindowForm("Notas do pedido $numeroNota Loja: $loja", toolBar = {
     }, onClose = {
       onClose()
     }) {
@@ -41,19 +42,27 @@ class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoNot
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      columnGrid(PedidoProduto::codigo, "Código")
-      columnGrid(PedidoProduto::descricao, "Descrição")
-      columnGrid(PedidoProduto::grade, "Grade")
-      columnGrid(PedidoProduto::qtty, "Qtde Pedido")
-      columnGrid(PedidoProduto::qttyPendente, "Qtde Pendente")
+      columnGrid(PedidoNota::loja, "Loja")
+      addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
+        val dlgProduto = DlgProdutosPedido(viewModel, pedido)
+        dlgProduto.showDialog {
+          viewModel.updateView()
+        }
+      }
+      columnGrid(PedidoNota::dataEmissao, "Emissão")
+      columnGrid(PedidoNota::nfEntrada, "NF", width = "100px").right()
+      columnGrid(PedidoNota::dataEntrada, "Entrada")
+      columnGrid(PedidoNota::invno, "NI")
+      columnGrid(PedidoNota::totalProduto, "Total Pedido")
+      columnGrid(PedidoNota::totalProdutoPendente, "Total Pendente")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
   fun update() {
-    val listProdutos = pedido.produtos
-    gridDetail.setItems(listProdutos)
+    val listNotas = pedido.notas
+    gridDetail.setItems(listNotas)
   }
 
   fun close() {

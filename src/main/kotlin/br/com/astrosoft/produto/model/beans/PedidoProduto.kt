@@ -13,6 +13,7 @@ class PedidoProduto {
   var dataEmissao: LocalDate? = null
   var dataEntrada: LocalDate? = null
   var nfEntrada: String? = null
+  var tipo: String = ""
   var total: Double = 0.0
   var codigo: String = ""
   var prdno: String = ""

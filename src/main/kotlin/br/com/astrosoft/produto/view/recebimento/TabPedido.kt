@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabPedido
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
@@ -23,7 +22,7 @@ import java.time.LocalDate
 
 class TabPedido(val viewModel: TabPedidoViewModel) :
   TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
-  private var dlgProduto: DlgProdutosPedido? = null
+  private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbStatus: Select<EPedidosStatus>
   private lateinit var edtPesquisa: TextField
@@ -84,18 +83,14 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
 
   override fun Grid<PedidoCapa>.gridPanel() {
     columnGrid(PedidoCapa::loja, "Loja")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
-      dlgProduto = DlgProdutosPedido(viewModel, pedido)
+    addColumnButton(VaadinIcon.FILE_TABLE, "Notas", "Notas") { pedido ->
+      dlgProduto = DlgNotaPedido(viewModel, pedido)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
     columnGrid(PedidoCapa::data, "Data")
     columnGrid(PedidoCapa::pedido, "Pedido")
-    columnGrid(PedidoCapa::dataEmissao, "Emissão")
-    columnGrid(PedidoCapa::nfEntrada, "NF", width = "100px").right()
-    columnGrid(PedidoCapa::dataEntrada, "Entrada")
-    columnGrid(PedidoCapa::invno, "NI")
     columnGrid(PedidoCapa::no, "No Forn")
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "400px")
     columnGrid(PedidoCapa::totalProduto, "Total Pedido")
