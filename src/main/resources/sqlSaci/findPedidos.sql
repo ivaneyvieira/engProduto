@@ -174,7 +174,7 @@ SELECT loja,
        IFNULL(nfEntrada, '')              AS nfEntrada
 FROM T_ORD
 WHERE (pedido = @PESQUISA_NUM
-  OR fornecedor LIKE @PESQUISA
+  OR fornecedor LIKE @PESQUISA_LIKE
   OR no = @PESQUISA_NUM
   OR @PESQUISA = '')
   AND (((:preEntrada = 'S') AND (invno2 IS NOT NULL AND invno IS NULL)) OR
