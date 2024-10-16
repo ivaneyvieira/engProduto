@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroPedidoCapa
+import br.com.astrosoft.produto.model.beans.FiltroPedido
+import br.com.astrosoft.produto.model.beans.FiltroPedidoNota
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.PedidoCapa
 
@@ -27,6 +27,6 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
 }
 
 interface ITabPedido : ITabView {
-  fun filtro(): FiltroPedidoCapa
+  fun filtro(): FiltroPedidoNota
   fun updatePedidos(pedido: List<PedidoCapa>)
 }

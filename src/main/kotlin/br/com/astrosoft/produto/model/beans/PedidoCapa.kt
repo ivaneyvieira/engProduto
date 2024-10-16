@@ -18,7 +18,7 @@ data class PedidoCapa(
     get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
 
   companion object {
-    fun findPedidoCapa(filtro: FiltroPedidoCapa): List<PedidoCapa> {
+    fun findPedidoCapa(filtro: FiltroPedidoNota): List<PedidoCapa> {
       val produtos = saci.findPedidoProduto(filtro)
       val pedidos = produtos.toPedidoNota().toPedidoCapa()
       return pedidos
@@ -28,7 +28,7 @@ data class PedidoCapa(
 
 fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
   val grupo = this.groupBy { "${it.loja} ${it.pedido}" }
-  return grupo.mapNotNull {entry ->
+  return grupo.mapNotNull { entry ->
     val (_, list) = entry
     val pedido = list.firstOrNull() ?: return@mapNotNull null
     PedidoCapa(
@@ -46,16 +46,23 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
   }
 }
 
-data class FiltroPedidoCapa(
+data class FiltroPedidoNota(
   val loja: Int,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val pesquisa: String,
   val status: EPedidosStatus,
+  val preEntrada: EPreEntrada,
 )
 
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
   TODOS(999, "Todos"),
   ABERTOS(0, "Pendente"),
   FECHADOS(1, "Recebido")
+}
+
+enum class EPreEntrada(val cod: String, val descricao: String) {
+  SIM("S", "Sim"),
+  NAO("N", "Não"),
+  TODOS("", "Todos"),
 }

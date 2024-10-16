@@ -25,6 +25,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbStatus: Select<EPedidosStatus>
+  private lateinit var cmbPreEnt: Select<EPreEntrada>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -52,6 +53,16 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1000
       addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbPreEnt = select("Pré Entrada") {
+      this.setItems(EPreEntrada.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EPreEntrada.TODOS
+      this.addValueChangeListener {
         viewModel.updateView()
       }
     }
@@ -98,13 +109,14 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::statusPedido, "Situação")
   }
 
-  override fun filtro(): FiltroPedidoCapa {
-    return FiltroPedidoCapa(
+  override fun filtro(): FiltroPedidoNota {
+    return FiltroPedidoNota(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       status = cmbStatus.value ?: EPedidosStatus.TODOS,
+      preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS
     )
   }
 

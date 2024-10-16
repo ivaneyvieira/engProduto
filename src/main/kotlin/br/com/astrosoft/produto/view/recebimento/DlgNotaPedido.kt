@@ -6,7 +6,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.PedidoCapa
+import br.com.astrosoft.produto.model.beans.PedidoNota
+import br.com.astrosoft.produto.model.beans.ValidadeSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -23,10 +25,10 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
     val numeroNota: Int = pedido.pedido
     val loja = pedido.loja
 
-    form = SubWindowForm("Notas do pedido $numeroNota Loja: $loja", toolBar = {
-    }, onClose = {
-      onClose()
-    }) {
+    form = SubWindowForm("Notas do pedido $numeroNota Loja: $loja",
+      toolBar = { }, onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -53,6 +55,7 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
       columnGrid(PedidoNota::nfEntrada, "NF", width = "100px").right()
       columnGrid(PedidoNota::dataEntrada, "Entrada")
       columnGrid(PedidoNota::invno, "NI")
+      columnGrid(PedidoNota::tipoNota, "Tipo")
       columnGrid(PedidoNota::totalProduto, "Total Pedido")
       columnGrid(PedidoNota::totalProdutoPendente, "Total Pendente")
     }

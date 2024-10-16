@@ -1454,12 +1454,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findPedidoProduto(filtro: FiltroPedidoCapa): List<PedidoProduto> {
+  fun findPedidoProduto(filtro: FiltroPedidoNota): List<PedidoProduto> {
     val sql = "/sqlSaci/findPedidos.sql"
     return query(sql, PedidoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("status", filtro.status.cod)
+      addOptionalParameter("preEntrada", filtro.preEntrada.cod)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }

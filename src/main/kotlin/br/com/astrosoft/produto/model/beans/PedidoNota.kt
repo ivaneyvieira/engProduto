@@ -17,7 +17,16 @@ data class PedidoNota(
   val totalProduto: Double,
   val totalProdutoPendente: Double,
   val produtos: List<PedidoProduto>,
-)
+){
+  val tipoNota: String
+    get() = when(tipo) {
+      "P" -> "Pre-Entrada"
+      "N" -> "Entrada"
+      else -> ""
+    }
+}
+
+
 
 fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
   return this.groupBy { "${it.loja} ${it.pedido} ${it.invno ?: 0}" }

@@ -93,7 +93,8 @@ CREATE TEMPORARY TABLE T_INVORD
 SELECT storeno,
        ordno,
        vendno,
-       IF(tipo = 'R', invno, NULL) AS invno,
+       invno                       AS ni,
+       IF(tipo = 'N', invno, NULL) AS invno,
        IF(tipo = 'P', invno, NULL) AS invno2,
        dataEmissao,
        dataEntrada,
@@ -106,7 +107,8 @@ SELECT storeno,
        cost,
        tipo
 FROM T_INV
-GROUP BY storeno, ordno, vendno, invno, prdno, grade, tipo;
+WHERE (:preEntrada != 'N' OR tipo = 'P')
+GROUP BY storeno, ordno, vendno, ni, prdno, grade, tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
@@ -141,8 +143,8 @@ FROM sqldados.ords AS O
                  ON IO.ordno = O.no
                    AND IO.storeno = O.storeno
                    AND IO.vendno = O.vendno
-       INNER JOIN sqldados.prd AS P
-                  ON P.no = IO.prdno
+       LEFT JOIN sqldados.prd AS P
+                 ON P.no = IO.prdno
 WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
@@ -151,9 +153,7 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) > 0)
   OR (:status = 1 AND ROUND((IO.qtty - IO.qttyCancel - IO.qttyRcv) * IO.cost, 2) = 0)
   OR (:status = 999)
-  OR (IO.storeno IS NULL))
-GROUP BY loja, pedido, invno, prdno, grade;
-
+  OR (IO.storeno IS NULL));
 
 SELECT loja,
        pedido,
@@ -162,25 +162,28 @@ SELECT loja,
        no,
        fornecedor,
        total,
-       codigo,
-       prdno,
-       descricao,
-       grade,
-       qtty,
-       qttyCancel,
-       qttyRcv,
-       qttyPendente,
-       custo,
-       totalProduto,
-       totalProdutoPendente,
-       invno       AS invno,
-       dataEmissao AS dataEmissao,
-       dataEntrada AS dataEntrada,
-       nfEntrada   AS nfEntrada,
-       tipo        AS tipo
+       IFNULL(codigo, '')                 AS codigo,
+       IFNULL(prdno, '')                  AS prdno,
+       IFNULL(descricao, '')              AS descricao,
+       IFNULL(grade, '')                  AS grade,
+       IFNULL(qtty, 0)                    AS qtty,
+       IFNULL(qttyCancel, 0)              AS qttyCancel,
+       IFNULL(qttyRcv, 0)                 AS qttyRcv,
+       IFNULL(qttyPendente, 0)            AS qttyPendente,
+       IFNULL(custo, 0)                   AS custo,
+       IFNULL(totalProduto, 0.00)         AS totalProduto,
+       IFNULL(totalProdutoPendente, 0.00) AS totalProdutoPendente,
+       IFNULL(invno, 0)                   AS invno,
+       dataEmissao                        AS dataEmissao,
+       dataEntrada                        AS dataEntrada,
+       IFNULL(nfEntrada, '')              AS nfEntrada,
+       IFNULL(tipo, '')                   AS tipo
 FROM T_ORD
-WHERE pedido = @PESQUISA_NUM
-   OR fornecedor LIKE @PESQUISA
-   OR no = @PESQUISA_NUM
-   OR @PESQUISA = ''
+WHERE (pedido = @PESQUISA_NUM
+  OR fornecedor LIKE @PESQUISA
+  OR no = @PESQUISA_NUM
+  OR @PESQUISA = '')
+  AND (((:preEntrada = 'S') AND (tipo = 'P')) OR
+       ((:preEntrada = 'N') AND (invno2 IS NULL)) OR
+       (:preEntrada = ''))
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade
