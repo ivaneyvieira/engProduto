@@ -431,6 +431,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", prd.codigo.lpad(16, " "))
       addOptionalParameter("grade", prd.grade)
       addOptionalParameter("lojaLocal", 0)
+      addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
     }
     produtos.forEach {
