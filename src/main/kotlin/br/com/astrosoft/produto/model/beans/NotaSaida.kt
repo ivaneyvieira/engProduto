@@ -87,14 +87,13 @@ class NotaSaida(
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-      val notas = saci.findNotaSaida(filtro = filtro) +
+      val notas = saci.findNotaSaida(filtro = filtro)/* +
                   saci.findNotaSaida(
                     filtro = filtro.copy(
-                      notaEntrega = "S",
                       tipoNota = filtro.tipoNota,
                     )
-                  )
-      return notas.distinctBy { "${it.loja} ${it.numero} ${it.serie} ${it.xano} ${it.pdvno}" }
+                  )*/
+      return notas/*.distinctBy { "${it.loja} ${it.numero} ${it.serie} ${it.xano} ${it.pdvno}" }*/
     }
   }
 }
@@ -109,7 +108,7 @@ data class FiltroNota(
   val dataFinal: LocalDate?,
   val dataEntregaInicial: LocalDate? = null,
   val dataEntregaFinal: LocalDate? = null,
-  val notaEntrega: String = "N",
+  val notaEntreg2: String = "T",
   val pesquisa: String,
   val prdno: String = "",
   val grade: String = "",

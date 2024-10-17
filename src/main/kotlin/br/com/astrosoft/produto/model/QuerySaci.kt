@@ -307,7 +307,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
       addOptionalParameter("dataEntregaFinal", filtro.dataEntregaFinal.toSaciDate())
-      addOptionalParameter("notaEntrega", filtro.notaEntrega)
+      addOptionalParameter("notaEntrega", "T"/*filtro.notaEntrega*/)
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("todosLocais", filtro.todosLocais.let { if (it) "S" else "N" })

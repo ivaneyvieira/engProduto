@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.expedicao.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import com.vaadin.flow.component.grid.Grid
 
@@ -23,6 +24,7 @@ object ProdutoNFNFSViewColumns {
 
   fun Grid<ProdutoNFS>.produtoNFBarcode() = columnGrid(ProdutoNFS::barcodeStrList) {
     this.setHeader("Código de Barras")
+    this.right()
   }
 
   fun Grid<ProdutoNFS>.produtoAutorizacaoExp() = columnGrid(ProdutoNFS::usuarioExp) {

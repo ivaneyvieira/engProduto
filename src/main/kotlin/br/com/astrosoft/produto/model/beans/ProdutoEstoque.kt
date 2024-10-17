@@ -108,7 +108,6 @@ class ProdutoEstoque(
       tipoNota = ETipoNotaFiscal.TODOS,
       loja = 0,
       pesquisa = "",
-      notaEntrega = "T",
       prdno = prdno ?: "",
       grade = "",
       dataInicial = dataInicial.minusDays(30),
