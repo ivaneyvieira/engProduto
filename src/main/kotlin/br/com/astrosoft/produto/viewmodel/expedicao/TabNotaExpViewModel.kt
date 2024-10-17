@@ -36,8 +36,12 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
 
+    itens.forEach {
+      if(it.local.isNullOrBlank()) fail("Produto sem localização")
+    }
+
     subView.formAutoriza(itens) { userno ->
-      itens.filter { it.marca == EMarcaNota.EXP.num }.forEach { produtoNF ->
+      itens.forEach { produtoNF ->
         if (produtoNF.local.isNullOrBlank()) {
           fail("Produto sem localização")
         }
@@ -46,6 +50,8 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
         produtoNF.usernoCD = 0
         produtoNF.salva()
       }
+
+      //TODO Testa filtro vazio
       imprimeEtiqueta(itens)
       subView.updateProdutos()
     }

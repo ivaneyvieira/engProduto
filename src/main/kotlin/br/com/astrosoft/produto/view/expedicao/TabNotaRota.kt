@@ -169,6 +169,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       dataFinal = edtDataFinal.value.plusDays(1),
       dataEntregaInicial = edtDataInicial.value,
       dataEntregaFinal = edtDataFinal.value,
+      todosLocais = false,
       pesquisa = edtPesquisa.value ?: "",
     )
   }

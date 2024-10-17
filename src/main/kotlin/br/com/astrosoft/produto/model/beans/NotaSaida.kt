@@ -76,8 +76,8 @@ class NotaSaida(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "") =
-      saci.findProdutoNF(this, marca, prdno, grade)
+  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean) =
+      saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
 
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -113,6 +113,7 @@ data class FiltroNota(
   val pesquisa: String,
   val prdno: String = "",
   val grade: String = "",
+  val todosLocais: Boolean,
   val localizacaoNota: List<String> = user?.localizacaoNota?.toList() ?: listOf("TODOS"),
 )
 

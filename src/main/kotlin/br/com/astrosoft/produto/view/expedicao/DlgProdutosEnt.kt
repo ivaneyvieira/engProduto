@@ -37,7 +37,7 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
         icon = VaadinIcon.ARROW_LEFT.create()
         onClick {
           viewModel.marcaCD()
-          gridDetail.setItems(nota.produtos(EMarcaNota.ENT))
+          gridDetail.setItems(nota.produtos(EMarcaNota.ENT, todosLocais = false))
         }
       }
     }, onClose = {
@@ -77,7 +77,7 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val listProdutos = nota.produtos(EMarcaNota.ENT)
+    val listProdutos = nota.produtos(EMarcaNota.ENT, todosLocais = false)
     gridDetail.setItems(listProdutos)
   }
 }

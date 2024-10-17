@@ -129,19 +129,12 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFUsuarioSep()
       produtoNFEstoque()
 
-      this.setClassNameGenerator {
-        when (it.marca) {
-          1    -> "cd"
-          2    -> "entregue"
-          else -> null
-        }
-      }
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
           marcaImpressao > 0          -> "azul"
-          marca == EMarcaNota.ENT.num -> "amarelo"
+          marca == EMarcaNota.CD.num -> "amarelo"
           else                        -> null
         }
       }
@@ -162,7 +155,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
     else
       EMarcaNota.EXP
     marca = EMarcaNota.TODOS
-    val listProdutos = nota.produtos(marca)
+    val listProdutos = nota.produtos(marca, todosLocais = true)
     gridDetail.setItems(listProdutos)
   }
 }

@@ -138,6 +138,7 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
+      todosLocais = false,
       pesquisa = edtPesquisa.value ?: "",
     )
   }

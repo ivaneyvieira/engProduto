@@ -165,7 +165,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val listProdutos = nota.produtos(EMarcaNota.CD)
+    val listProdutos = nota.produtos(EMarcaNota.CD, todosLocais = false)
     gridDetail.setItems(listProdutos)
   }
 

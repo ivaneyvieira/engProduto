@@ -78,7 +78,7 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
     val listNota = subView.itensSelecionados().ifEmpty { fail("Nenhuma nota selecionada") }
 
     val listNotaProduto = listNota.flatMap { nota ->
-      val produtos = nota.produtos(EMarcaNota.TODOS)
+      val produtos = nota.produtos(EMarcaNota.TODOS, todosLocais = true)
       produtos.filter {
         it.local?.startsWith("CD5A") == true
       }.map { produto ->

@@ -126,3 +126,4 @@ SELECT loja,
        tipoNota,
        estoque
 FROM T_DADOS
+WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')

@@ -114,6 +114,7 @@ class ProdutoEstoque(
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
       dataFinal = null,
+      todosLocais = true,
       localizacaoNota = listOf("TODOS"),
     )
     val notas = saci.findNotaSaida(filtro = filtro).filter {
@@ -136,7 +137,7 @@ class ProdutoEstoque(
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
 
-      nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "").filter { produto ->
+      nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true).filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
         ProdutoKardec(
