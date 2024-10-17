@@ -24,10 +24,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
-      checkBox("Sep") {
+      checkBox("Sep CD5A") {
         binder.bind(this, UserSaci::notaSep.name)
       }
-      checkBox("Rota") {
+      checkBox("Rota CD5A") {
         binder.bind(this, UserSaci::notaRota.name)
       }
       checkBox("Exp") {
