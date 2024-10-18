@@ -2,6 +2,7 @@ package br.com.astrosoft.framework.model.printText
 
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
+import org.apache.poi.ss.formula.functions.TextFunction.TRIM
 import java.text.DecimalFormat
 import kotlin.reflect.KProperty1
 
@@ -67,7 +68,11 @@ data class Column<T, V>(
   val posProcess: (V) -> String
 ) {
   val columnText
-    get() = header.rpad(size, "_")
+    get() = if (header.trim() == "") {
+      header.rpad(size, " ")
+    } else {
+      header.rpad(size, "_")
+    }
 
   fun dataText(value: T) = posProcess(process(value))
 }

@@ -34,10 +34,9 @@ class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
 
   init {
     column(NotaRecebimentoProduto::codigo, "Codigo", 6)
-    column(NotaRecebimentoProduto::descricao, "Descricao", 36)
+    column(NotaRecebimentoProduto::descricao, "Descricao", 40)
     column(NotaRecebimentoProduto::grade, "Grade", 8)
-    column(NotaRecebimentoProduto::localizacao, "Loc", 4)
-    column(NotaRecebimentoProduto::quant, "_Quant", 6,  lineBreak = true)
+    column(NotaRecebimentoProduto::quant, "__Quant", 7,  lineBreak = true)
     column(NotaRecebimentoProduto::localizacaoSaciStr, "", 35)
   }
 

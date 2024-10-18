@@ -45,7 +45,7 @@ class NotaRecebimentoProduto(
   var selecionado: Boolean? = false
 ) {
   val localizacaoSaciStr: String
-    get() = "Loc:   ${localizacaoSaci ?: ""}"
+    get() = "       ${localizacaoSaci ?: ""}"
   val validadeStr
     get() = when (validade) {
       null -> ""
