@@ -9,10 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaRecebida
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -41,61 +38,68 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    cmbLoja = select("Loja") {
-      this.setItemLabelGenerator { item ->
-        item.descricao
+    verticalLayout(spacing = false) {
+      this.isMargin = false
+      horizontalLayout {
+        cmbLoja = select("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient)
+              viewModel.updateView()
+          }
+        }
+        init()
+        edtTipoNota = select("Tipo Nota") {
+          this.setItems(EListaContas.entries)
+          this.value = EListaContas.TODOS
+          this.setItemLabelGenerator {
+            it.descricao
+          }
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtTemAnexo = select("Tem Anexo") {
+          this.setItems(ETemAnexo.entries)
+          this.value = ETemAnexo.TODOS
+          this.setItemLabelGenerator {
+            it.descricao
+          }
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
-      addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
-      }
-    }
-    init()
-    edtTipoNota = select("Tipo Nota") {
-      this.setItems(EListaContas.entries)
-      this.value = EListaContas.TODOS
-      this.setItemLabelGenerator {
-        it.descricao
-      }
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtTemAnexo = select("Tem Anexo") {
-      this.setItems(ETemAnexo.entries)
-      this.value = ETemAnexo.TODOS
-      this.setItemLabelGenerator {
-        it.descricao
-      }
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataInicial = datePicker("Data Inicial") {
-      value = LocalDate.now()
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      value = LocalDate.now()
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    button("Impressoa") {
-      this.icon = VaadinIcon.PRINT.create()
-      addClickListener {
-        viewModel.imprimeNotas()
+      horizontalLayout {
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataInicial = datePicker("Data Inicial") {
+          value = LocalDate.now()
+          this.localePtBr()
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataFinal = datePicker("Data Final") {
+          value = LocalDate.now()
+          this.localePtBr()
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        button("Impressoa") {
+          this.icon = VaadinIcon.PRINT.create()
+          addClickListener {
+            viewModel.imprimeNotas()
+          }
+        }
       }
     }
   }
@@ -121,7 +125,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
         viewModel.updateView()
       }
     }.setPartNameGenerator {
-      if(it.quantFile > 0) {
+      if (it.quantFile > 0) {
         "amarelo"
       } else {
         ""
