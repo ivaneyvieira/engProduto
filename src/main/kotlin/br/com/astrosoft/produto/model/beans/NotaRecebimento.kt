@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 class NotaRecebimento(
   var loja: Int?,
+  var lojaSigla: String?,
   var login: String?,
   var data: LocalDate?,
   var emissao: LocalDate?,
@@ -111,6 +112,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         quantFile = nota.quantFile ?: 0,
         observacaoNota = nota.observacaoNota,
         tipoNota = nota.tipoNota,
+        lojaSigla = nota.lojaSigla,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
       )
     }

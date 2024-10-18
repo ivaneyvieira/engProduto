@@ -13,6 +13,10 @@ class TextBuffer {
   private val buffer = StringBuilder()
   private val FONT_SIZE = 3
 
+  fun textBuf(): String{
+    return buffer.toString()
+  }
+
   fun println(text: String) {
     buffer.append(text).appendLine()
   }

@@ -52,6 +52,7 @@ SELECT I.invno,
        I.prdno,
        I.grade,
        N.storeno,
+       L.sname             AS lojaSigla,
        IFNULL(A.login, '') AS login,
        N.date,
        N.issue_date,
@@ -82,6 +83,8 @@ SELECT I.invno,
 FROM sqldados.iprd AS I
        INNER JOIN sqldados.inv AS N
                   USING (invno)
+       INNER JOIN sqldados.store AS L
+                  ON L.no = N.storeno
        LEFT JOIN T_NOTA_FILE AS F
                  ON F.invno = I.invno
        LEFT JOIN sqldados.iprdAdicional AS A
@@ -117,6 +120,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                   AS loja,
+       N.lojaSigla                                                 AS lojaSigla,
        N.login                                                     AS login,
        DATE(N.date)                                                AS data,
        DATE(N.issue_date)                                          AS emissao,
@@ -141,6 +145,7 @@ SELECT N.storeno                                                   AS loja,
        TRIM(MID(P.name, 1, 37))                                    AS descricao,
        N.grade                                                     AS grade,
        IFNULL(L.localizacao, '')                                   AS localizacao,
+       IFNULL(LS.localizacao, '')                                  AS localizacaoSaci,
        P.mfno                                                      AS vendnoProduto,
        ROUND(N.qtty / 1000)                                        AS quant,
        ROUND(E.estoque)                                            AS estoque,
@@ -177,6 +182,10 @@ FROM T_NOTA AS N
        LEFT JOIN T_LOC AS L
                  ON L.prdno = N.prdno
                    AND L.grade = N.grade
+       LEFT JOIN sqldados.prdloc AS LS
+                 ON LS.prdno = N.prdno
+                   AND LS.grade = N.grade
+                   AND LS.storeno = 4
        LEFT JOIN T_EST AS E
                  ON E.prdno = N.prdno
                    AND E.grade = N.grade
@@ -186,6 +195,7 @@ WHERE (P.dereg & POW(2, 6)) = 0
   AND (N.grade = :grade OR :grade = '');
 
 SELECT loja,
+       lojaSigla,
        login,
        data,
        emissao,
@@ -211,6 +221,7 @@ SELECT loja,
        grade,
        vendnoProduto,
        localizacao,
+       localizacaoSaci,
        quant,
        estoque,
        marca,

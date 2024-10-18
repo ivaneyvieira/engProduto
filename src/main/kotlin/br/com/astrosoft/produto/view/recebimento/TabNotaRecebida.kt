@@ -9,6 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaRecebida
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -91,6 +92,12 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
         viewModel.updateView()
       }
     }
+    button("Impressoa") {
+      this.icon = VaadinIcon.PRINT.create()
+      addClickListener {
+        viewModel.imprimeNotas()
+      }
+    }
   }
 
   override fun Grid<NotaRecebimento>.gridPanel() {
@@ -120,6 +127,8 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
         ""
       }
     }
+
+    this.selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
@@ -165,6 +174,10 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
 
   override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun notasSelecionadas(): List<NotaRecebimento> {
+    return this.itensSelecionados()
   }
 
   override fun updateProduto(): NotaRecebimento? {

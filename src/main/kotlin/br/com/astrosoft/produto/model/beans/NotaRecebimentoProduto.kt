@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 class NotaRecebimentoProduto(
   var loja: Int?,
+  var lojaSigla: String?,
   var data: LocalDate?,
   var login: String?,
   var emissao: LocalDate?,
@@ -28,6 +29,7 @@ class NotaRecebimentoProduto(
   var descricao: String?,
   var grade: String?,
   var localizacao: String?,
+  var localizacaoSaci: String?,
   var quant: Int?,
   var estoque: Int?,
   var marca: Int?,
@@ -42,6 +44,8 @@ class NotaRecebimentoProduto(
   var tipoNota: String?,
   var selecionado: Boolean? = false
 ) {
+  val localizacaoSaciStr: String
+    get() = "Loc:   ${localizacaoSaci ?: ""}"
   val validadeStr
     get() = when (validade) {
       null -> ""

@@ -1,8 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
+import br.com.astrosoft.framework.model.printText.IPrinter
+import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import java.time.LocalDate
 
 class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
@@ -58,6 +61,32 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
     }
     subView.updateProduto()
   }
+
+  fun imprimeNotas() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val report = PrintNotaRecebimento()
+    val preview = subView.printerPreview(loja = 0)
+
+    val buf = TextBuffer()
+
+
+    itens.forEach {nota ->
+      report.print(
+        dados = nota.produtos,
+        printer = object : IPrinter {
+          override fun print(text: TextBuffer) {
+            buf.println(text.textBuf())
+          }
+        }
+      )
+    }
+
+    preview.print(buf)
+  }
 }
 
 interface ITabNotaRecebida : ITabView {
@@ -66,5 +95,6 @@ interface ITabNotaRecebida : ITabView {
   fun updateArquivos()
   fun arquivosSelecionados(): List<InvFile>
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
+  fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
 }
