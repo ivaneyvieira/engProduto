@@ -485,4 +485,3 @@ HAVING CASE
          WHEN :marca = 2 THEN SUM(countRec) > 0 AND notaBaixa != ''
          ELSE FALSE
        END
-
