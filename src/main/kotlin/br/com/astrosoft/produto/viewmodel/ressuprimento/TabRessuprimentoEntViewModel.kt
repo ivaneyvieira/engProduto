@@ -21,7 +21,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = if (subView.filtroProduto())
-      Ressuprimento.find(filtro.codigo, filtro.grade)
+      Ressuprimento.find(filtro.prdno, filtro.grade)
     else
       Ressuprimento.find(filtro)
     subView.updateRessuprimentos(ressuprimento/*.filter {

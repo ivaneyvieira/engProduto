@@ -25,15 +25,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE (A.storeno = 4)
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+  AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '')
-  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-GROUP BY A.prdno, A.grade;
+  AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
 CREATE TEMPORARY TABLE T_NOTA_FILE
@@ -141,7 +140,7 @@ SELECT N.storeno                                                   AS loja,
           COALESCE(B.barcodeList, TRIM(P.barcode), ''))            AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                                    AS descricao,
        N.grade                                                     AS grade,
-       IFNULL(L.localizacaoList, '')                               AS localizacao,
+       IFNULL(L.localizacao, '')                                   AS localizacao,
        P.mfno                                                      AS vendnoProduto,
        ROUND(N.qtty / 1000)                                        AS quant,
        ROUND(E.estoque)                                            AS estoque,
@@ -176,8 +175,8 @@ FROM T_NOTA AS N
                  ON B.prdno = N.prdno
                    AND B.grade = N.grade
        LEFT JOIN T_LOC AS L
-                  ON L.prdno = N.prdno
-                    AND L.grade = N.grade
+                 ON L.prdno = N.prdno
+                   AND L.grade = N.grade
        LEFT JOIN T_EST AS E
                  ON E.prdno = N.prdno
                    AND E.grade = N.grade

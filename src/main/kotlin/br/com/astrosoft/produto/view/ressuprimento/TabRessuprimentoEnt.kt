@@ -27,7 +27,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoEnt(
   val viewModel: TabRessuprimentoEntViewModel,
-  val codigo: String,
+  val prdno: String,
   val grade: String,
 ) :
   TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
@@ -45,7 +45,7 @@ class TabRessuprimentoEnt(
     cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
 
-  override fun filtroProduto(): Boolean = codigo != "" || grade != ""
+  override fun filtroProduto(): Boolean = prdno != "" || grade != ""
 
   override fun HorizontalLayout.toolBarConfig() {
     this.isVisible = !filtroProduto()
@@ -152,7 +152,7 @@ class TabRessuprimentoEnt(
     if (filtroProduto())
       columnGrid({ ressu ->
         val produto = ressu.produtos().firstOrNull { prd ->
-          prd.codigo == codigo && prd.grade == grade
+          prd.prdno == prdno && prd.grade == grade
         }
         produto?.qtQuantNF ?: 0
       }, "Quant").right()
@@ -167,7 +167,7 @@ class TabRessuprimentoEnt(
       lojaRessu = cmbLoja.value?.no ?: 0,
       dataNotaInicial = edtDataInicial.value,
       dataNotaFinal = edtDataFinal.value,
-      codigo = codigo,
+      prdno = prdno,
       grade = grade,
     )
   }

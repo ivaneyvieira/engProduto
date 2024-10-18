@@ -12,20 +12,19 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE A.storeno = 4
-  AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
-  AND (A.grade = :grade OR :grade = '')
-  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-GROUP BY A.prdno, A.grade;
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+  AND (A.storeno = 4)
+  AND (A.prdno = :prdno OR :prdno = '')
+  AND (A.grade = :grade OR :grade = '');
 
 SELECT O.storeno                               AS loja,
        O.ordno                                 AS numero,
        CAST(O.date AS DATE)                    AS data,
-       IFNULL(L.localizacaoList, '')           AS localizacao,
+       IFNULL(L.localizacao, '')               AS localizacao,
        IFNULL(OA.observacao, '')               AS observacao,
        IFNULL(EE.no, 0)                        AS entregueNo,
        IFNULL(EE.name, '')                     AS entregueNome,
@@ -67,7 +66,7 @@ FROM sqldados.eoprd AS E
                  ON OA.storeno = O.storeno
                    AND OA.ordno = O.ordno
                    AND OA.localizacao != ''
-                   AND LOCATE(OA.localizacao, L.localizacaoList) > 0
+                   AND OA.localizacao = L.localizacao
        LEFT JOIN sqldados.stk AS S
                  ON S.prdno = E.prdno
                    AND S.grade = E.grade
@@ -91,10 +90,10 @@ WHERE (O.paymno IN (431, 432, 433))
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.storeno = :loja OR :loja = 0)
-  AND (E.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
+  AND (E.prdno = :prdno OR :prdno = '')
   AND (E.grade = :grade OR :grade = '')
   AND (O.ordno = @PESQUISA_NUM OR
-       IFNULL(L.localizacaoList, '') LIKE @PESQUISA_START OR
+       IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
        IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR
        IFNULL(EE.name, '') LIKE @PESQUISA_LIKE OR
        IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR

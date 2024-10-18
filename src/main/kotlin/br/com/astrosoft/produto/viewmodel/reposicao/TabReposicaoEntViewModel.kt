@@ -24,7 +24,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = if (subView.filtroProduto())
-      Reposicao.findAll(filtro.codigo, filtro.grade)
+      Reposicao.findAll(filtro.prdno, filtro.grade)
     else
       Reposicao.findAll(filtro)
     return reposicoes.filter {

@@ -7,15 +7,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE A.storeno = 4
-  AND (A.prdno = LPAD(:prdno, 16, ' ') OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '')
-  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-GROUP BY A.prdno, A.grade;
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+  AND (A.storeno = 4)
+  AND (A.prdno = :prdno OR :prdno = '')
+  AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -136,6 +135,7 @@ GROUP BY prdno, grade;
 
 SELECT X.ordno                                                  AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                 AS codigo,
+       P.no                                                     AS prdno,
        IFNULL(X.grade, '')                                      AS grade,
        IF(IFNULL(X.grade, '') = '',
           CONCAT(TRIM(P.barcode), ',', GROUP_CONCAT(TRIM(IFNULL(B.barcode, '')) SEPARATOR ',')),
@@ -166,7 +166,7 @@ SELECT X.ordno                                                  AS ordno,
        X.auxShort4                                              AS marca,
        X.auxShort3                                              AS selecionado,
        X.auxLong4                                               AS posicao,
-       IFNULL(L.localizacaoList, '')                            AS localizacao,
+       IFNULL(L.localizacao, '')                                AS localizacao,
        ROUND(IFNULL(S.qtty_varejo + S.qtty_atacado, 0) / 1000)  AS estoque,
        SUBSTRING_INDEX(X.obs, ':', 1)                           AS codigoCorrecao,
        TRIM(MID(PR.name, 1, 37))                                AS descricaoCorrecao,

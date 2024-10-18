@@ -18,15 +18,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE A.storeno = 4
-  AND (A.prdno = LPAD(:codigo, 16, ' ') OR :codigo = '')
-  AND (A.grade = :grade OR :grade = '')
-  AND ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-GROUP BY A.prdno, A.grade;
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+  AND (A.storeno = 4)
+  AND (A.prdno = :prdno OR :prdno = '')
+  AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -49,8 +48,8 @@ WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240307
   AND N.status <> 1
-  AND ((X.prdno = LPAD(:codigo, 16, ' ')) OR :codigo = '')
-  AND ((X.grade = :grade) OR :grade = '')
+  AND ((X.prdno = :prdno OR :prdno = '')
+  AND ((X.grade = :grade) OR :grade = ''))
 GROUP BY storeno, ordno, numero, prdno, grade;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -179,7 +178,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       IFNULL(L.localizacaoList, '')       AS localizacao,
+       IFNULL(L.localizacao, '')           AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
@@ -243,11 +242,11 @@ WHERE N.date >= @DATA
   AND (N.no = :ordno OR :ordno = 0)
   AND N.no >= 100000000
   AND N.date >= @DATA
-  AND ((X.prdno = LPAD(:codigo, 16, ' ') AND X.auxShort4 = :marca) OR :codigo = '')
+  AND ((X.prdno = :prdno AND X.auxShort4 = :marca) OR :prdno = '')
   AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
-         L.localizacaoList,
+         L.localizacao,
          notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_02;
@@ -256,7 +255,7 @@ SELECT N.no                                AS numero,
        vendno                              AS fornecedor,
        CAST(N.date AS DATE)                AS data,
        N.empno                             AS comprador,
-       IFNULL(L.localizacaoList, '')       AS localizacao,
+       IFNULL(L.localizacao, '')           AS localizacao,
        X.obs                               AS usuarioCD,
        NF.lojaNF                           AS loja,
        CAST(IFNULL(NF.numero, '') AS CHAR) AS notaBaixa,
@@ -319,11 +318,11 @@ WHERE N.date >= @DATA
   AND (N.storeno = 1)
   AND (N.no = :ordno OR :ordno = 0)
   AND N.no >= 100000000
-  AND ((X.prdno = LPAD(:codigo, 16, ' ') AND X.auxShort4 = :marca) OR :codigo = '')
+  AND ((X.prdno = :prdno AND X.auxShort4 = :marca) OR :prdno = '')
   AND ((X.grade = :grade AND X.auxShort4 = :marca) OR :grade = '')
 GROUP BY N.storeno,
          N.no,
-         L.localizacaoList,
+         L.localizacao,
          notaBaixa;
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;

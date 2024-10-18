@@ -3,16 +3,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = :lojaLocal OR :lojaLocal = 0)
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '')
-GROUP BY prdno, grade;
+  AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
@@ -47,7 +45,7 @@ SELECT X.storeno                                                               A
        EE.no                                                                   AS usernoExp,
        EE.login                                                                AS usuarioExp,
        X.c5                                                                    AS dataHoraExp,
-       CAST(L.localizacaoList AS CHAR)                                         AS local,
+       IFNULL(L.localizacao, '')                                               AS local,
        X.c3                                                                    AS usuarioSep,
        EC.no                                                                   AS usernoCD,
        EC.login                                                                AS usuarioCD,

@@ -92,11 +92,11 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnButton(VaadinIcon.SHOP, "Ressuprimento", "Ressuprimento") { produto ->
-      val codigo = produto.codigo?.toString() ?: ""
+      val prdno = produto.prdno ?: ""
       val grade = produto.grade ?: ""
       val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Ressuprimento|$codigo : $descricao : $grade") {
-        val view = RessuprimentoView(false, codigo, grade)
+      val dlg = SubWindowForm("Ressuprimento|$prdno : $descricao : $grade") {
+        val view = RessuprimentoView(false, prdno, grade)
         val tab = view.tabRessuprimentoEnt
         val form = tab.createComponent()
         tab.updateComponent()
@@ -105,11 +105,11 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       dlg.open()
     }
     addColumnButton(VaadinIcon.SIGNAL, "Reposição", "Reposição") { produto ->
-      val codigo = produto.codigo?.toString() ?: ""
+      val prdno = produto.prdno ?: ""
       val grade = produto.grade ?: ""
       val descricao = produto.descricao ?: ""
-      val dlg = SubWindowForm("Reposição Loja|$codigo : $descricao : $grade") {
-        val view = ReposicaoView(false, codigo, grade)
+      val dlg = SubWindowForm("Reposição Loja|$prdno : $descricao : $grade") {
+        val view = ReposicaoView(false, prdno, grade)
         val tab = view.tabReposicaoEnt
         val form = tab.createComponent()
         tab.updateComponent()

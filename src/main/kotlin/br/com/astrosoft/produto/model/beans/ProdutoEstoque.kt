@@ -66,7 +66,7 @@ class ProdutoEstoque(
       marca = marca,
       temNota = ETemNota.TEM_NOTA,
       lojaRessu = 0,
-      codigo = this.codigo?.toString() ?: "",
+      prdno = this.prdno ?: "",
       grade = grade ?: "",
     )
   }
@@ -169,7 +169,7 @@ class ProdutoEstoque(
       localizacao = localizacao,
       dataInicial = dataInicial,
       dataFinal = null,
-      codigo = codigo?.toString() ?: "",
+      prdno = prdno ?: "",
       grade = grade ?: "",
       metodo = EMetodo.TODOS,
     )

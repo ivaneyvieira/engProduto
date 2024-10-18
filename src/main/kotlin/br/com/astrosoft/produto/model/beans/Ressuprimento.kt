@@ -120,7 +120,7 @@ class Ressuprimento(
   }
 
   companion object {
-    fun find(codigo: String, grade: String): List<Ressuprimento> {
+    fun find(prdno: String, grade: String): List<Ressuprimento> {
       val reqEnt = find(
         FiltroRessuprimento(
           numero = 0,
@@ -128,7 +128,7 @@ class Ressuprimento(
           marca = EMarcaRessuprimento.ENT,
           temNota = ETemNota.TEM_NOTA,
           lojaRessu = 0,
-          codigo = codigo,
+          prdno = prdno,
           grade = grade,
         )
       )
@@ -139,7 +139,7 @@ class Ressuprimento(
           marca = EMarcaRessuprimento.REC,
           temNota = ETemNota.TEM_NOTA,
           lojaRessu = 0,
-          codigo = codigo,
+          prdno = prdno,
           grade = grade,
         )
       )
@@ -204,7 +204,7 @@ data class FiltroRessuprimento(
   val dataPedidoFinal: LocalDate? = null,
   val dataNotaInicial: LocalDate? = null,
   val dataNotaFinal: LocalDate? = null,
-  val codigo: String = "",
+  val prdno: String = "",
   val grade: String = "",
 )
 

@@ -91,15 +91,14 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno                                                    AS prdno,
-       A.grade                                                    AS grade,
-       GROUP_CONCAT(DISTINCT MID(A.localizacao, 1, 4) ORDER BY 1) AS localizacaoList
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
-WHERE ((MID(A.localizacao, 1, 4) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '')
-GROUP BY prdno, grade;
+  AND (A.grade = :grade OR :grade = '');
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
@@ -122,26 +121,26 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                                                                        AS loja,
-       N.pdvno                                                                          AS pdvno,
-       N.xano                                                                           AS xano,
-       N.nfno                                                                           AS numero,
-       N.nfse                                                                           AS serie,
-       N.eordno                                                                         AS pedido,
-       N.custno                                                                         AS cliente,
-       IFNULL(C.name, '')                                                               AS nomeCliente,
-       N.grossamt / 100                                                                 AS valorNota,
-       CAST(N.issuedate AS DATE)                                                        AS data,
-       SEC_TO_TIME(P.time)                                                              AS hora,
-       N.empno                                                                          AS vendedor,
-       TRIM(MID(E.sname, 1, 20))                                                        AS nomeVendedor,
-       TRIM(E.name)                                                                     AS nomeCompletoVendedor,
-       MAX(CAST(IFNULL(L.localizacaoList, '') AS CHAR))                                 AS locais,
-       X.c5                                                                             AS usuarioExp,
-       X.c4                                                                             AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)                                                   AS totalProdutos,
-       MAX(X.s11)                                                                       AS marca,
-       IF(N.status <> 1, 'N', 'S')                                                      AS cancelada,
+SELECT N.storeno                                                              AS loja,
+       N.pdvno                                                                AS pdvno,
+       N.xano                                                                 AS xano,
+       N.nfno                                                                 AS numero,
+       N.nfse                                                                 AS serie,
+       N.eordno                                                               AS pedido,
+       N.custno                                                               AS cliente,
+       IFNULL(C.name, '')                                                     AS nomeCliente,
+       N.grossamt / 100                                                       AS valorNota,
+       CAST(N.issuedate AS DATE)                                              AS data,
+       SEC_TO_TIME(P.time)                                                    AS hora,
+       N.empno                                                                AS vendedor,
+       TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
+       TRIM(E.name)                                                           AS nomeCompletoVendedor,
+       GROUP_CONCAT(DISTINCT L.localizacao ORDER BY 1)                        AS locais,
+       X.c5                                                                   AS usuarioExp,
+       X.c4                                                                   AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
+       MAX(X.s11)                                                             AS marca,
+       IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        CASE
          WHEN N.nfse = 7
            THEN 'ENTREGA_WEB'
@@ -182,10 +181,10 @@ SELECT N.storeno                                                                
          WHEN N.tipo = 15
            THEN 'NFE'
          ELSE ''
-       END                                                                              AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')                                                      AS notaEntrega,
-       ENT.usuario                                                                      AS usuarioEntrega,
-       CAST(ENT.dataEntrega AS DATE)                                                    AS dataEntrega,
+       END                                                                    AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '')                                            AS notaEntrega,
+       ENT.usuario                                                            AS usuarioEntrega,
+       CAST(ENT.dataEntrega AS DATE)                                          AS dataEntrega,
        CASE
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
@@ -194,24 +193,24 @@ SELECT N.storeno                                                                
          WHEN IFNULL(T.tipoE, 0) > 0
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
-       END                                                                              AS tipo,
+       END                                                                    AS tipo,
        X.c5,
        X.c4,
-       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                          AS retiraFutura,
-       IF(AR.city = 'TIMON', 'Timon', AR.name)                                          AS rota,
-       CA.addr                                                                          AS enderecoCliente,
-       CA.nei                                                                           AS bairroCliente,
-       IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ')           AS agendado,
-       CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                                         AS entrega,
-       M.no                                                                             AS empnoMotorista,
-       M.sname                                                                          AS nomeMotorista,
-       EP.no                                                                            AS usernoPrint,
-       EP.login                                                                         AS usuarioPrint,
-       MAX(EC.no)                                                                       AS usernoSingCD,
-       GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                                      AS usuarioSingCD,
-       MAX(EE.no)                                                                       AS usernoSingExp,
-       GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                                      AS usuarioSingExp,
-       MAX(IF(LOCATE('CD5A', IFNULL(L.localizacaoList, '')) > 0, IFNULL(X.c3, ''), '')) AS usuarioSep
+       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                AS retiraFutura,
+       IF(AR.city = 'TIMON', 'Timon', AR.name)                                AS rota,
+       CA.addr                                                                AS enderecoCliente,
+       CA.nei                                                                 AS bairroCliente,
+       IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
+       CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
+       M.no                                                                   AS empnoMotorista,
+       M.sname                                                                AS nomeMotorista,
+       EP.no                                                                  AS usernoPrint,
+       EP.login                                                               AS usuarioPrint,
+       MAX(EC.no)                                                             AS usernoSingCD,
+       GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                            AS usuarioSingCD,
+       MAX(EE.no)                                                             AS usernoSingExp,
+       GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                            AS usuarioSingExp,
+       MAX(IF('CD5A' = IFNULL(L.localizacao, ''), IFNULL(X.c3, ''), ''))      AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS PT
                  USING (storeno, pdvno, xano)
@@ -271,17 +270,17 @@ WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
                        (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))
         ELSE FALSE
       END
-  AND CASE
-        WHEN :marca IN (0, 999) THEN (((N.tipo IN (4)) AND IFNULL(tipoE, 0) > 0)/*Retira Futura*/
-          OR ((N.tipo IN (3)) AND IFNULL(tipoR, 0) > 0)/*Simples*/
-          OR (N.tipo = 0 AND N.nfse = 1)
-          OR (N.tipo = 0 AND N.nfse >= 10)
-          OR (N.tipo = 1 AND N.nfse = 5)
-          OR (IFNULL(CG.storeno, 0) != :loja)
-          OR (N.nfse = 7)
-          )
-        ELSE TRUE
-      END
+  AND (
+  (:marca IN (0, 999) AND (
+    (N.tipo = 4 AND IFNULL(tipoE, 0) > 0) -- Retira Futura
+      OR (N.tipo = 3 AND IFNULL(tipoR, 0) > 0) -- Simples
+      OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10))
+      OR (N.tipo = 1 AND N.nfse = 5)
+      OR (IFNULL(CG.storeno, 0) != :loja)
+      OR (N.nfse = 7)
+    ))
+    OR :marca NOT IN (0, 999)
+  )
 GROUP BY N.storeno,
          N.pdvno,
          N.xano;

@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 class TabReposicaoEnt(
   val viewModel: TabReposicaoEntViewModel,
-  val codigo: String,
+  val prdno: String,
   val grade: String,
 ) : TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoEnt {
   private var dlgProduto: DlgProdutosReposEnt? = null
@@ -33,7 +33,7 @@ class TabReposicaoEnt(
     cmbLoja.value = viewModel.findLoja(0) ?: Loja.lojaZero
   }
 
-  override fun filtroProduto(): Boolean = codigo != "" || grade != ""
+  override fun filtroProduto(): Boolean = prdno != "" || grade != ""
 
   override fun pedidosSelecionados(): List<Reposicao> {
     return itensSelecionados()
@@ -120,9 +120,9 @@ class TabReposicaoEnt(
 
     if (filtroProduto()) {
       columnGrid({
-        val reposicao = it.produtos.filter { prd ->
-          prd.codigo == codigo && prd.grade == grade
-        }.firstOrNull()
+        val reposicao = it.produtos.firstOrNull { prd ->
+          prd.prdno == prdno && prd.grade == grade
+        }
         reposicao?.quantidade ?: 0
       }, "Quant").right()
     }
@@ -151,7 +151,7 @@ class TabReposicaoEnt(
       localizacao = localizacao,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      codigo = codigo,
+      prdno = prdno,
       grade = grade,
       metodo = EMetodo.REPOSICAO,
     )

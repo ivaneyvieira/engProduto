@@ -145,14 +145,14 @@ class Reposicao(
     }
 
   companion object {
-    fun findAll(codigo: String, grade: String): List<Reposicao> {
+    fun findAll(prdno: String, grade: String): List<Reposicao> {
       val listBruto = findAll(
         FiltroReposicao(
           loja = 0,
           pesquisa = "",
           marca = EMarcaReposicao.ENT,
           localizacao = listOf("TODOS"),
-          codigo = codigo,
+          prdno = prdno,
           grade = grade,
           metodo = EMetodo.TODOS,
         )
@@ -206,7 +206,7 @@ data class FiltroReposicao(
   val localizacao: List<String>,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
-  val codigo: String = "",
+  val prdno: String = "",
   val grade: String = "",
   val metodo: EMetodo,
 )
