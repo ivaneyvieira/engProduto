@@ -19,7 +19,7 @@ CREATE TEMPORARY TABLE T_BARCODE
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
 FROM sqldados.prdbar
 GROUP BY prdno, grade;
-
+/*
 INSERT IGNORE sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao, dataInicial)
 SELECT 4, prdno, grade, 0, '', 0
 FROM sqldados.stk AS S
@@ -28,10 +28,10 @@ FROM sqldados.stk AS S
 WHERE S.storeno = 4
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')
-  AND A.storeno IS NULL;
+  AND A.storeno IS NULL
 
 
-DROP TEMPORARY TABLE IF EXISTS T_LOC_NOVO;
+DROP TEMPORARY TABLE IF EXISTS T_LOC_NOVO
 CREATE TEMPORARY TABLE T_LOC_NOVO
 (
   PRIMARY KEY (prdno)
@@ -39,19 +39,20 @@ CREATE TEMPORARY TABLE T_LOC_NOVO
 SELECT prdno, MAX(MID(localizacao, 1, 4)) AS loc
 FROM sqldados.prdAdicional
 WHERE storeno = 4
-GROUP BY prdno;
+GROUP BY prdno
 
 UPDATE sqldados.prdAdicional AS A
   INNER JOIN T_LOC_NOVO AS N
   USING (prdno)
 SET A.localizacao = N.loc
 WHERE A.localizacao = ''
-  AND N.loc != '';
+  AND N.loc != ''
 
 DELETE
 FROM sqldados.prdAdicional
 WHERE storeno = 4
-  AND localizacao = '';
+  AND localizacao = ''
+*/
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
