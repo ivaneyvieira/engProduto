@@ -51,7 +51,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
-      this.valueChangeTimeout = 1000
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }

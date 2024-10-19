@@ -68,7 +68,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -79,7 +80,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -88,7 +90,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtInventario = integerField("Validade") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -97,8 +100,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtMes = integerField("Mês") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.LAZY
-          valueChangeTimeout = 500
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -107,8 +110,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtAno = integerField("Ano") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.LAZY
-          valueChangeTimeout = 500
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -132,7 +135,8 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
         edtCodigo = textField("Código") {
           this.width = "110px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }

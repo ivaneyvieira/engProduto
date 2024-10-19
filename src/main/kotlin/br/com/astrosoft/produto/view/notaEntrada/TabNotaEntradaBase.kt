@@ -44,26 +44,30 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
       }
     }
     edtNI = integerField("NI") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtNota = textField("Nota") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtFornecedor = integerField("Fornecedor") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtChave = textField("Chave") {
       width = "400px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }

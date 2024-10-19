@@ -75,7 +75,8 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       horizontalLayout {
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }

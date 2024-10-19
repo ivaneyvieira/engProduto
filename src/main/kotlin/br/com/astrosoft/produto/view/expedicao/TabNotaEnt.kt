@@ -86,7 +86,8 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     edtPesquisa = textField("Pesquisa") {
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }

@@ -57,7 +57,8 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         }
       }
       textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.selecionaProduto(it.value)
@@ -68,7 +69,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           }
         }
       }
-      button("Enviar"){
+      button("Enviar") {
         icon = VaadinIcon.ARROW_RIGHT.create()
         onClick {
           viewModel.marcaEntProdutos()
@@ -153,7 +154,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFUsuarioSep()
 
       this.setPartNameGenerator {
-        if(it?.selecionado == true) "amarelo" else null
+        if (it?.selecionado == true) "amarelo" else null
       }
     }
     this.addAndExpand(gridDetail)

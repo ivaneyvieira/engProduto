@@ -20,6 +20,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.DataCommunicator
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
+import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.data.value.ValueChangeMode.LAZY
 import com.vaadin.flow.function.SerializablePredicate
 import org.vaadin.stefan.LazyDownloadButton
@@ -97,14 +98,16 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
         edtVal = integerField("Val") {
           this.width = "80px"
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
 
         edtGrade = textField("Grade") {
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           this.width = "100px"
           addValueChangeListener {
             viewModel.updateView()
@@ -112,7 +115,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         edtListVend = textField("Fornecedores") {
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           this.width = "150px"
           addValueChangeListener {
             viewModel.updateView()
@@ -120,7 +124,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         edtTributacao = textField("Trib") {
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           this.width = "80px"
           addValueChangeListener {
             viewModel.updateView()
@@ -128,7 +133,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         edtType = integerField("Tipo") {
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           this.width = "100px"
           addValueChangeListener {
             viewModel.updateView()
@@ -137,7 +143,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
         edtCl = integerField("C Lucro") {
           this.width = "100px"
-          this.valueChangeMode = LAZY
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }

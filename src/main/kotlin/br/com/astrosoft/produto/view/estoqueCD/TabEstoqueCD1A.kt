@@ -28,14 +28,16 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtGrade = textField("Grade") {
       this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }

@@ -16,7 +16,6 @@ import br.com.astrosoft.produto.view.pedido.columns.ProdutoPedViewColumns.produt
 import br.com.astrosoft.produto.viewmodel.pedido.TabPedidoCDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -39,7 +38,8 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
         }
       }
       textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.marcaEntProdutos(it.value)

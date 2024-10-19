@@ -36,28 +36,32 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtProduto = integerField("Produto") {
       this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtGrade = textField("Grade") {
       this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
     }
     edtLocalizacao = textField("Loc App") {
       this.width = "100px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -142,7 +146,6 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       inativo = cmbInativo.value ?: EInativo.TODOS
     )
   }
-
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)

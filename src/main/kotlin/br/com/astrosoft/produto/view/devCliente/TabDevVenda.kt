@@ -59,7 +59,8 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -116,7 +117,7 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
-      val totalValor = list.groupBy {nota ->
+      val totalValor = list.groupBy { nota ->
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
       }
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }

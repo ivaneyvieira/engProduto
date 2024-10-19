@@ -29,7 +29,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
 
     form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
       edtCodigoBarra = textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.selecionaProdutos(nota, it.value)
@@ -108,8 +109,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
     gridDetail.setPartNameGenerator {
       when {
         it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "primary"
-        it.selecionado == true -> "amarelo"
-        else -> null
+        it.selecionado == true                     -> "amarelo"
+        else                                       -> null
       }
     }
     update()

@@ -38,42 +38,48 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       horizontalLayout {
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         edtProduto = integerField("Produto") {
           this.width = "100px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         edtGrade = textField("Grade") {
           this.width = "100px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -113,7 +119,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         edtSaldo = integerField("Saldo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
           this.value = 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           addValueChangeListener {
