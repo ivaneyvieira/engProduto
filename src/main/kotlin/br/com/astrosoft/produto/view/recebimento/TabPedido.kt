@@ -104,7 +104,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      status = EPedidosStatus.PENDENTE,
+      status = EPedidosStatus.PENWIPDENTE,
       preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS
     )
   }
