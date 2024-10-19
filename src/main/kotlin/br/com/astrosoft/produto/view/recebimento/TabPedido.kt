@@ -24,7 +24,6 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
   private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbStatus: Select<EPedidosStatus>
   private lateinit var cmbPreEnt: Select<EPreEntrada>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -62,16 +61,6 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
         item.descricao
       }
       this.value = EPreEntrada.TODOS
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    cmbStatus = select("Situação") {
-      this.setItems(EPedidosStatus.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = EPedidosStatus.TODOS
       this.addValueChangeListener {
         viewModel.updateView()
       }
@@ -115,7 +104,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      status = cmbStatus.value ?: EPedidosStatus.TODOS,
+      status = EPedidosStatus.PENDENTE,
       preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS
     )
   }

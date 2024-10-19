@@ -62,8 +62,8 @@ data class FiltroPedidoNota(
 
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
   TODOS(999, "Todos"),
-  ABERTOS(0, "Pendente"),
-  FECHADOS(1, "Recebido")
+  PENDENTE(0, "Pendente"),
+  RECEBIDO(1, "Recebido")
 }
 
 enum class EPreEntrada(val cod: String, val descricao: String) {
