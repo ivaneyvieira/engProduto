@@ -206,4 +206,9 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraRec.orEmpty().toList()
+  }
 }

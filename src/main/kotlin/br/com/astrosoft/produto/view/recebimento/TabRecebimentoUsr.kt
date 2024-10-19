@@ -36,6 +36,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaRec)
       filtroLocalizacao(binder, UserSaci::localizacaoRec)
+      filtroImpressoraTermica(binder, UserSaci::impressoraRec)
     }
   }
 }

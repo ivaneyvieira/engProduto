@@ -307,6 +307,12 @@ class UserSaci : IUser {
       })
     }
 
+  var impressoraRec: Set<String>
+    get() = lojas.getOrNull(24)?.toString()?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(24, value.joinToString(":"))
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
