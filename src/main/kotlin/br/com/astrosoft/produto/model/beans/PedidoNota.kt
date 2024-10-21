@@ -50,7 +50,7 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
         totalPendente = pedidoCapa.totalPendente,
         totalProduto = produtos.sumOf { it.totalProduto },
         totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
-        produtos = produtos.filter { it.prdno != "" },
+        produtos = produtos.filter { it.prdno != "" && it.tipo == "P" },
       )
     }
 }
