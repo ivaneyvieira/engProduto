@@ -15,6 +15,7 @@ class PedidoProduto {
   var nfEntrada: String? = null
   var tipo: String = ""
   var total: Double = 0.0
+  var totalPendente: Double = 0.0
   var codigo: String = ""
   var prdno: String = ""
   var descricao: String = ""
