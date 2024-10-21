@@ -136,7 +136,6 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
 
   override fun filtro(): FiltroProdutoEstoque {
     return FiltroProdutoEstoque(
-      loja = 4,
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
       grade = edtGrade.value ?: "",

@@ -130,7 +130,6 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
 
   override fun filtro(): FiltroProdutoEstoque {
     return FiltroProdutoEstoque(
-      loja = 4,
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtCodigo.value ?: 0,
       grade = edtGrade.value ?: "",

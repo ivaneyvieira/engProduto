@@ -19,7 +19,7 @@ class PrintProdutosEstoque(private val filtro: FiltroProdutoEstoque) : PrintText
       negrito = true
     )
     writeln(
-      text = "Loja: ${filtro.lojaSigla()}   Fornecedor: ${
+      text = "Loja: ${bean.lojaSigla}   Fornecedor: ${
         filtro.fornecedor.rpad(5, " ")
       }   Cl:${filtro.centroLucro.toString().rpad(5, " ")}",
       negrito = true

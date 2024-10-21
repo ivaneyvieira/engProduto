@@ -53,39 +53,41 @@ GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
-SELECT S.storeno                                                                               AS loja,
-       P.no                                                                                    AS prdno,
-       TRIM(P.no) * 1                                                                          AS codigo,
-       TRIM(MID(P.name, 1, 37))                                                                AS descricao,
-       TRIM(MID(P.name, 38, 3))                                                                AS unidade,
-       S.grade                                                                                 AS grade,
-       ROUND(P.qttyPackClosed / 1000)                                                          AS embalagem,
-       TRUNCATE(ROUND((S.qtty_atacado + S.qtty_varejo) / 1000) / (P.qttyPackClosed / 1000), 0) AS qtdEmbalagem,
-       IFNULL(A.estoque, 0)                                                                    AS estoque,
-       L1.locSaci                                                                              AS locSaci,
-       A.locApp                                                                                AS locApp,
-       V.no                                                                                    AS codForn,
-       V.sname                                                                                 AS fornecedor,
-       ROUND((S.qtty_atacado + S.qtty_varejo) / 1000)                                          AS saldo,
-       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE)          AS dataInicial
-FROM sqldados.stk AS S
+SELECT E.storeno                                                                      AS loja,
+       S.sname                                                                        AS lojaSigla,
+       E.prdno                                                                        AS prdno,
+       TRIM(P.no) * 1                                                                 AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                       AS descricao,
+       TRIM(MID(P.name, 38, 3))                                                       AS unidade,
+       E.grade                                                                        AS grade,
+       ROUND(P.qttyPackClosed / 1000)                                                 AS embalagem,
+       TRUNCATE(ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / (P.qttyPackClosed / 1000),
+                0)                                                                    AS qtdEmbalagem,
+       IFNULL(A.estoque, 0)                                                           AS estoque,
+       L1.locSaci                                                                     AS locSaci,
+       A.locApp                                                                       AS locApp,
+       V.no                                                                           AS codForn,
+       V.sname                                                                        AS fornecedor,
+       ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000)             AS saldo,
+       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
+FROM sqldados.stk AS E
+       INNER JOIN sqldados.store AS S
+                  ON E.storeno = S.no
        INNER JOIN sqldados.prd AS P
-                  ON S.prdno = P.no
+                  ON E.prdno = P.no
        LEFT JOIN sqldados.vend AS V
                  ON V.no = P.mfno
        LEFT JOIN T_LOC_APP AS A
                  USING (storeno, prdno, grade)
        LEFT JOIN T_LOC_SACI AS L1
                  USING (storeno, prdno, grade)
-WHERE (S.storeno = :loja OR :loja = 0)
-  AND (
+WHERE (
   ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
   ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
   (:inativo = 'T')
   )
-  AND S.storeno = 4
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
-  AND (TRIM(S.prdno) * 1 = :codigo OR :codigo = 0)
+  AND (TRIM(E.prdno) * 1 = :codigo OR :codigo = 0)
   AND CASE :caracter
         WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
         WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
@@ -93,7 +95,7 @@ WHERE (S.storeno = :loja OR :loja = 0)
         ELSE FALSE
       END
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
-GROUP BY S.storeno, S.prdno, S.grade
+GROUP BY E.prdno, E.grade
 HAVING CASE :estoque
          WHEN '>' THEN saldo > :saldo
          WHEN '<' THEN saldo < :saldo
@@ -103,6 +105,7 @@ HAVING CASE :estoque
        END;
 
 SELECT loja,
+       lojaSigla,
        prdno,
        codigo,
        descricao,
@@ -129,4 +132,7 @@ WHERE (
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))
+
+
+
 

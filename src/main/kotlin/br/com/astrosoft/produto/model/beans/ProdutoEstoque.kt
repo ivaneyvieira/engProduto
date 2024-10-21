@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 class ProdutoEstoque(
   var loja: Int?,
+  var lojaSigla: String?,
   var prdno: String?,
   var codigo: Int?,
   var descricao: String?,
@@ -251,7 +252,6 @@ class ProdutoEstoque(
 }
 
 data class FiltroProdutoEstoque(
-  val loja: Int,
   val pesquisa: String,
   val codigo: Int,
   val grade: String,
@@ -262,8 +262,4 @@ data class FiltroProdutoEstoque(
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
   val inativo: EInativo,
-) {
-  fun lojaSigla(): String {
-    return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
-  }
-}
+)
