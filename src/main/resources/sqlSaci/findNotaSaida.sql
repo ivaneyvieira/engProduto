@@ -136,8 +136,8 @@ SELECT N.storeno                                                              AS
        TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
        TRIM(E.name)                                                           AS nomeCompletoVendedor,
        GROUP_CONCAT(DISTINCT L.localizacao ORDER BY 1)                        AS locais,
-       X.c5                                                                   AS usuarioExp,
-       X.c4                                                                   AS usuarioCD,
+       MAX(X.c5)                                                              AS usuarioExp,
+       MAX(X.c4)                                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
        MAX(X.s11)                                                             AS marca,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
@@ -194,8 +194,6 @@ SELECT N.storeno                                                              AS
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
        END                                                                    AS tipo,
-       X.c5,
-       X.c4,
        IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                AS retiraFutura,
        IF(AR.city = 'TIMON', 'Timon', AR.name)                                AS rota,
        CA.addr                                                                AS enderecoCliente,
