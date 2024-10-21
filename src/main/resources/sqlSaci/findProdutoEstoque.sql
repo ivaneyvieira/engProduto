@@ -27,21 +27,20 @@ alter table sqldados.prdAdicional
 DROP TEMPORARY TABLE IF EXISTS T_LOC_SACI;
 CREATE TEMPORARY TABLE T_LOC_SACI
 (
-  PRIMARY KEY (storeno, prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT storeno, prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
+SELECT prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
 FROM sqldados.prdloc
 WHERE localizacao <> ''
   AND storeno = 4
-GROUP BY storeno, prdno, grade;
+GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
-  PRIMARY KEY (storeno, prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT storeno,
-       prdno,
+SELECT prdno,
        grade,
        GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locApp,
        MAX(dataInicial)                              AS dataInicial,
@@ -49,11 +48,12 @@ SELECT storeno,
 FROM sqldados.prdAdicional
 WHERE localizacao <> ''
   AND storeno = 4
-GROUP BY storeno, prdno, grade;
+  AND (TRIM(prdno) * 1 = :codigo OR :codigo = 0)
+GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
-SELECT E.storeno                                                                      AS loja,
+SELECT 4                                                                              AS loja,
        S.sname                                                                        AS lojaSigla,
        E.prdno                                                                        AS prdno,
        TRIM(P.no) * 1                                                                 AS codigo,
@@ -78,9 +78,9 @@ FROM sqldados.stk AS E
        LEFT JOIN sqldados.vend AS V
                  ON V.no = P.mfno
        LEFT JOIN T_LOC_APP AS A
-                 USING (storeno, prdno, grade)
+                 USING (prdno, grade)
        LEFT JOIN T_LOC_SACI AS L1
-                 USING (storeno, prdno, grade)
+                 USING (prdno, grade)
 WHERE (
   ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
   ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
