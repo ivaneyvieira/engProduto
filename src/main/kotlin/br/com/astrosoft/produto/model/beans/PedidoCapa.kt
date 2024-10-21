@@ -44,7 +44,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
-      notas = list.filter { it.produtos.isNotEmpty() }
+      notas = list.filter { it.produtos.isNotEmpty() && it.tipo == "P" }
     )
 
   }
@@ -65,8 +65,10 @@ enum class EPedidosStatus(val cod: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class EPreEntrada(val
-                       cod: String, val descricao: String) {
+enum class EPreEntrada(
+  val
+  cod: String, val descricao: String
+) {
   SIM("S", "Sim"),
   NAO("N", "Não"),
   TODOS("", "Todos"),

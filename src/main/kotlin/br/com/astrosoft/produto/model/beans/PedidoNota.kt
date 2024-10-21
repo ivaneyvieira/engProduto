@@ -19,16 +19,14 @@ data class PedidoNota(
   val totalProduto: Double,
   val totalProdutoPendente: Double,
   val produtos: List<PedidoProduto>,
-){
+) {
   val tipoNota: String
-    get() = when(tipo) {
-      "P" -> "Pre-Entrada"
-      "N" -> "Entrada"
+    get() = when (tipo) {
+      "P"  -> "Pre-Entrada"
+      "N"  -> "Entrada"
       else -> ""
     }
 }
-
-
 
 fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
   return this.groupBy { "${it.loja} ${it.pedido} ${it.invno ?: 0}" }
@@ -50,7 +48,7 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
         totalPendente = pedidoCapa.totalPendente,
         totalProduto = produtos.sumOf { it.totalProduto },
         totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
-        produtos = produtos.filter { it.prdno != "" && it.tipo == "P" },
+        produtos = produtos.filter { it.prdno != "" },
       )
     }
 }
