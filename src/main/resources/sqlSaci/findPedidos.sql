@@ -159,6 +159,7 @@ SELECT
 FROM
   T_ORD
 WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
-  AND (((:preEntrada = 'S') AND (invno2 IS NOT NULL AND invno IS NULL)) OR ((:preEntrada = 'N') AND (prdno IS NULL)) OR
+  AND (((:preEntrada = 'S') AND (invno2 IS NOT NULL AND invno IS NULL)) OR
+       ((:preEntrada = 'N') AND (invno2 IS NULL AND invno IS NOT NULL)) OR
        (:preEntrada = ''))
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade

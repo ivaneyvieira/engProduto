@@ -44,9 +44,8 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
-      notas = list.filter { it.produtos.isNotEmpty() && it.tipo == "P" }
+      notas = list.filter { it.produtos.isNotEmpty() }
     )
-
   }
 }
 
