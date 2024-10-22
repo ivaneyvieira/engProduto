@@ -102,6 +102,19 @@ SELECT storeno,
 FROM T_INV
 GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_OPRD;
+CREATE TEMPORARY TABLE T_OPRD
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT storeno,
+       ordno,
+       SUM(qttyRcv * cost)                       AS totalRecebido,
+       SUM((qtty - qttyCancel - qttyRcv) * cost) AS totalPendente,
+       SUM((qtty - qttyCancel) * cost)           AS totalPedido
+FROM sqldados.oprd AS P
+GROUP BY storeno, ordno;
+
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
 SELECT O.storeno                                  AS loja,
@@ -110,9 +123,9 @@ SELECT O.storeno                                  AS loja,
        O.status                                   AS status,
        O.vendno                                   AS no,
        V.name                                     AS fornecedor,
-       O.amtOrigem / 100                          AS totalPedido,
+       OP.totalPedido                             AS totalPedido,
        O.freightAmt / 100                         AS frete,
-       O.amt / 100                                AS totalPendente,
+       OP.totalPendente                           AS totalPendente,
        TRIM(IO.prdno)                             AS codigo,
        IO.prdno                                   AS prdno,
        TRIM(MID(P.name, 1, 37))                   AS descricao,
@@ -130,6 +143,9 @@ SELECT O.storeno                                  AS loja,
        dataEntrada                                AS dataEntrada,
        nfEntrada                                  AS nfEntrada
 FROM sqldados.ords AS O
+       INNER JOIN T_OPRD AS OP
+                  ON O.storeno = OP.storeno
+                    AND O.no = OP.ordno
        INNER JOIN sqldados.vend AS V
                   ON O.vendno = V.no
        LEFT JOIN T_INVORD AS IO
