@@ -114,7 +114,7 @@ SELECT storeno, pdvno, xano
 FROM sqldados.nfrprd
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
-  AND date > 20240401
+  AND date > @DT
   AND optionEntrega % 10 = 4
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
@@ -247,11 +247,11 @@ FROM sqldados.nf AS N
                  ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
        LEFT JOIN sqldados.emp AS M
                  ON N.s16 = M.no
-WHERE (l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
-  AND (l16 <= :dataEntregaFinal OR :dataEntregaFinal = 0)
-  AND (issuedate >= :dataInicial OR :dataInicial = 0)
-  AND (issuedate <= :dataFinal OR :dataFinal = 0)
-  AND issuedate >= @DT
+WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
+  AND (N.l16 <= :dataEntregaFinal OR :dataEntregaFinal = 0)
+  AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
+  AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
+  AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
   AND (X.s11 = :marca OR :marca = 999)
