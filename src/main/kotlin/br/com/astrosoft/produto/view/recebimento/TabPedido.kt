@@ -113,6 +113,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::totalPendente, "Total Pendente")
     columnGrid(PedidoCapa::totalRecebido, "Total Recebido")
     columnGrid(PedidoCapa::preEntrada, "Pré-Ent")
+    columnGrid(PedidoCapa::observacao, "Observação", isExpand = true)
   }
 
   override fun filtro(): FiltroPedidoNota {

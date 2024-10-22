@@ -15,6 +15,7 @@ data class PedidoCapa(
   val frete: Double,
   val totalProduto: Double,
   val totalProdutoPendente: Double,
+  val observacao: String,
   val notas: List<PedidoNota>,
 ) {
 
@@ -54,6 +55,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       fornecedor = pedido.fornecedor,
       totalPedido = pedido.totalPedido,
       frete = pedido.frete,
+      observacao = pedido.observacao,
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },

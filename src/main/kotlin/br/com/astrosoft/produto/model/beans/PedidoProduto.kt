@@ -14,6 +14,7 @@ class PedidoProduto {
   var dataEntrada: LocalDate? = null
   var nfEntrada: String? = null
   var preEntrada: String = ""
+  var observacao: String = ""
   var tipo: String = ""
   var totalPedido: Double = 0.0
   var frete: Double = 0.0
