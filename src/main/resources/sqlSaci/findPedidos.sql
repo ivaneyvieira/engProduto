@@ -110,7 +110,8 @@ SELECT O.storeno                                  AS loja,
        O.status                                   AS status,
        O.vendno                                   AS no,
        V.name                                     AS fornecedor,
-       O.amtOrigem / 100                          AS total,
+       O.amtOrigem / 100                          AS totalPedido,
+       O.freightAmt / 100                         AS frete,
        O.amt / 100                                AS totalPendente,
        TRIM(IO.prdno)                             AS codigo,
        IO.prdno                                   AS prdno,
@@ -150,7 +151,8 @@ SELECT loja,
        status,
        no,
        fornecedor,
-       total,
+       totalPedido,
+       frete,
        totalPendente,
        tipo,
        IF(invno2 IS NOT NULL, 'S', 'N')   AS preEntrada,
@@ -170,7 +172,4 @@ SELECT loja,
        IFNULL(nfEntrada, '')              AS nfEntrada
 FROM T_ORD
 WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
-  AND (((:preEntrada = 'S') AND (invno2 IS NOT NULL AND invno IS NULL)) OR
-       ((:preEntrada = 'N') AND (prdno IS NULL)) OR
-       (:preEntrada = ''))
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade

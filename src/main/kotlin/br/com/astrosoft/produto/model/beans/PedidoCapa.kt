@@ -10,12 +10,16 @@ data class PedidoCapa(
   val status: Int,
   val no: Int,
   val fornecedor: String,
-  val total: Double,
+  val totalPedido: Double,
   val totalPendente: Double,
+  val frete: Double,
   val totalProduto: Double,
   val totalProdutoPendente: Double,
   val notas: List<PedidoNota>,
 ) {
+  val totalRecebido: Double
+    get() = totalPedido - totalPendente
+
   val statusPedido: String
     get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
 
@@ -43,7 +47,8 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       status = pedido.status,
       no = pedido.no,
       fornecedor = pedido.fornecedor,
-      total = pedido.total,
+      totalPedido = pedido.totalPedido,
+      frete = pedido.frete,
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
@@ -73,5 +78,5 @@ enum class EPreEntrada(
 ) {
   SIM("S", "Sim"),
   NAO("N", "Não"),
-  TODOS("", "Todos"),
+  TODOS("T", "Todos"),
 }

@@ -25,7 +25,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
 
-  //private lateinit var cmbPreEnt: Select<EPreEntrada>
+  private lateinit var cmbPreEnt: Select<EPreEntrada>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -56,8 +56,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
         viewModel.updateView()
       }
     }
-    /*
-        cmbPreEnt = select("Pré Entrada") {
+    cmbPreEnt = select("Pré-Ent") {
       this.setItems(EPreEntrada.entries)
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -66,7 +65,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       this.addValueChangeListener {
         viewModel.updateView()
       }
-    }*/
+    }
     edtDataInicial = datePicker("Data Inicial") {
       this.value = LocalDate.now()
       this.localePtBr()
@@ -95,10 +94,12 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::pedido, "Pedido")
     columnGrid(PedidoCapa::no, "No Forn")
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "400px")
-    columnGrid(PedidoCapa::total, "Total Pedido")
+    columnGrid(PedidoCapa::totalPedido, "Total Pedido")
     columnGrid(PedidoCapa::totalPendente, "Total Pendente")
     columnGrid(PedidoCapa::statusPedido, "Situação")
-    columnGrid(PedidoCapa::preEntrada, "Pré-Entrada")
+    //columnGrid(PedidoCapa::frete, "Frete")
+    columnGrid(PedidoCapa::totalRecebido, "Total Recebido")
+    columnGrid(PedidoCapa::preEntrada, "Pré-Ent")
   }
 
   override fun filtro(): FiltroPedidoNota {
@@ -108,7 +109,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       status = EPedidosStatus.TODOS,
-      preEntrada = EPreEntrada.TODOS
+      preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS
     )
   }
 
