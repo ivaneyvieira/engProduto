@@ -8,9 +8,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabPedido
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
+import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -24,7 +26,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
   private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
-
+  private lateinit var chkSemRecebimento: Checkbox
   private lateinit var cmbPreEnt: Select<EPreEntrada>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -66,6 +68,12 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
         viewModel.updateView()
       }
     }
+    chkSemRecebimento = checkBox("Sem Recebimento") {
+      this.value = false
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
     edtDataInicial = datePicker("Data Inicial") {
       this.value = LocalDate.now()
       this.localePtBr()
@@ -96,8 +104,6 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "400px")
     columnGrid(PedidoCapa::totalPedido, "Total Pedido")
     columnGrid(PedidoCapa::totalPendente, "Total Pendente")
-    //columnGrid(PedidoCapa::statusPedido, "Situação")
-    //columnGrid(PedidoCapa::frete, "Frete")
     columnGrid(PedidoCapa::totalRecebido, "Total Recebido")
     columnGrid(PedidoCapa::preEntrada, "Pré-Ent")
   }
@@ -109,7 +115,8 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       status = EPedidosStatus.TODOS,
-      preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS
+      preEntrada = cmbPreEnt.value ?: EPreEntrada.TODOS,
+      semRecebimento = chkSemRecebimento.value ?: false
     )
   }
 

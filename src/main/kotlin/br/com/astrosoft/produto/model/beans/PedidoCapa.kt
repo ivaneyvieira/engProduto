@@ -64,6 +64,7 @@ data class FiltroPedidoNota(
   val pesquisa: String,
   val status: EPedidosStatus,
   val preEntrada: EPreEntrada,
+  val semRecebimento: Boolean,
 )
 
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
