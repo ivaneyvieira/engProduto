@@ -17,6 +17,11 @@ data class PedidoCapa(
   val totalProdutoPendente: Double,
   val notas: List<PedidoNota>,
 ) {
+
+  fun produtosCompra(): List<PedidoProdutoCompra> {
+    return saci.findPedidoProdutoCompra(loja, pedido)
+  }
+
   val totalRecebido: Double
     get() = totalPedido - totalPendente
 
@@ -24,7 +29,7 @@ data class PedidoCapa(
     get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
 
   val preEntrada: String
-    get() = if(notas.any { it.preEntrada == "S" }) "S" else "N"
+    get() = if (notas.any { it.preEntrada == "S" }) "S" else "N"
 
   companion object {
     fun findPedidoCapa(filtro: FiltroPedidoNota): List<PedidoCapa> {

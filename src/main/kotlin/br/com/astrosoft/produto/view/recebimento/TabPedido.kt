@@ -93,9 +93,16 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   override fun Grid<PedidoCapa>.gridPanel() {
     columnGrid(PedidoCapa::loja, "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Notas", "Notas") { pedido ->
-      dlgProduto = DlgNotaPedido(viewModel, pedido)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+      if (pedido.notas.isEmpty()) {
+        val dlgProdutoCompra = DlgPedidoProdutoCompra(viewModel, pedido)
+        dlgProdutoCompra.showDialog {
+          viewModel.updateView()
+        }
+      } else {
+        dlgProduto = DlgNotaPedido(viewModel, pedido)
+        dlgProduto?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
     columnGrid(PedidoCapa::data, "Data")

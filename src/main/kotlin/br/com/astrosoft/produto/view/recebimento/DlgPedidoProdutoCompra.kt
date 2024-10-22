@@ -4,25 +4,23 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.PedidoNota
-import br.com.astrosoft.produto.model.beans.PedidoProduto
-import br.com.astrosoft.produto.model.beans.ValidadeSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoNota) {
+class DlgPedidoProdutoCompra(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(PedidoProduto::class.java, false)
+  private val gridDetail = Grid(PedidoProdutoCompra::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
-    val numeroNota: String = pedido.nfEntrada ?: ""
+    val numero: Int = pedido.pedido
     val loja = pedido.loja
 
-    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja", toolBar = {
+    form = SubWindowForm("Produtos do Pedido $numero Loja: $loja", toolBar = {
     }, onClose = {
       onClose()
     }) {
@@ -41,18 +39,18 @@ class DlgProdutosPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoNot
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      columnGrid(PedidoProduto::codigo, "Código")
-      columnGrid(PedidoProduto::descricao, "Descrição")
-      columnGrid(PedidoProduto::grade, "Grade")
-      columnGrid(PedidoProduto::qtty, "Qtde Pedido")
-      columnGrid(PedidoProduto::qttyPendente, "Qtde Pendente")
+      columnGrid(PedidoProdutoCompra::codigo, "Código")
+      columnGrid(PedidoProdutoCompra::descricao, "Descrição")
+      columnGrid(PedidoProdutoCompra::grade, "Grade")
+      columnGrid(PedidoProdutoCompra::qttyPedido, "Qtde Pedido")
+      columnGrid(PedidoProdutoCompra::qttyPendente, "Qtde Pendente")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
   fun update() {
-    val listProdutos = pedido.produtos
+    val listProdutos = pedido.produtosCompra()
     gridDetail.setItems(listProdutos)
   }
 

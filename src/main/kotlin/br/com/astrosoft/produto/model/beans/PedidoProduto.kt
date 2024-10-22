@@ -23,9 +23,7 @@ class PedidoProduto {
   var descricao: String = ""
   var grade: String = ""
   var qtty: Int = 0
-  var qttyRcv: Int = 0
   var qttyPendente: Int = 0
-  var custo: Double = 0.0
   var totalProduto: Double = 0.0
   var totalProdutoPendente: Double = 0.0
 }

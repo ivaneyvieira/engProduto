@@ -1473,6 +1473,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findPedidoProdutoCompra(storeno: Int, pedido: Int): List<PedidoProdutoCompra> {
+    val sql = "/sqlSaci/findPedidoProduto.sql"
+    return query(sql, PedidoProdutoCompra::class) {
+      addOptionalParameter("loja", storeno)
+      addOptionalParameter("pedido", pedido)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
