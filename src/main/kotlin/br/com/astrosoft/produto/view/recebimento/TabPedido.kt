@@ -37,58 +37,67 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    cmbLoja = select("Loja") {
-      this.setItemLabelGenerator { item ->
-        item.descricao
+    verticalLayout {
+      this.isPadding = false
+      this.isSpacing = false
+      this.isMargin = false
+      horizontalLayout {
+        cmbLoja = select("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient)
+              viewModel.updateView()
+          }
+        }
+        init()
+        cmbPreEnt = select("Pré-Ent") {
+          this.setItems(EPreEntrada.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EPreEntrada.TODOS
+          this.addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        chkSemRecebimento = checkBox("Sem Recebimento") {
+          this.value = false
+          this.addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
-      addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
-      }
-    }
-    init()
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      this.valueChangeMode = ValueChangeMode.LAZY
-      this.valueChangeTimeout = 1500
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    cmbPreEnt = select("Pré-Ent") {
-      this.setItems(EPreEntrada.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = EPreEntrada.TODOS
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    chkSemRecebimento = checkBox("Sem Recebimento") {
-      this.value = false
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataInicial = datePicker("Data Inicial") {
-      this.value = LocalDate.now()
-      this.localePtBr()
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      this.value = LocalDate.now()
-      this.localePtBr()
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    button("Impressão") {
-      this.icon = VaadinIcon.PRINT.create()
-      addClickListener {
-        viewModel.imprimePedido()
+      horizontalLayout {
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataInicial = datePicker("Data Inicial") {
+          this.value = LocalDate.now()
+          this.localePtBr()
+          this.addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataFinal = datePicker("Data Final") {
+          this.value = LocalDate.now()
+          this.localePtBr()
+          this.addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        button("Impressão") {
+          this.icon = VaadinIcon.PRINT.create()
+          addClickListener {
+            viewModel.imprimePedido()
+          }
+        }
       }
     }
   }
