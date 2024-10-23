@@ -69,6 +69,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
           }
         }
       }
+
       horizontalLayout {
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
