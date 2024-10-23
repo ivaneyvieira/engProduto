@@ -75,7 +75,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
+        this.setFixedWidth(60)
       }
   private val barcodeCol: TextColumnBuilder<String> =
       col.column("Cód Barra", PedidoProdutoCompra::barcode.name, type.stringType()).apply {
