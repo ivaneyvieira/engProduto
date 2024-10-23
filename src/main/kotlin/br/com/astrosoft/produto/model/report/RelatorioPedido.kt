@@ -142,7 +142,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   fun makeReport(): JasperReportBuilder? {
     val colunms = columnBuilder().toTypedArray()
     var index = 1
-    val itens = pedido.produtosCompra().sortedBy { it.codigo }.map {
+    val itens = pedido.produtosCompra().filterPendentes().sortedBy { it.codigo }.map {
       it.apply {
         this.item = index++
       }
@@ -181,3 +181,10 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   }
 }
 
+private fun List<PedidoProdutoCompra>.filterPendentes(): List<PedidoProdutoCompra> {
+  val contemPendente = this.any { it.qttyPendente > 0 }
+  val contemRecebido = this.any { it.qttyPendente == 0 }
+  return if (contemPendente && contemRecebido) {
+    this.filter { it.qttyPendente > 0 }
+  } else this
+}
