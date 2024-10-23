@@ -4,7 +4,9 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.PedidoCapa
+import br.com.astrosoft.produto.model.beans.PedidoProdutoCompra
+import br.com.astrosoft.produto.model.beans.ValidadeSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -50,7 +52,7 @@ class DlgPedidoProdutoCompra(val viewModel: TabPedidoViewModel, var pedido: Pedi
   }
 
   fun update() {
-    val listProdutos = pedido.produtosCompra()
+    val listProdutos = pedido.produtosCompra().filterPendentes()
     gridDetail.setItems(listProdutos)
   }
 
@@ -69,4 +71,12 @@ class DlgPedidoProdutoCompra(val viewModel: TabPedidoViewModel, var pedido: Pedi
   fun reloadGrid() {
     gridDetail.dataProvider.refreshAll()
   }
+}
+
+private fun List<PedidoProdutoCompra>.filterPendentes(): List<PedidoProdutoCompra> {
+  val contemPendente = this.any { it.qttyPendente > 0 }
+  val contemRecebido = this.any { it.qttyPendente == 0 }
+  return if (contemPendente && contemRecebido) {
+    this.filter { it.qttyPendente > 0 }
+  } else this
 }
