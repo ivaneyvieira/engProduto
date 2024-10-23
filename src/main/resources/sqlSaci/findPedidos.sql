@@ -118,6 +118,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
 SELECT O.storeno                                  AS loja,
+       L.sname                                    AS sigla,
        O.no                                       AS pedido,
        CAST(O.date AS DATE)                       AS data,
        O.status                                   AS status,
@@ -142,6 +143,8 @@ SELECT O.storeno                                  AS loja,
        dataEntrada                                AS dataEntrada,
        nfEntrada                                  AS nfEntrada
 FROM sqldados.ords AS O
+       INNER JOIN sqldados.store AS L
+                  ON O.storeno = L.no
        INNER JOIN T_OPRD AS OP
                   ON O.storeno = OP.storeno
                     AND O.no = OP.ordno
@@ -161,6 +164,7 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
        (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0) OR (:status = 999) OR (IO.storeno IS NULL));
 
 SELECT loja,
+       sigla,
        pedido,
        data,
        status,
@@ -171,7 +175,7 @@ SELECT loja,
        totalPendente,
        tipo,
        IF(invno2 IS NOT NULL, 'S', 'N')   AS preEntrada,
-       observacao as observacao,
+       observacao                         AS observacao,
        IFNULL(codigo, '')                 AS codigo,
        IFNULL(prdno, '')                  AS prdno,
        IFNULL(descricao, '')              AS descricao,

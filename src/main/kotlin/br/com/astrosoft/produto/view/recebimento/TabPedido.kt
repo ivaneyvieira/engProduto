@@ -8,10 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabPedido
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPedidoViewModel
-import com.github.mvysny.karibudsl.v10.checkBox
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -88,6 +85,12 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
         viewModel.updateView()
       }
     }
+    button("Impressão") {
+      this.icon = VaadinIcon.PRINT.create()
+      addClickListener {
+        viewModel.imprimePedido()
+      }
+    }
   }
 
   override fun Grid<PedidoCapa>.gridPanel() {
@@ -105,6 +108,8 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
         }
       }
     }
+    this.selectionMode = Grid.SelectionMode.MULTI
+
     columnGrid(PedidoCapa::data, "Data")
     columnGrid(PedidoCapa::pedido, "Pedido")
     columnGrid(PedidoCapa::no, "No Forn")
@@ -130,6 +135,10 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
 
   override fun updatePedidos(pedido: List<PedidoCapa>) {
     this.updateGrid(pedido)
+  }
+
+  override fun predidoSelecionado(): List<PedidoCapa> {
+    return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {

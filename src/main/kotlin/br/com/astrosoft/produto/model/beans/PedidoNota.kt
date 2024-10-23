@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 data class PedidoNota(
   val loja: Int,
+  val sigla: String,
   val pedido: Int,
   val data: LocalDate?,
   val status: Int,
@@ -37,6 +38,7 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
       val pedidoCapa = produtos.firstOrNull() ?: return@mapNotNull null
       PedidoNota(
         loja = pedidoCapa.loja,
+        sigla = pedidoCapa.sigla,
         pedido = pedidoCapa.pedido,
         invno = pedidoCapa.invno,
         tipo = pedidoCapa.tipo,

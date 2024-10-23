@@ -1,11 +1,14 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
+import br.com.astrosoft.devolucao.model.reports.RelatorioPedido
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.EPreEntrada
 import br.com.astrosoft.produto.model.beans.FiltroPedidoNota
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.PedidoCapa
+import br.com.astrosoft.produto.model.report.ReportImpresso
 
 class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -28,9 +31,19 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
+
+  fun imprimePedido() = viewModel.exec {
+    val pedidos = subView.predidoSelecionado()
+    pedidos.ifEmpty {
+      fail("Nenhum pedido selecionado")
+    }
+    val file = RelatorioPedido.processaRelatorio(pedidos)
+    viewModel.view.showReport(chave = "PedidoImpresso${System.nanoTime()}", report = file)
+  }
 }
 
 interface ITabPedido : ITabView {
   fun filtro(): FiltroPedidoNota
   fun updatePedidos(pedido: List<PedidoCapa>)
+  fun predidoSelecionado(): List<PedidoCapa>
 }

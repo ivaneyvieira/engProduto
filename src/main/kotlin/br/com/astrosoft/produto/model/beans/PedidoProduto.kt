@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 class PedidoProduto {
   var loja: Int = 0
+  var sigla: String = ""
   var pedido: Int = 0
   var data: LocalDate? = null
   var status: Int = 0
