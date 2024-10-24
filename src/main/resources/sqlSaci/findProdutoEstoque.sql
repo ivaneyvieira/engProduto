@@ -61,14 +61,14 @@ SELECT 4                                                                        
        TRIM(MID(P.name, 38, 3))                                                       AS unidade,
        E.grade                                                                        AS grade,
        ROUND(P.qttyPackClosed / 1000)                                                 AS embalagem,
-       TRUNCATE(ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / (P.qttyPackClosed / 1000),
-                0)                                                                    AS qtdEmbalagem,
+       TRUNCATE(ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) /
+                (P.qttyPackClosed / 1000), 0)                                         AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        L1.locSaci                                                                     AS locSaci,
        A.locApp                                                                       AS locApp,
        V.no                                                                           AS codForn,
        V.sname                                                                        AS fornecedor,
-       ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000)             AS saldo,
+       ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
 FROM sqldados.stk AS E
        INNER JOIN sqldados.store AS S
