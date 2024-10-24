@@ -13,8 +13,8 @@ class PedidoProdutoCompra {
   var qttyPendente: Int = 0
   var custo: Double = 0.0
 
-  val valorTotal: Double
-    get() = qttyPedido * custo
+  val valorTotalPendente: Double
+    get() = qttyPendente * custo
 
   //Sequencial do item
   var item: Int = 0

@@ -51,7 +51,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
         this.setFixedWidth(40)
       }
   private val qtdeCol: TextColumnBuilder<Int> =
-      col.column("Quant", PedidoProdutoCompra::qttyPedido.name, type.integerType()).apply {
+      col.column("Quant", PedidoProdutoCompra::qttyPendente.name, type.integerType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("0")
@@ -71,7 +71,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
         this.setFixedWidth(40)
       }
   private val valorTotalCol: TextColumnBuilder<Double> =
-      col.column("V. Total", PedidoProdutoCompra::valorTotal.name, type.doubleType()).apply {
+      col.column("V. Total", PedidoProdutoCompra::valorTotalPendente.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
