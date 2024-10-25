@@ -81,6 +81,7 @@ FROM sqldados.stk AS E
                  USING (prdno, grade)
        LEFT JOIN T_LOC_SACI AS L1
                  USING (prdno, grade)
+
 WHERE (
   ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
   ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
