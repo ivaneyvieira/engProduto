@@ -19,7 +19,8 @@ FROM sqldados.cthcr2 AS H
        INNER JOIN sqldados.custp AS C
                   ON C.no = H.custno
 WHERE invno > 0
-  AND saldoDevolucao != 0;
+  AND saldoDevolucao != 0
+GROUP BY H.custno;
 
 
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
