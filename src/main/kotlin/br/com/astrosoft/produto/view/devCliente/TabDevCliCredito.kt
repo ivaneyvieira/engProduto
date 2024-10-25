@@ -6,10 +6,12 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.CreditoCliente
+import br.com.astrosoft.produto.model.beans.FiltroCreditoCliente
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliCredito
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliCreditoViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -38,9 +40,18 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
   override fun Grid<CreditoCliente>.gridPanel() {
     this.addClassName("styling")
     columnGrid(CreditoCliente::loja, header = "Loja").right()
-    columnGrid(CreditoCliente::codigo, header = "Cód Cliente").right()
-    columnGrid(CreditoCliente::nome, header = "Nome Cliente").expand()
+    columnGrid(CreditoCliente::ni, header = "NI").right()
+    columnGrid(CreditoCliente::nfDev, header = "NF Dev")
+    columnGrid(CreditoCliente::dtDev, header = "Data")
+    columnGrid(CreditoCliente::vendno, header = "Cód For")
+    columnGrid(CreditoCliente::fornecedor, header = "Fornecedor")
+    columnGrid(CreditoCliente::valorDev, header = "Valor Dev")
     columnGrid(CreditoCliente::tipo, header = "Tipo")
+    columnGrid(CreditoCliente::nfVenda, header = "NF Venda")
+    columnGrid(CreditoCliente::dtVenda, header = "Data")
+    columnGrid(CreditoCliente::codigo, header = "Cód Cliente").right()
+    columnGrid(CreditoCliente::nome, header = "Nome do Cliente").expand()
+    columnGrid(CreditoCliente::valorVenda, header = "Valor Venda")
     columnGrid(CreditoCliente::vlCredito, header = "Valor Crédito")
   }
 
