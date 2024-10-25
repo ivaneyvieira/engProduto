@@ -220,7 +220,7 @@ FROM sqldados.nf AS N
                  USING (storeno, pdvno, xano)
        LEFT JOIN T_ENTREGA AS ENT
                  USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.xaprd2 AS X
+       INNER JOIN sqldados.xaprd2 AS X
                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EC
                  ON EC.no = X.s4
