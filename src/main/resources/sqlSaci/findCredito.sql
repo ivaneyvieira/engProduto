@@ -21,6 +21,7 @@ FROM sqldados.cthcr2 AS H
 WHERE invno > 0
   AND saldoDevolucao != 0;
 
+
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
 CREATE TEMPORARY TABLE T_VENDA
 SELECT N.storeno                 AS loja,
