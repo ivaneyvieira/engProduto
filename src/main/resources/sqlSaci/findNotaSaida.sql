@@ -221,7 +221,7 @@ FROM sqldados.nf AS N
        LEFT JOIN T_ENTREGA AS ENT
                  USING (storeno, pdvno, xano)
        INNER JOIN sqldados.xaprd2 AS X
-                 USING (storeno, pdvno, xano)
+                  USING (storeno, pdvno, xano)
        LEFT JOIN sqldados.users AS EC
                  ON EC.no = X.s4
        LEFT JOIN sqldados.users AS EE
@@ -254,7 +254,6 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-  AND (X.s11 = :marca OR :marca = 999)
   AND CASE :notaEntrega
         WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
           AND IFNULL(tipoR, 0) = 0
@@ -346,4 +345,9 @@ WHERE (@PESQUISA = ''
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
   AND (:todosLocais = 'S' OR locais != '')
-GROUP BY Q.loja, Q.pdvno, Q.xano
+GROUP BY Q.loja, Q.pdvno, Q.xanopus
+HAVING ((:marca = 0 AND countExp > 0)
+  OR (:marca = 1 AND countCD > 0)
+  OR (:marca = 2 AND countEnt > 0)
+  OR (:marca = 999))
+
