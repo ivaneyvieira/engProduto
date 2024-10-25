@@ -22,6 +22,11 @@ class CreditoCliente(
   var clienteVenda: String?,
   var valorVenda: Double?,
 ) {
+  fun produtos() = saci.entradaDevCliPro(ni ?: 0)
+  fun mudaCliente(): String {
+    return ""
+  }
+
   companion object {
     fun findCreditoCliente(filtro: FiltroCreditoCliente): List<CreditoCliente> {
       return saci.findCreditoCliente(filtro)

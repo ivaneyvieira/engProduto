@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.right
@@ -40,14 +41,17 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
   override fun Grid<CreditoCliente>.gridPanel() {
     this.addClassName("styling")
     columnGrid(CreditoCliente::loja, header = "Loja").right()
+        addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+      viewModel.imprimeCredito(nota)
+    }
     columnGrid(CreditoCliente::ni, header = "NI").right()
-    columnGrid(CreditoCliente::nfDev, header = "NF Dev")
+    columnGrid(CreditoCliente::nfDev, header = "NF Dev").right()
     columnGrid(CreditoCliente::dtDev, header = "Data")
     columnGrid(CreditoCliente::vendno, header = "Cód For")
     columnGrid(CreditoCliente::fornecedor, header = "Fornecedor")
     columnGrid(CreditoCliente::valorDev, header = "Valor Dev")
     columnGrid(CreditoCliente::tipo, header = "Tipo")
-    columnGrid(CreditoCliente::nfVenda, header = "NF Venda")
+    columnGrid(CreditoCliente::nfVenda, header = "NF Venda").right()
     columnGrid(CreditoCliente::dtVenda, header = "Data")
     columnGrid(CreditoCliente::codigo, header = "Cód Cliente").right()
     columnGrid(CreditoCliente::nome, header = "Nome do Cliente").expand()
