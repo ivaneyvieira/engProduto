@@ -12,7 +12,7 @@ CREATE TEMPORARY TABLE T_DEV
 (
   PRIMARY KEY (custno, invno)
 )
-SELECT DISTINCT H.custno, H.invno, H.storeno, H.pdvno, H.xano
+SELECT DISTINCT H.custno, MAX(H.invno) AS invno
 FROM sqldados.cthcr2 AS H
        LEFT JOIN sqldados.inv AS I
                  USING (invno)
