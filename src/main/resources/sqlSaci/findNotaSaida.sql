@@ -345,7 +345,7 @@ WHERE (@PESQUISA = ''
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
   AND (:todosLocais = 'S' OR locais != '')
-GROUP BY Q.loja, Q.pdvno, Q.xanopus
+GROUP BY Q.loja, Q.pdvno, Q.xano
 HAVING ((:marca = 0 AND countExp > 0)
   OR (:marca = 1 AND countCD > 0)
   OR (:marca = 2 AND countEnt > 0)
