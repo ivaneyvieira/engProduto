@@ -71,7 +71,7 @@ class CreditoDevolucao(val nota: CreditoCliente, val autorizacao: String = "") :
       "NF Entrada: ${nota.nfDev ?: ""} Data: ${nota.dtDev.format()} Hora: ",
       negrito = true
     )
-    writeln("Cliente Devolucao: ${nota.codigo} - ${nota.nfDev}", negrito = true)
+    writeln("Cliente Devolucao: ${nota.codigo} - ${nota.nfVenda}", negrito = true)
     writeln("Vendedor:  - ", negrito = true)
     val totalTxt = "Valor Total do Vale Troca <E>R$: ${nota.vlCredito.format()}</E>"
     writeln(totalTxt, negrito = true)
