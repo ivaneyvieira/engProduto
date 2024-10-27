@@ -1481,6 +1481,22 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoCadastro(filtro: FiltroProdutoCadastro): List<ProdutoCadastro> {
+    val sql = "/sqlSaci/produtoCadastro.sql"
+    return query(sql, ProdutoCadastro::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("taxno", filtro.taxno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("caracter", filtro.caracter.value)
+      addOptionalParameter("letraDup", filtro.letraDup.value)
+      addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
+      addOptionalParameter("estoque", filtro.estoque.value)
+      addOptionalParameter("saldo", filtro.saldo)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
