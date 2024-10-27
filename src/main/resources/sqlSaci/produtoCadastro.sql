@@ -26,6 +26,11 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
   (:letraDup = 'S' AND SUBSTRING_INDEX(P.name, ' ', 1) REGEXP '[A-Z]{2}') OR
   (:letraDup = 'N' AND SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP '[A-Z]{2}')
   )
+  AND (:pesquisa = ''
+  OR TRIM(P.no) LIKE @PESQUISA
+  OR TRIM(IFNULL(B.barcode, P.barcode)) LIKE @PESQUISA_LIKE
+  OR P.name LIKE @PESQUISA_LIKE
+  OR MID(P.name, 37, 3) LIKE @PESQUISA_LIKE)
 GROUP BY P.no, B.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
@@ -86,11 +91,12 @@ FROM T_PRD_FILTER AS PF
                  ON STK.prdno = PF.prdno
                    AND STK.grade = PF.grade
 WHERE (
-        :estoque = 'T' OR
-        (:estoque = '<' AND STK.qttyTotal < :saldo) OR
-        (:estoque = '>' AND STK.qttyTotal > :saldo) OR
-        (:estoque = '=' AND STK.qttyTotal = :saldo)
-        )
+  :estoque = 'T' OR
+  (:estoque = '<' AND STK.qttyTotal < :saldo) OR
+  (:estoque = '>' AND STK.qttyTotal > :saldo) OR
+  (:estoque = '=' AND STK.qttyTotal = :saldo)
+  )
+  AND (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
 GROUP BY PF.prdno, IF(:grade = 'S', PF.grade, '');
 
 SELECT prdno,
@@ -117,9 +123,6 @@ FROM T_PRD
 WHERE (:pesquisa = ''
   OR codigo LIKE @PESQUISA
   OR descricao LIKE @PESQUISA_LIKE
-  OR forn LIKE @PESQUISA
+  OR unidade LIKE @PESQUISA_LIKE
   OR abrev LIKE @PESQUISA_LIKE
-  OR tipo LIKE @PESQUISA
-  OR clno LIKE @PESQUISA
-  OR ncm LIKE @PESQUISA
-  OR rotulo LIKE @PESQUISA)
+  OR ncm LIKE @PESQUISA)

@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class ProdutoCadastro {
   var prdno: String? = null
   var codigo: String? = null
@@ -21,6 +23,12 @@ class ProdutoCadastro {
   var emb: Double? = null
   var foraLinha: String? = null
   var saldo: Int? = null
+
+  companion object {
+    fun find(filtro: FiltroProdutoCadastro): List<ProdutoCadastro> {
+      return saci.findProdutoCadastro(filtro)
+    }
+  }
 }
 
 data class FiltroProdutoCadastro(
@@ -29,6 +37,7 @@ data class FiltroProdutoCadastro(
   val taxno: String,
   val typeno: Int,
   val clno: Int,
+  val rotulo: String,
   val caracter: ECaracter,
   val letraDup: ELetraDup,
   val grade: Boolean,

@@ -1489,6 +1489,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("taxno", filtro.taxno)
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("rotulo", filtro.rotulo)
       addOptionalParameter("caracter", filtro.caracter.value)
       addOptionalParameter("letraDup", filtro.letraDup.value)
       addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
