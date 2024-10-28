@@ -313,6 +313,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("todosLocais", filtro.todosLocais.let { if (it) "S" else "N" })
     }
 
+    println("list.size: ${list.size}")
+    println(filtro)
+
     val listFilter = list.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
@@ -329,6 +332,8 @@ class QuerySaci : QueryDB(database) {
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
     }
+
+    println("listFilter.size: ${listFilter.size}")
 
     return listFilter
   }

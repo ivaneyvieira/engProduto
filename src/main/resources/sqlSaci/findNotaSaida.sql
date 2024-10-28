@@ -22,13 +22,13 @@ CREATE TEMPORARY TABLE T_TIPO
 (
   PRIMARY KEY (storeno, ordno)
 )
-SELECT storeno                     AS storeno,
-       ordno                       AS ordno,
-       SUM(E.bits & POW(2, 1))     AS tipoR,
-       SUM(NOT E.bits & POW(2, 1)) AS tipoE
+SELECT storeno               AS storeno,
+       ordno                 AS ordno,
+       SUM((E.bits & 2) > 0) AS tipoR,
+       SUM((E.bits & 2) = 0) AS tipoE
 FROM sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
-  AND (date >= @DT)
+  AND (`date` >= @DT)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
@@ -46,8 +46,8 @@ FROM sqlpdv.pxa AS P
        LEFT JOIN sqldados.users AS U
                  ON U.no = P.s3
 WHERE P.cfo IN (5117, 6117)
-  AND storeno IN (2, 3, 4, 5, 6, 7, 8)
-  AND DATE >= @DT
+  AND P.storeno IN (2, 3, 4, 5, 8)
+  AND P.date >= @DT
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -66,7 +66,7 @@ FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 6, 7, 8)
   AND nfse = '1'
-  AND date >= @DT
+  AND `date` >= @DT
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
@@ -114,7 +114,7 @@ SELECT storeno, pdvno, xano
 FROM sqldados.nfrprd
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
-  AND date > @DT
+  AND `date` > @DT
   AND optionEntrega % 10 = 4
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
@@ -144,9 +144,9 @@ SELECT N.storeno                                                              AS
        CASE
          WHEN N.nfse = 7
            THEN 'ENTREGA_WEB'
-         WHEN tipo = 0 AND N.nfse >= 10
+         WHEN N.tipo = 0 AND N.nfse >= 10
            THEN 'NFCE'
-         WHEN tipo = 0 AND N.nfse < 10
+         WHEN N.tipo = 0 AND N.nfse < 10
            THEN 'NFE'
          WHEN N.tipo = 1
            THEN 'TRANSFERENCIA'
@@ -194,7 +194,7 @@ SELECT N.storeno                                                              AS
            AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
          ELSE ''
        END                                                                    AS tipo,
-       IFNULL(CG.storeno, :loja) != :loja || N.storeno = :loja                AS retiraFutura,
+       (IFNULL(CG.storeno, :loja) != :loja) OR (N.storeno = :loja)            AS retiraFutura,
        IF(AR.city = 'TIMON', 'Timon', AR.name)                                AS rota,
        CA.addr                                                                AS enderecoCliente,
        CA.nei                                                                 AS bairroCliente,
@@ -269,8 +269,8 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
       END
   AND (
   (:marca IN (0, 999) AND (
-    (N.tipo = 4 AND IFNULL(tipoE, 0) > 0) -- Retira Futura
-      OR (N.tipo = 3 AND IFNULL(tipoR, 0) > 0) -- Simples
+    (N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
+      OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
       OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10))
       OR (N.tipo = 1 AND N.nfse = 5)
       OR (IFNULL(CG.storeno, 0) != :loja)
