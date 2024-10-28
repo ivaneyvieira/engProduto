@@ -135,7 +135,7 @@ SELECT N.storeno                                                              AS
        N.empno                                                                AS vendedor,
        TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
        TRIM(E.name)                                                           AS nomeCompletoVendedor,
-       GROUP_CONCAT(DISTINCT L.localizacao ORDER BY 1)                        AS locais,
+       IFNULL(L.localizacao, '')                                              AS locais,
        MAX(X.c5)                                                              AS usuarioExp,
        MAX(X.c4)                                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
@@ -254,19 +254,11 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-  AND CASE :notaEntrega
-        WHEN 'S' THEN (N.storeno != :loja OR :loja = 0)
-          AND IFNULL(tipoR, 0) = 0
-          AND N.tipo NOT IN (0, 1)
-        WHEN 'N' THEN (N.storeno = :loja OR :loja = 0) OR
-                      (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0)
-        WHEN 'T' THEN ((N.storeno != :loja OR :loja = 0)
-          AND IFNULL(tipoR, 0) = 0
-          AND N.tipo NOT IN (0, 1)) OR
-                      ((N.storeno = :loja OR :loja = 0) OR
-                       (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))
-        ELSE FALSE
-      END
+  AND (
+  (:loja = 0 OR
+   (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
+   (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0)))
+  )
   AND (
   (:marca IN (0, 999) AND (
     (N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
@@ -344,7 +336,7 @@ WHERE (@PESQUISA = ''
   OR usuarioSingCD LIKE @PESQUISA_LIKE
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
-  AND (:todosLocais = 'S' OR locais != '')
+  AND (:todosLocais = 'S' OR IFNULL(TRIM(locais), '') != '')
 GROUP BY Q.loja, Q.pdvno, Q.xano
 HAVING ((:marca = 0 AND countExp > 0)
   OR (:marca = 1 AND countCD > 0)

@@ -108,7 +108,7 @@ data class FiltroNota(
   val dataFinal: LocalDate?,
   val dataEntregaInicial: LocalDate? = null,
   val dataEntregaFinal: LocalDate? = null,
-  val notaEntreg2: String = "T",
+  //val notaEntreg2: String = "T",
   val pesquisa: String,
   val prdno: String = "",
   val grade: String = "",
