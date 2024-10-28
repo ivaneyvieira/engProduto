@@ -6,6 +6,9 @@ DO @PESQUISA_LIKE := CONCAT(@PESQUISA, '%');
 
 DROP TABLE IF EXISTS T_PRD_FILTER;
 CREATE TEMPORARY TABLE T_PRD_FILTER
+(
+  PRIMARY KEY (prdno)
+)
 SELECT P.no AS prdno
 FROM sqldados.prd AS P
 WHERE (:vendno = 0 OR P.mfno = :vendno)
@@ -28,6 +31,17 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
   OR MID(P.name, 37, 3) LIKE @PESQUISA_LIKE)
 GROUP BY P.no;
 
+DROP TEMPORARY TABLE IF EXISTS T_PRD_ST;
+CREATE TEMPORARY TABLE T_PRD_ST
+(
+  PRIMARY KEY (prdno)
+)
+SELECT prdno, COUNT(DISTINCT storeno) AS ctLoja, GROUP_CONCAT(DISTINCT storeno ORDER BY storeno) AS lojas
+FROM sqldados.spedprdst
+       INNER JOIN T_PRD_FILTER
+                  USING (prdno)
+GROUP BY prdno;
+
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
@@ -45,6 +59,9 @@ GROUP BY F.prdno;
 
 DROP TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
+(
+  INDEX (ctLoja)
+)
 SELECT PD.no                                    AS prdno,
        TRIM(PD.no) * 1                          AS codigo,
        TRIM(MID(PD.name, 1, 37))                AS descricao,
@@ -68,7 +85,9 @@ SELECT PD.no                                    AS prdno,
        PD.garantia                              AS tGar,
        PD.qttyPackClosed / 1000                 AS emb,
        IF((PD.dereg & POW(2, 2)) = 0, 'N', 'S') AS foraLinha,
-       SUM(STK.qttyTotal)                       AS saldo
+       SUM(STK.qttyTotal)                       AS saldo,
+       IFNULL(ST.ctLoja, 0)                     AS ctLoja,
+       IFNULL(ST.lojas, '')                     AS lojas
 FROM T_PRD_FILTER AS PF
        LEFT JOIN sqldados.prd AS PD
                  ON PF.prdno = PD.no
@@ -80,6 +99,8 @@ FROM T_PRD_FILTER AS PF
                  ON PD.no = S.prdno
        LEFT JOIN T_STK AS STK
                  ON STK.prdno = PF.prdno
+       LEFT JOIN T_PRD_ST AS ST
+                 ON ST.prdno = PF.prdno
 WHERE (
   :estoque = 'T' OR
   (:estoque = '<' AND STK.qttyTotal < :saldo) OR
@@ -106,7 +127,9 @@ SELECT prdno,
        tGar,
        emb,
        foraLinha,
-       saldo
+       saldo,
+       ctLoja,
+       lojas
 FROM T_PRD
 WHERE (:pesquisa = ''
   OR codigo LIKE @PESQUISA
@@ -114,3 +137,5 @@ WHERE (:pesquisa = ''
   OR unidade LIKE @PESQUISA_LIKE
   OR abrev LIKE @PESQUISA_LIKE
   OR ncm LIKE @PESQUISA)
+  AND ((:configSt = 'N')
+  OR (:configSt = 'S' AND ctLoja = 0))

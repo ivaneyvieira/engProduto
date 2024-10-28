@@ -1499,6 +1499,14 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("letraDup", filtro.letraDup.value)
       addOptionalParameter("estoque", filtro.estoque.value)
       addOptionalParameter("saldo", filtro.saldo)
+      addOptionalParameter("configSt", filtro.configSt.let { if (it) "S" else "N" })
+    }
+  }
+
+  fun updateProdutoSt(prdno : String){
+    val sql = "/sqlSaci/updateProdutoSt.sql"
+    script(sql){
+      addOptionalParameter("prdno", prdno)
     }
   }
 

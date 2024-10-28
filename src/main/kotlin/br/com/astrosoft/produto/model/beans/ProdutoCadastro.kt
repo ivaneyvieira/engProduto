@@ -21,6 +21,17 @@ class ProdutoCadastro {
   var emb: Double? = null
   var foraLinha: String? = null
   var saldo: Int? = null
+  var ctLoja: Int? = null
+  var lojas: String? = null
+
+  val configSt
+    get() = if(ctLoja == 0) "N" else "S"
+
+  fun updateSt() {
+    prdno?.let { pno ->
+      saci.updateProdutoSt(pno)
+    }
+  }
 
   companion object {
     fun find(filtro: FiltroProdutoCadastro): List<ProdutoCadastro> {
@@ -40,4 +51,5 @@ data class FiltroProdutoCadastro(
   val letraDup: ELetraDup,
   val estoque: EEstoque,
   val saldo: Int,
+  val configSt: Boolean,
 )
