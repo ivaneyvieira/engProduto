@@ -32,7 +32,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-  private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
 
@@ -121,12 +120,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
-        chkGrade = checkBox("Grade") {
-          this.value = true
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         cmdEstoque = select("Estoque") {
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -157,7 +150,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoCadastro::codigo, header = "Cód", width = "80px").right()
     columnGrid(ProdutoCadastro::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoCadastro::grade, header = "Grade")
     columnGrid(ProdutoCadastro::unidade, header = "Un")
     columnGrid(ProdutoCadastro::rotulo, header = "Rotulo")
     columnGrid(ProdutoCadastro::tributacao, header = "Trib").center()
@@ -166,7 +158,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     columnGrid(ProdutoCadastro::ncm, header = "NCM").right()
     columnGrid(ProdutoCadastro::tipo, header = "Tipo")
     columnGrid(ProdutoCadastro::clno, header = "CL")
-    columnGrid(ProdutoCadastro::barcode, header = "Cód.Barras", width="150px").right()
     columnGrid(ProdutoCadastro::refForn, header = "Ref Forn", width="150px").right()
     columnGrid(ProdutoCadastro::pesoBruto, header = "P.Bruto")
     columnGrid(ProdutoCadastro::uGar, header = "U.Gar")
@@ -186,7 +177,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       clno = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      grade = chkGrade.value,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
     )

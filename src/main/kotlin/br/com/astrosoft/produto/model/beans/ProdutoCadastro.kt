@@ -6,7 +6,6 @@ class ProdutoCadastro {
   var prdno: String? = null
   var codigo: String? = null
   var descricao: String? = null
-  var grade: String? = null
   var unidade: String? = null
   var rotulo: String? = null
   var tributacao: String? = null
@@ -15,7 +14,6 @@ class ProdutoCadastro {
   var ncm: String? = null
   var tipo: Int? = null
   var clno: Int? = null
-  var barcode: String? = null
   var refForn: String? = null
   var pesoBruto: Double? = null
   var uGar: String? = null
@@ -40,7 +38,6 @@ data class FiltroProdutoCadastro(
   val rotulo: String,
   val caracter: ECaracter,
   val letraDup: ELetraDup,
-  val grade: Boolean,
   val estoque: EEstoque,
   val saldo: Int,
 )

@@ -6,12 +6,8 @@ DO @PESQUISA_LIKE := CONCAT(@PESQUISA, '%');
 
 DROP TABLE IF EXISTS T_PRD_FILTER;
 CREATE TEMPORARY TABLE T_PRD_FILTER
-SELECT P.no                                    AS prdno,
-       IFNULL(B.grade, '')                     AS grade,
-       MAX(TRIM(IFNULL(B.barcode, P.barcode))) AS barcode
+SELECT P.no AS prdno
 FROM sqldados.prd AS P
-       LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno
 WHERE (:vendno = 0 OR P.mfno = :vendno)
   AND (:taxno = '' OR P.taxno = :taxno)
   AND (:typeno = 0 OR P.typeno = :typeno)
@@ -28,34 +24,30 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
   )
   AND (:pesquisa = ''
   OR TRIM(P.no) LIKE @PESQUISA
-  OR TRIM(IFNULL(B.barcode, P.barcode)) LIKE @PESQUISA_LIKE
   OR P.name LIKE @PESQUISA_LIKE
   OR MID(P.name, 37, 3) LIKE @PESQUISA_LIKE)
-GROUP BY P.no, B.grade;
+GROUP BY P.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno)
 )
 SELECT F.prdno                                                             AS prdno,
-       F.grade                                                             AS grade,
        ROUND(SUM(IFNULL(S.qtty_varejo, 0) / 1000))                         AS qttyVarejo,
        ROUND(SUM(IFNULL(S.qtty_atacado, 0) / 1000))                        AS qttyAtacado,
        ROUND(SUM(IFNULL(S.qtty_varejo, 0) / 1000 + S.qtty_atacado / 1000)) AS qttyTotal
 FROM T_PRD_FILTER AS F
        LEFT JOIN sqldados.stk AS S
                  ON F.prdno = S.prdno
-                   AND F.grade = S.grade
                    AND (S.storeno IN (1, 2, 3, 4, 5, 8))
-GROUP BY F.prdno, F.grade;
+GROUP BY F.prdno;
 
 DROP TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 SELECT PD.no                                    AS prdno,
        TRIM(PD.no) * 1                          AS codigo,
        TRIM(MID(PD.name, 1, 37))                AS descricao,
-       IF(:grade = 'S', PF.grade, '')           AS grade,
        TRIM(MID(PD.name, 37, 3))                AS unidade,
        IFNULL(R.form_label, '')                 AS rotulo,
        PD.taxno                                 AS tributacao,
@@ -64,7 +56,6 @@ SELECT PD.no                                    AS prdno,
        IFNULL(S.ncm, '')                        AS ncm,
        PD.typeno                                AS tipo,
        PD.clno                                  AS clno,
-       PF.barcode                               AS barcode,
        PD.mfno_ref                              AS refForn,
        PD.weight_g                              AS pesoBruto,
        CASE PD.tipoGarantia
@@ -89,7 +80,6 @@ FROM T_PRD_FILTER AS PF
                  ON PD.no = S.prdno
        LEFT JOIN T_STK AS STK
                  ON STK.prdno = PF.prdno
-                   AND STK.grade = PF.grade
 WHERE (
   :estoque = 'T' OR
   (:estoque = '<' AND STK.qttyTotal < :saldo) OR
@@ -97,12 +87,11 @@ WHERE (
   (:estoque = '=' AND STK.qttyTotal = :saldo)
   )
   AND (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
-GROUP BY PF.prdno, IF(:grade = 'S', PF.grade, '');
+GROUP BY PF.prdno;
 
 SELECT prdno,
        codigo,
        descricao,
-       grade,
        unidade,
        rotulo,
        tributacao,
@@ -111,7 +100,6 @@ SELECT prdno,
        ncm,
        tipo,
        clno,
-       barcode,
        refForn,
        pesoBruto,
        uGar,

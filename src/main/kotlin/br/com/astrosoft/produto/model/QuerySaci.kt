@@ -1497,7 +1497,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("rotulo", filtro.rotulo)
       addOptionalParameter("caracter", filtro.caracter.value)
       addOptionalParameter("letraDup", filtro.letraDup.value)
-      addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
       addOptionalParameter("estoque", filtro.estoque.value)
       addOptionalParameter("saldo", filtro.saldo)
     }
