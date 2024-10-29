@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoSped
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoSped
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSped
 
 class TabProdutoSpedViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -40,6 +41,11 @@ class TabProdutoSpedViewModel(val viewModel: ProdutoViewModel) {
       produtos.forEach { it.updateSt() }
       updateView()
     }
+  }
+
+  fun planilha(produtos: List<ProdutoSped>): ByteArray {
+    val planilha = PlanilhaProdutoSped()
+    return planilha.write(produtos)
   }
 
   val subView

@@ -2,12 +2,12 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.center
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoSped
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoSpedViewModel
@@ -19,7 +19,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
@@ -133,6 +132,10 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
             viewModel.configProdutosSelecionados()
           }
         }
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoSped") {
+          val produtos = itensSelecionados()
+          viewModel.planilha(produtos)
+        }
       }
     }
   }
@@ -151,13 +154,8 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::ncm, header = "NCM").right()
     columnGrid(ProdutoSped::tipo, header = "Tipo")
     columnGrid(ProdutoSped::clno, header = "CL", width = "80px")
-    columnGrid(ProdutoSped::refForn, header = "Ref Forn", width="150px").right()
-    columnGrid(ProdutoSped::pesoBruto, header = "P.Bruto")
-    columnGrid(ProdutoSped::uGar, header = "U.Gar")
-    columnGrid(ProdutoSped::tGar, header = "T.Gar")
-    columnGrid(ProdutoSped::emb, header = "Emb")
-    columnGrid(ProdutoSped::foraLinha, header = "F.Linha")
-    columnGrid(ProdutoSped::saldo, header = "Saldo", width="80px").right()
+    columnGrid(ProdutoSped::refForn, header = "Ref Forn", width = "150px").right()
+    columnGrid(ProdutoSped::saldo, header = "Saldo", width = "80px").right()
     columnGrid(ProdutoSped::configSt, header = "Conf St")
   }
 
