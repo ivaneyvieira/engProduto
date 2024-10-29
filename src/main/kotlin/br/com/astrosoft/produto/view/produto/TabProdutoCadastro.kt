@@ -144,13 +144,13 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
-        chkConfigSt = checkBox("Sem Config St") {
+        chkConfigSt = checkBox("Sem Sped") {
           this.value = false
           addValueChangeListener {
             viewModel.updateView()
           }
         }
-        button("Configura St") {
+        button("Configura Sped") {
           this.icon = VaadinIcon.COG.create()
           onClick {
             viewModel.configProdutosSelecionados()
