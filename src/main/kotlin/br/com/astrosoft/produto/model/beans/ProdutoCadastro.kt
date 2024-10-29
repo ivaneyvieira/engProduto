@@ -49,5 +49,4 @@ data class FiltroProdutoCadastro(
   val rotulo: String,
   val caracter: ECaracter,
   val letraDup: ELetraDup,
-  val configSt: Boolean,
 )

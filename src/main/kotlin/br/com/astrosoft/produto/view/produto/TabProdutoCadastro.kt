@@ -33,7 +33,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-  private lateinit var chkConfigSt: Checkbox
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -121,18 +120,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
-        chkConfigSt = checkBox("Sem Sped") {
-          this.value = false
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        button("Configura Sped") {
-          this.icon = VaadinIcon.COG.create()
-          onClick {
-            viewModel.configProdutosSelecionados()
-          }
-        }
       }
     }
   }
@@ -171,7 +158,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       clno = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      configSt = chkConfigSt.value ?: false
     )
   }
 

@@ -131,5 +131,3 @@ WHERE (:pesquisa = ''
   OR unidade LIKE @PESQUISA_LIKE
   OR abrev LIKE @PESQUISA_LIKE
   OR ncm LIKE @PESQUISA)
-  AND ((:configSt = 'N')
-  OR (:configSt = 'S' AND ctLoja = 0))
