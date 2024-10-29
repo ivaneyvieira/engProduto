@@ -25,6 +25,7 @@ class ProdutoSped {
   var ctIpi: Int? = null
   var ctPis: Int? = null
   var ctIcms: Int? = null
+  var ctErroPisCofins: Int? = null
   var lojas: String? = null
 
   val configSt
@@ -53,4 +54,5 @@ data class FiltroProdutoSped(
   val caracter: ECaracter,
   val letraDup: ELetraDup,
   val configSt: Boolean,
+  val pisICMSDif: Boolean,
 )

@@ -40,7 +40,11 @@ SELECT prdno,
        GROUP_CONCAT(DISTINCT storeno ORDER BY storeno) AS lojas,
        SUM((POW(2, 0) & bits) != 0)                    AS ctIpi,
        SUM((POW(2, 1) & bits) != 0)                    AS ctPis,
-       SUM((POW(2, 4) & bits) != 0)                    AS ctIcms
+       SUM((POW(2, 4) & bits) != 0)                    AS ctIcms,
+       SUM(((POW(2, 1) & bits) = 0) OR (aliqPis != 165) OR
+           (aliqCofins != 760) OR (cstPis != 1) OR
+           (cstCofins != 1) OR (cstPisIn != 50) OR
+           (cstCofinsIn != 50))                        AS ctErroPisCofins
 FROM sqldados.spedprdst
        INNER JOIN T_PRD_FILTER
                   USING (prdno)
@@ -94,6 +98,7 @@ SELECT PD.no                                    AS prdno,
        IFNULL(ctIpi, 0)                         AS ctIpi,
        IFNULL(ctPis, 0)                         AS ctPis,
        IFNULL(ctIcms, 0)                        AS ctIcms,
+       IFNULL(ctErroPisCofins, 0)               AS ctErroPisCofins,
        IFNULL(ST.lojas, '')                     AS lojas
 FROM T_PRD_FILTER AS PF
        LEFT JOIN sqldados.prd AS PD
@@ -133,6 +138,7 @@ SELECT prdno,
        ctIpi,
        ctPis,
        ctIcms,
+       ctErroPisCofins,
        lojas
 FROM T_PRD
 WHERE (:pesquisa = ''
@@ -143,3 +149,5 @@ WHERE (:pesquisa = ''
   OR ncm LIKE @PESQUISA)
   AND ((:configSt = 'N')
   OR (:configSt = 'S' AND ctLoja = 0))
+  AND ((:pisICMSDif = 'N')
+  OR (:pisICMSDif = 'S' AND ctPis != ctIcms))

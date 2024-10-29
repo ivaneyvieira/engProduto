@@ -33,6 +33,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkConfigSt: Checkbox
+  private lateinit var chkPisICMSDif: Checkbox
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -120,13 +121,13 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
             viewModel.updateView()
           }
         }
-        chkConfigSt = checkBox("Sem Sped") {
+        chkConfigSt = checkBox("Sem PIS/ICMS") {
           this.value = false
           addValueChangeListener {
             viewModel.updateView()
           }
         }
-        button("Configura Sped") {
+        button("Configura PIS/ICMS") {
           this.icon = VaadinIcon.COG.create()
           onClick {
             viewModel.configProdutosSelecionados()
@@ -135,6 +136,12 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoSped") {
           val produtos = itensSelecionados()
           viewModel.planilha(produtos)
+        }
+        chkPisICMSDif = checkBox("PIS/ICMS Dif") {
+          this.value = false
+          addValueChangeListener {
+            viewModel.updateView()
+          }
         }
       }
     }
@@ -159,7 +166,8 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::ctIpi, header = "IPI")
     columnGrid(ProdutoSped::ctPis, header = "PIS")
     columnGrid(ProdutoSped::ctIcms, header = "ICMS")
-    columnGrid(ProdutoSped::configSt, header = "Conf St")
+    columnGrid(ProdutoSped::configSt, header = "PIS/ICMS")
+    columnGrid(ProdutoSped::ctErroPisCofins, header = "Erro PIS/ICMS")
   }
 
   override fun filtro(): FiltroProdutoSped {
@@ -172,7 +180,8 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
       clno = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      configSt = chkConfigSt.value ?: false
+      configSt = chkConfigSt.value ?: false,
+      pisICMSDif = chkPisICMSDif.value ?: false
     )
   }
 
