@@ -1501,6 +1501,22 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoSped(filtro: FiltroProdutoSped): List<ProdutoSped> {
+    val sql = "/sqlSaci/produtoSped.sql"
+    return query(sql, ProdutoSped::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("vendno", filtro.vendno)
+      addOptionalParameter("taxno", filtro.taxno)
+      addOptionalParameter("typeno", filtro.typeno)
+      addOptionalParameter("clno", filtro.clno)
+      addOptionalParameter("rotulo", filtro.rotulo)
+      addOptionalParameter("caracter", filtro.caracter.value)
+      addOptionalParameter("letraDup", filtro.letraDup.value)
+      addOptionalParameter("configSt", filtro.configSt.let { if (it) "S" else "N" })
+    }
+  }
+
+
   fun updateProdutoSt(prdno : String){
     val sql = "/sqlSaci/updateProdutoSt.sql"
     script(sql){

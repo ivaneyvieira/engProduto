@@ -14,6 +14,10 @@ import com.vaadin.flow.component.grid.Grid
 class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel), ITabProdutoUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::produtoList, "Produto")
+    columnGrid(UserSaci::produtoCadastro, "Cadastro")
+    columnGrid(UserSaci::produtoSped, "Sped")
+    columnGrid(UserSaci::produtoEstoqueGiro, "Giro")
+    columnGrid(UserSaci::produtoEstoqueValidade, "Validade")
   }
 
   override fun FormUsuario.configFields() {
@@ -24,6 +28,9 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
         }
         checkBox("Cadastro") {
           binder.bind(this, UserSaci::produtoCadastro.name)
+        }
+        checkBox("Sped") {
+          binder.bind(this, UserSaci::produtoSped.name)
         }
         checkBox("Giro") {
           binder.bind(this, UserSaci::produtoEstoqueGiro.name)

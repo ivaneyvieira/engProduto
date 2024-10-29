@@ -102,6 +102,7 @@ class UserSaci : IUser {
   var recebimentoAgenda by DelegateAuthorized(56)
   var recebimentoPedido by DelegateAuthorized(57)
   var produtoCadastro by DelegateAuthorized(58)
+  var produtoSped by DelegateAuthorized(59)
 
   //Locais
   private var localEstoque: String?
@@ -330,8 +331,8 @@ class UserSaci : IUser {
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
   var produto
-    get() = produtoList || produtoCadastro || produtoEstoqueGiro || produtoEstoqueValidade || produtoInventario ||
-            produtoEditor || produtoInventarioAgrupado || admin
+    get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro || produtoEstoqueValidade ||
+            produtoInventario || produtoEditor || produtoInventarioAgrupado || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value

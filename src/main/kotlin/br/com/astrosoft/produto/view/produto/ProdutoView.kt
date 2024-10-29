@@ -20,6 +20,7 @@ class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
 
   override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
   override val tabProdutoCadastro = TabProdutoCadastro(viewModel.tabProdutoCadastroViewModel)
+  override val tabProdutoSped = TabProdutoSped(viewModel.tabProdutoSpedViewModel)
   override val tabProdutoInventario = TabProdutoInventario(viewModel.tabProdutoInventarioViewModel)
   override val tabProdutoInventarioAgrupado = TabProdutoInventarioAgrupado(viewModel.tabProdutoInventarioAgrupadoViewModel)
   override val tabProdutoUsr = TabProdutoUsr(viewModel.tabProdutoUsrViewModel)
