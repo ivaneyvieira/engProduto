@@ -33,7 +33,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-  private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
   private lateinit var chkConfigSt: Checkbox
 
@@ -123,17 +122,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
-        cmdEstoque = select("Estoque") {
-          this.width = "100px"
-          this.setItems(EEstoque.entries)
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-          this.value = EEstoque.MAIOR
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         edtSaldo = integerField("Saldo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -194,7 +182,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       clno = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       configSt = chkConfigSt.value ?: false
     )

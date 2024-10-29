@@ -101,13 +101,7 @@ FROM T_PRD_FILTER AS PF
                  ON STK.prdno = PF.prdno
        LEFT JOIN T_PRD_ST AS ST
                  ON ST.prdno = PF.prdno
-WHERE (
-  :estoque = 'T' OR
-  (:estoque = '<' AND STK.qttyTotal < :saldo) OR
-  (:estoque = '>' AND STK.qttyTotal > :saldo) OR
-  (:estoque = '=' AND STK.qttyTotal = :saldo)
-  )
-  AND (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
+WHERE (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
 GROUP BY PF.prdno;
 
 SELECT prdno,
