@@ -156,6 +156,9 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::clno, header = "CL", width = "80px")
     columnGrid(ProdutoSped::refForn, header = "Ref Forn", width = "150px").right()
     columnGrid(ProdutoSped::saldo, header = "Saldo", width = "80px").right()
+    columnGrid(ProdutoSped::ctIpi, header = "IPI")
+    columnGrid(ProdutoSped::ctPis, header = "PIS")
+    columnGrid(ProdutoSped::ctIcms, header = "ICMS")
     columnGrid(ProdutoSped::configSt, header = "Conf St")
   }
 

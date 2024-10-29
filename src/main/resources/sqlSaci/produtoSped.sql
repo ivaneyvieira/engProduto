@@ -3,7 +3,6 @@ USE sqldados;
 DO @PESQUISA := IF(:pesquisa NOT REGEXP '^[0-9]{1,2} [0-9]+(-[0-9]+)?$', :pesquisa, '');
 DO @PESQUISA_LIKE := CONCAT(@PESQUISA, '%');
 
-
 DROP TABLE IF EXISTS T_PRD_FILTER;
 CREATE TEMPORARY TABLE T_PRD_FILTER
 (
@@ -36,7 +35,12 @@ CREATE TEMPORARY TABLE T_PRD_ST
 (
   PRIMARY KEY (prdno)
 )
-SELECT prdno, COUNT(DISTINCT storeno) AS ctLoja, GROUP_CONCAT(DISTINCT storeno ORDER BY storeno) AS lojas
+SELECT prdno,
+       COUNT(DISTINCT storeno)                         AS ctLoja,
+       GROUP_CONCAT(DISTINCT storeno ORDER BY storeno) AS lojas,
+       SUM((POW(2, 0) & bits) != 0)                    AS ctIpi,
+       SUM((POW(2, 1) & bits) != 0)                    AS ctPis,
+       SUM((POW(2, 4) & bits) != 0)                    AS ctIcms
 FROM sqldados.spedprdst
        INNER JOIN T_PRD_FILTER
                   USING (prdno)
@@ -87,6 +91,9 @@ SELECT PD.no                                    AS prdno,
        IF((PD.dereg & POW(2, 2)) = 0, 'N', 'S') AS foraLinha,
        SUM(STK.qttyTotal)                       AS saldo,
        IFNULL(ST.ctLoja, 0)                     AS ctLoja,
+       IFNULL(ctIpi, 0)                         AS ctIpi,
+       IFNULL(ctPis, 0)                         AS ctPis,
+       IFNULL(ctIcms, 0)                        AS ctIcms,
        IFNULL(ST.lojas, '')                     AS lojas
 FROM T_PRD_FILTER AS PF
        LEFT JOIN sqldados.prd AS PD
@@ -123,6 +130,9 @@ SELECT prdno,
        foraLinha,
        saldo,
        ctLoja,
+       ctIpi,
+       ctPis,
+       ctIcms,
        lojas
 FROM T_PRD
 WHERE (:pesquisa = ''
