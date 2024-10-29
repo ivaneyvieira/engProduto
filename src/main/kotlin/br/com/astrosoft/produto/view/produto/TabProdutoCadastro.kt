@@ -33,7 +33,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-  private lateinit var edtSaldo: IntegerField
   private lateinit var chkConfigSt: Checkbox
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -122,16 +121,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
-        edtSaldo = integerField("Saldo") {
-          this.width = "100px"
-          this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.LAZY
-          this.value = 0
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         chkConfigSt = checkBox("Sem Sped") {
           this.value = false
           addValueChangeListener {
@@ -182,7 +171,6 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       clno = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      saldo = edtSaldo.value ?: 0,
       configSt = chkConfigSt.value ?: false
     )
   }
