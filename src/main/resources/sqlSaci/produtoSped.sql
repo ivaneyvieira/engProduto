@@ -52,7 +52,7 @@ SELECT prdno,
            (cstCofins != 1) OR (cstPisIn != 50) OR
            (cstCofinsIn != 50))                        AS ctErroPisCofins,
        SUM(CASE auxStr1
-             WHEN 'NORMAL..' THEN IF(storeno = 8, auxStr2 != '01', auxStr2 != '00')
+             WHEN 'NORMAL..' THEN IF(storeno = 8, auxStr2 NOT IN ('01', '25'), auxStr2 NOT IN ('00', '25'))
              WHEN 'ISENTO..' THEN auxStr2 != '04'
              WHEN 'NAO_TRIB' THEN auxStr2 != '41'
              WHEN 'SUBSTIFC' THEN auxStr2 != '06'
