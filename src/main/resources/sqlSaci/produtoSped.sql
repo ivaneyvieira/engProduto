@@ -58,7 +58,7 @@ SELECT prdno,
              WHEN 'SUBSTIFC' THEN auxStr2 != '06'
              WHEN 'SUBSTI00' THEN auxStr2 != '06'
              WHEN 'REDUZI56' THEN IF(storeno = 8, auxStr2 != '21', auxStr2 != '20')
-             WHEN 'REDUZI88' THEN IF(storeno = 8, auxStr2 = '21', auxStr2 != '20')
+             WHEN 'REDUZI88' THEN IF(storeno = 8, auxStr2 != '21', auxStr2 != '20')
              ELSE 1
            END)                                        AS ctErroRotulo
 FROM sqldados.spedprdst
@@ -67,8 +67,9 @@ FROM sqldados.spedprdst
 GROUP BY prdno;
 
 /*
-select * from  sqldados.spedprdst
-where prdno = 101644
+select storeno, prdno, auxStr1, auxStr2
+from  sqldados.spedprdst
+where prdno = 7226
 */
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
