@@ -175,6 +175,11 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::unidade, header = "Un")
     columnGrid(ProdutoSped::rotulo, header = "Rotulo")
     columnGrid(ProdutoSped::tributacao, header = "Trib").center()
+    columnGrid(ProdutoSped::ctIpi, header = "IPI")
+    columnGrid(ProdutoSped::ctPis, header = "PIS")
+    columnGrid(ProdutoSped::ctIcms, header = "ICMS")
+    columnGrid(ProdutoSped::pisCofOk, header = "PIS/COF")
+    columnGrid(ProdutoSped::rotuloOk, header = "Rotulo")
     columnGrid(ProdutoSped::forn, header = "Forn")
     columnGrid(ProdutoSped::abrev, header = "Abrev")
     columnGrid(ProdutoSped::ncm, header = "NCM").right()
@@ -182,11 +187,6 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::clno, header = "CL", width = "80px")
     columnGrid(ProdutoSped::refForn, header = "Ref Forn", width = "150px").right()
     columnGrid(ProdutoSped::saldo, header = "Saldo", width = "80px").right()
-    columnGrid(ProdutoSped::ctIpi, header = "IPI")
-    columnGrid(ProdutoSped::ctPis, header = "PIS")
-    columnGrid(ProdutoSped::ctIcms, header = "ICMS")
-    columnGrid(ProdutoSped::pisCofOk, header = "PIS/COF")
-    columnGrid(ProdutoSped::rotuloOk, header = "Rotulo")
   }
 
   override fun filtro(): FiltroProdutoSped {

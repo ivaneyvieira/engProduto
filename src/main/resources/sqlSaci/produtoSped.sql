@@ -69,7 +69,7 @@ GROUP BY prdno;
 /*
 select storeno, prdno, auxStr1, auxStr2
 from  sqldados.spedprdst
-where prdno = 7226
+where prdno = 123446
 */
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
