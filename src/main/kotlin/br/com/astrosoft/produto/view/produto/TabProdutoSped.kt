@@ -134,21 +134,17 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
             viewModel.updateView()
           }
         }
-        chkConfigSt = checkBox("Sem PIS/ICMS") {
+        chkConfigSt = checkBox("PIS/ICMS N") {
           this.value = false
           addValueChangeListener {
             viewModel.updateView()
           }
         }
-        button("Configura PIS/ICMS") {
+        button("Conf PIS/ICMS") {
           this.icon = VaadinIcon.COG.create()
           onClick {
             viewModel.configProdutosSelecionados()
           }
-        }
-        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoSped") {
-          val produtos = itensSelecionados()
-          viewModel.planilha(produtos)
         }
         chkPisCofN = checkBox("PIS/COF N") {
           this.value = false
@@ -161,6 +157,10 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
           addValueChangeListener {
             viewModel.updateView()
           }
+        }
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoSped") {
+          val produtos = itensSelecionados()
+          viewModel.planilha(produtos)
         }
       }
     }
