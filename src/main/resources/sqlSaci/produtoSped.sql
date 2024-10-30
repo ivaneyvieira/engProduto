@@ -21,8 +21,10 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
   )
   AND (
   :letraDup = 'T' OR
-  (:letraDup = 'S' AND SUBSTRING_INDEX(P.name, ' ', 1) REGEXP '[A-Z]{2}') OR
-  (:letraDup = 'N' AND SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP '[A-Z]{2}')
+  (:letraDup = 'S' AND SUBSTRING_INDEX(P.name, ' ', 1) REGEXP
+                       'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ') OR
+  (:letraDup = 'N' AND SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP
+                       'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ')
   )
   AND (:pesquisa = ''
   OR TRIM(P.no) LIKE @PESQUISA
@@ -44,7 +46,17 @@ SELECT prdno,
        SUM(((POW(2, 1) & bits) = 0) OR (aliqPis != 165) OR
            (aliqCofins != 760) OR (cstPis != 1) OR
            (cstCofins != 1) OR (cstPisIn != 50) OR
-           (cstCofinsIn != 50))                        AS ctErroPisCofins
+           (cstCofinsIn != 50))                        AS ctErroPisCofins,
+       SUM(CASE auxStr1
+             WHEN 'NORMAL..' THEN IF(storeno = 8, auxStr2 != '01', auxStr2 != '00')
+             WHEN 'ISENTO..' THEN auxStr2 != '01'
+             WHEN 'NAO_TRIB' THEN auxStr2 != '41'
+             WHEN 'SUBSTIFC' THEN auxStr2 != '06'
+             WHEN 'SUBSTI00' THEN auxStr2 != '06'
+             WHEN 'REDUZI56' THEN IF(storeno = 8, auxStr2 != '21', auxStr2 != '20')
+             WHEN 'REDUZI88' THEN IF(storeno = 8, auxStr2 = '21', auxStr2 != '20')
+             ELSE 1
+           END)                                        AS ctErroRotulo
 FROM sqldados.spedprdst
        INNER JOIN T_PRD_FILTER
                   USING (prdno)
@@ -99,6 +111,7 @@ SELECT PD.no                                    AS prdno,
        IFNULL(ctPis, 0)                         AS ctPis,
        IFNULL(ctIcms, 0)                        AS ctIcms,
        IFNULL(ctErroPisCofins, 0)               AS ctErroPisCofins,
+       IFNULL(ctErroRotulo, 0)                  AS ctErroRotulo,
        IFNULL(ST.lojas, '')                     AS lojas
 FROM T_PRD_FILTER AS PF
        LEFT JOIN sqldados.prd AS PD
@@ -139,6 +152,7 @@ SELECT prdno,
        ctPis,
        ctIcms,
        ctErroPisCofins,
+       ctErroRotulo,
        lojas
 FROM T_PRD
 WHERE (:pesquisa = ''
@@ -151,3 +165,5 @@ WHERE (:pesquisa = ''
   OR (:configSt = 'S' AND ctLoja = 0))
   AND ((:pisCofN = 'N')
   OR (:pisCofN = 'S' AND ctErroPisCofins > 0))
+  AND ((:rotuloN = 'N')
+  OR (:rotuloN = 'S' AND ctErroRotulo > 0))

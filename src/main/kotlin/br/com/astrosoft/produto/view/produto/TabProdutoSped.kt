@@ -34,6 +34,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkConfigSt: Checkbox
   private lateinit var chkPisCofN: Checkbox
+  private lateinit var chkRotuloN: Checkbox
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -143,6 +144,12 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
             viewModel.updateView()
           }
         }
+        chkRotuloN = checkBox("Rotulo N") {
+          this.value = false
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
     }
   }
@@ -167,6 +174,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::ctPis, header = "PIS")
     columnGrid(ProdutoSped::ctIcms, header = "ICMS")
     columnGrid(ProdutoSped::pisCofOk, header = "PIS/COF")
+    columnGrid(ProdutoSped::rotuloOk, header = "Rotulo")
   }
 
   override fun filtro(): FiltroProdutoSped {
@@ -180,7 +188,8 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       configSt = chkConfigSt.value ?: false,
-      pisCofN = chkPisCofN.value ?: false
+      pisCofN = chkPisCofN.value ?: false,
+      rotuloN = chkRotuloN.value ?: false,
     )
   }
 

@@ -26,10 +26,14 @@ class ProdutoSped {
   var ctPis: Int? = null
   var ctIcms: Int? = null
   var ctErroPisCofins: Int? = null
+  var ctErroRotulo: Int? = null
   var lojas: String? = null
 
   val pisCofOk: String
     get() = if (ctErroPisCofins == 0) "S" else "N"
+
+  val rotuloOk: String
+    get() = if (ctErroRotulo == 0) "S" else "N"
 
   val configSt
     get() = if (ctLoja == 0) "N" else "S"
@@ -58,4 +62,5 @@ data class FiltroProdutoSped(
   val letraDup: ELetraDup,
   val configSt: Boolean,
   val pisCofN: Boolean,
+  val rotuloN: Boolean,
 )
