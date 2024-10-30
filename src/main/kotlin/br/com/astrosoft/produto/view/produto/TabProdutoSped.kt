@@ -33,7 +33,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkConfigSt: Checkbox
-  private lateinit var chkPisICMSDif: Checkbox
+  private lateinit var chkPisCofN: Checkbox
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -137,7 +137,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
           val produtos = itensSelecionados()
           viewModel.planilha(produtos)
         }
-        chkPisICMSDif = checkBox("PIS/ICMS Dif") {
+        chkPisCofN = checkBox("PIS/COF N") {
           this.value = false
           addValueChangeListener {
             viewModel.updateView()
@@ -180,7 +180,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       configSt = chkConfigSt.value ?: false,
-      pisICMSDif = chkPisICMSDif.value ?: false
+      pisCofN = chkPisCofN.value ?: false
     )
   }
 

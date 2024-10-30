@@ -149,5 +149,5 @@ WHERE (:pesquisa = ''
   OR ncm LIKE @PESQUISA)
   AND ((:configSt = 'N')
   OR (:configSt = 'S' AND ctLoja = 0))
-  AND ((:pisICMSDif = 'N')
-  OR (:pisICMSDif = 'S' AND ctPis != ctIcms))
+  AND ((:pisCofN = 'N')
+  OR (:pisCofN = 'S' AND ctErroPisCofins > 0))

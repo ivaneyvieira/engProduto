@@ -1512,7 +1512,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("caracter", filtro.caracter.value)
       addOptionalParameter("letraDup", filtro.letraDup.value)
       addOptionalParameter("configSt", filtro.configSt.let { if (it) "S" else "N" })
-      addOptionalParameter("pisICMSDif", filtro.pisICMSDif.let { if (it) "S" else "N" })
+      addOptionalParameter("pisCofN", filtro.pisCofN.let { if (it) "S" else "N" })
     }
   }
 
