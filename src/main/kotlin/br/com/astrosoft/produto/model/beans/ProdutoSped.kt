@@ -28,8 +28,8 @@ class ProdutoSped {
   var ctErroPisCofins: Int? = null
   var lojas: String? = null
 
-  val pisCofErro: String
-    get() = if (ctErroPisCofins == 0) "N" else "S"
+  val pisCofOk: String
+    get() = if (ctErroPisCofins == 0) "S" else "N"
 
   val configSt
     get() = if (ctLoja == 0) "N" else "S"

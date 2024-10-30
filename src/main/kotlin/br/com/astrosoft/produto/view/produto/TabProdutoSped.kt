@@ -166,7 +166,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
     columnGrid(ProdutoSped::ctIpi, header = "IPI")
     columnGrid(ProdutoSped::ctPis, header = "PIS")
     columnGrid(ProdutoSped::ctIcms, header = "ICMS")
-    columnGrid(ProdutoSped::pisCofErro, header = "PIS/COF")
+    columnGrid(ProdutoSped::pisCofOk, header = "PIS/COF")
   }
 
   override fun filtro(): FiltroProdutoSped {
