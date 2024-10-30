@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 
 class ProdutoSped {
   var prdno: String? = null
-  var codigo: String? = null
+  var codigo: Int? = null
   var descricao: String? = null
   var unidade: String? = null
   var rotulo: String? = null
