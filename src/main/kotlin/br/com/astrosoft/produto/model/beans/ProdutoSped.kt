@@ -63,4 +63,5 @@ data class FiltroProdutoSped(
   val configSt: Boolean,
   val pisCofN: Boolean,
   val rotuloN: Boolean,
+  val consumo: EConsumo
 )

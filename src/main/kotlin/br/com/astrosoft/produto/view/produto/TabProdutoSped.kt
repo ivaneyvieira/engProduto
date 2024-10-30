@@ -31,6 +31,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
+  private lateinit var cmbConsumo: Select<EConsumo>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkConfigSt: Checkbox
   private lateinit var chkPisCofN: Checkbox
@@ -122,6 +123,17 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
             viewModel.updateView()
           }
         }
+        cmbConsumo = select("Consumo") {
+          this.width = "100px"
+          this.setItems(EConsumo.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EConsumo.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
         chkConfigSt = checkBox("Sem PIS/ICMS") {
           this.value = false
           addValueChangeListener {
@@ -190,6 +202,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) :
       configSt = chkConfigSt.value ?: false,
       pisCofN = chkPisCofN.value ?: false,
       rotuloN = chkRotuloN.value ?: false,
+      consumo = cmbConsumo.value ?: EConsumo.TODOS
     )
   }
 

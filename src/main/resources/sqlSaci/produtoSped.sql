@@ -26,6 +26,10 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
   (:letraDup = 'N' AND SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP
                        'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ')
   )
+  AND (:consumo = 'T' OR
+       (:consumo = 'S' AND P.no * 1 >= 900000) OR
+       (:consumo = 'N' AND P.no * 1 < 900000)
+  )
   AND (:pesquisa = ''
   OR TRIM(P.no) LIKE @PESQUISA
   OR P.name LIKE @PESQUISA_LIKE

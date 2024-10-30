@@ -61,6 +61,12 @@ enum class ECaracter(val value: String, val descricao: String) {
   TODOS("T", "Todos"),
 }
 
+enum class EConsumo(val value: String, val descricao: String) {
+  SIM("S", "Sim"),
+  NAO("N", "Não"),
+  TODOS("T", "Todos"),
+}
+
 enum class ELetraDup(val value: String, val descricao: String) {
   SIM("S", "Sim"),
   NAO("N", "Não"),
