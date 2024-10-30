@@ -53,7 +53,7 @@ SELECT prdno,
            (cstCofinsIn != 50))                        AS ctErroPisCofins,
        SUM(CASE auxStr1
              WHEN 'NORMAL..' THEN IF(storeno = 8, auxStr2 != '01', auxStr2 != '00')
-             WHEN 'ISENTO..' THEN auxStr2 != '01'
+             WHEN 'ISENTO..' THEN auxStr2 != '04'
              WHEN 'NAO_TRIB' THEN auxStr2 != '41'
              WHEN 'SUBSTIFC' THEN auxStr2 != '06'
              WHEN 'SUBSTI00' THEN auxStr2 != '06'
@@ -65,6 +65,11 @@ FROM sqldados.spedprdst
        INNER JOIN T_PRD_FILTER
                   USING (prdno)
 GROUP BY prdno;
+
+/*
+select * from  sqldados.spedprdst
+where prdno = 101644
+*/
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
