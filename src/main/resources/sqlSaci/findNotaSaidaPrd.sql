@@ -135,7 +135,7 @@ SELECT N.storeno                                                              AS
        N.empno                                                                AS vendedor,
        TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
        TRIM(E.name)                                                           AS nomeCompletoVendedor,
-       GROUP_CONCAT(DISTINCT IF(LC.localizacao = '', NULL, LC.localizacao))   AS locais,
+       GROUP_CONCAT(IF(LC.localizacao = '', NULL, LC.localizacao))            AS locais,
        MAX(X.c5)                                                              AS usuarioExp,
        MAX(X.c4)                                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
@@ -205,9 +205,9 @@ SELECT N.storeno                                                              AS
        EP.no                                                                  AS usernoPrint,
        EP.login                                                               AS usuarioPrint,
        MAX(EC.no)                                                             AS usernoSingCD,
-       GROUP_CONCAT(DISTINCT IF(EC.login = '', '', EC.login))                 AS usuarioSingCD,
+       GROUP_CONCAT(DISTINCT IFNULL(EC.login, ''))                            AS usuarioSingCD,
        MAX(EE.no)                                                             AS usernoSingExp,
-       GROUP_CONCAT(DISTINCT IF(EE.login = '', '', EE.login))                 AS usuarioSingExp,
+       GROUP_CONCAT(DISTINCT IFNULL(EE.login, ''))                            AS usuarioSingExp,
        MAX(IF('CD5A' = IFNULL(LC.localizacao, ''), IFNULL(X.c3, ''), ''))     AS usuarioSep
 FROM sqldados.nf AS N
        LEFT JOIN sqldados.nfUserPrint AS PT
@@ -288,7 +288,7 @@ SELECT Q.loja,
        Q.vendedor,
        Q.nomeVendedor,
        Q.nomeCompletoVendedor,
-       /*Q.locais,*/
+       Q.locais,
        Q.usuarioExp,
        Q.usuarioCD,
        Q.totalProdutos,
@@ -336,6 +336,7 @@ WHERE (@PESQUISA = ''
   OR usuarioSingCD LIKE @PESQUISA_LIKE
   OR pedido LIKE @PESQUISA
   OR locais LIKE @PESQUISA_LIKE)
+  AND (:todosLocais = 'S' OR IFNULL(TRIM(locais), '') != '')
 GROUP BY Q.loja, Q.pdvno, Q.xano
 HAVING ((:marca = 0 AND countExp > 0)
   OR (:marca = 1 AND countCD > 0)
