@@ -1,6 +1,6 @@
 USE sqldados;
 
-DO @PESQUISA := IF(:pesquisa NOT REGEXP '^[0-9]{1,2} [0-9]+(-[0-9]+)?$', :pesquisa, '');
+DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT(@PESQUISA, '%');
 
 DROP TABLE IF EXISTS T_PRD_FILTER;
@@ -30,10 +30,6 @@ WHERE (:vendno = 0 OR P.mfno = :vendno)
        (:consumo = 'S' AND P.no * 1 >= 900000) OR
        (:consumo = 'N' AND P.no * 1 < 900000)
   )
-  AND (:pesquisa = ''
-  OR TRIM(P.no) LIKE @PESQUISA
-  OR P.name LIKE @PESQUISA_LIKE
-  OR MID(P.name, 37, 3) LIKE @PESQUISA_LIKE)
 GROUP BY P.no;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD_ST;
