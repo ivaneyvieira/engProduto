@@ -15,6 +15,7 @@ class UserSaci : IUser {
   override var login: String = ""
   override var senha: String = ""
   var bitAcesso: Long = 0
+  var bitAcesso2: Long = 0
   var storeno: Int = 0
   var locais: String = ""
   var listaImpressora: String = ""
@@ -87,22 +88,18 @@ class UserSaci : IUser {
   var recebimentoReceber by DelegateAuthorized(60)
   var recebimentoRecebido by DelegateAuthorized(61)
   var tabVendaRef by DelegateAuthorized(62)
-  var notaSep by DelegateAuthorized(44)
-  var reposicaoAcerto by DelegateAuthorized(45)
-  var autorizaAcerto by DelegateAuthorized(46)
-  var recebimentoDevClientes by DelegateAuthorized(47)
-  var recebimentoTransferencia by DelegateAuthorized(48)
-  var recebimentoTransfReceb by DelegateAuthorized(49)
-  var recebimentoDevCliRec by DelegateAuthorized(50)
-  var recebimentoReclassifica by DelegateAuthorized(51)
-  var recebimentoReclassRec by DelegateAuthorized(52)
-  var reposicaoRetorno by DelegateAuthorized(53)
-  var recebimentoReceberNota by DelegateAuthorized(54)
-  var recebimentoNotaRecebida by DelegateAuthorized(55)
-  var recebimentoAgenda by DelegateAuthorized(56)
-  var recebimentoPedido by DelegateAuthorized(57)
-  var produtoCadastro by DelegateAuthorized(58)
-  var produtoSped by DelegateAuthorized(59)
+  var notaSep by DelegateAuthorized2(63)/*63 44 */
+
+  var reposicaoAcerto by DelegateAuthorized2(64)/*64 45*/
+  var autorizaAcerto by DelegateAuthorized2(65)/*65 46*/
+  var reposicaoRetorno by DelegateAuthorized2(66)/*66 53 */
+
+  var recebimentoReceberNota by DelegateAuthorized2(67)/*67 54*/
+  var recebimentoNotaRecebida by DelegateAuthorized2(68)/*68 55*/
+  var recebimentoAgenda by DelegateAuthorized2(69)/*69 56 */
+  var recebimentoPedido by DelegateAuthorized2(70)/*70 57 */
+  var produtoCadastro by DelegateAuthorized2(71)/*71 58*/
+  var produtoSped by DelegateAuthorized2(72)/*72 59*/
 
   //Locais
   private var localEstoque: String?
@@ -494,4 +491,20 @@ class DelegateAuthorized(numBit: Int) {
   }
 }
 
+class DelegateAuthorized2(numBit2: Int) {
+  private val bit = 2.toDouble().pow(numBit2 - 62).toLong()
 
+  operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
+    thisRef ?: return false
+    return (thisRef.bitAcesso2 and bit) != 0L || thisRef.admin
+  }
+
+  operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
+    thisRef ?: return
+    val v = value ?: false
+    thisRef.bitAcesso2 = when {
+      v    -> thisRef.bitAcesso2 or bit
+      else -> thisRef.bitAcesso2 and bit.inv()
+    }
+  }
+}

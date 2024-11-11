@@ -18,7 +18,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     columnGrid(UserSaci::reposicaoSep, "Separar")
     columnGrid(UserSaci::reposicaoAcerto, "Acerto")
     columnGrid(UserSaci::reposicaoRetorno, "Retorno")
-    columnGrid(UserSaci::reposicaoEnt, "Entregar")
+    columnGrid(UserSaci::reposicaoEnt, "Entregue")
     columnGrid(UserSaci::impressoraRepo, "Impressora")
     columnGrid(UserSaci::localizacaoRepo, "Localização")
     columnGrid(UserSaci::autorizaAcerto, "Autoriza Acerto")
@@ -35,7 +35,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       checkBox("Retorno") {
         binder.bind(this, UserSaci::reposicaoRetorno.name)
       }
-      checkBox("Entregar") {
+      checkBox("Entregue") {
         binder.bind(this, UserSaci::reposicaoEnt.name)
       }
     }

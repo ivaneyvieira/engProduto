@@ -104,6 +104,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("login", user.login)
       addOptionalParameter("bitAcesso", user.bitAcesso)
+      addOptionalParameter("bitAcesso2", user.bitAcesso2)
       addOptionalParameter("loja", user.storeno)
       addOptionalParameter("appName", appName)
       addOptionalParameter("locais", user.locais)
