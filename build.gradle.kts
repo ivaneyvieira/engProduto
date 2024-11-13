@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val vaadinVersion: String by extra
 val karibuDslVersion: String by extra
@@ -60,6 +60,7 @@ dependencies {
   implementation("org.cups4j:cups4j:0.7.8")
   implementation("com.jcraft:jsch:0.1.55")
   implementation("org.imgscalr:imgscalr-lib:4.2")
+  implementation("com.github.wmixvideo:nfe:4.0.73")
 
   //vaadin
   implementation("pl.unforgiven:superfields:0.18.1")
@@ -69,7 +70,7 @@ dependencies {
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
 
   //Report
-  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1")   {
+  implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1") {
     exclude(group = "org.glassfish.jaxb", module = "jaxb-core")
   }
   implementation("net.sf.jasperreports:jasperreports:6.20.6")

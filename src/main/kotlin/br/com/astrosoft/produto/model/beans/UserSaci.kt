@@ -100,6 +100,7 @@ class UserSaci : IUser {
   var recebimentoPedido by DelegateAuthorized2(70)/*70 57 */
   var produtoCadastro by DelegateAuthorized2(71)/*71 58*/
   var produtoSped by DelegateAuthorized2(72)/*72 59*/
+  var recebimentoXML by DelegateAuthorized2(73)
 
   //Locais
   private var localEstoque: String?

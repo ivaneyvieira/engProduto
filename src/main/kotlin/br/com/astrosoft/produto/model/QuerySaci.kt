@@ -2,6 +2,8 @@ package br.com.astrosoft.produto.model
 
 import br.com.astrosoft.devolucao.model.beans.Agenda
 import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
+import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
+import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
@@ -1518,12 +1520,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-
-  fun updateProdutoSt(prdno : String){
+  fun updateProdutoSt(prdno: String) {
     val sql = "/sqlSaci/updateProdutoSt.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("prdno", prdno)
     }
+  }
+
+  fun listNFEntrada(filter: FiltroNotaEntradaXML): List<NotaEntradaXML> {
+    val sql = "/sqlSaci/listNFEntrada.sql"
+    return query(sql, NotaEntradaXML::class) {
+      addOptionalParameter("loja", filter.loja?.no ?: 0)
+      addOptionalParameter("dataInicial", filter.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filter.dataFinal.toSaciDate())
+      addOptionalParameter("numero", filter.numero)
+      addOptionalParameter("cnpj", filter.cnpj)
+      addOptionalParameter("fornecedor", filter.fornecedor)
+    }.toList()
   }
 
   companion object {
