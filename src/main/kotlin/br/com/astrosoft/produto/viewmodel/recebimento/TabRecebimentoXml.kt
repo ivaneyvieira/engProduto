@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-
 import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.util.format
@@ -37,13 +36,11 @@ class TabRecebimentoXml(val viewModel: RecebimentoViewModel) {
       val chave = nota.chave
       val valorProduto = nota.valorTotalProdutos.format().replace(".", "")
       val valorNota = nota.valorTotal.format().replace(".", "")
-      val ni = nota.ni.toString()
-      val cfop = nota.cfop.toString()
       val fornecedorCad = nota.fornecedorCad?.split(",").orEmpty()
       val fornecedorNota = nota.fornecedorNota?.toString() ?: ""
       query == "" || cnpj == query || fornecedor.contains(query, ignoreCase = true) ||
       chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
-      valorNota.startsWith(query) || ni == query || cfop == query || fornecedorCad.contains(query) || fornecedorNota == query
+      valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
     }
 
     subView.updateList(listLocal)

@@ -16,7 +16,6 @@ class ProdutoNotaEntradaVO(
   val xmlNfe: String?,
   val numeroProtocolo: String?,
   val dataHoraRecebimento: String?,
-  val refNFe: String?,
 ) {
   fun produtosNotaEntradaNDD(): List<ProdutoNotaEntradaNdd> {
     xmlNfe ?: return emptyList()

@@ -24,4 +24,7 @@ data class ProdutoNotaEntradaNdd(
 ) {
   val temIPI
     get() = valorIPI.absoluteValue > 0.001
+
+  val valorICMS
+    get() = baseICMS * aliqICMS / 100
 }

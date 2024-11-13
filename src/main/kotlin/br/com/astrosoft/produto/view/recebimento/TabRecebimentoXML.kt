@@ -31,6 +31,7 @@ import java.time.LocalDate
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
 class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
   TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
+  private var dialog: DlgXmlProduto? = null
   private lateinit var edtNota: IntegerField
   private lateinit var edtFornecedorNota: TextField
   private lateinit var edtQuery: TextField
@@ -114,7 +115,10 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
-      TODO()
+      dialog = DlgXmlProduto(viewModel, nota)
+      dialog?.showDialog {
+        dialog = null
+      }
     }
     columnGrid(NotaEntradaXML::loja) {
       this.setHeader("Loja")
