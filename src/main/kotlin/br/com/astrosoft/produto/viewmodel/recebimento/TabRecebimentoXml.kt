@@ -7,9 +7,9 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.Loja
 
-class TabFileNFEViewModel(val viewModel: RecebimentoViewModel) {
+class TabRecebimentoXml(val viewModel: RecebimentoViewModel) {
   val subView
-    get() = viewModel.view.tabFileNFE
+    get() = viewModel.view.tabRecebimentoXml
 
   val list = mutableListOf<NotaEntradaXML>()
 
@@ -50,7 +50,7 @@ class TabFileNFEViewModel(val viewModel: RecebimentoViewModel) {
   }
 }
 
-interface ITabFileNFEViewModel : ITabView {
+interface ITabRecebimentoXML : ITabView {
   fun getFiltro(): FiltroNotaEntradaXML
   fun updateList(list: List<NotaEntradaXML>)
 }

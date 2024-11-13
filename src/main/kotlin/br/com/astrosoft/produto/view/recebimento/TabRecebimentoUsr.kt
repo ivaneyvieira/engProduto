@@ -14,6 +14,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::recebimentoPedido, "Pedidos")
     columnGrid(UserSaci::recebimentoAgenda, "Pré-entrada")
+    columnGrid(UserSaci::recebimentoXML, "XML")
     columnGrid(UserSaci::recebimentoReceberNota, "ReceberNota")
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
   }
@@ -25,6 +26,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       }
       checkBox("Agenda") {
         binder.bind(this, UserSaci::recebimentoAgenda.name)
+      }
+      checkBox("XML") {
+        binder.bind(this, UserSaci::recebimentoXML.name)
       }
       checkBox("Receber Nota") {
         binder.bind(this, UserSaci::recebimentoReceberNota.name)

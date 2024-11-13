@@ -355,12 +355,13 @@ class UserSaci : IUser {
     }
 
   var recebimento: Boolean
-    get() = recebimentoPedido || recebimentoAgenda || recebimentoReceber || recebimentoRecebido || admin
+    get() = recebimentoPedido || recebimentoAgenda || recebimentoReceber || recebimentoRecebido || recebimentoXML ||  admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value
       recebimentoReceber = value
       recebimentoRecebido = value
+      recebimentoXML = value
     }
   var ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin

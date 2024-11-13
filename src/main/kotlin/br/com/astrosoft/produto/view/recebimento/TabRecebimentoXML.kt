@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.view.recebimento
 import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.view.*
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
@@ -12,8 +11,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabFileNFEViewModel
-import br.com.astrosoft.produto.viewmodel.recebimento.TabFileNFEViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoXML
+import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXml
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
@@ -30,7 +29,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
-class TabRecebimentoXML(val viewModel: TabFileNFEViewModel) : ITabFileNFEViewModel,
+class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
   TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
   private lateinit var edtNota: IntegerField
   private lateinit var edtFornecedorNota: TextField
