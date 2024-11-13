@@ -24,6 +24,7 @@ class NotaEntradaXML {
   var valorTotal: Double = 0.00
   var chave: String = ""
   var xmlNfe: String? = null
+  var preEntrada: String? = null
 
   val notaFiscal
     get() = "$numero/$serie"
@@ -58,5 +59,12 @@ data class FiltroNotaEntradaXML(
   val numero: Int,
   val cnpj: String,
   val fornecedor: String,
+  val preEntrada: EPREEntradaXML,
   val query: String,
 )
+
+enum class EPREEntradaXML(val codigo: String, val descricao: String) {
+  TODOS("T", "Todos"),
+  SIM("S", "Sim"),
+  NAO("N", "Não")
+}

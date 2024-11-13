@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.devolucao.model.beans.EPREEntradaXML
 import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.config.AppConfig
@@ -13,10 +14,7 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoXML
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXml
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.Grid
@@ -39,6 +37,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
   private lateinit var edtDataI: DatePicker
   private lateinit var edtCNPJ: TextField
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbPreEntrada: Select<EPREEntradaXML>
 
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
@@ -48,6 +47,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
       numero = edtNota.value ?: 0,
       cnpj = edtCNPJ.value ?: "",
       fornecedor = edtFornecedorNota.value ?: "",
+      preEntrada = cmbPreEntrada.value ?: EPREEntradaXML.TODOS,
       query = edtQuery.value ?: "",
     )
   }
@@ -61,6 +61,17 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
       val lojas = Loja.allLojas() + Loja.lojaZero
       setItems(lojas.sortedBy { it.no })
       value = Loja.lojaZero
+      this.width = "100px"
+      setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateViewBD()
+      }
+    }
+    cmbPreEntrada = select("Pré Entrada") {
+      setItems(EPREEntradaXML.entries)
+      value = EPREEntradaXML.TODOS
       this.width = "100px"
       setItemLabelGenerator {
         it.descricao
@@ -148,6 +159,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
     columnGrid(NotaEntradaXML::nomeFornecedor) {
       this.setHeader("Fornecedor")
       this.isResizable = true
+      this.isExpand = true
     }
 
     columnGrid(NotaEntradaXML::chave) {
@@ -162,6 +174,11 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXml) : ITabRecebimentoXML,
 
     columnGrid(NotaEntradaXML::valorTotal) {
       this.setHeader("Valor")
+      this.isResizable = true
+    }
+
+    columnGrid(NotaEntradaXML::preEntrada) {
+      this.setHeader("Pre Ent")
       this.isResizable = true
     }
   }

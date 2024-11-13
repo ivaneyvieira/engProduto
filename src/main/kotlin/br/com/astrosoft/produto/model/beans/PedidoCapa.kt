@@ -83,8 +83,7 @@ enum class EPedidosStatus(val cod: Int, val descricao: String) {
 }
 
 enum class EPreEntrada(
-  val
-  cod: String, val descricao: String
+  val cod: String, val descricao: String
 ) {
   SIM("S", "Sim"),
   NAO("N", "Não"),

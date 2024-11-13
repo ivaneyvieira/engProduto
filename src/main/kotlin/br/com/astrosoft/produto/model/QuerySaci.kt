@@ -1536,6 +1536,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numero", filter.numero)
       addOptionalParameter("cnpj", filter.cnpj)
       addOptionalParameter("fornecedor", filter.fornecedor)
+      addOptionalParameter("preEntrada", filter.preEntrada.codigo)
     }.toList()
   }
 

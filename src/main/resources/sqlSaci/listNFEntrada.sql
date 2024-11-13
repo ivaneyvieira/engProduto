@@ -15,7 +15,8 @@ SELECT N.id                                       AS id,
            LOCATE('</vNF>', N.xmlNfe)
              - LOCATE('<vNF>', N.xmlNfe) - 5) * 1 AS valorTotal,
        N.chave                                    AS chave,
-       xmlNfe                                     AS xmlNfe
+       xmlNfe                                     AS xmlNfe,
+       IF(I2.invno IS NULL, 'N', 'S')             AS preEntrada
 FROM sqldados.notasEntradaNdd AS N
        INNER JOIN sqldados.store AS L
                   ON N.cnpjDestinatario = L.cgc
@@ -34,12 +35,14 @@ FROM sqldados.notasEntradaNdd AS N
 WHERE dataEmissao >= 20241101
   AND (N.cnpjEmitente NOT LIKE '07.483.654%')
   AND (I.invno IS NULL)
-  AND (I2.invno IS NULL)
   AND (N.dataEmissao BETWEEN :dataInicial AND :dataFinal)
   AND (N.NUMERO = :numero OR :numero = 0)
   AND (V.cgc = :cnpj OR :cnpj = '')
   AND (L.no = :loja OR :loja = 0)
   AND (V.name LIKE CONCAT(:fornecedor, '%') OR
        (V.no = :fornecedor) OR :fornecedor = '')
+  AND ((:preEntrada = 'S' AND I2.invno IS NOT NULL) OR
+       (:preEntrada = 'N' AND I2.invno IS NULL) OR
+       (:preEntrada = 'T'))
 ORDER BY dataEmissao
     DESC
