@@ -127,9 +127,16 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
         dialog = null
       }
     }
+
     columnGrid(NotaEntradaXML::loja) {
       this.setHeader("Loja")
     }
+
+    columnGrid(NotaEntradaXML::pedido) {
+      this.setHeader("Pedido")
+      this.isResizable = true
+    }
+
     columnGrid(NotaEntradaXML::notaFiscal) {
       this.setHeader("Número")
       this.isResizable = true
@@ -156,11 +163,6 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       this.setHeader("Fornecedor")
       this.isResizable = true
       this.isExpand = true
-    }
-
-    columnGrid(NotaEntradaXML::pedido) {
-      this.setHeader("Pedido")
-      this.isResizable = true
     }
 
     columnGrid(NotaEntradaXML::chave) {
