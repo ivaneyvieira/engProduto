@@ -19,8 +19,9 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     this.onClose = onClose
     val numeroNota: String = nota.notaFiscal ?: ""
     val loja = nota.sigla
+    val pedido = nota.pedido
 
-    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja", toolBar = {
+    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
     }, onClose = {
       onClose()
     }) {
