@@ -20,4 +20,3 @@ FROM sqldados.ords AS O
                    AND I.grade = B.grade
 WHERE I.storeno = :loja
   AND I.ordno = :pedido
-GROUP BY I.storeno, I.ordno, I.prdno, I.grade
