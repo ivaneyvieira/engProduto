@@ -1,8 +1,5 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.EPREEntradaXML
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
@@ -10,8 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoXML
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXmlViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -160,6 +156,11 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       this.setHeader("Fornecedor")
       this.isResizable = true
       this.isExpand = true
+    }
+
+    columnGrid(NotaEntradaXML::pedido) {
+      this.setHeader("Pedido")
+      this.isResizable = true
     }
 
     columnGrid(NotaEntradaXML::chave) {
