@@ -14,6 +14,10 @@ SELECT N.id                                       AS id,
            LOCATE('<vNF>', N.xmlNfe) + 5,
            LOCATE('</vNF>', N.xmlNfe)
              - LOCATE('<vNF>', N.xmlNfe) - 5) * 1 AS valorTotal,
+       MID(N.xmlNfe,
+           LOCATE('<xPed>', N.xmlNfe) + 6,
+           LOCATE('</xPed>', N.xmlNfe)
+             - LOCATE('<xPed>', N.xmlNfe) - 6)    AS pedido,
        N.chave                                    AS chave,
        xmlNfe                                     AS xmlNfe,
        IF(I2.invno IS NULL, 'N', 'S')             AS preEntrada

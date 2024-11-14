@@ -1,8 +1,5 @@
-package br.com.astrosoft.devolucao.model.beans
+package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaEntradaFileXML
-import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.nfeXml.ItensNotaReport
 import br.com.astrosoft.produto.nfeXml.ProdutoNotaEntradaVO
@@ -25,6 +22,7 @@ class NotaEntradaXML {
   var chave: String = ""
   var xmlNfe: String? = null
   var preEntrada: String? = null
+  var pedido: String? = null
 
   val notaFiscal
     get() = "$numero/$serie"

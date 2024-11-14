@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
+import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.Loja

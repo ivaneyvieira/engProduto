@@ -2,8 +2,8 @@ package br.com.astrosoft.produto.model
 
 import br.com.astrosoft.devolucao.model.beans.Agenda
 import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
-import br.com.astrosoft.devolucao.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.devolucao.model.beans.NotaEntradaXML
+import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
