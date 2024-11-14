@@ -23,6 +23,7 @@ class NotaEntradaXML {
   var xmlNfe: String? = null
   var preEntrada: String? = null
   var pedido: String? = null
+  var dataPedido: LocalDate? = null
 
   val notaFiscal
     get() = "$numero/$serie"
