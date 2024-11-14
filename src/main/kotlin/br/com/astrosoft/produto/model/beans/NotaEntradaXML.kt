@@ -12,7 +12,6 @@ class NotaEntradaXML {
   var numero: Int = 0
   var serie: Int = 0
   var dataEmissao: LocalDate? = null
-  var dataEntrada: LocalDate? = null
   var fornecedorNota: Int? = null
   var fornecedorCad: String? = null
   var cnpjEmitente: String = ""
@@ -22,8 +21,21 @@ class NotaEntradaXML {
   var chave: String = ""
   var xmlNfe: String? = null
   var preEntrada: String? = null
-  var pedido: String? = null
-  var dataPedido: LocalDate? = null
+
+
+  val pedido: Int
+    get(){
+      val regXPed = "<xPed>([^<]*)</xPed>".toRegex()
+      val pedidoX = regXPed.find(xmlNfe ?: "")?.groups?.get(1)?.value
+      val regPed = "${sigla}[^0-9]{0,4}[0-9]{4,15}+".toRegex(RegexOption.IGNORE_CASE)
+      val pedido = regPed.find(xmlNfe ?: "")?.value
+      val pedidoStr = pedidoX ?: pedido ?: return 0
+      val regNumero = "[0-9]+".toRegex()
+
+      return regNumero.find(pedidoStr)?.value?.toIntOrNull() ?: 0
+    }
+  val dataPedido: LocalDate?
+    get() = null
 
   val notaFiscal
     get() = "$numero/$serie"
