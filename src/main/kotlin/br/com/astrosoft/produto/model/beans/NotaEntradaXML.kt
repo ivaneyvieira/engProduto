@@ -49,7 +49,12 @@ class NotaEntradaXML {
   }
 
   fun produtosPedido(): List<PedidoXML> {
-    return saci.listPedidoXml(loja, pedido)
+    return saci.listPedidoXml(
+      loja = loja,
+      pedido = pedido,
+      vendno = fornecedorNota ?: 0,
+      numero = numero
+    )
   }
 
   fun xmlFile(): ProdutoNotaEntradaVO {

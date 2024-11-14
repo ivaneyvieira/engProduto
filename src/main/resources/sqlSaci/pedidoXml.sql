@@ -18,5 +18,10 @@ FROM sqldados.ords AS O
        LEFT JOIN sqldados.prdbar AS B
                  ON I.prdno = B.prdno
                    AND I.grade = B.grade
-WHERE I.storeno = :loja
-  AND I.ordno = :pedido
+WHERE (I.storeno = :loja
+  AND I.ordno = :pedido)
+   OR (I.storeno = :loja
+  AND O.vendno = :vendno
+  AND :vendno != 0
+  AND O.remarks LIKE CONCAT('%NFO%', :numero, '%')
+  )

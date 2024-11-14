@@ -2,8 +2,6 @@ package br.com.astrosoft.produto.model
 
 import br.com.astrosoft.devolucao.model.beans.Agenda
 import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
@@ -12,6 +10,7 @@ import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import org.sql2o.Query
 import java.time.LocalDate
 import java.time.LocalTime
@@ -1540,12 +1539,14 @@ class QuerySaci : QueryDB(database) {
     }.toList()
   }
 
-  fun listPedidoXml(loja:Int, pedido: Int): List<PedidoXML>{
+  fun listPedidoXml(loja: Int, pedido: Int, vendno: Int, numero: Int): List<PedidoXML> {
     val sql = "/sqlSaci/pedidoXml.sql"
 
-    return query(sql, PedidoXML::class ){
+    return query(sql, PedidoXML::class) {
       addOptionalParameter("loja", loja)
       addOptionalParameter("pedido", pedido)
+      addOptionalParameter("vendno", vendno)
+      addOptionalParameter("numero", numero)
     }
   }
 
