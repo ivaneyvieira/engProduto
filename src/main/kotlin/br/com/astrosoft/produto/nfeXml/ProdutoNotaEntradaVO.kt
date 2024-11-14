@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.nfeXml
 
-import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.formatDate
 import br.com.astrosoft.framework.util.formatTime
+import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import com.fincatto.documentofiscal.DFBase
 import com.fincatto.documentofiscal.nfe400.classes.NFModalidadeFrete
 import com.fincatto.documentofiscal.nfe400.classes.nota.*
@@ -50,7 +50,7 @@ class ProdutoNotaEntradaVO(
       id = id,
       numeroProtocolo = numeroProtocolo ?: "",
       codigo = produto?.codigo?.toString() ?: "",
-      codBarra = produto?.codigoDeBarras ?: "",
+      codBarra = produto?.barcode() ?: "",
       descricao = produto?.descricao ?: "",
       ncm = produto?.ncm ?: "",
       cst = item.icms().cst() ?: "",
@@ -66,6 +66,14 @@ class ProdutoNotaEntradaVO(
       valorOutros = produto?.valorOutrasDespesasAcessorias?.toDoubleOrNull() ?: 0.00,
       valorFrete = produto?.valorFrete?.toDoubleOrNull() ?: 0.00,
     )
+  }
+
+  private fun NFNotaInfoItemProduto.barcode(): String {
+    val barcode1 = this.codigoDeBarrasGtin
+    val barcode2 = this.codigoDeBarrasGtinTributavel
+    return if (barcode1.startsWith("SEM"))
+      barcode2
+    else barcode1
   }
 
   companion object {

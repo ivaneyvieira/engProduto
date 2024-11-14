@@ -22,9 +22,8 @@ class NotaEntradaXML {
   var xmlNfe: String? = null
   var preEntrada: String? = null
 
-
   val pedido: Int
-    get(){
+    get() {
       val regXPed = "<xPed>([^<]*)</xPed>".toRegex()
       val pedidoX = regXPed.find(xmlNfe ?: "")?.groups?.get(1)?.value
       val regPed = "${sigla}[^0-9]{0,4}[0-9]{4,15}+".toRegex(RegexOption.IGNORE_CASE)
@@ -47,6 +46,10 @@ class NotaEntradaXML {
 
   fun produtosNdd(): List<ProdutoNotaEntradaNdd> {
     return xmlFile().produtosNotaEntradaNDD()
+  }
+
+  fun produtosPedido(): List<PedidoXML> {
+    return saci.listPedidoXml(loja, pedido)
   }
 
   fun xmlFile(): ProdutoNotaEntradaVO {

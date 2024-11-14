@@ -1540,6 +1540,15 @@ class QuerySaci : QueryDB(database) {
     }.toList()
   }
 
+  fun listPedidoXml(loja:Int, pedido: Int): List<PedidoXML>{
+    val sql = "/sqlSaci/pedidoXml.sql"
+
+    return query(sql, PedidoXML::class ){
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("pedido", pedido)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

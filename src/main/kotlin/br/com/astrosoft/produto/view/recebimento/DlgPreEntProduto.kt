@@ -1,9 +1,11 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.columnGrid
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
+import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import com.vaadin.flow.component.grid.Grid
@@ -14,12 +16,23 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
+  val numeroNota: String = nota.notaFiscal ?: ""
+  val loja = nota.sigla
+  val pedido = nota.pedido
+  val produtosPedido = nota.produtosPedido()
+
+  private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
+    val pedido = produtosPedido.firstOrNull {
+      it.refFor == this.codigo
+    } ?: produtosPedido.firstOrNull {
+      it.barcode == this.codBarra
+    }
+
+    return pedido
+  }
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
-    val numeroNota: String = nota.notaFiscal ?: ""
-    val loja = nota.sigla
-    val pedido = nota.pedido
 
     form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
     }, onClose = {
@@ -40,14 +53,28 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
-      columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
-      columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
-      columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
-      columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
-      columnGrid(ProdutoNotaEntradaNdd::un, "UN")
-      columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant")
-      columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit")
+
+      this.columnGroup("XML") {
+        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
+        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
+        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
+        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
+        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
+        this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant")
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit")
+      }
+
+      this.columnGroup("Ped Compra $pedido") {
+        this.columnGrid({ it.produtosPedido()?.codigo }, "Código")
+        this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
+        this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
+        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
+        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
+        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
+        this.columnGrid({ it.produtosPedido()?.quant }, "Qtd")
+        this.columnGrid({ it.produtosPedido()?.valorUnit }, "V unit")
+      }
     }
     this.addAndExpand(gridDetail)
     update()
