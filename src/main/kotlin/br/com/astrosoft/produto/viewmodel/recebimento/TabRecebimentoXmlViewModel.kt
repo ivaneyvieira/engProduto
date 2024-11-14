@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.Loja
 
-class TabRecebimentoXml(val viewModel: RecebimentoViewModel) {
+class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
   val subView
     get() = viewModel.view.tabRecebimentoXml
 

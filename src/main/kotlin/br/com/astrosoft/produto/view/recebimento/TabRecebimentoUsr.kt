@@ -15,6 +15,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoPedido, "Pedidos")
     columnGrid(UserSaci::recebimentoAgenda, "Pré-entrada")
     columnGrid(UserSaci::recebimentoXML, "XML")
+    columnGrid(UserSaci::recebimentoPreEnt, "Pre-Ent XML")
     columnGrid(UserSaci::recebimentoReceberNota, "ReceberNota")
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
   }
@@ -29,6 +30,9 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       }
       checkBox("XML") {
         binder.bind(this, UserSaci::recebimentoXML.name)
+      }
+      checkBox("Pre-Ent XML") {
+        binder.bind(this, UserSaci::recebimentoPreEnt.name)
       }
       checkBox("Receber Nota") {
         binder.bind(this, UserSaci::recebimentoReceberNota.name)

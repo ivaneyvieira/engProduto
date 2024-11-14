@@ -23,6 +23,7 @@ class TabRecebimentoUsrViewModel(val viewModel: RecebimentoViewModel) : TabUsrVi
     this.recebimentoReceber = usuario.recebimentoReceber
     this.recebimentoRecebido = usuario.recebimentoRecebido
     this.recebimentoXML = usuario.recebimentoXML
+    this.recebimentoPreEnt = usuario.recebimentoPreEnt
     this.lojaRec = usuario.lojaRec
     this.localizacaoRec = usuario.localizacaoRec
     this.impressoraRec = usuario.impressoraRec

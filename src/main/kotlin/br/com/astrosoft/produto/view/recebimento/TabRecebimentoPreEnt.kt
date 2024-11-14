@@ -12,7 +12,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEnt
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoXML
+import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXmlViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -27,9 +29,9 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
-class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebimentoXML,
+class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabRecebimentoPreEnt,
   TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
-  private var dialog: DlgXmlProduto? = null
+  private var dialog: DlgPreEntProduto? = null
   private lateinit var edtNota: IntegerField
   private lateinit var edtFornecedorNota: TextField
   private lateinit var edtQuery: TextField
@@ -126,7 +128,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
-      dialog = DlgXmlProduto(viewModel, nota)
+      dialog = DlgPreEntProduto(viewModel, nota)
       dialog?.showDialog {
         dialog = null
       }
@@ -185,11 +187,11 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.recebimentoXML == true
+    return username?.recebimentoPreEnt == true
   }
 
   override val label: String
-    get() = "XML"
+    get() = "Pre-Ent XML"
 
   override fun updateComponent() {
     viewModel.updateViewBD()

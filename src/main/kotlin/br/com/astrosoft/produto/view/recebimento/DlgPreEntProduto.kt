@@ -5,12 +5,12 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
-import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXmlViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEntradaXML) {
+class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: NotaEntradaXML) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
