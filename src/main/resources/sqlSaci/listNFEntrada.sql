@@ -47,7 +47,8 @@ FROM sqldados.notasEntradaNdd AS N
 WHERE dataEmissao >= 20241101
   AND (N.cnpjEmitente NOT LIKE '07.483.654%')
   AND (I.invno IS NULL)
-  AND (N.dataEmissao BETWEEN :dataInicial AND :dataFinal)
+  AND (N.dataEmissao >= :dataInicial OR :dataInicial = 0)
+  AND (N.dataEmissao <= :dataFinal OR :dataFinal = 0)
   AND (N.NUMERO = :numero OR :numero = 0)
   AND (V.cgc = :cnpj OR :cnpj = '')
   AND (L.no = :loja OR :loja = 0)

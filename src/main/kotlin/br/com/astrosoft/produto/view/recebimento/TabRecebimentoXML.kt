@@ -85,12 +85,14 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
     }
     edtDataI = datePicker("Data Inicial") {
       localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateViewBD()
       }
     }
     edtDataF = datePicker("Data Final") {
       localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateViewBD()
       }
