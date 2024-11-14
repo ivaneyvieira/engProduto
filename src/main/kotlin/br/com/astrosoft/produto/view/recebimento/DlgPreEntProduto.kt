@@ -1,9 +1,11 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
@@ -61,8 +63,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
         this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
         this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
-        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant")
-        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px")
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "80px")
       }
 
       this.columnGroup("Ped Compra $pedido") {
@@ -72,8 +74,10 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
         this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
-        this.columnGrid({ it.produtosPedido()?.quant }, "Qtd")
-        this.columnGrid({ it.produtosPedido()?.valorUnit }, "V unit")
+        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Qtd").right()
+        this.columnGrid({
+          it.produtosPedido()?.valorUnit?.format()
+        }, "V unit").right()
       }
     }
     this.addAndExpand(gridDetail)

@@ -86,8 +86,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
 }
 
 @JvmName("columnProvider")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  valueProvider: ValueProvider<T, *>,
+fun <T : Any, V: Any> (@VaadinDsl Grid<T>).columnGrid(
+  valueProvider: ValueProvider<T, V?>,
   header: String? = null,
   width: String? = null,
   isExpand: Boolean = false,

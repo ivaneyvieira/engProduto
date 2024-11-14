@@ -16,14 +16,14 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KProperty1
 
-class ColumnGroup<T : Any>(val grid: Grid<T>, private val header: String){
+class ColumnGroup<T : Any>(val grid: Grid<T>, private val header: String) {
   private val columns: MutableList<Column<T>> = mutableListOf()
-  private var  headerRow : HeaderRow? = null
+  private var headerRow: HeaderRow? = null
 
   fun addColumn(column: Column<T>): Column<T> {
-    headerRow = if(grid.headerRows.size == 1) {
+    headerRow = if (grid.headerRows.size == 1) {
       grid.prependHeaderRow()
-    }else{
+    } else {
       grid.headerRows[0]
     }
     columns.add(column)
@@ -41,9 +41,9 @@ fun <T : Any> Grid<T>.columnGroup(header: String, block: ColumnGroup<T>.() -> Un
   columnGroup.join()
 }
 
-@JvmName("columnProvider")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
-  valueProvider: ValueProvider<T, *>,
+@JvmName("columnProviderString")
+fun <T : Any, V: Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
+  valueProvider: ValueProvider<T, V?>,
   header: String? = null,
   width: String? = null,
   isExpand: Boolean = false,
