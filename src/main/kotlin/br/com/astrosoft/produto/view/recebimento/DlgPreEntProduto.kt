@@ -69,6 +69,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
       this.columnGroup("Conversão Entrada") {
         this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "100px").right()
+        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
         this.columnGrid({
           val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
           val quant = it.quantidade
@@ -87,7 +88,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
         this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
         this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
-        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
+
         this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Qtd", width = "100px").right()
         this.columnGrid({
           it.produtosPedido()?.valorUnit?.format("#,##0.0000")
