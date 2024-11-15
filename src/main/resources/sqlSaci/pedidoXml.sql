@@ -2,13 +2,15 @@ SELECT I.storeno                          AS loja,
        I.ordno                            AS pedido,
        I.prdno                            AS prdno,
        I.grade                            AS grade,
+       CAST(O.date AS DATE)               AS data,
        TRIM(I.prdno) * 1                  AS codigo,
        TRIM(MID(P.name, 1, 37))           AS descricao,
        P.mfno_ref                         AS refFor,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
        TRIM(MID(P.name, 37, 3))           AS unidade,
        I.qtty                             AS quant,
-       I.cost                             AS valorUnit
+       I.cost                             AS valorUnit,
+       P.qttyPackClosed/1000              AS embalagem
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno

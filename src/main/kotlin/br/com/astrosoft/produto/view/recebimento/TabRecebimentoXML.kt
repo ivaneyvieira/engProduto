@@ -139,11 +139,6 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       this.isResizable = true
     }
 
-    columnGrid(NotaEntradaXML::dataPedido) {
-      this.setHeader("Data")
-      this.isResizable = true
-    }
-
     columnGrid(NotaEntradaXML::notaFiscal) {
       this.setHeader("Número")
       this.isResizable = true

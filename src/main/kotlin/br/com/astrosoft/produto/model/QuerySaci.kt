@@ -1550,6 +1550,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun saveNFEntrada(nota : NotaEntradaXML){
+    val sql = "/sqlSaci/listNFEntradaSave.sql"
+    script(sql) {
+      addOptionalParameter("id", nota.id)
+      addOptionalParameter("loja", nota.loja)
+      addOptionalParameter("pedido", nota.pedidoEdit ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

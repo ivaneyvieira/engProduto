@@ -20,6 +20,11 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
     return NotaEntradaXML.findAll(filtro)
   }
 
+  fun salvaNota(nota: NotaEntradaXML) {
+    nota.save()
+    updateViewBD()
+  }
+
   fun updateViewBD() {
     val filter = subView.getFiltro()
     val listBD = NotaEntradaXML.findAll(filter)

@@ -13,6 +13,12 @@ fun Double?.format(): String {
   return formatNumber.format(this)
 }
 
+fun Double?.format(pat: String): String {
+  this ?: return ""
+  return DecimalFormat(pat).format(this)
+}
+
+
 fun Int?.format(): String {
   this ?: return ""
   return formatInteger.format(this)

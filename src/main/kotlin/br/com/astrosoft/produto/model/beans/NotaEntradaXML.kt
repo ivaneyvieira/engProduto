@@ -21,20 +21,27 @@ class NotaEntradaXML {
   var chave: String = ""
   var xmlNfe: String? = null
   var preEntrada: String? = null
+  var ordno: Int? = null
+  var pedidoEdit: Int? = null
 
-  val pedido: Int
+  var pedido: Int
     get() {
-      val regXPed = "<xPed>([^<]*)</xPed>".toRegex()
-      val pedidoX = regXPed.find(xmlNfe ?: "")?.groups?.get(1)?.value
-      val regPed = "${sigla}[^0-9]{0,4}[0-9]{4,15}+".toRegex(RegexOption.IGNORE_CASE)
-      val pedido = regPed.find(xmlNfe ?: "")?.value
-      val pedidoStr = pedidoX ?: pedido ?: return 0
-      val regNumero = "[0-9]+".toRegex()
+      return if (pedidoEdit == null) {
+        val regXPed = "<xPed>([^<]*)</xPed>".toRegex()
+        val pedidoX = regXPed.find(xmlNfe ?: "")?.groups?.get(1)?.value
+        val regPed = "${sigla}[^0-9]{0,4}[0-9]{4,15}+".toRegex(RegexOption.IGNORE_CASE)
+        val pedido = regPed.find(xmlNfe ?: "")?.value
+        val pedidoStr = pedidoX ?: pedido ?: return 0
+        val regNumero = "[0-9]+".toRegex()
 
-      return regNumero.find(pedidoStr)?.value?.toIntOrNull() ?: 0
+        regNumero.find(pedidoStr)?.value?.toIntOrNull() ?: ordno ?: 0
+      } else {
+        pedidoEdit ?: 0
+      }
     }
-  val dataPedido: LocalDate?
-    get() = null
+    set(value) {
+      pedidoEdit = value
+    }
 
   val notaFiscal
     get() = "$numero/$serie"
@@ -64,6 +71,10 @@ class NotaEntradaXML {
       numeroProtocolo = "",
       dataHoraRecebimento = "",
     )
+  }
+
+  fun save() {
+    saci.saveNFEntrada(this)
   }
 
   companion object {

@@ -8,9 +8,13 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEnt
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
@@ -125,6 +129,13 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
   }
 
   override fun Grid<NotaEntradaXML>.gridPanel() {
+    this.withEditor(NotaEntradaXML::class,
+        openEditor = {
+          this.focusEditor(NotaEntradaXML::pedido)
+        },
+        closeEditor = {
+          viewModel.salvaNota(it.bean)
+        })
     setSelectionMode(Grid.SelectionMode.MULTI)
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
@@ -141,11 +152,7 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
     columnGrid(NotaEntradaXML::pedido) {
       this.setHeader("Pedido")
       this.isResizable = true
-    }
-
-    columnGrid(NotaEntradaXML::dataPedido) {
-      this.setHeader("Data")
-      this.isResizable = true
+      this.integerFieldEditor()
     }
 
     columnGrid(NotaEntradaXML::notaFiscal) {

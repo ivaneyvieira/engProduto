@@ -2,24 +2,26 @@ SET SQL_MODE = '';
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
-SELECT N.id                                                                    AS id,
-       L.no                                                                    AS loja,
-       L.sname                                                                 AS sigla,
-       NUMERO                                                                  AS numero,
-       SERIE                                                                   AS serie,
-       dataEmissao                                                             AS dataEmissao,
-       V.no                                                                    AS fornecedorNota,
-       C.no                                                                    AS fornecedorCad,
-       cnpjEmitente                                                            AS cnpjEmitente,
-       nomeFornecedor                                                          AS nomeFornecedor,
-       valorTotalProdutos                                                      AS valorTotalProdutos,
+SELECT N.id                                       AS id,
+       L.no                                       AS loja,
+       L.sname                                    AS sigla,
+       NUMERO                                     AS numero,
+       SERIE                                      AS serie,
+       dataEmissao                                AS dataEmissao,
+       V.no                                       AS fornecedorNota,
+       C.no                                       AS fornecedorCad,
+       cnpjEmitente                               AS cnpjEmitente,
+       nomeFornecedor                             AS nomeFornecedor,
+       valorTotalProdutos                         AS valorTotalProdutos,
        MID(N.xmlNfe,
            LOCATE('<vNF>', N.xmlNfe) + 5,
            LOCATE('</vNF>', N.xmlNfe)
-             - LOCATE('<vNF>', N.xmlNfe) - 5) * 1                              AS valorTotal,
-       N.chave                                                                 AS chave,
-       xmlNfe                                                                  AS xmlNfe,
-       IF(I2.invno IS NULL, 'N', 'S')                                          AS preEntrada
+             - LOCATE('<vNF>', N.xmlNfe) - 5) * 1 AS valorTotal,
+       N.chave                                    AS chave,
+       xmlNfe                                     AS xmlNfe,
+       IF(I2.invno IS NULL, 'N', 'S')             AS preEntrada,
+       I2.ordno                                   AS ordno,
+       P.pedido                                   AS pedidoEdit
 FROM sqldados.notasEntradaNdd AS N
        INNER JOIN sqldados.store AS L
                   ON N.cnpjDestinatario = L.cgc
@@ -35,6 +37,8 @@ FROM sqldados.notasEntradaNdd AS N
                  ON V.cgc = N.cnpjEmitente
        LEFT JOIN sqldados.custp AS C
                  ON C.cpf_cgc = N.cnpjEmitente
+       LEFT JOIN sqldados.pedidoNdd AS P
+                 ON P.id = N.id
 WHERE dataEmissao >= 20241101
   AND (N.cnpjEmitente NOT LIKE '07.483.654%')
   AND (I.invno IS NULL)
@@ -63,6 +67,8 @@ SELECT id,
        valorTotal,
        chave,
        xmlNfe,
-       preEntrada
+       preEntrada,
+       ordno,
+       pedidoEdit
 FROM T_NOTA AS N
 
