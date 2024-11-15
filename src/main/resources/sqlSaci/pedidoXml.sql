@@ -10,7 +10,7 @@ SELECT I.storeno                          AS loja,
        TRIM(MID(P.name, 37, 3))           AS unidade,
        I.qtty                             AS quant,
        I.cost                             AS valorUnit,
-       P.qttyPackClosed/1000              AS embalagem
+       P.mult / 1000                      AS embalagem
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno
