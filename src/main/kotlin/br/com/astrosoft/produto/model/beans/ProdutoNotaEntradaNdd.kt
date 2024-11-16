@@ -27,4 +27,6 @@ data class ProdutoNotaEntradaNdd(
 
   val valorICMS
     get() = baseICMS * aliqICMS / 100
+
+  //fun produtosPedido() = this.produtosPedido()
 }

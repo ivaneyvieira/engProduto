@@ -9,18 +9,16 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
+import br.com.astrosoft.produto.view.recebimento.EDiferenca.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
-import com.github.mvysny.karibudsl.v10.checkBox
-import com.vaadin.flow.component.checkbox.Checkbox
+import com.github.mvysny.karibudsl.v10.select
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 
 class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: NotaEntradaXML) {
-  private var chkDifRef: Checkbox? = null
-  private var chkDifBar: Checkbox? = null
-  private var chkDifValor: Checkbox? = null
-  private var chkDifQuant: Checkbox? = null
+  private var cmbDiferenca: Select<EDiferenca>? = null
 
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
@@ -38,34 +36,63 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     } ?: produtosPedido.firstOrNull {
       it.barcode == this.codBarra
     }
-
     return pedido
+  }
+
+  private fun ProdutoNotaEntradaNdd.codigo(): Int? {
+    return produtosPedido()?.codigo
+  }
+
+  private fun ProdutoNotaEntradaNdd.refFor(): String? {
+    return produtosPedido()?.refFor
+  }
+
+  private fun ProdutoNotaEntradaNdd.barcode(): String? {
+    return produtosPedido()?.barcode
+  }
+
+  private fun ProdutoNotaEntradaNdd.descricao(): String? {
+    return produtosPedido()?.descricao
+  }
+
+  private fun ProdutoNotaEntradaNdd.grade(): String? {
+    return produtosPedido()?.grade
+  }
+
+  private fun ProdutoNotaEntradaNdd.quant(): Int? {
+    return produtosPedido()?.quant
+  }
+
+  private fun ProdutoNotaEntradaNdd.valorUnit(): Double? {
+    return produtosPedido()?.valorUnit
+  }
+
+  private fun ProdutoNotaEntradaNdd.fator(): Double? {
+    return produtosPedido()?.fator
+  }
+
+  private fun ProdutoNotaEntradaNdd.quantConv(): Double? {
+    val embalagem = fator() ?: return null
+    val quant = quantidade
+    return (quant * embalagem)
+  }
+
+  private fun ProdutoNotaEntradaNdd.valorConv(): Double? {
+    val embalagem = fator() ?: return null
+    val valorUnit = valorUnitario
+    return (valorUnit / embalagem)
   }
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
 
     form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota", toolBar = {
-      chkDifRef = checkBox("Dif Referência") {
-        this.value = false
-        addValueChangeListener {
-          update()
+      cmbDiferenca = select("Diferença") {
+        setItems(EDiferenca.entries)
+        this.value = TODOS
+        setItemLabelGenerator {
+          it.descricao
         }
-      }
-      chkDifBar = checkBox("Dif Código Barra") {
-        this.value = false
-        addValueChangeListener {
-          update()
-        }
-      }
-      chkDifValor = checkBox("Dif Valor") {
-        this.value = false
-        addValueChangeListener {
-          update()
-        }
-      }
-      chkDifQuant = checkBox("Dif Quantidade") {
-        this.value = false
         addValueChangeListener {
           update()
         }
@@ -90,28 +117,20 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       isMultiSort = false
 
       this.columnGroup("Pedido Compra $loja$pedido") {
-        this.columnGrid({ it.produtosPedido()?.refFor }, "Referência").right()
-        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra").right()
-        this.columnGrid({ it.produtosPedido()?.codigo }, "Código").right()
-        this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
-        this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
-        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Quant", width = "60px").right()
+        this.columnGrid({ it.refFor() }, "Referência").right()
+        this.columnGrid({ it.barcode() }, "Código Barra").right()
+        this.columnGrid({ it.codigo() }, "Código").right()
+        this.columnGrid({ it.descricao() }, "Descrição")
+        this.columnGrid({ it.grade() }, "Grade")
+        this.columnGrid({ it.quant()?.format() }, "Quant", width = "60px").right()
         this.columnGrid({
-          it.produtosPedido()?.valorUnit?.format("#,##0.0000")
+          it.valorUnit()?.format("#,##0.0000")
         }, "Valor Unit", width = "100px").right()
       }
 
       this.columnGroup("Conversão Entrada") {
-        this.columnGrid({
-          val embalagem = it.produtosPedido()?.fator ?: return@columnGrid ""
-          val quant = it.quantidade
-          (quant * embalagem).format("#,##0")
-        }, "Quant", width = "60px").right()
-        this.columnGrid({
-          val embalagem = it.produtosPedido()?.fator ?: return@columnGrid ""
-          val valorUnit = it.valorUnitario
-          (valorUnit / embalagem).format("#,##0.0000")
-        }, "Valor Unit", width = "100px").right()
+        this.columnGrid({ it.quantConv()?.format("#,##0.0000") }, "Quant", width = "80px").right()
+        this.columnGrid({ it.valorConv()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right()
         this.columnGrid({ it.produtosPedido()?.fator?.format("#,##0.0000") }, "Emb", width = "80px").right()
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
@@ -134,10 +153,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
   fun update() {
     val listProdutos = nota.produtosNdd().filter { ndd ->
-      (chkDifRef?.value != true || ndd.codigo != ndd.produtosPedido()?.refFor) &&
-      (chkDifBar?.value != true || ndd.codBarra != ndd.produtosPedido()?.barcode) &&
-      (chkDifValor?.value != true || ndd.valorUnitario != ndd.produtosPedido()?.valorUnit) &&
-      (chkDifQuant?.value != true || ndd.quantidade.toInt() != ndd.produtosPedido()?.quant)
+      val value = cmbDiferenca?.value ?: TODOS
+      (value == REF && ndd.codigo != ndd.refFor()) ||
+      (value == BAR && ndd.codBarra != ndd.barcode()) ||
+      (value == VAL && ndd.valorConv() != ndd.valorUnit()) ||
+      (value == QTD && ndd.quantConv()?.toInt() != ndd.quant()) ||
+      (value == TODOS)
     }
     gridDetail.setItems(listProdutos)
   }
@@ -146,4 +167,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     onClose?.invoke()
     form?.close()
   }
+}
+
+enum class EDiferenca(val descricao: String) {
+  TODOS("Todos"),
+  BAR("Código de Barras"),
+  REF("Referência"),
+  QTD("Quantidade"),
+  VAL("Valor"),
 }

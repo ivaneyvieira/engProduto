@@ -5,7 +5,7 @@ SELECT I.storeno                          AS loja,
        CAST(O.date AS DATE)               AS data,
        TRIM(I.prdno) * 1                  AS codigo,
        TRIM(MID(P.name, 1, 37))           AS descricao,
-       P.mfno_ref                         AS refFor,
+       IFNULL(R.prdrefno, P.mfno_ref)     AS refFor,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
        TRIM(MID(P.name, 37, 3))           AS unidade,
        I.qtty                             AS quant,
@@ -23,6 +23,10 @@ FROM sqldados.ords AS O
        LEFT JOIN sqldados.prdbar AS B
                  ON I.prdno = B.prdno
                    AND I.grade = B.grade
+       LEFT JOIN sqldados.prdref AS R
+                 ON R.prdno = I.prdno
+                   AND R.grade = I.grade
+                   AND R.vendno = O.vendno
 WHERE (I.storeno = :loja
   AND I.ordno = :pedido)
    OR (I.storeno = :loja
