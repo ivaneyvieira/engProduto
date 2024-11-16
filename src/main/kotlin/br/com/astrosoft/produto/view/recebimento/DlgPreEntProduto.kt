@@ -18,7 +18,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
-  val numeroNota: String = nota.notaFiscal ?: ""
+  val numeroNota: String = nota.notaFiscal
   val loja = nota.sigla
   val pedido = nota.pedido
   val produtosPedido = nota.produtosPedido()
@@ -69,17 +69,6 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         }, "V unit", width = "100px").right()
       }
 
-      this.columnGroup("XML") {
-        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
-        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
-        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
-        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
-        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
-        this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
-        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px")
-        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
-      }
-
       this.columnGroup("Conversão Entrada") {
         this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "100px").right()
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
@@ -93,6 +82,17 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
           val valorUnit = it.valorUnitario
           (valorUnit / embalagem).format("#,##0.0000")
         }, "V. Unit", width = "100px").right()
+      }
+
+      this.columnGroup("XML") {
+        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
+        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
+        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
+        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
+        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
+        this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px")
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
       }
     }
     this.addAndExpand(gridDetail)
