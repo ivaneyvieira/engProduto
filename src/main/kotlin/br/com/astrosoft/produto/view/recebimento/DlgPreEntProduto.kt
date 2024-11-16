@@ -38,7 +38,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
 
-    form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota|Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
+    form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota", toolBar = {
     }, onClose = {
       onClose()
     }) {
