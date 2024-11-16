@@ -57,11 +57,11 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       isMultiSort = false
 
       this.columnGroup("Ped Compra $pedido") {
+        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
+        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
         this.columnGrid({ it.produtosPedido()?.codigo }, "Código")
         this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
         this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
-        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
-        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
 
         this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Qtd", width = "100px").right()
         this.columnGrid({
