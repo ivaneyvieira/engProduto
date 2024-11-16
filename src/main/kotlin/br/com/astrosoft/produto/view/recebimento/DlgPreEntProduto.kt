@@ -56,6 +56,19 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
 
+      this.columnGroup("Ped Compra $pedido") {
+        this.columnGrid({ it.produtosPedido()?.codigo }, "Código")
+        this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
+        this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
+        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
+        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
+
+        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Qtd", width = "100px").right()
+        this.columnGrid({
+          it.produtosPedido()?.valorUnit?.format("#,##0.0000")
+        }, "V unit", width = "100px").right()
+      }
+
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
         this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
@@ -80,19 +93,6 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
           val valorUnit = it.valorUnitario
           (valorUnit / embalagem).format("#,##0.0000")
         }, "V. Unit", width = "100px").right()
-      }
-
-      this.columnGroup("Ped Compra $pedido") {
-        this.columnGrid({ it.produtosPedido()?.codigo }, "Código")
-        this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
-        this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
-        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
-        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
-
-        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Qtd", width = "100px").right()
-        this.columnGrid({
-          it.produtosPedido()?.valorUnit?.format("#,##0.0000")
-        }, "V unit", width = "100px").right()
       }
     }
     this.addAndExpand(gridDetail)
