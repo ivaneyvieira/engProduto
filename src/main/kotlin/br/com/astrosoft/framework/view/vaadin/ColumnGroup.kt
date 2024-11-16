@@ -8,6 +8,7 @@ import com.github.mvysny.karibudsl.v10.VaadinDsl
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
 import com.vaadin.flow.component.grid.HeaderRow
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.function.ValueProvider
 import java.sql.Time
 import java.time.LocalDate
@@ -31,7 +32,15 @@ class ColumnGroup<T : Any>(val grid: Grid<T>, private val header: String) {
   }
 
   fun join() {
-    headerRow?.join(* columns.toTypedArray())?.text = header
+    headerRow?.join(* columns.toTypedArray())?.component = Div(header).apply {
+      //Centralizado
+      this.style["text-align"] = "center"
+      this.style["width"] = "100%"
+      this.style["margin"] = "0"
+      this.style["padding"] = "0"
+      this.style["font-size"] = "1em"
+      this.style["font-weight"] = "bold"
+    }
   }
 }
 
@@ -42,7 +51,7 @@ fun <T : Any> Grid<T>.columnGroup(header: String, block: ColumnGroup<T>.() -> Un
 }
 
 @JvmName("columnProviderString")
-fun <T : Any, V: Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
+fun <T : Any, V : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   valueProvider: ValueProvider<T, V?>,
   header: String? = null,
   width: String? = null,

@@ -56,14 +56,13 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
 
-      this.columnGroup("Ped Compra $pedido") {
+      this.columnGroup("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido") {
         this.columnGrid({ it.produtosPedido()?.refFor }, "Referência").right()
         this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra").right()
         this.columnGrid({ it.produtosPedido()?.codigo }, "Código").right()
         this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
         this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
-
-        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Quant", width = "100px").right()
+        this.columnGrid({ it.produtosPedido()?.quant?.format() }, "Quant", width = "60px").right()
         this.columnGrid({
           it.produtosPedido()?.valorUnit?.format("#,##0.0000")
         }, "Valor Unit", width = "100px").right()
@@ -74,19 +73,19 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
           val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
           val quant = it.quantidade
           (quant * embalagem).format("#,##0")
-        }, "Qaunt", width = "100px").right()
+        }, "Quant", width = "60px").right()
         this.columnGrid({
           val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
           val valorUnit = it.valorUnitario
           (valorUnit / embalagem).format("#,##0.0000")
         }, "Valor Unit", width = "100px").right()
-        this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "100px").right()
+        this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "50px").right()
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
 
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::un, "Un")
-        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px").right()
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right()
