@@ -87,12 +87,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra").right()
-        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
-        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
-        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP").right()
         this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
         this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px").right()
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
+        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP").right()
       }
     }
     this.addAndExpand(gridDetail)
