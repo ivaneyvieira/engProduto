@@ -10,11 +10,18 @@ import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
+import com.github.mvysny.karibudsl.v10.checkBox
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: NotaEntradaXML) {
+  private var chkDifRef: Checkbox? = null
+  private var chkDifBar: Checkbox? = null
+  private var chkDifValor: Checkbox? = null
+  private var chkDifQuant: Checkbox? = null
+
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
@@ -39,6 +46,30 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     this.onClose = onClose
 
     form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota", toolBar = {
+      chkDifRef = checkBox("Dif Referência") {
+        this.value = false
+        addValueChangeListener {
+          update()
+        }
+      }
+      chkDifBar = checkBox("Dif Código Barra") {
+        this.value = false
+        addValueChangeListener {
+          update()
+        }
+      }
+      chkDifValor = checkBox("Dif Valor") {
+        this.value = false
+        addValueChangeListener {
+          update()
+        }
+      }
+      chkDifQuant = checkBox("Dif Quantidade") {
+        this.value = false
+        addValueChangeListener {
+          update()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -87,7 +118,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px").right()
-        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
+          .right()
         this.columnGrid(ProdutoNotaEntradaNdd::un, "Un")
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right()
@@ -101,7 +133,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   }
 
   fun update() {
-    val listProdutos = nota.produtosNdd()
+    val listProdutos = nota.produtosNdd().filter { ndd ->
+      (chkDifRef?.value != true || ndd.codigo != ndd.produtosPedido()?.refFor) &&
+      (chkDifBar?.value != true || ndd.codBarra != ndd.produtosPedido()?.barcode) &&
+      (chkDifValor?.value != true || ndd.valorUnitario != ndd.produtosPedido()?.valorUnit) &&
+      (chkDifQuant?.value != true || ndd.quantidade.toInt() != ndd.produtosPedido()?.quant)
+    }
     gridDetail.setItems(listProdutos)
   }
 
