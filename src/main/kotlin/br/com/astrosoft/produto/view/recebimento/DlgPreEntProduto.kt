@@ -70,8 +70,6 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       }
 
       this.columnGroup("Conversão Entrada") {
-        this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "100px").right()
-        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
         this.columnGrid({
           val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
           val quant = it.quantidade
@@ -82,6 +80,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
           val valorUnit = it.valorUnitario
           (valorUnit / embalagem).format("#,##0.0000")
         }, "V. Unit", width = "100px").right()
+        this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "100px").right()
+        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
 
       this.columnGroup("XML") {
