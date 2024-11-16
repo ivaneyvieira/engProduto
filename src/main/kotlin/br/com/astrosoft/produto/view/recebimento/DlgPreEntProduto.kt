@@ -57,9 +57,9 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       isMultiSort = false
 
       this.columnGroup("Ped Compra $pedido") {
-        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For")
-        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra")
-        this.columnGrid({ it.produtosPedido()?.codigo }, "Código")
+        this.columnGrid({ it.produtosPedido()?.refFor }, "Ref For").right()
+        this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra").right()
+        this.columnGrid({ it.produtosPedido()?.codigo }, "Código").right()
         this.columnGrid({ it.produtosPedido()?.descricao }, "Descrição")
         this.columnGrid({ it.produtosPedido()?.grade }, "Grade")
 
@@ -85,14 +85,14 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       }
 
       this.columnGroup("XML") {
-        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
-        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
+        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra").right()
         this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
-        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
-        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
+        this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP").right()
         this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
-        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px")
-        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "100px").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000").right()
       }
     }
     this.addAndExpand(gridDetail)
