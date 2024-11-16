@@ -157,6 +157,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
 
+
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px").right()
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
