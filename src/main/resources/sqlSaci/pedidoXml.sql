@@ -10,7 +10,10 @@ SELECT I.storeno                          AS loja,
        TRIM(MID(P.name, 37, 3))           AS unidade,
        I.qtty                             AS quant,
        I.cost                             AS valorUnit,
-       P.mult / 1000                      AS embalagem
+       P.mult / 1000                      AS embalagem,
+       IF(P.free_fld1 LIKE '*%' ||
+          P.free_fld1 LIKE '/%',
+          P.free_fld1, NULL)              AS formula
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno

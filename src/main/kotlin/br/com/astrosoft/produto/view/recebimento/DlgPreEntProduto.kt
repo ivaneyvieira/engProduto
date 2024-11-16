@@ -103,16 +103,16 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
       this.columnGroup("Conversão Entrada") {
         this.columnGrid({
-          val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
+          val embalagem = it.produtosPedido()?.fator ?: return@columnGrid ""
           val quant = it.quantidade
           (quant * embalagem).format("#,##0")
         }, "Quant", width = "60px").right()
         this.columnGrid({
-          val embalagem = it.produtosPedido()?.embalagem ?: return@columnGrid ""
+          val embalagem = it.produtosPedido()?.fator ?: return@columnGrid ""
           val valorUnit = it.valorUnitario
           (valorUnit / embalagem).format("#,##0.0000")
         }, "Valor Unit", width = "100px").right()
-        this.columnGrid({ it.produtosPedido()?.embalagem?.format("#,##0") }, "Emb", width = "50px").right()
+        this.columnGrid({ it.produtosPedido()?.fator?.format("#,##0.0000") }, "Emb", width = "80px").right()
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
 
