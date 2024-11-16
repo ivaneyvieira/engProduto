@@ -33,7 +33,6 @@ class ColumnGroup<T : Any>(val grid: Grid<T>, private val header: String) {
 
   fun join() {
     headerRow?.join(* columns.toTypedArray())?.component = Div(header).apply {
-      //Centralizado
       this.style["text-align"] = "center"
       this.style["width"] = "100%"
       this.style["margin"] = "0"

@@ -21,6 +21,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   val numeroNota: String = nota.notaFiscal
   val loja = nota.sigla
   val pedido = nota.pedido
+  val fornecedor = nota.nomeFornecedor
+
   val produtosPedido = nota.produtosPedido()
 
   private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
@@ -36,7 +38,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
 
-    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
+    form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota|Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
     }, onClose = {
       onClose()
     }) {
@@ -56,7 +58,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
 
-      this.columnGroup("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido") {
+      this.columnGroup("Pedido Compra $loja$pedido") {
         this.columnGrid({ it.produtosPedido()?.refFor }, "Referência").right()
         this.columnGrid({ it.produtosPedido()?.barcode }, "Código Barra").right()
         this.columnGrid({ it.produtosPedido()?.codigo }, "Código").right()
@@ -89,9 +91,9 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right()
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right()
-        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
         this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
         this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
       }
     }
     this.addAndExpand(gridDetail)
