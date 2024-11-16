@@ -18,18 +18,21 @@ class PedidoXML {
   var embalagem: Double = 0.00
   var formula: String? = null
 
-  val valorFormula: Double
+  val valorFormula: Double?
     get() {
-      val formula = formula?.replace(',', '.') ?: return 1.00
+      val formula = formula?.replace(',', '.') ?: return null
       return if (formula.length > 1) {
         formula.substring(1).toDoubleOrNull() ?: 0.00
       } else {
-        1.00
+        null
       }
     }
 
-  val fator: Double
+  val embalagemFator
+    get() = valorFormula ?: embalagem
+
+  val fator: Double?
     get() = if (formula?.firstOrNull() == '*') valorFormula
-    else if (formula?.firstOrNull() == '/') 1 / valorFormula
+    else if (formula?.firstOrNull() == '/') 1 / (valorFormula ?: 1.0)
     else embalagem
 }

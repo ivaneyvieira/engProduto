@@ -117,21 +117,43 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       isMultiSort = false
 
       this.columnGroup("Pedido Compra $loja$pedido") {
-        this.columnGrid({ it.refFor() }, "Referência").right()
-        this.columnGrid({ it.barcode() }, "Código Barra").right()
+        this.columnGrid({ it.refFor() }, "Referência").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difRef()) "amarelo" else null
+          }
+        }
+        this.columnGrid({ it.barcode() }, "Código Barra").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difBar()) "amarelo" else null
+          }
+        }
         this.columnGrid({ it.codigo() }, "Código").right()
         this.columnGrid({ it.descricao() }, "Descrição")
         this.columnGrid({ it.grade() }, "Grade")
-        this.columnGrid({ it.quant()?.format() }, "Quant", width = "60px").right()
-        this.columnGrid({
-          it.valorUnit()?.format("#,##0.0000")
-        }, "Valor Unit", width = "100px").right()
+        this.columnGrid({ it.quant()?.format() }, "Quant", width = "60px").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difQtd()) "amarelo" else null
+          }
+        }
+        this.columnGrid({ it.valorUnit()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difVal()) "amarelo" else null
+          }
+        }
       }
 
       this.columnGroup("Conversão Entrada") {
-        this.columnGrid({ it.quantConv()?.format("#,##0.0000") }, "Quant", width = "80px").right()
-        this.columnGrid({ it.valorConv()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right()
-        this.columnGrid({ it.produtosPedido()?.fator?.format("#,##0.0000") }, "Emb", width = "80px").right()
+        this.columnGrid({ it.quantConv()?.format("#,##0.0000") }, "Quant", width = "80px").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difQtd()) "amarelo" else null
+          }
+        }
+        this.columnGrid({ it.valorConv()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difVal()) "amarelo" else null
+          }
+        }
+        this.columnGrid({ it.produtosPedido()?.embalagemFator?.format("#,##0.0000") }, "Emb", width = "80px").right()
         this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
       }
 
@@ -140,8 +162,16 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
           .right()
         this.columnGrid(ProdutoNotaEntradaNdd::un, "Un")
-        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right()
-        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difRef()) "amarelo" else null
+          }
+        }
+        this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right().apply {
+          this.setPartNameGenerator() {
+            if (it.difBar()) "amarelo" else null
+          }
+        }
         this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
         this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP").right()
         this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
@@ -151,13 +181,29 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     update()
   }
 
+  fun ProdutoNotaEntradaNdd.difRef(): Boolean {
+    return this.codigo != this.refFor()
+  }
+
+  fun ProdutoNotaEntradaNdd.difBar(): Boolean {
+    return this.barcode() != this.codBarra
+  }
+
+  fun ProdutoNotaEntradaNdd.difQtd(): Boolean {
+    return this.quantConv()?.toInt() != this.quant()
+  }
+
+  fun ProdutoNotaEntradaNdd.difVal(): Boolean {
+    return this.valorConv()?.format("0.0000") != this.valorUnit()?.format("0.0000")
+  }
+
   fun update() {
     val listProdutos = nota.produtosNdd().filter { ndd ->
       val value = cmbDiferenca?.value ?: TODOS
-      (value == REF && ndd.codigo != ndd.refFor()) ||
-      (value == BAR && ndd.codBarra != ndd.barcode()) ||
-      (value == VAL && ndd.valorConv() != ndd.valorUnit()) ||
-      (value == QTD && ndd.quantConv()?.toInt() != ndd.quant()) ||
+      (value == REF && ndd.difRef()) ||
+      (value == BAR && ndd.difBar()) ||
+      (value == VAL && ndd.difVal()) ||
+      (value == QTD && ndd.difQtd()) ||
       (value == TODOS)
     }
     gridDetail.setItems(listProdutos)
