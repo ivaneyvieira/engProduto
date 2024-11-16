@@ -86,8 +86,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
-        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
+        this.columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição")
         this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST")
         this.columnGrid(ProdutoNotaEntradaNdd::cfop, "CFOP")
         this.columnGrid(ProdutoNotaEntradaNdd::un, "UN")
