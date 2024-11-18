@@ -23,6 +23,7 @@ FROM sqldados.ords AS O
        LEFT JOIN sqldados.prdbar AS B
                  ON I.prdno = B.prdno
                    AND I.grade = B.grade
+                   AND B.grade != ''
        LEFT JOIN sqldados.prdref AS R
                  ON R.prdno = I.prdno
                    AND R.grade = I.grade
