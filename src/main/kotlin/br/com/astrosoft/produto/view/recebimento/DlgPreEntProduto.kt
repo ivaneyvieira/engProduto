@@ -3,11 +3,8 @@ package br.com.astrosoft.produto.view.recebimento
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
-import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.framework.view.vaadin.helper.withEditor
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showWarning
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
@@ -81,6 +78,14 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         },
         closeEditor = {
           viewModel.salvaItemPedido(it.bean)
+        },
+        canEdit = {bean ->
+          if(bean?.difQtdPedido == true){
+            true
+          } else {
+            showWarning("Não é possível editar este item")
+            false
+          }
         })
 
       this.columnGroup("Pedido Compra $loja$pedido") {
@@ -152,7 +157,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   }
 
   fun update() {
-    val listProdutos = nota.produtosNdd().map{ndd ->
+    val listProdutos = nota.produtosNdd().map { ndd ->
       ndd.pedidoXML = ndd.produtosPedido()
       ndd
     }.filter { ndd ->

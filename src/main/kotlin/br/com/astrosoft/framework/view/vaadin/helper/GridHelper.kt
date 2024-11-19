@@ -29,12 +29,16 @@ import kotlin.reflect.KProperty1
 fun <T : Any> Grid<T>.withEditor(
   classBean: KClass<T>,
   openEditor: (Binder<T>) -> Unit,
-  closeEditor: (Binder<T>) -> Unit
+  closeEditor: (Binder<T>) -> Unit,
+  canEdit: (T?) -> Boolean = { true },
 ) {
   val binder = Binder(classBean.java)
   editor.binder = binder
   addItemDoubleClickListener { event ->
-    editor.editItem(event.item)
+    val bean = this.selectedItems.firstOrNull()
+    if (canEdit(bean)) {
+      editor.editItem(event.item)
+    }
   }
   editor.addOpenListener {
     openEditor(binder)
@@ -44,6 +48,7 @@ fun <T : Any> Grid<T>.withEditor(
     openEditor(binder)
     closeEditor(binder)
   }
+
   element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"
 }
 
