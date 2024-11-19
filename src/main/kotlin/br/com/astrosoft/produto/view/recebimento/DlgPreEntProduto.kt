@@ -1,11 +1,13 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
+import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.PedidoXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
@@ -23,12 +25,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
-  val numeroNota: String = nota.notaFiscal
-  val loja = nota.sigla
-  val pedido = nota.pedido
-  val fornecedor = nota.nomeFornecedor
+  private val numeroNota: String = nota.notaFiscal
+  private val loja = nota.sigla
+  private val pedido = nota.pedido
+  private val fornecedor = nota.nomeFornecedor
 
-  val produtosPedido = nota.produtosPedido()
+  private val produtosPedido = nota.produtosPedido()
 
   private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
     val pedido = produtosPedido.firstOrNull {
@@ -37,50 +39,6 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       it.barcode == this.codBarra
     }
     return pedido
-  }
-
-  private fun ProdutoNotaEntradaNdd.codigo(): Int? {
-    return produtosPedido()?.codigo
-  }
-
-  private fun ProdutoNotaEntradaNdd.refFor(): String? {
-    return produtosPedido()?.refFor
-  }
-
-  private fun ProdutoNotaEntradaNdd.barcode(): String? {
-    return produtosPedido()?.barcode
-  }
-
-  private fun ProdutoNotaEntradaNdd.descricao(): String? {
-    return produtosPedido()?.descricao
-  }
-
-  private fun ProdutoNotaEntradaNdd.grade(): String? {
-    return produtosPedido()?.grade
-  }
-
-  private fun ProdutoNotaEntradaNdd.quant(): Int? {
-    return produtosPedido()?.quant
-  }
-
-  private fun ProdutoNotaEntradaNdd.valorUnit(): Double? {
-    return produtosPedido()?.valorUnit
-  }
-
-  private fun ProdutoNotaEntradaNdd.fator(): Double? {
-    return produtosPedido()?.fator
-  }
-
-  private fun ProdutoNotaEntradaNdd.quantConv(): Double? {
-    val embalagem = fator() ?: return null
-    val quant = quantidade
-    return (quant * embalagem)
-  }
-
-  private fun ProdutoNotaEntradaNdd.valorConv(): Double? {
-    val embalagem = fator() ?: return null
-    val valorUnit = valorUnitario
-    return (valorUnit / embalagem)
   }
 
   fun showDialog(onClose: () -> Unit) {
@@ -116,60 +74,72 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
 
+      this.withEditor(
+        ProdutoNotaEntradaNdd::class,
+        openEditor = {
+          this.focusEditor(ProdutoNotaEntradaNdd::quantFatPedido)
+        },
+        closeEditor = {
+          viewModel.salvaItemPedido(it.bean)
+        })
+
       this.columnGroup("Pedido Compra $loja$pedido") {
-        this.columnGrid({ it.refFor() }, "Referência").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::refForPedido, "Referência").right().apply {
           this.setPartNameGenerator() {
-            if (it.difRef()) "amarelo" else null
+            if (it.difRefPedido) "amarelo" else null
           }
         }
-        this.columnGrid({ it.barcode() }, "Código Barra").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::barcodePedido, "Código Barra").right().apply {
           this.setPartNameGenerator() {
-            if (it.difBar()) "amarelo" else null
+            if (it.difBarPedido) "amarelo" else null
           }
         }
-        this.columnGrid({ it.codigo() }, "Código").right()
-        this.columnGrid({ it.descricao() }, "Descrição")
-        this.columnGrid({ it.grade() }, "Grade")
-        this.columnGrid({ it.quant()?.format() }, "Quant", width = "60px").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::codigoPedido, "Código").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::descricaoPedido, "Descrição")
+        this.columnGrid(ProdutoNotaEntradaNdd::gradePedido, "Grade")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantPedido, "Quant", width = "60px")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantFatPedido, "Quant Fat", width = "100px") {
+          this.integerFieldEditor()
           this.setPartNameGenerator() {
-            if (it.difQtd()) "amarelo" else null
+            if (it.difQtdPedido) "amarelo" else null
           }
         }
-        this.columnGrid({ it.valorUnit()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right().apply {
-          this.setPartNameGenerator() {
-            if (it.difVal()) "amarelo" else null
+        this.columnGrid(ProdutoNotaEntradaNdd::valorUnitPedido, "Valor Unit", pattern = "#,##0.0000", width = "100px") {
+          this.setPartNameGenerator {
+            if (it.difValPedido) "amarelo" else null
           }
         }
       }
 
       this.columnGroup("Conversão Entrada") {
-        this.columnGrid({ it.quantConv()?.format("#,##0.0000") }, "Quant", width = "80px").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::quantConvPedido, "Quant", pattern = "#,##0.0000", width = "80px") {
           this.setPartNameGenerator() {
-            if (it.difQtd()) "amarelo" else null
+            if (it.difQtdPedido) "amarelo" else null
           }
         }
-        this.columnGrid({ it.valorConv()?.format("#,##0.0000") }, "Valor Unit", width = "100px").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::valorConvPedido, "Valor Unit", pattern = "#,##0.0000", width = "100px") {
           this.setPartNameGenerator() {
-            if (it.difVal()) "amarelo" else null
+            if (it.difValPedido) "amarelo" else null
           }
         }
-        this.columnGrid({ it.produtosPedido()?.embalagemFator?.format("#,##0.0000") }, "Emb", width = "80px").right()
-        this.columnGrid({ it.produtosPedido()?.unidade }, "Un")
+        this.columnGrid(ProdutoNotaEntradaNdd::embalagemFatorPedido, "Emb", pattern = "#,##0.0000", width = "80px")
+
+        this.columnGrid(ProdutoNotaEntradaNdd::unidadePedido, "Un")
       }
 
       this.columnGroup("XML") {
-        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px").right()
+        this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px")
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
-          .right()
         this.columnGrid(ProdutoNotaEntradaNdd::un, "Un")
-        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência").right().apply {
+        this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência") {
+          this.right()
           this.setPartNameGenerator() {
-            if (it.difRef()) "amarelo" else null
+            if (it.difRefPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right().apply {
           this.setPartNameGenerator() {
-            if (it.difBar()) "amarelo" else null
+            if (it.difBarPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::cst, "CST").right()
@@ -181,29 +151,16 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     update()
   }
 
-  fun ProdutoNotaEntradaNdd.difRef(): Boolean {
-    return this.codigo != this.refFor()
-  }
-
-  fun ProdutoNotaEntradaNdd.difBar(): Boolean {
-    return this.barcode() != this.codBarra
-  }
-
-  fun ProdutoNotaEntradaNdd.difQtd(): Boolean {
-    return this.quantConv()?.toInt() != this.quant()
-  }
-
-  fun ProdutoNotaEntradaNdd.difVal(): Boolean {
-    return this.valorConv()?.format("0.0000") != this.valorUnit()?.format("0.0000")
-  }
-
   fun update() {
-    val listProdutos = nota.produtosNdd().filter { ndd ->
+    val listProdutos = nota.produtosNdd().map{ndd ->
+      ndd.pedidoXML = ndd.produtosPedido()
+      ndd
+    }.filter { ndd ->
       val value = cmbDiferenca?.value ?: TODOS
-      (value == REF && ndd.difRef()) ||
-      (value == BAR && ndd.difBar()) ||
-      (value == VAL && ndd.difVal()) ||
-      (value == QTD && ndd.difQtd()) ||
+      (value == REF && ndd.difRefPedido) ||
+      (value == BAR && ndd.difBarPedido) ||
+      (value == VAL && ndd.difValPedido) ||
+      (value == QTD && ndd.difQtdPedido) ||
       (value == TODOS)
     }
     gridDetail.setItems(listProdutos)

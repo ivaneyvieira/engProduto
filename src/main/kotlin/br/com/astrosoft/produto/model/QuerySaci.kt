@@ -1550,6 +1550,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun listPedidoXmlSave(pedido: PedidoXML){
+    val sql = "/sqlSaci/pedidoXmlSave.sql"
+    script(sql) {
+      addOptionalParameter("storeno", pedido.loja)
+      addOptionalParameter("ordno", pedido.pedido)
+      addOptionalParameter("prdno", pedido.prdno)
+      addOptionalParameter("grade", pedido.grade)
+      addOptionalParameter("quantFat", pedido.quantFat ?: 0)
+    }
+  }
+
   fun saveNFEntrada(nota : NotaEntradaXML){
     val sql = "/sqlSaci/listNFEntradaSave.sql"
     script(sql) {

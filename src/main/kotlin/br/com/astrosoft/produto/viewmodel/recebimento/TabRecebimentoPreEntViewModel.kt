@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 
 class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -50,9 +51,16 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
 
     subView.updateList(listLocal)
   }
+
+  fun salvaItemPedido(ndd: ProdutoNotaEntradaNdd) {
+    val pedido = ndd.pedidoXML
+    pedido?.save()
+    subView.updateDlgPedidos()
+  }
 }
 
 interface ITabRecebimentoPreEnt : ITabView {
   fun getFiltro(): FiltroNotaEntradaXML
   fun updateList(list: List<NotaEntradaXML>)
+  fun updateDlgPedidos()
 }

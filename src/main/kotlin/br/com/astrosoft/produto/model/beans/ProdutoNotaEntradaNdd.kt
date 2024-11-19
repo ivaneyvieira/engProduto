@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
-import kotlin.math.absoluteValue
+import br.com.astrosoft.framework.util.format
 
 data class ProdutoNotaEntradaNdd(
   val id: Int,
@@ -22,11 +22,96 @@ data class ProdutoNotaEntradaNdd(
   val valorOutros: Double?,
   val valorFrete: Double?,
 ) {
-  val temIPI
-    get() = valorIPI.absoluteValue > 0.001
-
   val valorICMS
     get() = baseICMS * aliqICMS / 100
 
-  //fun produtosPedido() = this.produtosPedido()
+  var pedidoXML: PedidoXML? = null
+
+  val codigoPedido: Int?
+    get() {
+      return pedidoXML?.codigo
+    }
+
+  val refForPedido: String?
+    get() {
+      return pedidoXML?.refFor
+    }
+
+  val barcodePedido: String?
+    get() {
+      return pedidoXML?.barcode
+    }
+
+  val descricaoPedido: String?
+    get() {
+      return pedidoXML?.descricao
+    }
+
+  val gradePedido: String?
+    get() {
+      return pedidoXML?.grade
+    }
+
+  val quantPedido: Int?
+    get() {
+      return pedidoXML?.quant
+    }
+
+  var quantFatPedido: Int?
+    get() {
+      return pedidoXML?.quantFat
+    }
+    set(value) {
+      pedidoXML?.quantFat = value
+    }
+
+  val valorUnitPedido: Double?
+    get() {
+      return pedidoXML?.valorUnit
+    }
+
+  val fatorPedido: Double?
+    get() {
+      return pedidoXML?.fator
+    }
+
+  val quantConvPedido: Double?
+    get() {
+      val embalagem = fatorPedido ?: return null
+      val quant = quantidade
+      return (quant * embalagem)
+    }
+
+  val valorConvPedido: Double?
+    get() {
+      val embalagem = fatorPedido ?: return null
+      val valorUnit = valorUnitario
+      return (valorUnit / embalagem)
+    }
+
+  val difRefPedido: Boolean
+    get() {
+      return this.codigo != this.refForPedido
+    }
+
+  val difBarPedido: Boolean
+    get() {
+      return this.barcodePedido != this.codBarra
+    }
+
+  val difQtdPedido: Boolean
+    get() {
+      return this.quantConvPedido?.toInt() != this.quantFatPedido
+    }
+
+  val difValPedido: Boolean
+    get() {
+      return this.valorConvPedido?.format("0.0000") != this.valorUnitPedido?.format("0.0000")
+    }
+
+  val embalagemFatorPedido: Double?
+    get() = pedidoXML?.embalagemFator
+
+  val unidadePedido: String?
+    get() = pedidoXML?.unidade
 }

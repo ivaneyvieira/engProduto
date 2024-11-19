@@ -60,6 +60,10 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
     updateGrid(list)
   }
 
+  override fun updateDlgPedidos() {
+    dialog?.update()
+  }
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       val lojas = Loja.allLojas() + Loja.lojaZero
@@ -136,7 +140,7 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
         closeEditor = {
           viewModel.salvaNota(it.bean)
         })
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
       dialog = DlgPreEntProduto(viewModel, nota)

@@ -9,6 +9,7 @@ SELECT I.storeno                          AS loja,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
        TRIM(MID(P.name, 37, 3))           AS unidade,
        I.qtty                             AS quant,
+       IFNULL(PN.quantFat, I.qtty)        AS quantFat,
        I.cost                             AS valorUnit,
        P.mult / 1000                      AS embalagem,
        IF(P.free_fld1 LIKE '*%' ||
@@ -18,6 +19,11 @@ FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno
                     AND I.ordno = O.no
+       LEFT JOIN sqldados.pedidoPrdNdd AS PN
+                 ON I.storeno = PN.storeno
+                   AND I.ordno = PN.ordno
+                   AND I.prdno = PN.prdno
+                   AND I.grade = PN.grade
        INNER JOIN sqldados.prd AS P
                   ON P.no = I.prdno
        LEFT JOIN sqldados.prdbar AS B

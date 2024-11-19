@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class PedidoXML {
@@ -14,6 +15,7 @@ class PedidoXML {
   var barcode: String? = ""
   var unidade: String = ""
   var quant: Int = 0
+  var quantFat: Int? = 0
   var valorUnit: Double = 0.00
   var embalagem: Double = 0.00
   var formula: String? = null
@@ -35,4 +37,8 @@ class PedidoXML {
     get() = if (formula?.firstOrNull() == '*') valorFormula
     else if (formula?.firstOrNull() == '/') 1 / (valorFormula ?: 1.0)
     else embalagem
+
+  fun save() {
+    saci.listPedidoXmlSave(this)
+  }
 }
