@@ -90,12 +90,12 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 
       this.columnGroup("Pedido Compra $loja$pedido") {
         this.columnGrid(ProdutoNotaEntradaNdd::refForPedido, "Referência").right().apply {
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difRefPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::barcodePedido, "Código Barra").right().apply {
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difBarPedido) "amarelo" else null
           }
         }

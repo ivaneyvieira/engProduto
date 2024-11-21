@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class NotaViewModel(view: INotaView) : ViewModel<INotaView>(view) {
   val tabNotaSepViewModel = TabNotaSepViewModel(this)
   val tabNotaRotaViewModel = TabNotaRotaViewModel(this)
+  val tabNotaTrocaViewModel = TabNotaTrocaViewModel(this)
   val tabNotaExpViewModel = TabNotaExpViewModel(this)
   val tabNotaCDViewModel = TabNotaCDViewModel(this)
   val tabNotaEntViewModel = TabNotaEntViewModel(this)
@@ -14,6 +15,7 @@ class NotaViewModel(view: INotaView) : ViewModel<INotaView>(view) {
   override fun listTab() = listOf(
     view.tabNotaSep,
     view.tabNotaRota,
+    view.tabNotaTroca,
     view.tabNotaExp,
     view.tabNotaCD,
     view.tabNotaEnt,
@@ -24,6 +26,7 @@ class NotaViewModel(view: INotaView) : ViewModel<INotaView>(view) {
 interface INotaView : IView {
   val tabNotaSep: ITabNotaSep
   val tabNotaRota: ITabNotaRota
+  val tabNotaTroca: ITabNotaTroca
   val tabNotaExp: ITabNotaExp
   val tabNotaCD: ITabNotaCD
   val tabNotaEnt: ITabNotaEnt
