@@ -82,6 +82,16 @@ class NotaEntradaXML {
     return ConsultaNfeFile(this)
   }
 
+  fun processaEntrada() {
+    val consulta = ConsultaNfeFile(this)
+    var parameters = consulta.inv2Parameters
+    saci.processaEntrada(parameters)
+    val itensParam = consulta.iprd2Parameters(parameters)
+    itensParam.forEach {param ->
+      saci.processaItensEntrada(param)
+    }
+  }
+
   companion object {
     fun findAll(filter: FiltroNotaEntradaXML) = saci.listNFEntrada(filter).toList()
   }

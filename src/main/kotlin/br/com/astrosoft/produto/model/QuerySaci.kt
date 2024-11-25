@@ -1582,6 +1582,20 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 0
   }
 
+  fun processaEntrada(parameters: Inv2Parameters) {
+    val sql = "/sqlSaci/insertInv2.sql"
+    script(sql){
+      this.bind(parameters)
+    }
+  }
+
+  fun processaItensEntrada(parameters: Iprd2Parameters) {
+    val sql = "/sqlSaci/insertIPrd2.sql"
+    script(sql){
+      this.bind(parameters)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

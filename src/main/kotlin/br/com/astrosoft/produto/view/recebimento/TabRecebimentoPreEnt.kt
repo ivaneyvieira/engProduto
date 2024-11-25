@@ -130,6 +130,14 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
         viewModel.updateViewBD()
       }
     }
+
+    button("Pre Entrada") {
+      this.isVisible = false
+      icon = VaadinIcon.INBOX.create()
+      onClick {
+        viewModel.preEntrada()
+      }
+    }
   }
 
   override fun Grid<NotaEntradaXML>.gridPanel() {

@@ -51,90 +51,103 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
       )
     }
 
-  val Inv2Parameters.iprd2Parameters: List<Iprd2Parameters>
-    get() {
-      val produtos = notaEntradaXML.produtosNdd()
-      val itens = nfNota?.info?.itens.orEmpty()
-      val invnoNota = this.invno
-      val storenoNota = this.storeno
-      var seqItem = 1
-      return produtos.filter { prd ->
-        prd.codigoPedido != null
-      }.mapNotNull { ndd ->
-        itens.firstOrNull { it.produto?.codigo == ndd.codigo }?.let { item ->
-          val valorConvPedido = ndd.valorConvPedido ?: 0.00
-          Iprd2Parameters(
-            // Primary Keys and related fields
-            invno = invnoNota,
-            prdno = ndd.pedidoXML?.prdno ?: "",
-            grade = ndd.pedidoXML?.grade ?: "",
+  private val produtosPedido = notaEntradaXML.produtosPedido()
 
-            // Quantities and costs
-            qtty = ndd.quantConvPedido?.roundToInt() ?: 0,
-            fob = (valorConvPedido * 100).roundToLong(),
-            cost = (valorConvPedido * 100).roundToLong(),
-            fob4 = (valorConvPedido * 10000).roundToLong(),
-            cost4 = (valorConvPedido * 10000).roundToLong(),
-            dfob = valorConvPedido,
+  private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
+    val pedido = produtosPedido.firstOrNull {
+      it.refFor == this.codigo
+    } ?: produtosPedido.firstOrNull {
+      it.barcode == this.codBarra
+    }
+    return pedido
+  }
 
-            // Impostos - ICMS
-            icms = item.imposto?.icms?.tags()?.vICMS.toSaciValor(),
-            icmsAliq = item.imposto?.icms?.tags()?.pICMS.toSaciValor().toInt(),
-            baseIcms = item.imposto?.icms?.tags()?.vBC.toSaciValor(),
-            baseIcmsSubst = item.imposto?.icms?.tags()?.vBCST.toSaciValor(),
-            icmsSubst = item.imposto?.icms?.tags()?.vICMSST.toSaciValor(),
-            reducaoBaseIcms = item.imposto?.icms?.tags()?.pRedBCST.toSaciValor(),
-            amtCredIcmsSN = item.imposto?.icms?.tags()?.vCredICMSSN.toSaciValor(),
-            amtIcmsDeson = item.imposto?.icms?.tags()?.vICMSDeson.toSaciValor(),
-            amtIcmsDifer = item.imposto?.icms?.tags()?.vICMSDif.toSaciValor(),
-            amtIcmsEfet = item.imposto?.icms?.tags()?.vICMSEfet.toSaciValor(),
-            aliqIcmsDifer = item.imposto?.icms?.tags()?.pDif.toSaciValor().toInt(),
-            aliqIcmsEfet = item.imposto?.icms?.tags()?.pICMSEfet.toSaciValor().toInt(),
-            aliqIcmsInter = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-            aliqIcmsPart = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-            aliqIcmsUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+  fun iprd2Parameters(inv2Param: Inv2Parameters): List<Iprd2Parameters> {
+    val produtos = notaEntradaXML.produtosNdd().map { ndd ->
+      ndd.pedidoXML = ndd.produtosPedido()
+      ndd
+    }
+    val itens = nfNota?.info?.itens.orEmpty()
+    val invnoNota = inv2Param.invno
+    val storenoNota = inv2Param.storeno
+    var seqItem = 1
+    return produtos.filter { prd ->
+      prd.codigoPedido != null
+    }.mapNotNull { ndd ->
+      itens.firstOrNull { it.produto?.codigo == ndd.codigo }?.let { item ->
+        val valorConvPedido = ndd.valorConvPedido ?: 0.00
+        Iprd2Parameters(
+          // Primary Keys and related fields
+          invno = invnoNota,
+          prdno = ndd.pedidoXML?.prdno ?: "",
+          grade = ndd.pedidoXML?.grade ?: "",
 
-            // Impostos - FCP
-            amtFcpSt = item.imposto?.icms?.tags()?.vFCPST.toSaciValor(),
-            amtFcpStRet = item.imposto?.icms?.tags()?.vFCPSTRet.toSaciValor(),
-            amtFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor(),
-            baseFcp = item.imposto?.icms?.tags()?.vBCFCP.toSaciValor(),
-            baseFcpSt = item.imposto?.icms?.tags()?.vBCFCPST.toSaciValor(),
-            baseFcpStRet = item.imposto?.icms?.tags()?.vBCFCPSTRet.toSaciValor(),
-            baseFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor(),
-            aliqFcp = item.imposto?.icms?.tags()?.pFCP.toSaciValor().toInt(),
-            aliqFcpSt = item.imposto?.icms?.tags()?.pFCPST.toSaciValor().toInt(),
-            aliqFcpStRet = item.imposto?.icms?.tags()?.pFCPSTRet.toSaciValor().toInt(),
-            aliqFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+          // Quantities and costs
+          qtty = ndd.quantConvPedido?.roundToInt() ?: 0,
+          fob = (valorConvPedido * 100).roundToLong(),
+          cost = (valorConvPedido * 100).roundToLong(),
+          fob4 = (valorConvPedido * 10000).roundToLong(),
+          cost4 = (valorConvPedido * 10000).roundToLong(),
+          dfob = valorConvPedido,
 
-            // Impostos - IPI
-            ipi = item.imposto?.ipi?.tributado?.percentualAliquota.toSaciValor().toInt(),
-            ipiAmt = item.imposto?.ipi?.tributado?.valorTributo.toSaciValor(),
-            baseIpi = item.imposto?.ipi?.tributado?.valorBaseCalculo.toSaciValor(),
+          // Impostos - ICMS
+          icms = item.imposto?.icms?.tags()?.vICMS.toSaciValor(),
+          icmsAliq = item.imposto?.icms?.tags()?.pICMS.toSaciValor().toInt(),
+          baseIcms = item.imposto?.icms?.tags()?.vBC.toSaciValor(),
+          baseIcmsSubst = item.imposto?.icms?.tags()?.vBCST.toSaciValor(),
+          icmsSubst = item.imposto?.icms?.tags()?.vICMSST.toSaciValor(),
+          reducaoBaseIcms = item.imposto?.icms?.tags()?.pRedBCST.toSaciValor(),
+          amtCredIcmsSN = item.imposto?.icms?.tags()?.vCredICMSSN.toSaciValor(),
+          amtIcmsDeson = item.imposto?.icms?.tags()?.vICMSDeson.toSaciValor(),
+          amtIcmsDifer = item.imposto?.icms?.tags()?.vICMSDif.toSaciValor(),
+          amtIcmsEfet = item.imposto?.icms?.tags()?.vICMSEfet.toSaciValor(),
+          aliqIcmsDifer = item.imposto?.icms?.tags()?.pDif.toSaciValor().toInt(),
+          aliqIcmsEfet = item.imposto?.icms?.tags()?.pICMSEfet.toSaciValor().toInt(),
+          aliqIcmsInter = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+          aliqIcmsPart = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+          aliqIcmsUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
 
-            // Discount and other fields
-            discount = 0,
-            lucroTributado = 0,
+          // Impostos - FCP
+          amtFcpSt = item.imposto?.icms?.tags()?.vFCPST.toSaciValor(),
+          amtFcpStRet = item.imposto?.icms?.tags()?.vFCPSTRet.toSaciValor(),
+          amtFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor(),
+          baseFcp = item.imposto?.icms?.tags()?.vBCFCP.toSaciValor(),
+          baseFcpSt = item.imposto?.icms?.tags()?.vBCFCPST.toSaciValor(),
+          baseFcpStRet = item.imposto?.icms?.tags()?.vBCFCPSTRet.toSaciValor(),
+          baseFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor(),
+          aliqFcp = item.imposto?.icms?.tags()?.pFCP.toSaciValor().toInt(),
+          aliqFcpSt = item.imposto?.icms?.tags()?.pFCPST.toSaciValor().toInt(),
+          aliqFcpStRet = item.imposto?.icms?.tags()?.pFCPSTRet.toSaciValor().toInt(),
+          aliqFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
 
-            // Store and Sequence
-            storeno = storenoNota,
-            seq = seqItem++,
+          // Impostos - IPI
+          ipi = item.imposto?.ipi?.tributado?.percentualAliquota.toSaciValor().toInt(),
+          ipiAmt = item.imposto?.ipi?.tributado?.valorTributo.toSaciValor(),
+          baseIpi = item.imposto?.ipi?.tributado?.valorBaseCalculo.toSaciValor(),
 
-            // Flags
-            motIcmsDeson = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-            percBaseOper = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-            percCredSN = item.imposto?.icms?.tags()?.pCredSN.toSaciValor().toInt(),
-            percRedIcmsEfet = item.imposto?.icms?.tags()?.pRedBCEfet.toSaciValor().toInt(),
-            percRedIcmsSt = item.imposto?.icms?.tags()?.pRedBCST.toSaciValor().toInt(),
+          // Discount and other fields
+          discount = 0,
+          lucroTributado = 0,
 
-            // Product and classification fields
-            cstIcms = item.imposto?.icms?.tags()?.origCST() ?: "",
-            cstIpi = item.imposto?.ipi?.tributado?.situacaoTributaria?.codigo
-                     ?: item.imposto?.ipi?.naoTributado?.situacaoTributaria?.codigo ?: ""
-          )
-        }
+          // Store and Sequence
+          storeno = storenoNota,
+          seq = seqItem++,
+
+          // Flags
+          motIcmsDeson = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+          percBaseOper = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
+          percCredSN = item.imposto?.icms?.tags()?.pCredSN.toSaciValor().toInt(),
+          percRedIcmsEfet = item.imposto?.icms?.tags()?.pRedBCEfet.toSaciValor().toInt(),
+          percRedIcmsSt = item.imposto?.icms?.tags()?.pRedBCST.toSaciValor().toInt(),
+
+          // Product and classification fields
+          cstIcms = item.imposto?.icms?.tags()?.origCST() ?: "",
+          cstIpi = item.imposto?.ipi?.tributado?.situacaoTributaria?.codigo
+                   ?: item.imposto?.ipi?.naoTributado?.situacaoTributaria?.codigo ?: ""
+        )
       }
     }
+  }
 }
 
 private fun String?.toSaciValor(): Long {

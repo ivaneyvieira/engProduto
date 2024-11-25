@@ -1,10 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 
 class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
@@ -57,10 +58,29 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
     pedido?.save()
     subView.updateDlgPedidos()
   }
+
+  fun preEntrada() = viewModel.exec() {
+    val itens = subView.itensSelecionados()
+    itens.ifEmpty {
+      fail("Nenhuma nota selecionada")
+    }
+    itens.forEach { nota ->
+      if (nota.preEntrada == "S") {
+        fail("Nota já processada")
+      }
+    }
+    viewModel.view.showQuestion("Confirma a pré entrada das notas selecionadas?") {
+      itens.forEach { nota ->
+        nota.processaEntrada()
+      }
+      updateViewBD()
+    }
+  }
 }
 
 interface ITabRecebimentoPreEnt : ITabView {
   fun getFiltro(): FiltroNotaEntradaXML
   fun updateList(list: List<NotaEntradaXML>)
   fun updateDlgPedidos()
+  fun itensSelecionados(): List<NotaEntradaXML>
 }

@@ -128,6 +128,7 @@ open class QueryDB(database: DatabaseConfig) {
         val query = con.createQueryConfig(sql)
         query.lambda()
         query.executeUpdate()
+        query.paramNameToIdxMap
         println(sql)
       }
     } catch (e: Exception) {

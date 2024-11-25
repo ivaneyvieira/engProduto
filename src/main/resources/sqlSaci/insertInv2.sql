@@ -14,8 +14,8 @@ INSERT INTO sqldados.inv2(invno, vendno, ordno, xfrno, issue_date, date, comp_da
                           s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, nfname, invse,
                           account, remarks, contaCredito, contaDebito, nfNfse, auxStr1, auxStr2, auxStr3, auxStr4,
                           auxStr5, auxStr6, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10)
-SELECT :invno, :vendno, :ordno, 0 AS xfrno, :issue_date, CURRENT_DATE * 1 AS date, CURRENT_DATE * 1 AS comp_date, :ipi,
-       :icm, :freight, :baseCalculo AS netamt, :grossamt, :subst_trib, :discount, :prdamt, :despesas, :base_ipi, :aliq,
+SELECT :invno, :vendno, :ordno, 0 AS xfrno, :issueDate, CURRENT_DATE * 1 AS date, CURRENT_DATE * 1 AS compDate, :ipi,
+       :icm, :freight, :baseCalculo AS netamt, :grossamt, :substTrib, :discount, :prdamt, :despesas, :baseIpi, :aliq,
        :cfo, 0 AS nfNfno, 0 AS auxLong1, :conhecimentoFrete AS auxLong2, 0 AS auxMoney1, 0 AS auxMoney2, :dataSaida,
        0 AS amtServicos, 0 AS amtIRRF, 0 AS amtINSS, 0 AS amtISS, 0 AS auxMoney3, 0 AS auxMoney4, 0 AS auxMoney5,
        0 AS auxLong3, 0 AS auxLong4, 0 AS auxLong5, 0 AS auxLong6, 0 AS auxLong7, 0 AS auxLong8, 0 AS auxLong9,
@@ -27,7 +27,7 @@ SELECT :invno, :vendno, :ordno, 0 AS xfrno, :issue_date, CURRENT_DATE * 1 AS dat
        0 AS l24, 0 AS l25, 0 AS l26, 0 AS l27, 0 AS l28, 0 AS m1, 0 AS m2, 0 AS m3, 0 AS m4, 0 AS m5, :icmsDese AS m6,
        0 AS m7, 0 AS m8, 0 AS m9, 0 AS m10, 0 AS m11, 0 AS m12, 0 AS m13, 0 AS m14, 0 AS m15, 0 AS m16, 0 AS m17,
        0 AS m18, 0 AS m19, 0 AS m20, 0 AS m21, 0 AS m22, 0 AS m23, 0 AS m24, 0 AS m25, 0 AS m26, 0 AS m27, 0 AS m28,
-       :weight, :carrno, :packages, :storeno, 0 AS indxno, :book_bits,/*Flags Livro Entrada campos do livro de entrada*/
+       :weight, :carrno, :packages, :storeno, 0 AS indxno, :bookBits,/*Flags Livro Entrada campos do livro de entrada*/
        0 AS type, 1 AS usernoFirst, 1 AS usernoLast, 0 AS nfStoreno, 5024 AS bits, 0 AS padbyte, 0 AS auxShort1,
        0 AS auxShort2, 0 AS auxShort3, 0 AS auxShort4, 0 AS auxShort5, 0 AS auxShort6, 0 AS auxShort7, 0 AS auxShort8,
        0 AS auxShort9, 0 AS auxShort10, 0 AS auxShort11, 0 AS auxShort12, 0 AS auxShort13, 0 AS auxShort14, 0 AS bits2,
