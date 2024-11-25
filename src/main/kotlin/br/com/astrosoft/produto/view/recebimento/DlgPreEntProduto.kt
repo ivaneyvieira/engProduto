@@ -102,7 +102,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid(ProdutoNotaEntradaNdd::codigoPedido, "Código").right()
         this.columnGrid(ProdutoNotaEntradaNdd::descricaoPedido, "Descrição")
         this.columnGrid(ProdutoNotaEntradaNdd::gradePedido, "Grade")
-        this.columnGrid(ProdutoNotaEntradaNdd::quantPedido, "Quant", width = "60px")
+        this.columnGrid(ProdutoNotaEntradaNdd::quantPedido, "Quant", width = "100px")
         this.columnGrid(ProdutoNotaEntradaNdd::quantFatPedido, "Quant Fat", width = "100px") {
           this.integerFieldEditor()
           this.setPartNameGenerator() {
