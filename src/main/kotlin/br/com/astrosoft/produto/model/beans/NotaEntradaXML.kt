@@ -20,6 +20,7 @@ class NotaEntradaXML {
   var valorTotal: Double = 0.00
   var chave: String = ""
   var xmlNfe: String? = null
+  var entrada: String? = null
   var preEntrada: String? = null
   var ordno: Int? = null
   var pedidoEdit: Int? = null

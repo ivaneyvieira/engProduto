@@ -187,6 +187,11 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       this.setHeader("Pre Ent")
       this.isResizable = true
     }
+
+    columnGrid(NotaEntradaXML::entrada) {
+      this.setHeader("Ent")
+      this.isResizable = true
+    }
   }
 
   override fun isAuthorized(): Boolean {

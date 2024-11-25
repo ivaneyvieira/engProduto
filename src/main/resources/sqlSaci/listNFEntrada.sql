@@ -20,6 +20,7 @@ SELECT N.id                                       AS id,
        N.chave                                    AS chave,
        xmlNfe                                     AS xmlNfe,
        IF(I2.invno IS NULL, 'N', 'S')             AS preEntrada,
+       IF(I.invno IS NULL, 'N', 'S')              AS entrada,
        I2.ordno                                   AS ordno,
        P.pedido                                   AS pedidoEdit
 FROM sqldados.notasEntradaNdd AS N
@@ -68,6 +69,7 @@ SELECT id,
        valorTotal,
        chave,
        xmlNfe,
+       entrada,
        preEntrada,
        ordno,
        pedidoEdit
