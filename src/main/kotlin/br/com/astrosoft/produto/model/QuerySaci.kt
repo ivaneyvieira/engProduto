@@ -1570,6 +1570,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun proximoNumeroInvno2(): Int {
+    val sql = "/sqlSaci/proximoNumeroInvno2.sql"
+    return query(sql, Count::class).firstOrNull()?.quant ?: 0
+  }
+
+  fun findCarr(doc: String): Int {
+    val sql = "/sqlSaci/findCarr.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("doc", doc)
+    }.firstOrNull()?.quant ?: 0
+  }
+
   companion object {
     private val db = DB("saci")
 

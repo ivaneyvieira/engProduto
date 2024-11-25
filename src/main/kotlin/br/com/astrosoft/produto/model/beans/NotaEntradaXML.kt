@@ -77,6 +77,11 @@ class NotaEntradaXML {
     saci.saveNFEntrada(this)
   }
 
+  fun consultaNfeFile(): ConsultaNfeFile? {
+
+    return ConsultaNfeFile(this)
+  }
+
   companion object {
     fun findAll(filter: FiltroNotaEntradaXML) = saci.listNFEntrada(filter).toList()
   }
