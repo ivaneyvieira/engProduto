@@ -104,11 +104,12 @@ data class FiltroNotaEntradaXML(
   val numero: Int,
   val cnpj: String,
   val fornecedor: String,
-  val preEntrada: EPREEntradaXML,
+  val preEntrada: EEntradaXML,
+  val entrada: EEntradaXML,
   val query: String,
 )
 
-enum class EPREEntradaXML(val codigo: String, val descricao: String) {
+enum class EEntradaXML(val codigo: String, val descricao: String) {
   TODOS("T", "Todos"),
   SIM("S", "Sim"),
   NAO("N", "Não")

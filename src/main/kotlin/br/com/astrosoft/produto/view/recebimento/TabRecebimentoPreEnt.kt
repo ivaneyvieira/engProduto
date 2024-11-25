@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.EPREEntradaXML
+import br.com.astrosoft.produto.model.beans.EEntradaXML
 import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.config.AppConfig
@@ -14,7 +14,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEnt
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
@@ -41,7 +40,7 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
   private lateinit var edtDataI: DatePicker
   private lateinit var edtCNPJ: TextField
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbPreEntrada: Select<EPREEntradaXML>
+  private lateinit var cmbPreEntrada: Select<EEntradaXML>
 
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
@@ -51,7 +50,8 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
       numero = edtNota.value ?: 0,
       cnpj = edtCNPJ.value ?: "",
       fornecedor = edtFornecedorNota.value ?: "",
-      preEntrada = cmbPreEntrada.value ?: EPREEntradaXML.TODOS,
+      preEntrada = cmbPreEntrada.value ?: EEntradaXML.TODOS,
+      entrada = EEntradaXML.NAO,
       query = edtQuery.value ?: "",
     )
   }
@@ -78,8 +78,8 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
       }
     }
     cmbPreEntrada = select("Pré Entrada") {
-      setItems(EPREEntradaXML.entries)
-      value = EPREEntradaXML.TODOS
+      setItems(EEntradaXML.entries)
+      value = EEntradaXML.TODOS
       this.width = "100px"
       setItemLabelGenerator {
         it.descricao

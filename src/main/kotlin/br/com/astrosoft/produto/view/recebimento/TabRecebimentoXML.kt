@@ -33,7 +33,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
   private lateinit var edtDataI: DatePicker
   private lateinit var edtCNPJ: TextField
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbPreEntrada: Select<EPREEntradaXML>
+  private lateinit var cmbPreEntrada: Select<EEntradaXML>
 
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
@@ -43,7 +43,8 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       numero = edtNota.value ?: 0,
       cnpj = edtCNPJ.value ?: "",
       fornecedor = edtFornecedorNota.value ?: "",
-      preEntrada = cmbPreEntrada.value ?: EPREEntradaXML.TODOS,
+      preEntrada = cmbPreEntrada.value ?: EEntradaXML.TODOS,
+      entrada = EEntradaXML.TODOS,
       query = edtQuery.value ?: "",
     )
   }
@@ -66,8 +67,8 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       }
     }
     cmbPreEntrada = select("Pré Entrada") {
-      setItems(EPREEntradaXML.entries)
-      value = EPREEntradaXML.TODOS
+      setItems(EEntradaXML.entries)
+      value = EEntradaXML.TODOS
       this.width = "100px"
       setItemLabelGenerator {
         it.descricao

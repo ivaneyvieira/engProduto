@@ -39,9 +39,7 @@ FROM sqldados.notasEntradaNdd AS N
                  ON C.cpf_cgc = N.cnpjEmitente
        LEFT JOIN sqldados.pedidoNdd AS P
                  ON P.id = N.id
-WHERE dataEmissao >= 20241101
-  AND (N.cnpjEmitente NOT LIKE '07.483.654%')
-  AND (I.invno IS NULL)
+WHERE (N.cnpjEmitente NOT LIKE '07.483.654%')
   AND (N.dataEmissao >= :dataInicial OR :dataInicial = 0)
   AND (N.dataEmissao <= :dataFinal OR :dataFinal = 0)
   AND (N.NUMERO = :numero OR :numero = 0)
@@ -49,6 +47,9 @@ WHERE dataEmissao >= 20241101
   AND (L.no = :loja OR :loja = 0)
   AND (V.name LIKE CONCAT(:fornecedor, '%') OR
        (V.no = :fornecedor) OR :fornecedor = '')
+  AND ((:entrada = 'S' AND I.invno IS NOT NULL) OR
+       (:entrada = 'N' AND I.invno IS NULL) OR
+       (:entrada = 'T'))
   AND ((:preEntrada = 'S' AND I2.invno IS NOT NULL) OR
        (:preEntrada = 'N' AND I2.invno IS NULL) OR
        (:preEntrada = 'T'));
