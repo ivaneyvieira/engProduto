@@ -71,9 +71,12 @@ class ProdutoNotaEntradaVO(
   private fun NFNotaInfoItemProduto.barcode(): String {
     val barcode1 = this.codigoDeBarrasGtin
     val barcode2 = this.codigoDeBarrasGtinTributavel
-    return if (barcode1.startsWith("SEM"))
-      barcode2
-    else barcode1
+    return when {
+      barcode1.length == 13      -> barcode1
+      barcode2.length == 13      -> barcode2
+      barcode1.startsWith("SEM") -> barcode2
+      else                       -> barcode1
+    }
   }
 
   companion object {
