@@ -30,10 +30,12 @@ FROM sqldados.notasEntradaNdd AS N
                  ON N.numero = I.nfname
                    AND N.serie = I.invse
                    AND L.no = I.storeno
+                   AND I.issue_date >= :dataInicial
        LEFT JOIN sqldados.inv2 AS I2
                  ON N.numero = I2.nfname
                    AND N.serie = I2.invse
                    AND L.no = I2.storeno
+                   AND I2.issue_date >= :dataInicial
        LEFT JOIN sqldados.vend AS V
                  ON V.cgc = N.cnpjEmitente
        LEFT JOIN sqldados.custp AS C
