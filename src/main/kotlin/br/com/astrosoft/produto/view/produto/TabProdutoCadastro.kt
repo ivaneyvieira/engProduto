@@ -131,6 +131,7 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     columnGrid(ProdutoCadastro::codigo, header = "Cód", width = "80px").right()
     columnGrid(ProdutoCadastro::descricao, header = "Descrição").expand()
     columnGrid(ProdutoCadastro::unidade, header = "Un")
+    columnGrid(ProdutoCadastro::convEnt, header = "Conv Ent")
     columnGrid(ProdutoCadastro::rotulo, header = "Rotulo")
     columnGrid(ProdutoCadastro::tributacao, header = "Trib").center()
     columnGrid(ProdutoCadastro::forn, header = "Forn")

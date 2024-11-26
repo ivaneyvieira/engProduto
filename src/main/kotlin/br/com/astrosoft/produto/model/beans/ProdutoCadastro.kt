@@ -7,6 +7,7 @@ class ProdutoCadastro {
   var codigo: String? = null
   var descricao: String? = null
   var unidade: String? = null
+  var convEnt: String? = null
   var rotulo: String? = null
   var tributacao: String? = null
   var forn: String? = null
