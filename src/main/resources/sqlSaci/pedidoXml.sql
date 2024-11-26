@@ -1,4 +1,4 @@
-use sqldados;
+USE sqldados;
 
 DROP TABLE IF EXISTS T_REFERENCIA;
 CREATE TEMPORARY TABLE T_REFERENCIA
@@ -8,23 +8,23 @@ CREATE TEMPORARY TABLE T_REFERENCIA
 SELECT prdno, grade, prdrefno
 FROM sqldados.prdrefpq;
 
-SELECT I.storeno                                     AS loja,
-       I.ordno                                       AS pedido,
-       I.prdno                                       AS prdno,
-       I.grade                                       AS grade,
-       CAST(O.date AS DATE)                          AS data,
-       TRIM(I.prdno) * 1                             AS codigo,
-       TRIM(MID(P.name, 1, 37))                      AS descricao,
-       COALESCE(RP.prdrefno, R.prdrefno, P.mfno_ref) AS refFor,
-       TRIM(IFNULL(B.barcode, P.barcode))            AS barcode,
-       TRIM(MID(P.name, 37, 3))                      AS unidade,
-       I.qtty                                        AS quant,
-       IFNULL(PN.quantFat, I.qtty)                   AS quantFat,
-       I.cost                                        AS valorUnit,
-       P.mult / 1000                                 AS embalagem,
+SELECT I.storeno                                           AS loja,
+       I.ordno                                             AS pedido,
+       I.prdno                                             AS prdno,
+       I.grade                                             AS grade,
+       CAST(O.date AS DATE)                                AS data,
+       TRIM(I.prdno) * 1                                   AS codigo,
+       TRIM(MID(P.name, 1, 37))                            AS descricao,
+       TRIM(COALESCE(RP.prdrefno, R.prdrefno, P.mfno_ref)) AS refFor,
+       TRIM(IFNULL(B.barcode, P.barcode))                  AS barcode,
+       TRIM(MID(P.name, 37, 3))                            AS unidade,
+       I.qtty                                              AS quant,
+       IFNULL(PN.quantFat, I.qtty)                         AS quantFat,
+       I.cost                                              AS valorUnit,
+       P.mult / 1000                                       AS embalagem,
        IF(P.free_fld1 LIKE '*%' ||
           P.free_fld1 LIKE '/%',
-          P.free_fld1, NULL)                         AS formula
+          P.free_fld1, NULL)                               AS formula
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno
