@@ -1,20 +1,30 @@
-SELECT I.storeno                          AS loja,
-       I.ordno                            AS pedido,
-       I.prdno                            AS prdno,
-       I.grade                            AS grade,
-       CAST(O.date AS DATE)               AS data,
-       TRIM(I.prdno) * 1                  AS codigo,
-       TRIM(MID(P.name, 1, 37))           AS descricao,
-       IFNULL(R.prdrefno, P.mfno_ref)     AS refFor,
-       TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
-       TRIM(MID(P.name, 37, 3))           AS unidade,
-       I.qtty                             AS quant,
-       IFNULL(PN.quantFat, I.qtty)        AS quantFat,
-       I.cost                             AS valorUnit,
-       P.mult / 1000                      AS embalagem,
+use sqldados;
+
+DROP TABLE IF EXISTS T_REFERENCIA;
+CREATE TEMPORARY TABLE T_REFERENCIA
+(
+  INDEX (prdno, grade)
+)
+SELECT prdno, grade, prdrefno
+FROM sqldados.prdrefpq;
+
+SELECT I.storeno                                     AS loja,
+       I.ordno                                       AS pedido,
+       I.prdno                                       AS prdno,
+       I.grade                                       AS grade,
+       CAST(O.date AS DATE)                          AS data,
+       TRIM(I.prdno) * 1                             AS codigo,
+       TRIM(MID(P.name, 1, 37))                      AS descricao,
+       COALESCE(RP.prdrefno, R.prdrefno, P.mfno_ref) AS refFor,
+       TRIM(IFNULL(B.barcode, P.barcode))            AS barcode,
+       TRIM(MID(P.name, 37, 3))                      AS unidade,
+       I.qtty                                        AS quant,
+       IFNULL(PN.quantFat, I.qtty)                   AS quantFat,
+       I.cost                                        AS valorUnit,
+       P.mult / 1000                                 AS embalagem,
        IF(P.free_fld1 LIKE '*%' ||
           P.free_fld1 LIKE '/%',
-          P.free_fld1, NULL)              AS formula
+          P.free_fld1, NULL)                         AS formula
 FROM sqldados.ords AS O
        INNER JOIN sqldados.oprd AS I
                   ON I.storeno = O.storeno
@@ -33,11 +43,10 @@ FROM sqldados.ords AS O
        LEFT JOIN sqldados.prdref AS R
                  ON R.prdno = I.prdno
                    AND R.grade = I.grade
-                   AND R.vendno = O.vendno
+                   AND R.grade != ''
+       LEFT JOIN T_REFERENCIA AS RP
+                 ON RP.prdno = I.prdno
+                   AND RP.grade = I.grade
+                   AND RP.grade != ''
 WHERE (I.storeno = :loja
   AND I.ordno = :pedido)
-   OR (I.storeno = :loja
-  AND O.vendno = :vendno
-  AND :vendno != 0
-  AND O.remarks LIKE CONCAT('%NFO%', :numero, '%')
-  )

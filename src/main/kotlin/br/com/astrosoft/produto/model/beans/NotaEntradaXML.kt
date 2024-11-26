@@ -60,8 +60,6 @@ class NotaEntradaXML {
     return saci.listPedidoXml(
       loja = loja,
       pedido = pedido,
-      vendno = fornecedorNota ?: 0,
-      numero = numero
     )
   }
 
@@ -79,7 +77,6 @@ class NotaEntradaXML {
   }
 
   fun consultaNfeFile(): ConsultaNfeFile? {
-
     return ConsultaNfeFile(this)
   }
 
