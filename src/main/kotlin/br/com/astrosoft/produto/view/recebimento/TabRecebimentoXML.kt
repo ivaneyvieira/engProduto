@@ -46,6 +46,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       preEntrada = cmbPreEntrada.value ?: EEntradaXML.TODOS,
       entrada = EEntradaXML.TODOS,
       query = edtQuery.value ?: "",
+      pedido = 0
     )
   }
 

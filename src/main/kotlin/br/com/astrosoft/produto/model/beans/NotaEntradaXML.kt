@@ -105,6 +105,7 @@ data class FiltroNotaEntradaXML(
   val preEntrada: EEntradaXML,
   val entrada: EEntradaXML,
   val query: String,
+  val pedido: Int,
 )
 
 enum class EEntradaXML(val codigo: String, val descricao: String) {

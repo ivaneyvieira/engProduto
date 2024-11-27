@@ -39,6 +39,7 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
   private lateinit var edtDataF: DatePicker
   private lateinit var edtDataI: DatePicker
   private lateinit var edtCNPJ: TextField
+  private lateinit var edtPedido: IntegerField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbPreEntrada: Select<EEntradaXML>
 
@@ -53,6 +54,7 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
       preEntrada = cmbPreEntrada.value ?: EEntradaXML.TODOS,
       entrada = EEntradaXML.NAO,
       query = edtQuery.value ?: "",
+      pedido = edtPedido.value ?: 0
     )
   }
 
@@ -93,6 +95,13 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
       this.valueChangeTimeout = 1000
       addValueChangeListener {
         viewModel.updateViewLocal()
+      }
+    }
+    edtPedido = integerField("Pedido") {
+      valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
+      addValueChangeListener {
+        viewModel.updateViewBD()
       }
     }
     edtDataI = datePicker("Data Inicial") {
