@@ -54,6 +54,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
     updateGrid(list)
   }
 
+
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       val lojas = Loja.allLojas() + Loja.lojaZero
