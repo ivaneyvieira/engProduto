@@ -1,0 +1,110 @@
+package br.com.astrosoft.produto.view.nfd
+
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.produto.model.beans.EMarcaNota
+import br.com.astrosoft.produto.model.beans.NotaSaida
+import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFEstoque
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFGrade
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
+import br.com.astrosoft.produto.viewmodel.nfd.TabNfdDevForViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+
+class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaida) {
+  private var form: SubWindowForm? = null
+  private val gridDetail = Grid(ProdutoNFS::class.java, false)
+  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
+  fun showDialog(onClose: () -> Unit) {
+    form = SubWindowForm("Produtos da expedicao ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
+      button("Imprimir") {
+        this.icon = VaadinIcon.PRINT.create()
+        this.isVisible = nota.cancelada == "N"
+        onClick {
+          val itensSelecionados = gridDetail.selectedItems.toList()
+          viewModel.imprimeProdutosNota(nota, itensSelecionados)
+        }
+      }
+    }, onClose = {
+      onClose()
+    }) {
+      HorizontalLayout().apply {
+        setSizeFull()
+        createGridProdutos()
+      }
+    }
+    form?.open()
+  }
+
+  private fun HorizontalLayout.createGridProdutos() {
+    gridDetail.apply {
+      this.addClassName("styling")
+      setSizeFull()
+      addThemeVariants(GridVariant.LUMO_COMPACT)
+      isMultiSort = false
+      selectionMode = Grid.SelectionMode.MULTI
+
+      addItemDoubleClickListener { e ->
+        editor.editItem(e.item)
+        val editorComponent: Component = e.column.editorComponent
+        if (editorComponent is Focusable<*>) {
+          (editorComponent as Focusable<*>).focus()
+        }
+      }
+
+      produtoNFCodigo()
+      produtoNFBarcode()
+      produtoAutorizacaoExp()
+      produtoNFDescricao()
+      produtoNFGrade()
+      produtoNFGradeAlternativa()
+      produtoNFLocalizacao()
+      produtoNFQuantidade()
+      produtoNFPrecoUnitario()
+      produtoNFPrecoTotal()
+      produtoNFUsuarioSep()
+      produtoNFEstoque()
+
+      this.setPartNameGenerator {
+        val marca = it.marca
+        val marcaImpressao = it.marcaImpressao ?: 0
+        when {
+          marcaImpressao > 0         -> "azul"
+          marca == EMarcaNota.CD.num -> "amarelo"
+          else                       -> null
+        }
+      }
+    }
+    this.addAndExpand(gridDetail)
+
+    update()
+  }
+
+  fun itensSelecionados(): List<ProdutoNFS> {
+    return gridDetail.selectedItems.toList()
+  }
+
+  fun update() {
+    val user = AppConfig.userLogin() as? UserSaci
+    val marca = EMarcaNota.TODOS
+    val listProdutos = nota.produtos(marca, todosLocais = true)
+    gridDetail.setItems(listProdutos)
+  }
+}

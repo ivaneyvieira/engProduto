@@ -103,6 +103,7 @@ class UserSaci : IUser {
   var recebimentoXML by DelegateAuthorized2(73)
   var recebimentoPreEnt by DelegateAuthorized2(74)
   var notaTroca by DelegateAuthorized2(75)
+  var nfdDevFor by DelegateAuthorized2(76)
 
   //Locais
   private var localEstoque: String?
@@ -340,6 +341,11 @@ class UserSaci : IUser {
       produtoInventario = value
       produtoInventarioAgrupado = value
       produtoEditor = value
+    }
+  var nfd
+    get() = nfdDevFor || admin
+    set(value) {
+      nfdDevFor = value
     }
   var nota
     get() = notaSep || notaTroca || notaExp || notaCD || notaEnt || notaRota || admin

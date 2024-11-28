@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.expedicao.NotaView
+import br.com.astrosoft.produto.view.nfd.NfdView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.recebimento.RecebimentoView
@@ -78,6 +79,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = PACKAGE,
         title = "Acerto Estoque",
         routeClass = AcertoEstoqueView::class,
+      )
+      if (userSaci?.nfd == true) route(
+        icon = INBOX,
+        title = "NFD",
+        routeClass = NfdView::class,
       )
       if (userSaci?.estoqueCD == true) route(
         icon = STORAGE,

@@ -36,7 +36,7 @@ class QueryNDD : QueryDB(database) {
   }
 
   companion object {
-    private val db = DB("ndd")
+    private val db = DB("nfd")
 
     val ipServer: String? = db.url.split("/").getOrNull(2)
 
