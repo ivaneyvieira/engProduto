@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.recebimento
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.columnGroup
@@ -11,6 +12,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.view.recebimento.EDiferenca.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -79,8 +81,8 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         closeEditor = {
           viewModel.salvaItemPedido(it.bean)
         },
-        canEdit = {bean ->
-          if(bean?.difQtdPedido == true){
+        canEdit = { bean ->
+          if (bean?.difQtdPedido == true) {
             true
           } else {
             showWarning("Não é possível editar este item")

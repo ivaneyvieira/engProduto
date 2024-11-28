@@ -1,11 +1,13 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXmlViewModel
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -17,14 +19,18 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
-    val numeroNota: String = nota.notaFiscal ?: ""
+    val numeroNota: String = nota.notaFiscal
+    val fornecedor = nota.nomeFornecedor
+    val emissao = nota.dataEmissao.format()
     val loja = nota.sigla
     val pedido = nota.pedido
 
-    form = SubWindowForm("Produtos da Nota $numeroNota Loja: $loja Ped: $pedido", toolBar = {
-    }, onClose = {
-      onClose()
-    }) {
+    form = SubWindowForm(
+      "Fornecedor: $fornecedor NFO: $numeroNota Emissão: $emissao Ped Compra: $loja$pedido",
+      toolBar = {
+      }, onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -63,6 +69,11 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
   fun update() {
     val listProdutos = nota.produtosNdd()
     gridDetail.setItems(listProdutos)
+    gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorUnitario).setFooter("Total")
+    gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorTotal).setFooter(listProdutos.sumOf { it.valorTotal }.format())
+    gridDetail.getColumnBy(ProdutoNotaEntradaNdd::baseICMS).setFooter(listProdutos.sumOf { it.baseICMS }.format())
+    gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorICMS).setFooter(listProdutos.sumOf { it.valorICMS }.format())
+    gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorIPI).setFooter(listProdutos.sumOf { it.valorIPI }.format())
   }
 
   fun close() {
