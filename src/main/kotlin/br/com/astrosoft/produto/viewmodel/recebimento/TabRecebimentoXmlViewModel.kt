@@ -22,7 +22,9 @@ class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
 
   fun updateViewBD() {
     val filter = subView.getFiltro()
-    val listBD = NotaEntradaXML.findAll(filter)
+    val listBD = NotaEntradaXML.findAll(filter).filter { xml ->
+      filter.pedido == 0 || xml.pedido == filter.pedido
+    }
     list.clear()
     list.addAll(listBD)
     updateViewLocal()

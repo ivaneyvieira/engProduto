@@ -34,6 +34,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
   private lateinit var edtCNPJ: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbPreEntrada: Select<EEntradaXML>
+  private lateinit var edtPedido: IntegerField
 
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
@@ -46,14 +47,13 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       preEntrada = cmbPreEntrada.value ?: EEntradaXML.TODOS,
       entrada = EEntradaXML.TODOS,
       query = edtQuery.value ?: "",
-      pedido = 0
+      pedido = edtPedido.value ?: 0
     )
   }
 
   override fun updateList(list: List<NotaEntradaXML>) {
     updateGrid(list)
   }
-
 
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
@@ -84,6 +84,13 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       this.valueChangeTimeout = 1000
       addValueChangeListener {
         viewModel.updateViewLocal()
+      }
+    }
+    edtPedido = integerField("Pedido") {
+      valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
+      addValueChangeListener {
+        viewModel.updateViewBD()
       }
     }
     edtDataI = datePicker("Data Inicial") {
