@@ -71,7 +71,7 @@ class UserSaci : IUser {
 
   //var devCliSemPrdDelete by DelegateAuthorized(44)
   var devCliVenda by DelegateAuthorized(45)
-  var autorizaDevolucao by DelegateAuthorized(46)
+  var autorizaTroca by DelegateAuthorized(46)
   var acertoMovManualSaida by DelegateAuthorized(47)
   var acertoMovManualEntrada by DelegateAuthorized(48)
   var acertoMovAtacado by DelegateAuthorized(49)
@@ -104,6 +104,9 @@ class UserSaci : IUser {
   var recebimentoPreEnt by DelegateAuthorized2(74)
   var notaTroca by DelegateAuthorized2(75)
   var nfdDevFor by DelegateAuthorized2(76)
+  var autorizaEstorno by DelegateAuthorized2(77)
+  var autorizaReembolso by DelegateAuthorized2(78)
+  var autorizaMuda by DelegateAuthorized2(79)
 
   //Locais
   private var localEstoque: String?

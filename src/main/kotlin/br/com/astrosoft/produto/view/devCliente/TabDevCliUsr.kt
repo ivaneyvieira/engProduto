@@ -48,8 +48,17 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         }
       }
       verticalBlock("Comandos") {
-        checkBox("Autoriza Devolução") {
-          binder.bind(this, UserSaci::autorizaDevolucao.name)
+        checkBox("Autoriza Troca") {
+          binder.bind(this, UserSaci::autorizaTroca.name)
+        }
+        checkBox("Autoriza Estorno") {
+          binder.bind(this, UserSaci::autorizaEstorno.name)
+        }
+        checkBox("Autoriza Reembolso") {
+          binder.bind(this, UserSaci::autorizaReembolso.name)
+        }
+        checkBox("Autoriza Muda") {
+          binder.bind(this, UserSaci::autorizaMuda.name)
         }
       }
     }

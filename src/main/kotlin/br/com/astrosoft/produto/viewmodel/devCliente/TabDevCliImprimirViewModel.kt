@@ -30,9 +30,9 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       if (userName.isBlank() && (valor >= valorLimit)) {
         fail("Devolução de Cliente com valor maior que ${valorLimit.format()}, autorizar para imprimir")
       } else
-      if (userName.isBlank() && (nota.isReembolso())) {
-        fail("Devolução de Cliente com reembolso ou estorno")
-      }
+        if (userName.isBlank() && (nota.isReembolso())) {
+          fail("Devolução de Cliente com reembolso ou estorno")
+        }
       ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
     } else {
       if (userName.isBlank()) {
@@ -65,7 +65,22 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       val lojaUserSaci = user.lojaUsuario
       val lojaNoto = nota.loja
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
-      if (!user.autorizaDevolucao) fail("Usuário não autorizado para esta operação")
+      if (nota.tipoObs.startsWith("TROCA")) {
+        if (!user.autorizaTroca)
+          fail("Usuário não autorizado para Troca")
+      }
+      if (nota.tipoObs.startsWith("EST")) {
+        if (!user.autorizaEstorno)
+          fail("Usuário não autorizado para Estorno")
+      }
+      if (nota.tipoObs.startsWith("REEMB")) {
+        if (!user.autorizaEstorno)
+          fail("Usuário não autorizado para Reenbolso")
+      }
+      if (nota.tipoObs.startsWith("MUDA")) {
+        if (!user.autorizaEstorno)
+          fail("Usuário não autorizado para Muda Cliente")
+      }
     }
 
     nota.autoriza(user)
