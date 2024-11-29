@@ -11,6 +11,7 @@ class NotaEntradaXML {
   var sigla: String = ""
   var numero: Int = 0
   var serie: Int = 0
+  var natureza: String? = ""
   var dataEmissao: LocalDate? = null
   var fornecedorNota: Int? = null
   var fornecedorCad: String? = null
@@ -91,7 +92,7 @@ class NotaEntradaXML {
   }
 
   companion object {
-    fun findAll(filter: FiltroNotaEntradaXML) = saci.listNFEntrada(filter).toList()
+    fun findAll(filter: FiltroNotaEntradaXML) = saci.listNFEntrada(filter)
   }
 }
 

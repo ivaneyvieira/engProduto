@@ -24,9 +24,10 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     val emissao = nota.dataEmissao.format()
     val loja = nota.sigla
     val pedido = nota.pedido
+    var natureza = nota.natureza ?: ""
 
     form = SubWindowForm(
-      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao",
+      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
       toolBar = {
       }, onClose = {
         onClose()
