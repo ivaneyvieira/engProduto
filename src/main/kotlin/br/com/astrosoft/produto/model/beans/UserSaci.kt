@@ -71,7 +71,7 @@ class UserSaci : IUser {
 
   //var devCliSemPrdDelete by DelegateAuthorized(44)
   var devCliVenda by DelegateAuthorized(45)
-  var autorizaTroca by DelegateAuthorized(46)
+  var autorizaTrocaP by DelegateAuthorized(46)
   var acertoMovManualSaida by DelegateAuthorized(47)
   var acertoMovManualEntrada by DelegateAuthorized(48)
   var acertoMovAtacado by DelegateAuthorized(49)
@@ -107,6 +107,7 @@ class UserSaci : IUser {
   var autorizaEstorno by DelegateAuthorized2(77)
   var autorizaReembolso by DelegateAuthorized2(78)
   var autorizaMuda by DelegateAuthorized2(79)
+  var autorizaTroca by DelegateAuthorized2(80)
 
   //Locais
   private var localEstoque: String?
@@ -319,6 +320,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(24, value.joinToString(":"))
     }
 
+  var valorMinimoTroca: Int
+    get() = lojas.getOrNull(25)?.toIntOrNull() ?: 500
+    set(value) {
+      lojas = lojas.setValue(25, value.toString())
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
@@ -368,7 +375,7 @@ class UserSaci : IUser {
 
   var recebimento: Boolean
     get() = recebimentoPedido || recebimentoAgenda || recebimentoReceber || recebimentoRecebido
-            || recebimentoXML ||recebimentoPreEnt||  admin
+            || recebimentoXML || recebimentoPreEnt || admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value

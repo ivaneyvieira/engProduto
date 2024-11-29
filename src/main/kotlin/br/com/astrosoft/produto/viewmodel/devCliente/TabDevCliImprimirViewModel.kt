@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -23,24 +24,40 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    val userName = nota.nameAutorizacao ?: ""
-    val valor = nota.valor ?: 0.00
-    val relatorio = if (nota.isComProduto()) {
-      val valorLimit = 500.00
-      if (userName.isBlank() && (valor >= valorLimit)) {
-        fail("Devolução de Cliente com valor maior que ${valorLimit.format()}, autorizar para imprimir")
-      } else
-        if (userName.isBlank() && (nota.isReembolso())) {
-          fail("Devolução de Cliente com reembolso ou estorno")
-        }
-      ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
-    } else {
-      if (userName.isBlank()) {
-        fail("Devolução de Cliente sem produto, autorizar para imprimir")
-      } else {
-        ValeTrocaDevolucao(nota = nota, autorizacao = userName)
+    val user = AppConfig.userLogin() as? UserSaci
+    val assinado = nota.nameAutorizacao?.isBlank() == true
+    val valorNota = nota.valor ?: 0.00
+    val valorLimit = user?.valorMinimoTroca ?: 500
+
+    val relatorio = when {
+      assinado                         -> {
+        ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
+
+      nota.tipoObs.startsWith("TROCA") -> {
+
+        if (nota.isComProduto()) {
+          if (valorNota > valorLimit) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimit.format()})")
+          }
+          ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
+        } else {
+          fail("Nota não assinada")
+        }
+      }
+
+      nota.tipoObs.startsWith("EST") ||
+      nota.tipoObs.startsWith("REEMB") ||
+      nota.tipoObs.startsWith("MUDA")  -> {
+        fail("Nota não assinada")
+      }
+
+      else                             -> fail("Tipo de devolução não informado")
     }
+
+
+
+    ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
 
     relatorio.print(nota.produtos(), subView.printerPreview(loja = 0) { impressora ->
       nota.marcaImpresso(Impressora(0, impressora))
@@ -66,6 +83,8 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       val lojaNoto = nota.loja
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
       if (nota.tipoObs.startsWith("TROCA")) {
+        if (!user.autorizaTrocaP)
+          fail("Usuário não autorizado para Troca P")
         if (!user.autorizaTroca)
           fail("Usuário não autorizado para Troca")
       }
