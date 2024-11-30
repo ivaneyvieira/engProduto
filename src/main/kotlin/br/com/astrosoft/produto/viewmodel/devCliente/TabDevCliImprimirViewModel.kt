@@ -79,28 +79,31 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     user ?: fail("Usuário ou senha inválidos")
 
     if (!user.admin) {
-      val lojaUserSaci = user.lojaUsuario
-      val lojaNoto = nota.loja
-      if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
-      if (nota.tipoObs.startsWith("TROCA")) {
-        if (!user.autorizaTrocaP)
-          if (nota.isComProduto())
+      if (user.lojaUsuario != nota.loja) {
+        fail("Usuário não autorizado para esta loja")
+      }
+
+      when {
+        nota.tipoObs.startsWith("TROCA")                            -> {
+          if (nota.isComProduto() && !user.autorizaTrocaP) {
             fail("Usuário não autorizado para Troca P")
-        if (!user.autorizaTroca)
-          if (!nota.isComProduto())
+          }
+          if (!nota.isComProduto() && !user.autorizaTroca) {
             fail("Usuário não autorizado para Troca")
-      }
-      if (nota.tipoObs.startsWith("EST")) {
-        if (!user.autorizaEstorno)
+          }
+        }
+
+        nota.tipoObs.startsWith("EST") && !user.autorizaEstorno     -> {
           fail("Usuário não autorizado para Estorno")
-      }
-      if (nota.tipoObs.startsWith("REEMB")) {
-        if (!user.autorizaEstorno)
-          fail("Usuário não autorizado para Reenbolso")
-      }
-      if (nota.tipoObs.startsWith("MUDA")) {
-        if (!user.autorizaEstorno)
+        }
+
+        nota.tipoObs.startsWith("REEMB") && !user.autorizaReembolso -> {
+          fail("Usuário não autorizado para Reembolso")
+        }
+
+        nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda       -> {
           fail("Usuário não autorizado para Muda Cliente")
+        }
       }
     }
 
