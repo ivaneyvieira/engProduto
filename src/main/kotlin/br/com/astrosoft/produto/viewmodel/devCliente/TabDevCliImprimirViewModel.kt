@@ -25,7 +25,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
-    val assinado = nota.nameAutorizacao?.isBlank() == true
+    val assinado = nota.nameAutorizacao?.isBlank() == false
     val valorNota = nota.valor ?: 0.00
     val valorLimit = user?.valorMinimoTroca ?: 500
 
