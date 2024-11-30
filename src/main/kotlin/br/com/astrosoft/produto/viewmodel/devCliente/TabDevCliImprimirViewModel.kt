@@ -70,7 +70,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     subView.formAutoriza(nota)
   }
 
-  fun autorizaNota(nota: EntradaDevCli, login: String, senha: String) {
+  fun autorizaNota(nota: EntradaDevCli, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
@@ -84,9 +84,11 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       if (lojaUserSaci != lojaNoto) fail("Usuário não autorizado para esta loja")
       if (nota.tipoObs.startsWith("TROCA")) {
         if (!user.autorizaTrocaP)
-          fail("Usuário não autorizado para Troca P")
+          if (nota.isComProduto())
+            fail("Usuário não autorizado para Troca P")
         if (!user.autorizaTroca)
-          fail("Usuário não autorizado para Troca")
+          if (!nota.isComProduto())
+            fail("Usuário não autorizado para Troca")
       }
       if (nota.tipoObs.startsWith("EST")) {
         if (!user.autorizaEstorno)
