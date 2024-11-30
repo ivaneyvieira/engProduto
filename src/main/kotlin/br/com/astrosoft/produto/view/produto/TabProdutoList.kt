@@ -16,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoList(val viewModel: TabProdutoListViewModel) :
@@ -31,6 +32,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkGrade: Checkbox
+  private lateinit var cmdEstoque: Select<EEstoque>
+  private lateinit var edtSaldo: IntegerField
   private var updateFlag: Boolean = false
 
   fun init() {
@@ -148,6 +151,28 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
+        cmdEstoque = select("Estoque") {
+          this.setItems(EEstoque.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EEstoque.TODOS
+          addValueChangeListener {
+            updateFlag = true
+            viewModel.updateView()
+          }
+        }
+        edtSaldo = integerField("Saldo") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          this.value = null
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          addValueChangeListener {
+            updateFlag = true
+            viewModel.updateView()
+          }
+        }
 
         button("Cadastra Validade") {
           onClick {
@@ -207,8 +232,8 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
-      estoque = EEstoque.TODOS,
-      saldo = 0,
+      estoque = cmdEstoque.value ?: EEstoque.TODOS,
+      saldo = edtSaldo.value ?: 0,
       update = updateFlag
     )
   }
