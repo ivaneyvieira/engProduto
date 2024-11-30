@@ -321,10 +321,34 @@ class UserSaci : IUser {
       lojas = lojas.setValue(24, value.joinToString(":"))
     }
 
-  var valorMinimoTroca: Int
+  var valorMinimoTrocaP: Int
     get() = lojas.getOrNull(25)?.toIntOrNull() ?: 500
     set(value) {
       lojas = lojas.setValue(25, value.toString())
+    }
+
+  var valorMinimoTroca: Int
+    get() = lojas.getOrNull(26)?.toIntOrNull() ?: 0
+    set(value) {
+      lojas = lojas.setValue(26, value.toString())
+    }
+
+  var valorMinimoEstorno: Int
+    get() = lojas.getOrNull(27)?.toIntOrNull() ?: 0
+    set(value) {
+      lojas = lojas.setValue(27, value.toString())
+    }
+
+  var valorMinimoReembolso: Int
+    get() = lojas.getOrNull(28)?.toIntOrNull() ?: 0
+    set(value) {
+      lojas = lojas.setValue(28, value.toString())
+    }
+
+  var valorMinimoMuda: Int
+    get() = lojas.getOrNull(29)?.toIntOrNull() ?: 0
+    set(value) {
+      lojas = lojas.setValue(29, value.toString())
     }
 
   //-------------------------------------------------

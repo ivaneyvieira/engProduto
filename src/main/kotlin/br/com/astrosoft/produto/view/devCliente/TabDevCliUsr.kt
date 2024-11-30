@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliUsr
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
+import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.grid.Grid
 
@@ -69,8 +70,24 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)
       filtroLoja(binder, UserSaci::lojaVale)
-      integerField("Valor Troca"){
-        binder.bind(this, UserSaci::valorMinimoTroca.name)
+      horizontalLayout {
+        integerField("Valor Troca P") {
+          binder.bind(this, UserSaci::valorMinimoTrocaP.name)
+        }
+        integerField("Valor Troca") {
+          binder.bind(this, UserSaci::valorMinimoTroca.name)
+        }
+        integerField("Valor Estorno") {
+          binder.bind(this, UserSaci::valorMinimoEstorno.name)
+        }
+      }
+      horizontalLayout {
+        integerField("Valor Reeembolso") {
+          binder.bind(this, UserSaci::valorMinimoReembolso.name)
+        }
+        integerField("Valor Muda") {
+          binder.bind(this, UserSaci::valorMinimoMuda.name)
+        }
       }
     }
   }
