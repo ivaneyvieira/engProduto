@@ -204,9 +204,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldo::unidade, header = "Un")
-    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
     columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
     columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
@@ -218,6 +215,9 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::abrev, header = "Abrev")
     columnGrid(ProdutoSaldo::tipo, header = "Tipo")
     columnGrid(ProdutoSaldo::cl, header = "C Lucro")
+    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
+    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
+    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
   }
 
   override fun filtro(): FiltroProdutoSaldo {
