@@ -1,10 +1,10 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.produto.model.beans.EMarcaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
@@ -21,20 +21,27 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
+    val fornecedor = nota.fornecedor ?: ""
+    val emissao = nota.emissao.format()
+    val loja = nota.lojaSigla ?: ""
+    val pedido = nota.pedComp?.toString() ?: ""
+    var natureza = nota.natureza()
 
-    form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
-      val user = AppConfig.userLogin()
-      if (user?.admin == true) {
-        this.button("Volta") {
-          this.icon = VaadinIcon.ARROW_LEFT.create()
-          this.onClick {
-            viewModel.voltar()
+    form = SubWindowForm(
+      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
+      toolBar = {
+        val user = AppConfig.userLogin()
+        if (user?.admin == true) {
+          this.button("Volta") {
+            this.icon = VaadinIcon.ARROW_LEFT.create()
+            this.onClick {
+              viewModel.voltar()
+            }
           }
         }
-      }
-    }, onClose = {
-      onClose()
-    }) {
+      }, onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()

@@ -97,7 +97,7 @@ class NotaEntradaXML {
 }
 
 data class FiltroNotaEntradaXML(
-  val loja: Loja?,
+  val loja: Int,
   val dataInicial: LocalDate,
   val dataFinal: LocalDate,
   val numero: Int,

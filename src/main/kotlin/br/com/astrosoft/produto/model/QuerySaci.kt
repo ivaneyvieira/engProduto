@@ -1529,7 +1529,7 @@ class QuerySaci : QueryDB(database) {
   fun listNFEntrada(filter: FiltroNotaEntradaXML): List<NotaEntradaXML> {
     val sql = "/sqlSaci/listNFEntrada.sql"
     return query(sql, NotaEntradaXML::class) {
-      addOptionalParameter("loja", filter.loja?.no ?: 0)
+      addOptionalParameter("loja", filter.loja ?: 0)
       addOptionalParameter("dataInicial", filter.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filter.dataFinal.toSaciDate())
       addOptionalParameter("numero", filter.numero)

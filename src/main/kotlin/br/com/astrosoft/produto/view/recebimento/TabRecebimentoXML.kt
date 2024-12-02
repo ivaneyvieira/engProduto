@@ -38,7 +38,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
 
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
-      loja = cmbLoja.value,
+      loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataI.value ?: LocalDate.now(),
       dataFinal = edtDataF.value ?: LocalDate.now(),
       numero = edtNota.value ?: 0,

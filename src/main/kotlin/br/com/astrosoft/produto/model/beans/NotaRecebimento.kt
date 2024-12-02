@@ -42,6 +42,23 @@ class NotaRecebimento(
     return produtos.firstOrNull { it.containBarcode(codigoBarra) }
   }
 
+  fun natureza(): String {
+    val filter = FiltroNotaEntradaXML(
+      loja = loja ?: 0,
+      dataInicial = emissao ?: LocalDate.now(),
+      dataFinal = emissao ?: LocalDate.now(),
+      numero = nfEntrada?.split("/")?.get(0)?.toIntOrNull() ?: 0,
+      cnpj = "",
+      fornecedor = "",
+      preEntrada = EEntradaXML.TODOS,
+      entrada = EEntradaXML.TODOS,
+      query = "",
+      pedido = 0,
+    )
+    val notaXml = NotaEntradaXML.findAll(filter)
+    return notaXml.firstOrNull()?.natureza ?: tipoNota ?: ""
+  }
+
   fun refreshProdutos(): NotaRecebimento? {
     val marcaEng = marcaSelecionadaEnt()
     val notaRefresh = findAll(

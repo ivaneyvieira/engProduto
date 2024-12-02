@@ -26,32 +26,40 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val numeroNota = nota.nfEntrada ?: ""
+    val fornecedor = nota.fornecedor ?: ""
+    val emissao = nota.emissao.format()
+    val loja = nota.lojaSigla ?: ""
+    val pedido = nota.pedComp?.toString() ?: ""
+    var natureza = nota.natureza()
 
-    form = SubWindowForm("Produtos da nota $numeroNota", toolBar = {
-      edtCodigoBarra = textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.LAZY
-        this.valueChangeTimeout = 1500
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(nota, it.value)
+    form = SubWindowForm(
+      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
+      toolBar = {
+        edtCodigoBarra = textField("Código de barras") {
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.selecionaProdutos(nota, it.value)
+            }
           }
         }
-      }
 
-      button("Envia") {
-        onClick {
-          viewModel.enviaProdutoSelecionado()
+        button("Envia") {
+          onClick {
+            viewModel.enviaProdutoSelecionado()
+          }
         }
-      }
 
-      button("Cadastra Validade") {
-        onClick {
-          viewModel.cadastraValidade()
+        button("Cadastra Validade") {
+          onClick {
+            viewModel.cadastraValidade()
+          }
         }
-      }
-    }, onClose = {
-      onClose()
-    }) {
+      },
+      onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -69,7 +77,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      this.withEditor(NotaRecebimentoProduto::class,
+      this.withEditor(
+        NotaRecebimentoProduto::class,
         openEditor = {
           this.focusEditor(NotaRecebimentoProduto::vencimento)
         },
