@@ -72,9 +72,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
   }
 
   fun update() {
-    val listProdutos = nota.produtos.filter {
-      it.marcaEnum == EMarcaRecebimento.RECEBIDO
-    }
+    val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
   }
 
