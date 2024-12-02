@@ -89,8 +89,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-
-
     ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
 
     relatorio.print(nota.produtos(), subView.printerPreview(loja = 0) { impressora ->
