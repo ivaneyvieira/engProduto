@@ -8,9 +8,9 @@ import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
 class RequisicaoTransferencia(val nota: PedidoTransf) : PrintText<ProdutoPedidoTransf>() {
   init {
     column(ProdutoPedidoTransf::codigoFormat, "Codigo", 6)
-    column(ProdutoPedidoTransf::descricao, "Descricao", 36)
+    column(ProdutoPedidoTransf::descricao, "Descricao", 34)
     column(ProdutoPedidoTransf::grade, "Grade", 9)
-    column(ProdutoPedidoTransf::quantidade, "Quant", 5, expand = true)
+    column(ProdutoPedidoTransf::quantidade, "Quant", 6, expand = true)
   }
 
   override fun printTitle(bean: ProdutoPedidoTransf) {
