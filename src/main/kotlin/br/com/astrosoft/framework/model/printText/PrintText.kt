@@ -10,8 +10,14 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   private val textBuffer = TextBuffer()
 
   @JvmName("columnString")
-  fun column(property: KProperty1<T, String?>, header: String, size: Int, lineBreak: Boolean = false) {
-    columns.column(property, header, size, lineBreak)
+  fun column(
+    property: KProperty1<T, String?>,
+    header: String,
+    size: Int,
+    lineBreak: Boolean = false,
+    expand: Boolean = false
+  ) {
+    columns.column(property, header, size, lineBreak, expand)
   }
 
   @JvmName("columnDouble")
@@ -20,9 +26,10 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     header: String,
     size: Int,
     format: String = "#,##0.00",
-    lineBreak: Boolean = false
+    lineBreak: Boolean = false,
+    expand: Boolean = false
   ) {
-    columns.column(property, header, size, format, lineBreak)
+    columns.column(property, header, size, format, lineBreak, expand)
   }
 
   @JvmName("columnInt")
@@ -31,9 +38,10 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     header: String,
     size: Int,
     format: String = "#,##0",
-    lineBreak: Boolean = false
+    lineBreak: Boolean = false,
+    expand: Boolean = false
   ) {
-    columns.column(property, header, size, format, lineBreak)
+    columns.column(property, header, size, format, lineBreak, expand)
   }
 
   private fun header() = columns.montaLinha { col ->
@@ -92,18 +100,6 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
     return stringBuffer.toString()
   }
 
-  private fun String.negrito(): String {
-    return "<B>${this}</B>"
-  }
-
-  private fun String.expand(): String {
-    return "<E>${this}</E>"
-  }
-
-  private fun String.expandNegrito(): String {
-    return "<EB>${this}</EB>"
-  }
-
   private fun String.negritoOff(): String {
     return "<N>${this}</N>"
   }
@@ -158,3 +154,14 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   }
 }
 
+fun String.negrito(): String {
+  return "<B>${this}</B>"
+}
+
+fun String.expand(): String {
+  return "<E>${this}</E>"
+}
+
+fun String.expandNegrito(): String {
+  return "<EB>${this}</EB>"
+}
