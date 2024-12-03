@@ -17,41 +17,41 @@ CREATE TEMPORARY TABLE T_DADOS
 (
   PRIMARY KEY (codigo, grade)
 )
-SELECT X.storeno                                                               AS loja,
-       pdvno                                                                   AS pdvno,
-       xano                                                                    AS xano,
-       CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                               AS nota,
-       CAST(TRIM(P.no) AS CHAR)                                                AS codigo,
-       IFNULL(X.grade, '')                                                     AS grade,
-       TRIM(IFNULL(GROUP_CONCAT(DISTINCT B.barcode SEPARATOR ','), P.barcode)) AS barcodeStrList,
-       TRIM(MID(P.name, 1, 37))                                                AS descricao,
-       P.mfno                                                                  AS vendno,
-       IFNULL(F.auxChar1, '')                                                  AS fornecedor,
-       P.typeno                                                                AS typeno,
-       IFNULL(T.name, '')                                                      AS typeName,
-       CAST(LPAD(P.clno, 6, '0') AS CHAR)                                      AS clno,
-       IFNULL(cl.name, '')                                                     AS clname,
-       P.m6                                                                    AS altura,
-       P.m4                                                                    AS comprimento,
-       P.m5                                                                    AS largura,
-       P.sp / 100                                                              AS precoCheio,
-       IFNULL(S.ncm, '')                                                       AS ncm,
-       X.qtty / 1000                                                           AS quantidade,
-       X.preco                                                                 AS preco,
-       (X.qtty / 1000) * X.preco                                               AS total,
-       X.c6                                                                    AS gradeAlternativa,
-       X.s11                                                                   AS marca,
-       X.s10                                                                   AS marcaImpressao,
-       EE.no                                                                   AS usernoExp,
-       EE.login                                                                AS usuarioExp,
-       X.c5                                                                    AS dataHoraExp,
-       IFNULL(L.localizacao, '')                                               AS local,
-       X.c3                                                                    AS usuarioSep,
-       EC.no                                                                   AS usernoCD,
-       EC.login                                                                AS usuarioCD,
-       X.c4                                                                    AS dataHoraCD,
-       N.tipo                                                                  AS tipoNota,
-       ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)           AS estoque
+SELECT X.storeno                                                                AS loja,
+       pdvno                                                                    AS pdvno,
+       xano                                                                     AS xano,
+       CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                                AS nota,
+       CAST(TRIM(P.no) AS CHAR)                                                 AS codigo,
+       IFNULL(X.grade, '')                                                      AS grade,
+       TRIM(IFNULL(GROUP_CONCAT(DISTINCT BC.barcode SEPARATOR ','), P.barcode)) AS barcodeStrList,
+       TRIM(MID(P.name, 1, 37))                                                 AS descricao,
+       P.mfno                                                                   AS vendno,
+       IFNULL(F.auxChar1, '')                                                   AS fornecedor,
+       P.typeno                                                                 AS typeno,
+       IFNULL(T.name, '')                                                       AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)                                       AS clno,
+       IFNULL(cl.name, '')                                                      AS clname,
+       P.m6                                                                     AS altura,
+       P.m4                                                                     AS comprimento,
+       P.m5                                                                     AS largura,
+       P.sp / 100                                                               AS precoCheio,
+       IFNULL(S.ncm, '')                                                        AS ncm,
+       X.qtty / 1000                                                            AS quantidade,
+       X.preco                                                                  AS preco,
+       (X.qtty / 1000) * X.preco                                                AS total,
+       X.c6                                                                     AS gradeAlternativa,
+       X.s11                                                                    AS marca,
+       X.s10                                                                    AS marcaImpressao,
+       EE.no                                                                    AS usernoExp,
+       EE.login                                                                 AS usuarioExp,
+       X.c5                                                                     AS dataHoraExp,
+       IFNULL(L.localizacao, '')                                                AS local,
+       X.c3                                                                     AS usuarioSep,
+       EC.no                                                                    AS usernoCD,
+       EC.login                                                                 AS usuarioCD,
+       X.c4                                                                     AS dataHoraCD,
+       N.tipo                                                                   AS tipoNota,
+       ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000)            AS estoque
 FROM sqldados.prd AS P
        INNER JOIN sqldados.xaprd2 AS X
                   ON P.no = X.prdno
@@ -64,8 +64,8 @@ FROM sqldados.prd AS P
                  ON EE.no = X.s5
        INNER JOIN sqldados.nf AS N
                   USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno AND B.grade = X.grade
+       LEFT JOIN sqldados.prdbar AS BC
+                 ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
        LEFT JOIN (SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
                   FROM sqldados.stk
                   WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
