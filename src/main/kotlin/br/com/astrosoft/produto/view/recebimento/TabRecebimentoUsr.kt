@@ -26,7 +26,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
       checkBox("Pedidos") {
         binder.bind(this, UserSaci::recebimentoPedido.name)
       }
-      checkBox("Agenda") {
+      checkBox("Pré-entrada") {
         binder.bind(this, UserSaci::recebimentoAgenda.name)
       }
       checkBox("XML") {

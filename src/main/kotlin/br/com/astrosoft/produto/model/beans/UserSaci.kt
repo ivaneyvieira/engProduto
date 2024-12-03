@@ -85,8 +85,7 @@ class UserSaci : IUser {
   var ressuprimentoPen by DelegateAuthorized(57)
   var reposicaoSep by DelegateAuthorized(58)
   var reposicaoEnt by DelegateAuthorized(59)
-  var recebimentoReceber by DelegateAuthorized(60)
-  var recebimentoRecebido by DelegateAuthorized(61)
+
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized2(63)/*63 44 */
 
@@ -399,16 +398,16 @@ class UserSaci : IUser {
     }
 
   var recebimento: Boolean
-    get() = recebimentoPedido || recebimentoAgenda || recebimentoReceber || recebimentoRecebido
-            || recebimentoXML || recebimentoPreEnt || recebimentoNotaEntrada || admin
+    get() = recebimentoPedido || recebimentoAgenda || recebimentoXML || recebimentoPreEnt
+            || recebimentoNotaEntrada || recebimentoReceberNota || recebimentoNotaRecebida || admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value
-      recebimentoReceber = value
-      recebimentoRecebido = value
-      recebimentoNotaEntrada = value
       recebimentoXML = value
       recebimentoPreEnt = value
+      recebimentoNotaEntrada = value
+      recebimentoReceberNota = value
+      recebimentoNotaRecebida = value
     }
   var ressuprimento
     get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin

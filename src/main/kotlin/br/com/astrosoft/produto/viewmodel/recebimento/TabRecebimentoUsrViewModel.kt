@@ -20,11 +20,12 @@ class TabRecebimentoUsrViewModel(val viewModel: RecebimentoViewModel) : TabUsrVi
   override fun UserSaci.update(usuario: UserSaci) {
     this.recebimentoPedido = usuario.recebimentoPedido
     this.recebimentoAgenda = usuario.recebimentoAgenda
-    this.recebimentoReceber = usuario.recebimentoReceber
-    this.recebimentoNotaEntrada = usuario.recebimentoNotaEntrada
-    this.recebimentoRecebido = usuario.recebimentoRecebido
     this.recebimentoXML = usuario.recebimentoXML
     this.recebimentoPreEnt = usuario.recebimentoPreEnt
+    this.recebimentoNotaEntrada = usuario.recebimentoNotaEntrada
+    this.recebimentoReceberNota = usuario.recebimentoReceberNota
+    this.recebimentoNotaRecebida = usuario.recebimentoNotaRecebida
+
     this.lojaRec = usuario.lojaRec
     this.localizacaoRec = usuario.localizacaoRec
     this.impressoraRec = usuario.impressoraRec
