@@ -164,8 +164,8 @@ class TabNotaCD(val viewModel: TabNotaCDViewModel) : TabPanelGrid<NotaSaida>(Not
     return dlgProduto?.itensNaoMarcados().orEmpty()
   }
 
-  override fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS? {
-    return dlgProduto?.produtosCodigoBarras(codigoBarra)
+  override fun produtosCodigoBarras(codigoBarra: String): List<ProdutoNFS> {
+    return dlgProduto?.produtosCodigoBarras(codigoBarra).orEmpty()
   }
 
   override fun findNota(): NotaSaida? {

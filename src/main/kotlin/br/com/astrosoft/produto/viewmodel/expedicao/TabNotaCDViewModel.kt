@@ -81,8 +81,13 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   }
 
   fun selecionaProduto(codigoBarra: String) = viewModel.exec {
-    val produtoNF = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    produtoNF.selecionado = true
+    val produtoList = subView.produtosCodigoBarras(codigoBarra).ifEmpty {
+      fail("Produto não encontrado")
+    }
+
+    produtoList.forEach { produto ->
+      produto.selecionado = true
+    }
   }
 
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
@@ -146,7 +151,7 @@ interface ITabNotaCD : ITabView {
   fun produtosSelecionados(): List<ProdutoNFS>
   fun produtosMarcados(): List<ProdutoNFS>
   fun produtosNaoMarcados(): List<ProdutoNFS>
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoNFS?
+  fun produtosCodigoBarras(codigoBarra: String): List<ProdutoNFS>
   fun findNota(): NotaSaida?
   fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
 }
