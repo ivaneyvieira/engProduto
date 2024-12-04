@@ -5,12 +5,15 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
+import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.recebimento.DlgNotaPedido
-import br.com.astrosoft.produto.view.recebimento.DlgPedidoProdutoCompra
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabPedidoRessuprimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -21,7 +24,7 @@ import java.time.LocalDate
 
 class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
   TabPanelGrid<PedidoRessuprimento>(PedidoRessuprimento::class), ITabPedidoRessuprimento {
-  private var dlgProduto: DlgNotaPedido? = null
+  private var dlgProduto: DlgProdutosPedidoRessuprimento? = null
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -61,6 +64,13 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
   override fun Grid<PedidoRessuprimento>.gridPanel() {
     columnGrid(PedidoRessuprimento::loja, "Loja")
     this.selectionMode = Grid.SelectionMode.MULTI
+
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produto", "Produto") {
+      dlgProduto = DlgProdutosPedidoRessuprimento(viewModel, it)
+      dlgProduto?.showDialog{
+        viewModel.updateView()
+      }
+    }
 
     columnGrid(PedidoRessuprimento::data, "Data")
     columnGrid(PedidoRessuprimento::pedido, "Pedido")

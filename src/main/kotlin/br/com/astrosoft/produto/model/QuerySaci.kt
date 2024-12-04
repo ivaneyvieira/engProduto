@@ -10,7 +10,6 @@ import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import org.sql2o.Query
 import java.time.LocalDate
 import java.time.LocalTime
@@ -480,6 +479,17 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("local", locais)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
+    }
+  }
+
+  fun findProdutoRessuprimento(pedido: PedidoRessuprimento): List<ProdutoRessuprimento> {
+    val sql = "/sqlSaci/findProdutosRessuprimento.sql"
+    return query(sql, ProdutoRessuprimento::class) {
+      addOptionalParameter("ordno", pedido.pedido ?: 0)
+      addOptionalParameter("marca", 999)
+      addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("prdno", "")
+      addOptionalParameter("grade", "")
     }
   }
 
@@ -1548,7 +1558,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun listPedidoXmlSave(pedido: PedidoXML){
+  fun listPedidoXmlSave(pedido: PedidoXML) {
     val sql = "/sqlSaci/pedidoXmlSave.sql"
     script(sql) {
       addOptionalParameter("storeno", pedido.loja)
@@ -1559,7 +1569,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveNFEntrada(nota : NotaEntradaXML){
+  fun saveNFEntrada(nota: NotaEntradaXML) {
     val sql = "/sqlSaci/listNFEntradaSave.sql"
     script(sql) {
       addOptionalParameter("id", nota.id)
@@ -1582,14 +1592,14 @@ class QuerySaci : QueryDB(database) {
 
   fun processaEntrada(parameters: Inv2Parameters) {
     val sql = "/sqlSaci/insertInv2.sql"
-    script(sql){
+    script(sql) {
       this.bind(parameters)
     }
   }
 
   fun processaItensEntrada(parameters: Iprd2Parameters) {
     val sql = "/sqlSaci/insertIPrd2.sql"
-    script(sql){
+    script(sql) {
       this.bind(parameters)
     }
   }

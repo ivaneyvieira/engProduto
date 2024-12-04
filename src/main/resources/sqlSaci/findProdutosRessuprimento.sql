@@ -210,7 +210,7 @@ FROM T_OPRD AS X
                  ON PR.no = LPAD(SUBSTRING_INDEX(X.obs, ':', 1), 16, ' ')
 WHERE X.storeno = 1
   AND X.ordno = :ordno
-  AND (X.auxShort4 = :marca)
+  AND (X.auxShort4 = :marca OR :marca = 999)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 
 /*

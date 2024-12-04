@@ -16,6 +16,11 @@ class PedidoRessuprimento {
   var totalPendente: Double? = null
   var observacao: String? = null
 
+
+  fun produtos(): List<ProdutoRessuprimento> {
+    return saci.findProdutoRessuprimento(pedido = this)
+  }
+
   companion object {
     fun findPedidoRessuprimento(filtro: FiltroPedidoRessuprimento): List<PedidoRessuprimento> {
       return saci.findPedidosRessuprimento(filtro)
