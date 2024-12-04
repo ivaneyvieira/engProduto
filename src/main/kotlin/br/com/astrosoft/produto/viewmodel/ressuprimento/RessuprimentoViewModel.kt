@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessuprimentoView>(view) {
+  val tabPedidoRessuprimentoViewModel = TabPedidoRessuprimentoViewModel(this)
   val tabRessuprimentoCDViewModel = TabRessuprimentoCDViewModel(this)
   val tabRessuprimentoSepViewModel = TabRessuprimentoSepViewModel(this)
   val tabRessuprimentoEntViewModel = TabRessuprimentoEntViewModel(this)
@@ -12,16 +13,18 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
   val tabRessuprimentoUsrViewModel = TabRessuprimentoUsrViewModel(this)
 
   override fun listTab() = listOf(
+    view.tabPedidoRessuprimento,
     view.tabRessuprimentoCD,
     view.tabRessuprimentoSep,
     view.tabRessuprimentoEnt,
     view.tabRessuprimentoPen,
     view.tabRessuprimentoRec,
     view.tabRessuprimentoUsr,
-    )
+  )
 }
 
 interface IRessuprimentoView : IView {
+  val tabPedidoRessuprimento: ITabPedidoRessuprimento
   val tabRessuprimentoCD: ITabRessuprimentoCD
   val tabRessuprimentoSep: ITabRessuprimentoSep
   val tabRessuprimentoEnt: ITabRessuprimentoEnt

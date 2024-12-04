@@ -18,6 +18,7 @@ import jakarta.annotation.security.PermitAll
 class RessuprimentoView(val init: Boolean = true, prdno: String = "", grade: String = "") :
   ViewLayout<RessuprimentoViewModel>(), IRessuprimentoView {
   override val viewModel = RessuprimentoViewModel(this)
+  override val tabPedidoRessuprimento = TabPedidoRessuprimento(viewModel.tabPedidoRessuprimentoViewModel)
   override val tabRessuprimentoCD = TabRessuprimentoCD(viewModel.tabRessuprimentoCDViewModel)
   override val tabRessuprimentoSep = TabRessuprimentoSep(viewModel.tabRessuprimentoSepViewModel)
   override val tabRessuprimentoEnt = TabRessuprimentoEnt(viewModel.tabRessuprimentoEntViewModel, prdno, grade)

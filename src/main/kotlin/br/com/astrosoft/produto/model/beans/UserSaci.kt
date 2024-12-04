@@ -108,6 +108,7 @@ class UserSaci : IUser {
   var autorizaMuda by DelegateAuthorized2(79)
   var autorizaTroca by DelegateAuthorized2(80)
   var recebimentoNotaEntrada by DelegateAuthorized2(81)
+  var pedidoRessuprimento by DelegateAuthorized2(82)
 
   //Locais
   private var localEstoque: String?
@@ -410,8 +411,9 @@ class UserSaci : IUser {
       recebimentoNotaRecebida = value
     }
   var ressuprimento
-    get() = ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
+    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || admin
     set(value) {
+      pedidoRessuprimento = value
       ressuprimentoCD = value
       ressuprimentoEnt = value
       ressuprimentoPen = value

@@ -1594,6 +1594,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findPedidosRessuprimento(filtro: FiltroPedidoRessuprimento): List<PedidoRessuprimento> {
+    val sql = "/sqlSaci/findPedidosRessuprimento.sql"
+    return query(sql, PedidoRessuprimento::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
