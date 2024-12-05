@@ -29,7 +29,5 @@ class PedidoRessuprimento {
 }
 
 data class FiltroPedidoRessuprimento(
-  val pesquisa: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+  val pesquisa: String
 )

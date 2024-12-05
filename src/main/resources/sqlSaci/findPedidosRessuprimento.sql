@@ -54,9 +54,7 @@ WHERE (O.storeno = 1)
   (O.no BETWEEN 400000000 AND 499999999) OR
   (O.no BETWEEN 500000000 AND 599999999) OR
   (O.no BETWEEN 800000000 AND 899999999)
-  )
-  AND (O.date >= :dataInicial OR :dataInicial = 0)
-  AND (O.date <= :dataFinal OR :dataFinal = 0);
+  );
 
 SELECT loja,
        sigla,

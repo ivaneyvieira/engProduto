@@ -1608,8 +1608,6 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/findPedidosRessuprimento.sql"
     return query(sql, PedidoRessuprimento::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
-      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
   }
 
