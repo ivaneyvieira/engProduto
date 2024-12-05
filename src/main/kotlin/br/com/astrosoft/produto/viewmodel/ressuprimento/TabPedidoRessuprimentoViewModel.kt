@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
 
@@ -15,6 +16,15 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun imprimePedido() = viewModel.exec {
+  }
+
+  fun duplicaPedido() = viewModel.exec {
+    val pedidos = subView.predidoSelecionado()
+    if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
+    if (pedidos.size > 1) fail("Selecione apenas um pedido para duplicar")
+    val pedido = pedidos.first()
+    pedido.duplicaPedido()
+    updateView()
   }
 }
 

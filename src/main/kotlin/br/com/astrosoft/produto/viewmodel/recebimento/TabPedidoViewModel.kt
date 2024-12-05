@@ -8,7 +8,6 @@ import br.com.astrosoft.produto.model.beans.EPreEntrada
 import br.com.astrosoft.produto.model.beans.FiltroPedidoNota
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.PedidoCapa
-import br.com.astrosoft.produto.model.report.ReportImpresso
 
 class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
   val subView

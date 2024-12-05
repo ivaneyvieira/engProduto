@@ -16,6 +16,9 @@ class PedidoRessuprimento {
   var totalPendente: Double? = null
   var observacao: String? = null
 
+  fun duplicaPedido() {
+    saci.duplicaPedido(this)
+  }
 
   fun produtos(): List<ProdutoRessuprimento> {
     return saci.findProdutoRessuprimento(pedido = this)

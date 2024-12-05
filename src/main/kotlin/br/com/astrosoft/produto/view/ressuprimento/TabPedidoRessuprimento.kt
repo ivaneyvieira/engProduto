@@ -38,6 +38,13 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
         viewModel.imprimePedido()
       }
     }
+
+    button("Duplica") {
+      this.icon = VaadinIcon.COPY.create()
+      addClickListener {
+        viewModel.duplicaPedido()
+      }
+    }
   }
 
   override fun Grid<PedidoRessuprimento>.gridPanel() {
@@ -46,7 +53,7 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produto", "Produto") {
       dlgProduto = DlgProdutosPedidoRessuprimento(viewModel, it)
-      dlgProduto?.showDialog{
+      dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }

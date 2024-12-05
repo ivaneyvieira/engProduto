@@ -1611,6 +1611,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun duplicaPedido(pedido: PedidoRessuprimento) {
+    val sql = "/sqlSaci/duplicaPedido.sql"
+    script(sql) {
+      addOptionalParameter("ordno", pedido.pedido ?: 0)
+      addOptionalParameter("storeno", pedido.loja ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
