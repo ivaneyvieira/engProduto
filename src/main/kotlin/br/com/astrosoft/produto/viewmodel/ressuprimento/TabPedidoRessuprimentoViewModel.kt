@@ -23,8 +23,11 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
     if (pedidos.size > 1) fail("Selecione apenas um pedido para duplicar")
     val pedido = pedidos.first()
-    pedido.duplicaPedido()
-    updateView()
+
+    viewModel.view.showQuestion("Confirma a duplicação do pedido?") {
+      pedido.duplicaPedido()
+      updateView()
+    }
   }
 }
 

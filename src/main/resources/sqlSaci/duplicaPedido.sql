@@ -1,7 +1,10 @@
-DO @ORDNO := (SELECT MIN(no + 1) AS no
+DO @ORDNO_FIM := (MID(:ordno, 1, 1) + 1) * (RPAD('1', LENGTH(:ordno), '0') * 1);
+
+DO @ORDNO := (SELECT MAX(no + 1) AS no
               FROM sqldados.ords
               WHERE storeno = :storeno
-                AND no >= :ordno);
+                AND no >= :ordno
+                AND no < @ORDNO_FIM);
 
 
 
