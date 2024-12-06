@@ -126,4 +126,4 @@ WHERE (storeno = 1)
   AND (ordno = :ordno)
 GROUP BY prdno, grade;
 
-select @ORDNO as ordno;
+select @ORDNO as ordno

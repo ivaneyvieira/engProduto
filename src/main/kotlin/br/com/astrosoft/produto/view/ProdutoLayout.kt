@@ -27,71 +27,71 @@ class ProdutoLayout : AppLayoutAbstract() {
       val userSaci = AppConfig.userLogin() as? UserSaci
       if (userSaci?.recebimento == true) route(
         icon = TRUCK,
-        title = "Recebimento",
+        label = "Recebimento",
         routeClass = RecebimentoView::class
       )
       if (userSaci?.ressuprimento == true) route(
         icon = SHOP,
-        title = "Ressuprimento",
+        label = "Ressuprimento",
         routeClass = RessuprimentoView::class
       )
       if (userSaci?.nota == true) route(
         icon = OUT,
-        title = "Expedição",
+        label = "Expedição",
         routeClass = NotaView::class
       )
       if (userSaci?.reposicao == true) route(
         icon = SIGNAL,
-        title = "Reposição Loja",
+        label = "Reposição Loja",
         routeClass = ReposicaoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
         icon = EXCHANGE,
-        title = "Pedido Transf",
+        label = "Pedido Transf",
         routeClass = PedidoTransfView::class
       )
       if (userSaci?.devCliente == true) route(
         icon = REPLY,
-        title = "Dev Cliente",
+        label = "Dev Cliente",
         routeClass = DevClienteView::class,
       )
       if (userSaci?.cliente == true) route(
         icon = SMILEY_O,
-        title = "Cliente",
+        label = "Cliente",
         routeClass = ClienteView::class,
       )
       if (userSaci?.vendaRef == true) route(
         icon = SHOP,
-        title = "Venda",
+        label = "Venda",
         routeClass = VendaRefView::class,
       )
       if (userSaci?.pedidoRetira == true) route(
         icon = CART,
-        title = "Retira",
+        label = "Retira",
         routeClass = PedidoRetiraView::class,
       )
       if (userSaci?.produtoList == true) route(
         icon = CUBES,
-        title = "Produto",
+        label = "Produto",
         routeClass = ProdutoView::class,
       )
       if (userSaci?.acertoEstoque == true) route(
         icon = PACKAGE,
-        title = "Acerto Estoque",
+        label = "Acerto Estoque",
         routeClass = AcertoEstoqueView::class,
       )
       if (userSaci?.nfd == true) route(
         icon = INBOX,
-        title = "NFD",
+        label = "NFD",
         routeClass = NfdView::class,
       )
       if (userSaci?.estoqueCD == true) route(
         icon = STORAGE,
-        title = "CD MF",
+        label = "CD MF",
         routeClass = EstoqueCDView::class,
       )
 
-      if (userSaci?.admin == true) route(icon = USER, title = "Usuário", routeClass = UsuarioView::class)
+      if (userSaci?.admin == true) route(icon = USER, label = "Usuário", routeClass = UsuarioView::class)
     }
   }
 }
