@@ -203,7 +203,7 @@ private data class DadosEtiquetaPedido(
 private data class DadosEtiquetaRessuprimento(
   val titulo: String,
   val usuario: String,
-  val numero: Long,
+  val numero: Int,
   val data: String,
   val hora: String,
   val local: String,

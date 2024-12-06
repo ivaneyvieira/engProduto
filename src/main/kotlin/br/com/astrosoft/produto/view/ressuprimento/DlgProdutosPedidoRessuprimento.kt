@@ -14,10 +14,13 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -27,7 +30,14 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
   fun showDialog(onClose: () -> Unit) {
     val ressuprimentoTitle = "${pedido.pedido}"
 
-    form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
+    form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle",
+      toolBar = {
+        button("Separa") {
+          this.icon = VaadinIcon.SPLIT.create()
+          onClick {
+            viewModel.separaPedido()
+          }
+        }
     }, onClose = {
       onClose()
     }) {
@@ -86,10 +96,6 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
   fun update() {
     val listProdutos = pedido.produtos()
     gridDetail.setItems(listProdutos)
-  }
-
-  fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
-    return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodeList }
   }
 
   fun updateProduto(produto: ProdutoRessuprimento) {

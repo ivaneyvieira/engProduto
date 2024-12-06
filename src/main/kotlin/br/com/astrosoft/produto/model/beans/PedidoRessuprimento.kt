@@ -16,8 +16,8 @@ class PedidoRessuprimento {
   var totalPendente: Double? = null
   var observacao: String? = null
 
-  fun duplicaPedido() {
-    saci.duplicaPedido(this)
+  fun duplicaPedido(): PedidoNovo? {
+    return saci.duplicaPedido(this)
   }
 
   fun produtos(): List<ProdutoRessuprimento> {

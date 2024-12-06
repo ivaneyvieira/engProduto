@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
+import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabPedidoRessuprimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
@@ -79,6 +80,14 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
   override fun predidoSelecionado(): List<PedidoRessuprimento> {
     return itensSelecionados()
+  }
+
+  override fun produtosSelecionados(): List<ProdutoRessuprimento> {
+    return dlgProduto?.produtosSelecionados() ?: emptyList()
+  }
+
+  override fun updateProdutos() {
+    dlgProduto?.update()
   }
 
   override fun isAuthorized(): Boolean {

@@ -2,7 +2,7 @@ DO @ORDNO_FIM := (MID(:ordno, 1, 1) + 1) * (RPAD('1', LENGTH(:ordno), '0') * 1);
 
 DO @ORDNO := (SELECT MAX(no + 1) AS no
               FROM sqldados.ords
-              WHERE storeno = :storeno
+              WHERE storeno = 1
                 AND no >= :ordno
                 AND no < @ORDNO_FIM);
 
@@ -71,7 +71,7 @@ SELECT @ORDNO  AS no,
        c3,
        c4
 FROM sqldados.ords
-WHERE storeno = :storeno
+WHERE storeno = 1
   AND no = :ordno;
 
 INSERT INTO sqldados.oprd (storeno, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -120,8 +120,10 @@ SELECT storeno            AS storeno,
        padbyte,
        gradeFechada,
        obs,
-       ''                 AS auxStr
+       'D'                AS auxStr
 FROM sqldados.oprd
-WHERE (storeno = :storeno)
+WHERE (storeno = 1)
   AND (ordno = :ordno)
-GROUP BY prdno, grade
+GROUP BY prdno, grade;
+
+select @ORDNO as ordno;

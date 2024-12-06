@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class ProdutoRessuprimento(
-  var ordno: Long?,
+  var ordno: Int?,
   var prdno: String?,
   var codigo: String?,
   var grade: String?,
@@ -50,6 +50,14 @@ class ProdutoRessuprimento(
     get() = vencimentoStrList?.split(",")?.lastOrNull()?.toIntOrNull()
 
   val vencimentoStr = vencimentoToStr(vencimento)
+
+  fun pedidoNovo(): PedidoNovo? {
+    return saci.pedidoNovo(ordno ?: 0)
+  }
+
+  fun separaPedido(ordnoNovo: Int): PedidoNovo? {
+    return saci.separaPedido(this, ordnoNovo)
+  }
 
   private fun vencimentoToStr(vencimentoPar: Int?): String {
     val venc = vencimentoPar ?: 0

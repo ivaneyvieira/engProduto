@@ -1611,12 +1611,30 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun duplicaPedido(pedido: PedidoRessuprimento) {
+  fun duplicaPedido(pedido: PedidoRessuprimento): PedidoNovo? {
     val sql = "/sqlSaci/duplicaPedido.sql"
-    script(sql) {
+    return query(sql, PedidoNovo::class) {
       addOptionalParameter("ordno", pedido.pedido ?: 0)
-      addOptionalParameter("storeno", pedido.loja ?: 0)
-    }
+    }.firstOrNull()
+  }
+
+  fun separaPedido(produto: ProdutoRessuprimento, ordnoNovo: Int): PedidoNovo? {
+    val sql = "/sqlSaci/separaPedido.sql"
+    return query(sql, PedidoNovo::class) {
+      addOptionalParameter("ordno", produto.ordno ?: 0)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("qtty", produto.qtPedido ?: 0)
+      addOptionalParameter("localizacao", produto.localizacao)
+      addOptionalParameter("ordnoNovo", ordnoNovo)
+    }.firstOrNull()
+  }
+
+  fun pedidoNovo(ordno: Int): PedidoNovo? {
+    val sql = "/sqlSaci/pedidoNovo.sql"
+    return query(sql, PedidoNovo::class) {
+      addOptionalParameter("ordno", ordno)
+    }.firstOrNull()
   }
 
   companion object {
