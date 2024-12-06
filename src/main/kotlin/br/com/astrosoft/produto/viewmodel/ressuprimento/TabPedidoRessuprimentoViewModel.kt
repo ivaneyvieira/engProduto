@@ -3,9 +3,10 @@ package br.com.astrosoft.produto.viewmodel.ressuprimento
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.PedidoNovo
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
+import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
+import org.apache.xmlbeans.impl.common.XmlStreamUtils.printEvent
 
 class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   val subView
@@ -70,6 +71,23 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
       }
       updateView()
     }
+  }
+
+  fun previewPedido(ressuprimento: PedidoRessuprimento) {
+    val produtos = ressuprimento.produtos()
+
+    val relatorio = PrintPedidoRessuprimento(ressuprimento, ProdutoRessuprimento::qtPedido)
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoRessuprimento::descricao,
+          ProdutoRessuprimento::codigo,
+          ProdutoRessuprimento::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1)
+    )
   }
 }
 

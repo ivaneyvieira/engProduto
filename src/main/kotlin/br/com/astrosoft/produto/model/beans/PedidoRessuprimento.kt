@@ -16,6 +16,12 @@ class PedidoRessuprimento {
   var totalPendente: Double? = null
   var observacao: String? = null
 
+  val rotaRessuprimento: String?
+    get() {
+      val loja = pedido?.toString()?.substring(0, 1) ?: return null
+      return "${loja}4"
+    }
+
   fun duplicaPedido(): PedidoNovo? {
     return saci.duplicaPedido(this)
   }

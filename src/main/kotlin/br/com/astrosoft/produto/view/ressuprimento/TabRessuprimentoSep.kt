@@ -102,7 +102,7 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     this.addClassName("styling")
     this.format()
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
 
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {

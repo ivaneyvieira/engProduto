@@ -56,8 +56,11 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
   }
 
   override fun Grid<PedidoRessuprimento>.gridPanel() {
-    columnGrid(PedidoRessuprimento::loja, "Loja")
     this.selectionMode = Grid.SelectionMode.MULTI
+
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produto", "Produto") {
       dlgProduto = DlgProdutosPedidoRessuprimento(viewModel, it)
@@ -109,3 +112,4 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
     viewModel.updateView()
   }
 }
+
