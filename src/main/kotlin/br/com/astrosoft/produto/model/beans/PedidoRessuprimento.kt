@@ -20,6 +20,11 @@ class PedidoRessuprimento {
     return saci.duplicaPedido(this)
   }
 
+  fun removerPedido() {
+    val ordno = this.pedido ?: return
+    saci.removerPedido(ordno)
+  }
+
   fun produtos(): List<ProdutoRessuprimento> {
     return saci.findProdutoRessuprimento(pedido = this)
   }

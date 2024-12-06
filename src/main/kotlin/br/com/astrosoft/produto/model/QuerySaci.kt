@@ -1637,6 +1637,13 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun removerPedido(ordno: Int) {
+    val sql = "/sqlSaci/removerPedido.sql"
+    script(sql) {
+      addOptionalParameter("ordno", ordno)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

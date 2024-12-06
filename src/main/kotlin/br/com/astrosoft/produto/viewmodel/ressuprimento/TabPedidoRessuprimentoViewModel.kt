@@ -59,6 +59,18 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
       updateView()
     }
   }
+
+  fun removePedido() = viewModel.exec {
+    val pedidos = subView.predidoSelecionado()
+    if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
+
+    viewModel.view.showQuestion("Confirma a remoção do pedido?") {
+      pedidos.forEach { pedido ->
+        pedido.removerPedido()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabPedidoRessuprimento : ITabView {

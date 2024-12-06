@@ -46,6 +46,13 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
         viewModel.duplicaPedido()
       }
     }
+
+    button("Remove") {
+      this.icon = VaadinIcon.TRASH.create()
+      addClickListener {
+        viewModel.removePedido()
+      }
+    }
   }
 
   override fun Grid<PedidoRessuprimento>.gridPanel() {
