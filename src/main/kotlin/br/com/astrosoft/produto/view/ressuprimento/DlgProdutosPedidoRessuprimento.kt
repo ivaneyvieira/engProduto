@@ -35,6 +35,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
   fun showDialog(onClose: () -> Unit) {
     val ressuprimentoTitle = "${pedido.pedido}"
 
+
     form = SubWindowForm(
       "Produtos do ressuprimento $ressuprimentoTitle",
       toolBar = {
