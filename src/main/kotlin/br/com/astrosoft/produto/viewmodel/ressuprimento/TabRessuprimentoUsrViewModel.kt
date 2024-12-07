@@ -33,6 +33,7 @@ class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabU
     this.ressuprimentoDuplica = usuario.ressuprimentoDuplica
     this.ressuprimentoRemove = usuario.ressuprimentoRemove
     this.ressuprimentoSepara = usuario.ressuprimentoSepara
+    this.ressuprimentoRemoveProd = usuario.ressuprimentoRemoveProd
   }
 }
 

@@ -43,7 +43,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Recebido") {
           binder.bind(this, UserSaci::ressuprimentoRec.name)
         }
-        checkBox("Exclui") {
+        checkBox("Remover pedido") {
           binder.bind(this, UserSaci::ressuprimentoExclui.name)
         }
       }
@@ -59,6 +59,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         }
         checkBox("Separa Produto") {
           binder.bind(this, UserSaci::ressuprimentoSepara.name)
+        }
+        checkBox("Remover Produto") {
+          binder.bind(this, UserSaci::ressuprimentoRemoveProd.name)
         }
       }
     }

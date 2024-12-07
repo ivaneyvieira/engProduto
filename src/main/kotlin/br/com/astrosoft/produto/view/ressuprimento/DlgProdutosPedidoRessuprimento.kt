@@ -45,6 +45,14 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       "Produtos do ressuprimento $ressuprimentoTitle",
       toolBar = {
         val user = AppConfig.userLogin() as? UserSaci
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            update()
+          }
+        }
         button("Separa") {
           this.isVisible = user?.ressuprimentoSepara == true
           this.icon = VaadinIcon.SPLIT.create()
@@ -52,12 +60,11 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
             viewModel.separaPedido()
           }
         }
-        edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          addValueChangeListener {
-            update()
+        button("Remover") {
+          this.isVisible = user?.ressuprimentoSepara == true
+          this.icon = VaadinIcon.TRASH.create()
+          onClick {
+            viewModel.removeProduto()
           }
         }
       }, onClose = {

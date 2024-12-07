@@ -1644,6 +1644,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun removerProduto(produto: ProdutoRessuprimento) {
+    val sql = "/sqlSaci/removerProduto.sql"
+    script(sql) {
+      addOptionalParameter("ordno", produto.ordno ?: 0)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

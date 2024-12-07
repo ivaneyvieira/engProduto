@@ -101,6 +101,18 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
       fail("A quantidade deveria está entre $valorMin e $valorMax")
     }
   }
+
+  fun removeProduto() {
+    val produtos = subView.produtosSelecionados()
+    if (produtos.isEmpty()) fail("Nenhum produto selecionado")
+
+    subView.confirmaLogin("Confirma a remoção do produto?", UserSaci::ressuprimentoRemoveProd) {
+      produtos.forEach { produto ->
+        produto.removerProduto()
+      }
+      subView.updateProdutos()
+    }
+  }
 }
 
 

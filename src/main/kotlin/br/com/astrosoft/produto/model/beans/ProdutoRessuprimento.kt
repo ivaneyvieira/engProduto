@@ -100,4 +100,8 @@ class ProdutoRessuprimento(
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo ?: "")
   }
+
+  fun removerProduto() {
+    saci.removerProduto(this)
+  }
 }
