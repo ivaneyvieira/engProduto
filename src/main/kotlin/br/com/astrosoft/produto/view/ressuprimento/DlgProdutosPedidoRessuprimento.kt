@@ -20,6 +20,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.asc
 import com.github.mvysny.kaributools.desc
 import com.github.mvysny.kaributools.getColumnBy
@@ -28,9 +29,12 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel, val pedido: PedidoRessuprimento) {
   private var form: SubWindowForm? = null
+  private var edtPesquisa: TextField? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val ressuprimentoTitle = "${pedido.pedido}"
@@ -44,6 +48,14 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
           this.icon = VaadinIcon.SPLIT.create()
           onClick {
             viewModel.separaPedido()
+          }
+        }
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            update()
           }
         }
       }, onClose = {
@@ -100,8 +112,15 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     return gridDetail.selectedItems.toList()
   }
 
+  fun ProdutoRessuprimento.dadosStr(): String {
+    return "${this.codigo} ${this.barcodes} ${this.descricao} ${this.grade} ${this.localizacao}"
+  }
+
   fun update() {
-    val listProdutos = pedido.produtos()
+    val pesquisa = edtPesquisa?.value ?: ""
+    val listProdutos = pedido.produtos().filter {
+      it.dadosStr().contains(pesquisa, ignoreCase = true)
+    }
     gridDetail.setItems(listProdutos)
   }
 
