@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
-import org.apache.xmlbeans.impl.common.XmlStreamUtils.printEvent
 
 class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   val subView
@@ -48,7 +48,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     if (pedidos.size > 1) fail("Selecione apenas um pedido para duplicar")
     val pedido = pedidos.first()
 
-    viewModel.view.showQuestion("Confirma a duplicação do pedido?") {
+    subView.confirmaLogin("Confirma a duplicação do pedido?", UserSaci::ressuprimentoDuplica) {
       val pedidoNovo = pedido.duplicaPedido()
 
       if (pedidoNovo == null) {
@@ -65,7 +65,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     val pedidos = subView.predidoSelecionado()
     if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
 
-    viewModel.view.showQuestion("Confirma a remoção do pedido?") {
+    subView.confirmaLogin("Confirma a remoção do pedido?", UserSaci::ressuprimentoRemove) {
       pedidos.forEach { pedido ->
         pedido.removerPedido()
       }
@@ -97,4 +97,5 @@ interface ITabPedidoRessuprimento : ITabView {
   fun predidoSelecionado(): List<PedidoRessuprimento>
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun updateProdutos()
+  fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
 }

@@ -51,6 +51,15 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Usuário Recebedor") {
           binder.bind(this, UserSaci::ressuprimentoRecebedor.name)
         }
+        checkBox("Duplica Pedido") {
+          binder.bind(this, UserSaci::ressuprimentoDuplica.name)
+        }
+        checkBox("Remove Pedido") {
+          binder.bind(this, UserSaci::ressuprimentoRemove.name)
+        }
+        checkBox("Separa Produto") {
+          binder.bind(this, UserSaci::ressuprimentoSepara.name)
+        }
       }
     }
     verticalBlock("Filtros") {

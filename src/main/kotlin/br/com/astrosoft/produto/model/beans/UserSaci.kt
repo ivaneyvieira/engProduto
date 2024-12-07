@@ -109,6 +109,9 @@ class UserSaci : IUser {
   var autorizaTroca by DelegateAuthorized2(80)
   var recebimentoNotaEntrada by DelegateAuthorized2(81)
   var pedidoRessuprimento by DelegateAuthorized2(82)
+  var ressuprimentoDuplica by DelegateAuthorized2(83)
+  var ressuprimentoRemove by DelegateAuthorized2(84)
+  var ressuprimentoSepara by DelegateAuthorized2(85)
 
   //Locais
   private var localEstoque: String?

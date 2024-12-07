@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
@@ -30,13 +31,6 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
       this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
-      }
-    }
-
-    button("Impressão") {
-      this.icon = VaadinIcon.PRINT.create()
-      addClickListener {
-        viewModel.imprimePedido()
       }
     }
 
@@ -98,6 +92,27 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
   override fun updateProdutos() {
     dlgProduto?.update()
+  }
+
+  override fun confirmaLogin(
+    msg: String,
+    permissao: UserSaci.() -> Boolean,
+    onLogin: () -> Unit
+  ) {
+    val formLogin = FormLogin(msg)
+
+    DialogHelper.showForm("Confirmação", formLogin) {
+      val user = UserSaci.findUser(formLogin.login)
+      if (user.any { it.senha == formLogin.senha }) {
+        if (user.any { it.permissao() }) {
+          onLogin()
+        } else {
+          DialogHelper.showError("Usuário não tem permissão para esta operação")
+        }
+      } else {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      }
+    }
   }
 
   override fun isAuthorized(): Boolean {
