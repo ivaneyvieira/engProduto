@@ -1,12 +1,14 @@
 package br.com.astrosoft.produto.view.ressuprimento.columns
 
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() =
       columnGrid(ProdutoRessuprimento::codigo) {
+        this.right()
         this.setHeader("Código")
       }
 
