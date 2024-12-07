@@ -85,15 +85,20 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-      this.withEditor(
-        classBean = ProdutoRessuprimento::class,
-        openEditor = {
-          this.focusEditor(ProdutoRessuprimento::qtPedido)
-        },
-        closeEditor = {
-          viewModel.saveProduto(it.bean)
-        }
-      )
+
+      val user = AppConfig.userLogin() as? UserSaci
+
+      if(user?.ressuprimentoEditaQuant == true) {
+        this.withEditor(
+          classBean = ProdutoRessuprimento::class,
+          openEditor = {
+            this.focusEditor(ProdutoRessuprimento::qtPedido)
+          },
+          closeEditor = {
+            viewModel.saveProduto(it.bean)
+          }
+        )
+      }
 
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()

@@ -63,6 +63,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Remover Produto") {
           binder.bind(this, UserSaci::ressuprimentoRemoveProd.name)
         }
+        checkBox("Edita Quantidade") {
+          binder.bind(this, UserSaci::ressuprimentoEditaQuant.name)
+        }
       }
     }
     verticalBlock("Filtros") {
