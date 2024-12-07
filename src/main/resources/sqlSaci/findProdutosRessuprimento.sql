@@ -121,6 +121,20 @@ FROM (SELECT O1.*, 1 AS origem
         AND (grade = :grade OR :grade = '')) AS D
 GROUP BY storeno, ordno, prdno, grade, seqno;
 
+UPDATE sqldados.oprd AS O
+  INNER JOIN T_OPRD AS T
+  USING (storeno, ordno, prdno, grade, seqno)
+SET O.auxMy2 = T.qtty,
+    T.auxMy2 = T.qtty
+WHERE O.auxMy2 = 0;
+
+UPDATE sqldados.oprdRessu AS O
+  INNER JOIN T_OPRD AS T
+  USING (storeno, ordno, prdno, grade, seqno)
+SET O.auxMy2 = T.qtty,
+    T.auxMy2 = T.qtty
+WHERE O.auxMy2 = 0;
+
 DROP TEMPORARY TABLE IF EXISTS T_VENC;
 CREATE TEMPORARY TABLE T_VENC
 (
@@ -153,6 +167,7 @@ SELECT X.ordno                                                  AS ordno,
        P.m5                                                     AS largura,
        P.sp / 100                                               AS precoCheio,
        X.qtty                                                   AS qtPedido,
+       X.auxMy2                                                 AS qttyOriginal,
        IFNULL(TN.qtty, X.qtty)                                  AS qtQuantNF,
        X.qtty * S.cm_real / 10000                               AS vlPedido,
        TN.qtty * S.cm_real / 10000                              AS vlQuantNF,

@@ -22,6 +22,7 @@ class ProdutoRessuprimento(
   var precoCheio: Double?,
   var localizacao: String?,
   var qtPedido: Int?,
+  var qttyOriginal: Int?,
   var qtQuantNF: Int?,
   var qtRecebido: Int?,
   var qtEntregue: Int?,
@@ -73,10 +74,8 @@ class ProdutoRessuprimento(
 
   var estoqueLoja: Boolean? = false
 
-  var qttyOriginal: Int = 0
-
   val qttyMax
-    get() = (this.qttyOriginal * 1.20).toInt()
+    get() = ((this.qttyOriginal ?: 0) * 1.20).toInt()
 
   val qttyMin
     get() = 1
