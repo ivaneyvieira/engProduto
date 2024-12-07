@@ -112,6 +112,10 @@ object ProdutoRessuViewColumns {
     this.setHeader("Quant")
   }
 
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtPedidoEdt() = columnGrid(ProdutoRessuprimento::qttyEdit) {
+    this.setHeader("Quant")
+  }
+
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoQtNf() = columnGrid(ProdutoRessuprimento::qtQuantNF) {
     this.setHeader("Qnt NF")
   }

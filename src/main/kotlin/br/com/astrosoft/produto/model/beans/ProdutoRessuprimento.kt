@@ -71,6 +71,13 @@ class ProdutoRessuprimento(
     }
   }
 
+  var qttyEdit: Int = 0
+  var estoqueLoja: Boolean? = false
+  val qttyMax
+    get() = ((this.qtPedido ?: 0) * 1.10).toInt()
+  val qttyMin
+    get() = 1
+
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
   val selecionadoOrdemCD get() = if (selecionado == EMarcaRessuprimento.CD.num) 0 else 1
   val selecionadoOrdemREC get() = if (selecionado == EMarcaRessuprimento.REC.num) 0 else 1

@@ -1624,7 +1624,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("ordno", produto.ordno ?: 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("qtty", produto.qtPedido ?: 0)
+      addOptionalParameter("qtty", produto.qttyEdit)
       addOptionalParameter("localizacao", produto.localizacao)
       addOptionalParameter("ordnoNovo", ordnoNovo)
     }.firstOrNull()

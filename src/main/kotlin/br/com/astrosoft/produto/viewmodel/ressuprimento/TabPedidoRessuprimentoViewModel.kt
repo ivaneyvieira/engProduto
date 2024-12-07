@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
@@ -89,7 +90,19 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
       printer = subView.printerPreview(loja = 1)
     )
   }
+
+  fun saveProduto(ressuprimento: ProdutoRessuprimento) = viewModel.exec {
+    val valor = ressuprimento.qttyEdit
+    val valorMax = ressuprimento.qttyMax
+    val valorMin = ressuprimento.qttyMin
+
+    if (valor < valorMin || valor > valorMax) {
+      ressuprimento.qttyEdit = ressuprimento.qtPedido ?: 0
+      fail("A quantidade deveria está entre $valorMin e $valorMax")
+    }
+  }
 }
+
 
 interface ITabPedidoRessuprimento : ITabView {
   fun filtro(): FiltroPedidoRessuprimento

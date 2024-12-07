@@ -2,11 +2,11 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showError
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
+import br.com.astrosoft.produto.model.beans.ProdutoPedido
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
@@ -16,6 +16,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedidoEdt
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -30,6 +31,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.binder.ValidationResult
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel, val pedido: PedidoRessuprimento) {
@@ -76,7 +78,16 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
+      this.withEditor(
+        classBean = ProdutoRessuprimento::class,
+        openEditor = {
+          this.focusEditor(ProdutoRessuprimento::qttyEdit)
+        },
+        closeEditor = {
+          viewModel.saveProduto(it.bean)
+        }
+      )
 
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
@@ -84,7 +95,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoValidade()
-      produtoRessuprimentoQtPedido()
+      produtoRessuprimentoQtPedidoEdt().integerFieldEditor()
       produtoRessuprimentoEstoque()
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
@@ -120,6 +131,9 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     val pesquisa = edtPesquisa?.value ?: ""
     val listProdutos = pedido.produtos().filter {
       it.dadosStr().contains(pesquisa, ignoreCase = true)
+    }.map {
+      it.qttyEdit = it.qtPedido ?: 0
+      it
     }
     gridDetail.setItems(listProdutos)
   }
