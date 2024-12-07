@@ -126,5 +126,11 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    val impressoraRessu = user?.impressoraRessu ?: return emptyList()
+    return if (impressoraRessu.contains("TODOS")) emptyList() else impressoraRessu.toList()
+  }
 }
 
