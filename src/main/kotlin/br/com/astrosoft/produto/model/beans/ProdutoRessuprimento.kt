@@ -73,8 +73,10 @@ class ProdutoRessuprimento(
 
   var estoqueLoja: Boolean? = false
 
+  var qttyOriginal: Int = 0
+
   val qttyMax
-    get() = ((this.qtPedido ?: 0) * 1.10).toInt()
+    get() = (this.qttyOriginal * 1.20).toInt()
 
   val qttyMin
     get() = 1

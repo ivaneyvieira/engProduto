@@ -32,7 +32,10 @@ class PedidoRessuprimento {
   }
 
   fun produtos(): List<ProdutoRessuprimento> {
-    return saci.findProdutoRessuprimento(pedido = this)
+    return saci.findProdutoRessuprimento(pedido = this).map{
+      it.qttyOriginal = it.qtPedido ?: 0
+      it
+    }
   }
 
   companion object {
