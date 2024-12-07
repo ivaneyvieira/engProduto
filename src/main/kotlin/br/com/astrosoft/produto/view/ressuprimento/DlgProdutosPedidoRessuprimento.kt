@@ -16,7 +16,6 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedidoEdt
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -89,7 +88,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       this.withEditor(
         classBean = ProdutoRessuprimento::class,
         openEditor = {
-          this.focusEditor(ProdutoRessuprimento::qttyEdit)
+          this.focusEditor(ProdutoRessuprimento::qtPedido)
         },
         closeEditor = {
           viewModel.saveProduto(it.bean)
@@ -102,7 +101,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       produtoRessuprimentoGrade()
       produtoRessuprimentoLocalizacao()
       produtoRessuprimentoValidade()
-      produtoRessuprimentoQtPedidoEdt().integerFieldEditor()
+      produtoRessuprimentoQtPedido().integerFieldEditor()
       produtoRessuprimentoEstoque()
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
@@ -138,9 +137,6 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     val pesquisa = edtPesquisa?.value ?: ""
     val listProdutos = pedido.produtos().filter {
       it.dadosStr().contains(pesquisa, ignoreCase = true)
-    }.map {
-      it.qttyEdit = it.qtPedido ?: 0
-      it
     }
     gridDetail.setItems(listProdutos)
   }

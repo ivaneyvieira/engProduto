@@ -92,12 +92,15 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun saveProduto(ressuprimento: ProdutoRessuprimento) = viewModel.exec {
-    val valor = ressuprimento.qttyEdit
+    val valor = ressuprimento.qtPedido ?: 0
     val valorMax = ressuprimento.qttyMax
     val valorMin = ressuprimento.qttyMin
 
-    if (valor < valorMin || valor > valorMax) {
-      ressuprimento.qttyEdit = ressuprimento.qtPedido ?: 0
+    if (valor >= valorMin && valor <= valorMax) {
+      ressuprimento.salvaQuantidade()
+      subView.updateProdutos()
+    } else {
+      subView.updateProdutos()
       fail("A quantidade deveria está entre $valorMin e $valorMax")
     }
   }

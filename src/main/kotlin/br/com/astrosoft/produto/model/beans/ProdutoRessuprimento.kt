@@ -71,10 +71,11 @@ class ProdutoRessuprimento(
     }
   }
 
-  var qttyEdit: Int = 0
   var estoqueLoja: Boolean? = false
+
   val qttyMax
     get() = ((this.qtPedido ?: 0) * 1.10).toInt()
+
   val qttyMin
     get() = 1
 
@@ -103,5 +104,9 @@ class ProdutoRessuprimento(
 
   fun removerProduto() {
     saci.removerProduto(this)
+  }
+
+  fun salvaQuantidade() {
+    saci.salvaQuantidadeProduto(this)
   }
 }

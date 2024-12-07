@@ -1624,7 +1624,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("ordno", produto.ordno ?: 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("qtty", produto.qttyEdit)
+      addOptionalParameter("qtty", produto.qtPedido ?: 0)
       addOptionalParameter("localizacao", produto.localizacao)
       addOptionalParameter("ordnoNovo", ordnoNovo)
     }.firstOrNull()
@@ -1650,6 +1650,16 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("ordno", produto.ordno ?: 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+    }
+  }
+
+  fun salvaQuantidadeProduto(produto: ProdutoRessuprimento) {
+    val sql = "/sqlSaci/updateQuantidade.sql"
+    script(sql) {
+      addOptionalParameter("ordno", produto.ordno ?: 0)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("qtty", produto.qtPedido ?: 0)
     }
   }
 
