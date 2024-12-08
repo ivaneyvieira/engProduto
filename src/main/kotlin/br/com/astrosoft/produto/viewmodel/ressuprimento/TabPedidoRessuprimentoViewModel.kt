@@ -26,7 +26,6 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) fail("Nenhum pedido selecionado")
 
-
     viewModel.view.showQuestion("Confirma a separação do pedido?") {
       var ordnoNovo: Int = produtos.firstOrNull()?.pedidoNovo()?.ordno ?: 0
       produtos.forEach { produto ->

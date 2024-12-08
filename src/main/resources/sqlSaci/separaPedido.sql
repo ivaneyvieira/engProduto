@@ -249,27 +249,59 @@ WHERE (storeno = 1)
   AND (grade = :grade)
 GROUP BY storeno, ordno, prdno, grade;
 
+/********************************************************************/
+
 UPDATE oprd
-SET oprd.qtty = (oprd.qtty - :qtty)
-WHERE (oprd.storeno = 1)
-  AND (oprd.ordno = :ordno)
-  AND (oprd.prdno = :prdno)
-  AND (oprd.grade = :grade);
+SET qtty = (qtty - :qtty)
+WHERE (storeno = 1)
+  AND (ordno = :ordno)
+  AND (prdno = :prdno)
+  AND (grade = :grade);
+
+UPDATE oprdRessu
+SET qtty = (qtty - :qtty)
+WHERE (storeno = 1)
+  AND (ordno = :ordno)
+  AND (prdno = :prdno)
+  AND (grade = :grade);
+
+/********************************************************************/
 
 DELETE
 FROM oprd
-WHERE oprd.storeno = 1
-  AND oprd.ordno = :ordno
-  AND oprd.prdno = :prdno
-  AND oprd.grade = :grade
-  AND ROUND(oprd.qtty, 2) <= 0;
+WHERE storeno = 1
+  AND ordno = :ordno
+  AND prdno = :prdno
+  AND grade = :grade
+  AND ROUND(qtty) <= 0;
 
 DELETE
 FROM oprd
-WHERE oprd.storeno = 1
-  AND oprd.ordno = @ORDNO_NOVO
-  AND oprd.prdno = :prdno
-  AND oprd.grade = :grade
-  AND ROUND(oprd.qtty, 2) <= 0;
+WHERE storeno = 1
+  AND ordno = @ORDNO_NOVO
+  AND prdno = :prdno
+  AND grade = :grade
+  AND ROUND(qtty) <= 0;
+
+DELETE
+FROM oprdRessu
+WHERE storeno = 1
+  AND ordno = :ordno
+  AND prdno = :prdno
+  AND grade = :grade
+  AND ROUND(qtty) <= 0;
+
+DELETE
+FROM oprdRessu
+WHERE storeno = 1
+  AND ordno = @ORDNO_NOVO
+  AND prdno = :prdno
+  AND grade = :grade
+  AND ROUND(qtty) <= 0;
+
+/********************************************************************/
+
+INSERT IGNORE INTO sqldados.lastno(storeno, no, dupse, se, padbyte)
+  VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
 
 select @ORDNO_NOVO as ordno
