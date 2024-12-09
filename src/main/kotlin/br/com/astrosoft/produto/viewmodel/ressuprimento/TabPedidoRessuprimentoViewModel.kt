@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
+import br.com.astrosoft.produto.model.beans.LocalizacaoAlternativa
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -14,6 +14,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     get() = viewModel.view.tabPedidoRessuprimento
 
   fun updateView() {
+    LocalizacaoAlternativa.update()
     val filtro = subView.filtro()
     val pedidos = PedidoRessuprimento.findPedidoRessuprimento(filtro)
     subView.updatePedidos(pedidos)

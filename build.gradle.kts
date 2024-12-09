@@ -13,7 +13,7 @@ plugins {
   id("com.vaadin")
 }
 
-defaultTasks("clean", "build")
+//defaultTasks("clean", "build")
 
 repositories {
   mavenLocal()

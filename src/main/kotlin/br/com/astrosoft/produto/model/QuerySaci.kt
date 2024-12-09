@@ -1663,6 +1663,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun localizacaoAlternativa() : List<LocalizacaoAlternativa>{
+    val sql = "/sqlSaci/localizacaoAlternativa.sql"
+    return query(sql, LocalizacaoAlternativa::class)
+  }
+
   companion object {
     private val db = DB("saci")
 

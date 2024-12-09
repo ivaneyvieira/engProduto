@@ -32,7 +32,12 @@ class PedidoRessuprimento {
   }
 
   fun produtos(): List<ProdutoRessuprimento> {
-    return saci.findProdutoRessuprimento(pedido = this)
+    return saci.findProdutoRessuprimento(pedido = this).map{prd ->
+      if(prd.localizacao.isNullOrBlank()) {
+        prd.localizacao = LocalizacaoAlternativa.locsForn(prd.vendno ?: 0)
+      }
+      prd
+    }
   }
 
   companion object {
