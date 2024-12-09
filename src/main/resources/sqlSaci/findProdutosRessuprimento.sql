@@ -226,7 +226,6 @@ FROM T_OPRD AS X
 WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca OR :marca = 999)
-  AND (X.qtty > 0)
 GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
 
 /*

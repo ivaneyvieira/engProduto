@@ -76,8 +76,7 @@ class ProdutoRessuprimento(
   var estoqueLoja: Boolean? = false
 
   val qttyMax
-    get() = ((this.qttyOriginal ?: 0) * 1.50).toBigDecimal()
-      .setScale(0, RoundingMode.CEILING).toInt()
+    get() = ((this.qttyOriginal ?: 0) * 1.50).toBigDecimal().setScale(0, RoundingMode.CEILING).toInt()
 
   val qttyMin
     get() = 1
