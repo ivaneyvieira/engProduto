@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
-import org.apache.commons.math3.dfp.DfpField
 import java.math.RoundingMode
 import java.time.LocalDate
 
