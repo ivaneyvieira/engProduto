@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
@@ -16,7 +17,14 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   fun updateView() {
     LocalizacaoAlternativa.update()
     val filtro = subView.filtro()
-    val pedidos = PedidoRessuprimento.findPedidoRessuprimento(filtro)
+    val user = AppConfig.userLogin() as? UserSaci
+    val pedidos = PedidoRessuprimento.findPedidoRessuprimento(filtro).filter { pedido ->
+      if(user?.ressuprimentoExibePedidoPai == true) {
+        true
+      }else {
+        pedido.pedido?.toString()?.length != 5
+      }
+    }
     subView.updatePedidos(pedidos)
   }
 

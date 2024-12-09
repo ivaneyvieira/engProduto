@@ -35,6 +35,7 @@ class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabU
     this.ressuprimentoSepara = usuario.ressuprimentoSepara
     this.ressuprimentoRemoveProd = usuario.ressuprimentoRemoveProd
     this.ressuprimentoEditaQuant = usuario.ressuprimentoEditaQuant
+    this.ressuprimentoExibePedidoPai = usuario.ressuprimentoExibePedidoPai
   }
 }
 

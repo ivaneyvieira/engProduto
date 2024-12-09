@@ -66,6 +66,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Edita Quantidade") {
           binder.bind(this, UserSaci::ressuprimentoEditaQuant.name)
         }
+        checkBox("Exibe Pedido Pai") {
+          binder.bind(this, UserSaci::ressuprimentoExibePedidoPai.name)
+        }
       }
     }
     verticalBlock("Filtros") {
