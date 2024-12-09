@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
+import org.apache.commons.math3.dfp.DfpField
+import java.math.RoundingMode
 import java.time.LocalDate
 
 class ProdutoRessuprimento(
@@ -75,7 +77,8 @@ class ProdutoRessuprimento(
   var estoqueLoja: Boolean? = false
 
   val qttyMax
-    get() = ((this.qttyOriginal ?: 0) * 1.20).toInt()
+    get() = if ((qttyOriginal ?: 0) < 5) 5 else ((this.qttyOriginal ?: 0) * 1.30).toBigDecimal()
+      .setScale(0, RoundingMode.CEILING).toInt()
 
   val qttyMin
     get() = 1
