@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), ITabAcertoUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::acertoPedido, "Pedido")
     columnGrid(UserSaci::acertoEntrada, "Entrada")
     columnGrid(UserSaci::acertoSaida, "Saída")
     columnGrid(UserSaci::acertoMovManualEntrada, "Ent Manual")
@@ -23,6 +24,9 @@ class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), 
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
+        checkBox("Pedido") {
+          binder.bind(this, UserSaci::acertoPedido.name)
+        }
         checkBox("Entrada") {
           binder.bind(this, UserSaci::acertoEntrada.name)
         }

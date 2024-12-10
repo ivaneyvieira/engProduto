@@ -115,6 +115,7 @@ class UserSaci : IUser {
   var ressuprimentoRemoveProd by DelegateAuthorized2(86)
   var ressuprimentoEditaQuant by DelegateAuthorized2(87)
   var ressuprimentoExibePedidoPai by DelegateAuthorized2(88)
+  var acertoPedido by DelegateAuthorized2(89)
 
   //Locais
   private var localEstoque: String?
@@ -486,8 +487,10 @@ class UserSaci : IUser {
     }
 
   var acertoEstoque
-    get() = acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || acertoMovAtacado || admin
+    get() = acertoPedido || acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada
+            || acertoMovAtacado || admin
     set(value) {
+      acertoPedido = value
       acertoEntrada = value
       acertoSaida = value
       acertoMovManualSaida = value

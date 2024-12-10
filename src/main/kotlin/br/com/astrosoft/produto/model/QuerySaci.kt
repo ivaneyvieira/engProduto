@@ -1665,9 +1665,21 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun localizacaoAlternativa() : List<LocalizacaoAlternativa>{
+  fun localizacaoAlternativa(): List<LocalizacaoAlternativa> {
     val sql = "/sqlSaci/localizacaoAlternativa.sql"
     return query(sql, LocalizacaoAlternativa::class)
+  }
+
+  fun findPedidosAcerto(): List<PedidoAcerto> {
+    val sql = "/sqlSaci/findPedidosAcerto.sql"
+    return query(sql, PedidoAcerto::class)
+  }
+
+  fun findProdutoAcerto(pedido: PedidoAcerto): List<ProdutoAcerto> {
+    val sql = "/sqlSaci/findPedidoProdutosAcerto.sql"
+    return query(sql, ProdutoAcerto::class) {
+      addOptionalParameter("pedido", pedido.pedido ?: 0)
+    }
   }
 
   companion object {

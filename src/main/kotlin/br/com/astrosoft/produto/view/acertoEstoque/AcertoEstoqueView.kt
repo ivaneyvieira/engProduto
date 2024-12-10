@@ -17,6 +17,7 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class AcertoEstoqueView : ViewLayout<AcertoEstoqueViewModel>(), IAcertoEstoqueView {
   override val viewModel = AcertoEstoqueViewModel(this)
+  override val tabAcertoPedido = TabAcertoPedido(viewModel.tabAcertoPedidoViewModel)
   override val tabAcertoEstoqueEntrada = TabAcertoEstoqueEntrada(viewModel.tabAcertoEstoqueEntradaViewModel)
   override val tabAcertoEstoqueSaida = TabAcertoEstoqueSaida(viewModel.tabAcertoEstoqueSaidaViewModel)
   override val tabAcertoMovManualSaida = TabAcertoMovManualSaida(viewModel.tabAcertoMovManualSaidaViewModel)
