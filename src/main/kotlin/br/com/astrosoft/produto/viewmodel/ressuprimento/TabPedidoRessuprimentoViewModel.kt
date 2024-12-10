@@ -3,11 +3,10 @@ package br.com.astrosoft.produto.viewmodel.ressuprimento
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.LocalizacaoAlternativa
-import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.CreditoCliente
+import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
 
 class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
@@ -19,9 +18,9 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     val filtro = subView.filtro()
     val user = AppConfig.userLogin() as? UserSaci
     val pedidos = PedidoRessuprimento.findPedidoRessuprimento(filtro).filter { pedido ->
-      if(user?.ressuprimentoExibePedidoPai == true) {
+      if (user?.ressuprimentoExibePedidoPai == true) {
         true
-      }else {
+      } else {
         pedido.pedido?.toString()?.length != 5
       }
     }
@@ -124,8 +123,18 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
       subView.updateProdutos()
     }
   }
-}
 
+  fun geraPlanilha(): ByteArray = viewModel.exec {
+    val pedidos = subView.predidoSelecionado().ifEmpty{
+      fail("Nenhum pedido selecionado")
+    }
+    val produtos = pedidos.flatMap{
+      it.produtos()
+    }
+    val planilha = PlanilhaProdutoRessuprimento()
+    planilha.write(produtos)
+  }
+}
 
 interface ITabPedidoRessuprimento : ITabView {
   fun filtro(): FiltroPedidoRessuprimento

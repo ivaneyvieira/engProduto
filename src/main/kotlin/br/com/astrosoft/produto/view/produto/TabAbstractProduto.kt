@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
 import com.github.mvysny.karibudsl.v10.*

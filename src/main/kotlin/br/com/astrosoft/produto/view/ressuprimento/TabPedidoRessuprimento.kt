@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -46,6 +47,10 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
       addClickListener {
         viewModel.removePedido()
       }
+    }
+
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoRessuprimento") {
+      viewModel.geraPlanilha()
     }
   }
 
