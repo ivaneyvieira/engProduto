@@ -479,6 +479,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("local", locais)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
+      addOptionalParameter("ressu", "S")
     }
   }
 
@@ -490,6 +491,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("local", listOf("TODOS"))
       addOptionalParameter("prdno", "")
       addOptionalParameter("grade", "")
+      addOptionalParameter("ressu", "S")
     }
   }
 
