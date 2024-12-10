@@ -6,8 +6,6 @@ DO @ORDNO := (SELECT MAX(no + 1) AS no
                 AND no >= :ordno
                 AND no < @ORDNO_FIM);
 
-
-
 INSERT INTO sqldados.ords (no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno, dataFaturamento,
                            invno, freightAmt, auxLong1, auxLong2, amtOrigem, dataEntrega, discountOrig, l1, l2, l3, l4,
                            m1, m2, m3, m4, deliv, storeno, carrno, empno, prazo, eord_storeno, delivOriginal, bits,

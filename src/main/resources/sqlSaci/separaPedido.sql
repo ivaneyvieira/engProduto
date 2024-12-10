@@ -150,7 +150,7 @@ SELECT @ORDNO_NOVO      AS no,
        dataEntrega,
        discountOrig,
        l1,
-       :ordno           AS l2 /*Salva o pedido mãe*/,
+       :ordno           AS l2,
        l3,
        l4,
        m1,
@@ -158,7 +158,7 @@ SELECT @ORDNO_NOVO      AS no,
        m3,
        m4,
        deliv,
-       1         AS storeno,
+       1                AS storeno,
        carrno,
        empno,
        prazo,
@@ -198,7 +198,7 @@ INSERT INTO oprd (storeno, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, 
                   qttyRcv, qttyCancel, qttyVendaMes, qttyVendaMesAnt, qttyVendaMedia, qttyPendente,
                   stkDisponivel, qttyAbc, seqno, status, bits, bits2, auxShort1, auxShort2,
                   auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada, obs, auxStr)
-SELECT 1            AS storeno,
+SELECT 1                   AS storeno,
        @ORDNO_NOVO         AS ordno,
        mult,
        ipi,
@@ -209,9 +209,7 @@ SELECT 1            AS storeno,
        auxMy1,
        auxMy2,
        icmsSubst,
-       ROUND(:qtty * 1000) AS auxLong3 /*Salva a quantidade
-                                                                    original para manter
-                                                                    intocada*/,
+       ROUND(:qtty * 1000) AS auxLong3,
        auxLong4,
        auxMy3,
        auxMy4,
@@ -304,4 +302,4 @@ WHERE storeno = 1
 INSERT IGNORE INTO sqldados.lastno(storeno, no, dupse, se, padbyte)
   VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
 
-select @ORDNO_NOVO as ordno
+SELECT @ORDNO_NOVO AS ordno

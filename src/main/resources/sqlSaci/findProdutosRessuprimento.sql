@@ -118,7 +118,8 @@ FROM (SELECT O1.*, 1 AS origem
       WHERE storeno = 1
         AND ordno = :ordno
         AND (prdno = :prdno OR :prdno = '')
-        AND (grade = :grade OR :grade = '')) AS D
+        AND (grade = :grade OR :grade = '')
+        AND (:ressu = 'S')) AS D
 GROUP BY storeno, ordno, prdno, grade, seqno;
 
 UPDATE sqldados.oprd AS O

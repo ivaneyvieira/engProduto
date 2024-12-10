@@ -7,7 +7,6 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 USE sqldados;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
 (
