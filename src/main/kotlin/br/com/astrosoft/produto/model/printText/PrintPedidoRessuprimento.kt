@@ -31,7 +31,8 @@ class PrintPedidoRessuprimento(val pedido: PedidoRessuprimento, propertyQuant: K
     column(ProdutoRessuprimento::descricao, "Descricao", 36)
     column(ProdutoRessuprimento::grade, "Grade", 8)
     column(ProdutoRessuprimento::localizacao, "Loc", 4)
-    column(propertyQuant, "_Quant", 6)
+    column(propertyQuant, "_Quant", 6, lineBreak = true)
+    column(ProdutoRessuprimento::vendnoRefRel, "", 45)
   }
 
   override fun printSumary(bean: ProdutoRessuprimento?) {

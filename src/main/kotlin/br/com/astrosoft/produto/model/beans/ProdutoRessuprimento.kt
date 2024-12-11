@@ -15,6 +15,7 @@ class ProdutoRessuprimento(
   var fornecedor: String?,
   var typeno: Int?,
   var typeName: String?,
+  var vendnoRef: String?,
   var clno: String?,
   var clname: String?,
   var altura: Int?,
@@ -72,6 +73,9 @@ class ProdutoRessuprimento(
       return "$mes/$ano"
     }
   }
+
+  val vendnoRefRel: String
+    get() = "       Ref Fab ${vendnoRef ?: ""}"
 
   var estoqueLoja: Boolean? = false
 
