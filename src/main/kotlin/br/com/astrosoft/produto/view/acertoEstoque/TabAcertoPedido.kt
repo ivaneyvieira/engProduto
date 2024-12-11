@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
@@ -18,10 +19,15 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
   private var dlgProduto: DlgProdutosAcerto? = null
 
   override fun HorizontalLayout.toolBarConfig() {
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoAcerto") {
+      viewModel.geraPlanilha()
+    }
   }
 
   override fun Grid<PedidoAcerto>.gridPanel() {
     this.addClassName("styling")
+    this.selectionMode = Grid.SelectionMode.MULTI
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosAcerto(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -39,6 +45,10 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
 
   override fun updatePedido(pedidos: List<PedidoAcerto>) {
     updateGrid(pedidos)
+  }
+
+  override fun pedidoSelecionado(): List<PedidoAcerto> {
+    return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {

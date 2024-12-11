@@ -87,7 +87,7 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
     this.updateGrid(pedido)
   }
 
-  override fun predidoSelecionado(): List<PedidoRessuprimento> {
+  override fun pedidoSelecionado(): List<PedidoRessuprimento> {
     return itensSelecionados()
   }
 

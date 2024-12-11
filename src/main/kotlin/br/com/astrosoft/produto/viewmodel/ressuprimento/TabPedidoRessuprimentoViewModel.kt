@@ -4,8 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.beans.CreditoCliente
-import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
 
@@ -51,7 +49,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun duplicaPedido() = viewModel.exec {
-    val pedidos = subView.predidoSelecionado()
+    val pedidos = subView.pedidoSelecionado()
     if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
     if (pedidos.size > 1) fail("Selecione apenas um pedido para duplicar")
     val pedido = pedidos.first()
@@ -70,7 +68,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun removePedido() = viewModel.exec {
-    val pedidos = subView.predidoSelecionado()
+    val pedidos = subView.pedidoSelecionado()
     if (pedidos.isEmpty()) fail("Nenhum pedido selecionado")
 
     subView.confirmaLogin("Confirma a remoção do pedido?", UserSaci::ressuprimentoRemove) {
@@ -125,7 +123,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun geraPlanilha(): ByteArray = viewModel.exec {
-    val pedidos = subView.predidoSelecionado().ifEmpty{
+    val pedidos = subView.pedidoSelecionado().ifEmpty{
       fail("Nenhum pedido selecionado")
     }
     val produtos = pedidos.flatMap{
@@ -139,7 +137,7 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
 interface ITabPedidoRessuprimento : ITabView {
   fun filtro(): FiltroPedidoRessuprimento
   fun updatePedidos(pedido: List<PedidoRessuprimento>)
-  fun predidoSelecionado(): List<PedidoRessuprimento>
+  fun pedidoSelecionado(): List<PedidoRessuprimento>
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun updateProdutos()
   fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
