@@ -1,10 +1,12 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoPedidoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
@@ -33,6 +35,8 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       }
 
       button("Remove") {
+        val user = AppConfig.userLogin() as? UserSaci
+        this.isVisible = user?.acertoRemoveProd == true
         this.icon = VaadinIcon.TRASH.create()
         onClick {
           viewModel.removeProduto()

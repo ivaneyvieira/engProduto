@@ -524,6 +524,10 @@ class UserSaci : IUser {
     }
 
     fun findUser(login: String?): List<UserSaci> {
+      login ?: return emptyList()
+      if (login.isBlank()) {
+        return emptyList()
+      }
       return saci.findUser(login)
     }
 
