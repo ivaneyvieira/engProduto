@@ -25,9 +25,9 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
 
   init {
     column(ProdutoAcerto::codigo, "Codigo", 6)
-    column(ProdutoAcerto::descricao, "Descricao", 36)
+    column(ProdutoAcerto::descricao, "Descricao", 34)
     column(ProdutoAcerto::grade, "Grade", 8)
-    column(ProdutoAcerto::localizacao, "Loc", 4)
+    column(ProdutoAcerto::estoque, "_Estoq", 6)
     column(propertyQuant, "_Quant", 6)
   }
 
