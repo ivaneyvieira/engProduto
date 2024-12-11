@@ -2,23 +2,32 @@ package br.com.astrosoft.produto.view.acertoEstoque
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoPedido
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
   TabPanelGrid<PedidoAcerto>(PedidoAcerto::class),
   ITabAcertoPedido {
+  private var dlgProduto: DlgProdutosAcerto? = null
 
   override fun HorizontalLayout.toolBarConfig() {
   }
 
   override fun Grid<PedidoAcerto>.gridPanel() {
     this.addClassName("styling")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
+      dlgProduto = DlgProdutosAcerto(viewModel, pedido)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     columnGrid(PedidoAcerto::data, header = "Data")
     columnGrid(PedidoAcerto::pedido, header = "Pedido")
     columnGrid(PedidoAcerto::vendno, header = "No Forn")
