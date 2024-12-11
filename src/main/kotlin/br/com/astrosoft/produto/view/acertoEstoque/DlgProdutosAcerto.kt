@@ -66,7 +66,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
 
       columnGrid(ProdutoAcerto::codigo, "Código")
       columnGrid(ProdutoAcerto::barcode, "Código de Barras")
-      columnGrid(ProdutoAcerto::descricao, "Descrição").expand()
+      columnGrid(ProdutoAcerto::descricao, "Descrição")
       columnGrid(ProdutoAcerto::grade, "Grade")
       columnGrid(ProdutoAcerto::localizacao, "Loc App")
       columnGrid(ProdutoAcerto::validade, "val")
