@@ -85,6 +85,7 @@ CREATE TEMPORARY TABLE T_ESTOQUE_GERAL
 )
 SELECT prdno, grade, SUM(estoque) AS estoque
 FROM T_ESTOQUE
+where (storeno = :lojaAcerto OR :lojaAcerto = 0)
 GROUP BY prdno, grade;
 
 SELECT P.loja                       AS loja,
