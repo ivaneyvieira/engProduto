@@ -13,4 +13,8 @@ class ProdutoAcerto {
   var validade: Int? = null
   var qtPedido: Int? = null
   var estoque: Int? = null
+
+  fun pesquisaStr(): String {
+    return "$prdno $codigo $descricao $barcode $grade $localizacao $vendno"
+  }
 }

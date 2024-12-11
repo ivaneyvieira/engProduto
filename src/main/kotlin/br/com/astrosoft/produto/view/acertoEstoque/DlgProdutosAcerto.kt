@@ -1,26 +1,33 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.produto.model.beans.AcertoEntradaProduto
-import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
-import br.com.astrosoft.produto.model.beans.AcertoSaidaProduto
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
-import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoPedidoViewModel
-import com.vaadin.flow.component.Html
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: PedidoAcerto) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoAcerto::class.java, false)
+  private var edtPesquisa: TextField? = null
+
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos do Pedido ${pedido.pedido}", toolBar = {
+      edtPesquisa = textField("Pesquisa") {
+        this.width = "300px"
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
+        addValueChangeListener {
+          update()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -56,7 +63,10 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   }
 
   fun update() {
-    val listProdutos = pedido.produtos()
+    val filter = edtPesquisa?.value ?: ""
+    val listProdutos = pedido.produtos().filter { produto ->
+      produto.pesquisaStr().contains(filter, ignoreCase = true) || filter == ""
+    }
     gridDetail.setItems(listProdutos)
   }
 }
