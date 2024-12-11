@@ -99,6 +99,10 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
     viewModel.updateView()
   }
 
+  override fun pedidoDialog(): PedidoAcerto? {
+    return dlgProduto?.pedido
+  }
+
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     val impressoraRessu = user?.impressoraAcerto ?: return emptyList()

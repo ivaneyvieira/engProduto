@@ -32,11 +32,18 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
         }
       }
 
-      button("Remove"){
+      button("Remove") {
         this.icon = VaadinIcon.TRASH.create()
         onClick {
           viewModel.removeProduto()
           update()
+        }
+      }
+
+      button("Imprimir") {
+        this.icon = VaadinIcon.PRINT.create()
+        onClick {
+          viewModel.previewPedido()
         }
       }
     }, onClose = {

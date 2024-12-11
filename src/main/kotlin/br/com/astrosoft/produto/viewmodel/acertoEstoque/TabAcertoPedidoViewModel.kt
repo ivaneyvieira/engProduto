@@ -33,6 +33,26 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
     planilha.write(produtos)
   }
 
+  fun previewPedido() {
+    val acerto = subView.pedidoDialog() ?: fail("Nenhum pedido selecionado")
+    val produtos = subView.produtosSelecionados().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    val relatorio = PrintPedidoAcerto(acerto, ProdutoAcerto::qtPedido)
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoAcerto::descricao,
+          ProdutoAcerto::codigo,
+          ProdutoAcerto::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1)
+    )
+  }
+
   fun previewPedido(acerto: PedidoAcerto) {
     val produtos = acerto.produtos()
 
@@ -70,4 +90,5 @@ interface ITabAcertoPedido : ITabView {
   fun produtosSelecionados(): List<ProdutoAcerto>
   fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
   fun updateProdutos()
+  fun pedidoDialog(): PedidoAcerto?
 }
