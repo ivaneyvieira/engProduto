@@ -20,6 +20,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
 SELECT O.storeno            AS loja,
+       MID(O.no, 1, 1) * 1  AS lojaPedido,
        L.sname              AS sigla,
        O.no                 AS pedido,
        CAST(O.date AS DATE) AS data,
@@ -43,6 +44,7 @@ WHERE (O.storeno = 1)
 
 SELECT loja,
        sigla,
+       lojaPedido,
        pedido,
        data,
        status,

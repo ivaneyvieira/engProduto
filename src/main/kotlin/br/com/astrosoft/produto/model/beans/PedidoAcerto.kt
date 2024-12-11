@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 class PedidoAcerto {
   var loja: Int? = null
+  var lojaPedido: Int? = null
   var sigla: String? = null
   var pedido: Int? = null
   var data: LocalDate? = null

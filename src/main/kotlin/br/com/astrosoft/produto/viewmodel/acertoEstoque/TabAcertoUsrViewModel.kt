@@ -23,6 +23,7 @@ class TabAcertoUsrViewModel(val viewModel: AcertoEstoqueViewModel) : TabUsrViewM
     this.acertoMovManualEntrada = usuario.acertoMovManualEntrada
     this.acertoMovManualSaida = usuario.acertoMovManualSaida
     this.acertoMovAtacado = usuario.acertoMovAtacado
+    this.lojaAcerto = usuario.lojaAcerto
   }
 }
 

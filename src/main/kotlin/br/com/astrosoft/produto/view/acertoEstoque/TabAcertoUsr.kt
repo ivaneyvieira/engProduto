@@ -45,6 +45,7 @@ class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), 
       }
     }
     verticalBlock("Filtros") {
+      filtroLoja(binder, UserSaci::lojaAcerto)
       filtroImpressoraTermica(binder, UserSaci::impressoraAcerto)
     }
   }

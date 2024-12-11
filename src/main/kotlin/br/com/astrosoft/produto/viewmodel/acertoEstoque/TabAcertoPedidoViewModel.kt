@@ -1,9 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.acertoEstoque
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoAcerto
 import br.com.astrosoft.produto.model.printText.PrintPedidoAcerto
 
@@ -12,7 +14,10 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
     get() = viewModel.view.tabAcertoPedido
 
   fun updateView() = viewModel.exec {
-    val pedido = PedidoAcerto.findPedidoAcerto()
+    val user = AppConfig.userLogin() as? UserSaci
+    val pedido = PedidoAcerto.findPedidoAcerto().filter {
+      (it.lojaPedido == user?.lojaAcerto) || (user?.lojaAcerto == 0)
+    }
     subView.updatePedido(pedido)
   }
 
