@@ -10,13 +10,11 @@ import kotlin.reflect.KProperty1
 class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<ProdutoAcerto, Int?>) :
   PrintText<ProdutoAcerto>() {
   override fun printTitle(bean: ProdutoAcerto) {
-    val list = pedido.produtos()
-    val quant = list.size
-    val valorPedido = pedido.totalPedido ?: 0.00
-    writeln("Romaneio de Separacao do Acerto da ${pedido.rotaAcerto}", negrito = true, center = true)
+    val titulo = pedido.observacao?.trim()?.substringAfter(" ")?.trim() ?: ""
+    writeln(titulo, negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${pedido.data.format()}   Pedido   : ${pedido.pedido}   Valor R$ : ${valorPedido.format()}",
+      "Data: ${pedido.data.format()}   Pedido: ${pedido.loja}.${pedido.pedido}",
       negrito = true
     )
     val user = AppConfig.userLogin()
