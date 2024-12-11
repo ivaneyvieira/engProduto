@@ -20,7 +20,7 @@ SELECT O.storeno                             AS loja,
 FROM sqldados.oprd AS O
        INNER JOIN sqldados.prd AS P
                   ON P.no = O.prdno
-WHERE storeno = 1
+WHERE storeno = :loja
   AND ordno = :pedido
 GROUP BY prdno, grade;
 

@@ -42,6 +42,7 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
       }
     }
     columnGrid(PedidoAcerto::data, header = "Data")
+    columnGrid(PedidoAcerto::loja, header = "Loja")
     columnGrid(PedidoAcerto::pedido, header = "Pedido")
     columnGrid(PedidoAcerto::vendno, header = "No Forn")
     columnGrid(PedidoAcerto::fornecedor, header = "Fornecedor")

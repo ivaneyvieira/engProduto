@@ -1681,6 +1681,7 @@ class QuerySaci : QueryDB(database) {
     var user = AppConfig.userLogin() as? UserSaci
 
     return query(sql, ProdutoAcerto::class) {
+      addOptionalParameter("loja", pedido.loja ?: 0)
       addOptionalParameter("pedido", pedido.pedido ?: 0)
       addOptionalParameter("lojaAcerto", user?.lojaAcerto ?: 0)
     }
