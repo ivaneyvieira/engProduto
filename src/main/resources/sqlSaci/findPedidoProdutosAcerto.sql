@@ -7,6 +7,7 @@ CREATE TEMPORARY TABLE T_PEDIDO
 )
 SELECT O.storeno                             AS loja,
        O.ordno                               AS pedido,
+       MID(O.ordno, 1, 1) * 1                AS lojaPedido,
        O.prdno                               AS prdno,
        TRIM(O.prdno)                         AS codigo,
        TRIM(MID(P.name, 1, 37))              AS descicao,
@@ -68,15 +69,15 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_ESTOQUE;
 CREATE TEMPORARY TABLE T_ESTOQUE
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.prdno, S.grade, SUM(S.qtty_atacado + S.qtty_varejo) / 100 AS estoque
+SELECT S.storeno, S.prdno, S.grade, SUM(S.qtty_atacado + S.qtty_varejo) / 100 AS estoque
 FROM sqldados.stk AS S
        INNER JOIN T_PEDIDO AS P
                   ON P.prdno = S.prdno
                     AND P.grade = S.grade
 WHERE S.storeno IN (2, 3, 4, 5, 8)
-GROUP BY prdno, grade;
+GROUP BY storeno, prdno, grade;
 
 SELECT P.loja                       AS loja,
        P.pedido                     AS pedido,
@@ -101,3 +102,4 @@ FROM T_PEDIDO AS P
        LEFT JOIN T_ESTOQUE AS E
                  ON P.prdno = E.prdno
                    AND P.grade = E.grade
+                   AND E.storeno = P.lojaPedido
