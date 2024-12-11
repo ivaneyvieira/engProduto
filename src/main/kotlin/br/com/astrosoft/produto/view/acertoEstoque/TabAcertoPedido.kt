@@ -51,6 +51,7 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
     columnGrid(PedidoAcerto::observacao, header = "Observação")
   }
 
+
   override fun updatePedido(pedidos: List<PedidoAcerto>) {
     updateGrid(pedidos)
   }
