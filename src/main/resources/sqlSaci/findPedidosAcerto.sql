@@ -48,7 +48,7 @@ SELECT O.storeno            AS loja,
 FROM sqldados.ords AS O
        INNER JOIN sqldados.store AS L
                   ON O.storeno = L.no
-       INNER JOIN T_OPRD AS OP
+       LEFT JOIN T_OPRD AS OP
                   ON O.storeno = OP.storeno
                     AND O.no = OP.ordno
        INNER JOIN sqldados.vend AS V
