@@ -84,7 +84,13 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   fun update() {
     val filter = edtPesquisa?.value ?: ""
     val listProdutos = pedido.produtos().filter { produto ->
-      produto.pesquisaStr().contains(filter, ignoreCase = true) || filter == ""
+      if (filter.isBlank()) return@filter true
+
+      if (filter in listOf("2", "3", "4", "5", "8")) {
+        produto.qtPedido?.toString()?.contains(filter) == true
+      } else {
+        produto.pesquisaStr().contains(filter, ignoreCase = true)
+      }
     }
     gridDetail.setItems(listProdutos)
   }
