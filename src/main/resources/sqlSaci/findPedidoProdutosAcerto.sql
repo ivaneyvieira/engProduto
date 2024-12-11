@@ -71,7 +71,7 @@ CREATE TEMPORARY TABLE T_ESTOQUE
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.storeno, S.prdno, S.grade, SUM(S.qtty_atacado + S.qtty_varejo) / 100 AS estoque
+SELECT S.storeno, S.prdno, S.grade, SUM(S.qtty_atacado + S.qtty_varejo) / 1000 AS estoque
 FROM sqldados.stk AS S
        INNER JOIN T_PEDIDO AS P
                   ON P.prdno = S.prdno
