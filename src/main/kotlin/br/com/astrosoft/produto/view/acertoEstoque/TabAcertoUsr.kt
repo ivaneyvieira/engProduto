@@ -44,5 +44,8 @@ class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), 
         }
       }
     }
+    verticalBlock("Filtros") {
+      filtroImpressoraTermica(binder, UserSaci::impressoraAcerto)
+    }
   }
 }

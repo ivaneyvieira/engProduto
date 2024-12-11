@@ -28,6 +28,10 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
 
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosAcerto(viewModel, pedido)
       dlgProduto?.showDialog {
@@ -61,5 +65,11 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    val impressoraRessu = user?.impressoraAcerto ?: return emptyList()
+    return if (impressoraRessu.contains("TODOS")) emptyList() else impressoraRessu.toList()
   }
 }
