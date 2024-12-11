@@ -14,23 +14,24 @@ SELECT storeno,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
 FROM sqldados.oprd AS P
 WHERE storeno = 1
-  AND ordno IN (22, 33, 44, 55, 88)
+  AND ordno IN (2, 22, 33, 44, 55, 88)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
-SELECT O.storeno            AS loja,
-       MID(O.no, 1, 1) * 1  AS lojaPedido,
-       L.sname              AS sigla,
-       O.no                 AS pedido,
-       CAST(O.date AS DATE) AS data,
-       O.status             AS status,
-       O.vendno             AS vendno,
-       V.name               AS fornecedor,
-       OP.totalPedido       AS totalPedido,
-       O.freightAmt / 100   AS frete,
-       O.remarks            AS observacao,
-       OP.totalPendente     AS totalPendente
+SELECT O.storeno                  AS loja,
+       IF(LENGTH(O.no) = 2,
+          MID(O.no, 1, 1) * 1, 0) AS lojaPedido,
+       L.sname                    AS sigla,
+       O.no                       AS pedido,
+       CAST(O.date AS DATE)       AS data,
+       O.status                   AS status,
+       O.vendno                   AS vendno,
+       V.name                     AS fornecedor,
+       OP.totalPedido             AS totalPedido,
+       O.freightAmt / 100         AS frete,
+       O.remarks                  AS observacao,
+       OP.totalPendente           AS totalPendente
 FROM sqldados.ords AS O
        INNER JOIN sqldados.store AS L
                   ON O.storeno = L.no
@@ -40,7 +41,7 @@ FROM sqldados.ords AS O
        INNER JOIN sqldados.vend AS V
                   ON O.vendno = V.no
 WHERE (O.storeno = 1)
-  AND (O.no IN (22, 33, 44, 55, 88));
+  AND (O.no IN (2, 22, 33, 44, 55, 88));
 
 SELECT loja,
        sigla,

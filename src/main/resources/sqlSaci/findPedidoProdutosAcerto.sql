@@ -7,7 +7,8 @@ CREATE TEMPORARY TABLE T_PEDIDO
 )
 SELECT O.storeno                             AS loja,
        O.ordno                               AS pedido,
-       MID(O.ordno, 1, 1) * 1                AS lojaPedido,
+       IF(LENGTH(O.ordno) = 2,
+          MID(O.ordno, 1, 1) * 1, 0)         AS lojaPedido,
        O.prdno                               AS prdno,
        TRIM(O.prdno)                         AS codigo,
        TRIM(MID(P.name, 1, 37))              AS descicao,
@@ -51,8 +52,6 @@ FROM sqldados.prdAdicional AS L
 WHERE localizacao REGEXP 'CD[0-9][A-Z]'
 GROUP BY prdno;
 
-
-
 DROP TEMPORARY TABLE IF EXISTS T_GRADE;
 CREATE TEMPORARY TABLE T_GRADE
 (
@@ -79,6 +78,15 @@ FROM sqldados.stk AS S
 WHERE S.storeno IN (2, 3, 4, 5, 8)
 GROUP BY storeno, prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_ESTOQUE_GERAL;
+CREATE TEMPORARY TABLE T_ESTOQUE_GERAL
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, SUM(estoque) AS estoque
+FROM T_ESTOQUE
+GROUP BY prdno, grade;
+
 SELECT P.loja                       AS loja,
        P.pedido                     AS pedido,
        P.prdno                      AS prdno,
@@ -90,7 +98,8 @@ SELECT P.loja                       AS loja,
        IFNULL(LA.loc, L.loc)        AS localizacao,
        P.validade                   AS validade,
        P.quant                      AS qtPedido,
-       ROUND(E.estoque, 2)          AS estoque
+       ROUND(IF(P.lojaPedido = 0, EG.estoque,
+                E.estoque))         AS estoque
 FROM T_PEDIDO AS P
        LEFT JOIN T_LOC AS L
                  ON P.prdno = L.prdno
@@ -103,3 +112,6 @@ FROM T_PEDIDO AS P
                  ON P.prdno = E.prdno
                    AND P.grade = E.grade
                    AND E.storeno = P.lojaPedido
+       LEFT JOIN T_ESTOQUE_GERAL AS EG
+                 ON P.prdno = EG.prdno
+                   AND P.grade = EG.grade

@@ -15,8 +15,9 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
 
   fun updateView() = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
-    val pedido = PedidoAcerto.findPedidoAcerto().filter {
-      (it.lojaPedido == user?.lojaAcerto) || (user?.lojaAcerto == 0)
+    val pedidosAcerto = PedidoAcerto.findPedidoAcerto()
+    val pedido = pedidosAcerto.filter {
+      (it.lojaPedido == user?.lojaAcerto) || (user?.lojaAcerto == 0) || (it.lojaPedido == 0)
     }
     subView.updatePedido(pedido)
   }
