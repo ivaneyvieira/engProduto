@@ -6,9 +6,12 @@ import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoPedidoViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -28,6 +31,14 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
           update()
         }
       }
+
+      button("Remove"){
+        this.icon = VaadinIcon.TRASH.create()
+        onClick {
+          viewModel.removeProduto()
+          update()
+        }
+      }
     }, onClose = {
       onClose()
     }) {
@@ -43,7 +54,8 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COLUMN_BORDERS)
-      isMultiSort = false
+      isMultiSort = true
+      this.selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(ProdutoAcerto::codigo, "Código")
       columnGrid(ProdutoAcerto::barcode, "Código de Barras")

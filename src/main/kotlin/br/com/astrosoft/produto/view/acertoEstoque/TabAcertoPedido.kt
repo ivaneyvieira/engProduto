@@ -3,10 +3,13 @@ package br.com.astrosoft.produto.view.acertoEstoque
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
+import br.com.astrosoft.produto.model.beans.ProdutoAcerto
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.ressuprimento.FormLogin
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoPedido
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoPedidoViewModel
 import com.vaadin.flow.component.grid.Grid
@@ -53,6 +56,35 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
 
   override fun pedidoSelecionado(): List<PedidoAcerto> {
     return itensSelecionados()
+  }
+
+  override fun produtosSelecionados(): List<ProdutoAcerto> {
+    return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun confirmaLogin(
+    msg: String,
+    permissao: UserSaci.() -> Boolean,
+    onLogin: () -> Unit
+  ) {
+    val formLogin = FormLogin(msg)
+
+    DialogHelper.showForm("Confirmação", formLogin) {
+      val user = UserSaci.findUser(formLogin.login)
+      if (user.any { it.senha == formLogin.senha }) {
+        if (user.any { it.permissao() }) {
+          onLogin()
+        } else {
+          DialogHelper.showError("Usuário não tem permissão para esta operação")
+        }
+      } else {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      }
+    }
+  }
+
+  override fun updateProdutos() {
+    dlgProduto?.update()
   }
 
   override fun isAuthorized(): Boolean {

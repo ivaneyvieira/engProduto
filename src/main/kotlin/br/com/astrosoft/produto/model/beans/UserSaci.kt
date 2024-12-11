@@ -116,6 +116,7 @@ class UserSaci : IUser {
   var ressuprimentoEditaQuant by DelegateAuthorized2(87)
   var ressuprimentoExibePedidoPai by DelegateAuthorized2(88)
   var acertoPedido by DelegateAuthorized2(89)
+  var acertoRemoveProd by DelegateAuthorized2(90)
 
   //Locais
   private var localEstoque: String?

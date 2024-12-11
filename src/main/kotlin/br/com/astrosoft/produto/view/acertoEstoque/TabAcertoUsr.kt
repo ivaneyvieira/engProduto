@@ -47,6 +47,10 @@ class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), 
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaAcerto)
       filtroImpressoraTermica(binder, UserSaci::impressoraAcerto)
+
+      checkBox("Remove Produto") {
+        binder.bind(this, UserSaci::acertoRemoveProd.name)
+      }
     }
   }
 }

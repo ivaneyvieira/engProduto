@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class ProdutoAcerto {
   var loja: Int? = null
   var pedido: Int? = null
@@ -16,5 +18,9 @@ class ProdutoAcerto {
 
   fun pesquisaStr(): String {
     return "$prdno $codigo $descricao $barcode $grade $localizacao $vendno"
+  }
+
+  fun removerProduto() {
+    saci.removeProdutoAcerto(this)
   }
 }

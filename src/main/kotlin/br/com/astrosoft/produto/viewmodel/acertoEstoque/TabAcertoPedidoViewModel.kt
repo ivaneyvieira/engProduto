@@ -49,9 +49,25 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
       printer = subView.printerPreview(loja = 1)
     )
   }
+
+  fun removeProduto() = viewModel.exec {
+    val produtos = subView.produtosSelecionados().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+    subView.confirmaLogin("Confirma a remoção do produto?", UserSaci::acertoRemoveProd) {
+      produtos.forEach { produto ->
+        produto.removerProduto()
+      }
+      subView.updateProdutos()
+      updateView()
+    }
+  }
 }
 
 interface ITabAcertoPedido : ITabView {
   fun updatePedido(pedidos: List<PedidoAcerto>)
   fun pedidoSelecionado(): List<PedidoAcerto>
+  fun produtosSelecionados(): List<ProdutoAcerto>
+  fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
+  fun updateProdutos()
 }
