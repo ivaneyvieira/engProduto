@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.ressuprimento
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimentoSep
 
 class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -89,6 +90,23 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val selecionados = subView.ressuprimentosSelecionados()
     if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
+  }
+
+  fun previewPedido(ressuprimento: Ressuprimento) {
+    val produtos = ressuprimento.produtos()
+
+    val relatorio = PrintPedidoRessuprimentoSep(ressuprimento, ProdutoRessuprimento::qtPedido)
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoRessuprimento::descricao,
+          ProdutoRessuprimento::codigo,
+          ProdutoRessuprimento::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1)
+    )
   }
 
   val subView

@@ -101,7 +101,8 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
   override fun Grid<Ressuprimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    this.withEditor(classBean = Ressuprimento::class,
+    this.withEditor(
+      classBean = Ressuprimento::class,
       openEditor = {
         this.focusEditor(Ressuprimento::observacao)
       },
@@ -109,6 +110,9 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.saveObservacao(it.bean)
       }
     )
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosRessuCD(viewModel, listOf(pedido))
       dlgProduto?.showDialog {
@@ -184,5 +188,11 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    val impressoraRessu = user?.impressoraRessu ?: return emptyList()
+    return if (impressoraRessu.contains("TODOS")) emptyList() else impressoraRessu.toList()
   }
 }
