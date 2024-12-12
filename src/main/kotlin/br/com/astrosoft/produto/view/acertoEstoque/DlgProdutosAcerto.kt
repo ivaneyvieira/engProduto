@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.view.acertoEstoque
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -67,6 +66,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COLUMN_BORDERS)
       isMultiSort = true
       this.selectionMode = Grid.SelectionMode.MULTI
+      this.addClassName("styling")
 
       columnGrid(ProdutoAcerto::codigo, "Código")
       columnGrid(ProdutoAcerto::barcode, "Código de Barras")
@@ -76,6 +76,16 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       columnGrid(ProdutoAcerto::validade, "val")
       columnGrid(ProdutoAcerto::qtPedido, "Quant")
       columnGrid(ProdutoAcerto::estoque, "Estoque")
+
+      this.setPartNameGenerator { produto ->
+        val qtMov = produto.qtMov ?: 0
+        if (qtMov > 0) {
+          "amarelo"
+        } else {
+          null
+        }
+
+      }
     }
     this.addAndExpand(gridDetail)
     update()

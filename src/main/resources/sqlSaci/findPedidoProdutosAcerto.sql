@@ -85,7 +85,22 @@ CREATE TEMPORARY TABLE T_ESTOQUE_GERAL
 )
 SELECT prdno, grade, SUM(estoque) AS estoque
 FROM T_ESTOQUE
-where (storeno = :lojaAcerto OR :lojaAcerto = 0)
+WHERE (storeno = :lojaAcerto OR :lojaAcerto = 0)
+GROUP BY prdno, grade;
+
+
+DROP TEMPORARY TABLE IF EXISTS T_MOV;
+CREATE TEMPORARY TABLE T_MOV
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT M.prdno, M.grade, SUM(qtty) AS mov, COUNT(*) AS quant
+FROM sqldados.stkmov AS M
+       INNER JOIN T_PEDIDO AS P
+                  ON P.prdno = M.prdno
+                    AND P.grade = M.grade
+WHERE storeno IN (2, 3, 4, 5, 8)
+  AND date >= 20241210
 GROUP BY prdno, grade;
 
 SELECT P.loja                       AS loja,
@@ -100,7 +115,9 @@ SELECT P.loja                       AS loja,
        P.validade                   AS validade,
        P.quant                      AS qtPedido,
        ROUND(IF(P.lojaPedido = 0, EG.estoque,
-                E.estoque))         AS estoque
+                E.estoque))         AS estoque,
+       IFNULL(MV.quant, 0)          AS qtMov,
+       IFNULL(MV.mov, 0) / 1000     AS mov
 FROM T_PEDIDO AS P
        LEFT JOIN T_LOC AS L
                  ON P.prdno = L.prdno
@@ -116,3 +133,6 @@ FROM T_PEDIDO AS P
        LEFT JOIN T_ESTOQUE_GERAL AS EG
                  ON P.prdno = EG.prdno
                    AND P.grade = EG.grade
+       LEFT JOIN T_MOV AS MV
+                 ON P.prdno = MV.prdno
+                   AND P.grade = MV.grade
