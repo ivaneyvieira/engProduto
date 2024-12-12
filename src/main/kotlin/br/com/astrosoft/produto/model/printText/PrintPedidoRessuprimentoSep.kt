@@ -27,9 +27,10 @@ class PrintPedidoRessuprimentoSep(val pedido: Ressuprimento, propertyQuant: KPro
 
   init {
     column(ProdutoRessuprimento::codigo, "Codigo", 6)
-    column(ProdutoRessuprimento::descricao, "Descricao", 36)
+    column(ProdutoRessuprimento::descricao, "Descricao", 30)
     column(ProdutoRessuprimento::grade, "Grade", 8)
     column(ProdutoRessuprimento::localizacao, "Loc", 4)
+    column(ProdutoRessuprimento::estoque, "Estoq", 5)
     column(propertyQuant, "_Quant", 6)
   }
 
