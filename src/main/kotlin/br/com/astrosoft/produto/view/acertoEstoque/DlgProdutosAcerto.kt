@@ -23,7 +23,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   private var edtPesquisa: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos do Pedido ${pedido.pedido}", toolBar = {
+    form = SubWindowForm("Produtos do Pedido ${pedido.loja}.${pedido.pedido}", toolBar = {
       edtPesquisa = textField("Pesquisa") {
         this.width = "300px"
         this.valueChangeMode = ValueChangeMode.LAZY
@@ -79,7 +79,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
 
       this.setPartNameGenerator { produto ->
         val qtMov = produto.qtMov ?: 0
-        if (qtMov > 0) {
+        if (qtMov > 0 && produto.pedido in listOf(22, 33, 44, 55, 88)) {
           "amarelo"
         } else {
           null
