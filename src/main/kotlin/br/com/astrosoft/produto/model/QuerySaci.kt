@@ -483,7 +483,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoRessuprimento(pedido: PedidoRessuprimento): List<ProdutoRessuprimento> {
+  fun findProdutoRessuprimento(pedido: PedidoRessuprimento, ressu: Boolean = true): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.pedido ?: 0)
@@ -491,7 +491,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("local", listOf("TODOS"))
       addOptionalParameter("prdno", "")
       addOptionalParameter("grade", "")
-      addOptionalParameter("ressu", "S")
+      addOptionalParameter("ressu", ressu.let { if (it) "S" else "N" })
     }
   }
 
