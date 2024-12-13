@@ -92,9 +92,9 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_MOV;
 CREATE TEMPORARY TABLE T_MOV
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT M.prdno, M.grade, SUM(qtty) AS mov, COUNT(*) AS quant
+SELECT M.storeno, M.prdno, M.grade, SUM(qtty) AS mov, COUNT(*) AS quant
 FROM sqldados.stkmov AS M
        INNER JOIN T_PEDIDO AS P
                   ON P.prdno = M.prdno
@@ -134,5 +134,6 @@ FROM T_PEDIDO AS P
                  ON P.prdno = EG.prdno
                    AND P.grade = EG.grade
        LEFT JOIN T_MOV AS MV
-                 ON P.prdno = MV.prdno
+                 ON P.lojaPedido = MV.storeno
+                  AND P.prdno = MV.prdno
                    AND P.grade = MV.grade
