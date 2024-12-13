@@ -21,6 +21,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoAcerto::class.java, false)
   private var edtPesquisa: TextField? = null
+  private val user = AppConfig.userLogin() as? UserSaci
 
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos do Pedido ${pedido.loja}.${pedido.pedido}", toolBar = {
@@ -97,7 +98,8 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
 
   fun update() {
     val filter = edtPesquisa?.value ?: ""
-    val listProdutos = pedido.produtos().filter { produto ->
+    val lojaAcerto = user?.lojaAcerto ?: 0
+    val listProdutos = pedido.produtos(lojaAcerto).filter { produto ->
       if (filter.isBlank()) return@filter true
 
       if (filter in listOf("2", "3", "4", "5", "8")) {

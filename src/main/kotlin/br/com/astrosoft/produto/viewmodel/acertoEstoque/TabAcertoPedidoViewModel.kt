@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoAcerto
 import br.com.astrosoft.produto.model.printText.PrintPedidoAcerto
 
 class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
+  private val user = AppConfig.userLogin() as? UserSaci
+
   val subView
     get() = viewModel.view.tabAcertoPedido
 
@@ -26,8 +28,9 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
     val pedidos = subView.pedidoSelecionado().ifEmpty {
       fail("Nenhum pedido selecionado")
     }
+    val lojaAcerto = user?.lojaAcerto ?: 0
     val produtos = pedidos.flatMap {
-      it.produtos()
+      it.produtos(lojaAcerto)
     }
     val planilha = PlanilhaProdutoAcerto()
     planilha.write(produtos)
@@ -54,7 +57,9 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
   }
 
   fun previewPedido(acerto: PedidoAcerto) {
-    val produtos = acerto.produtos()
+    val user = AppConfig.userLogin() as? UserSaci
+    val lojaAcerto = user?.lojaAcerto ?: 0
+    val produtos = acerto.produtos(lojaAcerto)
 
     val relatorio = PrintPedidoAcerto(acerto, ProdutoAcerto::qtPedido)
 

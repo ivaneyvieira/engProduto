@@ -23,8 +23,8 @@ class PedidoAcerto {
       return "${loja}4"
     }
 
-  fun produtos(): List<ProdutoAcerto> {
-    return saci.findProdutoAcerto(pedido = this).map { prd ->
+  fun produtos(lojaAcerto: Int): List<ProdutoAcerto> {
+    return saci.findProdutoAcerto(pedido = this, lojaAcerto).map { prd ->
       if (prd.localizacao.isNullOrBlank()) {
         prd.localizacao = LocalizacaoAlternativa.locsForn(prd.vendno ?: 0)
       }

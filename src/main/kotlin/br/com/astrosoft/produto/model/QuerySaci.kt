@@ -1675,15 +1675,13 @@ class QuerySaci : QueryDB(database) {
     return query(sql, PedidoAcerto::class)
   }
 
-  fun findProdutoAcerto(pedido: PedidoAcerto): List<ProdutoAcerto> {
+  fun findProdutoAcerto(pedido: PedidoAcerto, lojaAcerto: Int): List<ProdutoAcerto> {
     val sql = "/sqlSaci/findPedidoProdutosAcerto.sql"
-
-    var user = AppConfig.userLogin() as? UserSaci
 
     return query(sql, ProdutoAcerto::class) {
       addOptionalParameter("loja", pedido.loja ?: 0)
       addOptionalParameter("pedido", pedido.pedido ?: 0)
-      addOptionalParameter("lojaAcerto", user?.lojaAcerto ?: 0)
+      addOptionalParameter("lojaAcerto", lojaAcerto)
     }
   }
 
