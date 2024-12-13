@@ -80,7 +80,7 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
       fail("Nenhum produto selecionado")
     }
     subView.confirmaLogin("Confirma a remoção do produto?", UserSaci::acertoRemoveProd) {
-      produtos.forEach { produto ->
+      produtos.filter{ it.prdno?.trim() != "139500" }.forEach { produto ->
         produto.removerProduto()
       }
       subView.updateProdutos()
