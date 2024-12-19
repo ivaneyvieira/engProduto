@@ -36,6 +36,7 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
           }
         }
 
+
         button("Remove") {
           val user = AppConfig.userLogin() as? UserSaci
           this.isVisible = user?.acertoRemoveProd == true
