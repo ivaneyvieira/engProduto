@@ -24,35 +24,37 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   private val user = AppConfig.userLogin() as? UserSaci
 
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos do Pedido ${pedido.loja}.${pedido.pedido}", toolBar = {
-      edtPesquisa = textField("Pesquisa") {
-        this.width = "300px"
-        this.valueChangeMode = ValueChangeMode.LAZY
-        this.valueChangeTimeout = 1500
-        addValueChangeListener {
-          update()
+    form = SubWindowForm(
+      "Produtos do Pedido ${pedido.loja}.${pedido.pedido}|${pedido.observacao}",
+      toolBar = {
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            update()
+          }
         }
-      }
 
-      button("Remove") {
-        val user = AppConfig.userLogin() as? UserSaci
-        this.isVisible = user?.acertoRemoveProd == true
-        this.icon = VaadinIcon.TRASH.create()
-        onClick {
-          viewModel.removeProduto()
-          update()
+        button("Remove") {
+          val user = AppConfig.userLogin() as? UserSaci
+          this.isVisible = user?.acertoRemoveProd == true
+          this.icon = VaadinIcon.TRASH.create()
+          onClick {
+            viewModel.removeProduto()
+            update()
+          }
         }
-      }
 
-      button("Imprimir") {
-        this.icon = VaadinIcon.PRINT.create()
-        onClick {
-          viewModel.previewPedido()
+        button("Imprimir") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.previewPedido()
+          }
         }
-      }
-    }, onClose = {
-      onClose()
-    }) {
+      }, onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
