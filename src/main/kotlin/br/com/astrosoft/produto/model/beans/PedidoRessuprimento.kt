@@ -32,7 +32,7 @@ class PedidoRessuprimento {
   }
 
   fun produtos(): List<ProdutoRessuprimento> {
-    return saci.findProdutoRessuprimento(pedido = this, false).map { prd ->
+    return saci.findProdutoRessuprimento(pedido = this, ressu = false).map { prd ->
       if (prd.localizacao.isNullOrBlank()) {
         prd.localizacao = LocalizacaoAlternativa.locsForn(prd.vendno ?: 0)
       }
