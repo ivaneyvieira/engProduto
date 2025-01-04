@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.expedicao.NotaView
 import br.com.astrosoft.produto.view.nfd.NfdView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
+import br.com.astrosoft.produto.view.precificacao.PrecificacaoView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.recebimento.RecebimentoView
 import br.com.astrosoft.produto.view.reposicao.ReposicaoView
@@ -74,6 +75,11 @@ class ProdutoLayout : AppLayoutAbstract() {
         icon = CUBES,
         label = "Produto",
         routeClass = ProdutoView::class,
+      )
+      if (userSaci?.precificacao == true) route(
+        icon = MONEY,
+        label = "Precificação",
+        routeClass = PrecificacaoView::class,
       )
       if (userSaci?.acertoEstoque == true) route(
         icon = PACKAGE,

@@ -117,6 +117,10 @@ class UserSaci : IUser {
   var ressuprimentoExibePedidoPai by DelegateAuthorized2(88)
   var acertoPedido by DelegateAuthorized2(89)
   var acertoRemoveProd by DelegateAuthorized2(90)
+  var precificacaoPrecificacao by DelegateAuthorized2(91)
+  var precificacaoEntrada: Boolean by DelegateAuthorized2(92)
+  var precificacaoSaida: Boolean by DelegateAuthorized2(93)
+  var precificacaoEntradaMa: Boolean by DelegateAuthorized2(94)
 
   //Locais
   private var localEstoque: String?
@@ -459,6 +463,16 @@ class UserSaci : IUser {
       pedidoTransfEnt = value
       pedidoTransfAutorizada = value
       pedidoTransfCD5A = value
+    }
+
+  var precificacao
+    get() = precificacaoPrecificacao || precificacaoEntrada || precificacaoEntradaMa ||
+            precificacaoSaida || admin
+    set(value) {
+      precificacaoPrecificacao = value
+      precificacaoEntrada = value
+      precificacaoEntradaMa = value
+      precificacaoSaida = value
     }
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin

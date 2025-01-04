@@ -193,7 +193,7 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Double): Query {
+  fun Query.addOptionalParameter(name: String, value: Double?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }

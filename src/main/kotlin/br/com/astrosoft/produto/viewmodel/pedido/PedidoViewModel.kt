@@ -14,4 +14,3 @@ interface IPedidoView : IView {
   val tabPedidoCD: ITabPedidoCD
   val tabPedidoEnt: ITabPedidoEnt
 }
-
