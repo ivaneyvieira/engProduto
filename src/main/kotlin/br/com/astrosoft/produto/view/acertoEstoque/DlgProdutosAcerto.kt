@@ -78,7 +78,6 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       columnGrid(ProdutoAcerto::grade, "Grade")
       columnGrid(ProdutoAcerto::localizacao, "Loc App")
       columnGrid(ProdutoAcerto::validade, "val")
-      //columnGrid(ProdutoAcerto::qtPedido, "Quant")
 
       val user = AppConfig.userLogin() as? UserSaci
       val lojaAcerto = user?.lojaAcerto ?: 0
