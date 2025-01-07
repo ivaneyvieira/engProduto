@@ -78,7 +78,27 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       columnGrid(ProdutoAcerto::grade, "Grade")
       columnGrid(ProdutoAcerto::localizacao, "Loc App")
       columnGrid(ProdutoAcerto::validade, "val")
-      columnGrid(ProdutoAcerto::qtPedido, "Quant")
+      //columnGrid(ProdutoAcerto::qtPedido, "Quant")
+
+      val user = AppConfig.userLogin() as? UserSaci
+      val lojaAcerto = user?.lojaAcerto ?: 0
+
+      if (lojaAcerto in listOf(0, 2)) {
+        columnGrid(ProdutoAcerto::qtDS, "DS")
+      }
+
+      if (lojaAcerto in listOf(0, 3)) {
+        columnGrid(ProdutoAcerto::qtMR, "MR")
+      }
+
+      if (lojaAcerto in listOf(0, 5)) {
+        columnGrid(ProdutoAcerto::qtPK, "PK")
+      }
+
+      if (lojaAcerto in listOf(0, 8)) {
+        columnGrid(ProdutoAcerto::qtTM, "TM")
+      }
+
       columnGrid(ProdutoAcerto::estoque, "Estoque")
 
       this.setPartNameGenerator { produto ->
