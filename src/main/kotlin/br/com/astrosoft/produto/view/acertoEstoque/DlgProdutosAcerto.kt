@@ -98,7 +98,13 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
         columnGrid(ProdutoAcerto::qtTM, "TM")
       }
 
-      columnGrid(ProdutoAcerto::estoque, "Estoque")
+      if (lojaAcerto in listOf(0)) {
+        columnGrid(ProdutoAcerto::estoqueMF, "MF")
+      }
+
+      if ("${pedido.loja}.${pedido.pedido}" != "1.2") {
+        columnGrid(ProdutoAcerto::estoque, "Estoque")
+      }
 
       this.setPartNameGenerator { produto ->
         val qtMov = produto.qtMov ?: 0
