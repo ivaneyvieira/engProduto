@@ -130,6 +130,8 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       } else {
         produto.pesquisaStr().contains(filter, ignoreCase = true)
       }
+    }.filter { produto ->
+      produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0
     }
     gridDetail.setItems(listProdutos)
   }
