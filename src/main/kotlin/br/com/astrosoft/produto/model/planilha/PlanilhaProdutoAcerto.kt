@@ -12,7 +12,10 @@ class PlanilhaProdutoAcerto : Planilha<ProdutoAcerto>("ProdutoAcerto") {
     columnSheet(ProdutoAcerto::grade, header = "Grade")
     columnSheet(ProdutoAcerto::localizacao, header = "Loc App")
     columnSheet(ProdutoAcerto::validade, header = "Val")
-    columnSheet(ProdutoAcerto::qtPedido, header = "Quant")
+    columnSheet(ProdutoAcerto::qtDS, header = "DS")
+    columnSheet(ProdutoAcerto::qtMR, header = "MR")
+    columnSheet(ProdutoAcerto::qtPK, header = "PK")
+    columnSheet(ProdutoAcerto::qtTM, header = "TM")
     columnSheet(ProdutoAcerto::estoque, header = "Estoque")
   }
 }
