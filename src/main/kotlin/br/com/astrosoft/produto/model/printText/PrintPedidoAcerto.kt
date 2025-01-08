@@ -5,12 +5,33 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.PedidoAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoAcerto
+import br.com.astrosoft.produto.model.beans.UserSaci
 import kotlin.reflect.KProperty1
 
 class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<ProdutoAcerto, Int?>) :
   PrintText<ProdutoAcerto>() {
   override fun printTitle(bean: ProdutoAcerto) {
-    val titulo = pedido.observacao?.trim()?.substringAfter(" ")?.trim() ?: ""
+    val titulo = if (pedido.loja == 1 && (pedido.pedido ?: 0) == 2) {
+      val tituloObs = pedido.observacao?.trim()?.substringAfter(" ")?.trim() ?: ""
+      val user = AppConfig.userLogin() as? UserSaci
+      val lojaUser = user?.lojaAcerto?.let {
+        when (it) {
+          2    -> "DS"
+          3    -> "MR"
+          5    -> "PK"
+          8    -> "TM"
+          else -> null
+        }
+      }
+
+      if (lojaUser == null) {
+        tituloObs
+      } else {
+        "$lojaUser $tituloObs"
+      }
+    } else {
+      pedido.observacao?.trim()?.substringAfter(" ")?.trim() ?: ""
+    }
     writeln(titulo, negrito = true, center = true)
     writeln("")
     writeln(
