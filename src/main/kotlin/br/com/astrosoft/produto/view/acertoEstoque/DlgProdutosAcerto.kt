@@ -79,30 +79,31 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
       columnGrid(ProdutoAcerto::localizacao, "Loc App")
       columnGrid(ProdutoAcerto::validade, "val")
 
-      val user = AppConfig.userLogin() as? UserSaci
-      val lojaAcerto = user?.lojaAcerto ?: 0
+      if ("${pedido.loja}.${pedido.pedido}" == "1.2") {
+        val user = AppConfig.userLogin() as? UserSaci
+        val lojaAcerto = user?.lojaAcerto ?: 0
 
-      if (lojaAcerto in listOf(0, 2)) {
-        columnGrid(ProdutoAcerto::qtDS, "DS")
-      }
+        if (lojaAcerto in listOf(0, 2)) {
+          columnGrid(ProdutoAcerto::qtDS, "DS")
+        }
 
-      if (lojaAcerto in listOf(0, 3)) {
-        columnGrid(ProdutoAcerto::qtMR, "MR")
-      }
+        if (lojaAcerto in listOf(0, 3)) {
+          columnGrid(ProdutoAcerto::qtMR, "MR")
+        }
 
-      if (lojaAcerto in listOf(0, 5)) {
-        columnGrid(ProdutoAcerto::qtPK, "PK")
-      }
+        if (lojaAcerto in listOf(0, 5)) {
+          columnGrid(ProdutoAcerto::qtPK, "PK")
+        }
 
-      if (lojaAcerto in listOf(0, 8)) {
-        columnGrid(ProdutoAcerto::qtTM, "TM")
-      }
+        if (lojaAcerto in listOf(0, 8)) {
+          columnGrid(ProdutoAcerto::qtTM, "TM")
+        }
 
-      if (lojaAcerto in listOf(0)) {
-        columnGrid(ProdutoAcerto::estoqueMF, "MF")
-      }
-
-      if ("${pedido.loja}.${pedido.pedido}" != "1.2") {
+        if (lojaAcerto in listOf(0)) {
+          columnGrid(ProdutoAcerto::estoqueMF, "MF")
+        }
+      } else {
+        columnGrid(ProdutoAcerto::qtPedido, "Quant")
         columnGrid(ProdutoAcerto::estoque, "Estoque")
       }
 
