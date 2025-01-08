@@ -120,7 +120,6 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
         } else {
           null
         }
-
       }
     }
     this.addAndExpand(gridDetail)

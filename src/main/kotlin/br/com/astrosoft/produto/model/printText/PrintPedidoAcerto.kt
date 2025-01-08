@@ -24,11 +24,23 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
   }
 
   init {
-    column(ProdutoAcerto::codigo, "Codigo", 6)
-    column(ProdutoAcerto::descricao, "Descricao", 34)
-    column(ProdutoAcerto::grade, "Grade", 8)
-    column(propertyQuant, "Quant", 5)
-    column(ProdutoAcerto::estoque, "Estoque", 7)
+    if (pedido.loja == 1 && (pedido.pedido ?: 0) >= 2 && (pedido.pedido ?: 0) <= 8) {
+      column(ProdutoAcerto::codigo, "Codigo", 6)
+      column(ProdutoAcerto::descricao, "Descricao", 40)
+      column(ProdutoAcerto::grade, "Grade", 8)
+      column(ProdutoAcerto::estoque, "Estoque", 7)
+    } else if (pedido.loja == 1 && (pedido.pedido ?: 0) >= 22 && (pedido.pedido ?: 0) <= 88) {
+      column(ProdutoAcerto::codigo, "Codigo", 6)
+      column(ProdutoAcerto::descricao, "Descricao", 40)
+      column(ProdutoAcerto::grade, "Grade", 8)
+      column(ProdutoAcerto::estoque, "Estoque", 7)
+    } else {
+      column(ProdutoAcerto::codigo, "Codigo", 6)
+      column(ProdutoAcerto::descricao, "Descricao", 34)
+      column(ProdutoAcerto::grade, "Grade", 8)
+      column(propertyQuant, "Quant", 5)
+      column(ProdutoAcerto::estoque, "Estoque", 7)
+    }
   }
 
   override fun printSumary(bean: ProdutoAcerto?) {
