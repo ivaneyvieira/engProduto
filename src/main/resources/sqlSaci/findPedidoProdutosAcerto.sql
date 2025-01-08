@@ -110,27 +110,27 @@ WHERE storeno IN (2, 3, 4, 5, 8)
   AND date >= 20241210
 GROUP BY prdno, grade;
 
-SELECT P.loja                         AS loja,
-       P.pedido                       AS pedido,
-       P.prdno                        AS prdno,
-       P.codigo                       AS codigo,
-       IFNULL(G.barcode, P.barcode)   AS barcode,
-       P.descicao                     AS descricao,
-       P.grade                        AS grade,
-       P.vendno                       AS vendno,
-       IFNULL(LA.loc, L.loc)          AS localizacao,
-       P.validade                     AS validade,
-       P.quant                        AS qtPedido,
-       ROUND(IF(P.lojaPedido = 0, EG.estoque,
-                E.estoque))           AS estoque,
-       ROUND(EG.estoque)              AS estoqueGeral,
-       ROUND(IFNULL(EG.estoqueDS, 0)) AS estoqueDS,
-       ROUND(IFNULL(EG.estoqueMR, 0)) AS estoqueMR,
-       ROUND(IFNULL(EG.estoqueMF, 0)) AS estoqueMF,
-       ROUND(IFNULL(EG.estoquePK, 0)) AS estoquePK,
-       ROUND(IFNULL(EG.estoqueTM, 0)) AS estoqueTM,
-       IFNULL(MV.quant, 0)            AS qtMov,
-       IFNULL(MV.mov, 0) / 1000       AS mov
+SELECT P.loja                          AS loja,
+       P.pedido                        AS pedido,
+       P.prdno                         AS prdno,
+       P.codigo                        AS codigo,
+       IFNULL(G.barcode, P.barcode)    AS barcode,
+       P.descicao                      AS descricao,
+       P.grade                         AS grade,
+       P.vendno                        AS vendno,
+       IFNULL(LA.loc, L.loc)           AS localizacao,
+       P.validade                      AS validade,
+       P.quant                         AS qtPedido,
+       ROUND(IFNULL(IF(P.lojaPedido = 0, EG.estoque,
+                       E.estoque), 0)) AS estoque,
+       ROUND(EG.estoque)               AS estoqueGeral,
+       ROUND(IFNULL(EG.estoqueDS, 0))  AS estoqueDS,
+       ROUND(IFNULL(EG.estoqueMR, 0))  AS estoqueMR,
+       ROUND(IFNULL(EG.estoqueMF, 0))  AS estoqueMF,
+       ROUND(IFNULL(EG.estoquePK, 0))  AS estoquePK,
+       ROUND(IFNULL(EG.estoqueTM, 0))  AS estoqueTM,
+       IFNULL(MV.quant, 0)             AS qtMov,
+       IFNULL(MV.mov, 0) / 1000        AS mov
 FROM T_PEDIDO AS P
        LEFT JOIN T_LOC AS L
                  ON P.prdno = L.prdno

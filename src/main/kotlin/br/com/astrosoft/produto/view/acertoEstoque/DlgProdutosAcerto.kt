@@ -102,6 +102,12 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
         if (lojaAcerto in listOf(0)) {
           columnGrid(ProdutoAcerto::estoqueMF, "MF")
         }
+      } else if (
+        pedido.loja == 1 &&
+        (pedido.pedido ?: 0) >= 22 &&
+        (pedido.pedido ?: 0) <= 88
+      ) {
+        columnGrid(ProdutoAcerto::estoque, "Estoque")
       } else {
         columnGrid(ProdutoAcerto::qtPedido, "Quant")
         columnGrid(ProdutoAcerto::estoque, "Estoque")
