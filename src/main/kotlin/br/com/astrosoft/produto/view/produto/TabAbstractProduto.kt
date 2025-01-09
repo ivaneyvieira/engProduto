@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.view.produto
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -97,6 +97,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
             viewModel.updateView()
           }
         }
+
         edtVal = integerField("Val") {
           this.width = "80px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -174,9 +175,18 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
       horizontalLayout {
         cmbLoja = select("Loja") {
           val lojaTodas = Loja(0, "Todas", "Todas")
-          val lojas = listOf(lojaTodas) + viewModel.allLojas()
+
+          val user = AppConfig.userLogin() as? UserSaci
+
+          val lojaProduto = user?.lojaProduto ?: 0
+
+          val lojas = if (lojaProduto == 0) {
+            listOf(lojaTodas) + viewModel.allLojas()
+          } else {
+            listOf((viewModel.allLojas().firstOrNull { it.no == lojaProduto } ?: lojaTodas))
+          }
           setItems(lojas)
-          value = lojaTodas
+          value = lojas.firstOrNull()
           this.setItemLabelGenerator {
             it.sname
           }
