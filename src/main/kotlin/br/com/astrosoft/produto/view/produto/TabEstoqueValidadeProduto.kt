@@ -3,10 +3,16 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.dateFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.EEstoqueList
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.Validade
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_DS_TT
@@ -83,6 +89,15 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
 
   override fun Grid<Produtos>.colunasGrid() {
     this.setSelectionMode(Grid.SelectionMode.MULTI)
+
+    this.withEditor(Produtos::class,
+      openEditor = {
+        this.focusEditor(Produtos::qtty01)
+      },
+      closeEditor = {
+        viewModel.salvaValidades(it.bean)
+      })
+
     this.shiftSelect()
     addColumnSeq("Seq")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { produto ->
@@ -120,6 +135,15 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     if (lojaProduto == 8 || lojaProduto == 0) {
       produto_TM_TT()
     }
+
+    columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
+    columnGrid(Produtos::venc01, "Vence 1").dateFieldEditor()
+    columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
+    columnGrid(Produtos::venc02, "Vence 2").dateFieldEditor()
+    columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
+    columnGrid(Produtos::venc03, "Vence 3").dateFieldEditor()
+    columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
+    columnGrid(Produtos::venc04, "Vence 4").dateFieldEditor()
   }
 
   override fun estoque(): EEstoqueList {

@@ -43,6 +43,11 @@ sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val v
     val file = report.processaRelatorio(listaProduto)
     viewModel.view.showReport(chave = "NotaImpresso${System.nanoTime()}", report = file)
   }
+
+  fun salvaValidades(produtos: Produtos) {
+    produtos.updateValidades()
+    updateView()
+  }
 }
 
 interface ITabAbstractProdutoViewModel : ITabView {

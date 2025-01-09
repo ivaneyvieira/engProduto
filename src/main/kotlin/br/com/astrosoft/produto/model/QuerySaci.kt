@@ -1183,6 +1183,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateProduto(produto: Produtos) {
+    val sql = "/sqlSaci/qtdVencimentoUpdate.sql"
+    script(sql) {
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+
+      addOptionalParameter("qtty01", produto.qtty01)
+      addOptionalParameter("venc01", produto.venc01)
+      addOptionalParameter("qtty02", produto.qtty02)
+      addOptionalParameter("venc02", produto.venc02)
+      addOptionalParameter("qtty03", produto.qtty03)
+      addOptionalParameter("venc03", produto.venc03)
+      addOptionalParameter("qtty04", produto.qtty04)
+      addOptionalParameter("venc04", produto.venc04)
+    }
+  }
+
   fun consultaValidade(filtro: FiltroValidade): List<ComparaValidade> {
     val sql = "/sqlSaci/consultaValidade.sql"
 

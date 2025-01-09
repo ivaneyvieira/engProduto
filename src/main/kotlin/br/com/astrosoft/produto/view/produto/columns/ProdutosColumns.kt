@@ -7,7 +7,7 @@ import com.vaadin.flow.component.grid.Grid
 
 object ProdutosColumns {
   fun Grid<Produtos>.produto_codigo() = columnGrid(Produtos::codigo) {
-    this.setHeader("Cód")
+    this.setHeader("Código")
     this.config()
   }
 

@@ -46,6 +46,14 @@ class Produtos(
   var dataEntrada: LocalDate?,
   var fabricacao: LocalDate?,
   var vencimento: LocalDate?,
+  var qtty01: Int?,
+  var venc01: LocalDate?,
+  var qtty02: Int?,
+  var venc02: LocalDate?,
+  var qtty03: Int?,
+  var venc03: LocalDate?,
+  var qtty04: Int?,
+  var venc04: LocalDate?,
 ) {
   fun produtosInventarioResumo(): List<ProdutoInventarioResumo> {
     val prdno = prdno ?: return emptyList()
@@ -61,6 +69,10 @@ class Produtos(
       storeno = 0,
     )
     return ProdutoInventario.find(filtro).resumo()
+  }
+
+  fun updateValidades() {
+    saci.updateProduto(this)
   }
 
   val MF_Dif

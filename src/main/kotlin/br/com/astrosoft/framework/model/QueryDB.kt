@@ -9,7 +9,6 @@ import org.sql2o.Sql2o
 import org.sql2o.converters.Converter
 import org.sql2o.quirks.NoQuirks
 import java.time.LocalDate
-import java.time.LocalTime
 import kotlin.reflect.KClass
 
 typealias QueryHandler = Query.() -> Unit
@@ -21,9 +20,9 @@ open class QueryDB(database: DatabaseConfig) {
     try {
       Class.forName(database.driver)
       val maps = HashMap<Class<*>, Converter<*>>()
-      maps[LocalDate::class.java] = LocalDateConverter()
-      maps[LocalTime::class.java] = LocalSqlTimeConverter()
-      maps[ByteArray::class.java] = ByteArrayConverter()
+      //maps[LocalDate::class.java] = LocalDateConverter()
+      //maps[LocalTime::class.java] = LocalSqlTimeConverter()
+      //maps[ByteArray::class.java] = ByteArrayConverter()
       this.sql2o = Sql2o(database.url, database.user, database.password, NoQuirks(maps))
     } catch (e: Exception) {
       throw RuntimeException(e)
@@ -166,7 +165,7 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Int): Query {
+  fun Query.addOptionalParameter(name: String, value: Int?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
