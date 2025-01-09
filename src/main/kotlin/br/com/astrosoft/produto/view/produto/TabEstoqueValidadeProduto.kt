@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.EEstoqueList
 import br.com.astrosoft.produto.model.beans.Produtos
@@ -99,11 +98,26 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_total()
     produto_quantVenda()
     produto_val()
-    produto_DS_TT()
-    produto_MR_TT()
-    produto_MF_TT()
-    produto_PK_TT()
-    produto_TM_TT()
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    val lojaProduto = user?.lojaProduto ?: 0
+
+    if (lojaProduto == 2 || lojaProduto == 0) {
+      produto_DS_TT()
+    }
+    if (lojaProduto == 3 || lojaProduto == 0) {
+      produto_MR_TT()
+    }
+    if (lojaProduto == 4 || lojaProduto == 0) {
+      produto_MF_TT()
+    }
+    if (lojaProduto == 5 || lojaProduto == 0) {
+      produto_PK_TT()
+    }
+    if (lojaProduto == 8 || lojaProduto == 0) {
+      produto_TM_TT()
+    }
     produto_forn()
     produto_abrev()
   }
