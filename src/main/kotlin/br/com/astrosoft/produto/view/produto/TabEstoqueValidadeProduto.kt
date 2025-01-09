@@ -130,22 +130,22 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     }
 
     columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
-    columnGrid(Produtos::venc01, "Vence 1", width = "110px") {
+    columnGrid(Produtos::venc01, "Vence 1", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
-    columnGrid(Produtos::venc02, "Vence 2", width = "110px") {
+    columnGrid(Produtos::venc02, "Vence 2", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
-    columnGrid(Produtos::venc03, "Vence 3", width = "110px") {
+    columnGrid(Produtos::venc03, "Vence 3", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
-    columnGrid(Produtos::venc04, "Vence 4", width = "110px") {
+    columnGrid(Produtos::venc04, "Vence 4", width = "70px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
     }.mesAnoFieldEditor()
   }

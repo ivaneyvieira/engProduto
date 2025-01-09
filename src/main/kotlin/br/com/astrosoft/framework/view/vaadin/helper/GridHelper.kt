@@ -132,6 +132,7 @@ fun <T : Any> Grid.Column<T>.mesAnoFieldEditor(): Grid.Column<T> {
   component.element.addEventListener("keydown") { _ ->
     grid.editor.cancel()
   }.filter = "event.key === 'Enter'"
+  component.setOverlayWidth("100px")
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
 
