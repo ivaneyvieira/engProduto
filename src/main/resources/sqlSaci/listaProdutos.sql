@@ -87,6 +87,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 1
+  AND (@LOJA = 1 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -102,6 +103,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 2
+  AND (@LOJA = 2 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -117,6 +119,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 3
+  AND (@LOJA = 3 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -132,6 +135,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 4
+  AND (@LOJA = 4 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -147,7 +151,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 5
-  AND qtty_varejo != qtty_atacado
+  AND (@LOJA = 5 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -163,7 +167,7 @@ FROM sqldados.stk AS S
        INNER JOIN T_PRD
                   USING (prdno)
 WHERE S.storeno = 8
-  AND qtty_varejo != qtty_atacado
+  AND (@LOJA = 8 OR @LOJA = 0)
 GROUP BY prdno, gradeOpt
 HAVING estoque != 0;
 
@@ -286,7 +290,7 @@ WHERE CASE :estoque
                        ROUND(IFNULL(MR.estoque, 0)) +
                        ROUND(IFNULL(MF.estoque, 0)) +
                        ROUND(IFNULL(PK.estoque, 0)) +
-                       ROUND(IFNULL(TM.estoque, 0))) < -:saldo
+                       ROUND(IFNULL(TM.estoque, 0))) < :saldo
         ELSE FALSE
       END;
 
@@ -360,6 +364,8 @@ SELECT prdno                              AS prdno,
        SUM(IF(num = 4, quantidade, NULL)) AS qtty04,
        MAX(IF(num = 4, vencimento, NULL)) AS venc04
 FROM sqldados.qtd_vencimento
+WHERE storeno = @LOJA
+  AND @LOJA IN (2, 3, 4, 5, 8)
 GROUP BY prdno, IF(@TEMGRADE = 'S', grade, '');
 
 SELECT R.prdno,

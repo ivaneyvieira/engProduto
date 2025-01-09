@@ -45,7 +45,8 @@ sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val v
   }
 
   fun salvaValidades(produtos: Produtos) {
-    produtos.updateValidades()
+    val loja = subView.filtro().loja
+    produtos.updateValidades(loja)
     updateView()
   }
 }

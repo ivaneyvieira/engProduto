@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class Produtos(
+  var storeno: Int?,
   var prdno: String?,
   var codigo: Int?,
   var descricao: String?,
@@ -71,8 +72,8 @@ class Produtos(
     return ProdutoInventario.find(filtro).resumo()
   }
 
-  fun updateValidades() {
-    saci.updateProduto(this)
+  fun updateValidades(loja: Int) {
+    saci.updateProduto(loja, this)
   }
 
   val MF_Dif

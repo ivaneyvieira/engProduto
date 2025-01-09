@@ -1183,9 +1183,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateProduto(produto: Produtos) {
+  fun updateProduto(loja: Int, produto: Produtos) {
     val sql = "/sqlSaci/qtdVencimentoUpdate.sql"
     script(sql) {
+      addOptionalParameter("storeno", loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
 
