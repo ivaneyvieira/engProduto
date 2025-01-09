@@ -5,7 +5,7 @@ CREATE TEMPORARY TABLE T_DADOS
   grade      VARCHAR(8),
   num        INT,
   quantidade INT,
-  vencimento DATE,
+  vencimento VARCHAR(10),
   PRIMARY KEY (prdno, grade, num)
 )
 SELECT :prdno AS prdno, :grade AS grade, 1 AS num, :qtty01 AS quantidade, :venc01 AS vencimento
@@ -23,5 +23,3 @@ FROM dual;
 REPLACE INTO sqldados.qtd_vencimento(prdno, grade, num, quantidade, vencimento)
 SELECT prdno, grade, num, quantidade, vencimento
 FROM T_DADOS
-WHERE quantidade IS NOT NULL
-  AND vencimento IS NOT NULL

@@ -47,13 +47,13 @@ class Produtos(
   var fabricacao: LocalDate?,
   var vencimento: LocalDate?,
   var qtty01: Int?,
-  var venc01: LocalDate?,
+  var venc01: String?,
   var qtty02: Int?,
-  var venc02: LocalDate?,
+  var venc02: String?,
   var qtty03: Int?,
-  var venc03: LocalDate?,
+  var venc03: String?,
   var qtty04: Int?,
-  var venc04: LocalDate?,
+  var venc04: String?,
 ) {
   fun produtosInventarioResumo(): List<ProdutoInventarioResumo> {
     val prdno = prdno ?: return emptyList()
