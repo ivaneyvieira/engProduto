@@ -80,7 +80,9 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
   }
 
   override fun Grid<Produtos>.colunasGrid() {
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    val user = AppConfig.userLogin() as? UserSaci
+
+    this.selectionMode = Grid.SelectionMode.MULTI
 
     this.withEditor(
       Produtos::class,
@@ -105,11 +107,11 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_Unidade()
     produto_forn()
     produto_abrev()
-    produto_total()
+    if(user?.admin == true) {
+      produto_total()
+    }
     produto_quantVenda()
     produto_val()
-
-    val user = AppConfig.userLogin() as? UserSaci
 
     val lojaProduto = user?.lojaProduto ?: 0
 
@@ -130,22 +132,22 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     }
 
     columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
-    columnGrid(Produtos::venc01, "Vence 1", width = "70px") {
+    columnGrid(Produtos::venc01, "Vence 1", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
-    columnGrid(Produtos::venc02, "Vence 2", width = "70px") {
+    columnGrid(Produtos::venc02, "Vence 2", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
-    columnGrid(Produtos::venc03, "Vence 3", width = "70px") {
+    columnGrid(Produtos::venc03, "Vence 3", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
     }.mesAnoFieldEditor()
 
     columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
-    columnGrid(Produtos::venc04, "Vence 4", width = "70px") {
+    columnGrid(Produtos::venc04, "Vence 4", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
     }.mesAnoFieldEditor()
   }
