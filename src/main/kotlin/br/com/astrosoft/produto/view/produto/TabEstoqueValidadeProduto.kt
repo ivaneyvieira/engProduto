@@ -95,6 +95,8 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
+    produto_forn()
+    produto_abrev()
     produto_total()
     produto_quantVenda()
     produto_val()
@@ -118,8 +120,6 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     if (lojaProduto == 8 || lojaProduto == 0) {
       produto_TM_TT()
     }
-    produto_forn()
-    produto_abrev()
   }
 
   override fun estoque(): EEstoqueList {
