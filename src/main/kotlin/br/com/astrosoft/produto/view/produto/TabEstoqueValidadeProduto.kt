@@ -58,7 +58,7 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
       this.isAutofocus = true
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
-      this.value = 1
+      this.value = 0
       addValueChangeListener {
         viewModel.updateView()
       }
