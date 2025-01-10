@@ -52,7 +52,6 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
       addValueChangeListener {
         viewModel.updateView()
       }
-      this.width = "8em"
     }
 
     edtSaldo = integerField("Saldo") {
