@@ -55,6 +55,11 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     viewModel.updateView()
   }
 
+  fun lojaProduto(): Int {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.lojaProduto ?: 0
+  }
+
   override fun produtosSelecionados(): List<Produtos> {
     val dataProvider: ListDataProvider<Produtos> = gridPanel.dataProvider as ListDataProvider<Produtos>
     val size = dataProvider.items.size
@@ -119,7 +124,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         edtListVend = textField("Fornecedores") {
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
-          this.width = "150px"
+          this.width = "100px"
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -165,6 +170,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         chkGrade = checkBox("Grade") {
+          this.isVisible = lojaProduto() == 0
+
           this.value = true
           this.addValueChangeListener {
             viewModel.updateView()
@@ -174,6 +181,8 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
 
       horizontalLayout {
         cmbLoja = select("Loja") {
+          this.isVisible = lojaProduto() == 0
+
           val lojaTodas = Loja(0, "Todas", "Todas")
 
           val user = AppConfig.userLogin() as? UserSaci
@@ -197,7 +206,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         edtCompra = select("Compra ") {
-          this.width = "150px"
+          this.width = "100px"
           this.setItems(MesAno.values())
           this.value = MesAno.now()
           this.setItemLabelGenerator {
@@ -210,7 +219,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
 
         edtVenda = select("Venda") {
-          this.width = "150px"
+          this.width = "100px"
           this.setItems(MesAno.values())
           this.value = MesAno.now()
           this.setItemLabelGenerator {

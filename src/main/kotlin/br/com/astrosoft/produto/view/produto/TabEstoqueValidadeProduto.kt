@@ -43,6 +43,7 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
 
   override fun HorizontalLayout.addAditionaisFields() {
     cmbEstoqueFiltro = select("Estoque") {
+      this.width = "100px"
       setItems(EEstoqueList.entries)
       value = EEstoqueList.TODOS
       this.setItemLabelGenerator {
@@ -95,19 +96,19 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
 
     this.shiftSelect()
     addColumnSeq("Seq")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { produto ->
-      val dlgProduto = DlgProdutosValidade(viewModel, produto)
-      dlgProduto.showDialog {
-        viewModel.updateView()
+    if (lojaProduto() == 0) {
+      addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { produto ->
+        val dlgProduto = DlgProdutosValidade(viewModel, produto)
+        dlgProduto.showDialog {
+          viewModel.updateView()
+        }
       }
     }
     produto_codigo()
     produto_descricao()
     produto_grade()
     produto_Unidade()
-    produto_forn()
-    produto_abrev()
-    if(user?.admin == true) {
+    if (user?.admin == true) {
       produto_total()
     }
     produto_quantVenda()
@@ -150,6 +151,9 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     columnGrid(Produtos::venc04, "Vence 4", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
     }.mesAnoFieldEditor()
+
+    produto_forn()
+    produto_abrev()
   }
 
   override fun estoque(): EEstoqueList {
