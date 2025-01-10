@@ -18,6 +18,7 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_c
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_qttyInv
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
@@ -130,6 +131,8 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     if (lojaProduto == 8 || lojaProduto == 0) {
       produto_TM_TT()
     }
+
+    produto_qttyInv()
 
     columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
     columnGrid(Produtos::venc01, "Vence 1", width = "80px") {

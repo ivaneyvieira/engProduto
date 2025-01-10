@@ -56,6 +56,9 @@ class Produtos(
   var qtty04: Int?,
   var venc04: String?,
 ) {
+  val qttyInv: Int?
+    get() = (qtty01 ?: 0).plus(qtty02 ?: 0).plus(qtty03 ?: 0).plus(qtty04 ?: 0)
+
   fun produtosInventarioResumo(): List<ProdutoInventarioResumo> {
     val prdno = prdno ?: return emptyList()
     val grade = grade ?: return emptyList()

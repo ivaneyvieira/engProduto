@@ -179,6 +179,10 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
       }
 
+      span{
+        this.width = "10px"
+      }
+
       horizontalLayout {
         cmbLoja = select("Loja") {
           this.isVisible = lojaProduto() == 0

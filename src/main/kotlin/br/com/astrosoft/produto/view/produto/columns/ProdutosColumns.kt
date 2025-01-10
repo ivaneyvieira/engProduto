@@ -96,6 +96,11 @@ object ProdutosColumns {
     this.config()
   }
 
+  fun Grid<Produtos>.produto_qttyInv() = columnGrid(Produtos::qttyInv) {
+    this.setHeader("Inv")
+    this.config()
+  }
+
   fun Grid<Produtos>.produto_total() = columnGrid(Produtos::estoque) {
     this.setHeader("Total")
     this.config()
