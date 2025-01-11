@@ -6,6 +6,11 @@ import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutosColumns {
+  fun Grid<Produtos>.produto_loja() = columnGrid(Produtos::siglaLoja) {
+    this.setHeader("Loja")
+    this.config()
+  }
+
   fun Grid<Produtos>.produto_codigo() = columnGrid(Produtos::codigo) {
     this.setHeader("Código")
     this.config()
@@ -98,6 +103,11 @@ object ProdutosColumns {
 
   fun Grid<Produtos>.produto_qttyInv() = columnGrid(Produtos::qttyInv) {
     this.setHeader("Inv")
+    this.config()
+  }
+
+  fun Grid<Produtos>.produto_saldo() = columnGrid(Produtos::saldo) {
+    this.setHeader("Saldo")
     this.config()
   }
 

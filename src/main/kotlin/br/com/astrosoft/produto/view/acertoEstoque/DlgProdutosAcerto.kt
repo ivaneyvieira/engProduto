@@ -133,22 +133,26 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   fun update() {
     val lojaAcerto = user?.lojaAcerto ?: 0
     val listProdutos = pedido.produtos(lojaAcerto)
-    if (pedido.loja == 1 && pedido.pedido == 2) {
-      val filter = edtPesquisa?.value ?: ""
-      val listProdutosFiltro = listProdutos.filter { produto ->
-        if (filter.isBlank()) return@filter true
 
-        if (filter in listOf("2", "3", "4", "5", "8")) {
-          produto.qtPedido?.toString()?.contains(filter) == true
-        } else {
-          produto.pesquisaStr().contains(filter, ignoreCase = true)
-        }
-      }.filter { produto ->
-        produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0
-      }
+    if (pedido.loja == 1 && pedido.pedido == 2) {
+      val filter = edtPesquisa?.value.orEmpty()
+      val listProdutosFiltro = listProdutos
+        .filter { produto -> filterProduto(produto, filter) }
+        .filter { produto -> produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0 }
+
       gridDetail.setItems(listProdutosFiltro)
     } else {
       gridDetail.setItems(listProdutos)
+    }
+  }
+
+  private fun filterProduto(produto: ProdutoAcerto, filter: String): Boolean {
+    if (filter.isBlank()) return true
+
+    return if (filter in listOf("2", "3", "4", "5", "8")) {
+      produto.qtPedido?.toString()?.contains(filter) == true
+    } else {
+      produto.pesquisaStr().contains(filter, ignoreCase = true)
     }
   }
 }

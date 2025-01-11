@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 class Produtos(
   var storeno: Int?,
+  var saldo: Int?,
   var prdno: String?,
   var codigo: Int?,
   var descricao: String?,
@@ -95,6 +96,84 @@ class Produtos(
       }
       return lista
     }
+
+    fun findLoja(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
+      val lista = find(filter, withSaldoApp)
+      return lista.flatMap { prd ->
+        listOf(
+          prd.copy(2, prd.DS_TT ?: 0),
+          prd.copy(3, prd.MR_TT ?: 0),
+          prd.copy(4, prd.MF_TT ?: 0),
+          prd.copy(5, prd.PK_TT ?: 0),
+          prd.copy(8, prd.TM_TT ?: 0),
+        ).filter { it.storeno == filter.loja || filter.loja == 0 }
+      }.sortedWith(compareBy({ it.codigo }, { it.grade }, { it.storeno }))
+    }
+  }
+
+  val siglaLoja: String
+    get() = when (storeno) {
+      2    -> "DS"
+      3    -> "MR"
+      4    -> "MF"
+      5    -> "PK"
+      8    -> "TM"
+      else -> ""
+    }
+
+  fun copy(loja: Int, saldo: Int): Produtos {
+    return Produtos(
+      storeno = loja,
+      saldo = saldo,
+      prdno = prdno,
+      codigo = codigo,
+      descricao = descricao,
+      grade = grade,
+      forn = forn,
+      tributacao = tributacao,
+      abrev = abrev,
+      tipo = tipo,
+      cl = cl,
+      codBar = codBar,
+      DS_TT = DS_TT,
+      MR_TT = MR_TT,
+      MF_TT = MF_TT,
+      PK_TT = PK_TT,
+      TM_TT = TM_TT,
+      estoque = estoque,
+      trib = trib,
+      refForn = refForn,
+      pesoBruto = pesoBruto,
+      uGar = uGar,
+      tGar = tGar,
+      mesesGarantia = mesesGarantia,
+      emb = emb,
+      ncm = ncm,
+      site = site,
+      unidade = unidade,
+      foraLinha = foraLinha,
+      ultVenda = ultVenda,
+      ultCompra = ultCompra,
+      qttyVendas = qttyVendas,
+      qttyCompra = qttyCompra,
+      MF_App = MF_App,
+      localizacao = localizacao,
+      rotulo = rotulo,
+      mesesFabricacao = mesesFabricacao,
+      entrada = entrada,
+      nfEntrada = nfEntrada,
+      dataEntrada = dataEntrada,
+      fabricacao = fabricacao,
+      vencimento = vencimento,
+      qtty01 = qtty01,
+      venc01 = venc01,
+      qtty02 = qtty02,
+      venc02 = venc02,
+      qtty03 = qtty03,
+      venc03 = venc03,
+      qtty04 = qtty04,
+      venc04 = venc04,
+    )
   }
 }
 

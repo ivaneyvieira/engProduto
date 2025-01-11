@@ -2,12 +2,24 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
-import br.com.astrosoft.produto.viewmodel.produto.ITabAbstractProdutoViewModel
-import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeLojaViewModel
+import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeLojaViewModel
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Unidade
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_abrev
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_codigo
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_descricao
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_forn
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_grade
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_loja
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_qttyInv
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_saldo
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
+import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.header2
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -31,11 +43,8 @@ import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
-  open val viewModel: TabAbstractProdutoViewModel<T>,
-  val showDatas: Boolean = true
-) :
-  TabPanelGrid<Produtos>(Produtos::class), ITabAbstractProdutoViewModel {
+class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
+  TabPanelGrid<Produtos>(Produtos::class), ITabEstoqueValidadeLojaViewModel {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: IntegerField
   private lateinit var edtVal: IntegerField
@@ -50,6 +59,32 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkGrade: Checkbox
   private lateinit var edtGrade: TextField
+  private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
+  private lateinit var edtSaldo: IntegerField
+
+  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueValidadeLoja ?: false
+
+  override val label: String
+    get() = "Val Loja"
+
+  fun estoque(): EEstoqueList {
+    return cmbEstoqueFiltro.value ?: EEstoqueList.TODOS
+  }
+
+  fun saldo(): Int {
+    return edtSaldo.value ?: 0
+  }
+
+  fun temValidade(): Boolean {
+    return true
+  }
+
+  fun String?.toMesAno(): Int {
+    this ?: return 0
+    val mes = this.substring(0, 2).toIntOrNull() ?: return 0
+    val ano = this.substring(3, 5).toIntOrNull() ?: return 0
+    return mes + (ano + 2000) * 100
+  }
 
   override fun updateComponent() {
     viewModel.updateView()
@@ -179,7 +214,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
         }
       }
 
-      span{
+      span {
         this.width = "10px"
       }
 
@@ -235,7 +270,42 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
           }
         }
 
-        addAditionaisFields()
+        cmbEstoqueFiltro = select("Estoque") {
+          this.width = "100px"
+          setItems(EEstoqueList.entries)
+          value = EEstoqueList.TODOS
+          this.setItemLabelGenerator {
+            it.descricao
+          }
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtSaldo = integerField("Saldo") {
+          this.isAutofocus = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          this.value = 0
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+          this.width = "5em"
+        }
+
+        button("Relatório") {
+          icon = VaadinIcon.PRINT.create()
+          this.addClickListener {
+            viewModel.geraRelatorio()
+          }
+        }
+
+        edtTributacao.isVisible = false
+        edtType.isVisible = false
+        edtCl.isVisible = false
+        edtCompra.isVisible = false
+        edtCompra.value = null
+
         downloadExcel(PlanilhaProduto())
       }
     }
@@ -246,8 +316,6 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     val textTime = LocalDateTime.now().format(sdf)
     return "produto$textTime.xlsx"
   }
-
-  protected abstract fun HorizontalLayout.addAditionaisFields()
 
   override fun filtro() = FiltroListaProduto(
     pesquisa = edtPesquisa.value ?: "",
@@ -271,24 +339,61 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     temValidade = temValidade()
   )
 
-  abstract fun estoque(): EEstoqueList
-  abstract fun saldo(): Int
-  abstract fun temValidade(): Boolean
-
   override fun Grid<Produtos>.gridPanel() {
     setSelectionMode(Grid.SelectionMode.MULTI)
-    this.colunasGrid()
-    printColunas()
-  }
+    val user = AppConfig.userLogin() as? UserSaci
 
-  abstract fun Grid<Produtos>.colunasGrid()
+    this.selectionMode = Grid.SelectionMode.MULTI
 
-  private fun printColunas() {
-    val colList = gridPanel.columns.joinToString("\n") { column ->
-      "CampoNumber(\"${column.header2}\") { ${column.key} ?: 0.00 },"
+    this.withEditor(
+      Produtos::class,
+      openEditor = {
+        this.focusEditor(Produtos::qtty01)
+      },
+      closeEditor = {
+        viewModel.salvaValidades(it.bean)
+      })
+
+    this.shiftSelect()
+    produto_loja()
+    produto_codigo()
+    produto_descricao()
+    produto_grade()
+    produto_Unidade()
+    if (user?.admin == true) {
+      produto_total()
     }
-    println(label)
-    println(colList)
+    produto_quantVenda()
+    produto_val()
+
+    val lojaProduto = user?.lojaProduto ?: 0
+
+    produto_saldo()
+
+    produto_qttyInv()
+
+    columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
+    columnGrid(Produtos::venc01, "Vence 1", width = "80px") {
+      this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
+    }.mesAnoFieldEditor()
+
+    columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
+    columnGrid(Produtos::venc02, "Vence 2", width = "80px") {
+      this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
+    }.mesAnoFieldEditor()
+
+    columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
+    columnGrid(Produtos::venc03, "Vence 3", width = "80px") {
+      this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
+    }.mesAnoFieldEditor()
+
+    columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
+    columnGrid(Produtos::venc04, "Vence 4", width = "80px") {
+      this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
+    }.mesAnoFieldEditor()
+
+    produto_forn()
+    produto_abrev()
   }
 
   private fun HasComponents.downloadExcel(planilha: PlanilhaProduto) {
@@ -300,5 +405,3 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(
     add(button)
   }
 }
-
-

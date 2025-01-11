@@ -18,6 +18,7 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::produtoSped, "Sped")
     columnGrid(UserSaci::produtoEstoqueGiro, "Giro")
     columnGrid(UserSaci::produtoEstoqueValidade, "Validade")
+    columnGrid(UserSaci::produtoEstoqueValidadeLoja, "Val Loja")
   }
 
   override fun FormUsuario.configFields() {
@@ -37,6 +38,9 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
         }
         checkBox("Validade") {
           binder.bind(this, UserSaci::produtoEstoqueValidade.name)
+        }
+        checkBox("Val Loja") {
+          binder.bind(this, UserSaci::produtoEstoqueValidadeLoja.name)
         }
         checkBox("Inventario") {
           binder.bind(this, UserSaci::produtoInventario.name)
