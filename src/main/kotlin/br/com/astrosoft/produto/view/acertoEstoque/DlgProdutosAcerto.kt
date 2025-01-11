@@ -131,19 +131,24 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
   }
 
   fun update() {
-    val filter = edtPesquisa?.value ?: ""
     val lojaAcerto = user?.lojaAcerto ?: 0
-    val listProdutos = pedido.produtos(lojaAcerto).filter { produto ->
-      if (filter.isBlank()) return@filter true
+    val listProdutos = pedido.produtos(lojaAcerto)
+    if (pedido.loja == 1 && pedido.pedido == 2) {
+      val filter = edtPesquisa?.value ?: ""
+      val listProdutosFiltro = listProdutos.filter { produto ->
+        if (filter.isBlank()) return@filter true
 
-      if (filter in listOf("2", "3", "4", "5", "8")) {
-        produto.qtPedido?.toString()?.contains(filter) == true
-      } else {
-        produto.pesquisaStr().contains(filter, ignoreCase = true)
+        if (filter in listOf("2", "3", "4", "5", "8")) {
+          produto.qtPedido?.toString()?.contains(filter) == true
+        } else {
+          produto.pesquisaStr().contains(filter, ignoreCase = true)
+        }
+      }.filter { produto ->
+        produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0
       }
-    }.filter { produto ->
-      produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0
+      gridDetail.setItems(listProdutosFiltro)
+    } else {
+      gridDetail.setItems(listProdutos)
     }
-    gridDetail.setItems(listProdutos)
   }
 }

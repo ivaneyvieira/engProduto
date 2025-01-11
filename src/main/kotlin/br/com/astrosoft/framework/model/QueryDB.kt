@@ -150,25 +150,31 @@ open class QueryDB(database: DatabaseConfig) {
     }
   }
 
-  fun Query.addOptionalParameter(name: String, value: String?): Query {
+
+  fun Query.addOptionalParameter(name: String, value: Any?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: LocalDate?): Query {
+  fun Query.addOptionalParameter(name: String, value: String): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: ByteArray?): Query {
+  fun Query.addOptionalParameter(name: String, value: LocalDate): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Int?): Query {
+  fun Query.addOptionalParameter(name: String, value: ByteArray): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
+
+  //fun Query.addOptionalParameter(name: String, value: Int?): Query {
+  //  if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
+  //  return this
+ // }
 
   @JvmName("addOptionalParameterString")
   fun Query.addOptionalParameter(name: String, value: List<String>): Query {
@@ -192,7 +198,7 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Double?): Query {
+  fun Query.addOptionalParameter(name: String, value: Double): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
