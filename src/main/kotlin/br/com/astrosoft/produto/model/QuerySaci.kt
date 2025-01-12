@@ -1850,6 +1850,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun qtdVencimento(): List<QtdVencimento> {
+    val sql = "/sqlSaci/qtdVencimento.sql"
+    return query(sql, QtdVencimento::class)
+  }
+
   companion object {
     private val db = DB("saci")
 

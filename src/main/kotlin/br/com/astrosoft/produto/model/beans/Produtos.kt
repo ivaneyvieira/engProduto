@@ -98,16 +98,56 @@ class Produtos(
     }
 
     fun findLoja(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
+      val qtdList = if (filter.loja == 0)
+        saci.qtdVencimento()
+      else emptyList()
       val lista = find(filter, withSaldoApp)
       return lista.flatMap { prd ->
         listOf(
-          prd.copy(2, prd.DS_TT ?: 0),
-          prd.copy(3, prd.MR_TT ?: 0),
-          prd.copy(4, prd.MF_TT ?: 0),
-          prd.copy(5, prd.PK_TT ?: 0),
-          prd.copy(8, prd.TM_TT ?: 0),
+          prd.copy(2, prd.DS_TT ?: 0).let {
+            if (filter.loja == 0)
+              it.setQtd(qtdList)
+            else it
+          },
+          prd.copy(3, prd.MR_TT ?: 0).let {
+            if (filter.loja == 0)
+              it.setQtd(qtdList)
+            else it
+          },
+          prd.copy(4, prd.MF_TT ?: 0).let {
+            if (filter.loja == 0)
+              it.setQtd(qtdList)
+            else it
+          },
+          prd.copy(5, prd.PK_TT ?: 0).let {
+            if (filter.loja == 0)
+              it.setQtd(qtdList)
+            else it
+          },
+          prd.copy(8, prd.TM_TT ?: 0).let {
+            if (filter.loja == 0) it.setQtd(qtdList) else it
+          },
         ).filter { it.storeno == filter.loja || filter.loja == 0 }
       }.sortedWith(compareBy({ it.codigo }, { it.grade }, { it.storeno }))
+    }
+
+    private fun Produtos.setQtd(qtdList: List<QtdVencimento>): Produtos {
+      val qtdNum = qtdList.filter { it.prdno == prdno && it.grade == grade && it.storeno == storeno }
+      val qtd01 = qtdNum.firstOrNull { it.num == 1 }
+      val qtd02 = qtdNum.firstOrNull { it.num == 2 }
+      val qtd03 = qtdNum.firstOrNull { it.num == 3 }
+      val qtd04 = qtdNum.firstOrNull { it.num == 4 }
+
+      return this.apply {
+        qtty01 = qtd01?.quantidade
+        venc01 = qtd01?.vencimento
+        qtty02 = qtd02?.quantidade
+        venc02 = qtd02?.vencimento
+        qtty03 = qtd03?.quantidade
+        venc03 = qtd03?.vencimento
+        qtty04 = qtd04?.quantidade
+        venc04 = qtd04?.vencimento
+      }
     }
   }
 

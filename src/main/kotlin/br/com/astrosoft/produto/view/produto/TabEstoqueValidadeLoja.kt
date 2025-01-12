@@ -50,15 +50,9 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
   private lateinit var edtVal: IntegerField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtListVend: TextField
-  protected lateinit var edtType: IntegerField
-  protected lateinit var edtCl: IntegerField
-  protected lateinit var edtTributacao: TextField
 
   private lateinit var edtVenda: Select<MesAno>
-  protected lateinit var edtCompra: Select<MesAno>
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var chkGrade: Checkbox
-  private lateinit var edtGrade: TextField
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
 
@@ -147,46 +141,10 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
-        edtGrade = textField("Grade") {
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          this.width = "100px"
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
         edtListVend = textField("Fornecedores") {
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.width = "100px"
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        edtTributacao = textField("Trib") {
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          this.width = "80px"
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        edtType = integerField("Tipo") {
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          this.width = "100px"
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        edtCl = integerField("C Lucro") {
-          this.width = "100px"
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -200,15 +158,6 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
             it.descricao
           }
           addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        chkGrade = checkBox("Grade") {
-          this.isVisible = lojaProduto() == 0
-
-          this.value = true
-          this.addValueChangeListener {
             viewModel.updateView()
           }
         }
@@ -242,19 +191,6 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
             viewModel.updateView()
           }
           this.width = "6em"
-        }
-
-        edtCompra = select("Compra ") {
-          this.width = "100px"
-          this.setItems(MesAno.values())
-          this.value = MesAno.now()
-          this.setItemLabelGenerator {
-            it.mesAnoFormat
-          }
-
-          this.addValueChangeListener {
-            viewModel.updateView()
-          }
         }
 
         edtVenda = select("Venda") {
@@ -300,12 +236,6 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
-        edtTributacao.isVisible = false
-        edtType.isVisible = false
-        edtCl.isVisible = false
-        edtCompra.isVisible = false
-        edtCompra.value = null
-
         downloadExcel(PlanilhaProduto())
       }
     }
@@ -323,16 +253,16 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     inativo = EInativo.NAO,
     codigo = edtCodigo.value ?: 0,
     listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
-    tributacao = edtTributacao.value ?: "",
-    typeno = edtType.value ?: 0,
-    clno = edtCl.value ?: 0,
+    tributacao =  "",
+    typeno =  0,
+    clno = 0,
     loja = cmbLoja.value?.no ?: 0,
     diVenda = edtVenda.value?.firstDay,
     dfVenda = MesAno.now().lastDay,
-    diCompra = edtCompra.value?.firstDay,
+    diCompra = MesAno.now().firstDay,
     dfCompra = MesAno.now().lastDay,
-    temGrade = chkGrade.value,
-    grade = edtGrade.value ?: "",
+    temGrade = true,
+    grade = "",
     estoque = estoque(),
     saldo = saldo(),
     validade = edtVal.value ?: 0,
