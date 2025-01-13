@@ -18,7 +18,7 @@ class QtdVencimento {
   var venc04: String? = null
 
   val qttyInv: Int?
-    get() = (qtty01 ?: 0).plus(qtty02 ?: 0).plus(qtty03 ?: 0).plus(qtty04 ?: 0)
+    get() = (qttyDif01 ?: 0).plus(qttyDif02 ?: 0).plus(qttyDif03 ?: 0).plus(qttyDif04 ?: 0)
 
   val qttyDif01: Int?
     get() {
