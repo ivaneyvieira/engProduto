@@ -38,7 +38,7 @@ class QtdVencimento {
   val qttyDif03: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty03
-      if ((qttyDif02 ?: 0) > 0) return this.qtty03
+      if ((qttyDif01 ?: 0) > 0 || (qttyDif02 ?: 0) > 0) return this.qtty03
       val dif = (this.qtty01 ?: 0) + (this.qtty02 ?: 0) + (this.qtty03 ?: 0) - vendas
       return if (dif < 0) 0 else dif
     }
@@ -46,7 +46,7 @@ class QtdVencimento {
   val qttyDif04: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty03
-      if ((qttyDif03 ?: 0) > 0) return this.qtty04
+      if ((qttyDif01 ?: 0) > 0 || (qttyDif02 ?: 0) > 0 || (qttyDif03 ?: 0) > 0) return this.qtty04
       val dif = (this.qtty01 ?: 0) + (this.qtty02 ?: 0) + (this.qtty03 ?: 0) + (this.qtty04 ?: 0) - vendas
       return dif
     }
