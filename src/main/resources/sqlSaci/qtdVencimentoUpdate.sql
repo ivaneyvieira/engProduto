@@ -1,10 +1,12 @@
+SET SQL_MODE = '';
+
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
   storeno    INT,
   prdno      VARCHAR(16),
   grade      VARCHAR(8),
-  dataVenda  DATE,
+  dataVenda  INT,
   num        INT,
   quantidade INT,
   vencimento VARCHAR(10),
@@ -47,6 +49,12 @@ SELECT :storeno   AS storeno,
 FROM dual;
 
 REPLACE INTO sqldados.qtd_vencimento(storeno, prdno, grade, dataVenda, num, quantidade, vencimento)
-SELECT storeno, prdno, grade, dataVenda, num, quantidade, vencimento
+SELECT storeno,
+       prdno,
+       grade,
+       CAST(IF(dataVenda = 0, NULL, dataVenda) AS DATE) AS dataVenda,
+       num,
+       quantidade,
+       vencimento
 FROM T_DADOS
 WHERE storeno IN (2, 3, 4, 5, 8)
