@@ -11,3 +11,10 @@ CREATE TABLE sqldados.qtd_vencimento
 );
 
 CREATE UNIQUE INDEX idx_qtd_vencimento ON sqldados.qtd_vencimento (num, storeno, prdno, grade);
+
+
+ALTER TABLE sqldados.qtd_vencimento
+  ADD COLUMN dataVenda DATE NULL AFTER num;
+
+
+select * from sqldados.qtd_vencimento

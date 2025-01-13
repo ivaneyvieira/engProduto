@@ -1189,6 +1189,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("dataVenda", produto.dataVenda.toSaciDate())
 
       addOptionalParameter("qtty01", produto.qtty01)
       addOptionalParameter("venc01", produto.venc01)

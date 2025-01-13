@@ -33,12 +33,12 @@ class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
         grade = it.grade ?: "",
         unidade = it.unidade ?: "",
         quant = when (filtro.loja) {
-                  0 -> it.estoque
-                  2 -> it.DS_TT
-                  3 -> it.MR_TT
-                  4 -> it.MF_TT
-                  5 -> it.PK_TT
-                  8 -> it.TM_TT
+                  0    -> it.estoque
+                  2    -> it.DS_TT
+                  3    -> it.MR_TT
+                  4    -> it.MF_TT
+                  5    -> it.PK_TT
+                  8    -> it.TM_TT
                   else -> 0
                 } ?: 0
       )
@@ -47,14 +47,13 @@ class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
     viewModel.view.showReport(chave = "NotaImpresso${System.nanoTime()}", report = file)
   }
 
-  fun salvaValidades(produtos: Produtos) {
-    val loja = subView.filtro().loja
-    produtos.updateValidades(loja)
+  fun salvaValidades(produto: Produtos) {
+    produto.updateValidades(produto.storeno ?: 0)
     updateView()
   }
 }
 
-interface ITabEstoqueValidadeLojaViewModel : ITabView{
+interface ITabEstoqueValidadeLojaViewModel : ITabView {
   fun filtro(): FiltroListaProduto
   fun updateGrid(itens: List<Produtos>)
   fun produtosSelecionados(): List<Produtos>

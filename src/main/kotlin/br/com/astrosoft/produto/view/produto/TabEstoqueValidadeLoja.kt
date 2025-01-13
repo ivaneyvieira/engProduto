@@ -296,31 +296,32 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_quantVenda()
     produto_val()
 
-    val lojaProduto = user?.lojaProduto ?: 0
-
     produto_saldo()
 
     produto_qttyInv()
 
-    columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
+    columnGrid(Produtos::dataVenda, "Data Venda").dateFieldEditor()
+    columnGrid(Produtos::vendas, "Vendas")
+
+    columnGrid(Produtos::qttyDif01, "QTD 1")
     columnGrid(Produtos::venc01, "Vence 1", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
-    }.mesAnoFieldEditor()
+    }
 
-    columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
+    columnGrid(Produtos::qttyDif02, "QTD 2")
     columnGrid(Produtos::venc02, "Vence 2", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
-    }.mesAnoFieldEditor()
+    }
 
-    columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
+    columnGrid(Produtos::qttyDif03, "QTD 3")
     columnGrid(Produtos::venc03, "Vence 3", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
-    }.mesAnoFieldEditor()
+    }
 
-    columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
+    columnGrid(Produtos::qttyDif04, "QTD 4")
     columnGrid(Produtos::venc04, "Vence 4", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
-    }.mesAnoFieldEditor()
+    }
 
     produto_forn()
     produto_abrev()

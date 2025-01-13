@@ -348,26 +348,6 @@ WHERE A.vencimento IS NOT NULL
   AND N.date BETWEEN @DICOMPRA AND @DFCOMPRA
 GROUP BY prdno, IF(@TEMGRADE = 'S', grade, '');
 
-DROP TEMPORARY TABLE IF EXISTS T_QTD_VENCIMENTO;
-CREATE TEMPORARY TABLE T_QTD_VENCIMENTO
-(
-  PRIMARY KEY (prdno, grade)
-)
-SELECT prdno                              AS prdno,
-       IF(@TEMGRADE = 'S', grade, '')     AS grade,
-       SUM(IF(num = 1, quantidade, NULL)) AS qtty01,
-       MAX(IF(num = 1, vencimento, NULL)) AS venc01,
-       SUM(IF(num = 2, quantidade, NULL)) AS qtty02,
-       MAX(IF(num = 2, vencimento, NULL)) AS venc02,
-       SUM(IF(num = 3, quantidade, NULL)) AS qtty03,
-       MAX(IF(num = 3, vencimento, NULL)) AS venc03,
-       SUM(IF(num = 4, quantidade, NULL)) AS qtty04,
-       MAX(IF(num = 4, vencimento, NULL)) AS venc04
-FROM sqldados.qtd_vencimento
-WHERE storeno = @LOJA
-  AND @LOJA IN (2, 3, 4, 5, 8)
-GROUP BY prdno, IF(@TEMGRADE = 'S', grade, '');
-
 SELECT R.prdno,
        codigo,
        descricao,
@@ -406,19 +386,11 @@ SELECT R.prdno,
        VC.nfEntrada,
        VC.dataEntrada,
        VC.fabricacao,
-       VC.vencimento,
-       QV.qtty01,
-       QV.venc01,
-       QV.qtty02,
-       QV.venc02,
-       QV.qtty03,
-       QV.venc03,
-       QV.qtty04
+       VC.vencimento
 FROM T_RESULT AS R
        LEFT JOIN T_PRDVENDA AS V ON (R.prdno = V.prdno AND R.grade = V.grade)
        LEFT JOIN T_PRDCOMPRA AS C ON (R.prdno = C.prdno AND R.grade = C.grade)
        LEFT JOIN T_PRDVENCIMENTO AS VC ON (R.prdno = VC.prdno AND R.grade = VC.grade)
-       LEFT JOIN T_QTD_VENCIMENTO AS QV ON (R.prdno = QV.prdno AND R.grade = QV.grade)
 WHERE (:pesquisa = ''
   OR codigo LIKE @PESQUISA
   OR descricao LIKE @PESQUISA_LIKE
