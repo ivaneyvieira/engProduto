@@ -48,6 +48,6 @@ class QtdVencimento {
       val vendas = this.vendas ?: return this.qtty03
       if ((qttyDif01 ?: 0) > 0 || (qttyDif02 ?: 0) > 0 || (qttyDif03 ?: 0) > 0) return this.qtty04
       val dif = (this.qtty01 ?: 0) + (this.qtty02 ?: 0) + (this.qtty03 ?: 0) + (this.qtty04 ?: 0) - vendas
-      return dif
+      return if (dif < 0) 0 else dif
     }
 }
