@@ -17,4 +17,8 @@ ALTER TABLE sqldados.qtd_vencimento
   ADD COLUMN dataVenda DATE NULL AFTER num;
 
 
+ALTER TABLE sqldados.qtd_vencimento
+  ADD COLUMN vendas INT NULL AFTER dataVenda;
+
+
 select * from sqldados.qtd_vencimento
