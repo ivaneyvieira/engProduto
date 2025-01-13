@@ -300,7 +300,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
 
     produto_qttyInv()
 
-    columnGrid(Produtos::dataVenda, "Data Venda").dateFieldEditor()
+    columnGrid(Produtos::dataVenda, "Data Venda", width = "100px").dateFieldEditor()
     columnGrid(Produtos::vendas, "Vendas")
 
     columnGrid(Produtos::qttyDif01, "QTD 1")
