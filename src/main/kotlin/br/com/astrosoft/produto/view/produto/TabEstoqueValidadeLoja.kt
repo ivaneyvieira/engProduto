@@ -278,7 +278,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     this.withEditor(
       Produtos::class,
       openEditor = {
-        this.focusEditor(Produtos::qtty01)
+        this.focusEditor(Produtos::dataVenda)
       },
       closeEditor = {
         viewModel.salvaValidades(it.bean)
