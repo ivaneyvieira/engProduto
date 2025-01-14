@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.model.report.ProdutoRelatorio
 import br.com.astrosoft.produto.model.report.RelatorioProduto
+import br.com.astrosoft.produto.model.saci
 
 class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
   private val subView
@@ -50,6 +51,7 @@ class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
 
   fun salvaValidades(produto: Produtos) {
     produto.updateValidades(produto.storeno ?: 0)
+    produto.processaVendas()
     updateView()
   }
 

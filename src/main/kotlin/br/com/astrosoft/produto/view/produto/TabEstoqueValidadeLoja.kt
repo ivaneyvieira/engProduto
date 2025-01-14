@@ -22,7 +22,6 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_v
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexLayout
@@ -236,7 +235,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
-        button("Processa Vendas"){
+        button("Processa Vendas") {
           icon = VaadinIcon.COG.create()
           this.addClickListener {
             viewModel.processaVendas()
@@ -260,8 +259,8 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     inativo = EInativo.NAO,
     codigo = edtCodigo.value ?: 0,
     listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
-    tributacao =  "",
-    typeno =  0,
+    tributacao = "",
+    typeno = 0,
     clno = 0,
     loja = cmbLoja.value?.no ?: 0,
     diVenda = edtVenda.value?.firstDay,
@@ -309,6 +308,13 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
 
     columnGrid(Produtos::dataVenda, "Data Venda", width = "100px").dateFieldEditor()
     columnGrid(Produtos::vendas, "Vendas")
+
+    addColumnButton(VaadinIcon.DATE_INPUT, "Validade", "Validade") { produto ->
+      val form = FormValidadeQuant(produto)
+      DialogHelper.showForm(caption = "Validade", form = form) {
+        viewModel.salvaValidades(produto)
+      }
+    }
 
     columnGrid(Produtos::qttyDif01, "QTD 1")
     columnGrid(Produtos::venc01, "Vence 1", width = "80px") {
