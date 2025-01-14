@@ -1856,6 +1856,15 @@ class QuerySaci : QueryDB(database) {
     return query(sql, QtdVencimento::class)
   }
 
+  fun qtdVencimentoVenda(storno: Int = 0, prdno: String = "", grade: String = "") {
+    val sql = "/sqlSaci/qtdVencimentoVendas.sql"
+    script(sql) {
+      addOptionalParameter("storeno", storno)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

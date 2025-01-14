@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.produto
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroListaProduto
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.Produtos
@@ -49,6 +50,16 @@ class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
 
   fun salvaValidades(produto: Produtos) {
     produto.updateValidades(produto.storeno ?: 0)
+    updateView()
+  }
+
+  fun processaVendas() = viewModel.exec {
+    val produto = subView.produtosSelecionados().ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    produto.forEach { it.processaVendas() }
+
     updateView()
   }
 }

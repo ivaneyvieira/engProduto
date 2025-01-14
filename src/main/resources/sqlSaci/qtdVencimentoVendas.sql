@@ -9,6 +9,7 @@ SELECT storeno, prdno, grade, MAX(dataVenda * 1) AS dataVenda
 FROM sqldados.qtd_vencimento
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND dataVenda IS NOT NULL
+  AND ((storeno = :storeno AND prdno = :prdno AND grade = :grade) OR (:storeno = 0))
 GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_VENDAS;
@@ -34,5 +35,5 @@ UPDATE sqldados.qtd_vencimento AS Q
     AND V.grade = Q.grade
 SET Q.vendas = V.vendas
 WHERE Q.storeno IN (2, 3, 4, 5, 8)
-  AND Q.dataVenda IS NOT NULL;
+  AND Q.dataVenda IS NOT NULL
 

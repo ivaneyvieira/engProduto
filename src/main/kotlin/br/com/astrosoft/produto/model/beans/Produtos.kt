@@ -87,6 +87,10 @@ class Produtos(
   val MF_Dif
     get() = (MF_TT ?: 0) - (MF_App ?: 0)
 
+  fun processaVendas() {
+    saci.qtdVencimentoVenda(storeno ?: 0, prdno ?: "", grade ?: "")
+  }
+
   companion object {
     fun find(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
       val lista = saci.listaProdutos(filter)
@@ -140,6 +144,10 @@ class Produtos(
         qtty04 = qtd?.qtty04
         venc04 = qtd?.venc04
       }
+    }
+
+    fun processaVendas() {
+      saci.qtdVencimentoVenda()
     }
   }
 

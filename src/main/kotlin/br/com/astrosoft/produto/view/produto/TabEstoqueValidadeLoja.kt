@@ -236,6 +236,13 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
+        button("Processa Vendas"){
+          icon = VaadinIcon.COG.create()
+          this.addClickListener {
+            viewModel.processaVendas()
+          }
+        }
+
         downloadExcel(PlanilhaProduto())
       }
     }
