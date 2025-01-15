@@ -102,5 +102,8 @@ application {
   mainClass.set("br.com.astrosoft.framework.view.layout.MainKt")
 }
 
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
 
 

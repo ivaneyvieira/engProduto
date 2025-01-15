@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoLoja
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeLojaViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeLojaViewModel
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_Unidade
@@ -242,7 +243,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
-        downloadExcel(PlanilhaProduto())
+        downloadExcel(PlanilhaProdutoLoja())
       }
     }
   }
@@ -250,7 +251,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)
-    return "produto$textTime.xlsx"
+    return "produtoLoja$textTime.xlsx"
   }
 
   override fun filtro() = FiltroListaProduto(
@@ -340,7 +341,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_abrev()
   }
 
-  private fun HasComponents.downloadExcel(planilha: PlanilhaProduto) {
+  private fun HasComponents.downloadExcel(planilha: PlanilhaProdutoLoja) {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(itensSelecionados())
       ByteArrayInputStream(bytes)
