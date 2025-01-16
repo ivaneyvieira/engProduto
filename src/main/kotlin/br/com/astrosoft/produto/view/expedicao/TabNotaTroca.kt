@@ -69,8 +69,8 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
         }
       }.filter { tipo ->
         tipo == ETipoNotaFiscal.ENTRE_FUT ||
-        tipo == ETipoNotaFiscal.SIMP_REME_L ||
-        tipo == ETipoNotaFiscal.TODOS
+            tipo == ETipoNotaFiscal.SIMP_REME_L ||
+            tipo == ETipoNotaFiscal.TODOS
       }
       setItems(tiposNota)
       value = tiposNota.firstOrNull()
@@ -141,11 +141,11 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0     -> "azul"
+        countImp > 0 -> "azul"
 
-        countEnt > 0     -> "amarelo"
+        countEnt > 0 -> "amarelo"
 
-        else             -> null
+        else -> null
       }
     }
   }

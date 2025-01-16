@@ -1,7 +1,7 @@
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+    PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno                        AS prdno,
        A.grade                        AS grade,
@@ -15,7 +15,7 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
-  PRIMARY KEY (codigo, grade)
+    PRIMARY KEY (codigo, grade)
 )
 SELECT X.storeno                                                     AS loja,
        pdvno                                                         AS pdvno,
@@ -24,9 +24,9 @@ SELECT X.storeno                                                     AS loja,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(X.grade, '')                                           AS grade,
        CASE
-         WHEN P.clno BETWEEN 10000 AND 19999 THEN P.barcode
-         ELSE TRIM(IFNULL(GROUP_CONCAT(DISTINCT BC.barcode SEPARATOR ','), P.barcode))
-       END                                                           AS barcodeStrList,
+           WHEN P.clno BETWEEN 10000 AND 19999 THEN P.barcode
+           ELSE TRIM(IFNULL(GROUP_CONCAT(DISTINCT BC.barcode SEPARATOR ','), P.barcode))
+           END                                                       AS barcodeStrList,
        TRIM(MID(P.name, 1, 37))                                      AS descricao,
        P.mfno                                                        AS vendno,
        IFNULL(F.auxChar1, '')                                        AS fornecedor,
@@ -56,33 +56,33 @@ SELECT X.storeno                                                     AS loja,
        N.tipo                                                        AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque
 FROM sqldados.prd AS P
-       INNER JOIN sqldados.xaprd2 AS X
-                  ON P.no = X.prdno
-       LEFT JOIN T_LOC AS L
-                 ON L.prdno = X.prdno
-                   AND L.grade = X.grade
-       LEFT JOIN sqldados.users AS EC
-                 ON EC.no = X.s4
-       LEFT JOIN sqldados.users AS EE
-                 ON EE.no = X.s5
-       INNER JOIN sqldados.nf AS N
-                  USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.prdbar AS BC
-                 ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
-       LEFT JOIN (SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
-                  FROM sqldados.stk
-                  WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
-                  GROUP BY prdno, grade) AS STK
-                 ON X.prdno = STK.prdno
-                   AND X.grade = STK.grade
-       LEFT JOIN sqldados.vend AS F
-                 ON F.no = P.mfno
-       LEFT JOIN sqldados.type AS T
-                 ON T.no = P.typeno
-       LEFT JOIN sqldados.cl
-                 ON cl.no = P.clno
-       LEFT JOIN sqldados.spedprd AS S
-                 ON P.no = S.prdno
+         INNER JOIN sqldados.xaprd2 AS X
+                    ON P.no = X.prdno
+         LEFT JOIN T_LOC AS L
+                   ON L.prdno = X.prdno
+                       AND L.grade = X.grade
+         LEFT JOIN sqldados.users AS EC
+                   ON EC.no = X.s4
+         LEFT JOIN sqldados.users AS EE
+                   ON EE.no = X.s5
+         INNER JOIN sqldados.nf AS N
+                    USING (storeno, pdvno, xano)
+         LEFT JOIN sqldados.prdbar AS BC
+                   ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
+         LEFT JOIN (SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
+                    FROM sqldados.stk
+                    WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+                    GROUP BY prdno, grade) AS STK
+                   ON X.prdno = STK.prdno
+                       AND X.grade = STK.grade
+         LEFT JOIN sqldados.vend AS F
+                   ON F.no = P.mfno
+         LEFT JOIN sqldados.type AS T
+                   ON T.no = P.typeno
+         LEFT JOIN sqldados.cl
+                   ON cl.no = P.clno
+         LEFT JOIN sqldados.spedprd AS S
+                   ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano

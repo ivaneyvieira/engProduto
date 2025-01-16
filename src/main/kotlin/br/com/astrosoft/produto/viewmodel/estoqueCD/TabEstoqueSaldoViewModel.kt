@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoque
 import java.time.LocalDate
@@ -35,8 +38,8 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     //val userAdmin = UserSaci.userAdmin()
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
     val lista: List<ProdutoKardec> = produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) +
-                                     produto.expedicao(dataInicial) + produto.reposicao(dataInicial) +
-                                     produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
+        produto.expedicao(dataInicial) + produto.reposicao(dataInicial) +
+        produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
     var saldoAcumulado = 0
     return lista.sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
       saldoAcumulado += it.qtde
@@ -51,10 +54,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun copiaLocalizacao() = viewModel.exec {
     val itens = subView.itensSelecionados()
-    if(itens.isEmpty()) fail("Nenhum item selecionado")
+    if (itens.isEmpty()) fail("Nenhum item selecionado")
 
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
-    itens.forEach {item ->
+    itens.forEach { item ->
       item.locApp = primeiro.locApp
       item.update()
     }

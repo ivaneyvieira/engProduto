@@ -4,7 +4,10 @@ import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
 import br.com.astrosoft.framework.util.format
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.VaadinDsl
+import com.github.mvysny.karibudsl.v10.column
+import com.github.mvysny.karibudsl.v10.isExpand
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
@@ -86,7 +89,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
 }
 
 @JvmName("columnProvider")
-fun <T : Any, V: Any> (@VaadinDsl Grid<T>).columnGrid(
+fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(
   valueProvider: ValueProvider<T, V?>,
   header: String? = null,
   width: String? = null,

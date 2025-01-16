@@ -1,5 +1,7 @@
-DROP TEMPORARY TABLE IF EXISTS T_VAL;
-CREATE TEMPORARY TABLE T_VAL
+DROP
+TEMPORARY TABLE IF EXISTS T_VAL;
+CREATE
+TEMPORARY TABLE T_VAL
 SELECT *
 FROM sqldados.produtoValidade
 WHERE storeno = :storeno
@@ -22,7 +24,8 @@ WHERE storeno = :storeno
   AND tipo = :tipoEdit
   AND dataEntrada = :dataEntradaEdit;
 
-REPLACE INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, movimento, tipo)
+REPLACE
+INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, movimento, tipo)
 SELECT :storeno,
        :prdno,
        :grade,

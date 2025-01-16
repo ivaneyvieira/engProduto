@@ -40,7 +40,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
-    return if("Todas" in printerUser) viewModel.allPrinters() else printerUser
+    return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
 
   override fun HorizontalLayout.toolBarConfig() {

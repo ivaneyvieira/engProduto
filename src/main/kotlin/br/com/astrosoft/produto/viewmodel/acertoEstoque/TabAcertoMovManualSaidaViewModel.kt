@@ -2,7 +2,9 @@ package br.com.astrosoft.produto.viewmodel.acertoEstoque
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.MovManual
+import br.com.astrosoft.produto.model.beans.MovManualFilter
 import br.com.astrosoft.produto.model.planilha.PlanilhaMovManual
 
 class TabAcertoMovManualSaidaViewModel(val viewModel: AcertoEstoqueViewModel) {

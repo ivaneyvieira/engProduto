@@ -48,8 +48,8 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
       val fornecedorCad = nota.fornecedorCad?.split(",").orEmpty()
       val fornecedorNota = nota.fornecedorNota?.toString() ?: ""
       query == "" || cnpj == query || fornecedor.contains(query, ignoreCase = true) ||
-      chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
-      valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
+          chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
+          valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
     }
 
     subView.updateList(listLocal)

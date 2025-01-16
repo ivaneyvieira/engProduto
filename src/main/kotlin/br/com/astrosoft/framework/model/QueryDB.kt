@@ -174,7 +174,7 @@ open class QueryDB(database: DatabaseConfig) {
   //fun Query.addOptionalParameter(name: String, value: Int?): Query {
   //  if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
   //  return this
- // }
+  // }
 
   @JvmName("addOptionalParameterString")
   fun Query.addOptionalParameter(name: String, value: List<String>): Query {

@@ -1,5 +1,7 @@
-DROP TEMPORARY TABLE IF EXISTS T_DADOS;
-CREATE TEMPORARY TABLE IF NOT EXISTS T_DADOS
+DROP
+TEMPORARY TABLE IF EXISTS T_DADOS;
+CREATE
+TEMPORARY TABLE IF NOT EXISTS T_DADOS
 SELECT S.no                AS storeno,
        P.no                AS prdno,
        IFNULL(B.grade, '') AS grade,
@@ -7,13 +9,13 @@ SELECT S.no                AS storeno,
        0                   AS inventario,
        CURRENT_DATE * 1    AS dataEntrada
 FROM sqldados.prd AS P
-       LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno
-       LEFT JOIN sqldados.vend AS V
-                 ON V.no = P.mfno
-       INNER JOIN sqldados.store AS S
-                  ON S.no IN (2, 3, 4, 5, 8)
-                    AND (S.no = :loja)
+         LEFT JOIN sqldados.prdbar AS B
+                   ON P.no = B.prdno
+         LEFT JOIN sqldados.vend AS V
+                   ON V.no = P.mfno
+         INNER JOIN sqldados.store AS S
+                    ON S.no IN (2, 3, 4, 5, 8)
+                        AND (S.no = :loja)
 WHERE IF(tipoGarantia = 2, garantia, 0) > 0
   AND (TRIM(P.no) * 1 = :codigo)
   AND (grade = :grade OR :grade = '')

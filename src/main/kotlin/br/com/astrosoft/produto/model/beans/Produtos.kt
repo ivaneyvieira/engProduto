@@ -153,11 +153,11 @@ class Produtos(
 
   val siglaLoja: String
     get() = when (storeno) {
-      2    -> "DS"
-      3    -> "MR"
-      4    -> "MF"
-      5    -> "PK"
-      8    -> "TM"
+      2 -> "DS"
+      3 -> "MR"
+      4 -> "MF"
+      5 -> "PK"
+      8 -> "TM"
       else -> ""
     }
 

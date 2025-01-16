@@ -1,20 +1,10 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.EEntradaXML
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
-import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.withEditor
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEnt
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -150,13 +140,14 @@ class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabR
   }
 
   override fun Grid<NotaEntradaXML>.gridPanel() {
-    this.withEditor(NotaEntradaXML::class,
-        openEditor = {
-          this.focusEditor(NotaEntradaXML::pedido)
-        },
-        closeEditor = {
-          viewModel.salvaNota(it.bean)
-        })
+    this.withEditor(
+      NotaEntradaXML::class,
+      openEditor = {
+        this.focusEditor(NotaEntradaXML::pedido)
+      },
+      closeEditor = {
+        viewModel.salvaNota(it.bean)
+      })
     selectionMode = Grid.SelectionMode.MULTI
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->

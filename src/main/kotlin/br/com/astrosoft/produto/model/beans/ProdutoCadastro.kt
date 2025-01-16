@@ -26,7 +26,7 @@ class ProdutoCadastro {
   var lojas: String? = null
 
   val configSt
-    get() = if(ctLoja == 0) "N" else "S"
+    get() = if (ctLoja == 0) "N" else "S"
 
   fun updateSt() {
     prdno?.let { pno ->

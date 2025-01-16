@@ -27,7 +27,7 @@ class ReportRessuprimentoEntradaSobra(private val ressuprimentoTitle: String) :
     columnReport(ProdutoRessuprimentoSobra::quantidade, "Quant", width = 40)
   }
 
-  override fun labelTitleCol(): TextColumnBuilder<String>  {
+  override fun labelTitleCol(): TextColumnBuilder<String> {
     return columnReport(ProdutoRessuprimentoSobra::grupo, "Grupo") {
       this.scaleFont()
     }

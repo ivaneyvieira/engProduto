@@ -86,7 +86,7 @@ class NotaEntradaXML {
     var parameters = consulta.inv2Parameters
     saci.processaEntrada(parameters)
     val itensParam = consulta.iprd2Parameters(parameters)
-    itensParam.forEach {param ->
+    itensParam.forEach { param ->
       saci.processaItensEntrada(param)
     }
   }

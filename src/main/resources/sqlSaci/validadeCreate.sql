@@ -1,10 +1,11 @@
-USE sqldados;
+USE
+sqldados;
 
 DROP TABLE IF EXISTS validadeAdicional;
 CREATE TABLE validadeAdicional
 (
-  validade        INT NOT NULL PRIMARY KEY,
-  mesesFabricacao INT NOT NULL
+    validade        INT NOT NULL PRIMARY KEY,
+    mesesFabricacao INT NOT NULL
 );
 
 INSERT INTO validadeAdicional (validade, mesesFabricacao)

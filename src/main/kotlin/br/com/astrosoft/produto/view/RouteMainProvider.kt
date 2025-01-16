@@ -16,9 +16,9 @@ class RouteMainProvider : IRouteMainProvider {
 
       return when {
         userSaci?.pedidoTransf == true -> PedidoTransfView::class
-        userSaci?.pedido == true       -> RessuprimentoView::class
-        userSaci?.admin == true        -> UsuarioView::class
-        else                           -> ProdutoView::class
+        userSaci?.pedido == true -> RessuprimentoView::class
+        userSaci?.admin == true -> UsuarioView::class
+        else -> ProdutoView::class
       }
     }
 }

@@ -3,14 +3,14 @@ SET SQL_MODE = '';
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
-  storeno    INT,
-  prdno      VARCHAR(16),
-  grade      VARCHAR(8),
-  dataVenda  INT,
-  num        INT,
-  quantidade INT,
-  vencimento VARCHAR(10),
-  PRIMARY KEY (storeno, prdno, grade, num)
+    storeno    INT,
+    prdno      VARCHAR(16),
+    grade      VARCHAR(8),
+    dataVenda  INT,
+    num        INT,
+    quantidade INT,
+    vencimento VARCHAR(10),
+    PRIMARY KEY (storeno, prdno, grade, num)
 )
 SELECT :storeno   AS storeno,
        :prdno     AS prdno,

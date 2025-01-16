@@ -118,8 +118,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
     gridDetail.setPartNameGenerator {
       when {
         it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "primary"
-        it.selecionado == true                     -> "amarelo"
-        else                                       -> null
+        it.selecionado == true -> "amarelo"
+        else -> null
       }
     }
     update()

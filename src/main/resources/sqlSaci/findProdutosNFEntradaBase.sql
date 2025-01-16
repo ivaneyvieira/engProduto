@@ -25,24 +25,24 @@ SELECT N.storeno                                          AS loja,
        IFNULL(0, 0) / 1000                                AS qttyRef,
        0                                                  AS marca
 FROM sqldados.prd AS P
-       INNER JOIN sqldados.iprd AS X
-                  ON P.no = X.prdno
-       INNER JOIN sqldados.inv AS N
-                  USING (invno)
-       INNER JOIN sqldados.invnfe AS K
-                  USING (invno)
-       LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno AND B.grade = X.grade
-       LEFT JOIN sqldados.prdloc AS L
-                 ON L.prdno = P.no AND L.storeno = 4
-       LEFT JOIN sqldados.vend AS F
-                 ON F.no = P.mfno
-       LEFT JOIN sqldados.type AS T
-                 ON T.no = P.typeno
-       LEFT JOIN sqldados.cl
-                 ON cl.no = P.clno
-       LEFT JOIN sqldados.spedprd AS S
-                 ON P.no = S.prdno
+         INNER JOIN sqldados.iprd AS X
+                    ON P.no = X.prdno
+         INNER JOIN sqldados.inv AS N
+                    USING (invno)
+         INNER JOIN sqldados.invnfe AS K
+                    USING (invno)
+         LEFT JOIN sqldados.prdbar AS B
+                   ON P.no = B.prdno AND B.grade = X.grade
+         LEFT JOIN sqldados.prdloc AS L
+                   ON L.prdno = P.no AND L.storeno = 4
+         LEFT JOIN sqldados.vend AS F
+                   ON F.no = P.mfno
+         LEFT JOIN sqldados.type AS T
+                   ON T.no = P.typeno
+         LEFT JOIN sqldados.cl
+                   ON cl.no = P.clno
+         LEFT JOIN sqldados.spedprd AS S
+                   ON P.no = S.prdno
 WHERE nfekey = :nfekey
 GROUP BY codigo, grade
 

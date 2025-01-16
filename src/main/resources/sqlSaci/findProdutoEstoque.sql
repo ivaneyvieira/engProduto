@@ -27,7 +27,7 @@ alter table sqldados.prdAdicional
 DROP TEMPORARY TABLE IF EXISTS T_LOC_SACI;
 CREATE TEMPORARY TABLE T_LOC_SACI
 (
-  PRIMARY KEY (prdno, grade)
+    PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
 FROM sqldados.prdloc
@@ -38,7 +38,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
-  PRIMARY KEY (prdno, grade)
+    PRIMARY KEY (prdno, grade)
 )
 SELECT prdno,
        grade,
@@ -71,39 +71,39 @@ SELECT 4                                                                        
        ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
 FROM sqldados.stk AS E
-       INNER JOIN sqldados.store AS S
-                  ON E.storeno = S.no
-       INNER JOIN sqldados.prd AS P
-                  ON E.prdno = P.no
-       LEFT JOIN sqldados.vend AS V
-                 ON V.no = P.mfno
-       LEFT JOIN T_LOC_APP AS A
-                 USING (prdno, grade)
-       LEFT JOIN T_LOC_SACI AS L1
-                 USING (prdno, grade)
+         INNER JOIN sqldados.store AS S
+                    ON E.storeno = S.no
+         INNER JOIN sqldados.prd AS P
+                    ON E.prdno = P.no
+         LEFT JOIN sqldados.vend AS V
+                   ON V.no = P.mfno
+         LEFT JOIN T_LOC_APP AS A
+                   USING (prdno, grade)
+         LEFT JOIN T_LOC_SACI AS L1
+                   USING (prdno, grade)
 
 WHERE (
-  ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
-  ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
-  (:inativo = 'T')
-  )
+    ((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
+    ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
+    (:inativo = 'T')
+    )
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND (TRIM(E.prdno) * 1 = :codigo OR :codigo = 0)
   AND CASE :caracter
-        WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
-        WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
-        WHEN 'T' THEN TRUE
-        ELSE FALSE
-      END
+          WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
+          WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
+          WHEN 'T' THEN TRUE
+          ELSE FALSE
+    END
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
 GROUP BY E.prdno, E.grade
 HAVING CASE :estoque
-         WHEN '>' THEN saldo > :saldo
-         WHEN '<' THEN saldo < :saldo
-         WHEN '=' THEN saldo = :saldo
-         WHEN 'T' THEN TRUE
-         ELSE FALSE
-       END;
+           WHEN '>' THEN saldo > :saldo
+           WHEN '<' THEN saldo < :saldo
+           WHEN '=' THEN saldo = :saldo
+           WHEN 'T' THEN TRUE
+           ELSE FALSE
+           END;
 
 SELECT loja,
        lojaSigla,
@@ -123,13 +123,13 @@ SELECT loja,
        dataInicial
 FROM temp_pesquisa
 WHERE (
-  @PESQUISA = '' OR
-  locSaci LIKE @PESQUISALIKE OR
-  codigo = @PESQUISANUM OR
-  locSaci LIKE @PESQUISALIKE OR
-  descricao LIKE @PESQUISALIKE OR
-  unidade LIKE @PESQUISA
-  )
+    @PESQUISA = '' OR
+    locSaci LIKE @PESQUISALIKE OR
+    codigo = @PESQUISANUM OR
+    locSaci LIKE @PESQUISALIKE OR
+    descricao LIKE @PESQUISALIKE OR
+    unidade LIKE @PESQUISA
+    )
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))

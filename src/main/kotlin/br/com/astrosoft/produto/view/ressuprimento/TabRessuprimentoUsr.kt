@@ -25,7 +25,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
-        checkBox("Pedido"){
+        checkBox("Pedido") {
           binder.bind(this, UserSaci::pedidoRessuprimento.name)
         }
         checkBox("Separar") {

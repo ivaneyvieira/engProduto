@@ -3,7 +3,7 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_CARR;
 CREATE TEMPORARY TABLE T_CARR
 (
-  INDEX (doc)
+    INDEX (doc)
 )
 SELECT no AS carrno, REPLACE(REPLACE(REPLACE(cgc, '.', ''), '/', ''), '-', '') AS doc
 FROM sqldados.carr;

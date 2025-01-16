@@ -2,8 +2,9 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaMovManual
+import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 
 class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
@@ -30,7 +31,7 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
     return planilha.write(produtos)
   }
 
-  fun updateProduto(bean: ProdutoEstoque?) = viewModel.exec{
+  fun updateProduto(bean: ProdutoEstoque?) = viewModel.exec {
     bean ?: fail("Produto não informado")
     bean.update()
     updateView()
@@ -38,10 +39,10 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun copiaLocalizacao() = viewModel.exec {
     val itens = subView.itensSelecionados()
-    if(itens.isEmpty()) fail("Nenhum item selecionado")
+    if (itens.isEmpty()) fail("Nenhum item selecionado")
 
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
-    itens.forEach {item ->
+    itens.forEach { item ->
       item.locApp = primeiro.locApp
       item.update()
     }

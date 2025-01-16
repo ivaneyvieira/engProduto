@@ -20,10 +20,10 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
     else
       EMarcaNota.EXP
     val filtro = subView.filtro(marca)
-    val notas = NotaSaida.find(filtro).filter {nota ->
+    val notas = NotaSaida.find(filtro).filter { nota ->
       nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name ||
-      nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME_L.name ||
-      nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
+          nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME_L.name ||
+          nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
     }
     subView.updateNotas(notas)
   }
@@ -41,7 +41,7 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
     }
 
     itens.forEach {
-      if(it.local.isNullOrBlank()) fail("Produto sem localização")
+      if (it.local.isNullOrBlank()) fail("Produto sem localização")
     }
 
     subView.formAutoriza(itens) { userno ->

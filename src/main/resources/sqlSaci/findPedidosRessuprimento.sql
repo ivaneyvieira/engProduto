@@ -10,7 +10,7 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno,
        ordno,
@@ -34,26 +34,26 @@ SELECT O.storeno            AS loja,
        O.remarks            AS observacao,
        OP.totalPendente     AS totalPendente
 FROM sqldados.ords AS O
-       INNER JOIN sqldados.store AS L
-                  ON O.storeno = L.no
-       LEFT JOIN T_OPRD AS OP
-                  ON O.storeno = OP.storeno
-                    AND O.no = OP.ordno
-       INNER JOIN sqldados.vend AS V
-                  ON O.vendno = V.no
+         INNER JOIN sqldados.store AS L
+                    ON O.storeno = L.no
+         LEFT JOIN T_OPRD AS OP
+                   ON O.storeno = OP.storeno
+                       AND O.no = OP.ordno
+         INNER JOIN sqldados.vend AS V
+                    ON O.vendno = V.no
 WHERE (O.storeno = 1)
   AND (
-  (O.no BETWEEN 20000 AND 29999) OR
-  (O.no BETWEEN 30000 AND 39999) OR
-  (O.no BETWEEN 40000 AND 49999) OR
-  (O.no BETWEEN 50000 AND 59999) OR
-  (O.no BETWEEN 80000 AND 89999) OR
-  (O.no BETWEEN 200000000 AND 299999999) OR
-  (O.no BETWEEN 300000000 AND 399999999) OR
-  (O.no BETWEEN 400000000 AND 499999999) OR
-  (O.no BETWEEN 500000000 AND 599999999) OR
-  (O.no BETWEEN 800000000 AND 899999999)
-  );
+    (O.no BETWEEN 20000 AND 29999) OR
+    (O.no BETWEEN 30000 AND 39999) OR
+    (O.no BETWEEN 40000 AND 49999) OR
+    (O.no BETWEEN 50000 AND 59999) OR
+    (O.no BETWEEN 80000 AND 89999) OR
+    (O.no BETWEEN 200000000 AND 299999999) OR
+    (O.no BETWEEN 300000000 AND 399999999) OR
+    (O.no BETWEEN 400000000 AND 499999999) OR
+    (O.no BETWEEN 500000000 AND 599999999) OR
+    (O.no BETWEEN 800000000 AND 899999999)
+    );
 
 SELECT loja,
        sigla,

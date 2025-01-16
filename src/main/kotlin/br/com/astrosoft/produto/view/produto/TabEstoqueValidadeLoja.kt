@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProduto
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoLoja
 import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeLojaViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeLojaViewModel
@@ -24,6 +23,7 @@ import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridMultiSelectionModel
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -94,15 +94,15 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     val size = dataProvider.items.size
     val dataCommunicator: DataCommunicator<Produtos> = gridPanel.dataCommunicator
     val stream: Stream<Produtos> =
-        dataProvider.fetch(
-          Query<Produtos, SerializablePredicate<Produtos>>(
-            0,
-            size,
-            dataCommunicator.backEndSorting,
-            dataCommunicator.inMemorySorting,
-            null
-          )
+      dataProvider.fetch(
+        Query<Produtos, SerializablePredicate<Produtos>>(
+          0,
+          size,
+          dataCommunicator.backEndSorting,
+          dataCommunicator.inMemorySorting,
+          null
         )
+      )
     val list: List<Produtos> = stream.collect(Collectors.toList())
     val selecionado = this.itensSelecionados()
     return list.filter { selecionado.contains(it) }
@@ -277,10 +277,10 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
   )
 
   override fun Grid<Produtos>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
-    val user = AppConfig.userLogin() as? UserSaci
-
     this.selectionMode = Grid.SelectionMode.MULTI
+    val sel = this.selectionModel as? GridMultiSelectionModel<Produtos>
+    sel?.isDragSelect = true
+    val user = AppConfig.userLogin() as? UserSaci
 
     this.withEditor(
       Produtos::class,

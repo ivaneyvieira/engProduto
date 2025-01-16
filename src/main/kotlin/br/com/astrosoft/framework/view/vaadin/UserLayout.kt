@@ -39,7 +39,8 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   }
 
   private fun setOperationd(crud: GridCrud<B>) {
-    crud.setOperations({ viewModel.findAll() },
+    crud.setOperations(
+      { viewModel.findAll() },
       { user: B? -> viewModel.add(user) },
       { user: B? -> viewModel.update(user) },
       { user: B? -> viewModel.delete(user) })

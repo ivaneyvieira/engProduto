@@ -13,7 +13,7 @@ class UsuarioViewModel(view: IUsuarioView) : UserViewModel<UserSaci, IUsuarioVie
 
   override fun findAllUser() = UserSaci.findAll()
 
-  fun findUser(filter : UserSaci.() -> Boolean) = UserSaci.findAll().filter {
+  fun findUser(filter: UserSaci.() -> Boolean) = UserSaci.findAll().filter {
     it.filter()
   }
 

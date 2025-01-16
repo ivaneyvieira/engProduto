@@ -17,7 +17,7 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
     val filtro = subView.filtro()
     val pedidos = PedidoCapa.findPedidoCapa(filtro).filter {
       (it.preEntrada == filtro.preEntrada.cod || filtro.preEntrada == EPreEntrada.TODOS) &&
-      (!filtro.semRecebimento || it.totalRecebido.format() == "0,00")
+          (!filtro.semRecebimento || it.totalRecebido.format() == "0,00")
     }
     subView.updatePedidos(pedidos)
   }

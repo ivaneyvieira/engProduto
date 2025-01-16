@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.saci
 
 class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
-    fun findLoja(storeno: Int): Loja? {
+  fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
@@ -105,7 +105,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    if(produto.localizacao.isNullOrBlank()){
+    if (produto.localizacao.isNullOrBlank()) {
       fail("Produto sem localização")
     }
     produto.selecionado = EMarcaRessuprimento.REC.num
@@ -125,7 +125,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
 
   fun processamentoProdutos() {
     val selecionados = subView.ressuprimentosSelecionados()
-    if(selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
+    if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
   }
 

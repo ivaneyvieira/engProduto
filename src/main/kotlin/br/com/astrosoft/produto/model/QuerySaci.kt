@@ -319,17 +319,17 @@ class QuerySaci : QueryDB(database) {
     val listFilter = list.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja != filtro.loja &&
-                                       filtro.loja != 0
+            it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
+            it.loja != filtro.loja &&
+            filtro.loja != 0
 
-        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja == filtro.loja &&
-                                       filtro.loja != 0 &&
-                                       it.serie == "3"
+        ETipoNotaFiscal.SIMP_REME -> it.retiraFutura == true &&
+            it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
+            it.loja == filtro.loja &&
+            filtro.loja != 0 &&
+            it.serie == "3"
 
-        else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
+        else -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
     }
 
@@ -630,8 +630,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("impresso", filtro.impresso.let {
         when {
           it == null -> "T"
-          it         -> "S"
-          else       -> "N"
+          it -> "S"
+          else -> "N"
         }
       })
     }
@@ -1278,9 +1278,9 @@ class QuerySaci : QueryDB(database) {
   fun produtoValidade(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
     val sql = "/sqlSaci/produtoValidade.sql"
     val ano = when {
-      filtro.ano == 0   -> 0
+      filtro.ano == 0 -> 0
       filtro.ano < 2000 -> filtro.ano + 2000
-      else              -> filtro.ano
+      else -> filtro.ano
     }
     return query(sql, ProdutoInventario::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
@@ -1326,9 +1326,9 @@ class QuerySaci : QueryDB(database) {
   fun produtoValidadeSaida(filtro: FiltroProdutoInventario, dataInicial: LocalDate?): List<ProdutoSaida> {
     val sql = "/sqlSaci/produtoValidadeSaida.sql"
     val ano = when {
-      filtro.ano == 0   -> 0
+      filtro.ano == 0 -> 0
       filtro.ano < 2000 -> filtro.ano + 2000
-      else              -> filtro.ano
+      else -> filtro.ano
     }
     return query(sql, ProdutoSaida::class) {
       this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
@@ -1345,9 +1345,9 @@ class QuerySaci : QueryDB(database) {
   fun produtoValidadeEntrada(filtro: FiltroProdutoInventario, dataInicial: LocalDate?): List<ProdutoRecebimento> {
     val sql = "/sqlSaci/produtoValidadeEntrada.sql"
     val ano = when {
-      filtro.ano == 0   -> 0
+      filtro.ano == 0 -> 0
       filtro.ano < 2000 -> filtro.ano + 2000
-      else              -> filtro.ano
+      else -> filtro.ano
     }
     return query(sql, ProdutoRecebimento::class) {
       this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
@@ -1410,9 +1410,9 @@ class QuerySaci : QueryDB(database) {
   fun dadosValidade(filtro: FiltroDadosValidade): List<DadosValidade> {
     val sql = "/sqlSaci/dadosValidade.sql"
     val ano = when {
-      filtro.ano == 0   -> 0
+      filtro.ano == 0 -> 0
       filtro.ano < 2000 -> filtro.ano + 2000
-      else              -> filtro.ano
+      else -> filtro.ano
     }
     return query(sql, DadosValidade::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)

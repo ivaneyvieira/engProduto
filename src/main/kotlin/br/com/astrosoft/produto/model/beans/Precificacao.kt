@@ -46,9 +46,9 @@ class Precificacao {
     val imposto = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
       parte.getOrNull(0) == "ICMS" &&
-      parte.getOrNull(1) == "ENTRADA" &&
-      parte.getOrNull(2) == icms &&
-      parte.getOrNull(3) == "MVA"
+          parte.getOrNull(1) == "ENTRADA" &&
+          parte.getOrNull(2) == icms &&
+          parte.getOrNull(3) == "MVA"
 
     } ?: return null
     return imposto.split(" +".toRegex()).getOrNull(2)?.replace(',', '.')?.toDoubleOrNull()
@@ -70,9 +70,9 @@ class Precificacao {
     val imposto = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
       parte.getOrNull(0) == "ICMS" &&
-      parte.getOrNull(1) == "ENTRADA" &&
-      parte.getOrNull(2) == icms &&
-      parte.getOrNull(3) == "MVA"
+          parte.getOrNull(1) == "ENTRADA" &&
+          parte.getOrNull(2) == icms &&
+          parte.getOrNull(3) == "MVA"
 
     } ?: return null
     return imposto.split(" +".toRegex()).getOrNull(4)?.replace(',', '.')?.toDoubleOrNull()
@@ -82,7 +82,7 @@ class Precificacao {
     val mvaOri = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
       parte.getOrNull(0) == "MVA" &&
-      parte.getOrNull(1) == "ORIGINAL"
+          parte.getOrNull(1) == "ORIGINAL"
 
     } ?: return null
     return mvaOri.split(" +".toRegex()).getOrNull(2)?.replace(',', '.')?.toDoubleOrNull()
@@ -92,9 +92,9 @@ class Precificacao {
     val ncmMa = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
       parte.getOrNull(0) == "TIMON" &&
-      parte.getOrNull(1) == "-" &&
-      parte.getOrNull(2) == "MA" &&
-      parte.getOrNull(3) == "NCM"
+          parte.getOrNull(1) == "-" &&
+          parte.getOrNull(2) == "MA" &&
+          parte.getOrNull(3) == "NCM"
 
     } ?: return null
     return ncmMa.split(" +".toRegex()).getOrNull(4)

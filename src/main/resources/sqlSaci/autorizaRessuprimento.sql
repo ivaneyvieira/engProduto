@@ -1,4 +1,5 @@
-use sqldados;
+use
+sqldados;
 
 UPDATE sqldados.ords
 SET s4 = :userno

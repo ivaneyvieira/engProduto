@@ -16,13 +16,13 @@ class ReportVendaRef : ReportBuild<NotaVendaRef>() {
     columnReport(NotaVendaRef::nota, header = "NF", width = 50, aligment = RIGHT)
     columnReport(NotaVendaRef::uf, header = "UF", width = 20, aligment = CENTER)
     columnReport(NotaVendaRef::numeroInterno, header = "NI", width = 70)
-    columnReport(NotaVendaRef::tipoPgto, header = "Tipo Pgto", width = 70){
+    columnReport(NotaVendaRef::tipoPgto, header = "Tipo Pgto", width = 70) {
       this.setTextAdjust(TextAdjust.SCALE_FONT)
     }
     columnReport(NotaVendaRef::valor, header = "Valor NF", width = 40)
     columnReport(NotaVendaRef::valorTipo, header = "Valor TP", width = 40)
     columnReport(NotaVendaRef::cliente, header = "Cód Cli", pattern = "0", width = 40)
-    columnReport(NotaVendaRef::nomeCliente, header = "Nome Cliente"){
+    columnReport(NotaVendaRef::nomeCliente, header = "Nome Cliente") {
       this.setTextAdjust(TextAdjust.CUT_TEXT)
     }
   }

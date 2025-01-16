@@ -1,6 +1,9 @@
 package br.com.astrosoft.framework.view.vaadin
 
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.verticalLayout
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -15,10 +18,10 @@ class SubWindowPDF(chave: String, bytesPDF: ByteArray) : Dialog() {
     height = "100%"
     val timeNumber = System.currentTimeMillis()
     val resourcePDF =
-        StreamResource(
-          "${chave}_${timeNumber}.pdf",
-          ConverteByte(bytesPDF)
-        ) //val buttonWrapper = FileDownloadWrapper(resourcePDF)
+      StreamResource(
+        "${chave}_${timeNumber}.pdf",
+        ConverteByte(bytesPDF)
+      ) //val buttonWrapper = FileDownloadWrapper(resourcePDF)
     verticalLayout {
       isPadding = false
       horizontalLayout {

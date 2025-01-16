@@ -1,16 +1,11 @@
 package br.com.astrosoft.produto.view.precificacao
 
-import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
-import br.com.astrosoft.produto.model.beans.BeanForm
-import br.com.astrosoft.produto.model.beans.EMarcaPonto
-import br.com.astrosoft.produto.model.beans.FiltroPrecificacao
-import br.com.astrosoft.produto.model.beans.Precificacao
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaPrecificacao
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoCS
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoClno
@@ -44,7 +39,6 @@ import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.pr
 import br.com.astrosoft.produto.viewmodel.precificacao.ITabPrecificacaoViewModel
 import br.com.astrosoft.produto.viewmodel.precificacao.TabPrecificacaoViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.karibudsl.v10.onClick
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
@@ -127,7 +121,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
     }
 
     button("Mudar %") {
-      onClick{
+      onClick {
         val itens = itensSelecionados()
         if (itens.isEmpty()) {
           DialogHelper.showError("Nenhum item selecionado")

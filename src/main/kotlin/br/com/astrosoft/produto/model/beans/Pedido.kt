@@ -117,12 +117,12 @@ class Pedido(
 
   val rotaArea
     get() = when {
-      area?.startsWith("NORTE") == true    -> "Norte"
-      area?.startsWith("SUL") == true      -> "Sul"
-      area?.startsWith("LESTE") == true    -> "Leste"
+      area?.startsWith("NORTE") == true -> "Norte"
+      area?.startsWith("SUL") == true -> "Sul"
+      area?.startsWith("LESTE") == true -> "Leste"
       area?.startsWith("NORDESTE") == true -> "Nordeste"
-      area?.startsWith("SUDESTE") == true  -> "Sudeste"
-      else                                 -> null
+      area?.startsWith("SUDESTE") == true -> "Sudeste"
+      else -> null
     }
 
   val paraImprimir: Boolean
@@ -194,7 +194,7 @@ class Pedido(
     fun listaPedidoImprimir(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.paraImprimir }
 
     fun listaPedidoImpressoSemNota(filtro: FiltroPedido): List<Pedido> =
-        listaPedido(filtro).filter { it.impressoSemNota }
+      listaPedido(filtro).filter { it.impressoSemNota }
   }
 }
 
@@ -292,9 +292,9 @@ data class RotaPedido(
 private fun numeroNota(nfno: String?, nfse: String?): String {
   return when {
     nfno.isNullOrBlank() -> ""
-    nfno == ""           -> ""
+    nfno == "" -> ""
     nfse.isNullOrBlank() -> nfno
-    else                 -> "$nfno/$nfse"
+    else -> "$nfno/$nfse"
   }
 }
 

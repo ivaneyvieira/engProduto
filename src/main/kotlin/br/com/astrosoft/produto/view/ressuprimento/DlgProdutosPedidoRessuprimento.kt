@@ -3,10 +3,8 @@ package br.com.astrosoft.produto.view.ressuprimento
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper.showError
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoPedido
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
@@ -30,7 +28,6 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.binder.ValidationResult
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel, val pedido: PedidoRessuprimento) {
@@ -88,7 +85,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
 
       val user = AppConfig.userLogin() as? UserSaci
 
-      if(user?.ressuprimentoEditaQuant == true) {
+      if (user?.ressuprimentoEditaQuant == true) {
         this.withEditor(
           classBean = ProdutoRessuprimento::class,
           openEditor = {

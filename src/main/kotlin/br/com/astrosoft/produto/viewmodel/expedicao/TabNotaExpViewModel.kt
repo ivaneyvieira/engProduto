@@ -37,7 +37,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
 
     itens.forEach {
-      if(it.local.isNullOrBlank()) fail("Produto sem localização")
+      if (it.local.isNullOrBlank()) fail("Produto sem localização")
     }
 
     subView.formAutoriza(itens) { userno ->

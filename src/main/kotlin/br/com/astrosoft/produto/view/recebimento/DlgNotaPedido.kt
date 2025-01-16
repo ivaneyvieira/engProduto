@@ -25,7 +25,8 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
     val numeroNota: Int = pedido.pedido
     val loja = pedido.loja
 
-    form = SubWindowForm("Notas do pedido $numeroNota Loja: $loja",
+    form = SubWindowForm(
+      "Notas do pedido $numeroNota Loja: $loja",
       toolBar = { }, onClose = {
         onClose()
       }) {

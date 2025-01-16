@@ -150,11 +150,11 @@ class TabNotaSep(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(N
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0     -> "azul"
+        countImp > 0 -> "azul"
 
-        countEnt > 0     -> "amarelo"
+        countEnt > 0 -> "amarelo"
 
-        else             -> null
+        else -> null
       }
     }
   }

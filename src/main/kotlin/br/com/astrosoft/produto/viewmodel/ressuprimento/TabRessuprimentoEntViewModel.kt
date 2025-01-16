@@ -24,9 +24,11 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       Ressuprimento.find(filtro.prdno, filtro.grade)
     else
       Ressuprimento.find(filtro)
-    subView.updateRessuprimentos(ressuprimento/*.filter {
+    subView.updateRessuprimentos(
+      ressuprimento/*.filter {
       (it.countCor ?: 0) == 0
-    }*/)
+    }*/
+    )
   }
 
   fun formAutoriza(pedido: Ressuprimento) {
@@ -126,9 +128,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       val qtRecebido = it.qtRecebido ?: 0
       val qtQuantNF = it.qtQuantNF ?: 0
       it.selecionado == EMarcaRessuprimento.REC.num &&
-      (qtRecebido == qtQuantNF) &&
-      (it.codigoCorrecao.isNullOrBlank()) &&
-      (it.gradeCorrecao.isNullOrBlank())
+          (qtRecebido == qtQuantNF) &&
+          (it.codigoCorrecao.isNullOrBlank()) &&
+          (it.gradeCorrecao.isNullOrBlank())
     }
     itens.ifEmpty {
       fail("Recebimento diferente da Entrega")

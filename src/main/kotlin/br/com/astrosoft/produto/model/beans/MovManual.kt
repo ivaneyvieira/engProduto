@@ -19,7 +19,7 @@ class MovManual(
   var estAtacado: Int?,
   var estTotal: Int?,
   var tipo: String?,
-){
+) {
   fun estorno() {
     saci.estornoMovManual(this)
   }

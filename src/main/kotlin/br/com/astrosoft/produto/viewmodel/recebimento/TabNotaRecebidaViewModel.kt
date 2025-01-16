@@ -74,7 +74,7 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
     val buf = TextBuffer()
 
 
-    itens.forEach {nota ->
+    itens.forEach { nota ->
       report.print(
         dados = nota.produtos,
         printer = object : IPrinter {

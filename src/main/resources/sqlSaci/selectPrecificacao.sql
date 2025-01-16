@@ -1,14 +1,24 @@
-DO @CODIGO := :codigo;
-DO @PRDNO := LPAD(@CODIGO, 16, ' ');
-DO @LISTVEND := REPLACE(:listVend, ' ', '');
-DO @TRIBUTACAO := :tributacao;
-DO @TYPENO := :typeno;
-DO @CLNO := :clno;
-DO @QUERY := :query;
-DO @QUERYLIKE := CONCAT(@QUERY, '%');
+DO
+@CODIGO := :codigo;
+DO
+@PRDNO := LPAD(@CODIGO, 16, ' ');
+DO
+@LISTVEND := REPLACE(:listVend, ' ', '');
+DO
+@TRIBUTACAO := :tributacao;
+DO
+@TYPENO := :typeno;
+DO
+@CLNO := :clno;
+DO
+@QUERY := :query;
+DO
+@QUERYLIKE := CONCAT(@QUERY, '%');
 
-DROP TEMPORARY TABLE IF EXISTS T_ETIQUETAS;
-CREATE TEMPORARY TABLE T_ETIQUETAS
+DROP
+TEMPORARY TABLE IF EXISTS T_ETIQUETAS;
+CREATE
+TEMPORARY TABLE T_ETIQUETAS
 (
   PRIMARY KEY (prdno)
 )
@@ -64,23 +74,52 @@ SELECT prdno                                                                   A
        TRUNCATE(P.auxLong3 / 100, 2)                                           AS cfinanceiro,
        CAST(IFNULL(E.impostos, '') AS CHAR)                                    AS impostos
 FROM sqldados.prp AS P
-       INNER JOIN sqldados.prd AS PD ON PD.no = P.prdno
-       INNER JOIN sqldados.spedprd AS S USING (prdno)
-       LEFT JOIN sqldados.prdalq AS R USING (prdno)
-       INNER JOIN sqldados.vend AS V ON PD.mfno = V.no
-       LEFT JOIN T_ETIQUETAS AS E USING (prdno)
+    INNER JOIN sqldados.prd AS PD
+ON PD.no = P.prdno
+    INNER JOIN sqldados.spedprd AS S USING (prdno)
+    LEFT JOIN sqldados.prdalq AS R USING (prdno)
+    INNER JOIN sqldados.vend AS V ON PD.mfno = V.no
+    LEFT JOIN T_ETIQUETAS AS E USING (prdno)
 WHERE P.storeno = 10
-  AND P.prdno < LPAD('960001', 16, ' ')
-  AND (P.prdno = @PRDNO OR @CODIGO = 0)
-  AND (FIND_IN_SET(PD.mfno, @LISTVEND) OR @LISTVEND = '')
-  AND (FIND_IN_SET(PD.typeno, @TYPENO) OR @TYPENO = '')
-  AND (PD.clno = @CLNO OR PD.deptno = @CLNO OR PD.groupno = @CLNO OR @CLNO = 0)
-  AND (PD.taxno = @TRIBUTACAO OR @TRIBUTACAO = '')
+  AND P.prdno
+    < LPAD('960001'
+    , 16
+    , ' ')
+  AND (P.prdno = @PRDNO
+   OR @CODIGO = 0)
+  AND (FIND_IN_SET(PD.mfno
+    , @LISTVEND)
+   OR @LISTVEND = '')
+  AND (FIND_IN_SET(PD.typeno
+    , @TYPENO)
+   OR @TYPENO = '')
+  AND (PD.clno = @CLNO
+   OR PD.deptno = @CLNO
+   OR PD.groupno = @CLNO
+   OR @CLNO = 0)
+  AND (PD.taxno = @TRIBUTACAO
+   OR @TRIBUTACAO = '')
   AND CASE :marca
-        WHEN 'T' THEN TRUE
-        WHEN 'N' THEN MID(PD.name, 1, 1) NOT IN ('.', '*', '!', '*', ']', ':', '#')
-        WHEN 'S' THEN MID(PD.name, 1, 1) IN ('.', '*', '!', '*', ']', ':', '#')
-      END
+    WHEN 'T' THEN TRUE
+    WHEN 'N' THEN MID(PD.name
+    , 1
+    , 1) NOT IN ('.'
+    , '*'
+    , '!'
+    , '*'
+    , ']'
+    , ':'
+    , '#')
+    WHEN 'S' THEN MID(PD.name
+    , 1
+    , 1) IN ('.'
+    , '*'
+    , '!'
+    , '*'
+    , ']'
+    , ':'
+    , '#')
+END
 HAVING @QUERY = ''
     OR descricao LIKE @QUERYLIKE
     OR ncm LIKE @QUERYLIKE

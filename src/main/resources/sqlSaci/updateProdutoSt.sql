@@ -3,7 +3,7 @@ USE sqldados;
 DROP TABLE IF EXISTS T_PRD_ST;
 CREATE TEMPORARY TABLE IF NOT EXISTS T_PRD_ST
 (
-  PRIMARY KEY (prdno)
+    PRIMARY KEY (prdno)
 )
 SELECT no AS prdno
 FROM sqldados.prd
@@ -12,7 +12,7 @@ WHERE no = :prdno;
 DROP TABLE IF EXISTS T_LOJAS;
 CREATE TEMPORARY TABLE IF NOT EXISTS T_LOJAS
 (
-  PRIMARY KEY (storeno)
+    PRIMARY KEY (storeno)
 )
 SELECT no AS storeno
 FROM sqldados.store
@@ -63,12 +63,12 @@ SELECT 165          AS aliqPis,
        ''           AS auxStr3,
        ''           AS auxStr4
 FROM sqldados.spedprd AS S
-       INNER JOIN T_PRD_ST AS T
-                  USING (prdno)
-       INNER JOIN sqldados.prdalq AS A
-                  ON A.prdno = S.prdno
-       INNER JOIN sqldados.prd AS P
-                  ON P.no = S.prdno,
+         INNER JOIN T_PRD_ST AS T
+                    USING (prdno)
+         INNER JOIN sqldados.prdalq AS A
+                    ON A.prdno = S.prdno
+         INNER JOIN sqldados.prd AS P
+                    ON P.no = S.prdno,
      T_LOJAS AS L;
 
 REPLACE INTO sqldados.spedprdst(aliqPis, aliqCofins, auxLong1, auxLong2, auxLong3, auxLong4, auxLong5, auxLong6,
@@ -117,12 +117,12 @@ SELECT aliqPis,
        codenq,
        auxStr1,
        IF(storeno = 8, CASE auxStr1
-                         WHEN 'NORMAL..' THEN '01'
-                         WHEN 'REDUZI88' THEN '21'
-                         WHEN 'REDUZI56' THEN '21'
-                         WHEN 'REDUZI20' THEN '21'
-                         ELSE auxStr2
-                       END, auxStr2) AS auxStr2,
+                           WHEN 'NORMAL..' THEN '01'
+                           WHEN 'REDUZI88' THEN '21'
+                           WHEN 'REDUZI56' THEN '21'
+                           WHEN 'REDUZI20' THEN '21'
+                           ELSE auxStr2
+           END, auxStr2) AS auxStr2,
        auxStr3,
        auxStr4
 FROM T_SPEDST

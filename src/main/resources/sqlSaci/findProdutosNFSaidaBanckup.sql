@@ -1,19 +1,23 @@
-DROP TEMPORARY TABLE IF EXISTS T_LOC;
-CREATE TEMPORARY TABLE T_LOC
+DROP
+TEMPORARY TABLE IF EXISTS T_LOC;
+CREATE
+TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, loc)
 )
 SELECT P.no AS prdno, CAST(MID(IFNULL(L.localizacao, '****'), 1, 4) AS CHAR) AS loc
 FROM sqldados.prd AS P
-       LEFT JOIN sqldados.prdloc AS L
-                 ON P.no = L.prdno
+         LEFT JOIN sqldados.prdloc AS L
+                   ON P.no = L.prdno
 WHERE (MID(L.localizacao, 1, 4) IN (:locais) OR 'TODOS' IN (:locais))
   AND (L.storeno = :lojaLocal OR :lojaLocal = 0)
 GROUP BY prdno, loc;
 
 
-DROP TEMPORARY TABLE IF EXISTS T_DADOS;
-CREATE TEMPORARY TABLE T_DADOS
+DROP
+TEMPORARY TABLE IF EXISTS T_DADOS;
+CREATE
+TEMPORARY TABLE T_DADOS
 (
   PRIMARY KEY (codigo, grade, local)
 )
@@ -42,30 +46,31 @@ SELECT X.storeno                                 AS loja,
        X.c6                                      AS gradeAlternativa,
        X.s11                                     AS marca,
        X.c5                                      AS usuarioExp,
-       CAST(L.loc AS CHAR)                       AS local,
+       CAST(L.loc AS CHAR) AS local,
        X.c4                                      AS usuarioCD,
        N.tipo                                    AS tipoNota
 FROM sqldados.prd AS P
-       INNER JOIN T_LOC AS L
-                  ON L.prdno = P.no
-       INNER JOIN sqldados.xaprd2 AS X
-                  ON P.no = X.prdno
-       INNER JOIN sqldados.nf AS N
-                  USING (storeno, pdvno, xano)
-       LEFT JOIN sqldados.prdbar AS B
-                 ON P.no = B.prdno AND B.grade = X.grade
-       LEFT JOIN sqldados.vend AS F
-                 ON F.no = P.mfno
-       LEFT JOIN sqldados.type AS T
-                 ON T.no = P.typeno
-       LEFT JOIN sqldados.cl
-                 ON cl.no = P.clno
-       LEFT JOIN sqldados.spedprd AS S
-                 ON P.no = S.prdno
+    INNER JOIN T_LOC AS L
+ON L.prdno = P.no
+    INNER JOIN sqldados.xaprd2 AS X
+    ON P.no = X.prdno
+    INNER JOIN sqldados.nf AS N
+    USING (storeno, pdvno, xano)
+    LEFT JOIN sqldados.prdbar AS B
+    ON P.no = B.prdno AND B.grade = X.grade
+    LEFT JOIN sqldados.vend AS F
+    ON F.no = P.mfno
+    LEFT JOIN sqldados.type AS T
+    ON T.no = P.typeno
+    LEFT JOIN sqldados.cl
+    ON cl.no = P.clno
+    LEFT JOIN sqldados.spedprd AS S
+    ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND (X.s11 = :marca OR :marca = 999)
+  AND (X.s11 = :marca
+   OR :marca = 999)
 GROUP BY codigo, grade, local;
 
 SELECT loja,
@@ -73,27 +78,5 @@ SELECT loja,
        xano,
        nota,
        codigo,
-       grade,
-       local,
-       barcode,
-       descricao,
-       vendno,
-       fornecedor,
-       typeno,
-       typeName,
-       clno,
-       clname,
-       altura,
-       comprimento,
-       largura,
-       precoCheio,
-       ncm,
-       quantidade,
-       preco,
-       total,
-       gradeAlternativa,
-       marca,
-       usuarioExp,
-       usuarioCD,
-       tipoNota
+       grade, local, barcode, descricao, vendno, fornecedor, typeno, typeName, clno, clname, altura, comprimento, largura, precoCheio, ncm, quantidade, preco, total, gradeAlternativa, marca, usuarioExp, usuarioCD, tipoNota
 FROM T_DADOS

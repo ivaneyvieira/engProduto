@@ -68,7 +68,7 @@ class EntradaDevCli(
     )
     val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
     when {
-      isReembolso()    -> {
+      isReembolso() -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custnoDev = custno ?: 0,
@@ -80,7 +80,7 @@ class EntradaDevCli(
         saci.marcaReembolso(saldoDevolucao)
       }
 
-      isMuda()         -> {
+      isMuda() -> {
         val mudaCliente = mudaCodigo()
         val custno = custno ?: 0
         val saldoDevolucao = SaldoDevolucao(
@@ -114,17 +114,17 @@ class EntradaDevCli(
 
   fun isReembolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
-           remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
-           remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||
-           remarks?.contains("GARANTIA", ignoreCase = true) == true ||
-           remarks?.contains("EST DEP", ignoreCase = true) == true
+        remarks?.contains("EST BOLETO", ignoreCase = true) == true ||
+        remarks?.contains("REEMBOLSO", ignoreCase = true) == true ||
+        remarks?.contains("GARANTIA", ignoreCase = true) == true ||
+        remarks?.contains("EST DEP", ignoreCase = true) == true
   }
 
   private fun isMuda(): Boolean {
     return remarks?.contains(MUDA_CLIENTE) == true
   }
 
-  fun isComProduto() : Boolean {
+  fun isComProduto(): Boolean {
     return comProduto == "COM"
   }
 

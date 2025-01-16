@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.model.printText
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.NotaSaidaProduto
 
 class NotaSeparacao(val rotas: List<String>, val userList: List<String>) : PrintText<NotaSaidaProduto>() {
   override fun printTitle(bean: NotaSaidaProduto) {

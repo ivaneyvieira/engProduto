@@ -28,11 +28,11 @@ class Reposicao(
       entregueSNome
     }
 
-    EMetodo.ACERTO.num  -> {
+    EMetodo.ACERTO.num -> {
       ""
     }
 
-    else                -> {
+    else -> {
       recebidoSNome
     }
   }
@@ -41,11 +41,11 @@ class Reposicao(
       recebidoSNome
     }
 
-    EMetodo.ACERTO.num  -> {
+    EMetodo.ACERTO.num -> {
       ""
     }
 
-    else                -> {
+    else -> {
       entregueSNome
     }
   }

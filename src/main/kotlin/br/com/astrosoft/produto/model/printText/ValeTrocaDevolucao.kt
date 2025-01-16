@@ -15,31 +15,31 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
 
   private fun tituloValeTroca() {
     when {
-      nota.tipoObs.contains("TROCA")      -> {
+      nota.tipoObs.contains("TROCA") -> {
         writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("ENTREGA")    -> {
+      nota.tipoObs.contains("ENTREGA") -> {
         writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("RETIRA")     -> {
+      nota.tipoObs.contains("RETIRA") -> {
         writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("REEMBOLSO")  -> {
+      nota.tipoObs.contains("REEMBOLSO") -> {
         writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("GARANTIA")  -> {
+      nota.tipoObs.contains("GARANTIA") -> {
         writeln("Vale Credito: GARANTIA", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("MUDA NF")    -> {
+      nota.tipoObs.contains("MUDA NF") -> {
         writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("MUDA")       -> {
+      nota.tipoObs.contains("MUDA") -> {
         writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
@@ -52,7 +52,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
         writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
       }
 
-      nota.tipoObs.contains("EST DEP")    -> {
+      nota.tipoObs.contains("EST DEP") -> {
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }

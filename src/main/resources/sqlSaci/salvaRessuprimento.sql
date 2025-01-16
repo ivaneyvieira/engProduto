@@ -1,10 +1,13 @@
-SET SQL_MODE = '';
+SET
+SQL_MODE = '';
 
-DELETE FROM sqldados.ordsAdicional
+DELETE
+FROM sqldados.ordsAdicional
 WHERE storeno = :storeno
   AND ordno = :ordno;
 
-REPLACE sqldados.ordsAdicional(storeno, ordno, localizacao, observacao)
+REPLACE
+sqldados.ordsAdicional(storeno, ordno, localizacao, observacao)
   VALUE (:storeno, :ordno, :localizacoes, :observacao)
 
 /*

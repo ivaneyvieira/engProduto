@@ -16,7 +16,7 @@ import jakarta.annotation.security.PermitAll
 @CssImport("./styles/gridTotal.css")
 @PermitAll
 class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
-    override val viewModel = VendaRefViewModel(this)
+  override val viewModel = VendaRefViewModel(this)
   override val tabVendaRef = TabVendaRef(viewModel.tabVendaRefViewModel)
 
 

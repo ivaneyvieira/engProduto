@@ -12,7 +12,7 @@ class Impressora(var no: Int, var name: String) {
       val impressoras = allTermica()
       loja ?: return null
       return when (tipoRota) {
-        PISO, ROTA            -> {
+        PISO, ROTA -> {
           if (loja == 4) {
             tipoRota.impressoraRota()
           } else {
@@ -36,7 +36,7 @@ class Impressora(var no: Int, var name: String) {
           }
         }
 
-        else                  -> null
+        else -> null
       }
     }
 

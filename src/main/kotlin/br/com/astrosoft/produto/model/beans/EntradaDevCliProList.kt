@@ -36,7 +36,7 @@ class EntradaDevCliProList(
 
   companion object {
     fun findAll(filtro: FiltroEntradaDevCliProList) = saci.entradaDevCliProList(filtro)
-    fun findAll(listNi : List<Int>) = saci.entradaDevCliProList(listNi)
+    fun findAll(listNi: List<Int>) = saci.entradaDevCliProList(listNi)
   }
 }
 

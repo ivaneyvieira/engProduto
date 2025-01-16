@@ -81,7 +81,7 @@ class ProdutoEstoque(
       val mult = when (marca) {
         EMarcaRessuprimento.REC -> -1
         EMarcaRessuprimento.ENT -> -1
-        else                    -> 0
+        else -> 0
       }
       ressuprimento.produtos(prdno, grade).map { produto ->
         ProdutoKardec(
@@ -178,16 +178,16 @@ class ProdutoEstoque(
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
 
       val tipo = when (produto.metodo) {
-        431  -> ETipoKardec.REPOSICAO
-        432  -> ETipoKardec.RETORNO
-        433  -> ETipoKardec.ACERTO
+        431 -> ETipoKardec.REPOSICAO
+        432 -> ETipoKardec.RETORNO
+        433 -> ETipoKardec.ACERTO
         else -> return@mapNotNull null
       }
 
       val mult = when (produto.metodo) {
-        431  -> -1
-        432  -> 1
-        433  -> produto.multAcerto ?: 0
+        431 -> -1
+        432 -> 1
+        433 -> produto.multAcerto ?: 0
         else -> return@mapNotNull null
       }
 

@@ -67,7 +67,8 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     this.addClassName("styling")
     this.format()
 
-    this.withEditor(classBean = Reposicao::class,
+    this.withEditor(
+      classBean = Reposicao::class,
       openEditor = {
         this.focusEditor(Reposicao::observacao)
       },
@@ -140,7 +141,6 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
   override fun updateProduto(produto: ReposicaoProduto) {
     dlgProduto?.updateProduto(produto)
   }
-
 
 
   override fun isAuthorized(): Boolean {

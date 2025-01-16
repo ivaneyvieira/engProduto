@@ -28,7 +28,8 @@ class TabValidadeList(val viewModel: TabValidadeListViewModel) :
 
   override fun Grid<Validade>.gridPanel() {
     this.addClassName("styling")
-    this.withEditor(Validade::class,
+    this.withEditor(
+      Validade::class,
       openEditor = {
         this.focusEditor(Validade::validade)
       },

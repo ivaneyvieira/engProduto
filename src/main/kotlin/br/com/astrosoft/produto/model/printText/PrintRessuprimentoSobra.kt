@@ -1,11 +1,8 @@
 package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
-import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimentoSobra
 import br.com.astrosoft.produto.model.beans.Ressuprimento
-import kotlin.reflect.KProperty1
 
 class PrintRessuprimentoSobra(val pedido: Ressuprimento, val ressuprimentoTitle: String) :
   PrintText<ProdutoRessuprimentoSobra>() {

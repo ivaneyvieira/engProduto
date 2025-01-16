@@ -13,7 +13,7 @@ class FormValidade(private val tipoValidade: Int, private val tempoValidade: Int
   private var edtTempoValidade: IntegerField? = null
 
   init {
-    edtTipoValidade = select <TipoValidade>("Tipo de validade").apply {
+    edtTipoValidade = select<TipoValidade>("Tipo de validade").apply {
       setItems(TipoValidade.entries)
       setItemLabelGenerator { it.descricao }
       value = TipoValidade.entries.firstOrNull { it.tipo == tipoValidade }

@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.produto.model.beans.AcertoEntradaProduto
 import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
 import br.com.astrosoft.produto.model.beans.AcertoSaidaProduto
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel

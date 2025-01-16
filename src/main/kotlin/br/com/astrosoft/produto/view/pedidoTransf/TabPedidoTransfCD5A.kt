@@ -15,9 +15,7 @@ import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.co
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfSituacaoPedido
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUserReservado
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfUsuario
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfAutorizada
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.ITabPedidoTransfCD5A
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfAutorizadaViewModel
 import br.com.astrosoft.produto.viewmodel.pedidoTransf.TabPedidoTransfCD5AViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
@@ -32,7 +30,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfCD5A(val viewModel: TabPedidoTransfCD5AViewModel) :
-  TabPanelGrid<PedidoTransf>(PedidoTransf::class),  ITabPedidoTransfCD5A {
+  TabPanelGrid<PedidoTransf>(PedidoTransf::class), ITabPedidoTransfCD5A {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -48,7 +46,7 @@ class TabPedidoTransfCD5A(val viewModel: TabPedidoTransfCD5AViewModel) :
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
-    return if("Todas" in printerUser) viewModel.allPrinters() else printerUser
+    return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
 
   override fun HorizontalLayout.toolBarConfig() {

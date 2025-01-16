@@ -50,8 +50,9 @@ class DlgProdutosReposEnt(
       isMultiSort = false
       setSelectionMode(Grid.SelectionMode.MULTI)
 
-      if(filtroProduto) {
-        this.withEditor(classBean = ReposicaoProduto::class,
+      if (filtroProduto) {
+        this.withEditor(
+          classBean = ReposicaoProduto::class,
           openEditor = {
             this.focusEditor(ReposicaoProduto::qtRecebido)
           },

@@ -31,7 +31,7 @@ class ProdutoInventario(
   var saldoDisponivel = 0
 
   val saldoDif: Int
-    get() = if((estoqueLoja ?: 0) > saldo) saldo else estoqueLoja ?: 0
+    get() = if ((estoqueLoja ?: 0) > saldo) saldo else estoqueLoja ?: 0
 
   var eTipo: ETipo?
     get() = ETipo.entries.firstOrNull { it.tipo == tipo }
@@ -49,7 +49,7 @@ class ProdutoInventario(
       ETipo.INV -> movimento ?: 0
       ETipo.REC -> movimento ?: 0
       ETipo.ANT -> movimento ?: 0
-      null      -> 0
+      null -> 0
     }
 
   val saida: Int
@@ -251,9 +251,9 @@ class ProdutoInventario(
           if (produto != null) {
             saidas.filter {
               it.lojaDestino == 0
-              && it.prdno == produto.prdno
-              && it.grade == produto.grade
-              && it.date.toSaciDate() >= produto.dataEntrada.toSaciDate()
+                  && it.prdno == produto.prdno
+                  && it.grade == produto.grade
+                  && it.date.toSaciDate() >= produto.dataEntrada.toSaciDate()
             }.sortedByDescending {
               it.date
             }.forEach { saida ->
@@ -306,9 +306,9 @@ class ProdutoInventario(
           val dataSaida = produtoValidadeSaida?.dataEntrada ?: LocalDate.of(2024, 6, 1)
           val saidasProduto = saidas.filter {
             it.lojaOrigem == loja
-            && it.prdno == prdno
-            && it.grade == grade
-            && it.date.toSaciDate() >= dataSaida.toSaciDate()
+                && it.prdno == prdno
+                && it.grade == grade
+                && it.date.toSaciDate() >= dataSaida.toSaciDate()
           }
           val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
           if (produtoValidadeSaida == null) {
@@ -329,16 +329,16 @@ class ProdutoInventario(
 
           val produtosTransf = saidas.filter {
             it.lojaDestino == loja
-            && it.prdno == prdno
-            && it.grade == grade
+                && it.prdno == prdno
+                && it.grade == grade
           }
           produtosTransf.forEach { produtoTransf ->
             val produtosValidadeTrans = this@produtosInventarioSaida.firstOrNull {
               it.loja == produtoTransf.lojaDestino
-              && it.prdno == produtoTransf.prdno
-              && it.grade == produtoTransf.grade
-              && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate()
-              && it.tipo == ETipo.TRA.tipo
+                  && it.prdno == produtoTransf.prdno
+                  && it.grade == produtoTransf.grade
+                  && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate()
+                  && it.tipo == ETipo.TRA.tipo
             }
 
             val quantSaidasTransf = produtoTransf.qtty ?: 0
@@ -374,9 +374,9 @@ class ProdutoInventario(
         entradas.forEach { entrada ->
           val produtoValidade = this@produtoInventariosEntradas.firstOrNull {
             it.loja == entrada.loja
-            && it.prdno == entrada.prdno
-            && it.grade == entrada.grade
-            && it.tipo == ETipo.REC.tipo
+                && it.prdno == entrada.prdno
+                && it.grade == entrada.grade
+                && it.tipo == ETipo.REC.tipo
           }
 
           if (produtoValidade == null) {

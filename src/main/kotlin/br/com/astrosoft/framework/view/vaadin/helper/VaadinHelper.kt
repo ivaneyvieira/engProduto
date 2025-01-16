@@ -19,28 +19,28 @@ fun Component.style(name: String, value: String) {
 fun DatePicker.localePtBr() {
   this.locale = Locale.Builder().setLanguage("pt").setRegion("BR").build()
   this.i18n =
-      DatePicker.DatePickerI18n().apply {
-        this.setDateFormat("dd/MM/yyyy")
-        this.today = "hoje"
-        this.cancel = "cancelar"
-        this.firstDayOfWeek = 0
-        this.monthNames = listOf(
-          "janeiro",
-          "fevereiro",
-          "março",
-          "abril",
-          "maio",
-          "junho",
-          "julho",
-          "agosto",
-          "setembro",
-          "outubro",
-          "novembro",
-          "dezembro"
-        )
-        this.weekdays = listOf("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado")
-        this.weekdaysShort = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sab")
-      }
+    DatePicker.DatePickerI18n().apply {
+      this.setDateFormat("dd/MM/yyyy")
+      this.today = "hoje"
+      this.cancel = "cancelar"
+      this.firstDayOfWeek = 0
+      this.monthNames = listOf(
+        "janeiro",
+        "fevereiro",
+        "março",
+        "abril",
+        "maio",
+        "junho",
+        "julho",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "dezembro"
+      )
+      this.weekdays = listOf("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado")
+      this.weekdaysShort = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sab")
+    }
 }
 
 fun <T> ListDataProvider<T>.updateItens(itens: List<T>) {

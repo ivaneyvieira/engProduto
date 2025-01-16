@@ -144,7 +144,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.isEmptySelectionAllowed = true
       this.setItemLabelGenerator { storeno ->
         when (storeno) {
-          0    -> "Todas as lojas"
+          0 -> "Todas as lojas"
           else -> lojas.firstOrNull { loja ->
             loja.no == storeno
           }?.descricao ?: ""

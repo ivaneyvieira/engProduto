@@ -47,7 +47,8 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      this.withEditor(classBean = ReposicaoProduto::class,
+      this.withEditor(
+        classBean = ReposicaoProduto::class,
         openEditor = {
           this.focusEditor(ReposicaoProduto::qtRecebido)
         },

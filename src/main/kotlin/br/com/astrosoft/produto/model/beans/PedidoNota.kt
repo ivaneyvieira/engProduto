@@ -26,8 +26,8 @@ data class PedidoNota(
 ) {
   val tipoNota: String
     get() = when (tipo) {
-      "P"  -> "Pre-Entrada"
-      "N"  -> "Entrada"
+      "P" -> "Pre-Entrada"
+      "N" -> "Entrada"
       else -> ""
     }
 }

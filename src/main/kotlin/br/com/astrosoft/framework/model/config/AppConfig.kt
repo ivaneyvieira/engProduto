@@ -34,7 +34,7 @@ object AppConfig {
   private val findUser by lazy { findUserClass.createInstance() }
 
   private val routeMainProviderClass: KClass<IRouteMainProvider> =
-      properties.getProperty("app.routeMainProvider").toClass()
+    properties.getProperty("app.routeMainProvider").toClass()
   private val routeMainProvider by lazy { routeMainProviderClass.createInstance() }
   fun routeMain() = routeMainProvider.routeMain
 

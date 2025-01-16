@@ -115,7 +115,8 @@ class DlgProdutosRessuEnt(
 
       if (!filtroProduto) {
         if (user?.ressuprimentoRecebedor == true) {
-          this.withEditor(classBean = ProdutoRessuprimento::class,
+          this.withEditor(
+            classBean = ProdutoRessuprimento::class,
             openEditor = {
               this.focusEditor(ProdutoRessuprimento::qtRecebido)
             },
@@ -205,11 +206,11 @@ class DlgProdutosRessuEnt(
             "amarelo"
           }
 
-          it.qtQuantNF != it.qtRecebido                 -> {
+          it.qtQuantNF != it.qtRecebido -> {
             "amarelo"
           }
 
-          else                                          -> null
+          else -> null
         }
       }
       gridDetail.isMultiSort = true

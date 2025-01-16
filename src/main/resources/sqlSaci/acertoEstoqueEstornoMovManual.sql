@@ -1,13 +1,17 @@
-SET SQL_MODE = '';
+SET
+SQL_MODE = '';
 
-USE sqldados;
+USE
+sqldados;
 
 /*storeno, prdno, grade, xano*/
 
 
-DO @XANO := IFNULL(@XANO_MOV, -1);
+DO
+@XANO := IFNULL(@XANO_MOV, -1);
 
-DO @QUANT_DEL := IFNULL((SELECT qtty
+DO
+@QUANT_DEL := IFNULL((SELECT qtty
                          FROM sqldados.stkmov
                          WHERE storeno = :storeno
                            AND prdno = :prdno

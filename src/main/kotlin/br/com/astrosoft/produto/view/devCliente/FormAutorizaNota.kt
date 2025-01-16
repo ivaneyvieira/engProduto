@@ -1,8 +1,5 @@
 package br.com.astrosoft.produto.view.devCliente
 
-import br.com.astrosoft.produto.model.beans.PedidoTransf
-import com.github.mvysny.karibudsl.v10.div
-import com.github.mvysny.karibudsl.v10.li
 import com.github.mvysny.karibudsl.v10.passwordField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.formlayout.FormLayout

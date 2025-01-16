@@ -61,19 +61,19 @@ class SubWindowPrinter(
           cmbImpressora = this.select("Impressora") {
             val userSaci = AppConfig.userLogin() as? UserSaci
             val allPrinter =
-                if (rota == null) {
-                  Impressora.allTermica().map { it.name }
-                } else {
-                  Impressora.allTermica()
-                    .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
-                }
+              if (rota == null) {
+                Impressora.allTermica().map { it.name }
+              } else {
+                Impressora.allTermica()
+                  .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
+              }
             val lista =
-                when {
-                  userSaci?.admin == true                    -> allPrinter
-                  printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
-                  printerUser.isEmpty()                      -> emptyList()
-                  else                                       -> printerUser
-                }
+              when {
+                userSaci?.admin == true -> allPrinter
+                printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                printerUser.isEmpty() -> emptyList()
+                else -> printerUser
+              }
             setItems(lista)
 
             this.value = lista.firstOrNull()

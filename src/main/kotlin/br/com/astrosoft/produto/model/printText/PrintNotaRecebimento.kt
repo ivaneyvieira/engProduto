@@ -1,10 +1,9 @@
 package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import java.time.LocalDate
 
 class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
@@ -36,7 +35,7 @@ class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
     column(NotaRecebimentoProduto::codigo, "Codigo", 6)
     column(NotaRecebimentoProduto::descricao, "Descricao", 40)
     column(NotaRecebimentoProduto::grade, "Grade", 8)
-    column(NotaRecebimentoProduto::quant, "__Quant", 7,  lineBreak = true)
+    column(NotaRecebimentoProduto::quant, "__Quant", 7, lineBreak = true)
     column(NotaRecebimentoProduto::localizacaoSaciStr, "", 35)
   }
 

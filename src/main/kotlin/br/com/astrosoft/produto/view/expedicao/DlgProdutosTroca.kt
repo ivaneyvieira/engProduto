@@ -77,11 +77,11 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
             Notification.show("O produto não está no grupo de piso")
           }
 
-          it.bean.tipoNota != 4                    -> {
+          it.bean.tipoNota != 4 -> {
             Notification.show("Não é uma expedicao de edtrega futura")
           }
 
-          nota.cancelada == "S"                    -> {
+          nota.cancelada == "S" -> {
             Notification.show("A expedicao está cancelada")
           }
         }
@@ -99,7 +99,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
 
       produtoNFCodigo()
       produtoNFBarcode()
-      produtoAutorizacaoExp ()
+      produtoAutorizacaoExp()
       produtoNFDescricao()
       produtoNFGrade()
       produtoNFGradeAlternativa().comboFieldEditor { combo: Select<String> ->
@@ -133,9 +133,9 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
-          marcaImpressao > 0          -> "azul"
+          marcaImpressao > 0 -> "azul"
           marca == EMarcaNota.CD.num -> "amarelo"
-          else                        -> null
+          else -> null
         }
       }
     }

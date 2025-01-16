@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
 import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.Ressuprimento
 import kotlin.reflect.KProperty1
 
 class PrintPedidoRessuprimento(val pedido: PedidoRessuprimento, propertyQuant: KProperty1<ProdutoRessuprimento, Int?>) :

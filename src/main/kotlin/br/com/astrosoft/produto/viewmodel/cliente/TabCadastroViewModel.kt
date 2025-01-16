@@ -17,10 +17,10 @@ class TabCadastroViewModel(val viewModel: ClienteViewModel) {
 
   fun geraPlanilha(): ByteArray {
     val clientes = subView.clientesSelecionados()
-    if(clientes.isEmpty()) {
+    if (clientes.isEmpty()) {
       viewModel.view.showError("Selecione os clientes para gerar a planilha")
       return byteArrayOf()
-    }else {
+    } else {
       val planilha = PlanilhaDadosCliente()
       return planilha.write(clientes)
     }

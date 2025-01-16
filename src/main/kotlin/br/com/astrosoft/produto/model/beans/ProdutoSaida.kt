@@ -19,8 +19,8 @@ class ProdutoSaida(
   var grade: String?,
   var date: LocalDate?,
   var qtty: Int?,
-){
-  companion object{
+) {
+  companion object {
     fun findSaidas(filtro: FiltroProdutoInventario, dataIncial: LocalDate?): List<ProdutoSaida> {
       return saci.produtoValidadeSaida(filtro, dataIncial)
     }

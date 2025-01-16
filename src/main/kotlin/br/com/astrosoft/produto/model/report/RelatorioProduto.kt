@@ -10,7 +10,7 @@ import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
 import net.sf.dynamicreports.report.constant.PageOrientation
 import java.awt.Color
 
-class RelatorioProduto(val lojaEstoque : Int) : ReportBuild<ProdutoRelatorio>() {
+class RelatorioProduto(val lojaEstoque: Int) : ReportBuild<ProdutoRelatorio>() {
   init {
     columnReport(ProdutoRelatorio::codigo, header = "Código", aligment = RIGHT, width = 80)
     columnReport(ProdutoRelatorio::descricao, header = "Descrição", aligment = LEFT)
@@ -38,14 +38,14 @@ class RelatorioProduto(val lojaEstoque : Int) : ReportBuild<ProdutoRelatorio>() 
 
   override fun config(itens: List<ProdutoRelatorio>): PropriedadeRelatorio {
     val loja = when (lojaEstoque) {
-          0 -> "Todas"
-          2 -> "DS"
-          3 -> "MR"
-          4 -> "MF"
-          5 -> "PK"
-          8 -> "TM"
-          else -> "Outra"
-        }
+      0 -> "Todas"
+      2 -> "DS"
+      3 -> "MR"
+      4 -> "MF"
+      5 -> "PK"
+      8 -> "TM"
+      else -> "Outra"
+    }
     return PropriedadeRelatorio(
       titulo = "Estoque Loja $loja",
       subTitulo = "",
@@ -62,4 +62,4 @@ data class ProdutoRelatorio(
   val grade: String,
   val unidade: String,
   val quant: Int
-                         )
+)

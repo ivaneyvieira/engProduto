@@ -26,7 +26,7 @@ class TabReposicaoEnt(
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
- // private lateinit var cmbMetodo: Select<EMetodo>
+  // private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -96,7 +96,7 @@ class TabReposicaoEnt(
   override fun Grid<Reposicao>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    
+
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
@@ -171,7 +171,7 @@ class TabReposicaoEnt(
   override fun formRecebe(pedido: Reposicao) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Recebido", form = form) {
-      viewModel.recebePedido(pedido, form.numero,  form.senha)
+      viewModel.recebePedido(pedido, form.numero, form.senha)
     }
   }
 

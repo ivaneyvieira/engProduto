@@ -67,7 +67,7 @@ fun <T : Any> Grid<T>.setReadOnly(property: KProperty1<T, *>) {
 }
 
 fun <T : Any> Grid<T>.editorComponent(property: KProperty1<T, *>): Component? =
-    getColumnBy(property).editorComponent
+  getColumnBy(property).editorComponent
 
 fun <T : Any> Grid<T>.focus(property: KProperty1<T, *>) {
   (editorComponent(property) as? Focusable<*>)?.focus()

@@ -267,7 +267,7 @@ class UserSaci : IUser {
   var tipoNotaExpedicao: Set<ETipoNotaFiscal>
     get() = lojas.getOrNull(16)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
       ETipoNotaFiscal.entries.firstOrNull { it.name == tipo }
-      ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+        ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
     }.toSet()
     set(value) {
       lojas = lojas.setValue(16, value.joinToString(":") {
@@ -284,7 +284,7 @@ class UserSaci : IUser {
   var retiraTipo: Set<ETipoRetira>
     get() = lojas.getOrNull(18)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
       ETipoRetira.entries.firstOrNull { it.name == tipo }
-      ?: ETipoRetira.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+        ?: ETipoRetira.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
     }.toSet()
     set(value) {
       lojas = lojas.setValue(18, value.joinToString(":") {
@@ -393,7 +393,7 @@ class UserSaci : IUser {
 
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro || produtoEstoqueValidade ||
-            produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja || admin
+        produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
@@ -426,7 +426,7 @@ class UserSaci : IUser {
 
   var recebimento: Boolean
     get() = recebimentoPedido || recebimentoAgenda || recebimentoXML || recebimentoPreEnt
-            || recebimentoNotaEntrada || recebimentoReceberNota || recebimentoNotaRecebida || admin
+        || recebimentoNotaEntrada || recebimentoReceberNota || recebimentoNotaRecebida || admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value
@@ -458,7 +458,7 @@ class UserSaci : IUser {
     get() = pedidoCD || pedidoEnt || admin
   var pedidoTransf
     get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt ||
-            pedidoTransfAutorizada || pedidoTransfCD5A || admin
+        pedidoTransfAutorizada || pedidoTransfCD5A || admin
     set(value) {
       pedidoTransfReserva = value
       pedidoTransfRessu4 = value
@@ -469,7 +469,7 @@ class UserSaci : IUser {
 
   var precificacao
     get() = precificacaoPrecificacao || precificacaoEntrada || precificacaoEntradaMa ||
-            precificacaoSaida || admin
+        precificacaoSaida || admin
     set(value) {
       precificacaoPrecificacao = value
       precificacaoEntrada = value
@@ -504,7 +504,7 @@ class UserSaci : IUser {
 
   var devCliente
     get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito ||
-            devCliEditor || devClienteTroca || devCliSemPrd || admin
+        devCliEditor || devClienteTroca || devCliSemPrd || admin
     set(value) {
       devCliImprimir = value
       devCliImpresso = value
@@ -517,7 +517,7 @@ class UserSaci : IUser {
 
   var acertoEstoque
     get() = acertoPedido || acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada
-            || acertoMovAtacado || admin
+        || acertoMovAtacado || admin
     set(value) {
       acertoPedido = value
       acertoEntrada = value
@@ -577,7 +577,7 @@ class DelegateAuthorized(numBit: Int) {
     thisRef ?: return
     val v = value ?: false
     thisRef.bitAcesso = when {
-      v    -> thisRef.bitAcesso or bit
+      v -> thisRef.bitAcesso or bit
       else -> thisRef.bitAcesso and bit.inv()
     }
   }
@@ -595,7 +595,7 @@ class DelegateAuthorized2(numBit2: Int) {
     thisRef ?: return
     val v = value ?: false
     thisRef.bitAcesso2 = when {
-      v    -> thisRef.bitAcesso2 or bit
+      v -> thisRef.bitAcesso2 or bit
       else -> thisRef.bitAcesso2 and bit.inv()
     }
   }

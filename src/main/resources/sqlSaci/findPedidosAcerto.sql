@@ -5,7 +5,7 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno,
        ordno,
@@ -24,7 +24,7 @@ WHERE (storeno, ordno) IN (
                            (1, 44),
                            (1, 55),
                            (1, 88)
-  )
+    )
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
@@ -46,13 +46,13 @@ SELECT O.storeno            AS loja,
        O.remarks            AS observacao,
        OP.totalPendente     AS totalPendente
 FROM sqldados.ords AS O
-       INNER JOIN sqldados.store AS L
-                  ON O.storeno = L.no
-       LEFT JOIN T_OPRD AS OP
-                  ON O.storeno = OP.storeno
-                    AND O.no = OP.ordno
-       INNER JOIN sqldados.vend AS V
-                  ON O.vendno = V.no
+         INNER JOIN sqldados.store AS L
+                    ON O.storeno = L.no
+         LEFT JOIN T_OPRD AS OP
+                   ON O.storeno = OP.storeno
+                       AND O.no = OP.ordno
+         INNER JOIN sqldados.vend AS V
+                    ON O.vendno = V.no
 WHERE (O.storeno, O.no) IN (
                             (1, 2),
                             (2, 2),
@@ -64,7 +64,7 @@ WHERE (O.storeno, O.no) IN (
                             (1, 44),
                             (1, 55),
                             (1, 88)
-  );
+    );
 
 SELECT loja,
        sigla,

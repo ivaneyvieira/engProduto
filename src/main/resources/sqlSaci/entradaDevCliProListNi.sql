@@ -1,11 +1,16 @@
-USE sqldados;
+USE
+sqldados;
 
-USE sqldados;
+USE
+sqldados;
 
-SET sql_mode = '';
+SET
+sql_mode = '';
 
-DROP TEMPORARY TABLE IF EXISTS T_NOTA;
-CREATE TEMPORARY TABLE T_NOTA
+DROP
+TEMPORARY TABLE IF EXISTS T_NOTA;
+CREATE
+TEMPORARY TABLE T_NOTA
 (
   PRIMARY KEY (invno)
 )
@@ -18,8 +23,8 @@ SELECT I.invno                                            AS invno,
        I.remarks                                          AS observacao,
        ROUND(I.grossamt / 100, 2)                         AS valor
 FROM sqldados.inv AS I
-       LEFT JOIN sqldados.store AS S
-                 ON S.no = I.storeno
+         LEFT JOIN sqldados.store AS S
+                   ON S.no = I.storeno
 WHERE (I.invno IN (:listNi))
   AND (I.bits & POW(2, 4) = 0)
   AND I.account = '2.01.25';
@@ -39,12 +44,12 @@ SELECT CAST(data AS DATE)        AS data,
        I.nota                    AS nota,
        I.valor                   AS valor
 FROM T_NOTA AS I
-       INNER JOIN sqldados.iprd AS X
-                  ON I.invno = X.invno
-       LEFT JOIN sqldados.prd AS P
-                 ON P.no = X.prdno
-       LEFT JOIN sqldados.users AS U
-                 ON U.no = I.userno
+         INNER JOIN sqldados.iprd AS X
+                    ON I.invno = X.invno
+         LEFT JOIN sqldados.prd AS P
+                   ON P.no = X.prdno
+         LEFT JOIN sqldados.users AS U
+                   ON U.no = I.userno
 GROUP BY I.codLoja, X.prdno, X.grade, I.observacao
 ORDER BY descricao, grade, codigo
 

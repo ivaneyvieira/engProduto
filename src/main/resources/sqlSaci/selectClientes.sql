@@ -1,10 +1,15 @@
-DO @PESQUISA := :pesquisa;
-DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
-DO @PESQUISA_START := CONCAT(:pesquisa, '%');
-DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
+DO
+@PESQUISA := :pesquisa;
+DO
+@PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO
+@PESQUISA_START := CONCAT(:pesquisa, '%');
+DO
+@PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 DROP TABLE IF EXISTS T_CLI;
-CREATE TEMPORARY TABLE T_CLI
+CREATE
+TEMPORARY TABLE T_CLI
 (
   custno     INT         NOT NULL,
   nome       CHAR(40)    NOT NULL,
@@ -34,9 +39,9 @@ SELECT C.no                                       AS custno,
        IF(celular = 0, '', CAST(celular AS CHAR)) AS celular,
        IF(C.city1 = 'TIMON', 'Timon', R.rota)     AS rota
 FROM sqldados.custp AS C
-       LEFT JOIN sqldados.rotasAdd AS R
-                 ON C.city1 = R.cidade
-                   AND (C.nei1 = R.bairro)
+         LEFT JOIN sqldados.rotasAdd AS R
+                   ON C.city1 = R.cidade
+                       AND (C.nei1 = R.bairro)
 WHERE (@PESQUISA = '' OR
        C.no = @PESQUISA_NUM OR
        C.name LIKE @PESQUISA_LIKE OR

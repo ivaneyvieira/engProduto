@@ -26,4 +26,4 @@ data class ProdutoInventarioResumo(
   val saidaMF: Int?,
   val saidaPK: Int?,
   val saidaTM: Int?,
-  )
+)

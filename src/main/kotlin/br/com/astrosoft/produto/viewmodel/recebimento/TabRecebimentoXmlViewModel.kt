@@ -1,10 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
-import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 
 class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -41,8 +41,8 @@ class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
       val fornecedorCad = nota.fornecedorCad?.split(",").orEmpty()
       val fornecedorNota = nota.fornecedorNota?.toString() ?: ""
       query == "" || cnpj == query || fornecedor.contains(query, ignoreCase = true) ||
-      chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
-      valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
+          chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
+          valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
     }
 
     subView.updateList(listLocal)

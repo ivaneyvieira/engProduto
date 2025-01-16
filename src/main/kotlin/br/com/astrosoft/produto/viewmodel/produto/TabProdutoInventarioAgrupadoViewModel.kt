@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel.produto
 
-import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.ETipo

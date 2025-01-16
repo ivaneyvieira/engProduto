@@ -1,4 +1,3 @@
-
 UPDATE sqldados.oprd AS O
 SET O.auxShort4 = 999
 WHERE O.storeno = :storeno

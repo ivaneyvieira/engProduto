@@ -192,6 +192,7 @@ class TabPrecificacaoSaida(val viewModel: TabPrecificacaoSaidaViewModel) : TabPa
     val user = AppConfig.userLogin() as? UserSaci ?: return false
     return user.precificacaoSaida
   }
+
   override val label: String
     get() = "Precificação Saída"
 

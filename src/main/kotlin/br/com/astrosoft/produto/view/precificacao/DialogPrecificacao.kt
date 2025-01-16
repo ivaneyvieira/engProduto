@@ -12,7 +12,6 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.math.BigDecimal
-import kotlin.jvm.java
 import kotlin.reflect.KMutableProperty1
 
 class DialogPrecificacao(

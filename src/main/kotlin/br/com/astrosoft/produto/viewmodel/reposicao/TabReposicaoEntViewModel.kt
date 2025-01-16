@@ -80,7 +80,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     if (pedido.countNaoEntregue() > 0) {
       if (pedido.metodo == EMetodo.ACERTO.num) {
         fail("Pedido não Conferido")
-      }else {
+      } else {
         fail("Pedido não Entregue")
       }
     }

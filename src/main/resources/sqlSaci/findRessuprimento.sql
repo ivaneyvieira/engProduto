@@ -16,7 +16,7 @@ CREATE TABLE sqldados.ordsAdicional
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+    PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno                        AS prdno,
        A.grade                        AS grade,
@@ -30,7 +30,7 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
 (
-  PRIMARY KEY (storeno, ordno, numero, prdno, grade)
+    PRIMARY KEY (storeno, ordno, numero, prdno, grade)
 )
 SELECT 1                           AS storeno,
        N.l2                        AS ordno,
@@ -42,14 +42,14 @@ SELECT 1                           AS storeno,
        SUM(N.grossamt / 100)       AS valorNota,
        SUM(X.qtty / 1000)          AS qtty
 FROM sqldados.nf AS N
-       INNER JOIN sqldados.xaprd2 AS X
-                  USING (storeno, pdvno, xano)
+         INNER JOIN sqldados.xaprd2 AS X
+                    USING (storeno, pdvno, xano)
 WHERE N.l2 BETWEEN 100000000 AND 999999999
   AND N.issuedate >= @DATA
   AND N.issuedate >= 20240307
   AND N.status <> 1
   AND ((X.prdno = :prdno OR :prdno = '')
-  AND ((X.grade = :grade) OR :grade = ''))
+    AND ((X.grade = :grade) OR :grade = ''))
 GROUP BY storeno, ordno, numero, prdno, grade;
 
 INSERT IGNORE sqldados.oprdRessu(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
@@ -208,33 +208,33 @@ SELECT N.no                                AS numero,
            X.auxLong2 != 0)                AS countCor,
        SUM(NF.ordno IS NOT NULL)           AS countNot,
        SUM(X.auxShort4 = 0
-         AND X.auxShort3 != 0)             AS countSelCD,
+           AND X.auxShort3 != 0)           AS countSelCD,
        SUM(X.auxShort4 = 1
-         AND X.auxShort3 != 0)             AS countSelENT,
+           AND X.auxShort3 != 0)           AS countSelENT,
        SUM(X.auxShort4 = 2
-         AND X.auxShort3 != 0)             AS countSelREC
+           AND X.auxShort3 != 0)           AS countSelREC
 FROM sqldados.ords AS N
-       INNER JOIN sqldados.oprd AS X
-                  ON N.storeno = X.storeno
-                    AND N.no = X.ordno
-       LEFT JOIN T_PEDIDO_NOTA AS NF
-                 ON X.ordno = NF.ordno
-                   AND X.storeno = NF.storeno
-                   AND X.prdno = NF.prdno
-                   AND X.grade = NF.grade
-       LEFT JOIN T_LOC AS L
-                 ON X.prdno = L.prdno
-                   AND X.grade = L.grade
-       LEFT JOIN sqldados.users AS SU
-                 ON N.s4 = SU.no
-       LEFT JOIN sqldados.emp AS TU
-                 ON N.s3 = TU.no
-       LEFT JOIN sqldados.users AS RU
-                 ON N.s2 = RU.no
-       LEFT JOIN sqldados.users AS DU
-                 ON N.s1 = DU.no
-       LEFT JOIN sqldados.users AS PU
-                 ON N.padbyte = PU.no
+         INNER JOIN sqldados.oprd AS X
+                    ON N.storeno = X.storeno
+                        AND N.no = X.ordno
+         LEFT JOIN T_PEDIDO_NOTA AS NF
+                   ON X.ordno = NF.ordno
+                       AND X.storeno = NF.storeno
+                       AND X.prdno = NF.prdno
+                       AND X.grade = NF.grade
+         LEFT JOIN T_LOC AS L
+                   ON X.prdno = L.prdno
+                       AND X.grade = L.grade
+         LEFT JOIN sqldados.users AS SU
+                   ON N.s4 = SU.no
+         LEFT JOIN sqldados.emp AS TU
+                   ON N.s3 = TU.no
+         LEFT JOIN sqldados.users AS RU
+                   ON N.s2 = RU.no
+         LEFT JOIN sqldados.users AS DU
+                   ON N.s1 = DU.no
+         LEFT JOIN sqldados.users AS PU
+                   ON N.padbyte = PU.no
 WHERE N.date >= @DATA
   AND N.date >= 20240307
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
@@ -285,33 +285,33 @@ SELECT N.no                                AS numero,
            X.auxLong2 != 0)                AS countCor,
        SUM(NF.ordno IS NOT NULL)           AS countNot,
        SUM(X.auxShort4 = 0
-         AND X.auxShort3 != 0)             AS countSelCD,
+           AND X.auxShort3 != 0)           AS countSelCD,
        SUM(X.auxShort4 = 1
-         AND X.auxShort3 != 0)             AS countSelENT,
+           AND X.auxShort3 != 0)           AS countSelENT,
        SUM(X.auxShort4 = 2
-         AND X.auxShort3 != 0)             AS countSelREC
+           AND X.auxShort3 != 0)           AS countSelREC
 FROM sqldados.ordsRessu AS N
-       INNER JOIN sqldados.oprdRessu AS X
-                  ON N.storeno = X.storeno
-                    AND N.no = X.ordno
-       LEFT JOIN T_PEDIDO_NOTA AS NF
-                 ON X.ordno = NF.ordno
-                   AND X.storeno = NF.storeno
-                   AND X.prdno = NF.prdno
-                   AND X.grade = NF.grade
-       LEFT JOIN T_LOC AS L
-                 ON X.prdno = L.prdno
-                   AND X.grade = L.grade
-       LEFT JOIN sqldados.users AS SU
-                 ON N.s4 = SU.no
-       LEFT JOIN sqldados.emp AS TU
-                 ON N.s3 = TU.no
-       LEFT JOIN sqldados.users AS RU
-                 ON N.s2 = RU.no
-       LEFT JOIN sqldados.users AS DU
-                 ON N.s1 = DU.no
-       LEFT JOIN sqldados.users AS PU
-                 ON N.padbyte = PU.no
+         INNER JOIN sqldados.oprdRessu AS X
+                    ON N.storeno = X.storeno
+                        AND N.no = X.ordno
+         LEFT JOIN T_PEDIDO_NOTA AS NF
+                   ON X.ordno = NF.ordno
+                       AND X.storeno = NF.storeno
+                       AND X.prdno = NF.prdno
+                       AND X.grade = NF.grade
+         LEFT JOIN T_LOC AS L
+                   ON X.prdno = L.prdno
+                       AND X.grade = L.grade
+         LEFT JOIN sqldados.users AS SU
+                   ON N.s4 = SU.no
+         LEFT JOIN sqldados.emp AS TU
+                   ON N.s3 = TU.no
+         LEFT JOIN sqldados.users AS RU
+                   ON N.s2 = RU.no
+         LEFT JOIN sqldados.users AS DU
+                   ON N.s1 = DU.no
+         LEFT JOIN sqldados.users AS PU
+                   ON N.padbyte = PU.no
 WHERE N.date >= @DATA
   AND N.date >= 20240307
   AND (N.no LIKE CONCAT(:lojaRessu, '%') OR :lojaRessu = 0)
@@ -400,7 +400,7 @@ FROM T_PEDIDO_02;
 DROP TEMPORARY TABLE IF EXISTS T_OBS;
 CREATE TEMPORARY TABLE T_OBS
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno, ordno, observacao
 FROM sqldados.ordsAdicional
@@ -451,9 +451,9 @@ SELECT numero,
        SUM(countSelENT)              AS countSelENT,
        SUM(countSelREC)              AS countSelREC
 FROM T_PEDIDO AS D
-       LEFT JOIN T_OBS AS A
-                 ON A.storeno = 1
-                   AND A.ordno = D.numero
+         LEFT JOIN T_OBS AS A
+                   ON A.storeno = 1
+                       AND A.ordno = D.numero
 WHERE (@PESQUISA = '' OR
        numero LIKE @PESQUISA_START OR
        fornecedor LIKE @PESQUISA_NUM OR
@@ -471,17 +471,17 @@ WHERE (@PESQUISA = '' OR
        recebidoSPor LIKE @PESQUISA_LIKE OR
        usuarioNo LIKE @PESQUISA_NUM OR
        usuario LIKE @PESQUISA_LIKE
-  )
+    )
   AND (data >= :dataPedidoInicial OR :dataPedidoInicial = 0)
   AND (data <= :dataPedidoFinal OR :dataPedidoFinal = 0)
   AND (dataBaixaPedido >= :dataNotaInicial OR :dataNotaInicial = 0 OR dataBaixaPedido IS NULL)
   AND (dataBaixaPedido <= :dataNotaFinal OR :dataNotaFinal = 0 OR dataBaixaPedido IS NULL)
 GROUP BY D.numero
 HAVING CASE
-         WHEN :marca = 0 THEN SUM(countCD) > 0
-         WHEN :marca = 1 AND :temNota = 'T' THEN SUM(countENT) > 0
-         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') = ''
-         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') != ''
-         WHEN :marca = 2 THEN SUM(countRec) > 0 AND notaBaixa != ''
-         ELSE FALSE
-       END
+           WHEN :marca = 0 THEN SUM(countCD) > 0
+           WHEN :marca = 1 AND :temNota = 'T' THEN SUM(countENT) > 0
+           WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') = ''
+           WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') != ''
+           WHEN :marca = 2 THEN SUM(countRec) > 0 AND notaBaixa != ''
+           ELSE FALSE
+           END

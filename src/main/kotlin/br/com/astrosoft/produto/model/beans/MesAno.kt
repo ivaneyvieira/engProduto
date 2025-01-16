@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.util.format
 import java.text.DecimalFormat
 import java.time.LocalDate
 
@@ -35,7 +34,7 @@ data class MesAno(val mes: Int, val ano: Int) {
       }
     }
 
-    fun valuesFuture() : List<MesAno> {
+    fun valuesFuture(): List<MesAno> {
       val mesAtual = LocalDate.now().withDayOfMonth(15)
       val listNum = (0..12 * 10).toList()
       return listNum.map {

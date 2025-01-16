@@ -6,20 +6,24 @@ SELECT *
 FROM sqldados.prdloc2
 WHERE storeno = 3;
 
-SHOW INDEX FROM sqldados.prdloc2;
+SHOW
+INDEX FROM sqldados.prdloc2;
 
-SHOW INDEX FROM sqldados.prdloc;
+SHOW
+INDEX FROM sqldados.prdloc;
 
 
-DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE3;
-CREATE TEMPORARY TABLE T_PRD_GRADE3
+DROP
+TEMPORARY TABLE IF EXISTS T_PRD_GRADE3;
+CREATE
+TEMPORARY TABLE T_PRD_GRADE3
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT storeno, prdno, grade, qtty_varejo
 FROM stk AS S
-       INNER JOIN prd AS P
-                  ON P.no = S.prdno
+         INNER JOIN prd AS P
+                    ON P.no = S.prdno
 WHERE storeno = 3;
 
 DELETE

@@ -49,7 +49,7 @@ class NotaRecebimentoProduto(
   val validadeStr
     get() = when (validade) {
       null -> ""
-      999  -> "Indeterminada"
+      999 -> "Indeterminada"
       else -> validade.toString()
     }
   val fabricacao: LocalDate?

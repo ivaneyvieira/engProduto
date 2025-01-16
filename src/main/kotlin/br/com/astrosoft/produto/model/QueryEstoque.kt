@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.model
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
-import br.com.astrosoft.produto.model.QuerySaci.Companion.database
 import br.com.astrosoft.produto.model.beans.*
 
 class QueryEstoque : QueryDB(database) {

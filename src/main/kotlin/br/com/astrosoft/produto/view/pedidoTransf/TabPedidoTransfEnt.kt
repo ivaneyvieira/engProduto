@@ -50,7 +50,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
-    return if("Todas" in printerUser) viewModel.allPrinters() else printerUser
+    return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -93,10 +93,10 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     }
     addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
       val obs =
-          "Referente: ${nota.referente ?: ""}<br>" +
-          "Entregue Por: ${nota.entregue ?: ""}<br>" +
-          "Recebido Por: ${nota.recebido ?: ""}" +
-          "Self Color: ${nota.selfColor ?: ""}"
+        "Referente: ${nota.referente ?: ""}<br>" +
+            "Entregue Por: ${nota.entregue ?: ""}<br>" +
+            "Recebido Por: ${nota.recebido ?: ""}" +
+            "Self Color: ${nota.selfColor ?: ""}"
       DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()

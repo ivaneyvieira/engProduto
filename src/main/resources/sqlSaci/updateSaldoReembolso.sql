@@ -1,9 +1,14 @@
-USE sqldados;
+USE
+sqldados;
 
-DO @invno := :invno;
-DO @custnoDev := :custnoDev;
-DO @saldo := :saldo;
-DO @custnoMuda := :custnoMuda;
+DO
+@invno := :invno;
+DO
+@custnoDev := :custnoDev;
+DO
+@saldo := :saldo;
+DO
+@custnoMuda := :custnoMuda;
 
 UPDATE sqldados.custp AS C
 SET C.saldoDevolucao = 0

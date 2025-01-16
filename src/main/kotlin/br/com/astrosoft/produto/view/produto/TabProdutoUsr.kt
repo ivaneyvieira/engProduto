@@ -8,7 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoUsr
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoUsrViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.checkBox
 import com.vaadin.flow.component.grid.Grid
 
 class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel), ITabProdutoUsr {

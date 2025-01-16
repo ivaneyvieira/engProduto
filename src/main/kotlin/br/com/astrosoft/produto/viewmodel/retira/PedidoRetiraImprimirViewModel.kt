@@ -22,9 +22,9 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   }
 
   fun confirmaPrint(pedido: Pedido) = viewModel.exec {
-    val relatorio = if(pedido.tipoRetiraEnum == ETipoRetira.RETIRA_FUTURA_L) {
+    val relatorio = if (pedido.tipoRetiraEnum == ETipoRetira.RETIRA_FUTURA_L) {
       RomaneioSeparacaoL()
-    }else {
+    } else {
       RomaneioSeparacao()
     }
     val dummyPrinter = DummyPrinter()

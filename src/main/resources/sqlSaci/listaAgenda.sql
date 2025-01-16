@@ -39,17 +39,17 @@ SELECT inv2.storeno                                               AS loja,
        IF((ords.bits & POW(2, 3)) != 0, 'FOB', 'CIF')             AS frete,
        CAST(IF(inv2.c6 = '', NULL, inv2.c6 * 1) AS DATE)          AS coleta
 FROM sqldados.inv2
-       LEFT JOIN sqldados.vend
-                 ON (vend.no = inv2.vendno)
-       LEFT JOIN sqldados.carr AS carr
-                 ON (carr.no = inv2.carrno)
-       LEFT JOIN sqldados.inv AS inv
-                 ON (inv.vendno = inv2.vendno AND inv.nfname = inv2.nfname AND
-                     inv.ordno = inv2.ordno AND inv.grossamt = inv2.grossamt)
-       LEFT JOIN sqldados.emp
-                 ON (emp.no = inv2.auxStr6 AND emp.no <> 0)
-       LEFT JOIN sqldados.ords
-                 ON (inv2.storeno = ords.storeno AND inv2.ordno = ords.no)
+         LEFT JOIN sqldados.vend
+                   ON (vend.no = inv2.vendno)
+         LEFT JOIN sqldados.carr AS carr
+                   ON (carr.no = inv2.carrno)
+         LEFT JOIN sqldados.inv AS inv
+                   ON (inv.vendno = inv2.vendno AND inv.nfname = inv2.nfname AND
+                       inv.ordno = inv2.ordno AND inv.grossamt = inv2.grossamt)
+         LEFT JOIN sqldados.emp
+                   ON (emp.no = inv2.auxStr6 AND emp.no <> 0)
+         LEFT JOIN sqldados.ords
+                   ON (inv2.storeno = ords.storeno AND inv2.ordno = ords.no)
 WHERE inv.invno IS NULL
   AND inv2.storeno > 0
   AND (inv2.storeno = @LOJA OR @LOJA = 0);

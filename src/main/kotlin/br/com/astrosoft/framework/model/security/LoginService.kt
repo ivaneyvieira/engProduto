@@ -9,7 +9,7 @@ class LoginService private constructor() : AbstractLoginService<UserLogin>() {
   @Throws(LoginException::class)
   fun login(username: String, password: String) {
     val user: UserLogin =
-        UserLogin.dao.findByUsername(username, password)
+      UserLogin.dao.findByUsername(username, password)
         ?: throw FailedLoginException("Nome de usuário ou senha inválidos")
     if (user.hashedPassword != password) {
       throw FailedLoginException("Nome de usuário ou senha inválidos")

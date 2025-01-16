@@ -67,7 +67,8 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
     this.addClassName("styling")
     this.format()
 
-    this.withEditor(classBean = Reposicao::class,
+    this.withEditor(
+      classBean = Reposicao::class,
       openEditor = {
         this.focusEditor(Reposicao::observacao)
       },

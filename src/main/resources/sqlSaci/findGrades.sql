@@ -3,8 +3,8 @@ SELECT TRIM(prdno)                AS codigo,
        grade                      AS grade,
        (qtty_varejo / 1000)       AS saldo
 FROM sqldados.stk
-       INNER JOIN sqldados.prd
-                  ON prd.no = stk.prdno
+         INNER JOIN sqldados.prd
+                    ON prd.no = stk.prdno
 WHERE storeno = 4
   AND prdno = LPAD(:codigo, 16, ' ')
 GROUP BY prdno, grade

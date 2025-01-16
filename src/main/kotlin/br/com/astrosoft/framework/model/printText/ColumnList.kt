@@ -9,10 +9,16 @@ class ColumnList<T> {
   private val itens = mutableListOf<Column<T, *>>()
 
   @JvmName("columnString")
-  fun column(property: KProperty1<T, String?>, header: String, size: Int, lineBreak: Boolean = false, expand: Boolean = true) {
+  fun column(
+    property: KProperty1<T, String?>,
+    header: String,
+    size: Int,
+    lineBreak: Boolean = false,
+    expand: Boolean = true
+  ) {
     val column = Column(header, size, lineBreak, expand, property) { str ->
-      str.rpad(size, " ").let{
-        if(expand) it.expand() else it
+      str.rpad(size, " ").let {
+        if (expand) it.expand() else it
       }
     }
     itens.add(column)
@@ -29,8 +35,8 @@ class ColumnList<T> {
   ) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, expand, property) { number ->
-      decimalFormat.format(number).lpad(size, " ").let{
-        if(expand) it.expand() else it
+      decimalFormat.format(number).lpad(size, " ").let {
+        if (expand) it.expand() else it
       }
     }
     itens.add(column)
@@ -55,7 +61,7 @@ class ColumnList<T> {
     ) { number ->
       val numberStr = if (number == null) "" else decimalFormat.format(number)
       numberStr.lpad(size, " ").let { text ->
-        if(expand) text.expand() else text
+        if (expand) text.expand() else text
       }
     }
     itens.add(column)
@@ -83,7 +89,7 @@ data class Column<T, V>(
 ) {
   val columnText: String
     get() {
-      val tamanho = if(expand) size*2 else size
+      val tamanho = if (expand) size * 2 else size
       return if (header.trim() == "") {
         header.rpad(tamanho, " ")
       } else {

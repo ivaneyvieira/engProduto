@@ -12,9 +12,9 @@ class LocalDateConverter : Converter<LocalDate?> {
   @Throws(ConverterException::class)
   override fun convert(value: Any?): LocalDate? {
     return when (value) {
-      is Date      -> value.toLocalDate()
+      is Date -> value.toLocalDate()
       is Timestamp -> value.toLocalDate()
-      else         -> null
+      else -> null
     }
   }
 

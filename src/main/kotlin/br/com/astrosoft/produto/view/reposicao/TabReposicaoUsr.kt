@@ -9,7 +9,6 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoUsr
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
-import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 

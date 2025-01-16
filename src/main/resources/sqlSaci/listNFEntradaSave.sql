@@ -1,4 +1,5 @@
-REPLACE sqldados.pedidoNdd(id, loja, pedido)
+REPLACE
+sqldados.pedidoNdd(id, loja, pedido)
 VALUES (:id, :loja, :pedido);
 
 DELETE

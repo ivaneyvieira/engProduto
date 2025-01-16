@@ -7,19 +7,15 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoCadastro
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoCadastroViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
@@ -139,13 +135,13 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     columnGrid(ProdutoCadastro::ncm, header = "NCM").right()
     columnGrid(ProdutoCadastro::tipo, header = "Tipo")
     columnGrid(ProdutoCadastro::clno, header = "CL", width = "80px")
-    columnGrid(ProdutoCadastro::refForn, header = "Ref Forn", width="150px").right()
+    columnGrid(ProdutoCadastro::refForn, header = "Ref Forn", width = "150px").right()
     columnGrid(ProdutoCadastro::pesoBruto, header = "P.Bruto")
     columnGrid(ProdutoCadastro::uGar, header = "U.Gar")
     columnGrid(ProdutoCadastro::tGar, header = "T.Gar")
     columnGrid(ProdutoCadastro::emb, header = "Emb")
     columnGrid(ProdutoCadastro::foraLinha, header = "F.Linha")
-    columnGrid(ProdutoCadastro::saldo, header = "Saldo", width="80px").right()
+    columnGrid(ProdutoCadastro::saldo, header = "Saldo", width = "80px").right()
     columnGrid(ProdutoCadastro::configSt, header = "Conf St")
   }
 

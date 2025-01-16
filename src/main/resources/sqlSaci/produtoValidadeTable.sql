@@ -1,32 +1,32 @@
 /*DROP TABLE IF EXISTS sqldados.produtoValidade;*/
 CREATE TABLE sqldados.produtoValidade
 (
-  storeno    INT         NOT NULL,
-  prdno      VARCHAR(16) NOT NULL,
-  grade      VARCHAR(8)  NOT NULL,
-  vencimento INT         NOT NULL,
-  estoque    INT         NULL,
-  PRIMARY KEY (storeno, prdno, grade, vencimento)
+    storeno    INT         NOT NULL,
+    prdno      VARCHAR(16) NOT NULL,
+    grade      VARCHAR(8)  NOT NULL,
+    vencimento INT         NOT NULL,
+    estoque    INT NULL,
+    PRIMARY KEY (storeno, prdno, grade, vencimento)
 );
 
 DROP TABLE IF EXISTS sqldados.produtoValidadeLoja;
 CREATE TABLE sqldados.produtoValidadeLoja
 (
-  seq          INT         NOT NULL AUTO_INCREMENT,
-  prdno        VARCHAR(16) NOT NULL,
-  grade        VARCHAR(8)  NOT NULL,
-  vencimentoDS INT         NOT NULL,
-  estoqueDS    INT         NULL,
-  vencimentoMR INT         NOT NULL,
-  estoqueMR    INT         NULL,
-  vencimentoMF INT         NOT NULL,
-  estoqueMF    INT         NULL,
-  vencimentoPK INT         NOT NULL,
-  estoquePK    INT         NULL,
-  vencimentoTM INT         NOT NULL,
-  estoqueTM    INT         NULL,
-  PRIMARY KEY (seq),
-  INDEX (prdno, grade)
+    seq          INT         NOT NULL AUTO_INCREMENT,
+    prdno        VARCHAR(16) NOT NULL,
+    grade        VARCHAR(8)  NOT NULL,
+    vencimentoDS INT         NOT NULL,
+    estoqueDS    INT NULL,
+    vencimentoMR INT         NOT NULL,
+    estoqueMR    INT NULL,
+    vencimentoMF INT         NOT NULL,
+    estoqueMF    INT NULL,
+    vencimentoPK INT         NOT NULL,
+    estoquePK    INT NULL,
+    vencimentoTM INT         NOT NULL,
+    estoqueTM    INT NULL,
+    PRIMARY KEY (seq),
+    INDEX (prdno, grade)
 );
 
 INSERT INTO sqldados.produtoValidadeLoja (prdno, grade,
@@ -51,7 +51,7 @@ FROM sqldados.produtoValidade
 GROUP BY prdno, grade;
 
 ALTER TABLE sqldados.produtoValidadeLoja
-  ADD COLUMN dataEntrada INT NOT NULL DEFAULT 0;
+    ADD COLUMN dataEntrada INT NOT NULL DEFAULT 0;
 
 UPDATE sqldados.produtoValidadeLoja
 SET dataEntrada = CURRENT_DATE() * 1
@@ -67,7 +67,7 @@ FROM sqldados.produtoValidadeLoja;
 
 
 ALTER TABLE sqldados.produtoValidadeLoja
-  ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
+    ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
 
 UPDATE sqldados.produtoValidadeLoja
 SET vencimento = vencimentoTM
@@ -80,7 +80,7 @@ SELECT *
 FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
-  ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
+    ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
 
 TRUNCATE TABLE sqldados.produtoValidade;
 
@@ -128,10 +128,10 @@ FROM sqldados.stk
 WHERE prdno = 113613;
 
 ALTER TABLE sqldados.produtoValidade
-  ADD COLUMN compras INT NOT NULL DEFAULT 0;
+    ADD COLUMN compras INT NOT NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoValidade
-  ADD COLUMN vencimentoEdit INT NULL;
+    ADD COLUMN vencimentoEdit INT NULL;
 
 /**********************************************************/
 
@@ -140,16 +140,18 @@ SELECT *
 FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
-  DROP COLUMN vencimentoEdit;
+DROP
+COLUMN vencimentoEdit;
 
 ALTER TABLE sqldados.produtoValidade
-  ADD COLUMN tipo VARCHAR(3) NOT NULL DEFAULT '' AFTER vencimento;
+    ADD COLUMN tipo VARCHAR(3) NOT NULL DEFAULT '' AFTER vencimento;
 
 ALTER TABLE sqldados.produtoValidade
-  DROP PRIMARY KEY;
+DROP
+PRIMARY KEY;
 
 ALTER TABLE sqldados.produtoValidade
-  ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo);
+    ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo);
 
 UPDATE sqldados.produtoValidade
 SET tipo = 'SAI'
@@ -177,7 +179,8 @@ SET vencimento = 0
 WHERE vencimento < 10;
 
 ALTER TABLE sqldados.produtoValidade
-  DROP COLUMN compras;
+DROP
+COLUMN compras;
 
 DELETE
 FROM sqldados.produtoValidade
@@ -188,7 +191,7 @@ SELECT DISTINCT tipo
 FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
-  RENAME COLUMN estoque TO movimento;
+    RENAME COLUMN estoque TO movimento;
 
 DELETE
 FROM sqldados.produtoValidade
@@ -200,14 +203,15 @@ FROM sqldados.produtoValidade;
 SELECT *
 FROM sqldados.produtoValidade
 where prdno = 105769
-and storeno = 2;
+  and storeno = 2;
 
 /***************************************************************************/
 
 ALTER TABLE sqldados.produtoValidade
-  DROP PRIMARY KEY;
+DROP
+PRIMARY KEY;
 
 ALTER TABLE sqldados.produtoValidade
-add PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada);
+    add PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada);
 
 

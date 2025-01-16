@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.viewmodel.precificacao
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.produto.view.precificacao.TabPrecificacaoUsr
 
 class PrecificacaoViewModel(view: IPrecificacaoView) : ViewModel<IPrecificacaoView>(view) {
   val tabPrecificacaoViewModel = TabPrecificacaoViewModel(this)

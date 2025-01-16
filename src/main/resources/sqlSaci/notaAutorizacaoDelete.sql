@@ -1,4 +1,5 @@
-USE sqldados;
+USE
+sqldados;
 
 DELETE
 FROM sqldados.nfAutorizacao

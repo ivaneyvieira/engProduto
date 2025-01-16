@@ -11,7 +11,6 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -75,7 +74,8 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      this.withEditor(classBean = ReposicaoProduto::class,
+      this.withEditor(
+        classBean = ReposicaoProduto::class,
         openEditor = {
           this.focusEditor(ReposicaoProduto::qtRecebido)
         },

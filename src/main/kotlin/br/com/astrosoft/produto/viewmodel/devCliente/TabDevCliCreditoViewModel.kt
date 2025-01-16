@@ -4,10 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.CreditoCliente
 import br.com.astrosoft.produto.model.beans.FiltroCreditoCliente
-import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.planilha.PlanilhaCredito
 import br.com.astrosoft.produto.model.printText.CreditoDevolucao
-import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
 class TabDevCliCreditoViewModel(val viewModel: DevClienteViewModel) {
   fun updateView() = viewModel.exec {

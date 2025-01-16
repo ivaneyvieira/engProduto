@@ -77,7 +77,7 @@ data class AcertoEntradaProduto(
   val codigoProduto: String?,
   val nomeProduto: String?,
   val grade: String?,
-  val rotulo : String?,
+  val rotulo: String?,
   val tributacao: String?,
   val quantidade: Int?,
   val valorUnitario: Double?,

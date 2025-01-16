@@ -1,9 +1,14 @@
-SET sql_mode = '';
+SET
+sql_mode = '';
 
-DO @PESQUISA := TRIM(:pesquisa);
-DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
-DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+DO
+@PESQUISA := TRIM(:pesquisa);
+DO
+@PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO
+@PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO
+@PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
 SELECT N.storeno                                    AS loja,
        N.invno                                      AS ni,
@@ -22,14 +27,14 @@ SELECT N.storeno                                    AS loja,
        ROUND(I.fob4 / 10000, 2)                     AS valorUnitario,
        ROUND((I.fob4 / 10000) * (I.qtty / 1000), 2) AS valorTotal
 FROM sqldados.inv AS N
-       LEFT JOIN sqldados.vend AS V
-                 ON (V.no = N.vendno)
-       LEFT JOIN sqldados.iprd AS I
-                 USING (invno)
-       LEFT JOIN sqldados.prd AS P
-                 ON (P.no = I.prdno)
-       LEFT JOIN sqldados.prdalq AS R
-                 ON R.prdno = I.prdno
+         LEFT JOIN sqldados.vend AS V
+                   ON (V.no = N.vendno)
+         LEFT JOIN sqldados.iprd AS I
+                   USING (invno)
+         LEFT JOIN sqldados.prd AS P
+                   ON (P.no = I.prdno)
+         LEFT JOIN sqldados.prdalq AS R
+                   ON R.prdno = I.prdno
 WHERE N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.issue_date >= :dataInicial OR :dataInicial = 0)
@@ -44,4 +49,4 @@ HAVING (@PESQUISA = '' OR
         fornecedor = @PESQUISANUM OR
         nomeFornecedor LIKE @PESQUISALIKE OR
         observacao LIKE @PESQUISALIKE
-         )
+           )

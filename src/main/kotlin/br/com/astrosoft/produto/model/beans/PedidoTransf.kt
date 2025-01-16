@@ -56,15 +56,15 @@ class PedidoTransf(
 
   val situacaoPedido
     get() = when (situacao) {
-      0    -> "Incluído"
-      1    -> "Orçado"
-      2    -> "Reservado"
-      3    -> "Vendido"
-      4    -> "Expirado"
-      5    -> "Cancelado"
-      6    -> "Reserva B"
-      7    -> "Trânsito"
-      8    -> "Futura"
+      0 -> "Incluído"
+      1 -> "Orçado"
+      2 -> "Reservado"
+      3 -> "Vendido"
+      4 -> "Expirado"
+      5 -> "Cancelado"
+      6 -> "Reserva B"
+      7 -> "Trânsito"
+      8 -> "Futura"
       else -> "Outro"
     }
 

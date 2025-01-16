@@ -7,8 +7,6 @@ import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.ProdutoInventarioResumo
 import br.com.astrosoft.produto.model.beans.Produtos
-import br.com.astrosoft.produto.viewmodel.produto.ITabEstoqueValidadeViewModel
-import br.com.astrosoft.produto.viewmodel.produto.TabAbstractProdutoViewModel
 import br.com.astrosoft.produto.viewmodel.produto.TabEstoqueValidadeLojaViewModel
 import com.github.mvysny.kaributools.asc
 import com.github.mvysny.kaributools.getColumnBy

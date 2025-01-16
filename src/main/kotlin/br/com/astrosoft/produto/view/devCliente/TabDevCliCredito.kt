@@ -41,7 +41,7 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
   override fun Grid<CreditoCliente>.gridPanel() {
     this.addClassName("styling")
     columnGrid(CreditoCliente::loja, header = "Loja").right()
-        addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeCredito(nota)
     }
     columnGrid(CreditoCliente::ni, header = "NI").right()

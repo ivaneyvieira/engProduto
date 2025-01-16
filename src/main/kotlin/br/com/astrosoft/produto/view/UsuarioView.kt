@@ -2,11 +2,12 @@ package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.view.vaadin.UserLayout
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
-import br.com.astrosoft.produto.model.beans.ETipoRota
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
-import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.github.mvysny.karibudsl.v10.formLayout
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
@@ -65,7 +66,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             this.isEmptySelectionAllowed = true
             this.setItemLabelGenerator { storeno ->
               when (storeno) {
-                0    -> "Todas as lojas"
+                0 -> "Todas as lojas"
                 else -> lojas.firstOrNull { loja ->
                   loja.no == storeno
                 }?.descricao ?: ""

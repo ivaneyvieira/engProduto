@@ -123,10 +123,10 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   }
 
   fun geraPlanilha(): ByteArray = viewModel.exec {
-    val pedidos = subView.pedidoSelecionado().ifEmpty{
+    val pedidos = subView.pedidoSelecionado().ifEmpty {
       fail("Nenhum pedido selecionado")
     }
-    val produtos = pedidos.flatMap{
+    val produtos = pedidos.flatMap {
       it.produtos()
     }
     val planilha = PlanilhaProdutoRessuprimento()

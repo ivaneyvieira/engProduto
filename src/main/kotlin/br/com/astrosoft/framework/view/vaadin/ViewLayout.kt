@@ -86,7 +86,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
 
   override fun showPrintText(
     text: TextBuffer,
-    showPrinter : Boolean,
+    showPrinter: Boolean,
     printerUser: List<String>,
     rota: Rota?,
     loja: Int,

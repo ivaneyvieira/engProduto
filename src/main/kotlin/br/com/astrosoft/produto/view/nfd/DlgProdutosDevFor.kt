@@ -86,9 +86,9 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
-          marcaImpressao > 0         -> "azul"
+          marcaImpressao > 0 -> "azul"
           marca == EMarcaNota.CD.num -> "amarelo"
-          else                       -> null
+          else -> null
         }
       }
     }

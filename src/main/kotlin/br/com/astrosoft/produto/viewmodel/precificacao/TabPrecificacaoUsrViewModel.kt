@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.viewmodel.precificacao
 import br.com.astrosoft.framework.viewmodel.ITabUser
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.pedidoTransf.PedidoTransfViewModel
 
 class TabPrecificacaoUsrViewModel(val viewModel: PrecificacaoViewModel) : TabUsrViewModel(viewModel) {
 

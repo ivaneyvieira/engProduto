@@ -8,7 +8,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.AcertoSaidaNota
+import br.com.astrosoft.produto.model.beans.FiltroAcertoSaida
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.ITabAcertoEstoqueSaida
 import br.com.astrosoft.produto.viewmodel.acertoEstoque.TabAcertoEstoqueSaidaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker

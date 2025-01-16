@@ -7,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.EMarcaReposicao
 import br.com.astrosoft.produto.model.beans.Reposicao
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRetornoViewModel
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoSepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
@@ -77,7 +76,8 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, var r
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      this.withEditor(classBean = ReposicaoProduto::class,
+      this.withEditor(
+        classBean = ReposicaoProduto::class,
         openEditor = {
           this.focusEditor(ReposicaoProduto::qtRecebido)
         },
@@ -140,6 +140,7 @@ class DlgProdutosReposRetorno(val viewModel: TabReposicaoRetornoViewModel, var r
       reposicao.countNaoRecebido() > 0 -> {
         assinaRecebimento()
       }
+
       reposicao.countNaoEntregue() > 0 -> {
         assinaEntrega()
       }

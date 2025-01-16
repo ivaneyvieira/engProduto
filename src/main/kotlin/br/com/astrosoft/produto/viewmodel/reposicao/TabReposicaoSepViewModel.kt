@@ -30,7 +30,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
-    if(produto.localizacao.isNullOrBlank()){
+    if (produto.localizacao.isNullOrBlank()) {
       fail("Produto sem localização")
     }
     produto.selecionado = EMarcaReposicao.ENT.num

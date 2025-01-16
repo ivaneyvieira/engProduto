@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
 
 class PlanilhaVendasRef : Planilha<NotaVendaRef>("Vendas") {

@@ -700,7 +700,7 @@ class ICMSsn201(val icms: NFNotaInfoItemImpostoICMSSN201) : ICMS {
   override val pFCPSTRet: Double = 0.0
 
   //Parte 4
-  override val pCredSN: Double  = icms.percentualAliquotaAplicavelCalculoCreditoSN?.toDoubleOrNull() ?: 0.0
+  override val pCredSN: Double = icms.percentualAliquotaAplicavelCalculoCreditoSN?.toDoubleOrNull() ?: 0.0
   override val pRedBCEfet: Double = 0.00
 }
 

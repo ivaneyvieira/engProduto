@@ -68,11 +68,11 @@ class DlgProdutosRota(val viewModel: TabNotaRotaViewModel, val nota: NotaSaida) 
             Notification.show("O produto não está no grupo de piso")
           }
 
-          it.bean.tipoNota != 4                    -> {
+          it.bean.tipoNota != 4 -> {
             Notification.show("Não é uma expedicao de edtrega futura")
           }
 
-          nota.cancelada == "S"                    -> {
+          nota.cancelada == "S" -> {
             Notification.show("A expedicao está cancelada")
           }
         }
@@ -120,8 +120,8 @@ class DlgProdutosRota(val viewModel: TabNotaRotaViewModel, val nota: NotaSaida) 
 
       this.setClassNameGenerator {
         when (it.marca) {
-          1    -> "cd"
-          2    -> "entregue"
+          1 -> "cd"
+          2 -> "entregue"
           else -> null
         }
       }
@@ -129,9 +129,9 @@ class DlgProdutosRota(val viewModel: TabNotaRotaViewModel, val nota: NotaSaida) 
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
-          marcaImpressao > 0          -> "azul"
+          marcaImpressao > 0 -> "azul"
           marca == EMarcaNota.ENT.num -> "amarelo"
-          else                        -> null
+          else -> null
         }
       }
     }

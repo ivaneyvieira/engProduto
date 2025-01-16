@@ -29,26 +29,26 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     var natureza = nota.natureza()
 
     form =
-        SubWindowForm(
-          "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
-          toolBar = {
-            val user = AppConfig.userLogin()
-            if (user?.admin == true) {
-              this.button("Volta") {
-                this.icon = VaadinIcon.ARROW_LEFT.create()
-                this.onClick {
-                  viewModel.voltar()
-                }
+      SubWindowForm(
+        "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
+        toolBar = {
+          val user = AppConfig.userLogin()
+          if (user?.admin == true) {
+            this.button("Volta") {
+              this.icon = VaadinIcon.ARROW_LEFT.create()
+              this.onClick {
+                viewModel.voltar()
               }
             }
-          }, onClose = {
-            onClose()
-          }) {
-          HorizontalLayout().apply {
-            setSizeFull()
-            createGridProdutos()
           }
+        }, onClose = {
+          onClose()
+        }) {
+        HorizontalLayout().apply {
+          setSizeFull()
+          createGridProdutos()
         }
+      }
     form?.open()
   }
 

@@ -1,6 +1,8 @@
-USE sqldados;
+USE
+sqldados;
 
-SET SQL_MODE = '';
+SET
+SQL_MODE = '';
 
 UPDATE sqldados.inv
 SET s26 = :usernoRecebe

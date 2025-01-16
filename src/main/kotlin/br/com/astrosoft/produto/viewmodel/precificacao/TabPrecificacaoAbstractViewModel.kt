@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.precificacao
 
-import br.com.astrosoft.produto.model.beans.BeanForm
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.produto.model.beans.BeanForm
 import br.com.astrosoft.produto.model.beans.FiltroPrecificacao
 import br.com.astrosoft.produto.model.beans.Precificacao
 

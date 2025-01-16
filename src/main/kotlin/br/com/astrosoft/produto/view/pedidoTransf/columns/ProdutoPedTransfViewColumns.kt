@@ -19,9 +19,9 @@ object ProdutoPedTransfViewColumns {
   }
 
   fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfGradeAlternativa() =
-      columnGrid(ProdutoPedidoTransf::gradeAlternativa) {
-        this.setHeader("Grade Editada")
-      }
+    columnGrid(ProdutoPedidoTransf::gradeAlternativa) {
+      this.setHeader("Grade Editada")
+    }
 
   fun Grid<ProdutoPedidoTransf>.produtoPedidoTransfLocalizacao() = columnGrid(ProdutoPedidoTransf::localizacao) {
     this.setHeader("Loc")

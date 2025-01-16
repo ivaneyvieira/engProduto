@@ -1,2 +1,3 @@
-REPLACE sqldados.validadeAdicional (validade, mesesFabricacao)
+REPLACE
+sqldados.validadeAdicional (validade, mesesFabricacao)
 VALUES (:validade, :mesesFabricacao)

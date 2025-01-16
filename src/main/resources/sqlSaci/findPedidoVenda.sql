@@ -9,10 +9,10 @@ SELECT N.storeno                                          AS loja,
        MAX(X.s12)                                         AS marca,
        'N'                                                AS cancelada
 FROM sqldados.eord AS N
-       INNER JOIN sqldados.eoprd AS X
-                  USING (storeno, ordno)
-       LEFT JOIN sqldados.prdloc AS L
-                 ON L.prdno = X.prdno AND L.storeno = 4
+         INNER JOIN sqldados.eoprd AS X
+                    USING (storeno, ordno)
+         LEFT JOIN sqldados.prdloc AS L
+                   ON L.prdno = X.prdno AND L.storeno = 4
 WHERE N.date >= 20221101
   AND N.paymno = 431
   AND (X.s12 = :marca OR :marca = 999)

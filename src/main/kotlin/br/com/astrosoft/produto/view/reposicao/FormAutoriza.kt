@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.reposicao
 
-import com.github.mvysny.karibudsl.v10.nativeLabel
 import com.github.mvysny.karibudsl.v10.passwordField
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.formlayout.FormLayout

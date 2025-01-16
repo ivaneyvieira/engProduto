@@ -1,10 +1,15 @@
-DO @PESQUISA := :pesquisa;
-DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO @PESQUISALIKE := IF(@PESQUISA REGEXP '[0-9]+', '', CONCAT('%', @PESQUISA, '%'));
+DO
+@PESQUISA := :pesquisa;
+DO
+@PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO
+@PESQUISALIKE := IF(@PESQUISA REGEXP '[0-9]+', '', CONCAT('%', @PESQUISA, '%'));
 
 
-DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
-CREATE TEMPORARY TABLE T_PEDIDO
+DROP
+TEMPORARY TABLE IF EXISTS T_PEDIDO;
+CREATE
+TEMPORARY TABLE T_PEDIDO
 SELECT T.storeno                                  AS loja,
        T.pdvno                                    AS pdvno,
        T.xano                                     AS transacao,
@@ -23,14 +28,14 @@ SELECT T.storeno                                  AS loja,
        T.grossamt / 100                           AS valorTransf,
        TRIM(T.remarks)                            AS observacaoTransf
 FROM sqldados.nf AS T
-       LEFT JOIN sqldados.store AS SO
-                 ON SO.no = T.storeno
-       LEFT JOIN sqldados.custp AS C
-                 ON C.no = T.custno
-       LEFT JOIN sqldados.store AS SD
-                 ON SD.cgc = C.cpf_cgc
-       LEFT JOIN sqldados.users AS U
-                 ON U.no = T.padbits
+         LEFT JOIN sqldados.store AS SO
+                   ON SO.no = T.storeno
+         LEFT JOIN sqldados.custp AS C
+                   ON C.no = T.custno
+         LEFT JOIN sqldados.store AS SD
+                   ON SD.cgc = C.cpf_cgc
+         LEFT JOIN sqldados.users AS U
+                   ON U.no = T.padbits
 WHERE T.issuedate >= 20231111
   AND (T.storeno = :storeno OR :storeno = 0)
   AND IFNULL(SD.no, 0) != IFNULL(SO.no, 0)

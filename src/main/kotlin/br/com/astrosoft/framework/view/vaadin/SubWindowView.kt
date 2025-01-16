@@ -1,6 +1,9 @@
 package br.com.astrosoft.framework.view.vaadin
 
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.verticalLayout
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Image
@@ -24,7 +27,7 @@ class SubWindowView(val filename: String, val bytesBoletos: ByteArray) : Dialog(
         }
       }
 
-      if(filename.uppercase().endsWith(".PDF")) {
+      if (filename.uppercase().endsWith(".PDF")) {
         addAndExpand(PDFViewer(resource))
       } else {
         addAndExpand(Image(resource, filename))

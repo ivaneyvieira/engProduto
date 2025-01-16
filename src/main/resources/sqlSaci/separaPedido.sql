@@ -120,8 +120,8 @@ SELECT O.date,
        obs,
        auxStr
 FROM ords AS O
-       INNER JOIN oprd AS P
-                  ON O.no = P.ordno AND P.storeno = O.storeno
+         INNER JOIN oprd AS P
+                    ON O.no = P.ordno AND P.storeno = O.storeno
 WHERE O.storeno = 1
   AND O.no = :ordno;
 
@@ -300,6 +300,6 @@ WHERE storeno = 1
 /********************************************************************/
 
 INSERT IGNORE INTO sqldados.lastno(storeno, no, dupse, se, padbyte)
-  VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
+    VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
 
 SELECT @ORDNO_NOVO AS ordno

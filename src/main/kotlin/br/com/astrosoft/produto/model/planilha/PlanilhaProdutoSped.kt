@@ -1,11 +1,6 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.framework.view.vaadin.center
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.produto.model.beans.CreditoCliente
 import br.com.astrosoft.produto.model.beans.ProdutoSped
 
 class PlanilhaProdutoSped : Planilha<ProdutoSped>("Credito Cliente") {
