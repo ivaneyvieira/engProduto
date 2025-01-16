@@ -8,7 +8,7 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 DROP TEMPORARY TABLE IF EXISTS T_INVN;
 CREATE TEMPORARY TABLE T_INVN
 (
-    PRIMARY KEY (invno, prdno, grade)
+  PRIMARY KEY (invno, prdno, grade)
 )
 SELECT O.storeno                      AS storeno,
        O.no                           AS ordno,
@@ -21,11 +21,12 @@ SELECT O.storeno                      AS storeno,
        P.grade                        AS grade,
        ROUND(P.qtty / 1000)           AS qtty,
        P.cost4 / 10000                AS cost
-FROM sqldados.iprd AS P
-         INNER JOIN sqldados.inv AS I
-                    USING (invno)
-         INNER JOIN sqldados.ords AS O
-                    ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+FROM
+  sqldados.iprd              AS P
+    INNER JOIN sqldados.inv  AS I
+               USING (invno)
+    INNER JOIN sqldados.ords AS O
+               ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
 GROUP BY P.invno, P.prdno, P.grade;
 
 
@@ -33,7 +34,7 @@ GROUP BY P.invno, P.prdno, P.grade;
 DROP TEMPORARY TABLE IF EXISTS T_INVP;
 CREATE TEMPORARY TABLE T_INVP
 (
-    PRIMARY KEY (invno, prdno, grade)
+  PRIMARY KEY (invno, prdno, grade)
 )
 SELECT O.storeno                      AS storeno,
        O.no                           AS ordno,
@@ -46,43 +47,24 @@ SELECT O.storeno                      AS storeno,
        P.grade                        AS grade,
        ROUND(P.qtty / 1000)           AS qtty,
        P.cost4 / 10000                AS cost
-FROM sqldados.iprd2 AS P
-         INNER JOIN sqldados.inv2 AS I
-                    USING (invno)
-         INNER JOIN sqldados.ords AS O
-                    ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+FROM
+  sqldados.iprd2             AS P
+    INNER JOIN sqldados.inv2 AS I
+               USING (invno)
+    INNER JOIN sqldados.ords AS O
+               ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
 GROUP BY P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
-SELECT storeno,
-       ordno,
-       vendno,
-       invno,
-       dataEmissao,
-       dataEntrada,
-       nfEntrada,
-       prdno,
-       grade,
-       qtty,
-       cost,
-       'N' AS tipo
-FROM T_INVN
+SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'N' AS tipo
+FROM
+  T_INVN
 UNION
 DISTINCT
-SELECT storeno,
-       ordno,
-       vendno,
-       invno,
-       dataEmissao,
-       dataEntrada,
-       nfEntrada,
-       prdno,
-       grade,
-       qtty,
-       cost,
-       'P' AS tipo
-FROM T_INVP;
+SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'P' AS tipo
+FROM
+  T_INVP;
 
 DROP TEMPORARY TABLE IF EXISTS T_INVORD;
 CREATE TEMPORARY TABLE T_INVORD
@@ -99,20 +81,22 @@ SELECT storeno,
        SUM(qtty)                        AS qtty,
        SUM(IF(tipo = 'R', qtty, 0))     AS qttyRcv,
        MAX(cost)                        AS cost
-FROM T_INV
+FROM
+  T_INV
 GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
 (
-    PRIMARY KEY (storeno, ordno)
+  PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno,
        ordno,
        SUM(qttyRcv * cost)                       AS totalRecebido,
        SUM((qtty - qttyCancel - qttyRcv) * cost) AS totalPendente,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
-FROM sqldados.oprd AS P
+FROM
+  sqldados.oprd AS P
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
@@ -142,18 +126,18 @@ SELECT O.storeno                                  AS loja,
        dataEmissao                                AS dataEmissao,
        dataEntrada                                AS dataEntrada,
        nfEntrada                                  AS nfEntrada
-FROM sqldados.ords AS O
-         INNER JOIN sqldados.store AS L
-                    ON O.storeno = L.no
-         INNER JOIN T_OPRD AS OP
-                    ON O.storeno = OP.storeno
-                        AND O.no = OP.ordno
-         INNER JOIN sqldados.vend AS V
-                    ON O.vendno = V.no
-         LEFT JOIN T_INVORD AS IO
-                   ON IO.ordno = O.no AND IO.storeno = O.storeno AND IO.vendno = O.vendno
-         LEFT JOIN sqldados.prd AS P
-                   ON P.no = IO.prdno
+FROM
+  sqldados.ords               AS O
+    INNER JOIN sqldados.store AS L
+               ON O.storeno = L.no
+    INNER JOIN T_OPRD         AS OP
+               ON O.storeno = OP.storeno AND O.no = OP.ordno
+    INNER JOIN sqldados.vend  AS V
+               ON O.vendno = V.no
+    LEFT JOIN  T_INVORD       AS IO
+               ON IO.ordno = O.no AND IO.storeno = O.storeno AND IO.vendno = O.vendno
+    LEFT JOIN  sqldados.prd   AS P
+               ON P.no = IO.prdno
 WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
@@ -188,6 +172,7 @@ SELECT loja,
        dataEmissao                        AS dataEmissao,
        dataEntrada                        AS dataEntrada,
        IFNULL(nfEntrada, '')              AS nfEntrada
-FROM T_ORD
+FROM
+  T_ORD
 WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade

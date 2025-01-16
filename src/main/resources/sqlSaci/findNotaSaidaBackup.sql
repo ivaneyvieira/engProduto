@@ -11,9 +11,9 @@ TEMPORARY TABLE T_TIPO
 (
   PRIMARY KEY (storeno, ordno)
 )
-SELECT storeno                     AS storeno,
-       ordno                       AS ordno,
-       SUM(E.bits & POW(2, 1))     AS tipoR,
+SELECT storeno AS storeno,
+       ordno AS ordno,
+       SUM(E.bits & POW(2, 1)) AS tipoR,
        SUM(NOT E.bits & POW(2, 1)) AS tipoE
 FROM sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
@@ -28,9 +28,9 @@ TEMPORARY TABLE T_E
   PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
-       P.eordno                                  AS ordno,
+       P.eordno AS ordno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
-       P.date                                    AS data
+       P.date AS data
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5, 6, 7, 8)
@@ -47,7 +47,7 @@ TEMPORARY TABLE T_V
 SELECT P.storeno,
        P.pdvno,
        P.xano,
-       P.eordno                                  AS ordno,
+       P.eordno AS ordno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
@@ -68,9 +68,9 @@ TEMPORARY TABLE T_ENTREGA
 SELECT V.storeno,
        V.pdvno,
        V.xano,
-       V.numero      AS notaVenda,
+       V.numero AS notaVenda,
        MAX(E.numero) AS notaEntrega,
-       MAX(E.data)   AS dataEntrega
+       MAX(E.data) AS dataEntrega
 FROM T_V AS V
          LEFT JOIN T_E AS E
                    USING (storeno, ordno)
@@ -83,7 +83,7 @@ TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, loc)
 )
-SELECT P.no                                               AS prdno,
+SELECT P.no AS prdno,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS loc
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdloc AS L
@@ -116,24 +116,24 @@ DROP
 TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE
 TEMPORARY TABLE T_QUERY
-SELECT N.storeno                          AS loja,
-       N.pdvno                            AS pdvno,
-       N.xano                             AS xano,
-       N.nfno                             AS numero,
-       N.nfse                             AS serie,
-       N.custno                           AS cliente,
-       IFNULL(C.name, '')                 AS nomeCliente,
-       N.grossamt / 100                   AS valorNota,
-       CAST(N.issuedate AS DATE)          AS data,
-       SEC_TO_TIME(P.time)                AS hora,
-       N.empno                            AS vendedor,
-       TRIM(MID(E.sname, 1, 20))          AS nomeVendedor,
+SELECT N.storeno AS loja,
+       N.pdvno AS pdvno,
+       N.xano AS xano,
+       N.nfno AS numero,
+       N.nfse AS serie,
+       N.custno AS cliente,
+       IFNULL(C.name, '') AS nomeCliente,
+       N.grossamt / 100 AS valorNota,
+       CAST(N.issuedate AS DATE) AS data,
+       SEC_TO_TIME(P.time) AS hora,
+       N.empno AS vendedor,
+       TRIM(MID(E.sname, 1, 20)) AS nomeVendedor,
        CAST(IFNULL(L.locais, '') AS CHAR) AS locais,
-       X.c5                               AS usuarioExp,
-       X.c4                               AS usuarioCD,
-       SUM((X.qtty / 1000) * X.preco)     AS totalProdutos,
-       MAX(X.s11)                         AS marca,
-       IF(N.status <> 1, 'N', 'S')        AS cancelada,
+       X.c5 AS usuarioExp,
+       X.c4 AS usuarioCD,
+       SUM((X.qtty / 1000) * X.preco) AS totalProdutos,
+       MAX(X.s11) AS marca,
+       IF(N.status <> 1, 'N', 'S') AS cancelada,
        CASE
            WHEN tipo = 0 AND N.nfse >= 10
                THEN 'NFCE'
@@ -170,9 +170,9 @@ SELECT N.storeno                          AS loja,
            WHEN N.tipo = 15
                THEN 'NFE'
            ELSE ''
-           END                            AS tipoNotaSaida,
-       IFNULL(ENT.notaEntrega, '')        AS notaEntrega,
-       CAST(ENT.dataEntrega AS DATE)      AS dataEntrega,
+           END AS tipoNotaSaida,
+       IFNULL(ENT.notaEntrega, '') AS notaEntrega,
+       CAST(ENT.dataEntrega AS DATE) AS dataEntrega,
        CASE
            WHEN IFNULL(T.tipoE, 0) > 0
                AND IFNULL(T.tipoR, 0) = 0 THEN 'Entrega'
@@ -181,7 +181,7 @@ SELECT N.storeno                          AS loja,
            WHEN IFNULL(T.tipoE, 0) > 0
                AND IFNULL(T.tipoR, 0) > 0 THEN 'Misto'
            ELSE ''
-           END                            AS tipo,
+           END AS tipo,
        X.c5,
        X.c4
 FROM sqldados.nf AS N

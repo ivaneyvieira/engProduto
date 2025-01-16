@@ -25,16 +25,16 @@ TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.no                              AS storeno,
-       S.sname                           AS abrevLoja,
-       P.no                              AS prdno,
-       TRIM(P.no) * 1                    AS codigo,
-       TRIM(MID(P.name, 1, 37))          AS descricao,
-       IFNULL(B.grade, '')               AS grade,
-       TRIM(MID(P.name, 37, 3))          AS unidade,
+SELECT S.no AS storeno,
+       S.sname AS abrevLoja,
+       P.no AS prdno,
+       TRIM(P.no) * 1 AS codigo,
+       TRIM(MID(P.name, 1, 37)) AS descricao,
+       IFNULL(B.grade, '') AS grade,
+       TRIM(MID(P.name, 37, 3)) AS unidade,
        IF(tipoGarantia = 2, garantia, 0) AS validade,
-       P.mfno                            AS vendno,
-       V.sname                           AS fornecedorAbrev
+       P.mfno AS vendno,
+       V.sname AS fornecedorAbrev
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdbar AS B
                    ON P.no = B.prdno
@@ -85,20 +85,20 @@ SELECT prdno, grade, SUM(estoqueLoja) AS estoqueTotal
 FROM T_STK
 GROUP BY prdno, grade;
 
-SELECT IFNULL(V.seq, 0)                                         AS seq,
-       storeno                                                  AS loja,
-       abrevLoja                                                AS abrevLoja,
-       prdno                                                    AS prdno,
-       TRIM(prdno) * 1                                          AS codigo,
-       P.descricao                                              AS descricao,
-       P.grade                                                  AS grade,
-       IFNULL(S.estoqueLoja, 0)                                 AS estoqueLoja,
-       MID(V.vencimento, 1, 6) * 1                              AS vencimento,
-       V.inventario                                             AS inventario,
+SELECT IFNULL(V.seq, 0) AS seq,
+       storeno AS loja,
+       abrevLoja AS abrevLoja,
+       prdno AS prdno,
+       TRIM(prdno) * 1 AS codigo,
+       P.descricao AS descricao,
+       P.grade AS grade,
+       IFNULL(S.estoqueLoja, 0) AS estoqueLoja,
+       MID(V.vencimento, 1, 6) * 1 AS vencimento,
+       V.inventario AS inventario,
        CAST(IF(V.dataEntrada = 0, NULL, V.dataEntrada) AS DATE) AS dataEntrada,
-       validade                                                 AS validade,
-       unidade                                                  AS unidade,
-       vendno                                                   AS vendno
+       validade AS validade,
+       unidade AS unidade,
+       vendno AS vendno
 FROM T_PRD AS P
          LEFT JOIN sqldados.dadosValidade AS V
                    USING (storeno, prdno, grade)

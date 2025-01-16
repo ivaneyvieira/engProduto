@@ -56,26 +56,26 @@ SELECT nfekey,
        prdno,
        grade,
        IF(C.marca = 1, IF(S.qtty = C.qtty, 1, 0), 0) AS marca,
-       IFNULL(S.qtty, 0)                             AS qttyS,
-       IFNULL(C.qtty, 0)                             AS qttyC
+       IFNULL(S.qtty, 0) AS qttyS,
+       IFNULL(C.qtty, 0) AS qttyC
 FROM T_MESTRE
          LEFT JOIN T_IPRD_S AS S
                    USING (nfekey, prdno, grade)
          LEFT JOIN T_IPRD_C AS C
                    USING (nfekey, prdno, grade);
 
-SELECT I.invno                              AS ni,
-       I.storeno                            AS loja,
-       I.nfname                             AS numero,
-       I.invse                              AS serie,
-       I.vendno                             AS fornecedor,
-       V.sname                              AS nomeForn,
-       CAST(I.issue_date AS DATE)           AS emissao,
-       CAST(I.date AS DATE)                 AS entrada,
-       I.grossamt / 100                     AS valorNota,
+SELECT I.invno AS ni,
+       I.storeno AS loja,
+       I.nfname AS numero,
+       I.invse AS serie,
+       I.vendno AS fornecedor,
+       V.sname AS nomeForn,
+       CAST(I.issue_date AS DATE) AS emissao,
+       CAST(I.date AS DATE) AS entrada,
+       I.grossamt / 100 AS valorNota,
        IF(I.bits & POW(2, 4) = 0, 'N', 'S') AS cancelada,
-       N.nfekey                             AS chave,
-       2                                    AS marca
+       N.nfekey AS chave,
+       2 AS marca
 FROM sqldados.inv AS I
          INNER JOIN sqldados.invnfe AS N
                     USING (invno)

@@ -10,21 +10,21 @@ DO
 DO
 @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-SELECT N.storeno                                    AS loja,
-       N.invno                                      AS ni,
-       CONCAT(N.nfname, '/', N.invse)               AS notaFiscal,
-       CAST(N.issue_date AS DATE)                   AS dataEmissao,
-       N.vendno                                     AS fornecedor,
-       V.name                                       AS nomeFornecedor,
-       N.remarks                                    AS observacao,
-       ROUND(N.grossamt / 100, 2)                   AS valorNota,
-       TRIM(I.prdno)                                AS codigoProduto,
-       TRIM(MID(P.name, 1, 37))                     AS nomeProduto,
-       IFNULL(R.form_label, '')                     AS rotulo,
-       P.taxno                                      AS tributacao,
-       I.grade                                      AS grade,
-       ROUND(I.qtty / 1000)                         AS quantidade,
-       ROUND(I.fob4 / 10000, 2)                     AS valorUnitario,
+SELECT N.storeno AS loja,
+       N.invno AS ni,
+       CONCAT(N.nfname, '/', N.invse) AS notaFiscal,
+       CAST(N.issue_date AS DATE) AS dataEmissao,
+       N.vendno AS fornecedor,
+       V.name AS nomeFornecedor,
+       N.remarks AS observacao,
+       ROUND(N.grossamt / 100, 2) AS valorNota,
+       TRIM(I.prdno) AS codigoProduto,
+       TRIM(MID(P.name, 1, 37)) AS nomeProduto,
+       IFNULL(R.form_label, '') AS rotulo,
+       P.taxno AS tributacao,
+       I.grade AS grade,
+       ROUND(I.qtty / 1000) AS quantidade,
+       ROUND(I.fob4 / 10000, 2) AS valorUnitario,
        ROUND((I.fob4 / 10000) * (I.qtty / 1000), 2) AS valorTotal
 FROM sqldados.inv AS N
          LEFT JOIN sqldados.vend AS V

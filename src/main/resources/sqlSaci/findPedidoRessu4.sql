@@ -10,23 +10,23 @@ DROP
 TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE
 TEMPORARY TABLE T_PEDIDO
-SELECT T.storeno                                  AS loja,
-       T.pdvno                                    AS pdvno,
-       T.xano                                     AS transacao,
-       SO.sname                                   AS lojaOrigem,
-       SD.sname                                   AS lojaDestino,
-       SO.no                                      AS lojaOrigemNo,
-       SD.no                                      AS lojaDestinoNo,
+SELECT T.storeno AS loja,
+       T.pdvno AS pdvno,
+       T.xano AS transacao,
+       SO.sname AS lojaOrigem,
+       SD.sname AS lojaDestino,
+       SO.no AS lojaOrigemNo,
+       SD.no AS lojaDestinoNo,
        CAST(CONCAT('Rota', SO.no, SD.no) AS CHAR) AS rota,
-       CAST(T.eordno AS CHAR)                     AS ordno,
-       T.custno                                   AS cliente,
-       CAST(T.issuedate AS DATE)                  AS data,
-       T.empno                                    AS vendedor,
-       U.no                                       AS userno,
-       U.name                                     AS usuario,
-       CAST(CONCAT(T.nfno, '/', T.nfse) AS CHAR)  AS notaTransf,
-       T.grossamt / 100                           AS valorTransf,
-       TRIM(T.remarks)                            AS observacaoTransf
+       CAST(T.eordno AS CHAR) AS ordno,
+       T.custno AS cliente,
+       CAST(T.issuedate AS DATE) AS data,
+       T.empno AS vendedor,
+       U.no AS userno,
+       U.name AS usuario,
+       CAST(CONCAT(T.nfno, '/', T.nfse) AS CHAR) AS notaTransf,
+       T.grossamt / 100 AS valorTransf,
+       TRIM(T.remarks) AS observacaoTransf
 FROM sqldados.nf AS T
          LEFT JOIN sqldados.store AS SO
                    ON SO.no = T.storeno

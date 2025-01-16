@@ -7,16 +7,16 @@ TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.no                              AS storeno,
-       S.sname                           AS abrevLoja,
-       P.no                              AS prdno,
-       TRIM(P.no) * 1                    AS codigo,
-       TRIM(MID(P.name, 1, 37))          AS descricao,
-       IFNULL(B.grade, '')               AS grade,
-       TRIM(MID(P.name, 37, 3))          AS unidade,
+SELECT S.no AS storeno,
+       S.sname AS abrevLoja,
+       P.no AS prdno,
+       TRIM(P.no) * 1 AS codigo,
+       TRIM(MID(P.name, 1, 37)) AS descricao,
+       IFNULL(B.grade, '') AS grade,
+       TRIM(MID(P.name, 37, 3)) AS unidade,
        IF(tipoGarantia = 2, garantia, 0) AS validade,
-       P.mfno                            AS vendno,
-       V.sname                           AS fornecedorAbrev
+       P.mfno AS vendno,
+       V.sname AS fornecedorAbrev
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdbar AS B
                    ON P.no = B.prdno
@@ -32,8 +32,8 @@ TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE
 TEMPORARY TABLE T_NOTA
 SELECT N.storeno AS storeno,
-       I.prdno   AS prdno,
-       I.grade   AS grade,
+       I.prdno AS prdno,
+       I.grade AS grade,
        CAST(N.date AS DATE) AS date,
        DATE_FORMAT(A.vencimento, '%Y%m') * 1 AS mesAno,
        ROUND(SUM(I.qtty / 1000))             AS qtty
@@ -94,18 +94,18 @@ CREATE TABLE IF NOT EXISTS sqldados.produtoEntrada
     mesano
 )
     )
-SELECT P.storeno       AS loja,
-       P.abrevLoja     AS lojaAbrev,
-       prdno           AS prdno,
-       codigo          AS codigo,
-       descricao       AS descricao,
-       unidade         AS unidade,
-       validade        AS validade,
-       vendno          AS vendno,
+SELECT P.storeno AS loja,
+       P.abrevLoja AS lojaAbrev,
+       prdno AS prdno,
+       codigo AS codigo,
+       descricao AS descricao,
+       unidade AS unidade,
+       validade AS validade,
+       vendno AS vendno,
        fornecedorAbrev AS fornecedorAbrev,
-       estoqueTotal    AS estoqueTotal,
-       estoqueLoja     AS estoqueLoja,
-       P.grade         AS grade, date AS date, mesAno AS mesAno, qtty AS qtty
+       estoqueTotal AS estoqueTotal,
+       estoqueLoja AS estoqueLoja,
+       P.grade AS grade, date AS date, mesAno AS mesAno, qtty AS qtty
 FROM T_NOTA
     INNER JOIN T_PRD AS P
     USING (storeno, prdno, grade)

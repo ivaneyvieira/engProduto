@@ -8,16 +8,16 @@ TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.no                              AS storeno,
-       S.sname                           AS abrevLoja,
-       P.no                              AS prdno,
-       TRIM(P.no) * 1                    AS codigo,
-       TRIM(MID(P.name, 1, 37))          AS descricao,
-       IFNULL(B.grade, '')               AS grade,
-       TRIM(MID(P.name, 37, 3))          AS unidade,
+SELECT S.no AS storeno,
+       S.sname AS abrevLoja,
+       P.no AS prdno,
+       TRIM(P.no) * 1 AS codigo,
+       TRIM(MID(P.name, 1, 37)) AS descricao,
+       IFNULL(B.grade, '') AS grade,
+       TRIM(MID(P.name, 37, 3)) AS unidade,
        IF(tipoGarantia = 2, garantia, 0) AS validade,
-       P.mfno                            AS vendno,
-       V.sname                           AS fornecedorAbrev
+       P.mfno AS vendno,
+       V.sname AS fornecedorAbrev
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdbar AS B
                    ON P.no = B.prdno
@@ -36,9 +36,9 @@ TEMPORARY TABLE T_VENDA
 )
 SELECT N.storeno AS lojaOrigem,
        I.storeno AS lojaDestino,
-       SD.sname  AS abrevDestino,
-       X.prdno   AS prdno,
-       X.grade   AS grade,
+       SD.sname AS abrevDestino,
+       X.prdno AS prdno,
+       X.grade AS grade,
        CAST(N.issuedate AS DATE) AS date,
        ROUND(SUM(X.qtty / 1000)) AS qtty
 FROM sqldados.nf AS N
@@ -86,11 +86,11 @@ GROUP BY prdno, grade;
 DROP TABLE IF EXISTS T_QUERY;
 CREATE
 TEMPORARY TABLE T_QUERY
-SELECT lojaOrigem               AS lojaOrigem,
-       abrevLoja                AS abrevLoja,
-       IFNULL(lojaDestino, 0)   AS lojaDestino,
+SELECT lojaOrigem AS lojaOrigem,
+       abrevLoja AS abrevLoja,
+       IFNULL(lojaDestino, 0) AS lojaDestino,
        IFNULL(abrevDestino, '') AS abrevDestino,
-       V.grade                  AS grade, date AS date, qtty AS qtty, V.prdno AS prdno, codigo AS codigo, descricao AS descricao, unidade AS unidade, validade AS validade, vendno AS vendno, fornecedorAbrev AS fornecedorAbrev, estoqueTotal AS estoqueTotal
+       V.grade AS grade, date AS date, qtty AS qtty, V.prdno AS prdno, codigo AS codigo, descricao AS descricao, unidade AS unidade, validade AS validade, vendno AS vendno, fornecedorAbrev AS fornecedorAbrev, estoqueTotal AS estoqueTotal
 FROM T_VENDA AS V
     INNER JOIN T_PRD AS P
 ON V.lojaOrigem = P.storeno

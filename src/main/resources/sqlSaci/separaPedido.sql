@@ -65,7 +65,8 @@ SELECT no,
        c2,
        c3,
        c4
-FROM ords o
+FROM
+  ords o
 WHERE storeno = 1
   AND no = :ordno;
 
@@ -119,9 +120,10 @@ SELECT O.date,
        gradeFechada,
        obs,
        auxStr
-FROM ords AS O
-         INNER JOIN oprd AS P
-                    ON O.no = P.ordno AND P.storeno = O.storeno
+FROM
+  ords              AS O
+    INNER JOIN oprd AS P
+               ON O.no = P.ordno AND P.storeno = O.storeno
 WHERE O.storeno = 1
   AND O.no = :ordno;
 
@@ -189,7 +191,8 @@ SELECT @ORDNO_NOVO      AS no,
        c2,
        c3,
        'S'              AS c4
-FROM ords
+FROM
+  ords
 WHERE storeno = 1
   AND NO = :ordno;
 
@@ -240,7 +243,8 @@ SELECT 1                   AS storeno,
        gradeFechada,
        obs,
        :localizacao        AS auxStr
-FROM oprd
+FROM
+  oprd
 WHERE (storeno = 1)
   AND (ordno = :ordno)
   AND (prdno = :prdno)
@@ -266,7 +270,8 @@ WHERE (storeno = 1)
 /********************************************************************/
 
 DELETE
-FROM oprd
+FROM
+  oprd
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = :prdno
@@ -274,7 +279,8 @@ WHERE storeno = 1
   AND ROUND(qtty) <= 0;
 
 DELETE
-FROM oprd
+FROM
+  oprd
 WHERE storeno = 1
   AND ordno = @ORDNO_NOVO
   AND prdno = :prdno
@@ -282,7 +288,8 @@ WHERE storeno = 1
   AND ROUND(qtty) <= 0;
 
 DELETE
-FROM oprdRessu
+FROM
+  oprdRessu
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = :prdno
@@ -290,7 +297,8 @@ WHERE storeno = 1
   AND ROUND(qtty) <= 0;
 
 DELETE
-FROM oprdRessu
+FROM
+  oprdRessu
 WHERE storeno = 1
   AND ordno = @ORDNO_NOVO
   AND prdno = :prdno
@@ -299,7 +307,6 @@ WHERE storeno = 1
 
 /********************************************************************/
 
-INSERT IGNORE INTO sqldados.lastno(storeno, no, dupse, se, padbyte)
-    VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
+INSERT IGNORE INTO sqldados.lastno(storeno, no, dupse, se, padbyte) VALUE (MID(@ORDNO_NOVO, 1, 1) * 1, @ORDNO_NOVO, 0, 'RS', '');
 
 SELECT @ORDNO_NOVO AS ordno

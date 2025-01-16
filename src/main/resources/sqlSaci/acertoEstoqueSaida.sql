@@ -10,20 +10,20 @@ DO
 DO
 @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-SELECT nf.storeno                            AS loja,
-       CONCAT(nf.nfno, '/', nf.nfse)         AS notaFiscal,
-       CAST(nf.issuedate AS DATE)            AS dataEmissao,
-       nf.custno                             AS cliente,
-       C.name                                AS nomeCliente,
-       nf.remarks                            AS observacao,
-       ROUND(nf.grossamt / 100, 2)           AS valorNota,
-       TRIM(I.prdno)                         AS codigoProduto,
-       TRIM(MID(P.name, 1, 37))              AS nomeProduto,
-       I.grade                               AS grade,
-       IFNULL(R.form_label, '')              AS rotulo,
-       P.taxno                               AS tributacao,
-       ROUND(I.qtty / 1000)                  AS quantidade,
-       ROUND(I.preco, 2)                     AS valorUnitario,
+SELECT nf.storeno AS loja,
+       CONCAT(nf.nfno, '/', nf.nfse) AS notaFiscal,
+       CAST(nf.issuedate AS DATE) AS dataEmissao,
+       nf.custno AS cliente,
+       C.name AS nomeCliente,
+       nf.remarks AS observacao,
+       ROUND(nf.grossamt / 100, 2) AS valorNota,
+       TRIM(I.prdno) AS codigoProduto,
+       TRIM(MID(P.name, 1, 37)) AS nomeProduto,
+       I.grade AS grade,
+       IFNULL(R.form_label, '') AS rotulo,
+       P.taxno AS tributacao,
+       ROUND(I.qtty / 1000) AS quantidade,
+       ROUND(I.preco, 2) AS valorUnitario,
        ROUND((I.preco) * (I.qtty / 1000), 2) AS valorTotal
 FROM sqldados.nf
          LEFT JOIN sqldados.xaprd2 AS I

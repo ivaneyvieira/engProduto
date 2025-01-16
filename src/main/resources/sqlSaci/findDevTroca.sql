@@ -1,11 +1,11 @@
-SELECT V.storenoOrigem                         AS loja,
-       V.pdvnoOrigem                           AS pdv,
-       V.xanoOrigem                            AS xano,
-       CAST(V.data AS DATE)                    AS data,
+SELECT V.storenoOrigem AS loja,
+       V.pdvnoOrigem AS pdv,
+       V.xanoOrigem AS xano,
+       CAST(V.data AS DATE) AS data,
        CONCAT(V.nfnoOrigem, '/', V.nfseOrigem) AS nfVenda,
-       V.vlTotal / 100                         AS vlTotal,
-       V.invnoDevol                            AS ni,
-       N.custno                                AS cliente
+       V.vlTotal / 100 AS vlTotal,
+       V.invnoDevol AS ni,
+       N.custno AS cliente
 FROM sqldados.cthcrdev AS V
          INNER JOIN sqldados.inv AS D
                     ON D.invno = V.invnoDevol

@@ -7,9 +7,10 @@ SELECT N.storeno                 AS loja,
        X.grade                   AS grade,
        CAST(N.issuedate AS DATE) AS data,
        ROUND(X.qtty / 1000)      AS quantidade
-FROM sqldados.nf AS N
-         INNER JOIN sqldados.xaprd2 AS X
-                    USING (storeno, pdvno, xano)
+FROM
+  sqldados.nf                  AS N
+    INNER JOIN sqldados.xaprd2 AS X
+               USING (storeno, pdvno, xano)
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja)
   AND (X.prdno = :prdno)
