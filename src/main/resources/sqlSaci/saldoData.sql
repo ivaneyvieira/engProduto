@@ -116,11 +116,11 @@ GROUP BY loja, prdno, grade, date;
 DROP TABLE IF EXISTS NFCupom;
 CREATE
 TEMPORARY TABLE NFCupom
-SELECT X.storeno AS loja,
+SELECT X.storeno           AS loja,
        X.prdno,
        X.grade,
        X.date,
-       'NF Cupom' AS tipo,
+       'NF Cupom'          AS tipo,
        SUM(-X.qtty / 1000) AS quant,
        X.storeno,
        X.pdvno,
@@ -145,11 +145,11 @@ GROUP BY X.storeno, prdno, grade, date;
 DROP TABLE IF EXISTS Devolucao;
 CREATE
 TEMPORARY TABLE Devolucao
-SELECT X.storeno AS loja,
+SELECT X.storeno           AS loja,
        X.prdno,
        X.grade,
        X.date,
-       'Devolucao' AS tipo,
+       'Devolucao'         AS tipo,
        SUM(-X.qtty / 1000) AS quant,
        X.storeno,
        X.pdvno,

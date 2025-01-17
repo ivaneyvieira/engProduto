@@ -27,16 +27,16 @@ TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT S.no AS storeno,
-       S.sname AS abrevLoja,
-       P.no AS prdno,
-       TRIM(P.no) * 1 AS codigo,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       IFNULL(B.grade, '') AS grade,
-       TRIM(MID(P.name, 37, 3)) AS unidade,
+SELECT S.no                              AS storeno,
+       S.sname                           AS abrevLoja,
+       P.no                              AS prdno,
+       TRIM(P.no) * 1                    AS codigo,
+       TRIM(MID(P.name, 1, 37))          AS descricao,
+       IFNULL(B.grade, '')               AS grade,
+       TRIM(MID(P.name, 37, 3))          AS unidade,
        IF(tipoGarantia = 2, garantia, 0) AS validade,
-       P.mfno AS vendno,
-       V.sname AS fornecedorAbrev
+       P.mfno                            AS vendno,
+       V.sname                           AS fornecedorAbrev
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdbar AS B
                    ON P.no = B.prdno
@@ -91,13 +91,13 @@ TEMPORARY TABLE T_VAL
 (
   PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada)
 )
-SELECT storeno AS storeno,
-       prdno AS prdno,
-       grade AS grade,
+SELECT storeno     AS storeno,
+       prdno       AS prdno,
+       grade       AS grade,
        dataEntrada AS dataEntrada,
-       vencimento AS vencimento,
-       tipo AS tipo,
-       movimento AS movimento
+       vencimento  AS vencimento,
+       tipo        AS tipo,
+       movimento   AS movimento
 FROM sqldados.produtoValidade
          INNER JOIN T_PRD
                     USING (storeno, prdno, grade)
@@ -106,25 +106,25 @@ WHERE (:ano = 0 OR MID(vencimento, 1, 4) = :ano)
   AND (:loja = 0 OR storeno = :loja)
   AND (movimento != 0);
 
-SELECT P.storeno AS loja,
-       P.abrevLoja AS lojaAbrev,
-       P.prdno AS prdno,
-       P.codigo AS codigo,
-       P.descricao AS descricao,
-       P.grade AS grade,
-       P.unidade AS unidade,
-       P.validade AS validade,
-       P.vendno AS vendno,
-       P.fornecedorAbrev AS fornecedorAbrev,
+SELECT P.storeno                                              AS loja,
+       P.abrevLoja                                            AS lojaAbrev,
+       P.prdno                                                AS prdno,
+       P.codigo                                               AS codigo,
+       P.descricao                                            AS descricao,
+       P.grade                                                AS grade,
+       P.unidade                                              AS unidade,
+       P.validade                                             AS validade,
+       P.vendno                                               AS vendno,
+       P.fornecedorAbrev                                      AS fornecedorAbrev,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntrada,
        CAST(IF(V.dataEntrada = 0, NULL, dataEntrada) AS DATE) AS dataEntradaEdit,
-       IFNULL(T.estoqueTotal, 0) AS estoqueTotal,
-       IFNULL(S.estoqueLoja, 0) AS estoqueLoja,
-       IFNULL(V.movimento, 0) AS movimento,
-       IFNULL(V.tipo, 'INV') AS tipo,
-       IFNULL(V.tipo, 'INV') AS tipoEdit,
-       MID(V.vencimento, 1, 6) * 1 AS vencimento,
-       MID(V.vencimento, 1, 6) * 1 AS vencimentoEdit
+       IFNULL(T.estoqueTotal, 0)                              AS estoqueTotal,
+       IFNULL(S.estoqueLoja, 0)                               AS estoqueLoja,
+       IFNULL(V.movimento, 0)                                 AS movimento,
+       IFNULL(V.tipo, 'INV')                                  AS tipo,
+       IFNULL(V.tipo, 'INV')                                  AS tipoEdit,
+       MID(V.vencimento, 1, 6) * 1                            AS vencimento,
+       MID(V.vencimento, 1, 6) * 1                            AS vencimentoEdit
 FROM T_STK AS S
          INNER JOIN T_STK_TOTAL AS T
                     USING (prdno, grade)

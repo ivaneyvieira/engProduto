@@ -20,8 +20,8 @@ TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS prdno,
-       A.grade AS grade,
+SELECT A.prdno                        AS prdno,
+       A.grade                        AS grade,
        TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
@@ -29,38 +29,38 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '');
 
-SELECT O.storeno AS loja,
-       O.ordno AS numero,
-       CAST(O.date AS DATE) AS data,
-       IFNULL(L.localizacao, '') AS localizacao,
-       IFNULL(OA.observacao, '') AS observacao,
-       IFNULL(EE.no, 0) AS entregueNo,
-       IFNULL(EE.name, '') AS entregueNome,
-       IFNULL(EE.login, '') AS entregueSNome,
-       IFNULL(EF.no, 0) AS finalizadoNo,
-       IFNULL(EF.name, '') AS finalizadoNome,
-       IFNULL(EF.login, '') AS finalizadoSNome,
-       IFNULL(ER.no, 0) AS recebidoNo,
-       IFNULL(ER.name, '') AS recebidoNome,
-       IFNULL(ER.sname, '') AS recebidoSNome,
-       E.prdno AS prdno,
-       TRIM(E.prdno) AS codigo,
-       E.grade AS grade,
-       IFNULL(EA.marca, 0) AS marca,
-       TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       ROUND(E.qtty / 1000) AS quantidade,
-       IFNULL(EA.qtRecebido, 0) AS qtRecebido,
-       EA.selecionado AS selecionado,
-       EA.posicao AS posicao,
+SELECT O.storeno                               AS loja,
+       O.ordno                                 AS numero,
+       CAST(O.date AS DATE)                    AS data,
+       IFNULL(L.localizacao, '')               AS localizacao,
+       IFNULL(OA.observacao, '')               AS observacao,
+       IFNULL(EE.no, 0)                        AS entregueNo,
+       IFNULL(EE.name, '')                     AS entregueNome,
+       IFNULL(EE.login, '')                    AS entregueSNome,
+       IFNULL(EF.no, 0)                        AS finalizadoNo,
+       IFNULL(EF.name, '')                     AS finalizadoNome,
+       IFNULL(EF.login, '')                    AS finalizadoSNome,
+       IFNULL(ER.no, 0)                        AS recebidoNo,
+       IFNULL(ER.name, '')                     AS recebidoNome,
+       IFNULL(ER.sname, '')                    AS recebidoSNome,
+       E.prdno                                 AS prdno,
+       TRIM(E.prdno)                           AS codigo,
+       E.grade                                 AS grade,
+       IFNULL(EA.marca, 0)                     AS marca,
+       TRIM(IFNULL(B.barcode, P.barcode))      AS barcode,
+       TRIM(MID(P.name, 1, 37))                AS descricao,
+       ROUND(E.qtty / 1000)                    AS quantidade,
+       IFNULL(EA.qtRecebido, 0)                AS qtRecebido,
+       EA.selecionado                          AS selecionado,
+       EA.posicao                              AS posicao,
        (S.qtty_atacado + S.qtty_varejo) / 1000 AS qtEstoque,
-       O.paymno AS metodo,
+       O.paymno                                AS metodo,
        IF(O.paymno = 433,
           ROUND(CASE
                     WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
                     WHEN R.remarks__480 LIKE 'SAIDA%' THEN -1
                     ELSE 0
-              END), 1) AS multAcerto
+              END), 1)                         AS multAcerto
 FROM sqldados.eoprd AS E
          LEFT JOIN T_LOC AS L
                    USING (prdno, grade)

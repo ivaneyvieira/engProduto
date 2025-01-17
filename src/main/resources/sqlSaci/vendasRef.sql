@@ -10,12 +10,12 @@ DO
 DO
 @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
-SELECT N.storeno AS loja,
-       N.pdvno AS pdv,
-       N.xano AS transacao,
-       N.eordno AS pedido,
-       CAST(N.issuedate AS DATE) AS data,
-       CONCAT(N.nfno, '/', N.nfse) AS nota,
+SELECT N.storeno                                  AS loja,
+       N.pdvno                                    AS pdv,
+       N.xano                                     AS transacao,
+       N.eordno                                   AS pedido,
+       CAST(N.issuedate AS DATE)                  AS data,
+       CONCAT(N.nfno, '/', N.nfse)                AS nota,
        CASE
            WHEN tipo = 0 THEN 'VENDA NF'
            WHEN tipo = 1 THEN 'TRANSFERENCIA'
@@ -34,17 +34,17 @@ SELECT N.storeno AS loja,
            WHEN tipo = 14 THEN 'BONIFICA'
            WHEN tipo = 15 THEN 'NFE'
            ELSE 'TIPO INVALIDO'
-           END AS tipoNf,
-       SEC_TO_TIME(P.time) AS hora,
-       Q.string AS tipoPgto,
-       N.grossamt / 100 AS valor,
-       N.custno AS cliente,
-       C.name AS nomeCliente,
+           END                                    AS tipoNf,
+       SEC_TO_TIME(P.time)                        AS hora,
+       Q.string                                   AS tipoPgto,
+       N.grossamt / 100                           AS valor,
+       N.custno                                   AS cliente,
+       C.name                                     AS nomeCliente,
        IF(C.cpf_cgc LIKE 'NAO%', '',
-          IFNULL(A.state, C.state1)) AS uf,
-       CONCAT(E.no, ' - ', MID(E.sname, 1, 17)) AS vendedor,
+          IFNULL(A.state, C.state1))              AS uf,
+       CONCAT(E.no, ' - ', MID(E.sname, 1, 17))   AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100) AS valorTipo,
-       CONCAT(N.remarks, ' ', N.print_remarks) AS obs
+       CONCAT(N.remarks, ' ', N.print_remarks)    AS obs
 FROM sqldados.nf AS N
          LEFT JOIN sqldados.ctadd AS A
                    ON A.custno = N.custno

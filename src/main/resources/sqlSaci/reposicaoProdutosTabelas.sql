@@ -44,8 +44,8 @@ TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS prdno,
-       A.grade AS grade,
+SELECT A.prdno                                AS prdno,
+       A.grade                                AS grade,
        MID(COALESCE(A.localizacao, ''), 1, 4) AS localizacao
 FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4

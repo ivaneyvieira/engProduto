@@ -2,12 +2,12 @@ DROP
 TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE
 TEMPORARY TABLE IF NOT EXISTS T_DADOS
-SELECT S.no AS storeno,
-       P.no AS prdno,
+SELECT S.no                AS storeno,
+       P.no                AS prdno,
        IFNULL(B.grade, '') AS grade,
-       0 AS vencimento,
-       0 AS inventario,
-       CURRENT_DATE * 1 AS dataEntrada
+       0                   AS vencimento,
+       0                   AS inventario,
+       CURRENT_DATE * 1    AS dataEntrada
 FROM sqldados.prd AS P
          LEFT JOIN sqldados.prdbar AS B
                    ON P.no = B.prdno

@@ -9,7 +9,7 @@ TEMPORARY TABLE T_E
   PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
-       P.eordno AS ordno,
+       P.eordno                                  AS ordno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero
 FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
@@ -25,7 +25,7 @@ TEMPORARY TABLE T_V
   PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
-       P.eordno AS ordno,
+       P.eordno                                  AS ordno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
@@ -36,26 +36,26 @@ WHERE P.cfo IN (5922, 6922)
   AND date >= 20190101
 GROUP BY storeno, ordno;
 
-SELECT E.storeno AS loja,
-       E.ordno AS pedido,
-       CAST(EO.date AS DATE) AS data,
-       CAST(IFNULL(T_V.numero, '') AS CHAR) AS nota,
-       IF(E.bits & POW(2, 1), 'RETIRA', 'CD') AS tipo,
-       EO.custno AS cliente,
-       P.mfno AS vendno,
-       CAST(TRIM(P.no) AS CHAR) AS codigo,
-       EO.empno AS empno,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       E.grade AS grade,
-       E.qtty / 1000 AS quant,
-       IFNULL(S.qtty_varejo / 1000, 0) AS estSaci,
+SELECT E.storeno                                       AS loja,
+       E.ordno                                         AS pedido,
+       CAST(EO.date AS DATE)                           AS data,
+       CAST(IFNULL(T_V.numero, '') AS CHAR)            AS nota,
+       IF(E.bits & POW(2, 1), 'RETIRA', 'CD')          AS tipo,
+       EO.custno                                       AS cliente,
+       P.mfno                                          AS vendno,
+       CAST(TRIM(P.no) AS CHAR)                        AS codigo,
+       EO.empno                                        AS empno,
+       TRIM(MID(P.name, 1, 37))                        AS descricao,
+       E.grade                                         AS grade,
+       E.qtty / 1000                                   AS quant,
+       IFNULL(S.qtty_varejo / 1000, 0)                 AS estSaci,
        IFNULL(S.qtty_varejo / 1000, 0) - E.qtty / 1000 AS saldo,
-       P.typeno AS typeno,
-       IFNULL(T.name, '') AS typeName,
-       CAST(LPAD(P.clno, 6, '0') AS CHAR) AS clno,
-       IFNULL(cl.name, '') AS clname,
-       MID(IFNULL(L.localizacao, ''), 1, 4) AS localizacao,
-       E.remarks AS gradeAlternativa
+       P.typeno                                        AS typeno,
+       IFNULL(T.name, '')                              AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)              AS clno,
+       IFNULL(cl.name, '')                             AS clname,
+       MID(IFNULL(L.localizacao, ''), 1, 4)            AS localizacao,
+       E.remarks                                       AS gradeAlternativa
 FROM sqldados.eoprdf AS E
          INNER JOIN sqldados.eord AS EO
                     USING (storeno, ordno)

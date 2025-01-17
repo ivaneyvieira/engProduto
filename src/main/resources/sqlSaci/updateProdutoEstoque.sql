@@ -10,4 +10,5 @@ select * from sqldados.prdAdicional
 where prdno = 122307
 */
 
-REPLACE INTO sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao, dataInicial) VALUE (:loja, :prdno, :grade, :estoque, :locApp, :dataInicial)
+REPLACE INTO
+    sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao, dataInicial) VALUE (:loja, :prdno, :grade, :estoque, :locApp, :dataInicial)

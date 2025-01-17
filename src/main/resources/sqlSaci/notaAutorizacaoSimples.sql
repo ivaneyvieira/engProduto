@@ -1,24 +1,24 @@
 USE
 sqldados;
 
-SELECT N.storeno AS loja,
-       N.pdvno AS pdv,
-       N.xano AS transacao,
-       CONCAT(N.nfno, '/', N.nfse) AS nfVenda,
-       CAST(N.issuedate AS DATE) AS dataEmissao,
-       N.custno AS codCliente,
-       C.name AS nomeCliente,
-       N.grossamt / 100 AS valorVenda,
-       '' AS tipoDev,
-       0 AS usernoSing,
-       '' AS autorizacao,
-       IFNULL(I1.invno, I2.invno) AS ni,
+SELECT N.storeno                                                                  AS loja,
+       N.pdvno                                                                    AS pdv,
+       N.xano                                                                     AS transacao,
+       CONCAT(N.nfno, '/', N.nfse)                                                AS nfVenda,
+       CAST(N.issuedate AS DATE)                                                  AS dataEmissao,
+       N.custno                                                                   AS codCliente,
+       C.name                                                                     AS nomeCliente,
+       N.grossamt / 100                                                           AS valorVenda,
+       ''                                                                         AS tipoDev,
+       0                                                                          AS usernoSing,
+       ''                                                                         AS autorizacao,
+       IFNULL(I1.invno, I2.invno)                                                 AS ni,
        IFNULL(CONCAT(I1.nfname, '/', I1.invse), CONCAT(I2.nfname, '/', I2.invse)) AS nfDev,
-       CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE) AS dataDev,
-       IFNULL(I1.grossamt, I2.grossamt) / 100 AS valorDev,
-       U.name AS usuarioDev,
-       U.login AS loginDev,
-       '' AS observacao
+       CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE)                         AS dataDev,
+       IFNULL(I1.grossamt, I2.grossamt) / 100                                     AS valorDev,
+       U.name                                                                     AS usuarioDev,
+       U.login                                                                    AS loginDev,
+       ''                                                                         AS observacao
 FROM sqldados.nf AS N
          LEFT JOIN sqldados.custp AS C
                    ON C.no = N.custno

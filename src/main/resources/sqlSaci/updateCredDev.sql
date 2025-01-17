@@ -3,9 +3,9 @@ FROM sqldados.custp
 WHERE no IN (200, 300, 400, 500, 600, 700, 800);
 
 
-SELECT S.no AS storeno,
-       S.no * 100 AS custnoDev,
-       C.no AS custnoLoj,
+SELECT S.no             AS storeno,
+       S.no * 100       AS custnoDev,
+       C.no             AS custnoLoj,
        C.name,
        C.saldoDevolucao AS saldoDevolucaoLoja,
        D.saldoDevolucao AS saldoDevolucaoDev

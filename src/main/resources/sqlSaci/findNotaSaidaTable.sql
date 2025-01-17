@@ -22,10 +22,10 @@ SELECT storeno,
        xano,
        prdno,
        grade,
-       c5 AS usuarioExp,
-       c4 AS usuarioCD,
+       c5  AS usuarioExp,
+       c4  AS usuarioCD,
        s11 AS marca,
-       c6 AS gradeAlternativa
+       c6  AS gradeAlternativa
 FROM sqldados.xaprd2
 WHERE c5 != ''
    OR c4 != ''

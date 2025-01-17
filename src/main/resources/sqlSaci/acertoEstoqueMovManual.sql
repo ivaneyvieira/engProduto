@@ -18,29 +18,29 @@ DROP
 TEMPORARY TABLE IF EXISTS T_MOVMANUAL;
 CREATE
 TEMPORARY TABLE T_MOVMANUAL
-SELECT M.storeno AS loja,
-       M.xano AS transacao,
-       CAST(M.date AS DATE) AS data,
-       TRIM(M.prdno) * 1 AS codigoProduto,
-       TRIM(MID(P.name, 1, 37)) AS nomeProduto,
-       M.prdno AS prdno,
-       M.grade AS grade,
+SELECT M.storeno                                      AS loja,
+       M.xano                                         AS transacao,
+       CAST(M.date AS DATE)                           AS data,
+       TRIM(M.prdno) * 1                              AS codigoProduto,
+       TRIM(MID(P.name, 1, 37))                       AS nomeProduto,
+       M.prdno                                        AS prdno,
+       M.grade                                        AS grade,
        SUBSTRING_INDEX(CASE
                            WHEN M.remarks LIKE '66:PED E%' THEN TRIM(MID(M.remarks, 9, 100))
                            WHEN M.remarks LIKE '66:PED S%' THEN TRIM(MID(M.remarks, 9, 100))
                            ELSE '0'
-                           END, ' ', 1) * 1 AS pedido,
+                           END, ' ', 1) * 1           AS pedido,
        CASE
            WHEN M.remarks LIKE '66:PED E%' THEN 'E'
            WHEN M.remarks LIKE '66:PED S%' THEN 'S'
            ELSE ''
-           END AS tipoPedido,
-       M.remarks AS observacao,
-       IFNULL(R.form_label, '') AS rotulo,
-       P.taxno AS tributacao,
-       ROUND(M.qtty / 1000) AS qtty,
-       ROUND(S.qtty_varejo / 1000) AS estVarejo,
-       ROUND(S.qtty_atacado / 1000) AS estAtacado,
+           END                                        AS tipoPedido,
+       M.remarks                                      AS observacao,
+       IFNULL(R.form_label, '')                       AS rotulo,
+       P.taxno                                        AS tributacao,
+       ROUND(M.qtty / 1000)                           AS qtty,
+       ROUND(S.qtty_varejo / 1000)                    AS estVarejo,
+       ROUND(S.qtty_atacado / 1000)                   AS estAtacado,
        ROUND((S.qtty_varejo + S.qtty_atacado) / 1000) AS estTotal
 FROM sqldados.stkmov AS M
          LEFT JOIN sqldados.stk AS S

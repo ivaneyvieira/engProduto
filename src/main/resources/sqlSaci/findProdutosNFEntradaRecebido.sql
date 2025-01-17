@@ -56,40 +56,40 @@ SELECT nfekey,
        prdno,
        grade,
        IF(C.marca = 1, IF(S.qtty = C.qtty, 1, 0), 0) AS marca,
-       IFNULL(S.qtty, 0) AS qttyS,
-       IFNULL(C.qtty, 0) AS qttyC
+       IFNULL(S.qtty, 0)                             AS qttyS,
+       IFNULL(C.qtty, 0)                             AS qttyC
 FROM T_MESTRE
          LEFT JOIN T_IPRD_S AS S
                    USING (nfekey, prdno, grade)
          LEFT JOIN T_IPRD_C AS C
                    USING (nfekey, prdno, grade);
 
-SELECT N.storeno AS loja,
-       X.invno AS ni,
-       K.nfekey AS chave,
-       CAST(CONCAT(N.nfname, '/', N.invse) AS CHAR) AS nota,
-       CAST(TRIM(P.no) AS CHAR) AS codigo,
-       IFNULL(X.grade, '') AS grade,
-       TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
-       TRIM(P.mfno_ref) AS referencia,
-       IF(tipoGarantia = 2, garantia, NULL) AS mesesGarantia,
-       ROUND(qttyPackClosed / 1000) AS quantidadePacote,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       TRIM(MID(P.name, 37, 3)) AS unidade,
-       P.mfno AS vendno,
-       IFNULL(F.auxChar1, '') AS fornecedor,
-       P.typeno AS typeno,
-       IFNULL(T.name, '') AS typeName,
-       CAST(LPAD(P.clno, 6, '0') AS CHAR) AS clno,
-       IFNULL(cl.name, '') AS clname,
-       P.sp / 100 AS precoCheio,
-       IFNULL(S.ncm, '') AS ncm,
-       X.qtty / 1000 AS quantidade,
-       X.fob / 100 AS preco,
-       (X.qtty / 1000) * (X.fob / 100) AS total,
+SELECT N.storeno                                          AS loja,
+       X.invno                                            AS ni,
+       K.nfekey                                           AS chave,
+       CAST(CONCAT(N.nfname, '/', N.invse) AS CHAR)       AS nota,
+       CAST(TRIM(P.no) AS CHAR)                           AS codigo,
+       IFNULL(X.grade, '')                                AS grade,
+       TRIM(IFNULL(B.barcode, P.barcode))                 AS barcode,
+       TRIM(P.mfno_ref)                                   AS referencia,
+       IF(tipoGarantia = 2, garantia, NULL)               AS mesesGarantia,
+       ROUND(qttyPackClosed / 1000)                       AS quantidadePacote,
+       TRIM(MID(P.name, 1, 37))                           AS descricao,
+       TRIM(MID(P.name, 37, 3))                           AS unidade,
+       P.mfno                                             AS vendno,
+       IFNULL(F.auxChar1, '')                             AS fornecedor,
+       P.typeno                                           AS typeno,
+       IFNULL(T.name, '')                                 AS typeName,
+       CAST(LPAD(P.clno, 6, '0') AS CHAR)                 AS clno,
+       IFNULL(cl.name, '')                                AS clname,
+       P.sp / 100                                         AS precoCheio,
+       IFNULL(S.ncm, '')                                  AS ncm,
+       X.qtty / 1000                                      AS quantidade,
+       X.fob / 100                                        AS preco,
+       (X.qtty / 1000) * (X.fob / 100)                    AS total,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
-       IFNULL(TI.qttyC, 0) / 1000 AS qttyRef,
-       TI.marca AS marca
+       IFNULL(TI.qttyC, 0) / 1000                         AS qttyRef,
+       TI.marca                                           AS marca
 FROM sqldados.prd AS P
          INNER JOIN sqldados.iprd AS X
                     ON P.no = X.prdno

@@ -1,10 +1,10 @@
-SELECT N.nfno AS numero,
-       N.nfse AS serie,
+SELECT N.nfno   AS          numero,
+       N.nfse   AS          serie,
        CAST(N.date AS DATE) data,
-       N.custno AS cliente,
-       C.name AS nomeCliente,
-       N.empno AS vendedor,
-       V.name AS nomeVendedor
+       N.custno AS          cliente,
+       C.name   AS          nomeCliente,
+       N.empno  AS          vendedor,
+       V.name   AS          nomeVendedor
 FROM sqlpdv.pxa AS N
          INNER JOIN sqldados.custp AS C
                     ON N.custno = C.no
