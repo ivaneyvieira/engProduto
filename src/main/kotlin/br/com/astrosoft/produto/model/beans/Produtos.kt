@@ -88,7 +88,7 @@ class Produtos(
     get() = (MF_TT ?: 0) - (MF_App ?: 0)
 
   fun processaVendas() {
-    saci.qtdVencimentoVenda(storeno ?: 0, prdno ?: "", grade ?: "")
+    saci.processaVendas(storeno ?: 0, prdno ?: "", grade ?: "")
   }
 
   companion object {
@@ -147,7 +147,7 @@ class Produtos(
     }
 
     fun processaVendas() {
-      saci.qtdVencimentoVenda()
+      saci.processaVendas()
     }
   }
 

@@ -1856,7 +1856,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, QtdVencimento::class)
   }
 
-  fun qtdVencimentoVenda(storno: Int = 0, prdno: String = "", grade: String = "") {
+  fun processaVendas(storno: Int = 0, prdno: String = "", grade: String = "") {
     val sql = "/sqlSaci/qtdVencimentoVendas.sql"
     script(sql) {
       addOptionalParameter("storeno", storno)
