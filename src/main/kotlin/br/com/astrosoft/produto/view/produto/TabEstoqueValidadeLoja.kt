@@ -59,7 +59,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
   override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueValidadeLoja ?: false
 
   override val label: String
-    get() = "Val Loja"
+    get() = "Validade"
 
   fun estoque(): EEstoqueList {
     return cmbEstoqueFiltro.value ?: EEstoqueList.TODOS

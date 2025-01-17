@@ -21,7 +21,6 @@ class TabProdutoUsrViewModel(val viewModel: ProdutoViewModel) : TabUsrViewModel(
     this.produtoCadastro = usuario.produtoCadastro
     this.produtoSped = usuario.produtoSped
     this.produtoEstoqueGiro = usuario.produtoEstoqueGiro
-    this.produtoEstoqueValidade = usuario.produtoEstoqueValidade
     this.produtoInventario = usuario.produtoInventario
     this.produtoInventarioAgrupado = usuario.produtoInventarioAgrupado
     this.produtoEditor = usuario.produtoEditor

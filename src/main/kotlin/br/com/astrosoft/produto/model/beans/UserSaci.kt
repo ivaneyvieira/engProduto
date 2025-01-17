@@ -25,7 +25,7 @@ class UserSaci : IUser {
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
   var produtoEstoqueGiro by DelegateAuthorized(2)
-  var produtoEstoqueValidade by DelegateAuthorized(3)
+  //var produtoEstoqueValidade by DelegateAuthorized(3)
   var produtoInventario by DelegateAuthorized(4)
   var notaExp by DelegateAuthorized(5)
   var notaCD by DelegateAuthorized(6)
@@ -392,12 +392,11 @@ class UserSaci : IUser {
     get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
 
   var produto
-    get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro || produtoEstoqueValidade ||
+    get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
         produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
-      produtoEstoqueValidade = value
       produtoInventario = value
       produtoInventarioAgrupado = value
       produtoEditor = value

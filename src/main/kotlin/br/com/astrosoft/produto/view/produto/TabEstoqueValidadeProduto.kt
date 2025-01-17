@@ -37,7 +37,7 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
 
-  override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueValidade ?: false
+  override fun isAuthorized() = true
 
   override val label: String
     get() = "Validade"

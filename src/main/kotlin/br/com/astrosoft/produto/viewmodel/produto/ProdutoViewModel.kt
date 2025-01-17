@@ -20,7 +20,7 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
     view.tabProdutoCadastro,
     view.tabProdutoSped,
     view.tabEstoqueGiroViewModel,
-    view.tabEstoqueValidadeViewModel,
+    //view.tabEstoqueValidadeViewModel,
     view.tabEstoqueValidadeLojaViewModel,
     view.tabProdutoInventario,
     view.tabProdutoInventarioAgrupado,
