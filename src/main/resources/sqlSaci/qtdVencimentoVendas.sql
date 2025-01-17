@@ -63,4 +63,3 @@ SET
 WHERE
       Q.storeno IN (2, 3, 4, 5, 8)
   AND Q.dataVenda IS NOT NULL
-
