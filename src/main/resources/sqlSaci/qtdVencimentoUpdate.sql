@@ -62,4 +62,5 @@ SELECT storeno,
        vencimento
 FROM
   T_DADOS
-WHERE storeno IN (2, 3, 4, 5, 8)
+WHERE
+  storeno IN (2, 3, 4, 5, 8)

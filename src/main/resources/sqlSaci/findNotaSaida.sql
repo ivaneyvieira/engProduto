@@ -25,9 +25,11 @@ CREATE TEMPORARY TABLE T_TIPO
 SELECT storeno AS storeno, ordno AS ordno, SUM((E.bits & 2) > 0) AS tipoR, SUM((E.bits & 2) = 0) AS tipoE
 FROM
   sqldados.eoprdf AS E
-WHERE (storeno IN (2, 3, 4, 5, 8))
-  AND (`date` >= @DT)
-GROUP BY storeno, ordno;
+WHERE
+    (storeno IN (2, 3, 4, 5, 8))
+AND (`date` >= @DT)
+GROUP BY
+  storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
@@ -41,13 +43,15 @@ SELECT P.storeno,
        P.s3                                      AS userno,
        U.login                                   AS usuario
 FROM
-  sqlpdv.pxa                 AS P
-    LEFT JOIN sqldados.users AS U
-              ON U.no = P.s3
-WHERE P.cfo IN (5117, 6117)
-  AND P.storeno IN (2, 3, 4, 5, 8)
-  AND P.date >= @DT
-GROUP BY storeno, ordno;
+  sqlpdv.pxa               AS P
+  LEFT JOIN sqldados.users AS U
+    ON U.no = P.s3
+WHERE
+    P.cfo IN (5117, 6117)
+AND P.storeno IN (2, 3, 4, 5, 8)
+AND P.date >= @DT
+GROUP BY
+  storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
@@ -63,11 +67,13 @@ SELECT P.storeno,
        nfse
 FROM
   sqlpdv.pxa AS P
-WHERE P.cfo IN (5922, 6922)
-  AND storeno IN (2, 3, 4, 5, 6, 7, 8)
-  AND nfse = '1'
-  AND `date` >= @DT
-GROUP BY storeno, ordno;
+WHERE
+    P.cfo IN (5922, 6922)
+AND storeno IN (2, 3, 4, 5, 6, 7, 8)
+AND nfse = '1'
+AND `date` >= @DT
+GROUP BY
+  storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
@@ -82,10 +88,11 @@ SELECT V.storeno,
        MAX(E.usuario) AS usuario,
        MAX(E.data)    AS dataEntrega
 FROM
-  T_V             AS V
-    LEFT JOIN T_E AS E
-              USING (storeno, ordno)
-GROUP BY V.storeno, V.pdvno, V.xano;
+  T_V           AS V
+  LEFT JOIN T_E AS E
+    USING (storeno, ordno)
+GROUP BY
+  V.storeno, V.pdvno, V.xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
@@ -95,10 +102,11 @@ CREATE TEMPORARY TABLE T_LOC
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
-WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = 4)
-  AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+WHERE
+    ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+AND (A.storeno = 4)
+AND (A.prdno = :prdno OR :prdno = '')
+AND (A.grade = :grade OR :grade = '');
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
@@ -113,12 +121,14 @@ CREATE TEMPORARY TABLE T_CARGA
 SELECT storeno, pdvno, xano
 FROM
   sqldados.nfrprd
-WHERE (storenoStk = :loja OR :loja = 0)
-  AND storeno != storenoStk
-  AND `date` > @DT
-  AND optionEntrega % 10 = 4
-  AND nfse != 3
-GROUP BY storeno, pdvno, xano;
+WHERE
+    (storenoStk = :loja OR :loja = 0)
+AND storeno != storenoStk
+AND `date` > @DT
+AND optionEntrega % 10 = 4
+AND nfse != 3
+GROUP BY
+  storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
@@ -190,55 +200,57 @@ SELECT N.storeno                                                              AS
        GROUP_CONCAT(DISTINCT IF(EE.login = '', '', EE.login))                 AS usuarioSingExp,
        MAX(IF('CD5A' = IFNULL(LC.localizacao, ''), IFNULL(X.c3, ''), ''))     AS usuarioSep
 FROM
-  sqldados.nf                       AS N
-    LEFT JOIN  sqldados.nfUserPrint AS PT
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.users       AS EP
-               ON EP.no = PT.userno
-    LEFT JOIN  T_CARGA              AS CG
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxa           AS P
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  T_ENTREGA            AS ENT
-               USING (storeno, pdvno, xano)
-    INNER JOIN sqldados.xaprd2      AS X
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.users       AS EC
-               ON EC.no = X.s4
-    LEFT JOIN  sqldados.users       AS EE
-               ON EE.no = X.s5
-    LEFT JOIN  T_TIPO               AS T
-               ON N.storeno = T.storeno AND N.eordno = T.ordno
-    LEFT JOIN  T_LOC                AS LC
-               ON LC.prdno = X.prdno AND LC.grade = X.grade
-    LEFT JOIN  sqldados.emp         AS E
-               ON E.no = N.empno
-    LEFT JOIN  sqldados.custp       AS C
-               ON C.no = N.custno
-    LEFT JOIN  sqldados.ctadd       AS CA
-               ON CA.custno = N.custno AND CA.seqno = N.custno_addno
-    LEFT JOIN  sqldados.route       AS RT
-               ON RT.no = CA.routeno
-    LEFT JOIN  sqldados.area        AS AR
-               ON AR.no = RT.areano
-    LEFT JOIN  sqldados.eordrk      AS OBS
-               ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
-    LEFT JOIN  sqldados.emp         AS M
-               ON N.s16 = M.no
-WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
-  AND (N.l16 <= :dataEntregaFinal OR :dataEntregaFinal = 0)
-  AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
-  AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
-  AND N.issuedate >= @DT
-  AND (X.prdno = :prdno OR :prdno = '')
-  AND (X.grade = :grade OR :grade = '')
-  AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
-        (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
-  AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
+  sqldados.nf                    AS N
+  LEFT JOIN sqldados.nfUserPrint AS PT
+    USING (storeno, pdvno, xano)
+  LEFT JOIN sqldados.users       AS EP
+    ON EP.no = PT.userno
+  LEFT JOIN T_CARGA              AS CG
+    USING (storeno, pdvno, xano)
+  LEFT JOIN sqlpdv.pxa           AS P
+    USING (storeno, pdvno, xano)
+  LEFT JOIN T_ENTREGA            AS ENT
+    USING (storeno, pdvno, xano)
+  INNER JOIN sqldados.xaprd2     AS X
+    USING (storeno, pdvno, xano)
+  LEFT JOIN sqldados.users       AS EC
+    ON EC.no = X.s4
+  LEFT JOIN sqldados.users       AS EE
+    ON EE.no = X.s5
+  LEFT JOIN T_TIPO               AS T
+    ON N.storeno = T.storeno AND N.eordno = T.ordno
+  LEFT JOIN T_LOC                AS LC
+    ON LC.prdno = X.prdno AND LC.grade = X.grade
+  LEFT JOIN sqldados.emp         AS E
+    ON E.no = N.empno
+  LEFT JOIN sqldados.custp       AS C
+    ON C.no = N.custno
+  LEFT JOIN sqldados.ctadd       AS CA
+    ON CA.custno = N.custno AND CA.seqno = N.custno_addno
+  LEFT JOIN sqldados.route       AS RT
+    ON RT.no = CA.routeno
+  LEFT JOIN sqldados.area        AS AR
+    ON AR.no = RT.areano
+  LEFT JOIN sqldados.eordrk      AS OBS
+    ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
+  LEFT JOIN sqldados.emp         AS M
+    ON N.s16 = M.no
+WHERE
+    (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
+AND (N.l16 <= :dataEntregaFinal OR :dataEntregaFinal = 0)
+AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
+AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
+AND N.issuedate >= @DT
+AND (X.prdno = :prdno OR :prdno = '')
+AND (X.grade = :grade OR :grade = '')
+AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
+      (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
+AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
   OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
-                                (N.nfse = 7))) OR :marca NOT IN (0, 999))
-GROUP BY N.storeno, N.pdvno, N.xano;
+                              (N.nfse = 7))) OR :marca NOT IN (0, 999))
+GROUP BY
+  N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
        Q.pdvno,
@@ -286,14 +298,17 @@ SELECT Q.loja,
        usuarioSingExp,
        usuarioSep
 FROM
-  T_QUERY                      AS Q
-    INNER JOIN sqldados.xaprd2 AS X
-               ON X.storeno = Q.loja AND X.pdvno = Q.pdvno AND X.xano = Q.xano
-WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
-       nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
-       nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
-       pedido LIKE @PESQUISA OR locais LIKE @PESQUISA_LIKE)
-GROUP BY Q.loja, Q.pdvno, Q.xano
-HAVING ((:marca = 0 AND countExp > 0) OR (:marca = 1 AND countCD > 0) OR (:marca = 2 AND countEnt > 0) OR
-        (:marca = 999))
+  T_QUERY                    AS Q
+  INNER JOIN sqldados.xaprd2 AS X
+    ON X.storeno = Q.loja AND X.pdvno = Q.pdvno AND X.xano = Q.xano
+WHERE
+  (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
+   nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
+   nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
+   pedido LIKE @PESQUISA OR locais LIKE @PESQUISA_LIKE)
+GROUP BY
+  Q.loja, Q.pdvno, Q.xano
+HAVING
+  ((:marca = 0 AND countExp > 0) OR (:marca = 1 AND countCD > 0) OR (:marca = 2 AND countEnt > 0) OR
+   (:marca = 999))
 

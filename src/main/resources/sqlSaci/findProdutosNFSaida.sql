@@ -6,10 +6,11 @@ CREATE TEMPORARY TABLE T_LOC
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
-WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = 4)
-  AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+WHERE
+    ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+AND (A.storeno = 4)
+AND (A.prdno = :prdno OR :prdno = '')
+AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
@@ -55,40 +56,43 @@ SELECT X.storeno                                                     AS loja,
        N.tipo                                                        AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque
 FROM
-  sqldados.prd                           AS P
-    INNER JOIN sqldados.xaprd2           AS X
-               ON P.no = X.prdno
-    LEFT JOIN  T_LOC                     AS L
-               ON L.prdno = X.prdno AND L.grade = X.grade
-    LEFT JOIN  sqldados.users            AS EC
-               ON EC.no = X.s4
-    LEFT JOIN  sqldados.users            AS EE
-               ON EE.no = X.s5
-    INNER JOIN sqldados.nf               AS N
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.prdbar           AS BC
-               ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
-    LEFT JOIN  ( SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
-                 FROM
-                   sqldados.stk
-                 WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
-                 GROUP BY prdno, grade ) AS STK
-               ON X.prdno = STK.prdno AND X.grade = STK.grade
-    LEFT JOIN  sqldados.vend             AS F
-               ON F.no = P.mfno
-    LEFT JOIN  sqldados.type             AS T
-               ON T.no = P.typeno
-    LEFT JOIN  sqldados.cl
-               ON cl.no = P.clno
-    LEFT JOIN  sqldados.spedprd          AS S
-               ON P.no = S.prdno
-WHERE X.storeno = :storeno
-  AND X.pdvno = :pdvno
-  AND X.xano = :xano
-  AND (X.s11 = :marca OR :marca = 999)
-  AND (X.prdno = :prdno OR :prdno = '')
-  AND (X.grade = :grade OR :grade = '')
-GROUP BY codigo, grade;
+  sqldados.prd                        AS P
+  INNER JOIN sqldados.xaprd2          AS X
+    ON P.no = X.prdno
+  LEFT JOIN T_LOC                     AS L
+    ON L.prdno = X.prdno AND L.grade = X.grade
+  LEFT JOIN sqldados.users            AS EC
+    ON EC.no = X.s4
+  LEFT JOIN sqldados.users            AS EE
+    ON EE.no = X.s5
+  INNER JOIN sqldados.nf              AS N
+    USING (storeno, pdvno, xano)
+  LEFT JOIN sqldados.prdbar           AS BC
+    ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
+  LEFT JOIN ( SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
+              FROM
+                sqldados.stk
+              WHERE
+                storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+              GROUP BY prdno, grade ) AS STK
+    ON X.prdno = STK.prdno AND X.grade = STK.grade
+  LEFT JOIN sqldados.vend             AS F
+    ON F.no = P.mfno
+  LEFT JOIN sqldados.type             AS T
+    ON T.no = P.typeno
+  LEFT JOIN sqldados.cl
+    ON cl.no = P.clno
+  LEFT JOIN sqldados.spedprd          AS S
+    ON P.no = S.prdno
+WHERE
+    X.storeno = :storeno
+AND X.pdvno = :pdvno
+AND X.xano = :xano
+AND (X.s11 = :marca OR :marca = 999)
+AND (X.prdno = :prdno OR :prdno = '')
+AND (X.grade = :grade OR :grade = '')
+GROUP BY
+  codigo, grade;
 
 SELECT loja,
        pdvno,
@@ -127,4 +131,5 @@ SELECT loja,
        estoque
 FROM
   T_DADOS
-WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')
+WHERE
+  (:todosLocais = 'S' OR IFNULL(local, '') != '')

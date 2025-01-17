@@ -10,10 +10,11 @@ CREATE TEMPORARY TABLE T_LOC
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
-WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = 4)
-  AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+WHERE
+    ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+AND (A.storeno = 4)
+AND (A.prdno = :prdno OR :prdno = '')
+AND (A.grade = :grade OR :grade = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_NOTA;
 CREATE TEMPORARY TABLE T_PEDIDO_NOTA
@@ -28,16 +29,18 @@ SELECT 1                           AS storeno,
        CAST(N.issuedate AS DATE)   AS dataNota,
        SUM(X.qtty / 1000)          AS qtty
 FROM
-  sqldados.nf                  AS N
-    INNER JOIN sqldados.xaprd2 AS X
-               USING (storeno, pdvno, xano)
-WHERE N.l2 BETWEEN 100000000 AND 999999999
-  AND N.issuedate >= @DATA
-  AND N.issuedate >= 20240226
-  AND N.status <> 1
-  AND (X.prdno = :prdno OR :prdno = '')
-  AND (X.grade = :grade OR :grade = '')
-GROUP BY N.l2, numero, X.prdno, X.grade;
+  sqldados.nf                AS N
+  INNER JOIN sqldados.xaprd2 AS X
+    USING (storeno, pdvno, xano)
+WHERE
+    N.l2 BETWEEN 100000000 AND 999999999
+AND N.issuedate >= @DATA
+AND N.issuedate >= 20240226
+AND N.status <> 1
+AND (X.prdno = :prdno OR :prdno = '')
+AND (X.grade = :grade OR :grade = '')
+GROUP BY
+  N.l2, numero, X.prdno, X.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORDS;
 CREATE TEMPORARY TABLE T_ORDS
@@ -49,16 +52,19 @@ FROM
   ( SELECT *
     FROM
       sqldados.ords
-    WHERE storeno = 1
-      AND no = :ordno
+    WHERE
+        storeno = 1
+    AND no = :ordno
     UNION
     DISTINCT
     SELECT *
     FROM
       sqldados.ordsRessu
-    WHERE storeno = 1
-      AND no = :ordno ) AS D
-GROUP BY storeno, no;
+    WHERE
+        storeno = 1
+    AND no = :ordno ) AS D
+GROUP BY
+  storeno, no;
 
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
@@ -112,31 +118,38 @@ FROM
   ( SELECT O1.*, 1 AS origem
     FROM
       sqldados.oprd AS O1
-    WHERE storeno = 1
-      AND ordno = :ordno
-      AND (prdno = :prdno OR :prdno = '')
-      AND (grade = :grade OR :grade = '')
+    WHERE
+        storeno = 1
+    AND ordno = :ordno
+    AND (prdno = :prdno OR :prdno = '')
+    AND (grade = :grade OR :grade = '')
     UNION
     DISTINCT
     SELECT O2.*, 10 AS origem
     FROM
       sqldados.oprdRessu AS O2
-    WHERE storeno = 1
-      AND ordno = :ordno
-      AND (prdno = :prdno OR :prdno = '')
-      AND (grade = :grade OR :grade = '')
-      AND (:ressu = 'S') ) AS D
-GROUP BY storeno, ordno, prdno, grade, seqno;
+    WHERE
+        storeno = 1
+    AND ordno = :ordno
+    AND (prdno = :prdno OR :prdno = '')
+    AND (grade = :grade OR :grade = '')
+    AND (:ressu = 'S') ) AS D
+GROUP BY
+  storeno, ordno, prdno, grade, seqno;
 
 UPDATE sqldados.oprd AS O INNER JOIN T_OPRD AS T USING (storeno, ordno, prdno, grade, seqno)
-SET O.auxMy2 = T.qtty,
-    T.auxMy2 = T.qtty
-WHERE O.auxMy2 = 0;
+SET
+  O.auxMy2 = T.qtty,
+  T.auxMy2 = T.qtty
+WHERE
+  O.auxMy2 = 0;
 
 UPDATE sqldados.oprdRessu AS O INNER JOIN T_OPRD AS T USING (storeno, ordno, prdno, grade, seqno)
-SET O.auxMy2 = T.qtty,
-    T.auxMy2 = T.qtty
-WHERE O.auxMy2 = 0;
+SET
+  O.auxMy2 = T.qtty,
+  T.auxMy2 = T.qtty
+WHERE
+  O.auxMy2 = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_VENC;
 CREATE TEMPORARY TABLE T_VENC
@@ -146,10 +159,12 @@ CREATE TEMPORARY TABLE T_VENC
 SELECT prdno, grade, GROUP_CONCAT(mesAno) AS vencimentoStrList
 FROM
   sqldados.produtoEntrada
-WHERE mesAno > 0
-  AND loja = 4
-  AND date >= 20240501
-GROUP BY prdno, grade;
+WHERE
+    mesAno > 0
+AND loja = 4
+AND date >= 20240501
+GROUP BY
+  prdno, grade;
 
 SELECT X.ordno                                                     AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                    AS codigo,
@@ -197,33 +212,35 @@ SELECT X.ordno                                                     AS ordno,
        IF(P.tipoGarantia = 2, P.garantia, 0)                       AS validade,
        IFNULL(V.vencimentoStrList, '')                             AS vencimentoStrList
 FROM
-  T_OPRD                       AS X
-    LEFT JOIN  T_VENC          AS V
-               USING (prdno, grade)
-    INNER JOIN T_ORDS          AS N
-               ON N.storeno = X.storeno AND N.no = X.ordno
-    INNER JOIN sqldados.prd    AS P
-               ON P.no = X.prdno
-    LEFT JOIN  T_PEDIDO_NOTA   AS TN
-               ON TN.storeno = X.storeno AND TN.ordno = X.ordno AND TN.prdno = X.prdno AND TN.grade = X.grade
-    LEFT JOIN  sqldados.stk    AS S
-               ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
-    LEFT JOIN  sqldados.prdbar AS B
-               ON B.prdno = P.no AND B.grade = X.grade
-    LEFT JOIN  T_LOC           AS L
-               ON X.prdno = L.prdno AND X.grade = L.grade
-    LEFT JOIN  sqldados.vend   AS F
-               ON F.no = P.mfno
-    LEFT JOIN  sqldados.type   AS T
-               ON T.no = P.typeno
-    LEFT JOIN  sqldados.cl
-               ON cl.no = P.clno
-    LEFT JOIN  sqldados.prd    AS PR
-               ON PR.no = LPAD(SUBSTRING_INDEX(X.obs, ':', 1), 16, ' ')
-WHERE X.storeno = 1
-  AND X.ordno = :ordno
-  AND (X.auxShort4 = :marca OR :marca = 999)
-GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
+  T_OPRD                    AS X
+  LEFT JOIN T_VENC          AS V
+    USING (prdno, grade)
+  INNER JOIN T_ORDS         AS N
+    ON N.storeno = X.storeno AND N.no = X.ordno
+  INNER JOIN sqldados.prd   AS P
+    ON P.no = X.prdno
+  LEFT JOIN T_PEDIDO_NOTA   AS TN
+    ON TN.storeno = X.storeno AND TN.ordno = X.ordno AND TN.prdno = X.prdno AND TN.grade = X.grade
+  LEFT JOIN sqldados.stk    AS S
+    ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
+  LEFT JOIN sqldados.prdbar AS B
+    ON B.prdno = P.no AND B.grade = X.grade
+  LEFT JOIN T_LOC           AS L
+    ON X.prdno = L.prdno AND X.grade = L.grade
+  LEFT JOIN sqldados.vend   AS F
+    ON F.no = P.mfno
+  LEFT JOIN sqldados.type   AS T
+    ON T.no = P.typeno
+  LEFT JOIN sqldados.cl
+    ON cl.no = P.clno
+  LEFT JOIN sqldados.prd    AS PR
+    ON PR.no = LPAD(SUBSTRING_INDEX(X.obs, ':', 1), 16, ' ')
+WHERE
+    X.storeno = 1
+AND X.ordno = :ordno
+AND (X.auxShort4 = :marca OR :marca = 999)
+GROUP BY
+  codigo, IFNULL(X.grade, ''), numeroNota
 
 /*
 update sqldados.oprdRessu

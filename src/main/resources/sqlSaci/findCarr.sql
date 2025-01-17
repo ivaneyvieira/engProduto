@@ -12,4 +12,5 @@ FROM
 SELECT carrno AS quant
 FROM
   T_CARR
-WHERE doc = :doc
+WHERE
+  doc = :doc

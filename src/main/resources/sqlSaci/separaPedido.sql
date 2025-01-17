@@ -67,8 +67,9 @@ SELECT no,
        c4
 FROM
   ords o
-WHERE storeno = 1
-  AND no = :ordno;
+WHERE
+    storeno = 1
+AND no = :ordno;
 
 INSERT IGNORE INTO oprdPendente(date, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1,
                                 auxMy2, icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty,
@@ -121,11 +122,12 @@ SELECT O.date,
        obs,
        auxStr
 FROM
-  ords              AS O
-    INNER JOIN oprd AS P
-               ON O.no = P.ordno AND P.storeno = O.storeno
-WHERE O.storeno = 1
-  AND O.no = :ordno;
+  ords            AS O
+  INNER JOIN oprd AS P
+    ON O.no = P.ordno AND P.storeno = O.storeno
+WHERE
+    O.storeno = 1
+AND O.no = :ordno;
 
 INSERT IGNORE INTO ords (no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno,
                          dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem,
@@ -193,8 +195,9 @@ SELECT @ORDNO_NOVO      AS no,
        'S'              AS c4
 FROM
   ords
-WHERE storeno = 1
-  AND NO = :ordno;
+WHERE
+    storeno = 1
+AND NO = :ordno;
 
 INSERT INTO oprd (storeno, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2,
                   icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost,
@@ -245,65 +248,75 @@ SELECT 1                   AS storeno,
        :localizacao        AS auxStr
 FROM
   oprd
-WHERE (storeno = 1)
-  AND (ordno = :ordno)
-  AND (prdno = :prdno)
-  AND (grade = :grade)
-GROUP BY storeno, ordno, prdno, grade;
+WHERE
+    (storeno = 1)
+AND (ordno = :ordno)
+AND (prdno = :prdno)
+AND (grade = :grade)
+GROUP BY
+  storeno, ordno, prdno, grade;
 
 /********************************************************************/
 
 UPDATE oprd
-SET qtty = (qtty - :qtty)
-WHERE (storeno = 1)
-  AND (ordno = :ordno)
-  AND (prdno = :prdno)
-  AND (grade = :grade);
+SET
+  qtty = (qtty - :qtty)
+WHERE
+    (storeno = 1)
+AND (ordno = :ordno)
+AND (prdno = :prdno)
+AND (grade = :grade);
 
 UPDATE oprdRessu
-SET qtty = (qtty - :qtty)
-WHERE (storeno = 1)
-  AND (ordno = :ordno)
-  AND (prdno = :prdno)
-  AND (grade = :grade);
+SET
+  qtty = (qtty - :qtty)
+WHERE
+    (storeno = 1)
+AND (ordno = :ordno)
+AND (prdno = :prdno)
+AND (grade = :grade);
 
 /********************************************************************/
 
 DELETE
 FROM
   oprd
-WHERE storeno = 1
-  AND ordno = :ordno
-  AND prdno = :prdno
-  AND grade = :grade
-  AND ROUND(qtty) <= 0;
+WHERE
+    storeno = 1
+AND ordno = :ordno
+AND prdno = :prdno
+AND grade = :grade
+AND ROUND(qtty) <= 0;
 
 DELETE
 FROM
   oprd
-WHERE storeno = 1
-  AND ordno = @ORDNO_NOVO
-  AND prdno = :prdno
-  AND grade = :grade
-  AND ROUND(qtty) <= 0;
+WHERE
+    storeno = 1
+AND ordno = @ORDNO_NOVO
+AND prdno = :prdno
+AND grade = :grade
+AND ROUND(qtty) <= 0;
 
 DELETE
 FROM
   oprdRessu
-WHERE storeno = 1
-  AND ordno = :ordno
-  AND prdno = :prdno
-  AND grade = :grade
-  AND ROUND(qtty) <= 0;
+WHERE
+    storeno = 1
+AND ordno = :ordno
+AND prdno = :prdno
+AND grade = :grade
+AND ROUND(qtty) <= 0;
 
 DELETE
 FROM
   oprdRessu
-WHERE storeno = 1
-  AND ordno = @ORDNO_NOVO
-  AND prdno = :prdno
-  AND grade = :grade
-  AND ROUND(qtty) <= 0;
+WHERE
+    storeno = 1
+AND ordno = @ORDNO_NOVO
+AND prdno = :prdno
+AND grade = :grade
+AND ROUND(qtty) <= 0;
 
 /********************************************************************/
 

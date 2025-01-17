@@ -22,12 +22,13 @@ SELECT O.storeno                      AS storeno,
        ROUND(P.qtty / 1000)           AS qtty,
        P.cost4 / 10000                AS cost
 FROM
-  sqldados.iprd              AS P
-    INNER JOIN sqldados.inv  AS I
-               USING (invno)
-    INNER JOIN sqldados.ords AS O
-               ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
-GROUP BY P.invno, P.prdno, P.grade;
+  sqldados.iprd            AS P
+  INNER JOIN sqldados.inv  AS I
+    USING (invno)
+  INNER JOIN sqldados.ords AS O
+    ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+GROUP BY
+  P.invno, P.prdno, P.grade;
 
 
 
@@ -48,12 +49,13 @@ SELECT O.storeno                      AS storeno,
        ROUND(P.qtty / 1000)           AS qtty,
        P.cost4 / 10000                AS cost
 FROM
-  sqldados.iprd2             AS P
-    INNER JOIN sqldados.inv2 AS I
-               USING (invno)
-    INNER JOIN sqldados.ords AS O
-               ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
-GROUP BY P.invno, P.prdno, P.grade;
+  sqldados.iprd2           AS P
+  INNER JOIN sqldados.inv2 AS I
+    USING (invno)
+  INNER JOIN sqldados.ords AS O
+    ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+GROUP BY
+  P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
@@ -83,7 +85,8 @@ SELECT storeno,
        MAX(cost)                        AS cost
 FROM
   T_INV
-GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
+GROUP BY
+  storeno, ordno, vendno, nfEntrada, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
 CREATE TEMPORARY TABLE T_OPRD
@@ -97,7 +100,8 @@ SELECT storeno,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
 FROM
   sqldados.oprd AS P
-GROUP BY storeno, ordno;
+GROUP BY
+  storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
@@ -127,25 +131,26 @@ SELECT O.storeno                                  AS loja,
        dataEntrada                                AS dataEntrada,
        nfEntrada                                  AS nfEntrada
 FROM
-  sqldados.ords               AS O
-    INNER JOIN sqldados.store AS L
-               ON O.storeno = L.no
-    INNER JOIN T_OPRD         AS OP
-               ON O.storeno = OP.storeno AND O.no = OP.ordno
-    INNER JOIN sqldados.vend  AS V
-               ON O.vendno = V.no
-    LEFT JOIN  T_INVORD       AS IO
-               ON IO.ordno = O.no AND IO.storeno = O.storeno AND IO.vendno = O.vendno
-    LEFT JOIN  sqldados.prd   AS P
-               ON P.no = IO.prdno
-WHERE V.name NOT LIKE 'ENGECOPI%'
-  AND (O.storeno = :loja OR :loja = 0)
-  AND (O.date >= :dataInicial OR :dataInicial = 0)
-  AND (O.date <= :dataFinal OR :dataFinal = 0)
-  AND (O.status != 2)
-  AND (O.amt > 0)
-  AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) > 0) OR
-       (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0) OR (:status = 999) OR (IO.storeno IS NULL));
+  sqldados.ords             AS O
+  INNER JOIN sqldados.store AS L
+    ON O.storeno = L.no
+  INNER JOIN T_OPRD         AS OP
+    ON O.storeno = OP.storeno AND O.no = OP.ordno
+  INNER JOIN sqldados.vend  AS V
+    ON O.vendno = V.no
+  LEFT JOIN T_INVORD        AS IO
+    ON IO.ordno = O.no AND IO.storeno = O.storeno AND IO.vendno = O.vendno
+  LEFT JOIN sqldados.prd    AS P
+    ON P.no = IO.prdno
+WHERE
+    V.name NOT LIKE 'ENGECOPI%'
+AND (O.storeno = :loja OR :loja = 0)
+AND (O.date >= :dataInicial OR :dataInicial = 0)
+AND (O.date <= :dataFinal OR :dataFinal = 0)
+AND (O.status != 2)
+AND (O.amt > 0)
+AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) > 0) OR
+     (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0) OR (:status = 999) OR (IO.storeno IS NULL));
 
 SELECT loja,
        sigla,
@@ -174,5 +179,7 @@ SELECT loja,
        IFNULL(nfEntrada, '')              AS nfEntrada
 FROM
   T_ORD
-WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
-ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade
+WHERE
+  (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
+ORDER BY
+  data DESC, loja, pedido DESC, invno, prdno, grade

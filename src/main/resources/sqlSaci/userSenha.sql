@@ -18,10 +18,11 @@ SELECT U.no,
        IF(U.bits1 & POW(0, 2) = 0, 'Sim', 'Não')                                                            AS ativoSaci,
        IFNULL(lojas, '')                                                                                    AS listaLoja
 FROM
-  sqldados.users               AS U
-    LEFT JOIN sqldados.prntr   AS P
-              ON P.no = U.prntno
-    LEFT JOIN sqldados.userApp AS A
-              ON A.userno = U.no AND A.appName = :appName
-WHERE (login = :login OR :login = 'TODOS')
-  AND U.bits1 & POW(2, 0) = 0
+  sqldados.users             AS U
+  LEFT JOIN sqldados.prntr   AS P
+    ON P.no = U.prntno
+  LEFT JOIN sqldados.userApp AS A
+    ON A.userno = U.no AND A.appName = :appName
+WHERE
+    (login = :login OR :login = 'TODOS')
+AND U.bits1 & POW(2, 0) = 0

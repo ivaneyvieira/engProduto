@@ -10,11 +10,13 @@ SELECT E.storeno                               AS loja,
        E.qtty                                  AS qttyPedido,
        E.qtty - E.qttyCancel - E.qttyRcv       AS qttyPendente
 FROM
-  sqldados.oprd                AS E
-    INNER JOIN sqldados.prd    AS P
-               ON P.no = E.prdno
-    LEFT JOIN  sqldados.prdbar AS B
-               ON E.prdno = B.prdno AND E.grade = B.grade
-WHERE storeno = :loja
-  AND ordno = :pedido
-GROUP BY E.storeno, E.ordno, E.prdno, E.grade
+  sqldados.oprd             AS E
+  INNER JOIN sqldados.prd   AS P
+    ON P.no = E.prdno
+  LEFT JOIN sqldados.prdbar AS B
+    ON E.prdno = B.prdno AND E.grade = B.grade
+WHERE
+    storeno = :loja
+AND ordno = :pedido
+GROUP BY
+  E.storeno, E.ordno, E.prdno, E.grade

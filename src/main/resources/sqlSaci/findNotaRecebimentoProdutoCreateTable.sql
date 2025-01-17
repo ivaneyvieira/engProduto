@@ -29,14 +29,17 @@ CREATE TEMPORARY TABLE T_NOTA_RECEBIMENTO
 SELECT invno, s26
 FROM
   sqldados.inv
-WHERE s26 > 0
-  AND date >= 20240501
-  AND storeno IN (1, 2, 3, 4, 5, 6, 7, 8);
+WHERE
+    s26 > 0
+AND date >= 20240501
+AND storeno IN (1, 2, 3, 4, 5, 6, 7, 8);
 
 
 UPDATE sqldados.iprd AS I INNER JOIN T_NOTA_RECEBIMENTO AS N USING (invno)
-SET I.s26 = N.s26
-WHERE I.s26 != N.s26;
+SET
+  I.s26 = N.s26
+WHERE
+  I.s26 != N.s26;
 
 
 ALTER TABLE sqldados.iprdAdicional

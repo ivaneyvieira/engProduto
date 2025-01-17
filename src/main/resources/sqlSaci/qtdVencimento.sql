@@ -15,7 +15,10 @@ SELECT Q.storeno                          AS storeno,
        MAX(IF(num = 4, vencimento, NULL)) AS venc04
 FROM
   sqldados.qtd_vencimento AS Q
-WHERE Q.storeno IN (2, 3, 4, 5, 8)
-  AND (Q.quantidade IS NOT NULL OR Q.vencimento IS NOT NULL)
-GROUP BY Q.storeno, Q.prdno, Q.grade
-ORDER BY Q.storeno, Q.prdno, Q.grade
+WHERE
+    Q.storeno IN (2, 3, 4, 5, 8)
+AND (Q.quantidade IS NOT NULL OR Q.vencimento IS NOT NULL)
+GROUP BY
+  Q.storeno, Q.prdno, Q.grade
+ORDER BY
+  Q.storeno, Q.prdno, Q.grade

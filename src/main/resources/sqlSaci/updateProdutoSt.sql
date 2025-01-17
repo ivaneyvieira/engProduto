@@ -8,7 +8,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_PRD_ST
 SELECT no AS prdno
 FROM
   sqldados.prd
-WHERE no = :prdno;
+WHERE
+  no = :prdno;
 
 DROP TABLE IF EXISTS T_LOJAS;
 CREATE TEMPORARY TABLE IF NOT EXISTS T_LOJAS
@@ -18,7 +19,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_LOJAS
 SELECT no AS storeno
 FROM
   sqldados.store
-WHERE (no IN (1, 2, 3, 4, 5, 8));
+WHERE
+  (no IN (1, 2, 3, 4, 5, 8));
 
 DROP TABLE IF EXISTS T_SPEDST;
 CREATE TEMPORARY TABLE T_SPEDST
@@ -67,11 +69,11 @@ SELECT 165          AS aliqPis,
 FROM
   sqldados.spedprd             AS S
     INNER JOIN T_PRD_ST        AS T
-               USING (prdno)
+    USING (prdno)
     INNER JOIN sqldados.prdalq AS A
-               ON A.prdno = S.prdno
+    ON A.prdno = S.prdno
     INNER JOIN sqldados.prd    AS P
-               ON P.no = S.prdno,
+    ON P.no = S.prdno,
   T_LOJAS                      AS L;
 
 REPLACE INTO sqldados.spedprdst(aliqPis, aliqCofins, auxLong1, auxLong2, auxLong3, auxLong4, auxLong5, auxLong6,

@@ -14,18 +14,20 @@ SELECT storeno,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
 FROM
   sqldados.oprd AS P
-WHERE (storeno, ordno) IN ((1, 2),
-                           (2, 2),
-                           (3, 2),
-                           (5, 2),
-                           (8, 2),
-                           (1, 22),
-                           (1, 33),
-                           (1, 44),
-                           (1, 55),
-                           (1, 88)
-  )
-GROUP BY storeno, ordno;
+WHERE
+  (storeno, ordno) IN ((1, 2),
+                       (2, 2),
+                       (3, 2),
+                       (5, 2),
+                       (8, 2),
+                       (1, 22),
+                       (1, 33),
+                       (1, 44),
+                       (1, 55),
+                       (1, 88)
+    )
+GROUP BY
+  storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
@@ -42,26 +44,28 @@ SELECT O.storeno                                                                
        O.remarks                                                                  AS observacao,
        OP.totalPendente                                                           AS totalPendente
 FROM
-  sqldados.ords               AS O
-    INNER JOIN sqldados.store AS L
-               ON O.storeno = L.no
-    LEFT JOIN  T_OPRD         AS OP
-               ON O.storeno = OP.storeno AND O.no = OP.ordno
-    INNER JOIN sqldados.vend  AS V
-               ON O.vendno = V.no
-WHERE (O.storeno, O.no) IN ((1, 2),
-                            (2, 2),
-                            (3, 2),
-                            (5, 2),
-                            (8, 2),
-                            (1, 22),
-                            (1, 33),
-                            (1, 44),
-                            (1, 55),
-                            (1, 88)
-  );
+  sqldados.ords             AS O
+  INNER JOIN sqldados.store AS L
+    ON O.storeno = L.no
+  LEFT JOIN T_OPRD          AS OP
+    ON O.storeno = OP.storeno AND O.no = OP.ordno
+  INNER JOIN sqldados.vend  AS V
+    ON O.vendno = V.no
+WHERE
+  (O.storeno, O.no) IN ((1, 2),
+                        (2, 2),
+                        (3, 2),
+                        (5, 2),
+                        (8, 2),
+                        (1, 22),
+                        (1, 33),
+                        (1, 44),
+                        (1, 55),
+                        (1, 88)
+    );
 
 SELECT loja, sigla, lojaPedido, pedido, data, status, vendno, fornecedor, totalPedido, frete, totalPendente, observacao
 FROM
   T_ORD
-ORDER BY pedido, loja
+ORDER BY
+  pedido, loja

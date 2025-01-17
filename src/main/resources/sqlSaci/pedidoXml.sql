@@ -25,17 +25,18 @@ SELECT I.storeno                                                             AS 
        P.mult / 1000                                                         AS embalagem,
        IF(P.free_fld1 LIKE '*%' || P.free_fld1 LIKE '/%', P.free_fld1, NULL) AS formula
 FROM
-  sqldados.ords                      AS O
-    INNER JOIN sqldados.oprd         AS I
-               ON I.storeno = O.storeno AND I.ordno = O.no
-    LEFT JOIN  sqldados.pedidoPrdNdd AS PN
-               ON I.storeno = PN.storeno AND I.ordno = PN.ordno AND I.prdno = PN.prdno AND I.grade = PN.grade
-    INNER JOIN sqldados.prd          AS P
-               ON P.no = I.prdno
-    LEFT JOIN  sqldados.prdbar       AS B
-               ON I.prdno = B.prdno AND I.grade = B.grade AND B.grade != ''
-    LEFT JOIN  sqldados.prdref       AS R
-               ON R.prdno = I.prdno AND R.grade = I.grade AND R.grade != ''
-    LEFT JOIN  T_REFERENCIA          AS RP
-               ON RP.prdno = I.prdno AND RP.grade = I.grade AND RP.grade != ''
-WHERE (I.storeno = :loja AND I.ordno = :pedido)
+  sqldados.ords                   AS O
+  INNER JOIN sqldados.oprd        AS I
+    ON I.storeno = O.storeno AND I.ordno = O.no
+  LEFT JOIN sqldados.pedidoPrdNdd AS PN
+    ON I.storeno = PN.storeno AND I.ordno = PN.ordno AND I.prdno = PN.prdno AND I.grade = PN.grade
+  INNER JOIN sqldados.prd         AS P
+    ON P.no = I.prdno
+  LEFT JOIN sqldados.prdbar       AS B
+    ON I.prdno = B.prdno AND I.grade = B.grade AND B.grade != ''
+  LEFT JOIN sqldados.prdref       AS R
+    ON R.prdno = I.prdno AND R.grade = I.grade AND R.grade != ''
+  LEFT JOIN T_REFERENCIA          AS RP
+    ON RP.prdno = I.prdno AND RP.grade = I.grade AND RP.grade != ''
+WHERE
+  (I.storeno = :loja AND I.ordno = :pedido)
