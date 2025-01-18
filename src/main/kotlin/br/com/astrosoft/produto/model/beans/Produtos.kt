@@ -134,7 +134,7 @@ class Produtos(
             "MR" -> it.storeno == 3
             "MF" -> it.storeno == 4
             "PK" -> it.storeno == 5
-            "TM" -> it.storeno == 6
+            "TM" -> it.storeno == 8
             else -> true
           }
         }
