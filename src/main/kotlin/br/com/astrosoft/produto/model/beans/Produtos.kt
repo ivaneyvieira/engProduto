@@ -119,7 +119,16 @@ class Produtos(
           prd.copy(4, prd.MF_TT ?: 0).setQtd(qtdList),
           prd.copy(5, prd.PK_TT ?: 0).setQtd(qtdList),
           prd.copy(8, prd.TM_TT ?: 0).setQtd(qtdList),
-        ).filter { it.storeno == filter.loja || filter.loja == 0 }
+        ).filter { it.storeno == filter.loja || filter.loja == 0 }.            filter {
+          when(filter.pesquisa){
+            "DS" -> it.storeno == 2
+            "MR" -> it.storeno == 3
+            "MF" -> it.storeno == 4
+            "PK" -> it.storeno == 5
+            "TM" -> it.storeno == 6
+            else -> true
+          }
+        }
       }.sortedWith(compareBy({ it.codigo }, { it.grade }, { it.storeno }))
     }
 

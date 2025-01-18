@@ -12,7 +12,7 @@ class TabEstoqueValidadeLojaViewModel(val viewModel: ProdutoViewModel) {
   private val subView
     get() = viewModel.view.tabEstoqueValidadeLojaViewModel
 
-  fun findPrecoAlteracao(filtro: FiltroListaProduto): List<Produtos> {
+  private fun findPrecoAlteracao(filtro: FiltroListaProduto): List<Produtos> {
     return Produtos.findLoja(filtro, false)
   }
 

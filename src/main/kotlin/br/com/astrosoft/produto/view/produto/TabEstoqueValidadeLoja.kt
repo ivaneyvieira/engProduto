@@ -94,15 +94,15 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     val size = dataProvider.items.size
     val dataCommunicator: DataCommunicator<Produtos> = gridPanel.dataCommunicator
     val stream: Stream<Produtos> =
-      dataProvider.fetch(
-        Query<Produtos, SerializablePredicate<Produtos>>(
-          0,
-          size,
-          dataCommunicator.backEndSorting,
-          dataCommunicator.inMemorySorting,
-          null
+        dataProvider.fetch(
+          Query<Produtos, SerializablePredicate<Produtos>>(
+            0,
+            size,
+            dataCommunicator.backEndSorting,
+            dataCommunicator.inMemorySorting,
+            null
+          )
         )
-      )
     val list: List<Produtos> = stream.collect(Collectors.toList())
     val selecionado = this.itensSelecionados()
     return list.filter { selecionado.contains(it) }
