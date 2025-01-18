@@ -110,8 +110,17 @@ class Produtos(
     }
 
     fun findLoja(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
+      val filtroPesquisa = when(filter.pesquisa){
+            "DS" -> ""
+            "MR" -> ""
+            "MF" -> ""
+            "PK" -> ""
+            "TM" -> ""
+            else -> filter.pesquisa
+          }
+      val filterNovo = filter.copy(pesquisa = filtroPesquisa)
       val qtdList = saci.qtdVencimento()
-      val lista = find(filter, withSaldoApp)
+      val lista = find(filterNovo, withSaldoApp)
       return lista.flatMap { prd ->
         listOf(
           prd.copy(2, prd.DS_TT ?: 0).setQtd(qtdList),
