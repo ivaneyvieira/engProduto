@@ -31,8 +31,12 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
 
-    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
-      viewModel.previewPedido(pedido)
+    val user = AppConfig.userLogin()
+
+    if (user?.admin == true) {
+      addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+        viewModel.previewPedido(pedido)
+      }
     }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
@@ -50,7 +54,6 @@ class TabAcertoPedido(val viewModel: TabAcertoPedidoViewModel) :
     columnGrid(PedidoAcerto::totalPendente, header = "Total Pendente")
     columnGrid(PedidoAcerto::observacao, header = "Observação")
   }
-
 
   override fun updatePedido(pedidos: List<PedidoAcerto>) {
     updateGrid(pedidos)
