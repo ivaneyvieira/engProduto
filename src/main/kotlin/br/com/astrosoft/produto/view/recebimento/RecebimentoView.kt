@@ -27,6 +27,7 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
   override val tabRecebimentoXml = TabRecebimentoXML(viewModel.tabRecebimentoXmlViewModel)
   override val tabRecebimentoPreEnt = TabRecebimentoPreEnt(viewModel.tabRecebimentoPreEntViewModel)
   override val tabReceberNota = TabReceberNota(viewModel.tabReceberNotaViewModel)
+  override val tabValidade = TabValidade(viewModel.tabValidadeViewModel)
   override val tabNotaEntrada = TabNotaEntrada(viewModel.tabNotaEntradaViewModel)
   override val tabNotaRecebida = TabNotaRecebida(viewModel.tabNotaRecebidaViewModel)
   override val tabRecebimentoUsr = TabRecebimentoUsr(viewModel.tabRecebimentoUsrViewModel)
