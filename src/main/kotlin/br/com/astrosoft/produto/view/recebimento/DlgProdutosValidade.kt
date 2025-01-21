@@ -6,8 +6,6 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.TabValidadeViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -97,13 +95,33 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
           data.format("MM/yy")
         }
       }
+
+      columnGrid(NotaRecebimentoProduto::qtty01, "QTD 1").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::venc01, "Vence 1", width = "80px") {
+        this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
+      }.mesAnoFieldEditor()
+
+      columnGrid(NotaRecebimentoProduto::qtty02, "QTD 2").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::venc02, "Vence 2", width = "80px") {
+        this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
+      }.mesAnoFieldEditor()
+
+      columnGrid(NotaRecebimentoProduto::qtty03, "QTD 3").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::venc03, "Vence 3", width = "80px") {
+        this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
+      }.mesAnoFieldEditor()
+
+      columnGrid(NotaRecebimentoProduto::qtty04, "QTD 4").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::venc04, "Vence 4", width = "80px") {
+        this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
+      }.mesAnoFieldEditor()
     }
     this.addAndExpand(gridDetail)
     gridDetail.setPartNameGenerator {
       when {
         it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "primary"
-        it.selecionado == true -> "amarelo"
-        else -> null
+        it.selecionado == true                     -> "amarelo"
+        else                                       -> null
       }
     }
     update()
@@ -160,5 +178,12 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
 
   fun reloadGrid() {
     gridDetail.dataProvider.refreshAll()
+  }
+
+  fun String?.toMesAno(): Int {
+    this ?: return 0
+    val mes = this.substring(0, 2).toIntOrNull() ?: return 0
+    val ano = this.substring(3, 5).toIntOrNull() ?: return 0
+    return mes + (ano + 2000) * 100
   }
 }

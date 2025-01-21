@@ -42,14 +42,24 @@ class NotaRecebimentoProduto(
   var observacaoNota: String?,
   var quantFile: Int?,
   var tipoNota: String?,
-  var selecionado: Boolean? = false
+  var selecionado: Boolean? = false,
+  var dataVenda: LocalDate?,
+  var vendas: Int?,
+  var qtty01: Int?,
+  var venc01: String?,
+  var qtty02: Int?,
+  var venc02: String?,
+  var qtty03: Int?,
+  var venc03: String?,
+  var qtty04: Int?,
+  var venc04: String?
 ) {
   val localizacaoSaciStr: String
     get() = "       ${localizacaoSaci ?: ""}"
   val validadeStr
     get() = when (validade) {
       null -> ""
-      999 -> "Indeterminada"
+      999  -> "Indeterminada"
       else -> validade.toString()
     }
   val fabricacao: LocalDate?
@@ -80,6 +90,10 @@ class NotaRecebimentoProduto(
     this.usernoRecebe = 0
     this.marcaEnum = EMarcaRecebimento.RECEBER
     salva()
+  }
+
+  fun salvaVencimento() {
+    saci.updateProduto(this)
   }
 
   companion object {

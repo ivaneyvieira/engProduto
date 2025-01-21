@@ -153,6 +153,28 @@ FROM
 WHERE (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_VENCIMENTO;
+CREATE TEMPORARY TABLE T_VENCIMENTO
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT storeno                            AS storeno,
+       prdno                              AS prdno,
+       grade                              AS grade,
+       MAX(dataVenda)                     AS dataVenda,
+       MAX(vendas)                        AS vendas,
+       MAX(IF(num = 1, quantidade, NULL)) AS qtty01,
+       MAX(IF(num = 1, vencimento, NULL)) AS venc01,
+       MAX(IF(num = 2, quantidade, NULL)) AS qtty02,
+       MAX(IF(num = 2, vencimento, NULL)) AS venc02,
+       MAX(IF(num = 3, quantidade, NULL)) AS qtty03,
+       MAX(IF(num = 3, vencimento, NULL)) AS venc03,
+       MAX(IF(num = 4, quantidade, NULL)) AS qtty04,
+       MAX(IF(num = 4, vencimento, NULL)) AS venc04
+FROM
+  sqldados.qtd_vencimento
+GROUP BY storeno, prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                                                            AS loja,
@@ -201,9 +223,21 @@ SELECT N.storeno                                                                
        ER.login                                                                                             AS usuarioRecebe,
        observacaoNota                                                                                       AS observacaoNota,
        tipoNota                                                                                             AS tipoNota,
-       selecionado                                                                                          AS selecionado
+       selecionado                                                                                          AS selecionado,
+       VC.dataVenda                                                                                         AS dataVenda,
+       VC.vendas                                                                                            AS vendas,
+       VC.qtty01                                                                                            AS qtty01,
+       VC.venc01                                                                                            AS venc01,
+       VC.qtty02                                                                                            AS qtty02,
+       VC.venc02                                                                                            AS venc02,
+       VC.qtty03                                                                                            AS qtty03,
+       VC.venc03                                                                                            AS venc03,
+       VC.qtty04                                                                                            AS qtty04,
+       VC.venc04                                                                                            AS venc04
 FROM
   T_NOTA                       AS N
+    LEFT JOIN  T_VENCIMENTO    AS VC
+               USING (storeno, prdno, grade)
     LEFT JOIN  sqldados.users  AS ER
                ON ER.no = N.usernoRecebe
     LEFT JOIN  sqldados.vend   AS V
@@ -264,7 +298,17 @@ SELECT loja,
        tempoValidade,
        observacaoNota,
        tipoNota,
-       selecionado
+       selecionado,
+       dataVenda,
+       vendas,
+       qtty01,
+       venc01,
+       qtty02,
+       venc02,
+       qtty03,
+       venc03,
+       qtty04,
+       venc04
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

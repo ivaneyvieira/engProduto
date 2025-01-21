@@ -61,6 +61,7 @@ class TabValidadeViewModel(val viewModel: RecebimentoViewModel) {
     bean ?: fail("Produto não encontrado")
     bean.validaProduto()
     bean.salva()
+    bean.salvaVencimento()
     updateView()
   }
 
