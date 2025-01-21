@@ -1,14 +1,11 @@
-USE
-sqldados;
+USE sqldados;
 
-REPLACE
-sqldados.eoprdAdicional(storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao, empRecebido,
+REPLACE sqldados.eoprdAdicional(storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao, empRecebido,
                                 empEntregue, empFinalizado)
 VALUES (:loja, :numero, :prdno, :grade, :marca, :qtRecebido, :selecionado, :posicao, :recebidoNo, :entregueNo,
         :finalizadoNo);
 
-UPDATE
-    sqldados.eoprdAdicional
+UPDATE sqldados.eoprdAdicional
 SET marca = 1
 WHERE empEntregue > 0
   AND (empRecebido > 0 OR empFinalizado > 0)

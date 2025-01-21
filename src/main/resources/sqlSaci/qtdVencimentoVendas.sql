@@ -58,9 +58,7 @@ FROM
     FROM T_STKMOV ) AS S
 GROUP BY storeno, prdno, grade;
 
-UPDATE sqldados.qtd_vencimento AS Q
-  INNER JOIN T_SAIDAS AS S
-  USING (storeno, prdno, grade)
+UPDATE sqldados.qtd_vencimento AS Q INNER JOIN T_SAIDAS AS S USING (storeno, prdno, grade)
 SET Q.vendas = IFNULL(S.vendas, 0)
 WHERE Q.storeno IN (2, 3, 4, 5, 8)
   AND Q.dataVenda IS NOT NULL

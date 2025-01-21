@@ -1,15 +1,10 @@
-DO
-@PESQUISA := :pesquisa;
-DO
-@PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
-DO
-@PESQUISA_START := CONCAT(:pesquisa, '%');
-DO
-@PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+DO @PESQUISA_START := CONCAT(:pesquisa, '%');
+DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 DROP TABLE IF EXISTS T_CLI;
-CREATE
-TEMPORARY TABLE T_CLI
+CREATE TEMPORARY TABLE T_CLI
 (
   custno     INT         NOT NULL,
   nome       CHAR(40)    NOT NULL,
@@ -38,22 +33,14 @@ SELECT C.no                                       AS custno,
        TRIM(MID(tel, 1, 10)) * 1                  AS telefone,
        IF(celular = 0, '', CAST(celular AS CHAR)) AS celular,
        IF(C.city1 = 'TIMON', 'Timon', R.rota)     AS rota
-FROM sqldados.custp AS C
-         LEFT JOIN sqldados.rotasAdd AS R
-                   ON C.city1 = R.cidade
-                       AND (C.nei1 = R.bairro)
-WHERE (@PESQUISA = '' OR
-       C.no = @PESQUISA_NUM OR
-       C.name LIKE @PESQUISA_LIKE OR
-       C.cpf_cgc LIKE @PESQUISA_LIKE OR
-       IF(C.fjflag = 1, id_sname, '') LIKE @PESQUISA_LIKE OR
-       C.add1 LIKE @PESQUISA_LIKE OR
-       C.nei1 LIKE @PESQUISA_LIKE OR
-       C.city1 LIKE @PESQUISA_LIKE OR
-       C.state1 LIKE @PESQUISA_START OR
-       ddd LIKE @PESQUISA_START OR
-       TRIM(MID(tel, 1, 10)) LIKE @PESQUISA_START OR
-       IF(celular = 0, '', CAST(celular AS CHAR)) LIKE @PESQUISA_LIKE OR
+FROM
+  sqldados.custp                AS C
+    LEFT JOIN sqldados.rotasAdd AS R
+              ON C.city1 = R.cidade AND (C.nei1 = R.bairro)
+WHERE (@PESQUISA = '' OR C.no = @PESQUISA_NUM OR C.name LIKE @PESQUISA_LIKE OR C.cpf_cgc LIKE @PESQUISA_LIKE OR
+       IF(C.fjflag = 1, id_sname, '') LIKE @PESQUISA_LIKE OR C.add1 LIKE @PESQUISA_LIKE OR C.nei1 LIKE @PESQUISA_LIKE OR
+       C.city1 LIKE @PESQUISA_LIKE OR C.state1 LIKE @PESQUISA_START OR ddd LIKE @PESQUISA_START OR
+       TRIM(MID(tel, 1, 10)) LIKE @PESQUISA_START OR IF(celular = 0, '', CAST(celular AS CHAR)) LIKE @PESQUISA_LIKE OR
        R.rota LIKE @PESQUISA_LIKE);
 
 
@@ -70,4 +57,5 @@ SELECT custno                                       AS custno,
        IF(telefone = 0, '', CAST(telefone AS CHAR)) AS telefone,
        celular                                      AS celular,
        rota                                         AS rota
-FROM T_CLI
+FROM
+  T_CLI

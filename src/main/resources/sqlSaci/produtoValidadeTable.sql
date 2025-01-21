@@ -1,32 +1,32 @@
 /*DROP TABLE IF EXISTS sqldados.produtoValidade;*/
 CREATE TABLE sqldados.produtoValidade
 (
-    storeno    INT         NOT NULL,
-    prdno      VARCHAR(16) NOT NULL,
-    grade      VARCHAR(8)  NOT NULL,
-    vencimento INT         NOT NULL,
-    estoque    INT NULL,
-    PRIMARY KEY (storeno, prdno, grade, vencimento)
+  storeno    INT         NOT NULL,
+  prdno      VARCHAR(16) NOT NULL,
+  grade      VARCHAR(8)  NOT NULL,
+  vencimento INT         NOT NULL,
+  estoque    INT         NULL,
+  PRIMARY KEY (storeno, prdno, grade, vencimento)
 );
 
 DROP TABLE IF EXISTS sqldados.produtoValidadeLoja;
 CREATE TABLE sqldados.produtoValidadeLoja
 (
-    seq          INT         NOT NULL AUTO_INCREMENT,
-    prdno        VARCHAR(16) NOT NULL,
-    grade        VARCHAR(8)  NOT NULL,
-    vencimentoDS INT         NOT NULL,
-    estoqueDS    INT NULL,
-    vencimentoMR INT         NOT NULL,
-    estoqueMR    INT NULL,
-    vencimentoMF INT         NOT NULL,
-    estoqueMF    INT NULL,
-    vencimentoPK INT         NOT NULL,
-    estoquePK    INT NULL,
-    vencimentoTM INT         NOT NULL,
-    estoqueTM    INT NULL,
-    PRIMARY KEY (seq),
-    INDEX (prdno, grade)
+  seq          INT         NOT NULL AUTO_INCREMENT,
+  prdno        VARCHAR(16) NOT NULL,
+  grade        VARCHAR(8)  NOT NULL,
+  vencimentoDS INT         NOT NULL,
+  estoqueDS    INT         NULL,
+  vencimentoMR INT         NOT NULL,
+  estoqueMR    INT         NULL,
+  vencimentoMF INT         NOT NULL,
+  estoqueMF    INT         NULL,
+  vencimentoPK INT         NOT NULL,
+  estoquePK    INT         NULL,
+  vencimentoTM INT         NOT NULL,
+  estoqueTM    INT         NULL,
+  PRIMARY KEY (seq),
+  INDEX (prdno, grade)
 );
 
 INSERT INTO sqldados.produtoValidadeLoja (prdno, grade,
@@ -47,11 +47,12 @@ SELECT prdno                               AS prdno,
        SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
        MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM,
        SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM
-FROM sqldados.produtoValidade
+FROM
+  sqldados.produtoValidade
 GROUP BY prdno, grade;
 
 ALTER TABLE sqldados.produtoValidadeLoja
-    ADD COLUMN dataEntrada INT NOT NULL DEFAULT 0;
+  ADD COLUMN dataEntrada INT NOT NULL DEFAULT 0;
 
 UPDATE sqldados.produtoValidadeLoja
 SET dataEntrada = CURRENT_DATE() * 1
@@ -63,11 +64,12 @@ SET dataEntrada = 0
 WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM) = 0;
 
 SELECT *
-FROM sqldados.produtoValidadeLoja;
+FROM
+  sqldados.produtoValidadeLoja;
 
 
 ALTER TABLE sqldados.produtoValidadeLoja
-    ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
+  ADD COLUMN vencimento INT NOT NULL DEFAULT 0;
 
 UPDATE sqldados.produtoValidadeLoja
 SET vencimento = vencimentoTM
@@ -77,81 +79,89 @@ WHERE vencimentoTM > 0
 
 
 SELECT *
-FROM sqldados.produtoValidade;
+FROM
+  sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
-    ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
+  ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
 
 TRUNCATE TABLE sqldados.produtoValidade;
 
 INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 2 AS storeno, prdno, grade, dataEntrada, vencimentoDS, estoqueDS
-FROM sqldados.produtoValidadeLoja
+FROM
+  sqldados.produtoValidadeLoja
 WHERE vencimentoDS > 0
   AND estoqueDS > 0;
 
 INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 3 AS storeno, prdno, grade, dataEntrada, vencimentoMR, estoqueMR
-FROM sqldados.produtoValidadeLoja
+FROM
+  sqldados.produtoValidadeLoja
 WHERE vencimentoMR > 0
   AND estoqueMR > 0;
 
 INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 4 AS storeno, prdno, grade, dataEntrada, vencimentoMF, estoqueMF
-FROM sqldados.produtoValidadeLoja
+FROM
+  sqldados.produtoValidadeLoja
 WHERE vencimentoMF > 0
   AND estoqueMF > 0;
 
 INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 5 AS storeno, prdno, grade, dataEntrada, vencimentoPK, estoquePK
-FROM sqldados.produtoValidadeLoja
+FROM
+  sqldados.produtoValidadeLoja
 WHERE vencimentoPK > 0
   AND estoquePK > 0;
 
 
 INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 8 AS storeno, prdno, grade, dataEntrada, vencimentoTM, estoqueTM
-FROM sqldados.produtoValidadeLoja
+FROM
+  sqldados.produtoValidadeLoja
 WHERE vencimentoTM > 0
   AND estoqueTM > 0;
 
 
 SELECT *
-FROM sqldados.produtoValidade
+FROM
+  sqldados.produtoValidade
 WHERE storeno = 3;
 
 SELECT *
-FROM sqldados.produtoValidadeLoja;
+FROM
+  sqldados.produtoValidadeLoja;
 
 SELECT *
-FROM sqldados.stk
+FROM
+  sqldados.stk
 WHERE prdno = 113613;
 
 ALTER TABLE sqldados.produtoValidade
-    ADD COLUMN compras INT NOT NULL DEFAULT 0;
+  ADD COLUMN compras INT NOT NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoValidade
-    ADD COLUMN vencimentoEdit INT NULL;
+  ADD COLUMN vencimentoEdit INT NULL;
 
 /**********************************************************/
 
 CREATE TABLE sqldados.produtoValidadeBak
 SELECT *
-FROM sqldados.produtoValidade;
+FROM
+  sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
-DROP
-COLUMN vencimentoEdit;
+  DROP COLUMN vencimentoEdit;
 
 ALTER TABLE sqldados.produtoValidade
-    ADD COLUMN tipo VARCHAR(3) NOT NULL DEFAULT '' AFTER vencimento;
+  ADD COLUMN tipo VARCHAR(3) NOT NULL DEFAULT '' AFTER vencimento;
 
 ALTER TABLE sqldados.produtoValidade
-DROP
-PRIMARY KEY;
+  DROP PRIMARY KEY;
 
 ALTER TABLE sqldados.produtoValidade
-    ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo);
+  ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo);
 
 UPDATE sqldados.produtoValidade
 SET tipo = 'SAI'
@@ -179,39 +189,41 @@ SET vencimento = 0
 WHERE vencimento < 10;
 
 ALTER TABLE sqldados.produtoValidade
-DROP
-COLUMN compras;
+  DROP COLUMN compras;
 
 DELETE
-FROM sqldados.produtoValidade
+FROM
+  sqldados.produtoValidade
 WHERE estoque = 0
   AND tipo = '';
 
 SELECT DISTINCT tipo
-FROM sqldados.produtoValidade;
+FROM
+  sqldados.produtoValidade;
 
-ALTER TABLE sqldados.produtoValidade
-    RENAME COLUMN estoque TO movimento;
+ALTER TABLE sqldados.produtoValidade RENAME COLUMN estoque TO movimento;
 
 DELETE
-FROM sqldados.produtoValidade
+FROM
+  sqldados.produtoValidade
 WHERE movimento = 0;
 
 SELECT DISTINCT tipo
-FROM sqldados.produtoValidade;
+FROM
+  sqldados.produtoValidade;
 
 SELECT *
-FROM sqldados.produtoValidade
-where prdno = 105769
-  and storeno = 2;
+FROM
+  sqldados.produtoValidade
+WHERE prdno = 105769
+  AND storeno = 2;
 
 /***************************************************************************/
 
 ALTER TABLE sqldados.produtoValidade
-DROP
-PRIMARY KEY;
+  DROP PRIMARY KEY;
 
 ALTER TABLE sqldados.produtoValidade
-    add PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada);
+  ADD PRIMARY KEY (storeno, prdno, grade, vencimento, tipo, dataEntrada);
 
 

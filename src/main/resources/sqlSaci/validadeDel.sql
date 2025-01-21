@@ -1,3 +1,4 @@
 DELETE
-FROM sqldados.validadeAdicional
+FROM
+  sqldados.validadeAdicional
 WHERE validade = :validade

@@ -7,6 +7,7 @@ WHERE seq = :seq
 
 INSERT INTO sqldados.dadosValidade(storeno, prdno, grade, vencimento, inventario, dataEntrada)
 SELECT :storeno, :prdno, :grade, :vencimento, :inventario, :dataEntrada
-FROM dual
+FROM
+  dual
 WHERE :seq = 0
 

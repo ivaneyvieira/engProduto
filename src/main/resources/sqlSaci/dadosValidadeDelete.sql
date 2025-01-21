@@ -1,3 +1,4 @@
 DELETE
-FROM sqldados.dadosValidade
+FROM
+  sqldados.dadosValidade
 WHERE seq = :seq

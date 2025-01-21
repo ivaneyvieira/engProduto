@@ -1,5 +1,4 @@
-USE
-sqldados;
+USE sqldados;
 
 SELECT N.storeno                                                                  AS loja,
        N.pdvno                                                                    AS pdv,
@@ -19,16 +18,17 @@ SELECT N.storeno                                                                
        U.name                                                                     AS usuarioDev,
        U.login                                                                    AS loginDev,
        ''                                                                         AS observacao
-FROM sqldados.nf AS N
-         LEFT JOIN sqldados.custp AS C
-                   ON C.no = N.custno
-         LEFT JOIN sqldados.inv AS I1
-                   ON (N.nfno = I1.nfNfno AND N.storeno = I1.nfStoreno AND N.nfse = I1.nfNfse)
-         LEFT JOIN sqldados.inv AS I2
-                   ON (N.storeno = I2.s1 AND N.pdvno = I2.s2 AND N.xano = I2.l2)
-         LEFT JOIN sqldados.users AS U
-                   ON U.no = IFNULL(IF(I1.usernoFirst = 0, I1.usernoLast, I1.usernoFirst),
-                                    IF(I2.usernoFirst = 0, I2.usernoLast, I2.usernoFirst))
+FROM
+  sqldados.nf                AS N
+    LEFT JOIN sqldados.custp AS C
+              ON C.no = N.custno
+    LEFT JOIN sqldados.inv   AS I1
+              ON (N.nfno = I1.nfNfno AND N.storeno = I1.nfStoreno AND N.nfse = I1.nfNfse)
+    LEFT JOIN sqldados.inv   AS I2
+              ON (N.storeno = I2.s1 AND N.pdvno = I2.s2 AND N.xano = I2.l2)
+    LEFT JOIN sqldados.users AS U
+              ON U.no = IFNULL(IF(I1.usernoFirst = 0, I1.usernoLast, I1.usernoFirst),
+                               IF(I2.usernoFirst = 0, I2.usernoLast, I2.usernoFirst))
 WHERE N.storeno = :loja
   AND N.nfno = :nfno
   AND N.nfse = :nfse

@@ -1,11 +1,8 @@
-USE
-sqldados;
+USE sqldados;
 
-SET
-SQL_MODE = '';
+SET SQL_MODE = '';
 
-REPLACE
-sqldados.iprdAdicional(invno, prdno, grade, marcaRecebimento, login, vencimento, selecionado)
+REPLACE sqldados.iprdAdicional(invno, prdno, grade, marcaRecebimento, login, vencimento, selecionado)
 VALUES (:ni, :prdno, :grade, :marca, :login, :vencimento, :selecionado);
 
 UPDATE sqldados.iprd

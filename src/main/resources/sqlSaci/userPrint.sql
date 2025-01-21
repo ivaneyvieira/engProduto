@@ -1,3 +1,4 @@
 SELECT no, name
-FROM sqldados.prntr
+FROM
+  sqldados.prntr
 

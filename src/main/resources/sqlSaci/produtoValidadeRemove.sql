@@ -1,5 +1,6 @@
 DELETE
-FROM sqldados.produtoValidade
+FROM
+  sqldados.produtoValidade
 WHERE storeno = :storeno
   AND prdno = :prdno
   AND grade = :grade

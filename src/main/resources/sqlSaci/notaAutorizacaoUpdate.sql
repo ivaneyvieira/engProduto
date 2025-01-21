@@ -1,5 +1,4 @@
-USE
-sqldados;
+USE sqldados;
 
 UPDATE sqldados.nfAutorizacao
 SET usernoSing = :usernoSing,
