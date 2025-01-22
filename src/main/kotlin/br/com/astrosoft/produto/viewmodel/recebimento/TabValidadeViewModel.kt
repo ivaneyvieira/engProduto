@@ -1,9 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.firstDayOfMonth
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -50,34 +48,16 @@ class TabValidadeViewModel(val viewModel: RecebimentoViewModel) {
       this.vencimento ?: fail("Data de vencimento obrigatório")
       val dataFabricacao = this.fabricacao ?: fail("Data de fabricação obrigatório")
       val dataFabricacaoLimite =
-        dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
+          dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
       if (dataFabricacao < dataFabricacaoLimite) {
         fail("Data de fabricação inferior a ${dataFabricacaoLimite.format("MM/yy")}")
       }
     }
   }
 
-  fun salvaNotaProduto(bean: NotaRecebimentoProduto?) = viewModel.exec {
-    bean ?: fail("Produto não encontrado")
-    bean.validaProduto()
-    bean.salva()
-    bean.salvaVencimento()
-    updateView()
-  }
-
-  fun recebeNotaProduto(produtos: List<NotaRecebimentoProduto>, login: String, senha: String) {
-    val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
-      }
-    user ?: fail("Usuário ou senha inválidos")
-
-    produtos.forEach {
-      it.recebe(user)
-      it.salva()
-    }
-
+  fun salvaValidades(produto: NotaRecebimentoProduto?) {
+    produto ?: fail("Produto não encontrado")
+    produto.salvaVencimento()
     updateView()
   }
 }

@@ -10,6 +10,7 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -63,15 +64,6 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      this.withEditor(
-        NotaRecebimentoProduto::class,
-        openEditor = {
-          this.focusEditor(NotaRecebimentoProduto::vencimento)
-        },
-        closeEditor = {
-          viewModel.salvaNotaProduto(it.bean)
-        })
-
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade")
@@ -85,36 +77,34 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
         "Venc",
         width = "120px",
         pattern = "MM/yy"
-      ).comboFieldEditor<NotaRecebimentoProduto, LocalDate?> {
-        val datas = MesAno.valuesFuture().map { mesAno ->
-          mesAno.lastDay
-        }
-        it.setItems(datas)
-        it.isEmptySelectionAllowed = true
-        it.setItemLabelGenerator { data ->
-          data.format("MM/yy")
+      )
+
+      addColumnButton(VaadinIcon.DATE_INPUT, "Validade", "Validade") { produto ->
+        val form = FormValidadeQuant(produto)
+        DialogHelper.showForm(caption = "Validade", form = form) {
+          viewModel.salvaValidades(produto)
         }
       }
 
-      columnGrid(NotaRecebimentoProduto::qtty01, "QTD 1").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::qtty01, "QTD 1")
       columnGrid(NotaRecebimentoProduto::venc01, "Vence 1", width = "80px") {
         this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
-      }.mesAnoFieldEditor()
+      }
 
-      columnGrid(NotaRecebimentoProduto::qtty02, "QTD 2").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::qtty02, "QTD 2")
       columnGrid(NotaRecebimentoProduto::venc02, "Vence 2", width = "80px") {
         this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
-      }.mesAnoFieldEditor()
+      }
 
-      columnGrid(NotaRecebimentoProduto::qtty03, "QTD 3").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::qtty03, "QTD 3")
       columnGrid(NotaRecebimentoProduto::venc03, "Vence 3", width = "80px") {
         this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
-      }.mesAnoFieldEditor()
+      }
 
-      columnGrid(NotaRecebimentoProduto::qtty04, "QTD 4").integerFieldEditor()
+      columnGrid(NotaRecebimentoProduto::qtty04, "QTD 4")
       columnGrid(NotaRecebimentoProduto::venc04, "Vence 4", width = "80px") {
         this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
-      }.mesAnoFieldEditor()
+      }
     }
     this.addAndExpand(gridDetail)
     gridDetail.setPartNameGenerator {
