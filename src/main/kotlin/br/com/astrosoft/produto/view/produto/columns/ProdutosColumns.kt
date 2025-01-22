@@ -107,7 +107,7 @@ object ProdutosColumns {
   }
 
   fun Grid<Produtos>.produto_saldo() = columnGrid(Produtos::saldo) {
-    this.setHeader("Saldo")
+    this.setHeader("Estoque")
     this.config()
   }
 

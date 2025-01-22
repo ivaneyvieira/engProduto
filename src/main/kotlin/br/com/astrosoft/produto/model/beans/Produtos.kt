@@ -6,62 +6,62 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class Produtos(
-  var storeno: Int?,
-  var saldo: Int?,
-  var prdno: String?,
-  var codigo: Int?,
-  var descricao: String?,
-  var grade: String?,
-  var forn: Int?,
-  var tributacao: String?,
-  var abrev: String?,
-  var tipo: Int?,
-  var cl: Int?,
-  var codBar: String?,
-  var DS_TT: Int?,
-  var MR_TT: Int?,
-  var MF_TT: Int?,
-  var PK_TT: Int?,
-  var TM_TT: Int?,
-  var estoque: Int?,
-  var trib: String?,
-  var refForn: String?,
-  var pesoBruto: Double?,
-  var uGar: String?,
-  var tGar: Int?,
-  var mesesGarantia: Int?,
-  var emb: Double?,
-  var ncm: String?,
-  var site: String?,
-  var unidade: String?,
-  var foraLinha: String?,
-  var ultVenda: LocalDate?,
-  var ultCompra: LocalDate?,
-  var qttyVendas: Int?,
-  var qttyCompra: Int?,
+  var storeno: Int? = null,
+  var saldo: Int? = null,
+  var prdno: String? = null,
+  var codigo: Int? = null,
+  var descricao: String? = null,
+  var grade: String? = null,
+  var forn: Int? = null,
+  var tributacao: String? = null,
+  var abrev: String? = null,
+  var tipo: Int? = null,
+  var cl: Int? = null,
+  var codBar: String? = null,
+  var DS_TT: Int? = null,
+  var MR_TT: Int? = null,
+  var MF_TT: Int? = null,
+  var PK_TT: Int? = null,
+  var TM_TT: Int? = null,
+  var estoque: Int? = null,
+  var trib: String? = null,
+  var refForn: String? = null,
+  var pesoBruto: Double? = null,
+  var uGar: String? = null,
+  var tGar: Int? = null,
+  var mesesGarantia: Int? = null,
+  var emb: Double? = null,
+  var ncm: String? = null,
+  var site: String? = null,
+  var unidade: String? = null,
+  var foraLinha: String? = null,
+  var ultVenda: LocalDate? = null,
+  var ultCompra: LocalDate? = null,
+  var qttyVendas: Int? = null,
+  var qttyCompra: Int? = null,
   var MF_App: Int? = null,
-  var localizacao: String?,
-  var rotulo: String?,
-  var mesesFabricacao: Int?,
-  var entrada: Int?,
-  var nfEntrada: String?,
-  var dataEntrada: LocalDate?,
-  var fabricacao: LocalDate?,
-  var vencimento: LocalDate?,
+  var localizacao: String? = null,
+  var rotulo: String? = null,
+  var mesesFabricacao: Int? = null,
+  var entrada: Int? = null,
+  var nfEntrada: String? = null,
+  var dataEntrada: LocalDate? = null,
+  var fabricacao: LocalDate? = null,
+  var vencimento: LocalDate? = null,
   var vendas: Int? = null,
   var dataVenda: LocalDate? = null,
-  var qtty01: Int?,
-  var qttyDif01: Int?,
-  var venc01: String?,
-  var qtty02: Int?,
-  var qttyDif02: Int?,
-  var venc02: String?,
-  var qtty03: Int?,
-  var qttyDif03: Int?,
-  var venc03: String?,
-  var qtty04: Int?,
-  var qttyDif04: Int?,
-  var venc04: String?,
+  var qtty01: Int? = null,
+  var qttyDif01: Int? = null,
+  var venc01: String? = null,
+  var qtty02: Int? = null,
+  var qttyDif02: Int? = null,
+  var venc02: String? = null,
+  var qtty03: Int? = null,
+  var qttyDif03: Int? = null,
+  var venc03: String? = null,
+  var qtty04: Int? = null,
+  var qttyDif04: Int? = null,
+  var venc04: String? = null,
   var qttyInv: Int? = null,
 ) {
   fun produtosInventarioResumo(): List<ProdutoInventarioResumo> {
@@ -110,31 +110,50 @@ class Produtos(
     }
 
     fun findLoja(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
-      val filtroPesquisa = when(filter.pesquisa){
-            "DS" -> ""
-            "MR" -> ""
-            "MF" -> ""
-            "PK" -> ""
-            "TM" -> ""
-            else -> filter.pesquisa
-          }
+      val filtroPesquisa = when (filter.pesquisa) {
+        "DS" -> ""
+        "MR" -> ""
+        "MF" -> ""
+        "PK" -> ""
+        "TM" -> ""
+        "AD" -> ""
+        else -> filter.pesquisa
+      }
       val filterNovo = filter.copy(pesquisa = filtroPesquisa)
       val qtdList = saci.qtdVencimento()
       val lista = find(filterNovo, withSaldoApp)
       return lista.flatMap { prd ->
-        listOf(
+        val dadosLoja = listOf(
           prd.copy(2, prd.DS_TT ?: 0).setQtd(qtdList),
           prd.copy(3, prd.MR_TT ?: 0).setQtd(qtdList),
           prd.copy(4, prd.MF_TT ?: 0).setQtd(qtdList),
           prd.copy(5, prd.PK_TT ?: 0).setQtd(qtdList),
           prd.copy(8, prd.TM_TT ?: 0).setQtd(qtdList),
-        ).filter { it.storeno == filter.loja || filter.loja == 0 }.            filter {
-          when(filter.pesquisa){
+        )
+
+        val dadosTotal = dadosLoja.groupBy { "${it.prdno} ${it.grade}" }.map { ent ->
+          val value = ent.value.firstOrNull()
+          Produtos().apply {
+            storeno = 10
+            prdno = value?.prdno
+            grade = value?.grade
+            codigo = value?.codigo
+            descricao = value?.descricao
+            unidade = value?.unidade
+            saldo = ent.value.sumOf { it.saldo ?: 0 }
+          }
+        }
+
+        val dados = dadosLoja + dadosTotal
+
+        dados.filter { it.storeno == filter.loja || filter.loja == 0 }.filter {
+          when (filter.pesquisa) {
             "DS" -> it.storeno == 2
             "MR" -> it.storeno == 3
             "MF" -> it.storeno == 4
             "PK" -> it.storeno == 5
             "TM" -> it.storeno == 8
+            "AD" -> it.storeno == 10
             else -> true
           }
         }
@@ -171,11 +190,12 @@ class Produtos(
 
   val siglaLoja: String
     get() = when (storeno) {
-      2 -> "DS"
-      3 -> "MR"
-      4 -> "MF"
-      5 -> "PK"
-      8 -> "TM"
+      2    -> "DS"
+      3    -> "MR"
+      4    -> "MF"
+      5    -> "PK"
+      8    -> "TM"
+      10   -> "AD"
       else -> ""
     }
 

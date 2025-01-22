@@ -297,9 +297,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
-    if (user?.admin == true) {
-      produto_total()
-    }
+
     produto_quantVenda()
     produto_val()
 
