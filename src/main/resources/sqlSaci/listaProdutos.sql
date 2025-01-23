@@ -285,12 +285,25 @@ CREATE TEMPORARY TABLE T_PRDVENDA
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT R.prdno, IF(@TEMGRADE = 'S', X.grade, '') AS grade, MAX(date) AS date, SUM(quant / 1000) AS qtty
+SELECT R.prdno,
+       IF(@TEMGRADE = 'S', X.grade, '')         AS grade,
+       MAX(date)                                AS date,
+       SUM(quant / 1000)                        AS qtty,
+       MAX(IF(storeno = 2, date, NULL))         AS dateVDS,
+       SUM(IF(storeno = 2, quant / 1000, NULL)) AS qttyVDS,
+       MAX(IF(storeno = 3, date, NULL))         AS dateVMR,
+       SUM(IF(storeno = 3, quant / 1000, NULL)) AS qttyVMR,
+       MAX(IF(storeno = 4, date, NULL))         AS dateVMF,
+       SUM(IF(storeno = 4, quant / 1000, NULL)) AS qttyVMF,
+       MAX(IF(storeno = 5, date, NULL))         AS dateVPK,
+       SUM(IF(storeno = 5, quant / 1000, NULL)) AS qttyVPK,
+       MAX(IF(storeno = 8, date, NULL))         AS dateVTM,
+       SUM(IF(storeno = 8, quant / 1000, NULL)) AS qttyVTM
 FROM
   T_PRD                           AS R
     INNER JOIN sqldados.vendaDate AS X
                ON X.prdno = R.prdno
-WHERE (X.storeno IN (1, 2, 3, 4, 5, 6, 8))
+WHERE (X.storeno IN (2, 3, 4, 5, 8))
   AND (X.storeno = @LOJA OR @LOJA = 0)
   AND date BETWEEN @DIVENDA AND @DFVENDA
 GROUP BY R.prdno, IF(@TEMGRADE = 'S', X.grade, '');
@@ -305,7 +318,7 @@ FROM
   T_PRD AS                         R
     INNER JOIN sqldados.compraDate P
                ON P.prdno = R.prdno
-WHERE (storeno IN (1, 2, 3, 4, 5, 6, 8))
+WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (storeno = @LOJA OR @LOJA = 0)
   AND date BETWEEN @DICOMPRA AND @DFCOMPRA
 GROUP BY R.prdno, IF(@TEMGRADE = 'S', P.grade, '');
@@ -366,10 +379,20 @@ SELECT R.prdno,
        unidade,
        foraLinha,
        mesesGarantia,
-       CAST(V.date AS DATE)     AS ultVenda,
-       CAST(C.date AS DATE)     AS ultCompra,
-       ROUND(IFNULL(V.qtty, 0)) AS qttyVendas,
-       ROUND(IFNULL(C.qtty, 0)) AS qttyCompra,
+       CAST(V.date AS DATE)        AS ultVenda,
+       ROUND(IFNULL(V.qtty, 0))    AS qttyVendas,
+       ROUND(IFNULL(V.qttyVDS, 0)) AS qttyVendasDS,
+       CAST(V.dateVDS AS DATE)     AS ultVendaDS,
+       ROUND(IFNULL(V.qttyVMR, 0)) AS qttyVendasMR,
+       CAST(V.dateVMR AS DATE)     AS ultVendaMR,
+       ROUND(IFNULL(V.qttyVMF, 0)) AS qttyVendasMF,
+       CAST(V.dateVMF AS DATE)     AS ultVendaMF,
+       ROUND(IFNULL(V.qttyVPK, 0)) AS qttyVendasPK,
+       CAST(V.dateVPK AS DATE)     AS ultVendaPK,
+       ROUND(IFNULL(V.qttyVTM, 0)) AS qttyVendasTM,
+       CAST(V.dateVTM AS DATE)     AS ultVendaTM,
+       CAST(C.date AS DATE)        AS ultCompra,
+       ROUND(IFNULL(C.qtty, 0))    AS qttyCompra,
        localizacao,
        rotulo,
        VC.mesesFabricacao,

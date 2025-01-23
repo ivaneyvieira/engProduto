@@ -128,6 +128,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
         this.button("Cópia") {
+          val user = AppConfig.userLogin() as? UserSaci
+          this.isVisible = user?.estoqueCopiaLoc == true
           this.icon = VaadinIcon.COPY.create()
           onClick {
             viewModel.copiaLocalizacao()
@@ -178,7 +180,12 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-    columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").textFieldEditor()
+    columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
+      val user = AppConfig.userLogin() as? UserSaci
+      if(user?.estoqueEditaLoc == true) {
+        textFieldEditor()
+      }
+    }
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")

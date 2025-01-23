@@ -35,6 +35,14 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
         binder.bind(this, UserSaci::estoqueCD1A.name)
       }
     }
+    verticalBlock("Comandos") {
+      checkBox("Edita Loc") {
+        binder.bind(this, UserSaci::estoqueEditaLoc.name)
+      }
+      checkBox("Copia Loc") {
+        binder.bind(this, UserSaci::estoqueCopiaLoc.name)
+      }
+    }
     verticalBlock("Filtros") {
       filtroLocalizacao(binder, UserSaci::listaEstoque)
       datePicker("Data Inicial Kardec") {

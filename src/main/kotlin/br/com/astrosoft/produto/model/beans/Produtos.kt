@@ -50,6 +50,16 @@ class Produtos(
   var vencimento: LocalDate? = null,
   var vendas: Int? = null,
   var dataVenda: LocalDate? = null,
+  var qttyVendasDS: Int? = null,
+  var ultVendaDS: LocalDate? = null,
+  var qttyVendasMR: Int? = null,
+  var ultVendaMR: LocalDate? = null,
+  var qttyVendasMF: Int? = null,
+  var ultVendaMF: LocalDate? = null,
+  var qttyVendasPK: Int? = null,
+  var ultVendaPK: LocalDate? = null,
+  var qttyVendasTM: Int? = null,
+  var ultVendaTM: LocalDate? = null,
   var qtty01: Int? = null,
   var qttyDif01: Int? = null,
   var venc01: String? = null,
@@ -140,6 +150,8 @@ class Produtos(
             codigo = value?.codigo
             descricao = value?.descricao
             unidade = value?.unidade
+            ultVenda = value?.ultVenda
+            qttyVendas = ent.value.sumOf { it.qttyVendas ?: 0 }
             saldo = ent.value.sumOf { it.saldo ?: 0 }
           }
         }
@@ -230,9 +242,23 @@ class Produtos(
       site = site,
       unidade = unidade,
       foraLinha = foraLinha,
-      ultVenda = ultVenda,
+      ultVenda = when (loja) {
+        2    -> ultVendaDS
+        3    -> ultVendaMR
+        4    -> ultVendaMF
+        5    -> ultVendaPK
+        8    -> ultVendaTM
+        else -> ultVenda
+      },
       ultCompra = ultCompra,
-      qttyVendas = qttyVendas,
+      qttyVendas = when (loja) {
+        2    -> qttyVendasDS
+        3    -> qttyVendasMR
+        4    -> qttyVendasMF
+        5    -> qttyVendasPK
+        8    -> qttyVendasTM
+        else -> qttyVendas
+      },
       qttyCompra = qttyCompra,
       MF_App = MF_App,
       localizacao = localizacao,
