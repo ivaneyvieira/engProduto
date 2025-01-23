@@ -297,12 +297,9 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
-
-    produto_quantVenda()
     produto_val()
-
     produto_saldo()
-
+    produto_quantVenda()
     produto_qttyInv()
 
     columnGrid(Produtos::dataVenda, "Data Venda", width = "100px").dateFieldEditor()
