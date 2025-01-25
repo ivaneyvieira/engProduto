@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Produtos
 
 class PlanilhaProdutoLoja : Planilha<Produtos>("Produto") {
@@ -10,12 +11,13 @@ class PlanilhaProdutoLoja : Planilha<Produtos>("Produto") {
     columnSheet(Produtos::descricao, header = "Descrição")
     columnSheet(Produtos::grade, header = "Grade")
     columnSheet(Produtos::unidade, header = "UN")
-    columnSheet(Produtos::estoque, header = "Total")
-    columnSheet(Produtos::qttyVendas, header = "Venda")
     columnSheet(Produtos::mesesGarantia, header = "Val")
     columnSheet(Produtos::saldo, header = "Saldo")
+    columnSheet(Produtos::qttyVendas, header = "Venda")
     columnSheet(Produtos::qttyInv, header = "Inv")
+//  columnSheet(Produtos::estoque, header = "Total")
     columnSheet(Produtos::dataVenda, header = "Data Venda")
+    columnSheet(Produtos::vendas, "Vendas")
     columnSheet(Produtos::qttyDif01, header = "QTD 1")
     columnSheet(Produtos::venc01, header = "Vence 1")
     columnSheet(Produtos::qttyDif02, header = "QTD 2")
