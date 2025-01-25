@@ -34,7 +34,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
-  private var updateFlag: Boolean = false
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
@@ -60,7 +59,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
 
           addValueChangeListener {
             if (it.isFromClient) {
-              updateFlag = true
               viewModel.updateView()
             }
           }
@@ -71,7 +69,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -80,7 +77,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -89,7 +85,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -99,7 +94,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -108,7 +102,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -117,7 +110,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -130,7 +122,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = ECaracter.TODOS
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -141,7 +132,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = ELetraDup.TODOS
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -158,7 +148,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           }
           this.value = EEstoque.TODOS
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -169,7 +158,6 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.value = null
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           addValueChangeListener {
-            updateFlag = true
             viewModel.updateView()
           }
         }
@@ -234,7 +222,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       grade = chkGrade.value,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
-      update = updateFlag
+      update = true
     )
   }
 
