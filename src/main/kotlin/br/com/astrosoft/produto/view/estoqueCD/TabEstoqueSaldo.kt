@@ -193,6 +193,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
   }
 
+
   override fun filtro(): FiltroProdutoEstoque {
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
