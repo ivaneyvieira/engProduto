@@ -156,7 +156,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
     val user = AppConfig.userLogin() as? UserSaci
 
-    if (user?.admin == true) {
+    if (user?.estoqueEditaLoc == true) {
       this.withEditor(
         classBean = ProdutoEstoque::class,
         openEditor = {
@@ -181,7 +181,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
-      val user = AppConfig.userLogin() as? UserSaci
       if(user?.estoqueEditaLoc == true) {
         textFieldEditor()
       }
