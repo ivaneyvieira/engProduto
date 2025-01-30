@@ -293,7 +293,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_saldo()
     produto_qttyInv()
 
-    columnGrid(Produtos::dataVenda, "Data Venda", width = "100px").dateFieldEditor()
+    columnGrid(Produtos::dataVenda, "Data Conf", width = "100px").dateFieldEditor()
 
     addColumnButton(VaadinIcon.DATE_INPUT, "Validade", "Validade") { produto ->
       val form = FormValidadeQuant(produto)
