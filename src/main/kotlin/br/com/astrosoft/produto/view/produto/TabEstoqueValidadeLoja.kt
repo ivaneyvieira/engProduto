@@ -17,7 +17,6 @@ import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_l
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_qttyInv
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_quantVenda
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_saldo
-import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_total
 import br.com.astrosoft.promocao.view.produtos.columns.ProdutosColumns.produto_val
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
@@ -236,13 +235,6 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
           }
         }
 
-        button("Processa Vendas") {
-          icon = VaadinIcon.COG.create()
-          this.addClickListener {
-            viewModel.processaVendas()
-          }
-        }
-
         downloadExcel(PlanilhaProdutoLoja())
       }
     }
@@ -297,13 +289,11 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
     produto_descricao()
     produto_grade()
     produto_Unidade()
-    produto_val()
-    produto_saldo()
     produto_quantVenda()
+    produto_saldo()
     produto_qttyInv()
 
     columnGrid(Produtos::dataVenda, "Data Venda", width = "100px").dateFieldEditor()
-    columnGrid(Produtos::vendas, "Vendas")
 
     addColumnButton(VaadinIcon.DATE_INPUT, "Validade", "Validade") { produto ->
       val form = FormValidadeQuant(produto)
@@ -332,6 +322,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) :
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
     }
 
+    produto_val()
     produto_forn()
     produto_abrev()
   }
