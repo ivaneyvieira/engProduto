@@ -22,6 +22,7 @@ SELECT X.storeno                                                     AS loja,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(X.grade, '')                                           AS grade,
+       IF(LENGTH(TRIM(P.barcode)) = 13, TRIM(P.barcode), NULL)       AS barcodeProd,
        CASE
          WHEN P.clno BETWEEN 10000 AND 19999 THEN P.barcode
                                              ELSE TRIM(IFNULL(GROUP_CONCAT(DISTINCT BC.barcode SEPARATOR ','), P.barcode))
@@ -97,6 +98,7 @@ SELECT loja,
        codigo,
        grade,
        local,
+       barcodeProd,
        barcodeStrList,
        descricao,
        vendno,

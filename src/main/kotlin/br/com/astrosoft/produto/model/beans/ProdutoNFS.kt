@@ -11,6 +11,7 @@ class ProdutoNFS(
   var nota: String?,
   var codigo: String?,
   var grade: String?,
+  var barcodeProd: String?,
   var barcodeStrList: String?,
   var descricao: String?,
   var vendno: Int?,
@@ -67,8 +68,12 @@ class ProdutoNFS(
 
   private fun splitExp(index: Int) = dataHoraExp?.split("-")?.getOrNull(index) ?: ""
 
-  val barcodes
-    get() = barcodeStrList?.split(",")?.map { it.trim() }.orEmpty()
+  val barcodes: List<String>
+    get() {
+      val barcodeList = barcodeStrList?.split(",")?.map { it.trim() }.orEmpty()
+      val barprd = listOfNotNull(barcodeProd)
+      return barprd + barcodeList
+    }
 
   val dataExp
     get() = splitExp(1)
