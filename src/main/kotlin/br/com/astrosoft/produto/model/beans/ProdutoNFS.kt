@@ -52,7 +52,7 @@ class ProdutoNFS(
         } else {
           gradeAlternativa ?: ""
         }
-      }
+      }.trim()
     }
 
   var selecionado: Boolean = false
