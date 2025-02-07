@@ -93,7 +93,7 @@ class NotaRecebimento(
 
 fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
   return this.groupBy { it.ni }.mapNotNull { entry ->
-    val produtos = entry.value
+    val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull()
     nota?.let {
       NotaRecebimento(
