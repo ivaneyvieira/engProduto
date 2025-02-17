@@ -47,6 +47,7 @@ data class FiltroProdutoSaldo(
   val caracter: ECaracter,
   val letraDup: ELetraDup,
   val grade: Boolean,
+  val tipoSaldo: ETipoSaldo,
   val estoque: EEstoque,
   val saldo: Int,
   val update: Boolean,
@@ -79,4 +80,10 @@ enum class EEstoque(val value: String, val descricao: String) {
   MAIOR(">", ">"),
   IGUAL("=", "="),
   TODOS("T", "Todos"),
+}
+
+enum class ETipoSaldo(val descricao: String) {
+  VAREJO("Varejo"),
+  ATACADO("Atacado"),
+  TOTAL("Total")
 }

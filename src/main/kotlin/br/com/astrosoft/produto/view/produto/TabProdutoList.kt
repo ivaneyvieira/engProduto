@@ -33,6 +33,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
+  private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
 
   fun init() {
@@ -141,6 +142,16 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
+        cmbTipoSaldo = select("Tipo Saldo") {
+          this.setItems(ETipoSaldo.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = ETipoSaldo.TOTAL
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
         cmdEstoque = select("Estoque") {
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -220,6 +231,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
+      tipoSaldo = cmbTipoSaldo.value ?: ETipoSaldo.TOTAL,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       update = true
