@@ -108,13 +108,12 @@ SELECT I.invno,
        N.remarks           AS observacaoNota,
        IFNULL(F.quant, 0)  AS quantFile,
        CASE
-         WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02') THEN 'Recebimento'
-         WHEN N.account IN ('2.01.25')                                                               THEN 'Devolução'
-         WHEN N.type = 1
-                                                                                                     THEN 'Transferência'
-         WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%'
-                                                                                                     THEN 'Reclassificação'
-                                                                                                     ELSE ''
+         WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
+                                                               THEN 'Recebimento'
+         WHEN N.account IN ('2.01.25')                         THEN 'Devolução'
+         WHEN N.type = 1                                       THEN 'Transferência'
+         WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
+                                                               ELSE ''
        END                 AS tipoNota,
        selecionado         AS selecionado
 FROM
