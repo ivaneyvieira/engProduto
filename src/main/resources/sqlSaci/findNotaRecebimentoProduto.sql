@@ -134,7 +134,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND ((:tipoNota IN ('R', 'T') AND
-        N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '6.03.01.01.01', '6.03.01.01.02')) OR
+        N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
        (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
