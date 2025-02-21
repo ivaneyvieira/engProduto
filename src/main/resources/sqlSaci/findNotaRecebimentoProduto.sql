@@ -253,9 +253,9 @@ FROM
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
     LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
-WHERE (P.dereg & POW(2, 6)) = 0
+WHERE /*(P.dereg & POW(2, 6)) = 0
   AND ((P.bits & POW(2, 13)) = 0)
-  AND (P.no = :prdno OR :prdno = '')
+  AND */(P.no = :prdno OR :prdno = '')
   AND (N.grade = :grade OR :grade = '');
 
 SELECT loja,
