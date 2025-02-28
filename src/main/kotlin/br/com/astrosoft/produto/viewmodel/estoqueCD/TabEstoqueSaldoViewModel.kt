@@ -37,15 +37,29 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     //val userAdmin = UserSaci.userAdmin()
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
-    val lista: List<ProdutoKardec> = produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) +
-                                     produto.expedicao(dataInicial) + produto.reposicao(dataInicial) +
-                                     produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
+    val lista: List<ProdutoKardec> =
+        produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) + produto.expedicao(dataInicial) + produto.reposicao(
+          dataInicial
+        ) + produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
     var saldoAcumulado = 0
     return lista.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo}" }
       .sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
-      saldoAcumulado += it.qtde
-      it.copy(saldo = saldoAcumulado)
+        saldoAcumulado += it.qtde
+        it.copy(saldo = saldoAcumulado)
+      }
+  }
+
+  private fun updateSaldoKardec(produto: ProdutoEstoque) {
+    val kardec = kardec(produto)
+    produto.kardec = kardec.lastOrNull()?.saldo ?: 0
+  }
+
+  fun updateKardec() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    produtos.forEach { produto ->
+      updateSaldoKardec(produto)
     }
+    subView.reloadGrid()
   }
 
   fun updateProduto(bean: ProdutoEstoque?) {
@@ -75,8 +89,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     val report = PrintProdutosEstoque(filtro)
 
     report.print(
-      dados = produtos,
-      printer = subView.printerPreview(loja = 0)
+      dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
 }
@@ -86,4 +99,5 @@ interface ITabEstoqueSaldo : ITabView {
   fun updateProduto(produtos: List<ProdutoEstoque>)
   fun updateKardec()
   fun itensSelecionados(): List<ProdutoEstoque>
+  fun reloadGrid()
 }

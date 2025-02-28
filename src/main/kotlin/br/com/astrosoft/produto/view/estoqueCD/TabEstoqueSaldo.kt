@@ -127,6 +127,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         this.button("Cópia") {
           val user = AppConfig.userLogin() as? UserSaci
           this.isVisible = user?.estoqueCopiaLoc == true
@@ -135,10 +136,19 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.copiaLocalizacao()
           }
         }
+
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
+
+        this.button("Kardec") {
+          this.icon = VaadinIcon.FILE_TABLE.create()
+          onClick {
+            viewModel.updateKardec()
+          }
+        }
+
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -188,6 +198,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
+    columnGrid(ProdutoEstoque::kardecEmb, header = "Kardec Emb", pattern = "0.##")
+    columnGrid(ProdutoEstoque::kardec, header = "Kardec")
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
@@ -215,6 +227,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
   override fun updateKardec() {
     dlgKardec?.update()
+  }
+
+  override fun reloadGrid() {
+    gridPanel.dataProvider.refreshAll()
   }
 
   override fun isAuthorized(): Boolean {

@@ -26,6 +26,25 @@ class ProdutoEstoque(
   val codigoStr
     get() = this.codigo?.toString() ?: ""
 
+  var kardec: Int = 0
+
+  val kardecEmb: Double
+    get() {
+      return when {
+        descricao?.startsWith("SVS E-COLOR") == true -> {
+          (kardec) / 5800.0
+        }
+
+        descricao?.startsWith("VRC COLOR") == true   -> {
+          (kardec) / 1000.0
+        }
+
+        else                                         -> {
+          (kardec) / ((embalagem ?: 0) * 1.00)
+        }
+      }
+    }
+
   fun update() {
     saci.updateProdutoEstoque(this)
   }
@@ -81,7 +100,7 @@ class ProdutoEstoque(
       val mult = when (marca) {
         EMarcaRessuprimento.REC -> -1
         EMarcaRessuprimento.ENT -> -1
-        else -> 0
+        else                    -> 0
       }
       ressuprimento.produtos(prdno, grade).map { produto ->
         ProdutoKardec(
@@ -178,16 +197,16 @@ class ProdutoEstoque(
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
 
       val tipo = when (produto.metodo) {
-        431 -> ETipoKardec.REPOSICAO
-        432 -> ETipoKardec.RETORNO
-        433 -> ETipoKardec.ACERTO
+        431  -> ETipoKardec.REPOSICAO
+        432  -> ETipoKardec.RETORNO
+        433  -> ETipoKardec.ACERTO
         else -> return@mapNotNull null
       }
 
       val mult = when (produto.metodo) {
-        431 -> -1
-        432 -> 1
-        433 -> produto.multAcerto ?: 0
+        431  -> -1
+        432  -> 1
+        433  -> produto.multAcerto ?: 0
         else -> return@mapNotNull null
       }
 
@@ -206,7 +225,8 @@ class ProdutoEstoque(
   }
 
   fun saldoAnterior(dataInicial: LocalDate): List<ProdutoKardec> {
-    val list = saci.findSaldoData(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+    val list =
+        saci.findSaldoData(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
     return list.map { saldo ->
       ProdutoKardec(
         loja = saldo.storeno,
