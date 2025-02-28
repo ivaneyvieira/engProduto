@@ -11,5 +11,7 @@ class PlanilhaProdutoEstoque : Planilha<ProdutoEstoque>("Estoque") {
     columnSheet(ProdutoEstoque::unidade, header = "UN")
     columnSheet(ProdutoEstoque::saldo, header = "Estoque")
     columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Emb")
+    columnSheet(ProdutoEstoque::kardec, header = "Kardec")
+    columnSheet(ProdutoEstoque::kardecEmb, header = "Kardec Emb")
   }
 }
