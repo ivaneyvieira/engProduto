@@ -55,23 +55,30 @@ GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
-SELECT 4                                                                                                           AS loja,
-       S.sname                                                                                                     AS lojaSigla,
-       E.prdno                                                                                                     AS prdno,
-       TRIM(P.no) * 1                                                                                              AS codigo,
-       TRIM(MID(P.name, 1, 37))                                                                                    AS descricao,
-       TRIM(MID(P.name, 38, 3))                                                                                    AS unidade,
-       E.grade                                                                                                     AS grade,
-       ROUND(P.qttyPackClosed / 1000)                                                                              AS embalagem,
-       TRUNCATE(ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / (P.qttyPackClosed / 1000),
-                0)                                                                                                 AS qtdEmbalagem,
-       IFNULL(A.estoque, 0)                                                                                        AS estoque,
-       L1.locSaci                                                                                                  AS locSaci,
-       A.locApp                                                                                                    AS locApp,
-       V.no                                                                                                        AS codForn,
-       V.sname                                                                                                     AS fornecedor,
-       ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)                                     AS saldo,
-       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE)                              AS dataInicial
+SELECT 4                                                                              AS loja,
+       S.sname                                                                        AS lojaSigla,
+       E.prdno                                                                        AS prdno,
+       TRIM(P.no) * 1                                                                 AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                       AS descricao,
+       TRIM(MID(P.name, 38, 3))                                                       AS unidade,
+       E.grade                                                                        AS grade,
+       ROUND(P.qttyPackClosed / 1000)                                                 AS embalagem,
+       SUM(CASE
+             WHEN P.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
+                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / 5800, 2)
+             WHEN P.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
+                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / 1000, 2)
+                                             ELSE TRUNCATE(
+                                                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) /
+                                                 (P.qttyPackClosed / 1000), 0)
+           END)                                                                       AS qtdEmbalagem,
+       IFNULL(A.estoque, 0)                                                           AS estoque,
+       L1.locSaci                                                                     AS locSaci,
+       A.locApp                                                                       AS locApp,
+       V.no                                                                           AS codForn,
+       V.sname                                                                        AS fornecedor,
+       ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
+       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -84,7 +91,6 @@ FROM
                USING (prdno, grade)
     LEFT JOIN  T_LOC_SACI     AS L1
                USING (prdno, grade)
-
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)

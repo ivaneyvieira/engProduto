@@ -9,8 +9,8 @@ class PlanilhaProdutoEstoque : Planilha<ProdutoEstoque>("Estoque") {
     columnSheet(ProdutoEstoque::descricao, header = "Descrição")
     columnSheet(ProdutoEstoque::grade, header = "Grade")
     columnSheet(ProdutoEstoque::unidade, header = "UN")
-    columnSheet(ProdutoEstoque::embalagem, header = "Emb")
-    columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Embalagem")
     columnSheet(ProdutoEstoque::estoque, header = "Estoque")
+    columnSheet(ProdutoEstoque::embalagem, header = "Emb")
+    //columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Embalagem")
   }
 }

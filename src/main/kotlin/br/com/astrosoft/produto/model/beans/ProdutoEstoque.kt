@@ -14,7 +14,7 @@ class ProdutoEstoque(
   var unidade: String?,
   var grade: String?,
   var embalagem: Int?,
-  var qtdEmbalagem: Int?,
+  var qtdEmbalagem: Double?,
   var estoque: Int?,
   var locSaci: String?,
   var locApp: String?,
