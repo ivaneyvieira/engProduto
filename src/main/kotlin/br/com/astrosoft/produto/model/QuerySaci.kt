@@ -963,7 +963,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoEstoque::class) {
       addOptionalParameter("pesquisa", filter.pesquisa)
       addOptionalParameter("grade", filter.grade)
-      addOptionalParameter("codigo", filter.codigo)
+      addOptionalParameter("prdno", filter.prdno)
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("fornecedor", filter.fornecedor)
       addOptionalParameter("centroLucro", filter.centroLucro)
@@ -1033,6 +1033,8 @@ class QuerySaci : QueryDB(database) {
         addOptionalParameter("estoque", produtoEstoque.estoque ?: 0)
         addOptionalParameter("locApp", localItem)
         addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
+        addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate.toSaciDate())
+        addOptionalParameter("kardec", produtoEstoque.kardec)
       }
     }
   }
@@ -1882,6 +1884,40 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", storno)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
+    }
+  }
+
+  fun deleteKardec(produto: ProdutoEstoque) {
+    val sql = "/sqlSaci/kardecDelete.sql"
+    script(sql){
+      addOptionalParameter("loja", produto.loja)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+    }
+  }
+
+  fun saveKardec(produtoKardec: ProdutoKardec) {
+    val sql = "/sqlSaci/kardecSave.sql"
+    script(sql) {
+      addOptionalParameter("loja", produtoKardec.loja)
+      addOptionalParameter("prdno", produtoKardec.prdno)
+      addOptionalParameter("grade", produtoKardec.grade)
+      addOptionalParameter("data", produtoKardec.data.toSaciDate())
+      addOptionalParameter("doc", produtoKardec.doc)
+      addOptionalParameter("tipo", produtoKardec.tipo?.name)
+      addOptionalParameter("vencimento", produtoKardec.vencimento.toSaciDate())
+      addOptionalParameter("qtde", produtoKardec.qtde)
+      addOptionalParameter("saldo", produtoKardec.saldo)
+      addOptionalParameter("userLogin", produtoKardec.userLogin)
+    }
+  }
+
+  fun selectKardec(produto: ProdutoEstoque): List<ProdutoKardec>{
+    val sql = "/sqlSaci/kardecSelect.sql"
+    return query(sql, ProdutoKardec::class){
+      addOptionalParameter("loja", produto.loja)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
     }
   }
 

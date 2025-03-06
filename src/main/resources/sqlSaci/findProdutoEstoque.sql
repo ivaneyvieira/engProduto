@@ -7,23 +7,6 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-/*
-create table sqldados.prdAdicional (
-  storeno int,
-  prdno varchar(16),
-  grade varchar(10),
-  estoque int,
-  PRIMARY KEY (storeno, prdno, grade)
-
-alter table sqldados.prdAdicional
-add column localizacao varchar(4)
-
-alter table sqldados.prdAdicional
-add column dataInicial int default 0
-alter table sqldados.prdAdicional
-  MODIFY COLUMN localizacao varchar(20) DEFAULT ''
-*/
-
 DROP TEMPORARY TABLE IF EXISTS T_LOC_SACI;
 CREATE TEMPORARY TABLE T_LOC_SACI
 (
@@ -45,12 +28,14 @@ SELECT prdno,
        grade,
        GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locApp,
        MAX(dataInicial)                              AS dataInicial,
+       MAX(dataUpdate)                               AS dataUpdate,
+       MAX(kardec)                                   AS kardec,
        MAX(estoque)                                  AS estoque
 FROM
   sqldados.prdAdicional
 WHERE localizacao <> ''
   AND storeno = 4
-  AND (TRIM(prdno) * 1 = :codigo OR :codigo = 0)
+  AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
@@ -78,7 +63,9 @@ SELECT 4                                                                        
        V.no                                                                           AS codForn,
        V.sname                                                                        AS fornecedor,
        ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
-       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
+       CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
+       A.dataUpdate                                                                   AS dataUpdate,
+       A.kardec                                                                       AS kardec
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -94,22 +81,17 @@ FROM
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
-  AND (TRIM(E.prdno) * 1 = :codigo OR :codigo = 0)
-  AND CASE :caracter
-        WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
-        WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'
-        WHEN 'T' THEN TRUE
-                 ELSE FALSE
-      END
+  AND (E.prdno = :prdno OR :prdno = '')
+  AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
+       (:caracter = 'T'))
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
+  AND E.storeno = 4
 GROUP BY E.prdno, E.grade
-HAVING CASE :estoque
-         WHEN '>' THEN saldo > :saldo
-         WHEN '<' THEN saldo < :saldo
-         WHEN '=' THEN saldo = :saldo
-         WHEN 'T' THEN TRUE
-                  ELSE FALSE
-       END;
+HAVING (:estoque = '>' AND saldo > :saldo)
+    OR (:estoque = '<' AND saldo < :saldo)
+    OR (:estoque = '=' AND saldo = :saldo)
+    OR (:estoque = 'T');
+
 
 SELECT loja,
        lojaSigla,
@@ -126,7 +108,9 @@ SELECT loja,
        codForn,
        fornecedor,
        saldo,
-       dataInicial
+       dataInicial,
+       dataUpdate,
+       kardec
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR

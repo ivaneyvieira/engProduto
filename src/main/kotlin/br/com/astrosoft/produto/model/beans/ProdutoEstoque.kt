@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -22,25 +23,28 @@ class ProdutoEstoque(
   var fornecedor: String,
   var saldo: Int?,
   var dataInicial: LocalDate?,
+  var dataUpdate: LocalDate?,
+  var kardec: Int? = null,
 ) {
+  val dataInicialDefault
+    get() = dataInicial ?: LocalDate.now().withDayOfMonth(1)
+
   val codigoStr
     get() = this.codigo?.toString() ?: ""
 
-  var kardec: Int = 0
-
-  val kardecEmb: Double
+  val kardecEmb: Double?
     get() {
       return when {
         descricao?.startsWith("SVS E-COLOR") == true -> {
-          (kardec) / 5800.0
+          if (kardec == null) null else (kardec ?: 0) / 5800.0
         }
 
         descricao?.startsWith("VRC COLOR") == true   -> {
-          (kardec) / 1000.0
+          if (kardec == null) null else (kardec ?: 0) / 1000.0
         }
 
         else                                         -> {
-          (kardec) / ((embalagem ?: 0) * 1.00)
+          if (kardec == null) null else (kardec ?: 0) / ((embalagem ?: 0) * 1.00)
         }
       }
     }
@@ -225,8 +229,12 @@ class ProdutoEstoque(
   }
 
   fun saldoAnterior(dataInicial: LocalDate): List<ProdutoKardec> {
-    val list =
-        saci.findSaldoData(loja = 4, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial)
+    val list = saci.findSaldoData(
+      loja = 4,
+      codigo = codigo.toString(),
+      grade = grade ?: "",
+      dataInicial = dataInicial
+    )
     return list.map { saldo ->
       ProdutoKardec(
         loja = saldo.storeno,
@@ -282,4 +290,6 @@ data class FiltroProdutoEstoque(
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
   val inativo: EInativo,
-)
+){
+  val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
+}

@@ -34,24 +34,66 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     return planilha.write(produtos)
   }
 
-  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    //val userAdmin = UserSaci.userAdmin()
-    val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
+  private fun fetchKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    val date = produto.dataInicialDefault
     val lista: List<ProdutoKardec> =
-        produto.recebimentos(dataInicial) + produto.ressuprimento(dataInicial) + produto.expedicao(dataInicial) + produto.reposicao(
-          dataInicial
-        ) + produto.saldoAnterior(dataInicial) + produto.acertoEstoque(dataInicial)
+        produto.recebimentos(date) +
+        produto.ressuprimento(date) +
+        produto.expedicao(date) +
+        produto.reposicao(date) +
+        produto.saldoAnterior(date) +
+        produto.acertoEstoque(date)
     var saldoAcumulado = 0
-    return lista.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo}" }
+    return lista.ajustaOrdem()
+  }
+
+  private fun fetchKardecHoje(produto: ProdutoEstoque): List<ProdutoKardec> {
+    val date = LocalDate.now()
+    val lista: List<ProdutoKardec> =
+        produto.recebimentos(date) +
+        produto.ressuprimento(date) +
+        produto.expedicao(date) +
+        produto.reposicao(date) +
+        produto.acertoEstoque(date)
+    return lista.ajustaOrdem()
+  }
+
+  private fun List<ProdutoKardec>.ajustaOrdem(): List<ProdutoKardec> {
+    var saldoAcumulado = 0
+    return this.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo}" }
       .sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
-        saldoAcumulado += it.qtde
+        saldoAcumulado += (it.qtde ?: 0)
         it.copy(saldo = saldoAcumulado)
       }
   }
 
+  fun updateKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    ProdutoKardec.deleteList(produto)
+    val list = fetchKardec(produto)
+    list.filter { produtoKardec: ProdutoKardec ->
+      true // produtoKardec.data?.isBefore(LocalDate.now()) ?: true
+    }.forEach { produtoKardec: ProdutoKardec ->
+      produtoKardec.save()
+    }
+    produto.dataUpdate = LocalDate.now()
+    produto.update()
+    return list.ajustaOrdem()
+  }
+
+  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    if (produto.dataUpdate != LocalDate.now()) {
+      return updateKardec(produto)
+    }
+    val saldoKardec = ProdutoKardec.findKardec(produto)
+    val saldoHoje = emptyList<ProdutoKardec>() //fetchKardecHoje (produto)
+    return (saldoHoje + saldoKardec).ajustaOrdem()
+  }
+
   private fun updateSaldoKardec(produto: ProdutoEstoque) {
+    produto.dataUpdate = null
     val kardec = kardec(produto)
     produto.kardec = kardec.lastOrNull()?.saldo ?: 0
+    produto.update()
   }
 
   fun updateKardec() = viewModel.exec {
