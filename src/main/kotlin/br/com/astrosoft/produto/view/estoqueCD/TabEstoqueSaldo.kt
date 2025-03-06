@@ -189,9 +189,9 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
-    columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
+    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
-      if(user?.estoqueEditaLoc == true) {
+      if (user?.estoqueEditaLoc == true) {
         textFieldEditor()
       }
     }
@@ -204,7 +204,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
   }
-
 
   override fun filtro(): FiltroProdutoEstoque {
     return FiltroProdutoEstoque(

@@ -82,7 +82,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     if (produto.dataUpdate != LocalDate.now()) {
-      return updateKardec(produto)
+      val kardec = updateKardec(produto)
+      produto.kardec = kardec.lastOrNull()?.saldo ?: 0
+      produto.update()
+      return kardec
     }
     val saldoKardec = ProdutoKardec.findKardec(produto)
     val saldoHoje = emptyList<ProdutoKardec>() //fetchKardecHoje (produto)
