@@ -116,8 +116,8 @@ FROM
 WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR
        descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
-  AND (((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
-        (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))) OR IFNULL(locApp, '') = '')
+  AND ((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
+       (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
 
 
 
