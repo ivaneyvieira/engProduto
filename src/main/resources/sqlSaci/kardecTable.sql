@@ -20,3 +20,12 @@ ALTER TABLE sqldados.prdAdicional
 
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN kardec int NULL;
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN dataObservacao date NULL;
+
+ALTER TABLE sqldados.prdAdicional
+  DROP COLUMN observacao;
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN observacao varchar(100) NULL;

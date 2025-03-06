@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -18,6 +19,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
@@ -32,6 +34,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var edtData: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
@@ -44,6 +47,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         edtProduto = integerField("Produto") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -52,6 +56,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -60,6 +65,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -68,6 +74,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -76,6 +83,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -83,6 +91,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           addValueChangeListener {
             viewModel.updateView()
           }
+        }
+
+        edtData = datePicker("Data") {
+          this.value = LocalDate.now()
+          this.localePtBr()
         }
       }
       horizontalLayout {
@@ -174,6 +187,9 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           edit?.focus()
         },
         closeEditor = {
+          if(!it.bean.observacao.isNullOrBlank()) {
+            it.bean.dataObservacao = edtData.value
+          }
           viewModel.updateProduto(it.bean)
         })
     }
@@ -203,6 +219,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
+    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Obs")
+    columnGrid(ProdutoEstoque::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroProdutoEstoque {

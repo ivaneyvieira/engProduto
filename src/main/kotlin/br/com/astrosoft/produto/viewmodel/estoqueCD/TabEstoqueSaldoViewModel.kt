@@ -108,8 +108,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun updateProduto(bean: ProdutoEstoque?) {
-    bean?.update()
-    updateView()
+    if(bean != null) {
+      bean.update()
+      updateView()
+    }
   }
 
   fun copiaLocalizacao() = viewModel.exec {

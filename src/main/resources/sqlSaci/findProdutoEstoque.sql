@@ -26,15 +26,16 @@ CREATE TEMPORARY TABLE T_LOC_APP
 )
 SELECT prdno,
        grade,
-       GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locApp,
-       MAX(dataInicial)                              AS dataInicial,
-       MAX(dataUpdate)                               AS dataUpdate,
-       MAX(kardec)                                   AS kardec,
-       MAX(estoque)                                  AS estoque
+       MAX(localizacao)    AS locApp,
+       MAX(dataInicial)    AS dataInicial,
+       MAX(dataUpdate)     AS dataUpdate,
+       MAX(kardec)         AS kardec,
+       MAX(dataObservacao) AS dataObservacao,
+       MAX(observacao)     AS observacao,
+       MAX(estoque)        AS estoque
 FROM
   sqldados.prdAdicional
-WHERE localizacao <> ''
-  AND storeno = 4
+WHERE storeno = 4
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
@@ -65,7 +66,9 @@ SELECT 4                                                                        
        ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
        A.dataUpdate                                                                   AS dataUpdate,
-       A.kardec                                                                       AS kardec
+       A.kardec                                                                       AS kardec,
+       A.dataObservacao                                                               AS dataObservacao,
+       A.observacao                                                                   AS observacao
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -110,7 +113,9 @@ SELECT loja,
        saldo,
        dataInicial,
        dataUpdate,
-       kardec
+       kardec,
+       dataObservacao,
+       observacao
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR
@@ -118,7 +123,3 @@ WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR 
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND ((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
        (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
-
-
-
-

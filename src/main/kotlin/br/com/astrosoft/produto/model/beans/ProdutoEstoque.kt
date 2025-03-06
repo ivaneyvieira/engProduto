@@ -25,7 +25,9 @@ class ProdutoEstoque(
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
-) {
+  var dataObservacao: LocalDate? = null,
+  var observacao: String? = null,
+  ) {
   val dataInicialDefault
     get() = dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
@@ -290,6 +292,6 @@ data class FiltroProdutoEstoque(
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
   val inativo: EInativo,
-){
+) {
   val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
 }
