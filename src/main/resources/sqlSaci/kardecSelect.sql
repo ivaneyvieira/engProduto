@@ -13,4 +13,4 @@ FROM
 WHERE loja = :loja
   AND prdno = :prdno
   AND grade = :grade
-  AND data < CURRENT_DATE * 1
+  AND data <= CURRENT_DATE * 1
