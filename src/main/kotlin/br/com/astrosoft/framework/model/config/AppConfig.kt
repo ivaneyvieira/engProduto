@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.security.IFindUser
 import br.com.astrosoft.framework.model.security.LoginService
 import br.com.astrosoft.framework.view.config.IRouteMainProvider
+import com.vaadin.flow.component.UI
 import java.io.IOException
 import java.util.*
 import kotlin.reflect.KClass
@@ -41,6 +42,7 @@ object AppConfig {
   val test: Boolean = properties.getProperty("app.test").toBoolean()
 
   fun userLogin(): IUser? {
+    val ui = UI.getCurrent() ?: return null
     val currentUser = LoginService.get().currentUser
     return findUser(currentUser?.username, currentUser?.hashedPassword)
   }

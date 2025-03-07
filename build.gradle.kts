@@ -99,6 +99,7 @@ java {
 }
 
 application {
+  //mainClass.set("br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardecKt")
   mainClass.set("br.com.astrosoft.framework.view.layout.MainKt")
 }
 

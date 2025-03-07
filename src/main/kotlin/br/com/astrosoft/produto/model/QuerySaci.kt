@@ -956,10 +956,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
     val sql = "/sqlSaci/findProdutoEstoque.sql"
-    val user = AppConfig.userLogin() as? UserSaci
-    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
-      listOf("TODOS")
-    }
+
     return query(sql, ProdutoEstoque::class) {
       addOptionalParameter("pesquisa", filter.pesquisa)
       addOptionalParameter("grade", filter.grade)
@@ -967,7 +964,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("fornecedor", filter.fornecedor)
       addOptionalParameter("centroLucro", filter.centroLucro)
-      addOptionalParameter("localizacaoUser", listaUser)
+      addOptionalParameter("localizacaoUser", filter.listaUser)
       addOptionalParameter("localizacao", filter.localizacao)
       addOptionalParameter("estoque", filter.estoque.value)
       addOptionalParameter("saldo", filter.saldo)

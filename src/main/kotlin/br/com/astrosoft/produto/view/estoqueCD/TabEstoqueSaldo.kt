@@ -187,7 +187,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           edit?.focus()
         },
         closeEditor = {
-          if(!it.bean.observacao.isNullOrBlank()) {
+          if (!it.bean.observacao.isNullOrBlank()) {
             it.bean.dataObservacao = edtData.value
           }
           viewModel.updateProduto(it.bean)
@@ -224,6 +224,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   }
 
   override fun filtro(): FiltroProdutoEstoque {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
+
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
@@ -234,7 +239,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       centroLucro = edtCentroLucro.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
-      inativo = cmbInativo.value ?: EInativo.TODOS
+      inativo = cmbInativo.value ?: EInativo.TODOS,
+      listaUser = listaUser,
     )
   }
 

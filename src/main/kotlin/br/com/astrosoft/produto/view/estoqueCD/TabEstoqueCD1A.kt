@@ -84,6 +84,10 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
   }
 
   override fun filtro(): FiltroProdutoEstoque {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
       codigo = 0,
@@ -91,7 +95,8 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
       localizacao = "CD1A",
       fornecedor = "",
-      inativo = cmbInativo.value ?: EInativo.TODOS
+      inativo = cmbInativo.value ?: EInativo.TODOS,
+      listaUser = listaUser
     )
   }
 

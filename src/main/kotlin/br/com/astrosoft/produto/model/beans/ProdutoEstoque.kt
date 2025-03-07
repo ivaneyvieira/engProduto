@@ -292,6 +292,7 @@ data class FiltroProdutoEstoque(
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
   val inativo: EInativo,
+  val listaUser: List<String>,
 ) {
   val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
 }
