@@ -13,5 +13,7 @@ class PlanilhaProdutoEstoque : Planilha<ProdutoEstoque>("Estoque") {
     columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Emb")
     columnSheet(ProdutoEstoque::kardec, header = "Kardec")
     columnSheet(ProdutoEstoque::kardecEmb, header = "Kardec Emb")
+    columnSheet(ProdutoEstoque::dataObservacao, header = "Data Conf")
+    columnSheet(ProdutoEstoque::observacao, header = "Observação")
   }
 }

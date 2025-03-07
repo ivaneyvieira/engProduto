@@ -35,7 +35,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       toolBar = {
       },
       onClose = {
-        onClose()
+        closeForm()
       }) {
       HorizontalLayout().apply {
         setSizeFull()
@@ -76,7 +76,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
     gridDetail.setItems(kardec)
   }
 
-  fun close() {
+  private fun closeForm() {
     onClose?.invoke()
     form?.close()
   }

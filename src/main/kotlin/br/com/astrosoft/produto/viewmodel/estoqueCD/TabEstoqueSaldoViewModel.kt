@@ -51,10 +51,12 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) {
     subView.reloadGrid()
   }
 
-  fun updateProduto(bean: ProdutoEstoque?) {
+  fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean = true) {
     if (bean != null) {
       bean.update()
-      updateView()
+      if (updateGrid) {
+        updateView()
+      }
     }
   }
 

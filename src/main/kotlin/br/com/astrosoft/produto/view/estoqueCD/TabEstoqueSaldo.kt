@@ -24,6 +24,7 @@ import java.time.LocalDate
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
   private var dlgKardec: DlgProdutoKardec? = null
+  private var dlgConferencia: DlgConferencias? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -187,9 +188,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           edit?.focus()
         },
         closeEditor = {
-          if (!it.bean.observacao.isNullOrBlank()) {
-            it.bean.dataObservacao = edtData.value
-          }
           viewModel.updateProduto(it.bean)
         })
     }
@@ -219,8 +217,15 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
-    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Obs")
-    columnGrid(ProdutoEstoque::observacao, header = "Observação", isExpand = true).textFieldEditor()
+    addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
+      produto.dataObservacao = edtData.value
+      dlgConferencia = DlgConferencias(viewModel, produto)
+      dlgConferencia?.showDialog{
+        gridPanel.dataProvider.refreshAll()
+      }
+    }
+    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf")
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", isExpand = true)
   }
 
   override fun filtro(): FiltroProdutoEstoque {
