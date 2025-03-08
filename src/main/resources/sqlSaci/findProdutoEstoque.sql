@@ -26,13 +26,13 @@ CREATE TEMPORARY TABLE T_LOC_APP
 )
 SELECT prdno,
        grade,
-       MAX(localizacao)    AS locApp,
-       MAX(dataInicial)    AS dataInicial,
-       MAX(dataUpdate)     AS dataUpdate,
-       MAX(kardec)         AS kardec,
-       MAX(dataObservacao) AS dataObservacao,
-       MAX(observacao)     AS observacao,
-       MAX(estoque)        AS estoque
+       MAX(localizacao)                                      AS locApp,
+       MAX(dataInicial)                                      AS dataInicial,
+       MAX(IF(dataUpdate * 1 = 0, NULL, dataUpdate))         AS dataUpdate,
+       MAX(kardec)                                           AS kardec,
+       MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
+       MAX(observacao)                                       AS observacao,
+       MAX(estoque)                                          AS estoque
 FROM
   sqldados.prdAdicional
 WHERE storeno = 4
