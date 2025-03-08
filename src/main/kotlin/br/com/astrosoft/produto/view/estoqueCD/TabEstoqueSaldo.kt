@@ -225,7 +225,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", isExpand = true)
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
   }
 
   override fun filtro(): FiltroProdutoEstoque {
