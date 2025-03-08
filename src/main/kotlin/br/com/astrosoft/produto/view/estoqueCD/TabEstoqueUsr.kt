@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.estoqueCD
 import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -45,9 +46,13 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     }
     verticalBlock("Filtros") {
       filtroLocalizacao(binder, UserSaci::listaEstoque)
-      datePicker("Data Inicial Kardec") {
-        this.localePtBr()
-        binder.bind(this, UserSaci::dataIncialKardec.name)
+      horizontalBlock {
+        datePicker("Data Inicial Kardec") {
+          this.localePtBr()
+          binder.bind(this, UserSaci::dataIncialKardec.name)
+        }
+
+        filtroImpressoraTermica(binder, UserSaci::impressoraEstoque)
       }
     }
   }
