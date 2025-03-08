@@ -201,7 +201,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     }
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
+    columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
@@ -210,13 +210,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##")
+    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD")
-    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "100px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial").dateFieldEditor()
+    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
+    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
+    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial", width="100px").dateFieldEditor()
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
       produto.dataObservacao = edtData.value
       dlgConferencia = DlgConferencias(viewModel, produto)
@@ -224,8 +222,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         gridPanel.dataProvider.refreshAll()
       }
     }
-    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf")
+    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width="100px")
     columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
+    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
+    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
   }
 
   override fun filtro(): FiltroProdutoEstoque {
