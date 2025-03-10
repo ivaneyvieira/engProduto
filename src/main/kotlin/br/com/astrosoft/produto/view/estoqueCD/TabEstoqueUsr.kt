@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.datepicker.DatePickerVariant
 import com.vaadin.flow.component.grid.Grid
 
@@ -48,13 +49,16 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     verticalBlock("Filtros") {
       filtroLocalizacao(binder, UserSaci::listaEstoque)
       horizontalLayout {
+        setWidthFull()
         datePicker("Data Inicial Kardec") {
           this.localePtBr()
           this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
           binder.bind(this, UserSaci::dataIncialKardec.name)
         }
 
-        filtroImpressoraTermica(binder, UserSaci::impressoraEstoque)
+        filtroImpressoraTermica(binder, UserSaci::impressoraEstoque) {
+          this.isExpand = true
+        }
       }
     }
   }

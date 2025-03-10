@@ -13,6 +13,7 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -144,7 +145,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.isEmptySelectionAllowed = true
       this.setItemLabelGenerator { storeno ->
         when (storeno) {
-          0 -> "Todas as lojas"
+          0    -> "Todas as lojas"
           else -> lojas.firstOrNull { loja ->
             loja.no == storeno
           }?.descricao ?: ""
@@ -156,12 +157,14 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
 
   protected fun HasComponents.filtroImpressoraTermica(
     binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>
-  ) {
-    multiSelectComboBox<String>("Impressora Cupom") {
+    property: KMutableProperty1<UserSaci, Set<String>>,
+    block: MultiSelectComboBox<String>.() -> Unit = {}
+  ): MultiSelectComboBox<String> {
+    return multiSelectComboBox("Impressora Cupom") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODAS") + viewModel.allTermica().map { it.name })
+      block()
       binder.bind(this, property.name)
     }
   }
