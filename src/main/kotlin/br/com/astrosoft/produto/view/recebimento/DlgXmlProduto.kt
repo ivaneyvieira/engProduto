@@ -7,15 +7,19 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoXmlViewModel
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEntradaXML) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
+  private var edtPesquisa: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
@@ -29,6 +33,14 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     form = SubWindowForm(
       "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
       toolBar = {
+        edtPesquisa = textField("Pesquisa") {
+          this.setWidthFull()
+          this.isAutofocus = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.addValueChangeListener {
+            update()
+          }
+        }
       }, onClose = {
         onClose()
       }) {
@@ -68,7 +80,17 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
   }
 
   fun update() {
-    val listProdutos = nota.produtosNdd()
+    val filtro = edtPesquisa?.value ?: ""
+    val listProdutos = nota.produtosNdd().filter { prd ->
+      filtro == "" ||
+      prd.codigo == filtro ||
+      prd.descricao.contains(filtro, ignoreCase = true) ||
+      prd.codBarra == filtro ||
+      prd.ncm == filtro ||
+      prd.cst == filtro ||
+      prd.cfop == filtro ||
+      prd.un == filtro
+    }
     gridDetail.setItems(listProdutos)
     gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorUnitario).setFooter("Total")
     gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorTotal).setFooter(listProdutos.sumOf { it.valorTotal }.format())
