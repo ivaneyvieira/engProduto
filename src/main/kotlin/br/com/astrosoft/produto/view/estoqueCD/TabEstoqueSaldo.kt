@@ -178,7 +178,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.withEditor(
         classBean = ProdutoEstoque::class,
         openEditor = {
-          val edit = getColumnBy(ProdutoEstoque::dataInicial) as? Focusable<*>
+          val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
           edit?.focus()
         },
         closeEditor = {
