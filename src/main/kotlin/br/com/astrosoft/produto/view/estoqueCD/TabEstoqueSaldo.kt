@@ -35,7 +35,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
-  private lateinit var edtData: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
@@ -92,11 +91,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           addValueChangeListener {
             viewModel.updateView()
           }
-        }
-
-        edtData = datePicker("Data") {
-          this.value = LocalDate.now()
-          this.localePtBr()
         }
       }
       horizontalLayout {
@@ -214,9 +208,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial", width="100px").dateFieldEditor()
+    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial", width="100px")
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      produto.dataObservacao = edtData.value
       dlgConferencia = DlgConferencias(viewModel, produto)
       dlgConferencia?.showDialog{
         gridPanel.dataProvider.refreshAll()
