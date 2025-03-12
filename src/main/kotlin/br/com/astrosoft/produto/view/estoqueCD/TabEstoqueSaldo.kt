@@ -95,23 +95,23 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
       horizontalLayout {
         cmbCaracter = select("Caracter") {
-          this.width = "80px"
+          this.width = "90px"
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-          this.value = ECaracter.TODOS
+          this.value = ECaracter.NAO
           addValueChangeListener {
             viewModel.updateView()
           }
         }
         cmbInativo = select("Inativo") {
-          this.width = "80px"
+          this.width = "90px"
           this.setItems(EInativo.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-          this.value = EInativo.TODOS
+          this.value = EInativo.NAO
           addValueChangeListener {
             viewModel.updateView()
           }
