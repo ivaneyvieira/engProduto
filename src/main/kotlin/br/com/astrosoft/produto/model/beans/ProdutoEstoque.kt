@@ -35,6 +35,7 @@ class ProdutoEstoque(
       return estSis - estCD
     }
 
+
   val dataInicialDefault
     get() = dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
