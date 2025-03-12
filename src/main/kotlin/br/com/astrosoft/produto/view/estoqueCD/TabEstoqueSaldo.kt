@@ -95,6 +95,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
       horizontalLayout {
         cmbCaracter = select("Caracter") {
+          this.width = "80px"
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -105,6 +106,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
         cmbInativo = select("Inativo") {
+          this.width = "80px"
           this.setItems(EInativo.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -144,6 +146,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         }
 
         cmdEstoque = select("Estoque") {
+          this.width = "80px"
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -155,8 +158,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         }
 
         edtSaldo = integerField("Saldo") {
-          this.width = "100px"
-          this.isClearButtonVisible = true
+          this.width = "80px"
+          //this.isClearButtonVisible = true
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.value = 0
