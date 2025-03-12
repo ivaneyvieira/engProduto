@@ -200,6 +200,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial", width="100px")
@@ -210,7 +211,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width="100px")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
