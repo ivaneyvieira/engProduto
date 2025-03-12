@@ -9,11 +9,13 @@ class PlanilhaProdutoEstoque : Planilha<ProdutoEstoque>("Estoque") {
     columnSheet(ProdutoEstoque::descricao, header = "Descrição")
     columnSheet(ProdutoEstoque::grade, header = "Grade")
     columnSheet(ProdutoEstoque::unidade, header = "UN")
+
+    columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Estq Emb")
+    columnSheet(ProdutoEstoque::kardecEmb, header = "Emb CD")
+
     columnSheet(ProdutoEstoque::saldo, header = "Estoque")
-    columnSheet(ProdutoEstoque::qtdEmbalagem, header = "Emb")
-    columnSheet(ProdutoEstoque::kardec, header = "Kardec")
-    columnSheet(ProdutoEstoque::kardecEmb, header = "Kardec Emb")
-    columnSheet(ProdutoEstoque::dataObservacao, header = "Data Conf")
-    columnSheet(ProdutoEstoque::observacao, header = "Observação")
+    columnSheet(ProdutoEstoque::kardec, header = "Estq CD")
+
+    columnSheet(ProdutoEstoque::diferenca, header = "Diferença")
   }
 }
