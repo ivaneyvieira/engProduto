@@ -114,25 +114,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
-        cmdEstoque = select("Estoque") {
-          this.setItems(EEstoque.entries)
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-          this.value = EEstoque.TODOS
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        edtSaldo = integerField("Saldo") {
-          this.width = "100px"
-          this.isClearButtonVisible = true
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          this.value = 0
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          addValueChangeListener {
-            viewModel.updateView()
+
+        this.button("Kardex") {
+          this.icon = VaadinIcon.FILE_TABLE.create()
+          onClick {
+            viewModel.updateKardec()
           }
         }
 
@@ -150,17 +136,33 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           viewModel.geraPlanilha(produtos)
         }
 
-        this.button("Kardec") {
-          this.icon = VaadinIcon.FILE_TABLE.create()
-          onClick {
-            viewModel.updateKardec()
-          }
-        }
-
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutos()
+          }
+        }
+
+        cmdEstoque = select("Estoque") {
+          this.setItems(EEstoque.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EEstoque.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtSaldo = integerField("Saldo") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          this.value = 0
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          addValueChangeListener {
+            viewModel.updateView()
           }
         }
       }
@@ -199,11 +201,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
-    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Data Inicial", width="100px")
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
       dlgConferencia = DlgConferencias(viewModel, produto)
       dlgConferencia?.showDialog{
@@ -211,6 +208,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width="100px")
+    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
+    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
+    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
+    columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width="100px")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {

@@ -48,7 +48,7 @@ class DlgConferencias(val viewModel: TabEstoqueSaldoViewModel, val produto: Prod
       VerticalLayout().apply {
         setSizeFull()
         horizontalLayout {
-          edtDataInicial = datePicker("Data Inicial") {
+          edtDataInicial = datePicker("Data Inicial Kardex") {
             this.setWidthFull()
             this.value = produto.dataInicial
             this.isClearButtonVisible = true
