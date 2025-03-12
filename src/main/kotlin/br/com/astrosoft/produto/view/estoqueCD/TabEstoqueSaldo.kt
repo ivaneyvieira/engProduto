@@ -201,6 +201,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
+    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
       dlgConferencia = DlgConferencias(viewModel, produto)
       dlgConferencia?.showDialog{
@@ -208,8 +210,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width="100px")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
     columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width="100px")
