@@ -150,13 +150,13 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
               DialogHelper.showWarning("Nenhum item selecionado")
             } else {
               val localizacaoSel = produtos
-                .asSequence()
-                .mapNotNull { it.locApp }
-                .groupBy { it }
-                .map { Pair(it.key, it.value.size) }
-                .sortedBy { - it.second }
-                .map { it.first }
-                .firstOrNull() ?: ""
+                                     .asSequence()
+                                     .mapNotNull { it.locApp }
+                                     .groupBy { it }
+                                     .map { Pair(it.key, it.value.size) }
+                                     .sortedBy { -it.second }
+                                     .map { it.first }
+                                     .firstOrNull() ?: ""
               val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
                 produtos.forEach { produto ->
                   produto.locApp = localizacao
@@ -293,5 +293,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraEstoque.orEmpty().toList()
   }
 }

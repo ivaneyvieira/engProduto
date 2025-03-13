@@ -245,4 +245,9 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraEstoque.orEmpty().toList()
+  }
 }
