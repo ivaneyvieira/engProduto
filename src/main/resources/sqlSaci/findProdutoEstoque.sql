@@ -68,7 +68,8 @@ SELECT 4                                                                        
        A.dataUpdate                                                                   AS dataUpdate,
        A.kardec                                                                       AS kardec,
        A.dataObservacao                                                               AS dataObservacao,
-       A.observacao                                                                   AS observacao
+       A.observacao                                                                   AS observacao,
+       PC.refprice / 100                                                              AS preco
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -81,6 +82,8 @@ FROM
                USING (prdno, grade)
     LEFT JOIN  T_LOC_SACI     AS L1
                USING (prdno, grade)
+    LEFT JOIN  sqldados.prp   AS PC
+               ON PC.storeno = 10 AND PC.prdno = E.prdno
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
@@ -115,7 +118,8 @@ SELECT loja,
        dataUpdate,
        kardec,
        dataObservacao,
-       observacao
+       observacao,
+       preco
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR

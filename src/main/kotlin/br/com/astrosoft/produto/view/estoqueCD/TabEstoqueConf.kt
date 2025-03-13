@@ -177,6 +177,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
+    columnGrid(ProdutoEstoque::preco, header = "Preço", width = "80px")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")

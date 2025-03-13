@@ -27,14 +27,14 @@ class ProdutoEstoque(
   var kardec: Int? = null,
   var dataObservacao: LocalDate? = null,
   var observacao: String? = null,
-  ) {
+  var preco: Double? = null,
+) {
   val diferenca: Int?
     get() {
       val estCD = kardec ?: 0
       val estSis = saldo ?: 0
       return estSis - estCD
     }
-
 
   val dataInicialDefault
     get() = dataInicial ?: LocalDate.now().withDayOfMonth(1)
