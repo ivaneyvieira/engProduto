@@ -22,7 +22,6 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
   private var dlgKardec: DlgProdutoKardec? = null
-  private var dlgConferencia: DlgConferencias? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -143,6 +142,33 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
 
+        this.button("Localização") {
+          this.icon = VaadinIcon.LOCATION_ARROW.create()
+          onClick {
+            val produtos = itensSelecionados()
+            if (produtos.isEmpty()) {
+              DialogHelper.showWarning("Nenhum item selecionado")
+            } else {
+              val localizacaoSel = produtos
+                .asSequence()
+                .mapNotNull { it.locApp }
+                .groupBy { it }
+                .map { Pair(it.key, it.value.size) }
+                .sortedBy { - it.second }
+                .map { it.first }
+                .firstOrNull() ?: ""
+              val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
+                produtos.forEach { produto ->
+                  produto.locApp = localizacao
+                  viewModel.updateProduto(produto, false)
+                }
+                gridPanel.dataProvider.refreshAll()
+              }
+              dlg.open()
+            }
+          }
+        }
+
         cmdEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)
@@ -205,10 +231,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::observacao, header = "Conferência", width = "100px").right()
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      dlgConferencia = DlgConferencias(viewModel, produto) {
+      val dlgConferencia = DlgConferencias(viewModel, produto) {
         gridPanel.dataProvider.refreshAll()
       }
-      dlgConferencia?.open()
+      dlgConferencia.open()
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width = "100px")
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
