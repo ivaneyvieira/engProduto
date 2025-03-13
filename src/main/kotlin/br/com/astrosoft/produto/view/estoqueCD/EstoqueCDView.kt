@@ -19,6 +19,7 @@ class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
   override val viewModel = EstoqueCDViewModel(this)
   override val tabEstoqueMov = TabEstoqueMov(viewModel.tabEstoqueMFViewModel)
   override val tabEstoqueSaldo = TabEstoqueSaldo(viewModel.tabEstoqueSaldoViewModel)
+  override val tabEstoqueConf = TabEstoqueConf(viewModel.tabEstoqueConfViewModel)
   override val tabEstoqueCad = TabEstoqueCad(viewModel.tabEstoqueCadViewModel)
   override val tabEstoqueCD1A = TabEstoqueCD1A(viewModel.tabEstoqueCD1AViewModel)
   override val tabEstoqueUsr = TabEstoqueUsr(viewModel.tabEstoqueUsrViewModel)

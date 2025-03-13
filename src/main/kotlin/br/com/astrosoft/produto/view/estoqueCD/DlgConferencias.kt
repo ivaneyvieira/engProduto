@@ -1,10 +1,9 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -16,7 +15,7 @@ import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
 class DlgConferencias(
-  val viewModel: TabEstoqueSaldoViewModel,
+  val viewModel: IModelConferencia,
   val produto: ProdutoEstoque,
   val onClose: () -> Unit = {}
 ) :

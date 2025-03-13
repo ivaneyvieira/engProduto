@@ -10,9 +10,9 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoque
 import java.time.LocalDate
 
-class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
+class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia{
   val subView
-    get() = viewModel.view.tabEstoqueSaldo
+    get() = viewModel.view.tabEstoqueConf
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -60,18 +60,6 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     }
   }
 
-  fun copiaLocalizacao() = viewModel.exec {
-    val itens = subView.itensSelecionados()
-    if (itens.isEmpty()) fail("Nenhum item selecionado")
-
-    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
-    itens.forEach { item ->
-      item.locApp = primeiro.locApp
-      item.update()
-    }
-    updateView()
-  }
-
   fun imprimeProdutos() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
@@ -91,7 +79,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
   }
 }
 
-interface ITabEstoqueSaldo : ITabView {
+interface ITabEstoqueConf : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
   fun updateKardec()

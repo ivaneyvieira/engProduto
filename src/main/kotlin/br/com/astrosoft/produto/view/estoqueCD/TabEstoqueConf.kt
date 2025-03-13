@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueConf
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueConfViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
+class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
+  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueConf {
   private var dlgKardec: DlgProdutoKardec? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -114,22 +114,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
 
-        this.button("Kardex") {
-          this.icon = VaadinIcon.FILE_TABLE.create()
-          onClick {
-            viewModel.updateKardec()
-          }
-        }
-
-        this.button("Cópia") {
-          val user = AppConfig.userLogin() as? UserSaci
-          this.isVisible = user?.estoqueCopiaLoc == true
-          this.icon = VaadinIcon.COPY.create()
-          onClick {
-            viewModel.copiaLocalizacao()
-          }
-        }
-
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -139,33 +123,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutos()
-          }
-        }
-
-        this.button("Localização") {
-          this.icon = VaadinIcon.LOCATION_ARROW.create()
-          onClick {
-            val produtos = itensSelecionados()
-            if (produtos.isEmpty()) {
-              DialogHelper.showWarning("Nenhum item selecionado")
-            } else {
-              val localizacaoSel = produtos
-                .asSequence()
-                .mapNotNull { it.locApp }
-                .groupBy { it }
-                .map { Pair(it.key, it.value.size) }
-                .sortedBy { - it.second }
-                .map { it.first }
-                .firstOrNull() ?: ""
-              val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
-                produtos.forEach { produto ->
-                  produto.locApp = localizacao
-                  viewModel.updateProduto(produto, false)
-                }
-                gridPanel.dataProvider.refreshAll()
-              }
-              dlg.open()
-            }
           }
         }
 
@@ -216,12 +173,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     }
 
     addColumnSeq("Seq")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
-      dlgKardec = DlgProdutoKardec(viewModel, produto)
-      dlgKardec?.showDialog {
-        viewModel.updateView()
-      }
-    }
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
@@ -239,7 +190,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width = "100px")
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width = "100px")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
@@ -285,11 +235,11 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueSaldo == true
+    return username?.estoqueConf == true
   }
 
   override val label: String
-    get() = "Estoque"
+    get() = "Conferência"
 
   override fun updateComponent() {
     viewModel.updateView()
