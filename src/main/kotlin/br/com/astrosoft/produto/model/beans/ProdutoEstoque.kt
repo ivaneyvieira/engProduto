@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
@@ -29,7 +30,13 @@ class ProdutoEstoque(
   var observacao: String? = null,
   var preco: Double? = null,
 ) {
-  val diferenca: Int?
+  val saldoRelatorio: String
+    get() {
+      val label = "Estoque"
+      val saldoStr = saldo?.format()?.lpad(10, " ") ?: ""
+      return "       $label: $saldoStr"
+    }
+  val diferenca: Int
     get() {
       val estCD = kardec ?: 0
       val estSis = saldo ?: 0
