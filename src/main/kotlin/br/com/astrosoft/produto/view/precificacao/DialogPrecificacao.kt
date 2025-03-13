@@ -29,7 +29,7 @@ class DialogPrecificacao(
     binder.readBean(bean)
   }
 
-  fun createDialogLayout() {
+  private fun createDialogLayout() {
     verticalLayout {
       isPadding = false
       alignItems = FlexComponent.Alignment.STRETCH
@@ -71,7 +71,7 @@ class DialogPrecificacao(
         justifyContentMode = FlexComponent.JustifyContentMode.END
         button("Confirma") {
           addThemeVariants(ButtonVariant.LUMO_PRIMARY)
-          onLeftClick {
+          onClick {
             binder.writeBean(bean)
             binder.validate()
             if (binder.isValid) {
@@ -81,7 +81,8 @@ class DialogPrecificacao(
           }
         }
         button("Cancela") {
-          onLeftClick {
+          addThemeVariants(ButtonVariant.LUMO_ERROR)
+          onClick {
             this@DialogPrecificacao.close()
           }
         }

@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -19,7 +18,6 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
@@ -204,18 +202,18 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width="80px")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width="100px").right()
+    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
+    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width = "100px").right()
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      dlgConferencia = DlgConferencias(viewModel, produto)
-      dlgConferencia?.showDialog{
+      dlgConferencia = DlgConferencias(viewModel, produto) {
         gridPanel.dataProvider.refreshAll()
       }
+      dlgConferencia?.open()
     }
-    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width="100px")
-    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width="80px")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width="80px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width="100px")
+    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width = "100px")
+    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
+    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
+    columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width = "100px")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
