@@ -7,7 +7,8 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferencia
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import java.time.LocalDate
 
 class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -60,14 +61,28 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     }
   }
 
-  fun imprimeProdutos() = viewModel.exec {
+  fun imprimeProdutosEstoque() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
 
-    val report = PrintProdutosConferencia(filtro)
+    val report = PrintProdutosConferenciaEstoque(filtro)
+
+    report.print(
+      dados = produtos, printer = subView.printerPreview(loja = 0)
+    )
+  }
+
+  fun imprimeProdutosAcerto() = viewModel.exec {
+    val produtos = subView.itensSelecionados().sortedBy { it.estoqueDif ?: 999999 }
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val filtro = subView.filtro()
+
+    val report = PrintProdutosConferenciaAcerto(filtro)
 
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)

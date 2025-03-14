@@ -9,10 +9,10 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PrintProdutosConferencia(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
+class PrintProdutosConferenciaAcerto(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoEstoque) {
-    writeln("Relatório de Conferencia", negrito = true, center = true)
+    writeln("Relatório de Acerto", negrito = true, center = true)
     writeln("")
     writeln(
       "Loja: ${bean.lojaSigla}     Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",
@@ -33,11 +33,9 @@ class PrintProdutosConferencia(private val filtro: FiltroProdutoEstoque) : Print
 
   init {
     column(ProdutoEstoque::codigoStr, "Codigo", 6)
-    column(ProdutoEstoque::descricao, "Descricao", 34)
+    column(ProdutoEstoque::descricao, "Descricao", 33)
     column(ProdutoEstoque::grade, "Grade", 8)
-    column(ProdutoEstoque::locApp, "Loc", 4)
-    column(ProdutoEstoque::saldo, "___Quant", 8, lineBreak = true)
-    column(ProdutoEstoque::saldoBarraRef, "", 47)
+    column(ProdutoEstoque::estoqueDif, "_____Diferenca", 7, expand = true)
   }
 
   override fun printSumary(bean: ProdutoEstoque?) {
