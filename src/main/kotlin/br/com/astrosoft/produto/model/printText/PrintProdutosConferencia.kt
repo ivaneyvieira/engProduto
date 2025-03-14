@@ -4,8 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.util.rpad
-import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
@@ -14,14 +12,10 @@ import java.time.LocalTime
 class PrintProdutosConferencia(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoEstoque) {
-    writeln("Relatorio Estoque", negrito = true, center = true)
+    writeln("Relatório de Conferencia", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",
-      negrito = true
-    )
-    writeln(
-      text = "Loja: ${bean.lojaSigla}",
+      "Loja: ${bean.lojaSigla}     Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",
       negrito = true
     )
     writeln(
@@ -43,8 +37,7 @@ class PrintProdutosConferencia(private val filtro: FiltroProdutoEstoque) : Print
     column(ProdutoEstoque::grade, "Grade", 8)
     column(ProdutoEstoque::locApp, "Loc", 4)
     column(ProdutoEstoque::saldo, "___Quant", 8, lineBreak = true)
-    //column(ProdutoEstoque::saldoRelatorio, "", 60)
-    column(ProdutoEstoque::vazio, "", 60)
+    column(ProdutoEstoque::saldoBarraRef, "", 47)
   }
 
   override fun printSumary(bean: ProdutoEstoque?) {

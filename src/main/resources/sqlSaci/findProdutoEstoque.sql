@@ -41,6 +41,23 @@ WHERE storeno = 4
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
+CREATE TEMPORARY TABLE T_BARCODE
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT P.no                                                                  AS prdno,
+       IFNULL(B.grade, '')                                                   AS grade,
+       MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
+FROM
+  sqldados.prd                AS P
+    LEFT JOIN sqldados.prd2   AS P2
+              ON P.no = P2.prdno
+    LEFT JOIN sqldados.prdbar AS B
+              ON P.no = B.prdno AND B.grade != ''
+GROUP BY P.no, B.grade
+HAVING codbar != '';
+
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
 SELECT 4                                                                              AS loja,
@@ -61,7 +78,6 @@ SELECT 4                                                                        
                                                  (P.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
-       L1.locSaci                                                                     AS locSaci,
        A.locApp                                                                       AS locApp,
        V.no                                                                           AS codForn,
        V.sname                                                                        AS fornecedor,
@@ -73,7 +89,9 @@ SELECT 4                                                                        
        A.observacao                                                                   AS observacao,
        PC.refprice / 100                                                              AS preco,
        A.estoqueCD                                                                    AS estoqueCD,
-       A.estoqueLoja                                                                  AS estoqueLoja
+       A.estoqueLoja                                                                  AS estoqueLoja,
+       B.codbar                                                                       AS barcode,
+       P.mfno_ref                                                                     AS ref
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -84,7 +102,7 @@ FROM
                ON V.no = P.mfno
     LEFT JOIN  T_LOC_APP      AS A
                USING (prdno, grade)
-    LEFT JOIN  T_LOC_SACI     AS L1
+    LEFT JOIN  T_BARCODE      AS B
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
                ON PC.storeno = 10 AND PC.prdno = E.prdno
@@ -113,7 +131,6 @@ SELECT loja,
        embalagem,
        qtdEmbalagem,
        estoque,
-       locSaci,
        locApp,
        codForn,
        fornecedor,
@@ -125,11 +142,12 @@ SELECT loja,
        observacao,
        preco,
        estoqueCD,
-       estoqueLoja
+       estoqueLoja,
+       barcode,
+       ref
 FROM
   temp_pesquisa
-WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR
-       descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
+WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND ((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
        (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))

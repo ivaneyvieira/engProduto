@@ -25,9 +25,8 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
     val locApp = produto.locApp
-    val locSaci = produto.locSaci
 
-    val localizacao = if (locApp.isNullOrBlank()) locSaci ?: "" else locApp
+    val localizacao = locApp
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
     form = SubWindowForm(

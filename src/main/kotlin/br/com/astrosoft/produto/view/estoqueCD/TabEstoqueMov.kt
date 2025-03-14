@@ -126,7 +126,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
-    columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
+    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
