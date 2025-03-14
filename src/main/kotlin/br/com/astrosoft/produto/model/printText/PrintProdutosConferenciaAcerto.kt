@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
@@ -24,6 +25,30 @@ class PrintProdutosConferenciaAcerto(private val filtro: FiltroProdutoEstoque) :
     )
 
     printLine()
+  }
+
+  override fun groupBotton(beanDetail: ProdutoEstoque): String {
+    val dif = beanDetail.estoqueDif
+    val linha = "".lpad(64, "-")
+    return when {
+      dif == null -> {
+        "Nao preenchido\n$linha"
+      }
+
+      dif > 0     -> {
+        "Entrada\n$linha"
+      }
+
+      dif == 0    -> {
+        "Zero\n$linha"
+      }
+
+      dif < 0     -> {
+        "Saida\n$linha"
+      }
+
+      else        -> linha
+    }
   }
 
   override fun print(dados: List<ProdutoEstoque>, printer: IPrinter) {
