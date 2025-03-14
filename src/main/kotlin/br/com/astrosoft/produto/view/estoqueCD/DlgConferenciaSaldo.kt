@@ -50,8 +50,8 @@ class DlgConferenciaSaldo(
         value = produto.observacao ?: ""
       }
     }
-    this.width = "40%"
-    this.height = "40%"
+    this.width = "60%"
+    this.height = "60%"
   }
 
   fun HasComponents.toolBar() {
