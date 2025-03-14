@@ -54,7 +54,8 @@ class PrintProdutosEstoque(private val filtro: FiltroProdutoEstoque) : PrintText
     column(ProdutoEstoque::grade, "Grade", 8)
     column(ProdutoEstoque::locApp, "Loc", 4)
     column(ProdutoEstoque::saldo, "_Quant", 6, lineBreak = true)
-    column(ProdutoEstoque::saldoRelatorio, "", 60)
+    //column(ProdutoEstoque::saldoRelatorio, "", 60)
+    column(ProdutoEstoque::vazio, "", 60)
   }
 
   override fun printSumary(bean: ProdutoEstoque?) {

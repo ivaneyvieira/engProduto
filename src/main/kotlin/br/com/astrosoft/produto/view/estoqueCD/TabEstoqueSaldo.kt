@@ -231,7 +231,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::observacao, header = "Conferência", width = "100px").right()
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      val dlgConferencia = DlgConferencias(viewModel, produto) {
+      val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
         gridPanel.dataProvider.refreshAll()
       }
       dlgConferencia.open()

@@ -180,10 +180,11 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::preco, header = "Preço", width = "80px")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
-    columnGrid(ProdutoEstoque::observacao, header = "Conferência", width = "100px").right()
+    columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
+    columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
+    columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "80px")
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      val dlgConferencia = DlgConferencias2(viewModel, produto) {
+      val dlgConferencia = DlgConferenciaConf(viewModel, produto) {
         gridPanel.dataProvider.refreshAll()
       }
       dlgConferencia.open()

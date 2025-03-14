@@ -32,7 +32,9 @@ SELECT prdno,
        MAX(kardec)                                           AS kardec,
        MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
        MAX(observacao)                                       AS observacao,
-       MAX(estoque)                                          AS estoque
+       MAX(estoque)                                          AS estoque,
+       MAX(estoqueCD)                                        AS estoqueCD,
+       MAX(estoqueLoja)                                      AS estoqueLoja
 FROM
   sqldados.prdAdicional
 WHERE storeno = 4
@@ -69,7 +71,9 @@ SELECT 4                                                                        
        A.kardec                                                                       AS kardec,
        A.dataObservacao                                                               AS dataObservacao,
        A.observacao                                                                   AS observacao,
-       PC.refprice / 100                                                              AS preco
+       PC.refprice / 100                                                              AS preco,
+       A.estoqueCD                                                                    AS estoqueCD,
+       A.estoqueLoja                                                                  AS estoqueLoja
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -119,7 +123,9 @@ SELECT loja,
        kardec,
        dataObservacao,
        observacao,
-       preco
+       preco,
+       estoqueCD,
+       estoqueLoja
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR locSaci LIKE @PESQUISALIKE OR codigo = @PESQUISANUM OR locSaci LIKE @PESQUISALIKE OR

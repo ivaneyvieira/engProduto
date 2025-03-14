@@ -14,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
-class DlgConferencias(
+class DlgConferenciaSaldo(
   val viewModel: IModelConferencia,
   val produto: ProdutoEstoque,
   val onClose: () -> Unit = {}
@@ -67,7 +67,7 @@ class DlgConferencias(
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
-          this@DlgConferencias.close()
+          this@DlgConferenciaSaldo.close()
         }
       }
     }

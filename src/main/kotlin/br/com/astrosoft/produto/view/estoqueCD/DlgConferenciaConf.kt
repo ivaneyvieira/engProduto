@@ -11,16 +11,18 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import java.time.LocalDate
 
-class DlgConferencias2(
+class DlgConferenciaConf(
   val viewModel: IModelConferencia,
   val produto: ProdutoEstoque,
   val onClose: () -> Unit = {}
 ) :
   Dialog() {
-  private var edtConferencia: TextField? = null
+  private var edtEstoqueCD: IntegerField? = null
+  private var edtEstoqueLoja: IntegerField? = null
   private var edtDataObservacao: DatePicker? = null
 
   init {
@@ -37,9 +39,19 @@ class DlgConferencias2(
           this.localePtBr()
         }
       }
-      edtConferencia = textField("Conferência") {
-        this.setWidthFull()
-        value = produto.observacao ?: ""
+
+      horizontalLayout {
+        edtEstoqueCD = integerField("Estoque CD") {
+          this.setWidthFull()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.value = produto.estoqueCD
+        }
+
+        edtEstoqueLoja = integerField("Estoque Loja") {
+          this.setWidthFull()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.value = produto.estoqueLoja
+        }
       }
     }
     this.width = "40%"
@@ -59,7 +71,7 @@ class DlgConferencias2(
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
-          this@DlgConferencias2.close()
+          this@DlgConferenciaConf.close()
         }
       }
     }
@@ -80,7 +92,8 @@ class DlgConferencias2(
   }
 
   private fun closeForm() {
-    produto.observacao = edtConferencia?.value
+    produto.estoqueCD = edtEstoqueCD?.value
+    produto.estoqueLoja = edtEstoqueLoja?.value
     produto.dataObservacao = edtDataObservacao?.value
     viewModel.updateProduto(produto, false)
     onClose.invoke()

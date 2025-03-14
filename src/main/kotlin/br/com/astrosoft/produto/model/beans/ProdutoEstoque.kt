@@ -29,7 +29,29 @@ class ProdutoEstoque(
   var dataObservacao: LocalDate? = null,
   var observacao: String? = null,
   var preco: Double? = null,
+  var estoqueCD: Int? = null,
+  var estoqueLoja: Int? = null,
 ) {
+  val estoqueDif: Int?
+    get() {
+      if (estoqueCD == null && estoqueLoja == null) {
+        return null
+      }
+
+      if (saldo == null) {
+        return null
+      }
+
+      val estLoja = estoqueLoja ?: 0
+      val estCD = estoqueCD ?: 0
+      val estSaldo = saldo ?: 0
+
+      return estLoja + estCD - estSaldo
+    }
+
+  val vazio
+    get() = "."
+
   val saldoRelatorio: String
     get() {
       val label = "Estoque"

@@ -12,3 +12,19 @@ ALTER TABLE sqldados.prdAdicional
 
 ALTER TABLE sqldados.prdAdicional
   ADD PRIMARY KEY (storeno, prdno, grade);
+
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueCD INT NULL;
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueLoja INT NULL;
+
+UPDATE sqldados.prdAdicional
+SET estoqueCD = observacao * 1
+WHERE observacao REGEXP '^[0-9]+$';
+
+SELECT *
+FROM
+  sqldados.prdAdicional
+WHERE observacao != '';
