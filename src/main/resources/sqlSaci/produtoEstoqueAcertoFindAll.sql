@@ -4,3 +4,4 @@ FROM
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data = :data OR :data = 0)
+  AND (descricao != '')
