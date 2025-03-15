@@ -242,6 +242,17 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     gridPanel.dataProvider.refreshAll()
   }
 
+  override fun autorizaAcerto(block: () -> Unit) {
+    val form = FormAutorizaAcerto()
+    DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
+      if (AppConfig.findUser(form.login, form.senha) != null) {
+        block()
+      } else {
+        DialogHelper.showWarning("Usuário ou senha inválidos")
+      }
+    }
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueConf == true

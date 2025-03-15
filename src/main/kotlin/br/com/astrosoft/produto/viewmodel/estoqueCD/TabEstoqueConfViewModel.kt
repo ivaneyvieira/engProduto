@@ -92,15 +92,15 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
         if (user?.estoqueGravaAcerto != true) {
           viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
         } else {
-
-          produtosAcerto.forEach {
-            if(it.jaGravado()){
-              viewModel.view.showWarning("Produto ${it.codigo} - ${it.grade} já foi gravado")
-              return@printerPreview
-            }
-            it.save()
+          val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
+          if (jaGravado != null) {
+            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
           }
-
+          subView.autorizaAcerto {
+            produtosAcerto.forEach {
+              it.save()
+            }
+          }
         }
       })
     )
@@ -117,4 +117,5 @@ interface ITabEstoqueConf : ITabView {
   fun updateKardec()
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
+  fun autorizaAcerto(block: () -> Unit)
 }
