@@ -21,6 +21,7 @@ class SubWindowPrinter(
   printerUser: List<String>,
   rota: Rota?,
   loja: Int,
+  val actionSave: Runnable?,
   val printEvent: (impressora: String) -> Unit
 ) :
   Dialog() {
@@ -61,22 +62,30 @@ class SubWindowPrinter(
           cmbImpressora = this.select("Impressora") {
             val userSaci = AppConfig.userLogin() as? UserSaci
             val allPrinter =
-              if (rota == null) {
-                Impressora.allTermica().map { it.name }
-              } else {
-                Impressora.allTermica()
-                  .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
-              }
+                if (rota == null) {
+                  Impressora.allTermica().map { it.name }
+                } else {
+                  Impressora.allTermica()
+                    .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
+                }
             val lista =
-              when {
-                userSaci?.admin == true -> allPrinter
-                printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
-                printerUser.isEmpty() -> emptyList()
-                else -> printerUser
-              }
+                when {
+                  userSaci?.admin == true                    -> allPrinter
+                  printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                  printerUser.isEmpty()                      -> emptyList()
+                  else                                       -> printerUser
+                }
             setItems(lista)
 
             this.value = lista.firstOrNull()
+          }
+          if (actionSave != null) {
+            this.button("Grava") {
+              icon = VaadinIcon.DISC.create()
+              this.onClick {
+                actionSave.run()
+              }
+            }
           }
           this.button("Imprimir") {
             icon = VaadinIcon.PRINT.create()

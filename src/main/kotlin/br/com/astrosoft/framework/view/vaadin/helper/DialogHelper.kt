@@ -72,9 +72,10 @@ object DialogHelper {
     printerUser: List<String>,
     rota: Rota?,
     loja: Int,
+    actionSave: Runnable?,
     printEvent: (impressora: String) -> Unit
   ) {
-    val form = SubWindowPrinter(text, showPrinter, printerUser, rota, loja, printEvent)
+    val form = SubWindowPrinter(text, showPrinter, printerUser, rota, loja, actionSave, printEvent)
     form.open()
   }
 

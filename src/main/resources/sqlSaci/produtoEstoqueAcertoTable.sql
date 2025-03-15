@@ -16,6 +16,12 @@ CREATE TABLE produtoEstoqueAcerto
   PRIMARY KEY (numloja, numero, prdno, grade)
 );
 
+ALTER TABLE produtoEstoqueAcerto
+  ADD processado boolean DEFAULT FALSE;
+
+ALTER TABLE produtoEstoqueAcerto
+  ADD transacao varchar(20) DEFAULT '';
+
 SELECT *
 FROM
   produtoEstoqueAcerto

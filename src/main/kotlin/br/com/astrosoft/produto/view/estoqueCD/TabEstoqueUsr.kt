@@ -18,6 +18,8 @@ import com.vaadin.flow.component.grid.Grid
 class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel), ITabEstoqueUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::estoqueMov, "Mov")
+    columnGrid(UserSaci::estoqueConf, "Conf")
+    columnGrid(UserSaci::estoqueAcerto, "Acerto")
     columnGrid(UserSaci::estoqueSaldo, "Estoque")
     columnGrid(UserSaci::estoqueCad, "Cad Loc")
     columnGrid(UserSaci::estoqueCD1A, "CD1A")
@@ -45,6 +47,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       }
     }
     verticalBlock("Comandos") {
+      checkBox("Grava Acerto") {
+        binder.bind(this, UserSaci::estoqueGravaAcerto.name)
+      }
       checkBox("Edita Loc") {
         binder.bind(this, UserSaci::estoqueEditaLoc.name)
       }

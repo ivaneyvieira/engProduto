@@ -128,6 +128,7 @@ class UserSaci : IUser {
   var estoqueCopiaLoc by DelegateAuthorized2(98)
   var estoqueConf by DelegateAuthorized2(99)
   var estoqueAcerto by DelegateAuthorized2(100)
+  var estoqueGravaAcerto by DelegateAuthorized2(101)
 
   //Locais
   private var localEstoque: String?

@@ -1957,6 +1957,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun jaGravado(produtoEstoqueAcerto: ProdutoEstoqueAcerto): List<ProdutoEstoqueAcerto> {
+    val sql = "/sqlSaci/produtoEstoqueAcertoJaGravado.sql"
+    return query(sql, ProdutoEstoqueAcerto::class) {
+      addOptionalParameter("numLoja", produtoEstoqueAcerto.numloja)
+      addOptionalParameter("data", produtoEstoqueAcerto.data.toSaciDate())
+      addOptionalParameter("prdno", produtoEstoqueAcerto.prdno)
+      addOptionalParameter("grade", produtoEstoqueAcerto.grade)
+      addOptionalParameter("diferenca", produtoEstoqueAcerto.diferenca)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

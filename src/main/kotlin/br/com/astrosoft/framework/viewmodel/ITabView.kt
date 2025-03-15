@@ -10,7 +10,8 @@ interface ITabView {
   fun printerPreview(
     showPrinter: Boolean = true,
     rota: Rota? = null,
-    loja: Int,
+    loja: Int = 0,
+    actionSave: Runnable? = null,
     printEvent: (impressora: String) -> Unit = {}
   ): IPrinter
 

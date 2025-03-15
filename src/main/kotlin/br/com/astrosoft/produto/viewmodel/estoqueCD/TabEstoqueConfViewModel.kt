@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -67,7 +68,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val report = PrintProdutosConferenciaEstoque()
 
     report.print(
-      dados = produtos, printer = subView.printerPreview(loja = 0)
+      dados = produtos, printer = subView.printerPreview()
     )
   }
 
@@ -83,10 +84,23 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
     val produtosAcerto = produtos.toAcerto()
 
+    val user = AppConfig.userLogin() as? UserSaci
+
     report.print(
-      dados = produtosAcerto, printer = subView.printerPreview(loja = 0, printEvent = {
-        produtosAcerto.forEach {
-          it.save()
+
+      dados = produtosAcerto, printer = subView.printerPreview(actionSave = {
+        if (user?.estoqueGravaAcerto != true) {
+          viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+        } else {
+
+          produtosAcerto.forEach {
+            if(it.jaGravado()){
+              viewModel.view.showWarning("Produto ${it.codigo} - ${it.grade} já foi gravado")
+              return@printerPreview
+            }
+            it.save()
+          }
+
         }
       })
     )

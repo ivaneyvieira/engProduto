@@ -10,9 +10,10 @@ class PrinterPreview(
   val printerUser: List<String>,
   val rota: Rota?,
   val loja: Int,
+  val actionSave: Runnable?,
   val printEvent: (impressora: String) -> Unit
 ) : IPrinter {
   override fun print(text: TextBuffer) {
-    DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, printEvent)
+    DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, actionSave, printEvent)
   }
 }

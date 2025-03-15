@@ -16,9 +16,15 @@ class ProdutoEstoqueAcerto(
   var descricao: String? = null,
   var grade: String? = null,
   var diferenca: Int? = null,
+  var processado: String? = null,
+  var transacao: String? = null
 ) {
   fun save() {
     saci.acertoUpdate(this)
+  }
+
+  fun jaGravado(): Boolean {
+    return saci.jaGravado(this).isNotEmpty()
   }
 
   val codigo

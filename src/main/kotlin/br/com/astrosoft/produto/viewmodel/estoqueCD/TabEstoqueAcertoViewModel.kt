@@ -39,7 +39,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     val report = PrintProdutosConferenciaAcerto()
 
     report.print(
-      dados = produtos, printer = subView.printerPreview(loja = 0)
+      dados = produtos, printer = subView.printerPreview()
     )
   }
 }

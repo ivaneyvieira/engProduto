@@ -51,6 +51,7 @@ interface IView {
     printerUser: List<String> = emptyList(),
     rota: Rota? = null,
     loja: Int,
+    actionSave: Runnable? = null,
     printEvent: (impressora: String) -> Unit
   )
 }
