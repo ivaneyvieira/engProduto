@@ -35,4 +35,20 @@ UPDATE produtoEstoqueAcerto AS A INNER JOIN users AS U ON U.name = A.usuario
 SET A.login = U.login
 WHERE A.login != U.login;
 
-select * from produtoEstoqueAcerto
+select * from produtoEstoqueAcerto;
+
+SELECT A.*, M.xano
+FROM
+  produtoEstoqueAcerto         AS A
+    INNER JOIN sqldados.stkmov AS M
+               ON M.date = 20250315 AND
+                  (M.remarks LIKE CONCAT('%E', A.numero) OR M.remarks LIKE CONCAT('%S', A.numero)) AND
+                  M.storeno = A.numloja AND M.prdno = A.prdno AND M.grade = A.grade;
+
+UPDATE produtoEstoqueAcerto AS A INNER JOIN sqldados.stkmov AS M ON M.date = 20250315 AND
+                                                                    (M.remarks LIKE CONCAT('%E', A.numero) OR
+                                                                     M.remarks LIKE CONCAT('%S', A.numero)) AND
+                                                                    M.storeno = A.numloja AND M.prdno = A.prdno AND
+                                                                    M.grade = A.grade
+SET A.transacao = M.xano
+WHERE A.transacao != M.xano;
