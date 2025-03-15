@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
@@ -66,9 +63,8 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-    val filtro = subView.filtro()
 
-    val report = PrintProdutosConferenciaEstoque(filtro)
+    val report = PrintProdutosConferenciaEstoque()
 
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
@@ -76,16 +72,23 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 
   fun imprimeProdutosAcerto() = viewModel.exec {
-    val produtos = subView.itensSelecionados().sortedBy { it.estoqueDif ?: 999999 }
+    val produtos = subView.itensSelecionados().filter {
+      (it.estoqueDif ?: 0) != 0
+    }.sortedBy { it.estoqueDif ?: 999999 }
     if (produtos.isEmpty()) {
-      fail("Nenhum produto selecionado")
+      fail("Nenhum produto válido selecionado")
     }
-    val filtro = subView.filtro()
 
-    val report = PrintProdutosConferenciaAcerto(filtro)
+    val report = PrintProdutosConferenciaAcerto()
+
+    val produtosAcerto = produtos.toAcerto()
 
     report.print(
-      dados = produtos, printer = subView.printerPreview(loja = 0)
+      dados = produtosAcerto, printer = subView.printerPreview(loja = 0, printEvent = {
+        produtosAcerto.forEach {
+          it.save()
+        }
+      })
     )
   }
 

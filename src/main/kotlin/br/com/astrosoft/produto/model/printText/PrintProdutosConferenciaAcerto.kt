@@ -1,34 +1,28 @@
 package br.com.astrosoft.produto.model.printText
 
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import java.time.LocalDate
-import java.time.LocalTime
+import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 
-class PrintProdutosConferenciaAcerto(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
-  private var valorPedido: Double = 0.0
-  override fun printTitle(bean: ProdutoEstoque) {
-    writeln("Relatório de Acerto", negrito = true, center = true)
+class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
+  override fun printTitle(bean: ProdutoEstoqueAcerto) {
+    writeln("Relatório de Acerto: ${bean.numero}", negrito = true, center = true)
     writeln("")
     writeln(
-      "Loja: ${bean.lojaSigla}     Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",
+      "Loja: ${bean.lojaSigla}     Data: ${bean.data.format()}     Hora: ${bean.hora.format()}",
       negrito = true
     )
     writeln(
-      text = "Usuario: ${AppConfig.userLogin()?.name}",
+      text = "Usuario: ${bean.usuario}",
       negrito = true
     )
 
     printLine()
   }
 
-  override fun groupBotton(beanDetail: ProdutoEstoque): String {
-    val dif = beanDetail.estoqueDif
+  override fun groupBotton(beanDetail: ProdutoEstoqueAcerto): String {
+    val dif = beanDetail.diferenca
     val linha = "".lpad(64, "-")
     return when {
       dif == null -> {
@@ -51,19 +45,14 @@ class PrintProdutosConferenciaAcerto(private val filtro: FiltroProdutoEstoque) :
     }
   }
 
-  override fun print(dados: List<ProdutoEstoque>, printer: IPrinter) {
-    valorPedido = dados.sumOf { ((it.estoque ?: 0) * 1.00) }
-    super.print(dados, printer)
-  }
-
   init {
-    column(ProdutoEstoque::codigoStr, "Codigo", 6)
-    column(ProdutoEstoque::descricao, "Descricao", 33)
-    column(ProdutoEstoque::grade, "Grade", 8)
-    column(ProdutoEstoque::estoqueDif, "_____Diferenca", 7, expand = true)
+    column(ProdutoEstoqueAcerto::codigo, "Codigo", 6)
+    column(ProdutoEstoqueAcerto::descricao, "Descricao", 33)
+    column(ProdutoEstoqueAcerto::grade, "Grade", 8)
+    column(ProdutoEstoqueAcerto::diferenca, "_____Diferenca", 14)
   }
 
-  override fun printSumary(bean: ProdutoEstoque?) {
+  override fun printSumary(bean: ProdutoEstoqueAcerto?) {
     writeln("")
     writeln("")
     writeln("")

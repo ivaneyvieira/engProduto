@@ -26,6 +26,7 @@ class TabEstoqueUsrViewModel(val viewModel: EstoqueCDViewModel) : TabUsrViewMode
     this.dataIncialKardec = usuario.dataIncialKardec
     this.impressoraEstoque = usuario.impressoraEstoque
     this.estoqueConf = usuario.estoqueConf
+    this.estoqueAcerto = usuario.estoqueAcerto
   }
 }
 

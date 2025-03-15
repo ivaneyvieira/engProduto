@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
+import br.com.astrosoft.framework.util.toDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
@@ -1915,6 +1916,44 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", produto.loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+    }
+  }
+
+  fun acertoNovo(numLoja: Int): ProdutoEstoqueAcerto? {
+    val sql = "/sqlSaci/produtoEstoqueAcertoNovo.sql"
+
+    val usuario = AppConfig.userLogin()?.name ?: ""
+
+    return query(sql, ProdutoEstoqueAcerto::class) {
+      addOptionalParameter("numLoja", numLoja)
+      addOptionalParameter("usuario", usuario)
+      addOptionalParameter("data", LocalDate.now().toSaciDate())
+      addOptionalParameter("hora", LocalTime.now().toSecondOfDay())
+    }.firstOrNull()
+  }
+
+  fun acertoUpdate(produto: ProdutoEstoqueAcerto) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoUpdate.sql"
+    script(sql) {
+      addOptionalParameter("numero", produto.numero)
+      addOptionalParameter("numloja", produto.numloja)
+      addOptionalParameter("lojaSigla", produto.lojaSigla)
+      addOptionalParameter("data", produto.data.toSaciDate())
+      addOptionalParameter("hora", produto.hora)
+      addOptionalParameter("usuario", produto.usuario)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("descricao", produto.descricao)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("diferenca", produto.diferenca)
+    }
+  }
+
+  fun acertoFindAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
+    val sql = "/sqlSaci/produtoEstoqueAcertoFindAll.sql"
+    return query(sql, ProdutoEstoqueAcerto::class) {
+      addOptionalParameter("numLoja", filtro.numLoja)
+      addOptionalParameter("data", filtro.data.toSaciDate())
+      addOptionalParameter("numero", filtro.numero)
     }
   }
 

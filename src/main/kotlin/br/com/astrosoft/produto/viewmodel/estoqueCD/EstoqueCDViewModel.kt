@@ -4,7 +4,8 @@ import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view) {
-  val tabEstoqueMFViewModel = TabEstoqueMovViewModel(this)
+  val tabEstoqueMovViewModel = TabEstoqueMovViewModel(this)
+  val tabEstoqueAcertoViewModel = TabEstoqueAcertoViewModel(this)
   val tabEstoqueSaldoViewModel = TabEstoqueSaldoViewModel(this)
   val tabEstoqueConfViewModel = TabEstoqueConfViewModel(this)
   val tabEstoqueCadViewModel = TabEstoqueCadViewModel(this)
@@ -15,6 +16,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
   override fun listTab() = listOf(
     view.tabEstoqueSaldo,
     view.tabEstoqueConf,
+    view.tabEstoqueAcerto,
     view.tabEstoqueMov,
     view.tabEstoqueCad,
     view.tabEstoqueCD1A,
@@ -25,6 +27,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
 
 interface IEstoqueCDView : IView {
   val tabEstoqueMov: ITabEstoqueMov
+  val tabEstoqueAcerto: ITabEstoqueAcerto
   val tabEstoqueSaldo: ITabEstoqueSaldo
   val tabEstoqueConf: ITabEstoqueConf
   val tabEstoqueCad: ITabEstoqueCad

@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PrintProdutosConferenciaEstoque(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
+class PrintProdutosConferenciaEstoque : PrintText<ProdutoEstoque>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoEstoque) {
     writeln("Relatório de Estoque", negrito = true, center = true)

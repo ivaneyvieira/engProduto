@@ -17,7 +17,8 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
   override val viewModel = EstoqueCDViewModel(this)
-  override val tabEstoqueMov = TabEstoqueMov(viewModel.tabEstoqueMFViewModel)
+  override val tabEstoqueMov = TabEstoqueMov(viewModel.tabEstoqueMovViewModel)
+  override val tabEstoqueAcerto = TabEstoqueAcerto(viewModel.tabEstoqueAcertoViewModel)
   override val tabEstoqueSaldo = TabEstoqueSaldo(viewModel.tabEstoqueSaldoViewModel)
   override val tabEstoqueConf = TabEstoqueConf(viewModel.tabEstoqueConfViewModel)
   override val tabEstoqueCad = TabEstoqueCad(viewModel.tabEstoqueCadViewModel)
