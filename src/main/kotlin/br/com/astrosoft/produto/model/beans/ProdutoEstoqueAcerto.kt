@@ -11,6 +11,7 @@ class ProdutoEstoqueAcerto(
   var lojaSigla: String? = null,
   var data: LocalDate? = null,
   var hora: LocalTime? = null,
+  var login: String? = null,
   var usuario: String? = null,
   var prdno: String? = null,
   var descricao: String? = null,

@@ -18,6 +18,7 @@ SELECT @NUMERO + 1         AS numero,
        sname               AS lojaSigla,
        CAST(:data AS date) AS data,
        SEC_TO_TIME(:hora)  AS hora,
+       :login              AS login,
        :usuario            AS usuario,
        ''                  AS prdno,
        ''                  AS descricao,
@@ -27,9 +28,9 @@ FROM
   sqldados.store
 WHERE no = :numLoja;
 
-REPLACE INTO produtoEstoqueAcerto (numero, numloja, lojaSigla, data, hora, usuario, prdno, descricao, grade,
+REPLACE INTO produtoEstoqueAcerto (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,
                                    diferenca)
-SELECT numero, numloja, lojaSigla, data, hora, usuario, prdno, descricao, grade, diferenca
+SELECT numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade, diferenca
 FROM
   T_ACERTO;
 

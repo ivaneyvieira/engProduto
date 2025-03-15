@@ -46,7 +46,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
 
   override fun Grid<ProdutoEstoqueAcerto>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(ProdutoEstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(ProdutoEstoqueAcerto::numero, header = "Acerto")
@@ -55,7 +55,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     }
     columnGrid(ProdutoEstoqueAcerto::data, header = "Data")
     columnGrid(ProdutoEstoqueAcerto::hora, header = "Hora")
-    columnGrid(ProdutoEstoqueAcerto::usuario, header = "Usuário", width = "200px")
+    columnGrid(ProdutoEstoqueAcerto::login, header = "Usuário", width = "80px")
     columnGrid(ProdutoEstoqueAcerto::transacao, header = "Transação")
     columnGrid(ProdutoEstoqueAcerto::processado, header = "Processado")
   }

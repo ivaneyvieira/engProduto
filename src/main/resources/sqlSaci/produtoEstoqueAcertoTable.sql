@@ -22,7 +22,17 @@ ALTER TABLE produtoEstoqueAcerto
 ALTER TABLE produtoEstoqueAcerto
   ADD transacao varchar(20) DEFAULT '';
 
-SELECT *
-FROM
-  produtoEstoqueAcerto
+ALTER TABLE produtoEstoqueAcerto
+  ADD login varchar(20) DEFAULT '';
 
+SELECT A.*, U.login
+FROM
+  produtoEstoqueAcerto AS A
+    INNER JOIN users   AS U
+               ON U.name = A.usuario;
+
+UPDATE produtoEstoqueAcerto AS A INNER JOIN users AS U ON U.name = A.usuario
+SET A.login = U.login
+WHERE A.login != U.login;
+
+select * from produtoEstoqueAcerto

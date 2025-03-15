@@ -8,7 +8,6 @@ import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
-import br.com.astrosoft.framework.util.toDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import org.sql2o.Query
@@ -1922,11 +1921,12 @@ class QuerySaci : QueryDB(database) {
   fun acertoNovo(numLoja: Int): ProdutoEstoqueAcerto? {
     val sql = "/sqlSaci/produtoEstoqueAcertoNovo.sql"
 
-    val usuario = AppConfig.userLogin()?.name ?: ""
+    val user = AppConfig.userLogin() as? UserSaci
 
     return query(sql, ProdutoEstoqueAcerto::class) {
       addOptionalParameter("numLoja", numLoja)
-      addOptionalParameter("usuario", usuario)
+      addOptionalParameter("login", user?.login ?: "")
+      addOptionalParameter("usuario", user?.name ?: "")
       addOptionalParameter("data", LocalDate.now().toSaciDate())
       addOptionalParameter("hora", LocalTime.now().toSecondOfDay())
     }.firstOrNull()
@@ -1940,6 +1940,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaSigla", produto.lojaSigla)
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
+      addOptionalParameter("login", produto.login)
       addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("descricao", produto.descricao)
