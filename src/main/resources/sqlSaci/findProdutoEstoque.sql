@@ -58,6 +58,27 @@ FROM
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
+DROP TEMPORARY TABLE IF EXISTS T_ULT_ACERTO;
+CREATE TEMPORARY TABLE T_ULT_ACERTO
+(
+  PRIMARY KEY (numloja, prdno, grade)
+)
+SELECT numloja, prdno, grade, MAX(numero) AS numero
+FROM
+  sqldados.produtoEstoqueAcerto A
+GROUP BY numloja, prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
+CREATE TEMPORARY TABLE T_ACERTO
+(
+  PRIMARY KEY (numloja, prdno, grade)
+)
+SELECT numloja, prdno, grade, numero, processado
+FROM
+  sqldados.produtoEstoqueAcerto A
+    INNER JOIN T_ULT_ACERTO
+               USING (numloja, prdno, grade, numero);
+
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
 SELECT 4                                                                              AS loja,
@@ -91,7 +112,9 @@ SELECT 4                                                                        
        A.estoqueCD                                                                    AS estoqueCD,
        A.estoqueLoja                                                                  AS estoqueLoja,
        B.codbar                                                                       AS barcode,
-       P.mfno_ref                                                                     AS ref
+       P.mfno_ref                                                                     AS ref,
+       AC.numero                                                                       AS numeroAcerto,
+       AC.processado                                                                   AS processado
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -106,6 +129,8 @@ FROM
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
                ON PC.storeno = 10 AND PC.prdno = E.prdno
+    LEFT JOIN  T_ACERTO       AS AC
+               ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)

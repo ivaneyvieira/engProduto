@@ -31,6 +31,8 @@ class ProdutoEstoque(
   var estoqueLoja: Int? = null,
   var barcode: String? = null,
   var ref: String? = null,
+  var numeroAcerto: Int? = null,
+  var processado: Boolean? = false,
 ) {
   val estoqueDif: Int?
     get() {

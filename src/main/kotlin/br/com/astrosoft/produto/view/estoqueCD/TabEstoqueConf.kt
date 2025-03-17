@@ -200,6 +200,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::embalagem, header = "Emb")
+    columnGrid(ProdutoEstoque::numeroAcerto, header = "Pedido")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
         textFieldEditor()
