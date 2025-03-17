@@ -197,16 +197,16 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       dlgConferencia.open()
     }
     columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width = "100px")
-    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::embalagem, header = "Emb")
+    //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
+    //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
+    //columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
         textFieldEditor()
       }
     }
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+    //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
   }
 
   override fun filtro(): FiltroProdutoEstoque {
