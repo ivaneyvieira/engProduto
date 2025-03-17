@@ -113,8 +113,8 @@ SELECT 4                                                                        
        A.estoqueLoja                                                                  AS estoqueLoja,
        B.codbar                                                                       AS barcode,
        P.mfno_ref                                                                     AS ref,
-       AC.numero                                                                       AS numeroAcerto,
-       AC.processado                                                                   AS processado
+       AC.numero                                                                      AS numeroAcerto,
+       AC.processado                                                                  AS processado
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -169,7 +169,9 @@ SELECT loja,
        estoqueCD,
        estoqueLoja,
        barcode,
-       ref
+       ref,
+       numeroAcerto,
+       processado
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)

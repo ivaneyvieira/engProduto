@@ -1976,6 +1976,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun limpaAcertoProduto(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
+    script(sql) {
+      addOptionalParameter("numLoja", produtoEstoque.loja)
+      addOptionalParameter("numero", produtoEstoque.numeroAcerto)
+      addOptionalParameter("prdno", produtoEstoque.prdno)
+      addOptionalParameter("grade", produtoEstoque.grade)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

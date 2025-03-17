@@ -133,6 +133,13 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           }
         }
 
+        this.button("Limpa Acerto") {
+          this.icon = VaadinIcon.CLOSE.create()
+          onClick {
+            viewModel.limpaAcerto()
+          }
+        }
+
         cmdEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)

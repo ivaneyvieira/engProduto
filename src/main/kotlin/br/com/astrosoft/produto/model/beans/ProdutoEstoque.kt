@@ -308,6 +308,10 @@ class ProdutoEstoque(
     }
   }
 
+  fun limpaAcerto() {
+    saci.limpaAcertoProduto(this)
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)

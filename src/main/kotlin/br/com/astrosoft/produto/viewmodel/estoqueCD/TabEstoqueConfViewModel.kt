@@ -109,6 +109,22 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     return ProcessamentoKardec.kardec(produto)
   }
+
+  fun limpaAcerto() {
+    val itensSelecionado = subView.itensSelecionados()
+    if (itensSelecionado.isEmpty()) {
+      fail("Nenhum acerto selecionado")
+    }
+    viewModel.view.showQuestion("Confirma a limpeza dos acertos selecionados?") {
+      itensSelecionado.forEach { produto ->
+        produto.estoqueCD = null
+        produto.estoqueLoja = null
+        produto.limpaAcerto()
+        produto.update()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabEstoqueConf : ITabView {
