@@ -42,9 +42,25 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       dados = produtos, printer = subView.printerPreview()
     )
   }
+
+  fun cancelarAcerto()= viewModel.exec {
+    val itensSelecionado = subView.itensSelecionados().filter {
+      it.processado == "Não"
+    }
+    if (itensSelecionado.isEmpty()) {
+      fail("Nenhum acerto não processado selecionado")
+    }
+    viewModel.view.showQuestion("Confirma o cancelamento do acerto selecionado?") {
+      itensSelecionado.forEach {
+        it.cancela()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabEstoqueAcerto : ITabView {
   fun filtro(): FiltroAcerto
   fun updateProduto(produtos: List<ProdutoEstoqueAcerto>)
+  fun itensSelecionados(): List<ProdutoEstoqueAcerto>
 }

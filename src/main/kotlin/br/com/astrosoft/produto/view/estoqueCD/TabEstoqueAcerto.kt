@@ -10,8 +10,10 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onClick
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -40,6 +42,13 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+
+    button("Cancelar") {
+      this.icon = VaadinIcon.CLOSE.create()
+      onClick {
+        viewModel.cancelarAcerto()
       }
     }
   }

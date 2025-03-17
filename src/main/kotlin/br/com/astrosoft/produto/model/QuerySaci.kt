@@ -1969,6 +1969,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun acertoCancela(produtoEstoqueAcerto: ProdutoEstoqueAcerto) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
+    script(sql) {
+      addOptionalParameter("numero", produtoEstoqueAcerto.numero)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

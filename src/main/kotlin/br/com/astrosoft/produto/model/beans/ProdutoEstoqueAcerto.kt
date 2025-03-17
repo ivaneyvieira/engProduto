@@ -28,6 +28,10 @@ class ProdutoEstoqueAcerto(
     return saci.jaGravado(this).isNotEmpty()
   }
 
+  fun cancela() {
+    saci.acertoCancela(this)
+  }
+
   val codigo
     get() = prdno?.trim()
 
