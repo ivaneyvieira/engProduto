@@ -49,7 +49,8 @@ data class FiltroAcerto(
 )
 
 fun List<ProdutoEstoque>.toAcerto(): List<ProdutoEstoqueAcerto> {
-  val username = AppConfig.userLogin()?.name
+  val user = AppConfig.userLogin()
+
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
   val novo = saci.acertoNovo(numLoja) ?: return emptyList()
   return this.map {
@@ -59,7 +60,8 @@ fun List<ProdutoEstoque>.toAcerto(): List<ProdutoEstoqueAcerto> {
       lojaSigla = novo.lojaSigla,
       data = novo.data,
       hora = novo.hora,
-      usuario = username,
+      login = user?.login,
+      usuario = user?.name,
       prdno = it.prdno,
       descricao = it.descricao,
       grade = it.grade,
