@@ -177,7 +177,9 @@ SELECT loja,
        processado
 FROM
   temp_pesquisa
-WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
+WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR
+       (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND ((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
        (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
+
