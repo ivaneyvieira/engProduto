@@ -203,7 +203,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       }
       dlgConferencia.open()
     }
-    columnGrid(ProdutoEstoque::dataObservacao, header = "Data Conf", width = "100px")
+    columnGrid(ProdutoEstoque::estoqueData, header = "Data Conf", width = "100px")
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::embalagem, header = "Emb")

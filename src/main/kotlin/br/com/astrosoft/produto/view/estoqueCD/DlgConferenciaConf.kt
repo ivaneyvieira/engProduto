@@ -23,7 +23,7 @@ class DlgConferenciaConf(
   Dialog() {
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
-  private var edtDataObservacao: DatePicker? = null
+  private var edtEstoqueData: DatePicker? = null
 
   init {
     this.isModal = true
@@ -33,7 +33,7 @@ class DlgConferenciaConf(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
-        edtDataObservacao = datePicker("Data Conf") {
+        edtEstoqueData = datePicker("Data Conf") {
           this.setWidthFull()
           this.value = LocalDate.now()
           this.localePtBr()
@@ -85,7 +85,7 @@ class DlgConferenciaConf(
     }
 
     val localizacao = produto.locApp
-    val dataConferencia = produto.dataObservacao.format()
+    val dataConferencia = produto.estoqueData.format()
     val saldo = produto.saldo ?: 0
 
     return "$codigo $descricao$grade ($localizacao) Data Conferência: $dataConferencia Estoque: $saldo"
@@ -94,7 +94,7 @@ class DlgConferenciaConf(
   private fun closeForm() {
     produto.estoqueCD = edtEstoqueCD?.value
     produto.estoqueLoja = edtEstoqueLoja?.value
-    produto.dataObservacao = edtDataObservacao?.value
+    produto.estoqueData = edtEstoqueData?.value
     viewModel.updateProduto(produto, false)
     onClose.invoke()
     this.close()

@@ -27,6 +27,7 @@ class ProdutoEstoque(
   var dataObservacao: LocalDate? = null,
   var observacao: String? = null,
   var preco: Double? = null,
+  var estoqueData: LocalDate? = null,
   var estoqueCD: Int? = null,
   var estoqueLoja: Int? = null,
   var barcode: String? = null,

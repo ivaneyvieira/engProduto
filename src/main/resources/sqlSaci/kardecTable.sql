@@ -29,3 +29,4 @@ ALTER TABLE sqldados.prdAdicional
 
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN observacao varchar(100) NULL;
+

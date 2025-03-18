@@ -20,6 +20,17 @@ ALTER TABLE sqldados.prdAdicional
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN estoqueLoja INT NULL;
 
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueData DATE NULL;
+
+UPDATE sqldados.prdAdicional
+SET estoqueData = dataObservacao
+WHERE dataObservacao != estoqueData or dataObservacao is not null;
+
+SELECT *
+FROM
+  sqldados.prdAdicional;
+
 UPDATE sqldados.prdAdicional
 SET estoqueCD = observacao * 1
 WHERE observacao REGEXP '^[0-9]+$';
