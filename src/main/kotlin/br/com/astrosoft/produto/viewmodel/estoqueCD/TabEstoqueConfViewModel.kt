@@ -60,7 +60,10 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 
   fun imprimeProdutosEstoque() = viewModel.exec {
-    val produtos = subView.itensSelecionados()
+    val filtroVazio = subView.filtroVazio()
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
+      it.marcadoConf
+    }
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -170,4 +173,5 @@ interface ITabEstoqueConf : ITabView {
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
   fun autorizaAcerto(block: () -> Unit)
+  fun filtroVazio(): FiltroProdutoEstoque
 }

@@ -126,7 +126,6 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           }
         }
 
-
         this.button("Desmarcar") {
           this.icon = VaadinIcon.CLOSE.create()
           onClick {
@@ -231,6 +230,10 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+
+    this.setPartNameGenerator {
+      if (it.marcadoConf) "amarelo" else null
+    }
   }
 
   override fun filtro(): FiltroProdutoEstoque {
@@ -250,6 +253,27 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,
+      listaUser = listaUser,
+    )
+  }
+
+  override fun filtroVazio(): FiltroProdutoEstoque {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
+
+    return FiltroProdutoEstoque(
+      pesquisa = "",
+      codigo = 0,
+      grade = "",
+      caracter = ECaracter.TODOS,
+      localizacao = "",
+      fornecedor = "",
+      centroLucro = 0,
+      estoque = EEstoque.TODOS,
+      saldo = 0,
+      inativo = EInativo.TODOS,
       listaUser = listaUser,
     )
   }
