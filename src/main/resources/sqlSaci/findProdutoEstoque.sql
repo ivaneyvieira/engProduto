@@ -35,7 +35,8 @@ SELECT prdno,
        MAX(estoque)                                          AS estoque,
        MAX(estoqueData)                                      AS estoqueData,
        MAX(estoqueCD)                                        AS estoqueCD,
-       MAX(estoqueLoja)                                      AS estoqueLoja
+       MAX(estoqueLoja)                                      AS estoqueLoja,
+       MAX(estoqueUser)                                      AS estoqueUser
 FROM
   sqldados.prdAdicional
 WHERE storeno = 4
@@ -110,6 +111,8 @@ SELECT 4                                                                        
        A.dataObservacao                                                               AS dataObservacao,
        A.observacao                                                                   AS observacao,
        PC.refprice / 100                                                              AS preco,
+       A.estoqueUser                                                                  AS estoqueUser,
+       U.login                                                                        AS estoqueLogin,
        A.estoqueData                                                                  AS estoqueData,
        A.estoqueCD                                                                    AS estoqueCD,
        A.estoqueLoja                                                                  AS estoqueLoja,
@@ -127,6 +130,8 @@ FROM
                ON V.no = P.mfno
     LEFT JOIN  T_LOC_APP      AS A
                USING (prdno, grade)
+    LEFT JOIN  sqldados.users AS U
+               ON U.no = A.estoqueUser
     LEFT JOIN  T_BARCODE      AS B
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
@@ -168,6 +173,8 @@ SELECT loja,
        dataObservacao,
        observacao,
        preco,
+       estoqueUser,
+       estoqueLogin,
        estoqueData,
        estoqueCD,
        estoqueLoja,

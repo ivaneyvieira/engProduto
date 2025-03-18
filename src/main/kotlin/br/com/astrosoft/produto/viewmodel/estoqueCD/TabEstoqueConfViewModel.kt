@@ -127,6 +127,40 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       updateView()
     }
   }
+
+  fun marcaProduto() {
+    val listaSelecionando = subView.itensSelecionados()
+    if (listaSelecionando.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    listaSelecionando.forEach { produto ->
+      produto.estoqueUser = user?.no
+      produto.estoqueLogin = user?.login
+      produto.estoqueData = LocalDate.now()
+    }
+    ProdutoEstoque.update(listaSelecionando)
+    subView.reloadGrid()
+  }
+
+  fun desmarcaProduto() {
+    val listaSelecionando = subView.itensSelecionados()
+    if (listaSelecionando.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    listaSelecionando.forEach { produto ->
+      produto.estoqueUser = null
+      produto.estoqueLogin = null
+      produto.estoqueData = null
+    }
+    ProdutoEstoque.update(listaSelecionando)
+    subView.reloadGrid()
+  }
 }
 
 interface ITabEstoqueConf : ITabView {

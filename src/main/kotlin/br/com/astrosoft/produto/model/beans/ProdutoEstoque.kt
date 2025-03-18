@@ -27,6 +27,8 @@ class ProdutoEstoque(
   var dataObservacao: LocalDate? = null,
   var observacao: String? = null,
   var preco: Double? = null,
+  var estoqueUser: Int? = null,
+  var estoqueLogin: String? = null,
   var estoqueData: LocalDate? = null,
   var estoqueCD: Int? = null,
   var estoqueLoja: Int? = null,
@@ -316,6 +318,10 @@ class ProdutoEstoque(
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
+    }
+
+    fun update(produtos: List<ProdutoEstoque>) {
+      saci.updateProdutoEstoque(produtos)
     }
   }
 }

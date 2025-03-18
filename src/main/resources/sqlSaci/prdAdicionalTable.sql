@@ -25,7 +25,12 @@ ALTER TABLE sqldados.prdAdicional
 
 UPDATE sqldados.prdAdicional
 SET estoqueData = dataObservacao
-WHERE dataObservacao != estoqueData or dataObservacao is not null;
+WHERE dataObservacao != estoqueData
+   OR dataObservacao IS NOT NULL;
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueUser int NULL;
+
 
 SELECT *
 FROM

@@ -1017,6 +1017,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateProdutoEstoque(produtos: List<ProdutoEstoque>) {
+    transaction {
+      produtos.forEach { produto ->
+        updateProdutoEstoque(produto)
+      }
+    }
+  }
+
   fun updateProdutoEstoque(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoEstoque.sql"
 
@@ -1031,6 +1039,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("kardec", produtoEstoque.kardec)
       addOptionalParameter("dataObservacao", produtoEstoque.dataObservacao)
       addOptionalParameter("observacao", produtoEstoque.observacao)
+      addOptionalParameter("estoqueUser", produtoEstoque.estoqueUser)
       addOptionalParameter("estoqueData", produtoEstoque.estoqueData)
       addOptionalParameter("estoqueCD", produtoEstoque.estoqueCD)
       addOptionalParameter("estoqueLoja", produtoEstoque.estoqueLoja)

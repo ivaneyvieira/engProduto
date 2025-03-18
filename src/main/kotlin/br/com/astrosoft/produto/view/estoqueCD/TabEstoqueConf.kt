@@ -119,6 +119,21 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           viewModel.geraPlanilha(produtos)
         }
 
+        this.button("Marca") {
+          this.icon = VaadinIcon.CHECK.create()
+          onClick {
+            viewModel.marcaProduto()
+          }
+        }
+
+
+        this.button("Desmarcar") {
+          this.icon = VaadinIcon.CLOSE.create()
+          onClick {
+            viewModel.desmarcaProduto()
+          }
+        }
+
         this.button("Estoque") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -207,6 +222,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::embalagem, header = "Emb")
+    columnGrid(ProdutoEstoque::estoqueLogin, header = "Usu Conf", width = "100px")
     columnGrid(ProdutoEstoque::numeroAcerto, header = "Pedido")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
