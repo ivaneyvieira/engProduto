@@ -68,7 +68,13 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val report = PrintProdutosConferenciaEstoque()
 
     report.print(
-      dados = produtos, printer = subView.printerPreview()
+      dados = produtos, printer = subView.printerPreview(printEvent = {
+        produtos.forEach { produto ->
+          produto.estoqueData = LocalDate.now()
+          produto.update()
+          subView.reloadGrid()
+        }
+      })
     )
   }
 
