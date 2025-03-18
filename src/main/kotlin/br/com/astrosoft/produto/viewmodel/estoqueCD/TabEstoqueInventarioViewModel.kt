@@ -88,21 +88,23 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
 
     report.print(
 
-      dados = produtosAcerto, printer = subView.printerPreview(actionSave = {
-        if (user?.estoqueGravaAcerto != true) {
-          viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
-        } else {
-          val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
-          if (jaGravado != null) {
-            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
-          }
-          subView.autorizaAcerto {
-            produtosAcerto.forEach {
-              it.save()
+      dados = produtosAcerto, printer = subView.printerPreview(
+        showPrintBunton = false,
+        actionSave = {
+          if (user?.estoqueGravaAcerto != true) {
+            viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+          } else {
+            val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
+            if (jaGravado != null) {
+              viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
+            }
+            subView.autorizaAcerto {
+              produtosAcerto.forEach {
+                it.save()
+              }
             }
           }
-        }
-      })
+        })
     )
   }
 

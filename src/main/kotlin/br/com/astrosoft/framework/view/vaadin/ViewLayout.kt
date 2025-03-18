@@ -90,10 +90,11 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     printerUser: List<String>,
     rota: Rota?,
     loja: Int,
+    showPrintBunton: Boolean,
     actionSave: Runnable?,
     printEvent: (impressora: String) -> Unit
   ) {
-    DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, actionSave, printEvent)
+    DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
   }
 
   override fun beforeLeave(event: BeforeLeaveEvent?) {

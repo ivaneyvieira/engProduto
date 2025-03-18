@@ -11,6 +11,7 @@ interface ITabView {
     showPrinter: Boolean = true,
     rota: Rota? = null,
     loja: Int = 0,
+    showPrintBunton: Boolean = true,
     actionSave: Runnable? = null,
     printEvent: (impressora: String) -> Unit = {}
   ): IPrinter

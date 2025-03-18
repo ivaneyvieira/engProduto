@@ -21,6 +21,7 @@ class SubWindowPrinter(
   printerUser: List<String>,
   rota: Rota?,
   loja: Int,
+  val showPrintBunton: Boolean = true,
   val actionSave: Runnable?,
   val printEvent: (impressora: String) -> Unit
 ) :
@@ -59,25 +60,27 @@ class SubWindowPrinter(
           }
         }
         if (showPrinter) {
-          cmbImpressora = this.select("Impressora") {
-            val userSaci = AppConfig.userLogin() as? UserSaci
-            val allPrinter =
-                if (rota == null) {
-                  Impressora.allTermica().map { it.name }
-                } else {
-                  Impressora.allTermica()
-                    .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
-                }
-            val lista =
-                when {
-                  userSaci?.admin == true                    -> allPrinter
-                  printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
-                  printerUser.isEmpty()                      -> emptyList()
-                  else                                       -> printerUser
-                }
-            setItems(lista)
+          if (showPrintBunton) {
+            cmbImpressora = this.select("Impressora") {
+              val userSaci = AppConfig.userLogin() as? UserSaci
+              val allPrinter =
+                  if (rota == null) {
+                    Impressora.allTermica().map { it.name }
+                  } else {
+                    Impressora.allTermica()
+                      .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
+                  }
+              val lista =
+                  when {
+                    userSaci?.admin == true                    -> allPrinter
+                    printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                    printerUser.isEmpty()                      -> emptyList()
+                    else                                       -> printerUser
+                  }
+              setItems(lista)
 
-            this.value = lista.firstOrNull()
+              this.value = lista.firstOrNull()
+            }
           }
           if (actionSave != null) {
             this.button("Grava") {
@@ -87,27 +90,29 @@ class SubWindowPrinter(
               }
             }
           }
-          this.button("Imprimir") {
-            icon = VaadinIcon.PRINT.create()
-            this.onClick {
-              DialogHelper.showQuestion("Confirma a impressão?") {
-                val impressoraName = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
-                val impressora = Impressora.findImpressora(impressoraName)
-                val tipoRota = impressora?.tipoRota()
-                if (tipoRota != null) {
-                  val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
-                  val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
-                  val printerRota = listOf(impressoraOrigem, impressoraDestino)
-                  printerRota.forEach { printer ->
-                    imprimeText(text, printer, loja)
+          if (showPrintBunton) {
+            this.button("Imprimir") {
+              icon = VaadinIcon.PRINT.create()
+              this.onClick {
+                DialogHelper.showQuestion("Confirma a impressão?") {
+                  val impressoraName = cmbImpressora?.value ?: "Nenhuma impressora selecionada"
+                  val impressora = Impressora.findImpressora(impressoraName)
+                  val tipoRota = impressora?.tipoRota()
+                  if (tipoRota != null) {
+                    val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
+                    val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
+                    val printerRota = listOf(impressoraOrigem, impressoraDestino)
+                    printerRota.forEach { printer ->
+                      imprimeText(text, printer, loja)
+                    }
+                    printEvent(printerRota.firstOrNull() ?: "")
+                  } else {
+                    imprimeText(text, impressoraName, loja)
+                    printEvent(impressoraName)
                   }
-                  printEvent(printerRota.firstOrNull() ?: "")
-                } else {
-                  imprimeText(text, impressoraName, loja)
-                  printEvent(impressoraName)
+                  this@SubWindowPrinter.close()
+                  //TODO verificar se a impressão foi realizada
                 }
-                this@SubWindowPrinter.close()
-                //TODO verificar se a impressão foi realizada
               }
             }
           }
