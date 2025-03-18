@@ -19,6 +19,7 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::estoqueMov, "Mov")
     columnGrid(UserSaci::estoqueConf, "Conf")
+    //columnGrid(UserSaci::estoqueInventario, "Inventário")
     columnGrid(UserSaci::estoqueAcerto, "Acerto")
     columnGrid(UserSaci::estoqueSaldo, "Estoque")
     columnGrid(UserSaci::estoqueCad, "Cad Loc")
@@ -36,6 +37,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Conferência") {
         binder.bind(this, UserSaci::estoqueConf.name)
       }
+      //   checkBox("Inventario") {
+      //       binder.bind(this, UserSaci::estoqueInventario.name)
+      //     }
       checkBox("Acerto") {
         binder.bind(this, UserSaci::estoqueAcerto.name)
       }
