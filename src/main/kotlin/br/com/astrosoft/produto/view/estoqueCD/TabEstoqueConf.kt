@@ -98,7 +98,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-          this.value = ECaracter.NAO
+          this.value = ECaracter.TODOS
           addValueChangeListener {
             viewModel.updateView()
           }
