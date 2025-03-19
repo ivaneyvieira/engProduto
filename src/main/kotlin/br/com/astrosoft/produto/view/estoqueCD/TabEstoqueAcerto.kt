@@ -59,8 +59,9 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
 
     columnGrid(ProdutoEstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(ProdutoEstoqueAcerto::numero, header = "Acerto")
-    addColumnButton(VaadinIcon.PRINT, "Imprimir") { acerto ->
-      viewModel.imprimir(acerto)
+    addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
+      val dlg = DlgEstoqueAcerto(viewModel, acerto)
+      dlg.showDialog()
     }
     columnGrid(ProdutoEstoqueAcerto::data, header = "Data")
     columnGrid(ProdutoEstoqueAcerto::hora, header = "Hora")

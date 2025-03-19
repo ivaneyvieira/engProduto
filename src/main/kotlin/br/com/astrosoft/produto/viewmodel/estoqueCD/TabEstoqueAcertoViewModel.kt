@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.beans.agrupa
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
+import br.com.astrosoft.produto.model.report.ReportAcerto
 
 class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -43,7 +44,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     )
   }
 
-  fun cancelarAcerto()= viewModel.exec {
+  fun cancelarAcerto() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados().filter {
       it.processado == "Não"
     }
@@ -56,6 +57,18 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       }
       updateView()
     }
+  }
+
+  fun imprimirRelatorio(acerto: ProdutoEstoqueAcerto) {
+    val filtro = FiltroAcerto(
+      numLoja = acerto.numloja ?: 0,
+      numero = acerto.numero ?: 0
+    )
+    val produtos = ProdutoEstoqueAcerto.findAll(filtro)
+
+    val report = ReportAcerto()
+    val file = report.processaRelatorio(produtos)
+    viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
   }
 }
 
