@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
@@ -38,12 +37,9 @@ class ProdutoEstoque(
   var numeroAcerto: Int? = null,
   var processado: Boolean? = false,
 ) {
-  val marcadoConf: Boolean
-    get() {
-      val data = LocalDate.now()
-      val user =userLazy ?: return false
-      return (estoqueUser == user.no) && (estoqueData == data)
-    }
+  fun marcadoConf(userNo: Int, data: LocalDate): Boolean {
+    return (estoqueUser == userNo) && (estoqueData == data)
+  }
 
   val estoqueDif: Int?
     get() {
@@ -324,8 +320,6 @@ class ProdutoEstoque(
   }
 
   companion object {
-    val userLazy = AppConfig.userLogin()
-
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
     }

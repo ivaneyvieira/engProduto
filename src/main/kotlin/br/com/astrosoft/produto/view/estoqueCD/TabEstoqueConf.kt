@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueConf {
@@ -230,9 +231,11 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+    val userno = AppConfig.userLogin()?.no ?: 0
+    val data = LocalDate.now()
 
     this.setPartNameGenerator {
-      if (it.marcadoConf) "amarelo" else null
+      if (it.marcadoConf(userno, data)) "amarelo" else null
     }
   }
 

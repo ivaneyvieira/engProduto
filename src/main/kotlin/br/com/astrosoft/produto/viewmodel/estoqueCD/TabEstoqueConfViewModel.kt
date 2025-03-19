@@ -61,8 +61,11 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
   fun imprimeProdutosEstoque() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
+    val userno = AppConfig.userLogin()?.no ?: 0
+    val data = LocalDate.now()
+
     val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
-      it.marcadoConf
+      it.marcadoConf(userno, data)
     }
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
