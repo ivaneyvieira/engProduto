@@ -970,6 +970,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoque", filter.estoque.value)
       addOptionalParameter("saldo", filter.saldo)
       addOptionalParameter("inativo", filter.inativo.codigo)
+      addOptionalParameter("uso", filter.uso.codigo)
     }
   }
 

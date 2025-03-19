@@ -31,6 +31,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var cmbInativo: Select<EInativo>
+  private lateinit var cmbUso: Select<EUso>
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
@@ -113,6 +114,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
+
         cmbInativo = select("Inativo") {
           this.width = "90px"
           this.setItems(EInativo.entries)
@@ -120,6 +122,18 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             item.descricao
           }
           this.value = EInativo.NAO
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        cmbUso = select("Uso") {
+          this.width = "90px"
+          this.setItems(EUso.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EUso.NAO
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -178,7 +192,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
         }
 
         edtSaldo = integerField("Saldo") {
-          this.width = "80px"
+          this.width = "100px"
           //this.isClearButtonVisible = true
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
@@ -221,7 +235,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
-    columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "80px")
+    columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "100px")
     addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
       val dlgConferencia = DlgConferenciaConf(viewModel, produto) {
         gridPanel.dataProvider.refreshAll()
@@ -266,6 +280,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       pedido = edtPedido.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
+      uso = cmbUso.value ?: EUso.TODOS,
       inativo = cmbInativo.value ?: EInativo.TODOS,
       listaUser = listaUser,
     )
@@ -288,6 +303,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       estoque = EEstoque.TODOS,
       saldo = 0,
       inativo = EInativo.TODOS,
+      uso = EUso.TODOS,
       listaUser = listaUser,
     )
   }

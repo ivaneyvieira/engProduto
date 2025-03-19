@@ -326,6 +326,10 @@ enum class EInativo(val codigo: String?, val descricao: String) {
   NAO("N", "Não"), SIM("S", "Sim"), TODOS("T", "Todos")
 }
 
+enum class EUso(val codigo: String?, val descricao: String) {
+  NAO("N", "Não"), SIM("S", "Sim"), TODOS("T", "Todos")
+}
+
 enum class EEstoqueTotal(val codigo: String?, val descricao: String) {
   MENOR("<", "<"), MAIOR(">", ">"), IGUAL("=", "="), TODOS("T", "Todos")
 }

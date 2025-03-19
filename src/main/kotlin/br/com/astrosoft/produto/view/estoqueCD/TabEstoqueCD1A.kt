@@ -96,6 +96,7 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       localizacao = "CD1A",
       fornecedor = "",
       inativo = cmbInativo.value ?: EInativo.TODOS,
+      uso = EUso.TODOS,
       listaUser = listaUser
     )
   }

@@ -138,8 +138,12 @@ FROM
                ON PC.storeno = 10 AND PC.prdno = E.prdno
     LEFT JOIN  T_ACERTO       AS AC
                ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
-WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
+WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
+       ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
+  AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR
+       ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR
+       (:uso = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND (E.prdno = :prdno OR :prdno = '')
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
