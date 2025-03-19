@@ -27,6 +27,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
   private lateinit var edtCentroLucro: IntegerField
+  private lateinit var edtPedido: IntegerField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var cmbInativo: Select<EInativo>
@@ -83,6 +84,15 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
         }
 
         edtCentroLucro = integerField("C. Lucro") {
+          this.width = "100px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtPedido = integerField("Pedido") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
@@ -253,6 +263,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = edtFornecedor.value ?: "",
       centroLucro = edtCentroLucro.value ?: 0,
+      pedido = edtPedido.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,

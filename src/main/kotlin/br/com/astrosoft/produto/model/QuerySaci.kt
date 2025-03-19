@@ -964,6 +964,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("fornecedor", filter.fornecedor)
       addOptionalParameter("centroLucro", filter.centroLucro)
+      addOptionalParameter("pedido", filter.pedido)
       addOptionalParameter("localizacaoUser", filter.listaUser)
       addOptionalParameter("localizacao", filter.localizacao)
       addOptionalParameter("estoque", filter.estoque.value)

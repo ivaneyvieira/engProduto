@@ -338,6 +338,7 @@ data class FiltroProdutoEstoque(
   val localizacao: String?,
   val fornecedor: String,
   val centroLucro: Int = 0,
+  val pedido: Int = 0,
   val estoque: EEstoque = EEstoque.TODOS,
   val saldo: Int = 0,
   val inativo: EInativo,
