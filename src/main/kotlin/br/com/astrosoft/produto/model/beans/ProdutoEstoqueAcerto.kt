@@ -52,7 +52,8 @@ class ProdutoEstoqueAcerto(
 
 data class FiltroAcerto(
   val numLoja: Int = 0,
-  val data: LocalDate? = null,
+  val dataInicial: LocalDate? = null,
+  val dataFinal: LocalDate? = null,
   val numero: Int = 0,
 )
 

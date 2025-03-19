@@ -25,7 +25,8 @@ import java.time.LocalDate
 class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcerto {
   private lateinit var edtNumero: IntegerField
-  private lateinit var edtDate: DatePicker
+  private lateinit var edtDateIncial: DatePicker
+  private lateinit var edtDateFinal: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     edtNumero = integerField("Número") {
@@ -37,7 +38,15 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       }
     }
 
-    edtDate = datePicker("Data") {
+    edtDateIncial = datePicker("Data") {
+      this.value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    edtDateFinal = datePicker("Data") {
       this.value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
@@ -75,7 +84,8 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     return FiltroAcerto(
       numLoja = 4,
       numero = edtNumero.value ?: 0,
-      data = edtDate.value ?: LocalDate.now()
+      dataInicial = edtDateIncial.value ?: LocalDate.now(),
+      dataFinal = edtDateFinal.value ?: LocalDate.now()
     )
   }
 

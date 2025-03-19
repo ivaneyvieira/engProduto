@@ -1966,7 +1966,8 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/produtoEstoqueAcertoFindAll.sql"
     return query(sql, ProdutoEstoqueAcerto::class) {
       addOptionalParameter("numLoja", filtro.numLoja)
-      addOptionalParameter("data", filtro.data.toSaciDate())
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
     }
   }
