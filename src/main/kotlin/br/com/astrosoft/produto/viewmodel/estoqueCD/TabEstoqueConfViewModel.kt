@@ -112,6 +112,9 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
                 produtos.forEach { prd ->
                   prd.estoqueCD = null
                   prd.estoqueLoja = null
+                  prd.estoqueData = null
+                  prd.estoqueUser = null
+                  prd.estoqueLogin = null
                   prd.update()
                 }
                 subView.reloadGrid()
