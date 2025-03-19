@@ -1981,9 +1981,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun acertoCancela(produtoEstoqueAcerto: ProdutoEstoqueAcerto) {
+  fun acertoCancela(produtoEstoqueAcerto: EstoqueAcerto) {
     val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
     script(sql) {
+      addOptionalParameter("numloja", produtoEstoqueAcerto.numloja)
       addOptionalParameter("numero", produtoEstoqueAcerto.numero)
     }
   }

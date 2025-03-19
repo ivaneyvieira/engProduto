@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroAcerto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
-import br.com.astrosoft.produto.model.beans.agrupa
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
@@ -30,7 +27,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     subView.updateProduto(produtos)
   }
 
-  fun imprimir(acerto: ProdutoEstoqueAcerto) = viewModel.exec {
+  fun imprimir(acerto: EstoqueAcerto) = viewModel.exec {
     val produtos =
         ProdutoEstoqueAcerto.findAll(FiltroAcerto(numLoja = acerto.numloja ?: 0, numero = acerto.numero ?: 0)).filter {
           (it.diferenca ?: 0) != 0
@@ -61,7 +58,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun imprimirRelatorio(acerto: ProdutoEstoqueAcerto) {
+  fun imprimirRelatorio(acerto: EstoqueAcerto) {
     val filtro = FiltroAcerto(
       numLoja = acerto.numloja ?: 0,
       numero = acerto.numero ?: 0
@@ -81,6 +78,6 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
 interface ITabEstoqueAcerto : ITabView {
   fun filtro(): FiltroAcerto
-  fun updateProduto(produtos: List<ProdutoEstoqueAcerto>)
-  fun itensSelecionados(): List<ProdutoEstoqueAcerto>
+  fun updateProduto(produtos: List<EstoqueAcerto>)
+  fun itensSelecionados(): List<EstoqueAcerto>
 }

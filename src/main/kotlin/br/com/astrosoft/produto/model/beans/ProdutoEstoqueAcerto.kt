@@ -40,10 +40,6 @@ class ProdutoEstoqueAcerto(
     return saci.jaGravado(this).isNotEmpty()
   }
 
-  fun cancela() {
-    saci.acertoCancela(this)
-  }
-
   val codigo
     get() = prdno?.trim()
 
@@ -85,9 +81,39 @@ fun List<ProdutoEstoque>.toAcerto(): List<ProdutoEstoqueAcerto> {
   }
 }
 
-fun List<ProdutoEstoqueAcerto>.agrupa(): List<ProdutoEstoqueAcerto> {
+fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull {
-    it.value.firstOrNull() ?: return@mapNotNull null
+    val acerto = it.value.firstOrNull() ?: return@mapNotNull null
+
+    EstoqueAcerto(
+      numero = acerto.numero ?: return@mapNotNull null,
+      numloja = acerto.numloja ?: return@mapNotNull null,
+      lojaSigla = acerto.lojaSigla ?: return@mapNotNull null,
+      data = acerto.data ?: return@mapNotNull null,
+      hora = acerto.hora ?: return@mapNotNull null,
+      login = acerto.login,
+      usuario = acerto.usuario,
+      processado = acerto.processado,
+      transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
+      transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao
+    )
+  }
+}
+
+class EstoqueAcerto(
+  var numero: Int,
+  var numloja: Int,
+  var lojaSigla: String,
+  var data: LocalDate,
+  var hora: LocalTime,
+  var login: String?,
+  var usuario: String?,
+  var processado: String?,
+  var transacaoEnt: String?,
+  var transacaoSai: String?
+) {
+  fun cancela() {
+    saci.acertoCancela(this)
   }
 }

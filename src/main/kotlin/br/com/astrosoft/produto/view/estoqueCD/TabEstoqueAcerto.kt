@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.FiltroAcerto
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
@@ -23,7 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
-  TabPanelGrid<ProdutoEstoqueAcerto>(ProdutoEstoqueAcerto::class), ITabEstoqueAcerto {
+  TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcerto {
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDate: DatePicker
 
@@ -53,21 +53,22 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     }
   }
 
-  override fun Grid<ProdutoEstoqueAcerto>.gridPanel() {
+  override fun Grid<EstoqueAcerto>.gridPanel() {
     this.addClassName("styling")
     selectionMode = Grid.SelectionMode.MULTI
 
-    columnGrid(ProdutoEstoqueAcerto::lojaSigla, header = "Loja")
-    columnGrid(ProdutoEstoqueAcerto::numero, header = "Acerto")
+    columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
+    columnGrid(EstoqueAcerto::numero, header = "Acerto")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
       val dlg = DlgEstoqueAcerto(viewModel, acerto)
       dlg.showDialog()
     }
-    columnGrid(ProdutoEstoqueAcerto::data, header = "Data")
-    columnGrid(ProdutoEstoqueAcerto::hora, header = "Hora")
-    columnGrid(ProdutoEstoqueAcerto::login, header = "Usuário", width = "80px")
-    columnGrid(ProdutoEstoqueAcerto::transacao, header = "Transação")
-    columnGrid(ProdutoEstoqueAcerto::processado, header = "Processado")
+    columnGrid(EstoqueAcerto::data, header = "Data")
+    columnGrid(EstoqueAcerto::hora, header = "Hora")
+    columnGrid(EstoqueAcerto::login, header = "Usuário", width = "80px")
+    columnGrid(EstoqueAcerto::transacaoEnt, header = "Trans Ent")
+    columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
+    columnGrid(EstoqueAcerto::processado, header = "Processado")
   }
 
   override fun filtro(): FiltroAcerto {
@@ -78,7 +79,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     )
   }
 
-  override fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
+  override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
   }
 

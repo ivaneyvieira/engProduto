@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.FiltroAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
@@ -13,7 +14,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: ProdutoEstoqueAcerto) {
+class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: EstoqueAcerto) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoEstoqueAcerto::class.java, false)
@@ -21,7 +22,7 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Pro
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
     val numero = acerto.numero
-    val loja = acerto.estoqueLoja
+    val loja = acerto.lojaSigla
 
     form = SubWindowForm(
       "Produtos do Acerto $numero - Loja $loja",
@@ -40,7 +41,7 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Pro
         }
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
-          val produtos = produtoEstoqueAcertos()
+          val produtos = estoqueAcertos()
           viewModel.geraPlanilha(produtos)
         }
       },
@@ -80,14 +81,14 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Pro
   }
 
   fun update() {
-    val produtos = produtoEstoqueAcertos()
+    val produtos = estoqueAcertos()
     gridDetail.setItems(produtos)
   }
 
-  private fun produtoEstoqueAcertos(): List<ProdutoEstoqueAcerto> {
+  private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
-      numLoja = acerto.numloja ?: 0,
-      numero = acerto.numero ?: 0
+      numLoja = acerto.numloja,
+      numero = acerto.numero
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos
