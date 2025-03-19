@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -16,10 +18,21 @@ class ProdutoEstoqueAcerto(
   var prdno: String? = null,
   var descricao: String? = null,
   var grade: String? = null,
+  var estoqueSis: Int? = null,
+  var estoqueCD: Int? = null,
+  var estoqueLoja: Int? = null,
   var diferenca: Int? = null,
   var processado: String? = null,
   var transacao: String? = null
 ) {
+  val estoqueRelatorio: String
+    get() {
+      val estSis = estoqueSis?.format() ?: ""
+      val estCD = estoqueCD?.format() ?: ""
+      val estLj = estoqueLoja?.format() ?: ""
+      return "       Est Sis: $estSis | Est CD: $estCD | Est Loja: $estLj"
+    }
+
   fun save() {
     saci.acertoUpdate(this)
   }
@@ -65,6 +78,9 @@ fun List<ProdutoEstoque>.toAcerto(): List<ProdutoEstoqueAcerto> {
       prdno = it.prdno,
       descricao = it.descricao,
       grade = it.grade,
+      estoqueSis = it.saldo,
+      estoqueCD = it.estoqueCD,
+      estoqueLoja = it.estoqueLoja,
       diferenca = it.estoqueDif
     )
   }

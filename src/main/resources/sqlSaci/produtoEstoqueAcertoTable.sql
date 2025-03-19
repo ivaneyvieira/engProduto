@@ -25,6 +25,14 @@ ALTER TABLE produtoEstoqueAcerto
 ALTER TABLE produtoEstoqueAcerto
   ADD login varchar(20) DEFAULT '';
 
+ALTER TABLE produtoEstoqueAcerto
+  ADD estoqueCD   int NULL AFTER grade,
+  ADD estoqueLoja int NULL AFTER grade;
+
+ALTER TABLE produtoEstoqueAcerto
+  ADD estoqueSis   int NULL AFTER grade;
+
+
 SELECT A.*, U.login
 FROM
   produtoEstoqueAcerto AS A
@@ -35,7 +43,9 @@ UPDATE produtoEstoqueAcerto AS A INNER JOIN users AS U ON U.name = A.usuario
 SET A.login = U.login
 WHERE A.login != U.login;
 
-select * from produtoEstoqueAcerto;
+SELECT *
+FROM
+  produtoEstoqueAcerto;
 
 SELECT A.*, M.xano
 FROM

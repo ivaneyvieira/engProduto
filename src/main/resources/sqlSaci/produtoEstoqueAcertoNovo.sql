@@ -23,17 +23,50 @@ SELECT @NUMERO + 1         AS numero,
        ''                  AS prdno,
        ''                  AS descricao,
        ''                  AS grade,
+       FALSE               AS processado,
+       0                   AS transacao,
+       0                   AS estoqueSis,
+       0                   AS estoqueCD,
+       0                   AS estoqueLoja,
        0                   AS diferenca
 FROM
   sqldados.store
 WHERE no = :numLoja;
 
 REPLACE INTO produtoEstoqueAcerto (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,
-                                   diferenca)
-SELECT numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade, diferenca
+                                   estoqueSis, estoqueCD, estoqueLoja, diferenca)
+SELECT numero,
+       numloja,
+       lojaSigla,
+       data,
+       hora,
+       login,
+       usuario,
+       prdno,
+       descricao,
+       grade,
+       estoqueSis,
+       estoqueCD,
+       estoqueLoja,
+       diferenca
 FROM
   T_ACERTO;
 
-SELECT *
+SELECT numero,
+       numloja,
+       lojaSigla,
+       data,
+       hora,
+       login,
+       usuario,
+       prdno,
+       descricao,
+       grade,
+       estoqueSis,
+       estoqueCD,
+       estoqueLoja,
+       diferenca,
+       IF(processado, 'Sim', 'Não') AS processado,
+       transacao
 FROM
   T_ACERTO

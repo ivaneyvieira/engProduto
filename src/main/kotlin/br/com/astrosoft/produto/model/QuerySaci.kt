@@ -1955,6 +1955,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("descricao", produto.descricao)
       addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("estoqueSis", produto.estoqueSis)
+      addOptionalParameter("estoqueCD", produto.estoqueCD)
+      addOptionalParameter("estoqueLoja", produto.estoqueLoja)
       addOptionalParameter("diferenca", produto.diferenca)
     }
   }
@@ -1975,7 +1978,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("data", produtoEstoqueAcerto.data.toSaciDate())
       addOptionalParameter("prdno", produtoEstoqueAcerto.prdno)
       addOptionalParameter("grade", produtoEstoqueAcerto.grade)
-      addOptionalParameter("diferenca", produtoEstoqueAcerto.diferenca)
     }
   }
 

@@ -31,6 +31,9 @@ WHERE dataObservacao != estoqueData
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN estoqueUser int NULL;
 
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueUser int NULL;
+
 
 SELECT *
 FROM

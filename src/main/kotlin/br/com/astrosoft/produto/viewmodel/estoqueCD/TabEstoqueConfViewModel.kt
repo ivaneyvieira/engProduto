@@ -103,10 +103,18 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
             val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
             if (jaGravado != null) {
               viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
-            }
-            subView.autorizaAcerto {
-              produtosAcerto.forEach {
-                it.save()
+            } else {
+              subView.autorizaAcerto {
+                produtosAcerto.forEach {
+                  it.save()
+                }
+
+                produtos.forEach { prd ->
+                  prd.estoqueCD = null
+                  prd.estoqueLoja = null
+                  prd.update()
+                }
+                subView.reloadGrid()
               }
             }
           }

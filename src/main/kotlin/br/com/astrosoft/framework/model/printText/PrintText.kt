@@ -12,7 +12,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   @JvmName("columnString")
   fun column(
     property: KProperty1<T, String?>,
-    header: String,
+    header: String = "",
     size: Int,
     lineBreak: Boolean = false,
     expand: Boolean = false
@@ -23,7 +23,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   @JvmName("columnDouble")
   fun column(
     property: KProperty1<T, Double?>,
-    header: String,
+    header: String = "",
     size: Int,
     format: String = "#,##0.00",
     lineBreak: Boolean = false,
@@ -35,7 +35,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   @JvmName("columnInt")
   fun column(
     property: KProperty1<T, Int?>,
-    header: String,
+    header: String = "",
     size: Int,
     format: String = "#,##0",
     lineBreak: Boolean = false,
