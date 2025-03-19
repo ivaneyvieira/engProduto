@@ -6,6 +6,8 @@ import br.com.astrosoft.produto.model.beans.FiltroAcerto
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.beans.agrupa
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.report.ReportAcerto
 
@@ -69,6 +71,11 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
+  }
+
+  fun geraPlanilha(produtos: List<ProdutoEstoqueAcerto>): ByteArray {
+    val planilha = PlanilhaProdutoEstoqueAcerto()
+    return planilha.write(produtos)
   }
 }
 

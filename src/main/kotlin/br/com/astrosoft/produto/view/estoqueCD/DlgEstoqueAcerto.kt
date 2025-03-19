@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.FiltroAcerto
@@ -25,17 +26,22 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Pro
     form = SubWindowForm(
       "Produtos do Acerto $numero - Loja $loja",
       toolBar = {
-        button("Imprimir"){
+        button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           this.addClickListener {
             viewModel.imprimir(acerto)
           }
         }
-        button ("Relatório"){
+        button("Relatório") {
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
             viewModel.imprimirRelatorio(acerto)
           }
+        }
+
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
+          val produtos = produtoEstoqueAcertos()
+          viewModel.geraPlanilha(produtos)
         }
       },
       onClose = {
@@ -74,12 +80,17 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Pro
   }
 
   fun update() {
+    val produtos = produtoEstoqueAcertos()
+    gridDetail.setItems(produtos)
+  }
+
+  private fun produtoEstoqueAcertos(): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
       numLoja = acerto.numloja ?: 0,
       numero = acerto.numero ?: 0
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
-    gridDetail.setItems(produtos)
+    return produtos
   }
 
   private fun closeForm() {
