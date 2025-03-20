@@ -24,6 +24,20 @@ class ProdutoEstoqueAcerto(
   var processado: String? = null,
   var transacao: String? = null
 ) {
+  val acertado
+    get() = estoqueCD != null && estoqueLoja != null
+
+  fun updateDiferenca() {
+    val estSis = estoqueSis ?: 0
+    val estCD = estoqueCD
+    val estLj = estoqueLoja
+    diferenca = if (estCD != null && estLj != null) {
+      (estCD + estLj) - estSis
+    } else {
+      0
+    }
+  }
+
   val estoqueRelatorio: String
     get() {
       val estSis = estoqueSis?.format() ?: ""
@@ -97,7 +111,8 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       usuario = acerto.usuario,
       processado = acerto.processado,
       transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
-      transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao
+      transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
+      produtos = it.value
     )
   }
 }
@@ -112,9 +127,27 @@ class EstoqueAcerto(
   var usuario: String?,
   var processado: String?,
   var transacaoEnt: String?,
-  var transacaoSai: String?
+  var transacaoSai: String?,
+  val produtos: List<ProdutoEstoqueAcerto> = emptyList()
 ) {
+  val produtosAjustados: String
+    get() {
+      return if (produtos.all { it.acertado })
+        "Sim"
+      else
+        "Não"
+    }
+
   fun cancela() {
     saci.acertoCancela(this)
+  }
+
+  fun findProdutos(): List<ProdutoEstoqueAcerto> {
+    val filtro = FiltroAcerto(
+      numLoja = numloja,
+      numero = numero
+    )
+    val produtos = ProdutoEstoqueAcerto.findAll(filtro)
+    return produtos
   }
 }

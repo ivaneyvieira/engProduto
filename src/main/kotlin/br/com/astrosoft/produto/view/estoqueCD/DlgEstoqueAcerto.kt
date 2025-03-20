@@ -2,10 +2,10 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
-import br.com.astrosoft.produto.model.beans.FiltroAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -67,6 +67,12 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código")
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade")
+      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
+        val dlgConferencia = DlgConferenciaAcerto(viewModel, produto) {
+          gridDetail.dataProvider.refreshAll()
+        }
+        dlgConferencia.open()
+      }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
       columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
@@ -86,12 +92,7 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
   }
 
   private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
-    val filtro = FiltroAcerto(
-      numLoja = acerto.numloja,
-      numero = acerto.numero
-    )
-    val produtos = ProdutoEstoqueAcerto.findAll(filtro)
-    return produtos
+    return acerto.findProdutos()
   }
 
   private fun closeForm() {

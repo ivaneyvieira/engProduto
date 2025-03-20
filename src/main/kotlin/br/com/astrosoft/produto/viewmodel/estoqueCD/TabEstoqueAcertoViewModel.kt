@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.report.ReportAcerto
@@ -28,10 +27,9 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimir(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos =
-        ProdutoEstoqueAcerto.findAll(FiltroAcerto(numLoja = acerto.numloja ?: 0, numero = acerto.numero ?: 0)).filter {
-          (it.diferenca ?: 0) != 0
-        }.sortedBy { it.diferenca ?: 999999 }
+    val produtos = acerto.findProdutos().filter {
+      (it.diferenca ?: 0) != 0
+    }.sortedBy { it.diferenca ?: 999999 }
     if (produtos.isEmpty()) {
       fail("Nenhum produto válido selecionado")
     }
@@ -59,11 +57,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirRelatorio(acerto: EstoqueAcerto) {
-    val filtro = FiltroAcerto(
-      numLoja = acerto.numloja ?: 0,
-      numero = acerto.numero ?: 0
-    )
-    val produtos = ProdutoEstoqueAcerto.findAll(filtro)
+    val produtos = acerto.findProdutos()
 
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
@@ -73,6 +67,10 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   fun geraPlanilha(produtos: List<ProdutoEstoqueAcerto>): ByteArray {
     val planilha = PlanilhaProdutoEstoqueAcerto()
     return planilha.write(produtos)
+  }
+
+  fun updateProduto(produto: ProdutoEstoqueAcerto) {
+    produto.save()
   }
 }
 

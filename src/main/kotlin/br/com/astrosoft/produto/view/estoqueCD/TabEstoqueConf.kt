@@ -236,12 +236,6 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
     columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "100px")
-    addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      val dlgConferencia = DlgConferenciaConf(viewModel, produto) {
-        gridPanel.dataProvider.refreshAll()
-      }
-      dlgConferencia.open()
-    }
     columnGrid(ProdutoEstoque::estoqueData, header = "Data Conf", width = "100px")
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
