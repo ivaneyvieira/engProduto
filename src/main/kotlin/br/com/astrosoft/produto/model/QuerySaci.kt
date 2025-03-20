@@ -1960,7 +1960,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoqueSis", produto.estoqueSis)
       addOptionalParameter("estoqueCD", produto.estoqueCD)
       addOptionalParameter("estoqueLoja", produto.estoqueLoja)
-      addOptionalParameter("diferenca", produto.diferenca)
+      addOptionalParameter("diferenca", produto.diferenca ?: 0)
     }
   }
 

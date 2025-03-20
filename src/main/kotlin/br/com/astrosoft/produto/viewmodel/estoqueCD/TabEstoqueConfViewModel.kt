@@ -1,11 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 
@@ -72,10 +70,29 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       fail("Nenhum produto selecionado")
     }
 
+    val produtosAcerto = produtos.toAcerto()
+
     val report = PrintProdutosConferenciaEstoque()
+    val user = AppConfig.userLogin() as? UserSaci
 
     report.print(
-      dados = produtos, printer = subView.printerPreview()
+      dados = produtos, printer = subView.printerPreview(actionSave = {
+        if (user?.estoqueGravaAcerto != true) {
+          viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+        } else {
+          val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
+          if (jaGravado != null) {
+            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
+          } else {
+            subView.autorizaAcerto {
+              produtosAcerto.forEach {
+                it.save()
+              }
+              subView.reloadGrid()
+            }
+          }
+        }
+      })
     )
   }
 
