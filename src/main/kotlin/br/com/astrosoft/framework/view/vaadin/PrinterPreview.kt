@@ -11,7 +11,7 @@ class PrinterPreview(
   val rota: Rota?,
   val loja: Int,
   val showPrintBunton: Boolean = true,
-  val actionSave: Runnable?,
+  val actionSave: ((SubWindowPrinter) -> Unit)?,
   val printEvent: (impressora: String) -> Unit
 ) : IPrinter {
   override fun print(text: TextBuffer) {

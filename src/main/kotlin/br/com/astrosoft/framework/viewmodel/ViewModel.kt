@@ -3,6 +3,7 @@ package br.com.astrosoft.framework.viewmodel
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.model.exceptions.EViewModelFail
 import br.com.astrosoft.framework.model.printText.TextBuffer
+import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
 import br.com.astrosoft.produto.model.beans.Rota
 
 abstract class ViewModel<V : IView>(val view: V) {
@@ -52,7 +53,7 @@ interface IView {
     rota: Rota? = null,
     loja: Int,
     showPrintBunton: Boolean = true,
-    actionSave: Runnable? = null,
+    actionSave: ((SubWindowPrinter) -> Unit)? = null,
     printEvent: (impressora: String) -> Unit
   )
 }

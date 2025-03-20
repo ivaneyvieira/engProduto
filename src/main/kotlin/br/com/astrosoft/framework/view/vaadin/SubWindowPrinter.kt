@@ -22,7 +22,7 @@ class SubWindowPrinter(
   rota: Rota?,
   loja: Int,
   val showPrintBunton: Boolean = true,
-  val actionSave: Runnable?,
+  val actionSave: ((SubWindowPrinter) -> Unit)?,
   val printEvent: (impressora: String) -> Unit
 ) :
   Dialog() {
@@ -86,7 +86,7 @@ class SubWindowPrinter(
             this.button("Grava") {
               icon = VaadinIcon.DISC.create()
               this.onClick {
-                actionSave.run()
+                actionSave.invoke(this@SubWindowPrinter)
               }
             }
           }

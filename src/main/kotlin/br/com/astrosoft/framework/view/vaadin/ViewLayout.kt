@@ -91,7 +91,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     rota: Rota?,
     loja: Int,
     showPrintBunton: Boolean,
-    actionSave: Runnable?,
+    actionSave: ((SubWindowPrinter) -> Unit)?,
     printEvent: (impressora: String) -> Unit
   ) {
     DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)

@@ -60,7 +60,7 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     rota: Rota?,
     loja: Int,
     showPrintBunton: Boolean,
-    actionSave: Runnable?,
+    actionSave: ((SubWindowPrinter) -> Unit)?,
     printEvent: (impressora: String) -> Unit
   ): IPrinter {
     return PrinterPreview(showPrinter, printerUser(), rota, loja, showPrintBunton, actionSave, printEvent)
