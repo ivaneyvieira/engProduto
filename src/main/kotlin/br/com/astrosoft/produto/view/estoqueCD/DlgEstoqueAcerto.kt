@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
@@ -68,10 +69,14 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
-        val dlgConferencia = DlgConferenciaAcerto(viewModel, produto) {
-          gridDetail.dataProvider.refreshAll()
+        if (acerto.processado == "Sim") {
+          DialogHelper.showWarning("Acerto já processado")
+        } else {
+          val dlgConferencia = DlgConferenciaAcerto(viewModel, produto) {
+            gridDetail.dataProvider.refreshAll()
+          }
+          dlgConferencia.open()
         }
-        dlgConferencia.open()
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")

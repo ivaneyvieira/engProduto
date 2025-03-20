@@ -139,11 +139,6 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           }
         }
 
-        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
-          val produtos = itensSelecionados()
-          viewModel.geraPlanilha(produtos)
-        }
-
         this.button("Marca") {
           this.icon = VaadinIcon.CHECK.create()
           onClick {
@@ -202,6 +197,11 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
+
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
+          val produtos = itensSelecionados()
+          viewModel.geraPlanilha(produtos)
+        }
       }
     }
   }
@@ -233,9 +233,9 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::preco, header = "Preço", width = "80px")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
-    columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
-    columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "100px")
+    //columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
+    //columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
+    //columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "100px")
     columnGrid(ProdutoEstoque::estoqueData, header = "Data Conf", width = "100px")
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
