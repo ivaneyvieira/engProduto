@@ -35,10 +35,33 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var cmbLoja: Select<Loja>
+
+  fun init() {
+    val user = AppConfig.userLogin() as? UserSaci
+    val loja = 4
+    val lojaSelecionada = viewModel.findAllLojas().firstOrNull { it.no == loja }
+    cmbLoja.isReadOnly = (user?.admin == false) && (lojaSelecionada?.no != 0)
+    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
+        cmbLoja = select("Loja") {
+          this.isVisible = false
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient)
+              viewModel.updateView()
+          }
+        }
+
+        init()
+
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.valueChangeMode = ValueChangeMode.LAZY

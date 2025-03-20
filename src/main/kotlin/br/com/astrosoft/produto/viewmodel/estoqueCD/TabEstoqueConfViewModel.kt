@@ -79,7 +79,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val user = AppConfig.userLogin() as? UserSaci
 
     report.print(
-      dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = {form ->
+      dados = produtos, printer = subView.printerPreview(actionSave = {form ->
         if (user?.estoqueGravaAcerto != true) {
           viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
         } else {
