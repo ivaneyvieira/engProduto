@@ -143,20 +143,20 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
+        /*
+                this.button("Marca") {
+                  this.icon = VaadinIcon.CHECK.create()
+                  onClick {
+                    viewModel.marcaProduto()
+                  }
+                }
 
-        this.button("Marca") {
-          this.icon = VaadinIcon.CHECK.create()
-          onClick {
-            viewModel.marcaProduto()
-          }
-        }
-
-        this.button("Desmarcar") {
-          this.icon = VaadinIcon.CLOSE.create()
-          onClick {
-            viewModel.desmarcaProduto()
-          }
-        }
+                this.button("Desmarcar") {
+                  this.icon = VaadinIcon.CLOSE.create()
+                  onClick {
+                    viewModel.desmarcaProduto()
+                  }
+                }*/
 
         this.button("Estoque") {
           this.icon = VaadinIcon.PRINT.create()
@@ -164,20 +164,20 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.imprimeProdutosEstoque()
           }
         }
+        /*
+                this.button("Acerto") {
+                  this.icon = VaadinIcon.PRINT.create()
+                  onClick {
+                    viewModel.imprimeProdutosAcerto()
+                  }
+                }
 
-        this.button("Acerto") {
-          this.icon = VaadinIcon.PRINT.create()
-          onClick {
-            viewModel.imprimeProdutosAcerto()
-          }
-        }
-
-        this.button("Limpa Acerto") {
-          this.icon = VaadinIcon.CLOSE.create()
-          onClick {
-            viewModel.limpaAcerto()
-          }
-        }
+                this.button("Limpa Acerto") {
+                  this.icon = VaadinIcon.CLOSE.create()
+                  onClick {
+                    viewModel.limpaAcerto()
+                  }
+                }*/
 
         cmdEstoque = select("Estoque") {
           this.width = "80px"
@@ -257,10 +257,11 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
-
-    this.setPartNameGenerator {
-      if (it.marcadoConf(userno, data)) "amarelo" else null
-    }
+    /*
+        this.setPartNameGenerator {
+          if (it.marcadoConf(userno, data)) "amarelo" else null
+        }
+     */
   }
 
   override fun filtro(): FiltroProdutoEstoque {

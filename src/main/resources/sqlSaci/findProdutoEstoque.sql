@@ -32,11 +32,11 @@ SELECT prdno,
        MAX(kardec)                                           AS kardec,
        MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
        MAX(observacao)                                       AS observacao,
-       MAX(estoque)                                          AS estoque,
+       MAX(estoque)                                          AS estoque/*,
        MAX(estoqueData)                                      AS estoqueData,
        MAX(estoqueCD)                                        AS estoqueCD,
        MAX(estoqueLoja)                                      AS estoqueLoja,
-       MAX(estoqueUser)                                      AS estoqueUser
+       MAX(estoqueUser)                                      AS estoqueUser*/
 FROM
   sqldados.prdAdicional
 WHERE storeno = 4
@@ -75,7 +75,22 @@ CREATE TEMPORARY TABLE T_ACERTO
 (
   PRIMARY KEY (numloja, prdno, grade)
 )
-SELECT numloja, prdno, grade, numero, processado
+SELECT A.numero,
+       A.numloja,
+       A.lojaSigla,
+       A.data,
+       A.hora,
+       A.usuario,
+       A.prdno,
+       A.descricao,
+       A.grade,
+       A.estoqueSis,
+       A.estoqueLoja,
+       A.estoqueCD,
+       A.diferenca,
+       A.processado,
+       A.transacao,
+       A.login
 FROM
   sqldados.produtoEstoqueAcerto A
     INNER JOIN T_ULT_ACERTO
@@ -111,11 +126,10 @@ SELECT 4                                                                        
        A.dataObservacao                                                               AS dataObservacao,
        A.observacao                                                                   AS observacao,
        PC.refprice / 100                                                              AS preco,
-       A.estoqueUser                                                                  AS estoqueUser,
-       U.login                                                                        AS estoqueLogin,
-       A.estoqueData                                                                  AS estoqueData,
-       A.estoqueCD                                                                    AS estoqueCD,
-       A.estoqueLoja                                                                  AS estoqueLoja,
+       AC.login                                                                       AS estoqueLogin,
+       AC.data                                                                        AS estoqueData,
+       AC.estoqueCD                                                                   AS estoqueCD,
+       AC.estoqueLoja                                                                 AS estoqueLoja,
        B.codbar                                                                       AS barcode,
        P.mfno_ref                                                                     AS ref,
        AC.numero                                                                      AS numeroAcerto,
@@ -130,8 +144,8 @@ FROM
                ON V.no = P.mfno
     LEFT JOIN  T_LOC_APP      AS A
                USING (prdno, grade)
-    LEFT JOIN  sqldados.users AS U
-               ON U.no = A.estoqueUser
+/*    LEFT JOIN  sqldados.users AS U
+               ON U.no = A.estoqueUser*/
     LEFT JOIN  T_BARCODE      AS B
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
@@ -177,7 +191,7 @@ SELECT loja,
        dataObservacao,
        observacao,
        preco,
-       estoqueUser,
+  /*estoqueUser,*/
        estoqueLogin,
        estoqueData,
        estoqueCD,

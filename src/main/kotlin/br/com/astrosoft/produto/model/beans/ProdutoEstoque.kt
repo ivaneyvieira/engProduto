@@ -27,7 +27,7 @@ class ProdutoEstoque(
   var dataObservacao: LocalDate? = null,
   var observacao: String? = null,
   var preco: Double? = null,
-  var estoqueUser: Int? = null,
+  /*var estoqueUser: Int? = null,*/
   var estoqueLogin: String? = null,
   var estoqueData: LocalDate? = null,
   var estoqueCD: Int? = null,
@@ -37,9 +37,11 @@ class ProdutoEstoque(
   var numeroAcerto: Int? = null,
   var processado: Boolean? = false,
 ) {
+  /*
   fun marcadoConf(userNo: Int, data: LocalDate): Boolean {
     return (estoqueUser == userNo) && (estoqueData == data)
   }
+*/
 
   val estoqueDif: Int?
     get() {

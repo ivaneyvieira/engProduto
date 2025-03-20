@@ -1,13 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
-import java.time.LocalDate
 
 class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
@@ -32,23 +32,23 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
+  /*
+    private fun fetchKardecHoje(produto: ProdutoEstoque): List<ProdutoKardec> {
+      val date = LocalDate.now()
+      val lista: List<ProdutoKardec> =
+          produto.recebimentos(date) +
+          produto.ressuprimento(date) +
+          produto.expedicao(date) +
+          produto.reposicao(date) +
+          produto.acertoEstoque(date)
+      return lista.ajustaOrdem()
+    }
 
-  private fun fetchKardecHoje(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val date = LocalDate.now()
-    val lista: List<ProdutoKardec> =
-        produto.recebimentos(date) +
-        produto.ressuprimento(date) +
-        produto.expedicao(date) +
-        produto.reposicao(date) +
-        produto.acertoEstoque(date)
-    return lista.ajustaOrdem()
-  }
-
-  fun updateKardec() = viewModel.exec {
-    val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-    ProcessamentoKardec.updateKardec(produtos)
-    subView.reloadGrid()
-  }
+    fun updateKardec() = viewModel.exec {
+      val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
+      ProcessamentoKardec.updateKardec(produtos)
+      subView.reloadGrid()
+    }*/
 
   override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
     if (bean != null) {
@@ -60,13 +60,14 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 
   fun imprimeProdutosEstoque() = viewModel.exec {
-    val filtroVazio = subView.filtroVazio()
+    /*val filtroVazio = subView.filtroVazio()
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
 
     val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
       it.marcadoConf(userno, data)
-    }
+    }*/
+    val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -78,6 +79,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     )
   }
 
+  /*
   fun imprimeProdutosAcerto() = viewModel.exec {
     val produtos = subView.itensSelecionados().filter {
       (it.estoqueDif ?: 0) != 0
@@ -123,61 +125,63 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
           }
         })
     )
-  }
+  }*/
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     return ProcessamentoKardec.kardec(produto)
   }
-
-  fun limpaAcerto() {
-    val itensSelecionado = subView.itensSelecionados()
-    if (itensSelecionado.isEmpty()) {
-      fail("Nenhum acerto selecionado")
-    }
-    viewModel.view.showQuestion("Confirma a limpeza dos acertos selecionados?") {
-      itensSelecionado.forEach { produto ->
-        produto.estoqueCD = null
-        produto.estoqueLoja = null
-        produto.limpaAcerto()
-        produto.update()
+  /*
+    fun limpaAcerto() {
+      val itensSelecionado = subView.itensSelecionados()
+      if (itensSelecionado.isEmpty()) {
+        fail("Nenhum acerto selecionado")
       }
-      updateView()
+      viewModel.view.showQuestion("Confirma a limpeza dos acertos selecionados?") {
+        itensSelecionado.forEach { produto ->
+          produto.estoqueCD = null
+          produto.estoqueLoja = null
+          produto.limpaAcerto()
+          produto.update()
+        }
+        updateView()
+      }
+    }*/
+  /*
+    fun marcaProduto() {
+      val listaSelecionando = subView.itensSelecionados()
+      if (listaSelecionando.isEmpty()) {
+        fail("Nenhum produto selecionado")
+      }
+
+      val user = AppConfig.userLogin() as? UserSaci
+
+      listaSelecionando.forEach { produto ->
+        produto.estoqueUser = user?.no
+        produto.estoqueLogin = user?.login
+        produto.estoqueData = LocalDate.now()
+      }
+      ProdutoEstoque.update(listaSelecionando)
+      subView.reloadGrid()
     }
-  }
 
-  fun marcaProduto() {
-    val listaSelecionando = subView.itensSelecionados()
-    if (listaSelecionando.isEmpty()) {
-      fail("Nenhum produto selecionado")
+    fun desmarcaProduto() {
+      val listaSelecionando = subView.itensSelecionados()
+      if (listaSelecionando.isEmpty()) {
+        fail("Nenhum produto selecionado")
+      }
+
+      val user = AppConfig.userLogin() as? UserSaci
+
+      listaSelecionando.forEach { produto ->
+        produto.estoqueUser = null
+        produto.estoqueLogin = null
+        produto.estoqueData = null
+      }
+      ProdutoEstoque.update(listaSelecionando)
+      subView.reloadGrid()
     }
 
-    val user = AppConfig.userLogin() as? UserSaci
-
-    listaSelecionando.forEach { produto ->
-      produto.estoqueUser = user?.no
-      produto.estoqueLogin = user?.login
-      produto.estoqueData = LocalDate.now()
-    }
-    ProdutoEstoque.update(listaSelecionando)
-    subView.reloadGrid()
-  }
-
-  fun desmarcaProduto() {
-    val listaSelecionando = subView.itensSelecionados()
-    if (listaSelecionando.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    val user = AppConfig.userLogin() as? UserSaci
-
-    listaSelecionando.forEach { produto ->
-      produto.estoqueUser = null
-      produto.estoqueLogin = null
-      produto.estoqueData = null
-    }
-    ProdutoEstoque.update(listaSelecionando)
-    subView.reloadGrid()
-  }
+   */
 }
 
 interface ITabEstoqueConf : ITabView {
