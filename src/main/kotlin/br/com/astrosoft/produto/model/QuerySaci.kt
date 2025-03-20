@@ -1041,7 +1041,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("kardec", produtoEstoque.kardec)
       addOptionalParameter("dataObservacao", produtoEstoque.dataObservacao)
       addOptionalParameter("observacao", produtoEstoque.observacao)
-      /*addOptionalParameter("estoqueUser", produtoEstoque.estoqueUser)*/
+      addOptionalParameter("estoqueUser", produtoEstoque.estoqueUser)
       addOptionalParameter("estoqueData", produtoEstoque.estoqueData)
       addOptionalParameter("estoqueCD", produtoEstoque.estoqueCD)
       addOptionalParameter("estoqueLoja", produtoEstoque.estoqueLoja)

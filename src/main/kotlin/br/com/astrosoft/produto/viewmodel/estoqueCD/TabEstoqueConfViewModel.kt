@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
+import java.time.LocalDate
 
 class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
@@ -58,14 +59,16 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 
   fun imprimeProdutosEstoque() = viewModel.exec {
-    /*val filtroVazio = subView.filtroVazio()
+    val filtroVazio = subView.filtroVazio()
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
 
     val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
       it.marcadoConf(userno, data)
-    }*/
-    val produtos = subView.itensSelecionados()
+    }
+
+    //val produtos = subView.itensSelecionados()
+
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -88,7 +91,13 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
               produtosAcerto.forEach {
                 it.save()
               }
-              subView.reloadGrid()
+              produtos.forEach { produto ->
+                produto.estoqueUser = null
+                produto.estoqueLogin = null
+                produto.estoqueData = null
+              }
+              ProdutoEstoque.update(produtos)
+              updateView()
             }
           }
         }
@@ -163,42 +172,38 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
         updateView()
       }
     }*/
-  /*
-    fun marcaProduto() {
-      val listaSelecionando = subView.itensSelecionados()
-      if (listaSelecionando.isEmpty()) {
-        fail("Nenhum produto selecionado")
-      }
 
-      val user = AppConfig.userLogin() as? UserSaci
-
-      listaSelecionando.forEach { produto ->
-        produto.estoqueUser = user?.no
-        produto.estoqueLogin = user?.login
-        produto.estoqueData = LocalDate.now()
-      }
-      ProdutoEstoque.update(listaSelecionando)
-      subView.reloadGrid()
+  fun marcaProduto() {
+    val listaSelecionando = subView.itensSelecionados()
+    if (listaSelecionando.isEmpty()) {
+      fail("Nenhum produto selecionado")
     }
 
-    fun desmarcaProduto() {
-      val listaSelecionando = subView.itensSelecionados()
-      if (listaSelecionando.isEmpty()) {
-        fail("Nenhum produto selecionado")
-      }
+    val user = AppConfig.userLogin() as? UserSaci
 
-      val user = AppConfig.userLogin() as? UserSaci
+    listaSelecionando.forEach { produto ->
+      produto.estoqueUser = user?.no
+      produto.estoqueLogin = user?.login
+      produto.estoqueData = LocalDate.now()
+    }
+    ProdutoEstoque.update(listaSelecionando)
+    subView.reloadGrid()
+  }
 
-      listaSelecionando.forEach { produto ->
-        produto.estoqueUser = null
-        produto.estoqueLogin = null
-        produto.estoqueData = null
-      }
-      ProdutoEstoque.update(listaSelecionando)
-      subView.reloadGrid()
+  fun desmarcaProduto() {
+    val listaSelecionando = subView.itensSelecionados()
+    if (listaSelecionando.isEmpty()) {
+      fail("Nenhum produto selecionado")
     }
 
-   */
+    listaSelecionando.forEach { produto ->
+      produto.estoqueUser = null
+      produto.estoqueLogin = null
+      produto.estoqueData = null
+    }
+    ProdutoEstoque.update(listaSelecionando)
+    subView.reloadGrid()
+  }
 }
 
 interface ITabEstoqueConf : ITabView {
