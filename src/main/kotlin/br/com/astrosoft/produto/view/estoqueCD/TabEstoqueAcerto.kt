@@ -7,17 +7,16 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.FiltroAcerto
+import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
@@ -27,8 +26,36 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
+  private lateinit var cmbLoja: Select<Loja>
+
+  fun init() {
+    val user = AppConfig.userLogin() as? UserSaci
+    val itens = if (user?.admin == true) {
+      viewModel.findAllLojas()
+    } else {
+      viewModel.findAllLojas().filter { it.no == (user?.lojaConferencia ?: 0) }
+    }
+    cmbLoja.setItems(itens)
+    cmbLoja.value = if (user?.admin == true) {
+      itens.firstOrNull { it.no == 4 }
+    } else {
+      itens.firstOrNull()
+    }
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+
+    init()
+
     edtNumero = integerField("Número") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -85,7 +112,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
 
   override fun filtro(): FiltroAcerto {
     return FiltroAcerto(
-      numLoja = 4,
+      numLoja = cmbLoja.value?.no ?: 0,
       numero = edtNumero.value ?: 0,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now()

@@ -39,18 +39,23 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
-    val loja = 4
-    val lojaSelecionada = viewModel.findAllLojas().firstOrNull { it.no == loja }
-    cmbLoja.isReadOnly = (user?.admin == false) && (lojaSelecionada?.no != 0)
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
+    val itens = if (user?.admin == true) {
+      viewModel.findAllLojas()
+    } else {
+      viewModel.findAllLojas().filter { it.no == (user?.lojaConferencia ?: 0) }
+    }
+    cmbLoja.setItems(itens)
+    cmbLoja.value = if (user?.admin == true) {
+      itens.firstOrNull { it.no == 4 }
+    } else {
+      itens.firstOrNull()
+    }
   }
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
         cmbLoja = select("Loja") {
-          this.isVisible = false
           this.setItemLabelGenerator { item ->
             item.descricao
           }
@@ -289,6 +294,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
 
     return FiltroProdutoEstoque(
+      loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
       grade = edtGrade.value ?: "",
@@ -312,6 +318,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
 
     return FiltroProdutoEstoque(
+      loja = cmbLoja.value?.no ?: 0,
       pesquisa = "",
       codigo = 0,
       grade = "",

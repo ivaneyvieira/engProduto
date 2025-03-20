@@ -332,6 +332,7 @@ class ProdutoEstoque(
 }
 
 data class FiltroProdutoEstoque(
+  val loja: Int = 4,
   val pesquisa: String,
   val codigo: Int,
   val grade: String,

@@ -29,6 +29,7 @@ class TabEstoqueUsrViewModel(val viewModel: EstoqueCDViewModel) : TabUsrViewMode
     this.estoqueAcerto = usuario.estoqueAcerto
     this.estoqueGravaAcerto = usuario.estoqueGravaAcerto
     this.estoqueInventario = estoqueInventario
+    this.lojaConferencia = usuario.lojaConferencia
   }
 }
 

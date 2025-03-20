@@ -74,6 +74,8 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
         filtroImpressoraTermica(binder, UserSaci::impressoraEstoque) {
           this.isExpand = true
         }
+
+        filtroLoja(binder, UserSaci::lojaConferencia, "Loja Conferência")
       }
     }
   }

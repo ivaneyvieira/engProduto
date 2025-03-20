@@ -89,6 +89,7 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       listOf("TODOS")
     }
     return FiltroProdutoEstoque(
+      loja = 4,
       pesquisa = edtPesquisa.value ?: "",
       codigo = 0,
       grade = edtGrade.value ?: "",

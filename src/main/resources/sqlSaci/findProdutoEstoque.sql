@@ -16,7 +16,7 @@ SELECT prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
 FROM
   sqldados.prdloc
 WHERE localizacao <> ''
-  AND storeno = 4
+  AND (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
@@ -39,7 +39,7 @@ SELECT prdno,
        MAX(estoqueUser)                                      AS estoqueUser
 FROM
   sqldados.prdAdicional
-WHERE storeno = 4
+WHERE (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
@@ -98,7 +98,7 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
-SELECT 4                                                                              AS loja,
+SELECT S.no                                                                           AS loja,
        S.sname                                                                        AS lojaSigla,
        E.prdno                                                                        AS prdno,
        TRIM(P.no) * 1                                                                 AS codigo,
@@ -108,18 +108,18 @@ SELECT 4                                                                        
        ROUND(P.qttyPackClosed / 1000)                                                 AS embalagem,
        SUM(CASE
              WHEN P.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / 5800, 2)
+                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 5800, 2)
              WHEN P.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
-                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) / 1000, 2)
+                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
                                              ELSE TRUNCATE(
-                                                 ROUND(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0) / 1000) /
+                                                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
                                                  (P.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        A.locApp                                                                       AS locApp,
        V.no                                                                           AS codForn,
        V.sname                                                                        AS fornecedor,
-       ROUND(SUM(IF(E.storeno = 4, E.qtty_atacado + E.qtty_varejo, 0)) / 1000)        AS saldo,
+       ROUND(SUM(E.qtty_atacado + E.qtty_varejo) / 1000)                              AS saldo,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
        A.dataUpdate                                                                   AS dataUpdate,
        A.kardec                                                                       AS kardec,
@@ -164,7 +164,7 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
        (:caracter = 'T'))
   AND (P.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
-  AND E.storeno = 4
+  AND (E.storeno = :loja OR :loja = 0)
 GROUP BY E.prdno, E.grade
 HAVING (:estoque = '>' AND saldo > :saldo)
     OR (:estoque = '<' AND saldo < :saldo)
