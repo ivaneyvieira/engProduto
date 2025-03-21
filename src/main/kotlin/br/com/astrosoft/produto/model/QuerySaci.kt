@@ -1931,18 +1931,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun acertoNovo(numLoja: Int): ProdutoEstoqueAcerto? {
+  fun acertoNovo(numero: Int, numLoja: Int): ProdutoEstoqueAcerto? {
     val sql = "/sqlSaci/produtoEstoqueAcertoNovo.sql"
 
     val user = AppConfig.userLogin() as? UserSaci
 
     return query(sql, ProdutoEstoqueAcerto::class) {
       addOptionalParameter("numLoja", numLoja)
+      addOptionalParameter("numero", numero)
       addOptionalParameter("login", user?.login ?: "")
       addOptionalParameter("usuario", user?.name ?: "")
       addOptionalParameter("data", LocalDate.now().toSaciDate())
       addOptionalParameter("hora", LocalTime.now().toSecondOfDay())
     }.firstOrNull()
+  }
+
+  fun acertoProximo(numLoja: Int): Int {
+    val sql = "/sqlSaci/produtoEstoqueAcertoProximo.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("numLoja", numLoja)
+    }.firstOrNull()?.quant ?: 1
   }
 
   fun acertoUpdate(produto: ProdutoEstoqueAcerto) {
@@ -2018,5 +2026,5 @@ class QuerySaci : QueryDB(database) {
 val saci = QuerySaci()
 
 class Count {
-  var quant: Int = 0
+  var quant: Int? = 0
 }

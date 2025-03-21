@@ -60,6 +60,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
   fun imprimeProdutosEstoque() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
+    val numLoja = filtroVazio.loja
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
 
@@ -73,7 +74,9 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       fail("Nenhum produto selecionado")
     }
 
-    val produtosAcerto = produtos.toAcerto()
+    val numero =  ProdutoEstoqueAcerto.proximoNumero(numLoja)
+
+    val produtosAcerto = produtos.toAcerto(numero)
 
     val report = PrintProdutosConferenciaEstoque()
     val user = AppConfig.userLogin() as? UserSaci

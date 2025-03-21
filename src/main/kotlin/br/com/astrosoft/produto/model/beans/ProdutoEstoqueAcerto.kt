@@ -61,6 +61,10 @@ class ProdutoEstoqueAcerto(
     fun findAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
       return saci.acertoFindAll(filtro)
     }
+
+    fun proximoNumero(numLoja: Int): Int {
+      return saci.acertoProximo(numLoja)
+    }
   }
 }
 
@@ -71,11 +75,11 @@ data class FiltroAcerto(
   val numero: Int = 0,
 )
 
-fun List<ProdutoEstoque>.toAcerto(): List<ProdutoEstoqueAcerto> {
+fun List<ProdutoEstoque>.toAcerto(numero: Int): List<ProdutoEstoqueAcerto> {
   val user = AppConfig.userLogin()
 
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
-  val novo = saci.acertoNovo(numLoja) ?: return emptyList()
+  val novo = saci.acertoNovo(numero, numLoja) ?: return emptyList()
   return this.map {
     ProdutoEstoqueAcerto(
       numero = novo.numero,

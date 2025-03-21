@@ -7,13 +7,8 @@ WHERE usuario = :usuario
   AND numloja = :numLoja
   AND descricao = '';
 
-DO @NUMERO := IFNULL(( SELECT MAX(numero)
-                       FROM
-                         produtoEstoqueAcerto
-                       WHERE numloja = :numLoja ), 0);
-
 CREATE TEMPORARY TABLE T_ACERTO
-SELECT @NUMERO + 1         AS numero,
+SELECT :numero             AS numero,
        no                  AS numloja,
        sname               AS lojaSigla,
        CAST(:data AS date) AS data,
@@ -32,25 +27,6 @@ SELECT @NUMERO + 1         AS numero,
 FROM
   sqldados.store
 WHERE no = :numLoja;
-
-REPLACE INTO produtoEstoqueAcerto (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,
-                                   estoqueSis, estoqueCD, estoqueLoja, diferenca)
-SELECT numero,
-       numloja,
-       lojaSigla,
-       data,
-       hora,
-       login,
-       usuario,
-       prdno,
-       descricao,
-       grade,
-       estoqueSis,
-       estoqueCD,
-       estoqueLoja,
-       diferenca
-FROM
-  T_ACERTO;
 
 SELECT numero,
        numloja,

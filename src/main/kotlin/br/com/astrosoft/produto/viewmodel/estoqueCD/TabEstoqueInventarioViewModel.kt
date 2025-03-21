@@ -82,7 +82,7 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
 
     val report = PrintProdutosConferenciaAcerto()
 
-    val produtosAcerto = produtos.toAcerto()
+    val produtosAcerto = produtos.toAcerto(0)
 
     val user = AppConfig.userLogin() as? UserSaci
 
