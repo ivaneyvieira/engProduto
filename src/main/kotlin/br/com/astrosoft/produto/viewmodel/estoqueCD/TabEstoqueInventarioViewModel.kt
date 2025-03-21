@@ -65,7 +65,7 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
       fail("Nenhum produto selecionado")
     }
 
-    val report = PrintProdutosConferenciaEstoque()
+    val report = PrintProdutosConferenciaEstoque("Inventario")
 
     report.print(
       dados = produtos, printer = subView.printerPreview()

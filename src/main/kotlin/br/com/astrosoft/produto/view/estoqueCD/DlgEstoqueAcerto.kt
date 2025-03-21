@@ -28,10 +28,16 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
     form = SubWindowForm(
       "Produtos do Acerto $numero - Loja $loja",
       toolBar = {
-        button("Imprimir") {
+        button("Pedido") {
           this.icon = VaadinIcon.PRINT.create()
           this.addClickListener {
-            viewModel.imprimir(acerto)
+            viewModel.imprimirPedido(acerto)
+          }
+        }
+        button("Acerto") {
+          this.icon = VaadinIcon.PRINT.create()
+          this.addClickListener {
+            viewModel.imprimirAcerto(acerto)
           }
         }
         button("Relatório") {

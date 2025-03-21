@@ -4,15 +4,14 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PrintProdutosConferenciaEstoque : PrintText<ProdutoEstoque>() {
+class PrintProdutosConferenciaEstoque(val titulo: String) : PrintText<ProdutoEstoque>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoEstoque) {
-    writeln("Relatório de Estoque", negrito = true, center = true)
+    writeln(titulo, negrito = true, center = true)
     writeln("")
     writeln(
       "Loja: ${bean.lojaSigla}     Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",

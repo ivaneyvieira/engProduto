@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import br.com.astrosoft.produto.model.report.ReportAcerto
 
 class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
@@ -26,7 +27,26 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     subView.updateProduto(produtos)
   }
 
-  fun imprimir(acerto: EstoqueAcerto) = viewModel.exec {
+  fun imprimirPedido(acerto: EstoqueAcerto) = viewModel.exec {
+    val filtroVazio = subView.filtroVazio().copy(
+      pedido = acerto.numero,
+      loja = acerto.numloja
+    )
+
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio)
+
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val report = PrintProdutosConferenciaEstoque("Pedido de acerto: ${acerto.numero}")
+
+    report.print(
+      dados = produtos, printer = subView.printerPreview()
+    )
+  }
+
+  fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
     val produtos = acerto.findProdutos().filter {
       (it.diferenca ?: 0) != 0
     }.sortedBy { it.diferenca ?: 999999 }
@@ -78,4 +98,5 @@ interface ITabEstoqueAcerto : ITabView {
   fun filtro(): FiltroAcerto
   fun updateProduto(produtos: List<EstoqueAcerto>)
   fun itensSelecionados(): List<EstoqueAcerto>
+  fun filtroVazio(): FiltroProdutoEstoque
 }

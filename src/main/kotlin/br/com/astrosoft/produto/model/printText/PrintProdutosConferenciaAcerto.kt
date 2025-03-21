@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 
 class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
   override fun printTitle(bean: ProdutoEstoqueAcerto) {
-    writeln("Relatório de Acerto: ${bean.numero}", negrito = true, center = true)
+    writeln("Pedido de acerto: ${bean.numero}", negrito = true, center = true)
     writeln("")
     writeln(
       "Loja: ${bean.lojaSigla}     Data: ${bean.data.format()}     Hora: ${bean.hora.format()}",

@@ -68,21 +68,19 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       it.marcadoConf(userno, data)
     }
 
-    //val produtos = subView.itensSelecionados()
-
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
-    val numero =  ProdutoEstoqueAcerto.proximoNumero(numLoja)
+    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
 
     val produtosAcerto = produtos.toAcerto(numero)
 
-    val report = PrintProdutosConferenciaEstoque()
+    val report = PrintProdutosConferenciaEstoque("Relatório de Estoque")
     val user = AppConfig.userLogin() as? UserSaci
 
     report.print(
-      dados = produtos, printer = subView.printerPreview(actionSave = {form ->
+      dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = { form ->
         if (user?.estoqueGravaAcerto != true) {
           viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
         } else {

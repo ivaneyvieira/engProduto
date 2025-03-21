@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.EstoqueAcerto
-import br.com.astrosoft.produto.model.beans.FiltroAcerto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -121,6 +118,29 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
 
   override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
+  }
+
+  override fun filtroVazio(): FiltroProdutoEstoque {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
+
+    return FiltroProdutoEstoque(
+      loja = cmbLoja.value?.no ?: 0,
+      pesquisa = "",
+      codigo = 0,
+      grade = "",
+      caracter = ECaracter.TODOS,
+      localizacao = "",
+      fornecedor = "",
+      centroLucro = 0,
+      estoque = EEstoque.TODOS,
+      saldo = 0,
+      inativo = EInativo.TODOS,
+      uso = EUso.TODOS,
+      listaUser = listaUser,
+    )
   }
 
   override fun isAuthorized(): Boolean {
