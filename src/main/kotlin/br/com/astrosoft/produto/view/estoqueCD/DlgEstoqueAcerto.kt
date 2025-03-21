@@ -98,6 +98,7 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
       columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
       columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
       columnGrid(ProdutoEstoqueAcerto::diferenca, "Diferença")
+      columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
     }
     this.addAndExpand(gridDetail)
     update()

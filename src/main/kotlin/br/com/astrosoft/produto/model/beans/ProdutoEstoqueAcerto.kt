@@ -27,6 +27,11 @@ class ProdutoEstoqueAcerto(
   val acertado
     get() = estoqueCD != null && estoqueLoja != null
 
+  val estoqueReal: Int
+    get() {
+      return (estoqueSis ?: 0) + (diferenca ?: 0)
+    }
+
   fun updateDiferenca() {
     val estSis = estoqueSis ?: 0
     val estCD = estoqueCD
