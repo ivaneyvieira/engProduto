@@ -87,13 +87,8 @@ class NotaSaida(
 
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
-      val notas = saci.findNotaSaida(filtro = filtro)/* +
-                  saci.findNotaSaida(
-                    filtro = filtro.copy(
-                      tipoNota = filtro.tipoNota,
-                    )
-                  )*/
-      return notas/*.distinctBy { "${it.loja} ${it.numero} ${it.serie} ${it.xano} ${it.pdvno}" }*/
+      val notas = saci.findNotaSaida(filtro = filtro)
+      return notas
     }
   }
 }
@@ -128,6 +123,7 @@ enum class ETipoNotaFiscal(val descricao: String) {
   SIMP_REME("Retira Futura"),
   SIMP_REME_L("Retira Futura L"),
   ENTREGA_WEB("Entrega Web"),
+  RECLASS("Reclassificação"),
   DEVOLUCAO("Dev Fornecedor"),
   TODOS("Todos"),
 }

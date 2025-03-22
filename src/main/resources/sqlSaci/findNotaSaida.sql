@@ -143,27 +143,28 @@ SELECT N.storeno                                                              AS
        MAX(X.s11)                                                             AS marca,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        CASE
-         WHEN N.nfse = 7                  THEN 'ENTREGA_WEB'
-         WHEN N.tipo = 0 AND N.nfse >= 10 THEN 'NFCE'
-         WHEN N.tipo = 0 AND N.nfse < 10  THEN 'NFE'
-         WHEN N.tipo = 1                  THEN 'TRANSFERENCIA'
-         WHEN N.tipo = 2                  THEN 'DEVOLUCAO'
-         WHEN N.tipo = 3                  THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME')
-         WHEN N.tipo = 4                  THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0,
-                                                  IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME'),
-                                                  'ENTRE_FUT')
-         WHEN N.tipo = 5                  THEN 'RET_DEMON'
-         WHEN N.tipo = 6                  THEN 'VENDA_USA'
-         WHEN N.tipo = 7                  THEN 'OUTROS'
-         WHEN N.tipo = 8                  THEN 'NF_CF'
-         WHEN N.tipo = 9                  THEN 'PERD/CONSER'
-         WHEN N.tipo = 10                 THEN 'REPOSICAO'
-         WHEN N.tipo = 11                 THEN 'RESSARCI'
-         WHEN N.tipo = 12                 THEN 'COMODATO'
-         WHEN N.tipo = 13                 THEN 'NF_EMPRESA'
-         WHEN N.tipo = 14                 THEN 'BONIFICA'
-         WHEN N.tipo = 15                 THEN 'NFE'
-                                          ELSE ''
+         WHEN N.remarks LIKE '%RECLASSIFI%' THEN 'RECLASS'
+         WHEN N.nfse = 7                    THEN 'ENTREGA_WEB'
+         WHEN N.tipo = 0 AND N.nfse >= 10   THEN 'NFCE'
+         WHEN N.tipo = 0 AND N.nfse < 10    THEN 'NFE'
+         WHEN N.tipo = 1                    THEN 'TRANSFERENCIA'
+         WHEN N.tipo = 2                    THEN 'DEVOLUCAO'
+         WHEN N.tipo = 3                    THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME')
+         WHEN N.tipo = 4                    THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0,
+                                                    IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME'),
+                                                    'ENTRE_FUT')
+         WHEN N.tipo = 5                    THEN 'RET_DEMON'
+         WHEN N.tipo = 6                    THEN 'VENDA_USA'
+         WHEN N.tipo = 7                    THEN 'OUTROS'
+         WHEN N.tipo = 8                    THEN 'NF_CF'
+         WHEN N.tipo = 9                    THEN 'PERD/CONSER'
+         WHEN N.tipo = 10                   THEN 'REPOSICAO'
+         WHEN N.tipo = 11                   THEN 'RESSARCI'
+         WHEN N.tipo = 12                   THEN 'COMODATO'
+         WHEN N.tipo = 13                   THEN 'NF_EMPRESA'
+         WHEN N.tipo = 14                   THEN 'BONIFICA'
+         WHEN N.tipo = 15                   THEN 'NFE'
+                                            ELSE ''
        END                                                                    AS tipoNotaSaida,
        IFNULL(ENT.notaEntrega, '')                                            AS notaEntrega,
        ENT.usuario                                                            AS usuarioEntrega,
