@@ -72,3 +72,29 @@ ALTER TABLE produtoEstoqueAcerto
 
 ALTER TABLE produtoEstoqueAcerto
   ADD gravado BOOLEAN NULL DEFAULT FALSE AFTER diferenca;
+
+
+select * from produtoEstoqueAcerto
+order by numloja, numero, prdno, grade;
+
+SELECT *
+FROM
+  produtoEstoqueAcerto
+WHERE numloja = 5
+  AND numero IN (1, 2, 3)
+ORDER BY numloja, numero, prdno, grade;
+
+
+SELECT *
+FROM
+  produtoEstoqueAcerto
+WHERE numloja = 5
+  AND numero IN (3)
+ORDER BY numloja, numero, prdno, grade;
+
+SELECT *
+FROM
+  produtoEstoqueAcerto
+WHERE numloja = 4
+  AND numero IN (35,36)
+ORDER BY numloja, numero, prdno, grade;

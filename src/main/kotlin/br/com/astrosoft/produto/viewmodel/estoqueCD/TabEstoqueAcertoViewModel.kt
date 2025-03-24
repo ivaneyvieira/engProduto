@@ -93,8 +93,11 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     produto.save()
   }
 
-  fun gravaAcerto(acerto: EstoqueAcerto) {
-    subView.autorizaAcerto {user ->
+  fun gravaAcerto(acerto: EstoqueAcerto) = viewModel.exec {
+    if (acerto.gravado == true) {
+      fail("Acerto já gravado")
+    }
+    subView.autorizaAcerto { user ->
       val pordutos = acerto.produtos
       pordutos.forEach {
         it.gravadoLogin = user.no
@@ -110,7 +113,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     itensSelecionado.ifEmpty {
       fail("Nenhum acerto selecionado")
     }
-    if(itensSelecionado.any { it.processado == "Sim" }) {
+    if (itensSelecionado.any { it.processado == "Sim" }) {
       fail("Acerto já processado")
     }
     viewModel.view.showQuestion("Confirma a remoção dos acertos selecionados?") {

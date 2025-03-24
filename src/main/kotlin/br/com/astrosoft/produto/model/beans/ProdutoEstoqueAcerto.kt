@@ -126,7 +126,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       hora = acerto.hora ?: return@mapNotNull null,
       login = acerto.login,
       usuario = acerto.usuario,
-      processado = acerto.processado,
+      processado = it.value.map { it.processado }.maxBy { it ?: "" },
       transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
       transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
