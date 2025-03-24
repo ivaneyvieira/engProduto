@@ -28,16 +28,12 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val itens = if (user?.admin == true) {
-      viewModel.findAllLojas()
+      listOf(Loja.lojaZero) + viewModel.findAllLojas()
     } else {
       viewModel.findAllLojas().filter { it.no == (user?.lojaConferencia ?: 0) }
     }
     cmbLoja.setItems(itens)
-    cmbLoja.value = if (user?.admin == true) {
-      itens.firstOrNull { it.no == 4 }
-    } else {
-      itens.firstOrNull()
-    }
+    cmbLoja.value = itens.firstOrNull()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
