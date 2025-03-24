@@ -12,7 +12,7 @@ import com.vaadin.flow.router.Route
 import jakarta.annotation.security.PermitAll
 
 @Route(layout = ProdutoLayout::class, value = "estoqueCD")
-@PageTitle("Estoque CD")
+@PageTitle("Controle Estoque")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
 class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
