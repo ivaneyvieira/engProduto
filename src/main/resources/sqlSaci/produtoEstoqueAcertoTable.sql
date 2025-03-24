@@ -30,7 +30,7 @@ ALTER TABLE produtoEstoqueAcerto
   ADD estoqueLoja int NULL AFTER grade;
 
 ALTER TABLE produtoEstoqueAcerto
-  ADD estoqueSis   int NULL AFTER grade;
+  ADD estoqueSis int NULL AFTER grade;
 
 
 SELECT A.*, U.login
@@ -38,6 +38,7 @@ FROM
   produtoEstoqueAcerto AS A
     INNER JOIN users   AS U
                ON U.name = A.usuario;
+
 
 UPDATE produtoEstoqueAcerto AS A INNER JOIN users AS U ON U.name = A.usuario
 SET A.login = U.login
@@ -62,3 +63,12 @@ UPDATE produtoEstoqueAcerto AS A INNER JOIN sqldados.stkmov AS M ON M.date = 202
                                                                     M.grade = A.grade
 SET A.transacao = M.xano
 WHERE A.transacao != M.xano;
+
+
+
+
+ALTER TABLE produtoEstoqueAcerto
+  ADD gravadoLogin int NULL DEFAULT 0 AFTER diferenca;
+
+ALTER TABLE produtoEstoqueAcerto
+  ADD gravado BOOLEAN NULL DEFAULT FALSE AFTER diferenca;

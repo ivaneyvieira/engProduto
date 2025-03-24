@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.estoqueCD
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
@@ -25,9 +22,10 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
     this.onClose = onClose
     val numero = acerto.numero
     val loja = acerto.lojaSigla
+    val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
 
     form = SubWindowForm(
-      "Produtos do Acerto $numero - Loja $loja",
+      "Produtos do Acerto $numero - Loja $loja $gravado",
       toolBar = {
         button("Pedido") {
           this.icon = VaadinIcon.PRINT.create()
@@ -35,12 +33,22 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
             viewModel.imprimirPedido(acerto)
           }
         }
+
         button("Acerto") {
           this.icon = VaadinIcon.PRINT.create()
           this.addClickListener {
             viewModel.imprimirAcerto(acerto)
           }
         }
+
+        button("Grava Acerto") {
+          this.icon = VaadinIcon.CHECK.create()
+          this.addClickListener {
+            viewModel.gravaAcerto(acerto)
+            closeForm()
+          }
+        }
+
         button("Relatório") {
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
@@ -51,6 +59,13 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
           val produtos = estoqueAcertos()
           viewModel.geraPlanilha(produtos)
+        }
+
+        this.button("Remove") {
+          this.icon = VaadinIcon.TRASH.create()
+          this.addClickListener {
+            viewModel.removeAcerto()
+          }
         }
       },
       onClose = {
@@ -70,6 +85,7 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
       this.format()
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
+      this.setSelectionMode(Grid.SelectionMode.MULTI)
       isMultiSort = false
 
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código")
@@ -120,5 +136,16 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
   private fun closeForm() {
     onClose?.invoke()
     form?.close()
+  }
+
+  fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
+    return gridDetail.selectedItemsSort()
+  }
+
+  fun updateAcerto(acertos: List<EstoqueAcerto>) {
+    val acerto = acertos.firstOrNull {
+      it.numloja == this.acerto.numloja && it.numero == this.acerto.numero
+    }
+    gridDetail.setItems(acerto?.produtos.orEmpty())
   }
 }

@@ -43,6 +43,8 @@ SELECT numero,
        estoqueLoja,
        diferenca,
        IF(processado, 'Sim', 'Não') AS processado,
-       transacao
+       transacao,
+       0                            AS gravadoLogin,
+       FALSE                        AS gravado
 FROM
   T_ACERTO

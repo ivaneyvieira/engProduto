@@ -1969,6 +1969,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoqueCD", produto.estoqueCD)
       addOptionalParameter("estoqueLoja", produto.estoqueLoja)
       addOptionalParameter("diferenca", produto.diferenca ?: 0)
+      addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
+      addOptionalParameter("gravado", produto.gravado ?: 0)
     }
   }
 
@@ -2005,6 +2007,16 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.loja)
       addOptionalParameter("numero", produtoEstoque.numeroAcerto)
+      addOptionalParameter("prdno", produtoEstoque.prdno)
+      addOptionalParameter("grade", produtoEstoque.grade)
+    }
+  }
+
+  fun limpaAcertoProduto(produtoEstoque: ProdutoEstoqueAcerto) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
+    script(sql) {
+      addOptionalParameter("numLoja", produtoEstoque.numloja)
+      addOptionalParameter("numero", produtoEstoque.numero)
       addOptionalParameter("prdno", produtoEstoque.prdno)
       addOptionalParameter("grade", produtoEstoque.grade)
     }

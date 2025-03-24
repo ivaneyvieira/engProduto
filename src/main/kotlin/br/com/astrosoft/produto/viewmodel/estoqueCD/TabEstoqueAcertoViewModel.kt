@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
+import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -78,7 +79,6 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun imprimirRelatorio(acerto: EstoqueAcerto) {
     val produtos = acerto.findProdutos()
-
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
@@ -92,6 +92,34 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   fun updateProduto(produto: ProdutoEstoqueAcerto) {
     produto.save()
   }
+
+  fun gravaAcerto(acerto: EstoqueAcerto) {
+    subView.autorizaAcerto {user ->
+      val pordutos = acerto.produtos
+      pordutos.forEach {
+        it.gravadoLogin = user.no
+        it.gravado = true
+        it.save()
+      }
+      updateView()
+    }
+  }
+
+  fun removeAcerto() = viewModel.exec {
+    val itensSelecionado = subView.produtosSelecionado()
+    itensSelecionado.ifEmpty {
+      fail("Nenhum acerto selecionado")
+    }
+    if(itensSelecionado.any { it.processado == "Sim" }) {
+      fail("Acerto já processado")
+    }
+    viewModel.view.showQuestion("Confirma a remoção dos acertos selecionados?") {
+      itensSelecionado.forEach { produto ->
+        produto.remove()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabEstoqueAcerto : ITabView {
@@ -99,4 +127,6 @@ interface ITabEstoqueAcerto : ITabView {
   fun updateProduto(produtos: List<EstoqueAcerto>)
   fun itensSelecionados(): List<EstoqueAcerto>
   fun filtroVazio(): FiltroProdutoEstoque
+  fun autorizaAcerto(block: (user: IUser) -> Unit)
+  fun produtosSelecionado(): List<ProdutoEstoqueAcerto>
 }

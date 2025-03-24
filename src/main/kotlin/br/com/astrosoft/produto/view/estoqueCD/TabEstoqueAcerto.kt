@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
+import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -20,6 +22,7 @@ import java.time.LocalDate
 
 class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcerto {
+  private var dlgEstoque: DlgEstoqueAcerto? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -89,8 +92,8 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
-      val dlg = DlgEstoqueAcerto(viewModel, acerto)
-      dlg.showDialog {
+      dlgEstoque = DlgEstoqueAcerto(viewModel, acerto)
+      dlgEstoque?.showDialog {
         viewModel.updateView()
       }
     }
@@ -99,7 +102,8 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::login, header = "Usuário", width = "80px")
     columnGrid(EstoqueAcerto::transacaoEnt, header = "Trans Ent")
     columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
-    columnGrid(EstoqueAcerto::produtosAjustados, header = "Ajustado")
+    columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
+    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Login", width = "80px")
     columnGrid(EstoqueAcerto::processado, header = "Processado")
   }
 
@@ -114,6 +118,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
 
   override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
+    dlgEstoque?.updateAcerto(produtos)
   }
 
   override fun filtroVazio(): FiltroProdutoEstoque {
@@ -137,6 +142,22 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       uso = EUso.TODOS,
       listaUser = listaUser,
     )
+  }
+
+  override fun autorizaAcerto(block: (IUser) -> Unit) {
+    val form = FormAutorizaAcerto()
+    DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
+      val user = AppConfig.findUser(form.login, form.senha)
+      if ( user != null) {
+        block(user)
+      } else {
+        DialogHelper.showWarning("Usuário ou senha inválidos")
+      }
+    }
+  }
+
+  override fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
+    return dlgEstoque?.produtosSelecionado().orEmpty()
   }
 
   override fun isAuthorized(): Boolean {

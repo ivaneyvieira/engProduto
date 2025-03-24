@@ -22,8 +22,11 @@ class ProdutoEstoqueAcerto(
   var estoqueLoja: Int? = null,
   var diferenca: Int? = null,
   var processado: String? = null,
-  var transacao: String? = null
-) {
+  var transacao: String? = null,
+  var gravadoLogin: Int? = 0,
+  var gravado: Boolean? = false,
+
+  ) {
   val acertado
     get() = estoqueCD != null && estoqueLoja != null
 
@@ -58,6 +61,10 @@ class ProdutoEstoqueAcerto(
 
   fun jaGravado(): Boolean {
     return saci.jaGravado(this).isNotEmpty()
+  }
+
+  fun remove() {
+    saci.limpaAcertoProduto(this)
   }
 
   val codigo
@@ -122,6 +129,8 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       processado = acerto.processado,
       transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
       transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
+      gravadoLogin = acerto.gravadoLogin,
+      gravado = acerto.gravado,
       produtos = it.value
     )
   }
@@ -138,8 +147,18 @@ class EstoqueAcerto(
   var processado: String?,
   var transacaoEnt: String?,
   var transacaoSai: String?,
+  var gravadoLogin: Int?,
+  var gravado: Boolean?,
   val produtos: List<ProdutoEstoqueAcerto> = emptyList()
 ) {
+  val gravadoLoginStr: String
+    get() {
+      return getUser(gravadoLogin ?: 0)?.login ?: ""
+    }
+
+  val gravadoStr: String
+    get() = if (gravado == true) "Sim" else "Não"
+
   val produtosAjustados: String
     get() {
       return if (produtos.all { it.acertado })
@@ -159,5 +178,13 @@ class EstoqueAcerto(
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos
+  }
+
+  companion object {
+    private val listUserSaci = saci.findAllUser()
+
+    private fun getUser(no: Int): UserSaci? {
+      return listUserSaci.firstOrNull { it.no == no }
+    }
   }
 }

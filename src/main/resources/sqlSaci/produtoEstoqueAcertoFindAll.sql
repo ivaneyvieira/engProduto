@@ -13,7 +13,9 @@ SELECT numero,
        estoqueLoja,
        diferenca,
        IF(processado, 'Sim', 'Não') AS processado,
-       transacao
+       transacao,
+       gravadoLogin,
+       gravado
 FROM
   sqldados.produtoEstoqueAcerto
 WHERE (numero = :numero OR :numero = 0)
