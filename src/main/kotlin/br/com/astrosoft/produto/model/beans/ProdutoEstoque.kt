@@ -317,7 +317,7 @@ class ProdutoEstoque(
   }
 
   fun limpaAcerto() {
-    saci.limpaAcertoProduto(this)
+    saci.removeAcertoProduto(this)
   }
 
   companion object {

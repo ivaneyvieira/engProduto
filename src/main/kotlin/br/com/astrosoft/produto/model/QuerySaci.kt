@@ -2003,7 +2003,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun limpaAcertoProduto(produtoEstoque: ProdutoEstoque) {
+  fun removeAcertoProduto(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.loja)
@@ -2013,7 +2013,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun limpaAcertoProduto(produtoEstoque: ProdutoEstoqueAcerto) {
+  fun removeAcertoProduto(produtoEstoque: ProdutoEstoqueAcerto) {
     val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.numloja)

@@ -90,7 +90,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     return planilha.write(produtos)
   }
 
-  fun updateProduto(produto: ProdutoEstoqueAcerto) {
+  fun updateProduto(produto: ProdutoEstoqueAcerto) = viewModel.exec {
     produto.save()
   }
 
@@ -111,11 +111,13 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun removeAcerto() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
+
     itensSelecionado.ifEmpty {
       fail("Nenhum acerto selecionado")
     }
+
     if (itensSelecionado.any { it.processado == true }) {
-      fail("Acerto já processado")
+      fail("Acerto está processado")
     }
 
     subView.autorizaAcerto {

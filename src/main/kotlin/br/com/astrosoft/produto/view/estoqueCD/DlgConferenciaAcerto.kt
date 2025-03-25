@@ -52,7 +52,7 @@ class DlgConferenciaAcerto(
       button("Confirma") {
         this.setPrimary()
         onClick {
-          closeForm()
+          confirmaForm()
         }
       }
 
@@ -75,7 +75,7 @@ class DlgConferenciaAcerto(
     return "$codigo $descricao $grade"
   }
 
-  private fun closeForm() {
+  private fun confirmaForm() {
     produto.estoqueCD = edtEstoqueCD?.value
     produto.estoqueLoja = edtEstoqueLoja?.value
     produto.updateDiferenca()

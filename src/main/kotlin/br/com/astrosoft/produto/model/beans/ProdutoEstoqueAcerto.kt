@@ -63,7 +63,7 @@ class ProdutoEstoqueAcerto(
   }
 
   fun remove() {
-    saci.limpaAcertoProduto(this)
+    saci.removeAcertoProduto(this)
   }
 
   val codigo
