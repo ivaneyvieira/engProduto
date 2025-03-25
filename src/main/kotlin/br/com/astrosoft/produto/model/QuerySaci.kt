@@ -954,8 +954,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
-    val sql = "/sqlSaci/findProdutoEstoque.sql"
+  fun findProdutoEstoque(filter: FiltroProdutoEstoque, mobile: Boolean = false): List<ProdutoEstoque> {
+    val sql = if (mobile) "/sqlSaci/findProdutoEstoqueMobile.sql"
+    else "/sqlSaci/findProdutoEstoque.sql"
 
     return query(sql, ProdutoEstoque::class) {
       addOptionalParameter("loja", filter.loja)
@@ -1953,8 +1954,9 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 1
   }
 
-  fun acertoUpdate(produto: ProdutoEstoqueAcerto) {
-    val sql = "/sqlSaci/produtoEstoqueAcertoUpdate.sql"
+  fun acertoUpdate(produto: ProdutoEstoqueAcerto, mobile: Boolean = false) {
+    val sql = if (mobile) "/sqlSaci/produtoEstoqueAcertoUpdateMobile.sql"
+    else "/sqlSaci/produtoEstoqueAcertoUpdate.sql"
     script(sql) {
       addOptionalParameter("numero", produto.numero)
       addOptionalParameter("numloja", produto.numloja)
@@ -1975,8 +1977,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun acertoFindAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
-    val sql = "/sqlSaci/produtoEstoqueAcertoFindAll.sql"
+  fun acertoFindAll(filtro: FiltroAcerto, mobile: Boolean = false): List<ProdutoEstoqueAcerto> {
+    val sql = if (mobile) "/sqlSaci/produtoEstoqueAcertoFindAllMobile.sql"
+    else "/sqlSaci/produtoEstoqueAcertoFindAll.sql"
     return query(sql, ProdutoEstoqueAcerto::class) {
       addOptionalParameter("numLoja", filtro.numLoja)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
@@ -1995,16 +1998,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun acertoCancela(produtoEstoqueAcerto: EstoqueAcerto) {
-    val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
+  fun acertoCancela(produtoEstoqueAcerto: EstoqueAcerto, mobile: Boolean = false) {
+    val sql = if (mobile) "/sqlSaci/produtoEstoqueAcertoCancelaMobile.sql"
+    else "/sqlSaci/produtoEstoqueAcertoCancela.sql"
     script(sql) {
       addOptionalParameter("numloja", produtoEstoqueAcerto.numloja)
       addOptionalParameter("numero", produtoEstoqueAcerto.numero)
     }
   }
 
-  fun removeAcertoProduto(produtoEstoque: ProdutoEstoque) {
-    val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
+  fun removeAcertoProduto(produtoEstoque: ProdutoEstoque, mobile: Boolean = false) {
+    val sql = if (mobile) "/sqlSaci/produtoEstoqueAcertoLimpaMobile.sql"
+    else "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.loja)
       addOptionalParameter("numero", produtoEstoque.numeroAcerto)
@@ -2013,8 +2018,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun removeAcertoProduto(produtoEstoque: ProdutoEstoqueAcerto) {
-    val sql = "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
+  fun removeAcertoProduto(produtoEstoque: ProdutoEstoqueAcerto, mobile: Boolean = false) {
+    val sql = if (mobile) "/sqlSaci/produtoEstoqueAcertoLimpaMobile.sql"
+    else "/sqlSaci/produtoEstoqueAcertoLimpa.sql"
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.numloja)
       addOptionalParameter("numero", produtoEstoque.numero)

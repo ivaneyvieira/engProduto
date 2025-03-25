@@ -58,6 +58,10 @@ class ProdutoEstoqueAcerto(
     saci.acertoUpdate(this)
   }
 
+  fun saveMobile() {
+    saci.acertoUpdate(this, true)
+  }
+
   fun jaGravado(): Boolean {
     return saci.jaGravado(this).isNotEmpty()
   }
@@ -66,12 +70,20 @@ class ProdutoEstoqueAcerto(
     saci.removeAcertoProduto(this)
   }
 
+  fun removeMobile() {
+    saci.removeAcertoProduto(this, true)
+  }
+
   val codigo
     get() = prdno?.trim()
 
   companion object {
-    fun findAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
-      return saci.acertoFindAll(filtro)
+    fun findAll(filtro: FiltroAcerto, mobile: Boolean = false): List<ProdutoEstoqueAcerto> {
+      return saci.acertoFindAll(filtro, mobile)
+    }
+
+    fun findAllMobile(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
+      return saci.acertoFindAll(filtro, true)
     }
 
     fun proximoNumero(numLoja: Int): Int {
@@ -173,12 +185,25 @@ class EstoqueAcerto(
     saci.acertoCancela(this)
   }
 
+  fun cancelaMobile() {
+    saci.acertoCancela(this, true)
+  }
+
   fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
       numLoja = numloja,
       numero = numero
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
+    return produtos
+  }
+
+  fun findProdutosMobile(): List<ProdutoEstoqueAcerto> {
+    val filtro = FiltroAcerto(
+      numLoja = numloja,
+      numero = numero
+    )
+    val produtos = ProdutoEstoqueAcerto.findAll(filtro, true)
     return produtos
   }
 
