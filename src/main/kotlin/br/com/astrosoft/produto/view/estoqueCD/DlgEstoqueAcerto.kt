@@ -103,8 +103,8 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
       isMultiSort = false
 
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código")
-      columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição")
-      columnGrid(ProdutoEstoqueAcerto::grade, "Grade")
+      columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
+      columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "120px")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val user = AppConfig.userLogin()
         when {
