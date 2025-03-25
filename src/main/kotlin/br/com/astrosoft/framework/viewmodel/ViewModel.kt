@@ -24,7 +24,7 @@ fun <T> exec(view: IView, block: () -> T): T {
   return try {
     block()
   } catch (e: EViewModelFail) {
-    view.showError(e.message ?: "Erro generico")
+    view.showWarning(e.message ?: "Erro generico")
     throw e
   } catch (e: EModelFail) {
     view.showError("Erro de banco de dados: ${e.message ?: "Erro generico"}")

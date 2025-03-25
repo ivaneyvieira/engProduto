@@ -25,8 +25,7 @@ class ProdutoEstoqueAcerto(
   var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
-
-  ) {
+) {
   val acertado
     get() = estoqueCD != null && estoqueLoja != null
 

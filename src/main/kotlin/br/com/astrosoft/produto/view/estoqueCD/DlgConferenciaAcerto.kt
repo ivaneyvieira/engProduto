@@ -1,25 +1,21 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
-import java.time.LocalDate
 
 class DlgConferenciaAcerto(
   val viewModel: TabEstoqueAcertoViewModel,
   val produto: ProdutoEstoqueAcerto,
   val onClose: () -> Unit = {}
-) :
-  Dialog() {
+) : Dialog() {
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
 

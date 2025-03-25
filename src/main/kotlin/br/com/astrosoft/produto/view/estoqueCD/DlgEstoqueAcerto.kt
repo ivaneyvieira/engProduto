@@ -61,6 +61,20 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
           viewModel.geraPlanilha(produtos)
         }
 
+        this.button("Adiciona") {
+          this.icon = VaadinIcon.PLUS.create()
+          this.addClickListener {
+            if(acerto.gravado == true){
+              DialogHelper.showWarning("Acerto já gravado")
+              return@addClickListener
+            }
+            val dlg = DlgAdicionaAcerto(viewModel, acerto) {
+              gridDetail.dataProvider.refreshAll()
+            }
+            dlg.open()
+          }
+        }
+
         this.button("Remove") {
           this.icon = VaadinIcon.TRASH.create()
           this.addClickListener {

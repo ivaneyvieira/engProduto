@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import br.com.astrosoft.produto.model.report.ReportAcerto
+import br.com.astrosoft.produto.model.saci
 
 class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -122,6 +123,15 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       }
       updateView()
     }
+  }
+
+  fun addProduto(produto: ProdutoEstoqueAcerto) {
+    produto.save()
+    updateView()
+  }
+
+  fun findProdutos(codigo:String, loja: Int): List<PrdGrade> {
+    return saci.findGrades(codigo, loja)
   }
 }
 
