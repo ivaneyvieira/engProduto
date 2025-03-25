@@ -17,7 +17,7 @@ SELECT numero,
        gravadoLogin,
        gravado
 FROM
-  sqldados.produtoEstoqueAcerto
+  sqldados.produtoEstoqueAcertoMobile
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)

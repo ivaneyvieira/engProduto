@@ -67,7 +67,7 @@ CREATE TEMPORARY TABLE T_ULT_ACERTO
 )
 SELECT numloja, prdno, grade, MAX(numero) AS numero
 FROM
-  sqldados.produtoEstoqueAcerto A
+  sqldados.produtoEstoqueAcertoMobile A
 GROUP BY numloja, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
@@ -92,7 +92,7 @@ SELECT A.numero,
        A.transacao,
        A.login
 FROM
-  sqldados.produtoEstoqueAcerto A
+  sqldados.produtoEstoqueAcertoMobile A
     INNER JOIN T_ULT_ACERTO
                USING (numloja, prdno, grade, numero);
 

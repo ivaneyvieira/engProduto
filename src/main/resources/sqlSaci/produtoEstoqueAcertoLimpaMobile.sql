@@ -1,6 +1,6 @@
 DELETE
 FROM
-  sqldados.produtoEstoqueAcerto
+  sqldados.produtoEstoqueAcertoMobile
 WHERE numloja = :numLoja
   AND numero = :numero
   AND prdno = :prdno
