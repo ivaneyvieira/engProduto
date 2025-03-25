@@ -21,7 +21,7 @@ class ProdutoEstoqueAcerto(
   var estoqueCD: Int? = null,
   var estoqueLoja: Int? = null,
   var diferenca: Int? = null,
-  var processado: String? = null,
+  var processado: Boolean? = null,
   var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
@@ -125,7 +125,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       hora = acerto.hora ?: return@mapNotNull null,
       login = acerto.login,
       usuario = acerto.usuario,
-      processado = it.value.map { it.processado }.maxBy { it ?: "" },
+      processado = it.value.map { it.processado }.maxBy { it ?: false },
       transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
       transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
@@ -143,13 +143,16 @@ class EstoqueAcerto(
   var hora: LocalTime,
   var login: String?,
   var usuario: String?,
-  var processado: String?,
+  var processado: Boolean?,
   var transacaoEnt: String?,
   var transacaoSai: String?,
   var gravadoLogin: Int?,
   var gravado: Boolean?,
   val produtos: List<ProdutoEstoqueAcerto> = emptyList()
 ) {
+  val processadoStr
+    get() = if (processado == true) "Sim" else "Não"
+
   val gravadoLoginStr: String
     get() {
       return getUser(gravadoLogin ?: 0)?.login ?: ""

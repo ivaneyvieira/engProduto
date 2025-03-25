@@ -42,7 +42,7 @@ SELECT numero,
        estoqueCD,
        estoqueLoja,
        diferenca,
-       IF(processado, 'Sim', 'Não') AS processado,
+       processado,
        transacao,
        0                            AS gravadoLogin,
        FALSE                        AS gravado

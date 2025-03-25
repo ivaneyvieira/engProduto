@@ -126,7 +126,7 @@ class DlgAdicionaAcerto(
       this.estoqueCD = edtEstoqueCD?.value
       this.estoqueLoja = edtEstoqueLoja?.value
       this.diferenca = (edtEstoqueLoja?.value ?: 0) + (edtEstoqueCD?.value ?: 0) - (produtos.firstOrNull()?.saldo ?: 0)
-      this.processado = "Não"
+      this.processado = false
       this.transacao = null
       this.gravadoLogin = user?.no
       this.gravado = acerto.gravado

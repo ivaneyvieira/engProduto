@@ -104,7 +104,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
     columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
     columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Login", width = "80px")
-    columnGrid(EstoqueAcerto::processado, header = "Processado")
+    columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
   }
 
   override fun filtro(): FiltroAcerto {

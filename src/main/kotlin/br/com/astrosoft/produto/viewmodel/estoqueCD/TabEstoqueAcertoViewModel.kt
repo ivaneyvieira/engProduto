@@ -65,7 +65,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun cancelarAcerto() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados().filter {
-      it.processado == "Não"
+      it.processado == false
     }
     if (itensSelecionado.isEmpty()) {
       fail("Nenhum acerto não processado selecionado")
@@ -114,10 +114,11 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     itensSelecionado.ifEmpty {
       fail("Nenhum acerto selecionado")
     }
-    if (itensSelecionado.any { it.processado == "Sim" }) {
+    if (itensSelecionado.any { it.processado == true }) {
       fail("Acerto já processado")
     }
-    viewModel.view.showQuestion("Confirma a remoção dos acertos selecionados?") {
+
+    subView.autorizaAcerto {
       itensSelecionado.forEach { produto ->
         produto.remove()
       }
@@ -130,7 +131,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     updateView()
   }
 
-  fun findProdutos(codigo:String, loja: Int): List<PrdGrade> {
+  fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
   }
 }
