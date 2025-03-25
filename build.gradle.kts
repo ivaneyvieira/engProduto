@@ -8,9 +8,9 @@ val vaadinSimpleSecurityVersion: String by extra
 val slf4jVersion: String by extra
 
 plugins {
-  kotlin("jvm") version "2.1.0"
-  id("application")
-  id("com.vaadin")
+  kotlin("jvm") version "2.1.20"
+  application
+  id("com.vaadin") version "24.7.0"
 }
 
 //defaultTasks("clean", "build")
