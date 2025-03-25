@@ -64,8 +64,8 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {
-            if(acerto.gravado == true){
-              DialogHelper.showWarning("Acerto já gravado")
+            if(acerto.processado == "Sim"){
+              DialogHelper.showWarning("Acerto já processado")
               return@addClickListener
             }
             val dlg = DlgAdicionaAcerto(viewModel, acerto) {
