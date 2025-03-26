@@ -25,7 +25,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoqueAcerto.findAllMobile(filtro).agrupa().sortedBy { it.numero }
+    val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupa().sortedBy { it.numero }
     subView.updateProduto(produtos)
   }
 
