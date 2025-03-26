@@ -86,7 +86,6 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   }
 
   override fun Grid<EstoqueAcerto>.gridPanel() {
-    this.addClassName("styling")
     selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")

@@ -3,13 +3,15 @@ package br.com.astrosoft.framework.view.vaadin
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.theme.lumo.LumoUtility
 
-class SubWindowForm(
+class SubWindowFormMobile(
   protected val title: String,
-  val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
+  val toolBar: HorizontalLayout.(SubWindowFormMobile) -> Unit = {},
   val onClose: (Dialog) -> Unit = {},
   val fullSize: Boolean = true,
   val blockForm: () -> Component,
@@ -21,7 +23,8 @@ class SubWindowForm(
     }
 
     verticalLayout {
-      content { align(stretch, top) }
+      setSizeFull()
+      //content { align(stretch, top) }
       isPadding = false
       verticalLayout {
         isSpacing = false
@@ -36,20 +39,21 @@ class SubWindowForm(
             this.style["padding"] = "0"
             this.style["font-size"] = "1em"
             this.style["font-weight"] = "bold"
-            isExpand = true
+            //isExpand = true
           }
         }
       }
       horizontalLayout {
         content { align(left, baseline) }
         button("Fechar") {
-          icon = VaadinIcon.CLOSE.create()
+          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+          this.icon = VaadinIcon.CLOSE.create()
           onClick {
-            onClose(this@SubWindowForm)
-            this@SubWindowForm.close()
+            onClose(this@SubWindowFormMobile)
+            this@SubWindowFormMobile.close()
           }
         }
-        toolBar(this@SubWindowForm)
+        toolBar(this@SubWindowFormMobile)
       }
 
       addAndExpand(blockForm())

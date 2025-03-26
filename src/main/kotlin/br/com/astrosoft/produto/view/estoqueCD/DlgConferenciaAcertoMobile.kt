@@ -25,25 +25,36 @@ class DlgConferenciaAcertoMobile(
     this.footer.toolBar()
 
     verticalLayout {
+      this.isMargin = false
+      this.isPadding = false
       setSizeFull()
       horizontalLayout {
+        this.isMargin = false
+        this.isPadding = false
         edtEstoqueCD = integerField("Estoque CD") {
-          this.setWidthFull()
+          this.isAutofocus = true
+          this.isAutoselect = true
+          this.addClassName("mobile")
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
+          this.width = "8em"
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.estoqueCD
         }
 
         edtEstoqueLoja = integerField("Estoque Loja") {
-          this.setWidthFull()
+          this.isAutoselect = true
+          this.addClassName("mobile")
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
+          this.width = "8em"
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.estoqueLoja
         }
       }
     }
-    this.width = "30%"
-    this.height = "30%"
+    this.width = "100%"
+    //this.height = "30%"
   }
 
   fun HasComponents.toolBar() {

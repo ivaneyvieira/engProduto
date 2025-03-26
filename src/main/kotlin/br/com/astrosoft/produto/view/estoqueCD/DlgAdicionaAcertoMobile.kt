@@ -37,10 +37,21 @@ class DlgAdicionaAcertoMobile(
 
     verticalLayout {
       setSizeFull()
+      this.isMargin = false
+      this.isPadding = false
+      this.isSpacing = false
+      this.setWidthFull()
       horizontalLayout {
+        this.isMargin = false
+        this.isPadding = false
+        this.isWrap = true
         this.setWidthFull()
         edtCodigo = textField("Código") {
-          this.width = "120px"
+          this.isAutofocus = true
+          this.isAutoselect = true
+          this.width = "6em"
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
+          this.addClassName("mobile")
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -57,31 +68,45 @@ class DlgAdicionaAcertoMobile(
         }
 
         edtDescricao = textField("Descrição") {
-          this.setWidthFull()
+          this.isAutoselect = true
+          this.width = null
+          this.minWidth = "10em"
+          this.isExpand = true
+          this.addClassName("mobile")
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
           this.isReadOnly = true
         }
 
-        edtGrade = select("Grade"){
-          this.width = "120px"
+        edtGrade = select("Grade") {
+          this.addClassName("mobile")
+          this.width = "6em"
         }
       }
       horizontalLayout {
-        this.isExpand = true
+        this.isMargin = false
+        this.isPadding = false
+
         edtEstoqueCD = integerField("Estoque CD") {
-          this.setWidthFull()
+          this.isAutoselect = true
+          this.addClassName("mobile")
+          this.width = "8em"
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
 
         edtEstoqueLoja = integerField("Estoque Loja") {
-          this.setWidthFull()
+          this.isAutoselect = true
+          this.addClassName("mobile")
+          this.width = "8em"
+          this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
       }
     }
-    this.width = "40%"
-    this.height = "35%"
+    this.width = "100%"
+    //this.height = "35%"
   }
 
   fun HasComponents.toolBar() {

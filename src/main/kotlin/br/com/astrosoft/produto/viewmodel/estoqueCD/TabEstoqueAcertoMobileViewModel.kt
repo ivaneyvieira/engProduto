@@ -109,21 +109,16 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun removeAcerto() = viewModel.exec {
-    val itensSelecionado = subView.produtosSelecionado()
+  fun removeAcerto(produto: ProdutoEstoqueAcerto?) = viewModel.exec {
 
-    itensSelecionado.ifEmpty {
-      fail("Nenhum acerto selecionado")
-    }
+    produto ?: fail("Nenhum acerto selecionado")
 
-    if (itensSelecionado.any { it.processado == true }) {
+    if (produto.processado == true) {
       fail("Acerto está processado")
     }
 
     subView.autorizaAcerto {
-      itensSelecionado.forEach { produto ->
-        produto.removeMobile()
-      }
+      produto.removeMobile()
       updateView()
     }
   }
@@ -144,5 +139,4 @@ interface ITabEstoqueAcertoMobile : ITabView {
   fun itensSelecionados(): List<EstoqueAcerto>
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaAcerto(block: (user: IUser) -> Unit)
-  fun produtosSelecionado(): List<ProdutoEstoqueAcerto>
 }

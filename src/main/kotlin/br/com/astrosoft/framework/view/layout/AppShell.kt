@@ -2,11 +2,9 @@ package br.com.astrosoft.framework.view.layout
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import com.vaadin.flow.component.dependency.NpmPackage
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.page.LoadingIndicatorConfiguration
-import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.component.page.Viewport
+import com.vaadin.flow.component.page.*
 import com.vaadin.flow.server.AppShellSettings
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.server.ServiceInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.theme.Theme
@@ -16,6 +14,10 @@ import com.vaadin.flow.theme.lumo.Lumo
 @Push
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 @Viewport(Viewport.DEVICE_DIMENSIONS)
+@BodySize(width = "100vw", height = "100vh")
+@PWA(
+  name = "Estoque Engecopi", shortName = "Estoque"
+)
 class AppShell : AppShellConfigurator, VaadinServiceInitListener {
   init {
     this.configurePage(AppSetting())

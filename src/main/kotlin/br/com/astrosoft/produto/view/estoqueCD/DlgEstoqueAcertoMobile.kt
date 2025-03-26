@@ -1,23 +1,27 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.SubWindowFormMobile
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoMobileViewModel
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.GridVariant
+import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.isExpand
+import com.github.mvysny.karibudsl.v10.onClick
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.virtuallist.VirtualList
+import com.vaadin.flow.data.renderer.ComponentRenderer
+import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val acerto: EstoqueAcerto) {
   private var onClose: (() -> Unit)? = null
-  private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoEstoqueAcerto::class.java, false)
+  private var form: SubWindowFormMobile? = null
+  private val virtualGrid = VirtualList<ProdutoEstoqueAcerto>()
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -25,24 +29,12 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
     val loja = acerto.lojaSigla
     val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
 
-    form = SubWindowForm(
+    form = SubWindowFormMobile(
       "Produtos do Acerto $numero - Loja $loja $gravado",
       toolBar = {
-        button("Pedido") {
-          this.icon = VaadinIcon.PRINT.create()
-          this.addClickListener {
-            viewModel.imprimirPedido(acerto)
-          }
-        }
-
-        button("Acerto") {
-          this.icon = VaadinIcon.PRINT.create()
-          this.addClickListener {
-            viewModel.imprimirAcerto(acerto)
-          }
-        }
-
+        this.isWrap = true
         button("Grava Acerto") {
+          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
           this.icon = VaadinIcon.CHECK.create()
           this.addClickListener {
             viewModel.gravaAcerto(acerto)
@@ -50,98 +42,107 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
           }
         }
 
-        button("Relatório") {
-          this.icon = VaadinIcon.FILE_TEXT.create()
-          this.addClickListener {
-            viewModel.imprimirRelatorio(acerto)
-          }
-        }
-
-        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
-          val produtos = estoqueAcertos()
-          viewModel.geraPlanilha(produtos)
-        }
-
         this.button("Adiciona") {
+          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {
-            if(acerto.processado == true){
+            if (acerto.processado == true) {
               DialogHelper.showWarning("Acerto já processado")
               return@addClickListener
             }
             val dlg = DlgAdicionaAcertoMobile(viewModel, acerto) {
-              gridDetail.dataProvider.refreshAll()
+              virtualGrid.dataProvider.refreshAll()
             }
             dlg.open()
           }
         }
-
-        this.button("Remove") {
-          this.icon = VaadinIcon.TRASH.create()
-          this.addClickListener {
-            viewModel.removeAcerto()
-          }
-        }
+        /*
+                this.button("Remove") {
+                  this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+                  this.icon = VaadinIcon.TRASH.create()
+                  this.addClickListener {
+                    viewModel.removeAcerto()
+                  }
+                }*/
       },
       onClose = {
         closeForm()
       }) {
-      HorizontalLayout().apply {
-        setSizeFull()
-        createGridProdutos()
+      virtualGrid.apply {
+        this.setSizeFull()
+        this.isExpand = true
+        this.setRenderer(renderProduto)
       }
+      update()
+      virtualGrid
     }
     form?.open()
   }
 
-  private fun HorizontalLayout.createGridProdutos() {
-    gridDetail.apply {
-      this.addClassName("styling")
-      this.format()
-      setSizeFull()
-      addThemeVariants(GridVariant.LUMO_COMPACT)
-      this.setSelectionMode(Grid.SelectionMode.MULTI)
-      isMultiSort = false
+  val renderProduto = ComponentRenderer<Component, ProdutoEstoqueAcerto> { produto ->
+    VerticalLayout().apply {
+      this.setWidthFull()
+      this.isSpacing = false
+      isMargin = false
+      isPadding = false
+      this.addClassNames(
+        LumoUtility.BorderRadius.LARGE,
+        LumoUtility.BoxShadow.LARGE,
+        LumoUtility.Border.ALL,
+        LumoUtility.BorderColor.CONTRAST_50
+      )
+      horizontalLayout {
+        this.isPadding = true
+        this.isSpacing = true
+        this.isMargin = false
+        this.isWrap = true
 
-      columnGrid(ProdutoEstoqueAcerto::codigo, "Código")
-      columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
-      columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "120px")
-      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
-        val user = AppConfig.userLogin()
-        when {
-          acerto.login != user?.login -> {
-            DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
-          }
+        fieldPanel(produto.codigo, "Código", width = 6.00)
+        fieldPanel(produto.grade, "Grade", width = 6.0)
+        fieldPanel(produto.descricao, "Descrição", width = 18.00)
+        fieldPanel(produto.estoqueSis?.toString(), "Est Sist", width = 4.0, isRight = true)
+        fieldPanel(produto.estoqueCD?.toString(), "Est CD", width = 4.0, isRight = true)
+        fieldPanel(produto.estoqueLoja?.toString(), "Est Loja", width = 4.0, isRight = true)
+        fieldPanel(produto.diferenca?.toString(), "Diferença", width = 5.0, isRight = true)
+        fieldPanel(produto.estoqueReal.toString(), "Est Real", width = 5.0, isRight = true)
+      }
+      horizontalLayout {
+        this.isPadding = true
+        this.isSpacing = true
+        this.isMargin = false
+        this.isWrap = true
+        button("Conferência") {
+          this.icon = VaadinIcon.DATE_INPUT.create()
+          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
 
-          acerto.processado == true  -> {
-            DialogHelper.showWarning("Acerto já processado")
-          }
+          this.onClick {
+            val user = AppConfig.userLogin()
+            when {
 
-          else                        -> {
-            val dlgConferencia = DlgConferenciaAcertoMobile(viewModel, produto) {
-              gridDetail.dataProvider.refreshAll()
+              acerto.login != user?.login && user?.admin != true -> {
+                DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
+              }
+
+              acerto.processado == true   -> {
+                DialogHelper.showWarning("Acerto já processado")
+              }
+
+              else                        -> {
+                val dlgConferencia = DlgConferenciaAcertoMobile(viewModel, produto) {
+                  virtualGrid.dataProvider.refreshAll()
+                }
+                dlgConferencia.open()
+              }
             }
-            dlgConferencia.open()
           }
         }
       }
-      columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
-      columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
-      columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
-      columnGrid(ProdutoEstoqueAcerto::diferenca, "Diferença")
-      columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
     }
-    this.addAndExpand(gridDetail)
-    update()
-  }
-
-  fun produtosSelecionados(): List<ProdutoEstoqueAcerto> {
-    return gridDetail.selectedItems.toList()
   }
 
   fun update() {
     val produtos = estoqueAcertos()
-    gridDetail.setItems(produtos)
+    virtualGrid.setItems(produtos)
   }
 
   private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
@@ -153,14 +154,10 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
     form?.close()
   }
 
-  fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
-    return gridDetail.selectedItemsSort()
-  }
-
   fun updateAcerto(acertos: List<EstoqueAcerto>) {
     val acerto = acertos.firstOrNull {
       it.numloja == this.acerto.numloja && it.numero == this.acerto.numero
     }
-    gridDetail.setItems(acerto?.produtos.orEmpty())
+    virtualGrid.setItems(acerto?.produtos.orEmpty())
   }
 }
