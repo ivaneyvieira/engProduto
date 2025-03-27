@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque2
 import java.time.LocalDate
 
 class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -65,7 +66,7 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
       fail("Nenhum produto selecionado")
     }
 
-    val report = PrintProdutosConferenciaEstoque("Inventario")
+    val report = PrintProdutosConferenciaEstoque2("Inventario")
 
     report.print(
       dados = produtos, printer = subView.printerPreview()

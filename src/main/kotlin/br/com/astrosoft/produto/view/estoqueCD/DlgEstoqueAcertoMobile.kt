@@ -157,6 +157,6 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
     val acerto = acertos.firstOrNull {
       it.numloja == this.acerto.numloja && it.numero == this.acerto.numero
     }
-    virtualGrid.setItems(acerto?.produtos.orEmpty())
+    virtualGrid.setItems(acerto?.findProdutos().orEmpty())
   }
 }

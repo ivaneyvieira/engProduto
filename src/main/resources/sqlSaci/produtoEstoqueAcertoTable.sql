@@ -66,7 +66,6 @@ WHERE A.transacao != M.xano;
 
 
 
-
 ALTER TABLE produtoEstoqueAcerto
   ADD gravadoLogin int NULL DEFAULT 0 AFTER diferenca;
 
@@ -74,8 +73,10 @@ ALTER TABLE produtoEstoqueAcerto
   ADD gravado BOOLEAN NULL DEFAULT FALSE AFTER diferenca;
 
 
-select * from produtoEstoqueAcerto
-order by numloja, numero, prdno, grade;
+SELECT *
+FROM
+  produtoEstoqueAcerto
+ORDER BY numloja, numero, prdno, grade;
 
 SELECT *
 FROM
@@ -96,5 +97,39 @@ SELECT *
 FROM
   produtoEstoqueAcerto
 WHERE numloja = 4
-  AND numero IN (35,36)
+  AND numero IN (35, 36)
 ORDER BY numloja, numero, prdno, grade;
+
+/***********************************************/
+
+SELECT numero,
+       numloja,
+       lojaSigla,
+       data,
+       hora,
+       usuario,
+       prdno,
+       descricao,
+       grade,
+       diferenca,
+       processado,
+       transacao,
+       login,
+       estoqueCD,
+       estoqueLoja,
+       estoqueSis,
+       gravadoLogin,
+       gravado
+FROM
+  sqldados.produtoEstoqueAcerto;
+
+ALTER TABLE produtoEstoqueAcerto
+  DROP COLUMN lojaSigla;
+
+ALTER TABLE produtoEstoqueAcerto
+  DROP COLUMN descricao;
+
+
+ALTER TABLE produtoEstoqueAcerto
+  DROP COLUMN diferenca;
+

@@ -1,21 +1,4 @@
-SELECT numero,
-       numloja,
-       lojaSigla,
-       data,
-       hora,
-       login,
-       usuario,
-       prdno,
-       descricao,
-       grade,
-       estoqueSis,
-       estoqueCD,
-       estoqueLoja,
-       diferenca,
-       processado,
-       transacao,
-       gravadoLogin,
-       gravado
+SELECT count(*) as quant
 FROM
   sqldados.produtoEstoqueAcerto
 WHERE numloja = :numLoja

@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque2
 import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
 
@@ -41,7 +42,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    val report = PrintProdutosConferenciaEstoque("Pedido de acerto: ${acerto.numero}")
+    val report = PrintProdutosConferenciaEstoque2("Pedido de acerto: ${acerto.numero}")
 
     report.print(
       dados = produtos, printer = subView.printerPreview()
@@ -99,7 +100,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Acerto já gravado")
     }
     subView.autorizaAcerto { user ->
-      val pordutos = acerto.produtos
+      val pordutos = acerto.findProdutos()
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true

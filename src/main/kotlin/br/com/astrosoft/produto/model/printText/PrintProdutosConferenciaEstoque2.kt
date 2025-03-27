@@ -5,12 +5,12 @@ import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PrintProdutosConferenciaEstoque(val titulo: String) : PrintText<ProdutoEstoqueAcerto>() {
-  override fun printTitle(bean: ProdutoEstoqueAcerto) {
+class PrintProdutosConferenciaEstoque2(val titulo: String) : PrintText<ProdutoEstoque>() {
+  private var valorPedido: Double = 0.0
+  override fun printTitle(bean: ProdutoEstoque) {
     writeln(titulo, negrito = true, center = true)
     writeln("")
     writeln(
@@ -25,16 +25,21 @@ class PrintProdutosConferenciaEstoque(val titulo: String) : PrintText<ProdutoEst
     printLine()
   }
 
-  init {
-    column(ProdutoEstoqueAcerto::codigo, "Codigo", 6)
-    column(ProdutoEstoqueAcerto::descricao, "Descricao", 34)
-    column(ProdutoEstoqueAcerto::grade, "Grade", 8)
-    column(ProdutoEstoqueAcerto::locApp, "Loc", 4)
-    column(ProdutoEstoqueAcerto::estoqueSis, "___Quant", 8, lineBreak = true)
-    column(ProdutoEstoqueAcerto::saldoBarraRef, "", 47)
+  override fun print(dados: List<ProdutoEstoque>, printer: IPrinter) {
+    valorPedido = dados.sumOf { ((it.estoque ?: 0) * 1.00) }
+    super.print(dados, printer)
   }
 
-  override fun printSumary(bean: ProdutoEstoqueAcerto?) {
+  init {
+    column(ProdutoEstoque::codigoStr, "Codigo", 6)
+    column(ProdutoEstoque::descricao, "Descricao", 34)
+    column(ProdutoEstoque::grade, "Grade", 8)
+    column(ProdutoEstoque::locApp, "Loc", 4)
+    column(ProdutoEstoque::saldo, "___Quant", 8, lineBreak = true)
+    column(ProdutoEstoque::saldoBarraRef, "", 47)
+  }
+
+  override fun printSumary(bean: ProdutoEstoque?) {
     writeln("")
     writeln("")
     writeln("")

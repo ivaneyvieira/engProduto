@@ -1,6 +1,6 @@
 USE sqldados;
 
-REPLACE INTO produtoEstoqueAcerto (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,
-                                   estoqueSis, estoqueCd, estoqueLoja, diferenca, gravadoLogin, gravado)
-  VALUE (:numero, :numloja, :lojaSigla, :data, :hora, :login, :usuario, :prdno, :descricao, :grade, :estoqueSis,
-         :estoqueCD, :estoqueLoja, :diferenca, :gravadoLogin, :gravado)
+REPLACE INTO produtoEstoqueAcerto (numero, numloja, data, hora, login, usuario, prdno, grade,
+                                   estoqueSis, estoqueCd, estoqueLoja, gravadoLogin, gravado)
+  VALUE (:numero, :numloja, :data, :hora, :login, :usuario, :prdno, :grade,
+         :estoqueSis, :estoqueCD, :estoqueLoja, :gravadoLogin, :gravado)

@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque2
 import java.time.LocalDate
 
 class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -76,7 +76,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
     val produtosAcerto = produtos.toAcerto(numero)
 
-    val report = PrintProdutosConferenciaEstoque("Relatório de Estoque")
+    val report = PrintProdutosConferenciaEstoque2("Relatório de Estoque")
     val user = AppConfig.userLogin() as? UserSaci
 
     report.print(

@@ -16,16 +16,28 @@ class ProdutoEstoqueAcerto(
   var usuario: String? = null,
   var prdno: String? = null,
   var descricao: String? = null,
+  var locApp: String? = null,
+  var barcode: String? = null,
+  var ref: String? = null,
   var grade: String? = null,
   var estoqueSis: Int? = null,
   var estoqueCD: Int? = null,
   var estoqueLoja: Int? = null,
-  var diferenca: Int? = null,
   var processado: Boolean? = null,
   var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
 ) {
+  val diferenca: Int?
+    get() {
+      return (estoqueCD ?: return null) + (estoqueLoja ?: return null) - (estoqueSis ?: return null)
+    }
+
+  val saldoBarraRef: String
+    get() {
+      return "${barcode ?: ""}   |   ${ref ?: ""}"
+    }
+
   val acertado
     get() = estoqueCD != null && estoqueLoja != null
 
@@ -33,17 +45,6 @@ class ProdutoEstoqueAcerto(
     get() {
       return (estoqueSis ?: 0) + (diferenca ?: 0)
     }
-
-  fun updateDiferenca() {
-    val estSis = estoqueSis ?: 0
-    val estCD = estoqueCD
-    val estLj = estoqueLoja
-    diferenca = if (estCD != null && estLj != null) {
-      (estCD + estLj) - estSis
-    } else {
-      0
-    }
-  }
 
   val estoqueRelatorio: String
     get() {
@@ -63,7 +64,7 @@ class ProdutoEstoqueAcerto(
   }
 
   fun jaGravado(): Boolean {
-    return saci.jaGravado(this).isNotEmpty()
+    return saci.jaGravado(this)
   }
 
   fun remove() {
@@ -119,7 +120,6 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int): List<ProdutoEstoqueAcerto> {
       estoqueSis = it.saldo,
       estoqueCD = it.estoqueCD,
       estoqueLoja = it.estoqueLoja,
-      diferenca = it.estoqueDif
     )
   }
 }
@@ -142,7 +142,6 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
       gravado = acerto.gravado,
-      produtos = it.value
     )
   }
 }
@@ -160,7 +159,6 @@ class EstoqueAcerto(
   var transacaoSai: String?,
   var gravadoLogin: Int?,
   var gravado: Boolean?,
-  val produtos: List<ProdutoEstoqueAcerto> = emptyList()
 ) {
   val processadoStr
     get() = if (processado == true) "Sim" else "Não"
@@ -172,14 +170,6 @@ class EstoqueAcerto(
 
   val gravadoStr: String
     get() = if (gravado == true) "Sim" else "Não"
-
-  val produtosAjustados: String
-    get() {
-      return if (produtos.all { it.acertado })
-        "Sim"
-      else
-        "Não"
-    }
 
   fun cancela() {
     saci.acertoCancela(this)

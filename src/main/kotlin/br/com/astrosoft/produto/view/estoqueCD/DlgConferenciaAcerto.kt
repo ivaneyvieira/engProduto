@@ -78,7 +78,6 @@ class DlgConferenciaAcerto(
   private fun confirmaForm() {
     produto.estoqueCD = edtEstoqueCD?.value
     produto.estoqueLoja = edtEstoqueLoja?.value
-    produto.updateDiferenca()
     viewModel.updateProduto(produto)
     onClose.invoke()
     this.close()

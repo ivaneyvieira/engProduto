@@ -7,18 +7,6 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-DROP TEMPORARY TABLE IF EXISTS T_LOC_SACI;
-CREATE TEMPORARY TABLE T_LOC_SACI
-(
-  PRIMARY KEY (prdno, grade)
-)
-SELECT prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
-FROM
-  sqldados.prdloc
-WHERE localizacao <> ''
-  AND (storeno = :loja OR :loja = 0)
-GROUP BY prdno, grade;
-
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
@@ -77,17 +65,14 @@ CREATE TEMPORARY TABLE T_ACERTO
 )
 SELECT A.numero,
        A.numloja,
-       A.lojaSigla,
        A.data,
        A.hora,
        A.usuario,
        A.prdno,
-       A.descricao,
        A.grade,
        A.estoqueSis,
        A.estoqueLoja,
        A.estoqueCD,
-       A.diferenca,
        A.processado,
        A.transacao,
        A.login

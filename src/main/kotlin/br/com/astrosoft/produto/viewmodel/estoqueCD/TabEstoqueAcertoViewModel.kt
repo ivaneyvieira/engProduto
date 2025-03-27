@@ -30,12 +30,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirPedido(acerto: EstoqueAcerto) = viewModel.exec {
-    val filtroVazio = subView.filtroVazio().copy(
-      pedido = acerto.numero,
-      loja = acerto.numloja
-    )
-
-    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio)
+    val produtos = acerto.findProdutos()
 
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -99,7 +94,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Acerto já gravado")
     }
     subView.autorizaAcerto { user ->
-      val pordutos = acerto.produtos
+      val pordutos = acerto.findProdutosMobile()
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true

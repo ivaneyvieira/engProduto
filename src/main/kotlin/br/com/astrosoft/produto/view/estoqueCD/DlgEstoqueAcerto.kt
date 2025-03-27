@@ -160,6 +160,6 @@ class DlgEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: Est
     val acerto = acertos.firstOrNull {
       it.numloja == this.acerto.numloja && it.numero == this.acerto.numero
     }
-    gridDetail.setItems(acerto?.produtos.orEmpty())
+    gridDetail.setItems(acerto?.findProdutos().orEmpty())
   }
 }

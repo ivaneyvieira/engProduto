@@ -4,8 +4,7 @@ DELETE
 FROM
   produtoEstoqueAcerto
 WHERE usuario = :usuario
-  AND numloja = :numLoja
-  AND descricao = '';
+  AND numloja = :numLoja;
 
 CREATE TEMPORARY TABLE T_ACERTO
 SELECT :numero             AS numero,
@@ -41,7 +40,6 @@ SELECT numero,
        estoqueSis,
        estoqueCD,
        estoqueLoja,
-       diferenca,
        processado,
        transacao,
        0                            AS gravadoLogin,

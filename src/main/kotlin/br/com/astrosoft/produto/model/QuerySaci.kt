@@ -1960,18 +1960,15 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("numero", produto.numero)
       addOptionalParameter("numloja", produto.numloja)
-      addOptionalParameter("lojaSigla", produto.lojaSigla)
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
       addOptionalParameter("login", produto.login)
       addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
-      addOptionalParameter("descricao", produto.descricao)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("estoqueSis", produto.estoqueSis)
       addOptionalParameter("estoqueCD", produto.estoqueCD)
       addOptionalParameter("estoqueLoja", produto.estoqueLoja)
-      addOptionalParameter("diferenca", produto.diferenca ?: 0)
       addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
       addOptionalParameter("gravado", produto.gravado ?: 0)
     }
@@ -1988,14 +1985,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun jaGravado(produtoEstoqueAcerto: ProdutoEstoqueAcerto): List<ProdutoEstoqueAcerto> {
+  fun jaGravado(produtoEstoqueAcerto: ProdutoEstoqueAcerto): Boolean {
     val sql = "/sqlSaci/produtoEstoqueAcertoJaGravado.sql"
-    return query(sql, ProdutoEstoqueAcerto::class) {
+    return (query(sql, Count::class) {
       addOptionalParameter("numLoja", produtoEstoqueAcerto.numloja)
       addOptionalParameter("data", produtoEstoqueAcerto.data.toSaciDate())
       addOptionalParameter("prdno", produtoEstoqueAcerto.prdno)
       addOptionalParameter("grade", produtoEstoqueAcerto.grade)
-    }
+    }.firstOrNull()?.quant ?: 0) > 0
   }
 
   fun acertoCancela(produtoEstoqueAcerto: EstoqueAcerto, mobile: Boolean = false) {

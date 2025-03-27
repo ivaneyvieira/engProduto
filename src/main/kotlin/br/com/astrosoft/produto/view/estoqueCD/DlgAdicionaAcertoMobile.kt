@@ -147,18 +147,15 @@ class DlgAdicionaAcertoMobile(
     produto.apply {
       this.numero = acerto.numero
       this.numloja = acerto.numloja
-      this.lojaSigla = acerto.lojaSigla
       this.data = acerto.data
       this.hora = acerto.hora
       this.login = acerto.login
       this.usuario = acerto.usuario
       this.prdno = produtos.firstOrNull()?.prdno
-      this.descricao = produtos.firstOrNull()?.descricao
       this.grade = edtGrade?.value
       this.estoqueSis = produtos.firstOrNull()?.saldo
       this.estoqueCD = edtEstoqueCD?.value
       this.estoqueLoja = edtEstoqueLoja?.value
-      this.diferenca = (edtEstoqueLoja?.value ?: 0) + (edtEstoqueCD?.value ?: 0) - (produtos.firstOrNull()?.saldo ?: 0)
       this.processado = false
       this.transacao = null
       this.gravadoLogin = user?.no

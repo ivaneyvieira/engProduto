@@ -37,6 +37,10 @@ class ProdutoEstoque(
   var numeroAcerto: Int? = null,
   var processado: Boolean? = false,
 ) {
+  val saldoBarraRef: String
+    get() {
+      return "${barcode ?: ""}   |   ${ref ?: ""}"
+    }
 
   fun marcadoConf(userNo: Int, data: LocalDate): Boolean {
     return (estoqueUser == userNo) && (estoqueData == data)
@@ -59,10 +63,6 @@ class ProdutoEstoque(
       return estLoja + estCD - estSaldo
     }
 
-  val saldoBarraRef: String
-    get() {
-      return "${barcode ?: ""}   |   ${ref ?: ""}"
-    }
   val diferenca: Int
     get() {
       val estCD = kardec ?: 0
