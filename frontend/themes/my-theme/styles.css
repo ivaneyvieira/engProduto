@@ -65,21 +65,21 @@ vaadin-grid.styling::part(azul) {
 }
 
 vaadin-text-field.mobile[has-label] {
-    padding-top: 0px;
-    margin-top: 0px;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 vaadin-select.mobile[has-label] {
-    padding-top: 0px;
-    margin-top: 0px;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 vaadin-number-field.mobile[has-label] {
-    padding-top: 0px;
-    margin-top: 0px;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 vaadin-date-picker.mobile[has-label] {
-    padding-top: 0px;
-    margin-top: 0px;
+    padding-top: 0;
+    margin-top: 0;
 }

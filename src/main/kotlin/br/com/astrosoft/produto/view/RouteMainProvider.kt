@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.config.IRouteMainProvider
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
@@ -18,6 +19,7 @@ class RouteMainProvider : IRouteMainProvider {
         userSaci?.pedidoTransf == true -> PedidoTransfView::class
         userSaci?.pedido == true -> RessuprimentoView::class
         userSaci?.admin == true -> UsuarioView::class
+        userSaci?.estoqueAcertoMobile == true -> EstoqueCDView::class
         else -> ProdutoView::class
       }
     }

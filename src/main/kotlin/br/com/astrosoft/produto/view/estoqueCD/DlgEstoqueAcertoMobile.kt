@@ -56,14 +56,6 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
             dlg.open()
           }
         }
-        /*
-                this.button("Remove") {
-                  this.addThemeVariants(ButtonVariant.LUMO_SMALL)
-                  this.icon = VaadinIcon.TRASH.create()
-                  this.addClickListener {
-                    viewModel.removeAcerto()
-                  }
-                }*/
       },
       onClose = {
         closeForm()
@@ -96,17 +88,24 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
         this.isSpacing = true
         this.isMargin = false
         this.isWrap = true
-
-        fieldPanel(produto.codigo, "Código", width = 6.00)
-        fieldPanel(produto.grade, "Grade", width = 6.0)
-        fieldPanel(produto.descricao, "Descrição", width = 18.00)
-        fieldPanel(produto.estoqueSis?.toString(), "Est Sist", width = 4.0, isRight = true)
-        fieldPanel(produto.estoqueCD?.toString(), "Est CD", width = 4.0, isRight = true)
-        fieldPanel(produto.estoqueLoja?.toString(), "Est Loja", width = 4.0, isRight = true)
-        fieldPanel(produto.diferenca?.toString(), "Diferença", width = 5.0, isRight = true)
-        fieldPanel(produto.estoqueReal.toString(), "Est Real", width = 5.0, isRight = true)
+        hBlock {
+          fieldPanel(produto.codigo, "Código", width = 6.00)
+          fieldPanel(produto.grade, "Grade", width = 6.0)
+        }
+        hBlock {
+          fieldPanel(produto.descricao, "Descrição", isExpand = true)
+        }
+        hBlock {
+          fieldPanel(produto.estoqueSis?.toString(), "Est Sist", isExpand = true, isRight = true)
+          fieldPanel(produto.estoqueCD?.toString(), "Est CD", isExpand = true, isRight = true)
+          fieldPanel(produto.estoqueLoja?.toString(), "Est Loja", isExpand = true, isRight = true)
+        }
+        hBlock {
+          fieldPanel(produto.diferenca?.toString(), "Diferença", isExpand = true, isRight = true)
+          fieldPanel(produto.estoqueReal.toString(), "Est Real", isExpand = true, isRight = true)
+        }
       }
-      horizontalLayout {
+      hBlock {
         this.isPadding = true
         this.isSpacing = true
         this.isMargin = false
@@ -123,11 +122,11 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
                 DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
               }
 
-              acerto.processado == true   -> {
+              acerto.processado == true                          -> {
                 DialogHelper.showWarning("Acerto já processado")
               }
 
-              else                        -> {
+              else                                               -> {
                 val dlgConferencia = DlgConferenciaAcertoMobile(viewModel, produto) {
                   virtualGrid.dataProvider.refreshAll()
                 }

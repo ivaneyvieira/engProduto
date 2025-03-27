@@ -34,7 +34,7 @@ class LoginRoute : VerticalLayout(), ComponentEventListener<LoginEvent> {
       LumoUtility.BoxShadow.XLARGE,
       LumoUtility.Border.ALL,
       LumoUtility.BorderColor.CONTRAST_50,
-      LumoUtility.BorderRadius.SMALL
+      LumoUtility.BorderRadius.MEDIUM
     )
     add(login)
   }

@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcertoMobile
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoMobileViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.datepicker.DatePickerVariant
@@ -45,60 +46,68 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    cmbLoja = select("Loja") {
-      this.addClassName("mobile")
-      this.addThemeVariants(SelectVariant.LUMO_SMALL)
-      this.width = "10em"
-      this.setItemLabelGenerator { item ->
-        item.descricao
+    this.hBlock {
+      cmbLoja = select("Loja") {
+        this.addClassName("mobile")
+        this.addThemeVariants(SelectVariant.LUMO_SMALL)
+        this.isExpand = true
+        this.setItemLabelGenerator { item ->
+          item.descricao
+        }
+        addValueChangeListener {
+          if (it.isFromClient)
+            viewModel.updateView()
+        }
       }
-      addValueChangeListener {
-        if (it.isFromClient)
+
+      init()
+      this.setWidthFull()
+      edtNumero = integerField("Número") {
+        this.addClassName("mobile")
+        this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
+        this.isExpand = true
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
+        addValueChangeListener {
           viewModel.updateView()
+        }
       }
     }
 
-    init()
-
-    edtNumero = integerField("Número") {
-      this.addClassName("mobile")
-      this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
-      this.width = "10em"
-      this.valueChangeMode = ValueChangeMode.LAZY
-      this.valueChangeTimeout = 1500
-      addValueChangeListener {
-        viewModel.updateView()
+    hBlock {
+      edtDateIncial = datePicker("Data Inicial") {
+        this.addClassName("mobile")
+        this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
+        this.minWidth = "0"
+        this.isExpand = true
+        this.value = LocalDate.now()
+        this.localePtBr()
+        addValueChangeListener {
+          viewModel.updateView()
+        }
       }
-    }
 
-    edtDateIncial = datePicker("Data Inicial") {
-      this.addClassName("mobile")
-      this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
-      this.width = "8.5em"
-      this.value = LocalDate.now()
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
+      edtDateFinal = datePicker("Data Final") {
+        this.addClassName("mobile")
+        this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
+        this.minWidth = "0"
+        this.isExpand = true
+        this.value = LocalDate.now()
+        this.localePtBr()
+        addValueChangeListener {
+          viewModel.updateView()
+        }
       }
-    }
 
-    edtDateFinal = datePicker("Data Final") {
-      this.addClassName("mobile")
-      this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
-      this.width = "8.5em"
-      this.value = LocalDate.now()
-      this.localePtBr()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
-    button("Cancelar") {
-      this.addClassName("mobile")
-      this.addThemeVariants(ButtonVariant.LUMO_SMALL)
-      this.icon = VaadinIcon.CLOSE.create()
-      onClick {
-        viewModel.cancelarAcerto()
+      button("Cancelar") {
+        this.addClassName("mobile")
+        this.minWidth = "0"
+        this.isExpand = true
+        this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+        this.icon = VaadinIcon.CLOSE.create()
+        onClick {
+          viewModel.cancelarAcerto()
+        }
       }
     }
   }
@@ -106,16 +115,24 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
   override fun VerticalLayout.renderCard(item: EstoqueAcerto) {
     horizontalLayout {
       isWrap = true
-      fieldPanel(item.lojaSigla, header = "Loja", width = 5.00)
-      fieldPanel(item.numero.toString(), header = "Acerto", isRight = true, width = 5.00)
-      fieldPanel(item.data.format(), header = "Data", width = 8.0)
-      fieldPanel(item.hora.format(), header = "Hora", width = 4.0)
-      fieldPanel(item.login, header = "Usuário", width = 5.0)
-      fieldPanel(item.transacaoEnt, header = "Trans Ent", width = 6.0)
-      fieldPanel(item.transacaoSai, header = "Trans Sai", width = 6.0)
-      fieldPanel(item.gravadoStr, header = "Gravado", width = 6.0)
-      fieldPanel(item.gravadoLoginStr, header = "Login", width = 6.0)
-      fieldPanel(item.processadoStr, header = "Processado", width = 6.0)
+      hBlock {
+        fieldPanel(item.lojaSigla, header = "Loja", width = 4.0)
+        fieldPanel(item.numero.toString(), header = "Acerto", isRight = true, width = 6.0)
+      }
+      hBlock {
+        fieldPanel(item.data.format(), header = "Data", width = 6.0)
+        fieldPanel(item.hora.format(), header = "Hora", width = 4.0)
+        fieldPanel(item.login, header = "Usuário", isExpand = true)
+      }
+      hBlock {
+        fieldPanel(item.transacaoEnt, header = "Trans Ent", isExpand = true)
+        fieldPanel(item.transacaoSai, header = "Trans Sai", isExpand = true)
+      }
+      hBlock {
+        fieldPanel(item.gravadoStr, header = "Gravado", isExpand = true)
+        fieldPanel(item.gravadoLoginStr, header = "Login", isExpand = true)
+        fieldPanel(item.processadoStr, header = "Processado", isExpand = true)
+      }
     }
     button("Pedido") {
       addThemeVariants(ButtonVariant.LUMO_SMALL)
@@ -196,29 +213,21 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
   }
 }
 
-/*
-fun HasComponents.fieldPanel(value: String?, header: String, isRight: Boolean = false, width: Double = 0.00) {
-  this.textField(header) {
-    this.addClassName("mobile")
-    this.isReadOnly = false
-    this.value = value ?: ""
-    this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
-    if (isRight) {
-      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-    }
-    if (width > 0) {
-      this.width = "${width}em"
-    }
-  }
-}*/
-
-fun HasComponents.fieldPanel(value: String?, header: String, isRight: Boolean = false, width: Double = 0.00) {
-  this.verticalLayout {
+fun HorizontalLayout.fieldPanel(
+  value: String?,
+  header: String,
+  isRight: Boolean = false,
+  width: Double? = null,
+  isExpand: Boolean = false
+) {
+  val panel = VerticalLayout().apply {
     this.isSpacing = false
     this.isMargin = false
     this.isPadding = false
     this.isSpacing = false
-    this.width = if (width > 0) "${width}em" else null
+
+    this.minWidth = "0"
+    this.width = if (width != null) "${width}em" else null
     this.p(header) {
       this.addClassNames(
         LumoUtility.FontSize.XSMALL,
@@ -250,4 +259,37 @@ fun HasComponents.fieldPanel(value: String?, header: String, isRight: Boolean = 
       }
     }
   }
+  if(isExpand){
+    this.addAndExpand(panel)
+  }else{
+    this.add(panel)
+  }
+}
+
+@VaadinDsl
+fun (@VaadinDsl HasComponents).hBlock(
+  block: (@VaadinDsl HorizontalLayout).() -> Unit = {}
+): HorizontalLayout {
+  if (this is HorizontalLayout) {
+    this.isSpacing = true
+    //this.themeList.add("spacing-xs")
+    this.isPadding = true
+    //this.addClassNames(LumoUtility.Padding.Right.MEDIUM)
+    UI.getCurrent().page.retrieveExtendedClientDetails {
+      this.isWrap = it.windowInnerWidth < 400
+    }
+  }
+
+  val layout: HorizontalLayout = HorizontalLayout().apply {
+    //this.addClassNames(LumoUtility.Border.ALL)
+    this.isPadding = false
+    this.isMargin = false
+    this.isSpacing = true
+    this.minWidth = "0"
+    this.setWidthFull()
+    this.isExpand = true
+    //this.themeList.add("spacing-xs")
+    content { align(left, baseline) }
+  }
+  return init(layout, block)
 }
