@@ -36,11 +36,13 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return addComponentColumn { bean ->
+
+
     iconButton.create().apply {
       configIcon(this, bean)
       this.style.set("cursor", "pointer")
       if (tooltip != null) this.setTooltipText(tooltip)
-      onClick {
+      this.onClick {
         execButton(bean)
       }
     }

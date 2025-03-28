@@ -52,6 +52,7 @@ class NotaSaida(
   var usernoSingExp: Int?,
   var usuarioSingExp: String?,
   var usuarioSep: String?,
+  var observacaoPrint: String?,
 ) {
   val dataStr
     get() = data?.format() ?: ""

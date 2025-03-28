@@ -20,6 +20,7 @@ import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produto
 import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.nfd.TabNfdDevForViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.h5
 import com.github.mvysny.karibudsl.v10.onClick
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -27,6 +28,8 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
@@ -45,9 +48,23 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
     }, onClose = {
       onClose()
     }) {
-      HorizontalLayout().apply {
-        setSizeFull()
-        createGridProdutos()
+      VerticalLayout().apply {
+        val grid = HorizontalLayout().apply {
+          setSizeFull()
+          createGridProdutos()
+        }
+        val obs = HorizontalLayout().apply {
+          this.setWidthFull()
+          this.addClassNames(LumoUtility.BorderRadius.MEDIUM, LumoUtility.Border.ALL)
+          this.isMargin = false
+          this.isPadding = true
+
+          h5(nota.observacaoPrint ?: "") {
+            this.setSizeFull()
+          }
+        }
+        addAndExpand(grid)
+        add(obs)
       }
     }
     form?.open()
@@ -86,9 +103,9 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
-          marcaImpressao > 0 -> "azul"
+          marcaImpressao > 0         -> "azul"
           marca == EMarcaNota.CD.num -> "amarelo"
-          else -> null
+          else                       -> null
         }
       }
     }
