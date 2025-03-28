@@ -94,7 +94,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Acerto já gravado")
     }
     subView.autorizaAcerto { user ->
-      val pordutos = acerto.findProdutosMobile()
+      val pordutos = acerto.findProdutos()
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true
