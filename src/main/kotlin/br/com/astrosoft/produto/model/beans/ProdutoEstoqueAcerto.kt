@@ -52,7 +52,9 @@ class ProdutoEstoqueAcerto(
       val estCD = estoqueCD?.format() ?: ""
       val estLj = estoqueLoja?.format() ?: ""
       val estReal = estoqueReal.format()
-      return "       Est Sis: $estSis | Est CD: $estCD | Est Loja: $estLj | Est Real: $estReal"
+      val linha = "       Est Sis: $estSis | Est CD: $estCD | Est Loja: $estLj | Est Real: $estReal"
+      val linhaMenor = "       E Sis: $estSis | E CD: $estCD | E Loja: $estLj | E Real: $estReal"
+      return if(linha.length> 64) linhaMenor else linha
     }
 
   fun save() {

@@ -50,7 +50,7 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
     column(ProdutoEstoqueAcerto::descricao, "Descricao", 33)
     column(ProdutoEstoqueAcerto::grade, "Grade", 8)
     column(ProdutoEstoqueAcerto::diferenca, "_____Diferenca", 14, lineBreak = true)
-    column(ProdutoEstoqueAcerto::estoqueRelatorio, size = 60)
+    column(ProdutoEstoqueAcerto::estoqueRelatorio, size = 64)
   }
 
   override fun printSumary(bean: ProdutoEstoqueAcerto?) {
