@@ -61,7 +61,7 @@ class DlgAdicionaAcerto(
           this.isReadOnly = true
         }
 
-        edtGrade = select("Grade"){
+        edtGrade = select("Grade") {
           this.width = "120px"
         }
       }
@@ -119,7 +119,9 @@ class DlgAdicionaAcerto(
       this.usuario = acerto.usuario
       this.prdno = produtos.firstOrNull()?.prdno
       this.grade = edtGrade?.value
-      this.estoqueSis = produtos.firstOrNull()?.saldo
+      this.estoqueSis = produtos.firstOrNull {
+        it.grade == edtGrade?.value
+      }?.saldo
       this.estoqueCD = edtEstoqueCD?.value
       this.estoqueLoja = edtEstoqueLoja?.value
       this.processado = false
