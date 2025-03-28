@@ -68,8 +68,8 @@ dependencies {
   implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:5.2.2")
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
-  implementation("com.wontlost:zxing-vaadin:3.1.0-8")
-  implementation("org.vaadin.addons.parttio:vcamera:4.0.0")
+  //implementation("com.wontlost:zxing-vaadin:3.1.0-8")
+  //implementation("org.vaadin.addons.parttio:vcamera:4.0.0")
   //implementation("sk.smartbase.component:barcode-scanner:1.0.1")
 
   //Report

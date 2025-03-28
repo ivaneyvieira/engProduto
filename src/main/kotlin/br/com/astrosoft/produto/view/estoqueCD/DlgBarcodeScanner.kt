@@ -5,9 +5,9 @@ import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.function.SerializableConsumer
-import com.wontlost.zxing.Constants
-import com.wontlost.zxing.ZXingVaadinReader
-
+//import com.wontlost.zxing.Constants
+//import com.wontlost.zxing.ZXingVaadinReader
+/*
 class DlgBarcodeScanner : Dialog() {
   init {
     setSizeFull()
@@ -50,4 +50,4 @@ class DlgBarcodeScanner : Dialog() {
       println(e)
     }
   }
-}
+}*/

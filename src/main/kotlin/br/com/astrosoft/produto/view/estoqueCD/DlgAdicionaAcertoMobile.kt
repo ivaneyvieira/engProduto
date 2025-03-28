@@ -67,7 +67,7 @@ class DlgAdicionaAcertoMobile(
             edtGrade?.isEnabled = produtos.size > 1
           }
         }
-
+/*
         button {
           icon = VaadinIcon.BARCODE.create()
           addClickListener {
@@ -75,7 +75,7 @@ class DlgAdicionaAcertoMobile(
             dlg.open()
           }
         }
-
+*/
         edtDescricao = textField("Descrição") {
           this.isAutoselect = true
           this.width = null
