@@ -9,6 +9,8 @@ import com.github.mvysny.karibudsl.v10.column
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.addColumnFor
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
@@ -36,16 +38,19 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return addComponentColumn { bean ->
-
-
-    iconButton.create().apply {
+    val iconCreate = iconButton.create().apply {
       configIcon(this, bean)
+    }
+    Button().apply {
+      this.icon = iconCreate
+      this.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_SMALL)
       this.style.set("cursor", "pointer")
       if (tooltip != null) this.setTooltipText(tooltip)
       this.onClick {
         execButton(bean)
       }
     }
+
   }.apply {
     this.isResizable = true
     this.isAutoWidth = true
