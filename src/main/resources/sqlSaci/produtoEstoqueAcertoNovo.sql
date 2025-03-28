@@ -1,11 +1,5 @@
 USE sqldados;
 
-DELETE
-FROM
-  produtoEstoqueAcerto
-WHERE usuario = :usuario
-  AND numloja = :numLoja;
-
 CREATE TEMPORARY TABLE T_ACERTO
 SELECT :numero             AS numero,
        no                  AS numloja,
