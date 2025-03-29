@@ -26,7 +26,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoqueAcerto.findAllMobile(filtro).agrupa().sortedBy { it.numero }
+    val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupa().sortedBy { it.numero }
     subView.updateProduto(produtos)
   }
 
@@ -36,7 +36,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       loja = acerto.numloja
     )
 
-    val produtos = ProdutoEstoque.findProdutoEstoqueMobile(filtroVazio)
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio)
 
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -50,7 +50,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos = acerto.findProdutosMobile().filter {
+    val produtos = acerto.findProdutos().filter {
       (it.diferenca ?: 0) != 0
     }.sortedBy { it.diferenca ?: 999999 }
     if (produtos.isEmpty()) {
@@ -73,14 +73,14 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
     }
     viewModel.view.showQuestion("Confirma o cancelamento do acerto selecionado?") {
       itensSelecionado.forEach {
-        it.cancelaMobile()
+        it.cancela()
       }
       updateView()
     }
   }
 
   fun imprimirRelatorio(acerto: EstoqueAcerto) {
-    val produtos = acerto.findProdutosMobile()
+    val produtos = acerto.findProdutos()
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
@@ -92,7 +92,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun updateProduto(produto: ProdutoEstoqueAcerto) = viewModel.exec {
-    produto.saveMobile()
+    produto.save()
   }
 
   fun gravaAcerto(acerto: EstoqueAcerto) = viewModel.exec {
@@ -104,7 +104,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true
-        it.saveMobile()
+        it.save()
       }
       updateView()
     }
@@ -119,13 +119,13 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
     }
 
     subView.autorizaAcerto {
-      produto.removeMobile()
+      produto.remove()
       updateView()
     }
   }
 
   fun addProduto(produto: ProdutoEstoqueAcerto) {
-    produto.saveMobile()
+    produto.save()
     updateView()
   }
 

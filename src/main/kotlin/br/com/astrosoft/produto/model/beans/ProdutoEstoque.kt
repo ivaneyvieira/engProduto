@@ -317,20 +317,12 @@ class ProdutoEstoque(
   }
 
   fun limpaAcerto() {
-    saci.removeAcertoProduto(this, false)
-  }
-
-  fun limpaAcertoMobile() {
-    saci.removeAcertoProduto(this, true)
+    saci.removeAcertoProduto(this)
   }
 
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
-    }
-
-    fun findProdutoEstoqueMobile(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
-      return saci.findProdutoEstoque(filter, true)
     }
 
     fun update(produtos: List<ProdutoEstoque>) {
