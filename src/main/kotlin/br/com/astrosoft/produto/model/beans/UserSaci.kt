@@ -131,6 +131,13 @@ class UserSaci : IUser {
   var estoqueGravaAcerto by DelegateAuthorized2(101)
   var estoqueInventario by DelegateAuthorized2(102)
   var estoqueAcertoMobile by DelegateAuthorized2(103)
+  var avariaRecEditor by DelegateAuthorized2(104)
+  var avariaRecPendente by DelegateAuthorized2(105)
+  var avariaRecTransportadora by DelegateAuthorized2(106)
+  var avariaRecEmail by DelegateAuthorized2(107)
+  var avariaRecNFD by DelegateAuthorized2(108)
+  var avariaRecAcerto by DelegateAuthorized2(109)
+  var avariaRecReposto by DelegateAuthorized2(110)
 
   //Locais
   private var localEstoque: String?
@@ -438,6 +445,19 @@ class UserSaci : IUser {
       notaEnt = value
       notaRota = value
     }
+  var menuDevolucaoAvariaRec
+    get() = avariaRecEditor || avariaRecPendente || avariaRecTransportadora || avariaRecEmail || avariaRecNFD
+            || avariaRecAcerto || avariaRecReposto || admin
+    set(value) {
+      avariaRecEditor = value
+      avariaRecPendente = value
+      avariaRecTransportadora = value
+      avariaRecEmail = value
+      avariaRecNFD = value
+      avariaRecAcerto = value
+      avariaRecReposto = value
+    }
+
   var vendaRef: Boolean
     get() = tabVendaRef || admin
     set(value) {
