@@ -110,6 +110,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
+
   fun removeAcerto(produto: ProdutoEstoqueAcerto?) = viewModel.exec {
 
     produto ?: fail("Nenhum acerto selecionado")
