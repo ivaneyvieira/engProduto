@@ -346,11 +346,12 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     gridPanel.dataProvider.refreshAll()
   }
 
-  override fun autorizaAcerto(block: () -> Unit) {
+  override fun autorizaAcerto(block: (user: UserSaci) -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
-      if (AppConfig.findUser(form.login, form.senha) != null) {
-        block()
+      val user = AppConfig.findUser(form.login, form.senha) as? UserSaci
+      if (user != null) {
+        block(user)
       } else {
         DialogHelper.showWarning("Usuário ou senha inválidos")
       }

@@ -116,12 +116,17 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
 
           this.onClick {
             val user = AppConfig.userLogin()
+
             when {
-              acerto.processado == true                          -> {
+              acerto.login != user?.login -> {
+                DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
+              }
+
+              acerto.processado == true   -> {
                 DialogHelper.showWarning("Acerto já processado")
               }
 
-              else                                               -> {
+              else                        -> {
                 val dlgConferencia = DlgConferenciaAcertoMobile(viewModel, produto) {
                   virtualGrid.dataProvider.refreshAll()
                 }

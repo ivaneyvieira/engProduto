@@ -88,9 +88,10 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
           if (jaGravado != null) {
             viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
           } else {
-            subView.autorizaAcerto {
+            subView.autorizaAcerto { user ->
               form.close()
               produtosAcerto.forEach {
+                it.login = user.login
                 it.save()
               }
               produtos.forEach { produto ->
@@ -214,6 +215,6 @@ interface ITabEstoqueConf : ITabView {
   fun updateKardec()
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
-  fun autorizaAcerto(block: () -> Unit)
+  fun autorizaAcerto(block: (user: UserSaci) -> Unit)
   fun filtroVazio(): FiltroProdutoEstoque
 }
