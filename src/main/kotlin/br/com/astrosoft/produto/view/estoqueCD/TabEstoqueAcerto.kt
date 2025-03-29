@@ -102,7 +102,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::transacaoEnt, header = "Trans Ent")
     columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
     columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
-    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Login", width = "80px")
+    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "200px")
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
   }
 
