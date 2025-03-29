@@ -120,7 +120,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
         fieldPanel(item.numero.toString(), header = "Acerto", isRight = true, width = 6.0)
       }
       hBlock {
-        fieldPanel(item.data.format(), header = "Data", width = 6.0)
+        fieldPanel(item.data.format(), header = "Data", width = 6.5)
         fieldPanel(item.hora.format(), header = "Hora", width = 4.0)
         fieldPanel(item.login, header = "Usuário", isExpand = true)
       }
@@ -272,12 +272,7 @@ fun (@VaadinDsl HasComponents).hBlock(
 ): HorizontalLayout {
   if (this is HorizontalLayout) {
     this.isSpacing = true
-    //this.themeList.add("spacing-xs")
     this.isPadding = true
-    //this.addClassNames(LumoUtility.Padding.Right.MEDIUM)
-    UI.getCurrent().page.retrieveExtendedClientDetails {
-      this.isWrap = it.windowInnerWidth < 400
-    }
   }
 
   val layout: HorizontalLayout = HorizontalLayout().apply {

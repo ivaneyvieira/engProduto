@@ -117,11 +117,6 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
           this.onClick {
             val user = AppConfig.userLogin()
             when {
-
-              acerto.login != user?.login && user?.admin != true -> {
-                DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
-              }
-
               acerto.processado == true                          -> {
                 DialogHelper.showWarning("Acerto já processado")
               }

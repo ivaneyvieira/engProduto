@@ -155,7 +155,7 @@ class EstoqueAcerto(
 
   val gravadoLoginStr: String
     get() {
-      return getUser(gravadoLogin ?: 0)?.login ?: ""
+      return getUser(gravadoLogin ?: 0)?.name ?: ""
     }
 
   val gravadoStr: String
