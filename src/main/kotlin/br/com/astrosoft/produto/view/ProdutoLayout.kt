@@ -43,13 +43,6 @@ class ProdutoLayout : AppLayoutAbstract() {
         label = "Expedição",
         routeClass = NotaView::class
       )
-      if (userSaci?.menuDevolucaoAvariaRec == true) {
-        route(
-          icon = FORM,
-          label = "Dev For",
-          routeClass = DevForView::class
-        )
-      }
       if (userSaci?.reposicao == true) route(
         icon = SIGNAL,
         label = "Reposição Loja",
@@ -100,6 +93,13 @@ class ProdutoLayout : AppLayoutAbstract() {
         label = "NFD",
         routeClass = NfdView::class,
       )
+      if (userSaci?.menuDevolucaoAvariaRec == true) {
+        route(
+          icon = FORM,
+          label = "Dev For",
+          routeClass = DevForView::class
+        )
+      }
       if (userSaci?.estoqueCD == true) route(
         icon = STORAGE,
         label = "Controle Estoque",
