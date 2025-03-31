@@ -6,10 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.produto.model.beans.FiltroPedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.PedidoRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabPedidoRessuprimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -51,6 +48,13 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoRessuprimento") {
       viewModel.geraPlanilha()
+    }
+
+    button("Copia Pedido") {
+      this.icon = VaadinIcon.COPY.create()
+      addClickListener {
+        viewModel.copiaPedido()
+      }
     }
   }
 
@@ -116,6 +120,18 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
         }
       } else {
         DialogHelper.showError("Usuário ou senha inválidos")
+      }
+    }
+  }
+
+  override fun formCopiaPedido(block: (beanCopia: BeanCopia) -> Unit) {
+    val formCopia = FormCopiaPedido()
+    DialogHelper.showForm("Copia Pedido", formCopia) {
+      val beanCopia = formCopia.getBeanCopia()
+      if (beanCopia != null) {
+        block(beanCopia)
+      } else {
+        DialogHelper.showError("Preencha todos os campos")
       }
     }
   }

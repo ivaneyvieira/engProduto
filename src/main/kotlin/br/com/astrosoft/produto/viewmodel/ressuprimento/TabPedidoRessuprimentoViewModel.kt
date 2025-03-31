@@ -6,6 +6,8 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
+import br.com.astrosoft.produto.model.saci
+import com.vaadin.flow.component.ClickEvent
 
 class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   val subView
@@ -132,6 +134,12 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     val planilha = PlanilhaProdutoRessuprimento()
     planilha.write(produtos)
   }
+
+  fun copiaPedido()=  viewModel.exec{
+    subView.formCopiaPedido{beanCopia : BeanCopia ->
+      saci.copiaPedido(beanCopia)
+    }
+  }
 }
 
 interface ITabPedidoRessuprimento : ITabView {
@@ -141,4 +149,5 @@ interface ITabPedidoRessuprimento : ITabView {
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun updateProdutos()
   fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
+  fun formCopiaPedido(block:   (beanCopia : BeanCopia) -> Unit)
 }

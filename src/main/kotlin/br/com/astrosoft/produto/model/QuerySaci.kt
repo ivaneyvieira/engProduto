@@ -2020,6 +2020,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun copiaPedido(beanCopia: BeanCopia) {
+    val sql = "/sqlSaci/copiaPedido.sql"
+    script(sql) {
+      addOptionalParameter("lojaOriginal", beanCopia.lojaOriginal)
+      addOptionalParameter("pedidoOriginal", beanCopia.numPedidoOriginal)
+      addOptionalParameter("lojaDestino", beanCopia.lojaDestino)
+      addOptionalParameter("pedidoDestino", beanCopia.numPedidoDestino)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
