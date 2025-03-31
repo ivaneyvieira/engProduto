@@ -445,17 +445,9 @@ class UserSaci : IUser {
       notaEnt = value
       notaRota = value
     }
-  var menuDevolucaoAvariaRec
-    get() = avariaRecEditor || avariaRecPendente || avariaRecTransportadora || avariaRecEmail || avariaRecNFD
-            || avariaRecAcerto || avariaRecReposto || admin
-    set(value) {
-      avariaRecEditor = value
-      avariaRecPendente = value
-      avariaRecTransportadora = value
-      avariaRecEmail = value
-      avariaRecNFD = value
-      avariaRecAcerto = value
-      avariaRecReposto = value
+  val menuDevolucaoAvariaRec: Boolean
+    get() {
+      return true
     }
 
   var vendaRef: Boolean

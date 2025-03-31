@@ -9,6 +9,8 @@ fun main() {
     .withContextRoot("/$context")
     .openBrowserInDevMode(false)
     .disableClasspathScanning(false)
+
   boot.listenOn = null
+  boot.port = 8888
   boot.run()
 }
