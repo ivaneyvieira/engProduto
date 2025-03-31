@@ -6,7 +6,6 @@ import br.com.astrosoft.produto.view.ProdutoLayout
 import com.vaadin.flow.component.html.IFrame
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.router.RouteParameters
 import com.vaadin.flow.theme.lumo.LumoUtility
 import jakarta.annotation.security.PermitAll
 
@@ -24,7 +23,7 @@ class DevForView : IFrame() {
     val userSaci = AppConfig.userLogin() as? UserSaci
     val login = userSaci?.login ?: ""
     val password = userSaci?.senha ?: ""
-    src = "$urlLocal/$login/$password"
+    src = "$url/$login/$password"
   }
 
   companion object {
