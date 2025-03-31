@@ -138,6 +138,7 @@ class UserSaci : IUser {
   var avariaRecNFD by DelegateAuthorized2(108)
   var avariaRecAcerto by DelegateAuthorized2(109)
   var avariaRecReposto by DelegateAuthorized2(110)
+  var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
 
   //Locais
   private var localEstoque: String?

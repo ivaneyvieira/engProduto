@@ -69,6 +69,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Exibe Pedido Pai") {
           binder.bind(this, UserSaci::ressuprimentoExibePedidoPai.name)
         }
+        checkBox("CopiaPedido") {
+          binder.bind(this, UserSaci::ressuprimentoCopiaPedido.name)
+        }
       }
     }
     verticalBlock("Filtros") {

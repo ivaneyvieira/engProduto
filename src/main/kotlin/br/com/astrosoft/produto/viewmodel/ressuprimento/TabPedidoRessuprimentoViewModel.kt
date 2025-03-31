@@ -7,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoRessuprimento
 import br.com.astrosoft.produto.model.printText.PrintPedidoRessuprimento
 import br.com.astrosoft.produto.model.saci
-import com.vaadin.flow.component.ClickEvent
 
 class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
   val subView
@@ -135,8 +134,12 @@ class TabPedidoRessuprimentoViewModel(val viewModel: RessuprimentoViewModel) {
     planilha.write(produtos)
   }
 
-  fun copiaPedido()=  viewModel.exec{
-    subView.formCopiaPedido{beanCopia : BeanCopia ->
+  fun copiaPedido() = viewModel.exec {
+    val user = AppConfig.userLogin() as? UserSaci
+    if (user?.ressuprimentoCopiaPedido == false) {
+      fail("Usuário não tem permissão para copiar pedido")
+    }
+    subView.formCopiaPedido { beanCopia: BeanCopia ->
       saci.copiaPedido(beanCopia)
     }
   }
@@ -149,5 +152,5 @@ interface ITabPedidoRessuprimento : ITabView {
   fun produtosSelecionados(): List<ProdutoRessuprimento>
   fun updateProdutos()
   fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit)
-  fun formCopiaPedido(block:   (beanCopia : BeanCopia) -> Unit)
+  fun formCopiaPedido(block: (beanCopia: BeanCopia) -> Unit)
 }

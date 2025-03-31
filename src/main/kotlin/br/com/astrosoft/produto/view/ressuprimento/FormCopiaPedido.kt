@@ -15,6 +15,7 @@ class FormCopiaPedido() : FormLayout() {
     setResponsiveSteps(ResponsiveStep("0", 3))
     edtLojaOrigem = integerField("Loja Origem") {
       this.isClearButtonVisible = true
+      this.isAutofocus = true
     }
     edtPedidoOrigem = integerField("Pedido Origem") {
       this.isClearButtonVisible = true
