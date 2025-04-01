@@ -30,10 +30,18 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
     val emissao = nota.emissao.format()
     val loja = nota.lojaSigla ?: ""
     val pedido = nota.pedComp?.toString() ?: ""
-    var natureza = nota.natureza()
+    val natureza = nota.natureza()
+    val transportadora = nota.transp
+    val cte = nota.cte
+
+    val linha1 = "Fornecedor: $fornecedor"
+    val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
+    val linha3 = "Natureza: $natureza"
+    val linha4 = "Transportadora: $transportadora      CTE: $cte"
 
     form = SubWindowForm(
-      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
+      title = "$linha1 |$linha2 |$linha3 |$linha4",
+
       toolBar = {
         edtCodigoBarra = textField("Código de barras") {
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -118,8 +126,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
     gridDetail.setPartNameGenerator {
       when {
         it.marcaEnum == EMarcaRecebimento.RECEBIDO -> "primary"
-        it.selecionado == true -> "amarelo"
-        else -> null
+        it.selecionado == true                     -> "amarelo"
+        else                                       -> null
       }
     }
     update()

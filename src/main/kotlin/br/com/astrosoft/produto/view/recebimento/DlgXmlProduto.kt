@@ -28,10 +28,15 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     val emissao = nota.dataEmissao.format()
     val loja = nota.sigla
     val pedido = nota.pedido
-    var natureza = nota.natureza ?: ""
+    val natureza = nota.natureza ?: ""
+
+    val linha1 = "Fornecedor: $fornecedor"
+    val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
+    val linha3 = "Natureza: $natureza"
 
     form = SubWindowForm(
-      "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
+      title = "$linha1 |$linha2 |$linha3",
+
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
           this.setWidthFull()

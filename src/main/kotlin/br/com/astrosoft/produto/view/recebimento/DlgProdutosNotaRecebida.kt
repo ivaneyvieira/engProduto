@@ -27,28 +27,34 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     val loja = nota.lojaSigla ?: ""
     val pedido = nota.pedComp?.toString() ?: ""
     var natureza = nota.natureza()
+    val transportadora = nota.transp
+    val cte = nota.cte
 
-    form =
-      SubWindowForm(
-        "Fornecedor: $fornecedor |Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao|Natureza: $natureza",
-        toolBar = {
-          val user = AppConfig.userLogin()
-          if (user?.admin == true) {
-            this.button("Volta") {
-              this.icon = VaadinIcon.ARROW_LEFT.create()
-              this.onClick {
-                viewModel.voltar()
-              }
+    val linha1 = "Fornecedor: $fornecedor"
+    val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
+    val linha3 = "Natureza: $natureza"
+    val linha4 = "Transportadora: $transportadora      CTE: $cte"
+
+    form = SubWindowForm(
+      title = "$linha1 |$linha2 |$linha3 |$linha4",
+      toolBar = {
+        val user = AppConfig.userLogin()
+        if (user?.admin == true) {
+          this.button("Volta") {
+            this.icon = VaadinIcon.ARROW_LEFT.create()
+            this.onClick {
+              viewModel.voltar()
             }
           }
-        }, onClose = {
-          onClose()
-        }) {
-        HorizontalLayout().apply {
-          setSizeFull()
-          createGridProdutos()
         }
+      }, onClose = {
+        onClose()
+      }) {
+      HorizontalLayout().apply {
+        setSizeFull()
+        createGridProdutos()
       }
+    }
     form?.open()
   }
 
