@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
@@ -67,16 +68,16 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      columnGrid(NotaRecebimentoProduto::codigo, "Código")
-      columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
+      columnGrid(NotaRecebimentoProduto::codigo, "Código").right()
+      columnGrid(NotaRecebimentoProduto::barcodeStrListEntrada, "Código de Barras").right()
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade")
-      columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
+      //columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
-      columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
-      columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
-      columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
-      columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "120px", pattern = "MM/yy")
+      //columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
+      //columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
+      //columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
+      //columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "120px", pattern = "MM/yy")
     }
     this.addAndExpand(gridDetail)
     update()

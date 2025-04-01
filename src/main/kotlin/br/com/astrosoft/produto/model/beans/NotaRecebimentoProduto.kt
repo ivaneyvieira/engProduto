@@ -27,6 +27,7 @@ class NotaRecebimentoProduto(
   var codigo: String?,
   var vendnoProduto: Int?,
   var barcodeStrList: String?,
+  var barcodeStrListEntrada: String?,
   var descricao: String?,
   var grade: String?,
   var localizacao: String?,
