@@ -30,6 +30,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     val linha1 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
     val linha2 = "Fornecedor: $fornecedor |Natureza: $natureza"
 
+
     form = SubWindowForm(
       title = "$linha1 |$linha2",
       toolBar = {
