@@ -71,8 +71,8 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código").right()
       columnGrid(NotaRecebimentoProduto::barcodeStrListEntrada, "Código de Barras").right()
-      columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
-      columnGrid(NotaRecebimentoProduto::grade, "Grade")
+      columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "400px")
+      columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "100px")
       //columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       //columnGrid(NotaRecebimentoProduto::estoque, "Estoque")

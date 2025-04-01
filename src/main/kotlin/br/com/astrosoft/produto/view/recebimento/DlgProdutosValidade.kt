@@ -71,8 +71,8 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
       selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
-      columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
-      columnGrid(NotaRecebimentoProduto::grade, "Grade")
+      columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "400px")
+      columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "100px")
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
       columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
