@@ -132,6 +132,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 ): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
+    this.isResizable = true
     if (isExpand) {
       this.isExpand = true
     } else {
@@ -141,9 +142,9 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
         this.width = width
       } else {
         this.isAutoWidth = true
+        this.setFlexGrow(0)
       }
     }
-    this.isResizable = true
     if (this.key == null) this.key = property.name
     this.left()
     this.block()

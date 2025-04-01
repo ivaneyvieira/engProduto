@@ -96,8 +96,8 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
-      columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "400px")
-      columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "100px")
+      columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "250px")
+      columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::usuarioRecebe, "Recebe")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")

@@ -58,7 +58,15 @@ class NotaRecebimentoProduto(
   var qtty03: Int?,
   var venc03: String?,
   var qtty04: Int?,
-  var venc04: String?
+  var venc04: String?,
+  var valorUnit: Double?,
+  var valorTotal: Double?,
+  var valorDesconto: Double?,
+  var baseIcms: Double?,
+  var valIcms: Double?,
+  var valIPI: Double?,
+  var icms: Double?,
+  var ipi: Double?,
 ) {
   val localizacaoSaciStr: String
     get() = "       ${localizacaoSaci ?: ""}"

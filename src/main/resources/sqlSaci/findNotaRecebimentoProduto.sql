@@ -101,12 +101,12 @@ SELECT I.invno,
        N.auxLong2,
        N.weight,
        N.packages,
-       SUM(I.qtty) AS qtty,
+       SUM(I.qtty / 1000) AS qtty,
        A.marcaRecebimento,
        A.validade,
        A.vencimento,
        I.cfop,
-       I.cstIcms as cst,
+       I.cstIcms AS cst,
        I.s26 AS usernoRecebe,
        N.remarks AS observacaoNota,
        IFNULL(F.quant, 0) AS quantFile,
@@ -118,7 +118,15 @@ SELECT I.invno,
          WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
                                                                ELSE ''
        END AS tipoNota,
-       selecionado AS selecionado
+       selecionado AS selecionado,
+       SUM((I.qtty / 1000) * (I.cost4 / 10000)) / SUM(I.qtty / 1000) AS valorUnit,
+       SUM((I.qtty / 1000) * (I.cost4 / 10000)) AS valorTotal,
+       I.discount / 100 AS valorDesconto,
+       I.baseIcms / 100 AS baseIcms,
+       I.icms / 100 AS valIcms,
+       I.ipiAmt / 100 AS valIPI,
+       I.icmsAliq AS icms,
+       I.ipi / 100 AS ipi
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -212,7 +220,7 @@ SELECT N.storeno AS loja,
        IFNULL(L.localizacao, '') AS localizacao,
        IFNULL(LS.localizacao, '') AS localizacaoSaci,
        P.mfno AS vendnoProduto,
-       ROUND(N.qtty / 1000) AS quant,
+       ROUND(N.qtty) AS quant,
        ROUND(E.estoque) AS estoque,
        IFNULL(N.marcaRecebimento, 0) AS marca,
        P.mfno_ref AS refFabrica,
@@ -244,7 +252,15 @@ SELECT N.storeno AS loja,
        VC.qtty03 AS qtty03,
        VC.venc03 AS venc03,
        VC.qtty04 AS qtty04,
-       VC.venc04 AS venc04
+       VC.venc04 AS venc04,
+       N.valorUnit,
+       N.valorTotal,
+       N.valorDesconto,
+       N.baseIcms,
+       N.valIcms,
+       N.valIPI,
+       N.icms,
+       N.ipi
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -323,7 +339,15 @@ SELECT loja,
        qtty03,
        venc03,
        qtty04,
-       venc04
+       venc04,
+       valorUnit,
+       valorTotal,
+       valorDesconto,
+       baseIcms,
+       valIcms,
+       valIPI,
+       icms,
+       ipi
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

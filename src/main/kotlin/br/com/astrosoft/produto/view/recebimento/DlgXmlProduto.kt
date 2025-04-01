@@ -65,7 +65,7 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       columnGrid(ProdutoNotaEntradaNdd::codigo, "Código")
-      columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição", width = "400px")
+      columnGrid(ProdutoNotaEntradaNdd::descricao, "Descrição", width = "250px")
       columnGrid(ProdutoNotaEntradaNdd::codBarra, "Cod. Barra")
       columnGrid(ProdutoNotaEntradaNdd::ncm, "NCM")
       columnGrid(ProdutoNotaEntradaNdd::cst, "CST")

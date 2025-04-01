@@ -42,8 +42,8 @@ class DlgPedidoProduto(val viewModel: TabPedidoViewModel, var pedido: PedidoNota
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       columnGrid(PedidoProduto::codigo, "Código")
-      columnGrid(PedidoProduto::descricao, "Descrição", width = "400px")
-      columnGrid(PedidoProduto::grade, "Grade", width = "100px")
+      columnGrid(PedidoProduto::descricao, "Descrição", width = "250px")
+      columnGrid(PedidoProduto::grade, "Grade", width = "80px")
       columnGrid(PedidoProduto::qtty, "Qtde Pedido")
       columnGrid(PedidoProduto::qttyPendente, "Qtde Pendente")
     }

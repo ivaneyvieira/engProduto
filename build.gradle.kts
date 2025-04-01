@@ -10,7 +10,7 @@ val slf4jVersion: String by extra
 plugins {
   kotlin("jvm") version "2.1.20"
   application
-  id("com.vaadin") version "24.7.0"
+  id("com.vaadin")
 }
 
 //defaultTasks("clean", "build")
