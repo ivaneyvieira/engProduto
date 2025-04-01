@@ -29,7 +29,7 @@ class DlgProdutosValidade(val viewModel: TabValidadeViewModel, var nota: NotaRec
     val loja = nota.lojaSigla ?: ""
     val pedido = nota.pedComp?.toString() ?: ""
     val natureza = nota.natureza()
-    val transportadora = nota.transp
+    val transportadora = nota.transportadora
     val cte = nota.cte
 
     val linha1 = "Fornecedor: $fornecedor"

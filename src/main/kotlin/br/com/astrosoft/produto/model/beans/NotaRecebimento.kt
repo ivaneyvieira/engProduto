@@ -18,6 +18,7 @@ class NotaRecebimento(
   var valorNF: Double?,
   var pedComp: Int?,
   var transp: Int?,
+  var transportadora: String?,
   var cte: Int?,
   var volume: Int?,
   var peso: Double?,
@@ -128,6 +129,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         observacaoNota = nota.observacaoNota,
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
+        transportadora = nota.transportadora,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
       )
     }

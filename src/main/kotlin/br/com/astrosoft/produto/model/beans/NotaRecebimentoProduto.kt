@@ -17,6 +17,7 @@ class NotaRecebimentoProduto(
   var valorNF: Double?,
   var pedComp: Int?,
   var transp: Int?,
+  var transportadora: String?,
   var cte: Int?,
   var volume: Int?,
   var peso: Double?,
