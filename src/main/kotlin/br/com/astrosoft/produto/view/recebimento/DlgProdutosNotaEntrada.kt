@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -9,12 +8,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: NotaRecebimento) {
@@ -83,6 +79,8 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
       columnGrid(NotaRecebimentoProduto::valorTotal, "Valor Total", width = "90px")
       columnGrid(NotaRecebimentoProduto::valorDesconto, "Val. Desc", width = "80px")
+      columnGrid(NotaRecebimentoProduto::frete, "Frete", width = "90px")
+      columnGrid(NotaRecebimentoProduto::outDesp, "Out Desp", width = "90px")
       columnGrid(NotaRecebimentoProduto::baseIcms, "Base ICMS", width = "90px")
       columnGrid(NotaRecebimentoProduto::valIcms, "Val. ICMS", width = "90px")
       columnGrid(NotaRecebimentoProduto::valIPI, "Val. IPI", width = "65px")

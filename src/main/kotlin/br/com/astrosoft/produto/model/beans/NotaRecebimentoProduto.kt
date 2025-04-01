@@ -67,6 +67,8 @@ class NotaRecebimentoProduto(
   var valIPI: Double?,
   var icms: Double?,
   var ipi: Double?,
+  var frete: Double?,
+  var outDesp: Double?,
 ) {
   val localizacaoSaciStr: String
     get() = "       ${localizacaoSaci ?: ""}"

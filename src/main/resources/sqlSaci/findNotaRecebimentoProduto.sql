@@ -125,8 +125,10 @@ SELECT I.invno,
        I.baseIcms / 100 AS baseIcms,
        I.icms / 100 AS valIcms,
        I.ipiAmt / 100 AS valIPI,
-       I.icmsAliq/100 AS icms,
-       I.ipi / 100 AS ipi
+       I.icmsAliq / 100 AS icms,
+       I.ipi / 100 AS ipi,
+       I.frete / 100 AS frete,
+       I.despesas / 100 AS outDesp
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -260,7 +262,9 @@ SELECT N.storeno AS loja,
        N.valIcms,
        N.valIPI,
        N.icms,
-       N.ipi
+       N.ipi,
+       N.frete,
+       N.outDesp
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -347,7 +351,9 @@ SELECT loja,
        valIcms,
        valIPI,
        icms,
-       ipi
+       ipi,
+       frete,
+       outDesp
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
