@@ -80,7 +80,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::cst, "CST")
       columnGrid(NotaRecebimentoProduto::un, "UN")
       columnGrid(NotaRecebimentoProduto::quant, "Quant")
-      columnGrid(NotaRecebimentoProduto::valorUnit, "Valor Unitário", pattern = "#,##0.0000")
+      columnGrid(NotaRecebimentoProduto::valorUnit, "Valor Unit", pattern = "#,##0.0000")
       columnGrid(NotaRecebimentoProduto::valorTotal, "Valor Total")
       columnGrid(NotaRecebimentoProduto::valorDesconto, "V. Desc")
       columnGrid(NotaRecebimentoProduto::baseIcms, "Base ICMS")
