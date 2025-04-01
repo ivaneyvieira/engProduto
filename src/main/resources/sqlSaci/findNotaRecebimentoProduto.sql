@@ -200,7 +200,7 @@ SELECT N.storeno AS loja,
   /*Produto*/
        P.no AS prdno,
        TRIM(P.no) AS codigo,
-       IF(N.grade = '', CONCAT(IFNULL(B.barcodeList, ''), IF(IFNULL(B.barcodeList, '') = '', '', ','), TRIM(P.barcode)),
+       IF(N.grade = '', IFNULL(B.barcodeList, ''),
           COALESCE(B.barcodeList, TRIM(P.barcode), '')) AS barcodeStrList,
        TRIM(MID(P.name, 1, 37)) AS descricao,
        N.grade AS grade,
