@@ -3,14 +3,13 @@ package br.com.astrosoft.produto.view.estoqueCD
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -88,6 +87,16 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
   override fun Grid<EstoqueAcerto>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
+    this.withEditor(
+      classBean = EstoqueAcerto::class,
+      openEditor = {
+        val edit = getColumnBy(EstoqueAcerto::observacao) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.updateAcerto(it.bean)
+      })
+
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
@@ -104,6 +113,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
     columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "200px")
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
+    columnGrid(EstoqueAcerto::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroAcerto {
@@ -147,7 +157,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
       val user = AppConfig.findUser(form.login, form.senha)
-      if ( user != null) {
+      if (user != null) {
         block(user)
       } else {
         DialogHelper.showWarning("Usuário ou senha inválidos")

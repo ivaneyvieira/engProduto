@@ -32,8 +32,8 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no                                                                  AS prdno,
-       IFNULL(B.grade, '')                                                   AS grade,
+SELECT P.no AS prdno,
+       IFNULL(B.grade, '') AS grade,
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
 FROM
   sqldados.prd                AS P
@@ -47,34 +47,37 @@ HAVING codbar != '';
 
 SELECT numero,
        numloja,
-       S.sname                                                                 AS lojaSigla,
+       S.sname AS lojaSigla,
        data,
        hora,
        login,
        usuario,
        A.prdno,
-       TRIM(MID(P.name, 1, 37))                                                AS descricao,
+       TRIM(MID(P.name, 1, 37)) AS descricao,
        A.grade,
        L.locApp,
-       B.codbar                                                                AS barcode,
-       TRIM(P.mfno_ref)                                                        AS ref,
+       B.codbar AS barcode,
+       TRIM(P.mfno_ref) AS ref,
        estoqueSis,
        estoqueCD,
        estoqueLoja,
        processado,
        transacao,
        gravadoLogin,
-       gravado
+       gravado,
+       O.observacao
 FROM
-  T_ACERTO                   AS A
-    LEFT JOIN T_BARCODE      AS B
+  T_ACERTO                            AS A
+    LEFT JOIN T_BARCODE               AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN sqldados.store AS S
+    LEFT JOIN produtoObservacaoAcerto AS O
+              USING (numero, numloja)
+    LEFT JOIN sqldados.store          AS S
               ON S.no = A.numloja
-    LEFT JOIN sqldados.prd   AS P
+    LEFT JOIN sqldados.prd            AS P
               ON P.no = A.prdno
-    LEFT JOIN T_LOC_APP      AS L
+    LEFT JOIN T_LOC_APP               AS L
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade

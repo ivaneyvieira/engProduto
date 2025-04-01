@@ -2030,6 +2030,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateAcerto(acertoEstoque: EstoqueAcerto) {
+    val sql = "/sqlSaci/produtoObservacaoAcertoUpdate.sql"
+    script(sql){
+      addOptionalParameter("numloja", acertoEstoque.numloja)
+      addOptionalParameter("numero", acertoEstoque.numero)
+      addOptionalParameter("observacao", acertoEstoque.observacao)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

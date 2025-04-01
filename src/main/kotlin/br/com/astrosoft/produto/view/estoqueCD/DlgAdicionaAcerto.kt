@@ -127,6 +127,7 @@ class DlgAdicionaAcerto(
       this.processado = false
       this.transacao = null
       this.gravadoLogin = user?.no
+      this.observacao = acerto.observacao
       this.gravado = acerto.gravado
     }
 

@@ -131,6 +131,12 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
   }
+
+  fun updateAcerto(bean: EstoqueAcerto?) = viewModel.exec {
+    bean ?: fail("Nenhum produto selecionado")
+    bean.save()
+    updateView()
+  }
 }
 
 interface ITabEstoqueAcerto : ITabView {

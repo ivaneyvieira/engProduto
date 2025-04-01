@@ -50,13 +50,13 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
         execButton(bean)
       }
     }
-
   }.apply {
     this.isResizable = true
     this.isAutoWidth = true
     this.flexGrow = 0
     this.isExpand = false
     this.center()
+    this.width = "2em"
     this.block()
   }
 }

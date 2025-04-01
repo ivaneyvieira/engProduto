@@ -27,6 +27,7 @@ class ProdutoEstoqueAcerto(
   var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
+  var observacao: String? = null
 ) {
   val diferenca: Int?
     get() {
@@ -110,6 +111,7 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int): List<ProdutoEstoqueAcerto> {
       estoqueSis = it.saldo,
       estoqueCD = it.estoqueCD,
       estoqueLoja = it.estoqueLoja,
+      observacao = it.observacao,
     )
   }
 }
@@ -131,6 +133,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
       transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
+      observacao = acerto.observacao,
       gravado = acerto.gravado,
     )
   }
@@ -148,6 +151,7 @@ class EstoqueAcerto(
   var transacaoEnt: String?,
   var transacaoSai: String?,
   var gravadoLogin: Int?,
+  var observacao: String?,
   var gravado: Boolean?,
 ) {
   val processadoStr
@@ -172,6 +176,10 @@ class EstoqueAcerto(
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos
+  }
+
+  fun save() {
+    saci.updateAcerto(this)
   }
 
   companion object {
