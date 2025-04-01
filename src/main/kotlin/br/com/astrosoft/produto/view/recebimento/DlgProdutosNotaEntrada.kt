@@ -27,12 +27,12 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     val pedido = nota.pedComp?.toString() ?: ""
     val natureza = nota.natureza()
     val numeroInterno = nota.ni
-    val linha1 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
-    val linha2 = "Fornecedor: $fornecedor |Natureza: $natureza"
-
+    val linha1 = "Fornecedor: $fornecedor"
+    val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
+    val linha3 = "Natureza: $natureza"
 
     form = SubWindowForm(
-      title = "$linha1 |$linha2",
+      title = "$linha1|$linha2|$linha3",
       toolBar = {
         val user = AppConfig.userLogin()
         if (user?.admin == true) {
