@@ -86,6 +86,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::valIPI, "V. IPI", width = "60px")
       columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
       columnGrid(NotaRecebimentoProduto::ipi, "IPI", width = "50px")
+      columnGrid(NotaRecebimentoProduto::totalGeral, "Total", width = "90px")
       //columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
       //columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
       //columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
