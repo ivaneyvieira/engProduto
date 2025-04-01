@@ -38,3 +38,4 @@ src/main/bundle
 cahche/*
 .kotlin
 src/main/bundles/
+*.log
