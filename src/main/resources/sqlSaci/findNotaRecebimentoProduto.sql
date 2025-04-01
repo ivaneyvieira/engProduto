@@ -125,7 +125,7 @@ SELECT I.invno,
        I.baseIcms / 100 AS baseIcms,
        I.icms / 100 AS valIcms,
        I.ipiAmt / 100 AS valIPI,
-       I.icmsAliq AS icms,
+       I.icmsAliq/100 AS icms,
        I.ipi / 100 AS ipi
 FROM
   sqldados.iprd                       AS I
