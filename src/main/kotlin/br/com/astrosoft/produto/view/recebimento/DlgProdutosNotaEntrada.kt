@@ -39,6 +39,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3",
       toolBar = {
+        /*
         val user = AppConfig.userLogin()
         if (user?.admin == true) {
           this.button("Volta") {
@@ -47,7 +48,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
               viewModel.voltar()
             }
           }
-        }
+        }*/
       }, onClose = {
         onClose()
       }) {
