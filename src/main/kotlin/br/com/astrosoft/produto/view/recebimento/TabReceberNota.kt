@@ -31,7 +31,7 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    cmbLoja.value = viewModel.findLoja(4) ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -47,7 +47,7 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
     init()
     edtTipoNota = select("Tipo Nota") {
       this.setItems(EListaContas.entries)
-      this.value = EListaContas.TODOS
+      this.value = EListaContas.RECEBIMENTO
       this.setItemLabelGenerator {
         it.descricao
       }
