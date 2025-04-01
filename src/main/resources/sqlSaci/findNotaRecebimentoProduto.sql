@@ -127,8 +127,8 @@ SELECT I.invno,
        I.ipiAmt / 100 AS valIPI,
        I.icmsAliq / 100 AS icms,
        I.ipi / 100 AS ipi,
-       I.frete / 100 AS frete,
-       I.despesas / 100 AS outDesp
+       (freight / 100) * (I.frete / 100) / 100 AS frete,
+       (N.despesas / 100) * (I.despesas / 100) / 100 AS outDesp
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
