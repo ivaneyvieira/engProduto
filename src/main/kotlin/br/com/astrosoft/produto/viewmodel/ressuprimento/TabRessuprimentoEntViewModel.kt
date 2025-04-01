@@ -25,9 +25,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     else
       Ressuprimento.find(filtro)
     subView.updateRessuprimentos(
-      ressuprimento/*.filter {
-      (it.countCor ?: 0) == 0
-    }*/
+      ressuprimento
     )
   }
 
