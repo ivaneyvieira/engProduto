@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
@@ -34,7 +31,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(4)  ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    cmbLoja.value = viewModel.findLoja(4) ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -133,10 +130,10 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
     this.selectionMode = Grid.SelectionMode.MULTI
 
-    columnGrid(NotaRecebimento::ni, header = "NI")
-    columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada")
-    columnGrid(NotaRecebimento::emissao, header = "Emissão")
-    columnGrid(NotaRecebimento::data, header = "Entrada")
+    columnGrid(NotaRecebimento::ni, header = "NI").right()
+    columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
+    columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)
+    columnGrid(NotaRecebimento::data, header = "Entrada", width = null)
     columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
