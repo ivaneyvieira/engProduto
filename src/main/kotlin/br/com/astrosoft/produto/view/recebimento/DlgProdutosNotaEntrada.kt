@@ -83,6 +83,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::frete, "Frete", width = "60px")
       columnGrid(NotaRecebimentoProduto::outDesp, "Desp", width = "60px")
       columnGrid(NotaRecebimentoProduto::baseIcms, "Base ICMS", width = "90px")
+      columnGrid(NotaRecebimentoProduto::icmsSubst, "Valor ST", width = "90px")
       columnGrid(NotaRecebimentoProduto::valIcms, "V. ICMS", width = "70px")
       columnGrid(NotaRecebimentoProduto::valIPI, "V. IPI", width = "60px")
       columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
@@ -118,6 +119,9 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     )
     gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcms).setFooter(
       listProdutos.sumOf { it.baseIcms ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::icmsSubst).setFooter(
+      listProdutos.sumOf { it.icmsSubst ?: 0.0 }.format("#,##0.00")
     )
     gridDetail.getColumnBy(NotaRecebimentoProduto::valIcms).setFooter(
       listProdutos.sumOf { it.valIcms ?: 0.0 }.format("#,##0.00")

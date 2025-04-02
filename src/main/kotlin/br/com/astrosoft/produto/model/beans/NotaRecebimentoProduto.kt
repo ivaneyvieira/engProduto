@@ -69,6 +69,7 @@ class NotaRecebimentoProduto(
   var ipi: Double?,
   var frete: Double?,
   var outDesp: Double?,
+  var icmsSubst: Double?,
 ) {
   val totalGeral
     get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) - (valorDesconto ?: 0.00)
