@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
+import com.github.mvysny.karibudsl.v10.p
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
@@ -36,6 +37,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
+        p("Volume: ${nota.volume.format()}")
+        p("Peso: ${nota.peso.format()}")
       }, onClose = {
         onClose()
       }) {
