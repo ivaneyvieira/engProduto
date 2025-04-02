@@ -2059,6 +2059,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun selectNotaDevolucao(loja: Int?, nota: String?, data: LocalDate?): NotaDevolucao?{
+    loja ?: return null
+    nota ?: return null
+    val sql = "/sqlSaci/notaDevolucaoSelect.sql"
+    return query(sql, NotaDevolucao::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("nota", nota)
+      addOptionalParameter("data", data.toSaciDate())
+    }?.firstOrNull()
+  }
+
   companion object {
     private val db = DB("saci")
 

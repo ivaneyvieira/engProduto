@@ -137,6 +137,9 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
+    columnGrid(NotaRecebimento::notaDevolucao, header = "NFD")
+    columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão")
+    columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
