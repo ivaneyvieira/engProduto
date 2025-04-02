@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
 import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -103,6 +104,30 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotal).setFooter(
+      listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valorDesconto).setFooter(
+      listProdutos.sumOf { it.valorDesconto ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::frete).setFooter(
+      listProdutos.sumOf { it.frete ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::outDesp).setFooter(
+      listProdutos.sumOf { it.outDesp ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcms).setFooter(
+      listProdutos.sumOf { it.baseIcms ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valIcms).setFooter(
+      listProdutos.sumOf { it.valIcms ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valIPI).setFooter(
+      listProdutos.sumOf { it.valIPI ?: 0.0 }.format("#,##0.00")
+    )
+    gridDetail.getColumnBy(NotaRecebimentoProduto::totalGeral).setFooter(
+      listProdutos.sumOf { it.totalGeral ?: 0.0 }.format("#,##0.00")
+    )
   }
 
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {
