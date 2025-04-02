@@ -127,7 +127,7 @@ SELECT I.invno,
        I.ipiAmt / 100 AS valIPI,
        I.icmsAliq / 100 AS icms,
        I.ipi / 100 AS ipi,
-       IF(bits & POW(2, 10) = 0, 0, I.m6) / 100 AS frete,
+       IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100 AS frete,
        I.l6 / 100 AS outDesp,
        I.icmsSubst / 100 AS icmsSubst
 FROM
