@@ -26,13 +26,15 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     val numeroInterno = nota.ni
     val transp = nota.transp
     val transportadora = nota.transportadora
+    val tipoDevolucao = nota.tipoDevolucaoName ?: ""
     val cte = nota.cte
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
     val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
+    val linha4 = "Motivo Devolução: $tipoDevolucao"
 
     form = SubWindowForm(
-      title = "$linha1|$linha2|$linha3",
+      title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
       }, onClose = {
         onClose()
