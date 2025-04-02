@@ -96,7 +96,7 @@ class NotaRecebimento(
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
       return saci.findNotaRecebimentoProduto(filtroTodos).toNota().filter { nota ->
         (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
-        (if (marcaDevolucao) nota.tipoDevolucao > 0 else nota.tipoDevolucao == 0)
+        (if (marcaDevolucao) nota.tipoDevolucao > 0 else true)
       }
     }
   }
