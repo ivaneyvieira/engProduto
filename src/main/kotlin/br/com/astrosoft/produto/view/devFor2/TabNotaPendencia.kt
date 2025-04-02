@@ -134,7 +134,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)
     columnGrid(NotaRecebimento::data, header = "Entrada", width = null)
-    columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
+    columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
   }
