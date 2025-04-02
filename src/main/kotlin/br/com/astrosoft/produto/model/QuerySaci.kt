@@ -2050,6 +2050,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun saveInvAdicional(invno: Int, volume: Int, peso: Double) {
+    val sql = "/sqlSaci/invAdicionalSave.sql"
+    script(sql) {
+      addOptionalParameter("invno", invno)
+      addOptionalParameter("volume", volume)
+      addOptionalParameter("peso", peso)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

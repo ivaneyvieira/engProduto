@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import java.math.BigDecimal
 import java.time.LocalDate
 
 class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
@@ -85,6 +86,11 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     }
 
     preview.print(buf)
+  }
+
+  fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?) {
+    nota.save(volume, peso)
+    viewModel.view.showInformation("Nota salva com sucesso")
   }
 }
 

@@ -8,16 +8,25 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
-import com.github.mvysny.karibudsl.v10.p
+import com.github.mvysny.karibudsl.v10.bigDecimalField
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.BigDecimalField
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
+  private var edtVolume: IntegerField? = null
+  private var edtPeso: BigDecimalField? = null
+
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
     val fornecedor = nota.fornecedor ?: ""
@@ -29,17 +38,32 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     val transportadora = nota.transportadora
     val tipoDevolucao = nota.tipoDevolucaoName ?: ""
     val cte = nota.cte
-    val volume = nota.volume.format()
-    val peso = nota.peso.format()
 
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
     val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
-    val linha4 = "Motivo Devolução: $tipoDevolucao   Volume: $volume - Peso: $peso"
+    val linha4 = "Motivo Devolução: $tipoDevolucao"
 
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
+        edtVolume = integerField("Volume") {
+          this.value = nota.volumeDevolucao
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.width = "6rem"
+          this.isAutoselect = true
+        }
+        edtPeso = bigDecimalField("Peso") {
+          this.value = nota.pesoDevolucao.toBigDecimal()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.width = "6rem"
+          this.isAutoselect = true
+        }
+        button("Grava") {
+          this.onClick {
+            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value)
+          }
+        }
       }, onClose = {
         onClose()
       }) {

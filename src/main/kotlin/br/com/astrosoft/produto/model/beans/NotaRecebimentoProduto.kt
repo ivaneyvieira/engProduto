@@ -72,7 +72,9 @@ class NotaRecebimentoProduto(
   var icmsSubst: Double?,
   var tipoDevolucao: Int?,
   var quantDevolucao: Int?,
-) {
+  var pesoDevolucao: Double?,
+  var volumeDevolucao: Int?,
+  ) {
   var tipoDevolucaoEnum: ETipoDevolucao?
     get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
     set(value) {

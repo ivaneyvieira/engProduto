@@ -271,27 +271,31 @@ SELECT N.storeno AS loja,
        N.icmsSubst,
        IFNULL(tipoDevolucao, 0) AS tipoDevolucao,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0,
-          IFNULL(quantDevolucao, 0)) AS quantDevolucao
+          IFNULL(quantDevolucao, 0)) AS quantDevolucao,
+       IA.volume AS volumeDevolucao,
+       IA.peso AS pesoDevolucao
 FROM
-  T_NOTA                       AS N
-    LEFT JOIN  T_VENCIMENTO    AS VC
+  T_NOTA                             AS N
+    LEFT JOIN  T_VENCIMENTO          AS VC
                USING (storeno, prdno, grade)
-    LEFT JOIN  sqldados.users  AS ER
+    LEFT JOIN  sqldados.users        AS ER
                ON ER.no = N.usernoRecebe
-    LEFT JOIN  sqldados.vend   AS V
+    LEFT JOIN  sqldados.vend         AS V
                ON V.no = N.vendno
-    LEFT JOIN  sqldados.custp  AS C
+    LEFT JOIN  sqldados.custp        AS C
                ON C.cpf_cgc = V.cgc
-    INNER JOIN sqldados.prd    AS P
+    INNER JOIN sqldados.prd          AS P
                ON P.no = N.prdno
-    LEFT JOIN  T_BARCODE       AS B
+    LEFT JOIN  T_BARCODE             AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
-    LEFT JOIN  T_LOC           AS L
+    LEFT JOIN  T_LOC                 AS L
                ON L.prdno = N.prdno AND L.grade = N.grade
-    LEFT JOIN  sqldados.prdloc AS LS
+    LEFT JOIN  sqldados.prdloc       AS LS
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
-    LEFT JOIN  T_EST           AS E
+    LEFT JOIN  T_EST                 AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
+    LEFT JOIN  sqldados.invAdicional AS IA
+               ON IA.invno = N.invno
 WHERE (P.no = :prdno OR :prdno = '')
   AND (N.grade = :grade OR :grade = '');
 
@@ -363,7 +367,9 @@ SELECT loja,
        outDesp,
        icmsSubst,
        tipoDevolucao,
-       quantDevolucao
+       quantDevolucao,
+       pesoDevolucao,
+       volumeDevolucao
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

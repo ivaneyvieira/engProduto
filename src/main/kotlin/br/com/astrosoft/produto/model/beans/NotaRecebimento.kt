@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
+import java.math.BigDecimal
 import java.time.LocalDate
 
 class NotaRecebimento(
@@ -30,6 +31,8 @@ class NotaRecebimento(
   var tipoNota: String?,
   var countLocalizacao: Int,
   var tipoDevolucao: Int,
+  var pesoDevolucao: Double,
+  var volumeDevolucao: Int,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val tipoDevolucaoEnun
@@ -91,6 +94,10 @@ class NotaRecebimento(
     return InvFile.findAll(this.ni ?: 0)
   }
 
+  fun save(volume: Int?, peso: BigDecimal?) {
+    saci.saveInvAdicional(invno = this.ni ?: 0, volume = volume ?: 0, peso = peso?.toDouble() ?: 0.00)
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
@@ -141,6 +148,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         lojaSigla = nota.lojaSigla,
         transportadora = nota.transportadora,
         tipoDevolucao = nota.tipoDevolucao ?: 0,
+        pesoDevolucao = nota.pesoDevolucao ?: 0.00,
+        volumeDevolucao = nota.volumeDevolucao ?: 0,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
       )
     }
