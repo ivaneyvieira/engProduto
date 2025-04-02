@@ -112,6 +112,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
+    columnGrid(NotaRecebimento::tipoDevolucaoName, "Tipo Devolução")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)

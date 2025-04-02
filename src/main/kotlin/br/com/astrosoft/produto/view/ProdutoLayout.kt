@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
 import br.com.astrosoft.produto.view.devFor.DevForView
+import br.com.astrosoft.produto.view.devFor2.DevFor2View
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.expedicao.NotaView
 import br.com.astrosoft.produto.view.nfd.NfdView
@@ -98,6 +99,13 @@ class ProdutoLayout : AppLayoutAbstract() {
           icon = FORM,
           label = "Dev For",
           routeClass = DevForView::class
+        )
+      }
+      if (userSaci?.devFor2 == true) {
+        route(
+          icon = FORM,
+          label = "Dev For 2",
+          routeClass = DevFor2View::class
         )
       }
       if (userSaci?.estoqueCD == true) route(

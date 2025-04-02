@@ -14,7 +14,7 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro)
+    val notas = NotaRecebimento.findAll(filtro, false)
     subView.updateNota(notas)
   }
 
@@ -87,6 +87,22 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
 
     preview.print(buf)
   }
+
+  fun devolucaoProduto(produtos: List<NotaRecebimentoProduto>, tipo: ETipoDevolucao) = viewModel.exec {
+
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    subView.dlgDevoucao(produtos) {
+      produtos.forEach { produto ->
+        produto.tipoDevolucao = tipo.num
+        produto.devolucao()
+      }
+
+      subView.updateProduto()
+    }
+  }
 }
 
 interface ITabNotaEntrada : ITabView {
@@ -97,4 +113,5 @@ interface ITabNotaEntrada : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
+  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, block : () -> Unit)
 }

@@ -29,8 +29,15 @@ class NotaRecebimento(
   var quantFile: Int = 0,
   var tipoNota: String?,
   var countLocalizacao: Int,
+  var tipoDevolucao: Int,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
+  val tipoDevolucaoEnun
+    get() = ETipoDevolucao.findByNum(tipoDevolucao)
+
+  val tipoDevolucaoName
+    get() = tipoDevolucaoEnun?.descricao
+
   val usuarioLogin: String
     get() = if (usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
 
@@ -60,7 +67,7 @@ class NotaRecebimento(
     return notaXml.firstOrNull()?.natureza ?: tipoNota ?: ""
   }
 
-  fun refreshProdutos(): NotaRecebimento? {
+  fun refreshProdutos(marcaDevolucao: Boolean): NotaRecebimento? {
     val marcaEng = marcaSelecionadaEnt()
     val notaRefresh = findAll(
       FiltroNotaRecebimentoProduto(
@@ -71,8 +78,10 @@ class NotaRecebimento(
         dataFinal = data,
         dataInicial = data,
         localizacao = listOf("TODOS"),
-        tipoNota = EListaContas.TODOS
-      )
+        tipoNota = EListaContas.TODOS,
+        temAnexo = ETemAnexo.TODOS,
+      ),
+      marcaDevolucao
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
@@ -83,17 +92,18 @@ class NotaRecebimento(
   }
 
   companion object {
-    fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimento> {
+    fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
       return saci.findNotaRecebimentoProduto(filtroTodos).toNota().filter { nota ->
-        nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
+        (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
+        (if (marcaDevolucao) nota.tipoDevolucao > 0 else nota.tipoDevolucao == 0)
       }
     }
   }
 }
 
 fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
-  return this.groupBy { it.ni }.mapNotNull { entry ->
+  return this.groupBy { "${it.ni} ${it.tipoDevolucao}" }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull()
     nota?.let {
@@ -130,6 +140,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
         transportadora = nota.transportadora,
+        tipoDevolucao = nota.tipoDevolucao ?: 0,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
       )
     }

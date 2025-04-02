@@ -45,3 +45,11 @@ ALTER TABLE sqldados.iprdAdicional
 SELECT *
 FROM
   sqldados.iprdAdicional;
+
+
+ALTER TABLE sqldados.iprdAdicional
+  ADD tipoDevolucao int DEFAULT 0;
+
+
+ALTER TABLE sqldados.iprdAdicional
+  ADD quantDevolucao int DEFAULT 0;

@@ -70,7 +70,15 @@ class NotaRecebimentoProduto(
   var frete: Double?,
   var outDesp: Double?,
   var icmsSubst: Double?,
+  var tipoDevolucao: Int?,
+  var quantDevolucao: Int?,
 ) {
+  var tipoDevolucaoEnum: ETipoDevolucao?
+    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+    set(value) {
+      tipoDevolucao = value?.num
+    }
+
   val totalGeral
     get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) +
             (icmsSubst ?: 0.00) - (valorDesconto ?: 0.00)
@@ -117,6 +125,10 @@ class NotaRecebimentoProduto(
     saci.updateProduto(this)
   }
 
+  fun devolucao() {
+    saci.updateTipoDevolucao(this)
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
       return saci.findNotaRecebimentoProduto(filtro)
@@ -156,4 +168,19 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   TODOS(999, "Todos"),
   RECEBER(0, "Receber"),
   RECEBIDO(1, "Recebido")
+}
+
+enum class ETipoDevolucao(val num: Int, val descricao: String) {
+  AVARIA_TRANSPORTE(1, "Avaria no Transporte"),
+  FALTA_TRANSPORTE(2, "Falta no Transporte"),
+  FALTA_FABRICA(3, "Falta da Fabrica"),
+  VENCIMENTO(4, "Vencimento"),
+  SEM_IDENTIFICACAO(5, "Sem Identificação"),
+  EM_DESACORDO(6, "Em Desacordo com Ped");
+
+  companion object {
+    fun findByNum(num: Int): ETipoDevolucao? {
+      return entries.firstOrNull { it.num == num }
+    }
+  }
 }

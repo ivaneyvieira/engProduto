@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaEntrada
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
@@ -35,7 +32,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(4)  ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    cmbLoja.value = viewModel.findLoja(4) ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -188,6 +185,13 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
 
   override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
+  }
+
+  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, block: () -> Unit) {
+    val form = FormDevoucao(produtos)
+    DialogHelper.showForm(caption = "Devolução", form = form) {
+      block()
+    }
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {

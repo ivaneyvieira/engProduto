@@ -129,7 +129,9 @@ SELECT I.invno,
        I.ipi / 100 AS ipi,
        IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100 AS frete,
        I.l6 / 100 AS outDesp,
-       I.icmsSubst / 100 AS icmsSubst
+       I.icmsSubst / 100 AS icmsSubst,
+       A.tipoDevolucao,
+       A.quantDevolucao
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -266,7 +268,10 @@ SELECT N.storeno AS loja,
        N.ipi,
        N.frete,
        N.outDesp,
-       N.icmsSubst
+       N.icmsSubst,
+       IFNULL(tipoDevolucao, 0) AS tipoDevolucao,
+       IF(IFNULL(tipoDevolucao, 0) = 0, 0,
+          IFNULL(quantDevolucao, 0)) AS quantDevolucao
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -356,7 +361,9 @@ SELECT loja,
        ipi,
        frete,
        outDesp,
-       icmsSubst
+       icmsSubst,
+       tipoDevolucao,
+       quantDevolucao
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

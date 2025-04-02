@@ -5,16 +5,19 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: NotaRecebimento) {
+class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -34,6 +37,15 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3",
       toolBar = {
+        ETipoDevolucao.entries.forEach {tipo->
+          button(tipo.descricao) {
+            this.icon = VaadinIcon.CHECK.create()
+            this.addClickListener {
+              val produtos = gridDetail.selectedItems.toList()
+              viewModel.devolucaoProduto(produtos, tipo)
+            }
+          }
+        }
       }, onClose = {
         onClose()
       }) {
@@ -124,7 +136,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
   }
 
   fun updateProduto(): NotaRecebimento? {
-    val nota = nota.refreshProdutos()
+    nota = nota.refreshProdutos(false) ?: return null
     update()
     return nota
   }
