@@ -23,29 +23,17 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
     val emissao = nota.emissao.format()
     val loja = nota.lojaSigla ?: ""
     val pedido = nota.pedComp?.toString() ?: ""
-    val natureza = nota.natureza()
     val numeroInterno = nota.ni
     val transp = nota.transp
     val transportadora = nota.transportadora
     val cte = nota.cte
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
-//    val linha3 = "Natureza: $natureza"
     val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
 
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3",
       toolBar = {
-        /*
-        val user = AppConfig.userLogin()
-        if (user?.admin == true) {
-          this.button("Volta") {
-            this.icon = VaadinIcon.ARROW_LEFT.create()
-            this.onClick {
-              viewModel.voltar()
-            }
-          }
-        }*/
       }, onClose = {
         onClose()
       }) {
@@ -72,7 +60,6 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::refFabrica, "Ref Fabrica").right()
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "80px")
-      //columnGrid(NotaRecebimentoProduto::localizacao, "Loc App")
       columnGrid(NotaRecebimentoProduto::cfop, "CFOP")
       columnGrid(NotaRecebimentoProduto::cst, "CST")
       columnGrid(NotaRecebimentoProduto::un, "UN")
@@ -89,10 +76,6 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, val nota: N
       columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
       columnGrid(NotaRecebimentoProduto::ipi, "IPI", width = "50px")
       columnGrid(NotaRecebimentoProduto::totalGeral, "Total", width = "90px")
-      //columnGrid(NotaRecebimentoProduto::estoque, "Estoque")
-      //columnGrid(NotaRecebimentoProduto::validade, "Val", width = "100px")
-      //columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
-      //columnGrid(NotaRecebimentoProduto::vencimento, "Venc", width = "120px", pattern = "MM/yy")
     }
     this.addAndExpand(gridDetail)
     update()
