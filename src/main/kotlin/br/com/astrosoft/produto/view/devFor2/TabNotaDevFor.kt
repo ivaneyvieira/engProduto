@@ -7,8 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaDevFor
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaDevForViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -19,10 +19,10 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaDevFor(val viewModel: TabNotaDevForViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaDevFor {
-  private var dlgProduto: DlgProdutosNotaDevFor? = null
-  private var dlgArquivo: DlgArquivoNotaDevFor? = null
+class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
+  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaPendencia {
+  private var dlgProduto: DlgProdutosNotaPendencia? = null
+  private var dlgArquivo: DlgArquivoNotaPendencia? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -114,14 +114,14 @@ class TabNotaDevFor(val viewModel: TabNotaDevForViewModel) :
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaDevFor(viewModel, nota)
+      dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
-      dlgArquivo = DlgArquivoNotaDevFor(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaPendencia(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -138,7 +138,7 @@ class TabNotaDevFor(val viewModel: TabNotaDevForViewModel) :
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
-    columnGrid(NotaRecebimento::nfEntrada, header = "NF DevFor")
+    columnGrid(NotaRecebimento::nfEntrada, header = "NF Pendencia")
     columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
@@ -190,20 +190,19 @@ class TabNotaDevFor(val viewModel: TabNotaDevForViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
-    dlgProduto = DlgProdutosNotaDevFor(viewModel, nota)
+    dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
 
   override fun isAuthorized(): Boolean {
-    //val username = AppConfig.userLogin() as? UserSaci
-    //return username?.recebimentoNotaDevFor == true
-    return true
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.devFor2NotaPendencia == true
   }
 
   override val label: String
-    get() = "DevFor"
+    get() = "Pendencia"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -6,12 +6,11 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
-import br.com.astrosoft.produto.viewmodel.recebimento.RecebimentoViewModel
 import java.time.LocalDate
 
-class TabNotaDevForViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
   val subView
-    get() = viewModel.view.tabNotaDevFor
+    get() = viewModel.view.tabNotaPendencia
 
   fun updateView() {
     val filtro = subView.filtro()
@@ -74,7 +73,6 @@ class TabNotaDevForViewModel(val viewModel: DevFor2ViewModel) {
 
     val buf = TextBuffer()
 
-
     itens.forEach { nota ->
       report.print(
         dados = nota.produtos,
@@ -90,7 +88,7 @@ class TabNotaDevForViewModel(val viewModel: DevFor2ViewModel) {
   }
 }
 
-interface ITabNotaDevFor : ITabView {
+interface ITabNotaPendencia : ITabView {
   fun filtro(): FiltroNotaRecebimentoProduto
   fun updateNota(notas: List<NotaRecebimento>)
   fun updateArquivos()

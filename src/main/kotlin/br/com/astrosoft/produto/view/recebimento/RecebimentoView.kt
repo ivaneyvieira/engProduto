@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.ViewLayout
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
-import br.com.astrosoft.produto.view.devFor2.TabNotaDevFor
 import br.com.astrosoft.produto.viewmodel.recebimento.IRecebimentoView
 import br.com.astrosoft.produto.viewmodel.recebimento.RecebimentoViewModel
 import com.vaadin.flow.component.dependency.CssImport
@@ -29,7 +28,6 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
   override val tabRecebimentoPreEnt = TabRecebimentoPreEnt(viewModel.tabRecebimentoPreEntViewModel)
   override val tabReceberNota = TabReceberNota(viewModel.tabReceberNotaViewModel)
   override val tabValidade = TabValidade(viewModel.tabValidadeViewModel)
-  override val tabNotaDevFor = TabNotaDevFor(viewModel.tabNotaDevForViewModel)
   override val tabNotaEntrada = TabNotaEntrada(viewModel.tabNotaEntradaViewModel)
   override val tabNotaRecebida = TabNotaRecebida(viewModel.tabNotaRecebidaViewModel)
   override val tabRecebimentoUsr = TabRecebimentoUsr(viewModel.tabRecebimentoUsrViewModel)

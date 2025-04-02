@@ -7,14 +7,14 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaDevForViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosNotaDevFor(val viewModel: TabNotaDevForViewModel, val nota: NotaRecebimento) {
+class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {

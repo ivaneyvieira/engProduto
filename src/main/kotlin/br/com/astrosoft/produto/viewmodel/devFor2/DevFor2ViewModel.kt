@@ -3,15 +3,15 @@ package br.com.astrosoft.produto.viewmodel.devFor2
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 
-class DevFor2ViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>(view) {
-  val tabNotaDevForViewModel = TabNotaDevForViewModel(this)
+class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
+  val tabNotaPendenciaViewModel = TabNotaPendenciaViewModel(this)
 
   override fun listTab() = listOf(
-    view.tabNotaDevFor,
+    view.tabNotaPendencia,
   )
 }
 
-interface IRecebimentoView : IView {
-  val tabNotaDevFor: ITabNotaDevFor
+interface IDevFor2View : IView {
+  val tabNotaPendencia: ITabNotaPendencia
 }
 
