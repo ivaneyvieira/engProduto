@@ -20,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
@@ -52,15 +53,20 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value)
+          }
         }
         edtPeso = bigDecimalField("Peso") {
           this.value = nota.pesoDevolucao.toBigDecimal()
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
-        }
-        button("Grava") {
-          this.onClick {
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
             viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value)
           }
         }

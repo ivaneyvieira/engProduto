@@ -89,8 +89,9 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?) {
+    nota.volumeDevolucao = volume ?: 0
+    nota.pesoDevolucao = peso?.toDouble() ?: 0.00
     nota.save(volume, peso)
-    viewModel.view.showInformation("Nota salva com sucesso")
   }
 }
 
