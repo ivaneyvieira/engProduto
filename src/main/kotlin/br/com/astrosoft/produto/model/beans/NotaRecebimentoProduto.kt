@@ -72,7 +72,8 @@ class NotaRecebimentoProduto(
   var icmsSubst: Double?,
 ) {
   val totalGeral
-    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) - (valorDesconto ?: 0.00)
+    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) +
+            (icmsSubst ?: 0.00) - (valorDesconto ?: 0.00)
 
   val localizacaoSaciStr: String
     get() = "       ${localizacaoSaci ?: ""}"
