@@ -133,10 +133,10 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
     this.selectionMode = Grid.SelectionMode.MULTI
 
-    columnGrid(NotaRecebimento::data, header = "Data")
-    columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
-    columnGrid(NotaRecebimento::nfEntrada, header = "NF Pendencia")
+    columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada")
+    columnGrid(NotaRecebimento::emissao, header = "Emissão")
+    columnGrid(NotaRecebimento::data, header = "Entrada")
     columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
