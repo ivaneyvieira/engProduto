@@ -5,4 +5,9 @@ CREATE TABLE sqldados.invAdicional
   peso   decimal(10, 4)
 );
 
-select * from sqldados.invAdicional;
+ALTER TABLE sqldados.invAdicional
+  ADD carrno int NULL;
+
+SELECT *
+FROM
+  sqldados.invAdicional;

@@ -2051,18 +2051,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveInvAdicional(invno: Int, volume: Int, peso: Double) {
+  fun saveInvAdicional(invno: Int, volume: Int, peso: Double, transp: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", invno)
       addOptionalParameter("volume", volume)
       addOptionalParameter("peso", peso)
+      addOptionalParameter("transp", transp)
     }
   }
 
   fun selectNotaDevolucao(): List<NotaDevolucao>{
     val sql = "/sqlSaci/notaDevolucaoSelect.sql"
     return query(sql, NotaDevolucao::class)
+  }
+
+  fun findTransportadora(carrno: Int): Transportadora? {
+    val sql = "/sqlSaci/transportadora.sql"
+    return query(sql, Transportadora::class) {
+      addOptionalParameter("carrno", carrno)
+    }.firstOrNull()
   }
 
   companion object {

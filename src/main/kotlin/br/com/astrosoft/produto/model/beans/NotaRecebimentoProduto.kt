@@ -74,6 +74,8 @@ class NotaRecebimentoProduto(
   var quantDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
+  var transpDevolucao: Int?,
+  var transportadoraDevolucao: String?,
 ) {
   val valorTotalDevolucao
     get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)

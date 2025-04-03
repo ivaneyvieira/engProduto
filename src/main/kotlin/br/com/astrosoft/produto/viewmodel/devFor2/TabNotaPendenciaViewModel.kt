@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import br.com.astrosoft.produto.model.saci
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -88,10 +89,16 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     preview.print(buf)
   }
 
-  fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?) {
+  fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?, transp: Int?) {
     nota.volumeDevolucao = volume ?: 0
     nota.pesoDevolucao = peso?.toDouble() ?: 0.00
-    nota.save(volume, peso)
+    nota.transpDevolucao = transp ?: 0
+    nota.save(volume, peso, transp)
+  }
+
+  fun findTransportadora(carrno: Int?): Transportadora? {
+    carrno ?: return null
+    return saci.findTransportadora(carrno)
   }
 }
 

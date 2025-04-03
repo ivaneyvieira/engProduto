@@ -33,6 +33,8 @@ class NotaRecebimento(
   var tipoDevolucao: Int,
   var pesoDevolucao: Double,
   var volumeDevolucao: Int,
+  var transpDevolucao: Int?,
+  var transportadoraDevolucao: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val valorNFDevolucao
@@ -97,8 +99,8 @@ class NotaRecebimento(
     return InvFile.findAll(this.ni ?: 0)
   }
 
-  fun save(volume: Int?, peso: BigDecimal?) {
-    saci.saveInvAdicional(invno = this.ni ?: 0, volume = volume ?: 0, peso = peso?.toDouble() ?: 0.00)
+  fun save(volume: Int?, peso: BigDecimal?, transp: Int?) {
+    saci.saveInvAdicional(invno = this.ni ?: 0, volume = volume ?: 0, peso = peso?.toDouble() ?: 0.00, transp ?: 0)
   }
 
   private fun notaDevolucaoLazy(): NotaDevolucao? {
@@ -167,6 +169,8 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         pesoDevolucao = nota.pesoDevolucao ?: 0.00,
         volumeDevolucao = nota.volumeDevolucao ?: 0,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
+        transpDevolucao = nota.transpDevolucao,
+        transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }
   }

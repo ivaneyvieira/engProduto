@@ -133,7 +133,9 @@ SELECT I.invno,
        A.tipoDevolucao,
        A.quantDevolucao,
        IA.volume AS volumeDevolucao,
-       IA.peso AS pesoDevolucao
+       IA.peso AS pesoDevolucao,
+       IA.carrno AS transpDevolucao,
+       CA.name AS transportadoraDevolucao
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -148,6 +150,8 @@ FROM
                ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
     LEFT JOIN  sqldados.invAdicional  AS IA
                ON IA.invno = N.invno
+    LEFT JOIN  sqldados.carr          AS CA
+               ON CA.no = IA.carrno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
@@ -278,7 +282,9 @@ SELECT N.storeno AS loja,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0,
           IFNULL(quantDevolucao, 0)) AS quantDevolucao,
        volumeDevolucao,
-       pesoDevolucao
+       pesoDevolucao,
+       transpDevolucao,
+       transportadoraDevolucao
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -372,7 +378,9 @@ SELECT loja,
        tipoDevolucao,
        quantDevolucao,
        pesoDevolucao,
-       volumeDevolucao
+       volumeDevolucao,
+       transpDevolucao,
+       transportadoraDevolucao
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

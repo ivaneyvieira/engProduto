@@ -9,9 +9,8 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
-import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
@@ -19,6 +18,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -26,7 +26,9 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   private var edtVolume: IntegerField? = null
+  private var edtTrans: IntegerField? = null
   private var edtPeso: BigDecimalField? = null
+  private var edtTransportadora: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
@@ -56,7 +58,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value)
+            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
           }
         }
         edtPeso = bigDecimalField("Peso") {
@@ -67,8 +69,24 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value)
+            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
           }
+        }
+        edtTrans = integerField("Cod") {
+          this.value = nota.transpDevolucao
+          this.width = "60px"
+          this.isAutoselect = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
+            edtTransportadora?.value = viewModel.findTransportadora(edtTrans?.value)?.nome ?: ""
+          }
+        }
+        edtTransportadora = textField("Transportadora Redespacho") {
+          this.isReadOnly = true
+          this.width = "300px"
+          this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
       }, onClose = {
         onClose()
