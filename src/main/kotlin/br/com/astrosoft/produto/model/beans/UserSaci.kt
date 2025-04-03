@@ -140,6 +140,7 @@ class UserSaci : IUser {
   var avariaRecReposto by DelegateAuthorized2(110)
   var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
   var devFor2NotaPendencia by DelegateAuthorized2(112)
+  var devFor2NotaNFD by DelegateAuthorized2(113)
 
   //Locais
   private var localEstoque: String?
@@ -448,9 +449,10 @@ class UserSaci : IUser {
       notaRota = value
     }
   var devFor2
-    get() = devFor2NotaPendencia || admin
+    get() = devFor2NotaPendencia || devFor2NotaNFD || admin
     set(value) {
       devFor2NotaPendencia = value
+      devFor2NotaNFD = value
     }
   val menuDevolucaoAvariaRec: Boolean
     get() {

@@ -23,6 +23,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
   }
 
   override val tabNotaPendencia = TabNotaPendencia(viewModel.tabNotaPendenciaViewModel)
+  override val tabNotaNFD = TabNotaNFD(viewModel.tabNotaNFDViewModel)
 
   init {
     addTabSheat(viewModel)
