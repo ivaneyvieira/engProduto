@@ -131,7 +131,9 @@ SELECT I.invno,
        I.l6 / 100 AS outDesp,
        I.icmsSubst / 100 AS icmsSubst,
        A.tipoDevolucao,
-       A.quantDevolucao
+       A.quantDevolucao,
+       IA.volume AS volumeDevolucao,
+       IA.peso AS pesoDevolucao
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -144,6 +146,8 @@ FROM
                ON F.invno = I.invno
     LEFT JOIN  sqldados.iprdAdicional AS A
                ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
+    LEFT JOIN  sqldados.invAdicional  AS IA
+               ON IA.invno = N.invno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
@@ -155,6 +159,7 @@ WHERE (N.bits & POW(2, 4) = 0)
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
        (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
+  AND (A.tipoDevolucao > 0 OR :marcaDevolucao = FALSE)
 GROUP BY I.invno, I.prdno, I.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -272,30 +277,28 @@ SELECT N.storeno AS loja,
        IFNULL(tipoDevolucao, 0) AS tipoDevolucao,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0,
           IFNULL(quantDevolucao, 0)) AS quantDevolucao,
-       IA.volume AS volumeDevolucao,
-       IA.peso AS pesoDevolucao
+       volumeDevolucao,
+       pesoDevolucao
 FROM
-  T_NOTA                             AS N
-    LEFT JOIN  T_VENCIMENTO          AS VC
+  T_NOTA                       AS N
+    LEFT JOIN  T_VENCIMENTO    AS VC
                USING (storeno, prdno, grade)
-    LEFT JOIN  sqldados.users        AS ER
+    LEFT JOIN  sqldados.users  AS ER
                ON ER.no = N.usernoRecebe
-    LEFT JOIN  sqldados.vend         AS V
+    LEFT JOIN  sqldados.vend   AS V
                ON V.no = N.vendno
-    LEFT JOIN  sqldados.custp        AS C
+    LEFT JOIN  sqldados.custp  AS C
                ON C.cpf_cgc = V.cgc
-    INNER JOIN sqldados.prd          AS P
+    INNER JOIN sqldados.prd    AS P
                ON P.no = N.prdno
-    LEFT JOIN  T_BARCODE             AS B
+    LEFT JOIN  T_BARCODE       AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
-    LEFT JOIN  T_LOC                 AS L
+    LEFT JOIN  T_LOC           AS L
                ON L.prdno = N.prdno AND L.grade = N.grade
-    LEFT JOIN  sqldados.prdloc       AS LS
+    LEFT JOIN  sqldados.prdloc AS LS
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
-    LEFT JOIN  T_EST                 AS E
+    LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
-    LEFT JOIN  sqldados.invAdicional AS IA
-               ON IA.invno = N.invno
 WHERE (P.no = :prdno OR :prdno = '')
   AND (N.grade = :grade OR :grade = '');
 

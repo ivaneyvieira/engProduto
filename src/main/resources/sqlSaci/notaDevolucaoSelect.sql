@@ -5,3 +5,4 @@ WHERE print_remarks LIKE CONCAT('%', :nota, '%')
   AND TRIM(:nota) != ''
   AND storeno = :loja
   AND issuedate >= :data
+  AND tipo = 2

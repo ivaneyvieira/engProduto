@@ -99,8 +99,7 @@ class NotaRecebimento(
   }
 
   private val notaDevolucaoLazy: NotaDevolucao? by lazy {
-    //saci.selectNotaDevolucao(loja, nfEntrada, emissao)
-    null
+    saci.selectNotaDevolucao(loja, nfEntrada, emissao)
   }
 
   val notaDevolucao: String?
@@ -115,7 +114,7 @@ class NotaRecebimento(
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos).toNota(marcaDevolucao).filter { nota ->
+      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao).toNota(marcaDevolucao).filter { nota ->
         (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
         (if (marcaDevolucao) nota.tipoDevolucao > 0 else true)
       }
@@ -124,7 +123,7 @@ class NotaRecebimento(
 }
 
 fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaRecebimento> {
-  return this.groupBy { "${it.ni} ${if(marcaDevolucao) it.tipoDevolucao else 0}" }.mapNotNull { entry ->
+  return this.groupBy { "${it.ni} ${if (marcaDevolucao) it.tipoDevolucao else 0}" }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull()
     nota?.let {

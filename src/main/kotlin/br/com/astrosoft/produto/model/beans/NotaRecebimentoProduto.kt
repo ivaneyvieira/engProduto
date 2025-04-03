@@ -132,9 +132,9 @@ class NotaRecebimentoProduto(
   }
 
   companion object {
-    fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
-      return saci.findNotaRecebimentoProduto(filtro)
-    }
+    //fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
+   //   return saci.findNotaRecebimentoProduto(filtro)
+   // }
   }
 }
 

@@ -28,9 +28,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(4) ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    cmbLoja.value = Loja.lojaZero
   }
 
   override fun HorizontalLayout.toolBarConfig() {

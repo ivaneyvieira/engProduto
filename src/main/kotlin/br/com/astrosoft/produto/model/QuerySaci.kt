@@ -1128,7 +1128,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaRecebimentoProduto(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
+  fun findNotaRecebimentoProduto(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimentoProduto> {
     val sql = "/sqlSaci/findNotaRecebimentoProduto.sql"
     return query(sql, NotaRecebimentoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
@@ -1142,6 +1142,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("tipoNota", filtro.tipoNota.codigo)
       addOptionalParameter("anexo", filtro.temAnexo.codigo)
+      addOptionalParameter("marcaDevolucao", marcaDevolucao)
     }
   }
 

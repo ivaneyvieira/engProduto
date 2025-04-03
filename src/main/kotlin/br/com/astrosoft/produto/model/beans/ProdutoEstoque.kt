@@ -109,7 +109,7 @@ class ProdutoEstoque(
       grade = grade ?: "",
       tipoNota = EListaContas.TODOS,
     )
-    return saci.findNotaRecebimentoProduto(filtro).map { nota ->
+    return saci.findNotaRecebimentoProduto(filtro, false).map { nota ->
       ProdutoKardec(
         loja = nota.loja ?: 0,
         prdno = prdno ?: "",
