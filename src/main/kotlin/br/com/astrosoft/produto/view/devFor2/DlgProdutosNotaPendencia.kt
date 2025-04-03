@@ -89,12 +89,11 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
         }
         edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
-          this.width = "300px"
+          this.width = "400px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
         edtCte = textField("CTE") {
-          this.isReadOnly = true
-          this.width = "60px"
+          this.width = "150px"
           this.value = nota.cteDevolucao ?: ""
           this.valueChangeMode = ValueChangeMode.LAZY
 
