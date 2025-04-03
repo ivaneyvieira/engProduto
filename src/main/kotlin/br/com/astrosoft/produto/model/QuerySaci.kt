@@ -2067,7 +2067,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", loja)
       addOptionalParameter("nota", nota)
       addOptionalParameter("data", data.toSaciDate())
-    }?.firstOrNull()
+    }.firstOrNull()
   }
 
   companion object {
