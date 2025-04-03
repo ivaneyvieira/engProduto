@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.ProdutoLayout
 import br.com.astrosoft.produto.viewmodel.devFor2.DevFor2ViewModel
 import br.com.astrosoft.produto.viewmodel.devFor2.IDevFor2View
+import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaUsr
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -24,6 +25,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
 
   override val tabNotaPendencia = TabNotaPendencia(viewModel.tabNotaPendenciaViewModel)
   override val tabNotaNFD = TabNotaNFD(viewModel.tabNotaNFDViewModel)
+  override val tabNotaUsr = TabNotaUsr(viewModel.tabNotaUsrViewModel)
 
   init {
     addTabSheat(viewModel)
