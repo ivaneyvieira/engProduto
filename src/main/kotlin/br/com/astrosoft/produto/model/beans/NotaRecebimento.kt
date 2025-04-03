@@ -102,7 +102,8 @@ class NotaRecebimento(
   }
 
   private val notaDevolucaoLazy: NotaDevolucao? by lazy {
-    saci.selectNotaDevolucao(loja, nfEntrada, emissao)
+    //saci.selectNotaDevolucao(loja, nfEntrada, emissao)
+    null
   }
 
   val notaDevolucao: String?
