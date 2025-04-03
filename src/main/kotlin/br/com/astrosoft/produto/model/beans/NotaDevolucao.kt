@@ -20,6 +20,9 @@ class NotaDevolucao {
     }
 
     fun findNotaDevolucao(loja: Int?, nfEntrada: String?): NotaDevolucao? {
+      if (list.isEmpty()) {
+        update()
+      }
       loja ?: return null
       nfEntrada ?: return null
       return list.firstOrNull { it.storeno == loja && (it.observacao?.contains(nfEntrada) ?: false) }

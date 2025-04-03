@@ -2,7 +2,7 @@ SELECT storeno,
        CONCAT(nfno, '/', nfse) AS nota,
        CAST(issuedate AS date) AS emissao,
        grossamt / 100          AS valor,
-       print_remarks           AS obs
+       print_remarks           AS observacao
 FROM
   sqldados.nf
 WHERE storeno IN (1, 2, 3, 4, 5, 8)
