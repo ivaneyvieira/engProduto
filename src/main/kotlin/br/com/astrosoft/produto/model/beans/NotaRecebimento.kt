@@ -28,10 +28,10 @@ class NotaRecebimento(
   var observacaoNota: String?,
   var quantFile: Int = 0,
   var tipoNota: String?,
-  var countLocalizacao: Int,
-  var tipoDevolucao: Int,
-  var pesoDevolucao: Double,
-  var volumeDevolucao: Int,
+  var countLocalizacao: Int?,
+  var tipoDevolucao: Int?,
+  var pesoDevolucao: Double?,
+  var volumeDevolucao: Int?,
   var transpDevolucao: Int?,
   var transportadoraDevolucao: String?,
   var cteDevolucao: String?,
@@ -42,7 +42,7 @@ class NotaRecebimento(
     get() = produtos.sumOf { it.valorTotalDevolucao }
 
   val tipoDevolucaoEnun
-    get() = ETipoDevolucao.findByNum(tipoDevolucao)
+    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
 
   val tipoDevolucaoName
     get() = tipoDevolucaoEnun?.descricao
@@ -127,7 +127,7 @@ class NotaRecebimento(
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
       return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao, situacaoDev).toNota(marcaDevolucao).filter { nota ->
         (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
-        (if (marcaDevolucao) nota.tipoDevolucao > 0 else true)
+        (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
       }
     }
   }

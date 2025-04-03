@@ -52,37 +52,37 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
       title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
         edtVolume = integerField("Volume") {
-          this.value = nota.volumeDevolucao
+          this.value = nota.volumeDevolucao ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            nota.volumeDevolucao = this.value
+            nota.volumeDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
           }
         }
         edtPeso = bigDecimalField("Peso") {
-          this.value = nota.pesoDevolucao.toBigDecimal()
+          this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            nota.pesoDevolucao = this.value.toDouble()
+            nota.pesoDevolucao = this.value?.toDouble() ?: 0.0
             viewModel.saveNota(nota)
           }
         }
         edtTrans = integerField("Cod") {
-          this.value = nota.transpDevolucao
+          this.value = nota.transpDevolucao ?: 0
           this.width = "60px"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            nota.transpDevolucao = this.value
+            nota.transpDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
             edtTransportadora?.value = viewModel.findTransportadora(edtTrans?.value)?.nome ?: ""
           }
@@ -95,11 +95,11 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
         edtCte = textField("CTE") {
           this.isReadOnly = true
           this.width = "60px"
-          this.value = nota.cteDevolucao
+          this.value = nota.cteDevolucao ?: ""
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            nota.cteDevolucao = this.value
+            nota.cteDevolucao = this.value ?: ""
             viewModel.saveNota(nota)
           }
         }
