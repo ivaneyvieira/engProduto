@@ -102,16 +102,16 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
       columnGrid(NotaRecebimentoProduto::quantDevolucao, "Quant")
       columnGrid(NotaRecebimentoProduto::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
       columnGrid(NotaRecebimentoProduto::valorTotalDevolucao, "Valor Total", width = "90px")
-      columnGrid(NotaRecebimentoProduto::valorDesconto, "Desc", width = "60px")
-      columnGrid(NotaRecebimentoProduto::frete, "Frete", width = "60px")
-      columnGrid(NotaRecebimentoProduto::outDesp, "Desp", width = "60px")
-      columnGrid(NotaRecebimentoProduto::baseIcms, "Base ICMS", width = "90px")
-      columnGrid(NotaRecebimentoProduto::icmsSubst, "Valor ST", width = "90px")
-      columnGrid(NotaRecebimentoProduto::valIcms, "V. ICMS", width = "70px")
-      columnGrid(NotaRecebimentoProduto::valIPI, "V. IPI", width = "60px")
+      columnGrid(NotaRecebimentoProduto::valorDescontoDevolucao, "Desc", width = "60px")
+      columnGrid(NotaRecebimentoProduto::freteDevolucao, "Frete", width = "60px")
+      columnGrid(NotaRecebimentoProduto::outDespDevolucao, "Desp", width = "60px")
+      columnGrid(NotaRecebimentoProduto::baseIcmsDevolucao, "Base ICMS", width = "90px")
+      columnGrid(NotaRecebimentoProduto::icmsSubstDevolucao, "Valor ST", width = "90px")
+      columnGrid(NotaRecebimentoProduto::valIcmsDevolucao, "V. ICMS", width = "70px")
+      columnGrid(NotaRecebimentoProduto::valIPIDevolucao, "V. IPI", width = "60px")
       columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
       columnGrid(NotaRecebimentoProduto::ipi, "IPI", width = "50px")
-      columnGrid(NotaRecebimentoProduto::totalGeral, "Total", width = "90px")
+      columnGrid(NotaRecebimentoProduto::totalGeralDevolucao, "Total", width = "90px")
     }
     this.addAndExpand(gridDetail)
     update()
@@ -127,29 +127,29 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotalDevolucao).setFooter(
       listProdutos.sumOf { it.valorTotalDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorDesconto).setFooter(
-      listProdutos.sumOf { it.valorDesconto ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valorDescontoDevolucao).setFooter(
+      listProdutos.sumOf { it.valorDescontoDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::frete).setFooter(
-      listProdutos.sumOf { it.frete ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::freteDevolucao).setFooter(
+      listProdutos.sumOf { it.freteDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::outDesp).setFooter(
-      listProdutos.sumOf { it.outDesp ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::outDespDevolucao).setFooter(
+      listProdutos.sumOf { it.outDespDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcms).setFooter(
-      listProdutos.sumOf { it.baseIcms ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcmsDevolucao).setFooter(
+      listProdutos.sumOf { it.baseIcmsDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::icmsSubst).setFooter(
-      listProdutos.sumOf { it.icmsSubst ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::icmsSubstDevolucao).setFooter(
+      listProdutos.sumOf { it.icmsSubstDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIcms).setFooter(
-      listProdutos.sumOf { it.valIcms ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valIcmsDevolucao).setFooter(
+      listProdutos.sumOf { it.valIcmsDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIPI).setFooter(
-      listProdutos.sumOf { it.valIPI ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valIPIDevolucao).setFooter(
+      listProdutos.sumOf { it.valIPIDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::totalGeral).setFooter(
-      listProdutos.sumOf { it.totalGeral ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::totalGeralDevolucao).setFooter(
+      listProdutos.sumOf { it.totalGeralDevolucao ?: 0.0 }.format("#,##0.00")
     )
   }
 

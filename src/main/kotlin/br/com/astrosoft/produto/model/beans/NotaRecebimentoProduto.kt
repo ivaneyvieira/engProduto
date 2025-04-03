@@ -78,6 +78,52 @@ class NotaRecebimentoProduto(
   val valorTotalDevolucao
     get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)
 
+  val valorDescontoDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (valorDesconto ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+
+  val freteDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (frete ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+
+  val outDespDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (outDesp ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+
+  val baseIcmsDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (baseIcms ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+
+  val icmsSubstDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (icmsSubst ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+  val valIcmsDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (valIcms ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+  val valIPIDevolucao: Double?
+    get() {
+      if ((quant ?: 0) == 0) return null
+      return (valIPI ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
+    }
+  val totalGeralDevolucao: Double?
+    get() {
+      return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) +
+             (outDespDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00) +
+             (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
+    }
+
   var tipoDevolucaoEnum: ETipoDevolucao?
     get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
     set(value) {
