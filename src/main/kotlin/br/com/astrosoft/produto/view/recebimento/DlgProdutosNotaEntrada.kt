@@ -10,14 +10,18 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: NotaRecebimento) {
+  private var edtPesquisa: TextField? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -37,7 +41,13 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3",
       toolBar = {
-        ETipoDevolucao.entries.forEach {tipo->
+        edtPesquisa = textField("Pesquisa") {
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.addValueChangeListener {
+            update()
+          }
+        }
+        ETipoDevolucao.entries.forEach { tipo ->
           button(tipo.descricao) {
             this.icon = VaadinIcon.CHECK.create()
             this.addClickListener {
@@ -88,6 +98,12 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
       columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
       columnGrid(NotaRecebimentoProduto::ipi, "IPI", width = "50px")
       columnGrid(NotaRecebimentoProduto::totalGeral, "Total", width = "90px")
+
+      this.setPartNameGenerator {
+        if ((it.tipoDevolucao ?: 0) > 0) {
+          "amarelo"
+        } else null
+      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -97,8 +113,15 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
     return gridDetail.selectedItems.toList()
   }
 
+  private fun NotaRecebimentoProduto.textoPesquisa(): String {
+    return "$codigo|$barcodeStrListEntrada|$refFabrica|$descricao|$grade|$cfop|$cst|$un"
+  }
+
   fun update() {
-    val listProdutos = nota.produtos
+    val pesquisa = edtPesquisa?.value?.trim() ?: ""
+    val listProdutos = nota.produtos.filter {
+      pesquisa == "" || it.textoPesquisa().contains(pesquisa, true)
+    }
     gridDetail.setItems(listProdutos)
     gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotal).setFooter(
       listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.00")
