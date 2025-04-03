@@ -2,19 +2,21 @@ package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
-import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.datepicker.DatePicker
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaPendencia {
@@ -22,10 +24,6 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   private var dlgArquivo: DlgArquivoNotaPendencia? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  private lateinit var edtDataInicial: DatePicker
-  private lateinit var edtDataFinal: DatePicker
-  private lateinit var edtTipoNota: Select<EListaContas>
-  private lateinit var edtTemAnexo: Select<ETemAnexo>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -35,69 +33,22 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    verticalLayout(spacing = false) {
-      this.isMargin = false
-      horizontalLayout {
-        cmbLoja = select("Loja") {
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-          addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
-          }
-        }
-        init()
-        edtTipoNota = select("Tipo Nota") {
-          this.setItems(EListaContas.entries)
-          this.value = EListaContas.RECEBIMENTO
-          this.setItemLabelGenerator {
-            it.descricao
-          }
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        edtTemAnexo = select("Tem Anexo") {
-          this.setItems(ETemAnexo.entries)
-          this.value = ETemAnexo.TODOS
-          this.setItemLabelGenerator {
-            it.descricao
-          }
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
       }
-      horizontalLayout {
-        edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        edtDataInicial = datePicker("Data Inicial") {
-          value = LocalDate.now()
-          this.localePtBr()
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        edtDataFinal = datePicker("Data Final") {
-          value = LocalDate.now()
-          this.localePtBr()
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-        button("Impressoa") {
-          this.icon = VaadinIcon.PRINT.create()
-          addClickListener {
-            viewModel.imprimeNotas()
-          }
-        }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+    init()
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "300px"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
       }
     }
   }
@@ -115,16 +66,14 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
+    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
+      if (bean.quantFile > 0) {
+        icon.element.style.set("color", "yellow")
+      }
+    }) { nota ->
       dlgArquivo = DlgArquivoNotaPendencia(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
-      }
-    }.setPartNameGenerator {
-      if (it.quantFile > 0) {
-        "amarelo"
-      } else {
-        ""
       }
     }
 
@@ -137,9 +86,9 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
-    columnGrid(NotaRecebimento::notaDevolucao, header = "NFD")
-    columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão")
-    columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota")
+    columnGrid(NotaRecebimento::notaDevolucao, header = "NFD", width = null)
+    columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão", width = null)
+    columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota", width = null)
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {
@@ -148,11 +97,11 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.TODOS,
-      dataFinal = edtDataFinal.value,
-      dataInicial = edtDataInicial.value,
+      dataFinal = null,
+      dataInicial = null,
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
-      temAnexo = edtTemAnexo.value ?: ETemAnexo.TODOS,
+      tipoNota = EListaContas.TODOS,
+      temAnexo = ETemAnexo.TODOS,
     )
   }
 

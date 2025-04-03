@@ -409,7 +409,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       if (width != null) {
         this.width = width
       } else {
-        this.width = "120px"
+        this.isAutoWidth = true
       }
     }
     this.setComparator { a, b ->
