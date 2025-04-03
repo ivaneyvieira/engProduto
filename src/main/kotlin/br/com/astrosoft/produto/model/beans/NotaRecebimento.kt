@@ -35,6 +35,9 @@ class NotaRecebimento(
   var volumeDevolucao: Int,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
+  val valorNFDevolucao
+    get() = produtos.sumOf { it.valorTotalDevolucao }
+
   val tipoDevolucaoEnun
     get() = ETipoDevolucao.findByNum(tipoDevolucao)
 

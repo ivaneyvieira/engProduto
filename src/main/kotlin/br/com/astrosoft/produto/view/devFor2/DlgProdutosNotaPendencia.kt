@@ -124,8 +124,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotal).setFooter(
-      listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.00")
+    gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotalDevolucao).setFooter(
+      listProdutos.sumOf { it.valorTotalDevolucao ?: 0.0 }.format("#,##0.00")
     )
     gridDetail.getColumnBy(NotaRecebimentoProduto::valorDesconto).setFooter(
       listProdutos.sumOf { it.valorDesconto ?: 0.0 }.format("#,##0.00")

@@ -21,6 +21,7 @@ class FormDevoucao(val produtos: List<NotaRecebimentoProduto>) : FormLayout() {
             value = produto.quant
             addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isAutoselect = true
+            produto.quantDevolucao = produto.quant
             addValueChangeListener {
               produto.quantDevolucao = this.value ?: 0
             }
