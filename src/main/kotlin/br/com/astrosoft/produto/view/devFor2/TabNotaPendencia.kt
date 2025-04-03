@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaPendencia {
@@ -98,7 +99,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.TODOS,
       dataFinal = null,
-      dataInicial = null,
+      dataInicial = LocalDate.of(2025, 4, 1),
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
       tipoNota = EListaContas.TODOS,
       temAnexo = ETemAnexo.TODOS,
