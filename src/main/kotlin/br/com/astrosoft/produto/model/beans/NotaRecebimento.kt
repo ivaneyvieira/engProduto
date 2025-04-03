@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
-import java.math.BigDecimal
 import java.time.LocalDate
 
 class NotaRecebimento(
@@ -35,6 +34,8 @@ class NotaRecebimento(
   var volumeDevolucao: Int,
   var transpDevolucao: Int?,
   var transportadoraDevolucao: String?,
+  var cteDevolucao: String?,
+  var situacaoDev: Int?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val valorNFDevolucao
@@ -99,12 +100,17 @@ class NotaRecebimento(
     return InvFile.findAll(this.ni ?: 0)
   }
 
-  fun save(volume: Int?, peso: BigDecimal?, transp: Int?) {
-    saci.saveInvAdicional(invno = this.ni ?: 0, volume = volume ?: 0, peso = peso?.toDouble() ?: 0.00, transp ?: 0)
+  fun save(nota: NotaRecebimento) {
+    saci.saveInvAdicional(nota)
   }
 
   private fun notaDevolucaoLazy(): NotaDevolucao? {
     return NotaDevolucao.findNotaDevolucao(loja, nfEntrada)
+  }
+
+  fun marcaNFD() {
+    this.situacaoDev = 1
+    saci.saveInvAdicional(this)
   }
 
   val notaDevolucao: String?
@@ -117,9 +123,9 @@ class NotaRecebimento(
     get() = notaDevolucaoLazy()?.valor
 
   companion object {
-    fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimento> {
+    fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean, situacaoDev: Int = 0): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao).toNota(marcaDevolucao).filter { nota ->
+      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao, situacaoDev).toNota(marcaDevolucao).filter { nota ->
         (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
         (if (marcaDevolucao) nota.tipoDevolucao > 0 else true)
       }
@@ -170,6 +176,8 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         volumeDevolucao = nota.volumeDevolucao ?: 0,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
         transpDevolucao = nota.transpDevolucao,
+        cteDevolucao = nota.cteDevolucao,
+        situacaoDev = nota.situacaoDev,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }

@@ -50,44 +50,6 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
-        edtVolume = integerField("Volume") {
-          this.value = nota.volumeDevolucao
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.width = "6rem"
-          this.isAutoselect = true
-          this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
-          }
-        }
-        edtPeso = bigDecimalField("Peso") {
-          this.value = nota.pesoDevolucao.toBigDecimal()
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.width = "6rem"
-          this.isAutoselect = true
-          this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
-          }
-        }
-        edtTrans = integerField("Cod") {
-          this.value = nota.transpDevolucao
-          this.width = "60px"
-          this.isAutoselect = true
-          this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
-            edtTransportadora?.value = viewModel.findTransportadora(edtTrans?.value)?.nome ?: ""
-          }
-        }
-        edtTransportadora = textField("Transportadora Redespacho") {
-          this.isReadOnly = true
-          this.width = "300px"
-          this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
-        }
       }, onClose = {
         onClose()
       }) {

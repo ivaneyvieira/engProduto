@@ -9,6 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -48,6 +50,13 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+
+    button("NFD"){
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaNFD()
       }
     }
   }

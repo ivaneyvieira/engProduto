@@ -7,7 +7,6 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.saci
-import java.math.BigDecimal
 import java.time.LocalDate
 
 class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
@@ -16,7 +15,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro, true)
+    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = 0)
     subView.updateNota(notas)
   }
 
@@ -89,16 +88,25 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     preview.print(buf)
   }
 
-  fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?, transp: Int?) {
-    nota.volumeDevolucao = volume ?: 0
-    nota.pesoDevolucao = peso?.toDouble() ?: 0.00
-    nota.transpDevolucao = transp ?: 0
-    nota.save(volume, peso, transp)
+  fun saveNota(nota: NotaRecebimento) {
+    nota.save(nota)
   }
 
   fun findTransportadora(carrno: Int?): Transportadora? {
     carrno ?: return null
     return saci.findTransportadora(carrno)
+  }
+
+  fun marcaNFD() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaNFD()
+    }
+    updateView()
   }
 }
 

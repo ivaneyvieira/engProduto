@@ -1128,7 +1128,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaRecebimentoProduto(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimentoProduto> {
+  fun findNotaRecebimentoProduto(
+    filtro: FiltroNotaRecebimentoProduto,
+    marcaDevolucao: Boolean,
+    situacaoDev: Int = 0,
+  ): List<NotaRecebimentoProduto> {
     val sql = "/sqlSaci/findNotaRecebimentoProduto.sql"
     return query(sql, NotaRecebimentoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
@@ -1143,6 +1147,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoNota", filtro.tipoNota.codigo)
       addOptionalParameter("anexo", filtro.temAnexo.codigo)
       addOptionalParameter("marcaDevolucao", marcaDevolucao)
+      addOptionalParameter("situacaoDev", situacaoDev)
     }
   }
 
@@ -2051,17 +2056,19 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveInvAdicional(invno: Int, volume: Int, peso: Double, transp: Int) {
+  fun saveInvAdicional(nota: NotaRecebimento) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
-      addOptionalParameter("invno", invno)
-      addOptionalParameter("volume", volume)
-      addOptionalParameter("peso", peso)
-      addOptionalParameter("transp", transp)
+      addOptionalParameter("invno", nota.ni)
+      addOptionalParameter("volume", nota.volumeDevolucao)
+      addOptionalParameter("peso", nota.pesoDevolucao)
+      addOptionalParameter("transp", nota.transpDevolucao)
+      addOptionalParameter("cte", nota.cteDevolucao)
+      addOptionalParameter("situacaoDev", nota.situacaoDev)
     }
   }
 
-  fun selectNotaDevolucao(): List<NotaDevolucao>{
+  fun selectNotaDevolucao(): List<NotaDevolucao> {
     val sql = "/sqlSaci/notaDevolucaoSelect.sql"
     return query(sql, NotaDevolucao::class)
   }

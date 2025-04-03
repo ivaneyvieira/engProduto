@@ -29,6 +29,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   private var edtTrans: IntegerField? = null
   private var edtPeso: BigDecimalField? = null
   private var edtTransportadora: TextField? = null
+  private var edtCte: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
@@ -58,7 +59,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
+            nota.volumeDevolucao = this.value
+            viewModel.saveNota(nota)
           }
         }
         edtPeso = bigDecimalField("Peso") {
@@ -69,7 +71,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
+            nota.pesoDevolucao = this.value.toDouble()
+            viewModel.saveNota(nota)
           }
         }
         edtTrans = integerField("Cod") {
@@ -79,7 +82,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
-            viewModel.saveNota(nota, edtVolume?.value, edtPeso?.value, edtTrans?.value)
+            nota.transpDevolucao = this.value
+            viewModel.saveNota(nota)
             edtTransportadora?.value = viewModel.findTransportadora(edtTrans?.value)?.nome ?: ""
           }
         }
@@ -87,6 +91,17 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.isReadOnly = true
           this.width = "300px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
+        }
+        edtCte = textField("CTE") {
+          this.isReadOnly = true
+          this.width = "60px"
+          this.value = nota.cteDevolucao
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.cteDevolucao = this.value
+            viewModel.saveNota(nota)
+          }
         }
       }, onClose = {
         onClose()

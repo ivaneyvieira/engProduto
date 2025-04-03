@@ -16,7 +16,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro, true)
+    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = 1)
     subView.updateNota(notas)
   }
 
@@ -87,13 +87,6 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     }
 
     preview.print(buf)
-  }
-
-  fun saveNota(nota: NotaRecebimento, volume: Int?, peso: BigDecimal?, transp: Int?) {
-    nota.volumeDevolucao = volume ?: 0
-    nota.pesoDevolucao = peso?.toDouble() ?: 0.00
-    nota.transpDevolucao = transp ?: 0
-    nota.save(volume, peso, transp)
   }
 
   fun findTransportadora(carrno: Int?): Transportadora? {

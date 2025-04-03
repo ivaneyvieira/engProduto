@@ -8,6 +8,12 @@ CREATE TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD carrno int NULL;
 
+ALTER TABLE sqldados.invAdicional
+  ADD situacaoDev int NULL;
+
+ALTER TABLE sqldados.invAdicional
+  ADD cet varchar(20) NULL;
+
 SELECT *
 FROM
   sqldados.invAdicional;

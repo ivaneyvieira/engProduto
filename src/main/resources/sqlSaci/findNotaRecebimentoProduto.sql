@@ -135,7 +135,9 @@ SELECT I.invno,
        IA.volume AS volumeDevolucao,
        IA.peso AS pesoDevolucao,
        IA.carrno AS transpDevolucao,
-       CA.name AS transportadoraDevolucao
+       CA.name AS transportadoraDevolucao,
+       IA.cet AS cteDevolucao,
+       IA.situacaoDev
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -284,7 +286,9 @@ SELECT N.storeno AS loja,
        volumeDevolucao,
        pesoDevolucao,
        transpDevolucao,
-       transportadoraDevolucao
+       transportadoraDevolucao,
+       cteDevolucao,
+       situacaoDev
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -380,7 +384,9 @@ SELECT loja,
        pesoDevolucao,
        volumeDevolucao,
        transpDevolucao,
-       transportadoraDevolucao
+       transportadoraDevolucao,
+       cteDevolucao,
+       situacaoDev
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
@@ -388,3 +394,4 @@ WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR 
        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
   AND (marca = :marca OR :marca = 999)
   AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
+  AND ((:marcaDevolucao = FALSE) OR (IFNULL(situacaoDev, 0) = :situacaoDev))
