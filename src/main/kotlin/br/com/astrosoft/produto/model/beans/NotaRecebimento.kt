@@ -101,19 +101,18 @@ class NotaRecebimento(
     saci.saveInvAdicional(invno = this.ni ?: 0, volume = volume ?: 0, peso = peso?.toDouble() ?: 0.00)
   }
 
-  private val notaDevolucaoLazy: NotaDevolucao? by lazy {
-    //saci.selectNotaDevolucao(loja, nfEntrada, emissao)
-    null
+  private fun notaDevolucaoLazy(): NotaDevolucao? {
+    return NotaDevolucao.findNotaDevolucao(loja, nfEntrada)
   }
 
   val notaDevolucao: String?
-    get() = notaDevolucaoLazy?.nota
+    get() = notaDevolucaoLazy()?.nota
 
   val emissaoDevolucao: LocalDate?
-    get() = notaDevolucaoLazy?.emissao
+    get() = notaDevolucaoLazy()?.emissao
 
   val valorDevolucao: Double?
-    get() = notaDevolucaoLazy?.valor
+    get() = notaDevolucaoLazy()?.valor
 
   companion object {
     fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean): List<NotaRecebimento> {
