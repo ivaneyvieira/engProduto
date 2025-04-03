@@ -74,7 +74,10 @@ class NotaRecebimentoProduto(
   var quantDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
-  ) {
+) {
+  val valorTotalDevolucao
+    get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)
+
   var tipoDevolucaoEnum: ETipoDevolucao?
     get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
     set(value) {
@@ -133,8 +136,8 @@ class NotaRecebimentoProduto(
 
   companion object {
     //fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
-   //   return saci.findNotaRecebimentoProduto(filtro)
-   // }
+    //   return saci.findNotaRecebimentoProduto(filtro)
+    // }
   }
 }
 
