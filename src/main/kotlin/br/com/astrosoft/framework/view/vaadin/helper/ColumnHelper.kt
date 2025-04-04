@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
 import br.com.astrosoft.framework.util.format
-import com.github.mvysny.karibudsl.v10.VaadinDsl
-import com.github.mvysny.karibudsl.v10.column
-import com.github.mvysny.karibudsl.v10.isExpand
-import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
@@ -22,6 +19,8 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer
 import com.vaadin.flow.data.renderer.NumberRenderer
 import com.vaadin.flow.data.renderer.TextRenderer
 import com.vaadin.flow.function.ValueProvider
+import org.vaadin.stefan.LazyDownloadButton
+import java.io.ByteArrayInputStream
 import java.sql.Time
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -69,6 +68,54 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   execButton: (T) -> Unit = {}
 ): Column<T> {
   return addColumnButton(iconButton, tooltip, execButton, configIcon) {
+    this.setHeader(header)
+    this.isAutoWidth = true
+    this.flexGrow = 0
+    this.isExpand = false
+  }
+}
+
+private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(
+  iconButton: VaadinIcon,
+  tooltip: String? = null,
+  configIcon: (Icon, T) -> Unit = { _, _ -> },
+  filename: (T) -> String,
+  execButton: (T) -> ByteArray? = { null },
+  block: (@VaadinDsl Column<T>).() -> Unit = {}
+): Column<T> {
+  return addComponentColumn { bean ->
+    val iconCreate = iconButton.create().apply {
+      configIcon(this, bean)
+    }
+    LazyDownloadButton(iconCreate, { filename(bean) }, {
+      val bytes = execButton(bean)
+      ByteArrayInputStream(bytes)
+    }).apply {
+      this.icon = iconCreate
+      this.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_SMALL)
+      this.style.set("cursor", "pointer")
+      if (tooltip != null) this.setTooltipText(tooltip)
+    }
+  }.apply {
+    this.isResizable = true
+    this.isAutoWidth = true
+    this.flexGrow = 0
+    this.isExpand = false
+    this.center()
+    this.width = "2em"
+    this.block()
+  }
+}
+
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload(
+  iconButton: VaadinIcon,
+  tooltip: String? = null,
+  header: String? = null,
+  configIcon: (Icon, T) -> Unit = { _, _ -> },
+  filename: (T) -> String,
+  execButton: (T) -> ByteArray? = { null }
+): Column<T> {
+  return addColumnDownload2(iconButton, tooltip, configIcon, filename, execButton) {
     this.setHeader(header)
     this.isAutoWidth = true
     this.flexGrow = 0

@@ -46,14 +46,24 @@ class DlgArquivoNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
 
-      addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { invFile ->
+      addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton
         val title = invFile.title ?: return@addColumnButton
         DialogHelper.showFile(title, fileName, file)
       }
+      addColumnDownload(
+        iconButton = VaadinIcon.DOWNLOAD,
+        tooltip = "Download",
+        header = "Download",
+        filename = { invFile ->
+          invFile.fileName ?: "arquivo"
+        }) { invFile ->
+        invFile.file
+      }
+
       columnGrid(InvFile::fileName, "Nome do Arquivo") {
         this.isExpand = true
       }
