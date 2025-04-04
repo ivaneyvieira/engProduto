@@ -10,9 +10,9 @@ import br.com.astrosoft.produto.model.saci
 import java.math.BigDecimal
 import java.time.LocalDate
 
-class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
   val subView
-    get() = viewModel.view.tabNotaNFD
+    get() = viewModel.view.tabNotaEmail
 
   fun updateView() {
     val filtro = subView.filtro()
@@ -53,7 +53,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
   }
 }
 
-interface ITabNotaNFD : ITabView {
+interface ITabNotaEmail : ITabView {
   fun filtro(): FiltroNotaRecebimentoProduto
   fun updateNota(notas: List<NotaRecebimento>)
   fun updateArquivos()

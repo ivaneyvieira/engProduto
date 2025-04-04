@@ -20,6 +20,8 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
   override fun UserSaci.update(usuario: UserSaci) {
     this.devFor2NotaPendencia = usuario.devFor2NotaPendencia
     this.devFor2NotaNFD = usuario.devFor2NotaNFD
+    this.devFor2NotaTransportadora = usuario.devFor2NotaTransportadora
+    this.devFor2NotaEmail = usuario.devFor2NotaEmail
   }
 }
 

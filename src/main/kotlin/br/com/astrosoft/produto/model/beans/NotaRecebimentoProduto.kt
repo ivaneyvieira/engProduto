@@ -79,6 +79,12 @@ class NotaRecebimentoProduto(
   var cteDevolucao: String?,
   var situacaoDev: Int?
 ) {
+  var situacaoDevEnum: EStituacaoDev
+    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
+    set(value) {
+      situacaoDev = value.num
+    }
+
   val valorTotalDevolucao
     get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)
 
@@ -183,12 +189,6 @@ class NotaRecebimentoProduto(
   fun devolucao() {
     saci.updateTipoDevolucao(this)
   }
-
-  companion object {
-    //fun findAll(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
-    //   return saci.findNotaRecebimentoProduto(filtro)
-    // }
-  }
 }
 
 data class FiltroNotaRecebimentoProduto(
@@ -242,4 +242,11 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex
       return entries.firstOrNull { it.regExp.containsMatchIn(obs) }
     }
   }
+}
+
+enum class EStituacaoDev(val num: Int) {
+  PENDENTE(0),
+  NFD(1),
+  TRANSPORTADORA(2),
+  EMAIL(3)
 }

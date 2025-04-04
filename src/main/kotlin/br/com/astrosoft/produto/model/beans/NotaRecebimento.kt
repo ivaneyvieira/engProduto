@@ -183,3 +183,4 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
     }
   }
 }
+
