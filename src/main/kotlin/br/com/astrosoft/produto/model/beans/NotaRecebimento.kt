@@ -105,7 +105,7 @@ class NotaRecebimento(
   }
 
   private fun notaDevolucaoLazy(): NotaDevolucao? {
-    return NotaDevolucao.findNotaDevolucao(loja, nfEntrada)
+    return NotaDevolucao.findNotaDevolucao(loja, nfEntrada, tipoDevolucaoEnun)
   }
 
   fun marcaNFD() {

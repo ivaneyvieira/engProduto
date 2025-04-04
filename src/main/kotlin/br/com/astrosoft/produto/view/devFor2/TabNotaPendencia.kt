@@ -63,17 +63,16 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
   override fun Grid<NotaRecebimento>.gridPanel() {
     this.addClassName("styling")
+    this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
-
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
       if (bean.quantFile > 0) {
         icon.element.style.set("color", "yellow")
@@ -85,8 +84,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    this.selectionMode = Grid.SelectionMode.MULTI
-
+    columnGrid(NotaRecebimento::tipoDevolucaoName, header = "Motivo").right()
     columnGrid(NotaRecebimento::ni, header = "NI").right()
     columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)

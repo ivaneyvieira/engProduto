@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class NotaDevolucao {
   var storeno: Int? = null
@@ -10,22 +11,37 @@ class NotaDevolucao {
   var valor: Double? = null
   var observacao: String? = null
 
+  val tipoDevolucao: ETipoDevolucao?
+    get() {
+      val obs = observacao ?: return null
+      return ETipoDevolucao.findByObs(obs)
+    }
+
   companion object {
+    private var timeUpdate = LocalDateTime.now()
     private val list = mutableListOf<NotaDevolucao>()
 
     fun update() {
-      val listNova = saci.selectNotaDevolucao()
-      list.clear()
-      list.addAll(listNova)
+      val time = LocalDateTime.now()
+      if (timeUpdate.isBefore(time)) {
+        val listNova = saci.selectNotaDevolucao()
+        list.clear()
+        list.addAll(listNova)
+        timeUpdate = time.plusMinutes(5)
+      }
     }
 
-    fun findNotaDevolucao(loja: Int?, nfEntrada: String?): NotaDevolucao? {
+    fun findNotaDevolucao(loja: Int?, nfEntrada: String?, tipoDevolucao: ETipoDevolucao?): NotaDevolucao? {
       if (list.isEmpty()) {
         update()
       }
       loja ?: return null
       nfEntrada ?: return null
-      return list.firstOrNull { it.storeno == loja && (it.observacao?.contains(nfEntrada) ?: false) }
+      return list.firstOrNull {
+        (it.storeno == loja) &&
+        (it.observacao?.contains(nfEntrada) ?: false) &&
+        (it.tipoDevolucao == tipoDevolucao)
+      }
     }
   }
 }

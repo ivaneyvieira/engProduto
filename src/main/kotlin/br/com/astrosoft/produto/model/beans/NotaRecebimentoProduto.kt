@@ -225,17 +225,21 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class ETipoDevolucao(val num: Int, val descricao: String) {
-  AVARIA_TRANSPORTE(1, "Avaria no Transporte"),
-  FALTA_TRANSPORTE(2, "Falta no Transporte"),
-  FALTA_FABRICA(3, "Falta da Fabrica"),
-  VENCIMENTO(4, "Vencimento"),
-  SEM_IDENTIFICACAO(5, "Sem Identificação"),
-  EM_DESACORDO(6, "Em Desacordo com Ped");
+enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex) {
+  AVARIA_TRANSPORTE(1, "Avaria no Transporte", "AVARIA".toRegex()),
+  FALTA_TRANSPORTE(2, "Falta no Transporte", "FAL.+TRANSP".toRegex()),
+  FALTA_FABRICA(3, "Falta da Fabrica", "FAL.+FAB".toRegex()),
+  VENCIMENTO(4, "Vencimento", "VENCIM|VENCID".toRegex()),
+  SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.+IDENTIF".toRegex()),
+  EM_DESACORDO(6, "Em Desacordo com Ped", "EM.+DESACO.+P".toRegex());
 
   companion object {
     fun findByNum(num: Int): ETipoDevolucao? {
       return entries.firstOrNull { it.num == num }
+    }
+
+    fun findByObs(obs: String): ETipoDevolucao? {
+      return entries.firstOrNull { it.regExp.containsMatchIn(obs) }
     }
   }
 }
