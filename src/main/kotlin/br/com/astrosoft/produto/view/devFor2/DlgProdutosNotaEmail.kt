@@ -16,11 +16,7 @@ import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.textfield.BigDecimalField
-import com.vaadin.flow.component.textfield.IntegerField
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
@@ -46,6 +42,39 @@ class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, val nota: NotaR
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3|$linha4",
       toolBar = {
+        integerField("Volume") {
+          this.value = nota.volumeDevolucao ?: 0
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.width = "6rem"
+          this.isAutoselect = true
+          this.isReadOnly = true
+        }
+        bigDecimalField("Peso") {
+          this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.width = "6rem"
+          this.isAutoselect = true
+          this.isReadOnly = true
+        }
+        integerField("Cod") {
+          this.value = nota.transpDevolucao ?: 0
+          this.width = "60px"
+          this.isAutoselect = true
+          this.isReadOnly = true
+        }
+        textField("Transportadora Redespacho") {
+          this.isReadOnly = true
+          this.width = "320px"
+          this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
+        }
+        textField("CTE") {
+          this.width = "120px"
+          this.value = nota.cteDevolucao ?: ""
+          if (this.value.isNullOrBlank()) {
+            this.value = "CTE "
+          }
+          this.isReadOnly = true
+        }
       }, onClose = {
         onClose()
       }) {

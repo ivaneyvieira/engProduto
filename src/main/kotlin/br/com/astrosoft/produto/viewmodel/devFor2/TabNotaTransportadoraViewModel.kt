@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.devFor2
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) {
@@ -46,6 +47,11 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) {
     }
     updateView()
     subView.updateArquivos()
+  }
+
+  fun findTransportadora(carrno: Int?): Transportadora? {
+    carrno ?: return null
+    return saci.findTransportadora(carrno)
   }
 
   fun marcaNFD() = viewModel.exec {
