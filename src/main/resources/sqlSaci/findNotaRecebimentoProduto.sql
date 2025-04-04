@@ -137,7 +137,8 @@ SELECT I.invno,
        IA.carrno AS transpDevolucao,
        CA.name AS transportadoraDevolucao,
        IA.cet AS cteDevolucao,
-       IA.situacaoDev
+       IA.situacaoDev,
+       UA.login AS userDevolucao
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -154,6 +155,8 @@ FROM
                ON IA.invno = N.invno
     LEFT JOIN  sqldados.carr          AS CA
                ON CA.no = IA.carrno
+    LEFT JOIN  sqldados.users         AS UA
+               ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.date >= :dataInicial OR :dataInicial = 0)
@@ -288,7 +291,8 @@ SELECT N.storeno AS loja,
        transpDevolucao,
        transportadoraDevolucao,
        cteDevolucao,
-       situacaoDev
+       situacaoDev,
+       userDevolucao
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -386,7 +390,8 @@ SELECT loja,
        transpDevolucao,
        transportadoraDevolucao,
        cteDevolucao,
-       situacaoDev
+       situacaoDev,
+       userDevolucao
 FROM
   T_QUERY
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR

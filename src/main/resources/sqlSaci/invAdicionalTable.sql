@@ -14,6 +14,9 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD cet varchar(20) NULL;
 
+ALTER TABLE sqldados.invAdicional
+  ADD userno int NULL;
+
 SELECT *
 FROM
   sqldados.invAdicional;

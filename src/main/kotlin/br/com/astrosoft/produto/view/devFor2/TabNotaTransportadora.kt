@@ -106,6 +106,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     columnGrid(NotaRecebimento::notaDevolucao, header = "Transportadora", width = null)
     columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota", width = null)
+    columnGrid(NotaRecebimento::userDevolucao, header = "Usuário")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {

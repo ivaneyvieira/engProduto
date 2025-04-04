@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -36,6 +37,7 @@ class NotaRecebimento(
   var transportadoraDevolucao: String?,
   var cteDevolucao: String?,
   var situacaoDev: Int?,
+  var userDevolucao: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val valorNFDevolucao
@@ -118,7 +120,8 @@ class NotaRecebimento(
   }
 
   fun save(nota: NotaRecebimento) {
-    saci.saveInvAdicional(nota)
+    val userno = AppConfig.userLogin()?.no ?: 0
+    saci.saveInvAdicional(nota, userno)
   }
 
   private fun notaDevolucaoLazy(): NotaDevolucao? {
@@ -127,7 +130,8 @@ class NotaRecebimento(
 
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
-    saci.saveInvAdicional(this)
+    val userno = AppConfig.userLogin()?.no ?: 0
+    saci.saveInvAdicional(this, userno)
   }
 
   val notaDevolucao: String?
@@ -203,6 +207,7 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         transpDevolucao = nota.transpDevolucao,
         cteDevolucao = nota.cteDevolucao,
         situacaoDev = nota.situacaoDev,
+        userDevolucao = nota.userDevolucao,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }

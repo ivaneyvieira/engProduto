@@ -2056,7 +2056,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveInvAdicional(nota: NotaRecebimento) {
+  fun saveInvAdicional(nota: NotaRecebimento, userno : Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)
@@ -2065,6 +2065,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("transp", nota.transpDevolucao)
       addOptionalParameter("cte", nota.cteDevolucao)
       addOptionalParameter("situacaoDev", nota.situacaoDev)
+      addOptionalParameter("userno", userno)
     }
   }
 
