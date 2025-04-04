@@ -17,10 +17,8 @@ class DlgArquivoNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota
   private val gridDetail = Grid(InvFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-    val observacao = nota.obsDevolucao ?: ""
-    val observacaoNota = if (observacao.isEmpty()) "" else "|Observação: $observacao"
 
-    form = SubWindowForm("Arquivos da nota $numeroNota$observacaoNota", toolBar = {
+    form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
       }
