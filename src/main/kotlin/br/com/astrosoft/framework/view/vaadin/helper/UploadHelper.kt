@@ -1,33 +1,31 @@
-package br.com.astrosoft.produto.view.recebimento
+package br.com.astrosoft.framework.view.vaadin.helper
 
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.upload.FileRejectedEvent
 import com.vaadin.flow.component.upload.Upload
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer
 
 fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit) {
-  val uploadPair = uploadFile(label)
+  uploadFile(label) { buffer, upload ->
+    upload.addSucceededListener {
+      val fileName = it.fileName ?: ""
+      val bytes = buffer.getInputStream(fileName).readBytes()
 
-  val buffer = uploadPair.first
-  val upload = uploadPair.second
-  upload.addSucceededListener {
-    val fileName = it.fileName ?: ""
-    val bytes = buffer.inputStream.readBytes()
-
-    if (fileName.isNotBlank() && bytes.isNotEmpty()) {
-      addAnexo(fileName, bytes)
+      if (fileName.isNotBlank() && bytes.isNotEmpty()) {
+        addAnexo(fileName, bytes)
+      }
     }
+    add(upload)
   }
-  add(upload)
 }
 
-private fun uploadFile(label: String): Pair<MemoryBuffer, Upload> {
-  val buffer = MemoryBuffer()
+private fun uploadFile(label: String, block: (buffer: MultiFileMemoryBuffer, upload: Upload) -> Unit) {
+  val buffer = MultiFileMemoryBuffer()
   val upload = Upload(buffer)
-  upload.isDropAllowed = false
-
+  //upload.isDropAllowed = false
+  upload.setAcceptedFileTypes("image/jpeg", "image/png", "application/pdf", "text/plain")
   val uploadButton = Button(label)
   uploadButton.icon = VaadinIcon.PLUS.create()
   upload.uploadButton = uploadButton
@@ -40,5 +38,5 @@ private fun uploadFile(label: String): Pair<MemoryBuffer, Upload> {
     println(event.reason.message)
   }
 
-  return Pair(buffer, upload)
+  block(buffer, upload)
 }
