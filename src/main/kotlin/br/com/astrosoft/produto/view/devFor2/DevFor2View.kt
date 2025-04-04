@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route
 import jakarta.annotation.security.PermitAll
 
 @Route(layout = ProdutoLayout::class, value = "devfor2")
-@PageTitle("DevFor 2")
+@PageTitle("Dev For Receb")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
 class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {

@@ -104,7 +104,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       if (userSaci?.devFor2 == true) {
         route(
           icon = FORM,
-          label = "Dev For 2",
+          label = "Dev For Receb",
           routeClass = DevFor2View::class
         )
       }
