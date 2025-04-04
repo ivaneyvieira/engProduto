@@ -230,6 +230,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex
   FALTA_TRANSPORTE(2, "Falta no Transporte", "FAL.+TRANSP".toRegex()),
   FALTA_FABRICA(3, "Falta da Fabrica", "FAL.+FAB".toRegex()),
   VENCIMENTO(4, "Vencimento", "VENCIM|VENCID".toRegex()),
+  DEFEITO_FABRICA(7, "Defeito de Fabricação", "DEFEITO.+FAB".toRegex()),
   SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.+IDENTIF".toRegex()),
   EM_DESACORDO(6, "Em Desacordo com Ped", "EM.+DESACO.+P".toRegex());
 
