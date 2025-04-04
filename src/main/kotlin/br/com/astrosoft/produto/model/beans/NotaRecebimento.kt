@@ -139,6 +139,9 @@ class NotaRecebimento(
   val valorDevolucao: Double?
     get() = notaDevolucaoLazy()?.valor
 
+  val obsDevolucao: String?
+    get() = notaDevolucaoLazy()?.observacao
+
   companion object {
     fun findAll(
       filtro: FiltroNotaRecebimentoProduto,
