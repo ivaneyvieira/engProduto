@@ -108,7 +108,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.TODOS,
       dataFinal = null,
-      dataInicial = LocalDate.of(2025, 1, 1),
+      dataInicial = LocalDate.of(2024, 1, 1),
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
       tipoNota = EListaContas.TODOS,
       temAnexo = ETemAnexo.TODOS,
