@@ -54,6 +54,16 @@ class DlgArquivoNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel
         val title = invFile.title ?: return@addColumnButton
         DialogHelper.showFile(title, fileName, file)
       }
+      addColumnDownload(
+        iconButton = VaadinIcon.DOWNLOAD,
+        tooltip = "Download",
+        header = "Download",
+        filename = { invFile ->
+          invFile.fileName ?: "arquivo"
+        }) { invFile ->
+        invFile.file
+      }
+
       columnGrid(InvFile::fileName, "Nome do Arquivo") {
         this.isExpand = true
       }
