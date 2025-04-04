@@ -127,6 +127,7 @@ class NotaRecebimentoProduto(
       if ((quant ?: 0) == 0) return null
       return (valIPI ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
+
   val totalGeralDevolucao: Double?
     get() {
       return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) +
@@ -189,6 +190,10 @@ class NotaRecebimentoProduto(
   fun devolucao() {
     saci.updateTipoDevolucao(this)
   }
+
+  fun salvaMotivoDevolucao() {
+    saci.salvaMotivoDevolucao(this)
+  }
 }
 
 data class FiltroNotaRecebimentoProduto(
@@ -233,6 +238,10 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex
   DEFEITO_FABRICA(7, "Defeito de Fabricação", "DEFEITO.+FAB".toRegex()),
   SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.+IDENTIF".toRegex()),
   EM_DESACORDO(6, "Em Desacordo com Ped", "EM.+DESACO.+P".toRegex());
+
+  override fun toString(): String {
+    return descricao
+  }
 
   companion object {
     fun findByNum(num: Int): ETipoDevolucao? {

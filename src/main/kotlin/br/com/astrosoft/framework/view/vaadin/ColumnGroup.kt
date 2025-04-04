@@ -52,12 +52,13 @@ fun <T : Any> Grid<T>.columnGroup(header: String, block: ColumnGroup<T>.() -> Un
 @JvmName("columnProviderString")
 fun <T : Any, V : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   valueProvider: ValueProvider<T, V?>,
+  key: String? = null,
   header: String? = null,
   width: String? = null,
   isExpand: Boolean = false,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
-  return this.addColumn(this.grid.columnGrid(valueProvider, header, width, isExpand, block))
+  return this.addColumn(this.grid.columnGrid(valueProvider, key, header, width, isExpand, block))
 }
 
 @JvmName("columnString")

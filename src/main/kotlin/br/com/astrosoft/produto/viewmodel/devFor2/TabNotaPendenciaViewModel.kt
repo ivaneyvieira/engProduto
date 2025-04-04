@@ -1,13 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.devFor2
 
-import br.com.astrosoft.framework.model.printText.IPrinter
-import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.saci
-import org.eclipse.jdt.internal.compiler.parser.Parser.name
 import java.time.LocalDate
 
 class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
@@ -69,6 +65,21 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
 
     itens.forEach {
       it.marcaSituacao(EStituacaoDev.NFD)
+    }
+    updateView()
+  }
+
+  fun updateMotivo(tipoDevolucao: ETipoDevolucao?)= viewModel.exec {
+    tipoDevolucao ?: return@exec
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    itens.forEach {bean ->
+      bean.produtos.forEach {
+        it.tipoDevolucao = tipoDevolucao.num
+        it.salvaMotivoDevolucao()
+      }
     }
     updateView()
   }

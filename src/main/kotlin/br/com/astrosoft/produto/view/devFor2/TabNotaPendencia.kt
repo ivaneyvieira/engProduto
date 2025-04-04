@@ -53,7 +53,16 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    button("NFD"){
+    select("Motivo Devoulucao") {
+      this.setItems(ETipoDevolucao.entries)
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateMotivo(it.value)
+        }
+      }
+    }
+
+    button("NFD") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
         viewModel.marcaNFD()
@@ -84,7 +93,9 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    columnGrid(NotaRecebimento::tipoDevolucaoName, header = "Motivo Devolução")
+    columnGrid(
+      NotaRecebimento::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
+    )
     columnGrid(NotaRecebimento::ni, header = "NI").right()
     columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)

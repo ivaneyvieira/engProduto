@@ -145,12 +145,14 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
 @JvmName("columnProvider")
 fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(
   valueProvider: ValueProvider<T, V?>,
+  key: String? = null,
   header: String? = null,
   width: String? = null,
   isExpand: Boolean = false,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
 ): Column<T> {
   return this.column(valueProvider) {
+    this.key = key
     this.setHeader(header ?: "")
     if (isExpand) {
       this.isExpand = true

@@ -41,8 +41,11 @@ class NotaRecebimento(
   val valorNFDevolucao
     get() = produtos.sumOf { it.valorTotalDevolucao }
 
-  val tipoDevolucaoEnun
+  var tipoDevolucaoEnun
     get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+    set(value) {
+      tipoDevolucao = value?.num
+    }
 
   val tipoDevolucaoName
     get() = tipoDevolucaoEnun?.descricao
@@ -102,7 +105,7 @@ class NotaRecebimento(
     val listFile = InvFile.findAll(this.ni ?: 0)
     val marcaDevolucao = (tipoDevolucao ?: 0) > 0
     return if (marcaDevolucao) {
-      if(tipoName == null) {
+      if (tipoName == null) {
         listFile
       } else {
         listFile.filter {
