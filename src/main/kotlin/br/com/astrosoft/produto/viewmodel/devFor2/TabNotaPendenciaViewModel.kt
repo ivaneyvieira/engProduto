@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.saci
+import org.eclipse.jdt.internal.compiler.parser.Parser.name
 import java.time.LocalDate
 
 class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
@@ -33,7 +34,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     val invFile = InvFile(
       seq = null,
       invno = nota.ni,
-      title = fileName,
+      title = EStituacaoDev.PENDENTE.name,
       date = LocalDate.now(),
       fileName = fileName,
       file = dados,

@@ -104,7 +104,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       marca = EMarcaRecebimento.TODOS,
       dataFinal = null,
-      dataInicial = LocalDate.of(2024, 10, 1),
+      dataInicial = LocalDate.of(2025, 1, 1),
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
       tipoNota = EListaContas.TODOS,
       temAnexo = ETemAnexo.TODOS,

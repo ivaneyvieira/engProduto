@@ -10,11 +10,18 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class FormDevoucao(val produtos: List<NotaRecebimentoProduto>) : FormLayout() {
   init {
+    this.width = "420px"
     verticalLayout {
+      this.isSpacing = false
+      this.isMargin = false
+      this.isPadding = false
+
       produtos.forEach { produto ->
         horizontalLayout {
+          this.isMargin = false
+          this.isPadding = false
           p("${produto.codigo} - ${produto.descricao}") {
-            width = "250px"
+            width = "300px"
           }
           integerField {
             width = "60px"

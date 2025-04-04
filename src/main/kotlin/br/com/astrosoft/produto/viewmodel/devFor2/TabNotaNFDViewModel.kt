@@ -29,7 +29,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     val invFile = InvFile(
       seq = null,
       invno = nota.ni,
-      title = fileName,
+      title = EStituacaoDev.NFD.name,
       date = LocalDate.now(),
       fileName = fileName,
       file = dados,
