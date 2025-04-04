@@ -95,6 +95,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
 
     this.selectionMode = Grid.SelectionMode.MULTI
 
+    columnGrid(NotaRecebimento::tipoDevolucaoName, header = "Motivo")
     columnGrid(NotaRecebimento::ni, header = "NI").right()
     columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)
