@@ -40,7 +40,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     val numeroInterno = nota.ni
     val transp = nota.transp
     val transportadora = nota.transportadora
-    val tipoDevolucao = nota.tipoDevolucaoName ?: ""
+    val tipoDevolucao = nota.tipoDevolucaoName?.uppercase() ?: ""
     val cte = nota.cte
 
     val linha1 = "Fornecedor: $fornecedor"
@@ -89,12 +89,15 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
         }
         edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
-          this.width = "400px"
+          this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
         edtCte = textField("CTE") {
-          this.width = "150px"
+          this.width = "120px"
           this.value = nota.cteDevolucao ?: ""
+          if(this.value.isNullOrBlank()){
+            this.value = "CTE "
+          }
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
@@ -124,8 +127,6 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
       selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código").right()
-      columnGrid(NotaRecebimentoProduto::barcodeStrListEntrada, "Código de Barras").right()
-      columnGrid(NotaRecebimentoProduto::refFabrica, "Ref Fabrica").right()
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProduto::cfop, "CFOP")

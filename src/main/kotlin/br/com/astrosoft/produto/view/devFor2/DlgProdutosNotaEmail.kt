@@ -25,10 +25,6 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
-  private var edtVolume: IntegerField? = null
-  private var edtTrans: IntegerField? = null
-  private var edtPeso: BigDecimalField? = null
-  private var edtTransportadora: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
@@ -39,7 +35,7 @@ class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, val nota: NotaR
     val numeroInterno = nota.ni
     val transp = nota.transp
     val transportadora = nota.transportadora
-    val tipoDevolucao = nota.tipoDevolucaoName ?: ""
+    val tipoDevolucao = nota.tipoDevolucaoName?.uppercase() ?: ""
     val cte = nota.cte
 
     val linha1 = "Fornecedor: $fornecedor"
@@ -72,8 +68,6 @@ class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, val nota: NotaR
       selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(NotaRecebimentoProduto::codigo, "Código").right()
-      columnGrid(NotaRecebimentoProduto::barcodeStrListEntrada, "Código de Barras").right()
-      columnGrid(NotaRecebimentoProduto::refFabrica, "Ref Fabrica").right()
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
       columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProduto::cfop, "CFOP")

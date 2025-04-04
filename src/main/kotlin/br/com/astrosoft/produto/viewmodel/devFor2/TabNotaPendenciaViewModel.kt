@@ -39,7 +39,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
       file = dados,
     )
     invFile.update()
-    updateView()
+    //updateView()
     subView.updateArquivos()
   }
 
