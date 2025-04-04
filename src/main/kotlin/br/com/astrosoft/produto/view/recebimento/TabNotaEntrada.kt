@@ -187,9 +187,9 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     return dlgProduto?.updateProduto()
   }
 
-  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, block: () -> Unit) {
+  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: String, block: () -> Unit) {
     val form = FormDevoucao(produtos)
-    DialogHelper.showForm(caption = "Devolução", form = form) {
+    DialogHelper.showForm(caption = "Devolução: $motivo", form = form) {
       block()
     }
   }

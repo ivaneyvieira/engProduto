@@ -94,7 +94,7 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.dlgDevoucao(produtos) {
+    subView.dlgDevoucao(produtos, tipo.descricao) {
       produtos.forEach { produto ->
         produto.tipoDevolucao = tipo.num
         produto.devolucao()
@@ -113,5 +113,5 @@ interface ITabNotaEntrada : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
-  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, block : () -> Unit)
+  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: String, block: () -> Unit)
 }
