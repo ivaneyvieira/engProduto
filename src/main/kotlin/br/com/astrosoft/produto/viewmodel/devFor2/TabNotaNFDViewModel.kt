@@ -35,7 +35,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
       file = dados,
     )
     invFile.update()
-    updateView()
+
     subView.updateArquivos()
   }
 
@@ -44,7 +44,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     selecionado.forEach {
       it.delete()
     }
-    updateView()
+
     subView.updateArquivos()
   }
 

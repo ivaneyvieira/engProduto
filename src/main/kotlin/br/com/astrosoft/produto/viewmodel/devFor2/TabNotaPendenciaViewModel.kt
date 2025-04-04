@@ -39,7 +39,6 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
       file = dados,
     )
     invFile.update()
-    //updateView()
     subView.updateArquivos()
   }
 
@@ -48,45 +47,8 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     selecionado.forEach {
       it.delete()
     }
-    updateView()
+
     subView.updateArquivos()
-  }
-
-  fun voltar() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.devolver()
-    }
-    subView.updateProduto()
-  }
-
-  fun imprimeNotas() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    val report = PrintNotaRecebimento()
-    val preview = subView.printerPreview(loja = 0)
-
-    val buf = TextBuffer()
-
-    itens.forEach { nota ->
-      report.print(
-        dados = nota.produtos,
-        printer = object : IPrinter {
-          override fun print(text: TextBuffer) {
-            buf.println(text.textBuf())
-          }
-        }
-      )
-    }
-
-    preview.print(buf)
   }
 
   fun saveNota(nota: NotaRecebimento) {
