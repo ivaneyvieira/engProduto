@@ -1,13 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.devFor2
 
-import br.com.astrosoft.framework.model.printText.IPrinter
-import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
-import br.com.astrosoft.produto.model.saci
-import java.math.BigDecimal
 import java.time.LocalDate
 
 class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
@@ -16,7 +11,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = 1)
+    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.NFD)
     subView.updateNota(notas)
   }
 
@@ -50,6 +45,30 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     }
     updateView()
     subView.updateArquivos()
+  }
+
+  fun marcaPendente() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(EStituacaoDev.PENDENTE)
+    }
+    updateView()
+  }
+
+  fun marcaTransportadora() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
+    }
+    updateView()
   }
 }
 

@@ -16,7 +16,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
   fun updateView() {
     NotaDevolucao.update()
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = 0)
+    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.PENDENTE)
     subView.updateNota(notas)
   }
 
@@ -105,7 +105,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     }
 
     itens.forEach {
-      it.marcaNFD()
+      it.marcaSituacao(EStituacaoDev.NFD)
     }
     updateView()
   }

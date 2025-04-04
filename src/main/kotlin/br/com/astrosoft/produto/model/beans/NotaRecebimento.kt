@@ -108,8 +108,8 @@ class NotaRecebimento(
     return NotaDevolucao.findNotaDevolucao(loja, nfEntrada, tipoDevolucaoEnun)
   }
 
-  fun marcaNFD() {
-    this.situacaoDev = 1
+  fun marcaSituacao(situacao: EStituacaoDev) {
+    this.situacaoDev = situacao.num
     saci.saveInvAdicional(this)
   }
 
@@ -123,12 +123,17 @@ class NotaRecebimento(
     get() = notaDevolucaoLazy()?.valor
 
   companion object {
-    fun findAll(filtro: FiltroNotaRecebimentoProduto, marcaDevolucao: Boolean, situacaoDev: Int = 0): List<NotaRecebimento> {
+    fun findAll(
+      filtro: FiltroNotaRecebimentoProduto,
+      marcaDevolucao: Boolean,
+      situacaoDev: EStituacaoDev = EStituacaoDev.PENDENTE
+    ): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao, situacaoDev).toNota(marcaDevolucao).filter { nota ->
-        (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
-        (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
-      }
+      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao, situacaoDev.num).toNota(marcaDevolucao)
+        .filter { nota ->
+          (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
+          (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
+        }
     }
   }
 }

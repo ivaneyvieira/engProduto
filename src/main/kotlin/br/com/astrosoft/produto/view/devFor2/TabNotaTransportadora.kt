@@ -9,6 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaTransportadora
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaTransportadoraViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -50,6 +52,21 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
         viewModel.updateView()
       }
     }
+
+    button("NFD") {
+      this.icon = VaadinIcon.ARROW_LEFT.create()
+      this.onClick {
+        viewModel.marcaNFD()
+      }
+    }
+
+    button("E-Mail") {
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaEmail()
+      }
+    }
+
   }
 
   override fun Grid<NotaRecebimento>.gridPanel() {
