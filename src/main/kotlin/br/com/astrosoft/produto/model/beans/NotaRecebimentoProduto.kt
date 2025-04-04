@@ -237,7 +237,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex
   VENCIMENTO(4, "Vencimento", "VENCIM|VENCID".toRegex()),
   DEFEITO_FABRICA(7, "Defeito de Fabricação", "DEFEITO.+FAB".toRegex()),
   SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.+IDENTIF".toRegex()),
-  EM_DESACORDO(6, "Pedido", "PEDIDO".toRegex());
+  EM_DESACORDO(6, "Em Desacordo Com Pedido", "DESAC.+PED".toRegex());
 
   override fun toString(): String {
     return descricao
