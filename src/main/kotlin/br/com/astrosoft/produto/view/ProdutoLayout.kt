@@ -6,7 +6,6 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
-import br.com.astrosoft.produto.view.devFor.DevForView
 import br.com.astrosoft.produto.view.devFor2.DevFor2View
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.expedicao.NotaView
@@ -23,7 +22,6 @@ import com.github.mvysny.karibudsl.v23.route
 import com.github.mvysny.karibudsl.v23.sideNav
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.icon.VaadinIcon.*
-import com.vaadin.flow.router.RouteParameters
 
 class ProdutoLayout : AppLayoutAbstract() {
   override fun HasComponents.navigation() {
@@ -94,6 +92,7 @@ class ProdutoLayout : AppLayoutAbstract() {
         label = "NFD",
         routeClass = NfdView::class,
       )
+      /*
       if (userSaci?.menuDevolucaoAvariaRec == true) {
         route(
           icon = FORM,
@@ -101,6 +100,7 @@ class ProdutoLayout : AppLayoutAbstract() {
           routeClass = DevForView::class
         )
       }
+       */
       if (userSaci?.devFor2 == true) {
         route(
           icon = FORM,
