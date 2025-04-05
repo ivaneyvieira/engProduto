@@ -75,7 +75,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
-      if (bean.quantFile > 0) {
+      if (bean.arquivos().isNotEmpty()) {
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->

@@ -30,7 +30,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     val invFile = InvFile(
       seq = null,
       invno = nota.ni,
-      title = EStituacaoDev.PENDENTE.name,
+      title = nota.tipoDevolucaoEnun?.name ?: "",
       date = LocalDate.now(),
       fileName = fileName,
       file = dados,
