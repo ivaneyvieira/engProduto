@@ -103,7 +103,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     columnGrid(NotaRecebimento::vendno, header = "For NF")
     columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
     columnGrid(NotaRecebimento::valorNFDevolucao, header = "Valor NF")
-    columnGrid(NotaRecebimento::notaDevolucao, header = "Transportadora", width = null)
+    columnGrid(NotaRecebimento::notaDevolucao, header = "NFD", width = null)
     columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimento::userDevolucao, header = "Usuário")
