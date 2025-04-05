@@ -111,7 +111,7 @@ class NotaRecebimento(
         listFile
       } else {
         listFile.filter {
-          (it.title == tipoName) /*|| (it.title !in outrosTipos)*/
+          (it.title == tipoName) || (it.title !in outrosTipos)
         }
       }
     } else {
