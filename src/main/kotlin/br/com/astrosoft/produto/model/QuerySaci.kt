@@ -2060,6 +2060,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)
+      addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
       addOptionalParameter("volume", nota.volumeDevolucao)
       addOptionalParameter("peso", nota.pesoDevolucao)
       addOptionalParameter("transp", nota.transpDevolucao)

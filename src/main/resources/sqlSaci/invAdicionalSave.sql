@@ -1,2 +1,2 @@
-REPLACE sqldados.invAdicional(invno, volume, peso, carrno, cet, situacaoDev, userno)
-  VALUE (:invno, :volume, :peso, :transp, :cte, :situacaoDev, :userno)
+REPLACE sqldados.invAdicional(invno, tipoDevolucao, volume, peso, carrno, cet, situacaoDev, userno)
+  VALUE (:invno, :tipoDevolucao, :volume, :peso, :transp, :cte, :situacaoDev, :userno)
