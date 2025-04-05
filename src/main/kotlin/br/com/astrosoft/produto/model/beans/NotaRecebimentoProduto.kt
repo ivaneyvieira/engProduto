@@ -129,7 +129,7 @@ class NotaRecebimentoProduto(
       return (valIPI ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
 
-  val totalGeralDevolucao: Double?
+  val totalGeralDevolucao: Double
     get() {
       return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) +
              (outDespDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00) +
