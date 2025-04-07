@@ -428,7 +428,7 @@ SELECT loja,
        dataDevolucao,
        CASE
          WHEN TRIM(IFNULL(notaDevolucao, '')) = ''                     THEN 0
-         WHEN situacaoDev = 0 AND TRIM(IFNULL(notaDevolucao, '')) = '' THEN 1
+         WHEN situacaoDev = 0 AND TRIM(IFNULL(notaDevolucao, '')) != '' THEN 1
                                                                        ELSE situacaoDev
        END    AS situacaoDev,
        userDevolucao,
