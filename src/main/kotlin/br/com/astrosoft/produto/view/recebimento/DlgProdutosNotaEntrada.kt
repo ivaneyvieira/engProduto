@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -47,13 +48,12 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             update()
           }
         }
-        ETipoDevolucao.entries.forEach { tipo ->
-          button(tipo.descricao) {
-            this.icon = VaadinIcon.CHECK.create()
-            this.addClickListener {
-              val produtos = gridDetail.selectedItems.toList()
-              viewModel.devolucaoProduto(produtos, tipo)
-            }
+        select("Motivo Devolução") {
+          this.setItems(ETipoDevolucao.entries)
+
+          this.addValueChangeListener {
+            val produtos = gridDetail.selectedItems.toList()
+            viewModel.devolucaoProduto(produtos, it.value)
           }
         }
       }, onClose = {
