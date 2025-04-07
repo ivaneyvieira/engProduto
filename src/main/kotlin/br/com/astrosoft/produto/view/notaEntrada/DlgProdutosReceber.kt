@@ -132,7 +132,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       produtoNFEGrade()
       produtoNFEUnidade()
       produtoNFEQuantidade().integerFieldEditor().apply {
-        this.setClassNameGenerator { produto ->
+        this.setPartNameGenerator { produto ->
           if (userSaci?.receberProcessar == true) {
             if (produto.quantidade != produto.qttyRef) "amarelo"
             else null
@@ -141,7 +141,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       }
       produtoNFEMesesGarantia()
       produtoNFEQuantidadePacote()
-      this.setClassNameGenerator { produto ->
+      this.setPartNameGenerator { produto ->
         if (userSaci?.receberProcessar == true) {
           if (produto.qttyRef == null) "amarelo"
           else null

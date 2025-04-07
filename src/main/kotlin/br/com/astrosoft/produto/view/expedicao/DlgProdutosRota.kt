@@ -118,7 +118,7 @@ class DlgProdutosRota(val viewModel: TabNotaRotaViewModel, val nota: NotaSaida) 
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
 
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         when (it.marca) {
           1 -> "cd"
           2 -> "entregue"

@@ -2070,11 +2070,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun selectNotaDevolucao(): List<NotaDevolucao> {
-    val sql = "/sqlSaci/notaDevolucaoSelect.sql"
-    return query(sql, NotaDevolucao::class)
-  }
-
   fun findTransportadora(carrno: Int): Transportadora? {
     val sql = "/sqlSaci/transportadora.sql"
     return query(sql, Transportadora::class) {

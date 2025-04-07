@@ -79,6 +79,10 @@ class NotaRecebimentoProduto(
   var cteDevolucao: String?,
   var situacaoDev: Int?,
   var userDevolucao: String?,
+  var notaDevolucao: String?,
+  var emissaoDevolucao: LocalDate?,
+  var valorDevolucao: Double?,
+  var obsDevolucao: String?
 ) {
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE

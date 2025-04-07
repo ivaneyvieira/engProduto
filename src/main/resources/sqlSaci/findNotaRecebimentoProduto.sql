@@ -55,6 +55,38 @@ WHERE storeno = 4
   AND localizacao = ''
 */
 
+REPLACE INTO sqldados.invDevolucao(storeno, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, cancelado,
+                                   nfo, motivo)
+SELECT storeno                             AS storeno,
+       CONCAT(nfno, '/', nfse)             AS notaDevolucao,
+       CAST(issuedate AS date)             AS emissaoDevolucao,
+       grossamt / 100                      AS valorDevolucao,
+       print_remarks                       AS obsDevolucao,
+       status = 1                          AS cancelado,
+       IF(LOCATE(' NFO ', print_remarks) > 0,
+          SUBSTRING_INDEX(
+              SUBSTRING(print_remarks,
+                        LOCATE(' NFO ', print_remarks) + 5,
+                        100), ' ', 1), '') AS nfo,
+       CASE
+         WHEN print_remarks REGEXP 'AVARIA'            THEN 1
+         WHEN print_remarks REGEXP 'FAL.{1,10}TRANSP'  THEN 2
+         WHEN print_remarks REGEXP 'FAL.{1,10}FAB'     THEN 3
+         WHEN print_remarks REGEXP 'VENCIM|VENCID'     THEN 4
+         WHEN print_remarks REGEXP 'DEFEITO.{1,10}FAB' THEN 7
+         WHEN print_remarks REGEXP 'SEM.{1,10}IDENTIF' THEN 5
+         WHEN print_remarks REGEXP 'DESAC.{1,10}PED'   THEN 6
+                                                       ELSE 0
+       END                                 AS motivo
+FROM
+  sqldados.nf
+WHERE storeno IN (1, 2, 3, 4, 5, 8)
+  AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 3 MONTH) * 1
+  AND tipo = 2
+  AND print_remarks REGEXP '[^0-9][0-9]+/[0-9]+[^0-9]'
+  AND status != 1;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
@@ -87,8 +119,8 @@ SELECT I.invno,
        I.prdno,
        I.grade,
        N.storeno,
-       L.sname AS lojaSigla,
-       IFNULL(A.login, '') AS login,
+       L.sname                                                      AS lojaSigla,
+       IFNULL(A.login, '')                                          AS login,
        N.date,
        N.issue_date,
        N.nfname,
@@ -97,19 +129,19 @@ SELECT I.invno,
        N.grossamt,
        N.ordno,
        N.carrno,
-       C.name AS transportadora,
+       C.name                                                       AS transportadora,
        N.auxLong2,
        N.weight,
        N.packages,
-       SUM(I.qtty / 1000) AS qtty,
+       SUM(I.qtty / 1000)                                           AS qtty,
        A.marcaRecebimento,
        A.validade,
        A.vencimento,
        I.cfop,
-       I.cstIcms AS cst,
-       I.s26 AS usernoRecebe,
-       N.remarks AS observacaoNota,
-       IFNULL(F.quant, 0) AS quantFile,
+       I.cstIcms                                                    AS cst,
+       I.s26                                                        AS usernoRecebe,
+       N.remarks                                                    AS observacaoNota,
+       IFNULL(F.quant, 0)                                           AS quantFile,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
                                                                THEN 'Recebimento'
@@ -117,28 +149,28 @@ SELECT I.invno,
          WHEN N.type = 1                                       THEN 'Transferência'
          WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
                                                                ELSE ''
-       END AS tipoNota,
-       selecionado AS selecionado,
+       END                                                          AS tipoNota,
+       selecionado                                                  AS selecionado,
        SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000) AS valorUnit,
-       SUM((I.qtty / 1000) * (I.fob4 / 10000)) AS valorTotal,
-       I.discount / 100 AS valorDesconto,
-       I.baseIcms / 100 AS baseIcms,
-       I.icms / 100 AS valIcms,
-       I.ipiAmt / 100 AS valIPI,
-       I.icmsAliq / 100 AS icms,
-       I.ipi / 100 AS ipi,
-       IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100 AS frete,
-       I.l6 / 100 AS outDesp,
-       I.icmsSubst / 100 AS icmsSubst,
+       SUM((I.qtty / 1000) * (I.fob4 / 10000))                      AS valorTotal,
+       I.discount / 100                                             AS valorDesconto,
+       I.baseIcms / 100                                             AS baseIcms,
+       I.icms / 100                                                 AS valIcms,
+       I.ipiAmt / 100                                               AS valIPI,
+       I.icmsAliq / 100                                             AS icms,
+       I.ipi / 100                                                  AS ipi,
+       IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100                   AS frete,
+       I.l6 / 100                                                   AS outDesp,
+       I.icmsSubst / 100                                            AS icmsSubst,
        A.tipoDevolucao,
        A.quantDevolucao,
-       IA.volume AS volumeDevolucao,
-       IA.peso AS pesoDevolucao,
-       IA.carrno AS transpDevolucao,
-       CA.name AS transportadoraDevolucao,
-       IA.cet AS cteDevolucao,
+       IA.volume                                                    AS volumeDevolucao,
+       IA.peso                                                      AS pesoDevolucao,
+       IA.carrno                                                    AS transpDevolucao,
+       CA.name                                                      AS transportadoraDevolucao,
+       IA.cet                                                       AS cteDevolucao,
        IA.situacaoDev,
-       UA.login AS userDevolucao
+       UA.login                                                     AS userDevolucao
 FROM
   sqldados.iprd                       AS I
     INNER JOIN sqldados.inv           AS N
@@ -169,7 +201,7 @@ WHERE (N.bits & POW(2, 4) = 0)
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
        (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
-  AND (A.tipoDevolucao > 0 OR :marcaDevolucao = FALSE)
+  AND (IFNULL(A.tipoDevolucao, 0) > 0 OR :marcaDevolucao = FALSE)
 GROUP BY I.invno, I.prdno, I.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -190,11 +222,11 @@ CREATE TEMPORARY TABLE T_VENCIMENTO
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT storeno AS storeno,
-       prdno AS prdno,
-       grade AS grade,
-       MAX(dataVenda) AS dataVenda,
-       MAX(vendas) AS vendas,
+SELECT storeno                            AS storeno,
+       prdno                              AS prdno,
+       grade                              AS grade,
+       MAX(dataVenda)                     AS dataVenda,
+       MAX(vendas)                        AS vendas,
        MAX(IF(num = 1, quantidade, NULL)) AS qtty01,
        MAX(IF(num = 1, vencimento, NULL)) AS venc01,
        MAX(IF(num = 2, quantidade, NULL)) AS qtty02,
@@ -209,70 +241,70 @@ GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno AS loja,
-       N.lojaSigla AS lojaSigla,
-       N.login AS login,
-       DATE(N.date) AS data,
-       DATE(N.issue_date) AS emissao,
-       N.invno AS ni,
+SELECT N.storeno                                                   AS loja,
+       N.lojaSigla                                                 AS lojaSigla,
+       N.login                                                     AS login,
+       DATE(N.date)                                                AS data,
+       DATE(N.issue_date)                                          AS emissao,
+       N.invno                                                     AS ni,
        TRIM(LEADING '0' FROM TRIM(CONCAT(N.nfname, '/', N.invse))) AS nfEntrada,
-       C.no AS custno,
-       N.vendno AS vendno,
-       V.name AS fornecedor,
-       N.grossamt / 100 AS valorNF,
-       N.ordno AS pedComp,
-       N.carrno AS transp,
+       C.no                                                        AS custno,
+       N.vendno                                                    AS vendno,
+       V.name                                                      AS fornecedor,
+       N.grossamt / 100                                            AS valorNF,
+       N.ordno                                                     AS pedComp,
+       N.carrno                                                    AS transp,
        N.transportadora,
-       N.auxLong2 AS cte,
-       N.packages AS volume,
-       N.weight AS peso,
-       N.quantFile AS quantFile,
+       N.auxLong2                                                  AS cte,
+       N.packages                                                  AS volume,
+       N.weight                                                    AS peso,
+       N.quantFile                                                 AS quantFile,
   /*Produto*/
-       P.no AS prdno,
-       TRIM(P.no) AS codigo,
+       P.no                                                        AS prdno,
+       TRIM(P.no)                                                  AS codigo,
        IF(N.grade = '', CONCAT(IFNULL(B.barcodeList, ''), IF(IFNULL(B.barcodeList, '') = '', '', ','), TRIM(P.barcode)),
-          COALESCE(B.barcodeList, TRIM(P.barcode), '')) AS barcodeStrList,
+          COALESCE(B.barcodeList, TRIM(P.barcode), ''))            AS barcodeStrList,
        IF(N.grade = '', IFNULL(TRIM(P.barcode), ''),
-          COALESCE(B.barcodeList, TRIM(P.barcode), '')) AS barcodeStrListEntrada,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
-       TRIM(MID(P.name, 37, 3)) AS un,
-       N.grade AS grade,
-       IFNULL(L.localizacao, '') AS localizacao,
-       IFNULL(LS.localizacao, '') AS localizacaoSaci,
-       P.mfno AS vendnoProduto,
-       ROUND(N.qtty) AS quant,
-       ROUND(E.estoque) AS estoque,
-       IFNULL(N.marcaRecebimento, 0) AS marca,
-       P.mfno_ref AS refFabrica,
-       N.cfop AS cfop,
-       N.cst AS cst,
+          COALESCE(B.barcodeList, TRIM(P.barcode), ''))            AS barcodeStrListEntrada,
+       TRIM(MID(P.name, 1, 37))                                    AS descricao,
+       TRIM(MID(P.name, 37, 3))                                    AS un,
+       N.grade                                                     AS grade,
+       IFNULL(L.localizacao, '')                                   AS localizacao,
+       IFNULL(LS.localizacao, '')                                  AS localizacaoSaci,
+       P.mfno                                                      AS vendnoProduto,
+       ROUND(N.qtty)                                               AS quant,
+       ROUND(E.estoque)                                            AS estoque,
+       IFNULL(N.marcaRecebimento, 0)                               AS marca,
+       P.mfno_ref                                                  AS refFabrica,
+       N.cfop                                                      AS cfop,
+       N.cst                                                       AS cst,
        @VALID := IF((tipoGarantia = 3 AND garantia = 999) || (tipoGarantia = 2 AND garantia > 0), 'S',
-                    'N') AS validadeValida,
-       IF(@VALID = 'S', garantia, NULL) AS validade,
+                    'N')                                           AS validadeValida,
+       IF(@VALID = 'S', garantia, NULL)                            AS validade,
        CASE tipoGarantia
          WHEN 0 THEN 'Dias'
          WHEN 1 THEN 'Semanas'
          WHEN 2 THEN 'Meses'
          WHEN 3 THEN 'Anos'
                 ELSE ''
-       END AS tipoValidade,
-       garantia AS tempoValidade,
-       vencimento AS vencimento,
-       ER.no AS usernoRecebe,
-       ER.login AS usuarioRecebe,
-       observacaoNota AS observacaoNota,
-       tipoNota AS tipoNota,
-       selecionado AS selecionado,
-       VC.dataVenda AS dataVenda,
-       VC.vendas AS vendas,
-       VC.qtty01 AS qtty01,
-       VC.venc01 AS venc01,
-       VC.qtty02 AS qtty02,
-       VC.venc02 AS venc02,
-       VC.qtty03 AS qtty03,
-       VC.venc03 AS venc03,
-       VC.qtty04 AS qtty04,
-       VC.venc04 AS venc04,
+       END                                                         AS tipoValidade,
+       garantia                                                    AS tempoValidade,
+       vencimento                                                  AS vencimento,
+       ER.no                                                       AS usernoRecebe,
+       ER.login                                                    AS usuarioRecebe,
+       observacaoNota                                              AS observacaoNota,
+       tipoNota                                                    AS tipoNota,
+       selecionado                                                 AS selecionado,
+       VC.dataVenda                                                AS dataVenda,
+       VC.vendas                                                   AS vendas,
+       VC.qtty01                                                   AS qtty01,
+       VC.venc01                                                   AS venc01,
+       VC.qtty02                                                   AS qtty02,
+       VC.venc02                                                   AS venc02,
+       VC.qtty03                                                   AS qtty03,
+       VC.venc03                                                   AS venc03,
+       VC.qtty04                                                   AS qtty04,
+       VC.venc04                                                   AS venc04,
        N.valorUnit,
        N.valorTotal,
        N.valorDesconto,
@@ -284,9 +316,9 @@ SELECT N.storeno AS loja,
        N.frete,
        N.outDesp,
        N.icmsSubst,
-       IFNULL(tipoDevolucao, 0) AS tipoDevolucao,
+       IFNULL(tipoDevolucao, 0)                                    AS tipoDevolucao,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0,
-          IFNULL(quantDevolucao, 0)) AS quantDevolucao,
+          IFNULL(quantDevolucao, 0))                               AS quantDevolucao,
        volumeDevolucao,
        pesoDevolucao,
        transpDevolucao,
@@ -391,10 +423,22 @@ SELECT loja,
        transpDevolucao,
        transportadoraDevolucao,
        cteDevolucao,
-       situacaoDev,
-       userDevolucao
+       CASE
+         WHEN userDevolucao IS NULL                         THEN 0
+         WHEN situacaoDev = 0 AND userDevolucao IS NOT NULL THEN 1
+                                                            ELSE situacaoDev
+       END    AS situacaoDev,
+       userDevolucao,
+       notaDevolucao,
+       emissaoDevolucao,
+       valorDevolucao,
+       obsDevolucao
 FROM
-  T_QUERY
+  T_QUERY                           AS Q
+    LEFT JOIN sqldados.invDevolucao AS N
+              ON Q.nfEntrada = N.nfo
+                AND Q.loja = N.storeno
+                AND Q.tipoDevolucao = N.motivo
 WHERE (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
        vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)

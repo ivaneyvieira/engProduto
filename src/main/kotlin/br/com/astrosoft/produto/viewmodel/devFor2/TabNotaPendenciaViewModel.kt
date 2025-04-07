@@ -11,7 +11,6 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     get() = viewModel.view.tabNotaPendencia
 
   fun updateView() {
-    NotaDevolucao.update()
     val filtro = subView.filtro()
     val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.PENDENTE)
     subView.updateNota(notas)

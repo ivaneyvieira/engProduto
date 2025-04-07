@@ -38,6 +38,10 @@ class NotaRecebimento(
   var cteDevolucao: String?,
   var situacaoDev: Int?,
   var userDevolucao: String?,
+  var notaDevolucao: String?,
+  var emissaoDevolucao: LocalDate?,
+  var valorDevolucao: Double?,
+  var obsDevolucao: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val valorNFDevolucao
@@ -124,27 +128,11 @@ class NotaRecebimento(
     saci.saveInvAdicional(nota, userno)
   }
 
-  private fun notaDevolucaoLazy(): NotaDevolucao? {
-    return NotaDevolucao.findNotaDevolucao(loja, nfEntrada, tipoDevolucaoEnun)
-  }
-
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
     val userno = AppConfig.userLogin()?.no ?: 0
     saci.saveInvAdicional(this, userno)
   }
-
-  val notaDevolucao: String?
-    get() = notaDevolucaoLazy()?.nota
-
-  val emissaoDevolucao: LocalDate?
-    get() = notaDevolucaoLazy()?.emissao
-
-  val valorDevolucao: Double?
-    get() = notaDevolucaoLazy()?.valor
-
-  val obsDevolucao: String?
-    get() = notaDevolucaoLazy()?.observacao
 
   companion object {
     fun findAll(
@@ -208,6 +196,10 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         cteDevolucao = nota.cteDevolucao,
         situacaoDev = nota.situacaoDev,
         userDevolucao = nota.userDevolucao,
+        notaDevolucao = nota.notaDevolucao,
+        emissaoDevolucao = nota.emissaoDevolucao,
+        valorDevolucao = nota.valorDevolucao,
+        obsDevolucao = nota.obsDevolucao,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }

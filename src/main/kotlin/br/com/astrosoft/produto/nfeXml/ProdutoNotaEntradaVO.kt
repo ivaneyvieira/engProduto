@@ -225,7 +225,7 @@ class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String
   val descricao: String
     get() = item.produto?.descricao ?: ""
   val codigoBarras: String
-    get() = item.produto?.codigoDeBarras ?: ""
+    get() = item.produto?.codigoDeBarrasGtin ?: ""
   val ncm: String
     get() = item.produto?.ncm ?: ""
   val cst: String
