@@ -57,7 +57,9 @@ WHERE storeno = 4
 
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
 CREATE TEMPORARY TABLE T_NFO
-  (index(storeno, nfo, motivo))
+(
+  INDEX (storeno, nfo, motivo)
+)
 SELECT storeno                             AS storeno,
        CONCAT(nfno, '/', nfse)             AS notaDevolucao,
        CAST(issuedate AS date)             AS emissaoDevolucao,
@@ -84,7 +86,6 @@ FROM
 WHERE storeno IN (1, 2, 3, 4, 5, 8)
   AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 7 MONTH) * 1
   AND tipo = 2
-  AND print_remarks REGEXP '[^0-9][0-9]+/[0-9]+[^0-9]'
   AND status != 1;
 
 
@@ -428,9 +429,9 @@ SELECT loja,
        cteDevolucao,
        dataDevolucao,
        CASE
-         WHEN TRIM(IFNULL(notaDevolucao, '')) = ''                     THEN 0
-         WHEN situacaoDev = 0 AND TRIM(IFNULL(notaDevolucao, '')) != '' THEN 1
-                                                                       ELSE situacaoDev
+         WHEN TRIM(IFNULL(N.notaDevolucao, '')) = '' THEN 0
+         WHEN Q.situacaoDev = 0                      THEN 1
+                                                     ELSE situacaoDev
        END    AS situacaoDev,
        userDevolucao,
        notaDevolucao,
@@ -438,14 +439,14 @@ SELECT loja,
        valorDevolucao,
        obsDevolucao
 FROM
-  T_QUERY                           AS Q
+  T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
               ON Q.nfEntrada = N.nfo
                 AND Q.loja = N.storeno
                 AND Q.tipoDevolucao = N.motivo
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
-       vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
-       cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
-  AND (marca = :marca OR :marca = 999)
-  AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
-  AND ((:marcaDevolucao = FALSE) OR (IFNULL(situacaoDev, 0) = :situacaoDev))
+        vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
+        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
+   AND (marca = :marca OR :marca = 999)
+   AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
+   AND ((:marcaDevolucao = FALSE) OR (IFNULL(situacaoDev, 0) = :situacaoDev))

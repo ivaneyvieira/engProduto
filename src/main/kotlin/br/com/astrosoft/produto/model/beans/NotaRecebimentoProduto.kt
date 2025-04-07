@@ -236,14 +236,14 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex) {
-  AVARIA_TRANSPORTE(1, "Avaria no Transporte", "AVARIA".toRegex()),
-  FALTA_TRANSPORTE(2, "Falta no Transporte", "FAL.{1,10}TRANSP".toRegex()),
-  FALTA_FABRICA(3, "Falta de Fabrica", "FAL.{1,10}FAB".toRegex()),
-  VENCIMENTO(4, "Vencimento", "VENCIM|VENCID".toRegex()),
-  DEFEITO_FABRICA(7, "Defeito de Fabricação", "DEFEITO.{1,10}FAB".toRegex()),
-  SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.{1,10}IDENTIF".toRegex()),
-  EM_DESACORDO(6, "Em Desacordo Com Pedido", "DESAC.{1,10}PED".toRegex());
+enum class ETipoDevolucao(val num: Int, val descricao: String) {
+  AVARIA_TRANSPORTE(1, "Avaria no Transporte"),
+  FALTA_TRANSPORTE(2, "Falta no Transporte"),
+  FALTA_FABRICA(3, "Falta de Fabrica"),
+  VENCIMENTO(4, "Vencimento"),
+  DEFEITO_FABRICA(7, "Defeito de Fabricação"),
+  SEM_IDENTIFICACAO(5, "Sem Identificação"),
+  EM_DESACORDO(6, "Em Desacordo Com Pedido");
 
   override fun toString(): String {
     return descricao
@@ -252,10 +252,6 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex
   companion object {
     fun findByNum(num: Int): ETipoDevolucao? {
       return entries.firstOrNull { it.num == num }
-    }
-
-    fun findByObs(obs: String): List<ETipoDevolucao> {
-      return entries.filter { it.regExp.containsMatchIn(obs) }
     }
   }
 }
