@@ -11,11 +11,10 @@ class NotaDevolucao {
   var valor: Double? = null
   var observacao: String? = null
 
-  val tipoDevolucao: ETipoDevolucao?
-    get() {
-      val obs = observacao ?: return null
-      return ETipoDevolucao.findByObs(obs)
-    }
+  fun tipoDevolucaoFound(): List<ETipoDevolucao> {
+    val obs = observacao ?: return emptyList()
+    return ETipoDevolucao.findByObs(obs)
+  }
 
   companion object {
     private var timeUpdate = LocalDateTime.now()
@@ -40,7 +39,7 @@ class NotaDevolucao {
       return list.firstOrNull {
         (it.storeno == loja) &&
         (it.observacao?.contains(nfEntrada) ?: false) &&
-        (it.tipoDevolucao == tipoDevolucao)
+        (tipoDevolucao in it.tipoDevolucaoFound())
       }
     }
   }
