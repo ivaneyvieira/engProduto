@@ -4,11 +4,13 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaNFDViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -17,7 +19,6 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
-import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
@@ -76,6 +77,12 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
           if (this.value.isNullOrBlank()) {
             this.value = "CTE "
           }
+          this.isReadOnly = true
+        }
+        datePicker("Data") {
+          this.localePtBr()
+          this.value = nota.dataDevolucao
+          this.width = "120px"
           this.isReadOnly = true
         }
       }, onClose = {

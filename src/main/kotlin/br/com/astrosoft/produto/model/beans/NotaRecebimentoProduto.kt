@@ -19,6 +19,7 @@ class NotaRecebimentoProduto(
   var transp: Int?,
   var transportadora: String?,
   var cte: Int?,
+  var dataDevolucao: LocalDate?,
   var volume: Int?,
   var peso: Double?,
   var usernoRecebe: Int?,

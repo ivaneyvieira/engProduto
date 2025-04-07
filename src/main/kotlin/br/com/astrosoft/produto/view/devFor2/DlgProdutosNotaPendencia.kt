@@ -4,11 +4,13 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -25,11 +27,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
-  private var edtVolume: IntegerField? = null
-  private var edtTrans: IntegerField? = null
-  private var edtPeso: BigDecimalField? = null
   private var edtTransportadora: TextField? = null
-  private var edtCte: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
@@ -53,7 +51,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     form = SubWindowForm(
       title = "$linha1|$linha2|$linha3|$linha4$observacaoNota",
       toolBar = {
-        edtVolume = integerField("Volume") {
+        integerField("Volume") {
           this.value = nota.volumeDevolucao ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
@@ -65,7 +63,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
             viewModel.saveNota(nota)
           }
         }
-        edtPeso = bigDecimalField("Peso") {
+        bigDecimalField("Peso") {
           this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
@@ -77,7 +75,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
             viewModel.saveNota(nota)
           }
         }
-        edtTrans = integerField("Cod") {
+        integerField("Cod") {
           this.value = nota.transpDevolucao ?: 0
           this.width = "60px"
           this.isAutoselect = true
@@ -86,7 +84,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           addValueChangeListener {
             nota.transpDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
-            edtTransportadora?.value = viewModel.findTransportadora(edtTrans?.value)?.nome ?: ""
+            edtTransportadora?.value = viewModel.findTransportadora(this.value)?.nome ?: ""
           }
         }
         edtTransportadora = textField("Transportadora Redespacho") {
@@ -94,7 +92,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
-        edtCte = textField("CTE") {
+        textField("CTE") {
           this.width = "120px"
           this.value = nota.cteDevolucao ?: ""
           if(this.value.isNullOrBlank()){
@@ -104,6 +102,16 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
 
           addValueChangeListener {
             nota.cteDevolucao = this.value ?: ""
+            viewModel.saveNota(nota)
+          }
+        }
+        datePicker("Data") {
+          this.localePtBr()
+          this.value = nota.dataDevolucao
+          this.width = "120px"
+
+          addValueChangeListener {
+            nota.dataDevolucao = this.value
             viewModel.saveNota(nota)
           }
         }

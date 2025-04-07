@@ -17,6 +17,10 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD userno int NULL;
 
+ALTER TABLE sqldados.invAdicional
+  ADD dataDevolucao int NULL DEFAULT 0;
+
+
 SELECT *
 FROM
   sqldados.invAdicional;
@@ -49,4 +53,6 @@ FROM
     INNER JOIN T_INVADICIONAL AS T
                USING (invno);
 
-select * from T_INVADICIONAL
+SELECT *
+FROM
+  T_INVADICIONAL

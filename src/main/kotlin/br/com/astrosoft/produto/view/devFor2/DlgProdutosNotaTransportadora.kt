@@ -4,11 +4,13 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaTransportadoraViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -75,6 +77,12 @@ class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewMode
           if (this.value.isNullOrBlank()) {
             this.value = "CTE "
           }
+          this.isReadOnly = true
+        }
+        datePicker("Data") {
+          this.localePtBr()
+          this.value = nota.dataDevolucao
+          this.width = "120px"
           this.isReadOnly = true
         }
       }, onClose = {

@@ -21,6 +21,7 @@ class NotaRecebimento(
   var transp: Int?,
   var transportadora: String?,
   var cte: Int?,
+  var dataDevolucao: LocalDate?,
   var volume: Int?,
   var peso: Double?,
   val marcaSelecionada: Int?,
@@ -200,6 +201,7 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         emissaoDevolucao = nota.emissaoDevolucao,
         valorDevolucao = nota.valorDevolucao,
         obsDevolucao = nota.obsDevolucao,
+        dataDevolucao = nota.dataDevolucao,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }
