@@ -55,8 +55,9 @@ WHERE storeno = 4
   AND localizacao = ''
 */
 
-REPLACE INTO sqldados.invDevolucao(storeno, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, cancelado,
-                                   nfo, motivo)
+DROP TEMPORARY TABLE IF EXISTS T_NFO;
+CREATE TEMPORARY TABLE T_NFO
+  (index(storeno, nfo, motivo))
 SELECT storeno                             AS storeno,
        CONCAT(nfno, '/', nfse)             AS notaDevolucao,
        CAST(issuedate AS date)             AS emissaoDevolucao,
@@ -81,7 +82,7 @@ SELECT storeno                             AS storeno,
 FROM
   sqldados.nf
 WHERE storeno IN (1, 2, 3, 4, 5, 8)
-  AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 3 MONTH) * 1
+  AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 7 MONTH) * 1
   AND tipo = 2
   AND print_remarks REGEXP '[^0-9][0-9]+/[0-9]+[^0-9]'
   AND status != 1;
@@ -438,7 +439,7 @@ SELECT loja,
        obsDevolucao
 FROM
   T_QUERY                           AS Q
-    LEFT JOIN sqldados.invDevolucao AS N
+    LEFT JOIN T_NFO AS N
               ON Q.nfEntrada = N.nfo
                 AND Q.loja = N.storeno
                 AND Q.tipoDevolucao = N.motivo
