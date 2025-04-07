@@ -47,7 +47,6 @@ class NotaRecebimentoProduto(
   var tipoValidade: String?,
   var tempoValidade: Int?,
   var observacaoNota: String?,
-  var quantFile: Int?,
   var tipoNota: String?,
   var selecionado: Boolean? = false,
   var dataVenda: LocalDate?,

@@ -24,7 +24,15 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
 CREATE TEMPORARY TABLE T_NFO
 (
-  INDEX (storeno, nfo, motivo)
+  `storeno`          smallint NOT NULL DEFAULT '0',
+  `notaDevolucao`    varchar(14),
+  `emissaoDevolucao` date,
+  `valorDevolucao`   decimal(23, 4),
+  `obsDevolucao`     char(160),
+  `cancelado`        int,
+  `nfo`              varchar(16),
+  `motivo`           int,
+  PRIMARY KEY (storeno, nfo, motivo, notaDevolucao)
 )
 SELECT storeno                             AS storeno,
        CONCAT(nfno, '/', nfse)             AS notaDevolucao,
@@ -50,8 +58,7 @@ SELECT storeno                             AS storeno,
        END                                 AS motivo
 FROM
   sqldados.nf
-WHERE storeno IN (1, 2, 3, 4, 5, 8)
-  AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 7 MONTH) * 1
+WHERE issuedate >= 20241001
   AND tipo = 2
   AND status != 1;
 
@@ -68,16 +75,6 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '');
-
-DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
-CREATE TEMPORARY TABLE T_NOTA_FILE
-(
-  PRIMARY KEY (invno)
-)
-SELECT invno, COUNT(*) AS quant
-FROM
-  sqldados.invAdicionalArquivos
-GROUP BY invno;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -110,7 +107,6 @@ SELECT I.invno,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
        N.remarks                                                      AS observacaoNota,
-       IFNULL(F.quant, 0)                                             AS quantFile,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
                                                                THEN 'Recebimento'
@@ -142,23 +138,21 @@ SELECT I.invno,
        IA.situacaoDev                                                 AS situacaoDev,
        UA.login                                                       AS userDevolucao
 FROM
-  sqldados.iprd                       AS I
-    INNER JOIN sqldados.inv           AS N
+  sqldados.iprdAdicional             AS A
+    LEFT JOIN  sqldados.inv          AS N
                USING (invno)
-    LEFT JOIN  sqldados.carr          AS C
+    LEFT JOIN sqldados.iprd         AS I
+               USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.carr         AS C
                ON C.no = N.carrno
-    INNER JOIN sqldados.store         AS L
+    LEFT JOIN  sqldados.store        AS L
                ON L.no = N.storeno
-    LEFT JOIN  T_NOTA_FILE            AS F
-               ON F.invno = I.invno
-    INNER JOIN sqldados.iprdAdicional AS A
-               ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
-    LEFT JOIN  sqldados.invAdicional  AS IA
+    LEFT JOIN  sqldados.invAdicional AS IA
                ON IA.invno = A.invno
                  AND IA.tipoDevolucao = A.tipoDevolucao
-    LEFT JOIN  sqldados.carr          AS CA
+    LEFT JOIN  sqldados.carr         AS CA
                ON CA.no = IA.carrno
-    LEFT JOIN  sqldados.users         AS UA
+    LEFT JOIN  sqldados.users        AS UA
                ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
@@ -171,7 +165,7 @@ WHERE (N.bits & POW(2, 4) = 0)
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
        (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
-  AND (IFNULL(A.tipoDevolucao, 0) > 0)
+  AND (A.tipoDevolucao > 0)
 GROUP BY I.invno, I.prdno, I.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -228,7 +222,6 @@ SELECT N.storeno                                                   AS loja,
        N.auxLong2                                                  AS cte,
        N.packages                                                  AS volume,
        N.weight                                                    AS peso,
-       N.quantFile                                                 AS quantFile,
   /*Produto*/
        P.no                                                        AS prdno,
        TRIM(P.no)                                                  AS codigo,
@@ -295,7 +288,7 @@ SELECT N.storeno                                                   AS loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-       situacaoDev,
+       IFNULL(situacaoDev, 0)                                      AS situacaoDev,
        userDevolucao
 FROM
   T_NOTA                       AS N
@@ -339,7 +332,6 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
-       quantFile,
   /*Produto*/
        prdno,
        codigo,
@@ -398,7 +390,7 @@ SELECT loja,
        CASE
          WHEN TRIM(IFNULL(N.notaDevolucao, '')) = '' THEN 0
          WHEN Q.situacaoDev = 0                      THEN 1
-                                                     ELSE situacaoDev
+                                                     ELSE Q.situacaoDev
        END    AS situacaoDev,
        userDevolucao,
        notaDevolucao,
@@ -415,5 +407,4 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
    AND (marca = :marca OR :marca = 999)
-   AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
-   AND ((IFNULL(situacaoDev, 0) = :situacaoDev))
+   AND (situacaoDev = :situacaoDev)

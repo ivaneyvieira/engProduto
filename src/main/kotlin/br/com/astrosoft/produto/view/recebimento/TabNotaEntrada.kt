@@ -123,8 +123,8 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
-    }.setPartNameGenerator {
-      if (it.quantFile > 0) {
+    }.setPartNameGenerator { bean ->
+      if (bean.arquivos().isNotEmpty()) {
         "amarelo"
       } else {
         ""

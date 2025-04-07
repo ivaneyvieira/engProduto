@@ -28,7 +28,6 @@ class NotaRecebimento(
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
   var observacaoNota: String?,
-  var quantFile: Int = 0,
   var tipoNota: String?,
   var countLocalizacao: Int?,
   var tipoDevolucao: Int?,
@@ -196,7 +195,6 @@ fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaReceb
         usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.mapNotNull { it.usuarioRecebe }.distinct()
           .joinToString(),
         marcaSelecionada = nota.marcaSelecionada,
-        quantFile = nota.quantFile ?: 0,
         observacaoNota = nota.observacaoNota,
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
