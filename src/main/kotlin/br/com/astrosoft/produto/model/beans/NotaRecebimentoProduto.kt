@@ -234,7 +234,7 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
 enum class ETipoDevolucao(val num: Int, val descricao: String, val regExp: Regex) {
   AVARIA_TRANSPORTE(1, "Avaria no Transporte", "AVARIA".toRegex()),
   FALTA_TRANSPORTE(2, "Falta no Transporte", "FAL.+TRANSP".toRegex()),
-  FALTA_FABRICA(3, "Falta da Fabrica", "FAL.+FAB".toRegex()),
+  FALTA_FABRICA(3, "Falta de Fabrica", "FAL.+FAB".toRegex()),
   VENCIMENTO(4, "Vencimento", "VENCIM|VENCID".toRegex()),
   DEFEITO_FABRICA(7, "Defeito de Fabricação", "DEFEITO.+FAB".toRegex()),
   SEM_IDENTIFICACAO(5, "Sem Identificação", "SEM.+IDENTIF".toRegex()),
