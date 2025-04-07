@@ -10,3 +10,4 @@ WHERE storeno IN (1, 2, 3, 4, 5, 8)
   AND tipo = 2
   AND print_remarks REGEXP '[^0-9][0-9]+/[0-9]+[^0-9]'
   AND status <> 1
+ORDER BY issuedate DESC
