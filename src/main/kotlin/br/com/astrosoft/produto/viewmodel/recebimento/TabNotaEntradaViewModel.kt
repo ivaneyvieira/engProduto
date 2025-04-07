@@ -97,11 +97,24 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
     subView.dlgDevoucao(produtos, tipo.descricao) {
       produtos.forEach { produto ->
         produto.tipoDevolucao = tipo.num
-        produto.devolucao()
+        produto.updateDevolucao()
       }
 
       subView.updateProduto()
     }
+  }
+
+  fun desfazerDevolucao(produtos: List<NotaRecebimentoProduto>) = viewModel.exec {
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    produtos.forEach { produto ->
+      produto.quantDevolucao = produto.quant
+      produto.tipoDevolucao = 0
+      produto.updateDevolucao()
+    }
+    subView.updateProduto()
   }
 }
 

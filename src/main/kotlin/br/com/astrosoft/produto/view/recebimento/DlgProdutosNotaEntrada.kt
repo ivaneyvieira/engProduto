@@ -56,6 +56,14 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             viewModel.devolucaoProduto(produtos, it.value)
           }
         }
+        button("Desfazer") {
+          this.icon = VaadinIcon.ARROW_BACKWARD.create()
+          this.addClickListener {
+            val produtos = gridDetail.selectedItems.toList()
+            viewModel.desfazerDevolucao(produtos)
+          }
+
+        }
       }, onClose = {
         onClose()
       }) {

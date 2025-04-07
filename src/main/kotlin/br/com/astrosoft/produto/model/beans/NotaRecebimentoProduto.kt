@@ -193,7 +193,7 @@ class NotaRecebimentoProduto(
     saci.updateProduto(this)
   }
 
-  fun devolucao() {
+  fun updateDevolucao() {
     saci.updateTipoDevolucao(this)
   }
 
