@@ -12,7 +12,7 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.EMAIL)
+    val notas = NotaRecebimento.findAllDev(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.EMAIL)
     subView.updateNota(notas)
   }
 

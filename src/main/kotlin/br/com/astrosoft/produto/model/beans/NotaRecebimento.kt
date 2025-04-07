@@ -139,10 +139,22 @@ class NotaRecebimento(
     fun findAll(
       filtro: FiltroNotaRecebimentoProduto,
       marcaDevolucao: Boolean,
-      situacaoDev: EStituacaoDev = EStituacaoDev.PENDENTE
     ): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos, marcaDevolucao, situacaoDev.num).toNota(marcaDevolucao)
+      return saci.findNotaRecebimentoProduto(filtroTodos).toNota(marcaDevolucao)
+        .filter { nota ->
+          (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
+          (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
+        }
+    }
+
+    fun findAllDev(
+      filtro: FiltroNotaRecebimentoProduto,
+      marcaDevolucao: Boolean,
+      situacaoDev: EStituacaoDev,
+    ): List<NotaRecebimento> {
+      val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
+      return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota(marcaDevolucao)
         .filter { nota ->
           (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
           (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)

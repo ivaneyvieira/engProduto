@@ -1128,11 +1128,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaRecebimentoProduto(
-    filtro: FiltroNotaRecebimentoProduto,
-    marcaDevolucao: Boolean,
-    situacaoDev: Int = 0,
-  ): List<NotaRecebimentoProduto> {
+  fun findNotaRecebimentoProduto(filtro: FiltroNotaRecebimentoProduto): List<NotaRecebimentoProduto> {
     val sql = "/sqlSaci/findNotaRecebimentoProduto.sql"
     return query(sql, NotaRecebimentoProduto::class) {
       addOptionalParameter("loja", filtro.loja)
@@ -1146,7 +1142,26 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("tipoNota", filtro.tipoNota.codigo)
       addOptionalParameter("anexo", filtro.temAnexo.codigo)
-      addOptionalParameter("marcaDevolucao", marcaDevolucao)
+    }
+  }
+
+  fun findNotaRecebimentoProdutoDev(
+    filtro: FiltroNotaRecebimentoProduto,
+    situacaoDev: Int,
+  ): List<NotaRecebimentoProduto> {
+    val sql = "/sqlSaci/findNotaRecebimentoProdutoDev.sql"
+    return query(sql, NotaRecebimentoProduto::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("marca", filtro.marca.codigo)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("invno", filtro.invno)
+      addOptionalParameter("local", filtro.localizacao)
+      addOptionalParameter("prdno", filtro.prdno)
+      addOptionalParameter("grade", filtro.grade)
+      addOptionalParameter("tipoNota", filtro.tipoNota.codigo)
+      addOptionalParameter("anexo", filtro.temAnexo.codigo)
       addOptionalParameter("situacaoDev", situacaoDev)
     }
   }
@@ -2056,7 +2071,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveInvAdicional(nota: NotaRecebimento, userno : Int) {
+  fun saveInvAdicional(nota: NotaRecebimento, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)

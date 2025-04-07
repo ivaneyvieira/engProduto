@@ -13,7 +13,7 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val notas =
-        NotaRecebimento.findAll(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.TRANSPORTADORA)
+        NotaRecebimento.findAllDev(filtro = filtro, marcaDevolucao = true, situacaoDev = EStituacaoDev.TRANSPORTADORA)
     subView.updateNota(notas)
   }
 

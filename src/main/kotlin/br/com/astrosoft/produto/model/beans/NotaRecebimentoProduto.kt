@@ -243,7 +243,8 @@ enum class ETipoDevolucao(val num: Int, val descricao: String) {
   VENCIMENTO(4, "Vencimento"),
   DEFEITO_FABRICA(7, "Defeito de Fabricação"),
   SEM_IDENTIFICACAO(5, "Sem Identificação"),
-  EM_DESACORDO(6, "Em Desacordo Com Pedido");
+  EM_DESACORDO(6, "Em Desacordo Com Pedido"),
+  EM_GARANTIA(8, "Garantia");
 
   override fun toString(): String {
     return descricao

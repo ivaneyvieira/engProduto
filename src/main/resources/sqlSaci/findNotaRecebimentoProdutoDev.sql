@@ -21,6 +21,41 @@ FROM
   sqldados.prdbar
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_NFO;
+CREATE TEMPORARY TABLE T_NFO
+(
+  INDEX (storeno, nfo, motivo)
+)
+SELECT storeno                             AS storeno,
+       CONCAT(nfno, '/', nfse)             AS notaDevolucao,
+       CAST(issuedate AS date)             AS emissaoDevolucao,
+       grossamt / 100                      AS valorDevolucao,
+       print_remarks                       AS obsDevolucao,
+       status = 1                          AS cancelado,
+       IF(LOCATE(' NFO ', print_remarks) > 0,
+          SUBSTRING_INDEX(
+              SUBSTRING(print_remarks,
+                        LOCATE(' NFO ', print_remarks) + 5,
+                        100), ' ', 1), '') AS nfo,
+       CASE
+         WHEN print_remarks REGEXP 'AVARIA'            THEN 1
+         WHEN print_remarks REGEXP 'FAL.{1,10}TRANSP'  THEN 2
+         WHEN print_remarks REGEXP 'FAL.{1,10}FAB'     THEN 3
+         WHEN print_remarks REGEXP 'VENCIM|VENCID'     THEN 4
+         WHEN print_remarks REGEXP 'SEM.{1,10}IDENTIF' THEN 5
+         WHEN print_remarks REGEXP 'DESAC.{1,10}PED'   THEN 6
+         WHEN print_remarks REGEXP 'DEFEITO.{1,10}FAB' THEN 7
+         WHEN print_remarks REGEXP 'GARANTIA'          THEN 8
+                                                       ELSE 0
+       END                                 AS motivo
+FROM
+  sqldados.nf
+WHERE storeno IN (1, 2, 3, 4, 5, 8)
+  AND issuedate >= SUBDATE(CURRENT_DATE, INTERVAL 7 MONTH) * 1
+  AND tipo = 2
+  AND status != 1;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
@@ -116,7 +151,7 @@ FROM
                ON L.no = N.storeno
     LEFT JOIN  T_NOTA_FILE            AS F
                ON F.invno = I.invno
-    LEFT JOIN  sqldados.iprdAdicional AS A
+    INNER JOIN sqldados.iprdAdicional AS A
                ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
     LEFT JOIN  sqldados.invAdicional  AS IA
                ON IA.invno = A.invno
@@ -136,6 +171,7 @@ WHERE (N.bits & POW(2, 4) = 0)
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
        (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (N.invno = :invno OR :invno = 0)
+  AND (IFNULL(A.tipoDevolucao, 0) > 0)
 GROUP BY I.invno, I.prdno, I.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -359,16 +395,25 @@ SELECT loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-       situacaoDev,
+       CASE
+         WHEN TRIM(IFNULL(N.notaDevolucao, '')) = '' THEN 0
+         WHEN Q.situacaoDev = 0                      THEN 1
+                                                     ELSE situacaoDev
+       END    AS situacaoDev,
        userDevolucao,
-       NULL   AS notaDevolucao,
-       NULL   AS emissaoDevolucao,
-       NULL   AS valorDevolucao,
-       ''     AS obsDevolucao
+       notaDevolucao,
+       emissaoDevolucao,
+       valorDevolucao,
+       obsDevolucao
 FROM
-  T_QUERY AS Q
+  T_QUERY           AS Q
+    LEFT JOIN T_NFO AS N
+              ON Q.nfEntrada = N.nfo
+                AND Q.loja = N.storeno
+                AND Q.tipoDevolucao = N.motivo
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
    AND (marca = :marca OR :marca = 999)
    AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
+   AND ((IFNULL(situacaoDev, 0) = :situacaoDev))
