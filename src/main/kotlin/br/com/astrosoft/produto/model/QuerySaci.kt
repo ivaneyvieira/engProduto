@@ -2004,14 +2004,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, numero: Int) {
+  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao,  numero: Int) {
     val sql = "/sqlSaci/updateTipoDevolucao.sql"
     script(sql) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", numero)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucaoEnum?.num ?: 0)
+      addOptionalParameter("tipoDevolucao", tipo.num)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
     }
   }
@@ -2099,12 +2099,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun proximoNumeroDevolucao(ni: Int, tipo: ETipoDevolucao): Int {
+  fun proximoNumeroDevolucao(): Int {
     val sql = "/sqlSaci/proximoNumeroDevolucao.sql"
-    return query(sql, Count::class) {
-      addOptionalParameter("ni", ni)
-      addOptionalParameter("tipo", tipo.num)
-    }.firstOrNull()?.quant ?: 1
+    return query(sql, Count::class).firstOrNull()?.quant ?: 1
   }
 
   fun desfazerDevolucao(notaRecebimentoProduto: NotaRecebimentoProduto) {

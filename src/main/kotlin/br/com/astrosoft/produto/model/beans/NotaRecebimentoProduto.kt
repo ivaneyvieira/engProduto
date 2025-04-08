@@ -197,8 +197,9 @@ class NotaRecebimentoProduto(
     saci.updateProduto(this)
   }
 
-  fun updateDevolucao(numero: Int) {
-    saci.updateTipoDevolucao(this, numero)
+  fun updateDevolucao(numero: Int, tipo: ETipoDevolucao?) {
+    tipo ?: return
+    saci.updateTipoDevolucao(this, tipo, numero)
   }
 
   fun salvaMotivoDevolucao() {

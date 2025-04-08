@@ -95,17 +95,13 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    val produto = produtos.firstOrNull() ?: return@exec
-
-    val ni = produto.ni ?: return@exec
-
-    val numero = saci.proximoNumeroDevolucao(ni,  tipo)
-
     subView.dlgDevoucao(produtos, tipo.descricao) {
+
+      val numero = saci.proximoNumeroDevolucao()
 
       produtos.forEach { produto ->
         produto.tipoDevolucao = tipo.num
-        produto.updateDevolucao(numero)
+        produto.updateDevolucao(numero, tipo)
       }
 
       subView.updateProduto()

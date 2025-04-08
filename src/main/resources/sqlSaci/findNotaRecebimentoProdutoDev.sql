@@ -75,9 +75,6 @@ WHERE (A.storeno = 4);
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
-(
-  PRIMARY KEY (invno, prdno, grade)
-)
 SELECT I.invno,
        I.prdno,
        I.grade,
@@ -156,7 +153,7 @@ WHERE (N.bits & POW(2, 4) = 0)
        (N.account IN ('2.01.25')) OR ((N.type = 1)) OR
        ((N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (A.tipoDevolucao > 0)
-GROUP BY I.invno, I.prdno, I.grade;
+GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
 CREATE TEMPORARY TABLE T_EST
