@@ -83,7 +83,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       produtoPedidoQuantidade()
       produtoPedidoEstoque()
 
-      this.setClassNameGenerator { produto ->
+      this.setPartNameGenerator { produto ->
         if (produto.marca == EMarcaPedido.ENT.num) "entregue" else null
       }
     }

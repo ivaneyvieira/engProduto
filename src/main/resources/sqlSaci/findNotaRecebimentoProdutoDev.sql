@@ -71,10 +71,7 @@ CREATE TEMPORARY TABLE T_LOC
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
-WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = 4)
-  AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+WHERE (A.storeno = 4);
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -86,7 +83,7 @@ SELECT I.invno,
        I.grade,
        N.storeno,
        L.sname                                                        AS lojaSigla,
-       IFNULL(A.login, '')                                            AS login,
+      /* IFNULL(A.login, '')                                            AS login,*/
        N.date,
        N.issue_date,
        N.nfname,
@@ -100,9 +97,6 @@ SELECT I.invno,
        N.weight,
        N.packages,
        SUM(I.qtty / 1000)                                             AS qtty,
-       A.marcaRecebimento,
-       A.validade,
-       A.vencimento,
        I.cfop,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
@@ -115,7 +109,6 @@ SELECT I.invno,
          WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
                                                                ELSE ''
        END                                                            AS tipoNota,
-       selecionado                                                    AS selecionado,
        SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)   AS valorUnit,
        SUM((I.qtty / 1000) * (I.fob4 / 10000))                        AS valorTotal,
        I.discount / 100                                               AS valorDesconto,
@@ -138,33 +131,30 @@ SELECT I.invno,
        IA.situacaoDev                                                 AS situacaoDev,
        UA.login                                                       AS userDevolucao
 FROM
-  sqldados.iprdAdicional             AS A
-    LEFT JOIN  sqldados.inv          AS N
-               USING (invno)
+  sqldados.iprdAdicionalDev         AS A
+    LEFT JOIN sqldados.inv          AS N
+              USING (invno)
     LEFT JOIN sqldados.iprd         AS I
-               USING (invno, prdno, grade)
-    LEFT JOIN  sqldados.carr         AS C
-               ON C.no = N.carrno
-    LEFT JOIN  sqldados.store        AS L
-               ON L.no = N.storeno
-    LEFT JOIN  sqldados.invAdicional AS IA
-               ON IA.invno = A.invno
-                 AND IA.tipoDevolucao = A.tipoDevolucao
-    LEFT JOIN  sqldados.carr         AS CA
-               ON CA.no = IA.carrno
-    LEFT JOIN  sqldados.users        AS UA
-               ON UA.no = IA.userno
+              USING (invno, prdno, grade)
+    LEFT JOIN sqldados.carr         AS C
+              ON C.no = N.carrno
+    LEFT JOIN sqldados.store        AS L
+              ON L.no = N.storeno
+    LEFT JOIN sqldados.invAdicional AS IA
+              ON IA.invno = A.invno
+                AND IA.tipoDevolucao = A.tipoDevolucao
+    LEFT JOIN sqldados.carr         AS CA
+              ON CA.no = IA.carrno
+    LEFT JOIN sqldados.users        AS UA
+              ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
-  AND (N.date >= :dataInicial OR :dataInicial = 0)
-  AND (N.date <= :dataFinal OR :dataFinal = 0)
+  AND (N.date >= 20240101)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
-  AND ((:tipoNota IN ('R', 'T') AND
-        N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
-       (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
-       (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
-  AND (N.invno = :invno OR :invno = 0)
+  AND ((N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
+       (N.account IN ('2.01.25')) OR ((N.type = 1)) OR
+       ((N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%')))
   AND (A.tipoDevolucao > 0)
 GROUP BY I.invno, I.prdno, I.grade;
 
@@ -309,9 +299,7 @@ FROM
     LEFT JOIN  sqldados.prdloc AS LS
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
     LEFT JOIN  T_EST           AS E
-               ON E.prdno = N.prdno AND E.grade = N.grade
-WHERE (P.no = :prdno OR :prdno = '')
-  AND (N.grade = :grade OR :grade = '');
+               ON E.prdno = N.prdno AND E.grade = N.grade;
 
 SELECT loja,
        lojaSigla,
@@ -349,7 +337,6 @@ SELECT loja,
        cfop,
        cst,
        un,
-       :marca AS marcaSelecionada,
        validadeValida,
        validade,
        vencimento,
@@ -391,7 +378,7 @@ SELECT loja,
          WHEN TRIM(IFNULL(N.notaDevolucao, '')) = '' THEN 0
          WHEN Q.situacaoDev = 0                      THEN 1
                                                      ELSE Q.situacaoDev
-       END    AS situacaoDev,
+       END AS situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
@@ -406,5 +393,4 @@ FROM
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
-   AND (marca = :marca OR :marca = 999)
    AND (situacaoDev = :situacaoDev)

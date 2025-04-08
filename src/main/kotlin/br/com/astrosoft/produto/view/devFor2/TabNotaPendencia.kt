@@ -22,7 +22,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaPendencia {
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPendencia {
   private var dlgProduto: DlgProdutosNotaPendencia? = null
   private var dlgArquivo: DlgArquivoNotaPendencia? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -70,12 +70,12 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     }
   }
 
-  override fun Grid<NotaRecebimento>.gridPanel() {
+  override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
 
-    columnGrid(NotaRecebimento::loja, header = "Loja")
+    columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
       dlgProduto?.showDialog {
@@ -94,36 +94,29 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     }
 
     columnGrid(
-      NotaRecebimento::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
+      NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
     )
-    columnGrid(NotaRecebimento::ni, header = "NI").right()
-    columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada").right()
-    columnGrid(NotaRecebimento::emissao, header = "Emissão", width = null)
-    columnGrid(NotaRecebimento::data, header = "Entrada", width = null)
-    columnGrid(NotaRecebimento::vendno, header = "For NF")
-    columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
-    columnGrid(NotaRecebimento::valorNFDevolucao, header = "Valor NF")
-    columnGrid(NotaRecebimento::notaDevolucao, header = "NFD", width = null)
-    columnGrid(NotaRecebimento::emissaoDevolucao, header = "Emissão", width = null)
-    columnGrid(NotaRecebimento::valorDevolucao, header = "Valor Nota", width = null)
-    columnGrid(NotaRecebimento::userDevolucao, header = "Usuário")
+    columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
+    columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
+    columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
+    columnGrid(NotaRecebimentoDev::data, header = "Entrada", width = null)
+    columnGrid(NotaRecebimentoDev::vendno, header = "For NF")
+    columnGrid(NotaRecebimentoDev::fornecedor, header = "Nome Fornecedor")
+    columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor NF")
+    columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
+    columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
+    columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
+    columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
   }
 
-  override fun filtro(): FiltroNotaRecebimentoProduto {
-    val usr = AppConfig.userLogin() as? UserSaci
-    return FiltroNotaRecebimentoProduto(
+  override fun filtro(): FiltroNotaRecebimentoProdutoDev {
+    return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      marca = EMarcaRecebimento.TODOS,
-      dataFinal = null,
-      dataInicial = LocalDate.of(2024, 9, 1),
-      localizacao = usr?.localizacaoRec.orEmpty().toList(),
-      tipoNota = EListaContas.TODOS,
-      temAnexo = ETemAnexo.TODOS,
     )
   }
 
-  override fun updateNota(notas: List<NotaRecebimento>) {
+  override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
   }
 
@@ -135,19 +128,19 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 
-  override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+  override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
 
-  override fun notasSelecionadas(): List<NotaRecebimento> {
+  override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
 
-  override fun updateProduto(): NotaRecebimento? {
+  override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
 
-  fun showDlgProdutos(nota: NotaRecebimento) {
+  fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()

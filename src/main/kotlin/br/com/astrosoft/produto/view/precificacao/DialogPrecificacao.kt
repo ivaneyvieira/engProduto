@@ -109,7 +109,7 @@ class DialogPrecificacao(
       isMargin = false
       alignItems = FlexComponent.Alignment.STRETCH
 
-      label(label) {
+      p(label) {
         style.set("font-weight", "bold")
       }
       formLayout {

@@ -170,17 +170,17 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     promocaoIcms()
     promocaoFrete()
     promocaoFreteIcmsCalc().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
     promocaoFreteIcms().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
     promocaoContabil().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
@@ -191,7 +191,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       }
     }
     promocaoDiferenca().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }

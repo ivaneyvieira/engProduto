@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
+import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
+import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -24,9 +24,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimento) {
+class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
+  private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
   private var edtTransportadora: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
@@ -136,73 +136,73 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      columnGrid(NotaRecebimentoProduto::codigo, "Código").right()
-      columnGrid(NotaRecebimentoProduto::descricao, "Descrição")
-      columnGrid(NotaRecebimentoProduto::grade, "Grade", width = "80px")
-      columnGrid(NotaRecebimentoProduto::cfop, "CFOP")
-      columnGrid(NotaRecebimentoProduto::cst, "CST")
-      columnGrid(NotaRecebimentoProduto::un, "UN")
-      columnGrid(NotaRecebimentoProduto::quantDevolucao, "Quant")
-      columnGrid(NotaRecebimentoProduto::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
-      columnGrid(NotaRecebimentoProduto::valorTotalDevolucao, "Valor Total", width = "90px")
-      columnGrid(NotaRecebimentoProduto::valorDescontoDevolucao, "Desc", width = "60px")
-      columnGrid(NotaRecebimentoProduto::freteDevolucao, "Frete", width = "60px")
-      columnGrid(NotaRecebimentoProduto::outDespDevolucao, "Desp", width = "60px")
-      columnGrid(NotaRecebimentoProduto::baseIcmsDevolucao, "Base ICMS", width = "90px")
-      columnGrid(NotaRecebimentoProduto::icmsSubstDevolucao, "Valor ST", width = "90px")
-      columnGrid(NotaRecebimentoProduto::valIcmsDevolucao, "V. ICMS", width = "70px")
-      columnGrid(NotaRecebimentoProduto::valIPIDevolucao, "V. IPI", width = "60px")
-      columnGrid(NotaRecebimentoProduto::icms, "ICMS", width = "60px")
-      columnGrid(NotaRecebimentoProduto::ipi, "IPI", width = "50px")
-      columnGrid(NotaRecebimentoProduto::totalGeralDevolucao, "Total", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
+      columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
+      columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
+      columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
+      columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
+      columnGrid(NotaRecebimentoProdutoDev::un, "UN")
+      columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")
+      columnGrid(NotaRecebimentoProdutoDev::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::valorTotalDevolucao, "Valor Total", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::valorDescontoDevolucao, "Desc", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::outDespDevolucao, "Desp", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::baseIcmsDevolucao, "Base ICMS", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::icmsSubstDevolucao, "Valor ST", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::valIcmsDevolucao, "V. ICMS", width = "70px")
+      columnGrid(NotaRecebimentoProdutoDev::valIPIDevolucao, "V. IPI", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::icms, "ICMS", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::ipi, "IPI", width = "50px")
+      columnGrid(NotaRecebimentoProdutoDev::totalGeralDevolucao, "Total", width = "90px")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+  fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return gridDetail.selectedItems.toList()
   }
 
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotalDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorTotalDevolucao).setFooter(
       listProdutos.sumOf { it.valorTotalDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorDescontoDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorDescontoDevolucao).setFooter(
       listProdutos.sumOf { it.valorDescontoDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::freteDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::freteDevolucao).setFooter(
       listProdutos.sumOf { it.freteDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::outDespDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::outDespDevolucao).setFooter(
       listProdutos.sumOf { it.outDespDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcmsDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::baseIcmsDevolucao).setFooter(
       listProdutos.sumOf { it.baseIcmsDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::icmsSubstDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::icmsSubstDevolucao).setFooter(
       listProdutos.sumOf { it.icmsSubstDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIcmsDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valIcmsDevolucao).setFooter(
       listProdutos.sumOf { it.valIcmsDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIPIDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valIPIDevolucao).setFooter(
       listProdutos.sumOf { it.valIPIDevolucao ?: 0.0 }.format("#,##0.00")
     )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::totalGeralDevolucao).setFooter(
+    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::totalGeralDevolucao).setFooter(
       listProdutos.sumOf { it.totalGeralDevolucao ?: 0.0 }.format("#,##0.00")
     )
   }
 
-  fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {
+  fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProdutoDev? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { prd ->
       prd.containBarcode(codigoBarra)
     }
   }
 
-  fun updateProduto(): NotaRecebimento? {
+  fun updateProduto(): NotaRecebimentoDev? {
     val nota = nota.refreshProdutosDev()
     update()
     return nota

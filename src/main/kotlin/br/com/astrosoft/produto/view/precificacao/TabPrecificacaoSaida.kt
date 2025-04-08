@@ -113,7 +113,7 @@ class TabPrecificacaoSaida(val viewModel: TabPrecificacaoSaidaViewModel) : TabPa
     }
 
     button("Mudar %") {
-      onLeftClick {
+      onClick {
         val itens = itensSelecionados()
         if (itens.isEmpty()) {
           DialogHelper.showError("Nenhum item selecionado")

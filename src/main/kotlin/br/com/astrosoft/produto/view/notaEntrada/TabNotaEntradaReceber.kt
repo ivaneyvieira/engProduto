@@ -49,7 +49,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
     }
     colunaNFEChave()
     colunaNFEDataEmissao()
-    setClassNameGenerator {
+    setPartNameGenerator {
       if (userSaci?.receberProcessar == true) when (it.marca) {
         0 -> "azul"
         1 -> "amarelo"

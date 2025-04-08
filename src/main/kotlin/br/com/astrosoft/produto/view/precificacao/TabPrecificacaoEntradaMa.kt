@@ -176,7 +176,7 @@ class TabPrecificacaoEntradaMa(val viewModel: TabPrecificacaoEntradaMaViewModel)
     promocaoIcms()
     promocaoFrete()
     promocaoContabil().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }

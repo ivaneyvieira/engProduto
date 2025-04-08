@@ -12,7 +12,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimento.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.NFD)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.NFD)
     subView.updateNota(notas)
   }
 
@@ -25,7 +25,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     return lojas.firstOrNull { it.no == storeno }
   }
 
-  fun addArquivo(nota: NotaRecebimento, fileName: String, dados: ByteArray) {
+  fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
     val invFile = InvFile(
       seq = null,
       invno = nota.ni,
@@ -79,11 +79,11 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
 }
 
 interface ITabNotaNFD : ITabView {
-  fun filtro(): FiltroNotaRecebimentoProduto
-  fun updateNota(notas: List<NotaRecebimento>)
+  fun filtro(): FiltroNotaRecebimentoProdutoDev
+  fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()
   fun arquivosSelecionados(): List<InvFile>
-  fun produtosSelecionados(): List<NotaRecebimentoProduto>
-  fun notasSelecionadas(): List<NotaRecebimento>
-  fun updateProduto(): NotaRecebimento?
+  fun produtosSelecionados(): List<NotaRecebimentoProdutoDev>
+  fun notasSelecionadas(): List<NotaRecebimentoDev>
+  fun updateProduto(): NotaRecebimentoDev?
 }

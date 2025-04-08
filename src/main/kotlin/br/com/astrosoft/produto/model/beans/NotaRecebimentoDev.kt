@@ -1,11 +1,10 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev.Companion.findAllDev
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaRecebimento(
+class NotaRecebimentoDev(
   var loja: Int?,
   var lojaSigla: String?,
   var login: String?,
@@ -25,7 +24,6 @@ class NotaRecebimento(
   var dataDevolucao: LocalDate?,
   var volume: Int?,
   var peso: Double?,
-  val marcaSelecionada: Int?,
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
   var observacaoNota: String?,
@@ -43,7 +41,7 @@ class NotaRecebimento(
   var emissaoDevolucao: LocalDate?,
   var valorDevolucao: Double?,
   var obsDevolucao: String?,
-  var produtos: List<NotaRecebimentoProduto>,
+  var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
@@ -57,49 +55,18 @@ class NotaRecebimento(
   val tipoDevolucaoName
     get() = tipoDevolucaoEnun?.descricao
 
-  val usuarioLogin: String
-    get() = if (usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
-
-  fun marcaSelecionadaEnt(): EMarcaRecebimento {
-    return EMarcaRecebimento.entries.firstOrNull { it.codigo == marcaSelecionada } ?: EMarcaRecebimento.TODOS
-  }
-
-  fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProduto? {
+  fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProdutoDev? {
     if (codigoBarra.isNullOrBlank()) return null
     return produtos.firstOrNull { it.containBarcode(codigoBarra) }
   }
 
-  fun natureza(): String {
-    val filter = FiltroNotaEntradaXML(
-      loja = loja ?: 0,
-      dataInicial = emissao ?: LocalDate.now(),
-      dataFinal = emissao ?: LocalDate.now(),
-      numero = nfEntrada?.split("/")?.get(0)?.toIntOrNull() ?: 0,
-      cnpj = "",
-      fornecedor = "",
-      preEntrada = EEntradaXML.TODOS,
-      entrada = EEntradaXML.TODOS,
-      query = "",
-      pedido = 0,
-    )
-    val notaXml = NotaEntradaXML.findAll(filter)
-    return notaXml.firstOrNull()?.natureza ?: tipoNota ?: ""
-  }
-
-  fun refreshProdutos(): NotaRecebimento? {
-    val marcaEng = marcaSelecionadaEnt()
-    val notaRefresh = findAll(
-      FiltroNotaRecebimentoProduto(
+  fun refreshProdutosDev(): NotaRecebimentoDev? {
+    val notaRefresh = findAllDev(
+      FiltroNotaRecebimentoProdutoDev(
         loja = this.loja ?: return null,
         pesquisa = "",
-        marca = marcaEng,
-        invno = this.ni ?: return null,
-        dataFinal = data,
-        dataInicial = data,
-        localizacao = listOf("TODOS"),
-        tipoNota = EListaContas.TODOS,
-        temAnexo = ETemAnexo.TODOS,
-      )
+      ),
+      EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
@@ -123,7 +90,7 @@ class NotaRecebimento(
     }
   }
 
-  fun save(nota: NotaRecebimento) {
+  fun save(nota: NotaRecebimentoDev) {
     val userno = AppConfig.userLogin()?.no ?: 0
     saci.saveInvAdicional(nota, userno)
   }
@@ -131,28 +98,29 @@ class NotaRecebimento(
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
     val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(this, userno)
+    saci.saveInvAdicionalDev(this, userno)
   }
 
   companion object {
-    fun findAll(
-      filtro: FiltroNotaRecebimentoProduto,
-    ): List<NotaRecebimento> {
-      val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos).toNota()
+    fun findAllDev(
+      filtro: FiltroNotaRecebimentoProdutoDev,
+      situacaoDev: EStituacaoDev,
+    ): List<NotaRecebimentoDev> {
+      val filtroTodos = filtro.copy()
+      return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota()
         .filter { nota ->
-          nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
+          ((nota.tipoDevolucao ?: 0) > 0)
         }
     }
   }
 }
 
-fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
-  return this.groupBy { it.chaveNi }.mapNotNull { entry ->
+fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
+  return this.groupBy { it.chaveDevolucao }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull()
     nota?.let {
-      NotaRecebimento(
+      NotaRecebimentoDev(
         loja = nota.loja,
         login = produtos.asSequence().mapNotNull { it.login }
           .filter { it != "" }
@@ -179,7 +147,6 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         usernoRecebe = produtos.firstOrNull { it.usernoRecebe != 0 }?.usernoRecebe,
         usuarioRecebe = produtos.filter { !it.usuarioRecebe.isNullOrBlank() }.mapNotNull { it.usuarioRecebe }.distinct()
           .joinToString(),
-        marcaSelecionada = nota.marcaSelecionada,
         observacaoNota = nota.observacaoNota,
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
