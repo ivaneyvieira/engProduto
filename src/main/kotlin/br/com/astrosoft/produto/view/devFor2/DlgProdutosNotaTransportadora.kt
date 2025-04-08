@@ -173,7 +173,7 @@ class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewMode
   }
 
   fun updateProduto(): NotaRecebimento? {
-    val nota = nota.refreshProdutos(true)
+    val nota = nota.refreshProdutosDev()
     update()
     return nota
   }

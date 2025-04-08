@@ -85,7 +85,7 @@ class NotaRecebimento(
     return notaXml.firstOrNull()?.natureza ?: tipoNota ?: ""
   }
 
-  fun refreshProdutos(marcaDevolucao: Boolean): NotaRecebimento? {
+  fun refreshProdutos(): NotaRecebimento? {
     val marcaEng = marcaSelecionadaEnt()
     val notaRefresh = findAll(
       FiltroNotaRecebimentoProduto(
@@ -98,8 +98,27 @@ class NotaRecebimento(
         localizacao = listOf("TODOS"),
         tipoNota = EListaContas.TODOS,
         temAnexo = ETemAnexo.TODOS,
+      )
+    ).firstOrNull()
+    this.produtos = notaRefresh?.produtos ?: emptyList()
+    return notaRefresh
+  }
+
+  fun refreshProdutosDev(): NotaRecebimento? {
+    val marcaEng = marcaSelecionadaEnt()
+    val notaRefresh = findAllDev(
+      FiltroNotaRecebimentoProduto(
+        loja = this.loja ?: return null,
+        pesquisa = "",
+        marca = marcaEng,
+        invno = this.ni ?: return null,
+        dataFinal = data,
+        dataInicial = data,
+        localizacao = listOf("TODOS"),
+        tipoNota = EListaContas.TODOS,
+        temAnexo = ETemAnexo.TODOS,
       ),
-      marcaDevolucao
+      EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
@@ -137,33 +156,30 @@ class NotaRecebimento(
   companion object {
     fun findAll(
       filtro: FiltroNotaRecebimentoProduto,
-      marcaDevolucao: Boolean,
     ): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos).toNota(marcaDevolucao)
+      return saci.findNotaRecebimentoProduto(filtroTodos).toNota(marcaDevolucao = false)
         .filter { nota ->
-          (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
-          (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
+          nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
         }
     }
 
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProduto,
-      marcaDevolucao: Boolean,
       situacaoDev: EStituacaoDev,
     ): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota(marcaDevolucao)
+      return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota(marcaDevolucao = true)
         .filter { nota ->
           (nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS) &&
-          (if (marcaDevolucao) (nota.tipoDevolucao ?: 0) > 0 else true)
+          ((nota.tipoDevolucao ?: 0) > 0)
         }
     }
   }
 }
 
 fun List<NotaRecebimentoProduto>.toNota(marcaDevolucao: Boolean): List<NotaRecebimento> {
-  return this.groupBy { "${it.ni} ${if (marcaDevolucao) it.tipoDevolucao else 0}" }.mapNotNull { entry ->
+  return this.groupBy { if (marcaDevolucao) it.chaveDevolucao else it.chaveNi }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull()
     nota?.let {

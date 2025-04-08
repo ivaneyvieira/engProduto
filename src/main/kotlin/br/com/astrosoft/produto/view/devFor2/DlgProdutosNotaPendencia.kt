@@ -203,7 +203,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   }
 
   fun updateProduto(): NotaRecebimento? {
-    val nota = nota.refreshProdutos(true)
+    val nota = nota.refreshProdutosDev()
     update()
     return nota
   }

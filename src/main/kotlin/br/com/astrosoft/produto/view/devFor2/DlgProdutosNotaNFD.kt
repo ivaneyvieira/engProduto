@@ -173,7 +173,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
   }
 
   fun updateProduto(): NotaRecebimento? {
-    val nota = nota.refreshProdutos(true)
+    val nota = nota.refreshProdutosDev()
     update()
     return nota
   }

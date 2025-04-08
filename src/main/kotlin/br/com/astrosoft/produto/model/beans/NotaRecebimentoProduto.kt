@@ -84,6 +84,11 @@ class NotaRecebimentoProduto(
   var valorDevolucao: Double?,
   var obsDevolucao: String?
 ) {
+  val chaveNi
+    get() = "$loja-$ni"
+  val chaveDevolucao
+    get() = "$loja-$ni-$tipoDevolucao-$notaDevolucao"
+
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
     set(value) {
