@@ -34,16 +34,6 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '');
 
-DROP TEMPORARY TABLE IF EXISTS T_NOTA_FILE;
-CREATE TEMPORARY TABLE T_NOTA_FILE
-(
-  PRIMARY KEY (invno)
-)
-SELECT invno, COUNT(*) AS quant
-FROM
-  sqldados.invAdicionalArquivos
-GROUP BY invno;
-
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -75,7 +65,6 @@ SELECT I.invno,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
        N.remarks                                                      AS observacaoNota,
-       IFNULL(F.quant, 0)                                             AS quantFile,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
                                                                THEN 'Recebimento'
@@ -114,8 +103,6 @@ FROM
                ON C.no = N.carrno
     INNER JOIN sqldados.store         AS L
                ON L.no = N.storeno
-    LEFT JOIN  T_NOTA_FILE            AS F
-               ON F.invno = I.invno
     LEFT JOIN  sqldados.iprdAdicional AS A
                ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
     LEFT JOIN  sqldados.invAdicional  AS IA
@@ -192,7 +179,6 @@ SELECT N.storeno                                                   AS loja,
        N.auxLong2                                                  AS cte,
        N.packages                                                  AS volume,
        N.weight                                                    AS peso,
-       N.quantFile                                                 AS quantFile,
   /*Produto*/
        P.no                                                        AS prdno,
        TRIM(P.no)                                                  AS codigo,
@@ -303,7 +289,6 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
-       quantFile,
   /*Produto*/
        prdno,
        codigo,
@@ -371,4 +356,4 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
    AND (marca = :marca OR :marca = 999)
-   AND ((:anexo = 'S' AND quantFile > 0) OR (:anexo = 'N' AND quantFile = 0) OR (:anexo = 'T'))
+
