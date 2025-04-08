@@ -10,7 +10,6 @@ import br.com.astrosoft.framework.model.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
-import org.sql2o.Query
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -1115,22 +1114,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-
-  fun updateNotaRecebimentoProduto(notaRecebimentoProduto: NotaRecebimentoProdutoDev) {
-    val sql = "/sqlSaci/findNotaRecebimentoProdutoUpdate.sql"
-    script(sql) {
-      addOptionalParameter("ni", notaRecebimentoProduto.ni ?: 0)
-      addOptionalParameter("prdno", notaRecebimentoProduto.prdno ?: "")
-      addOptionalParameter("grade", notaRecebimentoProduto.grade ?: "")
-      addOptionalParameter("marca", notaRecebimentoProduto.marca ?: 0)
-      addOptionalParameter("login", notaRecebimentoProduto.login ?: "")
-      addOptionalParameter("validade", notaRecebimentoProduto.validade ?: 0)
-      addOptionalParameter("vencimento", notaRecebimentoProduto.vencimento)
-      addOptionalParameter("usernoRecebe", notaRecebimentoProduto.usernoRecebe ?: 0)
-      addOptionalParameter("selecionado", notaRecebimentoProduto.selecionado ?: false)
-    }
-  }
-
   fun listaProdutos(filtro: FiltroListaProduto): List<Produtos> {
     val sql = "/sqlSaci/listaProdutos.sql"
 
@@ -2021,12 +2004,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: NotaRecebimentoProduto) {
+  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, numero: Int) {
     val sql = "/sqlSaci/updateTipoDevolucao.sql"
     script(sql) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("numero", numero)
       addOptionalParameter("tipoDevolucao", produto.tipoDevolucaoEnum?.num ?: 0)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
     }
@@ -2112,6 +2096,32 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", notaRecebimento.prdno)
       addOptionalParameter("grade", notaRecebimento.grade)
       addOptionalParameter("tipoDevolucao", notaRecebimento.tipoDevolucao)
+    }
+  }
+
+  fun proximoNumeroDevolucao(ni: Int, tipo: ETipoDevolucao): Int {
+    val sql = "/sqlSaci/proximoNumeroDevolucao.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("ni", ni)
+      addOptionalParameter("tipo", tipo.num)
+    }.firstOrNull()?.quant ?: 1
+  }
+
+  fun desfazerDevolucao(notaRecebimentoProduto: NotaRecebimentoProduto) {
+    val sql = "/sqlSaci/desfazerDevolucao.sql"
+    script(sql) {
+      addOptionalParameter("invno", notaRecebimentoProduto.ni)
+      addOptionalParameter("prdno", notaRecebimentoProduto.prdno)
+      addOptionalParameter("grade", notaRecebimentoProduto.grade)
+    }
+  }
+
+  fun findDevolucoes(notaRecebimentoProduto: NotaRecebimentoProduto): List<DevolucaoProduto> {
+    val sql = "/sqlSaci/devolucoes.sql"
+    return query(sql, DevolucaoProduto::class) {
+      addOptionalParameter("invno", notaRecebimentoProduto.ni)
+      addOptionalParameter("prdno", notaRecebimentoProduto.prdno)
+      addOptionalParameter("grade", notaRecebimentoProduto.grade)
     }
   }
 

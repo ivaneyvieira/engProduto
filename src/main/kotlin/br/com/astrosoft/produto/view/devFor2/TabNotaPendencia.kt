@@ -97,6 +97,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
     )
     columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Numero Dev").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::data, header = "Entrada", width = null)

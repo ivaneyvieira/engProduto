@@ -1,5 +1,2 @@
-REPLACE sqldados.iprdAdicional(invno, prdno, grade, marcaRecebimento, login, validade, vencimento, selecionado,
-                               tipoDevolucao, quantDevolucao)
-VALUE( :invno, :prdno, :grade, marcaRecebimento, login, validade, vencimento, selecionado,
-                               :tipoDevolucao, :quantDevolucao)
-
+REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
+  VALUE (:invno, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao)

@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
@@ -94,10 +95,17 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Nenhum produto selecionado")
     }
 
+    val produto = produtos.firstOrNull() ?: return@exec
+
+    val ni = produto.ni ?: return@exec
+
+    val numero = saci.proximoNumeroDevolucao(ni,  tipo)
+
     subView.dlgDevoucao(produtos, tipo.descricao) {
+
       produtos.forEach { produto ->
         produto.tipoDevolucao = tipo.num
-        produto.updateDevolucao()
+        produto.updateDevolucao(numero)
       }
 
       subView.updateProduto()
@@ -110,9 +118,7 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
     }
 
     produtos.forEach { produto ->
-      produto.quantDevolucao = produto.quant
-      produto.tipoDevolucao = 0
-      produto.updateDevolucao()
+      produto.desfazerDevolucao()
     }
     subView.updateProduto()
   }

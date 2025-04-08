@@ -7,10 +7,10 @@ import java.time.LocalDate
 class NotaRecebimentoDev(
   var loja: Int?,
   var lojaSigla: String?,
-  var login: String?,
   var data: LocalDate?,
   var emissao: LocalDate?,
   var ni: Int?,
+  var numeroDevolucao: Int?,
   var nfEntrada: String?,
   var custno: Int?,
   var vendno: Int?,
@@ -122,13 +122,9 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
     nota?.let {
       NotaRecebimentoDev(
         loja = nota.loja,
-        login = produtos.asSequence().mapNotNull { it.login }
-          .filter { it != "" }
-          .distinct().sorted().joinToString(separator = ", ") { login ->
-            login
-          },
         data = nota.data,
         emissao = nota.emissao,
+        numeroDevolucao = nota.numeroDevolucao,
         ni = nota.ni,
         nfEntrada = nota.nfEntrada,
         custno = nota.custno,

@@ -6,8 +6,8 @@ import java.time.LocalDate
 class NotaRecebimentoProdutoDev(
   var loja: Int?,
   var lojaSigla: String?,
+  var numeroDevolucao: Int?,
   var data: LocalDate?,
-  var login: String?,
   var emissao: LocalDate?,
   var ni: Int?,
   var nfEntrada: String?,
@@ -35,19 +35,16 @@ class NotaRecebimentoProdutoDev(
   var localizacaoSaci: String?,
   var quant: Int?,
   var estoque: Int?,
-  var marca: Int?,
   var refFabrica: String?,
   var cfop: String?,
   var cst: String?,
   var un: String?,
   var validadeValida: String?,
   var validade: Int?,
-  var vencimento: LocalDate?,
   var tipoValidade: String?,
   var tempoValidade: Int?,
   var observacaoNota: String?,
   var tipoNota: String?,
-  var selecionado: Boolean? = false,
   var dataVenda: LocalDate?,
   var vendas: Int?,
   var qtty01: Int?,
@@ -84,7 +81,7 @@ class NotaRecebimentoProdutoDev(
   var obsDevolucao: String?
 ) {
   val chaveDevolucao
-    get() = "$loja-$ni-$tipoDevolucao-$notaDevolucao"
+    get() = "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
 
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
@@ -152,19 +149,8 @@ class NotaRecebimentoProdutoDev(
     get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) +
             (icmsSubst ?: 0.00) - (valorDesconto ?: 0.00)
 
-  var marcaEnum: EMarcaRecebimento = EMarcaRecebimento.TODOS
-    get() = EMarcaRecebimento.entries.firstOrNull { it.codigo == marca } ?: EMarcaRecebimento.TODOS
-    set(value) {
-      marca = value.codigo
-      field = value
-    }
-
   fun containBarcode(barcode: String): Boolean {
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
-  }
-
-  private fun salva() {
-    saci.updateNotaRecebimentoProduto(this)
   }
 
   fun salvaMotivoDevolucao() {

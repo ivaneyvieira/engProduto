@@ -197,12 +197,20 @@ class NotaRecebimentoProduto(
     saci.updateProduto(this)
   }
 
-  fun updateDevolucao() {
-    saci.updateTipoDevolucao(this)
+  fun updateDevolucao(numero: Int) {
+    saci.updateTipoDevolucao(this, numero)
   }
 
   fun salvaMotivoDevolucao() {
     saci.salvaMotivoDevolucao(this)
+  }
+
+  fun desfazerDevolucao() {
+    saci.desfazerDevolucao(this)
+  }
+
+  fun devolucoes(): List<DevolucaoProduto> {
+    return saci.findDevolucoes(this)
   }
 }
 
