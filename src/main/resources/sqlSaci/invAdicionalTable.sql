@@ -23,6 +23,9 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD observacao varchar(160) NULL DEFAULT '';
 
+ALTER TABLE sqldados.invAdicional
+  ADD dataColeta int NULL DEFAULT 0;
+
 
 SELECT *
 FROM

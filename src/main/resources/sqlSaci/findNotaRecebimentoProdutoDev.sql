@@ -137,7 +137,8 @@ SELECT I.invno,
        CAST(IF(IA.dataDevolucao = 0, NULL, IA.dataDevolucao) AS date) AS dataDevolucao,
        IA.situacaoDev                                                 AS situacaoDev,
        UA.login                                                       AS userDevolucao,
-       IFNULL(AC.countColeta, 0)                                      AS countColeta
+       IFNULL(AC.countColeta, 0)                                      AS countColeta,
+       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta
 FROM
   sqldados.iprdAdicionalDev         AS A
     LEFT JOIN sqldados.inv          AS N
@@ -288,7 +289,8 @@ SELECT N.storeno                                                   AS loja,
        IFNULL(situacaoDev, 0)                                      AS situacaoDev,
        userDevolucao,
        observacaoDev,
-       countColeta
+       countColeta,
+       dataColeta
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -393,7 +395,8 @@ SELECT loja,
        emissaoDevolucao,
        valorDevolucao,
        obsDevolucao,
-       observacaoDev
+       observacaoDev,
+       dataColeta
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N

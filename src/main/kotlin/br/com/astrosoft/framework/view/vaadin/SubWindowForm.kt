@@ -5,10 +5,11 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class SubWindowForm(
   protected val title: String = "",
-  val header: HorizontalLayout.(SubWindowForm) -> Unit = {},
+  val header: VerticalLayout.(SubWindowForm) -> Unit = {},
   val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
   val onClose: (Dialog) -> Unit = {},
   val fullSize: Boolean = true,
@@ -23,8 +24,7 @@ class SubWindowForm(
     verticalLayout {
       content { align(stretch, top) }
       isPadding = false
-      horizontalLayout {
-        content { align(left, baseline) }
+      verticalLayout {
         this.header(this@SubWindowForm)
       }
 
