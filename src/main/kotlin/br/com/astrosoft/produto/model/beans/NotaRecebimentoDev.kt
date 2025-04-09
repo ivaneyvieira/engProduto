@@ -80,15 +80,14 @@ class NotaRecebimentoDev(
     return InvFileDev.findAll(invno, tipo, numero)
   }
 
-  fun save(nota: NotaRecebimentoDev) {
+  fun save() {
     val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(nota, userno)
+    saci.saveInvAdicional(this, userno)
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
-    val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicionalDev(this, userno)
+    save()
   }
 
   companion object {

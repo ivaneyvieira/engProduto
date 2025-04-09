@@ -22,6 +22,8 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
     this.devFor2NotaNFD = usuario.devFor2NotaNFD
     this.devFor2NotaTransportadora = usuario.devFor2NotaTransportadora
     this.devFor2NotaEmail = usuario.devFor2NotaEmail
+    this.devFor2NotaReposto = usuario.devFor2NotaReposto
+    this.devFor2NotaAcerto = usuario.devFor2NotaAcerto
   }
 }
 

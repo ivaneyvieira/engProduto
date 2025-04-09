@@ -6,13 +6,13 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) {
   val subView
-    get() = viewModel.view.tabNotaEmail
+    get() = viewModel.view.tabNotaAcerto
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.EMAIL)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.ACERTO)
     subView.updateNota(notas)
   }
 
@@ -53,18 +53,6 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
-  fun marcaTransportadora() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
-    }
-    updateView()
-  }
-
   fun marcaReposto() = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
@@ -78,7 +66,7 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
   }
 }
 
-interface ITabNotaEmail : ITabView {
+interface ITabNotaAcerto : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

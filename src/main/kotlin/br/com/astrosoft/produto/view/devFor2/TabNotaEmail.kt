@@ -59,6 +59,13 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
         viewModel.marcaTransportadora()
       }
     }
+
+    button("Reposto") {
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaReposto()
+      }
+    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {

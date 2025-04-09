@@ -49,7 +49,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save(nota)
+    nota.save()
     if(updateGrid){
       updateView()
     }

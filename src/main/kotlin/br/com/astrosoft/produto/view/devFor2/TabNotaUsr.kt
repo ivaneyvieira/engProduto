@@ -17,6 +17,8 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::devFor2NotaNFD, "NFD")
     columnGrid(UserSaci::devFor2NotaTransportadora, "Transportadora")
     columnGrid(UserSaci::devFor2NotaEmail, "E-Mail")
+    columnGrid(UserSaci::devFor2NotaReposto, "Reposto")
+    columnGrid(UserSaci::devFor2NotaAcerto, "Acerto")
   }
 
   override fun FormUsuario.configFields() {
@@ -36,6 +38,14 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
         checkBox("E-Mail") {
           binder.bind(this, UserSaci::devFor2NotaEmail.name)
+        }
+
+        checkBox("Reposto") {
+          binder.bind(this, UserSaci::devFor2NotaReposto.name)
+        }
+
+        checkBox("Acerto") {
+          binder.bind(this, UserSaci::devFor2NotaAcerto.name)
         }
       }
     }

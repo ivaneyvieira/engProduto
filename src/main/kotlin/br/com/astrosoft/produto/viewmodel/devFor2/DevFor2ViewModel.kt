@@ -8,6 +8,8 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
   val tabNotaNFDViewModel = TabNotaNFDViewModel(this)
   val tabNotaTransportadoraViewModel = TabNotaTransportadoraViewModel(this)
   val tabNotaEmailViewModel = TabNotaEmailViewModel(this)
+  val tabNotaRepostoViewModel = TabNotaRepostoViewModel(this)
+  val tabNotaAcertoViewModel = TabNotaAcertoViewModel(this)
   val tabNotaUsrViewModel = TabNotaUsrViewModel(this)
 
   override fun listTab() = listOf(
@@ -15,6 +17,8 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
     view.tabNotaNFD,
     view.tabNotaTransportadora,
     view.tabNotaEmail,
+    view.tabNotaReposto,
+    view.tabNotaAcerto,
     view.tabNotaUsr,
   )
 }
@@ -24,6 +28,8 @@ interface IDevFor2View : IView {
   val tabNotaNFD: ITabNotaNFD
   val tabNotaTransportadora: ITabNotaTransportadora
   val tabNotaEmail: ITabNotaEmail
+  val tabNotaReposto: ITabNotaReposto
+  val tabNotaAcerto: ITabNotaAcerto
   val tabNotaUsr: ITabNotaUsr
 }
 

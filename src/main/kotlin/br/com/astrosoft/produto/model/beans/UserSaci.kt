@@ -143,6 +143,8 @@ class UserSaci : IUser {
   var devFor2NotaNFD by DelegateAuthorized2(113)
   var devFor2NotaTransportadora by DelegateAuthorized2(114)
   var devFor2NotaEmail by DelegateAuthorized2(115)
+  var devFor2NotaReposto by DelegateAuthorized2(116)
+  var devFor2NotaAcerto by DelegateAuthorized2(117)
 
   //Locais
   private var localEstoque: String?
@@ -451,12 +453,15 @@ class UserSaci : IUser {
       notaRota = value
     }
   var devFor2
-    get() = devFor2NotaPendencia || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail || admin
+    get() = devFor2NotaPendencia || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
+            devFor2NotaReposto || devFor2NotaAcerto || admin
     set(value) {
       devFor2NotaPendencia = value
       devFor2NotaNFD = value
       devFor2NotaTransportadora = value
       devFor2NotaEmail = value
+      devFor2NotaAcerto = value
+      devFor2NotaReposto = value
     }
   val menuDevolucaoAvariaRec: Boolean
     get() {
