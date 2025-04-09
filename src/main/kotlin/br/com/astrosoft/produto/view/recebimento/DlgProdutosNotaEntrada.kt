@@ -2,16 +2,12 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
@@ -19,6 +15,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: NotaRecebimento) {
@@ -27,20 +24,79 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-    val fornecedor = nota.fornecedor ?: ""
     val emissao = nota.emissao.format()
-    val loja = nota.lojaSigla ?: ""
-    val pedido = nota.pedComp?.toString() ?: ""
     val numeroInterno = nota.ni
-    val transp = nota.transp
-    val transportadora = nota.transportadora
-    val cte = nota.cte
-    val linha1 = "Fornecedor: $fornecedor"
-    val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
-    val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
 
     form = SubWindowForm(
-      title = "$linha1|$linha2|$linha3",
+      header = {
+        this.isPadding = false
+        this.isMargin = false
+        this.isSpacing = false
+
+        horizontalBlock {
+          this.isSpacing = true
+
+          integerField("NI") {
+            this.isReadOnly = true
+            this.width = "6rem"
+            this.value = numeroInterno
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("NFO") {
+            this.isReadOnly = true
+            this.width = "6rem"
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.value = numeroNota
+          }
+          textField("Emissão") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = emissao
+          }
+          textField("Entrada") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.data.format()
+          }
+          integerField("Cod") {
+            this.isReadOnly = true
+            this.width = "3.5rem"
+            this.value = nota.vendno
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("Fornecedor") {
+            this.isReadOnly = true
+            this.width = "20rem"
+            this.value = nota.fornecedor
+          }
+        }
+
+        horizontalBlock {
+          this.isSpacing = true
+
+          textField("Cod") {
+            this.isReadOnly = true
+            this.width = "3.5rem"
+            this.value = nota.transp?.toString()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("Transportadora") {
+            this.isReadOnly = true
+            this.width = "20rem"
+            this.value = nota.transportadora
+          }
+          textField("CTE") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.cte?.toString()
+          }
+          textField("Ped Compra") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.pedComp?.toString()
+          }
+        }
+      },
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
           this.valueChangeMode = ValueChangeMode.LAZY
