@@ -26,6 +26,13 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) {
     return lojas.firstOrNull { it.no == storeno }
   }
 
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if(updateGrid){
+      updateView()
+    }
+  }
+
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
     val invFile = InvFileDev(
       invno = nota.ni,

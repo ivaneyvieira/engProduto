@@ -10,13 +10,14 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaTransportadora {
@@ -69,6 +70,16 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     this.addClassName("styling")
     this.format()
 
+    this.withEditor(
+      classBean = NotaRecebimentoDev::class,
+      openEditor = {
+        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.saveNota(nota = it.bean, updateGrid = true)
+      })
+
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -104,7 +115,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px")
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

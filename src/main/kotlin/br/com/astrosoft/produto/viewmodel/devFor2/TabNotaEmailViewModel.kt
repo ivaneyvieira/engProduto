@@ -53,6 +53,13 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if(updateGrid){
+      updateView()
+    }
+  }
+
   fun marcaTransportadora() = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {

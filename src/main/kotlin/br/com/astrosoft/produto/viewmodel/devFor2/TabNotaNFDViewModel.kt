@@ -20,6 +20,13 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     return Loja.allLojas()
   }
 
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if(updateGrid){
+      updateView()
+    }
+  }
+
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }

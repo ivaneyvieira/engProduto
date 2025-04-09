@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaNFD
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaNFDViewModel
@@ -13,13 +10,14 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaNFD {
@@ -73,6 +71,16 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
     this.addClassName("styling")
     this.format()
 
+    this.withEditor(
+      classBean = NotaRecebimentoDev::class,
+      openEditor = {
+        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.saveNota(nota = it.bean, updateGrid = true)
+      })
+
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -108,7 +116,7 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px")
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

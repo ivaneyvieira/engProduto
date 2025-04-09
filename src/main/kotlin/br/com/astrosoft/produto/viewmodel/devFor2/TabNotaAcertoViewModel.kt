@@ -16,6 +16,13 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateNota(notas)
   }
 
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if(updateGrid){
+      updateView()
+    }
+  }
+
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
