@@ -61,26 +61,14 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     return saci.findTransportadora(carrno)
   }
 
-  fun marcaPendente() = viewModel.exec {
+  fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
     itens.forEach {
-      it.marcaSituacao(EStituacaoDev.PENDENTE)
-    }
-    updateView()
-  }
-
-  fun marcaTransportadora() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
+      it.marcaSituacao(situacao)
     }
     updateView()
   }

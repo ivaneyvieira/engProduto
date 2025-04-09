@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.saci
+import com.vaadin.flow.component.ClickEvent
 import java.time.LocalDate
 
 class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) {
@@ -60,14 +61,14 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
-  fun marcaReposto() = viewModel.exec {
+  fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
     itens.forEach {
-      it.marcaSituacao(EStituacaoDev.REPOSTO)
+      it.marcaSituacao(situacao)
     }
     updateView()
   }

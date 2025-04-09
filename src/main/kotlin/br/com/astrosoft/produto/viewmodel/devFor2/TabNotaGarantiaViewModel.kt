@@ -6,25 +6,18 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) {
   val subView
-    get() = viewModel.view.tabNotaReposto
+    get() = viewModel.view.tabNotaGarantia
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.REPOSTO)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.GARANTIA)
     subView.updateNota(notas)
   }
 
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
-  }
-
-  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save()
-    if(updateGrid){
-      updateView()
-    }
   }
 
   fun findLoja(storeno: Int): Loja? {
@@ -60,6 +53,13 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if(updateGrid){
+      updateView()
+    }
+  }
+
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
@@ -73,7 +73,7 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) {
   }
 }
 
-interface ITabNotaReposto : ITabView {
+interface ITabNotaGarantia : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

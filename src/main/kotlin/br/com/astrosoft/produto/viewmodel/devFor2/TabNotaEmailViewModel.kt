@@ -60,26 +60,14 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
     }
   }
 
-  fun marcaTransportadora() = viewModel.exec {
+  fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
     itens.forEach {
-      it.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
-    }
-    updateView()
-  }
-
-  fun marcaReposto() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.REPOSTO)
+      it.marcaSituacao(situacao)
     }
     updateView()
   }

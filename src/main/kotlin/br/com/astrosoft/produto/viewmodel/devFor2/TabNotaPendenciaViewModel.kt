@@ -50,7 +50,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
 
   fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
     nota.save()
-    if(updateGrid){
+    if (updateGrid) {
       updateView()
     }
   }
@@ -60,55 +60,29 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     return saci.findTransportadora(carrno)
   }
 
-  fun marcaNFD() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.NFD)
-    }
-    updateView()
-  }
-
-
-  fun marcaReposto() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.REPOSTO)
-    }
-    updateView()
-  }
-
-
-  fun marcaAcerto() = viewModel.exec {
-    val itens = subView.notasSelecionadas()
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    itens.forEach {
-      it.marcaSituacao(EStituacaoDev.ACERTO)
-    }
-    updateView()
-  }
-
-  fun updateMotivo(tipoDevolucao: ETipoDevolucao?)= viewModel.exec {
+  fun updateMotivo(tipoDevolucao: ETipoDevolucao?) = viewModel.exec {
     tipoDevolucao ?: return@exec
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-    itens.forEach {bean ->
+    itens.forEach { bean ->
       bean.produtos.forEach {
         it.tipoDevolucao = tipoDevolucao.num
         it.salvaMotivoDevolucao()
       }
+    }
+    updateView()
+  }
+
+  fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(situacao)
     }
     updateView()
   }

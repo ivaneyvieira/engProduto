@@ -276,5 +276,6 @@ enum class EStituacaoDev(val num: Int) {
   TRANSPORTADORA(2),
   EMAIL(3),
   REPOSTO(4),
-  ACERTO(5)
+  ACERTO(5),
+  GARANTIA(6),
 }

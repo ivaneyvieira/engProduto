@@ -64,21 +64,21 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     button("NFD") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaNFD()
+        viewModel.marcaSituacao(EStituacaoDev.NFD)
       }
     }
 
     button("Resposto") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaReposto()
+        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
       }
     }
 
     button("Acerto") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaAcerto()
+        viewModel.marcaSituacao(EStituacaoDev.ACERTO)
       }
     }
   }

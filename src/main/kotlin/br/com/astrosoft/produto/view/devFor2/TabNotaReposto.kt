@@ -54,14 +54,14 @@ class TabNotaReposto(val viewModel: TabNotaRepostoViewModel) :
     button("E-Mail") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaEmail()
+        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
       }
     }
 
     button("Acerto") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaAcerto()
+        viewModel.marcaSituacao(EStituacaoDev.ACERTO)
       }
     }
   }

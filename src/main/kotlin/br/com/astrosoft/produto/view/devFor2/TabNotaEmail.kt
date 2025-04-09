@@ -54,14 +54,14 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     button("Tranportadora") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaTransportadora()
+        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
       }
     }
 
     button("Reposto") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaReposto()
+        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
       }
     }
   }
@@ -162,7 +162,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
   }
 
   override val label: String
-    get() = "Email"
+    get() = "E-mail"
 
   override fun updateComponent() {
     viewModel.updateView()

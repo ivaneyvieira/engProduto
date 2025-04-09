@@ -51,17 +51,17 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
       }
     }
 
-    button("NFD") {
+    button("Garantia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaNFD()
+        viewModel.marcaSituacao(EStituacaoDev.GARANTIA)
       }
     }
 
     button("E-Mail") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaEmail()
+        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
       }
     }
   }

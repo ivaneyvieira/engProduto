@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import kotlin.math.E
 
 class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaAcerto {
@@ -54,7 +55,7 @@ class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
     button("Reposto") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaReposto()
+        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
       }
     }
   }
