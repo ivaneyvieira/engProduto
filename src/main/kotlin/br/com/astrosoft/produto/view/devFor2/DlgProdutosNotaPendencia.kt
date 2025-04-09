@@ -74,13 +74,13 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
         integerField("Cod") {
           this.isReadOnly = true
           this.width = "3.5rem"
-          this.value = transp
+          this.value = nota.vendno
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
         textField("Fornecedor") {
           this.isReadOnly = true
           this.width = "20rem"
-          this.value = transportadora
+          this.value = nota.fornecedor
         }
       },
       toolBar = {
