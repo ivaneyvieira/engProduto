@@ -2,13 +2,12 @@ package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaAcertoViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
@@ -24,25 +23,110 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, val nota: Not
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-    val fornecedor = nota.fornecedor ?: ""
     val emissao = nota.emissao.format()
-    val loja = nota.lojaSigla ?: ""
-    val pedido = nota.pedComp?.toString() ?: ""
     val numeroInterno = nota.ni
-    val transp = nota.transp
-    val transportadora = nota.transportadora
-    val tipoDevolucao = nota.tipoDevolucaoName?.uppercase() ?: ""
-    val cte = nota.cte
-
-    val linha1 = "Fornecedor: $fornecedor"
-    val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
-    val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
-    val linha4 = "Motivo Devolução: $tipoDevolucao"
-    val observacao = nota.obsDevolucao ?: ""
-    val observacaoNota = if (observacao.isEmpty()) "" else "|Observação: $observacao"
 
     form = SubWindowForm(
-      title = "$linha1|$linha2|$linha3|$linha4$observacaoNota",
+      header = {
+        this.isPadding = false
+        this.isMargin = false
+        this.isSpacing = false
+
+        horizontalBlock {
+          this.isSpacing = true
+
+          integerField("NI") {
+            this.isReadOnly = true
+            this.width = "6rem"
+            this.value = numeroInterno
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("NFO") {
+            this.isReadOnly = true
+            this.width = "6rem"
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.value = numeroNota
+          }
+          textField("Emissão") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = emissao
+          }
+          textField("Entrada") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.data.format()
+          }
+          integerField("Cod") {
+            this.isReadOnly = true
+            this.width = "3.5rem"
+            this.value = nota.vendno
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("Fornecedor") {
+            this.isReadOnly = true
+            this.width = "20rem"
+            this.value = nota.fornecedor
+          }
+        }
+
+        horizontalBlock {
+          this.isSpacing = true
+
+          textField("Cod") {
+            this.isReadOnly = true
+            this.width = "3.5rem"
+            this.value = nota.transp?.toString()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("Transportadora") {
+            this.isReadOnly = true
+            this.width = "20rem"
+            this.value = nota.transportadora
+          }
+          textField("CTE") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.cte?.toString()
+          }
+          textField("Ped Compra") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.pedComp?.toString()
+          }
+        }
+
+        horizontalBlock {
+          this.isSpacing = true
+
+          textField("NFD") {
+            this.isReadOnly = true
+            this.width = "6rem"
+            this.value = nota.notaDevolucao ?: ""
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+          textField("Emissão") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.value = nota.emissaoDevolucao.format()
+          }
+          datePicker("Coleta") {
+            this.localePtBr()
+            this.width = "10rem"
+            this.value = nota.dataColeta
+
+            addValueChangeListener {
+              nota.dataColeta = this.value
+              viewModel.saveNota(nota)
+            }
+          }
+          textField("Motivo Devolução") {
+            this.isReadOnly = true
+            this.width = "15rem"
+            this.value = nota.tipoDevolucaoName ?: ""
+          }
+        }
+      },
       toolBar = {
         integerField("Volume") {
           this.value = nota.volumeDevolucao ?: 0

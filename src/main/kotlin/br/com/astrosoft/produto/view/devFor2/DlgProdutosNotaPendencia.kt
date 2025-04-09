@@ -26,22 +26,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
 
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-    val fornecedor = nota.fornecedor ?: ""
     val emissao = nota.emissao.format()
-    val loja = nota.lojaSigla ?: ""
-    val pedido = nota.pedComp?.toString() ?: ""
     val numeroInterno = nota.ni
-    val transp = nota.transp
-    val transportadora = nota.transportadora
-    val tipoDevolucao = nota.tipoDevolucaoName?.uppercase() ?: ""
-    val cte = nota.cte
-
-    val linha1 = "Fornecedor: $fornecedor"
-    val linha2 = "NI: $numeroInterno - Nota: $numeroNota - Emissão: $emissao - Ped Compra: $loja$pedido"
-    val linha3 = "Transportadora: $transp - $transportadora     CTE: $cte"
-    val linha4 = "Motivo Devolução: $tipoDevolucao"
-    val observacao = nota.obsDevolucao ?: ""
-    val observacaoNota = if (observacao.isEmpty()) "" else "|Observação: $observacao"
 
     form = SubWindowForm(
       header = {
