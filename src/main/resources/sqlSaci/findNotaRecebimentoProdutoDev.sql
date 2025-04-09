@@ -148,11 +148,11 @@ FROM
               ON C.no = N.carrno
     LEFT JOIN sqldados.store        AS L
               ON L.no = N.storeno
+    LEFT JOIN T_ARQCOLETA           AS AC
+              USING (invno, tipoDevolucao, numero)
     LEFT JOIN sqldados.invAdicional AS IA
               ON IA.invno = A.invno
                 AND IA.tipoDevolucao = A.tipoDevolucao
-    LEFT JOIN T_ARQCOLETA           AS AC
-              USING (invno, tipoDevolucao, numero)
     LEFT JOIN sqldados.carr         AS CA
               ON CA.no = IA.carrno
     LEFT JOIN sqldados.users        AS UA
@@ -310,6 +310,8 @@ FROM
     LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_RESULT;
+CREATE TEMPORARY TABLE T_RESULT
 SELECT loja,
        lojaSigla,
        data,
@@ -382,7 +384,8 @@ SELECT loja,
        dataDevolucao,
        CASE
          WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN 1
-         WHEN Q.situacaoDev = 1 AND countColeta > 0                         THEN 2
+         WHEN ((Q.situacaoDev = 1) OR (Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '')) AND
+              countColeta > 0                                               THEN 2
                                                                             ELSE Q.situacaoDev
        END AS situacaoDev,
        userDevolucao,
@@ -400,4 +403,16 @@ FROM
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
-   AND (situacaoDev = :situacaoDev)
+   AND (situacaoDev = :situacaoDev);
+
+UPDATE sqldados.iprdAdicionalDev AS I
+  INNER JOIN T_RESULT AS R
+  ON I.numero = R.numeroDevolucao
+    AND I.invno = R.ni
+    AND I.tipoDevolucao = R.tipoDevolucao
+SET I.tipoDevolucao = R.tipoDevolucao
+WHERE I.tipoDevolucao != R.tipoDevolucao;
+
+SELECT *
+FROM
+  T_RESULT
