@@ -20,6 +20,9 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD dataDevolucao int NULL DEFAULT 0;
 
+ALTER TABLE sqldados.invAdicional
+  ADD observacao varchar(160) NULL DEFAULT '';
+
 
 SELECT *
 FROM

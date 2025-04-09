@@ -48,8 +48,11 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
-  fun saveNota(nota: NotaRecebimentoDev) {
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
     nota.save(nota)
+    if(updateGrid){
+      updateView()
+    }
   }
 
   fun findTransportadora(carrno: Int?): Transportadora? {

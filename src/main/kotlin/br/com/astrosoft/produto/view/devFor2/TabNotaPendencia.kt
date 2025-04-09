@@ -2,10 +2,7 @@ package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
@@ -13,6 +10,8 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -75,6 +74,16 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
 
+    this.withEditor(
+        classBean = NotaRecebimentoDev::class,
+        openEditor = {
+          val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+          edit?.focus()
+        },
+        closeEditor = {
+          viewModel.saveNota(nota = it.bean, updateGrid = true)
+        })
+
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
@@ -108,6 +117,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

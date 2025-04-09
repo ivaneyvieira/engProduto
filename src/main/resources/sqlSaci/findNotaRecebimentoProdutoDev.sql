@@ -119,6 +119,7 @@ SELECT I.invno,
        A.numero                                                       AS numeroDevolucao,
        A.tipoDevolucao,
        A.quantDevolucao,
+       IFNULL(IA.observacao, '')                                      AS observacaoDev,
        IA.volume                                                      AS volumeDevolucao,
        IA.peso                                                        AS pesoDevolucao,
        IA.carrno                                                      AS transpDevolucao,
@@ -273,7 +274,8 @@ SELECT N.storeno                                                   AS loja,
        cteDevolucao,
        dataDevolucao,
        IFNULL(situacaoDev, 0)                                      AS situacaoDev,
-       userDevolucao
+       userDevolucao,
+       observacaoDev
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -374,7 +376,8 @@ SELECT loja,
        notaDevolucao,
        emissaoDevolucao,
        valorDevolucao,
-       obsDevolucao
+       obsDevolucao,
+       observacaoDev
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N

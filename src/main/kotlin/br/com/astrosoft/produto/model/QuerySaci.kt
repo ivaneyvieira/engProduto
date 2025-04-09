@@ -2081,6 +2081,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("cte", nota.cteDevolucao)
       addOptionalParameter("data", nota.dataDevolucao.toSaciDate())
       addOptionalParameter("situacaoDev", nota.situacaoDev)
+      addOptionalParameter("observacaoDev", nota.observacaoDev)
       addOptionalParameter("userno", userno)
     }
   }

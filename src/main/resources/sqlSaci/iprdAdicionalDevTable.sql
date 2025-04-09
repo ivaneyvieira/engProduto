@@ -90,6 +90,13 @@ WHERE quantDevolucao > 0;
 
 SELECT invno, numero, tipoDevolucao, seq, date, filename, file
 FROM
-  invAdicionalDevArquivo
+  invAdicionalDevArquivo;
 
 
+/****************************************************************************************/
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  ADD COLUMN observacao varchar(160) DEFAULT '';
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  drop COLUMN observacao;

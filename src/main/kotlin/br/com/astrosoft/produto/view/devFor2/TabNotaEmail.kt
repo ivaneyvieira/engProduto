@@ -100,6 +100,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
