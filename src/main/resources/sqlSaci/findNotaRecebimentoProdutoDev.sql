@@ -297,6 +297,7 @@ FROM
     LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade;
 
+
 SELECT loja,
        lojaSigla,
        data,
