@@ -62,6 +62,15 @@ WHERE issuedate >= 20241001
   AND tipo = 2
   AND status != 1;
 
+DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
+CREATE TEMPORARY TABLE T_ARQCOLETA
+(
+  PRIMARY KEY (invno, tipoDevolucao, numero)
+)
+SELECT invno, tipoDevolucao, numero, SUM(filename LIKE '%COLETA%') AS countColeta
+FROM
+  sqldados.invAdicionalDevArquivo
+GROUP BY invno, tipoDevolucao, numero;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
@@ -127,7 +136,8 @@ SELECT I.invno,
        IA.cet                                                         AS cteDevolucao,
        CAST(IF(IA.dataDevolucao = 0, NULL, IA.dataDevolucao) AS date) AS dataDevolucao,
        IA.situacaoDev                                                 AS situacaoDev,
-       UA.login                                                       AS userDevolucao
+       UA.login                                                       AS userDevolucao,
+       IFNULL(AC.countColeta, 0)                                      AS countColeta
 FROM
   sqldados.iprdAdicionalDev         AS A
     LEFT JOIN sqldados.inv          AS N
@@ -141,6 +151,8 @@ FROM
     LEFT JOIN sqldados.invAdicional AS IA
               ON IA.invno = A.invno
                 AND IA.tipoDevolucao = A.tipoDevolucao
+    LEFT JOIN T_ARQCOLETA           AS AC
+              USING (invno, tipoDevolucao, numero)
     LEFT JOIN sqldados.carr         AS CA
               ON CA.no = IA.carrno
     LEFT JOIN sqldados.users        AS UA
@@ -275,7 +287,8 @@ SELECT N.storeno                                                   AS loja,
        dataDevolucao,
        IFNULL(situacaoDev, 0)                                      AS situacaoDev,
        userDevolucao,
-       observacaoDev
+       observacaoDev,
+       countColeta
 FROM
   T_NOTA                       AS N
     LEFT JOIN  T_VENCIMENTO    AS VC
@@ -296,7 +309,6 @@ FROM
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
     LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade;
-
 
 SELECT loja,
        lojaSigla,
@@ -368,7 +380,11 @@ SELECT loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-       situacaoDev,
+       CASE
+         WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN 1
+         WHEN Q.situacaoDev = 1 AND countColeta > 0                         THEN 2
+                                                                            ELSE Q.situacaoDev
+       END AS situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
