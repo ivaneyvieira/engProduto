@@ -367,11 +367,7 @@ SELECT loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-       CASE
-         WHEN TRIM(IFNULL(N.notaDevolucao, '')) = '' THEN 0
-         WHEN Q.situacaoDev = 0                      THEN 1
-                                                     ELSE Q.situacaoDev
-       END AS situacaoDev,
+       situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,

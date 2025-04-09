@@ -67,6 +67,20 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
         viewModel.marcaNFD()
       }
     }
+
+    button("Resposto") {
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaReposto()
+      }
+    }
+
+    button("Acerto") {
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaAcerto()
+      }
+    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {

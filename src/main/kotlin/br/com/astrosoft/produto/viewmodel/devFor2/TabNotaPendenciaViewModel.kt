@@ -72,6 +72,32 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
     updateView()
   }
 
+
+  fun marcaReposto() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(EStituacaoDev.REPOSTO)
+    }
+    updateView()
+  }
+
+
+  fun marcaAcerto() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(EStituacaoDev.ACERTO)
+    }
+    updateView()
+  }
+
   fun updateMotivo(tipoDevolucao: ETipoDevolucao?)= viewModel.exec {
     tipoDevolucao ?: return@exec
     val itens = subView.notasSelecionadas()
