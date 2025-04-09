@@ -26,10 +26,11 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
-    val invFile = InvFile(
-      seq = null,
+    val invFile = InvFileDev(
       invno = nota.ni,
-      title = nota.tipoDevolucaoEnun?.name ?: "",
+      numero = nota.numeroDevolucao,
+      tipoDevolucao = nota.tipoDevolucao,
+      seq = null,
       date = LocalDate.now(),
       fileName = fileName,
       file = dados,
@@ -69,7 +70,7 @@ interface ITabNotaEmail : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()
-  fun arquivosSelecionados(): List<InvFile>
+  fun arquivosSelecionados(): List<InvFileDev>
   fun produtosSelecionados(): List<NotaRecebimentoProdutoDev>
   fun notasSelecionadas(): List<NotaRecebimentoDev>
   fun updateProduto(): NotaRecebimentoDev?

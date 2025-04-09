@@ -1366,6 +1366,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findInvFile(invno: Int, tipo : ETipoDevolucao, numero: Int): List<InvFileDev> {
+    val sql = "/sqlSaci/invArquivoDev.sql"
+    return query(sql, InvFileDev::class) {
+      addOptionalParameter("invno", invno)
+      addOptionalParameter("tipo", tipo.num)
+      addOptionalParameter("numero", numero)
+    }
+  }
+
   fun updateInvFile(file: InvFile) {
     val sql = "/sqlSaci/invArquivoUpdate.sql"
     script(sql) {
@@ -1377,8 +1386,27 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateInvFile(file: InvFileDev) {
+    val sql = "/sqlSaci/invArquivoUpdateDev.sql"
+    script(sql) {
+      addOptionalParameter("invno", file.invno ?: 0)
+      addOptionalParameter("numero", file.numero ?: 0)
+      addOptionalParameter("tipoDevolucao", file.tipoDevolucao ?: 0)
+      addOptionalParameter("date", file.date.toSaciDate())
+      addOptionalParameter("fileName", file.fileName ?: "")
+      addOptionalParameter("file", file.file)
+    }
+  }
+
   fun deleteInvFile(file: InvFile) {
     val sql = "/sqlSaci/invArquivoDelete.sql"
+    script(sql) {
+      addOptionalParameter("seq", file.seq ?: 0)
+    }
+  }
+
+  fun deleteInvFile(file: InvFileDev) {
+    val sql = "/sqlSaci/invArquivoDeleteDev.sql"
     script(sql) {
       addOptionalParameter("seq", file.seq ?: 0)
     }

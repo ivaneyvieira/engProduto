@@ -117,7 +117,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     dlgArquivo?.update()
   }
 
-  override fun arquivosSelecionados(): List<InvFile> {
+  override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 

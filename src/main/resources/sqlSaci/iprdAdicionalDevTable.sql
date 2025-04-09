@@ -1,3 +1,5 @@
+USE sqldados;
+
 DROP TABLE IF EXISTS sqldados.iprdAdicionalDev;
 CREATE TABLE sqldados.iprdAdicionalDev
 (
@@ -29,13 +31,65 @@ FROM
   T_SEQ;
 
 INSERT INTO sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
-  SELECT invno, prdno, grade, seq AS numero, tipoDevolucao, quantDevolucao
-  FROM
-    sqldados.iprdAdicional
-      INNER JOIN T_SEQ
-                 USING (invno)
-  WHERE quantDevolucao > 0;
+SELECT invno, prdno, grade, seq AS numero, tipoDevolucao, quantDevolucao
+FROM
+  sqldados.iprdAdicional
+    INNER JOIN T_SEQ
+               USING (invno)
+WHERE quantDevolucao > 0;
 
 SELECT *
 FROM
+  sqldados.iprdAdicionalDev;
+
+/******************************************/
+
+DROP TABLE IF EXISTS invAdicionalDevArquivo;
+CREATE TABLE invAdicionalDevArquivo
+(
+  invno         int           NOT NULL,
+  numero        int           NOT NULL,
+  tipoDevolucao int DEFAULT 0 NOT NULL,
+  seq           int AUTO_INCREMENT PRIMARY KEY,
+  date          int           NOT NULL,
+  filename      varchar(100)  NOT NULL,
+  file          mediumblob    NULL,
+  INDEX (invno, tipoDevolucao, numero)
+);
+
+DROP TEMPORARY TABLE IF EXISTS T_FILE;
+CREATE TEMPORARY TABLE T_FILE
+SELECT seq,
+       invno,
+       CASE title
+         WHEN 'AVARIA_TRANSPORTE' THEN 1
+         WHEN 'FALTA_TRANSPORTE'  THEN 2
+         WHEN 'FALTA_FABRICA'     THEN 3
+         WHEN 'VENCIMENTO'        THEN 4
+         WHEN 'DEFEITO_FABRICA'   THEN 7
+         WHEN 'SEM_IDENTIFICACAO' THEN 5
+         WHEN 'EM_DESACORDO'      THEN 6
+         WHEN 'EM_GARANTIA'       THEN 8
+                                  ELSE 0
+       END AS tipoDevolucao,
+       date,
+       filename,
+       file
+FROM
+  invAdicionalArquivos
+HAVING tipoDevolucao > 0;
+
+
+INSERT INTO invAdicionalDevArquivo(invno, tipoDevolucao, numero, date, filename, file)
+SELECT invno, tipoDevolucao, numero, date, filename, file
+FROM
   sqldados.iprdAdicionalDev
+    INNER JOIN T_FILE
+               USING (invno, tipoDevolucao)
+WHERE quantDevolucao > 0;
+
+SELECT invno, numero, tipoDevolucao, seq, date, filename, file
+FROM
+  invAdicionalDevArquivo
+
+

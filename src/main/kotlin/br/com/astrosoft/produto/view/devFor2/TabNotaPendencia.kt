@@ -125,7 +125,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     dlgArquivo?.update()
   }
 
-  override fun arquivosSelecionados(): List<InvFile> {
+  override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 

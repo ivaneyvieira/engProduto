@@ -72,22 +72,11 @@ class NotaRecebimentoDev(
     return notaRefresh
   }
 
-  fun arquivos(): List<InvFile> {
-    val tipoName = tipoDevolucaoEnun?.name
-    val outrosTipos = ETipoDevolucao.entries.filter { it.name != tipoName }.map { it.name }
-    val listFile = InvFile.findAll(this.ni ?: 0)
-    val marcaDevolucao = (tipoDevolucao ?: 0) > 0
-    return if (marcaDevolucao) {
-      if (tipoName == null) {
-        listFile
-      } else {
-        listFile.filter {
-          (it.title == tipoName) || (it.title !in outrosTipos)
-        }
-      }
-    } else {
-      listFile
-    }
+  fun arquivos(): List<InvFileDev> {
+    val invno = this.ni ?: return emptyList()
+    val tipo = ETipoDevolucao.findByNum(tipoDevolucao ?: 0) ?: return emptyList()
+    val numero = this.numeroDevolucao ?: return emptyList()
+    return InvFileDev.findAll(invno, tipo, numero)
   }
 
   fun save(nota: NotaRecebimentoDev) {
