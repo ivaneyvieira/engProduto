@@ -49,7 +49,40 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
     val observacaoNota = if (observacao.isEmpty()) "" else "|Observação: $observacao"
 
     form = SubWindowForm(
-      title = "$linha1|$linha2|$linha3|$linha4$observacaoNota",
+      header = {
+        integerField("NI") {
+          this.isReadOnly = true
+          this.width = "6rem"
+          this.value = numeroInterno
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        }
+        textField("NFO") {
+          this.isReadOnly = true
+          this.width = "6rem"
+          this.value = numeroNota
+        }
+        textField("Emissão") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.value = emissao
+        }
+        textField("Entrada") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.value = nota.data.format()
+        }
+        integerField("Cod") {
+          this.isReadOnly = true
+          this.width = "3.5rem"
+          this.value = transp
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        }
+        textField("Fornecedor") {
+          this.isReadOnly = true
+          this.width = "20rem"
+          this.value = transportadora
+        }
+      },
       toolBar = {
         integerField("Volume") {
           this.value = nota.volumeDevolucao ?: 0
