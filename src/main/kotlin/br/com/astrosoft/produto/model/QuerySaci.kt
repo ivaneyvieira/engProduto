@@ -1393,7 +1393,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numero", file.numero ?: 0)
       addOptionalParameter("tipoDevolucao", file.tipoDevolucao ?: 0)
       addOptionalParameter("date", file.date.toSaciDate())
-      addOptionalParameter("fileName", file.fileName ?: "")
+      addOptionalParameter("filename", file.fileName ?: "")
       addOptionalParameter("file", file.file)
     }
   }
