@@ -386,8 +386,9 @@ SELECT loja,
        dataDevolucao,
        CASE
          WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN 1
-         WHEN ((Q.situacaoDev = 1) OR (Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '')) AND
-              countColeta > 0                                               THEN 2
+         WHEN ((Q.situacaoDev = 1)) AND countColeta > 0                     THEN 2
+         WHEN tipoDevolucao = 8/*Garantia*/ AND TRIM(IFNULL(N.notaDevolucao, '')) != ''
+                                                                            THEN 6 /*Garantia*/
                                                                             ELSE Q.situacaoDev
        END AS situacaoDev,
        userDevolucao,
@@ -413,6 +414,8 @@ UPDATE sqldados.iprdAdicionalDev AS I
   ON I.numero = R.numeroDevolucao
     AND I.invno = R.ni
     AND I.tipoDevolucao = R.tipoDevolucao
+    AND I.prdno = R.prdno
+    AND I.grade = R.grade
 SET I.tipoDevolucao = R.tipoDevolucao
 WHERE I.tipoDevolucao != R.tipoDevolucao;
 
