@@ -132,6 +132,7 @@ data class FiltroPrecificacao(
   val codigo: Int,
   val listVend: List<Int>,
   val tributacao: String,
+  val mva: String,
   val typeno: String,
   val clno: Int,
   val marcaPonto: EMarcaPonto,

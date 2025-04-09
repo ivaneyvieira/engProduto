@@ -202,6 +202,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       codigo = edtCodigo.value ?: 0,
       listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
       tributacao = edtTributacao.value ?: "",
+      mva = "",
       typeno = edtType.value ?: "",
       clno = edtCl.value ?: 0,
       marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,

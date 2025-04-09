@@ -45,8 +45,10 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
@@ -60,6 +62,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
   private lateinit var edtType: TextField
   private lateinit var edtCl: IntegerField
   private lateinit var edtTributacao: TextField
+  private lateinit var edtMVA: TextField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtQuery: TextField
 
@@ -89,6 +92,15 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
     edtTributacao = textField("Tributação") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "80px"
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    edtMVA = textField("MVA") {
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.width = "80px"
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -196,6 +208,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
       tributacao = edtTributacao.value ?: "",
       typeno = edtType.value ?: "",
       clno = edtCl.value ?: 0,
+      mva = edtMVA.value?.replace(',', '.') ?: "",
       marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,
       query = edtQuery.value ?: "",
     )

@@ -1748,6 +1748,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("listVend", listVend)
       addOptionalParameter("tributacao", filtro.tributacao)
+      addOptionalParameter("mva", filtro.mva)
       addOptionalParameter("typeno", filtro.typeno)
       addOptionalParameter("clno", filtro.clno)
       addOptionalParameter("marca", filtro.marcaPonto.codigo)

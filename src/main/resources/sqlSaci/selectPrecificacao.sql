@@ -2,6 +2,7 @@ DO @CODIGO := :codigo;
 DO @PRDNO := LPAD(@CODIGO, 16, ' ');
 DO @LISTVEND := REPLACE(:listVend, ' ', '');
 DO @TRIBUTACAO := :tributacao;
+DO @MVA := CONCAT(:mva, '%');
 DO @TYPENO := :typeno;
 DO @CLNO := :clno;
 DO @QUERY := :query;
@@ -80,6 +81,7 @@ FROM
 WHERE P.storeno = 10
   AND P.prdno < LPAD('960001', 16, ' ')
   AND (P.prdno = @PRDNO OR @CODIGO = 0)
+  AND (ROUND(IF(PD.taxno = '00', 0.00, IFNULL(PD.lucroTributado, 0)) / 100, 4) LIKE @MVA OR @MVA = '')
   AND (FIND_IN_SET(PD.mfno, @LISTVEND) OR @LISTVEND = '')
   AND (FIND_IN_SET(PD.typeno, @TYPENO) OR @TYPENO = '')
   AND (PD.clno = @CLNO OR PD.deptno = @CLNO OR PD.groupno = @CLNO OR @CLNO = 0)
