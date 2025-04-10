@@ -6,10 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
-import com.github.mvysny.karibudsl.v10.bigDecimalField
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
@@ -25,108 +22,117 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   private var edtTransportadora: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
-    val numeroNota = nota.nfEntrada ?: ""
-    val emissao = nota.emissao.format()
-    val numeroInterno = nota.ni
-
     form = SubWindowForm(
       header = {
-        this.isPadding = false
-        this.isMargin = false
-        this.isSpacing = false
-
+        this.setWidthFull()
         horizontalBlock {
+          this.setWidthFull()
           this.isSpacing = true
+          verticalBlock {
+            this.isPadding = false
+            this.isMargin = false
+            this.isSpacing = false
 
-          integerField("NI") {
-            this.isReadOnly = true
-            this.width = "6rem"
-            this.value = numeroInterno
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          }
-          textField("NFO") {
-            this.isReadOnly = true
-            this.width = "6rem"
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.value = numeroNota
-          }
-          textField("Emissão") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = emissao
-          }
-          textField("Entrada") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = nota.data.format()
-          }
-          integerField("Cod") {
-            this.isReadOnly = true
-            this.width = "3.5rem"
-            this.value = nota.vendno
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          }
-          textField("Fornecedor") {
-            this.isReadOnly = true
-            this.width = "20rem"
-            this.value = nota.fornecedor
-          }
-        }
+            horizontalBlock {
+              this.isSpacing = true
 
-        horizontalBlock {
-          this.isSpacing = true
+              integerField("NI") {
+                this.isReadOnly = true
+                this.width = "6rem"
+                this.value = nota.ni ?: 0
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              }
+              textField("NFO") {
+                this.isReadOnly = true
+                this.width = "6rem"
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+                this.value = nota.nfEntrada ?: ""
+              }
+              textField("Emissão") {
+                this.isReadOnly = true
+                this.width = "7rem"
+                this.value = nota.emissao.format()
+              }
+              textField("Entrada") {
+                this.isReadOnly = true
+                this.width = "7rem"
+                this.value = nota.data.format()
+              }
+              integerField("Cod") {
+                this.isReadOnly = true
+                this.width = "3.5rem"
+                this.value = nota.vendno
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              }
+              textField("Fornecedor") {
+                this.isReadOnly = true
+                this.width = "20rem"
+                this.value = nota.fornecedor
+              }
+            }
 
-          textField("Cod") {
-            this.isReadOnly = true
-            this.width = "3.5rem"
-            this.value = nota.transp?.toString()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          }
-          textField("Transportadora") {
-            this.isReadOnly = true
-            this.width = "20rem"
-            this.value = nota.transportadora
-          }
-          textField("CTE") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = nota.cte?.toString()
-          }
-          textField("Ped Compra") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = nota.pedComp?.toString()
-          }
-        }
+            horizontalBlock {
+              this.isSpacing = true
 
-        horizontalBlock {
-          this.isSpacing = true
+              textField("Cod") {
+                this.isReadOnly = true
+                this.width = "3.5rem"
+                this.value = nota.transp?.toString()
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              }
+              textField("Transportadora") {
+                this.isReadOnly = true
+                this.width = "20rem"
+                this.value = nota.transportadora
+              }
+              textField("CTE") {
+                this.isReadOnly = true
+                this.width = "7rem"
+                this.value = nota.cte?.toString()
+              }
+              textField("Ped Compra") {
+                this.isReadOnly = true
+                this.width = "7rem"
+                this.value = nota.pedComp?.toString()
+              }
+            }
 
-          textField("NFD") {
-            this.isReadOnly = true
-            this.width = "6rem"
-            this.value = nota.notaDevolucao ?: ""
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          }
-          textField("Emissão") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = nota.emissaoDevolucao.format()
-          }
-          datePicker("Coleta") {
-            this.localePtBr()
-            this.width = "10rem"
-            this.value = nota.dataColeta
+            horizontalBlock {
+              this.isSpacing = true
 
-            addValueChangeListener {
-              nota.dataColeta = this.value
-              viewModel.saveNota(nota)
+              textField("NFD") {
+                this.isReadOnly = true
+                this.width = "6rem"
+                this.value = nota.notaDevolucao ?: ""
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              }
+              textField("Emissão") {
+                this.isReadOnly = true
+                this.width = "7rem"
+                this.value = nota.emissaoDevolucao.format()
+              }
+              datePicker("Coleta") {
+                this.localePtBr()
+                this.width = "10rem"
+                this.value = nota.dataColeta
+
+                addValueChangeListener {
+                  nota.dataColeta = this.value
+                  viewModel.saveNota(nota)
+                }
+              }
+              textField("Motivo Devolução") {
+                this.isReadOnly = true
+                this.width = "15rem"
+                this.value = nota.tipoDevolucaoName ?: ""
+              }
             }
           }
-          textField("Motivo Devolução") {
+          textArea("Dados Adicionais") {
+            this.isExpand = true
             this.isReadOnly = true
-            this.width = "15rem"
-            this.value = nota.tipoDevolucaoName ?: ""
+            this.setSizeFull()
+            this.value = nota.obsDevolucao ?: ""
           }
         }
       },
