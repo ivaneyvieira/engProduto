@@ -385,11 +385,14 @@ SELECT loja,
        cteDevolucao,
        dataDevolucao,
        CASE
-         WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN 1
-         WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0               THEN 2
-         WHEN tipoDevolucao = 8/*Garantia*/ AND TRIM(IFNULL(N.notaDevolucao, '')) != ''
-                                                                            THEN 6 /*Garantia*/
-                                                                            ELSE Q.situacaoDev
+         WHEN Q.situacaoDev = 0
+           AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN IF(countColeta > 0, 2, 1)
+         WHEN ((Q.situacaoDev IN (1, 6)))
+           AND countColeta > 0                         THEN 2
+         WHEN tipoDevolucao = 8/*Garantia*/
+           AND TRIM(IFNULL(N.notaDevolucao, '')) != ''
+                                                       THEN IF(countColeta > 0, 2, 6)
+                                                       ELSE Q.situacaoDev
        END AS situacaoDev,
        userDevolucao,
        notaDevolucao,
@@ -411,7 +414,7 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
 
 UPDATE sqldados.invAdicional AS I
   INNER JOIN T_RESULT AS R
-    ON I.invno = R.ni
+  ON I.invno = R.ni
     AND I.tipoDevolucao = R.tipoDevolucao
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
