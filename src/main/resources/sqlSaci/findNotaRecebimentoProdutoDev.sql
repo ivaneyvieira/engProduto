@@ -409,15 +409,12 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
    AND (situacaoDev = :situacaoDev);
 
-UPDATE sqldados.iprdAdicionalDev AS I
+UPDATE sqldados.invAdicional AS I
   INNER JOIN T_RESULT AS R
-  ON I.numero = R.numeroDevolucao
-    AND I.invno = R.ni
+    ON I.invno = R.ni
     AND I.tipoDevolucao = R.tipoDevolucao
-    AND I.prdno = R.prdno
-    AND I.grade = R.grade
-SET I.tipoDevolucao = R.tipoDevolucao
-WHERE I.tipoDevolucao != R.tipoDevolucao;
+SET I.situacaoDev = R.situacaoDev
+WHERE I.situacaoDev != R.situacaoDev;
 
 SELECT *
 FROM
