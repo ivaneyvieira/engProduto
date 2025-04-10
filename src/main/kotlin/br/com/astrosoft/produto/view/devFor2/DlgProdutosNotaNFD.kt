@@ -19,13 +19,11 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
-    val numeroNota = nota.nfEntrada ?: ""
-    val emissao = nota.emissao.format()
-    val numeroInterno = nota.ni
-
     form = SubWindowForm(
       header = {
         this.setWidthFull()
+        this.isPadding = false
+        this.isMargin = false
         horizontalBlock {
           this.setWidthFull()
           this.isSpacing = true
@@ -36,6 +34,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
 
             horizontalBlock {
               this.isSpacing = true
+              this.width = "55rem"
 
               integerField("NI") {
                 this.isReadOnly = true
@@ -67,13 +66,14 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
               }
               textField("Fornecedor") {
                 this.isReadOnly = true
-                this.width = "20rem"
+                this.isExpand = true
                 this.value = nota.fornecedor
               }
             }
 
             horizontalBlock {
               this.isSpacing = true
+              this.setWidthFull()
 
               textField("Cod") {
                 this.isReadOnly = true
@@ -83,7 +83,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
               }
               textField("Transportadora") {
                 this.isReadOnly = true
-                this.width = "20rem"
+                this.isExpand = true
                 this.value = nota.transportadora
               }
               textField("CTE") {
@@ -100,10 +100,11 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
 
             horizontalBlock {
               this.isSpacing = true
+              this.setWidthFull()
 
               textField("NFD") {
                 this.isReadOnly = true
-                this.width = "6rem"
+                this.width = "7rem"
                 this.value = nota.notaDevolucao ?: ""
                 this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               }
@@ -124,7 +125,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
               }
               textField("Motivo Devolução") {
                 this.isReadOnly = true
-                this.width = "15rem"
+                this.isExpand = true
                 this.value = nota.tipoDevolucaoName ?: ""
               }
             }
