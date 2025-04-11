@@ -136,9 +136,10 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
             this.isSpacing = false
             this.setSizeFull()
             textArea("Dados Adicionais") {
+              this.width = "27rem"
               this.isExpand = true
               this.isReadOnly = true
-              this.setSizeFull()
+              //this.setSizeFull()
               this.value = nota.obsDevolucao ?: ""
             }
           }
