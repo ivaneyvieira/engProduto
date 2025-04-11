@@ -1940,8 +1940,30 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun garantiaNovo(numero: Int, numLoja: Int): ProdutoEstoqueGarantia? {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaNovo.sql"
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    return query(sql, ProdutoEstoqueGarantia::class) {
+      addOptionalParameter("numLoja", numLoja)
+      addOptionalParameter("numero", numero)
+      addOptionalParameter("login", user?.login ?: "")
+      addOptionalParameter("usuario", user?.name ?: "")
+      addOptionalParameter("data", LocalDate.now().toSaciDate())
+      addOptionalParameter("hora", LocalTime.now().toSecondOfDay())
+    }.firstOrNull()
+  }
+
   fun acertoProximo(numLoja: Int): Int {
     val sql = "/sqlSaci/produtoEstoqueAcertoProximo.sql"
+    return query(sql, Count::class) {
+      addOptionalParameter("numLoja", numLoja)
+    }.firstOrNull()?.quant ?: 1
+  }
+
+  fun garantiaProximo(numLoja: Int): Int {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaProximo.sql"
     return query(sql, Count::class) {
       addOptionalParameter("numLoja", numLoja)
     }.firstOrNull()?.quant ?: 1
@@ -1966,9 +1988,33 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun garantiaUpdate(produto: ProdutoEstoqueGarantia) {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaUpdate.sql"
+    script(sql) {
+      addOptionalParameter("numero", produto.numero)
+      addOptionalParameter("numloja", produto.numloja)
+      addOptionalParameter("data", produto.data.toSaciDate())
+      addOptionalParameter("hora", produto.hora)
+      addOptionalParameter("usuario", produto.usuario)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("estoqueSis", produto.estoqueSis)
+    }
+  }
+
   fun acertoFindAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
     val sql = "/sqlSaci/produtoEstoqueAcertoFindAll.sql"
     return query(sql, ProdutoEstoqueAcerto::class) {
+      addOptionalParameter("numLoja", filtro.numLoja)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("numero", filtro.numero)
+    }
+  }
+
+  fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoEstoqueGarantia> {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaFindAll.sql"
+    return query(sql, ProdutoEstoqueGarantia::class) {
       addOptionalParameter("numLoja", filtro.numLoja)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
@@ -1986,7 +2032,25 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 0) > 0
   }
 
+  fun jaGravadoGarantia(produtoEstoqueGarantia: ProdutoEstoqueGarantia): Boolean {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaJaGravado.sql"
+    return (query(sql, Count::class) {
+      addOptionalParameter("numLoja", produtoEstoqueGarantia.numloja)
+      addOptionalParameter("data", produtoEstoqueGarantia.data.toSaciDate())
+      addOptionalParameter("prdno", produtoEstoqueGarantia.prdno)
+      addOptionalParameter("grade", produtoEstoqueGarantia.grade)
+    }.firstOrNull()?.quant ?: 0) > 0
+  }
+
   fun acertoCancela(produtoEstoqueAcerto: EstoqueAcerto) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
+    script(sql) {
+      addOptionalParameter("numloja", produtoEstoqueAcerto.numloja)
+      addOptionalParameter("numero", produtoEstoqueAcerto.numero)
+    }
+  }
+
+  fun garantiaCancela(produtoEstoqueAcerto: EstoqueGarantia) {
     val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
     script(sql) {
       addOptionalParameter("numloja", produtoEstoqueAcerto.numloja)
@@ -1999,6 +2063,16 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.loja)
       addOptionalParameter("numero", produtoEstoque.numeroAcerto)
+      addOptionalParameter("prdno", produtoEstoque.prdno)
+      addOptionalParameter("grade", produtoEstoque.grade)
+    }
+  }
+
+  fun removeGarantiaProduto(produtoEstoque: ProdutoEstoqueGarantia) {
+    val sql = "/sqlSaci/produtoEstoqueGarantiaLimpa.sql"
+    script(sql) {
+      addOptionalParameter("numLoja", produtoEstoque.numloja)
+      addOptionalParameter("numero", produtoEstoque.numero)
       addOptionalParameter("prdno", produtoEstoque.prdno)
       addOptionalParameter("grade", produtoEstoque.grade)
     }
@@ -2030,6 +2104,15 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numloja", acertoEstoque.numloja)
       addOptionalParameter("numero", acertoEstoque.numero)
       addOptionalParameter("observacao", acertoEstoque.observacao)
+    }
+  }
+
+  fun updateGarantia(garantiaEstoque: EstoqueGarantia) {
+    val sql = "/sqlSaci/produtoObservacaoGarantiaUpdate.sql"
+    script(sql) {
+      addOptionalParameter("numloja", garantiaEstoque.numloja)
+      addOptionalParameter("numero", garantiaEstoque.numero)
+      addOptionalParameter("observacao", garantiaEstoque.observacao)
     }
   }
 

@@ -107,25 +107,24 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
     val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
 
-    val produtosAcerto = produtos.toAcerto(numero)
+    val produtosGarantia = produtos.toGarantia(numero)
 
     val report = PrintProdutosConferenciaEstoque2("Relatório de Estoque")
     val user = AppConfig.userLogin() as? UserSaci
 
     report.print(
       dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = { form ->
-        if (user?.estoqueGravaAcerto != true) {
-          viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+        if (user?.estoqueGravaGarantia != true) {
+          viewModel.view.showWarning("Usuário não tem permissão para gravar garantia")
         } else {
-          val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
+          val jaGravado = produtosGarantia.firstOrNull { it.jaGravadoGarantia() }
           if (jaGravado != null) {
-            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
+            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado na garantia")
           } else {
             subView.autorizaAcerto { user ->
               form.close()
-              produtosAcerto.forEach {
-                it.login = user.login
-                it.save()
+              produtosGarantia.forEach {
+                it.saveGarantia()
               }
               produtos.forEach { produto ->
                 produto.estoqueUser = null
