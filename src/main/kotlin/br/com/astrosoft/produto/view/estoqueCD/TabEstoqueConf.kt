@@ -181,27 +181,19 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           }
         }
 
+        this.button("Garantia") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeProdutosGarantia()
+          }
+        }
+
         this.button("Desmarcar") {
           this.icon = VaadinIcon.CLOSE.create()
           onClick {
             viewModel.desmarcaProduto()
           }
         }
-
-        /*
-                this.button("Acerto") {
-                  this.icon = VaadinIcon.PRINT.create()
-                  onClick {
-                    viewModel.imprimeProdutosAcerto()
-                  }
-                }
-
-                this.button("Limpa Acerto") {
-                  this.icon = VaadinIcon.CLOSE.create()
-                  onClick {
-                    viewModel.limpaAcerto()
-                  }
-                }*/
 
         cmdEstoque = select("Estoque") {
           this.width = "100px"
@@ -218,7 +210,6 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
 
         edtSaldo = integerField("Saldo") {
           this.width = "100px"
-          //this.isClearButtonVisible = true
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.value = 0
@@ -261,16 +252,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     columnGrid(ProdutoEstoque::preco, header = "Preço", width = "80px")
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    //columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
-    //columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
-    //columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "100px")
-    //columnGrid(ProdutoEstoque::estoqueData, header = "Data Conf", width = "100px")
-    //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
-    //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
-    //columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-    //columnGrid(ProdutoEstoque::estoqueLogin, header = "Usu Conf", width = "100px")
     columnGrid(ProdutoEstoque::numeroAcerto, header = "Pedido")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {
@@ -278,7 +260,6 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       }
     }
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
 

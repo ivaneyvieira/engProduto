@@ -31,23 +31,6 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
-  /*
-    private fun fetchKardecHoje(produto: ProdutoEstoque): List<ProdutoKardec> {
-      val date = LocalDate.now()
-      val lista: List<ProdutoKardec> =
-          produto.recebimentos(date) +
-          produto.ressuprimento(date) +
-          produto.expedicao(date) +
-          produto.reposicao(date) +
-          produto.acertoEstoque(date)
-      return lista.ajustaOrdem()
-    }
-
-    fun updateKardec() = viewModel.exec {
-      val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-      ProcessamentoKardec.updateKardec(produtos)
-      subView.reloadGrid()
-    }*/
 
   override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
     if (bean != null) {
@@ -108,73 +91,59 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     )
   }
 
-  /*
-  fun imprimeProdutosAcerto() = viewModel.exec {
-    val produtos = subView.itensSelecionados().filter {
-      (it.estoqueDif ?: 0) != 0
-    }.sortedBy { it.estoqueDif ?: 999999 }
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto válido selecionado")
+  fun imprimeProdutosGarantia() = viewModel.exec {
+    val filtroVazio = subView.filtroVazio()
+    val numLoja = filtroVazio.loja
+    val userno = AppConfig.userLogin()?.no ?: 0
+    val data = LocalDate.now()
+
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
+      it.marcadoConf(userno, data)
     }
 
-    val report = PrintProdutosConferenciaAcerto()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
 
-    val produtosAcerto = produtos.toAcerto()
+    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
 
+    val produtosAcerto = produtos.toAcerto(numero)
+
+    val report = PrintProdutosConferenciaEstoque2("Relatório de Estoque")
     val user = AppConfig.userLogin() as? UserSaci
 
     report.print(
-
-      dados = produtosAcerto, printer = subView.printerPreview(
-        showPrintBunton = false,
-        actionSave = {
-          if (user?.estoqueGravaAcerto != true) {
-            viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+      dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = { form ->
+        if (user?.estoqueGravaAcerto != true) {
+          viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+        } else {
+          val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
+          if (jaGravado != null) {
+            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
           } else {
-            val jaGravado = produtosAcerto.firstOrNull { it.jaGravado() }
-            if (jaGravado != null) {
-              viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado")
-            } else {
-              subView.autorizaAcerto {
-                produtosAcerto.forEach {
-                  it.save()
-                }
-
-                produtos.forEach { prd ->
-                  prd.estoqueCD = null
-                  prd.estoqueLoja = null
-                  prd.estoqueData = null
-                  prd.estoqueUser = null
-                  prd.estoqueLogin = null
-                  prd.update()
-                }
-                subView.reloadGrid()
+            subView.autorizaAcerto { user ->
+              form.close()
+              produtosAcerto.forEach {
+                it.login = user.login
+                it.save()
               }
+              produtos.forEach { produto ->
+                produto.estoqueUser = null
+                produto.estoqueLogin = null
+                produto.estoqueData = null
+              }
+              ProdutoEstoque.update(produtos)
+              updateView()
             }
           }
-        })
+        }
+      })
     )
-  }*/
+  }
 
   fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     return ProcessamentoKardec.kardec(produto)
   }
-  /*
-    fun limpaAcerto() {
-      val itensSelecionado = subView.itensSelecionados()
-      if (itensSelecionado.isEmpty()) {
-        fail("Nenhum acerto selecionado")
-      }
-      viewModel.view.showQuestion("Confirma a limpeza dos acertos selecionados?") {
-        itensSelecionado.forEach { produto ->
-          produto.estoqueCD = null
-          produto.estoqueLoja = null
-          produto.limpaAcerto()
-          produto.update()
-        }
-        updateView()
-      }
-    }*/
 
   fun marcaProduto() {
     val listaSelecionando = subView.itensSelecionados()
