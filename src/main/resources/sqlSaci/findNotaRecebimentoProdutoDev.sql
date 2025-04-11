@@ -385,13 +385,14 @@ SELECT loja,
        cteDevolucao,
        dataDevolucao,
        CASE
+         WHEN tipoDevolucao = 8/*Garantia*/
+           AND Q.situacaoDev = 0
+           AND TRIM(IFNULL(N.notaDevolucao, '')) != ''
+                                                       THEN IF(countColeta > 0, 2, 6)
          WHEN Q.situacaoDev = 0
            AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN IF(countColeta > 0, 2, 1)
          WHEN ((Q.situacaoDev IN (1, 6)))
            AND countColeta > 0                         THEN 2
-         WHEN tipoDevolucao = 8/*Garantia*/
-           AND TRIM(IFNULL(N.notaDevolucao, '')) != ''
-                                                       THEN IF(countColeta > 0, 2, 6)
                                                        ELSE Q.situacaoDev
        END AS situacaoDev,
        userDevolucao,
