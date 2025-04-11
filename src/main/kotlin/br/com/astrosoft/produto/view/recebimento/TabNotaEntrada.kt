@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaEntrada
+import br.com.astrosoft.produto.viewmodel.recebimento.ResultDialog
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
 
 import com.github.mvysny.karibudsl.v10.*
@@ -187,10 +188,36 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     return dlgProduto?.updateProduto()
   }
 
-  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: String, block: () -> Unit) {
-    val form = FormDevoucao(produtos)
-    DialogHelper.showForm(caption = "Devolução: $motivo", form = form) {
-      block()
+  override fun dlgDevoucao(
+    produtos: List<NotaRecebimentoProduto>,
+    motivo: ETipoDevolucao,
+    block: (numero: Int?, msg: String) -> Unit
+  ) {
+    val form = FormDevoucao(motivo, produtos)
+    DialogHelper.showForm(caption = "Devolução: ${motivo.descricao}", form = form) {
+      val (numero, msg) = if (motivo.notasMultiplas) {
+        val numeroForm = form.numero()
+        val numeroInformado = form.numeroInformado()
+        if (numeroInformado) {
+          if (numeroForm == null) {
+            ResultDialog(msg = "Número da nota não informado")
+          } else {
+            val temNota = viewModel.findNota(numeroForm).all {
+              it.tipoDevolucaoEnun == motivo
+            }
+            if (temNota) {
+              ResultDialog(numeroForm)
+            } else {
+              ResultDialog(msg = "Numero de nota não possui o mesmo motivo")
+            }
+          }
+        } else {
+          ResultDialog(numero = viewModel.proximoNumeroDevolucao())
+        }
+      } else {
+        ResultDialog(viewModel.proximoNumeroDevolucao(), "")
+      }
+      block(numero, msg)
     }
   }
 

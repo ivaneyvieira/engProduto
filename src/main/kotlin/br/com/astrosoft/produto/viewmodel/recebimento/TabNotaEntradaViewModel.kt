@@ -89,22 +89,29 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
     preview.print(buf)
   }
 
+  fun proximoNumeroDevolucao(): Int {
+    return saci.proximoNumeroDevolucao()
+  }
+
   fun devolucaoProduto(produtos: List<NotaRecebimentoProduto>, tipo: ETipoDevolucao) = viewModel.exec {
 
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.dlgDevoucao(produtos, tipo.descricao) {
+    subView.dlgDevoucao(produtos, tipo) { numero: Int?, msg: String ->
+      if (numero == null) {
+        viewModel.view.showError(msg)
+      } else {
+        produtos.forEach { produto ->
+          produto.tipoDevolucao = tipo.num
+          produto.updateDevolucao(numero, tipo)
+        }
 
-      val numero = saci.proximoNumeroDevolucao()
+        viewModel.view.showInformation("Criada registro de devolução: $numero com o motivo ${tipo.descricao}")
 
-      produtos.forEach { produto ->
-        produto.tipoDevolucao = tipo.num
-        produto.updateDevolucao(numero, tipo)
+        subView.updateProduto()
       }
-
-      subView.updateProduto()
     }
   }
 
@@ -118,6 +125,10 @@ class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
     }
     subView.updateProduto()
   }
+
+  fun findNota(numeroForm: Int): List<DadosDevolucao> {
+    return DadosDevolucao.findNota(numeroForm)
+  }
 }
 
 interface ITabNotaEntrada : ITabView {
@@ -128,5 +139,14 @@ interface ITabNotaEntrada : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
-  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: String, block: () -> Unit)
+  fun dlgDevoucao(
+    produtos: List<NotaRecebimentoProduto>,
+    motivo: ETipoDevolucao,
+    block: (numero: Int?, msg: String) -> Unit
+  )
 }
+
+data class ResultDialog(
+  val numero: Int? = null,
+  val msg: String = "",
+)

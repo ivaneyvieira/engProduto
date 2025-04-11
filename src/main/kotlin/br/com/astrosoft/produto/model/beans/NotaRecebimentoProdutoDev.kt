@@ -82,8 +82,15 @@ class NotaRecebimentoProdutoDev(
   var observacaoDev: String?,
   var dataColeta: LocalDate?
 ) {
-  val chaveDevolucao
-    get() = "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
+  val chaveDevolucao: String
+    get() {
+      val motivo = tipoDevolucaoEnum
+      return if (motivo?.notasMultiplas == true) {
+        numeroDevolucao?.toString() ?: ""
+      } else {
+        "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
+      }
+    }
 
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE

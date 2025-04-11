@@ -2138,6 +2138,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findDadosNotaDevolucao(numero: Int): List<DadosDevolucao> {
+    val sql = "/sqlSaci/findDadosDevolucao.sql"
+    return query(sql, DadosDevolucao::class) {
+      addOptionalParameter("numero", numero)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
