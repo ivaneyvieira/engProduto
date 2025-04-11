@@ -140,7 +140,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
               this.isExpand = true
               this.isReadOnly = true
               //this.setSizeFull()
-              this.value = nota.obsDevolucao ?: ""
+              this.value = nota.obsDevolucaoAjustada() ?: ""
             }
           }
         }
@@ -277,4 +277,42 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
     update()
     return nota
   }
+}
+
+private fun NotaRecebimentoDev.obsDevolucaoAjustada(): String? {
+  val observacao = this.obsDevolucao ?: return null
+  val pos1 = observacao.posProxima(41)
+  val pos2 = observacao.posProxima(81)
+  val pos3 = observacao.posProxima(121)
+  val pos4 = observacao.posProxima(161)
+  return observacao.substringPos(0, pos1).trim() + "\n" +
+         observacao.substringPos(pos1, pos2).trim() + "\n" +
+         observacao.substringPos(pos2, pos3).trim() + "\n" +
+         observacao.substringPos(pos3, pos4).trim() + "\n" +
+         observacao.substringPos(pos4).trim()
+}
+
+private fun String.posProxima(pos: Int): Int {
+  val posAntes = this.getOrNull(pos - 1) ?: return pos
+  return if (posAntes == ' ') {
+    pos
+  } else {
+    this.indexOf(' ', pos) + 1
+  }
+}
+
+private fun String.substringPos(pos1: Int, pos2: Int=1000): String {
+  if(pos1 < 0) {
+    return ""
+  }
+  if(pos2 < 0) {
+    return ""
+  }
+  if (pos1 > length) {
+    return ""
+  }
+  if (pos2 > length) {
+    return this.substring(pos1)
+  }
+  return this.substring(pos1, pos2)
 }
