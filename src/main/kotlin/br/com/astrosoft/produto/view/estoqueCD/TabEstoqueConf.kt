@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueConf
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueConfViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
@@ -72,7 +73,15 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           addValueChangeListener {
-            viewModel.updateView()
+            if (it.isFromClient) {
+              val value = it.value ?: ""
+              if (processaBarcode(value)) {
+                edtPesquisa.value = ""
+                reloadGridMarca()
+              } else {
+                viewModel.updateView()
+              }
+            }
           }
         }
 
@@ -227,6 +236,26 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
   }
 
+  private fun reloadGridMarca() {
+    val userno = AppConfig.userLogin()?.no ?: 0
+    val data = LocalDate.now()
+
+    val produtos = gridPanel.dataProvider.fetchAll()
+
+    updateGrid(produtos.sortedBy { !it.marcadoConf(userno, data) })
+  }
+
+  private fun processaBarcode(value: String): Boolean {
+    return if (value.matches(Regex("[0-9]{13}"))) {
+      val listaProduto = gridPanel.dataProvider.fetchAll()
+      val filterList = listaProduto.filter { it.barcode == value }
+      viewModel.marcaProduto(filterList)
+      filterList.isNotEmpty()
+    } else {
+      false
+    }
+  }
+
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
@@ -248,6 +277,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
+    columnGrid(ProdutoEstoque::barcode, header = "Código de Barras")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
@@ -316,7 +346,10 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   }
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
-    updateGrid(produtos)
+    val userno = AppConfig.userLogin()?.no ?: 0
+    val data = LocalDate.now()
+
+    updateGrid(produtos.sortedBy { !it.marcadoConf(userno, data) })
   }
 
   override fun updateKardec() {

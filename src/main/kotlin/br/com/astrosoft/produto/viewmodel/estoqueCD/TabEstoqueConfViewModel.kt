@@ -144,20 +144,26 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     return ProcessamentoKardec.kardec(produto)
   }
 
+  fun marcaProduto(listaSelecionando: List<ProdutoEstoque>) {
+    val user = AppConfig.userLogin() as? UserSaci ?: return
+    val data = LocalDate.now()
+
+    listaSelecionando.forEach { produto ->
+      if (!produto.marcadoConf(user.no, data)) {
+        produto.estoqueUser = user.no
+        produto.estoqueLogin = user.login
+        produto.estoqueData = LocalDate.now()
+        produto.update()
+      }
+    }
+  }
+
   fun marcaProduto() {
     val listaSelecionando = subView.itensSelecionados()
     if (listaSelecionando.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
-    val user = AppConfig.userLogin() as? UserSaci
-
-    listaSelecionando.forEach { produto ->
-      produto.estoqueUser = user?.no
-      produto.estoqueLogin = user?.login
-      produto.estoqueData = LocalDate.now()
-    }
-    ProdutoEstoque.update(listaSelecionando)
+    marcaProduto(listaSelecionando)
     subView.reloadGrid()
   }
 

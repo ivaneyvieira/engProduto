@@ -92,15 +92,17 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no                                                                  AS prdno,
-       IFNULL(B.grade, '')                                                   AS grade,
-       MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
+SELECT P.no                                                           AS prdno,
+       IFNULL(B.grade, '')                                            AS grade,
+       MAX(TRIM(IF(B.grade IS NULL,
+                   IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13,
+                             P.barcode, NULL), P2.gtin), B.barcode))) AS codbar
 FROM
   sqldados.prd                AS P
     LEFT JOIN sqldados.prd2   AS P2
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno AND B.grade != ''
+              ON P.no = B.prdno AND B.grade != '' AND LENGTH(TRIM(B.barcode)) = 13
 WHERE P.no IN ( SELECT DISTINCT prdno FROM T_GARANTIA )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
