@@ -93,6 +93,10 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     bean.saveGarantia()
     updateView()
   }
+
+  fun imprimirRelatorio(garantia: EstoqueGarantia) {
+    TODO()
+  }
 }
 
 interface ITabEstoqueGarantia : ITabView {

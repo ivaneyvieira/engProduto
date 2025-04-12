@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EstoqueGarantia
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
@@ -47,6 +48,18 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
             viewModel.removeGarantia()
           }
         }
+
+        button("Relatório") {
+          this.icon = VaadinIcon.FILE_TEXT.create()
+          this.addClickListener {
+            viewModel.imprimirRelatorio(garantia)
+          }
+        }
+
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
+          val produtos = estoqueGarantias()
+          viewModel.geraPlanilha(produtos)
+        }
       },
       onClose = {
         closeForm()
@@ -71,13 +84,13 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       columnGrid(ProdutoEstoqueGarantia::lojaReceb, "Loja")
       columnGrid(ProdutoEstoqueGarantia::niReceb, "NI")
       columnGrid(ProdutoEstoqueGarantia::nfoReceb, "NFO")
-      columnGrid(ProdutoEstoqueGarantia::entradaReceb, "Entrada")
+      columnGrid(ProdutoEstoqueGarantia::entradaReceb, "Entrada", width = null)
       columnGrid(ProdutoEstoqueGarantia::forReceb, "For NFO")
 
-      columnGrid(ProdutoEstoqueGarantia::ref, "Ref Fabricante").right()
+      columnGrid(ProdutoEstoqueGarantia::ref, "Ref Fab").right()
       columnGrid(ProdutoEstoqueGarantia::codigo, "Código").right()
-      columnGrid(ProdutoEstoqueGarantia::descricao, "Descrição", width = "300px")
-      columnGrid(ProdutoEstoqueGarantia::grade, "Grade", width = "120px")
+      columnGrid(ProdutoEstoqueGarantia::descricao, "Descrição")
+      columnGrid(ProdutoEstoqueGarantia::grade, "Grade")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val dlgConferencia = DlgConferenciaGarantia(viewModel, produto) {
           gridDetail.dataProvider.refreshAll()
