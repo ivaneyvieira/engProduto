@@ -22,6 +22,7 @@ class ProdutoEstoqueGarantia(
   var estoqueLoja: Int? = null,
   var estoqueReal: Int? = null,
   var observacao: String? = null,
+  var lojaReceb: Int? = null,
   var niReceb: Int? = null,
   var nfoReceb: String? = null,
   var entradaReceb: LocalDate? = null,
