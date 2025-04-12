@@ -4,7 +4,8 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueGarantia
+import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaGarantia
 import br.com.astrosoft.produto.model.saci
 
 class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
@@ -33,22 +34,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    val report = PrintProdutosConferenciaEstoque("Pedido de garantia: ${garantia.numero}")
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview()
-    )
-  }
-
-  fun imprimirGarantia(garantia: EstoqueGarantia) = viewModel.exec {
-    val produtos = garantia.findProdutos().filter {
-      (it.diferenca ?: 0) != 0
-    }.sortedBy { it.diferenca ?: 999999 }
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto válido selecionado")
-    }
-
-    val report = PrintProdutosConferenciaGarantia()
+    val report = PrintProdutosConferenciaGarantia("Pedido de garantia: ${garantia.numero}")
 
     report.print(
       dados = produtos, printer = subView.printerPreview()
@@ -56,9 +42,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun cancelarGarantia() = viewModel.exec {
-    val itensSelecionado = subView.itensSelecionados().filter {
-      it.processado == false
-    }
+    val itensSelecionado = subView.itensSelecionados()
     if (itensSelecionado.isEmpty()) {
       fail("Nenhum garantia não processado selecionado")
     }
@@ -70,46 +54,21 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun imprimirRelatorio(garantia: EstoqueGarantia) {
-    val produtos = garantia.findProdutos()
-    val report = ReportGarantia()
-    val file = report.processaRelatorio(produtos)
-    viewModel.view.showReport(chave = "Garantia${System.nanoTime()}", report = file)
-  }
-
   fun geraPlanilha(produtos: List<ProdutoEstoqueGarantia>): ByteArray {
     val planilha = PlanilhaProdutoEstoqueGarantia()
     return planilha.write(produtos)
   }
 
   fun updateProduto(produto: ProdutoEstoqueGarantia) = viewModel.exec {
-    produto.save()
+    produto.saveGarantia()
   }
 
-  fun gravaGarantia(garantia: EstoqueGarantia) = viewModel.exec {
-    if (garantia.gravado == true) {
-      fail("Garantia já gravado")
-    }
-    subView.autorizaGarantia { user ->
-      val pordutos = garantia.findProdutos()
-      pordutos.forEach {
-        it.gravadoLogin = user.no
-        it.gravado = true
-        it.save()
-      }
-      updateView()
-    }
-  }
 
   fun removeGarantia() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
 
     itensSelecionado.ifEmpty {
       fail("Nenhum garantia selecionado")
-    }
-
-    if (itensSelecionado.any { it.processado == true }) {
-      fail("Garantia está processado")
     }
 
     subView.autorizaGarantia {
@@ -121,7 +80,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun addProduto(produto: ProdutoEstoqueGarantia) {
-    produto.save()
+    produto.saveGarantia()
     updateView()
   }
 
