@@ -27,6 +27,7 @@ class ProdutoEstoqueGarantia(
   var nfoReceb: String? = null,
   var entradaReceb: LocalDate? = null,
   var forReceb: Int? = null,
+  var cfopReceb: String? = null,
 ) {
 
   val saldoBarraRef: String

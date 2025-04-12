@@ -9,6 +9,7 @@ class PlanilhaProdutoEstoqueGarantia : Planilha<ProdutoEstoqueGarantia>("Estoque
     columnSheet(ProdutoEstoqueGarantia::niReceb, header = "NI")
     columnSheet(ProdutoEstoqueGarantia::nfoReceb, header = "NFO")
     columnSheet(ProdutoEstoqueGarantia::entradaReceb, header = "Entrada")
+    columnSheet(ProdutoEstoqueGarantia::cfopReceb, header = "CFOP")
     columnSheet(ProdutoEstoqueGarantia::forReceb, header = "For NFD")
 
     columnSheet(ProdutoEstoqueGarantia::ref, header = "Ref Fab")

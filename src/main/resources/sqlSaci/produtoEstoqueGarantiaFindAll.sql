@@ -53,17 +53,21 @@ CREATE TEMPORARY TABLE T_ULTIMO_RECEB
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                      AS prdno,
-       grade                      AS grade,
-       storeno                    AS lojaReceb,
-       invno                      AS niReceb,
-       CONCAT(nfname, '/', invse) AS nfoReceb,
-       CAST(date AS date)         AS entradaReceb,
-       vendno                     AS forReceb
+SELECT prdno                          AS prdno,
+       grade                          AS grade,
+       N.storeno                      AS lojaReceb,
+       N.invno                        AS niReceb,
+       CONCAT(N.nfname, '/', N.invse) AS nfoReceb,
+       CAST(N.date AS date)           AS entradaReceb,
+       vendno                         AS forReceb,
+       I.cfop                         AS cfopReceb
 FROM
-  sqldados.inv AS N
+  sqldados.inv               AS N
     INNER JOIN T_ULTIMO_INVNO
-               USING (invno);
+               USING (invno)
+    INNER JOIN sqldados.iprd AS I
+               USING (invno, prdno, grade)
+GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -120,7 +124,8 @@ SELECT numero,
        UR.niReceb               AS niReceb,
        UR.nfoReceb              AS nfoReceb,
        UR.entradaReceb          AS entradaReceb,
-       UR.forReceb              AS forReceb
+       UR.forReceb              AS forReceb,
+       UR.cfopReceb             AS cfopReceb
 FROM
   T_GARANTIA                            AS A
     LEFT JOIN T_ESTOQUE_LOJA            AS EL

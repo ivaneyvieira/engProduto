@@ -85,6 +85,7 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       columnGrid(ProdutoEstoqueGarantia::niReceb, "NI")
       columnGrid(ProdutoEstoqueGarantia::nfoReceb, "NFO").right()
       columnGrid(ProdutoEstoqueGarantia::entradaReceb, "Entrada", width = null)
+      columnGrid(ProdutoEstoqueGarantia::cfopReceb, "CFOP").right()
       columnGrid(ProdutoEstoqueGarantia::forReceb, "For NFO")
 
       columnGrid(ProdutoEstoqueGarantia::ref, "Ref Fab").right()
