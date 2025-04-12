@@ -21,7 +21,11 @@ class ProdutoEstoqueGarantia(
   var estoqueSis: Int? = null,
   var estoqueLoja: Int? = null,
   var estoqueReal: Int? = null,
-  var observacao: String? = null
+  var observacao: String? = null,
+  var niReceb: Int? = null,
+  var nfoReceb: String? = null,
+  var entradaReceb: LocalDate? = null,
+  var forReceb: Int? = null,
 ) {
 
   val saldoBarraRef: String
@@ -61,7 +65,6 @@ data class FiltroGarantia(
   val dataFinal: LocalDate? = null,
   val numero: Int = 0,
 )
-
 
 fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoEstoqueGarantia> {
   val user = AppConfig.userLogin()

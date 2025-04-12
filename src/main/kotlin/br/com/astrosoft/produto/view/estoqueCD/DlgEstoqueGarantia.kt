@@ -80,6 +80,10 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       columnGrid(ProdutoEstoqueGarantia::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueGarantia::estoqueLoja, "Est Loja")
       columnGrid(ProdutoEstoqueGarantia::estoqueReal, "Est Real")
+      columnGrid(ProdutoEstoqueGarantia::niReceb, "NI")
+      columnGrid(ProdutoEstoqueGarantia::nfoReceb, "NFO")
+      columnGrid(ProdutoEstoqueGarantia::entradaReceb, "Entrada")
+      columnGrid(ProdutoEstoqueGarantia::forReceb, "For NFO")
     }
     this.addAndExpand(gridDetail)
     update()

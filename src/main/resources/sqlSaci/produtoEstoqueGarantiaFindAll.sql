@@ -32,6 +32,37 @@ FROM
                USING (prdno, grade)
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_ULTIMO_INVNO;
+CREATE TEMPORARY TABLE T_ULTIMO_INVNO
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, MAX(invno) AS invno
+FROM
+  sqldados.iprd             AS I
+    INNER JOIN sqldados.inv AS N
+               USING (invno)
+    INNER JOIN T_PRD        AS T
+               USING (prdno, grade)
+WHERE type = 0
+  AND I.bits & POW(2, 4) = 0
+GROUP BY prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_ULTIMO_RECEB;
+CREATE TEMPORARY TABLE T_ULTIMO_RECEB
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno                      AS prdno,
+       grade                      AS grade,
+       invno                      AS niReceb,
+       CONCAT(nfname, '/', invse) AS nfoReceb,
+       CAST(date AS date)         AS entradaReceb,
+       vendno                     AS forReceb
+FROM
+  sqldados.inv AS N
+    INNER JOIN T_ULTIMO_INVNO
+               USING (invno);
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -82,10 +113,16 @@ SELECT numero,
        TRIM(P.mfno_ref)         AS ref,
        estoqueSis,
        ROUND(EL.estoqueLoja)    AS estoqueLoja,
-       O.observacao
+       O.observacao             AS observacao,
+       UR.niReceb               AS niReceb,
+       UR.nfoReceb              AS nfoReceb,
+       UR.entradaReceb          AS entradaReceb,
+       UR.forReceb              AS forReceb
 FROM
   T_GARANTIA                            AS A
     LEFT JOIN T_ESTOQUE_LOJA            AS EL
+              USING (prdno, grade)
+    LEFT JOIN T_ULTIMO_RECEB            AS UR
               USING (prdno, grade)
     LEFT JOIN T_BARCODE                 AS B
               ON B.prdno = A.prdno
