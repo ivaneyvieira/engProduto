@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueGarantia
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TipoEstoque
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
@@ -124,6 +125,10 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     dlgEstoque?.updateGarantia(produtos)
   }
 
+  override fun updateProduto() {
+    dlgEstoque?.update()
+  }
+
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
@@ -161,6 +166,13 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
 
   override fun produtosSelecionado(): List<ProdutoEstoqueGarantia> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
+  }
+
+  override fun formSeleionaEstoque(block: (estoque: TipoEstoque?) -> Unit) {
+    val form = FormSelecionaEstoque()
+    DialogHelper.showForm(caption = "Seleciona Estoque", form = form) {
+      block(form.selecionaEstoque())
+    }
   }
 
   override fun isAuthorized(): Boolean {

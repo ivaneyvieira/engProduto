@@ -6,7 +6,6 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueGarantia
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaGarantia
-import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.report.ReportGarantia
 import br.com.astrosoft.produto.model.saci
 
@@ -102,13 +101,48 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
   }
+
+  fun copiaEstoque() = viewModel.exec {
+    val itensSelecionado = subView.produtosSelecionado()
+    if (itensSelecionado.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    subView.formSeleionaEstoque{tipo ->
+      itensSelecionado.forEach {
+        if(tipo == null) {
+          fail("Selecione o tipo de estoque")
+        }else {
+          it.estoqueDev = when (tipo) {
+            TipoEstoque.LOJA  -> {
+              it.estoqueLoja
+            }
+
+            TipoEstoque.LOJAS -> {
+              it.estoqueLojas
+            }
+          }
+
+          it.saveGarantia()
+          subView.updateProduto()
+        }
+      }
+    }
+  }
 }
 
 interface ITabEstoqueGarantia : ITabView {
   fun filtro(): FiltroGarantia
   fun updateProduto(produtos: List<EstoqueGarantia>)
+  fun updateProduto()
   fun itensSelecionados(): List<EstoqueGarantia>
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaGarantia(block: (user: IUser) -> Unit)
   fun produtosSelecionado(): List<ProdutoEstoqueGarantia>
+  fun formSeleionaEstoque(block: (estoque: TipoEstoque?) -> Unit)
+}
+
+enum class TipoEstoque(val descricao: String) {
+  LOJA("Loja"),
+  LOJAS("Lojas"),
 }

@@ -60,6 +60,13 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
           val produtos = estoqueGarantias()
           viewModel.geraPlanilha(produtos)
         }
+
+        this.button("Copia Est") {
+          this.icon = VaadinIcon.COPY.create()
+          this.addClickListener {
+            viewModel.copiaEstoque()
+          }
+        }
       },
       onClose = {
         closeForm()
