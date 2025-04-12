@@ -10,6 +10,29 @@ WHERE (numero = :numero OR :numero = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
   AND (data <= :dataFinal OR :dataFinal = 0);
 
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade
+FROM
+  T_GARANTIA
+GROUP BY prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_ESTOQUE_LOJA;
+CREATE TEMPORARY TABLE T_ESTOQUE_LOJA
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoqueLoja
+FROM
+  sqldados.stk
+    INNER JOIN T_PRD
+               USING (prdno, grade)
+GROUP BY prdno, grade;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
@@ -58,9 +81,12 @@ SELECT numero,
        B.codbar                 AS barcode,
        TRIM(P.mfno_ref)         AS ref,
        estoqueSis,
+       ROUND(EL.estoqueLoja)    AS estoqueLoja,
        O.observacao
 FROM
   T_GARANTIA                            AS A
+    LEFT JOIN T_ESTOQUE_LOJA            AS EL
+              USING (prdno, grade)
     LEFT JOIN T_BARCODE                 AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade

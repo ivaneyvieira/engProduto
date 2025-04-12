@@ -19,6 +19,7 @@ class ProdutoEstoqueGarantia(
   var ref: String? = null,
   var grade: String? = null,
   var estoqueSis: Int? = null,
+  var estoqueLoja: Int? = null,
   var estoqueReal: Int? = null,
   var observacao: String? = null
 ) {
