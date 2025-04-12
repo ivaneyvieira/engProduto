@@ -27,10 +27,11 @@ class DlgConferenciaGarantia(
       setSizeFull()
       horizontalLayout {
         edtEstoqueReal = integerField("Estoque Real") {
+          this.isAutofocus = true
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = produto.estoqueReal
+          this.value = produto.estoqueDev
         }
       }
     }
@@ -68,7 +69,7 @@ class DlgConferenciaGarantia(
   }
 
   private fun confirmaForm() {
-    produto.estoqueReal = edtEstoqueReal?.value
+    produto.estoqueDev = edtEstoqueReal?.value
     viewModel.updateProduto(produto)
     onClose.invoke()
     this.close()

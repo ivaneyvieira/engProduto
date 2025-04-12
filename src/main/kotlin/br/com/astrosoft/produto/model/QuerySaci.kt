@@ -1366,7 +1366,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findInvFile(invno: Int, tipo : ETipoDevolucao, numero: Int): List<InvFileDev> {
+  fun findInvFile(invno: Int, tipo: ETipoDevolucao, numero: Int): List<InvFileDev> {
     val sql = "/sqlSaci/invArquivoDev.sql"
     return query(sql, InvFileDev::class) {
       addOptionalParameter("invno", invno)
@@ -1998,7 +1998,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("estoqueSis", produto.estoqueSis)
+      addOptionalParameter("estoqueSis", produto.estoqueLoja)
+      addOptionalParameter("estoqueReal", produto.estoqueDev)
     }
   }
 
@@ -2116,7 +2117,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao,  numero: Int) {
+  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao, numero: Int) {
     val sql = "/sqlSaci/updateTipoDevolucao.sql"
     script(sql) {
       addOptionalParameter("invno", produto.ni)

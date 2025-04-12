@@ -13,9 +13,9 @@ class ReportGarantia() : ReportBuild<ProdutoEstoqueGarantia>() {
     columnReport(ProdutoEstoqueGarantia::codigo, header = "Código", aligment = RIGHT, width = 40)
     columnReport(ProdutoEstoqueGarantia::descricao, header = "Descrição", aligment = LEFT)
     columnReport(ProdutoEstoqueGarantia::grade, header = "Grade", aligment = LEFT, width = 40)
-    columnReport(ProdutoEstoqueGarantia::estoqueSis, header = "Est Loja", aligment = RIGHT, width = 60)
-    columnReport(ProdutoEstoqueGarantia::estoqueLoja, header = "Est Lojas", aligment = RIGHT, width = 60)
-    columnReport(ProdutoEstoqueGarantia::estoqueReal, header = "Est Dif", aligment = RIGHT, width = 60)
+    columnReport(ProdutoEstoqueGarantia::estoqueLoja, header = "Est Loja", aligment = RIGHT, width = 60)
+    columnReport(ProdutoEstoqueGarantia::estoqueLojas, header = "Est Lojas", aligment = RIGHT, width = 60)
+    columnReport(ProdutoEstoqueGarantia::estoqueDev, header = "Est Dev", aligment = RIGHT, width = 60)
   }
 
   override fun makeReport(itens: List<ProdutoEstoqueGarantia>): JasperReportBuilder {
@@ -26,7 +26,7 @@ class ReportGarantia() : ReportBuild<ProdutoEstoqueGarantia>() {
   override fun config(itens: List<ProdutoEstoqueGarantia>): PropriedadeRelatorio {
     val Garantia = itens.firstOrNull()
     val numero = Garantia?.numero
-    val loja = Garantia?.estoqueLoja
+    val loja = Garantia?.estoqueLojas
 
     return PropriedadeRelatorio(
       titulo = "Garantia de Estoque",

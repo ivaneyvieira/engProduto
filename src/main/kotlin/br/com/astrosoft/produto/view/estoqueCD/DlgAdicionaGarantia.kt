@@ -118,7 +118,7 @@ class DlgAdicionaGarantia(
       this.usuario = garantia.usuario
       this.prdno = produtos.firstOrNull()?.prdno
       this.grade = edtGrade?.value
-      this.estoqueSis = produtos.firstOrNull {
+      this.estoqueLoja = produtos.firstOrNull {
         it.grade == edtGrade?.value
       }?.saldo
       this.observacao = garantia.observacao

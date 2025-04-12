@@ -16,6 +16,6 @@ class PlanilhaProdutoEstoqueGarantia : Planilha<ProdutoEstoqueGarantia>("Estoque
     columnSheet(ProdutoEstoqueGarantia::descricao, header = "Descrição")
     columnSheet(ProdutoEstoqueGarantia::grade, header = "Grade")
 
-    columnSheet(ProdutoEstoqueGarantia::estoqueReal, header = "Est Real")
+    columnSheet(ProdutoEstoqueGarantia::estoqueDev, header = "Est Dev")
   }
 }

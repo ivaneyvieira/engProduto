@@ -1,10 +1,8 @@
 package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
 import java.time.LocalDate
 import java.time.LocalTime
@@ -30,7 +28,7 @@ class PrintProdutosConferenciaGarantia(val titulo: String) : PrintText<ProdutoEs
     column(ProdutoEstoqueGarantia::descricao, "Descricao", 34)
     column(ProdutoEstoqueGarantia::grade, "Grade", 8)
     column(ProdutoEstoqueGarantia::locApp, "Loc", 4)
-    column(ProdutoEstoqueGarantia::estoqueSis, "___Quant", 8, lineBreak = true)
+    column(ProdutoEstoqueGarantia::estoqueLoja, "___Quant", 8, lineBreak = true)
     column(ProdutoEstoqueGarantia::saldoBarraRef, "", 47)
   }
 

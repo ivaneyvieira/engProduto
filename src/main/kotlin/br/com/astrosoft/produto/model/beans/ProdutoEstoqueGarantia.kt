@@ -18,9 +18,9 @@ class ProdutoEstoqueGarantia(
   var barcode: String? = null,
   var ref: String? = null,
   var grade: String? = null,
-  var estoqueSis: Int? = null,
   var estoqueLoja: Int? = null,
-  var estoqueReal: Int? = null,
+  var estoqueLojas: Int? = null,
+  var estoqueDev: Int? = null,
   var observacao: String? = null,
   var lojaReceb: Int? = null,
   var niReceb: Int? = null,
@@ -71,19 +71,20 @@ fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoEstoqueGarantia> {
   val user = AppConfig.userLogin()
 
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
-  val novo = saci.garantiaNovo(numero, numLoja) ?: return emptyList()
+  val lojaSigla = this.firstOrNull()?.lojaSigla ?: return emptyList()
+
   return this.map {
     ProdutoEstoqueGarantia(
-      numero = novo.numero,
-      numloja = novo.numloja,
-      lojaSigla = novo.lojaSigla,
-      data = novo.data,
-      hora = novo.hora,
+      numero = numero,
+      numloja = numLoja,
+      lojaSigla = lojaSigla,
+      data = LocalDate.now(),
+      hora = LocalTime.now(),
       usuario = user?.name,
       prdno = it.prdno,
       descricao = it.descricao,
       grade = it.grade,
-      estoqueSis = it.saldo,
+      estoqueLoja = it.saldo,
       observacao = it.observacao,
     )
   }
