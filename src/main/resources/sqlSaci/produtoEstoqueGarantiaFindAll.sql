@@ -44,8 +44,9 @@ FROM
                USING (invno)
     INNER JOIN T_PRD        AS T
                USING (prdno, grade)
-WHERE type = 0
-  AND I.bits & POW(2, 4) = 0
+WHERE N.type = 0
+  AND N.bits & POW(2, 4) = 0
+  AND I.cfop NOT IN (1910, 2910, 1916, 2916)
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ULTIMO_RECEB;
