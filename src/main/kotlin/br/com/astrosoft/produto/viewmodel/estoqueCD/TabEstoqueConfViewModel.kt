@@ -105,7 +105,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       fail("Nenhum produto selecionado")
     }
 
-    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
+    val numero = ProdutoEstoqueGarantia.proximoNumero(numLoja)
 
     val produtosGarantia = produtos.toGarantia(numero)
 
@@ -121,7 +121,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
           if (jaGravado != null) {
             viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado na garantia")
           } else {
-            subView.autorizaAcerto { user ->
+            subView.autorizaGarantia { user ->
               form.close()
               produtosGarantia.forEach {
                 it.saveGarantia()
@@ -184,5 +184,6 @@ interface ITabEstoqueConf : ITabView {
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
   fun autorizaAcerto(block: (user: UserSaci) -> Unit)
+  fun autorizaGarantia(block: (user: UserSaci) -> Unit)
   fun filtroVazio(): FiltroProdutoEstoque
 }

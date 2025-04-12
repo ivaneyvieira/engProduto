@@ -1,7 +1,7 @@
 USE sqldados;
 
-DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
-CREATE TEMPORARY TABLE T_ACERTO
+DROP TEMPORARY TABLE IF EXISTS T_GARANTIA;
+CREATE TEMPORARY TABLE T_GARANTIA
 SELECT *
 FROM
   sqldados.produtoEstoqueGarantia
@@ -20,8 +20,8 @@ SELECT P.storeno,
        P.grade,
        P.localizacao AS locApp
 FROM
-  sqldados.prdAdicional AS P
-    INNER JOIN T_ACERTO AS A
+  sqldados.prdAdicional   AS P
+    INNER JOIN T_GARANTIA AS A
                ON P.storeno = A.numloja
                  AND P.prdno = A.prdno
                  AND P.grade = A.grade
@@ -32,8 +32,8 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no AS prdno,
-       IFNULL(B.grade, '') AS grade,
+SELECT P.no                                                                  AS prdno,
+       IFNULL(B.grade, '')                                                   AS grade,
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
 FROM
   sqldados.prd                AS P
@@ -41,13 +41,13 @@ FROM
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
               ON P.no = B.prdno AND B.grade != ''
-WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
+WHERE P.no IN ( SELECT DISTINCT prdno FROM T_GARANTIA )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
 SELECT numero,
        numloja,
-       S.sname AS lojaSigla,
+       S.sname                  AS lojaSigla,
        data,
        hora,
        usuario,
@@ -55,22 +55,22 @@ SELECT numero,
        TRIM(MID(P.name, 1, 37)) AS descricao,
        A.grade,
        L.locApp,
-       B.codbar AS barcode,
-       TRIM(P.mfno_ref) AS ref,
+       B.codbar                 AS barcode,
+       TRIM(P.mfno_ref)         AS ref,
        estoqueSis,
        O.observacao
 FROM
-  T_ACERTO                            AS A
-    LEFT JOIN T_BARCODE               AS B
+  T_GARANTIA                            AS A
+    LEFT JOIN T_BARCODE                 AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN produtoObservacaoAcerto AS O
+    LEFT JOIN produtoObservacaoGarantia AS O
               USING (numero, numloja)
-    LEFT JOIN sqldados.store          AS S
+    LEFT JOIN sqldados.store            AS S
               ON S.no = A.numloja
-    LEFT JOIN sqldados.prd            AS P
+    LEFT JOIN sqldados.prd              AS P
               ON P.no = A.prdno
-    LEFT JOIN T_LOC_APP               AS L
+    LEFT JOIN T_LOC_APP                 AS L
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade

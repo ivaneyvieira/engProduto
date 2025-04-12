@@ -26,7 +26,7 @@ class DlgConferenciaGarantia(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
-        edtEstoqueReal = integerField("Estoque CD") {
+        edtEstoqueReal = integerField("Estoque Real") {
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)

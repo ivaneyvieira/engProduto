@@ -110,7 +110,7 @@ class EstoqueGarantia(
   var usuario: String?,
   var observacao: String?,
 ) {
-  fun cancela() {
+  fun cancelaGarantia() {
     saci.garantiaCancela(this)
   }
 
@@ -123,7 +123,7 @@ class EstoqueGarantia(
     return produtos
   }
 
-  fun save() {
+  fun saveGarantia() {
     saci.updateGarantia(this)
   }
 

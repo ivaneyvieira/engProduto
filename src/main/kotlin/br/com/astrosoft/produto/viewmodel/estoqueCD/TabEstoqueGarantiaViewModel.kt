@@ -48,7 +48,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     }
     viewModel.view.showQuestion("Confirma o cancelamento do garantia selecionado?") {
       itensSelecionado.forEach {
-        it.cancela()
+        it.cancelaGarantia()
       }
       updateView()
     }
@@ -90,7 +90,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateGarantia(bean: EstoqueGarantia?) = viewModel.exec {
     bean ?: fail("Nenhum produto selecionado")
-    bean.save()
+    bean.saveGarantia()
     updateView()
   }
 }

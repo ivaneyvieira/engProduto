@@ -339,6 +339,18 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     }
   }
 
+  override fun autorizaGarantia(block: (user: UserSaci) -> Unit) {
+    val form = FormAutorizaAcerto()
+    DialogHelper.showForm(caption = "Autoriza gravação da garantia", form = form) {
+      val user = AppConfig.findUser(form.login, form.senha) as? UserSaci
+      if (user != null) {
+        block(user)
+      } else {
+        DialogHelper.showWarning("Usuário ou senha inválidos")
+      }
+    }
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueConf == true
