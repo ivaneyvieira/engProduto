@@ -99,7 +99,7 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       }
       columnGrid(ProdutoEstoqueGarantia::estoqueSis, "Est Loja")
       columnGrid(ProdutoEstoqueGarantia::estoqueLoja, "Est Lojas")
-      columnGrid(ProdutoEstoqueGarantia::estoqueReal, "Est Real")
+      columnGrid(ProdutoEstoqueGarantia::estoqueReal, "Est Dif")
     }
     this.addAndExpand(gridDetail)
     update()

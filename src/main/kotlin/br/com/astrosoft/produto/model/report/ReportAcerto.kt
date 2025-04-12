@@ -22,11 +22,6 @@ class ReportAcerto() : ReportBuild<ProdutoEstoqueAcerto>() {
   override fun makeReport(itens: List<ProdutoEstoqueAcerto>): JasperReportBuilder {
     return super
       .makeReport(itens)
-      //.setPageMargin(margin(0))
-//      .setTitleStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(padding().setTop(20)))
-//      .setColumnStyle(stl.style().setForegroundColor(Color.WHITE).setFontSize(8).setLeftPadding(3).setRightPadding(3))
-//      .setGroupStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(padding().setLeft(4)))
-    //    .setBackgroundStyle(stl.style().setBackgroundColor(Color(35, 51, 72)))
   }
 
   override fun config(itens: List<ProdutoEstoqueAcerto>): PropriedadeRelatorio {

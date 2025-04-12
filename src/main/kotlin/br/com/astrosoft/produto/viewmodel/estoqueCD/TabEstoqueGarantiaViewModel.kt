@@ -6,6 +6,8 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueGarantia
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaGarantia
+import br.com.astrosoft.produto.model.report.ReportAcerto
+import br.com.astrosoft.produto.model.report.ReportGarantia
 import br.com.astrosoft.produto.model.saci
 
 class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
@@ -95,7 +97,10 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirRelatorio(garantia: EstoqueGarantia) {
-    TODO()
+    val produtos = garantia.findProdutos()
+    val report = ReportGarantia()
+    val file = report.processaRelatorio(produtos)
+    viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
   }
 }
 
