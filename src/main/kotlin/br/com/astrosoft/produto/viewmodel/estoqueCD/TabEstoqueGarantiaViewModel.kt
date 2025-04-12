@@ -64,7 +64,6 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     produto.saveGarantia()
   }
 
-
   fun removeGarantia() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
 
@@ -108,11 +107,11 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.formSeleionaEstoque{tipo ->
+    subView.formSeleionaEstoque { tipo ->
       itensSelecionado.forEach {
-        if(tipo == null) {
+        if (tipo == null) {
           fail("Selecione o tipo de estoque")
-        }else {
+        } else {
           it.estoqueDev = when (tipo) {
             TipoEstoque.LOJA  -> {
               it.estoqueLoja
