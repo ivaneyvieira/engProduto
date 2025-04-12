@@ -68,7 +68,8 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       this.setSelectionMode(Grid.SelectionMode.MULTI)
       isMultiSort = false
 
-      columnGrid(ProdutoEstoqueGarantia::codigo, "Código")
+      columnGrid(ProdutoEstoqueGarantia::ref, "Ref Fabricante").right()
+      columnGrid(ProdutoEstoqueGarantia::codigo, "Código").right()
       columnGrid(ProdutoEstoqueGarantia::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoEstoqueGarantia::grade, "Grade", width = "120px")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
