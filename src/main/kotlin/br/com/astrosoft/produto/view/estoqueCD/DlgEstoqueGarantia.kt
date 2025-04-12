@@ -84,8 +84,8 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
         }
         dlgConferencia.open()
       }
-      columnGrid(ProdutoEstoqueGarantia::estoqueSis, "Est Sist")
-      columnGrid(ProdutoEstoqueGarantia::estoqueLoja, "Est Loja")
+      columnGrid(ProdutoEstoqueGarantia::estoqueSis, "Est Loja")
+      columnGrid(ProdutoEstoqueGarantia::estoqueLoja, "Est Lojas")
       columnGrid(ProdutoEstoqueGarantia::estoqueReal, "Est Real")
     }
     this.addAndExpand(gridDetail)
