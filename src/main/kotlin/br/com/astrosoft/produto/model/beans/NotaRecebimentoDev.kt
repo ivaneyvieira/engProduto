@@ -108,7 +108,7 @@ class NotaRecebimentoDev(
 fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
   return this.groupBy { it.chaveDevolucao }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
-    val maxInvno = produtos.map{ it.ni ?: 0 }.maxOrNull() ?: 0
+    val maxInvno = produtos.minOfOrNull { it.ni ?: 0 } ?: 0
     val nota = produtos.firstOrNull {it.ni == maxInvno}
     nota?.let {
       NotaRecebimentoDev(
