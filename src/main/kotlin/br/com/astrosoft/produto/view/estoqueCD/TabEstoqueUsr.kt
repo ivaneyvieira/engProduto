@@ -59,6 +59,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Grava Acerto") {
         binder.bind(this, UserSaci::estoqueGravaAcerto.name)
       }
+      checkBox("Grava Garantia") {
+        binder.bind(this, UserSaci::estoqueGravaGarantia.name)
+      }
       checkBox("Edita Loc") {
         binder.bind(this, UserSaci::estoqueEditaLoc.name)
       }
