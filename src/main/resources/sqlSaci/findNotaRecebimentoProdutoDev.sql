@@ -58,7 +58,7 @@ SELECT storeno                             AS storeno,
        END                                 AS motivo
 FROM
   sqldados.nf
-WHERE issuedate >= 20241001
+WHERE issuedate >= 20191001
   AND tipo = 2
   AND status != 1;
 
