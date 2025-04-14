@@ -25,7 +25,10 @@ CREATE TEMPORARY TABLE T_ESTOQUE_LOJA
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoqueLoja
+SELECT prdno,
+       grade,
+       SUM(IF(storeno = :numLoja, qtty_atacado + qtty_varejo, 0) / 1000) AS estoqueLoja,
+       SUM((qtty_atacado + qtty_varejo) / 1000)                          AS estoqueLojas
 FROM
   sqldados.stk
     INNER JOIN T_PRD
@@ -119,9 +122,9 @@ SELECT numero,
        L.locApp,
        B.codbar                 AS barcode,
        TRIM(P.mfno_ref)         AS ref,
-       estoqueSis               AS estoqueLoja,
+       ROUND(EL.estoqueLoja)    AS estoqueLoja,
        estoqueReal              AS estoqueDev,
-       ROUND(EL.estoqueLoja)    AS estoqueLojas,
+       ROUND(EL.estoqueLojas)   AS estoqueLojas,
        O.observacao             AS observacao,
        UR.lojaReceb             AS lojaReceb,
        UR.niReceb               AS niReceb,
