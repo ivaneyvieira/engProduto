@@ -28,7 +28,7 @@ class PrintProdutosConferenciaGarantia(val titulo: String) : PrintText<ProdutoEs
     column(ProdutoEstoqueGarantia::descricao, "Descricao", 34)
     column(ProdutoEstoqueGarantia::grade, "Grade", 8)
     column(ProdutoEstoqueGarantia::locApp, "Loc", 4)
-    column(ProdutoEstoqueGarantia::estoqueLoja, "___Quant", 8, lineBreak = true)
+    column(ProdutoEstoqueGarantia::estoqueDev, "___Quant", 8, lineBreak = true)
     column(ProdutoEstoqueGarantia::saldoBarraRef, "", 47)
   }
 
