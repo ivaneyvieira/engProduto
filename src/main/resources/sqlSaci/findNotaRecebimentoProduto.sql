@@ -2,7 +2,7 @@ USE sqldados;
 
 SET SQL_MODE = '';
 
-DO @DT := 20190101;
+DO @DT := 20150101;
 
 DO @LJ := :loja;
 
