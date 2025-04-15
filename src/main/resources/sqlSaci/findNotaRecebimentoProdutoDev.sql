@@ -2,7 +2,7 @@ USE sqldados;
 
 SET SQL_MODE = '';
 
-DO @DT := 20240420;
+DO @DT := 20190101;
 
 DO @LJ := :loja;
 
@@ -160,7 +160,7 @@ FROM
               ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
-  AND (N.date >= 20240101)
+  AND (N.date >= 20190101)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND ((N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
