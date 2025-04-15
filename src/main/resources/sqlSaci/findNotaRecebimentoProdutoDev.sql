@@ -40,8 +40,9 @@ SELECT storeno                         AS storeno,
        grossamt / 100                  AS valorDevolucao,
        print_remarks                   AS obsDevolucao,
        status = 1                      AS cancelado,
-       IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ')) > 0,
-          SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' '), LOCATE(' NFO ', CONCAT(print_remarks, ' ')) + 5, 100),
+       IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+          SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                    LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
                           ' ', 1), '') AS nfo,
        CASE
          WHEN print_remarks REGEXP 'AVARIA'            THEN 1
