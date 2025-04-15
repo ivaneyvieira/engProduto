@@ -109,6 +109,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
   return this.groupBy { it.chaveDevolucao }.mapNotNull { entry ->
     val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
     val nota = produtos.firstOrNull { it.notaDevolucao != null }
+               ?: produtos.firstOrNull { it.notaDevolucao == null }
 
     nota?.let {
       NotaRecebimentoDev(
@@ -145,12 +146,12 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         transpDevolucao = nota.transpDevolucao,
         cteDevolucao = nota.cteDevolucao,
         situacaoDev = nota.situacaoDev,
-        userDevolucao = notaDev?.userDevolucao,
-        notaDevolucao = notaDev?.notaDevolucao,
-        emissaoDevolucao = notaDev?.emissaoDevolucao,
-        valorDevolucao = notaDev?.valorDevolucao,
-        obsDevolucao = notaDev?.obsDevolucao,
-        dataDevolucao = notaDev?.dataDevolucao,
+        userDevolucao = nota.userDevolucao,
+        notaDevolucao = nota.notaDevolucao,
+        emissaoDevolucao = nota.emissaoDevolucao,
+        valorDevolucao = nota.valorDevolucao,
+        obsDevolucao = nota.obsDevolucao,
+        dataDevolucao = nota.dataDevolucao,
         observacaoDev = nota.observacaoDev,
         dataColeta = nota.dataColeta,
         transportadoraDevolucao = nota.transportadoraDevolucao,
