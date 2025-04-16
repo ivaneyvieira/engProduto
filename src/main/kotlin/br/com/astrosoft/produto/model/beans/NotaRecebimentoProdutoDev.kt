@@ -79,6 +79,7 @@ class NotaRecebimentoProdutoDev(
   var emissaoDevolucao: LocalDate?,
   var valorDevolucao: Double?,
   var obsDevolucao: String?,
+  var obsGarantia: String?,
   var observacaoDev: String?,
   var dataColeta: LocalDate?
 ) {

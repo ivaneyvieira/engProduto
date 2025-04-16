@@ -36,11 +36,12 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, nfo, motivo, notaDevolucao),
   INDEX (niDev)
 )
-SELECT storeno AS storeno,
+SELECT storeno                         AS storeno,
        CONCAT(nfno, '/', nfse)         AS notaDevolucao,
        CAST(issuedate AS date)         AS emissaoDevolucao,
        grossamt / 100                  AS valorDevolucao,
        print_remarks                   AS obsDevolucao,
+       remarks                         AS obsGarantia,
        status = 1                      AS cancelado,
        IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
@@ -390,12 +391,13 @@ SELECT loja,
          WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
          WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
                                                                              ELSE Q.situacaoDev
-       END AS situacaoDev,
+       END                       AS situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
        valorDevolucao,
        obsDevolucao,
+       CONCAT('NI DEV', N.niDev) AS obsGarantia,
        observacaoDev,
        dataColeta
 FROM
@@ -418,6 +420,7 @@ SELECT numeroDevolucao,
        MAX(emissaoDevolucao) AS emissaoDevolucao,
        MAX(valorDevolucao)   AS valorDevolucao,
        MAX(obsDevolucao)     AS obsDevolucao,
+       MAX(obsGarantia)      AS obsGarantia,
        MAX(situacaoDev)      AS situacaoDev
 FROM
   T_RESULT
@@ -429,6 +432,7 @@ SET R1.userDevolucao    = R2.userDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
     R1.obsDevolucao     = R2.obsDevolucao,
+    R1.obsGarantia      = R2.obsGarantia,
     R1.situacaoDev      = R2.situacaoDev
 WHERE R1.numeroDevolucao = R2.numeroDevolucao;
 
