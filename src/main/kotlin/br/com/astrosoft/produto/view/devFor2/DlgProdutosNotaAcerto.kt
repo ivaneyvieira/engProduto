@@ -182,6 +182,7 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, val nota: Not
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
