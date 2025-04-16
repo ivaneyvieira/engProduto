@@ -391,13 +391,13 @@ SELECT loja,
          WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
          WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
                                                                              ELSE Q.situacaoDev
-       END                       AS situacaoDev,
+       END                        AS situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
        valorDevolucao,
        obsDevolucao,
-       CONCAT('NI DEV', N.niDev) AS obsGarantia,
+       CONCAT('NI DEV ', N.niDev) AS obsGarantia,
        observacaoDev,
        dataColeta
 FROM
