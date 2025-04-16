@@ -47,10 +47,18 @@ SELECT storeno                         AS storeno,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                     LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
                           ' ', 1), '') AS nfo,
-       IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-          SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                    LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 100),
-                          ' ', 1), '') AS niDev,
+       IFNULL(
+           IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 4,
+                                        100),
+                              ' ', 1), NULL),
+           IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                        LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
+                                        100),
+                              ' ', 1), NULL)
+       )                               AS niDev,
        CASE
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
@@ -397,14 +405,13 @@ SELECT loja,
        emissaoDevolucao,
        valorDevolucao,
        obsDevolucao,
-       CONCAT('NI DEV ', N.niDev) AS obsGarantia,
        observacaoDev,
        dataColeta
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
-              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND TRUE) OR
-                 (N.niDev = Q.numeroDevolucao AND FALSE)
+              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND FALSE) OR
+                 (N.niDev = Q.numeroDevolucao AND TRUE)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
@@ -420,7 +427,6 @@ SELECT numeroDevolucao,
        MAX(emissaoDevolucao) AS emissaoDevolucao,
        MAX(valorDevolucao)   AS valorDevolucao,
        MAX(obsDevolucao)     AS obsDevolucao,
-       MAX(obsGarantia)      AS obsGarantia,
        MAX(situacaoDev)      AS situacaoDev
 FROM
   T_RESULT
@@ -432,7 +438,6 @@ SET R1.userDevolucao    = R2.userDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
     R1.obsDevolucao     = R2.obsDevolucao,
-    R1.obsGarantia      = R2.obsGarantia,
     R1.situacaoDev      = R2.situacaoDev
 WHERE R1.numeroDevolucao = R2.numeroDevolucao;
 
