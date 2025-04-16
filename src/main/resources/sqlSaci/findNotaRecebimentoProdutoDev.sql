@@ -24,17 +24,19 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
 CREATE TEMPORARY TABLE T_NFO
 (
-  `storeno`          smallint NOT NULL DEFAULT '0',
-  `notaDevolucao`    varchar(14),
-  `emissaoDevolucao` date,
-  `valorDevolucao`   decimal(23, 4),
-  `obsDevolucao`     char(160),
-  `cancelado`        int,
-  `nfo`              varchar(16),
-  `motivo`           int,
-  PRIMARY KEY (storeno, nfo, motivo, notaDevolucao)
+  storeno          smallint NOT NULL DEFAULT '0',
+  notaDevolucao    varchar(14),
+  emissaoDevolucao date,
+  valorDevolucao   decimal(23, 4),
+  obsDevolucao     char(160),
+  cancelado        int,
+  nfo              varchar(16),
+  motivo           int,
+  niDev            int,
+  PRIMARY KEY (storeno, nfo, motivo, notaDevolucao),
+  INDEX (niDev)
 )
-SELECT storeno                         AS storeno,
+SELECT storeno AS storeno,
        CONCAT(nfno, '/', nfse)         AS notaDevolucao,
        CAST(issuedate AS date)         AS emissaoDevolucao,
        grossamt / 100                  AS valorDevolucao,
@@ -44,6 +46,10 @@ SELECT storeno                         AS storeno,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                     LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
                           ' ', 1), '') AS nfo,
+       IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+          SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                    LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 100),
+                          ' ', 1), '') AS niDev,
        CASE
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
@@ -395,7 +401,8 @@ SELECT loja,
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
-              ON Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo
+              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND FALSE) OR
+                 (N.niDev = Q.numeroDevolucao)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
