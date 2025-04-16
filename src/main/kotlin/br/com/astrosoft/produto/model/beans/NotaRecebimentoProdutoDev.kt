@@ -25,7 +25,7 @@ class NotaRecebimentoProdutoDev(
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
   var prdno: String?,
-  var codigo: String?,
+  var codigo: Int?,
   var vendnoProduto: Int?,
   var barcodeStrList: String?,
   var barcodeStrListEntrada: String?,
