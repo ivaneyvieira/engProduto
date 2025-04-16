@@ -2,7 +2,7 @@ USE sqldados;
 
 SET SQL_MODE = '';
 
-DO @DT := 20190101;
+DO @DT := 20150101;
 
 DO @LJ := :loja;
 
@@ -57,7 +57,7 @@ SELECT storeno                         AS storeno,
        END                             AS motivo
 FROM
   sqldados.nf
-WHERE issuedate >= 20191001
+WHERE issuedate >= @DT
   AND tipo = 2
   AND status != 1
 HAVING nfo != '';
@@ -159,7 +159,6 @@ FROM
               ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
-  AND (N.date >= 20190101)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (A.tipoDevolucao > 0)
