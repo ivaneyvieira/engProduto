@@ -401,8 +401,8 @@ SELECT loja,
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
-              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND FALSE) OR
-                 (N.niDev = Q.numeroDevolucao)
+              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND TRUE) OR
+                 (N.niDev = Q.numeroDevolucao AND FALSE)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
