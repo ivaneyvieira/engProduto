@@ -168,7 +168,7 @@ FROM
     LEFT JOIN T_ARQCOLETA           AS AC
               USING (invno, tipoDevolucao, numero)
     LEFT JOIN sqldados.invAdicional AS IA
-              ON IA.invno = A.invno AND IA.tipoDevolucao = A.tipoDevolucao
+              USING (invno, tipoDevolucao, numero)
     LEFT JOIN sqldados.carr         AS CA
               ON CA.no = IA.carrno
     LEFT JOIN sqldados.users        AS UA
@@ -395,13 +395,16 @@ SELECT loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-       CASE
-         WHEN tipoDevolucao = 8/*Garantia*/
-           AND Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN IF(countColeta > 0, 2, 6)
-         WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
-         WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
-                                                                             ELSE Q.situacaoDev
-       END AS situacaoDev,
+  /*
+  CASE
+    WHEN tipoDevolucao = 8/*Garantia
+      AND Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN IF(countColeta > 0, 2, 6)
+    WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
+    WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
+                                                                        ELSE Q.situacaoDev
+  END AS situacaoDev,
+*/
+       Q.situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
@@ -444,7 +447,8 @@ SET R1.userDevolucao    = R2.userDevolucao,
     R1.situacaoDev      = R2.situacaoDev
 WHERE R1.numeroDevolucao = R2.numeroDevolucao;
 
-UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND I.tipoDevolucao = R.tipoDevolucao
+UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND I.tipoDevolucao = R.tipoDevolucao AND
+                                                              I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 

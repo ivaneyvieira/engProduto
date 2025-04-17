@@ -61,4 +61,35 @@ FROM
 
 SELECT *
 FROM
-  T_INVADICIONAL
+  T_INVADICIONAL;
+
+/************************************************************************************/
+
+SELECT *
+FROM
+  sqldados.invAdicional;
+
+ALTER TABLE sqldados.invAdicional
+  ADD COLUMN numero int NOT NULL DEFAULT 0 AFTER invno;
+
+ALTER TABLE sqldados.invAdicional
+  DROP PRIMARY KEY;
+
+ALTER TABLE sqldados.invAdicional
+  ADD PRIMARY KEY (invno, tipoDevolucao, numero);
+
+DROP TABLE IF EXISTS T_IPRADICIONALDEV;
+CREATE TEMPORARY TABLE T_IPRADICIONALDEV
+(
+  PRIMARY KEY (invno, tipoDevolucao, numero)
+)
+SELECT invno, tipoDevolucao, numero
+FROM
+  iprdAdicionalDev
+GROUP BY invno, tipoDevolucao, numero;
+
+UPDATE sqldados.invAdicional AS A
+  INNER JOIN T_IPRADICIONALDEV AS T
+  USING (invno, tipoDevolucao)
+SET A.numero = T.numero
+WHERE A.numero = 0;

@@ -2140,10 +2140,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  /*
   fun saveInvAdicional(nota: NotaRecebimento, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)
+      addOptionalParameter("numero", nota.numeroDevolucao)
       addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
       addOptionalParameter("volume", nota.volumeDevolucao)
       addOptionalParameter("peso", nota.pesoDevolucao)
@@ -2153,12 +2155,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("situacaoDev", nota.situacaoDev)
       addOptionalParameter("userno", userno)
     }
-  }
+  }*/
 
   fun saveInvAdicional(nota: NotaRecebimentoDev, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)
+      addOptionalParameter("numero", nota.numeroDevolucao)
       addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
       addOptionalParameter("volume", nota.volumeDevolucao)
       addOptionalParameter("peso", nota.pesoDevolucao)

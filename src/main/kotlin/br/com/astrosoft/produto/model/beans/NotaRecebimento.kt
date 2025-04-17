@@ -1,7 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev.Companion.findAllDev
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -123,16 +121,17 @@ class NotaRecebimento(
     }
   }
 
-  fun save(nota: NotaRecebimento) {
+  /*
+  private fun save(nota: NotaRecebimento) {
     val userno = AppConfig.userLogin()?.no ?: 0
     saci.saveInvAdicional(nota, userno)
   }
 
-  fun marcaSituacao(situacao: EStituacaoDev) {
+  private fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
-    val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(this, userno)
+    save(this)
   }
+   */
 
   companion object {
     fun findAll(
