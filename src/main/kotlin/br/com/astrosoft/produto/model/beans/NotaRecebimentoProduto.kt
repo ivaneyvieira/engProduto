@@ -82,7 +82,8 @@ class NotaRecebimentoProduto(
   var notaDevolucao: String?,
   var emissaoDevolucao: LocalDate?,
   var valorDevolucao: Double?,
-  var obsDevolucao: String?
+  var obsDevolucao: String?,
+  var observacaoAdicional: String?,
 ) {
   val chaveNi
     get() = "$loja-$ni"

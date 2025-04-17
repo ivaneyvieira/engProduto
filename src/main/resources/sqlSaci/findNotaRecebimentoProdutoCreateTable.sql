@@ -53,3 +53,8 @@ ALTER TABLE sqldados.iprdAdicional
 
 ALTER TABLE sqldados.iprdAdicional
   ADD quantDevolucao int DEFAULT 0;
+
+
+
+ALTER TABLE sqldados.invAdicional
+  ADD observacaoAdicional VARCHAR(400) DEFAULT '';

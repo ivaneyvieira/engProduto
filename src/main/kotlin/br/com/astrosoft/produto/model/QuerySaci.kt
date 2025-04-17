@@ -2168,6 +2168,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataColeta", nota.dataColeta.toSaciDate())
       addOptionalParameter("situacaoDev", nota.situacaoDev)
       addOptionalParameter("observacaoDev", nota.observacaoDev)
+      addOptionalParameter("observacaoAdicional", nota.observacaoAdicional)
       addOptionalParameter("userno", userno)
     }
   }

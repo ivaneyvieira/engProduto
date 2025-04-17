@@ -149,6 +149,7 @@ SELECT I.invno,
        IA.carrno                                                      AS transpDevolucao,
        CA.name                                                        AS transportadoraDevolucao,
        IA.cet                                                         AS cteDevolucao,
+       IA.observacaoAdicional                                         AS observacaoAdicional,
        CAST(IF(IA.dataDevolucao = 0, NULL, IA.dataDevolucao) AS date) AS dataDevolucao,
        IA.situacaoDev                                                 AS situacaoDev,
        UA.login                                                       AS userDevolucao,
@@ -294,6 +295,7 @@ SELECT N.storeno                                                      AS loja,
        transpDevolucao,
        transportadoraDevolucao,
        cteDevolucao,
+       observacaoAdicional,
        dataDevolucao,
        IFNULL(situacaoDev, 0)                                         AS situacaoDev,
        userDevolucao,
@@ -399,14 +401,15 @@ SELECT loja,
          WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
          WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
                                                                              ELSE Q.situacaoDev
-       END                        AS situacaoDev,
+       END AS situacaoDev,
        userDevolucao,
        notaDevolucao,
        emissaoDevolucao,
        valorDevolucao,
        obsDevolucao,
        observacaoDev,
-       dataColeta
+       dataColeta,
+       observacaoAdicional
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
