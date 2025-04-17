@@ -50,7 +50,7 @@ SELECT storeno                         AS storeno,
        IFNULL(
            IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
               SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 4,
+                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
                                         100),
                               ' ', 1), NULL),
            IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
