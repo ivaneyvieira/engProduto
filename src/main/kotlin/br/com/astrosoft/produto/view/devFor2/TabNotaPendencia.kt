@@ -6,8 +6,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
@@ -18,7 +16,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPendencia {
@@ -61,24 +58,15 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    button("NFD") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.NFD)
+    select("Enviar") {
+      this.setItems(EStituacaoDev.entries - EStituacaoDev.PENDENCIA)
+      this.setItemLabelGenerator {sit ->
+        sit.descricao
       }
-    }
-
-    button("Resposto") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
-      }
-    }
-
-    button("Acerto") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.ACERTO)
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.marcaSituacao(it.value)
+        }
       }
     }
   }

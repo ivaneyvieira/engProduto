@@ -51,10 +51,10 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
       }
     }
 
-    button("NFD") {
+    button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.NFD)
+        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
       }
     }
 

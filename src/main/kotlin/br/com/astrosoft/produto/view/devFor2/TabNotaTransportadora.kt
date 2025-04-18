@@ -51,10 +51,10 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
       }
     }
 
-    button("Garantia") {
+    button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.GARANTIA)
+        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
       }
     }
 

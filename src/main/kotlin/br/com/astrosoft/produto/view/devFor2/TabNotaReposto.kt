@@ -51,17 +51,10 @@ class TabNotaReposto(val viewModel: TabNotaRepostoViewModel) :
       }
     }
 
-    button("E-Mail") {
+    button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
-      }
-    }
-
-    button("Acerto") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.ACERTO)
+        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
       }
     }
   }

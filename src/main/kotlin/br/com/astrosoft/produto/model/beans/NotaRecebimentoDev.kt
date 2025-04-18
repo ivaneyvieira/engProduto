@@ -69,7 +69,7 @@ class NotaRecebimentoDev(
         loja = this.loja ?: return null,
         pesquisa = "",
       ),
-      EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
+      EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
     ).firstOrNull()
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh

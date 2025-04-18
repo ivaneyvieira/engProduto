@@ -91,7 +91,7 @@ class NotaRecebimentoProduto(
     get() = "$loja-$ni-$tipoDevolucao-$notaDevolucao"
 
   var situacaoDevEnum: EStituacaoDev
-    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
+    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
     set(value) {
       situacaoDev = value.num
     }
@@ -272,12 +272,12 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   }
 }
 
-enum class EStituacaoDev(val num: Int) {
-  PENDENTE(0),
-  NFD(1),
-  TRANSPORTADORA(2),
-  EMAIL(3),
-  REPOSTO(4),
-  ACERTO(5),
-  GARANTIA(6),
+enum class EStituacaoDev(val num: Int, val descricao: String) {
+  PENDENCIA(0, "Pendencia"),
+  NFD(1, "NFD"),
+  GARANTIA(6, "Garantia"),
+  TRANSPORTADORA(2, "Transportadora"),
+  EMAIL(3, "E-mail"),
+  REPOSTO(4, "Reposto"),
+  ACERTO(5, "Acerto"),
 }

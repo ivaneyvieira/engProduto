@@ -52,10 +52,10 @@ class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
       }
     }
 
-    button("Reposto") {
+    button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
+        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
       }
     }
   }

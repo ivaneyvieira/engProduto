@@ -51,17 +51,10 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
       }
     }
 
-    button("Tranportadora") {
+    button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
-      }
-    }
-
-    button("Reposto") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.REPOSTO)
+        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
       }
     }
   }

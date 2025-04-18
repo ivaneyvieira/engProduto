@@ -94,7 +94,7 @@ class NotaRecebimentoProdutoDev(
     }
 
   var situacaoDevEnum: EStituacaoDev
-    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENTE
+    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
     set(value) {
       situacaoDev = value.num
     }
