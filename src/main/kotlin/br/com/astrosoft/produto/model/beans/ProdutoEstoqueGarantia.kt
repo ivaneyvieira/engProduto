@@ -27,6 +27,7 @@ class ProdutoEstoqueGarantia(
   var nfoReceb: String? = null,
   var entradaReceb: LocalDate? = null,
   var forReceb: Int? = null,
+  var nforReceb: String? = null,
   var cfopReceb: String? = null,
 ) {
 
@@ -104,6 +105,8 @@ fun List<ProdutoEstoqueGarantia>.agrupaGarantia(): List<EstoqueGarantia> {
       hora = garantia.hora ?: return@mapNotNull null,
       usuario = garantia.usuario,
       observacao = garantia.observacao,
+      codFor = garantia.forReceb,
+      nomeFor = garantia.nforReceb
     )
   }
 }
@@ -116,6 +119,8 @@ class EstoqueGarantia(
   var hora: LocalTime,
   var usuario: String?,
   var observacao: String?,
+  var codFor: Int?,
+  var nomeFor: String?,
 ) {
   fun cancelaGarantia() {
     saci.garantiaCancela(this)

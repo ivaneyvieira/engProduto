@@ -64,9 +64,12 @@ SELECT prdno                          AS prdno,
        CONCAT(N.nfname, '/', N.invse) AS nfoReceb,
        CAST(N.date AS date)           AS entradaReceb,
        vendno                         AS forReceb,
+       V.name                         AS nforReceb,
        I.cfop                         AS cfopReceb
 FROM
   sqldados.inv               AS N
+    LEFT JOIN  sqldados.vend AS V
+               ON N.vendno = V.no
     INNER JOIN T_ULTIMO_INVNO
                USING (invno)
     INNER JOIN sqldados.iprd AS I
@@ -131,6 +134,7 @@ SELECT numero,
        UR.nfoReceb              AS nfoReceb,
        UR.entradaReceb          AS entradaReceb,
        UR.forReceb              AS forReceb,
+       UR.nforReceb             AS nforReceb,
        UR.cfopReceb             AS cfopReceb
 FROM
   T_GARANTIA                            AS A
