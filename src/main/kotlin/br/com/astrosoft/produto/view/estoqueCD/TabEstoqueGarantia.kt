@@ -61,15 +61,15 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
       }
     }
 
-    edtDateIncial = datePicker("Data") {
-      this.value = LocalDate.now()
+    edtDateIncial = datePicker("Data Inicial") {
+      this.value = LocalDate.of(2025, 4, 1)
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
       }
     }
 
-    edtDateFinal = datePicker("Data") {
+    edtDateFinal = datePicker("Data Final") {
       this.value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
