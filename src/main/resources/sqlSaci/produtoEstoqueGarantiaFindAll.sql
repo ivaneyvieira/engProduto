@@ -65,6 +65,7 @@ SELECT prdno                          AS prdno,
        CAST(N.date AS date)           AS entradaReceb,
        vendno                         AS forReceb,
        V.name                         AS nforReceb,
+       V.no IN (8907)                 AS temLote,
        I.cfop                         AS cfopReceb
 FROM
   sqldados.inv               AS N
@@ -135,6 +136,8 @@ SELECT numero,
        UR.entradaReceb          AS entradaReceb,
        UR.forReceb              AS forReceb,
        UR.nforReceb             AS nforReceb,
+       A.loteDev                AS loteDev,
+       UR.temLote               AS temLote,
        UR.cfopReceb             AS cfopReceb
 FROM
   T_GARANTIA                            AS A

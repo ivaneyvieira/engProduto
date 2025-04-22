@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgConferenciaGarantia(
@@ -17,6 +18,7 @@ class DlgConferenciaGarantia(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
+  private var edtLote: TextField? = null
 
   init {
     this.isModal = true
@@ -32,6 +34,15 @@ class DlgConferenciaGarantia(
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.estoqueDev
+        }
+        edtLote = if (produto.temLote == true) {
+          textField("Lote") {
+            this.setWidthFull()
+            this.isClearButtonVisible = true
+            this.value = produto.loteDev
+          }
+        } else {
+          null
         }
       }
     }
@@ -70,6 +81,7 @@ class DlgConferenciaGarantia(
 
   private fun confirmaForm() {
     produto.estoqueDev = edtEstoqueReal?.value
+    produto.loteDev = edtLote?.value
     viewModel.updateProduto(produto)
     onClose.invoke()
     this.close()

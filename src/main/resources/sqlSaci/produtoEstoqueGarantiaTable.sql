@@ -14,3 +14,7 @@ CREATE TABLE produtoEstoqueGarantia
   estoqueReal int         NULL,
   PRIMARY KEY (numloja, numero, prdno, grade)
 );
+
+
+ALTER TABLE sqldados.produtoEstoqueGarantia
+  ADD loteDev varchar(20) NULL DEFAULT '';

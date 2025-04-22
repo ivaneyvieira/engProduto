@@ -2000,6 +2000,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("estoqueSis", produto.estoqueLoja)
       addOptionalParameter("estoqueReal", produto.estoqueDev)
+      addOptionalParameter("loteDev", produto.loteDev)
     }
   }
 
