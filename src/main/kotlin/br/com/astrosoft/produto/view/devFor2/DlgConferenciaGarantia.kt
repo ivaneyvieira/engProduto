@@ -1,7 +1,7 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -13,8 +13,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgConferenciaGarantia(
-  val viewModel: TabEstoqueGarantiaViewModel,
-  val produto: ProdutoEstoqueGarantia,
+  val viewModel: TabPedidoGarantiaViewModel,
+  val produto: ProdutoPedidoGarantia,
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null

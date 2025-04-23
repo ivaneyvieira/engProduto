@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
 import com.github.mvysny.karibudsl.v10.passwordField
 import com.github.mvysny.karibudsl.v10.textField

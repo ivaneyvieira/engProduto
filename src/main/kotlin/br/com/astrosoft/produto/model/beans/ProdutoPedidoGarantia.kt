@@ -5,7 +5,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class ProdutoEstoqueGarantia(
+class ProdutoPedidoGarantia(
   var numero: Int? = null,
   var numloja: Int? = null,
   var lojaSigla: String? = null,
@@ -60,7 +60,7 @@ class ProdutoEstoqueGarantia(
     get() = prdno?.trim()
 
   companion object {
-    fun findAll(filtro: FiltroGarantia): List<ProdutoEstoqueGarantia> {
+    fun findAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {
       return saci.garantiaFindAll(filtro)
     }
 
@@ -85,14 +85,14 @@ enum class ETipoDevolvidoGarantia(val codigo: String, val descricao: String) {
   TODOS("T", "Todos"),
 }
 
-fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoEstoqueGarantia> {
+fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoPedidoGarantia> {
   val user = AppConfig.userLogin()
 
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
   val lojaSigla = this.firstOrNull()?.lojaSigla ?: return emptyList()
 
   return this.map {
-    ProdutoEstoqueGarantia(
+    ProdutoPedidoGarantia(
       numero = numero,
       numloja = numLoja,
       lojaSigla = lojaSigla,
@@ -108,12 +108,12 @@ fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoEstoqueGarantia> {
   }
 }
 
-fun List<ProdutoEstoqueGarantia>.agrupaGarantia(): List<EstoqueGarantia> {
+fun List<ProdutoPedidoGarantia>.agrupaGarantia(): List<PedidoGarantia> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull {
     val garantia = it.value.firstOrNull() ?: return@mapNotNull null
 
-    EstoqueGarantia(
+    PedidoGarantia(
       numero = garantia.numero ?: return@mapNotNull null,
       numloja = garantia.numloja ?: return@mapNotNull null,
       lojaSigla = garantia.lojaSigla ?: return@mapNotNull null,
@@ -132,7 +132,7 @@ fun List<ProdutoEstoqueGarantia>.agrupaGarantia(): List<EstoqueGarantia> {
   }
 }
 
-class EstoqueGarantia(
+class PedidoGarantia(
   var numero: Int,
   var numloja: Int,
   var lojaSigla: String,
@@ -152,12 +152,12 @@ class EstoqueGarantia(
     saci.garantiaCancela(this)
   }
 
-  fun findProdutos(): List<ProdutoEstoqueGarantia> {
+  fun findProdutos(): List<ProdutoPedidoGarantia> {
     val filtro = FiltroGarantia(
       numLoja = numloja,
       numero = numero
     )
-    val produtos = ProdutoEstoqueGarantia.findAll(filtro)
+    val produtos = ProdutoPedidoGarantia.findAll(filtro)
     return produtos
   }
 

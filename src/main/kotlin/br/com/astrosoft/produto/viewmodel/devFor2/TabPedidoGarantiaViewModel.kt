@@ -1,17 +1,17 @@
-package br.com.astrosoft.produto.viewmodel.estoqueCD
+package br.com.astrosoft.produto.viewmodel.devFor2
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueGarantia
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoPedidoGarantia
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaGarantia
 import br.com.astrosoft.produto.model.report.ReportGarantia
 import br.com.astrosoft.produto.model.saci
 
-class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
+class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
   val subView
-    get() = viewModel.view.tabEstoqueGarantia
+    get() = viewModel.view.tabPedidoGarantia
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -24,11 +24,11 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoqueGarantia.findAll(filtro).agrupaGarantia().sortedBy { it.numero }
+    val produtos = ProdutoPedidoGarantia.findAll(filtro).agrupaGarantia().sortedBy { it.numero }
     subView.updateProduto(produtos)
   }
 
-  fun imprimirPedido(garantia: EstoqueGarantia) = viewModel.exec {
+  fun imprimirPedido(garantia: PedidoGarantia) = viewModel.exec {
     val produtos = garantia.findProdutos()
 
     if (produtos.isEmpty()) {
@@ -55,12 +55,12 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun geraPlanilha(produtos: List<ProdutoEstoqueGarantia>): ByteArray {
-    val planilha = PlanilhaProdutoEstoqueGarantia()
+  fun geraPlanilha(produtos: List<ProdutoPedidoGarantia>): ByteArray {
+    val planilha = PlanilhaProdutoPedidoGarantia()
     return planilha.write(produtos)
   }
 
-  fun updateProduto(produto: ProdutoEstoqueGarantia) = viewModel.exec {
+  fun updateProduto(produto: ProdutoPedidoGarantia) = viewModel.exec {
     produto.saveGarantia()
   }
 
@@ -79,7 +79,7 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun addProduto(produto: ProdutoEstoqueGarantia) {
+  fun addProduto(produto: ProdutoPedidoGarantia) {
     produto.saveGarantia()
     updateView()
   }
@@ -88,13 +88,13 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
     return saci.findGrades(codigo, loja)
   }
 
-  fun updateGarantia(bean: EstoqueGarantia?) = viewModel.exec {
+  fun updateGarantia(bean: PedidoGarantia?) = viewModel.exec {
     bean ?: fail("Nenhum produto selecionado")
     bean.saveGarantia()
     updateView()
   }
 
-  fun imprimirRelatorio(garantia: EstoqueGarantia) {
+  fun imprimirRelatorio(garantia: PedidoGarantia) {
     val produtos = garantia.findProdutos()
     val report = ReportGarantia()
     val file = report.processaRelatorio(produtos)
@@ -130,14 +130,14 @@ class TabEstoqueGarantiaViewModel(val viewModel: EstoqueCDViewModel) {
   }
 }
 
-interface ITabEstoqueGarantia : ITabView {
+interface ITabPedidoGarantia : ITabView {
   fun filtro(): FiltroGarantia
-  fun updateProduto(produtos: List<EstoqueGarantia>)
+  fun updateProduto(produtos: List<PedidoGarantia>)
   fun updateProduto()
-  fun itensSelecionados(): List<EstoqueGarantia>
+  fun itensSelecionados(): List<PedidoGarantia>
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaGarantia(block: (user: IUser) -> Unit)
-  fun produtosSelecionado(): List<ProdutoEstoqueGarantia>
+  fun produtosSelecionado(): List<ProdutoPedidoGarantia>
   fun formSeleionaEstoque(block: (estoque: TipoEstoque?) -> Unit)
 }
 

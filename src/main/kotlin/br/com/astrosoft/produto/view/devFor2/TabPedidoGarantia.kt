@@ -1,13 +1,13 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueGarantia
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TipoEstoque
+import br.com.astrosoft.produto.viewmodel.devFor2.ITabPedidoGarantia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TipoEstoque
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
@@ -20,9 +20,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
-  TabPanelGrid<EstoqueGarantia>(EstoqueGarantia::class), ITabEstoqueGarantia {
-  private var dlgEstoque: DlgEstoqueGarantia? = null
+class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
+  TabPanelGrid<PedidoGarantia>(PedidoGarantia::class), ITabPedidoGarantia {
+  private var dlgEstoque: DlgPedidoGarantia? = null
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -97,36 +97,36 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     }
   }
 
-  override fun Grid<EstoqueGarantia>.gridPanel() {
+  override fun Grid<PedidoGarantia>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
     this.withEditor(
-      classBean = EstoqueGarantia::class,
+      classBean = PedidoGarantia::class,
       openEditor = {
-        val edit = getColumnBy(EstoqueGarantia::observacao) as? Focusable<*>
+        val edit = getColumnBy(PedidoGarantia::observacao) as? Focusable<*>
         edit?.focus()
       },
       closeEditor = {
         viewModel.updateGarantia(it.bean)
       })
 
-    columnGrid(EstoqueGarantia::lojaSigla, header = "Loja")
-    columnGrid(EstoqueGarantia::numero, header = "Garantia")
+    columnGrid(PedidoGarantia::lojaSigla, header = "Loja")
+    columnGrid(PedidoGarantia::numero, header = "Garantia")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { garantia ->
-      dlgEstoque = DlgEstoqueGarantia(viewModel, garantia)
+      dlgEstoque = DlgPedidoGarantia(viewModel, garantia)
       dlgEstoque?.showDialog {
         viewModel.updateView()
       }
     }
-    columnGrid(EstoqueGarantia::data, header = "Data")
-    columnGrid(EstoqueGarantia::hora, header = "Hora")
-    columnGrid(EstoqueGarantia::codFor, header = "For Cod")
-    columnGrid(EstoqueGarantia::nomeFor, header = "For Nome")
-    columnGrid(EstoqueGarantia::dataNfdGarantia, header = "Data", width = "7rem").dateFieldEditor()
-    columnGrid(EstoqueGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
-    columnGrid(EstoqueGarantia::valorTotal, header = "Valor")
+    columnGrid(PedidoGarantia::data, header = "Data")
+    columnGrid(PedidoGarantia::hora, header = "Hora")
+    columnGrid(PedidoGarantia::codFor, header = "For Cod")
+    columnGrid(PedidoGarantia::nomeFor, header = "For Nome")
+    columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data", width = "7rem").dateFieldEditor()
+    columnGrid(PedidoGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
+    columnGrid(PedidoGarantia::valorTotal, header = "Valor")
 
-    columnGrid(EstoqueGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
+    columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroGarantia {
@@ -139,7 +139,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     )
   }
 
-  override fun updateProduto(produtos: List<EstoqueGarantia>) {
+  override fun updateProduto(produtos: List<PedidoGarantia>) {
     updateGrid(produtos)
     dlgEstoque?.updateGarantia(produtos)
   }
@@ -183,7 +183,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     }
   }
 
-  override fun produtosSelecionado(): List<ProdutoEstoqueGarantia> {
+  override fun produtosSelecionado(): List<ProdutoPedidoGarantia> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
 
@@ -200,7 +200,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
   }
 
   override val label: String
-    get() = "Garantia"
+    get() = "Ped Garantia"
 
   override fun updateComponent() {
     viewModel.updateView()

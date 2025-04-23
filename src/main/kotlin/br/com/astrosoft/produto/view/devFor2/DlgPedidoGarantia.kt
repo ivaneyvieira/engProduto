@@ -1,12 +1,12 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.EstoqueGarantia
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
+import br.com.astrosoft.produto.model.beans.PedidoGarantia
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -15,10 +15,10 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garantia: EstoqueGarantia) {
+class DlgPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia: PedidoGarantia) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoEstoqueGarantia::class.java, false)
+  private val gridDetail = Grid(ProdutoPedidoGarantia::class.java, false)
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -91,34 +91,34 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       this.setSelectionMode(Grid.SelectionMode.MULTI)
       isMultiSort = false
 
-      columnGrid(ProdutoEstoqueGarantia::lojaReceb, "Loja")
-      columnGrid(ProdutoEstoqueGarantia::niReceb, "NI")
-      columnGrid(ProdutoEstoqueGarantia::nfoReceb, "NFO").right()
-      columnGrid(ProdutoEstoqueGarantia::entradaReceb, "Entrada", width = null)
-      columnGrid(ProdutoEstoqueGarantia::cfopReceb, "CFOP").right()
-      columnGrid(ProdutoEstoqueGarantia::forReceb, "For NFO")
+      columnGrid(ProdutoPedidoGarantia::lojaReceb, "Loja")
+      columnGrid(ProdutoPedidoGarantia::niReceb, "NI")
+      columnGrid(ProdutoPedidoGarantia::nfoReceb, "NFO").right()
+      columnGrid(ProdutoPedidoGarantia::entradaReceb, "Entrada", width = null)
+      columnGrid(ProdutoPedidoGarantia::cfopReceb, "CFOP").right()
+      columnGrid(ProdutoPedidoGarantia::forReceb, "For NFO")
 
-      columnGrid(ProdutoEstoqueGarantia::ref, "Ref Fab").right()
-      columnGrid(ProdutoEstoqueGarantia::codigo, "Código").right()
-      columnGrid(ProdutoEstoqueGarantia::descricao, "Descrição")
-      columnGrid(ProdutoEstoqueGarantia::grade, "Grade")
+      columnGrid(ProdutoPedidoGarantia::ref, "Ref Fab").right()
+      columnGrid(ProdutoPedidoGarantia::codigo, "Código").right()
+      columnGrid(ProdutoPedidoGarantia::descricao, "Descrição")
+      columnGrid(ProdutoPedidoGarantia::grade, "Grade")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val dlgConferencia = DlgConferenciaGarantia(viewModel, produto) {
           gridDetail.dataProvider.refreshAll()
           val total = gridDetail.dataProvider.fetchAll().sumOf { it.valorTotal }
-          getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
+          getColumnBy(ProdutoPedidoGarantia::valorTotal).setFooter(total.format())
         }
         dlgConferencia.open()
       }
-      columnGrid(ProdutoEstoqueGarantia::estoqueLoja, "Est Loja")
-      columnGrid(ProdutoEstoqueGarantia::estoqueLojas, "Est Lojas")
-      columnGrid(ProdutoEstoqueGarantia::estoqueDev, "Est Dev")
-      columnGrid(ProdutoEstoqueGarantia::valorUnitario, "V. Unit")
-      columnGrid(ProdutoEstoqueGarantia::valorTotal, "V. Total")
+      columnGrid(ProdutoPedidoGarantia::estoqueLoja, "Est Loja")
+      columnGrid(ProdutoPedidoGarantia::estoqueLojas, "Est Lojas")
+      columnGrid(ProdutoPedidoGarantia::estoqueDev, "Est Dev")
+      columnGrid(ProdutoPedidoGarantia::valorUnitario, "V. Unit")
+      columnGrid(ProdutoPedidoGarantia::valorTotal, "V. Total")
 
       this.dataProvider.addDataProviderListener {
         val total = estoqueGarantias().sumOf { it.valorTotal }
-        getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
+        getColumnBy(ProdutoPedidoGarantia::valorTotal).setFooter(total.format())
       }
     }
     this.addAndExpand(gridDetail)
@@ -126,7 +126,7 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
     update()
   }
 
-  fun produtosSelecionados(): List<ProdutoEstoqueGarantia> {
+  fun produtosSelecionados(): List<ProdutoPedidoGarantia> {
     return gridDetail.selectedItems.toList()
   }
 
@@ -134,10 +134,10 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
     val produtos = estoqueGarantias()
     gridDetail.setItems(produtos)
     val total = produtos.sumOf { it.valorTotal }
-    gridDetail.getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
+    gridDetail.getColumnBy(ProdutoPedidoGarantia::valorTotal).setFooter(total.format())
   }
 
-  private fun estoqueGarantias(): List<ProdutoEstoqueGarantia> {
+  private fun estoqueGarantias(): List<ProdutoPedidoGarantia> {
     return garantia.findProdutos()
   }
 
@@ -146,11 +146,11 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
     form?.close()
   }
 
-  fun produtosSelecionado(): List<ProdutoEstoqueGarantia> {
+  fun produtosSelecionado(): List<ProdutoPedidoGarantia> {
     return gridDetail.selectedItemsSort()
   }
 
-  fun updateGarantia(acertos: List<EstoqueGarantia>) {
+  fun updateGarantia(acertos: List<PedidoGarantia>) {
     val garantia = acertos.firstOrNull {
       it.numloja == this.garantia.numloja && it.numero == this.garantia.numero
     }

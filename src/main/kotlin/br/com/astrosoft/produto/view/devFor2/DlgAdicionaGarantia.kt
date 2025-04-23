@@ -1,10 +1,10 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.produto.model.beans.EstoqueGarantia
+import br.com.astrosoft.produto.model.beans.PedidoGarantia
 import br.com.astrosoft.produto.model.beans.PrdGrade
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -18,8 +18,8 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaGarantia(
-  val viewModel: TabEstoqueGarantiaViewModel,
-  val garantia: EstoqueGarantia,
+  val viewModel: TabPedidoGarantiaViewModel,
+  val garantia: PedidoGarantia,
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtCodigo: TextField? = null
@@ -109,7 +109,7 @@ class DlgAdicionaGarantia(
 
   private fun closeForm() {
     val user = AppConfig.userLogin()
-    val produto = ProdutoEstoqueGarantia()
+    val produto = ProdutoPedidoGarantia()
     produto.apply {
       this.numero = garantia.numero
       this.numloja = garantia.numloja

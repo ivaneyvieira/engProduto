@@ -1,13 +1,9 @@
-package br.com.astrosoft.produto.view.estoqueCD
+package br.com.astrosoft.produto.view.devFor2
 
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TipoEstoque
-import com.github.mvysny.karibudsl.v10.passwordField
+import br.com.astrosoft.produto.viewmodel.devFor2.TipoEstoque
 import com.github.mvysny.karibudsl.v10.radioButtonGroup
-import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup
-import com.vaadin.flow.component.textfield.PasswordField
-import com.vaadin.flow.component.textfield.TextField
 
 class FormSelecionaEstoque : FormLayout() {
   private var selecionaEstoque : RadioButtonGroup<TipoEstoque>? = null

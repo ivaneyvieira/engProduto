@@ -105,7 +105,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       fail("Nenhum produto selecionado")
     }
 
-    val numero = ProdutoEstoqueGarantia.proximoNumero(numLoja)
+    val numero = ProdutoPedidoGarantia.proximoNumero(numLoja)
 
     val produtosGarantia = produtos.toGarantia(numero)
 

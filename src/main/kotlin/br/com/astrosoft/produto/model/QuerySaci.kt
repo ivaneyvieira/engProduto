@@ -1940,12 +1940,12 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
-  fun garantiaNovo(numero: Int, numLoja: Int): ProdutoEstoqueGarantia? {
+  fun garantiaNovo(numero: Int, numLoja: Int): ProdutoPedidoGarantia? {
     val sql = "/sqlSaci/produtoEstoqueGarantiaNovo.sql"
 
     val user = AppConfig.userLogin() as? UserSaci
 
-    return query(sql, ProdutoEstoqueGarantia::class) {
+    return query(sql, ProdutoPedidoGarantia::class) {
       addOptionalParameter("numLoja", numLoja)
       addOptionalParameter("numero", numero)
       addOptionalParameter("login", user?.login ?: "")
@@ -1988,7 +1988,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun garantiaUpdate(produto: ProdutoEstoqueGarantia) {
+  fun garantiaUpdate(produto: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/produtoEstoqueGarantiaUpdate.sql"
     script(sql) {
       addOptionalParameter("numero", produto.numero)
@@ -2014,9 +2014,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoEstoqueGarantia> {
+  fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {
     val sql = "/sqlSaci/produtoEstoqueGarantiaFindAll.sql"
-    return query(sql, ProdutoEstoqueGarantia::class) {
+    return query(sql, ProdutoPedidoGarantia::class) {
       addOptionalParameter("numLoja", filtro.numLoja)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
@@ -2036,13 +2036,13 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 0) > 0
   }
 
-  fun jaGravadoGarantia(produtoEstoqueGarantia: ProdutoEstoqueGarantia): Boolean {
+  fun jaGravadoGarantia(produtoPedidoGarantia: ProdutoPedidoGarantia): Boolean {
     val sql = "/sqlSaci/produtoEstoqueGarantiaJaGravado.sql"
     return (query(sql, Count::class) {
-      addOptionalParameter("numLoja", produtoEstoqueGarantia.numloja)
-      addOptionalParameter("data", produtoEstoqueGarantia.data.toSaciDate())
-      addOptionalParameter("prdno", produtoEstoqueGarantia.prdno)
-      addOptionalParameter("grade", produtoEstoqueGarantia.grade)
+      addOptionalParameter("numLoja", produtoPedidoGarantia.numloja)
+      addOptionalParameter("data", produtoPedidoGarantia.data.toSaciDate())
+      addOptionalParameter("prdno", produtoPedidoGarantia.prdno)
+      addOptionalParameter("grade", produtoPedidoGarantia.grade)
     }.firstOrNull()?.quant ?: 0) > 0
   }
 
@@ -2054,7 +2054,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun garantiaCancela(produtoEstoqueAcerto: EstoqueGarantia) {
+  fun garantiaCancela(produtoEstoqueAcerto: PedidoGarantia) {
     val sql = "/sqlSaci/produtoEstoqueAcertoCancela.sql"
     script(sql) {
       addOptionalParameter("numloja", produtoEstoqueAcerto.numloja)
@@ -2072,7 +2072,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun removeGarantiaProduto(produtoEstoque: ProdutoEstoqueGarantia) {
+  fun removeGarantiaProduto(produtoEstoque: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/produtoEstoqueGarantiaLimpa.sql"
     script(sql) {
       addOptionalParameter("numLoja", produtoEstoque.numloja)
@@ -2111,7 +2111,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateGarantia(garantiaEstoque: EstoqueGarantia) {
+  fun updateGarantia(garantiaEstoque: PedidoGarantia) {
     val sql = "/sqlSaci/produtoObservacaoGarantiaUpdate.sql"
     script(sql) {
       addOptionalParameter("numloja", garantiaEstoque.numloja)
