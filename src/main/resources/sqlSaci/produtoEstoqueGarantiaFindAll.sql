@@ -1,5 +1,9 @@
 USE sqldados;
 
+DO @PESQUISA_NUM := :pesquisa * 1;
+DO @PESQUISA_STR := TRIM(:pesquisa);
+DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA_STR, '%');
+
 DROP TEMPORARY TABLE IF EXISTS T_GARANTIA;
 CREATE TEMPORARY TABLE T_GARANTIA
 SELECT *
@@ -121,31 +125,33 @@ HAVING codbar != '';
 
 SELECT numero,
        numloja,
-       S.sname                       AS lojaSigla,
+       S.sname                                          AS lojaSigla,
        data,
        hora,
        usuario,
        A.prdno,
-       TRIM(MID(P.name, 1, 37))      AS descricao,
+       TRIM(MID(P.name, 1, 37))                         AS descricao,
        A.grade,
        L.locApp,
-       B.codbar                      AS barcode,
-       TRIM(P.mfno_ref)              AS ref,
-       ROUND(EL.estoqueLoja)         AS estoqueLoja,
-       estoqueReal                   AS estoqueDev,
-       ROUND(EL.estoqueLojas)        AS estoqueLojas,
-       O.observacao                  AS observacao,
-       UR.lojaReceb                  AS lojaReceb,
-       UR.niReceb                    AS niReceb,
-       UR.nfoReceb                   AS nfoReceb,
-       UR.entradaReceb               AS entradaReceb,
-       UR.forReceb                   AS forReceb,
-       UR.nforReceb                  AS nforReceb,
-       A.loteDev                     AS loteDev,
-       UR.temLote                    AS temLote,
-       UR.cfopReceb                  AS cfopReceb,
-       IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao,
-       UR.valorUnitario              AS valorUnitario
+       B.codbar                                         AS barcode,
+       TRIM(P.mfno_ref)                                 AS ref,
+       ROUND(EL.estoqueLoja)                            AS estoqueLoja,
+       estoqueReal                                      AS estoqueDev,
+       ROUND(EL.estoqueLojas)                           AS estoqueLojas,
+       O.observacao                                     AS observacao,
+       UR.lojaReceb                                     AS lojaReceb,
+       UR.niReceb                                       AS niReceb,
+       UR.nfoReceb                                      AS nfoReceb,
+       UR.entradaReceb                                  AS entradaReceb,
+       UR.forReceb                                      AS forReceb,
+       UR.nforReceb                                     AS nforReceb,
+       A.loteDev                                        AS loteDev,
+       UR.temLote                                       AS temLote,
+       UR.cfopReceb                                     AS cfopReceb,
+       IFNULL(UR.numeroDevolucao, 0)                    AS numeroDevolucao,
+       UR.valorUnitario                                 AS valorUnitario,
+       O.nfd                                            AS nfdGarantia,
+       CAST(IF(O.dataNfd = 0, NULL, O.dataNfd) AS date) AS dataNfdGarantia
 FROM
   T_GARANTIA                                     AS A
     LEFT JOIN T_ESTOQUE_LOJA                     AS EL
@@ -166,7 +172,14 @@ FROM
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
 WHERE (
-        (IFNULL(UR.numeroDevolucao, 0) > 0 AND :devolvido = 'F') OR
-        (IFNULL(UR.numeroDevolucao, 0) = 0 AND :devolvido = 'P') OR
-        (:devolvido = 'T')
-        )
+  (IFNULL(UR.numeroDevolucao, 0) > 0 AND :devolvido = 'F') OR
+  (IFNULL(UR.numeroDevolucao, 0) = 0 AND :devolvido = 'P') OR
+  (:devolvido = 'T')
+  )
+  AND (
+  @PESQUISA_STR = '' OR
+  numero = @PESQUISA_NUM OR
+  S.sname LIKE @PESQUISA_LIKE OR
+  UR.forReceb = @PESQUISA_NUM OR
+  UR.nforReceb LIKE @PESQUISA_LIKE
+  )

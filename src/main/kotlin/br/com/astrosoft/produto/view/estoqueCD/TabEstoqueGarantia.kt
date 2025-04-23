@@ -16,14 +16,14 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
   TabPanelGrid<EstoqueGarantia>(EstoqueGarantia::class), ITabEstoqueGarantia {
   private var dlgEstoque: DlgEstoqueGarantia? = null
-  private lateinit var edtNumero: IntegerField
+  private lateinit var edtPesquisa: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
@@ -53,7 +53,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
 
     init()
 
-    edtNumero = integerField("Pesquisa") {
+    edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
@@ -122,8 +122,8 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     columnGrid(EstoqueGarantia::hora, header = "Hora")
     columnGrid(EstoqueGarantia::codFor, header = "For Cod")
     columnGrid(EstoqueGarantia::nomeFor, header = "For Nome")
-    columnGrid(EstoqueGarantia::entradaReceb, header = "Data")
-    columnGrid(EstoqueGarantia::nfoReceb, header = "NFD")
+    columnGrid(EstoqueGarantia::dataNfdGarantia, header = "Data", width = "7rem").dateFieldEditor()
+    columnGrid(EstoqueGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
     columnGrid(EstoqueGarantia::valorTotal, header = "Valor")
 
     columnGrid(EstoqueGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
@@ -132,7 +132,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
   override fun filtro(): FiltroGarantia {
     return FiltroGarantia(
       numLoja = cmbLoja.value?.no ?: 0,
-      numero = edtNumero.value ?: 0,
+      pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
       devolvido = cmbTipo.value ?: ETipoDevolvidoGarantia.PENDENTE,

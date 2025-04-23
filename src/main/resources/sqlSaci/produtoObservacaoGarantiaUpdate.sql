@@ -1,2 +1,2 @@
-REPLACE INTO sqldados.produtoObservacaoGarantia(numero, numloja, observacao)
-  VALUE (:numero, :numloja, :observacao)
+REPLACE INTO sqldados.produtoObservacaoGarantia(numero, numloja, observacao, nfd, dataNfd)
+  VALUE (:numero, :numloja, :observacao, :nfdGarantia, :dataNfdGarantia)

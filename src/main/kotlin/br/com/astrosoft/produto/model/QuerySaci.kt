@@ -2021,6 +2021,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("devolvido", filtro.devolvido.codigo)
     }
   }
@@ -2116,6 +2117,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numloja", garantiaEstoque.numloja)
       addOptionalParameter("numero", garantiaEstoque.numero)
       addOptionalParameter("observacao", garantiaEstoque.observacao)
+      addOptionalParameter("dataNfdGarantia", garantiaEstoque.dataNfdGarantia.toSaciDate())
+      addOptionalParameter("nfdGarantia", garantiaEstoque.nfdGarantia)
     }
   }
 

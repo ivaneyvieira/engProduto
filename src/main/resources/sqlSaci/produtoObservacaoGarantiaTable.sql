@@ -9,3 +9,9 @@ CREATE TABLE produtoObservacaoGarantia
   PRIMARY KEY (numloja, numero)
 );
 
+ALTER TABLE sqldados.produtoObservacaoGarantia
+  ADD nfd varchar(20) NULL DEFAULT '';
+
+ALTER TABLE sqldados.produtoObservacaoGarantia
+  ADD dataNfd int NULL DEFAULT 0;
+

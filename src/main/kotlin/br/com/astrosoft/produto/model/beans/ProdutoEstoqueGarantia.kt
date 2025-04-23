@@ -33,6 +33,8 @@ class ProdutoEstoqueGarantia(
   var loteDev: String? = null,
   var numeroDevolucao: Int? = null,
   var valorUnitario: Double? = null,
+  var nfdGarantia: String? = null,
+  var dataNfdGarantia: LocalDate? = null,
 ) {
   val valorTotal: Double
     get() = (estoqueDev ?: 0) * (valorUnitario ?: 0.0)
@@ -70,9 +72,10 @@ class ProdutoEstoqueGarantia(
 
 data class FiltroGarantia(
   val numLoja: Int = 0,
+  val numero: Int = 0,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
-  val numero: Int = 0,
+  val pesquisa: String = "",
   val devolvido: ETipoDevolvidoGarantia = ETipoDevolvidoGarantia.TODOS
 )
 
@@ -123,6 +126,8 @@ fun List<ProdutoEstoqueGarantia>.agrupaGarantia(): List<EstoqueGarantia> {
       valorTotal = it.value.sumOf { it.valorTotal },
       nfoReceb = garantia.nfoReceb,
       entradaReceb = garantia.entradaReceb,
+      nfdGarantia = garantia.nfdGarantia,
+      dataNfdGarantia = garantia.dataNfdGarantia,
     )
   }
 }
@@ -140,6 +145,8 @@ class EstoqueGarantia(
   val valorTotal: Double,
   val nfoReceb: String?,
   val entradaReceb: LocalDate?,
+  var nfdGarantia: String?,
+  var dataNfdGarantia: LocalDate?,
 ) {
   fun cancelaGarantia() {
     saci.garantiaCancela(this)
