@@ -53,7 +53,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
 
     init()
 
-    edtNumero = integerField("Número") {
+    edtNumero = integerField("Pesquisa") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
