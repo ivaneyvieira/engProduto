@@ -66,15 +66,19 @@ SELECT prdno                          AS prdno,
        vendno                         AS forReceb,
        V.name                         AS nforReceb,
        V.no IN (8907)                 AS temLote,
-       I.cfop                         AS cfopReceb
+       I.cfop                         AS cfopReceb,
+       MAX(IA.numero)                 AS numeroDevolucao
 FROM
-  sqldados.inv               AS N
-    LEFT JOIN  sqldados.vend AS V
+  sqldados.inv                       AS N
+    LEFT JOIN  sqldados.vend         AS V
                ON N.vendno = V.no
-    INNER JOIN T_ULTIMO_INVNO
+    INNER JOIN T_ULTIMO_INVNO        AS U
                USING (invno)
-    INNER JOIN sqldados.iprd AS I
+    INNER JOIN sqldados.iprd         AS I
                USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.invAdicional AS IA
+               ON IA.invno = U.invno
+                 AND IA.tipoDevolucao = 8
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
@@ -116,46 +120,51 @@ HAVING codbar != '';
 
 SELECT numero,
        numloja,
-       S.sname                  AS lojaSigla,
+       S.sname                       AS lojaSigla,
        data,
        hora,
        usuario,
        A.prdno,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
+       TRIM(MID(P.name, 1, 37))      AS descricao,
        A.grade,
        L.locApp,
-       B.codbar                 AS barcode,
-       TRIM(P.mfno_ref)         AS ref,
-       ROUND(EL.estoqueLoja)    AS estoqueLoja,
-       estoqueReal              AS estoqueDev,
-       ROUND(EL.estoqueLojas)   AS estoqueLojas,
-       O.observacao             AS observacao,
-       UR.lojaReceb             AS lojaReceb,
-       UR.niReceb               AS niReceb,
-       UR.nfoReceb              AS nfoReceb,
-       UR.entradaReceb          AS entradaReceb,
-       UR.forReceb              AS forReceb,
-       UR.nforReceb             AS nforReceb,
-       A.loteDev                AS loteDev,
-       UR.temLote               AS temLote,
-       UR.cfopReceb             AS cfopReceb
+       B.codbar                      AS barcode,
+       TRIM(P.mfno_ref)              AS ref,
+       ROUND(EL.estoqueLoja)         AS estoqueLoja,
+       estoqueReal                   AS estoqueDev,
+       ROUND(EL.estoqueLojas)        AS estoqueLojas,
+       O.observacao                  AS observacao,
+       UR.lojaReceb                  AS lojaReceb,
+       UR.niReceb                    AS niReceb,
+       UR.nfoReceb                   AS nfoReceb,
+       UR.entradaReceb               AS entradaReceb,
+       UR.forReceb                   AS forReceb,
+       UR.nforReceb                  AS nforReceb,
+       A.loteDev                     AS loteDev,
+       UR.temLote                    AS temLote,
+       UR.cfopReceb                  AS cfopReceb,
+       IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao
 FROM
-  T_GARANTIA                            AS A
-    LEFT JOIN T_ESTOQUE_LOJA            AS EL
+  T_GARANTIA                                     AS A
+    LEFT JOIN T_ESTOQUE_LOJA                     AS EL
               USING (prdno, grade)
-    LEFT JOIN T_ULTIMO_RECEB            AS UR
+    LEFT JOIN T_ULTIMO_RECEB                     AS UR
               USING (prdno, grade)
-    LEFT JOIN T_BARCODE                 AS B
+    LEFT JOIN T_BARCODE                          AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN produtoObservacaoGarantia AS O
+    LEFT JOIN sqldados.produtoObservacaoGarantia AS O
               USING (numero, numloja)
-    LEFT JOIN sqldados.store            AS S
+    LEFT JOIN sqldados.store                     AS S
               ON S.no = A.numloja
-    LEFT JOIN sqldados.prd              AS P
+    LEFT JOIN sqldados.prd                       AS P
               ON P.no = A.prdno
-    LEFT JOIN T_LOC_APP                 AS L
+    LEFT JOIN T_LOC_APP                          AS L
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
-
+WHERE (
+        (IFNULL(UR.numeroDevolucao, 0) > 0 AND :devolvido = 'F') OR
+        (IFNULL(UR.numeroDevolucao, 0) = 0 AND :devolvido = 'P') OR
+        (:devolvido = 'T')
+        )

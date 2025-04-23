@@ -27,6 +27,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbTipo: Select<ETipoDevolvidoGarantia>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -77,6 +78,17 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
       }
     }
 
+    cmbTipo = select("Tipo Garantia") {
+      this.setItems(ETipoDevolvidoGarantia.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = ETipoDevolvidoGarantia.PENDENTE
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     button("Cancelar") {
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
@@ -119,7 +131,8 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
       numLoja = cmbLoja.value?.no ?: 0,
       numero = edtNumero.value ?: 0,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
-      dataFinal = edtDateFinal.value ?: LocalDate.now()
+      dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      devolvido = cmbTipo.value ?: ETipoDevolvidoGarantia.PENDENTE,
     )
   }
 

@@ -31,6 +31,7 @@ class ProdutoEstoqueGarantia(
   var cfopReceb: String? = null,
   var temLote: Boolean? = null,
   var loteDev: String? = null,
+  var numeroDevolucao: Int? = null,
 ) {
 
   val saldoBarraRef: String
@@ -69,7 +70,14 @@ data class FiltroGarantia(
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
   val numero: Int = 0,
+  val devolvido: ETipoDevolvidoGarantia = ETipoDevolvidoGarantia.TODOS
 )
+
+enum class ETipoDevolvidoGarantia(val codigo: String, val descricao: String) {
+  PENDENTE("P", "Pendente"),
+  FATURADO("F", "Faturado"),
+  TODOS("T", "Todos"),
+}
 
 fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoEstoqueGarantia> {
   val user = AppConfig.userLogin()

@@ -58,3 +58,7 @@ ALTER TABLE sqldados.iprdAdicional
 
 ALTER TABLE sqldados.invAdicional
   ADD observacaoAdicional VARCHAR(400) DEFAULT '';
+
+select * from sqldados.invAdicional;
+
+
