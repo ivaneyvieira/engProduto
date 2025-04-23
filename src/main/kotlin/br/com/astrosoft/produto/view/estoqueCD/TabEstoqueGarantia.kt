@@ -122,6 +122,7 @@ class TabEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel) :
     columnGrid(EstoqueGarantia::hora, header = "Hora")
     columnGrid(EstoqueGarantia::codFor, header = "For Cod")
     columnGrid(EstoqueGarantia::nomeFor, header = "For Nome")
+    columnGrid(EstoqueGarantia::valorTotal, header = "Valor")
 
     columnGrid(EstoqueGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }

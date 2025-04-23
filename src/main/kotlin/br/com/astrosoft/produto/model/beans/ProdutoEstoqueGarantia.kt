@@ -119,7 +119,8 @@ fun List<ProdutoEstoqueGarantia>.agrupaGarantia(): List<EstoqueGarantia> {
       usuario = garantia.usuario,
       observacao = garantia.observacao,
       codFor = garantia.forReceb,
-      nomeFor = garantia.nforReceb
+      nomeFor = garantia.nforReceb,
+      valorTotal = it.value.sumOf { it.valorTotal }
     )
   }
 }
@@ -134,6 +135,7 @@ class EstoqueGarantia(
   var observacao: String?,
   var codFor: Int?,
   var nomeFor: String?,
+  val valorTotal: Double,
 ) {
   fun cancelaGarantia() {
     saci.garantiaCancela(this)
