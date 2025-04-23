@@ -67,7 +67,8 @@ SELECT prdno                          AS prdno,
        V.name                         AS nforReceb,
        V.no IN (8907)                 AS temLote,
        I.cfop                         AS cfopReceb,
-       MAX(IA.numero)                 AS numeroDevolucao
+       MAX(IA.numero)                 AS numeroDevolucao,
+       I.fob4 / 10000                 AS valorUnitario
 FROM
   sqldados.inv                       AS N
     LEFT JOIN  sqldados.vend         AS V
@@ -143,7 +144,8 @@ SELECT numero,
        A.loteDev                     AS loteDev,
        UR.temLote                    AS temLote,
        UR.cfopReceb                  AS cfopReceb,
-       IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao
+       IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao,
+       UR.valorUnitario              AS valorUnitario
 FROM
   T_GARANTIA                                     AS A
     LEFT JOIN T_ESTOQUE_LOJA                     AS EL

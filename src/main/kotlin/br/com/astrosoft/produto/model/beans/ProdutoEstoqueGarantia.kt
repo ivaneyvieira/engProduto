@@ -32,7 +32,11 @@ class ProdutoEstoqueGarantia(
   var temLote: Boolean? = null,
   var loteDev: String? = null,
   var numeroDevolucao: Int? = null,
+  var valorUnitario: Double? = null,
 ) {
+  val valorTotal: Double
+    get() = (estoqueDev ?: 0) * (valorUnitario ?: 0.0)
+
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
