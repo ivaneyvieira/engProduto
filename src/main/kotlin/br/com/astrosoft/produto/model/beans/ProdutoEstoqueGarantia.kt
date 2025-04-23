@@ -33,7 +33,6 @@ class ProdutoEstoqueGarantia(
   var loteDev: String? = null,
   var numeroDevolucao: Int? = null,
 ) {
-
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
