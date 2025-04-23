@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -7,6 +8,8 @@ import br.com.astrosoft.produto.model.beans.EstoqueGarantia
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueGarantia
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -102,6 +105,8 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val dlgConferencia = DlgConferenciaGarantia(viewModel, produto) {
           gridDetail.dataProvider.refreshAll()
+          val total = gridDetail.dataProvider.fetchAll().sumOf { it.valorTotal }
+          getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
         }
         dlgConferencia.open()
       }
@@ -110,8 +115,14 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
       columnGrid(ProdutoEstoqueGarantia::estoqueDev, "Est Dev")
       columnGrid(ProdutoEstoqueGarantia::valorUnitario, "V. Unit")
       columnGrid(ProdutoEstoqueGarantia::valorTotal, "V. Total")
+
+      this.dataProvider.addDataProviderListener {
+        val total = estoqueGarantias().sumOf { it.valorTotal }
+        getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
+      }
     }
     this.addAndExpand(gridDetail)
+
     update()
   }
 
@@ -122,6 +133,8 @@ class DlgEstoqueGarantia(val viewModel: TabEstoqueGarantiaViewModel, val garanti
   fun update() {
     val produtos = estoqueGarantias()
     gridDetail.setItems(produtos)
+    val total = produtos.sumOf { it.valorTotal }
+    gridDetail.getColumnBy(ProdutoEstoqueGarantia::valorTotal).setFooter(total.format())
   }
 
   private fun estoqueGarantias(): List<ProdutoEstoqueGarantia> {
