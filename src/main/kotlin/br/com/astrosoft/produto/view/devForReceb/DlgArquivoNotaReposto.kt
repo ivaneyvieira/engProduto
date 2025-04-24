@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*

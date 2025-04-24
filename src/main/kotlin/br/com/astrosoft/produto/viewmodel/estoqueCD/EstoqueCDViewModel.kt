@@ -2,11 +2,11 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 
 class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view) {
   val tabEstoqueMovViewModel = TabEstoqueMovViewModel(this)
   val tabEstoqueAcertoViewModel = TabEstoqueAcertoViewModel(this)
-  val tabPedidoGarantiaViewModel = TabPedidoGarantiaViewModel(this)
   val tabEstoqueAcertoMobileViewModel = TabEstoqueAcertoMobileViewModel(this)
   val tabEstoqueSaldoViewModel = TabEstoqueSaldoViewModel(this)
   val tabEstoqueConfViewModel = TabEstoqueConfViewModel(this)
@@ -21,7 +21,6 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
     view.tabEstoqueConf,
     view.tabEstoqueAcerto,
     view.tabEstoqueAcertoMobile,
-    view.tabEstoqueGarantia,
     view.tabEstoqueMov,
     view.tabEstoqueCad,
     view.tabEstoqueCD1A,
@@ -33,7 +32,6 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
 interface IEstoqueCDView : IView {
   val tabEstoqueMov: ITabEstoqueMov
   val tabEstoqueAcerto: ITabEstoqueAcerto
-  val tabEstoqueGarantia: ITabPedidoGarantia
   val tabEstoqueAcertoMobile: ITabEstoqueAcertoMobile
   val tabEstoqueSaldo: ITabEstoqueSaldo
   val tabEstoqueConf: ITabEstoqueConf

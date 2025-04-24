@@ -1,11 +1,11 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaGarantia
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaTransportadora
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaTransportadoraViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -19,10 +19,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaGarantia {
-  private var dlgProduto: DlgProdutosNotaGarantia? = null
-  private var dlgArquivo: DlgArquivoNotaGarantia? = null
+class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaTransportadora {
+  private var dlgProduto: DlgProdutosNotaTransportadora? = null
+  private var dlgArquivo: DlgArquivoNotaTransportadora? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -58,10 +58,10 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
       }
     }
 
-    button("Transportadora") {
+    button("E-Mail") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
+        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
       }
     }
   }
@@ -83,7 +83,7 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaGarantia(viewModel, nota)
+      dlgProduto = DlgProdutosNotaTransportadora(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -94,7 +94,7 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaGarantia(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaTransportadora(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -150,7 +150,7 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaGarantia(viewModel, nota)
+    dlgProduto = DlgProdutosNotaTransportadora(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -158,11 +158,11 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaGarantia == true
+    return username?.devFor2NotaTransportadora == true
   }
 
   override val label: String
-    get() = "Garantia"
+    get() = "Transportadora"
 
   override fun updateComponent() {
     viewModel.updateView()

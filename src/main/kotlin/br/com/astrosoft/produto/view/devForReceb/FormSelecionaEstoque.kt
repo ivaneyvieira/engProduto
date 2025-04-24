@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.produto.viewmodel.devFor2.TipoEstoque
 import com.github.mvysny.karibudsl.v10.radioButtonGroup

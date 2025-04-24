@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel

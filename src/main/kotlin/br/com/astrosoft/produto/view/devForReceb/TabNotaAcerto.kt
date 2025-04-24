@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
@@ -18,7 +18,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import kotlin.math.E
 
 class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaAcerto {

@@ -1,13 +1,11 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaNFD
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaNFDViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
+import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
@@ -19,10 +17,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaNFD {
-  private var dlgProduto: DlgProdutosNotaNFD? = null
-  private var dlgArquivo: DlgArquivoNotaNFD? = null
+class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPendencia {
+  private var dlgProduto: DlgProdutosNotaPendencia? = null
+  private var dlgArquivo: DlgArquivoNotaPendencia? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -51,58 +49,64 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
       }
     }
 
-    button("Pendente") {
-      this.icon = VaadinIcon.ARROW_LEFT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
+    select("Motivo Devoulucao") {
+      this.setItems(ETipoDevolucao.entries)
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateMotivo(it.value)
+        }
       }
     }
 
-    button("Transportadora") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
+    select("Enviar") {
+      this.setItems(EStituacaoDev.entries - EStituacaoDev.PENDENCIA)
+      this.setItemLabelGenerator {sit ->
+        sit.descricao
+      }
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.marcaSituacao(it.value)
+        }
       }
     }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
+    this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
 
     this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
+        classBean = NotaRecebimentoDev::class,
+        openEditor = {
+          val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+          edit?.focus()
+        },
+        closeEditor = {
+          viewModel.saveNota(nota = it.bean, updateGrid = true)
+        })
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
-
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaNFD(viewModel, nota)
+      dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
       if (bean.arquivos().isNotEmpty()) {
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaNFD(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaPendencia(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
     }
 
-    this.selectionMode = Grid.SelectionMode.MULTI
-
-    columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
+    columnGrid(
+      NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
+    )
     columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
@@ -115,7 +119,7 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
@@ -150,7 +154,7 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaNFD(viewModel, nota)
+    dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -158,11 +162,11 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaNFD == true
+    return username?.devFor2NotaPendencia == true
   }
 
   override val label: String
-    get() = "NFD"
+    get() = "Pendencia"
 
   override fun updateComponent() {
     viewModel.updateView()

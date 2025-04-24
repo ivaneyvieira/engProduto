@@ -1,32 +1,27 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaAcertoViewModel
-import com.github.mvysny.karibudsl.v10.bigDecimalField
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.textField
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, val nota: NotaRecebimentoDev) {
+class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
+  private var edtTransportadora: TextField? = null
 
   fun showDialog(onClose: () -> Unit) {
-    val numeroNota = nota.nfEntrada ?: ""
-    val emissao = nota.emissao.format()
-    val numeroInterno = nota.ni
-
     form = SubWindowForm(
       header = {
         this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
@@ -39,22 +34,38 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, val nota: Not
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
-          this.isReadOnly = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.volumeDevolucao = this.value ?: 0
+            viewModel.saveNota(nota)
+          }
         }
         bigDecimalField("Peso") {
           this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
-          this.isReadOnly = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.pesoDevolucao = this.value?.toDouble() ?: 0.0
+            viewModel.saveNota(nota)
+          }
         }
         integerField("Cod") {
           this.value = nota.transpDevolucao ?: 0
           this.width = "60px"
           this.isAutoselect = true
-          this.isReadOnly = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.transpDevolucao = this.value ?: 0
+            viewModel.saveNota(nota)
+            edtTransportadora?.value = viewModel.findTransportadora(this.value)?.nome ?: ""
+          }
         }
-        textField("Transportadora Redespacho") {
+        edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
@@ -65,7 +76,22 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, val nota: Not
           if (this.value.isNullOrBlank()) {
             this.value = "CTE "
           }
-          this.isReadOnly = true
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.cteDevolucao = this.value ?: ""
+            viewModel.saveNota(nota)
+          }
+        }
+        datePicker("Data") {
+          this.localePtBr()
+          this.value = nota.dataDevolucao
+          this.width = "120px"
+
+          addValueChangeListener {
+            nota.dataDevolucao = this.value
+            viewModel.saveNota(nota)
+          }
         }
       }, onClose = {
         onClose()

@@ -1,14 +1,11 @@
-package br.com.astrosoft.produto.view.devFor2
+package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaNFDViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaTransportadoraViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
@@ -20,11 +17,15 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaRecebimentoDev) {
+class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
+    val numeroNota = nota.nfEntrada ?: ""
+    val emissao = nota.emissao.format()
+    val numeroInterno = nota.ni
+
     form = SubWindowForm(
       header = {
         this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
@@ -165,4 +166,3 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
     return nota
   }
 }
-

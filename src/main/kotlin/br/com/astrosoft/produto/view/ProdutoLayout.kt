@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.acertoEstoque.AcertoEstoqueView
 import br.com.astrosoft.produto.view.cliente.ClienteView
 import br.com.astrosoft.produto.view.devCliente.DevClienteView
-import br.com.astrosoft.produto.view.devFor2.DevFor2View
+import br.com.astrosoft.produto.view.devForReceb.DevFor2View
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.expedicao.NotaView
 import br.com.astrosoft.produto.view.nfd.NfdView
