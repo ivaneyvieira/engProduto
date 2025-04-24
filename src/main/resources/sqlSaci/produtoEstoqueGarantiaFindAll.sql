@@ -1,5 +1,7 @@
 USE sqldados;
 
+SET SQL_MODE = '';
+
 DO @DT := 20150101;
 
 DO @PESQUISA_NUM := :pesquisa * 1;
