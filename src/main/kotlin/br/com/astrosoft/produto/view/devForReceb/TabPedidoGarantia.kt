@@ -122,8 +122,8 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     columnGrid(PedidoGarantia::hora, header = "Hora")
     columnGrid(PedidoGarantia::codFor, header = "For Cod")
     columnGrid(PedidoGarantia::nomeFor, header = "For Nome")
-    columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data", width = "7rem").dateFieldEditor()
-    columnGrid(PedidoGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
+    columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data")
+    columnGrid(PedidoGarantia::nfdGarantia, header = "NFD").right()
     columnGrid(PedidoGarantia::valorTotal, header = "Valor")
 
     columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
