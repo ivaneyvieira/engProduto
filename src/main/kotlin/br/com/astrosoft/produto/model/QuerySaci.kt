@@ -2134,33 +2134,20 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: NotaRecebimentoProdutoDev) {
-    val sql = "/sqlSaci/updateTipoDevolucao.sql"
+  fun updateTipoDevolucao(produto: ProdutoPedidoGarantia) {
+    val sql = "/sqlSaci/updateTipoDevolucaoGarantia.sql"
+    if(produto.niReceb == null)
+      return
     script(sql) {
-      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("invno", produto.niReceb)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucaoEnum?.num ?: 0)
-      addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
+      addOptionalParameter("numero", produto.numero)
+      addOptionalParameter("situacaoDev", EStituacaoDev.GARANTIA.num)
+      addOptionalParameter("tipoDevolucao", ETipoDevolucao.EM_GARANTIA.num)
+      addOptionalParameter("quantDevolucao", produto.estoqueDev ?: 0)
     }
   }
-
-  /*
-  fun saveInvAdicional(nota: NotaRecebimento, userno: Int) {
-    val sql = "/sqlSaci/invAdicionalSave.sql"
-    script(sql) {
-      addOptionalParameter("invno", nota.ni)
-      addOptionalParameter("numero", nota.numeroDevolucao)
-      addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
-      addOptionalParameter("volume", nota.volumeDevolucao)
-      addOptionalParameter("peso", nota.pesoDevolucao)
-      addOptionalParameter("transp", nota.transpDevolucao)
-      addOptionalParameter("cte", nota.cteDevolucao)
-      addOptionalParameter("data", nota.dataDevolucao.toSaciDate())
-      addOptionalParameter("situacaoDev", nota.situacaoDev)
-      addOptionalParameter("userno", userno)
-    }
-  }*/
 
   fun saveInvAdicional(nota: NotaRecebimentoDev, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"

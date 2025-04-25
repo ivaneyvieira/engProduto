@@ -104,7 +104,7 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Ped Gar").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::data, header = "Entrada", width = null)

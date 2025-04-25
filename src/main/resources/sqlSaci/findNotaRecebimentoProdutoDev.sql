@@ -425,9 +425,10 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
 (
-  PRIMARY KEY (numeroDevolucao)
+  PRIMARY KEY (tipoDevolucao, numeroDevolucao)
 )
-SELECT numeroDevolucao,
+SELECT tipoDevolucao,
+       numeroDevolucao,
        MAX(userDevolucao)    AS userDevolucao,
        MAX(notaDevolucao)    AS notaDevolucao,
        MAX(emissaoDevolucao) AS emissaoDevolucao,
@@ -436,16 +437,17 @@ SELECT numeroDevolucao,
        MAX(situacaoDev)      AS situacaoDev
 FROM
   T_RESULT
-GROUP BY numeroDevolucao;
+GROUP BY tipoDevolucao, numeroDevolucao;
 
-UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (numeroDevolucao)
+UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao)
 SET R1.userDevolucao    = R2.userDevolucao,
     R1.notaDevolucao    = R2.notaDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
     R1.obsDevolucao     = R2.obsDevolucao,
     R1.situacaoDev      = R2.situacaoDev
-WHERE R1.numeroDevolucao = R2.numeroDevolucao;
+WHERE R1.tipoDevolucao = R2.tipoDevolucao
+  AND R1.numeroDevolucao = R2.numeroDevolucao;
 
 UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND I.tipoDevolucao = R.tipoDevolucao AND
                                                               I.numero = R.numeroDevolucao

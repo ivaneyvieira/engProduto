@@ -182,7 +182,8 @@ SELECT numero,
        IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao,
        UR.valorUnitario              AS valorUnitario,
        N.notaDevolucao               AS nfdGarantia,
-       N.emissaoDevolucao            AS dataNfdGarantia
+       N.emissaoDevolucao            AS dataNfdGarantia,
+       N.notaDevolucao IS NULL       AS pendente
 FROM
   T_GARANTIA                                     AS A
     LEFT JOIN T_ESTOQUE_LOJA                     AS EL

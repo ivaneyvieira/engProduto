@@ -35,6 +35,7 @@ class ProdutoPedidoGarantia(
   var valorUnitario: Double? = null,
   var nfdGarantia: String? = null,
   var dataNfdGarantia: LocalDate? = null,
+  var pendente: Boolean? = null,
 ) {
   val valorTotal: Double
     get() = (estoqueDev ?: 0) * (valorUnitario ?: 0.0)
@@ -128,6 +129,7 @@ fun List<ProdutoPedidoGarantia>.agrupaGarantia(): List<PedidoGarantia> {
       entradaReceb = garantia.entradaReceb,
       nfdGarantia = garantia.nfdGarantia,
       dataNfdGarantia = garantia.dataNfdGarantia,
+      pendente = garantia.pendente ?: true,
     )
   }
 }
@@ -147,6 +149,7 @@ class PedidoGarantia(
   val entradaReceb: LocalDate?,
   var nfdGarantia: String?,
   var dataNfdGarantia: LocalDate?,
+  val pendente: Boolean,
 ) {
   fun cancelaGarantia() {
     saci.garantiaCancela(this)
@@ -163,6 +166,21 @@ class PedidoGarantia(
 
   fun saveGarantia() {
     saci.updateGarantia(this)
+  }
+
+  fun saveGarantiaNota() {
+    this.findProdutos().forEach { produto ->
+      saci.updateTipoDevolucao(produto)
+    }
+  }
+
+  fun saveGarantiaNotaCondicional(): PedidoGarantia {
+    if (this.pendente)
+      return this
+    this.findProdutos().forEach { produto ->
+      saci.updateTipoDevolucao(produto)
+    }
+    return this
   }
 
   companion object {

@@ -25,6 +25,9 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoPedidoGarantia.findAll(filtro).agrupaGarantia().sortedBy { it.numero }
+    produtos.forEach {
+     // it.saveGarantiaNotaCondicional()
+    }
     subView.updateProduto(produtos)
   }
 
@@ -126,6 +129,19 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
           subView.updateProduto()
         }
       }
+    }
+  }
+
+  fun processaPedido() = viewModel.exec {
+    val itensSelecionado = subView.itensSelecionados()
+    if (itensSelecionado.isEmpty()) {
+      fail("Nenhum garantia não processado selecionado")
+    }
+    if (itensSelecionado.any { it.pendente }) {
+      fail("Todos os pedidos devem estar pendentes")
+    }
+    itensSelecionado.forEach { pedido ->
+      pedido.saveGarantiaNota()
     }
   }
 }

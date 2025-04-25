@@ -95,6 +95,13 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.cancelarGarantia()
       }
     }
+
+    button("Processa Pedido") {
+      this.icon = VaadinIcon.CHECK.create()
+      onClick {
+        viewModel.processaPedido()
+      }
+    }
   }
 
   override fun Grid<PedidoGarantia>.gridPanel() {
