@@ -17,34 +17,35 @@ CREATE TEMPORARY TABLE T_NFO
   valorDevolucao   decimal(23, 4),
   pedGarantia      int,
   PRIMARY KEY (storeno, notaDevolucao),
-  INDEX (pedGarantia)
+  INDEX (storeno, pedGarantia)
 )
-SELECT storeno                                      AS storeno,
-       CONCAT(nfno, '/', nfse)                      AS notaDevolucao,
-       CAST(issuedate AS date)                      AS emissaoDevolucao,
-       grossamt / 100                               AS valorDevolucao,
-       @PEG1 := IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
-                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
-                                             LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100),
-                                   ' ', 1), '') * 1 AS pedGarantia1,
-       @PEG2 := IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
-                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
-                                             LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100),
-                                   ' ', 1), '') * 1 AS pedGarantia2,
-       IF(remarks LIKE '%GARANTIA%',
-          CASE
-            WHEN @PEG1 != 0 THEN @PEG1
-            WHEN @PEG2 != 0 THEN @PEG2
-                            ELSE 0
-          END
-         , '0') * 1                                 AS pedGarantia
+SELECT storeno,
+       notaDevolucao,
+       emissaoDevolucao,
+       valorDevolucao,
+       IF(remarks LIKE '%GARANTIA%', CASE
+                                       WHEN pedGarantia1 != 0 THEN pedGarantia1
+                                       WHEN pedGarantia2 != 0 THEN pedGarantia2
+                                                              ELSE 0
+                                     END, '0') * 1 AS pedGarantia
 FROM
-  sqldados.nf
-WHERE issuedate >= @DT
-  AND tipo = 2
-  AND status != 1
+  ( SELECT storeno                 AS storeno,
+           CONCAT(nfno, '/', nfse) AS notaDevolucao,
+           CAST(issuedate AS date) AS emissaoDevolucao,
+           grossamt / 100          AS valorDevolucao,
+           IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
+              '') * 1              AS pedGarantia1,
+           IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
+              '') * 1              AS pedGarantia2,
+           remarks
+    FROM
+      sqldados.nf
+    WHERE issuedate >= 20250101
+      AND tipo = 2
+      AND status != 1 ) AS D
 HAVING pedGarantia != 0;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_GARANTIA;
 CREATE TEMPORARY TABLE T_GARANTIA
@@ -209,6 +210,7 @@ FROM
     LEFT JOIN T_NFO                              AS N
               ON N.storeno = A.numloja
                 AND N.pedGarantia = A.numero
+                AND N.storeno = A.numloja
     LEFT JOIN sqldados.store                     AS S
               ON S.no = A.numloja
     LEFT JOIN sqldados.prd                       AS P
