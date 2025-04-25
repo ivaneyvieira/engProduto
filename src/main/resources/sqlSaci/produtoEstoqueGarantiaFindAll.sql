@@ -19,14 +19,25 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, notaDevolucao),
   INDEX (pedGarantia)
 )
-SELECT storeno                             AS storeno,
-       CONCAT(nfno, '/', nfse)             AS notaDevolucao,
-       CAST(issuedate AS date)             AS emissaoDevolucao,
-       grossamt / 100                      AS valorDevolucao,
-       IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
-          SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
-                                    LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100),
-                          ' ', 1), '') * 1 AS pedGarantia
+SELECT storeno                                      AS storeno,
+       CONCAT(nfno, '/', nfse)                      AS notaDevolucao,
+       CAST(issuedate AS date)                      AS emissaoDevolucao,
+       grossamt / 100                               AS valorDevolucao,
+       @PEG1 := IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
+                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
+                                             LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100),
+                                   ' ', 1), '') * 1 AS pedGarantia1,
+       @PEG2 := IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
+                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
+                                             LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100),
+                                   ' ', 1), '') * 1 AS pedGarantia2,
+       IF(remarks LIKE '%GARANTIA%',
+          CASE
+            WHEN @PEG1 != 0 THEN @PEG1
+            WHEN @PEG2 != 0 THEN @PEG2
+                            ELSE 0
+          END
+         , '0') * 1                                 AS pedGarantia
 FROM
   sqldados.nf
 WHERE issuedate >= @DT

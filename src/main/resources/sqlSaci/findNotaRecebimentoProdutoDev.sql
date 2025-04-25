@@ -36,17 +36,17 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, nfo, motivo, notaDevolucao),
   INDEX (niDev)
 )
-SELECT storeno                         AS storeno,
-       CONCAT(nfno, '/', nfse)         AS notaDevolucao,
-       CAST(issuedate AS date)         AS emissaoDevolucao,
-       grossamt / 100                  AS valorDevolucao,
-       print_remarks                   AS obsDevolucao,
-       remarks                         AS obsGarantia,
-       status = 1                      AS cancelado,
+SELECT storeno                                      AS storeno,
+       CONCAT(nfno, '/', nfse)                      AS notaDevolucao,
+       CAST(issuedate AS date)                      AS emissaoDevolucao,
+       grossamt / 100                               AS valorDevolucao,
+       print_remarks                                AS obsDevolucao,
+       remarks                                      AS obsGarantia,
+       status = 1                                   AS cancelado,
        IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                     LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
-                          ' ', 1), '') AS nfo,
+                          ' ', 1), '')              AS nfo,
        IFNULL(
            IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
               SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
@@ -58,7 +58,22 @@ SELECT storeno                         AS storeno,
                                         LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
                                         100),
                               ' ', 1), NULL)
-       )                               AS niDev,
+       )                                            AS niDev,
+       @PEG1 := IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
+                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
+                                             LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100),
+                                   ' ', 1), '') * 1 AS pedGarantia1,
+       @PEG2 := IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
+                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
+                                             LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100),
+                                   ' ', 1), '') * 1 AS pedGarantia2,
+       IF(remarks LIKE '%GARANTIA%',
+          CASE
+            WHEN @PEG1 != 0 THEN @PEG1
+            WHEN @PEG2 != 0 THEN @PEG2
+                            ELSE 0
+          END
+         , '0') * 1                                 AS pedGarantia,
        CASE
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
@@ -69,13 +84,14 @@ SELECT storeno                         AS storeno,
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'DEFEITO.{1,10}FAB' THEN 7
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'GARANTIA'          THEN 8
                                                                                   ELSE 0
-       END                             AS motivo
+       END                                          AS motivo
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
   AND tipo = 2
   AND status != 1
-HAVING nfo != '';
+HAVING pedGarantia != 0
+    OR niDev IS NOT NULL;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
@@ -416,8 +432,8 @@ SELECT loja,
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
-              ON (Q.nfEntrada = N.nfo AND Q.loja = N.storeno AND Q.tipoDevolucao = N.motivo AND FALSE) OR
-                 (N.niDev = Q.numeroDevolucao AND TRUE)
+              ON (N.pedGarantia = Q.numeroDevolucao) OR
+                 (N.niDev = Q.numeroDevolucao)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
