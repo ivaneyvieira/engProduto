@@ -59,21 +59,6 @@ SELECT storeno                                      AS storeno,
                                         100),
                               ' ', 1), NULL)
        )                                            AS niDev,
-       @PEG1 := IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
-                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
-                                             LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100),
-                                   ' ', 1), '') * 1 AS pedGarantia1,
-       @PEG2 := IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
-                   SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '),
-                                             LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100),
-                                   ' ', 1), '') * 1 AS pedGarantia2,
-       IF(remarks LIKE '%GARANTIA%',
-          CASE
-            WHEN @PEG1 != 0 THEN @PEG1
-            WHEN @PEG2 != 0 THEN @PEG2
-                            ELSE 0
-          END
-         , '0') * 1                                 AS pedGarantia,
        CASE
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
@@ -90,8 +75,7 @@ FROM
 WHERE issuedate >= @DT
   AND tipo = 2
   AND status != 1
-HAVING pedGarantia != 0
-    OR niDev IS NOT NULL;
+HAVING niDev IS NOT NULL;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
@@ -432,8 +416,7 @@ SELECT loja,
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS N
-              ON (N.pedGarantia = Q.numeroDevolucao) OR
-                 (N.niDev = Q.numeroDevolucao)
+              ON (N.niDev = Q.numeroDevolucao)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
