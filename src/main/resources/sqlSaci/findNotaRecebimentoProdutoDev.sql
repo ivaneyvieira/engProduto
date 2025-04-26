@@ -36,17 +36,17 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, nfo, motivo, notaDevolucao),
   INDEX (niDev)
 )
-SELECT storeno                                      AS storeno,
-       CONCAT(nfno, '/', nfse)                      AS notaDevolucao,
-       CAST(issuedate AS date)                      AS emissaoDevolucao,
-       grossamt / 100                               AS valorDevolucao,
-       print_remarks                                AS obsDevolucao,
-       remarks                                      AS obsGarantia,
-       status = 1                                   AS cancelado,
+SELECT storeno                         AS storeno,
+       CONCAT(nfno, '/', nfse)         AS notaDevolucao,
+       CAST(issuedate AS date)         AS emissaoDevolucao,
+       grossamt / 100                  AS valorDevolucao,
+       print_remarks                   AS obsDevolucao,
+       remarks                         AS obsGarantia,
+       status = 1                      AS cancelado,
        IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                     LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
-                          ' ', 1), '')              AS nfo,
+                          ' ', 1), '') AS nfo,
        IFNULL(
            IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
               SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
@@ -58,7 +58,7 @@ SELECT storeno                                      AS storeno,
                                         LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
                                         100),
                               ' ', 1), NULL)
-       )                                            AS niDev,
+       )                               AS niDev,
        CASE
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
@@ -69,13 +69,53 @@ SELECT storeno                                      AS storeno,
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'DEFEITO.{1,10}FAB' THEN 7
          WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'GARANTIA'          THEN 8
                                                                                   ELSE 0
-       END                                          AS motivo
+       END                             AS motivo
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
   AND tipo = 2
   AND status != 1
 HAVING niDev IS NOT NULL;
+
+DROP TEMPORARY TABLE IF EXISTS T_NFO_GARANTIA;
+CREATE TEMPORARY TABLE T_NFO_GARANTIA
+(
+  storeno          smallint,
+  notaDevolucao    varchar(14),
+  emissaoDevolucao date,
+  valorDevolucao   decimal(23, 4),
+  pedGarantia      int,
+  PRIMARY KEY (storeno, notaDevolucao),
+  INDEX (storeno, pedGarantia)
+)
+SELECT storeno,
+       notaDevolucao,
+       emissaoDevolucao,
+       valorDevolucao,
+       obsDevolucao,
+       IF(obsDevolucao LIKE '%GARANTIA%', CASE
+                                            WHEN pedGarantia1 != 0 THEN pedGarantia1
+                                            WHEN pedGarantia2 != 0 THEN pedGarantia2
+                                                                   ELSE 0
+                                          END, '0') * 1 AS pedGarantia
+FROM
+  ( SELECT storeno                 AS storeno,
+           CONCAT(nfno, '/', nfse) AS notaDevolucao,
+           CAST(issuedate AS date) AS emissaoDevolucao,
+           grossamt / 100          AS valorDevolucao,
+           IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
+              '') * 1              AS pedGarantia1,
+           IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
+              '') * 1              AS pedGarantia2,
+           remarks                 AS obsDevolucao
+    FROM
+      sqldados.nf
+    WHERE issuedate >= @DT
+      AND tipo = 2
+      AND status != 1 ) AS D
+HAVING pedGarantia != 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
@@ -395,31 +435,25 @@ SELECT loja,
        transportadoraDevolucao,
        cteDevolucao,
        dataDevolucao,
-  /*
-  CASE
-    WHEN tipoDevolucao = 8/*Garantia
-      AND Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != '' THEN IF(countColeta > 0, 2, 6)
-    WHEN Q.situacaoDev = 0 AND TRIM(IFNULL(N.notaDevolucao, '')) != ''  THEN IF(countColeta > 0, 2, 1)
-    WHEN ((Q.situacaoDev IN (1, 6))) AND countColeta > 0                THEN 2
-                                                                        ELSE Q.situacaoDev
-  END AS situacaoDev,
-*/
        Q.situacaoDev,
        userDevolucao,
-       notaDevolucao,
-       emissaoDevolucao,
-       valorDevolucao,
-       obsDevolucao,
+       IF(tipoDevolucao = 6, NG.notaDevolucao, ND.notaDevolucao)       AS notaDevolucao,
+       IF(tipoDevolucao = 6, NG.emissaoDevolucao, ND.emissaoDevolucao) AS emissaoDevolucao,
+       IF(tipoDevolucao = 6, NG.valorDevolucao, ND.valorDevolucao)     AS valorDevolucao,
+       IF(tipoDevolucao = 6, NG.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
        observacaoDev,
        dataColeta,
        observacaoAdicional
 FROM
-  T_QUERY           AS Q
-    LEFT JOIN T_NFO AS N
-              ON (N.niDev = Q.numeroDevolucao)
+  T_QUERY                    AS Q
+    LEFT JOIN T_NFO          AS ND
+              ON (ND.niDev = Q.numeroDevolucao)
+    LEFT JOIN T_NFO_GARANTIA AS NG
+              ON (NG.pedGarantia = Q.numeroDevolucao AND NG.storeno = Q.loja)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
+
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
@@ -448,8 +482,10 @@ SET R1.userDevolucao    = R2.userDevolucao,
 WHERE R1.tipoDevolucao = R2.tipoDevolucao
   AND R1.numeroDevolucao = R2.numeroDevolucao;
 
-UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND I.tipoDevolucao = R.tipoDevolucao AND
-                                                              I.numero = R.numeroDevolucao
+UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
+  ON I.invno = R.ni
+    AND I.tipoDevolucao = R.tipoDevolucao
+    AND I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 

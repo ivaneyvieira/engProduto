@@ -27,7 +27,6 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbTipo: Select<ETipoDevolvidoGarantia>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -78,17 +77,6 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       }
     }
 
-    cmbTipo = select("Tipo Garantia") {
-      this.setItems(ETipoDevolvidoGarantia.entries)
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = ETipoDevolvidoGarantia.PENDENTE
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-
     button("Cancelar") {
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
@@ -134,6 +122,8 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     columnGrid(PedidoGarantia::valorTotal, header = "Valor")
 
     columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
+    //columnGrid(PedidoGarantia::pendente, header = "Pendente")
+    //columnGrid(PedidoGarantia::processado, header = "Processado")
   }
 
   override fun filtro(): FiltroGarantia {
@@ -142,7 +132,6 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
-      devolvido = cmbTipo.value ?: ETipoDevolvidoGarantia.PENDENTE,
     )
   }
 

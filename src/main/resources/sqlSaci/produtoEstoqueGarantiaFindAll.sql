@@ -42,7 +42,7 @@ FROM
            remarks
     FROM
       sqldados.nf
-    WHERE issuedate >= 20250101
+    WHERE issuedate >= @DT
       AND tipo = 2
       AND status != 1 ) AS D
 HAVING pedGarantia != 0;
@@ -114,19 +114,15 @@ SELECT prdno                          AS prdno,
        V.name                         AS nforReceb,
        V.no IN (8907)                 AS temLote,
        I.cfop                         AS cfopReceb,
-       MAX(IA.numero)                 AS numeroDevolucao,
        I.fob4 / 10000                 AS valorUnitario
 FROM
-  sqldados.inv                       AS N
-    LEFT JOIN  sqldados.vend         AS V
+  sqldados.inv                AS N
+    LEFT JOIN  sqldados.vend  AS V
                ON N.vendno = V.no
-    INNER JOIN T_ULTIMO_INVNO        AS U
+    INNER JOIN T_ULTIMO_INVNO AS U
                USING (invno)
-    INNER JOIN sqldados.iprd         AS I
+    INNER JOIN sqldados.iprd  AS I
                USING (invno, prdno, grade)
-    LEFT JOIN  sqldados.invAdicional AS IA
-               ON IA.invno = U.invno
-                 AND IA.tipoDevolucao = 8
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
@@ -166,47 +162,54 @@ WHERE P.no IN ( SELECT DISTINCT prdno FROM T_GARANTIA )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
-SELECT numero,
-       numloja,
-       S.sname                       AS lojaSigla,
+SELECT A.numero,
+       A.numloja,
+       S.sname                  AS lojaSigla,
        data,
        hora,
        usuario,
        A.prdno,
-       TRIM(MID(P.name, 1, 37))      AS descricao,
+       TRIM(MID(P.name, 1, 37)) AS descricao,
        A.grade,
        L.locApp,
-       B.codbar                      AS barcode,
-       TRIM(P.mfno_ref)              AS ref,
-       ROUND(EL.estoqueLoja)         AS estoqueLoja,
-       estoqueReal                   AS estoqueDev,
-       ROUND(EL.estoqueLojas)        AS estoqueLojas,
-       O.observacao                  AS observacao,
-       UR.lojaReceb                  AS lojaReceb,
-       UR.niReceb                    AS niReceb,
-       UR.nfoReceb                   AS nfoReceb,
-       UR.entradaReceb               AS entradaReceb,
-       UR.forReceb                   AS forReceb,
-       UR.nforReceb                  AS nforReceb,
-       A.loteDev                     AS loteDev,
-       UR.temLote                    AS temLote,
-       UR.cfopReceb                  AS cfopReceb,
-       IFNULL(UR.numeroDevolucao, 0) AS numeroDevolucao,
-       UR.valorUnitario              AS valorUnitario,
-       N.notaDevolucao               AS nfdGarantia,
-       N.emissaoDevolucao            AS dataNfdGarantia,
-       N.notaDevolucao IS NULL       AS pendente
+       B.codbar                 AS barcode,
+       TRIM(P.mfno_ref)         AS ref,
+       ROUND(EL.estoqueLoja)    AS estoqueLoja,
+       estoqueReal              AS estoqueDev,
+       ROUND(EL.estoqueLojas)   AS estoqueLojas,
+       O.observacao             AS observacao,
+       UR.lojaReceb             AS lojaReceb,
+       UR.niReceb               AS niReceb,
+       UR.nfoReceb              AS nfoReceb,
+       UR.entradaReceb          AS entradaReceb,
+       UR.forReceb              AS forReceb,
+       UR.nforReceb             AS nforReceb,
+       A.loteDev                AS loteDev,
+       UR.temLote               AS temLote,
+       UR.cfopReceb             AS cfopReceb,
+       IFNULL(IA.numero, 0)     AS numeroDevolucao,
+       UR.valorUnitario         AS valorUnitario,
+       N.notaDevolucao          AS nfdGarantia,
+       N.emissaoDevolucao       AS dataNfdGarantia,
+       UR.niReceb IS NULL       AS pendente,
+       IA.numero IS NOT NULL    AS processado
 FROM
   T_GARANTIA                                     AS A
     LEFT JOIN T_ESTOQUE_LOJA                     AS EL
               USING (prdno, grade)
     LEFT JOIN T_ULTIMO_RECEB                     AS UR
               USING (prdno, grade)
+    LEFT JOIN sqldados.invAdicional              AS IA
+              ON IA.invno = UR.niReceb
+                AND IA.tipoDevolucao = 8
+                AND IA.situacaoDev = 6
+                AND IA.numero = A.numero
     LEFT JOIN T_BARCODE                          AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
     LEFT JOIN sqldados.produtoObservacaoGarantia AS O
-              USING (numero, numloja)
+              ON O.numero = A.numero
+                AND O.numloja = A.numloja
     LEFT JOIN T_NFO                              AS N
               ON N.storeno = A.numloja
                 AND N.pedGarantia = A.numero
@@ -220,14 +223,10 @@ FROM
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
 WHERE (
-  (N.notaDevolucao IS NOT NULL AND :devolvido = 'F') OR
-  (N.notaDevolucao IS NULL AND :devolvido = 'P') OR
-  (:devolvido = 'T')
-  )
-  AND (
-  @PESQUISA_STR = '' OR
-  numero = @PESQUISA_NUM OR
-  S.sname LIKE @PESQUISA_LIKE OR
-  UR.forReceb = @PESQUISA_NUM OR
-  UR.nforReceb LIKE @PESQUISA_LIKE
-  )
+        @PESQUISA_STR = '' OR
+        A.numero = @PESQUISA_NUM OR
+        S.sname LIKE @PESQUISA_LIKE OR
+        UR.forReceb = @PESQUISA_NUM OR
+        UR.nforReceb LIKE @PESQUISA_LIKE
+        )
+HAVING processado = FALSE

@@ -36,6 +36,7 @@ class ProdutoPedidoGarantia(
   var nfdGarantia: String? = null,
   var dataNfdGarantia: LocalDate? = null,
   var pendente: Boolean? = null,
+  var processado: Boolean? = null,
 ) {
   val valorTotal: Double
     get() = (estoqueDev ?: 0) * (valorUnitario ?: 0.0)
@@ -77,7 +78,6 @@ data class FiltroGarantia(
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
   val pesquisa: String = "",
-  val devolvido: ETipoDevolvidoGarantia = ETipoDevolvidoGarantia.TODOS
 )
 
 enum class ETipoDevolvidoGarantia(val codigo: String, val descricao: String) {
@@ -130,6 +130,7 @@ fun List<ProdutoPedidoGarantia>.agrupaGarantia(): List<PedidoGarantia> {
       nfdGarantia = garantia.nfdGarantia,
       dataNfdGarantia = garantia.dataNfdGarantia,
       pendente = garantia.pendente ?: true,
+      processado = garantia.processado ?: true,
     )
   }
 }
@@ -150,6 +151,7 @@ class PedidoGarantia(
   var nfdGarantia: String?,
   var dataNfdGarantia: LocalDate?,
   val pendente: Boolean,
+  val processado: Boolean,
 ) {
   fun cancelaGarantia() {
     saci.garantiaCancela(this)

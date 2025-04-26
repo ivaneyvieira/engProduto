@@ -143,6 +143,7 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
     itensSelecionado.forEach { pedido ->
       pedido.saveGarantiaNota()
     }
+    updateView()
   }
 }
 
