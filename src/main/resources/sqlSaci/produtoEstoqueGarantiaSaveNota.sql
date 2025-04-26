@@ -13,7 +13,7 @@ FROM
   sqldados.invAdicional
 GROUP BY invno, tipoDevolucao, numero;
 
-SELECT * FROM sqldados.in
+SELECT * FROM sqldados.inv
 order by invno;
 
 SELECT * FROM sqldados.nf

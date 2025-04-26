@@ -26,7 +26,7 @@ class DlgPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia:
     val loja = garantia.lojaSigla
 
     form = SubWindowForm(
-      "Produtos do Garantia $numero - Loja $loja",
+      "Produtos de Garantia $numero - Loja $loja",
       toolBar = {
         button("Pedido") {
           this.icon = VaadinIcon.PRINT.create()
