@@ -84,8 +84,8 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       }
     }
 
-    button("Garantia") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
+    button("Processa Pedido") {
+      this.icon = VaadinIcon.CHECK.create()
       onClick {
         viewModel.processaPedido()
       }
