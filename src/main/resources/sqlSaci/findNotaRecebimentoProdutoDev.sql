@@ -77,46 +77,6 @@ WHERE issuedate >= @DT
   AND status != 1
 HAVING niDev IS NOT NULL;
 
-DROP TEMPORARY TABLE IF EXISTS T_NFO_GARANTIA;
-CREATE TEMPORARY TABLE T_NFO_GARANTIA
-(
-  storeno          smallint,
-  notaDevolucao    varchar(14),
-  emissaoDevolucao date,
-  valorDevolucao   decimal(23, 4),
-  pedGarantia      int,
-  PRIMARY KEY (storeno, notaDevolucao),
-  INDEX (storeno, pedGarantia)
-)
-SELECT storeno,
-       notaDevolucao,
-       emissaoDevolucao,
-       valorDevolucao,
-       obsDevolucao,
-       IF(obsDevolucao LIKE '%GARANTIA%', CASE
-                                            WHEN pedGarantia1 != 0 THEN pedGarantia1
-                                            WHEN pedGarantia2 != 0 THEN pedGarantia2
-                                                                   ELSE 0
-                                          END, '0') * 1 AS pedGarantia
-FROM
-  ( SELECT storeno                 AS storeno,
-           CONCAT(nfno, '/', nfse) AS notaDevolucao,
-           CAST(issuedate AS date) AS emissaoDevolucao,
-           grossamt / 100          AS valorDevolucao,
-           IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
-              '') * 1              AS pedGarantia1,
-           IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
-              '') * 1              AS pedGarantia2,
-           remarks                 AS obsDevolucao
-    FROM
-      sqldados.nf
-    WHERE issuedate >= @DT
-      AND tipo = 2
-      AND status != 1 ) AS D
-HAVING pedGarantia != 0;
-
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
 (
@@ -337,7 +297,7 @@ SELECT N.storeno                                                      AS loja,
        cteDevolucao,
        observacaoAdicional,
        dataDevolucao,
-       IFNULL(situacaoDev, 0)                                         AS situacaoDev,
+       IFNULL(N.situacaoDev, 0)                                       AS situacaoDev,
        userDevolucao,
        observacaoDev,
        countColeta,
@@ -437,59 +397,63 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
-       IF(tipoDevolucao = 6, NG.notaDevolucao, ND.notaDevolucao)       AS notaDevolucao,
-       IF(tipoDevolucao = 6, NG.emissaoDevolucao, ND.emissaoDevolucao) AS emissaoDevolucao,
-       IF(tipoDevolucao = 6, NG.valorDevolucao, ND.valorDevolucao)     AS valorDevolucao,
-       IF(tipoDevolucao = 6, NG.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
+       ND.notaDevolucao    AS notaDevolucao,
+       ND.emissaoDevolucao AS emissaoDevolucao,
+       ND.valorDevolucao   AS valorDevolucao,
+       ND.obsDevolucao     AS obsDevolucao,
        observacaoDev,
        dataColeta,
        observacaoAdicional
 FROM
-  T_QUERY                    AS Q
-    LEFT JOIN T_NFO          AS ND
+  T_QUERY           AS Q
+    LEFT JOIN T_NFO AS ND
               ON (ND.niDev = Q.numeroDevolucao)
-    LEFT JOIN T_NFO_GARANTIA AS NG
-              ON (NG.pedGarantia = Q.numeroDevolucao AND NG.storeno = Q.loja)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
 
-
-DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
+/*
+DROP TEMPORARY TABLE IF EXISTS T_RESULT2
 CREATE TEMPORARY TABLE T_RESULT2
 (
-  PRIMARY KEY (tipoDevolucao, numeroDevolucao)
+  PRIMARY KEY (tipoDevolucao, numeroDevolucao, situacaoDev)
 )
 SELECT tipoDevolucao,
        numeroDevolucao,
+       situacaoDev,
        MAX(userDevolucao)    AS userDevolucao,
        MAX(notaDevolucao)    AS notaDevolucao,
        MAX(emissaoDevolucao) AS emissaoDevolucao,
        MAX(valorDevolucao)   AS valorDevolucao,
-       MAX(obsDevolucao)     AS obsDevolucao,
-       MAX(situacaoDev)      AS situacaoDev
+       MAX(obsDevolucao)     AS obsDevolucao
 FROM
   T_RESULT
-GROUP BY tipoDevolucao, numeroDevolucao;
+GROUP BY tipoDevolucao, numeroDevolucao, situacaoDev
 
-UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao)
+UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao, situacaoDev)
 SET R1.userDevolucao    = R2.userDevolucao,
     R1.notaDevolucao    = R2.notaDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
-    R1.obsDevolucao     = R2.obsDevolucao,
-    R1.situacaoDev      = R2.situacaoDev
+    R1.obsDevolucao     = R2.obsDevolucao
 WHERE R1.tipoDevolucao = R2.tipoDevolucao
-  AND R1.numeroDevolucao = R2.numeroDevolucao;
+  AND R1.numeroDevolucao = R2.numeroDevolucao
+  AND R1.situacaoDev = R2.situacaoDev
 
 UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
   ON I.invno = R.ni
     AND I.tipoDevolucao = R.tipoDevolucao
     AND I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
-WHERE I.situacaoDev != R.situacaoDev;
+WHERE I.situacaoDev != R.situacaoDev*/
 
 SELECT *
 FROM
   T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev)
+/*
+SELECT ni, situacaoDev, numeroDevolucao
+FROM
+  T_RESULT AS R
+where ni  = 1074769
+*/

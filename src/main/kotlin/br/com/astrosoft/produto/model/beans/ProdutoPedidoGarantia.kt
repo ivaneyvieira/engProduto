@@ -67,7 +67,7 @@ class ProdutoPedidoGarantia(
     }
 
     fun proximoNumero(numLoja: Int): Int {
-      return saci.garantiaProximo(numLoja)
+      return saci.acertoProximo(numLoja)
     }
   }
 }

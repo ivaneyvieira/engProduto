@@ -88,6 +88,7 @@ class NotaRecebimentoProdutoDev(
       val motivo = tipoDevolucaoEnum
       return if (motivo?.notasMultiplas == true) {
         numeroDevolucao?.toString() ?: ""
+        "$numeroDevolucao-$situacaoDev"
       } else {
         "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
       }

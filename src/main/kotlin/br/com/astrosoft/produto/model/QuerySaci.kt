@@ -1962,13 +1962,6 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 1
   }
 
-  fun garantiaProximo(numLoja: Int): Int {
-    val sql = "/sqlSaci/produtoEstoqueGarantiaProximo.sql"
-    return query(sql, Count::class) {
-      addOptionalParameter("numLoja", numLoja)
-    }.firstOrNull()?.quant ?: 1
-  }
-
   fun acertoUpdate(produto: ProdutoEstoqueAcerto) {
     val sql = "/sqlSaci/produtoEstoqueAcertoUpdate.sql"
     script(sql) {

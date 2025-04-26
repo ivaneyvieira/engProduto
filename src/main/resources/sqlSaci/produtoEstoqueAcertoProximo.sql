@@ -1,6 +1,13 @@
 USE sqldados;
 
-SELECT MAX(numero + 1) AS quant
+SELECT MAX(quant) AS quant
 FROM
-  produtoEstoqueAcerto
-WHERE numloja = :numLoja
+  ( SELECT MAX(numero + 1) AS quant
+    FROM
+      produtoEstoqueAcerto
+    WHERE numloja = :numLoja
+    UNION
+    SELECT MAX(numero + 1) AS quant
+    FROM
+      produtoEstoqueGarantia
+    WHERE numloja = :numLoja ) AS D
