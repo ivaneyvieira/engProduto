@@ -2135,7 +2135,7 @@ class QuerySaci : QueryDB(database) {
 
   fun updateTipoDevolucao(produto: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/updateTipoDevolucaoGarantia.sql"
-    if(produto.niReceb == null)
+    if (produto.niReceb == null)
       return
     script(sql) {
       addOptionalParameter("invno", produto.niReceb)
@@ -2221,6 +2221,15 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/findDadosDevolucao.sql"
     return query(sql, DadosDevolucao::class) {
       addOptionalParameter("numero", numero)
+    }
+  }
+
+  fun removerNotaRecebimentoDev(dev: NotaRecebimentoDev) {
+    val sql = "/sqlSaci/removerNotaRecebimentoDev.sql"
+    script(sql) {
+      addOptionalParameter("invno", dev.ni)
+      addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
+      addOptionalParameter("numero", dev.numeroDevolucao)
     }
   }
 

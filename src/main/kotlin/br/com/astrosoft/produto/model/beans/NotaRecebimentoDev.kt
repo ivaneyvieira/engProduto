@@ -92,6 +92,10 @@ class NotaRecebimentoDev(
     save()
   }
 
+  fun delete() {
+    saci.removerNotaRecebimentoDev(this)
+  }
+
   companion object {
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,

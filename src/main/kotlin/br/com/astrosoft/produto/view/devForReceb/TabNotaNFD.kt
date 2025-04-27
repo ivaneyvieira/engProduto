@@ -51,6 +51,13 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
       }
     }
 
+    button("Remove"){
+      this.icon = VaadinIcon.TRASH.create()
+      this.onClick {
+        viewModel.removeNota()
+      }
+    }
+
     button("Pendente") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {

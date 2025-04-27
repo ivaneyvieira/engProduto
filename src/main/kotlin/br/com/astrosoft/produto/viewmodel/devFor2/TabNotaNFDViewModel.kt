@@ -72,6 +72,20 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     }
     updateView()
   }
+
+  fun removeNota()= viewModel.exec {
+    val lista = subView.notasSelecionadas()
+    if (lista.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    viewModel.view.showQuestion("Confirma a remoção do(s) produto(s) selecionado(s)?") {
+      lista.forEach {
+        it.delete()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabNotaNFD : ITabView {
