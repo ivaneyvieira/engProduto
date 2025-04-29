@@ -437,10 +437,10 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
-       IF(tipoDevolucao = 6, NG.notaDevolucao, ND.notaDevolucao)       AS notaDevolucao,
-       IF(tipoDevolucao = 6, NG.emissaoDevolucao, ND.emissaoDevolucao) AS emissaoDevolucao,
-       IF(tipoDevolucao = 6, NG.valorDevolucao, ND.valorDevolucao)     AS valorDevolucao,
-       IF(tipoDevolucao = 6, NG.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
+       IF(tipoDevolucao = 6, ND.notaDevolucao, ND.notaDevolucao)       AS notaDevolucao,
+       IF(tipoDevolucao = 6, ND.emissaoDevolucao, ND.emissaoDevolucao) AS emissaoDevolucao,
+       IF(tipoDevolucao = 6, ND.valorDevolucao, ND.valorDevolucao)     AS valorDevolucao,
+       IF(tipoDevolucao = 6, ND.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
        observacaoDev,
        dataColeta,
        observacaoAdicional
@@ -448,8 +448,6 @@ FROM
   T_QUERY                    AS Q
     LEFT JOIN T_NFO          AS ND
               ON (ND.niDev = Q.numeroDevolucao)
-    LEFT JOIN T_NFO_GARANTIA AS NG
-              ON (NG.pedGarantia = Q.numeroDevolucao AND NG.storeno = Q.loja)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
         cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);

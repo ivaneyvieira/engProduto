@@ -51,6 +51,13 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
       }
     }
 
+    button("Remove") {
+      this.icon = VaadinIcon.TRASH.create()
+      this.onClick {
+        viewModel.removeNota()
+      }
+    }
+
     button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {

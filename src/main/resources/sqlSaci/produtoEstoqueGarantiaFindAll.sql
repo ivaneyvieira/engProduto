@@ -229,4 +229,3 @@ WHERE (
         UR.forReceb = @PESQUISA_NUM OR
         UR.nforReceb LIKE @PESQUISA_LIKE
         )
-HAVING processado = FALSE
