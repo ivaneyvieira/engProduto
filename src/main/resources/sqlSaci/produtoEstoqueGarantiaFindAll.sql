@@ -164,35 +164,35 @@ HAVING codbar != '';
 
 SELECT A.numero,
        A.numloja,
-       S.sname                  AS lojaSigla,
+       S.sname                                          AS lojaSigla,
        data,
        hora,
        usuario,
        A.prdno,
-       TRIM(MID(P.name, 1, 37)) AS descricao,
+       TRIM(MID(P.name, 1, 37))                         AS descricao,
        A.grade,
        L.locApp,
-       B.codbar                 AS barcode,
-       TRIM(P.mfno_ref)         AS ref,
-       ROUND(EL.estoqueLoja)    AS estoqueLoja,
-       estoqueReal              AS estoqueDev,
-       ROUND(EL.estoqueLojas)   AS estoqueLojas,
-       O.observacao             AS observacao,
-       UR.lojaReceb             AS lojaReceb,
-       UR.niReceb               AS niReceb,
-       UR.nfoReceb              AS nfoReceb,
-       UR.entradaReceb          AS entradaReceb,
-       UR.forReceb              AS forReceb,
-       UR.nforReceb             AS nforReceb,
-       A.loteDev                AS loteDev,
-       UR.temLote               AS temLote,
-       UR.cfopReceb             AS cfopReceb,
-       IFNULL(IA.numero, 0)     AS numeroDevolucao,
-       UR.valorUnitario         AS valorUnitario,
-       N.notaDevolucao          AS nfdGarantia,
-       N.emissaoDevolucao       AS dataNfdGarantia,
-       UR.niReceb IS NULL       AS pendente,
-       IA.numero IS NOT NULL    AS processado
+       B.codbar                                         AS barcode,
+       TRIM(P.mfno_ref)                                 AS ref,
+       ROUND(EL.estoqueLoja)                            AS estoqueLoja,
+       estoqueReal                                      AS estoqueDev,
+       ROUND(EL.estoqueLojas)                           AS estoqueLojas,
+       O.observacao                                     AS observacao,
+       UR.lojaReceb                                     AS lojaReceb,
+       UR.niReceb                                       AS niReceb,
+       UR.nfoReceb                                      AS nfoReceb,
+       UR.entradaReceb                                  AS entradaReceb,
+       UR.forReceb                                      AS forReceb,
+       UR.nforReceb                                     AS nforReceb,
+       A.loteDev                                        AS loteDev,
+       UR.temLote                                       AS temLote,
+       UR.cfopReceb                                     AS cfopReceb,
+       IFNULL(IA.numero, 0)                             AS numeroDevolucao,
+       UR.valorUnitario                                 AS valorUnitario,
+       O.nfd                                            AS nfdGarantia,
+       CAST(IF(O.dataNfd = 0, NULL, O.dataNfd) AS DATE) AS dataNfdGarantia,
+       UR.niReceb IS NULL                               AS pendente,
+       IFNULL(O.nfd, '') != ''                          AS processado
 FROM
   T_GARANTIA                                     AS A
     LEFT JOIN T_ESTOQUE_LOJA                     AS EL
@@ -210,10 +210,6 @@ FROM
     LEFT JOIN sqldados.produtoObservacaoGarantia AS O
               ON O.numero = A.numero
                 AND O.numloja = A.numloja
-    LEFT JOIN T_NFO                              AS N
-              ON N.storeno = A.numloja
-                AND N.pedGarantia = A.numero
-                AND N.storeno = A.numloja
     LEFT JOIN sqldados.store                     AS S
               ON S.no = A.numloja
     LEFT JOIN sqldados.prd                       AS P
@@ -227,5 +223,7 @@ WHERE (
         A.numero = @PESQUISA_NUM OR
         S.sname LIKE @PESQUISA_LIKE OR
         UR.forReceb = @PESQUISA_NUM OR
-        UR.nforReceb LIKE @PESQUISA_LIKE
-        )
+        UR.nforReceb LIKE @PESQUISA_LIKE)
+HAVING (:processado = 'S' AND processado = 1) OR
+       (:processado = 'N' AND processado = 0) OR
+       (:processado = 'T' AND processado = 0)

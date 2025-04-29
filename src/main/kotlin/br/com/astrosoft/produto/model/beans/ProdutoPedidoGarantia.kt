@@ -78,11 +78,12 @@ data class FiltroGarantia(
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
   val pesquisa: String = "",
+  val processado: String,
 )
 
 enum class ETipoDevolvidoGarantia(val codigo: String, val descricao: String) {
-  PENDENTE("P", "Pendente"),
-  FATURADO("F", "Faturado"),
+  PENDENTE("N", "Pendente"),
+  FATURADO("S", "Faturado"),
   TODOS("T", "Todos"),
 }
 
@@ -160,7 +161,8 @@ class PedidoGarantia(
   fun findProdutos(): List<ProdutoPedidoGarantia> {
     val filtro = FiltroGarantia(
       numLoja = numloja,
-      numero = numero
+      numero = numero,
+      processado = "T"
     )
     val produtos = ProdutoPedidoGarantia.findAll(filtro)
     return produtos

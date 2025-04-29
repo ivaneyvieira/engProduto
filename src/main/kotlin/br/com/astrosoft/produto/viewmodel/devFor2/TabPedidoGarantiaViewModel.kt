@@ -25,9 +25,7 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoPedidoGarantia.findAll(filtro).agrupaGarantia().sortedBy { it.numero }
-    produtos.forEach {
-     // it.saveGarantiaNotaCondicional()
-    }
+
     subView.updateProduto(produtos)
   }
 

@@ -2022,6 +2022,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("processado", filtro.processado)
     }
   }
 

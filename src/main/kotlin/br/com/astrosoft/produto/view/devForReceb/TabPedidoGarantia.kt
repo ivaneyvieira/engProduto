@@ -27,6 +27,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbTipo: Select<ETipoDevolvidoGarantia>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -77,20 +78,31 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       }
     }
 
+    cmbTipo = select("Tipo Garantia") {
+      this.setItems(ETipoDevolvidoGarantia.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = ETipoDevolvidoGarantia.PENDENTE
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     button("Cancelar") {
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
         viewModel.cancelarGarantia()
       }
     }
-/*
-    button("Garantia") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      onClick {
-        viewModel.processaPedido()
-      }
-    }
- */
+    /*
+        button("Garantia") {
+          this.icon = VaadinIcon.ARROW_RIGHT.create()
+          onClick {
+            viewModel.processaPedido()
+          }
+        }
+     */
   }
 
   override fun Grid<PedidoGarantia>.gridPanel() {
@@ -118,9 +130,9 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     columnGrid(PedidoGarantia::hora, header = "Hora")
     columnGrid(PedidoGarantia::codFor, header = "For Cod")
     columnGrid(PedidoGarantia::nomeFor, header = "For Nome")
-    columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data")
-    columnGrid(PedidoGarantia::nfdGarantia, header = "NFD").right()
-    columnGrid(PedidoGarantia::valorTotal, header = "Valor")
+    columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data").dateFieldEditor()
+    columnGrid(PedidoGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
+    columnGrid(PedidoGarantia::valorTotal, header = "Valor", width = "7rem")
 
     columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
     //columnGrid(PedidoGarantia::pendente, header = "Pendente")
@@ -133,6 +145,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      processado = (cmbTipo.value ?: ETipoDevolvidoGarantia.PENDENTE).codigo,
     )
   }
 
