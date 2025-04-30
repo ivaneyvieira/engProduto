@@ -2228,7 +2228,7 @@ class QuerySaci : QueryDB(database) {
   fun removerNotaRecebimentoDev(dev: NotaRecebimentoDev) {
     val sql = "/sqlSaci/removerNotaRecebimentoDev.sql"
     script(sql) {
-      addOptionalParameter("invno", dev.ni)
+      addOptionalParameter("situacaoDev", dev.situacaoDev)
       addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
       addOptionalParameter("numero", dev.numeroDevolucao)
     }

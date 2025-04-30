@@ -77,46 +77,6 @@ WHERE issuedate >= @DT
   AND status != 1
 HAVING niDev IS NOT NULL;
 
-DROP TEMPORARY TABLE IF EXISTS T_NFO_GARANTIA;
-CREATE TEMPORARY TABLE T_NFO_GARANTIA
-(
-  storeno          smallint,
-  notaDevolucao    varchar(14),
-  emissaoDevolucao date,
-  valorDevolucao   decimal(23, 4),
-  pedGarantia      int,
-  PRIMARY KEY (storeno, notaDevolucao),
-  INDEX (storeno, pedGarantia)
-)
-SELECT storeno,
-       notaDevolucao,
-       emissaoDevolucao,
-       valorDevolucao,
-       obsDevolucao,
-       IF(obsDevolucao LIKE '%GARANTIA%', CASE
-                                            WHEN pedGarantia1 != 0 THEN pedGarantia1
-                                            WHEN pedGarantia2 != 0 THEN pedGarantia2
-                                                                   ELSE 0
-                                          END, '0') * 1 AS pedGarantia
-FROM
-  ( SELECT storeno                 AS storeno,
-           CONCAT(nfno, '/', nfse) AS notaDevolucao,
-           CAST(issuedate AS date) AS emissaoDevolucao,
-           grossamt / 100          AS valorDevolucao,
-           IF(LOCATE(' PEG ', CONCAT(remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PEG ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
-              '') * 1              AS pedGarantia1,
-           IF(LOCATE(' PED ', CONCAT(remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
-              '') * 1              AS pedGarantia2,
-           remarks                 AS obsDevolucao
-    FROM
-      sqldados.nf
-    WHERE issuedate >= @DT
-      AND tipo = 2
-      AND status != 1 ) AS D
-HAVING pedGarantia != 0;
-
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
 (
