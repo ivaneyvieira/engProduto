@@ -405,8 +405,8 @@ SELECT loja,
        dataColeta,
        observacaoAdicional
 FROM
-  T_QUERY                    AS Q
-    LEFT JOIN T_NFO          AS ND
+  T_QUERY           AS Q
+    LEFT JOIN T_NFO AS ND
               ON (ND.niDev = Q.numeroDevolucao)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
@@ -416,36 +416,37 @@ HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
 (
-  PRIMARY KEY (tipoDevolucao, numeroDevolucao)
+  PRIMARY KEY (tipoDevolucao, numeroDevolucao, situacaoDev)
 )
 SELECT tipoDevolucao,
        numeroDevolucao,
+       situacaoDev,
        MAX(userDevolucao)    AS userDevolucao,
        MAX(notaDevolucao)    AS notaDevolucao,
        MAX(emissaoDevolucao) AS emissaoDevolucao,
        MAX(valorDevolucao)   AS valorDevolucao,
-       MAX(obsDevolucao)     AS obsDevolucao,
-       MAX(situacaoDev)      AS situacaoDev
+       MAX(obsDevolucao)     AS obsDevolucao
 FROM
   T_RESULT
-GROUP BY tipoDevolucao, numeroDevolucao;
+GROUP BY tipoDevolucao, numeroDevolucao, situacaoDev;
 
-UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao)
+UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao, situacaoDev)
 SET R1.userDevolucao    = R2.userDevolucao,
     R1.notaDevolucao    = R2.notaDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
-    R1.obsDevolucao     = R2.obsDevolucao,
-    R1.situacaoDev      = R2.situacaoDev
+    R1.obsDevolucao     = R2.obsDevolucao
 WHERE R1.tipoDevolucao = R2.tipoDevolucao
-  AND R1.numeroDevolucao = R2.numeroDevolucao;
+  AND R1.numeroDevolucao = R2.numeroDevolucao
+  AND R1.situacaoDev != R2.situacaoDev;
 
+/*
 UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
-  ON I.invno = R.ni
-    AND I.tipoDevolucao = R.tipoDevolucao
+  ON I.tipoDevolucao = R.tipoDevolucao
     AND I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
-WHERE I.situacaoDev != R.situacaoDev;
+WHERE I.situacaoDev != R.situacaoDev
+*/
 
 SELECT *
 FROM
