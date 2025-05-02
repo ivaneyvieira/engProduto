@@ -29,7 +29,7 @@ fun VerticalLayout.formHerader(nota: NotaRecebimentoDev, salvaNota: (notaModific
         integerField("NI") {
           this.isReadOnly = true
           this.width = "6rem"
-          this.value = nota.ni ?: 0
+          this.value = nota.niPrincipal ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
         textField("NFO") {

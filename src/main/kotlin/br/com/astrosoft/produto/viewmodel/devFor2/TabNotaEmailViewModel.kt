@@ -27,7 +27,7 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) {
 
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
     val invFile = InvFileDev(
-      invno = nota.ni,
+      invno = nota.niPrincipal,
       numero = nota.numeroDevolucao,
       tipoDevolucao = nota.tipoDevolucao,
       seq = null,

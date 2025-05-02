@@ -9,7 +9,8 @@ class NotaRecebimentoDev(
   var lojaSigla: String?,
   var data: LocalDate?,
   var emissao: LocalDate?,
-  var ni: Int?,
+  val niPrincipal: Int?,
+  var niList: List<Int>,
   var numeroDevolucao: Int?,
   var nfEntrada: String?,
   var custno: Int?,
@@ -46,6 +47,10 @@ class NotaRecebimentoDev(
   var observacaoAdicional: String?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val niListStr
+    get() = niList.joinToString(separator = ", ") {
+      it.toString()
+    }
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
 
@@ -76,10 +81,10 @@ class NotaRecebimentoDev(
   }
 
   fun arquivos(): List<InvFileDev> {
-    val invno = this.ni ?: return emptyList()
+    val niList = this.niList
     val tipo = ETipoDevolucao.findByNum(tipoDevolucao ?: 0) ?: return emptyList()
     val numero = this.numeroDevolucao ?: return emptyList()
-    return InvFileDev.findAll(invno, tipo, numero)
+    return niList.flatMap { invno -> InvFileDev.findAll(invno, tipo, numero) }
   }
 
   fun save() {
@@ -122,7 +127,8 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         data = nota.data,
         emissao = nota.emissao,
         numeroDevolucao = nota.numeroDevolucao,
-        ni = nota.ni,
+        niPrincipal = nota.ni,
+        niList = produtos.mapNotNull { it.ni }.distinct(),
         nfEntrada = nota.nfEntrada,
         custno = nota.custno,
         vendno = nota.vendno,

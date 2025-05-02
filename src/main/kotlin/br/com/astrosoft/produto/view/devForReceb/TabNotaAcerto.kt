@@ -96,7 +96,7 @@ class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
     this.selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
+    columnGrid(NotaRecebimentoDev::niListStr, header = "NI").right()
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)

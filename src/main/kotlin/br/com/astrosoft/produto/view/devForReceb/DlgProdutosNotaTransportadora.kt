@@ -22,10 +22,6 @@ class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewMode
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
   fun showDialog(onClose: () -> Unit) {
-    val numeroNota = nota.nfEntrada ?: ""
-    val emissao = nota.emissao.format()
-    val numeroInterno = nota.ni
-
     form = SubWindowForm(
       header = {
         this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->

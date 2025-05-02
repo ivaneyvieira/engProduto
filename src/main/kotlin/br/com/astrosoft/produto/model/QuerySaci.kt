@@ -2151,20 +2151,22 @@ class QuerySaci : QueryDB(database) {
 
   fun saveInvAdicional(nota: NotaRecebimentoDev, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
-    script(sql) {
-      addOptionalParameter("invno", nota.ni)
-      addOptionalParameter("numero", nota.numeroDevolucao)
-      addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
-      addOptionalParameter("volume", nota.volumeDevolucao)
-      addOptionalParameter("peso", nota.pesoDevolucao)
-      addOptionalParameter("transp", nota.transpDevolucao)
-      addOptionalParameter("cte", nota.cteDevolucao)
-      addOptionalParameter("data", nota.dataDevolucao.toSaciDate())
-      addOptionalParameter("dataColeta", nota.dataColeta.toSaciDate())
-      addOptionalParameter("situacaoDev", nota.situacaoDev)
-      addOptionalParameter("observacaoDev", nota.observacaoDev)
-      addOptionalParameter("observacaoAdicional", nota.observacaoAdicional)
-      addOptionalParameter("userno", userno)
+    nota.niList.forEach { invno ->
+      script(sql) {
+        addOptionalParameter("invno", invno)
+        addOptionalParameter("numero", nota.numeroDevolucao)
+        addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
+        addOptionalParameter("volume", nota.volumeDevolucao)
+        addOptionalParameter("peso", nota.pesoDevolucao)
+        addOptionalParameter("transp", nota.transpDevolucao)
+        addOptionalParameter("cte", nota.cteDevolucao)
+        addOptionalParameter("data", nota.dataDevolucao.toSaciDate())
+        addOptionalParameter("dataColeta", nota.dataColeta.toSaciDate())
+        addOptionalParameter("situacaoDev", nota.situacaoDev)
+        addOptionalParameter("observacaoDev", nota.observacaoDev)
+        addOptionalParameter("observacaoAdicional", nota.observacaoAdicional)
+        addOptionalParameter("userno", userno)
+      }
     }
   }
 

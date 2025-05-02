@@ -110,7 +110,7 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
     this.selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::ni, header = "NI").right()
+    columnGrid(NotaRecebimentoDev::niListStr, header = "NI").right()
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Ped Gar").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
