@@ -13,6 +13,7 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -109,9 +110,11 @@ class TabNotaGarantia(val viewModel: TabNotaGarantiaViewModel) :
 
     this.selectionMode = Grid.SelectionMode.MULTI
 
+    this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
+
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::niListStr, header = "NI").right()
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Ped Gar").right()
+    columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::data, header = "Entrada", width = null)

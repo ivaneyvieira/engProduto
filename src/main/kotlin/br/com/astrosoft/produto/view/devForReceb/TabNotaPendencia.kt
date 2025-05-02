@@ -11,6 +11,7 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -60,7 +61,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
     select("Enviar") {
       this.setItems(EStituacaoDev.entries - EStituacaoDev.PENDENCIA)
-      this.setItemLabelGenerator {sit ->
+      this.setItemLabelGenerator { sit ->
         sit.descricao
       }
       this.addValueChangeListener {
@@ -77,14 +78,14 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     this.format()
 
     this.withEditor(
-        classBean = NotaRecebimentoDev::class,
-        openEditor = {
-          val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-          edit?.focus()
-        },
-        closeEditor = {
-          viewModel.saveNota(nota = it.bean, updateGrid = true)
-        })
+      classBean = NotaRecebimentoDev::class,
+      openEditor = {
+        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.saveNota(nota = it.bean, updateGrid = true)
+      })
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -104,10 +105,12 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       }
     }
 
-    columnGrid(
-      NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
+    this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
+
+    this.columnGrid(
+      valueProvider = NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
     )
-    columnGrid(NotaRecebimentoDev::niListStr, header = "NI").right()
+    columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
@@ -119,7 +122,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width="200px").textFieldEditor()
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
