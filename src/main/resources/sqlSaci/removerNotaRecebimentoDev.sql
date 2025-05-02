@@ -14,6 +14,7 @@ WHERE invno IN ( SELECT invno FROM T_NI )
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
+
 DELETE
 FROM
   sqldados.invAdicional

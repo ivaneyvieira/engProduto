@@ -84,12 +84,12 @@ class NotaRecebimentoDev(
 
   fun save() {
     val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(nota = this, userno = userno, situacaoDevNovo = this.situacaoDev ?: 0)
+    saci.saveInvAdicional(this, userno)
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) {
-    val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(nota = this, userno = userno, situacaoDevNovo = situacao.num)
+    this.situacaoDev = situacao.num
+    save()
   }
 
   fun delete() {
