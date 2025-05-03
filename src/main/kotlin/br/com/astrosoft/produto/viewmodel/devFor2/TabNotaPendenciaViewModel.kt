@@ -115,6 +115,20 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
     produto.saveProduto()
     subView.updateProduto()
   }
+
+  fun removeNota() = viewModel.exec {
+    val lista = subView.notasSelecionadas()
+    if (lista.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    viewModel.view.showQuestion("Confirma a remoção do(s) produto(s) selecionado(s)?") {
+      lista.forEach {
+        it.delete()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabNotaPendencia : ITabView {

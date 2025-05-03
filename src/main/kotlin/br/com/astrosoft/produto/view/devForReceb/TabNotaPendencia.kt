@@ -6,6 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
@@ -47,6 +49,13 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
       this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+
+    button("Remove") {
+      this.icon = VaadinIcon.TRASH.create()
+      this.onClick {
+        viewModel.removeNota()
       }
     }
 
