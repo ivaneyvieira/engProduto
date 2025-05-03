@@ -95,14 +95,6 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.cancelarGarantia()
       }
     }
-    /*
-        button("Garantia") {
-          this.icon = VaadinIcon.ARROW_RIGHT.create()
-          onClick {
-            viewModel.processaPedido()
-          }
-        }
-     */
   }
 
   override fun Grid<PedidoGarantia>.gridPanel() {

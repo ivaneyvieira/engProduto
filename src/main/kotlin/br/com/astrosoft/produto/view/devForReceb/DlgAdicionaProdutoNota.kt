@@ -33,11 +33,13 @@ class DlgAdicionaProdutoNota(
       setSizeFull()
       this.isSpacing = false
       this.isMargin = false
-      edtNi = integerField("NI") {
-        this.isAutoselect = true
-        this.isAutofocus = true
-        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-        this.width = "6rem"
+      if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
+        edtNi = integerField("NI") {
+          this.isAutoselect = true
+          this.isAutofocus = true
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.width = "6rem"
+        }
       }
       for (i in 4..10) {
         val linha = LinhaNota(viewModel, nota)
@@ -73,11 +75,34 @@ class DlgAdicionaProdutoNota(
   }
 
   private fun closeForm() {
-    listaRow.forEach {
-      it.save(edtNi?.value)
+    listaRow.forEach { linha ->
+      save(linha)
     }
     onClose.invoke()
     this.close()
+  }
+
+  private fun save(linha: LinhaNota) {
+    val produtoNota = nota.produtos.firstOrNull() ?: return
+
+    val prdno = linha.prdno() ?: return
+    val grade = linha.grade()
+    val saldo = linha.saldo()
+    val invno = if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
+      edtNi?.value ?: 0
+    } else {
+      nota.niPrincipal
+    }
+    if (saldo == null || saldo <= 0) return
+
+    val produto = produtoNota.copy(
+      ni = invno,
+      prdno = prdno,
+      grade = grade,
+      quantDevolucao = saldo
+    )
+
+    viewModel.addProduto(produto)
   }
 }
 
@@ -88,6 +113,10 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
   private var edtQuant: IntegerField? = null
 
   private val produtos = mutableListOf<PrdGrade>()
+
+  fun prdno() = produtos.firstOrNull()?.prdno
+  fun grade() = edtGrade?.value
+  fun saldo() = edtQuant?.value
 
   init {
     this.setWidthFull()
@@ -122,23 +151,5 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     }
-  }
-
-  fun save(invno: Int?) {
-    val produtoNota = nota.produtos.firstOrNull() ?: return
-
-    val prdno = produtos.firstOrNull()?.prdno ?: return
-    val grade = edtGrade?.value
-    val saldo = edtQuant?.value
-    if (saldo == null || saldo <= 0) return
-
-    val produto = produtoNota.copy(
-      ni = invno,
-      prdno = prdno,
-      grade = grade,
-      quantDevolucao = saldo
-    )
-
-    viewModel.addProduto(produto)
   }
 }
