@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
     get() = viewModel.view.tabNotaNFD
 
@@ -22,7 +22,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
 
   fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
     nota.save()
-    if(updateGrid){
+    if (updateGrid) {
       updateView()
     }
   }
@@ -73,7 +73,7 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
     updateView()
   }
 
-  fun removeNota()= viewModel.exec {
+  fun removeNota() = viewModel.exec {
     val lista = subView.notasSelecionadas()
     if (lista.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -85,6 +85,16 @@ class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) {
       }
       updateView()
     }
+  }
+
+  override fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
+    return saci.findGrades(codigo, loja)
+  }
+
+  override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {
+    produto ?: fail("Nenhum produto selecionado")
+    produto.saveProduto()
+    subView.updateProduto()
   }
 }
 

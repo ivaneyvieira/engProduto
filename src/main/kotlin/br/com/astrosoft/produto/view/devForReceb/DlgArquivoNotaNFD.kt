@@ -78,7 +78,7 @@ class DlgArquivoNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaRecebi
   }
 
   fun update() {
-    val listProdutos = nota.arquivos()
+    val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)
   }
 }

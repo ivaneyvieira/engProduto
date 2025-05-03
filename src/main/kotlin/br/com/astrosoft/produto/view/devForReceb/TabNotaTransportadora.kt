@@ -91,7 +91,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
-      if (bean.arquivos().isNotEmpty()) {
+      if (bean.countArq?.let { it > 0 } == true) {
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->

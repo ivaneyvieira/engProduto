@@ -1179,7 +1179,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("venc04", produto.venc04)
     }
   }
-
+/*
   fun updateProduto(produto: NotaRecebimentoProdutoDev) {
     val sql = "/sqlSaci/qtdVencimentoUpdate.sql"
     script(sql) {
@@ -1198,7 +1198,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("venc04", produto.venc04)
     }
   }
-
+*/
   fun consultaValidade(filtro: FiltroValidade): List<ComparaValidade> {
     val sql = "/sqlSaci/consultaValidade.sql"
 
@@ -2122,8 +2122,8 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao, numero: Int) {
-    val sql = "/sqlSaci/updateTipoDevolucao.sql"
+  fun saveTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao, numero: Int) {
+    val sql = "/sqlSaci/saveTipoDevolucao.sql"
     script(sql) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
@@ -2134,7 +2134,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateTipoDevolucao(produto: ProdutoPedidoGarantia) {
+  fun saveTipoDevolucao(produto: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/updateTipoDevolucaoGarantia.sql"
     if (produto.niReceb == null)
       return
@@ -2233,6 +2233,22 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("situacaoDev", dev.situacaoDev)
       addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
       addOptionalParameter("numero", dev.numeroDevolucao)
+    }
+  }
+
+  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
+    val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
+
+    if (produto.ni == null)
+      return
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("numero", produto.numeroDevolucao)
+      addOptionalParameter("situacaoDev", produto.situacaoDev)
+      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
     }
   }
 

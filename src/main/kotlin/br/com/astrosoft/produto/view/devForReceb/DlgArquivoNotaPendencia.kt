@@ -78,7 +78,7 @@ class DlgArquivoNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota
   }
 
   fun update() {
-    val listProdutos = nota.arquivos()
+    val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)
   }
 }

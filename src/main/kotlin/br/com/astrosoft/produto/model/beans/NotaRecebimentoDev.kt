@@ -29,7 +29,6 @@ class NotaRecebimentoDev(
   var usuarioRecebe: String?,
   var observacaoNota: String?,
   var tipoNota: String?,
-  var countLocalizacao: Int?,
   var tipoDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
@@ -45,6 +44,8 @@ class NotaRecebimentoDev(
   var observacaoDev: String?,
   var dataColeta: LocalDate?,
   var observacaoAdicional: String?,
+  var countColeta: Int?,
+  var countArq: Int?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
   val niListStr
@@ -80,7 +81,7 @@ class NotaRecebimentoDev(
     return notaRefresh
   }
 
-  fun arquivos(): List<InvFileDev> {
+  fun listArquivos(): List<InvFileDev> {
     val niList = this.niList
     val tipo = ETipoDevolucao.findByNum(tipoDevolucao ?: 0) ?: return emptyList()
     val numero = this.numeroDevolucao ?: return emptyList()
@@ -128,7 +129,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         emissao = nota.emissao,
         numeroDevolucao = nota.numeroDevolucao,
         niPrincipal = nota.ni,
-        niList = produtos.mapNotNull { it.ni }.distinct(),
+        niList = produtos.mapNotNull { it.ni }.sorted().distinct(),
         nfEntrada = nota.nfEntrada,
         custno = nota.custno,
         vendno = nota.vendno,
@@ -153,7 +154,6 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         tipoDevolucao = nota.tipoDevolucao ?: 0,
         pesoDevolucao = nota.pesoDevolucao ?: 0.00,
         volumeDevolucao = nota.volumeDevolucao ?: 0,
-        countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,
         transpDevolucao = nota.transpDevolucao,
         cteDevolucao = nota.cteDevolucao,
         situacaoDev = nota.situacaoDev,
@@ -166,6 +166,8 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         observacaoDev = nota.observacaoDev,
         dataColeta = nota.dataColeta,
         observacaoAdicional = nota.observacaoAdicional,
+        countColeta = nota.countColeta,
+        countArq = nota.countArq,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }

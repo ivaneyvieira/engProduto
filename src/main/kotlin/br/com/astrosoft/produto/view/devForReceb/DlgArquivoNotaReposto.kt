@@ -78,7 +78,7 @@ class DlgArquivoNotaReposto(val viewModel: TabNotaRepostoViewModel, val nota: No
   }
 
   fun update() {
-    val listProdutos = nota.arquivos()
+    val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)
   }
 }

@@ -9,14 +9,12 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaNFDViewModel
-import com.github.mvysny.karibudsl.v10.bigDecimalField
-import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
@@ -71,6 +69,16 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
           this.width = "120px"
           this.isReadOnly = true
         }
+        this.button("Adiciona") {
+          this.icon = VaadinIcon.PLUS.create()
+          this.addClickListener {
+            val dlg = DlgAdicionaProdutoNota(viewModel, nota) {
+              gridDetail.dataProvider.refreshAll()
+            }
+            dlg.open()
+          }
+        }
+
       }, onClose = {
         onClose()
       }) {

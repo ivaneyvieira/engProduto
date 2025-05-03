@@ -80,28 +80,18 @@ HAVING niDev IS NOT NULL;
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
 (
-  PRIMARY KEY (invno, tipoDevolucao, numero)
+  PRIMARY KEY (tipoDevolucao, numero)
 )
-SELECT invno, tipoDevolucao, numero, SUM(filename LIKE '%COLETA%') AS countColeta
+SELECT tipoDevolucao, numero, SUM(filename LIKE '%COLETA%') AS countColeta, COUNT(DISTINCT filename) AS countArq
 FROM
   sqldados.invAdicionalDevArquivo
-GROUP BY invno, tipoDevolucao, numero;
-
-DROP TEMPORARY TABLE IF EXISTS T_LOC;
-CREATE TEMPORARY TABLE T_LOC
-(
-  PRIMARY KEY (prdno, grade)
-)
-SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
-WHERE (A.storeno = 4);
+GROUP BY tipoDevolucao, numero;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
-SELECT I.invno,
-       I.prdno,
-       I.grade,
+SELECT A.invno,
+       A.prdno,
+       A.grade,
        N.storeno,
        L.sname                                                        AS lojaSigla,
        N.date,
@@ -141,8 +131,8 @@ SELECT I.invno,
        I.l6 / 100                                                     AS outDesp,
        I.icmsSubst / 100                                              AS icmsSubst,
        A.numero                                                       AS numeroDevolucao,
-       A.tipoDevolucao,
-       A.quantDevolucao,
+       A.tipoDevolucao                                                AS tipoDevolucao,
+       A.quantDevolucao                                               AS quantDevolucao,
        IFNULL(IA.observacao, '')                                      AS observacaoDev,
        IA.volume                                                      AS volumeDevolucao,
        IA.peso                                                        AS pesoDevolucao,
@@ -154,30 +144,32 @@ SELECT I.invno,
        IA.situacaoDev                                                 AS situacaoDev,
        UA.login                                                       AS userDevolucao,
        IFNULL(AC.countColeta, 0)                                      AS countColeta,
+       IFNULL(AC.countArq, 0)                                         AS countArq,
        CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta
 FROM
-  sqldados.iprdAdicionalDev         AS A
-    LEFT JOIN sqldados.inv          AS N
-              USING (invno)
-    LEFT JOIN sqldados.iprd         AS I
-              USING (invno, prdno, grade)
-    LEFT JOIN sqldados.carr         AS C
-              ON C.no = N.carrno
-    LEFT JOIN sqldados.store        AS L
-              ON L.no = N.storeno
-    LEFT JOIN T_ARQCOLETA           AS AC
-              USING (invno, tipoDevolucao, numero)
-    LEFT JOIN sqldados.invAdicional AS IA
-              USING (invno, tipoDevolucao, numero)
-    LEFT JOIN sqldados.carr         AS CA
-              ON CA.no = IA.carrno
-    LEFT JOIN sqldados.users        AS UA
-              ON UA.no = IA.userno
+  sqldados.iprdAdicionalDev          AS A
+    INNER JOIN sqldados.inv          AS N
+               USING (invno)
+    LEFT JOIN  sqldados.iprd         AS I
+               USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.carr         AS C
+               ON C.no = N.carrno
+    LEFT JOIN  sqldados.store        AS L
+               ON L.no = N.storeno
+    LEFT JOIN  T_ARQCOLETA           AS AC
+               USING (tipoDevolucao, numero)
+    INNER JOIN sqldados.invAdicional AS IA
+               USING (invno, tipoDevolucao, numero)
+    LEFT JOIN  sqldados.carr         AS CA
+               ON CA.no = IA.carrno
+    LEFT JOIN  sqldados.users        AS UA
+               ON UA.no = IA.userno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (A.tipoDevolucao > 0)
+  AND (IA.situacaoDev = :situacaoDev)
 GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -193,27 +185,6 @@ FROM
 WHERE (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
-DROP TEMPORARY TABLE IF EXISTS T_VENCIMENTO;
-CREATE TEMPORARY TABLE T_VENCIMENTO
-(
-  PRIMARY KEY (storeno, prdno, grade)
-)
-SELECT storeno                            AS storeno,
-       prdno                              AS prdno,
-       grade                              AS grade,
-       MAX(dataVenda)                     AS dataVenda,
-       MAX(vendas)                        AS vendas,
-       MAX(IF(num = 1, quantidade, NULL)) AS qtty01,
-       MAX(IF(num = 1, vencimento, NULL)) AS venc01,
-       MAX(IF(num = 2, quantidade, NULL)) AS qtty02,
-       MAX(IF(num = 2, vencimento, NULL)) AS venc02,
-       MAX(IF(num = 3, quantidade, NULL)) AS qtty03,
-       MAX(IF(num = 3, vencimento, NULL)) AS venc03,
-       MAX(IF(num = 4, quantidade, NULL)) AS qtty04,
-       MAX(IF(num = 4, vencimento, NULL)) AS venc04
-FROM
-  sqldados.qtd_vencimento
-GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
@@ -243,8 +214,6 @@ SELECT N.storeno                                                      AS loja,
        TRIM(MID(P.name, 1, 37))                                       AS descricao,
        TRIM(MID(P.name, 37, 3))                                       AS un,
        N.grade                                                        AS grade,
-       IFNULL(L.localizacao, '')                                      AS localizacao,
-       IFNULL(LS.localizacao, '')                                     AS localizacaoSaci,
        P.mfno                                                         AS vendnoProduto,
        ROUND(N.qtty)                                                  AS quant,
        ROUND(E.estoque)                                               AS estoque,
@@ -266,16 +235,6 @@ SELECT N.storeno                                                      AS loja,
        ER.login                                                       AS usuarioRecebe,
        observacaoNota                                                 AS observacaoNota,
        tipoNota                                                       AS tipoNota,
-       VC.dataVenda                                                   AS dataVenda,
-       VC.vendas                                                      AS vendas,
-       VC.qtty01                                                      AS qtty01,
-       VC.venc01                                                      AS venc01,
-       VC.qtty02                                                      AS qtty02,
-       VC.venc02                                                      AS venc02,
-       VC.qtty03                                                      AS qtty03,
-       VC.venc03                                                      AS venc03,
-       VC.qtty04                                                      AS qtty04,
-       VC.venc04                                                      AS venc04,
        N.valorUnit,
        N.valorTotal,
        N.valorDesconto,
@@ -301,26 +260,21 @@ SELECT N.storeno                                                      AS loja,
        userDevolucao,
        observacaoDev,
        countColeta,
+       countArq,
        dataColeta
 FROM
-  T_NOTA                       AS N
-    LEFT JOIN  T_VENCIMENTO    AS VC
-               USING (storeno, prdno, grade)
-    LEFT JOIN  sqldados.users  AS ER
+  T_NOTA                      AS N
+    LEFT JOIN  sqldados.users AS ER
                ON ER.no = N.usernoRecebe
-    LEFT JOIN  sqldados.vend   AS V
+    LEFT JOIN  sqldados.vend  AS V
                ON V.no = N.vendno
-    LEFT JOIN  sqldados.custp  AS C
+    LEFT JOIN  sqldados.custp AS C
                ON C.cpf_cgc = V.cgc
-    INNER JOIN sqldados.prd    AS P
+    INNER JOIN sqldados.prd   AS P
                ON P.no = N.prdno
-    LEFT JOIN  T_BARCODE       AS B
+    LEFT JOIN  T_BARCODE      AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
-    LEFT JOIN  T_LOC           AS L
-               ON L.prdno = N.prdno AND L.grade = N.grade
-    LEFT JOIN  sqldados.prdloc AS LS
-               ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
-    LEFT JOIN  T_EST           AS E
+    LEFT JOIN  T_EST          AS E
                ON E.prdno = N.prdno AND E.grade = N.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
@@ -351,8 +305,6 @@ SELECT loja,
        descricao,
        grade,
        vendnoProduto,
-       localizacao,
-       localizacaoSaci,
        quant,
        estoque,
        refFabrica,
@@ -365,16 +317,6 @@ SELECT loja,
        tempoValidade,
        observacaoNota,
        tipoNota,
-       dataVenda,
-       vendas,
-       qtty01,
-       venc01,
-       qtty02,
-       venc02,
-       qtty03,
-       venc03,
-       qtty04,
-       venc04,
        valorUnit,
        valorTotal,
        valorDesconto,
@@ -403,10 +345,12 @@ SELECT loja,
        IF(tipoDevolucao = 6, ND.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
        observacaoDev,
        dataColeta,
-       observacaoAdicional
+       observacaoAdicional,
+       countColeta,
+       countArq
 FROM
-  T_QUERY                    AS Q
-    LEFT JOIN T_NFO          AS ND
+  T_QUERY           AS Q
+    LEFT JOIN T_NFO AS ND
               ON (ND.niDev = Q.numeroDevolucao)
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR

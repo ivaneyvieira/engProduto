@@ -78,7 +78,7 @@ class DlgArquivoNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel
   }
 
   fun update() {
-    val listProdutos = nota.arquivos()
+    val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)
   }
 }

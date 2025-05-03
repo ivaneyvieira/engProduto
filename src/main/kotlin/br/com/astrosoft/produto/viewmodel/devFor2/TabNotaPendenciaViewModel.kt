@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
     get() = viewModel.view.tabNotaPendencia
 
@@ -85,6 +85,16 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) {
       it.marcaSituacao(situacao)
     }
     updateView()
+  }
+
+  override fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
+    return saci.findGrades(codigo, loja)
+  }
+
+  override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {
+    produto ?: fail("Nenhum produto selecionado")
+    produto.saveProduto()
+    subView.updateProduto()
   }
 }
 

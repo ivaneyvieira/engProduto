@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaRecebimentoProdutoDev(
+data class NotaRecebimentoProdutoDev(
   var loja: Int?,
   var lojaSigla: String?,
   var numeroDevolucao: Int?,
@@ -31,8 +31,8 @@ class NotaRecebimentoProdutoDev(
   var barcodeStrListEntrada: String?,
   var descricao: String?,
   var grade: String?,
-  var localizacao: String?,
-  var localizacaoSaci: String?,
+  //var localizacao: String?,
+  //var localizacaoSaci: String?,
   var quant: Int?,
   var estoque: Int?,
   var refFabrica: String?,
@@ -45,8 +45,8 @@ class NotaRecebimentoProdutoDev(
   var tempoValidade: Int?,
   var observacaoNota: String?,
   var tipoNota: String?,
-  var dataVenda: LocalDate?,
-  var vendas: Int?,
+  /*var dataVenda: LocalDate?,*/
+  /*var vendas: Int?,
   var qtty01: Int?,
   var venc01: String?,
   var qtty02: Int?,
@@ -54,7 +54,7 @@ class NotaRecebimentoProdutoDev(
   var qtty03: Int?,
   var venc03: String?,
   var qtty04: Int?,
-  var venc04: String?,
+  var venc04: String?,*/
   var valorUnit: Double?,
   var valorTotal: Double?,
   var valorDesconto: Double?,
@@ -81,8 +81,10 @@ class NotaRecebimentoProdutoDev(
   var obsDevolucao: String?,
   var observacaoDev: String?,
   var observacaoAdicional: String?,
-  var dataColeta: LocalDate?
-) {
+  var dataColeta: LocalDate?,
+  var countColeta: Int?,
+  var countArq: Int?,
+  ) {
   val chaveDevolucao: String
     get() {
       val motivo = tipoDevolucaoEnum
@@ -165,6 +167,10 @@ class NotaRecebimentoProdutoDev(
 
   fun salvaMotivoDevolucao() {
     saci.salvaMotivoDevolucao(this)
+  }
+
+  fun saveProduto() {
+    saci.saveNotaRecebimentoProduto(this)
   }
 }
 

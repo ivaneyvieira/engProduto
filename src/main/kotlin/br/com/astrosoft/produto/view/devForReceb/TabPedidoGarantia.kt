@@ -135,8 +135,6 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     columnGrid(PedidoGarantia::valorTotal, header = "Valor", width = "7rem")
 
     columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
-    //columnGrid(PedidoGarantia::pendente, header = "Pendente")
-    //columnGrid(PedidoGarantia::processado, header = "Processado")
   }
 
   override fun filtro(): FiltroGarantia {

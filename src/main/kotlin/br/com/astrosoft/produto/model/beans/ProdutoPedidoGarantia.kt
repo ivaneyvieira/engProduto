@@ -174,7 +174,7 @@ class PedidoGarantia(
 
   fun saveGarantiaNota() {
     this.findProdutos().forEach { produto ->
-      saci.updateTipoDevolucao(produto)
+      saci.saveTipoDevolucao(produto)
     }
   }
 
@@ -182,7 +182,7 @@ class PedidoGarantia(
     if (this.pendente)
       return this
     this.findProdutos().forEach { produto ->
-      saci.updateTipoDevolucao(produto)
+      saci.saveTipoDevolucao(produto)
     }
     return this
   }
