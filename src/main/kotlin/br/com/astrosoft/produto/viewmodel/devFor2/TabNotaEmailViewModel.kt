@@ -95,6 +95,11 @@ class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel
       subView.updateProduto()
     }
   }
+
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.saveProduto()
+    subView.updateProduto()
+  }
 }
 
 interface ITabNotaEmail : ITabView {

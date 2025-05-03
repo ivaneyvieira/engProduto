@@ -2,11 +2,13 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
+import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaAcertoViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.button
@@ -106,6 +108,12 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
+      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
+        val dlgConferencia = DlgConferenciaProduto(viewModel, produto) {
+          update()
+        }
+        dlgConferencia.open()
+      }
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")
@@ -135,7 +143,7 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, var nota: Not
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
     gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorTotalDevolucao).setFooter(
-      listProdutos.sumOf { it.valorTotalDevolucao ?: 0.0 }.format("#,##0.00")
+      listProdutos.sumOf { it.valorTotalDevolucao }.format("#,##0.00")
     )
     gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorDescontoDevolucao).setFooter(
       listProdutos.sumOf { it.valorDescontoDevolucao ?: 0.0 }.format("#,##0.00")
@@ -159,7 +167,7 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, var nota: Not
       listProdutos.sumOf { it.valIPIDevolucao ?: 0.0 }.format("#,##0.00")
     )
     gridDetail.getColumnBy(NotaRecebimentoProdutoDev::totalGeralDevolucao).setFooter(
-      listProdutos.sumOf { it.totalGeralDevolucao ?: 0.0 }.format("#,##0.00")
+      listProdutos.sumOf { it.totalGeralDevolucao }.format("#,##0.00")
     )
   }
 

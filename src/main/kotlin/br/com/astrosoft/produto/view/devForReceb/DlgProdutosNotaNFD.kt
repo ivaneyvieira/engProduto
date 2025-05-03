@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -110,6 +111,12 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
+      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
+        val dlgConferencia = DlgConferenciaProduto(viewModel, produto) {
+          update()
+        }
+        dlgConferencia.open()
+      }
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")

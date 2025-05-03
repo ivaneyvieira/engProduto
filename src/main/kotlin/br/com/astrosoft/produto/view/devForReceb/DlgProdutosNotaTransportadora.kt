@@ -107,6 +107,12 @@ class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewMode
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
+      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
+        val dlgConferencia = DlgConferenciaProduto(viewModel, produto) {
+          update()
+        }
+        dlgConferencia.open()
+      }
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")

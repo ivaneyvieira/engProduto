@@ -96,6 +96,11 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
       subView.updateProduto()
     }
   }
+
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.saveProduto()
+    subView.updateProduto()
+  }
 }
 
 interface ITabNotaTransportadora : ITabView {

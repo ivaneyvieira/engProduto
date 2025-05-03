@@ -110,6 +110,11 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
       subView.updateProduto()
     }
   }
+
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.saveProduto()
+    subView.updateProduto()
+  }
 }
 
 interface ITabNotaPendencia : ITabView {

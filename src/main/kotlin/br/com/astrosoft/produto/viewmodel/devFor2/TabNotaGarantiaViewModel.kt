@@ -109,6 +109,11 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
       subView.updateProduto()
     }
   }
+
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.saveProduto()
+    subView.updateProduto()
+  }
 }
 
 interface ITabNotaGarantia : ITabView {

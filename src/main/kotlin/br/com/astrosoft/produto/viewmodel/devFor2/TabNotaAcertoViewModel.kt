@@ -95,6 +95,11 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       subView.updateProduto()
     }
   }
+
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.saveProduto()
+    subView.updateProduto()
+  }
 }
 
 interface ITabNotaAcerto : ITabView {
