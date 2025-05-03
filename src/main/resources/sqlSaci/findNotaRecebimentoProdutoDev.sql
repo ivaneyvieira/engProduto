@@ -158,7 +158,7 @@ FROM
                ON L.no = N.storeno
     LEFT JOIN  T_ARQCOLETA           AS AC
                USING (tipoDevolucao, numero)
-    INNER JOIN sqldados.invAdicional AS IA
+    LEFT JOIN sqldados.invAdicional AS IA
                USING (invno, tipoDevolucao, numero)
     LEFT JOIN  sqldados.carr         AS CA
                ON CA.no = IA.carrno
@@ -169,7 +169,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (A.tipoDevolucao > 0)
-  AND (IA.situacaoDev = :situacaoDev)
+  AND (IFNULL(IA.situacaoDev, 0) = :situacaoDev)
 GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
