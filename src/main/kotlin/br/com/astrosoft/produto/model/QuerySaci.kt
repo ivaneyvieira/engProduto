@@ -1179,26 +1179,27 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("venc04", produto.venc04)
     }
   }
-/*
-  fun updateProduto(produto: NotaRecebimentoProdutoDev) {
-    val sql = "/sqlSaci/qtdVencimentoUpdate.sql"
-    script(sql) {
-      addOptionalParameter("storeno", produto.loja)
-      addOptionalParameter("prdno", produto.prdno)
-      addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("dataVenda", produto.dataVenda.toSaciDate())
 
-      addOptionalParameter("qtty01", produto.qtty01)
-      addOptionalParameter("venc01", produto.venc01)
-      addOptionalParameter("qtty02", produto.qtty02)
-      addOptionalParameter("venc02", produto.venc02)
-      addOptionalParameter("qtty03", produto.qtty03)
-      addOptionalParameter("venc03", produto.venc03)
-      addOptionalParameter("qtty04", produto.qtty04)
-      addOptionalParameter("venc04", produto.venc04)
+  /*
+    fun updateProduto(produto: NotaRecebimentoProdutoDev) {
+      val sql = "/sqlSaci/qtdVencimentoUpdate.sql"
+      script(sql) {
+        addOptionalParameter("storeno", produto.loja)
+        addOptionalParameter("prdno", produto.prdno)
+        addOptionalParameter("grade", produto.grade)
+        addOptionalParameter("dataVenda", produto.dataVenda.toSaciDate())
+
+        addOptionalParameter("qtty01", produto.qtty01)
+        addOptionalParameter("venc01", produto.venc01)
+        addOptionalParameter("qtty02", produto.qtty02)
+        addOptionalParameter("venc02", produto.venc02)
+        addOptionalParameter("qtty03", produto.qtty03)
+        addOptionalParameter("venc03", produto.venc03)
+        addOptionalParameter("qtty04", produto.qtty04)
+        addOptionalParameter("venc04", produto.venc04)
+      }
     }
-  }
-*/
+  */
   fun consultaValidade(filtro: FiltroValidade): List<ComparaValidade> {
     val sql = "/sqlSaci/consultaValidade.sql"
 
@@ -2249,6 +2250,21 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("situacaoDev", produto.situacaoDev)
       addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
+    }
+  }
+
+  fun deleteNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
+    val sql = "/sqlSaci/deleteNotaRecebimentoProdutoDev.sql"
+
+    if (produto.ni == null)
+      return
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("numero", produto.numeroDevolucao)
+      addOptionalParameter("situacaoDev", produto.situacaoDev)
+      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
     }
   }
 

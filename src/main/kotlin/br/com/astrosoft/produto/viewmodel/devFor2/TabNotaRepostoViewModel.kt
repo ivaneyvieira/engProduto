@@ -81,6 +81,20 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
     produto.saveProduto()
     subView.updateProduto()
   }
+
+  fun removeProduto() = viewModel.exec {
+    val lista = subView.produtosSelecionados()
+    if (lista.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    viewModel.view.showQuestion("Remover produtos selecionados?") {
+      lista.forEach {
+        it.deleteProduto()
+      }
+      subView.updateProduto()
+    }
+  }
 }
 
 interface ITabNotaReposto : ITabView {

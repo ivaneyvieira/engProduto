@@ -18,7 +18,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaRecebimentoDev) {
+class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
@@ -79,6 +79,12 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
           }
         }
 
+        this.button("Remover") {
+          this.icon = VaadinIcon.TRASH.create()
+          this.addClickListener {
+            viewModel.removeProduto()
+          }
+        }
       }, onClose = {
         onClose()
       }) {
@@ -168,7 +174,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, val nota: NotaReceb
   }
 
   fun updateProduto(): NotaRecebimentoDev? {
-    val nota = nota.refreshProdutosDev()
+    nota = nota.refreshProdutosDev() ?: return null
     update()
     return nota
   }

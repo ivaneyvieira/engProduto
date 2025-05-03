@@ -76,7 +76,9 @@ class NotaRecebimentoDev(
         pesquisa = "",
       ),
       EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
-    ).firstOrNull()
+    ).firstOrNull{
+      it.numeroDevolucao == this.numeroDevolucao
+    }
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
   }

@@ -20,7 +20,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimentoDev) {
+class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
   private var edtTransportadora: TextField? = null
@@ -104,6 +104,13 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
               gridDetail.dataProvider.refreshAll()
             }
             dlg.open()
+          }
+        }
+
+        this.button("Remover") {
+          this.icon = VaadinIcon.TRASH.create()
+          this.addClickListener {
+            viewModel.removeProduto()
           }
         }
       }, onClose = {
@@ -195,7 +202,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, val not
   }
 
   fun updateProduto(): NotaRecebimentoDev? {
-    val nota = nota.refreshProdutosDev()
+    nota = nota.refreshProdutosDev() ?: return null
     update()
     return nota
   }

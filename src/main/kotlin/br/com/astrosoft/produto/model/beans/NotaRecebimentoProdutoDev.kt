@@ -172,6 +172,10 @@ data class NotaRecebimentoProdutoDev(
   fun saveProduto() {
     saci.saveNotaRecebimentoProduto(this)
   }
+
+  fun deleteProduto() {
+    saci.deleteNotaRecebimentoProduto(this)
+  }
 }
 
 data class FiltroNotaRecebimentoProdutoDev(
