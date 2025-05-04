@@ -82,6 +82,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoGrades(codigo: String): List<PrdGrade> {
+    val sql = "/sqlSaci/findProdutoGrades.sql"
+    return query(sql, PrdGrade::class) {
+      addOptionalParameter("codigo", codigo)
+    }
+  }
+
   fun findLocais(): List<Local> {
     val sql = "/sqlSaci/findLocais.sql"
     return query(sql, Local::class)

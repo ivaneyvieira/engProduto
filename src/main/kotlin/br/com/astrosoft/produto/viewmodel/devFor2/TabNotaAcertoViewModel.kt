@@ -74,8 +74,8 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     updateView()
   }
 
-  override fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
-    return saci.findGrades(codigo, loja)
+  override fun findProdutos(codigo: String): List<PrdGrade> {
+    return saci.findProdutoGrades(codigo)
   }
 
   override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {

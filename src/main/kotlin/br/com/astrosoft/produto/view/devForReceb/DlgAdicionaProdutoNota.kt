@@ -121,12 +121,12 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
   init {
     this.setWidthFull()
     edtCodigo = textField("Código") {
-      this.width = "120px"
+      this.width = "180px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
       this.addValueChangeListener {
-        val lista = viewModel.findProdutos(this.value, nota.loja ?: 0)
+        val lista = viewModel.findProdutos(this.value)
         produtos.clear()
         produtos.addAll(lista)
 
