@@ -127,9 +127,8 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var not
         }
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
-          val produtos = gridDetail.selectedItems.toList()
+          val produtos = gridDetail.dataProvider.fetchAll()
           if(produtos.isEmpty()) {
-            DialogHelper.showError("Nenhum produto selecionado")
             ByteArray(0)
           } else {
             viewModel.geraPlanilha(produtos)
