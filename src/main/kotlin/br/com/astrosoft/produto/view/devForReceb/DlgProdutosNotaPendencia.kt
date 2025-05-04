@@ -128,8 +128,6 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var not
             viewModel.imprimirRelatorioReduzido(nota)
           }
         }
-
-
       }, onClose = {
         onClose()
       }) {

@@ -86,6 +86,20 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
             viewModel.removeProduto()
           }
         }
+
+        this.button("Imp Completa") {
+          this.icon = VaadinIcon.FILE_TEXT.create()
+          this.addClickListener {
+            viewModel.imprimirRelatorioCompleto(nota)
+          }
+        }
+
+        this.button("Imp Reduzida") {
+          this.icon = VaadinIcon.FILE_TEXT.create()
+          this.addClickListener {
+            viewModel.imprimirRelatorioReduzido(nota)
+          }
+        }
       }, onClose = {
         onClose()
       }) {

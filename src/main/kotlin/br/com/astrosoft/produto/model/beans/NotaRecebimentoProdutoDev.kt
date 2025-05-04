@@ -107,7 +107,7 @@ data class NotaRecebimentoProdutoDev(
     get() = refFabrica
 
   val invnoObs: String?
-    get() = listDadosNotas?.firstOrNull()?.invnoObs
+    get() = this.ni?.toString()
 
   val qtde
     get() = listDadosNotas?.firstOrNull()?.qtde
