@@ -2268,6 +2268,20 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findDadosNota(storeno: Int?, pdvno: Int?, xano: Int?): List<DadosNotaSaida> {
+    storeno ?: return emptyList()
+    pdvno ?: return emptyList()
+    xano ?: return emptyList()
+
+    val sql = "/sqlSaci/findNotaRecebimentoProdutoDevRelatorio.sql"
+
+    return query(sql, DadosNotaSaida::class) {
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("pdvno", pdvno)
+      addOptionalParameter("xano", xano)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

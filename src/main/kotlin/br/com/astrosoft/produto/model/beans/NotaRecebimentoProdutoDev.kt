@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -31,8 +32,6 @@ data class NotaRecebimentoProdutoDev(
   var barcodeStrListEntrada: String?,
   var descricao: String?,
   var grade: String?,
-  //var localizacao: String?,
-  //var localizacaoSaci: String?,
   var quant: Int?,
   var estoque: Int?,
   var refFabrica: String?,
@@ -45,16 +44,6 @@ data class NotaRecebimentoProdutoDev(
   var tempoValidade: Int?,
   var observacaoNota: String?,
   var tipoNota: String?,
-  /*var dataVenda: LocalDate?,*/
-  /*var vendas: Int?,
-  var qtty01: Int?,
-  var venc01: String?,
-  var qtty02: Int?,
-  var venc02: String?,
-  var qtty03: Int?,
-  var venc03: String?,
-  var qtty04: Int?,
-  var venc04: String?,*/
   var valorUnit: Double?,
   var valorTotal: Double?,
   var valorDesconto: Double?,
@@ -81,10 +70,26 @@ data class NotaRecebimentoProdutoDev(
   var obsDevolucao: String?,
   var observacaoDev: String?,
   var observacaoAdicional: String?,
+  var storeno: Int?,
+  var pdvno: Int?,
+  var xano: Int?,
   var dataColeta: LocalDate?,
   var countColeta: Int?,
   var countArq: Int?,
-  ) {
+) {
+  var item: Int? = null
+
+  var listDadosNotas: List<DadosNotaSaida>? = null
+
+  val codigoStr
+    get() = codigo?.toString() ?: ""
+
+  val dateInvStr
+    get() = emissao.format()
+
+  val notaInv
+    get() = notaDevolucao
+
   val chaveDevolucao: String
     get() {
       val motivo = tipoDevolucaoEnum
@@ -94,6 +99,39 @@ data class NotaRecebimentoProdutoDev(
         "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
       }
     }
+
+  val ncm
+    get() = listDadosNotas?.firstOrNull()?.ncm
+
+  val refFor
+    get() = refFabrica
+
+  val invnoObs: String?
+    get() = listDadosNotas?.firstOrNull()?.invnoObs
+
+  val qtde
+    get() = listDadosNotas?.firstOrNull()?.qtde
+
+  val valorUnitario
+    get() = listDadosNotas?.firstOrNull()?.valorUnitario
+
+  val baseICMS
+    get() = listDadosNotas?.firstOrNull()?.baseIcms
+
+  val valorICMS
+    get() = listDadosNotas?.firstOrNull()?.valorIcms
+
+  val valorIPI
+    get() = listDadosNotas?.firstOrNull()?.valorIpi
+
+  val icmsAliq
+    get() = listDadosNotas?.firstOrNull()?.icmsAliq
+
+  val ipiAliq
+    get() = listDadosNotas?.firstOrNull()?.ipiAliq
+
+  val barcode
+    get() = this.barcodeStrList?.split(",")?.firstOrNull()?.trim() ?: ""
 
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA

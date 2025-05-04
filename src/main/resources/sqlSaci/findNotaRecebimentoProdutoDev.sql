@@ -24,7 +24,9 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
 CREATE TEMPORARY TABLE T_NFO
 (
-  storeno          smallint NOT NULL DEFAULT '0',
+  storeno          smallint NOT NULL DEFAULT 0,
+  pdvno            int      NOT NULL DEFAULT 0,
+  xano             int      NOT NULL DEFAULT 0,
   notaDevolucao    varchar(14),
   emissaoDevolucao date,
   valorDevolucao   decimal(23, 4),
@@ -37,6 +39,8 @@ CREATE TEMPORARY TABLE T_NFO
   INDEX (niDev)
 )
 SELECT storeno                         AS storeno,
+       pdvno                           AS pdvno,
+       xano                            AS xano,
        CONCAT(nfno, '/', nfse)         AS notaDevolucao,
        CAST(issuedate AS date)         AS emissaoDevolucao,
        grossamt / 100                  AS valorDevolucao,
@@ -158,7 +162,7 @@ FROM
                ON L.no = N.storeno
     LEFT JOIN  T_ARQCOLETA           AS AC
                USING (tipoDevolucao, numero)
-    LEFT JOIN sqldados.invAdicional AS IA
+    LEFT JOIN  sqldados.invAdicional AS IA
                USING (invno, tipoDevolucao, numero)
     LEFT JOIN  sqldados.carr         AS CA
                ON CA.no = IA.carrno
@@ -339,10 +343,13 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
-       IF(tipoDevolucao = 6, ND.notaDevolucao, ND.notaDevolucao)       AS notaDevolucao,
-       IF(tipoDevolucao = 6, ND.emissaoDevolucao, ND.emissaoDevolucao) AS emissaoDevolucao,
-       IF(tipoDevolucao = 6, ND.valorDevolucao, ND.valorDevolucao)     AS valorDevolucao,
-       IF(tipoDevolucao = 6, ND.obsDevolucao, ND.obsDevolucao)         AS obsDevolucao,
+       ND.notaDevolucao    AS notaDevolucao,
+       ND.emissaoDevolucao AS emissaoDevolucao,
+       ND.valorDevolucao   AS valorDevolucao,
+       ND.obsDevolucao     AS obsDevolucao,
+       ND.storeno          AS storeno,
+       ND.pdvno            AS pdvno,
+       ND.xano             AS xano,
        observacaoDev,
        dataColeta,
        observacaoAdicional,

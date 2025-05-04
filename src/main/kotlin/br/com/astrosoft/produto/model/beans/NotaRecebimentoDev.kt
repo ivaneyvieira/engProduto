@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -42,12 +43,26 @@ class NotaRecebimentoDev(
   var valorDevolucao: Double?,
   var obsDevolucao: String?,
   var observacaoDev: String?,
+  var storeno: Int?,
+  var pdvno: Int?,
+  var xano: Int?,
   var dataColeta: LocalDate?,
   var observacaoAdicional: String?,
   var countColeta: Int?,
   var countArq: Int?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  private var dadosNotas: DadosNotaSaida? = null
+
+  val natureza
+    get() = dadosNotas?.natureza
+
+  val pedido
+    get() = dadosNotas?.pedido
+
+  val dataPedido
+    get() = dadosNotas?.dataPedido.format()
+
   val niListStr
     get() = niList.joinToString(separator = ", ") {
       it.toString()
@@ -76,7 +91,7 @@ class NotaRecebimentoDev(
         pesquisa = "",
       ),
       EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
-    ).firstOrNull{
+    ).firstOrNull {
       it.numeroDevolucao == this.numeroDevolucao
     }
     this.produtos = notaRefresh?.produtos ?: emptyList()
@@ -102,6 +117,14 @@ class NotaRecebimentoDev(
 
   fun delete() {
     saci.removerNotaRecebimentoDev(this)
+  }
+
+  fun updateDadosNota() {
+    val listDadosNotas = saci.findDadosNota(storeno, pdvno, xano)
+    this.dadosNotas = listDadosNotas.firstOrNull()
+    produtos.forEach { prd ->
+      prd.listDadosNotas = listDadosNotas.filter { it.prdno == prd.prdno && it.grade == prd.grade }
+    }
   }
 
   companion object {
@@ -170,6 +193,9 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         observacaoAdicional = nota.observacaoAdicional,
         countColeta = nota.countColeta,
         countArq = nota.countArq,
+        storeno = nota.storeno,
+        pdvno = nota.pdvno,
+        xano = nota.xano,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }
