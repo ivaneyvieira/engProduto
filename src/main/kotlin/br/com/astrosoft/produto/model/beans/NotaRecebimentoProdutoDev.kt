@@ -76,10 +76,27 @@ data class NotaRecebimentoProdutoDev(
   var dataColeta: LocalDate?,
   var countColeta: Int?,
   var countArq: Int?,
+  var rotulo: String?,
+  var baseSTUnit: Double?,
+  var chaveUlt: String?,
+  var chaveSefaz: String?,
 ) {
   var item: Int? = null
 
   var listDadosNotas: List<DadosNotaSaida>? = null
+
+  val valorMVA
+    get() = if (((baseICMS ?: 0.00) + (valorIPI ?: 0.00)) == 0.00) 0.00
+    else baseSt / ((baseICMS ?: 0.00) + (valorIPI ?: 0.00))
+
+  val baseSt
+    get() = (baseSTUnit ?: 0.00) * (quantDevolucao ?: 0)
+
+  val valorST
+    get() = listDadosNotas?.firstOrNull()?.valorST
+
+  val valorTotalGeral
+    get() = (valorTotal ?: 0.00) + (valorST ?: 0.00) + (valorIPI ?: 0.00)
 
   val codigoStr
     get() = codigo?.toString() ?: ""
@@ -110,7 +127,7 @@ data class NotaRecebimentoProdutoDev(
     get() = this.ni?.toString()
 
   val qtde
-    get() = listDadosNotas?.firstOrNull()?.qtde
+    get() = quantDevolucao //listDadosNotas?.firstOrNull()?.qtde
 
   val valorUnitario
     get() = listDadosNotas?.firstOrNull()?.valorUnitario

@@ -3,6 +3,8 @@ package br.com.astrosoft.produto.viewmodel.devFor2
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoPedidoGarantia
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -145,6 +147,11 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
 
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
+  }
+
+  fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
+    val planilha = PlanilhaNotasPedidos()
+    return planilha.write(produtos)
   }
 }
 

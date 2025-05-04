@@ -149,10 +149,15 @@ SELECT A.invno,
        UA.login                                                       AS userDevolucao,
        IFNULL(AC.countColeta, 0)                                      AS countColeta,
        IFNULL(AC.countArq, 0)                                         AS countArq,
-       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta
+       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta,
+       SUM(I.baseIcmsSubst / 100) / SUM(I.qtty / 1000)                AS baseSTUnit,
+       IFNULL(X.nfekey, '')                                           AS chaveUlt,
+       I.c1                                                           AS chaveSefaz
 FROM
   sqldados.iprdAdicionalDev          AS A
     INNER JOIN sqldados.inv          AS N
+               USING (invno)
+    LEFT JOIN  sqldados.invnfe       AS X
                USING (invno)
     LEFT JOIN  sqldados.iprd         AS I
                USING (invno, prdno, grade)
@@ -265,21 +270,27 @@ SELECT N.storeno                                                      AS loja,
        observacaoDev,
        countColeta,
        countArq,
-       dataColeta
+       dataColeta,
+       IFNULL(R.form_label, '')                                       AS rotulo,
+       baseSTUnit                                                     AS baseSTUnit,
+       chaveUlt                                                       AS chaveUlt,
+       chaveSefaz                                                     AS chaveSefaz
 FROM
-  T_NOTA                      AS N
-    LEFT JOIN  sqldados.users AS ER
+  T_NOTA                       AS N
+    LEFT JOIN  sqldados.users  AS ER
                ON ER.no = N.usernoRecebe
-    LEFT JOIN  sqldados.vend  AS V
+    LEFT JOIN  sqldados.vend   AS V
                ON V.no = N.vendno
-    LEFT JOIN  sqldados.custp AS C
+    LEFT JOIN  sqldados.custp  AS C
                ON C.cpf_cgc = V.cgc
-    INNER JOIN sqldados.prd   AS P
+    INNER JOIN sqldados.prd    AS P
                ON P.no = N.prdno
-    LEFT JOIN  T_BARCODE      AS B
+    LEFT JOIN  T_BARCODE       AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
-    LEFT JOIN  T_EST          AS E
-               ON E.prdno = N.prdno AND E.grade = N.grade;
+    LEFT JOIN  T_EST           AS E
+               ON E.prdno = N.prdno AND E.grade = N.grade
+    LEFT JOIN  sqldados.prdalq AS R
+               ON R.prdno = N.prdno;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
@@ -354,7 +365,11 @@ SELECT loja,
        dataColeta,
        observacaoAdicional,
        countColeta,
-       countArq
+       countArq,
+       rotulo,
+       baseSTUnit,
+       chaveUlt,
+       chaveSefaz
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS ND

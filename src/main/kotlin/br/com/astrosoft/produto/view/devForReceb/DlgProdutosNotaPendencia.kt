@@ -2,11 +2,8 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
@@ -126,6 +123,16 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var not
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
             viewModel.imprimirRelatorioReduzido(nota)
+          }
+        }
+
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
+          val produtos = gridDetail.selectedItems.toList()
+          if(produtos.isEmpty()) {
+            DialogHelper.showError("Nenhum produto selecionado")
+            ByteArray(0)
+          } else {
+            viewModel.geraPlanilha(produtos)
           }
         }
       }, onClose = {
