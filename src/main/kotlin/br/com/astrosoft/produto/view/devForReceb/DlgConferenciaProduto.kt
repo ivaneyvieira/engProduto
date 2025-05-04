@@ -1,18 +1,15 @@
 package br.com.astrosoft.produto.view.devForReceb
 
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
 import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaViewModel
-import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgConferenciaProduto(
@@ -21,11 +18,20 @@ class DlgConferenciaProduto(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
+  private var edtGrade: Select<String>? = null
 
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
+
+    val listaGrades = produto.codigo?.toString()?.let {
+      viewModel.findProdutos(it)
+    }.orEmpty().map {
+      it.grade
+    }.filter {
+      it.isNotBlank()
+    }.distinct()
 
     verticalLayout {
       setSizeFull()
@@ -36,6 +42,14 @@ class DlgConferenciaProduto(
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.quantDevolucao
+        }
+
+        if (listaGrades.isNotEmpty()) {
+          edtGrade = select("Grade") {
+            this.width = "120px"
+            this.setItems(listaGrades)
+            this.value = listaGrades.firstOrNull { it == produto.grade }
+          }
         }
       }
     }
@@ -74,7 +88,8 @@ class DlgConferenciaProduto(
 
   private fun confirmaForm() {
     produto.quantDevolucao = edtEstoqueReal?.value
-    viewModel.updateProduto(produto)
+    val grade = edtGrade?.value
+    viewModel.updateProduto(produto, grade ?: produto.grade)
     onClose.invoke()
     this.close()
   }

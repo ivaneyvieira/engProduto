@@ -224,8 +224,8 @@ data class NotaRecebimentoProdutoDev(
     saci.salvaMotivoDevolucao(this)
   }
 
-  fun saveProduto() {
-    saci.saveNotaRecebimentoProduto(this)
+  fun saveProduto(gradeNova : String? =  null) {
+    saci.saveNotaRecebimentoProduto(this, gradeNova ?: grade ?: "")
   }
 
   fun deleteProduto() {

@@ -2244,7 +2244,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
+  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String) {
     val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
 
     if (produto.ni == null)
@@ -2253,6 +2253,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("gradeNova", gradeNova)
       addOptionalParameter("numero", produto.numeroDevolucao)
       addOptionalParameter("situacaoDev", produto.situacaoDev)
       addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)

@@ -16,6 +16,14 @@ DO @INVNO := IF(:invno = 0,
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
   VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao);
 
+UPDATE sqldados.iprdAdicionalDev
+SET grade = :gradeNova
+WHERE invno = :invno
+  AND prdno = :prdno
+  AND grade = :grade
+  AND tipoDevolucao = :tipoDevolucao
+  AND numero = :numero;
+
 UPDATE sqldados.invAdicional
 SET situacaoDev = :situacaoDev
 WHERE invno = @INVNO
