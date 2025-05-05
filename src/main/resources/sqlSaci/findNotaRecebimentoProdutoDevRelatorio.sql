@@ -18,9 +18,7 @@ SELECT N.storeno                                                  AS storeno,
        0.00                                                       AS ipiAliq,
        IFNULL(OP.name, '')                                        AS natureza,
        N.eordno                                                   AS pedido,
-       CAST(O.date AS DATE)                                       AS dataPedido,
-       TRUNCATE(IFNULL((I.costdel3 / 10000) *
-                       ROUND(X.qtty) * (X.price / 100), 0.00), 2) AS valorST
+       CAST(O.date AS DATE)                                       AS dataPedido
 FROM
   sqldados.nf                   AS N
     INNER JOIN sqldados.xaprd   AS X

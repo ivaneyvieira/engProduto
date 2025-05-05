@@ -152,7 +152,8 @@ SELECT A.invno,
        CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta,
        SUM(I.baseIcmsSubst / 100) / SUM(I.qtty / 1000)                AS baseSTUnit,
        IFNULL(X.nfekey, '')                                           AS chaveUlt,
-       I.c1                                                           AS chaveSefaz
+       I.c1                                                           AS chaveSefaz,
+       IFNULL(S.ncm, '')                                              AS ncm
 FROM
   sqldados.iprdAdicionalDev          AS A
     INNER JOIN sqldados.inv          AS N
@@ -173,6 +174,8 @@ FROM
                ON CA.no = IA.carrno
     LEFT JOIN  sqldados.users        AS UA
                ON UA.no = IA.userno
+    LEFT JOIN  sqldados.spedprd      AS S
+               ON I.prdno = S.prdno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
@@ -274,7 +277,8 @@ SELECT N.storeno                                                      AS loja,
        IFNULL(R.form_label, '')                                       AS rotulo,
        baseSTUnit                                                     AS baseSTUnit,
        chaveUlt                                                       AS chaveUlt,
-       chaveSefaz                                                     AS chaveSefaz
+       chaveSefaz                                                     AS chaveSefaz,
+       ncm                                                            AS ncm
 FROM
   T_NOTA                       AS N
     LEFT JOIN  sqldados.users  AS ER
@@ -369,7 +373,8 @@ SELECT loja,
        rotulo,
        baseSTUnit,
        chaveUlt,
-       chaveSefaz
+       chaveSefaz,
+       ncm
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS ND

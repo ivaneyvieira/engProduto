@@ -80,10 +80,9 @@ data class NotaRecebimentoProdutoDev(
   var baseSTUnit: Double?,
   var chaveUlt: String?,
   var chaveSefaz: String?,
+  var ncm: String?
 ) {
   var item: Int? = null
-
-  var listDadosNotas: List<DadosNotaSaida>? = null
 
   val valorMVA
     get() = if (((baseICMS ?: 0.00) + (valorIPI ?: 0.00)) == 0.00) 0.00
@@ -93,10 +92,10 @@ data class NotaRecebimentoProdutoDev(
     get() = (baseSTUnit ?: 0.00) * (quantDevolucao ?: 0)
 
   val valorST
-    get() = listDadosNotas?.firstOrNull()?.valorST
+    get() = icmsSubst
 
   val valorTotalGeral
-    get() = (valorTotal ?: 0.00) + (valorST ?: 0.00) + (valorIPI ?: 0.00)
+    get() = totalGeral
 
   val codigoStr
     get() = codigo?.toString() ?: ""
@@ -105,7 +104,7 @@ data class NotaRecebimentoProdutoDev(
     get() = emissao.format()
 
   val notaInv
-    get() = notaDevolucao
+    get() = nfEntrada
 
   val chaveDevolucao: String
     get() {
@@ -117,9 +116,6 @@ data class NotaRecebimentoProdutoDev(
       }
     }
 
-  val ncm
-    get() = listDadosNotas?.firstOrNull()?.ncm
-
   val refFor
     get() = refFabrica
 
@@ -130,22 +126,22 @@ data class NotaRecebimentoProdutoDev(
     get() = quantDevolucao //listDadosNotas?.firstOrNull()?.qtde
 
   val valorUnitario
-    get() = listDadosNotas?.firstOrNull()?.valorUnitario
+    get() = valorUnit
 
   val baseICMS
-    get() = listDadosNotas?.firstOrNull()?.baseIcms
+    get() = baseIcms
 
   val valorICMS
-    get() = listDadosNotas?.firstOrNull()?.valorIcms
+    get() = valIcms
 
   val valorIPI
-    get() = listDadosNotas?.firstOrNull()?.valorIpi
+    get() = valIPI
 
   val icmsAliq
-    get() = listDadosNotas?.firstOrNull()?.icmsAliq
+    get() = icms
 
   val ipiAliq
-    get() = listDadosNotas?.firstOrNull()?.ipiAliq
+    get() = ipi
 
   val barcode
     get() = this.barcodeStrList?.split(",")?.firstOrNull()?.trim() ?: ""

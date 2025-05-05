@@ -122,9 +122,6 @@ class NotaRecebimentoDev(
   fun updateDadosNota() {
     val listDadosNotas = saci.findDadosNota(storeno, pdvno, xano)
     this.dadosNotas = listDadosNotas.firstOrNull()
-    produtos.forEach { prd ->
-      prd.listDadosNotas = listDadosNotas.filter { it.prdno == prd.prdno && it.grade == prd.grade }
-    }
   }
 
   companion object {

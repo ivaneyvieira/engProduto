@@ -20,8 +20,4 @@ class DadosNotaSaida {
   var natureza: String? = null
   var pedido: Int? = null
   var dataPedido: LocalDate? = null
-
-  val valorST
-    get() = 0.00
-
 }

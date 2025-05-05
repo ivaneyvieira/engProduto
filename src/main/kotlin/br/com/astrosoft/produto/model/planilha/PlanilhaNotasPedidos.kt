@@ -10,7 +10,7 @@ class PlanilhaNotasPedidos : Planilha<NotaRecebimentoProdutoDev>("Nota Dev"){
     columnSheet(header = "NI", property = NotaRecebimentoProdutoDev::ni)
     columnSheet(header = "CFOP", property = NotaRecebimentoProdutoDev::cfop)
     columnSheet(header = "Emissão", property = NotaRecebimentoProdutoDev::dateInvStr)
-    columnSheet(header = "NF", property = NotaRecebimentoProdutoDev::notaInv)
+    columnSheet(header = "NF", property = NotaRecebimentoProdutoDev::nfEntrada)
     columnSheet(header = "Ref do Fab", property = NotaRecebimentoProdutoDev::refFor)
     columnSheet(header = "Código", property = NotaRecebimentoProdutoDev::codigo)
     columnSheet(header = "Descrição", property = NotaRecebimentoProdutoDev::descricao)
