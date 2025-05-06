@@ -61,7 +61,7 @@ class NotaRecebimentoDev(
 
   val fornecedorNF: String?
     get() = if (tipoDevolucaoEnun?.fob == true) {
-      transpDevolucao?.let { saci.findTransportadora(it)?.nome } ?: transportadora
+      transportadoraDevolucao ?: transportadora
     } else {
       fornecedor
     }

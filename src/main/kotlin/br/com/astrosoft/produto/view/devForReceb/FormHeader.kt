@@ -51,13 +51,13 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
         integerField("Cod") {
           this.isReadOnly = true
           this.width = "3.5rem"
-          this.value = nota.vendnoNF
+          this.value = nota.vendno
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
         textField("Fornecedor") {
           this.isReadOnly = true
           this.isExpand = true
-          this.value = nota.fornecedorNF
+          this.value = nota.fornecedor
         }
       }
 
