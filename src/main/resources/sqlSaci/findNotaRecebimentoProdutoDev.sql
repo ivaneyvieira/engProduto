@@ -77,7 +77,7 @@ SELECT storeno                         AS storeno,
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
-  AND tipo IN (0, 2)
+  AND tipo IN (2)
   AND status != 1
   AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')
 HAVING niDev IS NOT NULL;
