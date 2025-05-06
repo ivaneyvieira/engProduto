@@ -9,7 +9,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
 import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaAcertoViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.button
@@ -30,7 +29,7 @@ class DlgProdutosNotaAcerto(val viewModel: TabNotaAcertoViewModel, var nota: Not
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
+        this.formHeader(nota) { notaModificada: NotaRecebimentoDev ->
           viewModel.saveNota(notaModificada)
         }
       },

@@ -250,16 +250,16 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultiplas: Boolean) {
-  AVARIA_TRANSPORTE(1, "Avaria no Transporte", false),
-  FALTA_TRANSPORTE(2, "Falta no Transporte", false),
-  FALTA_FABRICA(3, "Falta de Fabrica", false),
-  VENCIMENTO(4, "Vencimento", false),
-  DEFEITO_FABRICA(7, "Defeito de Fabricação", false),
-  SEM_IDENTIFICACAO(5, "Sem Identificação", false),
-  EM_DESACORDO(6, "Em Desacordo Com Pedido", false),
-  EM_GARANTIA(8, "Garantia", true),
-  FRET_FOB(9, "Frete FOB", false);
+enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultiplas: Boolean, val fob: Boolean) {
+  AVARIA_TRANSPORTE(1, "Avaria no Transporte", false, false),
+  FALTA_TRANSPORTE(2, "Falta no Transporte", false, false),
+  FALTA_FABRICA(3, "Falta de Fabrica", false, false),
+  VENCIMENTO(4, "Vencimento", false, false),
+  DEFEITO_FABRICA(7, "Defeito de Fabricação", false, false),
+  SEM_IDENTIFICACAO(5, "Sem Identificação", false, false),
+  EM_DESACORDO(6, "Em Desacordo Com Pedido", false, false),
+  EM_GARANTIA(8, "Garantia", true, false),
+  FRET_FOB(9, "Frete FOB", false, true);
 
   override fun toString(): String {
     return descricao

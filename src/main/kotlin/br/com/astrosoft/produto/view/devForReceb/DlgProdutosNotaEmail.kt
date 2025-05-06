@@ -26,7 +26,7 @@ class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, var nota: NotaR
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
+        this.formHeader(nota) { notaModificada: NotaRecebimentoDev ->
           viewModel.saveNota(notaModificada)
         }
       },

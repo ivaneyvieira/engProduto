@@ -51,7 +51,7 @@ SELECT storeno                         AS storeno,
           SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                     LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
                           ' ', 1), '') AS nfo,
-       IFNULL(
+       COALESCE(
            IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
               SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                                         LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
@@ -77,8 +77,9 @@ SELECT storeno                         AS storeno,
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
-  AND tipo = 2
+  AND tipo IN (0, 2)
   AND status != 1
+  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')
 HAVING niDev IS NOT NULL;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;

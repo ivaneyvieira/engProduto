@@ -23,7 +23,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
+        this.formHeader(nota) { notaModificada: NotaRecebimentoDev ->
           viewModel.saveNota(notaModificada)
         }
       },

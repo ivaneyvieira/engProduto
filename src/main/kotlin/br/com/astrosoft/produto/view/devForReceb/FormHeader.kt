@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-fun VerticalLayout.formHerader(nota: NotaRecebimentoDev, salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit) {
+fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit) {
   this.setWidthFull()
   this.isPadding = false
   this.isMargin = false
@@ -51,13 +51,13 @@ fun VerticalLayout.formHerader(nota: NotaRecebimentoDev, salvaNota: (notaModific
         integerField("Cod") {
           this.isReadOnly = true
           this.width = "3.5rem"
-          this.value = nota.vendno
+          this.value = nota.vendnoNF
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
         textField("Fornecedor") {
           this.isReadOnly = true
           this.isExpand = true
-          this.value = nota.fornecedor
+          this.value = nota.fornecedorNF
         }
       }
 

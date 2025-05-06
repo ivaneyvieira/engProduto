@@ -26,7 +26,7 @@ class DlgProdutosNotaGarantia(val viewModel: TabNotaGarantiaViewModel, var nota:
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHerader(nota) { notaModificada: NotaRecebimentoDev ->
+        this.formHeader(nota) { notaModificada: NotaRecebimentoDev ->
           viewModel.saveNota(notaModificada)
         }
       },

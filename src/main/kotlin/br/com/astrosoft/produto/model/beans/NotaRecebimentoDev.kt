@@ -52,6 +52,20 @@ class NotaRecebimentoDev(
   var countArq: Int?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val vendnoNF: Int?
+    get() = if (tipoDevolucaoEnun?.fob == true) {
+      transpDevolucao ?: transp
+    } else {
+      vendno
+    }
+
+  val fornecedorNF: String?
+    get() = if (tipoDevolucaoEnun?.fob == true) {
+      transpDevolucao?.let { saci.findTransportadora(it)?.nome } ?: transportadora
+    } else {
+      fornecedor
+    }
+
   private var dadosNotas: DadosNotaSaida? = null
 
   val natureza
