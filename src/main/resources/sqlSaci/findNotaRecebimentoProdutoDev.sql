@@ -31,26 +31,18 @@ CREATE TEMPORARY TABLE T_NFO
   emissaoDevolucao date,
   valorDevolucao   decimal(23, 4),
   obsDevolucao     char(160),
-  cancelado        int,
-  nfo              varchar(16),
-  motivo           int,
   niDev            int,
-  PRIMARY KEY (storeno, nfo, motivo, notaDevolucao),
+  PRIMARY KEY(storeno, pdvno, xano),
   INDEX (niDev)
 )
-SELECT storeno                         AS storeno,
-       pdvno                           AS pdvno,
-       xano                            AS xano,
-       CONCAT(nfno, '/', nfse)         AS notaDevolucao,
-       CAST(issuedate AS date)         AS emissaoDevolucao,
-       grossamt / 100                  AS valorDevolucao,
-       print_remarks                   AS obsDevolucao,
-       remarks                         AS obsGarantia,
-       status = 1                      AS cancelado,
-       IF(LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-          SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                    LOCATE(' NFO ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100),
-                          ' ', 1), '') AS nfo,
+SELECT storeno                 AS storeno,
+       pdvno                   AS pdvno,
+       xano                    AS xano,
+       CONCAT(nfno, '/', nfse) AS notaDevolucao,
+       CAST(issuedate AS date) AS emissaoDevolucao,
+       grossamt / 100          AS valorDevolucao,
+       print_remarks           AS obsDevolucao,
+       remarks                 AS obsGarantia,
        COALESCE(
            IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
               SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
@@ -62,24 +54,44 @@ SELECT storeno                         AS storeno,
                                         LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
                                         100),
                               ' ', 1), NULL)
-       )                               AS niDev,
-       CASE
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'AVARIA'            THEN 1
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}TRANSP'  THEN 2
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'FAL.{1,10}FAB'     THEN 3
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'VENCIM|VENCID'     THEN 4
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'SEM.{1,10}IDENTIF' THEN 5
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'DESAC.{1,10}PED'   THEN 6
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'DEFEITO.{1,10}FAB' THEN 7
-         WHEN CONCAT(print_remarks, ' ', remarks, ' ') REGEXP 'GARANTIA'          THEN 8
-                                                                                  ELSE 0
-       END                             AS motivo
+       )                       AS niDev
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
   AND tipo IN (2)
   AND status != 1
-  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')
+/*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
+HAVING niDev IS NOT NULL;
+
+INSERT IGNORE INTO T_NFO
+  (storeno, pdvno, xano, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
+SELECT storeno                 AS storeno,
+       pdvno                   AS pdvno,
+       xano                    AS xano,
+       CONCAT(nfno, '/', nfse) AS notaDevolucao,
+       CAST(issuedate AS date) AS emissaoDevolucao,
+       grossamt / 100          AS valorDevolucao,
+       print_remarks           AS obsDevolucao,
+       remarks                 AS obsGarantia,
+       COALESCE(
+           IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
+                                        100),
+                              ' ', 1), NULL),
+           IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                                        LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
+                                        100),
+                              ' ', 1), NULL)
+       )                       AS niDev
+FROM
+  sqldados.nf
+WHERE issuedate >= 20250401
+  AND tipo IN (0)
+  AND paymno IN (71)
+  AND status != 1
+/*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
 HAVING niDev IS NOT NULL;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
@@ -185,17 +197,29 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (IFNULL(IA.situacaoDev, 0) = :situacaoDev)
 GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
 
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT S.no AS storeno, prdno, grade
+FROM
+  T_NOTA,
+  sqldados.store AS S
+WHERE S.no IN (1, 2, 3, 4, 5, 8)
+  AND (no = :loja OR :loja = 0)
+GROUP BY S.no, prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_EST;
 CREATE TEMPORARY TABLE T_EST
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoque
+SELECT prdno, grade, ((qtty_atacado + qtty_varejo) / 1000) AS estoque
 FROM
-  sqldados.stk                                                           AS S
-    INNER JOIN ( SELECT prdno, grade FROM T_NOTA GROUP BY prdno, grade ) AS N
-               USING (prdno, grade)
-WHERE (storeno = :loja OR :loja = 0)
+  sqldados.stk       AS S
+    INNER JOIN T_PRD AS N
+               USING (storeno, prdno, grade)
 GROUP BY prdno, grade;
 
 
@@ -233,7 +257,7 @@ SELECT N.storeno                                                      AS loja,
        P.mfno_ref                                                     AS refFabrica,
        N.cfop                                                         AS cfop,
        N.cst                                                          AS cst,
-       @VALID := IF((tipoGarantia = 3 AND garantia = 999) || (tipoGarantia = 2 AND garantia > 0), 'S',
+       @VALID := IF((tipoGarantia = 3 AND garantia = 999) OR (tipoGarantia = 2 AND garantia > 0), 'S',
                     'N')                                              AS validadeValida,
        IF(@VALID = 'S', garantia, NULL)                               AS validade,
        CASE tipoGarantia
