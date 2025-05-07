@@ -28,8 +28,15 @@ class TabNotaAcerto(val viewModel: TabNotaAcertoViewModel) :
   private lateinit var edtPesquisa: TextField
 
   fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    cmbLoja.value = Loja.lojaZero
+    val user = AppConfig.userLogin() as? UserSaci
+    val lojaUSer = user?.devFor2Loja ?: 0
+    val lojas = if(lojaUSer == 0) {
+      viewModel.findAllLojas() + listOf(Loja.lojaZero)
+    }else{
+      viewModel.findAllLojas().filter { it.no == lojaUSer }
+    }
+    cmbLoja.setItems(lojas)
+    cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
 
   override fun HorizontalLayout.toolBarConfig() {
