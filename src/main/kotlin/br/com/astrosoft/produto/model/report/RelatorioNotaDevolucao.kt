@@ -302,7 +302,8 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       breakLine()
 
       text("Dados Adicionais:", LEFT, 100)
-      text(nota.observacaoNota ?: "", LEFT)
+      //text(nota.observacaoNota ?: "", LEFT)
+      text(nota.observacaoAdicional ?: "", LEFT)
     }
   }
 
