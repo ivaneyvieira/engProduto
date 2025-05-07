@@ -212,8 +212,9 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
         val fornecedor = nota.fornecedor
         val vendno = nota.vendno
         val pedido = nota.numeroDevolucao
+        val data = nota.dataDevolucao.format()
         text("Fornecedor: $vendno - $fornecedor", LEFT)
-        text("NI Devolução:   $pedido", RIGHT, 150)
+        text("NI Devolução:   $pedido - $data", RIGHT, 150)
       }
     }
   }
