@@ -85,10 +85,10 @@ data class NotaRecebimentoProdutoDev(
   var item: Int? = null
 
   val valorMVA
-    get() = if (((baseICMS ?: 0.00) + (valorIPI ?: 0.00)) == 0.00) 0.00
-    else baseSt / ((baseICMS ?: 0.00) + (valorIPI ?: 0.00))
+    get() = if (((baseIcmsDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00)) == 0.00) 0.00
+    else baseIcmsSubst / ((baseIcmsDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00))
 
-  val baseSt
+  val baseIcmsSubst
     get() = (baseSTUnit ?: 0.00) * (quantDevolucao ?: 0)
 
   val valorST
@@ -103,9 +103,6 @@ data class NotaRecebimentoProdutoDev(
   val dateInvStr
     get() = emissao.format()
 
-  val notaInv
-    get() = nfEntrada
-
   val chaveDevolucao: String
     get() {
       val motivo = tipoDevolucaoEnum
@@ -116,32 +113,8 @@ data class NotaRecebimentoProdutoDev(
       }
     }
 
-  val refFor
-    get() = refFabrica
-
   val invnoObs: String?
     get() = this.ni?.toString()
-
-  val qtde
-    get() = quantDevolucao //listDadosNotas?.firstOrNull()?.qtde
-
-  val valorUnitario
-    get() = valorUnit
-
-  val baseICMS
-    get() = baseIcms
-
-  val valorICMS
-    get() = valIcms
-
-  val valorIPI
-    get() = valIPI
-
-  val icmsAliq
-    get() = icms
-
-  val ipiAliq
-    get() = ipi
 
   val barcode
     get() = this.barcodeStrList?.split(",")?.firstOrNull()?.trim() ?: ""

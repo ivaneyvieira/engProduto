@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -52,6 +51,39 @@ class NotaRecebimentoDev(
   var countArq: Int?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val baseIcmsProdutos
+    get() = produtos.sumOf { it.baseIcmsDevolucao ?: 0.00 }
+
+  val valorIcmsProdutos
+    get() = produtos.sumOf { it.valIcmsDevolucao ?: 0.00 }
+
+  val baseIcmsSubstProduto
+    get() = produtos.sumOf { it.baseIcmsSubst }
+
+  val icmsSubstProduto
+    get() = produtos.sumOf { it.icmsSubstDevolucao ?: 0.00 }
+
+  val valorTotalProduto
+    get() = produtos.sumOf { it.valorTotalDevolucao }
+
+  val valorFrete
+    get() = 0.00
+
+  val valorSeguro
+    get() = 0.00
+
+  val valorDesconto
+    get() = produtos.sumOf { it.valorDescontoDevolucao ?: 0.00 }
+
+  val outrasDespesas
+    get() = produtos.sumOf { it.outDespDevolucao ?: 0.00 }
+
+  val valorIpiProdutos
+    get() = produtos.sumOf { it.valIPIDevolucao ?: 0.00 }
+
+  val valorTotalNota
+    get() = icmsSubstProduto + valorFrete + valorSeguro - valorDesconto + valorTotalProduto + outrasDespesas + valorIpiProdutos
+
   val vendnoNF: Int?
     get() = if (tipoDevolucaoEnun?.fob == true) {
       transpDevolucao ?: transp

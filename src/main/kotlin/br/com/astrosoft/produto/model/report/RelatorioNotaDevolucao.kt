@@ -1,10 +1,9 @@
 package br.com.astrosoft.produto.model.report
 
-import br.com.astrosoft.framework.model.reports.Templates
+import br.com.astrosoft.framework.model.reports.*
+import br.com.astrosoft.framework.model.reports.Templates.fieldBorder
 import br.com.astrosoft.framework.model.reports.Templates.fieldFontGrande
-import br.com.astrosoft.framework.model.reports.horizontalList
-import br.com.astrosoft.framework.model.reports.text
-import br.com.astrosoft.framework.model.reports.verticalBlock
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
@@ -12,6 +11,8 @@ import net.sf.dynamicreports.report.builder.DynamicReports.*
 import net.sf.dynamicreports.report.builder.column.ColumnBuilder
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder
+import net.sf.dynamicreports.report.builder.component.TextFieldBuilder
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
 import net.sf.dynamicreports.report.constant.PageOrientation.LANDSCAPE
 import net.sf.dynamicreports.report.constant.PageOrientation.PORTRAIT
@@ -23,7 +24,7 @@ import net.sf.jasperreports.export.SimpleExporterInput
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput
 import java.io.ByteArrayOutputStream
 
-class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resumida: Boolean) {
+class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida: Boolean) {
   private val codigoCol: TextColumnBuilder<String> =
       col.column("Cód Saci", NotaRecebimentoProdutoDev::codigoStr.name, type.stringType()).apply {
         this.setHorizontalTextAlignment(CENTER)
@@ -37,7 +38,7 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
         this.setFixedWidth(40)
       }
   private val notaInvCol: TextColumnBuilder<String> =
-      col.column("NF", NotaRecebimentoProdutoDev::notaInv.name, type.stringType()).apply {
+      col.column("NF", NotaRecebimentoProdutoDev::nfEntrada.name, type.stringType()).apply {
         this.setHorizontalTextAlignment(CENTER)
         this.setTextAdjust(SCALE_FONT)
         this.setFixedWidth(40)
@@ -49,7 +50,7 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
         this.setFixedWidth(40)
       }
   private val refForCol: TextColumnBuilder<String> =
-      col.column("Ref do Fab", NotaRecebimentoProdutoDev::refFor.name, type.stringType()).apply {
+      col.column("Ref do Fab", NotaRecebimentoProdutoDev::refFabrica.name, type.stringType()).apply {
         this.setHorizontalTextAlignment(CENTER)
         this.setTextAdjust(SCALE_FONT)
         this.setFixedWidth(60)
@@ -73,7 +74,7 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
         this.setFixedWidth(30)
       }
   private val qtdeCol: TextColumnBuilder<Int> =
-      col.column("Quant", NotaRecebimentoProdutoDev::qtde.name, type.integerType()).apply {
+      col.column("Quant", NotaRecebimentoProdutoDev::quantDevolucao.name, type.integerType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("0")
@@ -86,7 +87,7 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
         this.setFixedWidth(25)
       }
   private val valorUnitarioCol: TextColumnBuilder<Double> =
-      col.column("V. Unit", NotaRecebimentoProdutoDev::valorUnitario.name, type.doubleType()).apply {
+      col.column("V. Unit", NotaRecebimentoProdutoDev::valorUnit.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.0000")
@@ -203,14 +204,14 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
       text("Espelho Nota Fiscal Devolução Fornecedor", CENTER).apply {
         this.setStyle(fieldFontGrande)
       }
-      text("ENGECOPI ${notaSaida.lojaSigla}", LEFT).apply {
+      text("ENGECOPI ${nota.lojaSigla}", LEFT).apply {
         this.setStyle(fieldFontGrande)
       }
-      text("Motivo de Devolução: ${notaSaida.tipoDevolucaoEnun?.name ?: ""}", LEFT)
+      text("Motivo de Devolução: ${nota.tipoDevolucaoEnun?.name ?: ""}", LEFT)
       horizontalList {
-        val fornecedor = notaSaida.fornecedor
-        val vendno = notaSaida.vendno
-        val pedido = notaSaida.numeroDevolucao
+        val fornecedor = nota.fornecedor
+        val vendno = nota.vendno
+        val pedido = nota.numeroDevolucao
         text("Fornecedor: $vendno - $fornecedor", LEFT)
         text("NI Devolução. $pedido", RIGHT, 150)
       }
@@ -220,14 +221,95 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
   private fun titleBuider(): ComponentBuilder<*, *> {
     return titleBuiderPedido()
   }
-fun pageFooterBuilder(): ComponentBuilder<*, *>? {
+
+  fun pageFooterBuilder(): ComponentBuilder<*, *>? {
     return cmp.verticalList()
+  }
+
+  private fun TextFieldBuilder<String>.fonteSumarioImposto() {
+    this.setTextAdjust(SCALE_FONT)
+    this.setStyle(stl.style().setFontSize(8))
+  }
+
+  private fun VerticalListBuilder.sumaryNota() {
+    breakLine()
+    this.horizontalList {
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("BASE DE CÁLCULO DO ICMS", LEFT).fonteSumarioImposto()
+        text(nota.baseIcmsProdutos.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR DO ICMS", LEFT).fonteSumarioImposto()
+        text(nota.valorIcmsProdutos.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("BASE DE CÁLCULO DO ICMS ST", LEFT).fonteSumarioImposto()
+        text(nota.baseIcmsSubstProduto.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR ICMS ST", LEFT).fonteSumarioImposto()
+        text(nota.icmsSubstProduto.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR TOTAL DOS PRODUTOS", LEFT).fonteSumarioImposto()
+        text(nota.valorTotalProduto.format(), RIGHT)
+      }
+    }
+    this.horizontalList {
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR DO FRETE", LEFT).fonteSumarioImposto()
+        text(nota.valorFrete.format(), RIGHT)
+      }
+
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR DO SEGURO", LEFT).fonteSumarioImposto()
+        text(nota.valorSeguro.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("DESCONTO", LEFT).fonteSumarioImposto()
+        text(nota.valorDesconto.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("OUTRAS DESPESAS", LEFT).fonteSumarioImposto()
+        text(nota.outrasDespesas.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR IPI", LEFT).fonteSumarioImposto()
+        text(nota.valorIpiProdutos.format(), RIGHT)
+      }
+      this.verticalList {
+        setStyle(fieldBorder)
+        text("VALOR TOTAL DA NOTA", LEFT).fonteSumarioImposto()
+        text(nota.valorTotalNota.format(), RIGHT)
+      }
+    }
+  }
+
+  private fun sumaryBuild(): ComponentBuilder<*, *> {
+    return verticalBlock {
+      sumaryNota()
+
+      breakLine()
+
+      text("Dados Adicionais:", LEFT, 100)
+      text(nota.observacaoNota ?: "", LEFT)
+    }
   }
 
   fun makeReport(): JasperReportBuilder? {
     val colunms = columnBuilder().toTypedArray()
     var index = 1
-    val itens = notaSaida.produtos.sortedBy { it.codigo }.map {
+    val itens = nota.produtos.sortedBy { it.codigo }.map {
       it.apply {
         item = index++
       }
@@ -241,6 +323,7 @@ fun pageFooterBuilder(): ComponentBuilder<*, *>? {
       .setColumnStyle(stl.style().setFontSize(7))
       .columnGrid(* colunms)
       .setDataSource(itens.toList())
+      .summary(sumaryBuild())
       .setPageFormat(A4, pageOrientation)
       .setPageMargin(margin(28))
       .summary(pageFooterBuilder())
