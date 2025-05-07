@@ -414,6 +414,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(33, value?.toString() ?: "")
     }
 
+  var devFor2Loja: Int?
+    get() = lojas.getOrNull(34)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(34, value?.toString() ?: "")
+    }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

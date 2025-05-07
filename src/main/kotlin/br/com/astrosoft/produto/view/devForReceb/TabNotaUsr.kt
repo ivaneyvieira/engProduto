@@ -53,6 +53,9 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           binder.bind(this, UserSaci::devFor2NotaAcerto.name)
         }
       }
+      verticalBlock("Filtros") {
+        filtroLoja(binder, UserSaci::devFor2Loja)
+      }
     }
   }
 }
