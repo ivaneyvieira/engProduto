@@ -100,3 +100,6 @@ ALTER TABLE sqldados.iprdAdicionalDev
 
 ALTER TABLE sqldados.iprdAdicionalDev
   drop COLUMN observacao;
+
+
+select * from sqldados.invAdicional;

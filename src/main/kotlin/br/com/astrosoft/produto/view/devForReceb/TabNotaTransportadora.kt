@@ -30,9 +30,9 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
-    val lojas = if(lojaUSer == 0) {
+    val lojas = if (lojaUSer == 0) {
       viewModel.findAllLojas() + listOf(Loja.lojaZero)
-    }else{
+    } else {
       viewModel.findAllLojas().filter { it.no == lojaUSer }
     }
     cmbLoja.setItems(lojas)
@@ -115,9 +115,10 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
+    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data").dateFieldEditor()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
-    columnGrid(NotaRecebimentoDev::data, header = "Entrada", width = null)
+    columnGrid(NotaRecebimentoDev::dataEntrada, header = "Entrada", width = null)
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor NF")

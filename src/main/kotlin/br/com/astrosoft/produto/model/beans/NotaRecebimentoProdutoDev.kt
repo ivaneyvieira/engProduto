@@ -8,7 +8,7 @@ data class NotaRecebimentoProdutoDev(
   var loja: Int?,
   var lojaSigla: String?,
   var numeroDevolucao: Int?,
-  var data: LocalDate?,
+  var dataEntrada: LocalDate?,
   var emissao: LocalDate?,
   var ni: Int?,
   var nfEntrada: String?,

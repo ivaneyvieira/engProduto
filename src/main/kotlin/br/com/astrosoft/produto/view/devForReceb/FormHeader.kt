@@ -46,7 +46,7 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
         textField("Entrada") {
           this.isReadOnly = true
           this.width = "7rem"
-          this.value = nota.data.format()
+          this.value = nota.dataEntrada.format()
         }
         integerField("Cod") {
           this.isReadOnly = true

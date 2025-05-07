@@ -227,7 +227,7 @@ DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                      AS loja,
        N.lojaSigla                                                    AS lojaSigla,
-       DATE(N.date)                                                   AS data,
+       DATE(N.date)                                                   AS dataEntrada,
        DATE(N.issue_date)                                             AS emissao,
        N.invno                                                        AS ni,
        TRIM(LEADING '0' FROM TRIM(CONCAT(N.nfname, '/', N.invse)))    AS nfEntrada,
@@ -325,7 +325,7 @@ DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
 SELECT loja,
        lojaSigla,
-       data,
+       dataEntrada,
        emissao,
        ni,
        nfEntrada,

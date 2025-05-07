@@ -7,7 +7,7 @@ import java.time.LocalDate
 class NotaRecebimentoDev(
   var loja: Int?,
   var lojaSigla: String?,
-  var data: LocalDate?,
+  var dataEntrada: LocalDate?,
   var emissao: LocalDate?,
   val niPrincipal: Int?,
   var niList: List<Int>,
@@ -177,7 +177,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
     nota?.let {
       NotaRecebimentoDev(
         loja = nota.loja,
-        data = nota.data,
+        dataEntrada = nota.dataEntrada,
         emissao = nota.emissao,
         numeroDevolucao = nota.numeroDevolucao,
         niPrincipal = nota.ni,
