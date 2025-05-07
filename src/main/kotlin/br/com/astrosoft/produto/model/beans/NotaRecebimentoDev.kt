@@ -66,17 +66,6 @@ class NotaRecebimentoDev(
       fornecedor
     }
 
-  private var dadosNotas: DadosNotaSaida? = null
-
-  val natureza
-    get() = dadosNotas?.natureza
-
-  val pedido
-    get() = dadosNotas?.pedido
-
-  val dataPedido
-    get() = dadosNotas?.dataPedido.format()
-
   val niListStr
     get() = niList.joinToString(separator = ", ") {
       it.toString()
@@ -131,11 +120,6 @@ class NotaRecebimentoDev(
 
   fun delete() {
     saci.removerNotaRecebimentoDev(this)
-  }
-
-  fun updateDadosNota() {
-    val listDadosNotas = saci.findDadosNota(storeno, pdvno, xano)
-    this.dadosNotas = listDadosNotas.firstOrNull()
   }
 
   companion object {

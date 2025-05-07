@@ -118,16 +118,12 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
   }
 
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
-    nota.updateDadosNota()
-
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
 
     viewModel.view.showReport(chave = "Relatorio Completo${System.nanoTime()}", report = file)
   }
 
   fun imprimirRelatorioReduzido(nota: NotaRecebimentoDev) = viewModel.exec {
-    nota.updateDadosNota()
-
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
 
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)

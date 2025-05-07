@@ -89,46 +89,46 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
       col.column("V. Unit", NotaRecebimentoProdutoDev::valorUnitario.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
+        this.setPattern("#,##0.0000")
         this.setFixedWidth(40)
       }
   private val valorTotalCol: TextColumnBuilder<Double> =
-      col.column("V. Total", NotaRecebimentoProdutoDev::valorTotal.name, type.doubleType()).apply {
+      col.column("V. Total", NotaRecebimentoProdutoDev::valorTotalDevolucao.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
         this.setFixedWidth(40)
       }
   private val baseICMSCol: TextColumnBuilder<Double> =
-      col.column("B. Cálc. ICMS", NotaRecebimentoProdutoDev::baseICMS.name, type.doubleType()).apply {
+      col.column("B. Cálc. ICMS", NotaRecebimentoProdutoDev::baseIcmsDevolucao.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
         this.setFixedWidth(40)
       }
   private val valorICMSCol: TextColumnBuilder<Double> =
-      col.column("Valor ICMS", NotaRecebimentoProdutoDev::valorICMS.name, type.doubleType()).apply {
+      col.column("Valor ICMS", NotaRecebimentoProdutoDev::valIcmsDevolucao.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
         this.setFixedWidth(40)
       }
   private val valorIPICol: TextColumnBuilder<Double> =
-      col.column("Valor IPI", NotaRecebimentoProdutoDev::valorIPI.name, type.doubleType()).apply {
+      col.column("Valor IPI", NotaRecebimentoProdutoDev::valIPIDevolucao.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
         this.setFixedWidth(40)
       }
   private val aliqICMSCol: TextColumnBuilder<Double> =
-      col.column("Alíq. ICMS", NotaRecebimentoProdutoDev::icmsAliq.name, type.doubleType()).apply {
+      col.column("Alíq. ICMS", NotaRecebimentoProdutoDev::icms.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
         this.setFixedWidth(40)
       }
   private val aliqIPICol: TextColumnBuilder<Double> =
-      col.column("Alíq. IPI", NotaRecebimentoProdutoDev::ipiAliq.name, type.doubleType()).apply {
+      col.column("Alíq. IPI", NotaRecebimentoProdutoDev::ipi.name, type.doubleType()).apply {
         this.setHorizontalTextAlignment(RIGHT)
         this.setTextAdjust(SCALE_FONT)
         this.setPattern("#,##0.00")
@@ -206,15 +206,13 @@ class RelatorioNotaDevolucao(val notaSaida: NotaRecebimentoDev, private val resu
       text("ENGECOPI ${notaSaida.lojaSigla}", LEFT).apply {
         this.setStyle(fieldFontGrande)
       }
-      text("Natureza da operação: ${notaSaida.natureza}", LEFT)
+      text("Motivo de Devolução: ${notaSaida.tipoDevolucaoEnun?.name ?: ""}", LEFT)
       horizontalList {
-        val custno = notaSaida.custno
         val fornecedor = notaSaida.fornecedor
         val vendno = notaSaida.vendno
-        val pedido = notaSaida.pedido
-        val dataPedido = notaSaida.dataPedido
-        text("Fornecedor: $custno - $fornecedor (FOR - $vendno)", LEFT)
-        text("PED. $pedido - $dataPedido", RIGHT, 150)
+        val pedido = notaSaida.numeroDevolucao
+        text("Fornecedor: $vendno - $fornecedor", LEFT)
+        text("NI Devolução. $pedido", RIGHT, 150)
       }
     }
   }
