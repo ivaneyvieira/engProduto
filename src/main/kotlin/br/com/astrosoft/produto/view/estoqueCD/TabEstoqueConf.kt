@@ -189,14 +189,14 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.imprimeProdutosEstoque()
           }
         }
-
+/*
         this.button("Garantia") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutosGarantia()
           }
         }
-
+*/
         this.button("Desmarcar") {
           this.icon = VaadinIcon.CLOSE.create()
           onClick {

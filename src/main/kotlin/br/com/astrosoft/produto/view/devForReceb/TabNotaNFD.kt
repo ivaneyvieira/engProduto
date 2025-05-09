@@ -122,7 +122,7 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
-    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data").dateFieldEditor()
+    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor NF")
