@@ -126,8 +126,8 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     this.columnGrid(
       valueProvider = NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
     )
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor NF")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
