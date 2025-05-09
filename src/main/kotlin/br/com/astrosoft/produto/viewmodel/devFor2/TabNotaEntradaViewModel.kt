@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.recebimento
+package br.com.astrosoft.produto.viewmodel.devFor2
 
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.TextBuffer
@@ -7,9 +7,10 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.saci
+import br.com.astrosoft.produto.viewmodel.recebimento.RecebimentoViewModel
 import java.time.LocalDate
 
-class TabNotaEntradaViewModel(val viewModel: RecebimentoViewModel) {
+class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
   val subView
     get() = viewModel.view.tabNotaEntrada
 
