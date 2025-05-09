@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaUsr
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaUsrViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaUsr
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.vaadin.flow.component.grid.Grid
 

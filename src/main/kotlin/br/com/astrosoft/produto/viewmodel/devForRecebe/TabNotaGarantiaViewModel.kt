@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.devFor2
+package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -8,14 +8,13 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
+class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaTransportadora
+    get() = viewModel.view.tabNotaGarantia
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas =
-        NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.TRANSPORTADORA)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.GARANTIA)
     subView.updateNota(notas)
   }
 
@@ -26,13 +25,6 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
-  }
-
-  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save()
-    if (updateGrid) {
-      updateView()
-    }
   }
 
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
@@ -46,14 +38,6 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
       file = dados,
     )
     invFile.update()
-    subView.updateArquivos()
-  }
-
-  fun removeArquivosSelecionado() {
-    val selecionado = subView.arquivosSelecionados()
-    selecionado.forEach {
-      it.delete()
-    }
 
     subView.updateArquivos()
   }
@@ -61,6 +45,21 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
   fun findTransportadora(carrno: Int?): Transportadora? {
     carrno ?: return null
     return saci.findTransportadora(carrno)
+  }
+
+  fun removeArquivosSelecionado() {
+    val selecionado = subView.arquivosSelecionados()
+    selecionado.forEach {
+      it.delete()
+    }
+    subView.updateArquivos()
+  }
+
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if (updateGrid) {
+      updateView()
+    }
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
@@ -73,6 +72,20 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
       it.marcaSituacao(situacao)
     }
     updateView()
+  }
+
+  fun removeNota() = viewModel.exec {
+    val lista = subView.notasSelecionadas()
+    if (lista.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    viewModel.view.showQuestion("Confirma a remoção do(s) produto(s) selecionado(s)?") {
+      lista.forEach {
+        it.delete()
+      }
+      updateView()
+    }
   }
 
   override fun findProdutos(codigo: String): List<PrdGrade> {
@@ -122,7 +135,7 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
   }
 }
 
-interface ITabNotaTransportadora : ITabView {
+interface ITabNotaGarantia : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

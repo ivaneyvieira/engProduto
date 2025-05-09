@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.PedidoGarantia
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
-import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy

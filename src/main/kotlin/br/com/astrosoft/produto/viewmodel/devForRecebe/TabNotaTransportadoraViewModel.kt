@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.devFor2
+package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -8,21 +8,15 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
+class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaAcerto
+    get() = viewModel.view.tabNotaTransportadora
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.ACERTO)
+    val notas =
+        NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.TRANSPORTADORA)
     subView.updateNota(notas)
-  }
-
-  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save()
-    if (updateGrid) {
-      updateView()
-    }
   }
 
   fun findAllLojas(): List<Loja> {
@@ -32,6 +26,13 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if (updateGrid) {
+      updateView()
+    }
   }
 
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
@@ -45,13 +46,7 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       file = dados,
     )
     invFile.update()
-
     subView.updateArquivos()
-  }
-
-  fun findTransportadora(carrno: Int?): Transportadora? {
-    carrno ?: return null
-    return saci.findTransportadora(carrno)
   }
 
   fun removeArquivosSelecionado() {
@@ -59,7 +54,13 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     selecionado.forEach {
       it.delete()
     }
+
     subView.updateArquivos()
+  }
+
+  fun findTransportadora(carrno: Int?): Transportadora? {
+    carrno ?: return null
+    return saci.findTransportadora(carrno)
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
@@ -121,7 +122,7 @@ class TabNotaAcertoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
   }
 }
 
-interface ITabNotaAcerto : ITabView {
+interface ITabNotaTransportadora : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

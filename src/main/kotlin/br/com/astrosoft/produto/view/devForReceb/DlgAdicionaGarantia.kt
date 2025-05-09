@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.produto.model.beans.PedidoGarantia
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoGarantia
-import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabPedidoGarantiaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents

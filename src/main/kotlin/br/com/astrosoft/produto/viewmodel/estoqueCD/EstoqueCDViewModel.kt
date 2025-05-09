@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
 
 class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view) {
   val tabEstoqueMovViewModel = TabEstoqueMovViewModel(this)

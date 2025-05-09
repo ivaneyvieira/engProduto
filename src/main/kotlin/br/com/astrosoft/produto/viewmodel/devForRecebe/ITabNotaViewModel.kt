@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.devFor2
+package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade

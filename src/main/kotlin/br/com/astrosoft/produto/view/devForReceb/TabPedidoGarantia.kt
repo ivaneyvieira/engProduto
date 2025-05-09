@@ -5,9 +5,9 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabPedidoGarantia
-import br.com.astrosoft.produto.viewmodel.devFor2.TabPedidoGarantiaViewModel
-import br.com.astrosoft.produto.viewmodel.devFor2.TipoEstoque
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabPedidoGarantia
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabPedidoGarantiaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TipoEstoque
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable

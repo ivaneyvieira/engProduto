@@ -4,9 +4,9 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaEntrada
-import br.com.astrosoft.produto.viewmodel.devFor2.ResultDialog
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaEntradaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEntrada
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ResultDialog
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid

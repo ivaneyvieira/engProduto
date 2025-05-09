@@ -4,8 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaPendencia
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaPendenciaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaPendencia
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPendenciaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select

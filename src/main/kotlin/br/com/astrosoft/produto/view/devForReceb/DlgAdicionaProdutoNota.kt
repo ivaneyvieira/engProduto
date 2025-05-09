@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
-import br.com.astrosoft.produto.viewmodel.devFor2.ITabNotaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents

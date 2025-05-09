@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.devFor2
+package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -8,18 +8,25 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
+class TabNotaNFDViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaGarantia
+    get() = viewModel.view.tabNotaNFD
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.GARANTIA)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.NFD)
     subView.updateNota(notas)
   }
 
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
+  }
+
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if (updateGrid) {
+      updateView()
+    }
   }
 
   fun findLoja(storeno: Int): Loja? {
@@ -42,24 +49,18 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
     subView.updateArquivos()
   }
 
-  fun findTransportadora(carrno: Int?): Transportadora? {
-    carrno ?: return null
-    return saci.findTransportadora(carrno)
-  }
-
   fun removeArquivosSelecionado() {
     val selecionado = subView.arquivosSelecionados()
     selecionado.forEach {
       it.delete()
     }
+
     subView.updateArquivos()
   }
 
-  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save()
-    if (updateGrid) {
-      updateView()
-    }
+  fun findTransportadora(carrno: Int?): Transportadora? {
+    carrno ?: return null
+    return saci.findTransportadora(carrno)
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
@@ -135,7 +136,7 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
   }
 }
 
-interface ITabNotaGarantia : ITabView {
+interface ITabNotaNFD : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.viewmodel.recebimento
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaEntradaViewModel
 
 class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>(view) {
   val tabPedidoViewModel = TabPedidoViewModel(this)

@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.devForReceb
 
-import br.com.astrosoft.produto.viewmodel.devFor2.TipoEstoque
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TipoEstoque
 import com.github.mvysny.karibudsl.v10.radioButtonGroup
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup

@@ -1,4 +1,4 @@
-package br.com.astrosoft.produto.viewmodel.devFor2
+package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
@@ -8,25 +8,18 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
+class TabNotaEmailViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaReposto
+    get() = viewModel.view.tabNotaEmail
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.REPOSTO)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.EMAIL)
     subView.updateNota(notas)
   }
 
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
-  }
-
-  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
-    nota.save()
-    if (updateGrid) {
-      updateView()
-    }
   }
 
   fun findLoja(storeno: Int): Loja? {
@@ -60,6 +53,13 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
       it.delete()
     }
     subView.updateArquivos()
+  }
+
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if (updateGrid) {
+      updateView()
+    }
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
@@ -121,7 +121,7 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
   }
 }
 
-interface ITabNotaReposto : ITabView {
+interface ITabNotaEmail : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()
