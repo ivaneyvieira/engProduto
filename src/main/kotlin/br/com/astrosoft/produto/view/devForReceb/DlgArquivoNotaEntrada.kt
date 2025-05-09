@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.InvFile
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaEntradaViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid

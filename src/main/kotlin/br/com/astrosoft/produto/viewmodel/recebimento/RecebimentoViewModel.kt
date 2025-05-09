@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.recebimento
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
+import br.com.astrosoft.produto.viewmodel.devFor2.TabNotaEntradaViewModel
 
 class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>(view) {
   val tabPedidoViewModel = TabPedidoViewModel(this)
@@ -10,7 +11,6 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
   val tabRecebimentoPreEntViewModel = TabRecebimentoPreEntViewModel(this)
   val tabReceberNotaViewModel = TabReceberNotaViewModel(this)
   val tabValidadeViewModel = TabValidadeViewModel(this)
-  val tabNotaEntradaViewModel = TabNotaEntradaViewModel(this)
   val tabNotaRecebidaViewModel = TabNotaRecebidaViewModel(this)
   val tabRecebimentoUsrViewModel = TabRecebimentoUsrViewModel(this)
 
@@ -19,7 +19,6 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
     view.tabAgenda,
     view.tabRecebimentoXml,
     view.tabRecebimentoPreEnt,
-    view.tabNotaEntrada,
     view.tabReceberNota,
     view.tabValidade,
     view.tabNotaRecebida,
@@ -32,7 +31,6 @@ interface IRecebimentoView : IView {
   val tabAgenda: ITabAgenda
   val tabReceberNota: ITabReceberNota
   val tabValidade: ITabValidade
-  val tabNotaEntrada: ITabNotaEntrada
   val tabNotaRecebida: ITabNotaRecebida
   val tabRecebimentoUsr: ITabRecebimentoUsr
   val tabRecebimentoXml: ITabRecebimentoXML

@@ -22,6 +22,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
     return userSaci.devFor2
   }
 
+  override val tabNotaEntrada = TabNotaEntrada(viewModel.tabNotaEntradaViewModel)
   override val tabNotaPendencia = TabNotaPendencia(viewModel.tabNotaPendenciaViewModel)
   override val tabNotaNFD = TabNotaNFD(viewModel.tabNotaNFDViewModel)
   override val tabNotaTransportadora = TabNotaTransportadora(viewModel.tabNotaTransportadoraViewModel)

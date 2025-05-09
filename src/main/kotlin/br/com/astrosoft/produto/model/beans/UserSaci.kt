@@ -463,7 +463,7 @@ class UserSaci : IUser {
     }
   var devFor2
     get() = devFor2NotaPendencia || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
-            devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || admin
+            devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada || admin
     set(value) {
       devFor2NotaPendencia = value
       devFor2NotaNFD = value
@@ -472,6 +472,7 @@ class UserSaci : IUser {
       devFor2NotaAcerto = value
       devFor2NotaReposto = value
       devFor2NotaGarantia = value
+      recebimentoNotaEntrada = value
     }
   val menuDevolucaoAvariaRec: Boolean
     get() {
@@ -486,13 +487,12 @@ class UserSaci : IUser {
 
   var recebimento: Boolean
     get() = recebimentoPedido || recebimentoAgenda || recebimentoXML || recebimentoPreEnt || recebimentoValidade
-            || recebimentoNotaEntrada || recebimentoReceberNota || recebimentoNotaRecebida || admin
+            || recebimentoReceberNota || recebimentoNotaRecebida || admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value
       recebimentoXML = value
       recebimentoPreEnt = value
-      recebimentoNotaEntrada = value
       recebimentoReceberNota = value
       recebimentoNotaRecebida = value
       recebimentoValidade = value
