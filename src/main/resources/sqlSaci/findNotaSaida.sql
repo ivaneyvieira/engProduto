@@ -27,6 +27,8 @@ FROM
   sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (`date` >= @DT)
+  AND (`date` >= :dataInicial OR :dataInicial = 0)
+  AND (`date` <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
@@ -47,6 +49,8 @@ FROM
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
   AND P.date >= @DT
+  AND (P.date >= :dataInicial OR :dataInicial = 0)
+  AND (P.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -67,6 +71,8 @@ WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 6, 7, 8)
   AND nfse = '1'
   AND `date` >= @DT
+  AND (P.date >= :dataInicial OR :dataInicial = 0)
+  AND (P.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
@@ -116,6 +122,8 @@ FROM
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
   AND `date` > @DT
+  AND (date >= :dataInicial OR :dataInicial = 0)
+  AND (date <= :dataFinal OR :dataFinal = 0)
   AND optionEntrega % 10 = 4
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
