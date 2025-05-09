@@ -119,8 +119,7 @@ CREATE TEMPORARY TABLE T_CARGA
 SELECT storeno, pdvno, xano
 FROM
   sqldados.nfrprd
-WHERE (storenoStk = :loja OR :loja = 0)
-  AND storeno != storenoStk
+WHERE storeno != storenoStk
   AND `date` > @DT
   AND (date >= :dataInicial OR :dataInicial = 0)
   AND (date <= :dataFinal OR :dataFinal = 0)
@@ -242,12 +241,17 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-  AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
-        (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
-  AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
-  OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
-  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
-                                (N.nfse = 7))) OR :marca NOT IN (0, 999))
+  AND ((:loja = 0 OR
+        (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
+        ((N.storeno = :loja OR :loja = 0) OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
+  AND ((:loja = 0) OR
+       (:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0))) OR -- Retira Futura
+       (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) OR -- Simples
+       (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR
+       (N.tipo = 1 AND N.nfse = 5) OR
+       (IFNULL(CG.storeno, 0) != :loja) OR
+       (N.nfse = 7) OR
+       :marca NOT IN (0, 999))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -304,6 +308,7 @@ WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUI
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
        pedido LIKE @PESQUISA OR locais LIKE @PESQUISA_LIKE)
+  AND (loja = :loja OR :loja = 0)
 GROUP BY Q.loja, Q.pdvno, Q.xano
 HAVING ((:marca = 0 AND countExp > 0) OR (:marca = 1 AND countCD > 0) OR (:marca = 2 AND countEnt > 0) OR
         (:marca = 999))

@@ -20,7 +20,7 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
     view.tabNotaPendencia,
     view.tabNotaNFD,
 //    view.tabPedidoGarantia,
-//    view.tabNotaGarantia,
+    view.tabNotaGarantia,
     view.tabNotaTransportadora,
     view.tabNotaEmail,
     view.tabNotaReposto,
