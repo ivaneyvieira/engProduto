@@ -34,7 +34,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNfdDevFor {
-  private var colRota: Grid.Column<NotaSaida>? = null
+  //private var colRota: Grid.Column<NotaSaida>? = null
   private var dlgProduto: DlgProdutosDevFor? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtDataInicial: DatePicker
@@ -101,16 +101,16 @@ class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaid
     }
     colunaNFNota()
     colunaNFData()
-    colunaHora()
-    colRota = colunaRota()
+    //colunaHora()
+    //colRota = colunaRota()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNFVendedor()
+    //colunaNFVendedor()
     //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
-    colunaNFEntregaRetira()
-    colunaNFSituacao()
+    //colunaNFEntregaRetira()
+    //colunaNFSituacao()
 
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
