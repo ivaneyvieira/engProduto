@@ -15,7 +15,7 @@ DROP INDEX e6 ON sqldados.nf
 CREATE INDEX e6 ON sqldados.nf (l16, issuedate)
 */
 
-DO @DT := 20070401;
+DO @DT := 20070101;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
@@ -27,8 +27,6 @@ FROM
   sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (`date` >= @DT)
-  AND (`date` >= :dataInicial OR :dataInicial = 0)
-  AND (`date` <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
@@ -49,8 +47,6 @@ FROM
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
   AND P.date >= @DT
-  AND (P.date >= :dataInicial OR :dataInicial = 0)
-  AND (P.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -71,8 +67,6 @@ WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 6, 7, 8)
   AND nfse = '1'
   AND `date` >= @DT
-  AND (P.date >= :dataInicial OR :dataInicial = 0)
-  AND (P.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
@@ -119,17 +113,15 @@ CREATE TEMPORARY TABLE T_CARGA
 SELECT storeno, pdvno, xano
 FROM
   sqldados.nfrprd
-WHERE storeno != storenoStk
+WHERE (storenoStk = :loja OR :loja = 0)
+  AND storeno != storenoStk
   AND `date` > @DT
-  AND (date >= :dataInicial OR :dataInicial = 0)
-  AND (date <= :dataFinal OR :dataFinal = 0)
   AND optionEntrega % 10 = 4
   AND nfse != 3
 GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-  (PRIMARY KEY (loja, pdvno, xano))
 SELECT N.storeno                                                              AS loja,
        N.pdvno                                                                AS pdvno,
        N.xano                                                                 AS xano,
@@ -242,18 +234,12 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-  AND (N.storeno IN (2, 3, 4, 5, 8))
-  AND ((:loja = 0 OR
-        (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
-        ((N.storeno = :loja OR :loja = 0) OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
-  AND ((:loja = 0) OR
-       (:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0))) OR -- Retira Futura
-       (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) OR -- Simples
-       (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR
-       (N.tipo = 1 AND N.nfse = 5) OR
-       (IFNULL(CG.storeno, 0) != :loja) OR
-       (N.nfse = 7) OR
-       (:marca NOT IN (0, 999)))
+  AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
+        (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
+  AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
+  OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
+  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
+                                (N.nfse = 7))) OR :marca NOT IN (0, 999))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -310,8 +296,6 @@ WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUI
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
        pedido LIKE @PESQUISA OR locais LIKE @PESQUISA_LIKE)
-  AND (loja = :loja OR :loja = 0)
 GROUP BY Q.loja, Q.pdvno, Q.xano
 HAVING ((:marca = 0 AND countExp > 0) OR (:marca = 1 AND countCD > 0) OR (:marca = 2 AND countEnt > 0) OR
         (:marca = 999))
-
