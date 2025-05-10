@@ -129,6 +129,7 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
+  (PRIMARY KEY (loja, pdvno, xano))
 SELECT N.storeno                                                              AS loja,
        N.pdvno                                                                AS pdvno,
        N.xano                                                                 AS xano,
@@ -241,6 +242,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
+  AND (N.storeno IN (2, 3, 4, 5, 8))
   AND ((:loja = 0 OR
         (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
         ((N.storeno = :loja OR :loja = 0) OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
@@ -251,7 +253,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
        (N.tipo = 1 AND N.nfse = 5) OR
        (IFNULL(CG.storeno, 0) != :loja) OR
        (N.nfse = 7) OR
-       :marca NOT IN (0, 999))
+       (:marca NOT IN (0, 999)))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
