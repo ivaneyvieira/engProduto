@@ -154,11 +154,11 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.nfdDevFor == true
+    return username?.notaNFDAberta == true
   }
 
   override val label: String
-    get() = "Dev For"
+    get() = "NFD Aberta"
 
   override fun updateComponent() {
     viewModel.updateView()

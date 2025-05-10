@@ -20,7 +20,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     else
       EMarcaNota.EXP
     val filtro = subView.filtro(marca)
-    val notas = NotaSaida.find(filtro)
+    val notas = NotaSaida.findDevolucao(filtro)
     subView.updateNotas(notas)
   }
 

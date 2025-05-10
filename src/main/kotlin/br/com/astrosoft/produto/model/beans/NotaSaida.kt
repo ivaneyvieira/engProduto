@@ -91,6 +91,11 @@ class NotaSaida(
       val notas = saci.findNotaSaida(filtro = filtro)
       return notas
     }
+
+    fun findDevolucao(filtro: FiltroNota): List<NotaSaida> {
+      val notas = saci.findNotaSaidaDevolucao(filtro = filtro)
+      return notas
+    }
   }
 }
 
