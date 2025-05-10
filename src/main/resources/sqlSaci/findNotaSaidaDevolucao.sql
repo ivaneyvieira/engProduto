@@ -219,6 +219,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
+  AND (N.status <> 1)
   AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
         (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
   AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
