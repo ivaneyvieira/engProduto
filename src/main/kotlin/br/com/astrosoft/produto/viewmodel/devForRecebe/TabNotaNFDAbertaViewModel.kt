@@ -7,9 +7,8 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
-import br.com.astrosoft.produto.viewmodel.nfd.NfdViewModel
 
-class TabNfdDevForViewModel(val viewModel: NfdViewModel) {
+class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
@@ -76,10 +75,10 @@ class TabNfdDevForViewModel(val viewModel: NfdViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabNfdDevFor
+    get() = viewModel.view.tabNotaNFDAberta
 }
 
-interface ITabNfdDevFor : ITabView {
+interface ITabNotaNFDAberta : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?

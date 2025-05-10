@@ -7,20 +7,16 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.nfd.DlgProdutosDevFor
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFEntregaRetira
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaRota
-import br.com.astrosoft.produto.viewmodel.nfd.ITabNfdDevFor
-import br.com.astrosoft.produto.viewmodel.nfd.TabNfdDevForViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaNFDAberta
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -33,9 +29,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNfdDevFor {
+class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaNFDAberta {
   //private var colRota: Grid.Column<NotaSaida>? = null
-  private var dlgProduto: DlgProdutosDevFor? = null
+  private var dlgProduto: DlgProdutosNFDAberta? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -94,7 +90,7 @@ class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaid
     columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosDevFor(viewModel, nota)
+      dlgProduto = DlgProdutosNFDAberta(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }

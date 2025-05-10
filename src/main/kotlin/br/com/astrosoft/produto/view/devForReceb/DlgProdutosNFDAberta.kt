@@ -18,7 +18,7 @@ import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produto
 import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
 import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
-import br.com.astrosoft.produto.viewmodel.nfd.TabNfdDevForViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.h5
 import com.github.mvysny.karibudsl.v10.onClick
@@ -31,7 +31,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.theme.lumo.LumoUtility
 
-class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaida) {
+class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
