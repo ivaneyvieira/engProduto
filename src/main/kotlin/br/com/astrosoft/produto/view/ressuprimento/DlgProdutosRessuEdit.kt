@@ -63,10 +63,15 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
 
       this.withEditor(
         classBean = DadosProdutosRessuprimento::class,
+        isBuffered = false,
         openEditor = {
           this.focusEditor(DadosProdutosRessuprimento::qttyPedida)
         },
         closeEditor = {
+          viewModel.saveProduto(it.bean)
+          abreProximo(it.bean)
+        },
+        saveEditor = {
           viewModel.saveProduto(it.bean)
           abreProximo(it.bean)
         }

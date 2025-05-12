@@ -28,13 +28,15 @@ import kotlin.reflect.KProperty1
 
 fun <T : Any> Grid<T>.withEditor(
   classBean: KClass<T>,
+  isBuffered : Boolean = false,
   openEditor: (Binder<T>) -> Unit,
   closeEditor: (Binder<T>) -> Unit,
+  saveEditor: (Binder<T>) -> Unit = { _ -> },
   canEdit: (T?) -> Boolean = { true },
 ) {
   val binder = Binder(classBean.java)
   editor.binder = binder
-  editor.isBuffered = false
+  editor.isBuffered = isBuffered
   addItemDoubleClickListener { event ->
     val bean = this.selectedItems.firstOrNull()
     if (canEdit(bean)) {
@@ -46,6 +48,9 @@ fun <T : Any> Grid<T>.withEditor(
   }
   editor.addCloseListener {
     closeEditor(binder)
+  }
+  editor.addSaveListener {
+    saveEditor(it.grid.editor.binder)
   }
 }
 
@@ -201,7 +206,7 @@ fun mesAnoFieldComponente() = ComboBox<String>().apply {
 }
 
 private fun integerFieldComponente() = IntegerField().apply {
-  this.valueChangeMode = ValueChangeMode.ON_BLUR
+  this.valueChangeMode = ValueChangeMode.ON_CHANGE
   addThemeVariants(TextFieldVariant.LUMO_SMALL)
   this.isAutoselect = true
   setSizeFull()
