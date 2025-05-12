@@ -28,7 +28,7 @@ FROM
     INNER JOIN sqldados.prd  AS P
                ON P.no = I.prdno
 WHERE I.storeno = 1
-  AND (I.ordno IN (20000, 30000, 40000, 50000, 80000))
+  AND (I.ordno IN (20000, 30000, 40000, 50000, 80000, 3))
   AND (MID(O.no, 1, 1) * 1 = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
