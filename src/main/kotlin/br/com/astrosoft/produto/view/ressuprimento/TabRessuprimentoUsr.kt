@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUser(viewModel), ITabRessuprimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::ressuprimentoRessu, "Ressup")
     columnGrid(UserSaci::pedidoRessuprimento, "Pedido")
     columnGrid(UserSaci::ressuprimentoCD, "Separar")
     columnGrid(UserSaci::ressuprimentoSep, "Separado")
@@ -25,6 +26,9 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
+        checkBox("Ressup") {
+          binder.bind(this, UserSaci::ressuprimentoRessu.name)
+        }
         checkBox("Pedido") {
           binder.bind(this, UserSaci::pedidoRessuprimento.name)
         }
