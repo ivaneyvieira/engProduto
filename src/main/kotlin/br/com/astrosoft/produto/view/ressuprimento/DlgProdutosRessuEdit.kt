@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
@@ -13,9 +14,10 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 
 class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val ressuprimento: DadosRessuprimento) {
-  private var edtPesquisa : TextField? = null
+  private var edtPesquisa: TextField? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(DadosProdutosRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -89,16 +91,22 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
         }
       )
 
-      columnGrid(DadosProdutosRessuprimento::codigo, "Código").right()
-      columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "260px")
-      columnGrid(DadosProdutosRessuprimento::grade, "Grade")
-      columnGrid(DadosProdutosRessuprimento::qttyVendaMes, "Venda no Mes")
-      columnGrid(DadosProdutosRessuprimento::qttyVendaMesAnt, "Venda mes Ant")
-      columnGrid(DadosProdutosRessuprimento::qttyVendaMedia, "Venda Media")
-      columnGrid(DadosProdutosRessuprimento::estoque, "Estoque Atual")
-      columnGrid(DadosProdutosRessuprimento::qttySugerida, "Sugestão")
-      columnGrid(DadosProdutosRessuprimento::qttyPedida, "Qtde Pedida").integerFieldEditor()
-      columnGrid(DadosProdutosRessuprimento::estoqueLJ, "Estoque MF")
+      columnGroup("Produto") {
+        this.columnGrid(DadosProdutosRessuprimento::codigo, "Código").right()
+        this.columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "260px")
+        this.columnGrid(DadosProdutosRessuprimento::grade, "Grade")
+      }
+      columnGroup("Venda") {
+        this.columnGrid(DadosProdutosRessuprimento::qttyVendaMes, "No Mês")
+        this.columnGrid(DadosProdutosRessuprimento::qttyVendaMesAnt, "Mês Ant")
+        this.columnGrid(DadosProdutosRessuprimento::qttyVendaMedia, "Média")
+      }
+      columnGroup("Quantidade/Estoque") {
+        this.columnGrid(DadosProdutosRessuprimento::estoque, "Atual")
+        this.columnGrid(DadosProdutosRessuprimento::qttySugerida, "Sugestão")
+        this.columnGrid(DadosProdutosRessuprimento::qttyPedida, "Pedida").integerFieldEditor()
+        this.columnGrid(DadosProdutosRessuprimento::estoqueLJ, "LJ MF")
+      }
     }
     this.addAndExpand(gridDetail)
     update()
