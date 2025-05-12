@@ -2341,6 +2341,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun removeDadosRessuprimento(ressuprimento: DadosProdutosRessuprimento) {
+    val sql = "/sqlSaci/removeDadosRessuprimento.sql"
+    script(sql){
+      addOptionalParameter("loja", ressuprimento.loja)
+      addOptionalParameter("pedido", ressuprimento.pedido)
+      addOptionalParameter("prdno", ressuprimento.prdno)
+      addOptionalParameter("grade", ressuprimento.grade)
+      addOptionalParameter("seqno", ressuprimento.seqno)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

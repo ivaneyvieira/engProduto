@@ -11,8 +11,12 @@ data class DadosRessuprimento (
   val codFornecedor: Int,
   val totalPedido: Double,
   val observacao: String,
-  val produtos: List<DadosProdutosRessuprimento>
+  val produtos: MutableList<DadosProdutosRessuprimento>
 ){
+  fun removeProduto(produto: DadosProdutosRessuprimento) {
+    this.produtos.remove(produto)
+  }
+
   companion object {
     fun find(filter: FiltroDadosProdutosRessuprimento): List<DadosRessuprimento> {
       return saci.findDadosRessuprimento(filter).toDadosRessuprimento()
@@ -31,7 +35,7 @@ fun List<DadosProdutosRessuprimento>.toDadosRessuprimento(): List<DadosRessuprim
       codFornecedor = first?.codFornecedor ?: 0,
       totalPedido = first?.totalPedido ?: 0.00,
       observacao = first?.observacao ?: "",
-      produtos = produtos
+      produtos = produtos.toMutableList()
     )
   }
 }

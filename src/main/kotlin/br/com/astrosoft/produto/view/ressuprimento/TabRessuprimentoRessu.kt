@@ -119,9 +119,5 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
   override fun produtosSelecionados(): List<DadosProdutosRessuprimento> {
     return dlgProduto?.produtosSelecionados() ?: emptyList()
   }
-
-  override fun updateProduto(produto: DadosProdutosRessuprimento) {
-    dlgProduto?.updateProduto(produto)
-  }
 }
 

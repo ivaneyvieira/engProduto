@@ -3,12 +3,8 @@ package br.com.astrosoft.produto.viewmodel.ressuprimento
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
-import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
 import br.com.astrosoft.produto.model.beans.FiltroDadosProdutosRessuprimento
-import br.com.astrosoft.produto.model.beans.FiltroRessuprimento
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.model.beans.Ressuprimento
 
 class TabRessuprimentoRessupViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -26,6 +22,13 @@ class TabRessuprimentoRessupViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateRessuprimentos(ressuprimento)
   }
 
+  fun removeProdutos(ressuprimento: DadosRessuprimento, produtos: List<DadosProdutosRessuprimento>) {
+    produtos.forEach {produto ->
+      produto.remove()
+      ressuprimento.removeProduto(produto)
+    }
+  }
+
   val subView
     get() = viewModel.view.tabRessuprimentoRessup
 }
@@ -35,5 +38,4 @@ interface ITabRessuprimentoRessup : ITabView {
   fun updateRessuprimentos(ressuprimentos: List<DadosRessuprimento>)
   fun updateProdutos()
   fun produtosSelecionados(): List<DadosProdutosRessuprimento>
-  fun updateProduto(produto: DadosProdutosRessuprimento)
 }
