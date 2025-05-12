@@ -2,15 +2,8 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
-import br.com.astrosoft.produto.model.beans.DadosRessuprimento
-import br.com.astrosoft.produto.model.beans.FiltroDadosProdutosRessuprimento
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoRessup
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRessupViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -18,18 +11,16 @@ import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
-import kotlin.Boolean
-import kotlin.String
-import kotlin.TODO
-import kotlin.collections.plus
 
 class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
   TabPanelGrid<DadosRessuprimento>(DadosRessuprimento::class), ITabRessuprimentoRessup {
+  private var dlgProduto: DlgProdutosRessuEdit? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -83,6 +74,12 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
     this.format()
 
     columnGrid(DadosRessuprimento::lojaRessuprimento, "Loja")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
+      dlgProduto = DlgProdutosRessuEdit(viewModel, ressuprimento)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     columnGrid(DadosRessuprimento::data, "Data")
     columnGrid(DadosRessuprimento::pedido, "Pedido")
     columnGrid(DadosRessuprimento::codFornecedor, "No Forn")
@@ -116,15 +113,15 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
   }
 
   override fun updateProdutos() {
-    TODO("Not yet implemented")
+    dlgProduto?.update()
   }
 
   override fun produtosSelecionados(): List<DadosProdutosRessuprimento> {
-    TODO("Not yet implemented")
+    return dlgProduto?.produtosSelecionados() ?: emptyList()
   }
 
   override fun updateProduto(produto: DadosProdutosRessuprimento) {
-    TODO("Not yet implemented")
+    dlgProduto?.updateProduto(produto)
   }
 }
 
