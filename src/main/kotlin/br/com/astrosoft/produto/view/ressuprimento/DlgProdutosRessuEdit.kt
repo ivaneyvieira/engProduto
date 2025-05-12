@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val ressuprimento: DadosRessuprimento) {
@@ -32,13 +33,14 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
       title = "Pedido $pedido",
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
+          this.width = "220px"
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
             update()
           }
         }
         cmbOperador = select("Est MF") {
+          this.width = "80px"
           this.setItems(EOperador.entries)
           this.setItemLabelGenerator { e ->
             e.descricao
@@ -51,6 +53,8 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
         }
         edtSaldo = integerField("Saldo") {
           this.value = 0
+          this.width = "80px"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.addValueChangeListener {
             update()
           }
