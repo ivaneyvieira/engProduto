@@ -101,7 +101,7 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
         this.columnGrid(DadosProdutosRessuprimento::qttyVendaMesAnt, "Mês Ant")
         this.columnGrid(DadosProdutosRessuprimento::qttyVendaMedia, "Média")
       }
-      columnGroup("Quantidade/Estoque") {
+      columnGroup("Estoque/Quantidade") {
         this.columnGrid(DadosProdutosRessuprimento::estoque, "Atual")
         this.columnGrid(DadosProdutosRessuprimento::qttySugerida, "Sugestão")
         this.columnGrid(DadosProdutosRessuprimento::qttyPedida, "Pedida").integerFieldEditor()
