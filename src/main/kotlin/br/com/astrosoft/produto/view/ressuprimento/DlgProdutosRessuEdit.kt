@@ -2,22 +2,28 @@ package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.columnGrid
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRessupViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import br.com.astrosoft.framework.view.vaadin.columnGroup
 
 class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val ressuprimento: DadosRessuprimento) {
   private var edtPesquisa: TextField? = null
+  private var cmbOperador: Select<EOperador>? = null
+  private var edtSaldo: IntegerField? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(DadosProdutosRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -29,6 +35,23 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
           this.width = "300px"
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
+            update()
+          }
+        }
+        cmbOperador = select("Est MF") {
+          this.setItems(EOperador.entries)
+          this.setItemLabelGenerator { e ->
+            e.descricao
+          }
+          this.value = EOperador.TODOS
+
+          this.addValueChangeListener {
+            update()
+          }
+        }
+        edtSaldo = integerField("Saldo") {
+          this.value = 0
+          this.addValueChangeListener {
             update()
           }
         }
@@ -134,7 +157,13 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
   fun update() {
     val pesquisa = edtPesquisa?.value ?: ""
     val listProdutos = ressuprimento.produtos.filter {
-      pesquisa == "" || it.codigo.toString() == pesquisa || (it.descricao?.contains(pesquisa) == true)
+      ((pesquisa == "") || (it.codigo.toString() == pesquisa) || (it.descricao?.contains(pesquisa) == true)) &&
+      ((cmbOperador?.value == EOperador.TODOS) || when (cmbOperador?.value) {
+        EOperador.MAIOR -> (it.estoqueLJ ?: 0) > (edtSaldo?.value ?: 0)
+        EOperador.MENOR -> (it.estoqueLJ ?: 0) < (edtSaldo?.value ?: 0)
+        EOperador.IGUAL -> (it.estoqueLJ ?: 0) == (edtSaldo?.value ?: 0)
+        else            -> false
+      })
     }
     gridDetail.setItems(listProdutos)
   }
@@ -142,4 +171,11 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
   fun itensSelecionados(): List<DadosProdutosRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
+}
+
+enum class EOperador(val descricao: String) {
+  MAIOR(">"),
+  MENOR("<"),
+  IGUAL("="),
+  TODOS("Todos"),
 }
