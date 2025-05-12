@@ -12,7 +12,7 @@ class DadosProdutosRessuprimento {
   var totalPedido: Double? = null
   var observacao: String? = null
   var prdno: String? = null
-  var codigo: String? = null
+  var codigo: Int? = null
   var descricao: String? = null
   var grade: String? = null
   var seqno: Int? = null

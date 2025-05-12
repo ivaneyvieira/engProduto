@@ -28,7 +28,7 @@ import kotlin.reflect.KProperty1
 
 fun <T : Any> Grid<T>.withEditor(
   classBean: KClass<T>,
-  isBuffered : Boolean = false,
+  isBuffered: Boolean = false,
   openEditor: (Binder<T>) -> Unit,
   closeEditor: (Binder<T>) -> Unit,
   saveEditor: (Binder<T>) -> Unit = { _ -> },
@@ -52,6 +52,7 @@ fun <T : Any> Grid<T>.withEditor(
   editor.addSaveListener {
     saveEditor(it.grid.editor.binder)
   }
+  element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"
 }
 
 fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>) {
@@ -99,10 +100,10 @@ fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit =
     grid.editor.save()
     grid.editor.closeEditor()
   }.filter = "event.key === 'Enter'"
-  component.element.addEventListener("keydown") { _ ->
-    grid.editor.cancel()
-    grid.editor.closeEditor()
-  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
+  // component.element.addEventListener("keydown") { _ ->
+//    grid.editor.cancel()
+//    grid.editor.closeEditor()
+//  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component

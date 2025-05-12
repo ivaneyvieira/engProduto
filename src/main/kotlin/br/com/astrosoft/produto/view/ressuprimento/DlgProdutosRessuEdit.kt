@@ -6,12 +6,16 @@ import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRessupViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val ressuprimento: DadosRessuprimento) {
+  private var edtPesquisa : TextField? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(DadosProdutosRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -19,6 +23,13 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     form = SubWindowForm(
       title = "Pedido $pedido",
       toolBar = {
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            update()
+          }
+        }
         this.button("Edita") {
           this.icon = VaadinIcon.EDIT.create()
           this.addClickListener {
@@ -47,7 +58,7 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
         createGridProdutos()
       }
     }
-    form?.isCloseOnEsc = false
+    form?.isCloseOnEsc = true
     form?.open()
   }
 
@@ -112,7 +123,10 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
   }
 
   fun update() {
-    val listProdutos = ressuprimento.produtos
+    val pesquisa = edtPesquisa?.value ?: ""
+    val listProdutos = ressuprimento.produtos.filter {
+      pesquisa == "" || it.codigo.toString() == pesquisa || (it.descricao?.contains(pesquisa) == true)
+    }
     gridDetail.setItems(listProdutos)
   }
 
