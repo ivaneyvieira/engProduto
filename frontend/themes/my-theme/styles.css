@@ -83,3 +83,8 @@ vaadin-date-picker.mobile[has-label] {
     padding-top: 0;
     margin-top: 0;
 }
+
+vaadin-grid.negrito::part(cell) {
+    font-weight: bold;
+    font-size: larger;
+}

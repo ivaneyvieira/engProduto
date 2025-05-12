@@ -65,6 +65,7 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
+      this.addClassName("negrito")
       this.format()
 
       setSizeFull()
@@ -89,7 +90,7 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
       )
 
       columnGrid(DadosProdutosRessuprimento::codigo, "Código").right()
-      columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "220px")
+      columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "260px")
       columnGrid(DadosProdutosRessuprimento::grade, "Grade")
       columnGrid(DadosProdutosRessuprimento::qttyVendaMes, "Venda no Mes")
       columnGrid(DadosProdutosRessuprimento::qttyVendaMesAnt, "Venda mes Ant")
