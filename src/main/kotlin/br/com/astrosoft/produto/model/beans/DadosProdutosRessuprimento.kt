@@ -28,6 +28,10 @@ class DadosProdutosRessuprimento {
     saci.removeDadosRessuprimento(this)
   }
 
+  fun save() {
+    saci.saveDadosRessuprimento(this)
+  }
+
   companion object {
     fun find(filter: FiltroDadosProdutosRessuprimento): List<DadosProdutosRessuprimento> {
       return saci.findDadosRessuprimento(filter)

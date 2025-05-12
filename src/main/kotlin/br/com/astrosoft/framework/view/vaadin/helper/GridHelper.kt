@@ -34,6 +34,7 @@ fun <T : Any> Grid<T>.withEditor(
 ) {
   val binder = Binder(classBean.java)
   editor.binder = binder
+  editor.isBuffered = false
   addItemDoubleClickListener { event ->
     val bean = this.selectedItems.firstOrNull()
     if (canEdit(bean)) {
@@ -43,13 +44,9 @@ fun <T : Any> Grid<T>.withEditor(
   editor.addOpenListener {
     openEditor(binder)
   }
-  editor.addCloseListener { _ ->
-    editor.refresh()
-    openEditor(binder)
+  editor.addCloseListener {
     closeEditor(binder)
   }
-
-  element.addEventListener("keyup") { editor.cancel() }.filter = "event.key === 'Escape' || event.key === 'Esc'"
 }
 
 fun <T : Any> Grid<T>.focusEditor(property: KProperty1<T, *>) {
@@ -67,7 +64,7 @@ fun <T : Any> Grid<T>.setReadOnly(property: KProperty1<T, *>) {
 }
 
 fun <T : Any> Grid<T>.editorComponent(property: KProperty1<T, *>): Component? =
-  getColumnBy(property).editorComponent
+    getColumnBy(property).editorComponent
 
 fun <T : Any> Grid<T>.focus(property: KProperty1<T, *>) {
   (editorComponent(property) as? Focusable<*>)?.focus()
@@ -94,8 +91,13 @@ fun <T : Any> Grid.Column<T>.textAreaEditor(block: TextArea.() -> Unit = {}): Gr
 fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit = {}): Grid.Column<T> {
   val component = integerFieldComponente()
   component.element.addEventListener("keydown") { _ ->
-    grid.editor.cancel()
+    grid.editor.save()
+    grid.editor.closeEditor()
   }.filter = "event.key === 'Enter'"
+  component.element.addEventListener("keydown") { _ ->
+    grid.editor.cancel()
+    grid.editor.closeEditor()
+  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
@@ -199,7 +201,7 @@ fun mesAnoFieldComponente() = ComboBox<String>().apply {
 }
 
 private fun integerFieldComponente() = IntegerField().apply {
-  this.valueChangeMode = ValueChangeMode.ON_CHANGE
+  this.valueChangeMode = ValueChangeMode.ON_BLUR
   addThemeVariants(TextFieldVariant.LUMO_SMALL)
   this.isAutoselect = true
   setSizeFull()

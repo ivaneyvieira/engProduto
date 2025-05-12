@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.ressuprimento
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
 import br.com.astrosoft.produto.model.beans.FiltroDadosProdutosRessuprimento
@@ -22,11 +23,16 @@ class TabRessuprimentoRessupViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateRessuprimentos(ressuprimento)
   }
 
-  fun removeProdutos(ressuprimento: DadosRessuprimento, produtos: List<DadosProdutosRessuprimento>) {
-    produtos.forEach {produto ->
+  fun removeProdutos(ressuprimento: DadosRessuprimento, produtos: List<DadosProdutosRessuprimento>) = viewModel.exec {
+    produtos.forEach { produto ->
       produto.remove()
       ressuprimento.removeProduto(produto)
     }
+  }
+
+  fun saveProduto(bean: DadosProdutosRessuprimento?) = viewModel.exec {
+    bean ?: fail("Produto não encontrado")
+    bean.save()
   }
 
   val subView

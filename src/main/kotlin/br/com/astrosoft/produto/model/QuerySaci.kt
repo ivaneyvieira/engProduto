@@ -2331,7 +2331,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findDadosRessuprimento(filtro: FiltroDadosProdutosRessuprimento): List<DadosProdutosRessuprimento>{
+  fun findDadosRessuprimento(filtro: FiltroDadosProdutosRessuprimento): List<DadosProdutosRessuprimento> {
     val sql = "/sqlSaci/findDadosRessuprimento.sql"
     return query(sql, DadosProdutosRessuprimento::class) {
       addOptionalParameter("loja", filtro.loja)
@@ -2343,12 +2343,24 @@ class QuerySaci : QueryDB(database) {
 
   fun removeDadosRessuprimento(ressuprimento: DadosProdutosRessuprimento) {
     val sql = "/sqlSaci/removeDadosRessuprimento.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("loja", ressuprimento.loja)
       addOptionalParameter("pedido", ressuprimento.pedido)
       addOptionalParameter("prdno", ressuprimento.prdno)
       addOptionalParameter("grade", ressuprimento.grade)
       addOptionalParameter("seqno", ressuprimento.seqno)
+    }
+  }
+
+  fun saveDadosRessuprimento(ressuprimento: DadosProdutosRessuprimento) {
+    val sql = "/sqlSaci/saveDadosRessuprimento.sql"
+    script(sql) {
+      addOptionalParameter("loja", ressuprimento.loja)
+      addOptionalParameter("pedido", ressuprimento.pedido)
+      addOptionalParameter("prdno", ressuprimento.prdno)
+      addOptionalParameter("grade", ressuprimento.grade)
+      addOptionalParameter("seqno", ressuprimento.seqno)
+      addOptionalParameter("qttyPedida", ressuprimento.qttyPedida)
     }
   }
 

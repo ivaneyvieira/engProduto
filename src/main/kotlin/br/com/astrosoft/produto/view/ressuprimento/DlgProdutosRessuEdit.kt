@@ -1,22 +1,11 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.list
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.DadosRessuprimento
-import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoBarcode
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoCodigo
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoDescricao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
-import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRessupViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -30,6 +19,16 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     form = SubWindowForm(
       title = "Pedido $pedido",
       toolBar = {
+        this.button("Edita") {
+          this.icon = VaadinIcon.EDIT.create()
+          this.addClickListener {
+            val item = gridDetail.list().firstOrNull()
+            if (item != null) {
+              gridDetail.deselectAll()
+              gridDetail.editor.editItem(item)
+            }
+          }
+        }
         this.button("Remove") {
           this.icon = VaadinIcon.TRASH.create()
           this.addClickListener {
@@ -48,6 +47,7 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
         createGridProdutos()
       }
     }
+    form?.isCloseOnEsc = false
     form?.open()
   }
 
@@ -61,6 +61,17 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
+      this.withEditor(
+        classBean = DadosProdutosRessuprimento::class,
+        openEditor = {
+          this.focusEditor(DadosProdutosRessuprimento::qttyPedida)
+        },
+        closeEditor = {
+          viewModel.saveProduto(it.bean)
+          abreProximo(it.bean)
+        }
+      )
+
       columnGrid(DadosProdutosRessuprimento::codigo, "Código").right()
       columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "220px")
       columnGrid(DadosProdutosRessuprimento::grade, "Grade")
@@ -69,11 +80,26 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
       columnGrid(DadosProdutosRessuprimento::qttyVendaMedia, "Venda Media")
       columnGrid(DadosProdutosRessuprimento::estoque, "Estoque Atual")
       columnGrid(DadosProdutosRessuprimento::qttySugerida, "Sugestão")
-      columnGrid(DadosProdutosRessuprimento::qttyPedida, "Qtde Pedida")
+      columnGrid(DadosProdutosRessuprimento::qttyPedida, "Qtde Pedida").integerFieldEditor()
       columnGrid(DadosProdutosRessuprimento::estoqueLJ, "Estoque MF")
     }
     this.addAndExpand(gridDetail)
     update()
+  }
+
+  private fun abreProximo(bean: DadosProdutosRessuprimento) {
+    val items = gridDetail.list()
+    val index = items.indexOf(bean)
+    if (index >= 0) {
+      val nextIndex = index + 1
+      if (nextIndex < items.size) {
+        val nextBean = items[nextIndex]
+        //gridDetail.select(nextBean)
+        gridDetail.editor.editItem(nextBean)
+      } else {
+        gridDetail.deselectAll()
+      }
+    }
   }
 
   fun produtosSelecionados(): List<DadosProdutosRessuprimento> {
