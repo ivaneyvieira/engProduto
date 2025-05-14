@@ -97,16 +97,10 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     colunaNFNota()
     colunaNFData()
-    //colunaHora()
-    //colRota = colunaRota()
     colunaNFCliente()
     colunaNomeCliente()
-    //colunaNFVendedor()
-    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
-    //colunaNFEntregaRetira()
-    //colunaNFSituacao()
 
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
