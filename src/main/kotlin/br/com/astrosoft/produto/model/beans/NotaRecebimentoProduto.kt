@@ -280,4 +280,5 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   EMAIL(3, "E-mail"),
   REPOSTO(4, "Reposto"),
   ACERTO(5, "Acerto"),
+  ACERTO_PAGO(7, "Acerto Pago"),
 }
