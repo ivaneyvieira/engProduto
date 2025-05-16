@@ -10,7 +10,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoPagoViewModel
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -101,7 +100,7 @@ class DlgProdutosNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel, var n
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
           val produtos = gridDetail.dataProvider.fetchAll()
-          if(produtos.isEmpty()) {
+          if (produtos.isEmpty()) {
             ByteArray(0)
           } else {
             viewModel.geraPlanilha(produtos)
@@ -126,7 +125,7 @@ class DlgProdutosNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel, var n
       addThemeVariants(GridVariant.LUMO_COMPACT)
       removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      Grid.setSelectionMode = Grid.SelectionMode.MULTI
+      this.setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()

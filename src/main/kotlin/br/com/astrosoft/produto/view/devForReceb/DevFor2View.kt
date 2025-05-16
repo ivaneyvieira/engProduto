@@ -32,6 +32,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
   override val tabNotaEmail = TabNotaEmail(viewModel.tabNotaEmailViewModel)
   override val tabNotaReposto = TabNotaReposto(viewModel.tabNotaRepostoViewModel)
   override val tabNotaAcerto = TabNotaAcerto(viewModel.tabNotaAcertoViewModel)
+  override val tabNotaAcertoPago = TabNotaAcertoPago(viewModel.tabNotaAcertoPagoViewModel)
   override val tabNotaUsr = TabNotaUsr(viewModel.tabNotaUsrViewModel)
 
   init {

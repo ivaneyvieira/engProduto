@@ -5,6 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaAcerto
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaAcertoPago
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoPagoViewModel
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
@@ -20,10 +22,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaAcertoPago(val viewModel: TabNotaAcertoViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaAcerto {
-  private var dlgProduto: DlgProdutosNotaAcerto? = null
-  private var dlgArquivo: DlgArquivoNotaAcerto? = null
+class TabNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaAcertoPago {
+  private var dlgProduto: DlgProdutosNotaAcertoPago? = null
+  private var dlgArquivo: DlgArquivoNotaAcertoPago? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -84,7 +86,7 @@ class TabNotaAcertoPago(val viewModel: TabNotaAcertoViewModel) :
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaAcerto(viewModel, nota)
+      dlgProduto = DlgProdutosNotaAcertoPago(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -95,7 +97,7 @@ class TabNotaAcertoPago(val viewModel: TabNotaAcertoViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaAcerto(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaAcertoPago(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -154,7 +156,7 @@ class TabNotaAcertoPago(val viewModel: TabNotaAcertoViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaAcerto(viewModel, nota)
+    dlgProduto = DlgProdutosNotaAcertoPago(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -162,11 +164,11 @@ class TabNotaAcertoPago(val viewModel: TabNotaAcertoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaAcerto == true
+    return username?.devFor2NotaAcertoPago == true
   }
 
   override val label: String
-    get() = "Acerto"
+    get() = "Acerto Pago"
 
   override fun updateComponent() {
     viewModel.updateView()

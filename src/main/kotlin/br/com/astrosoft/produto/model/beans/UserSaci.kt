@@ -150,6 +150,7 @@ class UserSaci : IUser {
   var estoqueGarantia by DelegateAuthorized2(120)
   var notaNFDAberta by DelegateAuthorized2(121)
   var ressuprimentoRessu by DelegateAuthorized2(122)
+  var devFor2NotaAcertoPago by DelegateAuthorized2(123)
 
   //Locais
   private var localEstoque: String?
@@ -503,7 +504,7 @@ class UserSaci : IUser {
     }
   var ressuprimento
     get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep ||
-            ressuprimentoRessu || admin
+            ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || admin
     set(value) {
       pedidoRessuprimento = value
       ressuprimentoCD = value
@@ -511,6 +512,8 @@ class UserSaci : IUser {
       ressuprimentoPen = value
       ressuprimentoSep = value
       ressuprimentoRessu = value
+      devFor2NotaAcerto = value
+      devFor2NotaAcertoPago = value
     }
 
   var reposicao
