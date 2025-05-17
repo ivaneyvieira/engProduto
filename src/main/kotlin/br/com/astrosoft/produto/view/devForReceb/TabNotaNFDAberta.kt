@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -12,6 +13,7 @@ import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -99,7 +101,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::nomeCliente) {
       this.setHeader("Nome Cliente")
     }
-    columnGrid(NotaSaidaDev::valorNota) {
+    columnGrid(NotaSaidaDev::valorNota, width="120px") {
       this.setHeader("Valor")
     }
     columnGrid(NotaSaidaDev::situacaoDup) {
@@ -118,6 +120,8 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
 
   override fun updateNotas(notas: List<NotaSaidaDev>) {
     updateGrid(notas)
+    val colValor = gridPanel.getColumnBy(NotaSaidaDev::valorNota)
+    colValor.setFooter(notas.sumOf { it.valorNota ?: 0.00 }.format())
   }
 
   override fun findNota(): NotaSaidaDev? {
