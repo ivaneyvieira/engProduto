@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
+import br.com.astrosoft.produto.model.printText.NotaExpedicaoDev
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
@@ -19,8 +20,8 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       EMarcaNota.TODOS
     else
       EMarcaNota.EXP
-    val filtro = subView.filtro(marca)
-    val notas = NotaSaida.findDevolucao(filtro)
+    val filtro = subView.filtro()
+    val notas = NotaSaidaDev.findDevolucao(filtro)
     subView.updateNotas(notas)
   }
 
@@ -42,13 +43,13 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
   }
 
-  fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
+  fun imprimeProdutosNota(nota: NotaSaidaDev, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
     if (itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
     if (nota.cancelada == "S")
       fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
-    val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
+    val report = NotaExpedicaoDev(nota)
     report.print(
       dados = itensSelecionados,
       printer = subView.printerPreview(loja = nota.loja),
@@ -79,9 +80,9 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
 }
 
 interface ITabNotaNFDAberta : ITabView {
-  fun filtro(marca: EMarcaNota): FiltroNota
-  fun updateNotas(notas: List<NotaSaida>)
-  fun findNota(): NotaSaida?
+  fun filtro(): FiltroNotaDev
+  fun updateNotas(notas: List<NotaSaidaDev>)
+  fun findNota(): NotaSaidaDev?
   fun updateProdutos()
   fun produtosSelcionados(): List<ProdutoNFS>
 }

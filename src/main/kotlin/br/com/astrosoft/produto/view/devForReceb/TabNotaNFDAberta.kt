@@ -7,14 +7,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nfd.DlgProdutosDevFor
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFCliente
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFLoja
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFTipo
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNomeCliente
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaNFDAberta
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -29,7 +21,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaNFDAberta {
+class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<NotaSaidaDev>(NotaSaidaDev::class),
+  ITabNotaNFDAberta {
   //private var colRota: Grid.Column<NotaSaida>? = null
   private var dlgProduto: DlgProdutosNFDAberta? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -81,13 +74,15 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
   }
 
-  override fun Grid<NotaSaida>.gridPanel() {
+  override fun Grid<NotaSaidaDev>.gridPanel() {
     this.addClassName("styling")
     this.format()
 
-    colunaNFLoja()
+    columnGrid(NotaSaidaDev::loja) {
+      this.setHeader("Loja")
+    }
 
-    columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
+    columnGrid(NotaSaidaDev::usuarioSingExp, "Autoriza")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNFDAberta(viewModel, nota)
@@ -95,12 +90,24 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
         viewModel.updateView()
       }
     }
-    colunaNFNota()
-    colunaNFData()
-    colunaNFCliente()
-    colunaNomeCliente()
-    colunaNFValor()
-    colunaNFTipo()
+    columnGrid(NotaSaidaDev::nota) {
+      this.setHeader("Nota")
+    }
+    columnGrid(NotaSaidaDev::data) {
+      this.setHeader("Data")
+    }
+    columnGrid(NotaSaidaDev::cliente) {
+      this.setHeader("Cliente")
+    }
+    columnGrid(NotaSaidaDev::nomeCliente) {
+      this.setHeader("Nome Cliente")
+    }
+    columnGrid(NotaSaidaDev::valorNota) {
+      this.setHeader("Valor")
+    }
+    columnGrid(NotaSaidaDev::tipoNotaSaidaDesc, width = "120px") {
+      this.setHeader("Tipo")
+    }
 
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
@@ -109,18 +116,17 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0 -> "azul"
+        countImp > 0     -> "azul"
 
-        countEnt > 0 -> "amarelo"
+        countEnt > 0     -> "amarelo"
 
-        else -> null
+        else             -> null
       }
     }
   }
 
-  override fun filtro(marca: EMarcaNota): FiltroNota {
-    return FiltroNota(
-      marca = marca,
+  override fun filtro(): FiltroNotaDev {
+    return FiltroNotaDev(
       tipoNota = ETipoNotaFiscal.DEVOLUCAO,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
@@ -130,11 +136,11 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     )
   }
 
-  override fun updateNotas(notas: List<NotaSaida>) {
+  override fun updateNotas(notas: List<NotaSaidaDev>) {
     updateGrid(notas)
   }
 
-  override fun findNota(): NotaSaida? {
+  override fun findNota(): NotaSaidaDev? {
     return dlgProduto?.nota
   }
 

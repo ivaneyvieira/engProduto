@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
+import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
@@ -31,7 +32,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.theme.lumo.LumoUtility
 
-class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaida) {
+class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
@@ -119,9 +120,7 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
   }
 
   fun update() {
-    val user = AppConfig.userLogin() as? UserSaci
-    val marca = EMarcaNota.TODOS
-    val listProdutos = nota.produtos(marca, todosLocais = true)
+    val listProdutos = nota.produtos(todosLocais = true)
     gridDetail.setItems(listProdutos)
   }
 }

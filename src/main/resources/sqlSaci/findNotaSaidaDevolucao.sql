@@ -222,10 +222,10 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND (N.status <> 1)
   AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
         (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
-  AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
+  AND ((999 IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
   OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
-                                (N.nfse = 7))) OR :marca NOT IN (0, 999))
+                                (N.nfse = 7))) OR 999 NOT IN (0, 999))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -283,5 +283,5 @@ WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUI
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
        pedido LIKE @PESQUISA OR locais LIKE @PESQUISA_LIKE)
 GROUP BY Q.loja, Q.pdvno, Q.xano
-HAVING ((:marca = 0 AND countExp > 0) OR (:marca = 1 AND countCD > 0) OR (:marca = 2 AND countEnt > 0) OR
-        (:marca = 999))
+HAVING ((999 = 0 AND countExp > 0) OR (999 = 1 AND countCD > 0) OR (999 = 2 AND countEnt > 0) OR
+        (999 = 999))

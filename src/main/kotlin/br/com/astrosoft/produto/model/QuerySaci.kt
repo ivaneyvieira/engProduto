@@ -242,6 +242,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun saveNotaSaida(nota: NotaSaidaDev) {
+    val sql = "/sqlSaci/saveNotaSaida.sql"
+    script(sql) {
+      this.addOptionalParameter("storeno", nota.loja)
+      this.addOptionalParameter("pdvno", nota.pdvno)
+      this.addOptionalParameter("xano", nota.xano)
+      this.addOptionalParameter("entrega", nota.entrega.toSaciDate())
+      this.addOptionalParameter("empnoM", nota.empnoMotorista ?: 0)
+    }
+  }
+
   fun saveNotaSaidaPrint(nota: NotaSaida) {
     val sql = "/sqlSaci/saveNotaSaidaPrint.sql"
     script(sql) {
@@ -254,11 +265,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findNotaSaidaDevolucao(filtro: FiltroNota): List<NotaSaida> {
+  fun findNotaSaidaDevolucao(filtro: FiltroNotaDev): List<NotaSaidaDev> {
     val sql = "/sqlSaci/findNotaSaidaDevolucao.sql"
 
-    val list = query(sql, NotaSaida::class) {
-      addOptionalParameter("marca", filtro.marca.num)
+    val list = query(sql, NotaSaidaDev::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("local", filtro.localizacaoNota)
@@ -411,6 +421,31 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
       addOptionalParameter("marca", marca.num)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("lojaLocal", 4)
+      addOptionalParameter("todosLocais", todosLocais.let { if (it) "S" else "N" })
+      addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
+    }
+    produtos.forEach {
+      println(it.local)
+    }
+    return produtos
+  }
+
+  fun findProdutoNF(
+    nfs: NotaSaidaDev,
+    prdno: String,
+    grade: String,
+    todosLocais: Boolean
+  ): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdvno)
+      addOptionalParameter("xano", nfs.xano)
+      addOptionalParameter("marca", 999)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
       addOptionalParameter("lojaLocal", 4)
