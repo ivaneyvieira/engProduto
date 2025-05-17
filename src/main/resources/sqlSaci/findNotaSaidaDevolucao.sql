@@ -78,7 +78,8 @@ SELECT loja,
        totalProdutos,
        cancelada,
        entrega,
-       observacaoPrint
+       observacaoPrint,
+       situacaoDup
 FROM
   T_QUERY AS Q
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
