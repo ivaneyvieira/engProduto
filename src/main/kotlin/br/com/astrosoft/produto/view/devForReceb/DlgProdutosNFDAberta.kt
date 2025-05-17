@@ -1,24 +1,11 @@
 package br.com.astrosoft.produto.view.devForReceb
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.EMarcaNota
-import br.com.astrosoft.produto.model.beans.NotaSaida
 import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
-import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFEstoque
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFGrade
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
-import br.com.astrosoft.produto.view.nfd.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.h5
@@ -87,18 +74,29 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
         }
       }
 
-      produtoNFCodigo()
-      produtoNFBarcode()
-      produtoAutorizacaoExp()
-      produtoNFDescricao()
-      produtoNFGrade()
-      produtoNFGradeAlternativa()
-      produtoNFLocalizacao()
-      produtoNFQuantidade()
-      produtoNFPrecoUnitario()
-      produtoNFPrecoTotal()
-      produtoNFUsuarioSep()
-      produtoNFEstoque()
+      columnGrid(ProdutoNFS::codigo) {
+        this.setHeader("Código")
+      }
+      columnGrid(ProdutoNFS::barcodeStrList) {
+        this.setHeader("Código de Barras")
+        this.right()
+      }
+      columnGrid(ProdutoNFS::descricao) {
+        this.setHeader("Descrição")
+      }
+      columnGrid(ProdutoNFS::grade) {
+        this.setHeader("Grade")
+      }
+      columnGrid(ProdutoNFS::quantidade) {
+        this.setHeader("Quant")
+      }
+
+      columnGrid(ProdutoNFS::preco) {
+        this.setHeader("Preço")
+      }
+      columnGrid(ProdutoNFS::total) {
+        this.setHeader("Total")
+      }
 
       this.setPartNameGenerator {
         val marca = it.marca
