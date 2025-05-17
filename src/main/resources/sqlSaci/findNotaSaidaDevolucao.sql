@@ -27,7 +27,7 @@ SELECT N.storeno                                                              AS
        CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
        print_remarks                                                          AS observacaoPrint,
        CASE D.status
-         WHEN 0 THEN 'Aberto'
+         WHEN 0 THEN 'Incluida'
          WHEN 1 THEN 'Em cobrança'
          WHEN 2 THEN 'Quitada"'
          WHEN 3 THEN 'Cartório'
