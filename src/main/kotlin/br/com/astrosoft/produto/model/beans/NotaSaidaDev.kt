@@ -23,6 +23,7 @@ class NotaSaidaDev(
   var cancelada: String?,
   var entrega: LocalDate?,
   var observacaoPrint: String?,
+  var situacaoDup: String?,
 ) {
   val dataStr
     get() = data?.format() ?: ""

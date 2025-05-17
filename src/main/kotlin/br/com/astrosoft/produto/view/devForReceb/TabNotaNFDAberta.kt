@@ -103,8 +103,8 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::valorNota) {
       this.setHeader("Valor")
     }
-    columnGrid(NotaSaidaDev::tipoNotaSaidaDesc, width = "120px") {
-      this.setHeader("Tipo")
+    columnGrid(NotaSaidaDev::situacaoDup) {
+      this.setHeader("Status Dup")
     }
   }
 

@@ -25,7 +25,19 @@ SELECT N.storeno                                                              AS
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
        CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
-       print_remarks                                                          AS observacaoPrint
+       print_remarks                                                          AS observacaoPrint,
+       CASE D.status
+         WHEN 1 THEN 'Em cobrança'
+         WHEN 2 THEN 'Quitada"'
+         WHEN 3 THEN 'Cartório'
+         WHEN 4 THEN 'No advogado'
+         WHEN 5 THEN 'Cancelada'
+         WHEN 6 THEN 'Perda'
+         WHEN 7 THEN 'Processada'
+         WHEN 8 THEN 'Outros'
+         WHEN 9 THEN 'Pago Parcial'
+                ELSE ''
+       END                                                                    AS situacaoDup
 FROM
   sqldados.nf                       AS N
     LEFT JOIN  sqldados.nfUserPrint AS PT
@@ -38,6 +50,10 @@ FROM
                ON C.no = N.custno
     LEFT JOIN  sqldados.eordrk      AS OBS
                ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
+    LEFT JOIN  sqldados.nfdup       AS ND
+               ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
+    LEFT JOIN  sqldados.dup         AS D
+               ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse
 WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.issuedate >= @DT
@@ -64,7 +80,7 @@ SELECT loja,
        entrega,
        observacaoPrint
 FROM
-  T_QUERY                      AS Q
+  T_QUERY AS Q
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
        pedido LIKE @PESQUISA)
