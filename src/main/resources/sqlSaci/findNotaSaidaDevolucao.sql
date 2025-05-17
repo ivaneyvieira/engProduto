@@ -38,7 +38,8 @@ SELECT N.storeno                                                              AS
          WHEN 8 THEN 'Outros'
          WHEN 9 THEN 'Pago Parcial'
                 ELSE 'Pendente'
-       END                                                                    AS situacaoDup
+       END                                                                    AS situacaoDup,
+       IFNULL(D.status, 999)                                                  AS situacaoDupStatus
 FROM
   sqldados.nf                       AS N
     LEFT JOIN  sqldados.nfUserPrint AS PT
@@ -86,5 +87,6 @@ FROM
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
        pedido LIKE @PESQUISA)
+  AND situacaoDupStatus NOT IN (2, 5)
 GROUP BY Q.loja, Q.pdvno, Q.xano
 
