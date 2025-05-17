@@ -24,6 +24,7 @@ class NotaSaidaDev(
   var entrega: LocalDate?,
   var observacaoPrint: String?,
   var situacaoDup: String?,
+  var duplicata: String?,
 ) {
   val dataStr
     get() = data?.format() ?: ""

@@ -15,11 +15,6 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun updateView() {
-    val user = AppConfig.userLogin() as? UserSaci
-    val marca = if (user?.admin == true)
-      EMarcaNota.TODOS
-    else
-      EMarcaNota.EXP
     val filtro = subView.filtro()
     val notas = NotaSaidaDev.findDevolucao(filtro)
     subView.updateNotas(notas)

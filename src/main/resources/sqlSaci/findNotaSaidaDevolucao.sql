@@ -39,6 +39,7 @@ SELECT N.storeno                                                              AS
          WHEN 9 THEN 'Pago Parcial'
                 ELSE 'Pendente'
        END                                                                    AS situacaoDup,
+       CONCAT(D.dupno, '/', D.dupse)                                          AS duplicata,
        IFNULL(D.status, 999)                                                  AS situacaoDupStatus
 FROM
   sqldados.nf                       AS N
@@ -81,6 +82,7 @@ SELECT loja,
        cancelada,
        entrega,
        observacaoPrint,
+       duplicata,
        situacaoDup
 FROM
   T_QUERY AS Q
