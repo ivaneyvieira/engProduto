@@ -82,8 +82,6 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       this.setHeader("Loja")
     }
 
-    columnGrid(NotaSaidaDev::usuarioSingExp, "Autoriza")
-
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNFDAberta(viewModel, nota)
       dlgProduto?.showDialog {
@@ -108,30 +106,13 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::tipoNotaSaidaDesc, width = "120px") {
       this.setHeader("Tipo")
     }
-
-    this.setPartNameGenerator {
-      val countEnt = it.countEnt ?: 0
-      val countImp = it.countImp ?: 0
-      val cancelada = it.cancelada ?: "N"
-      when {
-        cancelada == "S" -> "vermelho"
-
-        countImp > 0     -> "azul"
-
-        countEnt > 0     -> "amarelo"
-
-        else             -> null
-      }
-    }
   }
 
   override fun filtro(): FiltroNotaDev {
     return FiltroNotaDev(
-      tipoNota = ETipoNotaFiscal.DEVOLUCAO,
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      todosLocais = true,
       pesquisa = edtPesquisa.value ?: "",
     )
   }

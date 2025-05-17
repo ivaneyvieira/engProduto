@@ -48,7 +48,6 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       fail("Nenhum produto selecionado")
     if (nota.cancelada == "S")
       fail("Nota cancelada")
-    val tipo = nota.tipoNotaSaida ?: ""
     val report = NotaExpedicaoDev(nota)
     report.print(
       dados = itensSelecionados,

@@ -249,7 +249,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("pdvno", nota.pdvno)
       this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("entrega", nota.entrega.toSaciDate())
-      this.addOptionalParameter("empnoM", nota.empnoMotorista ?: 0)
+      this.addOptionalParameter("empnoM", 0)
     }
   }
 
@@ -274,35 +274,10 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("local", filtro.localizacaoNota)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
-      addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
-      addOptionalParameter("dataEntregaFinal", filtro.dataEntregaFinal.toSaciDate())
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
     }
-
-    println("list.size: ${list.size}")
-    println(filtro)
-
-    val listFilter = list.filter {
-      when (filtro.tipoNota) {
-        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja != filtro.loja &&
-                                       filtro.loja != 0
-
-        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja == filtro.loja &&
-                                       filtro.loja != 0 &&
-                                       it.serie == "3"
-
-        else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
-      }
-    }
-
-    println("listFilter.size: ${listFilter.size}")
-
-    return listFilter
+    return list
   }
 
   fun findNotaSaida(filtro: FiltroNota): List<NotaSaida> {
