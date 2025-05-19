@@ -20,7 +20,11 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaSaidaDevProduto::class.java, false)
-  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
+
+  init{
+    nota.updateProdutos()
+  }
+
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
@@ -132,7 +136,70 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
             viewModel.imprimeProdutosNota(nota, itensSelecionados)
           }
         }
-      }, onClose = {
+      },
+      headerGrid = {
+        this.isMargin = false
+        this.isPadding = false
+        horizontalBlock {
+          this.setWidthFull()
+          this.isSpacing = true
+          textField("Valor Total") {
+            this.value = nota.total.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Desconto") {
+            this.value = nota.desconto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Frete") {
+            this.value = nota.frete.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Despesas") {
+            this.value = nota.despesas.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Base ICMS") {
+            this.value = nota.baseIcms.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Valor ST") {
+            this.value = nota.valorSubst.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("V.ICMS") {
+            this.value = nota.valorIcms.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("V.IPI") {
+            this.value = nota.valorIpi.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Total") {
+            this.value = nota.totalGeral.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+        }
+      },
+      onClose = {
         onClose()
       }) {
       VerticalLayout().apply {
@@ -228,7 +295,8 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
   }
 
   fun update() {
-    val listProdutos = nota.produtos()
+    nota.updateProdutos()
+    val listProdutos = nota.obetemProdutos()
     gridDetail.setItems(listProdutos)
   }
 }

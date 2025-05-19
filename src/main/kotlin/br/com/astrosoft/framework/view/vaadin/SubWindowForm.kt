@@ -12,6 +12,7 @@ class SubWindowForm(
   val header: VerticalLayout.(SubWindowForm) -> Unit = {},
   val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
   val onClose: (Dialog) -> Unit = {},
+  val headerGrid: VerticalLayout.(SubWindowForm) -> Unit = {},
   val fullSize: Boolean = true,
   val blockForm: () -> Component,
 ) : Dialog() {
@@ -58,6 +59,10 @@ class SubWindowForm(
         }
         toolBar(this@SubWindowForm)
       }
+      verticalLayout {
+        this.headerGrid(this@SubWindowForm)
+      }
+
 
       addAndExpand(blockForm())
     }

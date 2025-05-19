@@ -51,8 +51,36 @@ class NotaSaidaDev(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos() =
-      saci.findNotaSaidaDevolucaoProduto(this)
+  private val produtos = mutableListOf<NotaSaidaDevProduto>()
+
+  val total
+    get() = produtos.sumOf { it.total ?: 0.00 }
+  val desconto
+    get() = produtos.sumOf { it.desconto ?: 0.00 }
+  val frete
+    get() = produtos.sumOf { it.frete ?: 0.00 }
+  val despesas
+    get() = produtos.sumOf { it.despesas ?: 0.00 }
+  val baseIcms
+    get() = produtos.sumOf { it.baseIcms ?: 0.00 }
+  val valorSubst
+    get() = produtos.sumOf { it.valorSubst ?: 0.00 }
+  val valorIcms
+    get() = produtos.sumOf { it.valorIcms ?: 0.00 }
+  val valorIpi
+    get() = produtos.sumOf { it.valorIpi ?: 0.00 }
+  val totalGeral
+    get() = produtos.sumOf { it.totalGeral }
+
+  fun updateProdutos() {
+    val produtosNovos = saci.findNotaSaidaDevolucaoProduto(this)
+    produtos.clear()
+    produtos.addAll(produtosNovos)
+  }
+
+  fun obetemProdutos(): List<NotaSaidaDevProduto> {
+    return produtos.toList()
+  }
 
   fun saveObs() {
     saci.notaSaidaObservacaoSave(this)
