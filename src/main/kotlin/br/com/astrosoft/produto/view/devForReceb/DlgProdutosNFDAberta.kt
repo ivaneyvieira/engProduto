@@ -24,6 +24,8 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
+        this.isMargin = false
+        this.isPadding = false
         horizontalBlock {
           this.setWidthFull()
           this.isSpacing = true
@@ -82,7 +84,7 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
                 this.value = nota.volume?.format("0")
                 this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
                 this.isReadOnly = true
-                this.width = "120px"p
+                this.width = "120px"
               }
               textField("Peso") {
                 this.value = nota.peso.format("0.0000")
@@ -134,6 +136,9 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
         onClose()
       }) {
       VerticalLayout().apply {
+        this.isMargin = false
+        this.isPadding = false
+
         val grid = HorizontalLayout().apply {
           setSizeFull()
           createGridProdutos()
