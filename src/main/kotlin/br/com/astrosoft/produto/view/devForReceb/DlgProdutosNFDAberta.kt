@@ -24,6 +24,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
@@ -112,9 +113,14 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
             this.setHeightFull()
             textArea("Observação") {
               this.setSizeFull()
-              this.value = ""
-              this.isReadOnly = true
+              this.value = nota.observacaoAdd ?: ""
+              this.isReadOnly = false
               this.isExpand = true
+              this.valueChangeMode = ValueChangeMode.LAZY
+              addValueChangeListener {
+                nota.observacaoAdd = it.value ?: ""
+                viewModel.saveObs(nota)
+              }
             }
           }
         }

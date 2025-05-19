@@ -2374,6 +2374,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun notaSaidaObservacaoSave(nota: NotaSaidaDev  ){
+    val sql = "/sqlSaci/notaSaidaObservacaoSave.sql"
+    script(sql) {
+      addOptionalParameter("storeno", nota.loja)
+      addOptionalParameter("pdvno", nota.pdvno)
+      addOptionalParameter("xano", nota.xano)
+      addOptionalParameter("observacao", nota.observacaoAdd)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

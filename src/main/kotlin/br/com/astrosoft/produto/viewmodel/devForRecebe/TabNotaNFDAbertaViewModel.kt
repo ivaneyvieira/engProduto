@@ -4,9 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoDev
-import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 
 class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
@@ -67,6 +65,10 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
 
     return user
+  }
+
+  fun saveObs(nota: NotaSaidaDev) = viewModel.exec {
+    nota.saveObs()
   }
 
   val subView

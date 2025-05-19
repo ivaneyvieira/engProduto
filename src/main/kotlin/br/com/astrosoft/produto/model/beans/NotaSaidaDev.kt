@@ -27,6 +27,8 @@ class NotaSaidaDev(
   var cancelada: String?,
   var entrega: LocalDate?,
   var observacaoPrint: String?,
+  var observacaoNota: String?,
+  var observacaoAdd: String?,
   var situacaoDup: String?,
   var duplicata: String?,
 ) {
@@ -51,6 +53,10 @@ class NotaSaidaDev(
 
   fun produtos(prdno: String = "", grade: String = "", todosLocais: Boolean) =
       saci.findProdutoNF(this, prdno, grade, todosLocais)
+
+  fun saveObs() {
+    saci.notaSaidaObservacaoSave(this)
+  }
 
   companion object {
     fun findDevolucao(filtro: FiltroNotaDev): List<NotaSaidaDev> {

@@ -22,7 +22,7 @@ SELECT N.storeno                                                              AS
        N.grossamt / 100                                                       AS valorNota,
        CAST(N.issuedate AS DATE)                                              AS dataEmissao,
        SEC_TO_TIME(P.time)                                                    AS hora,
-       N.vol_qtty / 100                                                        AS volume,
+       N.vol_qtty / 100                                                       AS volume,
        N.vol_gross                                                            AS peso,
        N.empno                                                                AS vendedor,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
@@ -30,6 +30,8 @@ SELECT N.storeno                                                              AS
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ') AS agendado,
        CAST(IF(N.l16 = 0, NULL, N.l16) AS DATE)                               AS entrega,
        print_remarks                                                          AS observacaoPrint,
+       N.remarks                                                              AS observacaoNota,
+       O.observacao                                                           AS observacaoAdd,
        CASE D.status
          WHEN 0 THEN 'Incluída'
          WHEN 1 THEN 'Em cobrança'
@@ -46,23 +48,27 @@ SELECT N.storeno                                                              AS
        CONCAT(D.dupno, '/', D.dupse)                                          AS duplicata,
        IFNULL(D.status, 999)                                                  AS situacaoDupStatus
 FROM
-  sqldados.nf                       AS N
-    LEFT JOIN  sqldados.nfUserPrint AS PT
+  sqldados.nf                               AS N
+    LEFT JOIN  sqldados.nfUserPrint         AS PT
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxa           AS P
+    LEFT JOIN  sqlpdv.pxa                   AS P
                USING (storeno, pdvno, xano)
-    INNER JOIN sqldados.xaprd2      AS X
+    INNER JOIN sqldados.xaprd2              AS X
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.custp       AS C
+    LEFT JOIN  sqldados.custp               AS C
                ON C.no = N.custno
-    LEFT JOIN  sqldados.eordrk      AS OBS
+    LEFT JOIN  sqldados.eordrk              AS OBS
                ON (OBS.storeno = N.storeno AND OBS.ordno = N.eordno)
-    LEFT JOIN  sqldados.nfdup       AS ND
+    LEFT JOIN  sqldados.nfdup               AS ND
                ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
-    LEFT JOIN  sqldados.dup         AS D
+    LEFT JOIN  sqldados.dup                 AS D
                ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse
-    LEFT JOIN  sqldados.carr        AS T
+    LEFT JOIN  sqldados.carr                AS T
                ON T.no = N.carrno
+    LEFT JOIN  sqldados.notaSaidaObservacao AS O
+               ON O.storeno = N.storeno
+                 AND O.pdvno = N.pdvno
+                 AND O.xano = N.xano
 WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.issuedate >= @DT
@@ -93,6 +99,8 @@ SELECT loja,
        cancelada,
        entrega,
        observacaoPrint,
+       observacaoNota,
+       observacaoAdd,
        duplicata,
        situacaoDup
 FROM
