@@ -16,7 +16,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
@@ -36,10 +35,17 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
               //Linha01
               this.setWidthFull()
               this.isSpacing = true
+              textField("Loja") {
+                this.value = nota.loja.toString()
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+                this.isReadOnly = true
+                this.width = "60px"
+              }
               textField("Nota") {
                 this.value = nota.nota
+                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
                 this.isReadOnly = true
-                this.width = "120px"
+                this.width = "100px"
               }
               textField("Emissão") {
                 this.value = nota.dataEmissao.format()
@@ -73,13 +79,13 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
                 this.isExpand = true
               }
               textField("Volume") {
-                this.value = nota.volume?.format()
+                this.value = nota.volume?.format("0")
                 this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
                 this.isReadOnly = true
-                this.width = "120px"
+                this.width = "120px"p
               }
               textField("Peso") {
-                this.value = nota.peso.format()
+                this.value = nota.peso.format("0.0000")
                 this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
                 this.isReadOnly = true
                 this.width = "120px"
