@@ -24,7 +24,6 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
-      title = "Produtos da expedicao ${nota.nota} loja: ${nota.loja}${lblCancel}",
       header = {
         horizontalBlock {
           this.setWidthFull()
@@ -133,18 +132,7 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
           setSizeFull()
           createGridProdutos()
         }
-        val obs = HorizontalLayout().apply {
-          this.setWidthFull()
-          this.addClassNames(LumoUtility.BorderRadius.MEDIUM, LumoUtility.Border.ALL)
-          this.isMargin = false
-          this.isPadding = true
-
-          h5(nota.observacaoPrint ?: "") {
-            this.setSizeFull()
-          }
-        }
         addAndExpand(grid)
-        add(obs)
       }
     }
     form?.open()
