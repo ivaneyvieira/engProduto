@@ -65,6 +65,8 @@ class NotaSaidaDev(
     get() = produtos.sumOf { it.baseIcms ?: 0.00 }
   val valorSubst
     get() = produtos.sumOf { it.valorSubst ?: 0.00 }
+  val baseSubst
+    get() = produtos.sumOf { it.baseSubst ?: 0.00 }
   val valorIcms
     get() = produtos.sumOf { it.valorIcms ?: 0.00 }
   val valorIpi

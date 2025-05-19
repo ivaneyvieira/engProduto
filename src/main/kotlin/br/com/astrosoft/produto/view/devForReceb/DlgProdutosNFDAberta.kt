@@ -143,20 +143,20 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
         horizontalBlock {
           this.setWidthFull()
           this.isSpacing = true
-          textField("Valor Total") {
+          textField("Produtos") {
             this.value = nota.total.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-          }
-          textField("Desconto") {
-            this.value = nota.desconto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
             this.width = "100px"
           }
           textField("Frete") {
             this.value = nota.frete.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Desconto") {
+            this.value = nota.desconto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
             this.width = "100px"
@@ -173,25 +173,31 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
             this.isReadOnly = true
             this.width = "100px"
           }
-          textField("Valor ST") {
-            this.value = nota.valorSubst.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-          }
-          textField("V.ICMS") {
+          textField("ICMS") {
             this.value = nota.valorIcms.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
             this.width = "100px"
           }
-          textField("V.IPI") {
+          textField("Base ST") {
+            this.value = nota.baseSubst.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("ST") {
+            this.value = nota.valorSubst.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("IPI") {
             this.value = nota.valorIpi.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
             this.width = "100px"
           }
-          textField("Total") {
+          textField("Total Nota") {
             this.value = nota.totalGeral.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true

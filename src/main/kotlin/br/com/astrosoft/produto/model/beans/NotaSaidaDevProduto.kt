@@ -21,6 +21,7 @@ class NotaSaidaDevProduto {
   var despesas: Double? = null
   var baseIcms: Double? = null
   var valorSubst: Double? = null
+  var baseSubst: Double? = null
   var valorIcms: Double? = null
   var valorIpi: Double? = null
   var aliquotaIcms: Double? = null
