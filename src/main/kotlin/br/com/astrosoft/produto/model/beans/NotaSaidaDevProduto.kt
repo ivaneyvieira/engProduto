@@ -14,6 +14,7 @@ class NotaSaidaDevProduto {
   var ncm: String? = null
   var quantidade: Int? = null
   var local: String? = null
+  var barcodeStrList: String? = null
   var preco: Double? = null
   var desconto: Double? = null
   var frete: Double? = null

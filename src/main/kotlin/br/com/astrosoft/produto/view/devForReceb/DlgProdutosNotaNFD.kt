@@ -191,7 +191,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
       listProdutos.sumOf { it.valIPIDevolucao ?: 0.0 }.format("#,##0.00")
     )
     gridDetail.getColumnBy(NotaRecebimentoProdutoDev::totalGeralDevolucao).setFooter(
-      listProdutos.sumOf { it.totalGeralDevolucao ?: 0.0 }.format("#,##0.00")
+      listProdutos.sumOf { it.totalGeralDevolucao }.format("#,##0.00")
     )
   }
 

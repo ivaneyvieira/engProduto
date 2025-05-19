@@ -160,6 +160,9 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
       columnGrid(NotaSaidaDevProduto::codigo) {
         this.setHeader("Código")
       }
+      columnGrid(NotaSaidaDevProduto::barcodeStrList) {
+        this.setHeader("Código de barras")
+      }
       columnGrid(NotaSaidaDevProduto::descricao) {
         this.setHeader("Descrição")
       }
