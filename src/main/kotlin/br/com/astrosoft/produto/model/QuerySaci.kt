@@ -2374,13 +2374,22 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun notaSaidaObservacaoSave(nota: NotaSaidaDev  ){
+  fun notaSaidaObservacaoSave(nota: NotaSaidaDev) {
     val sql = "/sqlSaci/notaSaidaObservacaoSave.sql"
     script(sql) {
       addOptionalParameter("storeno", nota.loja)
       addOptionalParameter("pdvno", nota.pdvno)
       addOptionalParameter("xano", nota.xano)
       addOptionalParameter("observacao", nota.observacaoAdd)
+    }
+  }
+
+  fun findNotaSaidaDevolucaoProduto(nota: NotaSaidaDev): List<NotaSaidaDevProduto> {
+    val sql = "/sqlSaci/findNotaSaidaDevolucaoProduto.sql"
+    return query(sql, NotaSaidaDevProduto::class) {
+      addOptionalParameter("storeno", nota.loja)
+      addOptionalParameter("pdvno", nota.pdvno)
+      addOptionalParameter("xano", nota.xano)
     }
   }
 

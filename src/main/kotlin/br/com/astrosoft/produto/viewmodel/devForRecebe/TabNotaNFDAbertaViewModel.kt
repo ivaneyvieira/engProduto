@@ -36,7 +36,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
   }
 
-  fun imprimeProdutosNota(nota: NotaSaidaDev, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
+  fun imprimeProdutosNota(nota: NotaSaidaDev, itensSelecionados: List<NotaSaidaDevProduto>) = viewModel.exec {
     if (itensSelecionados.isEmpty())
       fail("Nenhum produto selecionado")
     if (nota.cancelada == "S")
@@ -80,5 +80,5 @@ interface ITabNotaNFDAberta : ITabView {
   fun updateNotas(notas: List<NotaSaidaDev>)
   fun findNota(): NotaSaidaDev?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelcionados(): List<NotaSaidaDevProduto>
 }

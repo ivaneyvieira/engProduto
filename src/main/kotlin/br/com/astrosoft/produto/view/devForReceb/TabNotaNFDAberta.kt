@@ -137,7 +137,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoNFS> {
+  override fun produtosSelcionados(): List<NotaSaidaDevProduto> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

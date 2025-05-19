@@ -4,20 +4,11 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
-import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
-import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaidaDev
-import br.com.astrosoft.produto.model.beans.ProdutoNFS
+import br.com.astrosoft.produto.model.beans.NotaSaidaDevProduto
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.h5
-import com.github.mvysny.karibudsl.v10.isExpand
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.textArea
-import com.github.mvysny.karibudsl.v10.textField
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Focusable
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -29,7 +20,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoNFS::class.java, false)
+  private val gridDetail = Grid(NotaSaidaDevProduto::class.java, false)
   val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
@@ -167,46 +158,62 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      addItemDoubleClickListener { e ->
-        editor.editItem(e.item)
-        val editorComponent: Component = e.column.editorComponent
-        if (editorComponent is Focusable<*>) {
-          (editorComponent as Focusable<*>).focus()
-        }
-      }
-
-      columnGrid(ProdutoNFS::codigo) {
+      columnGrid(NotaSaidaDevProduto::codigo) {
         this.setHeader("Código")
       }
-      columnGrid(ProdutoNFS::barcodeStrList) {
-        this.setHeader("Código de Barras")
-        this.right()
-      }
-      columnGrid(ProdutoNFS::descricao) {
+      columnGrid(NotaSaidaDevProduto::descricao) {
         this.setHeader("Descrição")
       }
-      columnGrid(ProdutoNFS::grade) {
+      columnGrid(NotaSaidaDevProduto::grade) {
         this.setHeader("Grade")
       }
-      columnGrid(ProdutoNFS::quantidade) {
+      columnGrid(NotaSaidaDevProduto::cfop) {
+        this.setHeader("CFOP")
+      }
+      columnGrid(NotaSaidaDevProduto::cst) {
+        this.setHeader("CST")
+      }
+      columnGrid(NotaSaidaDevProduto::un) {
+        this.setHeader("UN")
+      }
+      columnGrid(NotaSaidaDevProduto::quantidade) {
         this.setHeader("Quant")
       }
-
-      columnGrid(ProdutoNFS::preco) {
-        this.setHeader("Preço")
+      columnGrid(NotaSaidaDevProduto::preco) {
+        this.setHeader("Valor Unit")
       }
-      columnGrid(ProdutoNFS::total) {
+      columnGrid(NotaSaidaDevProduto::total) {
+        this.setHeader("Valor Total")
+      }
+      columnGrid(NotaSaidaDevProduto::desconto) {
+        this.setHeader("Desc")
+      }
+      columnGrid(NotaSaidaDevProduto::frete) {
+        this.setHeader("Frete")
+      }
+      columnGrid(NotaSaidaDevProduto::despesas) {
+        this.setHeader("Desp")
+      }
+      columnGrid(NotaSaidaDevProduto::baseIcms) {
+        this.setHeader("Base ICMS")
+      }
+      columnGrid(NotaSaidaDevProduto::valorSubst) {
+        this.setHeader("Valor ST")
+      }
+      columnGrid(NotaSaidaDevProduto::valorIcms) {
+        this.setHeader("V.ICMS")
+      }
+      columnGrid(NotaSaidaDevProduto::valorIpi) {
+        this.setHeader("V.IPI")
+      }
+      columnGrid(NotaSaidaDevProduto::aliquotaIcms) {
+        this.setHeader("ICMS")
+      }
+      columnGrid(NotaSaidaDevProduto::aliquotaIpi) {
+        this.setHeader("IPI")
+      }
+      columnGrid(NotaSaidaDevProduto::totalGeral) {
         this.setHeader("Total")
-      }
-
-      this.setPartNameGenerator {
-        val marca = it.marca
-        val marcaImpressao = it.marcaImpressao ?: 0
-        when {
-          marcaImpressao > 0 -> "azul"
-          marca == EMarcaNota.CD.num -> "amarelo"
-          else -> null
-        }
       }
     }
     this.addAndExpand(gridDetail)
@@ -214,12 +221,12 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
     update()
   }
 
-  fun itensSelecionados(): List<ProdutoNFS> {
+  fun itensSelecionados(): List<NotaSaidaDevProduto> {
     return gridDetail.selectedItems.toList()
   }
 
   fun update() {
-    val listProdutos = nota.produtos(todosLocais = true)
+    val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)
   }
 }

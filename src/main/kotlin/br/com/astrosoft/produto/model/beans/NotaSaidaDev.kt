@@ -51,8 +51,8 @@ class NotaSaidaDev(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos(prdno: String = "", grade: String = "", todosLocais: Boolean) =
-      saci.findProdutoNF(this, prdno, grade, todosLocais)
+  fun produtos() =
+      saci.findNotaSaidaDevolucaoProduto(this)
 
   fun saveObs() {
     saci.notaSaidaObservacaoSave(this)
