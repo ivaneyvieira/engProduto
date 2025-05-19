@@ -17,9 +17,13 @@ SELECT N.storeno                                                              AS
        N.eordno                                                               AS pedido,
        N.custno                                                               AS cliente,
        IFNULL(C.name, '')                                                     AS nomeCliente,
+       N.carrno                                                               AS codTransportadora,
+       T.name                                                                 AS nomeTransportadora,
        N.grossamt / 100                                                       AS valorNota,
-       CAST(N.issuedate AS DATE)                                              AS data,
+       CAST(N.issuedate AS DATE)                                              AS dataEmissao,
        SEC_TO_TIME(P.time)                                                    AS hora,
+       N.vol_qtty / 100                                                        AS volume,
+       N.vol_gross                                                            AS peso,
        N.empno                                                                AS vendedor,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
@@ -57,6 +61,8 @@ FROM
                ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
     LEFT JOIN  sqldados.dup         AS D
                ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse
+    LEFT JOIN  sqldados.carr        AS T
+               ON T.no = N.carrno
 WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.issuedate >= @DT
@@ -74,9 +80,14 @@ SELECT loja,
        serie,
        cliente,
        nomeCliente,
+       codTransportadora,
+       nomeTransportadora,
        valorNota,
-       data,
+       dataEmissao,
        hora,
+       vendedor,
+       volume,
+       peso,
        vendedor,
        totalProdutos,
        cancelada,

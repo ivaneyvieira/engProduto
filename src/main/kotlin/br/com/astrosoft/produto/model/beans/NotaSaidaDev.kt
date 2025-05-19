@@ -15,9 +15,13 @@ class NotaSaidaDev(
   var serie: String?,
   var cliente: Int?,
   var nomeCliente: String?,
+  var codTransportadora: Int?,
+  var nomeTransportadora: String?,
   var valorNota: Double?,
-  var data: LocalDate?,
+  var dataEmissao: LocalDate?,
   var hora: LocalTime?,
+  var volume: Double?,
+  var peso: Double?,
   var vendedor: Int?,
   var totalProdutos: Double?,
   var cancelada: String?,
@@ -27,7 +31,7 @@ class NotaSaidaDev(
   var duplicata: String?,
 ) {
   val dataStr
-    get() = data?.format() ?: ""
+    get() = dataEmissao?.format() ?: ""
 
   val hotaTime
     get() = hora?.toString() ?: ""
@@ -46,7 +50,7 @@ class NotaSaidaDev(
   }
 
   fun produtos(prdno: String = "", grade: String = "", todosLocais: Boolean) =
-    saci.findProdutoNF(this, prdno, grade, todosLocais)
+      saci.findProdutoNF(this, prdno, grade, todosLocais)
 
   companion object {
     fun findDevolucao(filtro: FiltroNotaDev): List<NotaSaidaDev> {
