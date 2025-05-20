@@ -97,13 +97,82 @@ class DlgProdutosNotaEmail(val viewModel: TabNotaEmailViewModel, var nota: NotaR
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
           val produtos = gridDetail.dataProvider.fetchAll()
-          if(produtos.isEmpty()) {
+          if (produtos.isEmpty()) {
             ByteArray(0)
           } else {
             viewModel.geraPlanilha(produtos)
           }
         }
-      }, onClose = {
+      },
+      headerGrid = {
+        this.isMargin = false
+        this.isPadding = false
+        horizontalBlock {
+          this.setWidthFull()
+          this.isSpacing = true
+          textField("Produtos") {
+            this.value = nota.valorTotalProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Frete") {
+            this.value = nota.valorFrete.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Desconto") {
+            this.value = nota.valorDesconto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Despesas") {
+            this.value = nota.outrasDespesas.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Base ICMS") {
+            this.value = nota.baseIcmsProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("ICMS") {
+            this.value = nota.valorIcmsProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Base ST") {
+            this.value = nota.baseIcmsSubstProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("ST") {
+            this.value = nota.icmsSubstProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("IPI") {
+            this.value = nota.valorIpiProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Total Nota") {
+            this.value = nota.valorTotalNota.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+        }
+      },
+      onClose = {
         onClose()
       }) {
       HorizontalLayout().apply {

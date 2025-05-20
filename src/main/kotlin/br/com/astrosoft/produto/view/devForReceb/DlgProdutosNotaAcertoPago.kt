@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoPagoViewModel
@@ -106,7 +103,76 @@ class DlgProdutosNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel, var n
             viewModel.geraPlanilha(produtos)
           }
         }
-      }, onClose = {
+      },
+      headerGrid = {
+        this.isMargin = false
+        this.isPadding = false
+        horizontalBlock {
+          this.setWidthFull()
+          this.isSpacing = true
+          textField("Produtos") {
+            this.value = nota.valorTotalProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Frete") {
+            this.value = nota.valorFrete.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Desconto") {
+            this.value = nota.valorDesconto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Despesas") {
+            this.value = nota.outrasDespesas.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Base ICMS") {
+            this.value = nota.baseIcmsProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("ICMS") {
+            this.value = nota.valorIcmsProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Base ST") {
+            this.value = nota.baseIcmsSubstProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("ST") {
+            this.value = nota.icmsSubstProduto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("IPI") {
+            this.value = nota.valorIpiProdutos.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+          textField("Total Nota") {
+            this.value = nota.valorTotalNota.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.width = "100px"
+          }
+        }
+      },
+      onClose = {
         onClose()
       }) {
       HorizontalLayout().apply {
