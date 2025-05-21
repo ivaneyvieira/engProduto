@@ -170,10 +170,10 @@ class NotaRecebimentoDev(
         }.filter {
           val pesquisa = filtro.pesquisa
           (pesquisa == "") ||
-          (it.tipoDevolucaoEnun?.descricao?.startsWith(pesquisa) == true) ||
+          (it.tipoDevolucaoEnun?.descricao?.startsWith(pesquisa, ignoreCase = true) == true) ||
           (it.vendno?.toString() == pesquisa) ||
-          (it.fornecedor?.contains(pesquisa) == true) ||
-          (it.niPrincipal?.toString()?.contains(pesquisa) == true)
+          (it.fornecedor?.contains(pesquisa, ignoreCase = true) == true) ||
+          (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true)
         }
     }
   }

@@ -112,6 +112,9 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       this.setHeader("Duplicata")
       this.right()
     }
+    columnGrid(NotaSaidaDev::observacaoNota) {
+      this.setHeader("Observação")
+    }
   }
 
   override fun filtro(): FiltroNotaDev {
