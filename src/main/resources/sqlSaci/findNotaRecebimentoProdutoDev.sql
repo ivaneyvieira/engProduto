@@ -403,10 +403,7 @@ SELECT loja,
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS ND
-              ON (ND.niDev = Q.numeroDevolucao)
-HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
-        vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
-        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE);
+              ON (ND.niDev = Q.numeroDevolucao);
 
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;

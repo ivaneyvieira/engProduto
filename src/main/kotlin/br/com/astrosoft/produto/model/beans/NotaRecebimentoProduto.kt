@@ -70,6 +70,7 @@ class NotaRecebimentoProduto(
   var frete: Double?,
   var outDesp: Double?,
   var icmsSubst: Double?,
+  var baseSubst: Double?,
   var tipoDevolucao: Int?,
   var quantDevolucao: Int?,
   var pesoDevolucao: Double?,

@@ -121,18 +121,6 @@ class NotaRecebimento(
     }
   }
 
-  /*
-  private fun save(nota: NotaRecebimento) {
-    val userno = AppConfig.userLogin()?.no ?: 0
-    saci.saveInvAdicional(nota, userno)
-  }
-
-  private fun marcaSituacao(situacao: EStituacaoDev) {
-    this.situacaoDev = situacao.num
-    save(this)
-  }
-   */
-
   companion object {
     fun findAll(
       filtro: FiltroNotaRecebimentoProduto,

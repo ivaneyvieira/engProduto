@@ -167,6 +167,13 @@ class NotaRecebimentoDev(
       return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota()
         .filter { nota ->
           ((nota.tipoDevolucao ?: 0) > 0)
+        }.filter {
+          val pesquisa = filtro.pesquisa
+          (pesquisa == "") ||
+          (it.tipoDevolucaoEnun?.descricao?.startsWith(pesquisa) == true) ||
+          (it.vendno?.toString() == pesquisa) ||
+          (it.fornecedor?.contains(pesquisa) == true) ||
+          (it.niPrincipal?.toString()?.contains(pesquisa) == true)
         }
     }
   }

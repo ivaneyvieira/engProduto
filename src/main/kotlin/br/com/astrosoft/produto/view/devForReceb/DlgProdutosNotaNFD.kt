@@ -117,61 +117,61 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
             this.value = nota.valorTotalProduto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Frete") {
             this.value = nota.valorFrete.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Desconto") {
             this.value = nota.valorDesconto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Despesas") {
             this.value = nota.outrasDespesas.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Base ICMS") {
             this.value = nota.baseIcmsProdutos.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("ICMS") {
             this.value = nota.valorIcmsProdutos.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Base ST") {
             this.value = nota.baseIcmsSubstProduto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("ST") {
             this.value = nota.icmsSubstProduto.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("IPI") {
             this.value = nota.valorIpiProdutos.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
           textField("Total Nota") {
             this.value = nota.valorTotalNota.format()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.isReadOnly = true
-            this.width = "100px"
+            this.formatFont()
           }
         }
       },
@@ -217,6 +217,7 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
       columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::outDespDevolucao, "Desp", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::baseIcmsDevolucao, "Base ICMS", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::baseIcmsSubst, "Base ST", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::icmsSubstDevolucao, "Valor ST", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valIcmsDevolucao, "V. ICMS", width = "70px")
       columnGrid(NotaRecebimentoProdutoDev::valIPIDevolucao, "V. IPI", width = "60px")
@@ -235,33 +236,6 @@ class DlgProdutosNotaNFD(val viewModel: TabNotaNFDViewModel, var nota: NotaReceb
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorTotalDevolucao).setFooter(
-      listProdutos.sumOf { it.valorTotalDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valorDescontoDevolucao).setFooter(
-      listProdutos.sumOf { it.valorDescontoDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::freteDevolucao).setFooter(
-      listProdutos.sumOf { it.freteDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::outDespDevolucao).setFooter(
-      listProdutos.sumOf { it.outDespDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::baseIcmsDevolucao).setFooter(
-      listProdutos.sumOf { it.baseIcmsDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::icmsSubstDevolucao).setFooter(
-      listProdutos.sumOf { it.icmsSubstDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valIcmsDevolucao).setFooter(
-      listProdutos.sumOf { it.valIcmsDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::valIPIDevolucao).setFooter(
-      listProdutos.sumOf { it.valIPIDevolucao ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProdutoDev::totalGeralDevolucao).setFooter(
-      listProdutos.sumOf { it.totalGeralDevolucao }.format("#,##0.00")
-    )
   }
 
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProdutoDev? {

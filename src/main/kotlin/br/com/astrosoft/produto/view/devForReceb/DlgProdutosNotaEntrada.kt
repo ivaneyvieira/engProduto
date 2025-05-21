@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
+import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -156,6 +157,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
       columnGrid(NotaRecebimentoProduto::frete, "Frete", width = "60px")
       columnGrid(NotaRecebimentoProduto::outDesp, "Desp", width = "60px")
       columnGrid(NotaRecebimentoProduto::baseIcms, "Base ICMS", width = "90px")
+      columnGrid(NotaRecebimentoProduto::baseSubst, "Base ST", width = "90px")
       columnGrid(NotaRecebimentoProduto::icmsSubst, "Valor ST", width = "90px")
       columnGrid(NotaRecebimentoProduto::valIcms, "V. ICMS", width = "70px")
       columnGrid(NotaRecebimentoProduto::valIPI, "V. IPI", width = "60px")
@@ -187,33 +189,6 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
       pesquisa == "" || it.textoPesquisa().contains(pesquisa, true)
     }
     gridDetail.setItems(listProdutos)
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorTotal).setFooter(
-      listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valorDesconto).setFooter(
-      listProdutos.sumOf { it.valorDesconto ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::frete).setFooter(
-      listProdutos.sumOf { it.frete ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::outDesp).setFooter(
-      listProdutos.sumOf { it.outDesp ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::baseIcms).setFooter(
-      listProdutos.sumOf { it.baseIcms ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::icmsSubst).setFooter(
-      listProdutos.sumOf { it.icmsSubst ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIcms).setFooter(
-      listProdutos.sumOf { it.valIcms ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::valIPI).setFooter(
-      listProdutos.sumOf { it.valIPI ?: 0.0 }.format("#,##0.00")
-    )
-    gridDetail.getColumnBy(NotaRecebimentoProduto::totalGeral).setFooter(
-      listProdutos.sumOf { it.totalGeral ?: 0.0 }.format("#,##0.00")
-    )
   }
 
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {

@@ -88,3 +88,12 @@ vaadin-grid.negrito::part(cell) {
     font-weight: bold;
     font-size: larger;
 }
+
+vaadin-text-field.grande::part(input-field) {
+    font-size: larger;
+    font-weight: bold;
+}
+
+vaadin-text-field.grande::part(label) {
+    font-size: larger;
+}
