@@ -2235,17 +2235,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("carrno", carrno)
     }.firstOrNull()
   }
-/*
-  fun salvaMotivoDevolucao(notaRecebimento: NotaRecebimentoProduto) {
-    val sql = "/sqlSaci/motivoDevolucaoSave.sql"
-    script(sql) {
-      addOptionalParameter("invno", notaRecebimento.ni)
-      addOptionalParameter("prdno", notaRecebimento.prdno)
-      addOptionalParameter("grade", notaRecebimento.grade)
-      addOptionalParameter("tipoDevolucao", notaRecebimento.tipoDevolucao)
-    }
-  }
-*/
+
   fun salvaMotivoDevolucao(notaRecebimento: NotaRecebimentoDev, tipoDevolucaoNovo: Int) {
     val sql = "/sqlSaci/motivoDevolucaoSave.sql"
     script(sql) {

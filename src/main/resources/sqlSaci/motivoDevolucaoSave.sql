@@ -5,14 +5,14 @@ FROM
 WHERE tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
-UPDATE
+UPDATE IGNORE
   sqldados.invAdicional
 SET tipoDevolucao = :tipoDevolucaoNovo
 WHERE situacaoDev = :situacaoDev
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
-UPDATE
+UPDATE IGNORE
   sqldados.iprdAdicionalDev
 SET tipoDevolucao = :tipoDevolucaoNovo
 WHERE tipoDevolucao = :tipoDevolucao
