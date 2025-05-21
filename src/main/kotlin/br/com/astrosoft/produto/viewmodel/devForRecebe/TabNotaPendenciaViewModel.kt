@@ -69,10 +69,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
       fail("Nenhum produto selecionado")
     }
     itens.forEach { bean ->
-      bean.produtos.forEach {
-        it.tipoDevolucao = tipoDevolucao.num
-        it.salvaMotivoDevolucao()
-      }
+      bean.salvaMotivoDevolucao(tipoDevolucao.num)
     }
     updateView()
   }

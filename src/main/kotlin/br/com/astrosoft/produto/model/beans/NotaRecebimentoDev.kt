@@ -145,6 +145,10 @@ class NotaRecebimentoDev(
     saci.saveInvAdicional(this, userno)
   }
 
+  fun salvaMotivoDevolucao(tipoDevolucaoNovo: Int) {
+    saci.salvaMotivoDevolucao(this, tipoDevolucaoNovo)
+  }
+
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
     save()

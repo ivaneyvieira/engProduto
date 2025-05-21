@@ -203,10 +203,6 @@ class NotaRecebimentoProduto(
     saci.saveTipoDevolucao(this, tipo, numero)
   }
 
-  fun salvaMotivoDevolucao() {
-    saci.salvaMotivoDevolucao(this)
-  }
-
   fun desfazerDevolucao() {
     saci.desfazerDevolucao(this)
   }
