@@ -35,11 +35,14 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
-    val loja = user?.lojaNota ?: 0
-    val lojaSelecionada = viewModel.findAllLojas().firstOrNull { it.no == loja }
-    cmbLoja.isReadOnly = (user?.admin == false) && (lojaSelecionada?.no != 0)
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
+    val lojaUSer = user?.devFor2Loja ?: 0
+    val lojas = if(lojaUSer == 0) {
+      viewModel.findAllLojas() + listOf(Loja.lojaZero)
+    }else{
+      viewModel.findAllLojas().filter { it.no == lojaUSer }
+    }
+    cmbLoja.setItems(lojas)
+    cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
 
   override fun HorizontalLayout.toolBarConfig() {

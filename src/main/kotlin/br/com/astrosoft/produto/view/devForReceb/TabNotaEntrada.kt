@@ -29,10 +29,15 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
   private lateinit var edtTemAnexo: Select<ETemAnexo>
 
   fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    val lojaUSer = user?.devFor2Loja ?: 0
+    val lojas = if(lojaUSer == 0) {
+      viewModel.findAllLojas() + listOf(Loja.lojaZero)
+    }else{
+      viewModel.findAllLojas().filter { it.no == lojaUSer }
+    }
+    cmbLoja.setItems(lojas)
+    cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
 
   override fun HorizontalLayout.toolBarConfig() {
