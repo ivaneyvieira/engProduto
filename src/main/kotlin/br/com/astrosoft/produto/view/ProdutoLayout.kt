@@ -92,15 +92,6 @@ class ProdutoLayout : AppLayoutAbstract() {
         label = "NFD",
         routeClass = NfdView::class,
       )
-      /*
-      if (userSaci?.menuDevolucaoAvariaRec == true) {
-        route(
-          icon = FORM,
-          label = "Dev For",
-          routeClass = DevForView::class
-        )
-      }
-       */
       if (userSaci?.devFor2 == true) {
         route(
           icon = FORM,

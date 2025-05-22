@@ -2285,13 +2285,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String) {
+  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
     val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
 
     if (produto.ni == null)
       return
     script(sql) {
       addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("invnoNovo", niNovo)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("gradeNova", gradeNova)

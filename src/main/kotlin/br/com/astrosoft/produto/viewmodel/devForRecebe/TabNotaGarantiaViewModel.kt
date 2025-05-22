@@ -112,8 +112,8 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
     }
   }
 
-  override fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?) {
-    produto.saveProduto(grade)
+  override fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?) {
+    produto.saveProduto(grade, ni)
     subView.updateProduto()
   }
 
