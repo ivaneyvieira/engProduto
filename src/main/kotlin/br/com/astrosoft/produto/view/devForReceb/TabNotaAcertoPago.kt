@@ -109,7 +109,7 @@ class TabNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel) :
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "NI Dev").right()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
