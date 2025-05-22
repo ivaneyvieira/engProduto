@@ -92,6 +92,13 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
         this.isSpacing = true
         this.setWidthFull()
 
+        textField("Pedido") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.value = nota.pedComp?.toString() ?: ""
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        }
+
         textField("NFD") {
           this.isReadOnly = true
           this.width = "7rem"
