@@ -193,8 +193,10 @@ class DlgProdutosNotaGarantia(val viewModel: TabNotaGarantiaViewModel, var nota:
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
+      columnGrid(NotaRecebimentoProdutoDev::loja, "Lj").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
+      columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")

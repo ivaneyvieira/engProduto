@@ -256,7 +256,8 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   SEM_IDENTIFICACAO(5, "Sem Identificação", false, false),
   EM_DESACORDO(6, "Em Desacordo Com Pedido", false, false),
   EM_GARANTIA(8, "Garantia", true, false),
-  FRET_FOB(9, "Frete FOB", false, true);
+  FRET_FOB(9, "Frete FOB", false, true),
+  ASSISTENCIA(10, "Assistência", false, false);
 
   override fun toString(): String {
     return descricao
