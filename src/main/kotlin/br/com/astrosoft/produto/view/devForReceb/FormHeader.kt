@@ -174,11 +174,16 @@ private fun NotaRecebimentoDev.obsDevolucaoAjustada(): String? {
 }
 
 private fun String.posProxima(pos: Int): Int {
-  val posAntes = this.getOrNull(pos - 1) ?: return pos
+  val posAntes = this.getOrNull(pos - 1) ?: return this.length
   return if (posAntes == ' ') {
     pos
   } else {
-    this.indexOf(' ', pos) + 1
+    val index = this.indexOf(' ', pos) + 1
+    if(index == 0) {
+      this.length
+    } else {
+      index
+    }
   }
 }
 
