@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaNotasEntrada
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -128,6 +129,11 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
 
   fun findNota(numeroForm: Int): List<DadosDevolucao> {
     return DadosDevolucao.findNota(numeroForm)
+  }
+
+  fun geraPlanilha(produtos: List<NotaRecebimentoProduto>): ByteArray {
+    val planilha = PlanilhaNotasEntrada()
+    return planilha.write(produtos)
   }
 }
 

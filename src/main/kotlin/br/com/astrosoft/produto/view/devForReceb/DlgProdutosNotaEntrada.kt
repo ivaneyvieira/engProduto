@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
@@ -119,7 +120,14 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             val produtos = gridDetail.selectedItems.toList()
             viewModel.desfazerDevolucao(produtos)
           }
-
+        }
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaEntrada") {
+          val produtos = gridDetail.dataProvider.fetchAll()
+          if (produtos.isEmpty()) {
+            ByteArray(0)
+          } else {
+            viewModel.geraPlanilha(produtos)
+          }
         }
       }, onClose = {
         onClose()
