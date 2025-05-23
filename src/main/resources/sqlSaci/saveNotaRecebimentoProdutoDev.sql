@@ -1,4 +1,4 @@
-DO @INVNO := IF(:invnoNovo = 0,
+DO @INVNO := IF(:invno = 0,
                 IFNULL(( SELECT MAX(invno) AS invno
                          FROM
                            sqldados.iprd             AS I
@@ -9,28 +9,40 @@ DO @INVNO := IF(:invnoNovo = 0,
                            AND I.cfop NOT IN (1910, 2910, 1916, 2916)
                            AND I.prdno = :prdno
                            AND I.grade = :grade
-                           AND :invnoNovo = 0
-                         GROUP BY prdno, grade ), :invnoNovo), :invnoNovo);
+                           AND :invno = 0
+                         GROUP BY prdno, grade ), :invno), :invno);
 
 
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
   VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao);
 
-UPDATE IGNORE sqldados.iprdAdicionalDev
-SET grade = :gradeNova,
-    invno = @INVNO
-WHERE invno = :invno
+UPDATE sqldados.iprdAdicionalDev
+SET grade = :gradeNova
+WHERE invno = @INVNO
   AND prdno = :prdno
   AND grade = :grade
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
-UPDATE IGNORE sqldados.invAdicional
-SET situacaoDev = :situacaoDev,
-    invno       = @INVNO
-WHERE invno = :invno
+UPDATE sqldados.invAdicional
+SET situacaoDev = :situacaoDev
+WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
 REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, situacaoDev)
-VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev)
+VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev);
+
+UPDATE sqldados.iprdAdicionalDev
+SET invno = :invnoNovo
+WHERE invno = @INVNO
+  AND prdno = :prdno
+  AND grade = :grade
+  AND tipoDevolucao = :tipoDevolucao
+  AND numero = :numero;
+
+UPDATE sqldados.invAdicional
+SET invno = :invnoNovo
+WHERE invno = @INVNO
+  AND tipoDevolucao = :tipoDevolucao
+  AND numero = :numero

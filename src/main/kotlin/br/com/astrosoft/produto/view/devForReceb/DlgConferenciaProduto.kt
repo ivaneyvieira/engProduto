@@ -37,12 +37,11 @@ class DlgConferenciaProduto(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
-        edtEstoqueReal = integerField("Estoque Real") {
-          this.isAutofocus = true
+        edtNI = integerField("NI") {
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = produto.quantDevolucao
+          this.value = produto.ni
         }
 
         if (listaGrades.isNotEmpty()) {
@@ -53,12 +52,12 @@ class DlgConferenciaProduto(
           }
         }
 
-        edtNI = integerField("NI") {
+        edtEstoqueReal = integerField("Estoque Real") {
           this.isAutofocus = true
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = produto.ni
+          this.value = produto.quantDevolucao
         }
       }
     }
