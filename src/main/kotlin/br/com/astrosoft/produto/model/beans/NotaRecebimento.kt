@@ -43,6 +43,36 @@ class NotaRecebimento(
   var obsDevolucao: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
+  val valorTotal
+    get() = produtos.sumOf { it.valorTotal ?: 0.0 }
+
+  val frete
+    get() = produtos.sumOf { it.frete ?: 0.0 }
+
+  val valorDesconto
+    get() = produtos.sumOf { it.valorDesconto ?: 0.0 }
+
+  val outDesp
+    get() = produtos.sumOf { it.outDesp ?: 0.0 }
+
+  val baseIcms
+    get() = produtos.sumOf { it.baseIcms ?: 0.0 }
+
+  val valIcms
+    get() = produtos.sumOf { it.valIcms ?: 0.0 }
+
+  val baseSubst
+    get() = produtos.sumOf { it.baseSubst ?: 0.0 }
+
+  val icmsSubst
+    get() = produtos.sumOf { it.icmsSubst ?: 0.0 }
+
+  val valIPI
+    get() = produtos.sumOf { it.valIPI ?: 0.0 }
+
+  val totalGeral
+    get() = produtos.sumOf { it.totalGeral }
+
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
 

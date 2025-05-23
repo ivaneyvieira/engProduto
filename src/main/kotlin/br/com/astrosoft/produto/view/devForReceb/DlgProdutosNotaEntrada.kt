@@ -7,11 +7,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
-import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -129,7 +127,76 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             viewModel.geraPlanilha(produtos)
           }
         }
-      }, onClose = {
+      },
+      headerGrid = {
+        this.isMargin = false
+        this.isPadding = false
+        horizontalBlock {
+          this.setWidthFull()
+          this.isSpacing = true
+          textField("Produtos") {
+            this.value = nota.valorTotal.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Frete") {
+            this.value = nota.frete.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Desconto") {
+            this.value = nota.valorDesconto.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Despesas") {
+            this.value = nota.outDesp.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Base ICMS") {
+            this.value = nota.baseIcms.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("ICMS") {
+            this.value = nota.valIcms.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Base ST") {
+            this.value = nota.baseSubst.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("ST") {
+            this.value = nota.icmsSubst.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("IPI") {
+            this.value = nota.valIPI.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+          textField("Total Nota") {
+            this.value = nota.totalGeral.format()
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.isReadOnly = true
+            this.formatFont()
+          }
+        }
+      },
+      onClose = {
         onClose()
       }) {
       HorizontalLayout().apply {
