@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAjusteViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -19,7 +19,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgProdutosNotaAjuste(val viewModel: TabNotaAcertoViewModel, var nota: NotaRecebimentoDev) {
+class DlgProdutosNotaAjuste(val viewModel: TabNotaAjusteViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
@@ -191,7 +191,7 @@ class DlgProdutosNotaAjuste(val viewModel: TabNotaAcertoViewModel, var nota: Not
       addThemeVariants(GridVariant.LUMO_COMPACT)
       removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      Grid.setSelectionMode = Grid.SelectionMode.MULTI
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(NotaRecebimentoProdutoDev::loja, "Lj").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()

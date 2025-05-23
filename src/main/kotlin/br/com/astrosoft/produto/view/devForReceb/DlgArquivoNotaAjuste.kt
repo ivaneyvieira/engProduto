@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.InvFileDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAjusteViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
@@ -12,7 +12,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgArquivoNotaAjuste(val viewModel: TabNotaAcertoViewModel, val nota: NotaRecebimentoDev) {
+class DlgArquivoNotaAjuste(val viewModel: TabNotaAjusteViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(InvFileDev::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -46,7 +46,7 @@ class DlgArquivoNotaAjuste(val viewModel: TabNotaAcertoViewModel, val nota: Nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      Grid.setSelectionMode = Grid.SelectionMode.MULTI
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton

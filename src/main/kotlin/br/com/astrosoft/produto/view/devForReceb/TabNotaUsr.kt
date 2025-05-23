@@ -23,6 +23,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::devFor2NotaReposto, "Reposto")
     columnGrid(UserSaci::devFor2NotaAcerto, "Acerto")
     columnGrid(UserSaci::devFor2NotaAcertoPago, "Acerto Pago")
+    columnGrid(UserSaci::devFor2NotaAjuste, "Ajuste")
   }
 
   override fun FormUsuario.configFields() {
@@ -66,6 +67,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
         checkBox("Acerto Pago") {
           binder.bind(this, UserSaci::devFor2NotaAcertoPago.name)
+        }
+
+        checkBox("Ajuste") {
+          binder.bind(this, UserSaci::devFor2NotaAjuste.name)
         }
       }
       verticalBlock("Filtros") {
