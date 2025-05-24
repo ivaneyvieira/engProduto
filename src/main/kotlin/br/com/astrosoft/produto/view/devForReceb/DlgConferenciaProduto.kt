@@ -38,7 +38,7 @@ class DlgConferenciaProduto(
       setSizeFull()
       horizontalLayout {
         edtNI = integerField("NI") {
-          this.width  = "120px"
+          this.width = "120px"
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.ni
@@ -46,7 +46,7 @@ class DlgConferenciaProduto(
 
         if (listaGrades.isNotEmpty()) {
           edtGrade = select("Grade") {
-            this.width  = "120px"
+            this.width = "120px"
             this.setItems(listaGrades)
             this.value = listaGrades.firstOrNull { it == produto.grade }
           }
