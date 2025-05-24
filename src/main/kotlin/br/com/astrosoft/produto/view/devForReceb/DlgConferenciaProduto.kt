@@ -52,7 +52,7 @@ class DlgConferenciaProduto(
           }
         }
 
-        edtEstoqueReal = integerField("Estoque Real") {
+        edtEstoqueReal = integerField("Qntd") {
           this.isAutofocus = true
           this.setWidthFull()
           this.isClearButtonVisible = true
