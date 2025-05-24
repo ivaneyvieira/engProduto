@@ -38,7 +38,7 @@ class DlgConferenciaProduto(
       setSizeFull()
       horizontalLayout {
         edtNI = integerField("NI") {
-          this.setWidthFull()
+          this.width = "120px"
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.ni
@@ -53,8 +53,8 @@ class DlgConferenciaProduto(
         }
 
         edtEstoqueReal = integerField("Qntd") {
+          this.width = "120px"
           this.isAutofocus = true
-          this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.quantDevolucao
