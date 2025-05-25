@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcerto
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcertoSimples
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoViewModel) :
-  TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcerto {
+class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
+  TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoSimples {
   private var dlgEstoque: DlgEstoqueAcerto? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
@@ -171,11 +171,11 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueAcerto == true
+    return username?.estoqueAcertoSimples == true
   }
 
   override val label: String
-    get() = "Acerto"
+    get() = "Acerto 2"
 
   override fun updateComponent() {
     viewModel.updateView()

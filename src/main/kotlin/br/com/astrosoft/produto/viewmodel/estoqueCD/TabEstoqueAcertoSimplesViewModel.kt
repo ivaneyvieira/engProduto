@@ -10,9 +10,9 @@ import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
 
-class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
+class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
-    get() = viewModel.view.tabEstoqueAcerto
+    get() = viewModel.view.tabEstoqueAcertoSimples
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -139,7 +139,7 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 }
 
-interface ITabEstoqueAcerto : ITabView {
+interface ITabEstoqueAcertoSimples : ITabView {
   fun filtro(): FiltroAcerto
   fun updateProduto(produtos: List<EstoqueAcerto>)
   fun itensSelecionados(): List<EstoqueAcerto>
