@@ -41,6 +41,40 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     }
   }
 
+  fun processaAcerto() = viewModel.exec {
+    val filtroVazio = subView.filtroVazio()
+    val numLoja = filtroVazio.loja
+    val data = LocalDate.now()
+    val user = AppConfig.userLogin() as? UserSaci
+    val userno = user?.no ?: 0
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
+      it.marcadoConf(userno, data)
+    }
+
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
+    val produtosAcerto = produtos.toAcerto(numero, true)
+    if (user?.estoqueGravaAcerto != true) {
+      viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
+    } else {
+      subView.autorizaAcerto { user ->
+        produtosAcerto.forEach {
+          it.login = user.login
+          it.save()
+        }
+        produtos.forEach { produto ->
+          produto.estoqueUser = null
+          produto.estoqueLogin = null
+          produto.estoqueData = null
+        }
+        ProdutoEstoque.update(produtos)
+        updateView()
+      }
+    }
+  }
+
   fun imprimeProdutosEstoque() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
     val numLoja = filtroVazio.loja
@@ -76,55 +110,6 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
               produtosAcerto.forEach {
                 it.login = user.login
                 it.save()
-              }
-              produtos.forEach { produto ->
-                produto.estoqueUser = null
-                produto.estoqueLogin = null
-                produto.estoqueData = null
-              }
-              ProdutoEstoque.update(produtos)
-              updateView()
-            }
-          }
-        }
-      })
-    )
-  }
-
-  fun imprimeProdutosGarantia() = viewModel.exec {
-    val filtroVazio = subView.filtroVazio()
-    val numLoja = filtroVazio.loja
-    val userno = AppConfig.userLogin()?.no ?: 0
-    val data = LocalDate.now()
-
-    val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
-      it.marcadoConf(userno, data)
-    }
-
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    val numero = ProdutoPedidoGarantia.proximoNumero(numLoja)
-
-    val produtosGarantia = produtos.toGarantia(numero)
-
-    val report = PrintProdutosConferenciaEstoque2("Relatório de Estoque")
-    val user = AppConfig.userLogin() as? UserSaci
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = { form ->
-        if (user?.estoqueGravaGarantia != true) {
-          viewModel.view.showWarning("Usuário não tem permissão para gravar garantia")
-        } else {
-          val jaGravado = produtosGarantia.firstOrNull { it.jaGravadoGarantia() }
-          if (jaGravado != null) {
-            viewModel.view.showWarning("Produto ${jaGravado.codigo} - ${jaGravado.grade} já foi gravado na garantia")
-          } else {
-            subView.autorizaGarantia { user ->
-              form.close()
-              produtosGarantia.forEach {
-                it.saveGarantia()
               }
               produtos.forEach { produto ->
                 produto.estoqueUser = null

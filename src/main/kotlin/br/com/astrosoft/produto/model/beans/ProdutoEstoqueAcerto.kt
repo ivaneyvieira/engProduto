@@ -14,6 +14,7 @@ class ProdutoEstoqueAcerto(
   var hora: LocalTime? = null,
   var login: String? = null,
   var usuario: String? = null,
+  var acertoSimples: Boolean? = false,
   var prdno: String? = null,
   var descricao: String? = null,
   var locApp: String? = null,
@@ -88,10 +89,11 @@ data class FiltroAcerto(
   val numLoja: Int = 0,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
+  val simples: Boolean = false,
   val numero: Int = 0,
 )
 
-fun List<ProdutoEstoque>.toAcerto(numero: Int): List<ProdutoEstoqueAcerto> {
+fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoEstoqueAcerto> {
   val user = AppConfig.userLogin()
 
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
@@ -104,6 +106,7 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int): List<ProdutoEstoqueAcerto> {
       data = novo.data,
       hora = novo.hora,
       login = user?.login,
+      acertoSimples = acertoSimples,
       usuario = user?.name,
       prdno = it.prdno,
       descricao = it.descricao,

@@ -2036,6 +2036,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
       addOptionalParameter("login", produto.login)
+      addOptionalParameter("acertoSimples", produto.acertoSimples)
       addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
@@ -2070,6 +2071,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
+      addOptionalParameter("simples", filtro.simples)
     }
   }
 
