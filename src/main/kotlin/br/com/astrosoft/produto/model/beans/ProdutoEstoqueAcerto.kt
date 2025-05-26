@@ -179,11 +179,11 @@ class EstoqueAcerto(
     saci.acertoCancela(this)
   }
 
-  fun findProdutos(): List<ProdutoEstoqueAcerto> {
+  fun findProdutos(simples: Boolean = false): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
       numLoja = numloja,
       numero = numero,
-      simples = true,
+      simples = simples,
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos

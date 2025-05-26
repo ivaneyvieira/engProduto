@@ -144,7 +144,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   }
 
   private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
-    return acerto.findProdutos()
+    return acerto.findProdutos(true)
   }
 
   private fun closeForm() {
