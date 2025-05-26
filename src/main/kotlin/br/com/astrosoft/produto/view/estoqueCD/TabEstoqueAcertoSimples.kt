@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
   TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoSimples {
-  private var dlgEstoque: DlgEstoqueAcerto? = null
+  private var dlgEstoque: DlgEstoqueAcertoSimples? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -100,7 +100,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
-      dlgEstoque = DlgEstoqueAcerto(viewModel, acerto)
+      dlgEstoque = DlgEstoqueAcertoSimples(viewModel, acerto)
       dlgEstoque?.showDialog {
         viewModel.updateView()
       }
@@ -121,7 +121,8 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
       numLoja = cmbLoja.value?.no ?: 0,
       numero = edtNumero.value ?: 0,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
-      dataFinal = edtDateFinal.value ?: LocalDate.now()
+      dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      simples = true,
     )
   }
 

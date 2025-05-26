@@ -68,7 +68,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               DialogHelper.showWarning("Acerto já processado")
               return@addClickListener
             }
-            val dlg = DlgAdicionaAcerto(viewModel, acerto) {
+            val dlg = DlgAdicionaAcertoSimples(viewModel, acerto) {
               gridDetail.dataProvider.refreshAll()
             }
             dlg.open()
@@ -117,7 +117,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
           }
 
           else                        -> {
-            val dlgConferencia = DlgConferenciaAcerto(viewModel, produto) {
+            val dlgConferencia = DlgConferenciaAcertoSimples(viewModel, produto) {
               gridDetail.dataProvider.refreshAll()
             }
             dlgConferencia.open()

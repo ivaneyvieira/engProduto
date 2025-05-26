@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
@@ -18,7 +19,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaAcertoSimples(
-  val viewModel: TabEstoqueAcertoViewModel,
+  val viewModel: TabEstoqueAcertoSimplesViewModel,
   val acerto: EstoqueAcerto,
   val onClose: () -> Unit = {}
 ) : Dialog() {
