@@ -69,7 +69,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               return@addClickListener
             }
             val dlg = DlgAdicionaAcertoSimples(viewModel, acerto) {
-              gridDetail.dataProvider.refreshAll()
+              update()
             }
             dlg.open()
           }
@@ -154,12 +154,5 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
   fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
     return gridDetail.selectedItemsSort()
-  }
-
-  fun updateAcerto(acertos: List<EstoqueAcerto>) {
-    val acerto = acertos.firstOrNull {
-      it.numloja == this.acerto.numloja && it.numero == this.acerto.numero
-    }
-    gridDetail.setItems(acerto?.findProdutos().orEmpty())
   }
 }

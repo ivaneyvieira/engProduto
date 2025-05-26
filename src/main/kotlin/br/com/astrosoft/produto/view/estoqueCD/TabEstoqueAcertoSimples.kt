@@ -128,7 +128,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
 
   override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
-    dlgEstoque?.updateAcerto(produtos)
+    dlgEstoque?.update()
   }
 
   override fun filtroVazio(): FiltroProdutoEstoque {
