@@ -22,7 +22,7 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
   }
 
   override fun groupBotton(beanDetail: ProdutoEstoqueAcerto): String {
-    val dif = beanDetail.diferenca
+    val dif = beanDetail.diferencaAcerto
     val linha = "".lpad(64, "-")
     return when {
       dif == null -> {
@@ -49,7 +49,7 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
     column(ProdutoEstoqueAcerto::codigo, "Codigo", 6)
     column(ProdutoEstoqueAcerto::descricao, "Descricao", 33)
     column(ProdutoEstoqueAcerto::grade, "Grade", 8)
-    column(ProdutoEstoqueAcerto::diferenca, "_____Diferenca", 14, lineBreak = true)
+    column(ProdutoEstoqueAcerto::diferencaAcerto, "_____Diferenca", 14, lineBreak = true)
     column(ProdutoEstoqueAcerto::estoqueRelatorio, size = 64)
   }
 

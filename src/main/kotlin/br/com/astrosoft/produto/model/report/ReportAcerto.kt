@@ -16,7 +16,7 @@ class ReportAcerto() : ReportBuild<ProdutoEstoqueAcerto>() {
     columnReport(ProdutoEstoqueAcerto::estoqueSis, header = "Est Sist", aligment = RIGHT, width = 60)
     columnReport(ProdutoEstoqueAcerto::estoqueCD, header = "Est CD", aligment = RIGHT, width = 60)
     columnReport(ProdutoEstoqueAcerto::estoqueLoja, header = "Est Loja", aligment = RIGHT, width = 60)
-    columnReport(ProdutoEstoqueAcerto::diferenca, header = "Diferença", aligment = RIGHT, width = 60)
+    columnReport(ProdutoEstoqueAcerto::diferencaAcerto, header = "Diferença", aligment = RIGHT, width = 60)
   }
 
   override fun makeReport(itens: List<ProdutoEstoqueAcerto>): JasperReportBuilder {

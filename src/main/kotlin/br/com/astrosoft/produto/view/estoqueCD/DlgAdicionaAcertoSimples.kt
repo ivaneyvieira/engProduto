@@ -26,8 +26,7 @@ class DlgAdicionaAcertoSimples(
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
-  private var edtEstoqueCD: IntegerField? = null
-  private var edtEstoqueLoja: IntegerField? = null
+  private var edtDiferenca: IntegerField? = null
 
   private val produtos = mutableListOf<PrdGrade>()
 
@@ -65,16 +64,8 @@ class DlgAdicionaAcertoSimples(
         edtGrade = select("Grade") {
           this.width = "120px"
         }
-      }
-      horizontalLayout {
-        this.isExpand = true
-        edtEstoqueCD = integerField("Estoque CD") {
-          this.setWidthFull()
-          this.isClearButtonVisible = true
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-        }
 
-        edtEstoqueLoja = integerField("Estoque Loja") {
+        edtDiferenca = integerField("Diferença") {
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -114,6 +105,7 @@ class DlgAdicionaAcertoSimples(
     produto.apply {
       this.numero = acerto.numero
       this.numloja = acerto.numloja
+      this.acertoSimples = true
       this.data = acerto.data
       this.hora = acerto.hora
       this.login = acerto.login
@@ -123,8 +115,7 @@ class DlgAdicionaAcertoSimples(
       this.estoqueSis = produtos.firstOrNull {
         it.grade == edtGrade?.value
       }?.saldo
-      this.estoqueCD = edtEstoqueCD?.value
-      this.estoqueLoja = edtEstoqueLoja?.value
+      this.diferenca = edtDiferenca?.value
       this.processado = false
       this.transacao = null
       this.gravadoLogin = user?.no

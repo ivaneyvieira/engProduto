@@ -64,7 +64,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {
-            if(acerto.processado == true){
+            if (acerto.processado == true) {
               DialogHelper.showWarning("Acerto já processado")
               return@addClickListener
             }
@@ -112,7 +112,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
             DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
           }
 
-          acerto.processado == true  -> {
+          acerto.processado == true   -> {
             DialogHelper.showWarning("Acerto já processado")
           }
 
@@ -125,9 +125,9 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         }
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
-      columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
-      columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
-      columnGrid(ProdutoEstoqueAcerto::diferenca, "Diferença")
+      //columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
+      //columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
+      columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Diferença")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
     }
     this.addAndExpand(gridDetail)

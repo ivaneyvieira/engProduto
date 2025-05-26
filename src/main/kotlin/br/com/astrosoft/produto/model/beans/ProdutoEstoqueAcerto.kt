@@ -23,6 +23,7 @@ class ProdutoEstoqueAcerto(
   var grade: String? = null,
   var estoqueSis: Int? = null,
   var estoqueCD: Int? = null,
+  var diferenca: Int? = null,
   var estoqueLoja: Int? = null,
   var processado: Boolean? = null,
   var transacao: String? = null,
@@ -30,9 +31,11 @@ class ProdutoEstoqueAcerto(
   var gravado: Boolean? = false,
   var observacao: String? = null
 ) {
-  val diferenca: Int?
-    get() {
-      return (estoqueCD ?: return null) + (estoqueLoja ?: return null) - (estoqueSis ?: return null)
+  val diferencaAcerto: Int?
+    get() = if (acertoSimples == true) {
+      diferenca
+    } else {
+      (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
     }
 
   val saldoBarraRef: String
@@ -44,8 +47,10 @@ class ProdutoEstoqueAcerto(
     get() = estoqueCD != null && estoqueLoja != null
 
   val estoqueReal: Int
-    get() {
-      return (estoqueSis ?: 0) + (diferenca ?: 0)
+    get() = if (acertoSimples == true) {
+      (estoqueSis ?: 0) + (diferenca ?: 0)
+    } else {
+      (estoqueSis ?: 0) + (diferencaAcerto ?: 0)
     }
 
   val estoqueRelatorio: String
@@ -133,8 +138,9 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       login = acerto.login,
       usuario = acerto.usuario,
       processado = it.value.map { it.processado }.maxBy { it ?: false },
-      transacaoEnt = it.value.firstOrNull { (it.diferenca ?: 0) > 0 }?.transacao,
-      transacaoSai = it.value.firstOrNull { (it.diferenca ?: 0) < 0 }?.transacao,
+      acertoSimples = it.value.firstOrNull()?.acertoSimples ?: false,
+      transacaoEnt = it.value.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
+      transacaoSai = it.value.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
       observacao = acerto.observacao,
       gravado = acerto.gravado,
@@ -151,6 +157,7 @@ class EstoqueAcerto(
   var login: String?,
   var usuario: String?,
   var processado: Boolean?,
+  var acertoSimples: Boolean?,
   var transacaoEnt: String?,
   var transacaoSai: String?,
   var gravadoLogin: Int?,
@@ -175,7 +182,8 @@ class EstoqueAcerto(
   fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
       numLoja = numloja,
-      numero = numero
+      numero = numero,
+      simples = true,
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos

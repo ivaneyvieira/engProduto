@@ -101,7 +101,7 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
           fieldPanel(produto.estoqueLoja?.toString(), "Est Loja", isExpand = true, isRight = true)
         }
         hBlock {
-          fieldPanel(produto.diferenca?.toString(), "Diferença", isExpand = true, isRight = true)
+          fieldPanel(produto.diferencaAcerto?.toString(), "Diferença", isExpand = true, isRight = true)
           fieldPanel(produto.estoqueReal.toString(), "Est Real", isExpand = true, isRight = true)
         }
       }

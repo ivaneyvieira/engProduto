@@ -135,3 +135,6 @@ ALTER TABLE produtoEstoqueAcerto
 
 ALTER TABLE sqldados.produtoEstoqueAcerto
   ADD COLUMN acertoSimples boolean DEFAULT FALSE AFTER usuario;
+
+ALTER TABLE sqldados.produtoEstoqueAcerto
+  ADD COLUMN diferenca int NULL DEFAULT NULL AFTER estoqueCD;

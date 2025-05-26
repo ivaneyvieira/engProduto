@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 
 class PlanilhaProdutoEstoqueAcerto : Planilha<ProdutoEstoqueAcerto>("Estoque") {
@@ -19,6 +18,6 @@ class PlanilhaProdutoEstoqueAcerto : Planilha<ProdutoEstoqueAcerto>("Estoque") {
     columnSheet(ProdutoEstoqueAcerto::estoqueSis, header = "Est Sist")
     columnSheet(ProdutoEstoqueAcerto::estoqueCD, header = "Est CD")
     columnSheet(ProdutoEstoqueAcerto::estoqueLoja, header = "Est Loja")
-    columnSheet(ProdutoEstoqueAcerto::diferenca, header = "Diferença")
+    columnSheet(ProdutoEstoqueAcerto::diferencaAcerto, header = "Diferença")
   }
 }

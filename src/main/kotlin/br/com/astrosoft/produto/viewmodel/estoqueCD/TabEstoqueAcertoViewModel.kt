@@ -45,8 +45,8 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
     val produtos = acerto.findProdutos().filter {
-      (it.diferenca ?: 0) != 0
-    }.sortedBy { it.diferenca ?: 999999 }
+      (it.diferencaAcerto ?: 0) != 0
+    }.sortedBy { it.diferencaAcerto ?: 999999 }
     if (produtos.isEmpty()) {
       fail("Nenhum produto válido selecionado")
     }
