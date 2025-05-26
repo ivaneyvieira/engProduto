@@ -1,0 +1,294 @@
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+    <infNFe Id="NFe25210602357659000125550010002223711752639330" versao="4.00">
+        <ide>
+            <cUF>25</cUF>
+            <cNF>75263933</cNF>
+            <natOp>VENDA PRODUTO ACABAD</natOp>
+            <mod>55</mod>
+            <serie>1</serie>
+            <nNF>222371</nNF>
+            <dhEmi>2021-06-01T15:19:00-03:00</dhEmi>
+            <dhSaiEnt>2021-06-01T15:19:00-03:00</dhSaiEnt>
+            <tpNF>1</tpNF>
+            <idDest>2</idDest>
+            <cMunFG>2504603</cMunFG>
+            <tpImp>1</tpImp>
+            <tpEmis>1</tpEmis>
+            <cDV>0</cDV>
+            <tpAmb>1</tpAmb>
+            <finNFe>1</finNFe>
+            <indFinal>0</indFinal>
+            <indPres>9</indPres>
+            <procEmi>0</procEmi>
+            <verProc>12.1.027 | 3.0</verProc>
+        </ide>
+        <emit>
+            <CNPJ>02357659000125</CNPJ>
+            <xNome>ELIZABETH PORCELANATO S.A</xNome>
+            <xFant>ELIZABETH PORCELANATO</xFant>
+            <enderEmit>
+                <xLgr>BR 101 KM</xLgr>
+                <nro>98</nro>
+                <xBairro>DISTRITO INDUSTRIAL</xBairro>
+                <cMun>2504603</cMun>
+                <xMun>CONDE</xMun>
+                <UF>PB</UF>
+                <CEP>58322000</CEP>
+                <cPais>1058</cPais>
+                <xPais>BRASIL</xPais>
+                <fone>8330152700</fone>
+            </enderEmit>
+            <IE>161235506</IE>
+            <IEST>196106150</IEST>
+            <IM>25200</IM>
+            <CNAE>2342701</CNAE>
+            <CRT>3</CRT>
+        </emit>
+        <dest>
+            <CNPJ>07483654000405</CNPJ>
+            <xNome>ENGECOPI COMERCIO DE MAT. DE CONSTRUCAO</xNome>
+            <enderDest>
+                <xLgr>RUA MAGALHAES FILHO - NORTE -</xLgr>
+                <nro>2001</nro>
+                <xBairro>MARQUES DE PARANAGU</xBairro>
+                <cMun>2211001</cMun>
+                <xMun>TERESINA</xMun>
+                <UF>PI</UF>
+                <CEP>64002450</CEP>
+                <cPais>1058</cPais>
+                <xPais>BRASIL</xPais>
+                <fone>8631316565</fone>
+            </enderDest>
+            <indIEDest>1</indIEDest>
+            <IE>194459969</IE>
+            <email>engecopi.nfe@engecopi.com.br;coleta.pb@fontanellatransportes</email>
+        </dest>
+        <det nItem="1">
+            <prod>
+                <cProd>01040001002PLO</cProd>
+                <cEAN>7899060696093</cEAN>
+                <xProd>ITAJAI AMBER AC 62,5X125 ESMALTADO</xProd>
+                <NCM>69072100</NCM>
+                <CEST>1003000</CEST>
+                <cBenef></cBenef>
+                <CFOP>6101</CFOP>
+                <uCom>M2</uCom>
+                <qCom>224.6400</qCom>
+                <vUnCom>53.57603276</vUnCom>
+                <vProd>12035.32</vProd>
+                <cEANTrib>7899060696093</cEANTrib>
+                <uTrib>M2</uTrib>
+                <qTrib>224.6400</qTrib>
+                <vUnTrib>53.57603276</vUnTrib>
+                <indTot>1</indTot>
+                <xPed>MF 400393</xPed>
+            </prod>
+            <imposto>
+                <ICMS>
+                    <ICMS00>
+                        <orig>0</orig>
+                        <CST>00</CST>
+                        <modBC>3</modBC>
+                        <vBC>12035.32</vBC>
+                        <pICMS>12.0000</pICMS>
+                        <vICMS>1444.24</vICMS>
+                    </ICMS00>
+                </ICMS>
+                <IPI>
+                    <cEnq>999</cEnq>
+                    <IPINT>
+                        <CST>51</CST>
+                    </IPINT>
+                </IPI>
+                <PIS>
+                    <PISAliq>
+                        <CST>01</CST>
+                        <vBC>12035.32</vBC>
+                        <pPIS>1.6500</pPIS>
+                        <vPIS>198.58</vPIS>
+                    </PISAliq>
+                </PIS>
+                <COFINS>
+                    <COFINSAliq>
+                        <CST>01</CST>
+                        <vBC>12035.32</vBC>
+                        <pCOFINS>7.6000</pCOFINS>
+                        <vCOFINS>914.68</vCOFINS>
+                    </COFINSAliq>
+                </COFINS>
+            </imposto>
+            <infAdProd>TP:A Ton:2002 Bit:7</infAdProd>
+        </det>
+        <det nItem="2">
+            <prod>
+                <cProd>01040001002PLU</cProd>
+                <cEAN>7899060696147</cEAN>
+                <xProd>OUTSIDE SILVER RUSTICO 62,5X125 ESMALTAD</xProd>
+                <NCM>69072100</NCM>
+                <CEST>1003000</CEST>
+                <cBenef></cBenef>
+                <CFOP>6101</CFOP>
+                <uCom>M2</uCom>
+                <qCom>224.6400</qCom>
+                <vUnCom>53.57598825</vUnCom>
+                <vProd>12035.31</vProd>
+                <cEANTrib>7899060696147</cEANTrib>
+                <uTrib>M2</uTrib>
+                <qTrib>224.6400</qTrib>
+                <vUnTrib>53.57598825</vUnTrib>
+                <indTot>1</indTot>
+                <xPed>MF 400393</xPed>
+            </prod>
+            <imposto>
+                <ICMS>
+                    <ICMS00>
+                        <orig>0</orig>
+                        <CST>00</CST>
+                        <modBC>3</modBC>
+                        <vBC>12035.31</vBC>
+                        <pICMS>12.0000</pICMS>
+                        <vICMS>1444.24</vICMS>
+                    </ICMS00>
+                </ICMS>
+                <IPI>
+                    <cEnq>999</cEnq>
+                    <IPINT>
+                        <CST>51</CST>
+                    </IPINT>
+                </IPI>
+                <PIS>
+                    <PISAliq>
+                        <CST>01</CST>
+                        <vBC>12035.31</vBC>
+                        <pPIS>1.6500</pPIS>
+                        <vPIS>198.59</vPIS>
+                    </PISAliq>
+                </PIS>
+                <COFINS>
+                    <COFINSAliq>
+                        <CST>01</CST>
+                        <vBC>12035.31</vBC>
+                        <pCOFINS>7.6000</pCOFINS>
+                        <vCOFINS>914.69</vCOFINS>
+                    </COFINSAliq>
+                </COFINS>
+            </imposto>
+            <infAdProd>TP:A Ton:2002 Bit:7</infAdProd>
+        </det>
+        <total>
+            <ICMSTot>
+                <vBC>24070.63</vBC>
+                <vICMS>2888.48</vICMS>
+                <vICMSDeson>0</vICMSDeson>
+                <vFCPUFDest>0</vFCPUFDest>
+                <vICMSUFDest>0</vICMSUFDest>
+                <vICMSUFRemet>0</vICMSUFRemet>
+                <vFCP>0</vFCP>
+                <vBCST>0</vBCST>
+                <vST>0</vST>
+                <vFCPST>0</vFCPST>
+                <vFCPSTRet>0</vFCPSTRet>
+                <vProd>24070.63</vProd>
+                <vFrete>0</vFrete>
+                <vSeg>0</vSeg>
+                <vDesc>0</vDesc>
+                <vII>0</vII>
+                <vIPI>0</vIPI>
+                <vIPIDevol>0</vIPIDevol>
+                <vPIS>397.17</vPIS>
+                <vCOFINS>1829.37</vCOFINS>
+                <vOutro>0</vOutro>
+                <vNF>24070.63</vNF>
+            </ICMSTot>
+        </total>
+        <transp>
+            <modFrete>1</modFrete>
+            <transporta>
+                <CNPJ>10927264000300</CNPJ>
+                <xNome>FONTANELLA TRANSPORTES &amp; TERRAPLANAGEM L</xNome>
+                <IE>162373074</IE>
+                <xEnder>R DOUTOR WALTER BELLIAN 2249</xEnder>
+                <xMun>JOAO PESSOA</xMun>
+                <UF>PB</UF>
+            </transporta>
+            <vol>
+                <qVol>288</qVol>
+                <esp>CX</esp>
+                <pesoL>10364.890</pesoL>
+                <pesoB>10364.890</pesoB>
+            </vol>
+        </transp>
+        <cobr>
+            <fat>
+                <nFat>1000222371</nFat>
+                <vOrig>24070.63</vOrig>
+                <vDesc>0</vDesc>
+                <vLiq>24070.63</vLiq>
+            </fat>
+            <dup>
+                <nDup>001</nDup>
+                <dVenc>2021-07-01</dVenc>
+                <vDup>8023.54</vDup>
+            </dup>
+            <dup>
+                <nDup>002</nDup>
+                <dVenc>2021-07-31</dVenc>
+                <vDup>8023.54</vDup>
+            </dup>
+            <dup>
+                <nDup>003</nDup>
+                <dVenc>2021-08-30</dVenc>
+                <vDup>8023.55</vDup>
+            </dup>
+        </cobr>
+        <pag>
+            <detPag>
+                <indPag>1</indPag>
+                <tPag>15</tPag>
+                <vPag>24070.63</vPag>
+            </detPag>
+        </pag>
+        <infAdic>
+            <infAdFisco>MD-5:94DBB831B0F3C67A412EAC4010EC561F ( TOTAL DE PALETES: 8 )</infAdFisco>
+            <infCpl>LOCAL DE ENTREGA: Endereco: RUA MAGALHAES FILHO - NORTE - 2001, Bairro: MARQUES DE
+                PARANAGU , Cidade: TERESINA , Uf: PI ,Cep: 64002450 ACOMPANHE SEUS TITULOS:
+                http://portal.grupoelizabeth.com.br/portaldocliente SENHA: 41835 Pedido Venda: 082228 Carga:
+                126104 Pedido Compra: MF 400393 Placa: PKB8169
+            </infCpl>
+        </infAdic>
+        <compra>
+            <xPed>MF 400393</xPed>
+        </compra>
+        <infRespTec>
+            <CNPJ>53113791000122</CNPJ>
+            <xContato>Rodrigo de Almeida Sartorio</xContato>
+            <email>resp_tecnico_dfe_protheus@totvs.com.br</email>
+            <fone>1128593904</fone>
+        </infRespTec>
+    </infNFe>
+    <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+            <CanonicalizationMethod
+                    Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></CanonicalizationMethod>
+            <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></SignatureMethod>
+            <Reference URI="#NFe25210602357659000125550010002223711752639330">
+                <Transforms>
+                    <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></Transform>
+                    <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></Transform>
+                </Transforms>
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></DigestMethod>
+                <DigestValue>oOtFuF8vQzkY9WTS3LvXhNM1s1E=</DigestValue>
+            </Reference>
+        </SignedInfo>
+        <SignatureValue>
+            ebRBS7fpbgNEPAz7ZS5uw4U0N9aEb2pOnhdfgSc0RozUwudrmCJvjl2LuG8t4+qRFvyNm7biFGFJdfxVM3Jw2D+LvhItW6Lp4RDv0xLhYCqYd90wOAH9ZW/l3Ca4oyrieE7hdu3ptObgRlQ5fTM9Giv84UezuaukBqHJir7Mn7ltxI1qOvNtn2LBmc2GoAJG2GpKFLWPnytJqPpdiBmbdGgk3stY9rK7VdHM8AZErlOYMa3TucO8N0SxUrzCLMenGT9ZG0XvtzN6WMesu+icZiQdAnZwO9saSpKAlShzmRsbprsr98gXo9XrJ6KOP6wdVVVMKfjk/07lF06rZIoaFA==
+        </SignatureValue>
+        <KeyInfo>
+            <X509Data>
+                <X509Certificate>
+                    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
+                </X509Certificate>
+            </X509Data>
+        </KeyInfo>
+    </Signature>
+</NFe>

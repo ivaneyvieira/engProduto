@@ -35,6 +35,10 @@ class DlgAdicionaAcertoSimples(
     this.footer.toolBar()
 
     verticalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.isSpacing = false
+
       setSizeFull()
       produtoLinha.forEach {
         this.add(it)
