@@ -14,7 +14,7 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput
 import java.io.ByteArrayOutputStream
 
 object DanfeReport {
-  private val jasperReport = compileReport()
+  private fun jasperReport() = compileReport()
 
   fun create(listItens: List<List<IItensNotaReport>>, tipo: ETIPO_COPIA): ByteArray {
     val listPrintReport = listItens.map { itens ->
@@ -35,7 +35,7 @@ object DanfeReport {
     val parameter = hashMapOf<String, Any>()
     parameter["PRINT_MARCA"] = tipo.parametro
     val collection = JRBeanCollectionDataSource(itens)
-    return JasperFillManager.fillReport(jasperReport, parameter, collection)
+    return JasperFillManager.fillReport(jasperReport(), parameter, collection)
   }
 
   private fun compileReport(): JasperReport {
