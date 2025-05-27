@@ -25,6 +25,7 @@ data class NotaRecebimentoProdutoDev(
   var peso: Double?,
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
+  var seq: Int?,
   var prdno: String?,
   var codigo: Int?,
   var vendnoProduto: Int?,

@@ -231,6 +231,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var not
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
+      columnGrid(NotaRecebimentoProdutoDev::seq, "Item").right()
       columnGrid(NotaRecebimentoProdutoDev::loja, "Lj").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
@@ -271,7 +272,7 @@ class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var not
   }
 
   fun update() {
-    val listProdutos = nota.produtos
+    val listProdutos = nota.produtos.sortedBy { it.seq ?: 0 }
     gridDetail.setItems(listProdutos)
   }
 

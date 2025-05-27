@@ -2303,6 +2303,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("situacaoDev", produto.situacaoDev)
       addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
+      addOptionalParameter("seq", produto.seq ?: 0)
     }
   }
 

@@ -117,6 +117,7 @@ GROUP BY tipoDevolucao, numero;
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 SELECT A.invno,
+       A.seq,
        A.prdno,
        A.grade,
        N.storeno,
@@ -252,6 +253,7 @@ SELECT N.storeno                                                      AS loja,
        N.packages                                                     AS volume,
        N.weight                                                       AS peso,
   /*Produto*/
+       N.seq                                                          AS seq,
        P.no                                                           AS prdno,
        TRIM(P.no)                                                     AS codigo,
        IF(N.grade = '', CONCAT(IFNULL(B.barcodeList, ''), IF(IFNULL(B.barcodeList, '') = '', '', ','), TRIM(P.barcode)),
@@ -354,6 +356,7 @@ SELECT loja,
        usernoRecebe,
        usuarioRecebe,
   /*Produto*/
+       seq,
        prdno,
        codigo,
        barcodeStrList,

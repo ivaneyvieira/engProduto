@@ -45,4 +45,12 @@ UPDATE IGNORE sqldados.invAdicional
 SET invno = :invnoNovo
 WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
+  AND numero = :numero;
+
+UPDATE IGNORE sqldados.iprdAdicionalDev
+SET seq = :seq
+WHERE invno = @INVNO
+  AND prdno = :prdno
+  AND grade = :grade
+  AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero

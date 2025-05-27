@@ -18,6 +18,7 @@ class DlgConferenciaProduto(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
+  private var edtSeq: IntegerField? = null
   private var edtNI: IntegerField? = null
   private var edtGrade: Select<String>? = null
 
@@ -37,8 +38,17 @@ class DlgConferenciaProduto(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
+        edtSeq = integerField("Item") {
+          this.width = "80px"
+          this.isAutoselect = true
+          this.isClearButtonVisible = true
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.value = produto.seq
+        }
+
         edtNI = integerField("NI") {
           this.width = "120px"
+          this.isAutoselect = true
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.ni
@@ -54,6 +64,7 @@ class DlgConferenciaProduto(
 
         edtEstoqueReal = integerField("Qntd") {
           this.width = "120px"
+          this.isAutoselect = true
           this.isAutofocus = true
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -96,6 +107,7 @@ class DlgConferenciaProduto(
 
   private fun confirmaForm() {
     produto.quantDevolucao = edtEstoqueReal?.value
+    produto.seq = edtSeq?.value
     val grade = edtGrade?.value
     val ni = edtNI?.value
     viewModel.updateProduto(produto = produto, grade = grade ?: produto.grade, ni = ni ?: produto.ni)

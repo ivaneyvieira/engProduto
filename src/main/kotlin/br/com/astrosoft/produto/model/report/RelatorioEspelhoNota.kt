@@ -5,7 +5,7 @@ import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
 
 object RelatorioEspelhoNota {
   fun processaRelatorio(listNota: List<NotaRecebimentoDev>): ByteArray {
-    val listItem : List<List<IItensNotaReport>> = listNota.toListItem()
+    val listItem: List<List<IItensNotaReport>> = listNota.toListItem()
     return DanfeReport.create(listItem, ETIPO_COPIA.ESPELHO)
   }
 }
@@ -17,8 +17,10 @@ fun List<NotaRecebimentoDev>.toListItem(): List<List<IItensNotaReport>> {
 }
 
 fun NotaRecebimentoDev.toListItem(): List<IItensNotaReport> {
-  return this.produtos.map {produto -> 
-    NotaRecebimentoDevItem(this, produto)
-  }
+  return this.produtos
+    .sortedBy { it.seq ?: 0 }
+    .map { produto ->
+      NotaRecebimentoDevItem(this, produto)
+    }
 }
 

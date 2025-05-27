@@ -99,7 +99,12 @@ ALTER TABLE sqldados.iprdAdicionalDev
   ADD COLUMN observacao varchar(160) DEFAULT '';
 
 ALTER TABLE sqldados.iprdAdicionalDev
-  drop COLUMN observacao;
+  DROP COLUMN observacao;
 
 
-select * from sqldados.invAdicional;
+SELECT *
+FROM
+  sqldados.invAdicional;
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  ADD COLUMN seq int(10) NULL DEFAULT NULL;
