@@ -80,7 +80,9 @@ data class NotaRecebimentoProdutoDev(
   var baseSTUnit: Double?,
   var chaveUlt: String?,
   var chaveSefaz: String?,
-  var ncm: String?
+  var ncm: String?,
+  var pesoLiquido: Double?,
+  var pesoBruto: Double?
 ) {
   var item: Int? = null
 
@@ -189,7 +191,7 @@ data class NotaRecebimentoProdutoDev(
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
   }
 
-  fun saveProduto(gradeNova : String? =  null, niNovo: Int? = this.ni) {
+  fun saveProduto(gradeNova: String? = null, niNovo: Int? = this.ni) {
     saci.saveNotaRecebimentoProduto(this, gradeNova ?: grade ?: "", niNovo ?: ni ?: 0)
   }
 

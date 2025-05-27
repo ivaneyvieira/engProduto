@@ -32,7 +32,7 @@ CREATE TEMPORARY TABLE T_NFO
   valorDevolucao   decimal(23, 4),
   obsDevolucao     char(160),
   niDev            int,
-  PRIMARY KEY(storeno, pdvno, xano),
+  PRIMARY KEY (storeno, pdvno, xano),
   INDEX (niDev)
 )
 SELECT storeno                 AS storeno,
@@ -69,7 +69,7 @@ WHERE issuedate >= @DT
 HAVING niDev IS NOT NULL;
 
 INSERT IGNORE INTO T_NFO
-  (storeno, pdvno, xano, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
+(storeno, pdvno, xano, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
 SELECT storeno                 AS storeno,
        pdvno                   AS pdvno,
        xano                    AS xano,
@@ -313,7 +313,9 @@ SELECT N.storeno                                                      AS loja,
        baseSTUnit                                                     AS baseSTUnit,
        chaveUlt                                                       AS chaveUlt,
        chaveSefaz                                                     AS chaveSefaz,
-       ncm                                                            AS ncm
+       ncm                                                            AS ncm,
+       P.weight                                                       AS pesoLiquido,
+       P.weight_g                                                     AS pesoBruto
 FROM
   T_NOTA                       AS N
     LEFT JOIN  sqldados.users  AS ER
@@ -409,7 +411,9 @@ SELECT loja,
        baseSTUnit,
        chaveUlt,
        chaveSefaz,
-       ncm
+       ncm,
+       pesoLiquido,
+       pesoBruto
 FROM
   T_QUERY           AS Q
     LEFT JOIN T_NFO AS ND

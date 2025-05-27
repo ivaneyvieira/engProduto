@@ -6,8 +6,9 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
 import br.com.astrosoft.produto.model.saci
 import java.math.BigDecimal
+import java.time.LocalTime
 
-class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev): IItensNotaReport {
+class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev) : IItensNotaReport {
   val loja = saci.findLoja(nota.loja)
   val fornecedor = saci.findFornecedor(nota.vendno)
   val transportadora = saci.findTransportadora(nota.transp ?: 0)
@@ -41,7 +42,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val ieEmitente: String
     get() = loja?.insc ?: ""
   override val ieSubstTrib: String
-    get() = "SEM VALOR"
+    get() = ""
   override val cpnjEmitente: String
     get() = loja?.cgc ?: ""
   override val nomeDestinatario: String
@@ -57,7 +58,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val cepDestinatario: String
     get() = fornecedor?.zip ?: ""
   override val dataSaida: String
-    get() = nota.dataDevolucao.format() 
+    get() = nota.dataDevolucao.format()
   override val cidadeDestinatario: String
     get() = fornecedor?.city ?: ""
   override val ufDestinatario: String
@@ -67,9 +68,9 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val ieDestinatario: String
     get() = fornecedor?.insc ?: ""
   override val horaSaida: String
-    get() = "SEM VALOR"
+    get() = LocalTime.now().format()
   override val faturaDuplicata: String
-    get() = "SEM VALOR"
+    get() = ""
   override val bcICMS: BigDecimal
     get() = BigDecimal(nota.baseIcmsProdutos)
   override val vlICMS: BigDecimal
@@ -97,13 +98,13 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val nomeTransportadora: String
     get() = nota.transportadora ?: ""
   override val fretePorConta: String
-    get() = "SEM VALOR"
+    get() = ""
   override val codigoANTT: String
-    get() = "SEM VALOR"
+    get() = ""
   override val placaVeiculo: String
-    get() = "SEM VALOR"
+    get() = ""
   override val ufVeiculo: String
-    get() = "SEM VALOR"
+    get() = ""
   override val cnpjCPF: String
     get() = transportadora?.cgc ?: ""
   override val enderecoTransportadora: String
@@ -117,15 +118,15 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val quantidade: Long
     get() = nota.produtos.sumOf { it.quantDevolucao ?: 0 }.toLong()
   override val especie: String
-    get() = "SEM VALOR"
+    get() = ""
   override val marca: String
-    get() = "SEM VALOR"
+    get() = ""
   override val numeracao: String
-    get() = "SEM VALOR"
+    get() = ""
   override val pesoBruto: BigDecimal
-    get() = BigDecimal(999999)
+    get() = BigDecimal(nota.produtos.sumOf { (it.pesoBruto ?: 0.00) * (it.quantDevolucao ?: 0) })
   override val pesoLiquido: BigDecimal
-    get() = BigDecimal(999999)
+    get() = BigDecimal(nota.produtos.sumOf { (it.pesoLiquido ?: 0.00) * (it.quantDevolucao ?: 0) })
   override val codigo: String
     get() = produto.codigo?.toString() ?: ""
   override val descricao: String
@@ -157,13 +158,13 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val aliqIPIProduto: BigDecimal
     get() = BigDecimal(produto.ipi ?: 0.00)
   override val inscricaoMunicial: String
-    get() = "SEM VALOR"
+    get() = ""
   override val valorServicos: BigDecimal
     get() = BigDecimal(0)
   override val bcISSQN: BigDecimal
-    get() = BigDecimal(999999)
+    get() = BigDecimal(0)
   override val valorISSQN: BigDecimal
-    get() = BigDecimal(999999)
+    get() = BigDecimal(0)
   override val informacoesComplementares: String
     get() = nota.observacaoDev ?: ""
 
