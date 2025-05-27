@@ -46,5 +46,8 @@ object DanfeReport {
 }
 
 enum class ETIPO_COPIA(val parametro: String, val descricao: String) {
-  COPIA("C", "Cópia"), SEGUNDA_VIA("2", "2ª Via"), REIMPRESSAO("R", "Reimpressão")
+  COPIA("C", "Cópia"),
+  SEGUNDA_VIA("2", "2ª Via"),
+  REIMPRESSAO("R", "Reimpressão"),
+  ESPELHO("E", "Espelho da NFD"),
 }

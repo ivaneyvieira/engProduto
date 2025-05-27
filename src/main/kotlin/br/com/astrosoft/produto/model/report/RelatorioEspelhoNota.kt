@@ -6,7 +6,7 @@ import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
 object RelatorioEspelhoNota {
   fun processaRelatorio(listNota: List<NotaRecebimentoDev>): ByteArray {
     val listItem : List<List<IItensNotaReport>> = listNota.toListItem()
-    return DanfeReport.create(listItem, ETIPO_COPIA.REIMPRESSAO)
+    return DanfeReport.create(listItem, ETIPO_COPIA.ESPELHO)
   }
 }
 
