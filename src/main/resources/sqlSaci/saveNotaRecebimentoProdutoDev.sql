@@ -16,7 +16,7 @@ DO @INVNO := IF(:invno = 0,
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
   VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao);
 
-UPDATE sqldados.iprdAdicionalDev
+UPDATE IGNORE sqldados.iprdAdicionalDev
 SET grade = :gradeNova
 WHERE invno = @INVNO
   AND prdno = :prdno
@@ -24,7 +24,7 @@ WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
-UPDATE sqldados.invAdicional
+UPDATE IGNORE sqldados.invAdicional
 SET situacaoDev = :situacaoDev
 WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
@@ -33,7 +33,7 @@ WHERE invno = @INVNO
 REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, situacaoDev)
 VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev);
 
-UPDATE sqldados.iprdAdicionalDev
+UPDATE IGNORE sqldados.iprdAdicionalDev
 SET invno = :invnoNovo
 WHERE invno = @INVNO
   AND prdno = :prdno
@@ -41,7 +41,7 @@ WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
-UPDATE sqldados.invAdicional
+UPDATE IGNORE sqldados.invAdicional
 SET invno = :invnoNovo
 WHERE invno = @INVNO
   AND tipoDevolucao = :tipoDevolucao
