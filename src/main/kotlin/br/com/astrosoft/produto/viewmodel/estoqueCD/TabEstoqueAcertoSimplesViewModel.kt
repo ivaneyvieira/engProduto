@@ -30,7 +30,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirPedido(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos = acerto.findProdutos()
+    val produtos = acerto.findProdutos(true)
 
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -44,7 +44,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos = acerto.findProdutos().filter {
+    val produtos = acerto.findProdutos(true).filter {
       (it.diferencaAcerto ?: 0) != 0
     }.sortedBy { it.diferencaAcerto ?: 999999 }
     if (produtos.isEmpty()) {
@@ -74,7 +74,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun imprimirRelatorio(acerto: EstoqueAcerto) {
-    val produtos = acerto.findProdutos()
+    val produtos = acerto.findProdutos(true)
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
@@ -94,7 +94,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Acerto já gravado")
     }
     subView.autorizaAcerto { user ->
-      val pordutos = acerto.findProdutos()
+      val pordutos = acerto.findProdutos(true)
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true

@@ -2045,7 +2045,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoqueLoja", produto.estoqueLoja)
       addOptionalParameter("diferenca", produto.diferenca)
       addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
-      addOptionalParameter("gravado", produto.gravado ?: 0)
+      addOptionalParameter("gravado", produto.gravado ?: false)
     }
   }
 
