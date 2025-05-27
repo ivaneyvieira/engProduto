@@ -39,7 +39,7 @@ object DanfeReport {
   }
 
   private fun compileReport(): JasperReport {
-    val jasperFile = "/report/projeto/notafiscal.jrxml"
+    val jasperFile = "/projeto/notafiscal.jrxml"
     val jasperInputStream = readStream(jasperFile)
     return JasperCompileManager.compileReport(jasperInputStream)
   }

@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.model.beans
 
-class Transportadora {
-  var carrno: Int? = null
-  var nome: String? = null
+class LojaNota {
+  var no: Int? = null
+  var name: String? = null
   var addr: String? = null
   var nei: String? = null
   var city: String? = null

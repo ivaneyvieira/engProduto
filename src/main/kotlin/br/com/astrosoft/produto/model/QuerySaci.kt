@@ -2387,6 +2387,20 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findLoja(loja: Int?) : LojaNota?{
+    val sql = "/sqlSaci/findLoja.sql"
+    return query(sql, LojaNota::class) {
+      addOptionalParameter("loja", loja)
+    }.firstOrNull()
+  }
+
+  fun findFornecedor(vendno: Int?) : FornecedorNota?{
+    val sql = "/sqlSaci/findFornecedor.sql"
+    return query(sql, FornecedorNota::class) {
+      addOptionalParameter("vendno", vendno)
+    }.firstOrNull()
+  }
+
   companion object {
     private val db = DB("saci")
 

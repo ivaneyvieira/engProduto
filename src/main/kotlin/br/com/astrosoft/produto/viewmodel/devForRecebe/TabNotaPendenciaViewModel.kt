@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -129,6 +130,12 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
     }
   }
 
+  fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
+    val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
+
+    viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
+  }
+
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
 
@@ -146,6 +153,7 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
     return planilha.write(produtos)
   }
 }
+
 
 interface ITabNotaPendencia : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
