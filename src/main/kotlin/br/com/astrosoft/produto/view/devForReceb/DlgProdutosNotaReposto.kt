@@ -81,14 +81,21 @@ class DlgProdutosNotaReposto(val viewModel: TabNotaRepostoViewModel, var nota: N
           }
         }
 
-        this.button("Imp Completa") {
+        this.button("Esp Nota") {
+          this.icon = VaadinIcon.FILE_TEXT.create()
+          this.addClickListener {
+            viewModel.imprimirEspelhoNota(nota)
+          }
+        }
+
+        this.button("Imp Comp") {
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
             viewModel.imprimirRelatorioCompleto(nota)
           }
         }
 
-        this.button("Imp Reduzida") {
+        this.button("Imp Red") {
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
             viewModel.imprimirRelatorioReduzido(nota)

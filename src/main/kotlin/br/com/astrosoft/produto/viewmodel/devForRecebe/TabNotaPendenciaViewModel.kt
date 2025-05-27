@@ -132,19 +132,16 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
 
   fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
-
     viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
   }
 
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
-
     viewModel.view.showReport(chave = "Relatorio Completo${System.nanoTime()}", report = file)
   }
 
   fun imprimirRelatorioReduzido(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
-
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
   }
 
@@ -153,7 +150,6 @@ class TabNotaPendenciaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
     return planilha.write(produtos)
   }
 }
-
 
 interface ITabNotaPendencia : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev

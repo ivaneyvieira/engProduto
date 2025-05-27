@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -102,6 +103,11 @@ class TabNotaTransportadoraViewModel(val viewModel: DevFor2ViewModel) : ITabNota
   override fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?) {
     produto.saveProduto(grade, ni)
     subView.updateProduto()
+  }
+
+  fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
+    val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
+    viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
   }
 
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
