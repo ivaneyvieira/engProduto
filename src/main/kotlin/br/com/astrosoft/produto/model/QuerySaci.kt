@@ -2402,6 +2402,18 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun saveSeq(produto: NotaRecebimentoProdutoDev) {
+    val sql = "/sqlSaci/saveSeq.sql"
+    script(sql) {
+      addOptionalParameter("seq", produto.seq ?: 0)
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("numero", produto.numeroDevolucao)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

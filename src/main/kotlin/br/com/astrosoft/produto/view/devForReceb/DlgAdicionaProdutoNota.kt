@@ -75,14 +75,15 @@ class DlgAdicionaProdutoNota(
   }
 
   private fun closeForm() {
-    listaRow.forEach { linha ->
-      save(linha)
+    val seqMax = nota.produtos.maxOfOrNull { it.seq ?: 0 } ?: 0
+    listaRow.forEachIndexed { index, linha ->
+      save(linha, seqMax + index + 1)
     }
     onClose.invoke()
     this.close()
   }
 
-  private fun save(linha: LinhaNota) {
+  private fun save(linha: LinhaNota, seq: Int) {
     val produtoNota = nota.produtos.firstOrNull() ?: return
 
     val prdno = linha.prdno() ?: return
@@ -96,6 +97,7 @@ class DlgAdicionaProdutoNota(
     if (saldo == null || saldo <= 0) return
 
     val produto = produtoNota.copy(
+      seq = seq,
       ni = invno,
       prdno = prdno,
       grade = grade,

@@ -199,6 +199,11 @@ data class NotaRecebimentoProdutoDev(
   fun deleteProduto() {
     saci.deleteNotaRecebimentoProduto(this)
   }
+
+  fun saveSeq(seq: Int) {
+    this.seq = seq
+    saci.saveSeq(this)
+  }
 }
 
 data class FiltroNotaRecebimentoProdutoDev(
