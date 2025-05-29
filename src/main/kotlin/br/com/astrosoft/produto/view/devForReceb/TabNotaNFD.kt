@@ -73,10 +73,10 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
       }
     }
 
-    button("Transportadora") {
+    button("Coleta") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
+        viewModel.marcaSituacao(EStituacaoDev.COLETA)
       }
     }
   }
