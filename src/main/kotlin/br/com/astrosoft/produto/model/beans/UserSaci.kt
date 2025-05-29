@@ -153,6 +153,7 @@ class UserSaci : IUser {
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
   var estoqueAcertoSimples by DelegateAuthorized2(125)
+  var devFor2NotaColeta by DelegateAuthorized2(126)
 
   //Locais
   private var localEstoque: String?
@@ -469,10 +470,11 @@ class UserSaci : IUser {
   var devFor2
     get() = devFor2NotaPendencia || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
             devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada ||
-            notaNFDAberta || admin
+            notaNFDAberta ||devFor2NotaColeta|| admin
     set(value) {
       devFor2NotaPendencia = value
       devFor2NotaNFD = value
+      devFor2NotaColeta = value
       devFor2NotaTransportadora = value
       devFor2NotaEmail = value
       devFor2NotaAcerto = value

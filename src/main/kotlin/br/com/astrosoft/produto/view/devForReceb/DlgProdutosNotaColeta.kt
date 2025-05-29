@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaColetaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -16,7 +16,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgProdutosNotaColeta(val viewModel: TabNotaNFDViewModel, var nota: NotaRecebimentoDev) {
+class DlgProdutosNotaColeta(val viewModel: TabNotaColetaViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
@@ -201,7 +201,7 @@ class DlgProdutosNotaColeta(val viewModel: TabNotaNFDViewModel, var nota: NotaRe
       addThemeVariants(GridVariant.LUMO_COMPACT)
       removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      Grid.setSelectionMode = Grid.SelectionMode.MULTI
+      setSelectionMode(Grid.SelectionMode.MULTI)
 
       columnGrid(NotaRecebimentoProdutoDev::loja, "Lj").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
