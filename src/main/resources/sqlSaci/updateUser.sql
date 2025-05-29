@@ -8,10 +8,11 @@ UPDATE sqldados.users
 SET auxLong1 = :loja
 WHERE no = @NO;
 
-INSERT INTO sqldados.userApp(userno, appName, bitAcesso, bitAcesso2, locais)
-VALUES (@NO, :appName, :bitAcesso, :bitAcesso2, :locais)
+INSERT INTO sqldados.userApp(userno, appName, bitAcesso, bitAcesso2, bitAcesso3, locais)
+VALUES (@NO, :appName, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais)
 ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
                         bitAcesso2  = :bitAcesso2,
+                        bitAcesso3  = :bitAcesso3,
                         locais      = :locais,
                         impressoras = :listaImpressora,
                         lojas       = :listaLoja

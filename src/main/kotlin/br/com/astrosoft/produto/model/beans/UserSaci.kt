@@ -16,6 +16,7 @@ class UserSaci : IUser {
   override var senha: String = ""
   var bitAcesso: Long = 0
   var bitAcesso2: Long = 0
+  var bitAcesso3: Long = 0
   var storeno: Int = 0
   var locais: String = ""
   var listaImpressora: String = ""
@@ -153,8 +154,8 @@ class UserSaci : IUser {
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
   var estoqueAcertoSimples by DelegateAuthorized2(125)
-  var devFor2NotaColeta by DelegateAuthorized2(126)
-  var devFor2NotaDescarte by DelegateAuthorized2(127)
+  var devFor2NotaColeta by DelegateAuthorized3(126)
+  var devFor2NotaDescarte by DelegateAuthorized3(127)
 
   //Locais
   private var localEstoque: String?
@@ -684,3 +685,22 @@ class DelegateAuthorized2(numBit2: Int) {
     }
   }
 }
+
+class DelegateAuthorized3(numBit2: Int) {
+  private val bit = 2.toDouble().pow(numBit2 - (62*2)).toLong()
+
+  operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
+    thisRef ?: return false
+    return (thisRef.bitAcesso3 and bit) != 0L || thisRef.admin
+  }
+
+  operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
+    thisRef ?: return
+    val v = value ?: false
+    thisRef.bitAcesso3 = when {
+      v    -> thisRef.bitAcesso3 or bit
+      else -> thisRef.bitAcesso3 and bit.inv()
+    }
+  }
+}
+
