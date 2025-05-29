@@ -4,8 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaAcerto
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaDescarte
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaDescarteViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -20,10 +20,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaDescarte(val viewModel: TabNotaAcertoViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaAcerto {
-  private var dlgProduto: DlgProdutosNotaAcerto? = null
-  private var dlgArquivo: DlgArquivoNotaAcerto? = null
+class TabNotaDescarte(val viewModel: TabNotaDescarteViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaDescarte {
+  private var dlgProduto: DlgProdutosNotaDescarte? = null
+  private var dlgArquivo: DlgArquivoNotaDescarte? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -84,7 +84,7 @@ class TabNotaDescarte(val viewModel: TabNotaAcertoViewModel) :
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaAcerto(viewModel, nota)
+      dlgProduto = DlgProdutosNotaDescarte(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -95,7 +95,7 @@ class TabNotaDescarte(val viewModel: TabNotaAcertoViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaAcerto(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaDescarte(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -154,7 +154,7 @@ class TabNotaDescarte(val viewModel: TabNotaAcertoViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaAcerto(viewModel, nota)
+    dlgProduto = DlgProdutosNotaDescarte(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -162,11 +162,11 @@ class TabNotaDescarte(val viewModel: TabNotaAcertoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaAcerto == true
+    return username?.devFor2NotaDescarte == true
   }
 
   override val label: String
-    get() = "Acerto"
+    get() = "Descarte"
 
   override fun updateComponent() {
     viewModel.updateView()
