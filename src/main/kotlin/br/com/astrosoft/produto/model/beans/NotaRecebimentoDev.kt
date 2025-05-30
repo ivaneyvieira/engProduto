@@ -111,8 +111,8 @@ class NotaRecebimentoDev(
       tipoDevolucao = value?.num
     }
 
-  val tipoDevolucaoName
-    get() = tipoDevolucaoEnun?.descricao
+  val tipoDevolucaoName: String
+    get() = tipoDevolucaoEnun?.descricao ?: ""
 
   fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProdutoDev? {
     if (codigoBarra.isNullOrBlank()) return null

@@ -30,9 +30,9 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
-    val lojas = if(lojaUSer == 0) {
+    val lojas = if (lojaUSer == 0) {
       viewModel.findAllLojas() + listOf(Loja.lojaZero)
-    }else{
+    } else {
       viewModel.findAllLojas().filter { it.no == lojaUSer }
     }
     cmbLoja.setItems(lojas)
@@ -123,9 +123,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
 
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
-    this.columnGrid(
-      valueProvider = NotaRecebimentoDev::tipoDevolucaoEnun, key = "tipoDevolucaoEnun", header = "Motivo Devolução"
-    )
+    columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
