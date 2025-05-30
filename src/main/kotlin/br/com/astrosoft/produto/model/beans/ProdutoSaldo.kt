@@ -50,6 +50,7 @@ data class FiltroProdutoSaldo(
   val tipoSaldo: ETipoSaldo,
   val estoque: EEstoque,
   val saldo: Int,
+  val consumo: EConsumo,
   val update: Boolean,
 ) {
   fun lojaSigla(): String {
