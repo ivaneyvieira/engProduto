@@ -76,7 +76,7 @@ class TabNotaPendencia(val viewModel: TabNotaPendenciaViewModel) :
     }
 
     select("Enviar") {
-      this.setItems(EStituacaoDev.entries - EStituacaoDev.PENDENCIA)
+      this.setItems(EStituacaoDev.list() - EStituacaoDev.PENDENCIA)
       this.setItemLabelGenerator { sit ->
         sit.descricao
       }

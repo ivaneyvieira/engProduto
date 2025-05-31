@@ -205,7 +205,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (A.tipoDevolucao > 0)
-  AND (IFNULL(IA.situacaoDev, 0) = :situacaoDev)
+  AND (IFNULL(IA.situacaoDev, 0) = :situacaoDev OR :situacaoDev = 999)
 GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
@@ -460,4 +460,4 @@ WHERE I.situacaoDev != R.situacaoDev;
 SELECT *
 FROM
   T_RESULT AS R
-WHERE (situacaoDev = :situacaoDev)
+WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)

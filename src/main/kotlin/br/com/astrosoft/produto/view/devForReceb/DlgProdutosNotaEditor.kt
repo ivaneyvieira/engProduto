@@ -26,22 +26,16 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHeader(nota) { notaModificada: NotaRecebimentoDev ->
-          viewModel.saveNota(notaModificada)
-        }
+        this.formHeader(nota, readOnly = true)
       },
       toolBar = {
         integerField("Volume") {
+          this.isReadOnly = true
           this.value = nota.volumeDevolucao ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            nota.volumeDevolucao = this.value ?: 0
-            viewModel.saveNota(nota)
-          }
         }
         bigDecimalField("Peso") {
           this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
@@ -49,23 +43,13 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            nota.pesoDevolucao = this.value?.toDouble() ?: 0.0
-            viewModel.saveNota(nota)
-          }
         }
         integerField("Cod") {
+          this.isReadOnly = true
           this.value = nota.transpDevolucao ?: 0
           this.width = "60px"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            nota.transpDevolucao = this.value ?: 0
-            viewModel.saveNota(nota)
-            edtTransportadora?.value = viewModel.findTransportadora(this.value)?.nome ?: ""
-          }
         }
         edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
@@ -79,37 +63,12 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
             this.value = "CTE "
           }
           this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            nota.cteDevolucao = this.value ?: ""
-            viewModel.saveNota(nota)
-          }
         }
         datePicker("Data") {
+          this.isReadOnly = true
           this.localePtBr()
           this.value = nota.dataDevolucao
           this.width = "120px"
-
-          addValueChangeListener {
-            nota.dataDevolucao = this.value
-            viewModel.saveNota(nota)
-          }
-        }
-        this.button("Adiciona") {
-          this.icon = VaadinIcon.PLUS.create()
-          this.addClickListener {
-            val dlg = DlgAdicionaProdutoNota(viewModel, nota) {
-              gridDetail.dataProvider.refreshAll()
-            }
-            dlg.open()
-          }
-        }
-
-        this.button("Remover") {
-          this.icon = VaadinIcon.TRASH.create()
-          this.addClickListener {
-            viewModel.removeProduto()
-          }
         }
 
         this.button("Esp Nota") {
@@ -239,12 +198,6 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
-      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
-        val dlgConferencia = DlgConferenciaProduto(viewModel, produto) {
-          update()
-        }
-        dlgConferencia.open()
-      }
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")

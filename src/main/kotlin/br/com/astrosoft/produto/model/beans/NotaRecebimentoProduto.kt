@@ -92,7 +92,7 @@ class NotaRecebimentoProduto(
     get() = "$loja-$ni-$tipoDevolucao-$notaDevolucao"
 
   var situacaoDevEnum: EStituacaoDev
-    get() = EStituacaoDev.entries.firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
+    get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
     set(value) {
       situacaoDev = value.num
     }
@@ -284,5 +284,11 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   ACERTO(5, "Acerto"),
   ACERTO_PAGO(7, "Acerto Pago"),
   AJUSTE(8, "Ajuste"),
-  DESCARTE(10, "Descarte"),
+  DESCARTE(10, "Descarte");
+
+  companion object{
+    fun list(): List<EStituacaoDev> {
+      return entries.filter { it != EDITOR }
+    }
+  }
 }

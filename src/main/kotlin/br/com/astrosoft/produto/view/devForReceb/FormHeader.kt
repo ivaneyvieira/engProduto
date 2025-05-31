@@ -10,7 +10,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit) {
+fun VerticalLayout.formHeader(
+  nota: NotaRecebimentoDev,
+  readOnly: Boolean = false,
+  salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit = {}
+) {
   this.setWidthFull()
   this.isPadding = false
   this.isMargin = false
@@ -100,6 +104,7 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
         }
 
         datePicker("Data") {
+          this.isReadOnly = readOnly
           this.localePtBr()
           this.width = "10rem"
           this.value = nota.dataColeta
@@ -144,6 +149,7 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
           this.value = nota.obsDevolucaoAjustada() ?: ""
         }
         textArea("Observação") {
+          this.isReadOnly = readOnly
           this.width = "100%"
           this.height = "100%"
           this.isExpand = true
@@ -180,7 +186,7 @@ private fun String.posProxima(pos: Int): Int {
     pos
   } else {
     val index = this.indexOf(' ', pos) + 1
-    if(index == 0) {
+    if (index == 0) {
       this.length
     } else {
       index

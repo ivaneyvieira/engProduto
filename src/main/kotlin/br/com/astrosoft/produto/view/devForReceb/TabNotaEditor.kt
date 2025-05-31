@@ -2,16 +2,15 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.getColumnBy
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -58,38 +57,12 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         viewModel.updateView()
       }
     }
-
-    button("Remove") {
-      this.icon = VaadinIcon.TRASH.create()
-      this.onClick {
-        viewModel.removeNota()
-      }
-    }
-
-    select("Motivo Devoulucao") {
-      this.setItems(ETipoDevolucao.entries)
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateMotivo(it.value)
-        }
-      }
-    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -112,7 +85,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
+    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
@@ -125,7 +98,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::dataEntrada, header = "Entrada", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px")
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

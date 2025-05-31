@@ -46,7 +46,7 @@ class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: Nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      Grid.setSelectionMode = Grid.SelectionMode.MULTI
+      this.setSelectionMode(Grid.SelectionMode.MULTI)
 
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
