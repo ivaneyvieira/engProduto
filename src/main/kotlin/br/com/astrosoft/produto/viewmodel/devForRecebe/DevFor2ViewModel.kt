@@ -41,6 +41,7 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
 
 interface IDevFor2View : IView {
   val tabNotaEntrada: ITabNotaEntrada
+  val tabNotaEditor: ITabNotaEditor
   val tabNotaPendencia: ITabNotaPendencia
   val tabNotaColeta: ITabNotaColeta
   val tabNotaNFD: ITabNotaNFD
