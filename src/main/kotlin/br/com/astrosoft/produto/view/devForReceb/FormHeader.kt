@@ -99,6 +99,17 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
 
+        datePicker("Data") {
+          this.localePtBr()
+          this.width = "10rem"
+          this.value = nota.dataColeta
+
+          addValueChangeListener {
+            nota.dataColeta = this.value
+            salvaNota(nota)
+          }
+        }
+
         textField("NFD") {
           this.isReadOnly = true
           this.width = "7rem"
@@ -109,16 +120,6 @@ fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, salvaNota: (notaModifica
           this.isReadOnly = true
           this.width = "7rem"
           this.value = nota.emissaoDevolucao.format()
-        }
-        datePicker("Coleta") {
-          this.localePtBr()
-          this.width = "10rem"
-          this.value = nota.dataColeta
-
-          addValueChangeListener {
-            nota.dataColeta = this.value
-            salvaNota(nota)
-          }
         }
         textField("Motivo Devolução") {
           this.isReadOnly = true
