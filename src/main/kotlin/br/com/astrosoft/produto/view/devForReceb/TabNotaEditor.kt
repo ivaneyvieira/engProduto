@@ -4,8 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaPendencia
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPendenciaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -20,10 +20,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPendencia {
-  private var dlgProduto: DlgProdutosNotaPendencia? = null
-  private var dlgArquivo: DlgArquivoNotaPendencia? = null
+class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaEditor {
+  private var dlgProduto: DlgProdutosNotaEditor? = null
+  private var dlgArquivo: DlgArquivoNotaEditor? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -74,18 +74,6 @@ class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
         }
       }
     }
-
-    select("Enviar") {
-      this.setItems(EStituacaoDev.entries - EStituacaoDev.PENDENCIA)
-      this.setItemLabelGenerator { sit ->
-        sit.descricao
-      }
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.marcaSituacao(it.value)
-        }
-      }
-    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
@@ -105,7 +93,7 @@ class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
+      dlgProduto = DlgProdutosNotaEditor(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -115,7 +103,7 @@ class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaPendencia(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaEditor(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -172,7 +160,7 @@ class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaPendencia(viewModel, nota)
+    dlgProduto = DlgProdutosNotaEditor(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -180,11 +168,11 @@ class TabNotaEditor(val viewModel: TabNotaPendenciaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaPendencia == true
+    return username?.devFor2NotaEditor == true
   }
 
   override val label: String
-    get() = "Pendencia"
+    get() = "Editor"
 
   override fun updateComponent() {
     viewModel.updateView()

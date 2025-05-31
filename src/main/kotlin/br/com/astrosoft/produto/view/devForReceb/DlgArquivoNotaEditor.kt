@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.InvFileDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPendenciaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
@@ -12,7 +12,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgArquivoNotaEditor(val viewModel: TabNotaPendenciaViewModel, val nota: NotaRecebimentoDev) {
+class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(InvFileDev::class.java, false)
   fun showDialog(onClose: () -> Unit) {

@@ -273,6 +273,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
 }
 
 enum class EStituacaoDev(val num: Int, val descricao: String) {
+  EDITOR(999, "Editor"),
   PENDENCIA(0, "Pendencia"),
   COLETA(9, "Coleta"),
   NFD(1, "NFD"),

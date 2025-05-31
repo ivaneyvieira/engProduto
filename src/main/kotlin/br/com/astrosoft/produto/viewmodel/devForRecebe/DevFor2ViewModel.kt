@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
   val tabNotaEntradaViewModel = TabNotaEntradaViewModel(this)
+  val tabNotaEditorViewModel = TabNotaEditorViewModel(this)
   val tabNotaPendenciaViewModel = TabNotaPendenciaViewModel(this)
   val tabNotaColetaViewModel = TabNotaColetaViewModel(this)
   val tabNotaNFDViewModel = TabNotaNFDViewModel(this)
@@ -22,6 +23,7 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
 
   override fun listTab() = listOf(
     view.tabNotaEntrada,
+    view.tabNotaEditor,
     view.tabNotaPendencia,
     view.tabNotaNFD,
     view.tabNotaColeta,

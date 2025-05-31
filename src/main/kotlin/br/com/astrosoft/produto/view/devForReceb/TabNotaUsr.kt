@@ -14,6 +14,7 @@ import com.vaadin.flow.component.grid.Grid
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::recebimentoNotaEntrada, "Entrada")
+    columnGrid(UserSaci::devFor2NotaEditor, "Editor")
     columnGrid(UserSaci::devFor2NotaPendencia, "Pendencia")
     columnGrid(UserSaci::devFor2NotaColeta, "Coleta")
     columnGrid(UserSaci::devFor2NotaNFD, "NFD")
@@ -33,6 +34,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
       verticalBlock("Menu") {
         checkBox("Entrada") {
           binder.bind(this, UserSaci::recebimentoNotaEntrada.name)
+        }
+
+        checkBox("Editor") {
+          binder.bind(this, UserSaci::devFor2NotaEditor.name)
         }
 
         checkBox("Pendencia") {
