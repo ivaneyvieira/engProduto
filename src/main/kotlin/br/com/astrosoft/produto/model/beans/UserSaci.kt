@@ -153,10 +153,10 @@ class UserSaci : IUser {
   var ressuprimentoRessu by DelegateAuthorized2(122)
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
-  var estoqueAcertoSimples by DelegateAuthorized2(125)
   var devFor2NotaColeta by DelegateAuthorized3(126)
   var devFor2NotaDescarte by DelegateAuthorized3(127)
   var devFor2NotaEditor by DelegateAuthorized3(128)
+  var estoqueAcertoSimples by DelegateAuthorized2(129)
 
   //Locais
   private var localEstoque: String?
