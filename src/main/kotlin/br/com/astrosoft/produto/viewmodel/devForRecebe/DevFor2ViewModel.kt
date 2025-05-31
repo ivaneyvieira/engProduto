@@ -23,11 +23,11 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
 
   override fun listTab() = listOf(
     view.tabNotaEntrada,
+    view.tabNotaNFDAberta,
     view.tabNotaEditor,
     view.tabNotaPendencia,
     view.tabNotaNFD,
     view.tabNotaColeta,
-    view.tabNotaNFDAberta,
 // view.tabPedidoGarantia,
     // view.tabNotaGarantia,
     view.tabNotaTransportadora,

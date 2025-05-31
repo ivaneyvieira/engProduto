@@ -173,7 +173,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
   }
 
   override val label: String
-    get() = "Transportadora"
+    get() = "Transp"
 
   override fun updateComponent() {
     viewModel.updateView()
