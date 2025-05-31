@@ -106,7 +106,7 @@ fun VerticalLayout.formHeader(
         datePicker("Data") {
           this.isReadOnly = readOnly
           this.localePtBr()
-          this.width = "7rem"
+          this.width = "7.5rem"
           this.value = nota.dataColeta
 
           addValueChangeListener {
