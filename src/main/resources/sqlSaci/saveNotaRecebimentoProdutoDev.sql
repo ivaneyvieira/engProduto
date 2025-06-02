@@ -13,44 +13,8 @@ DO @INVNO := IF(:invno = 0,
                          GROUP BY prdno, grade ), :invno), :invno);
 
 
-REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
-  VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao);
-
-UPDATE IGNORE sqldados.iprdAdicionalDev
-SET grade = :gradeNova
-WHERE invno = @INVNO
-  AND prdno = :prdno
-  AND grade = :grade
-  AND tipoDevolucao = :tipoDevolucao
-  AND numero = :numero;
-
-UPDATE IGNORE sqldados.invAdicional
-SET situacaoDev = :situacaoDev
-WHERE invno = @INVNO
-  AND tipoDevolucao = :tipoDevolucao
-  AND numero = :numero;
+REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao, seq)
+  VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao, :seq);
 
 REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, situacaoDev)
-VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev);
-
-UPDATE IGNORE sqldados.iprdAdicionalDev
-SET invno = :invnoNovo
-WHERE invno = @INVNO
-  AND prdno = :prdno
-  AND grade = :grade
-  AND tipoDevolucao = :tipoDevolucao
-  AND numero = :numero;
-
-UPDATE IGNORE sqldados.invAdicional
-SET invno = :invnoNovo
-WHERE invno = @INVNO
-  AND tipoDevolucao = :tipoDevolucao
-  AND numero = :numero;
-
-UPDATE IGNORE sqldados.iprdAdicionalDev
-SET seq = :seq
-WHERE invno = @INVNO
-  AND prdno = :prdno
-  AND grade = :grade
-  AND tipoDevolucao = :tipoDevolucao
-  AND numero = :numero
+VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev)

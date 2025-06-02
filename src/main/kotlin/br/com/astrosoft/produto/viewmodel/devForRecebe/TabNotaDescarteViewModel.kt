@@ -81,7 +81,7 @@ class TabNotaDescarteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
 
   override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {
     produto ?: fail("Nenhum produto selecionado")
-    produto.saveProduto()
+    produto.insertProduto()
     subView.updateProduto()
   }
 
@@ -100,7 +100,7 @@ class TabNotaDescarteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
   }
 
   override fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?) {
-    produto.saveProduto(grade, ni)
+    produto.updateProduto(grade, ni)
     subView.updateProduto()
   }
 

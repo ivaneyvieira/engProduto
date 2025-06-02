@@ -192,8 +192,12 @@ data class NotaRecebimentoProdutoDev(
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
   }
 
-  fun saveProduto(gradeNova: String? = null, niNovo: Int? = this.ni) {
-    saci.saveNotaRecebimentoProduto(this, gradeNova ?: grade ?: "", niNovo ?: ni ?: 0)
+  fun insertProduto() {
+    saci.insertNotaRecebimentoProduto(produto = this)
+  }
+
+  fun updateProduto(gradeNova: String?, niNovo: Int?) {
+    saci.updateNotaRecebimentoProduto(produto = this, gradeNova = gradeNova ?: grade ?: "", niNovo = niNovo ?: ni ?: 0)
   }
 
   fun deleteProduto() {

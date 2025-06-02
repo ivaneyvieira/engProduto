@@ -2290,8 +2290,25 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
+  fun insertNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
     val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
+
+    if (produto.ni == null)
+      return
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("numero", produto.numeroDevolucao)
+      addOptionalParameter("situacaoDev", produto.situacaoDev)
+      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
+      addOptionalParameter("seq", produto.seq ?: 0)
+    }
+  }
+
+  fun updateNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
+    val sql = "/sqlSaci/updateNotaRecebimentoProdutoDev.sql"
 
     if (produto.ni == null)
       return
