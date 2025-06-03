@@ -341,6 +341,17 @@ FROM
     LEFT JOIN  sqldados.prdalq AS R
                ON R.prdno = N.prdno;
 
+DROP TEMPORARY TABLE IF EXISTS T_DUP;
+CREATE TEMPORARY TABLE T_DUP
+(
+  PRIMARY KEY (invno)
+)
+SELECT invno, docno, MIN(duedate) AS duedate, SUM(amtdue) AS amtdue
+FROM
+  sqldados.invxa
+where invno in (select ni from T_QUERY)
+GROUP BY invno;
+
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
 SELECT loja,
@@ -404,13 +415,13 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
-       N.notaDevolucao               AS notaDevolucao,
-       N.emissaoDevolucao            AS emissaoDevolucao,
-       N.valorDevolucao              AS valorDevolucao,
-       N.obsDevolucao                AS obsDevolucao,
-       N.storeno                     AS storeno,
-       N.pdvno                       AS pdvno,
-       N.xano                        AS xano,
+       N.notaDevolucao         AS notaDevolucao,
+       N.emissaoDevolucao      AS emissaoDevolucao,
+       N.valorDevolucao        AS valorDevolucao,
+       N.obsDevolucao          AS obsDevolucao,
+       N.storeno               AS storeno,
+       N.pdvno                 AS pdvno,
+       N.xano                  AS xano,
        observacaoDev,
        dataColeta,
        observacaoAdicional,
@@ -423,18 +434,15 @@ SELECT loja,
        ncm,
        pesoLiquido,
        pesoBruto,
-       CONCAT(D.dupno, '/', D.dupse) AS duplicata,
-       CAST(D.duedate AS date)       AS dataVencimentoDup,
-       D.amtdue / 100                AS valorVencimentoDup
+       D.docno                 AS duplicata,
+       CAST(D.duedate AS date) AS dataVencimentoDup,
+       D.amtdue / 100          AS valorVencimentoDup
 FROM
-  T_QUERY                    AS Q
-    LEFT JOIN T_NFO          AS N
+  T_QUERY                        AS Q
+    LEFT JOIN T_NFO              AS N
               ON (N.niDev = Q.numeroDevolucao)
-    LEFT JOIN sqldados.nfdup AS ND
-              ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
-    LEFT JOIN sqldados.dup   AS D
-              ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse;
-
+    LEFT JOIN T_DUP AS D
+              ON Q.ni = D.invno;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
