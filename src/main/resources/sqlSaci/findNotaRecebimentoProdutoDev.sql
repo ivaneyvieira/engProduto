@@ -27,6 +27,8 @@ CREATE TEMPORARY TABLE T_NFO
   storeno          smallint NOT NULL DEFAULT 0,
   pdvno            int      NOT NULL DEFAULT 0,
   xano             int      NOT NULL DEFAULT 0,
+  nfno             int               DEFAULT 0 NOT NULL,
+  nfse             char(2)           DEFAULT '' NOT NULL,
   notaDevolucao    varchar(14),
   emissaoDevolucao date,
   valorDevolucao   decimal(23, 4),
@@ -38,6 +40,8 @@ CREATE TEMPORARY TABLE T_NFO
 SELECT storeno                 AS storeno,
        pdvno                   AS pdvno,
        xano                    AS xano,
+       nfno                    AS nfno,
+       nfse                    AS nfse,
        CONCAT(nfno, '/', nfse) AS notaDevolucao,
        CAST(issuedate AS date) AS emissaoDevolucao,
        grossamt / 100          AS valorDevolucao,
@@ -69,10 +73,12 @@ WHERE issuedate >= @DT
 HAVING niDev IS NOT NULL;
 
 INSERT IGNORE INTO T_NFO
-(storeno, pdvno, xano, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
+(storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
 SELECT storeno                 AS storeno,
        pdvno                   AS pdvno,
        xano                    AS xano,
+       nfno                    AS nfno,
+       nfse                    AS nfse,
        CONCAT(nfno, '/', nfse) AS notaDevolucao,
        CAST(issuedate AS date) AS emissaoDevolucao,
        grossamt / 100          AS valorDevolucao,
@@ -343,7 +349,7 @@ SELECT loja,
        emissao,
        ni,
        nfEntrada,
-       custno,
+       Q.custno,
        vendno,
        fornecedor,
        valorNF,
@@ -398,13 +404,13 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
-       ND.notaDevolucao    AS notaDevolucao,
-       ND.emissaoDevolucao AS emissaoDevolucao,
-       ND.valorDevolucao   AS valorDevolucao,
-       ND.obsDevolucao     AS obsDevolucao,
-       ND.storeno          AS storeno,
-       ND.pdvno            AS pdvno,
-       ND.xano             AS xano,
+       N.notaDevolucao               AS notaDevolucao,
+       N.emissaoDevolucao            AS emissaoDevolucao,
+       N.valorDevolucao              AS valorDevolucao,
+       N.obsDevolucao                AS obsDevolucao,
+       N.storeno                     AS storeno,
+       N.pdvno                       AS pdvno,
+       N.xano                        AS xano,
        observacaoDev,
        dataColeta,
        observacaoAdicional,
@@ -416,11 +422,18 @@ SELECT loja,
        chaveSefaz,
        ncm,
        pesoLiquido,
-       pesoBruto
+       pesoBruto,
+       CONCAT(D.dupno, '/', D.dupse) AS duplicata,
+       CAST(D.duedate AS date)       AS dataVencimentoDup,
+       D.amtdue / 100                AS valorVencimentoDup
 FROM
-  T_QUERY           AS Q
-    LEFT JOIN T_NFO AS ND
-              ON (ND.niDev = Q.numeroDevolucao);
+  T_QUERY                    AS Q
+    LEFT JOIN T_NFO          AS N
+              ON (N.niDev = Q.numeroDevolucao)
+    LEFT JOIN sqldados.nfdup AS ND
+              ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
+    LEFT JOIN sqldados.dup   AS D
+              ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse;
 
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;

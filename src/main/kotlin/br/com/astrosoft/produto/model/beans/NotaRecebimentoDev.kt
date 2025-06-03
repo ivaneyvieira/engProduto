@@ -49,6 +49,9 @@ class NotaRecebimentoDev(
   var observacaoAdicional: String?,
   var countColeta: Int?,
   var countArq: Int?,
+  var duplicata: String?,
+  var dataVencimentoDup: LocalDate?,
+  var valorVencimentoDup: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
   val baseIcmsProdutos
@@ -242,6 +245,9 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         storeno = nota.storeno,
         pdvno = nota.pdvno,
         xano = nota.xano,
+        duplicata = nota.duplicata,
+        dataVencimentoDup = nota.dataVencimentoDup,
+        valorVencimentoDup = nota.valorVencimentoDup,
         transportadoraDevolucao = nota.transportadoraDevolucao,
       )
     }

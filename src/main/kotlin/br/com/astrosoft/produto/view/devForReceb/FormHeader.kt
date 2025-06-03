@@ -90,6 +90,16 @@ fun VerticalLayout.formHeader(
           this.width = "7rem"
           this.value = nota.pedComp?.toString()
         }
+        textField("Duplicata") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.value = nota.dataVencimentoDup.format()
+        }
+        textField("Ped Compra") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.value = nota.valorVencimentoDup.format()
+        }
       }
 
       horizontalBlock {

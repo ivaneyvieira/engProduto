@@ -83,7 +83,10 @@ data class NotaRecebimentoProdutoDev(
   var chaveSefaz: String?,
   var ncm: String?,
   var pesoLiquido: Double?,
-  var pesoBruto: Double?
+  var pesoBruto: Double?,
+  var duplicata: String?,
+  var dataVencimentoDup: LocalDate?,
+  var valorVencimentoDup: Double?,
 ) {
   var item: Int? = null
 
