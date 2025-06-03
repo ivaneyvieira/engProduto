@@ -30,9 +30,9 @@ class TabNotaDescarte(val viewModel: TabNotaDescarteViewModel) :
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
-    val lojas = if(lojaUSer == 0) {
+    val lojas = if (lojaUSer == 0) {
       viewModel.findAllLojas() + listOf(Loja.lojaZero)
-    }else{
+    } else {
       viewModel.findAllLojas().filter { it.no == lojaUSer }
     }
     cmbLoja.setItems(lojas)
@@ -106,18 +106,12 @@ class TabNotaDescarte(val viewModel: TabNotaDescarteViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
-    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
-    columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
-    columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
-    columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor NF")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
-    columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
-    columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
-    columnGrid(NotaRecebimentoDev::dataEntrada, header = "Entrada", width = null)
+    columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
+    columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
