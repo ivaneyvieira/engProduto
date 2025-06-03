@@ -92,13 +92,13 @@ fun VerticalLayout.formHeader(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.pedComp?.toString()
         }
-        textField("Duplicata") {
+        textField("Dup Vcto") {
           this.isReadOnly = true
           this.width = "7rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.dataVencimentoDup.format()
         }
-        textField("Ped Compra") {
+        textField("Dup Valor") {
           this.isReadOnly = true
           this.width = "7rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
