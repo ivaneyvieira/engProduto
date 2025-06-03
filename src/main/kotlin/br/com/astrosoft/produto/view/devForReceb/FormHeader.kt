@@ -83,21 +83,25 @@ fun VerticalLayout.formHeader(
         textField("CTE") {
           this.isReadOnly = true
           this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.cte?.toString()
         }
         textField("Ped Compra") {
           this.isReadOnly = true
           this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.pedComp?.toString()
         }
         textField("Duplicata") {
           this.isReadOnly = true
           this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.dataVencimentoDup.format()
         }
         textField("Ped Compra") {
           this.isReadOnly = true
           this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.valorVencimentoDup.format()
         }
       }
@@ -134,6 +138,7 @@ fun VerticalLayout.formHeader(
         textField("Emissão") {
           this.isReadOnly = true
           this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.emissaoDevolucao.format()
         }
         textField("Motivo Devolução") {
