@@ -251,7 +251,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   AVARIA_TRANSPORTE(1, "Avaria no Transporte", false, false),
   FALTA_TRANSPORTE(2, "Falta no Transporte", false, false),
   FALTA_FABRICA(3, "Falta de Fabrica", false, false),
-  VENCIMENTO(4, "Vencimento", false, false),
+  VENCIMENTO(4, "Validade", false, false),
   DEFEITO_FABRICA(7, "Defeito de Fabricação", false, false),
   SEM_IDENTIFICACAO(5, "Sem Identificação", false, false),
   EM_DESACORDO(6, "Em Desacordo", false, false),
