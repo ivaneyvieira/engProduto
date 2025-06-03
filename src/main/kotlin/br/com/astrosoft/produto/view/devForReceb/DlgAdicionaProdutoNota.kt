@@ -103,7 +103,7 @@ class DlgAdicionaProdutoNota(
       seq = seq,
       ni = invno,
       prdno = prdno,
-      grade = grade,
+      grade = grade ?: "",
       quantDevolucao = saldo
     )
 
