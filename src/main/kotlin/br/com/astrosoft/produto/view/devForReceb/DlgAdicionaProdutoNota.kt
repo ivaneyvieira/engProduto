@@ -4,10 +4,13 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.selectAll
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.notification.Notification
+import com.vaadin.flow.component.notification.NotificationVariant
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -125,17 +128,40 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
     edtCodigo = textField("Código") {
       this.width = "180px"
       this.isClearButtonVisible = true
+      this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 2000
       this.addValueChangeListener {
         val lista = viewModel.findProdutos(this.value)
         produtos.clear()
         produtos.addAll(lista)
+        if (produtos.isEmpty()) {
+          edtDescricao?.value = ""
+          edtGrade?.isEnabled = false
+          edtGrade?.value = null
+          edtQuant?.value = null
 
-        edtGrade?.setItems(produtos.map { it.grade })
-        edtGrade?.value = produtos.firstOrNull()?.grade
-        edtDescricao?.value = produtos.firstOrNull()?.descricao
-        edtGrade?.isEnabled = produtos.size > 1
+          if(this.value != "" || this.value != null) {
+            //Notification.show("Produto não encontrado", 3000, Notification.Position.MIDDLE).apply {
+            //  this.addThemeVariants(NotificationVariant.LUMO_ERROR)
+            //}
+            edtCodigo?.focus()
+            //edtCodigo?.selectAll()
+          }
+        } else if (produtos.size == 1) {
+          edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
+          edtGrade?.isEnabled = false
+          edtQuant?.value = 0
+          edtGrade?.value = null
+          edtQuant?.focus()
+        } else {
+          edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
+          edtGrade?.isEnabled = true
+          edtGrade?.value = produtos.firstOrNull()?.grade
+          edtQuant?.value = 0
+          edtGrade?.focus()
+        }
       }
     }
 
@@ -151,6 +177,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
     edtQuant = integerField("Quant") {
       this.width = "120px"
       this.isClearButtonVisible = true
+      this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     }
   }

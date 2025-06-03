@@ -84,6 +84,9 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoGrades(codigo: String): List<PrdGrade> {
     val sql = "/sqlSaci/findProdutoGrades.sql"
+    if(codigo.isEmpty()){
+      return emptyList()
+    }
     return query(sql, PrdGrade::class) {
       addOptionalParameter("codigo", codigo)
     }

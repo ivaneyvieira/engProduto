@@ -12,9 +12,14 @@ DO @INVNO := IF(:invno = 0,
                            AND :invno = 0
                          GROUP BY prdno, grade ), :invno), :invno);
 
-
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao, seq)
-  VALUE (@INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao, :seq);
+SELECT @INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao, :seq
+FROM
+  DUAL
+WHERE @INVNO != 0;
 
-REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, situacaoDev)
-VALUES (@INVNO, :tipoDevolucao, :numero, :situacaoDev)
+REPLACE sqldados.invAdicional (invno, tipoDevolucao, numero, situacaoDev)
+SELECT @INVNO, :tipoDevolucao, :numero, :situacaoDev
+FROM
+  DUAL
+WHERE @INVNO != 0
