@@ -130,7 +130,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val pesoLiquido: BigDecimal
     get() = BigDecimal(nota.produtos.sumOf { (it.pesoLiquido ?: 0.00) * (it.quantDevolucao ?: 0) })
   override val codigo: String
-    get() = produto.codigo?.toString() ?: ""
+    get() = produto.refFabrica ?: ""
   override val descricao: String
     get() = if (produto.grade.isNullOrBlank()) {
       produto.descricao ?: ""
