@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.model.report
 
 import br.com.astrosoft.framework.util.SystemUtils.readStream
 import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
-import br.com.astrosoft.produto.model.nfeXml.ItensNotaReport
 import net.sf.jasperreports.engine.JasperCompileManager
 import net.sf.jasperreports.engine.JasperFillManager
 import net.sf.jasperreports.engine.JasperPrint

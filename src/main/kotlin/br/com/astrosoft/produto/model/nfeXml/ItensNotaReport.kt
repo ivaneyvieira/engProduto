@@ -111,6 +111,8 @@ class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String
     get() = transporte()?.modalidadeFrete.modalidadeFrete()
   override val codigoANTT: String
     get() = transporte()?.veiculo?.registroNacionalTransportadorCarga ?: ""
+  override val nfo: String
+    get() =  ""
   override val placaVeiculo: String
     get() = transporte()?.veiculo?.placaVeiculo ?: ""
   override val ufVeiculo: String

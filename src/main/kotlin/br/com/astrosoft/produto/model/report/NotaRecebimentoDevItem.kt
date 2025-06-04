@@ -101,6 +101,8 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
     get() = ""
   override val codigoANTT: String
     get() = ""
+  override val nfo: String
+    get() = nota.nfEntrada ?: ""
   override val placaVeiculo: String
     get() = ""
   override val ufVeiculo: String

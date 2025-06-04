@@ -80,8 +80,9 @@
        1212.55                                                  AS pesoBruto,
        256.22                                                   AS pesoLiquido,
        '105270'                                                 AS codigo,
-       'PRT PROTETOR 15X12X6CM KKK AADAD ALLLASDL'                                 AS descricao,
+       'PRT PROTETOR 15X12X6CM KKK AADAD ALLLASDL'              AS descricao,
        '7898932868101'                                          AS codigoBarras,
+       ''                                                       AS nfo,
        '83030000'                                               AS ncm,
        '000'                                                    AS cst,
        '1202'                                                   AS cfop,
@@ -345,6 +346,10 @@ FROM dual]]>
 	<field name="codigoBarras" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="codigoBarras"/>
 		<property name="com.jaspersoft.studio.field.label" value="codigoBarras"/>
+	</field>
+	<field name="nfo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nfo"/>
+		<property name="com.jaspersoft.studio.field.label" value="nfo"/>
 	</field>
 	<field name="ncm" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="ncm"/>
@@ -2638,7 +2643,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement style="fontLabel" x="0" y="0" width="33" height="20" uuid="16922cb0-a2e9-4900-ba32-8d5a85c33c13">
+					<reportElement style="fontLabel" x="0" y="0" width="29" height="20" uuid="16922cb0-a2e9-4900-ba32-8d5a85c33c13">
 						<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 						<property name="com.jaspersoft.layout.grid.y" value="-1"/>
 						<property name="com.jaspersoft.layout.grid.weight.x" value="2.0"/>
@@ -2962,7 +2967,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="33" height="10" uuid="a2128fbd-2a2b-45fc-8732-1e92f0d2bb40">
+						<reportElement style="fontLabel" x="0" y="0" width="29" height="10" uuid="a2128fbd-2a2b-45fc-8732-1e92f0d2bb40">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cab91298-5db8-4775-a0d8-6b9deaf98800"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3002,7 +3007,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="97" height="10" uuid="c32a69ca-3642-42c5-b2ae-e79405c3de94">
+						<reportElement style="fontLabel" x="0" y="0" width="93" height="10" uuid="c32a69ca-3642-42c5-b2ae-e79405c3de94">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a503ee66-1415-40b4-9529-9432c9e65b4a"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3042,7 +3047,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="49" height="10" uuid="2c47b617-62a9-430f-90c6-7320f2f0e31c">
+						<reportElement style="fontLabel" x="0" y="0" width="45" height="10" uuid="2c47b617-62a9-430f-90c6-7320f2f0e31c">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d3c2051c-d175-464e-b7e5-73ee41b31aab"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3073,8 +3078,15 @@ BARRAS]]></text>
 						<property name="com.jaspersoft.layout.grid.colspan" value="1"/>
 						<property name="com.jaspersoft.layout.grid.weight.fixed" value="false"/>
 					</reportElement>
+					<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+						<pen lineWidth="0.75" lineStyle="Dotted"/>
+						<topPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
+						<leftPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
+						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
+						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
+					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="49" height="10" uuid="a248e778-5d6e-48ce-9d6a-0c5db9531d6e">
+						<reportElement style="fontLabel" x="0" y="0" width="45" height="10" uuid="a248e778-5d6e-48ce-9d6a-0c5db9531d6e">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d3c2051c-d175-464e-b7e5-73ee41b31aab"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3114,7 +3126,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="49" height="10" uuid="c5c37133-f900-473a-9d15-2ec9c98c1376">
+						<reportElement style="fontLabel" x="0" y="0" width="45" height="10" uuid="c5c37133-f900-473a-9d15-2ec9c98c1376">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="01b08f7b-779d-4517-aea2-fc5049280161"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3147,7 +3159,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="16" height="10" uuid="5671850a-e74e-4a5c-8eca-d93b5bae5e86">
+						<reportElement style="fontLabel" x="0" y="0" width="12" height="10" uuid="5671850a-e74e-4a5c-8eca-d93b5bae5e86">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7b56cac9-3f35-4ad2-a8a2-8dcf971740cf"/>
 						</reportElement>
 						<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -3173,7 +3185,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="16" height="10" uuid="70360761-6c93-44e7-9260-da44dc5acfa2">
+						<reportElement style="fontLabel" x="0" y="0" width="12" height="10" uuid="70360761-6c93-44e7-9260-da44dc5acfa2">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="01ad712c-851d-441f-9dff-440f2e84c984"/>
 						</reportElement>
 						<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -3199,7 +3211,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight">
-						<reportElement style="fontLabel" x="0" y="0" width="16" height="10" uuid="20d234ef-5a97-4a4f-b00a-6cb78ee003a8">
+						<reportElement style="fontLabel" x="0" y="0" width="12" height="10" uuid="20d234ef-5a97-4a4f-b00a-6cb78ee003a8">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff0168ad-9537-4961-82c4-5be187d52d3b"/>
 						</reportElement>
 						<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -3232,7 +3244,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="461f8525-013d-4b4f-91e4-e666fc4b930e">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="461f8525-013d-4b4f-91e4-e666fc4b930e">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f4e7cc5-0b78-4e19-b70f-965bb98c6112"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3272,7 +3284,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="255d0664-b4d8-4885-a6c5-cc1e6c620c20">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="255d0664-b4d8-4885-a6c5-cc1e6c620c20">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="38e7a9f0-6dd6-40ad-9e51-1d301bf99126"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3312,7 +3324,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="88d30801-8137-499c-9045-08e4dd205cdf">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="88d30801-8137-499c-9045-08e4dd205cdf">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d90503e6-c7ed-4103-b2c0-6601ff5b2e78"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3352,7 +3364,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="ebdab909-8a6f-4da2-8652-46665bef1c1b">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="ebdab909-8a6f-4da2-8652-46665bef1c1b">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9bc9fbeb-87ba-40a4-a684-7fba6d29c222"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3392,7 +3404,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="4f1c0856-85c0-45a6-b1ff-1dae6f29f5ea">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="4f1c0856-85c0-45a6-b1ff-1dae6f29f5ea">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="648c664f-ceeb-4a4d-aaab-915767e0ceb8"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3432,7 +3444,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="32" height="10" uuid="39d9bd33-7d52-43d1-909e-212dfe9b7781">
+						<reportElement style="fontLabel" x="0" y="0" width="28" height="10" uuid="39d9bd33-7d52-43d1-909e-212dfe9b7781">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
 							<property name="com.jaspersoft.layout.grid.y" value="-1"/>
@@ -3472,7 +3484,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="19" height="10" uuid="486c247f-44f7-4a40-af4e-b46d5a7a6282">
+						<reportElement style="fontLabel" x="0" y="0" width="15" height="10" uuid="486c247f-44f7-4a40-af4e-b46d5a7a6282">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 						</reportElement>
 						<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -3505,7 +3517,7 @@ BARRAS]]></text>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
 					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
-						<reportElement style="fontLabel" x="0" y="0" width="19" height="10" uuid="039a8b9c-07af-4342-acea-cb3aecffcbbe">
+						<reportElement style="fontLabel" x="0" y="0" width="15" height="10" uuid="039a8b9c-07af-4342-acea-cb3aecffcbbe">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 						</reportElement>
 						<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">

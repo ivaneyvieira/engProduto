@@ -47,6 +47,7 @@ interface IItensNotaReport {
   val nomeTransportadora: String
   val fretePorConta: String
   val codigoANTT: String
+  val nfo: String
   val placaVeiculo: String
   val ufVeiculo: String
   val cnpjCPF: String
