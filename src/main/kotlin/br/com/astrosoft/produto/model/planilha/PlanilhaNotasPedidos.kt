@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.model.planilha
 import br.com.astrosoft.framework.model.planilha.Planilha
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 
-class PlanilhaNotasPedidos : Planilha<NotaRecebimentoProdutoDev>("Nota Dev"){
+class PlanilhaNotasPedidos : Planilha<NotaRecebimentoProdutoDev>("Nota Dev") {
   init {
     columnSheet(header = "Rótulo", property = NotaRecebimentoProdutoDev::rotulo)
     columnSheet(header = "Fornecedor", property = NotaRecebimentoProdutoDev::vendno)

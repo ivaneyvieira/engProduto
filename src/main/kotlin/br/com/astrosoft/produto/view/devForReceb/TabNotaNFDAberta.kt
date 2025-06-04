@@ -3,11 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaNFDAberta
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
@@ -36,9 +32,9 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
-    val lojas = if(lojaUSer == 0) {
+    val lojas = if (lojaUSer == 0) {
       viewModel.findAllLojas() + listOf(Loja.lojaZero)
-    }else{
+    } else {
       viewModel.findAllLojas().filter { it.no == lojaUSer }
     }
     cmbLoja.setItems(lojas)
@@ -105,7 +101,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::nomeCliente) {
       this.setHeader("Nome Cliente")
     }
-    columnGrid(NotaSaidaDev::valorNota, width="120px") {
+    columnGrid(NotaSaidaDev::valorNota, width = "120px") {
       this.setHeader("Valor")
     }
     columnGrid(NotaSaidaDev::situacaoDup) {

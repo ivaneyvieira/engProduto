@@ -51,9 +51,9 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
     val filter = subView.filter()
     val usuarios = usuarios().filter {
       filter == "" ||
-          it.no.toString() == filter ||
-          it.name.contains(filter, ignoreCase = true) ||
-          it.login.startsWith(filter, ignoreCase = true)
+      it.no.toString() == filter ||
+      it.name.contains(filter, ignoreCase = true) ||
+      it.login.startsWith(filter, ignoreCase = true)
     }
     subView.updateUsuarios(usuarios)
   }

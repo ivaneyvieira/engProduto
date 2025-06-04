@@ -7,18 +7,13 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaHora
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFData
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFEntregaRetira
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFLoja
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFNota
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFSituacao
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFTipo
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFValor
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNFVendedor
 import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaNomeCliente
-import br.com.astrosoft.produto.view.nfd.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.nfd.ITabNfdDevFor
 import br.com.astrosoft.produto.viewmodel.nfd.TabNfdDevForViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
@@ -119,11 +114,11 @@ class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaid
       when {
         cancelada == "S" -> "vermelho"
 
-        countImp > 0 -> "azul"
+        countImp > 0     -> "azul"
 
-        countEnt > 0 -> "amarelo"
+        countEnt > 0     -> "amarelo"
 
-        else -> null
+        else             -> null
       }
     }
   }

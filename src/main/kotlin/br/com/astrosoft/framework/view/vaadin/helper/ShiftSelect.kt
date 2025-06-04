@@ -72,7 +72,7 @@ private fun <T : Any> comparator(sortOrder: List<GridSortOrder<T>>, classGrid: K
     }
     props.map { prop ->
       when (gridSort.direction) {
-        DESCENDING -> compareByDescending {
+        DESCENDING      -> compareByDescending {
           prop.get(it)
         }
 

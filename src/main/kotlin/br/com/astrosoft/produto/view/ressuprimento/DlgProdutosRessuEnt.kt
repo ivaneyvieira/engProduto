@@ -206,11 +206,11 @@ class DlgProdutosRessuEnt(
             "amarelo"
           }
 
-          it.qtQuantNF != it.qtRecebido -> {
+          it.qtQuantNF != it.qtRecebido                 -> {
             "amarelo"
           }
 
-          else -> null
+          else                                          -> null
         }
       }
       gridDetail.isMultiSort = true

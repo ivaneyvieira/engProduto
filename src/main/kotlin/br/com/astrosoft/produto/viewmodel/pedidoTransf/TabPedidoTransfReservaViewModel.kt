@@ -67,7 +67,7 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
       this.isEmpty() -> ""
       this.size == 1 -> this.first()
       this.size == 2 -> this.first() + " e " + this.last()
-      else -> this.dropLast(1).joinToString(", ") + " e " + this.last()
+      else           -> this.dropLast(1).joinToString(", ") + " e " + this.last()
     }
   }
 

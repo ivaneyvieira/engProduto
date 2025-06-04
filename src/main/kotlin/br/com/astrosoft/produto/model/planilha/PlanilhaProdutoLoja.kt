@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Produtos
 
 class PlanilhaProdutoLoja : Planilha<Produtos>("Produto") {

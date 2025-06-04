@@ -125,7 +125,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
-    }.setPartNameGenerator {bean ->
+    }.setPartNameGenerator { bean ->
       if (bean.arquivos().isNotEmpty()) {
         "amarelo"
       } else {

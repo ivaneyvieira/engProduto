@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents

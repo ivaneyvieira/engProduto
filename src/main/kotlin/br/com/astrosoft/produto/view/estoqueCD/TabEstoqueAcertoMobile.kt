@@ -11,7 +11,6 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcertoMobile
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoMobileViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.datepicker.DatePickerVariant
@@ -259,9 +258,9 @@ fun HorizontalLayout.fieldPanel(
       }
     }
   }
-  if(isExpand){
+  if (isExpand) {
     this.addAndExpand(panel)
-  }else{
+  } else {
     this.add(panel)
   }
 }

@@ -142,7 +142,6 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     dlgProduto?.updateProduto(produto)
   }
 
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.reposicaoAcerto == true

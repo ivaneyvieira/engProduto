@@ -1,10 +1,5 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.function.SerializableConsumer
 //import com.wontlost.zxing.Constants
 //import com.wontlost.zxing.ZXingVaadinReader
 /*

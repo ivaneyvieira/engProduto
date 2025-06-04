@@ -16,10 +16,10 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
       val user = AppConfig.userLogin() as? UserSaci
       val lojaUser = user?.lojaAcerto?.let {
         when (it) {
-          2 -> "DS"
-          3 -> "MR"
-          5 -> "PK"
-          8 -> "TM"
+          2    -> "DS"
+          3    -> "MR"
+          5    -> "PK"
+          8    -> "TM"
           else -> null
         }
       }

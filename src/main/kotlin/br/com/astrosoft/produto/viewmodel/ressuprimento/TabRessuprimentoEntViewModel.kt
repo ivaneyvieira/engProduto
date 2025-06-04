@@ -126,9 +126,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       val qtRecebido = it.qtRecebido ?: 0
       val qtQuantNF = it.qtQuantNF ?: 0
       it.selecionado == EMarcaRessuprimento.REC.num &&
-          (qtRecebido == qtQuantNF) &&
-          (it.codigoCorrecao.isNullOrBlank()) &&
-          (it.gradeCorrecao.isNullOrBlank())
+      (qtRecebido == qtQuantNF) &&
+      (it.codigoCorrecao.isNullOrBlank()) &&
+      (it.gradeCorrecao.isNullOrBlank())
     }
     itens.ifEmpty {
       fail("Recebimento diferente da Entrega")

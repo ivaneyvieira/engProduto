@@ -50,7 +50,7 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
       this.vencimento ?: fail("Data de vencimento obrigatório")
       val dataFabricacao = this.fabricacao ?: fail("Data de fabricação obrigatório")
       val dataFabricacaoLimite =
-        dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
+          dataRecebimento.minusMonths(validade.mesesFabricacao.toLong() - 1.toLong()).firstDayOfMonth()
       if (dataFabricacao < dataFabricacaoLimite) {
         fail("Data de fabricação inferior a ${dataFabricacaoLimite.format("MM/yy")}")
       }

@@ -4,7 +4,8 @@ import br.com.astrosoft.framework.model.reports.PropriedadeRelatorio
 import br.com.astrosoft.framework.model.reports.ReportBuild
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.*
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.LEFT
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.RIGHT
 import net.sf.dynamicreports.report.constant.PageOrientation
 import java.awt.Color
 

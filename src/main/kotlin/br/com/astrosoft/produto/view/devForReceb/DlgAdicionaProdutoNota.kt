@@ -4,13 +4,10 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.selectAll
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.notification.Notification
-import com.vaadin.flow.component.notification.NotificationVariant
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -142,7 +139,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
           edtGrade?.value = null
           edtQuant?.value = null
 
-          if(this.value != "" || this.value != null) {
+          if (this.value != "" || this.value != null) {
             //Notification.show("Produto não encontrado", 3000, Notification.Position.MIDDLE).apply {
             //  this.addThemeVariants(NotificationVariant.LUMO_ERROR)
             //}

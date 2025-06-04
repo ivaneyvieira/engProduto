@@ -81,24 +81,24 @@ open class Planilha<B>(private val sheatName: String) {
 
       row.createCell(index).apply {
         when (cellValue) {
-          is String -> setCellValue(cellValue)
+          is String        -> setCellValue(cellValue)
 
-          is Int -> {
+          is Int           -> {
             cellStyle = workbook.createStyle("#,##0")
             setCellValue(cellValue.toDouble())
           }
 
-          is Number -> {
+          is Number        -> {
             cellStyle = workbook.createStyle("#,##0.00")
             setCellValue(cellValue.toDouble())
           }
 
-          is Date -> {
+          is Date          -> {
             cellStyle = workbook.createStyle("dd/mm/yyyy")
             setCellValue(cellValue)
           }
 
-          is LocalDate -> {
+          is LocalDate     -> {
             cellStyle = workbook.createStyle("dd/mm/yyyy")
             setCellValue(cellValue)
           }
@@ -108,7 +108,7 @@ open class Planilha<B>(private val sheatName: String) {
             setCellValue(cellValue)
           }
 
-          else -> {
+          else             -> {
             if (cellValue != null)
               setCellValue(cellValue.toString())
             else

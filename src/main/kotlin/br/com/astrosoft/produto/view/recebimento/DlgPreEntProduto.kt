@@ -163,10 +163,10 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     }.filter { ndd ->
       val value = cmbDiferenca?.value ?: TODOS
       (value == REF && ndd.difRefPedido) ||
-          (value == BAR && ndd.difBarPedido) ||
-          (value == VAL && ndd.difValPedido) ||
-          (value == QTD && ndd.difQtdPedido) ||
-          (value == TODOS)
+      (value == BAR && ndd.difBarPedido) ||
+      (value == VAL && ndd.difValPedido) ||
+      (value == QTD && ndd.difQtdPedido) ||
+      (value == TODOS)
     }
     gridDetail.setItems(listProdutos)
   }

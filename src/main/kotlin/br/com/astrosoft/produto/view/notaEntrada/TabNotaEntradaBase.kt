@@ -91,8 +91,8 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
     colunaNFEValor()
     setPartNameGenerator {
       when (it.marca) {
-        0 -> "azul"
-        1 -> "amarelo"
+        0    -> "azul"
+        1    -> "amarelo"
         else -> null
       }
     }

@@ -6,7 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup
 
 class FormSelecionaEstoque : FormLayout() {
-  private var selecionaEstoque : RadioButtonGroup<TipoEstoque>? = null
+  private var selecionaEstoque: RadioButtonGroup<TipoEstoque>? = null
 
   init {
     selecionaEstoque = radioButtonGroup("Seleciona Estoque") {

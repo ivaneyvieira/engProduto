@@ -101,11 +101,11 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
             show("O produto não está no grupo de piso")
           }
 
-          it.bean.tipoNota != 4 -> {
+          it.bean.tipoNota != 4                    -> {
             show("Não é uma expedicao de edtrega futura")
           }
 
-          nota.cancelada == "S" -> {
+          nota.cancelada == "S"                    -> {
             show("A expedicao está cancelada")
           }
         }

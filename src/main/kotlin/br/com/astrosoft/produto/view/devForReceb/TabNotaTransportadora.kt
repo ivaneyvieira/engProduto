@@ -74,7 +74,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     }
   }
 
-override fun Grid<NotaRecebimentoDev>.gridPanel() {
+  override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.format()
 

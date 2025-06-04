@@ -18,11 +18,11 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
         writeln("$motorista Entrega: $dataEntrada", expand = true)
       }
 
-      motorista.isNotBlank() -> {
+      motorista.isNotBlank()                             -> {
         writeln(motorista, expand = true)
       }
 
-      dataEntrada.isNotBlank() -> {
+      dataEntrada.isNotBlank()                           -> {
         writeln("Data Entrega: $dataEntrada", expand = true)
       }
     }

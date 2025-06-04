@@ -5,10 +5,6 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque2
-import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
 
 class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
@@ -70,7 +66,6 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
 
   fun removeAcerto(produto: ProdutoEstoqueAcerto?) = viewModel.exec {
 

@@ -10,7 +10,6 @@ import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -67,15 +66,15 @@ class DlgAdicionaAcertoMobile(
             edtGrade?.isEnabled = produtos.size > 1
           }
         }
-/*
-        button {
-          icon = VaadinIcon.BARCODE.create()
-          addClickListener {
-            val dlg = DlgBarcodeScanner()
-            dlg.open()
-          }
-        }
-*/
+        /*
+                button {
+                  icon = VaadinIcon.BARCODE.create()
+                  addClickListener {
+                    val dlg = DlgBarcodeScanner()
+                    dlg.open()
+                  }
+                }
+        */
         edtDescricao = textField("Descrição") {
           this.isAutoselect = true
           this.width = null

@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.view.vaadin.helper.mesAnoFieldComponente
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
-import br.com.astrosoft.produto.model.beans.Produtos
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.verticalLayout
 import com.vaadin.flow.component.HasComponents

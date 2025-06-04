@@ -66,7 +66,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
             this.isEmptySelectionAllowed = true
             this.setItemLabelGenerator { storeno ->
               when (storeno) {
-                0 -> "Todas as lojas"
+                0    -> "Todas as lojas"
                 else -> lojas.firstOrNull { loja ->
                   loja.no == storeno
                 }?.descricao ?: ""

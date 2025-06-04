@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model
 
-
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
@@ -8,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.NotaEntradaFileXML
 import br.com.astrosoft.produto.nfeXml.ProdutoNotaEntradaVO
 
 class QueryNDD : QueryDB(database) {
-
 
   fun produtosNotasEntrada(id: Int): ProdutoNotaEntradaVO? {
     val sql = "/sqlNDD/produtosNotaEntrada.sql"

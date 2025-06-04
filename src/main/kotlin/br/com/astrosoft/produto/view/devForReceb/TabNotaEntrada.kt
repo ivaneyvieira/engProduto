@@ -31,9 +31,9 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
-    val lojas = if(lojaUSer == 0) {
+    val lojas = if (lojaUSer == 0) {
       viewModel.findAllLojas() + listOf(Loja.lojaZero)
-    }else{
+    } else {
       viewModel.findAllLojas().filter { it.no == lojaUSer }
     }
     cmbLoja.setItems(lojas)

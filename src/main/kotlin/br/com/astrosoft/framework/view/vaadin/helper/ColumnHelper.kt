@@ -4,7 +4,10 @@ import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
 import br.com.astrosoft.framework.util.format
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.VaadinDsl
+import com.github.mvysny.karibudsl.v10.column
+import com.github.mvysny.karibudsl.v10.isExpand
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.addColumnFor
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant

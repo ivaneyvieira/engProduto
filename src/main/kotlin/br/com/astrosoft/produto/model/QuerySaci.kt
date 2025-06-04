@@ -84,7 +84,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findProdutoGrades(codigo: String): List<PrdGrade> {
     val sql = "/sqlSaci/findProdutoGrades.sql"
-    if(codigo.isEmpty()){
+    if (codigo.isEmpty()) {
       return emptyList()
     }
     return query(sql, PrdGrade::class) {
@@ -2410,14 +2410,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findLoja(loja: Int?) : LojaNota?{
+  fun findLoja(loja: Int?): LojaNota? {
     val sql = "/sqlSaci/findLoja.sql"
     return query(sql, LojaNota::class) {
       addOptionalParameter("loja", loja)
     }.firstOrNull()
   }
 
-  fun findFornecedor(vendno: Int?) : FornecedorNota?{
+  fun findFornecedor(vendno: Int?): FornecedorNota? {
     val sql = "/sqlSaci/findFornecedor.sql"
     return query(sql, FornecedorNota::class) {
       addOptionalParameter("vendno", vendno)

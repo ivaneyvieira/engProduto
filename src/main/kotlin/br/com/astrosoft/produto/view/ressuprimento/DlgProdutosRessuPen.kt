@@ -212,11 +212,11 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
             "amarelo"
           }
 
-          it.qtQuantNF != it.qtRecebido -> {
+          it.qtQuantNF != it.qtRecebido                 -> {
             "amarelo"
           }
 
-          else -> null
+          else                                          -> null
         }
       }
       gridDetail.isMultiSort = true
@@ -240,9 +240,9 @@ class DlgProdutosRessuPen(val viewModel: TabRessuprimentoPenViewModel, val ressu
     val listProdutos = ressuprimentos.flatMap { ress ->
       ress.produtos().filter {
         it.codigoCorrecao?.isNotEmpty() == true ||
-            it.gradeCorrecao?.isNotEmpty() == true ||
-            (it.qtRecebido ?: 0) != (it.qtQuantNF ?: 0) ||
-            (it.qtEntregue ?: 0) > 0
+        it.gradeCorrecao?.isNotEmpty() == true ||
+        (it.qtRecebido ?: 0) != (it.qtQuantNF ?: 0) ||
+        (it.qtEntregue ?: 0) > 0
       }
     }
     gridDetail.setItems(listProdutos)

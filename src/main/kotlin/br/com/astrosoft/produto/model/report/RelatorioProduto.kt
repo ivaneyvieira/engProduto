@@ -38,12 +38,12 @@ class RelatorioProduto(val lojaEstoque: Int) : ReportBuild<ProdutoRelatorio>() {
 
   override fun config(itens: List<ProdutoRelatorio>): PropriedadeRelatorio {
     val loja = when (lojaEstoque) {
-      0 -> "Todas"
-      2 -> "DS"
-      3 -> "MR"
-      4 -> "MF"
-      5 -> "PK"
-      8 -> "TM"
+      0    -> "Todas"
+      2    -> "DS"
+      3    -> "MR"
+      4    -> "MF"
+      5    -> "PK"
+      8    -> "TM"
       else -> "Outra"
     }
     return PropriedadeRelatorio(

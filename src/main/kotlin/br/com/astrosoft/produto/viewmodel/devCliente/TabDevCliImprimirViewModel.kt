@@ -34,7 +34,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     val valorLimitMuda = user?.valorMinimoMuda ?: 0
 
     val relatorio = when {
-      assinado -> {
+      assinado                         -> {
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
@@ -57,7 +57,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }
       }
 
-      nota.tipoObs.startsWith("EST") -> {
+      nota.tipoObs.startsWith("EST")   -> {
         if (valorLimitEstorno == 0) {
           fail("Nota não assinada")
         } else if (valorNota > valorLimitEstorno) {
@@ -75,7 +75,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
-      nota.tipoObs.startsWith("MUDA") -> {
+      nota.tipoObs.startsWith("MUDA")  -> {
         if (valorLimitMuda == 0) {
           fail("Nota não assinada")
         } else if (valorNota > valorLimitMuda) {
@@ -84,7 +84,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
-      else -> {
+      else                             -> {
         fail("Nota não assinada")
       }
     }
@@ -116,7 +116,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
 
       when {
-        nota.tipoObs.startsWith("TROCA") -> {
+        nota.tipoObs.startsWith("TROCA")                            -> {
           if (nota.isComProduto() && !user.autorizaTrocaP) {
             fail("Usuário não autorizado para Troca P")
           }
@@ -125,7 +125,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           }
         }
 
-        nota.tipoObs.startsWith("EST") && !user.autorizaEstorno -> {
+        nota.tipoObs.startsWith("EST") && !user.autorizaEstorno     -> {
           fail("Usuário não autorizado para Estorno")
         }
 
@@ -133,7 +133,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           fail("Usuário não autorizado para Reembolso")
         }
 
-        nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda -> {
+        nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda       -> {
           fail("Usuário não autorizado para Muda Cliente")
         }
       }

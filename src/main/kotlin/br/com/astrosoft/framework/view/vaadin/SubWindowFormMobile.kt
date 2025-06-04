@@ -2,12 +2,10 @@ package br.com.astrosoft.framework.view.vaadin
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.theme.lumo.LumoUtility
 
 class SubWindowFormMobile(
   protected val title: String,

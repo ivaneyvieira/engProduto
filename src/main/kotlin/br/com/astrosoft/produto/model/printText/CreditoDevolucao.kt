@@ -17,31 +17,31 @@ class CreditoDevolucao(val nota: CreditoCliente, val autorizacao: String = "") :
   private fun tituloValeTroca() {
     val tipo = nota.tipo ?: ""
     when {
-      tipo.contains("TROCA") -> {
+      tipo.contains("TROCA")      -> {
         writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("ENTREGA") -> {
+      tipo.contains("ENTREGA")    -> {
         writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("RETIRA") -> {
+      tipo.contains("RETIRA")     -> {
         writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("REEMBOLSO") -> {
+      tipo.contains("REEMBOLSO")  -> {
         writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("GARANTIA") -> {
+      tipo.contains("GARANTIA")   -> {
         writeln("Vale Credito: GARANTIA", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("MUDA NF") -> {
+      tipo.contains("MUDA NF")    -> {
         writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("MUDA") -> {
+      tipo.contains("MUDA")       -> {
         writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
@@ -54,7 +54,7 @@ class CreditoDevolucao(val nota: CreditoCliente, val autorizacao: String = "") :
         writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
       }
 
-      tipo.contains("EST DEP") -> {
+      tipo.contains("EST DEP")    -> {
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }

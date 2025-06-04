@@ -150,7 +150,6 @@ open class QueryDB(database: DatabaseConfig) {
     }
   }
 
-
   fun Query.addOptionalParameter(name: String, value: Any?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this

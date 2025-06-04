@@ -70,7 +70,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
             "amarelo"
           }
 
-          else -> null
+          else                          -> null
         }
       }
     }

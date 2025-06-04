@@ -31,7 +31,6 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Expedicao")
   }
 
-
   fun Grid<ProdutoNFS>.produtoNFDescricao() = columnGrid(ProdutoNFS::descricao) {
     this.setHeader("Descrição")
   }
