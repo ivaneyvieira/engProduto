@@ -135,7 +135,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
     get() = if (produto.grade.isNullOrBlank()) {
       produto.descricao ?: ""
     } else {
-      "${produto.descricao} - ${produto.grade}"
+      "${produto.descricao} ${produto.grade}"
     }
   override val codigoBarras: String
     get() = produto.barcode
