@@ -262,6 +262,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   AJUSTE(11, "Ajuste", false, false),
   PRODUTO_TROCADO(12, "Produto Trocado", false, false);
 
+
   override fun toString(): String {
     return descricao
   }
