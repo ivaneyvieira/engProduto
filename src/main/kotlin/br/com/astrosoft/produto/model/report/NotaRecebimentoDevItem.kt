@@ -102,7 +102,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val codigoANTT: String
     get() = ""
   override val nfo: String
-    get() = nota.nfEntrada ?: ""
+    get() = produto.nfEntrada ?: ""
   override val placaVeiculo: String
     get() = ""
   override val ufVeiculo: String
@@ -132,7 +132,11 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val codigo: String
     get() = produto.codigo?.toString() ?: ""
   override val descricao: String
-    get() = produto.descricao ?: ""
+    get() = if (produto.grade.isNullOrBlank()) {
+      produto.descricao ?: ""
+    } else {
+      "${produto.descricao} - ${produto.grade}"
+    }
   override val codigoBarras: String
     get() = produto.barcode
   override val ncm: String
