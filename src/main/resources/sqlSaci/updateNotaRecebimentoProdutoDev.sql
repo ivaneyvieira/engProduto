@@ -1,5 +1,6 @@
 UPDATE IGNORE sqldados.iprdAdicionalDev
-SET seq = :seq
+SET seq            = :seq,
+    quantDevolucao = :quantDevolucao
 WHERE invno = :invno
   AND prdno = :prdno
   AND grade = :grade
