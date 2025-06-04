@@ -19,7 +19,6 @@ object DanfeReport {
     val listPrintReport = listItens.map { itens ->
       fillReport(itens, tipo)
     }
-
     val exporter = JRPdfExporter()
     val baos = ByteArrayOutputStream()
     exporter.setExporterInput(SimpleExporterInput.getInstance(listPrintReport))
