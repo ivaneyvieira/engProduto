@@ -19,11 +19,11 @@ class ValidadeSaci {
 
   fun msgErro(): String {
     return when {
-      tipoValidade == null -> "Tipo de validade não informado"
-      tempoValidade == null -> "Tempo de validade não informado"
+      tipoValidade == null                   -> "Tipo de validade não informado"
+      tempoValidade == null                  -> "Tempo de validade não informado"
       tipoValidadeEnum == TipoValidade.MESES -> validaMeses()
-      tipoValidadeEnum == TipoValidade.ANOS -> validaAnos()
-      else -> "Tipo de validade(${tipoValidadeEnum.descricao}) não usado"
+      tipoValidadeEnum == TipoValidade.ANOS  -> validaAnos()
+      else                                   -> "Tipo de validade(${tipoValidadeEnum.descricao}) não usado"
     }
   }
 

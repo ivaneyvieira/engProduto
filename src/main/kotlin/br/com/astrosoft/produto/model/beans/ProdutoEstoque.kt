@@ -42,7 +42,7 @@ class ProdutoEstoque(
       return "${barcode ?: ""}   |   ${ref ?: ""}"
     }
 
-  var marcadoConfProp : Boolean = false
+  var marcadoConfProp: Boolean = false
 
   fun marcadoConf(userNo: Int, data: LocalDate): Boolean {
     this.marcadoConfProp = (estoqueUser == userNo) && (estoqueData == data)

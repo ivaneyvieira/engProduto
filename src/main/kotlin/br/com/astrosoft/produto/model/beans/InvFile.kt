@@ -23,7 +23,7 @@ class InvFile(
       sizeInBytes >= gigabyte -> "${(sizeInBytes / gigabyte).format()} GB"
       sizeInBytes >= megabyte -> "${(sizeInBytes / megabyte).format()} MB"
       sizeInBytes >= kilobyte -> "${(sizeInBytes / kilobyte).format()} KB"
-      else -> "$sizeInBytes B"
+      else                    -> "$sizeInBytes B"
     }
   }
 

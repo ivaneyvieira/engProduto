@@ -689,7 +689,7 @@ class DelegateAuthorized2(numBit2: Int) {
 }
 
 class DelegateAuthorized3(numBit2: Int) {
-  private val bit = 2.toDouble().pow(numBit2 - (62*2)).toLong()
+  private val bit = 2.toDouble().pow(numBit2 - (62 * 2)).toLong()
 
   operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
     thisRef ?: return false

@@ -38,9 +38,9 @@ class PedidoXML {
   val fator: Double
     get() = when {
       formula?.firstOrNull() == '*' -> valorFormula
-      valorFormula == 0.00 -> 1.00
+      valorFormula == 0.00          -> 1.00
       formula?.firstOrNull() == '/' -> (1.00 / valorFormula)
-      else -> 1.00
+      else                          -> 1.00
     }
 
   fun save() {

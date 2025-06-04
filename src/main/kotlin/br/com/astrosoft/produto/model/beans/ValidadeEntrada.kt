@@ -43,8 +43,8 @@ class ValidadeEntrada(
       return listaValidade.asSequence().filter { venda ->
         when {
           filtro.nfe.isBlank() -> true
-          prdNota.isEmpty() -> false
-          else -> prdNota.any { prd ->
+          prdNota.isEmpty()    -> false
+          else                 -> prdNota.any { prd ->
             prd.prdno.trim().toIntOrNull() == venda.codigo && prd.grade == venda.grade
           }
         }

@@ -37,11 +37,11 @@ class ReposicaoProduto(
       entregueNome
     }
 
-    EMetodo.ACERTO.num -> {
+    EMetodo.ACERTO.num  -> {
       finalizadoNome
     }
 
-    else -> {
+    else                -> {
       recebidoNome
     }
   }
@@ -50,7 +50,7 @@ class ReposicaoProduto(
       recebidoNome
     }
 
-    else -> {
+    else                -> {
       entregueNome
     }
   }

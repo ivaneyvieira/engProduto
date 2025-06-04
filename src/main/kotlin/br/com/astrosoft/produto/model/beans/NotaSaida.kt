@@ -78,7 +78,7 @@ class NotaSaida(
   }
 
   fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean) =
-    saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
+      saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
 
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci

@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-data class DadosRessuprimento (
+data class DadosRessuprimento(
   val loja: Int,
   val lojaRessuprimento: Int,
   val pedido: Int,
@@ -12,7 +12,7 @@ data class DadosRessuprimento (
   val totalPedido: Double,
   val observacao: String,
   val produtos: MutableList<DadosProdutosRessuprimento>
-){
+) {
   fun removeProduto(produto: DadosProdutosRessuprimento) {
     this.produtos.remove(produto)
   }

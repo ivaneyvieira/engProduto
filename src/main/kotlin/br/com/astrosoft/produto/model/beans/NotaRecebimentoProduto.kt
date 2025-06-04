@@ -256,6 +256,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   SEM_IDENTIFICACAO(5, "Sem Identificação", false, false),
   EM_DESACORDO(6, "Em Desacordo", false, false),
   EM_GARANTIA(8, "Garantia", true, false),
+  ACORDO_COMERCIAL(13, "Acordo Comercial", false, false),
   FRET_FOB(9, "Frete FOB", false, true),
   ASSISTENCIA(10, "Assistência", false, false),
   AJUSTE(11, "Ajuste", false, false),
@@ -286,7 +287,7 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   AJUSTE(8, "Ajuste"),
   DESCARTE(10, "Descarte");
 
-  companion object{
+  companion object {
     fun list(): List<EStituacaoDev> {
       return entries.filter { it != EDITOR && it != NFD }
     }
