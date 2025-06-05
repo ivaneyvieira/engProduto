@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
   val tabNotaEntradaViewModel = TabNotaEntradaViewModel(this)
   val tabNotaEditorViewModel = TabNotaEditorViewModel(this)
-  val tabNotaPendenciaViewModel = TabNotaPendenciaViewModel(this)
+  val tabNotaPendenciaViewModel = TabNotaPedidoViewModel(this)
   val tabNotaColetaViewModel = TabNotaColetaViewModel(this)
   val tabNotaNFDViewModel = TabNotaNFDViewModel(this)
   val tabNotaNFDAbertaViewModel = TabNotaNFDAbertaViewModel(this)
@@ -44,7 +44,7 @@ class DevFor2ViewModel(view: IDevFor2View) : ViewModel<IDevFor2View>(view) {
 interface IDevFor2View : IView {
   val tabNotaEntrada: ITabNotaEntrada
   val tabNotaEditor: ITabNotaEditor
-  val tabNotaPendencia: ITabNotaPendencia
+  val tabNotaPendencia: ITabNotaPedido
   val tabNotaColeta: ITabNotaColeta
   val tabNotaNFD: ITabNotaNFD
   val tabNotaNFDAberta: ITabNotaNFDAberta

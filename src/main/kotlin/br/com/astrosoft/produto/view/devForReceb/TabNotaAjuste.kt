@@ -62,7 +62,7 @@ class TabNotaAjuste(val viewModel: TabNotaAjusteViewModel) :
     button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }

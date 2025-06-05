@@ -140,7 +140,7 @@ class UserSaci : IUser {
   var avariaRecAcerto by DelegateAuthorized2(109)
   var avariaRecReposto by DelegateAuthorized2(110)
   var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
-  var devFor2NotaPendencia by DelegateAuthorized2(112)
+  var devFor2NotaPedido by DelegateAuthorized2(112)
   var devFor2NotaNFD by DelegateAuthorized2(113)
   var devFor2NotaTransportadora by DelegateAuthorized2(114)
   var devFor2NotaEmail by DelegateAuthorized2(115)
@@ -471,11 +471,11 @@ class UserSaci : IUser {
       notaRota = value
     }
   var devFor2
-    get() = devFor2NotaPendencia || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
+    get() = devFor2NotaPedido || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
             devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada ||
             notaNFDAberta || devFor2NotaColeta || devFor2NotaDescarte || devFor2NotaEditor || admin
     set(value) {
-      devFor2NotaPendencia = value
+      devFor2NotaPedido = value
       devFor2NotaNFD = value
       devFor2NotaColeta = value
       devFor2NotaTransportadora = value

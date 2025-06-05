@@ -15,7 +15,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::recebimentoNotaEntrada, "Entrada")
     columnGrid(UserSaci::devFor2NotaEditor, "Editor")
-    columnGrid(UserSaci::devFor2NotaPendencia, "Pendencia")
+    columnGrid(UserSaci::devFor2NotaPedido, "Pedido")
     columnGrid(UserSaci::devFor2NotaColeta, "Coleta")
     columnGrid(UserSaci::devFor2NotaNFD, "NFD")
     columnGrid(UserSaci::notaNFDAberta, "NFD Aberta")
@@ -40,8 +40,8 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           binder.bind(this, UserSaci::devFor2NotaEditor.name)
         }
 
-        checkBox("Pendencia") {
-          binder.bind(this, UserSaci::devFor2NotaPendencia.name)
+        checkBox("Pedido") {
+          binder.bind(this, UserSaci::devFor2NotaPedido.name)
         }
 
         checkBox("NFD") {

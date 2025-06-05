@@ -69,7 +69,7 @@ class TabNotaColeta(val viewModel: TabNotaColetaViewModel) :
     button("Pendente") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
 

@@ -126,7 +126,7 @@ data class NotaRecebimentoProdutoDev(
     get() = this.barcodeStrList?.split(",")?.firstOrNull()?.trim() ?: ""
 
   var situacaoDevEnum: EStituacaoDev
-    get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
+    get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
     set(value) {
       situacaoDev = value.num
     }

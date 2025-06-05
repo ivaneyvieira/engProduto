@@ -62,7 +62,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
 

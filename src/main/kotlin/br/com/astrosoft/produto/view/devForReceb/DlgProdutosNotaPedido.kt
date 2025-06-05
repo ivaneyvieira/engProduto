@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPendenciaViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -17,7 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosNotaPendencia(val viewModel: TabNotaPendenciaViewModel, var nota: NotaRecebimentoDev) {
+class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
   private var edtTransportadora: TextField? = null

@@ -62,7 +62,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     button("Pendencia") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PENDENCIA)
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }

@@ -128,7 +128,7 @@ class NotaRecebimentoDev(
         loja = this.loja ?: return null,
         pesquisa = "",
       ),
-      EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PENDENCIA
+      EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
     ).firstOrNull {
       it.numeroDevolucao == this.numeroDevolucao
     }
