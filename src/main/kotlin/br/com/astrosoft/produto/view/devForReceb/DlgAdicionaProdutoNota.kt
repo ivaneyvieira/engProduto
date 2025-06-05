@@ -150,7 +150,8 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
           edtGrade?.isEnabled = false
           edtQuant?.value = 0
-          edtGrade?.value = null
+          edtGrade?.setItems(produtos.map { it.grade })
+          edtGrade?.value = produtos.firstOrNull()?.grade
           edtQuant?.focus()
         } else {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
