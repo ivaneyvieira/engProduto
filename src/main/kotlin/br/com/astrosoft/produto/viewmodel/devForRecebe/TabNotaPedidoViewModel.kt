@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaPendencia
+    get() = viewModel.view.tabNotaPedido
 
   fun updateView() {
     val filtro = subView.filtro()
