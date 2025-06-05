@@ -148,10 +148,11 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
           }
         } else if (produtos.size == 1) {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
-          edtGrade?.isEnabled = false
+          edtGrade?.isEnabled = true
           edtQuant?.value = 0
           edtGrade?.setItems(produtos.map { it.grade })
           edtGrade?.value = produtos.firstOrNull()?.grade
+          edtGrade?.isEnabled = false
           edtQuant?.focus()
         } else {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
