@@ -289,7 +289,7 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
 
   companion object {
     fun list(): List<EStituacaoDev> {
-      return entries.filter { it != EDITOR && it != NFD }
+      return entries.filter { it != EDITOR && it != NFD && it != GARANTIA}
     }
   }
 }
