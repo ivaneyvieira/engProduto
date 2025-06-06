@@ -28,4 +28,3 @@ FROM
 WHERE (TRIM(B.barcode) = :codigo
   OR TRIM(P.no) = :codigo)
   AND B.prdno IS NOT NULL
-
