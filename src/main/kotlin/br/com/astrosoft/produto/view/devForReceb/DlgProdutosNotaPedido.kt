@@ -254,7 +254,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::outDespDevolucao, "Desp", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::baseIcmsDevolucao, "Base ICMS", width = "90px")
-      columnGrid(NotaRecebimentoProdutoDev::valorMVA, "MVA", width = "90px", pattern = "#,##0.0000")
+      columnGrid(NotaRecebimentoProdutoDev::valorMVA, "MVA", width = "70px")
       columnGrid(NotaRecebimentoProdutoDev::baseIcmsSubst, "Base ST", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::icmsSubstDevolucao, "Valor ST", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valIcmsDevolucao, "V. ICMS", width = "70px")
