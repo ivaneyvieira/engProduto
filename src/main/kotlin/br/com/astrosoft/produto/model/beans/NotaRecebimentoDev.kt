@@ -158,7 +158,14 @@ class NotaRecebimentoDev(
   }
 
   fun delete() {
-    saci.removerNotaRecebimentoDev(this)
+    if (tipoDevolucaoEnun?.notasMultiplas == true) {
+      saci.removerNotaRecebimentoDevMult(this)
+    } else {
+      saci.removerNotaRecebimentoDevSimples(this)
+    }
+    produtos.forEach {
+      it.deleteProduto()
+    }
   }
 
   companion object {

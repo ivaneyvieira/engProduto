@@ -22,4 +22,8 @@ REPLACE sqldados.invAdicional (invno, tipoDevolucao, numero, situacaoDev)
 SELECT @INVNO, :tipoDevolucao, :numero, :situacaoDev
 FROM
   DUAL
-WHERE @INVNO != 0
+WHERE @INVNO != 0;
+
+SELECT @INVNO as quant
+FROM
+  DUAL

@@ -291,5 +291,9 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
     fun list(): List<EStituacaoDev> {
       return entries.filter { it != EDITOR && it != NFD && it != GARANTIA}
     }
+
+    fun findByNum(num: Int): EStituacaoDev? {
+      return entries.firstOrNull { it.num == num }
+    }
   }
 }

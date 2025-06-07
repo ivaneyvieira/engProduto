@@ -2284,22 +2284,30 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun removerNotaRecebimentoDev(dev: NotaRecebimentoDev) {
-    val sql = "/sqlSaci/removerNotaRecebimentoDev.sql"
+  fun removerNotaRecebimentoDevMult(dev: NotaRecebimentoDev) {
+    /* "$loja-$numeroDevolucao" */
+    val sql = "/sqlSaci/removerNotaRecebimentoDevMult.sql"
     script(sql) {
-      addOptionalParameter("situacaoDev", dev.situacaoDev)
-      addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
-      addOptionalParameter("numero", dev.numeroDevolucao)
+      addOptionalParameter("loja", dev.loja)
+      addOptionalParameter("numeroDevolucao", dev.numeroDevolucao)
     }
   }
 
-  fun insertNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
-    val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
-
-    if (produto.ni == null)
-      return
+  fun removerNotaRecebimentoDevSimples(dev: NotaRecebimentoDev) {
+    //$loja-$ni-$tipoDevolucao-$numeroDevolucao
+    val sql = "/sqlSaci/removerNotaRecebimentoDevSimples.sql"
     script(sql) {
-      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("loja", dev.loja)
+      addOptionalParameter("ni", dev.niPrincipal)
+      addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
+      addOptionalParameter("numeroDevolucao", dev.numeroDevolucao)
+    }
+  }
+
+  fun insertNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev): Int {
+    val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
+    val count = query(sql, Count::class) {
+      addOptionalParameter("invno", produto.ni ?: 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", produto.numeroDevolucao)
@@ -2308,6 +2316,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
       addOptionalParameter("seq", produto.seq ?: 0)
     }
+
+    return count.firstOrNull()?.quant ?: 0
   }
 
   fun updateNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
