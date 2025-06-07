@@ -156,6 +156,8 @@ SELECT A.invno,
        SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)   AS valorUnit,
        SUM((I.qtty / 1000) * (I.fob4 / 10000))                        AS valorTotal,
        I.discount / 100                                               AS valorDesconto,
+       ((SUM((I.qtty / 1000) * (I.fob4 / 10000)) + (I.ipiAmt / 100)) /
+        (I.baseIcms / 100) - 1.00) * 100                              AS valorMva,
        I.baseIcms / 100                                               AS baseIcms,
        I.icms / 100                                                   AS valIcms,
        I.ipiAmt / 100                                                 AS valIPI,
@@ -293,6 +295,7 @@ SELECT N.storeno                                                      AS loja,
        N.valorUnit,
        N.valorTotal,
        N.valorDesconto,
+       N.valorMva,
        N.baseIcms,
        N.valIcms,
        N.valIPI,
@@ -349,7 +352,7 @@ CREATE TEMPORARY TABLE T_DUP
 SELECT invno, docno, MIN(duedate) AS duedate, SUM(amtdue) AS amtdue
 FROM
   sqldados.invxa
-where invno in (select ni from T_QUERY)
+WHERE invno IN ( SELECT ni FROM T_QUERY )
 GROUP BY invno;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
@@ -438,8 +441,8 @@ SELECT loja,
        CAST(D.duedate AS date) AS dataVencimentoDup,
        D.amtdue / 100          AS valorVencimentoDup
 FROM
-  T_QUERY                        AS Q
-    LEFT JOIN T_NFO              AS N
+  T_QUERY           AS Q
+    LEFT JOIN T_NFO AS N
               ON (N.niDev = Q.numeroDevolucao)
     LEFT JOIN T_DUP AS D
               ON Q.ni = D.invno;
