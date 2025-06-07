@@ -32,10 +32,12 @@ private fun uploadFile(label: String, block: (buffer: MultiFileMemoryBuffer, upl
   upload.isAutoUpload = true
   upload.maxFileSize = 1024 * 1024 * 1024
   upload.addFileRejectedListener { event: FileRejectedEvent ->
-    println(event.errorMessage)
+    DialogHelper.showError(event.errorMessage)
   }
   upload.addFailedListener { event ->
-    println(event.reason.message)
+    event.reason.message?.let { msg ->
+      DialogHelper.showError(msg)
+    }
   }
 
   block(buffer, upload)

@@ -16,4 +16,10 @@ UPDATE IGNORE
   sqldados.iprdAdicionalDev
 SET tipoDevolucao = :tipoDevolucaoNovo
 WHERE tipoDevolucao = :tipoDevolucao
+  AND numero = :numero;
+
+UPDATE IGNORE
+sqldados.invAdicionalDevArquivo
+SET tipoDevolucao = :tipoDevolucaoNovo
+WHERE tipoDevolucao = :tipoDevolucao
   AND numero = :numero
