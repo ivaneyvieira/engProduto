@@ -92,13 +92,13 @@ data class NotaRecebimentoProdutoDev(
   var item: Int? = null
 
   val valorMVA
-    get() = if (((baseIcmsDevolucao ?: 0.00) + (valIPIDevolucao
+    get() = if (((valorTotalDevolucao ?: 0.00) + (valIPIDevolucao
                                                 ?: 0.00)) == 0.00 ||
                 (baseIcmsSubst * 10000).roundToInt() == 0
     ) {
       0.00
     } else {
-      (baseIcmsSubst / ((baseIcmsDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00))) * 100 - 100
+      (baseIcmsSubst / ((valorTotalDevolucao) + (valIPIDevolucao ?: 0.00))) * 100 - 100
     }
 
   val baseIcmsSubst
