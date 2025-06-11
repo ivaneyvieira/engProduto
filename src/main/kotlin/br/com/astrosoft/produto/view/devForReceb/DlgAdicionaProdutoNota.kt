@@ -41,8 +41,8 @@ class DlgAdicionaProdutoNota(
           this.width = "6rem"
         }
       }
-      for (i in 4..10) {
-        val linha = LinhaNota(viewModel, nota)
+      for (i in 1..14) {
+        val linha = LinhaNota(viewModel = viewModel, nota = nota, temLabel = i == 1)
         listaRow.add(linha)
         add(linha)
       }
@@ -108,7 +108,7 @@ class DlgAdicionaProdutoNota(
   }
 }
 
-class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) : HorizontalLayout() {
+class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) : HorizontalLayout() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -123,6 +123,9 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
   init {
     this.setWidthFull()
     edtCodigo = textField("Código") {
+      if(!temLabel){
+        this.label = ""
+      }
       this.width = "180px"
       this.isClearButtonVisible = true
       this.isAutoselect = true
@@ -166,15 +169,24 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev) 
     }
 
     edtDescricao = textField("Descrição") {
+      if(!temLabel){
+        this.label = ""
+      }
       this.setWidthFull()
       this.isReadOnly = true
     }
 
     edtGrade = select("Grade") {
+      if(!temLabel){
+        this.label = ""
+      }
       this.width = "120px"
     }
 
     edtQuant = integerField("Quant") {
+      if(!temLabel){
+        this.label = ""
+      }
       this.width = "120px"
       this.isClearButtonVisible = true
       this.isAutoselect = true
