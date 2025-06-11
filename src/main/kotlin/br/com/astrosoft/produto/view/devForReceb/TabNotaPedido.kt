@@ -124,7 +124,6 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    // columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null).dateFieldEditor()
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
@@ -132,10 +131,6 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null)
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
-    //columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
-    //columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
-    //columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
-    //columnGrid(NotaRecebimentoDev::dataEntrada, header = "Entrada", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
   }

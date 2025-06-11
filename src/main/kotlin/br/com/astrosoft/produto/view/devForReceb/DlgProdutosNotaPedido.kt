@@ -232,12 +232,14 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
 
       columnGrid(NotaRecebimentoProdutoDev::seq, "Item").right()
       columnGrid(NotaRecebimentoProdutoDev::loja, "Lj").right()
-      columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
+      columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")
+      columnGrid(NotaRecebimentoProdutoDev::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val dlgConferencia = DlgConferenciaProduto(viewModel, produto) {
           update()
@@ -247,8 +249,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")
-      columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")
-      columnGrid(NotaRecebimentoProdutoDev::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valorTotalDevolucao, "Valor Total", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valorDescontoDevolucao, "Desc", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")
