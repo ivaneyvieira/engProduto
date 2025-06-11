@@ -33,14 +33,14 @@ class DlgAdicionaProdutoNota(
       setSizeFull()
       this.isSpacing = false
       this.isMargin = false
-      if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
-        edtNi = integerField("NI") {
-          this.isAutoselect = true
-          this.isAutofocus = true
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.width = "6rem"
-        }
+      //if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
+      edtNi = integerField("NI") {
+        this.isAutoselect = true
+        this.isAutofocus = true
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        this.width = "6rem"
       }
+      //}
       for (i in 1..14) {
         val linha = LinhaNota(viewModel = viewModel, nota = nota, temLabel = i == 1)
         listaRow.add(linha)
@@ -108,7 +108,8 @@ class DlgAdicionaProdutoNota(
   }
 }
 
-class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) : HorizontalLayout() {
+class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) :
+  HorizontalLayout() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -123,7 +124,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
   init {
     this.setWidthFull()
     edtCodigo = textField("Código") {
-      if(!temLabel){
+      if (!temLabel) {
         this.label = ""
       }
       this.width = "180px"
@@ -169,7 +170,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
     }
 
     edtDescricao = textField("Descrição") {
-      if(!temLabel){
+      if (!temLabel) {
         this.label = ""
       }
       this.setWidthFull()
@@ -177,14 +178,14 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
     }
 
     edtGrade = select("Grade") {
-      if(!temLabel){
+      if (!temLabel) {
         this.label = ""
       }
       this.width = "120px"
     }
 
     edtQuant = integerField("Quant") {
-      if(!temLabel){
+      if (!temLabel) {
         this.label = ""
       }
       this.width = "120px"
