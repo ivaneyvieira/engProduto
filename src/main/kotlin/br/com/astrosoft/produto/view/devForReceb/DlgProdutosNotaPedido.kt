@@ -239,7 +239,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         dlgConferencia.open()
       }
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
-      columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
+      //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
