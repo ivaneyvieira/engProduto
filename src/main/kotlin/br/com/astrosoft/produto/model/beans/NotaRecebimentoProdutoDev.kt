@@ -55,6 +55,7 @@ data class NotaRecebimentoProdutoDev(
   var icms: Double?,
   var ipi: Double?,
   var frete: Double?,
+  var freteNota: Double?,
   var outDesp: Double?,
   var icmsSubst: Double?,
   var tipoDevolucao: Int?,

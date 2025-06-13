@@ -138,7 +138,13 @@ fun VerticalLayout.formHeader(
         textField("Motivo Devolução") {
           this.isReadOnly = true
           this.isExpand = true
-          this.value = nota.tipoDevolucaoName ?: ""
+          this.value = nota.tipoDevolucaoName
+        }
+        textField("Valor Frete") {
+          this.isReadOnly = true
+          this.width = "7rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.value = nota.freteNota.format()
         }
       }
     }
