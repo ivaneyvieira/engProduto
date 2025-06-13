@@ -58,9 +58,6 @@ class DlgProdutosNotaDescarte(val viewModel: TabNotaDescarteViewModel, var nota:
         textField("CTE") {
           this.width = "120px"
           this.value = nota.cteDevolucao ?: ""
-          if (this.value.isNullOrBlank()) {
-            this.value = "CTE "
-          }
           this.isReadOnly = true
         }
         this.button("Adiciona") {

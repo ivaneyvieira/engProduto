@@ -55,9 +55,6 @@ class DlgProdutosNotaTransportadora(val viewModel: TabNotaTransportadoraViewMode
         textField("CTE") {
           this.width = "120px"
           this.value = nota.cteDevolucao ?: ""
-          if (this.value.isNullOrBlank()) {
-            this.value = "CTE "
-          }
           this.isReadOnly = true
         }
         datePicker("Data") {
