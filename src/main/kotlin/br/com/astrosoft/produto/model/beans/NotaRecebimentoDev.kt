@@ -183,7 +183,8 @@ class NotaRecebimentoDev(
           (it.tipoDevolucaoEnun?.descricao?.startsWith(pesquisa, ignoreCase = true) == true) ||
           (it.vendno?.toString() == pesquisa) ||
           (it.fornecedor?.contains(pesquisa, ignoreCase = true) == true) ||
-          (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true)
+          (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true) ||
+          (it.numeroDevolucao?.toString() == pesquisa)
         }
     }
   }
