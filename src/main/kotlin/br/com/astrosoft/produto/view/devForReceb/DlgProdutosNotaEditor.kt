@@ -55,14 +55,6 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
-        textField("CTE") {
-          this.width = "120px"
-          this.value = nota.cteDevolucao ?: ""
-          if (this.value.isNullOrBlank()) {
-            this.value = "CTE "
-          }
-          this.valueChangeMode = ValueChangeMode.LAZY
-        }
         datePicker("Data") {
           this.isReadOnly = true
           this.localePtBr()

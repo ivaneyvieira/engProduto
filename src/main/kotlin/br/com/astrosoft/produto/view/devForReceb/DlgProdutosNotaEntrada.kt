@@ -91,11 +91,6 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             this.width = "20rem"
             this.value = nota.transportadora
           }
-          textField("CTE") {
-            this.isReadOnly = true
-            this.width = "7rem"
-            this.value = nota.cte?.toString()
-          }
           textField("Ped Compra") {
             this.isReadOnly = true
             this.width = "7rem"

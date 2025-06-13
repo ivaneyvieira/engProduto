@@ -55,14 +55,6 @@ class DlgProdutosNotaDescarte(val viewModel: TabNotaDescarteViewModel, var nota:
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
-        textField("CTE") {
-          this.width = "120px"
-          this.value = nota.cteDevolucao ?: ""
-          if (this.value.isNullOrBlank()) {
-            this.value = "CTE "
-          }
-          this.isReadOnly = true
-        }
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {

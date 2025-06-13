@@ -80,12 +80,6 @@ fun VerticalLayout.formHeader(
           this.isExpand = true
           this.value = nota.transportadora ?: ""
         }
-        textField("CTE") {
-          this.isReadOnly = true
-          this.width = "7rem"
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = nota.cte?.toString()
-        }
         textField("Ped Compra") {
           this.isReadOnly = true
           this.width = "7rem"
