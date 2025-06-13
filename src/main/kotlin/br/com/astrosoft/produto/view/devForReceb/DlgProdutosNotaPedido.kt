@@ -71,6 +71,19 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
         }
+        textField("CTE") {
+          this.width = "120px"
+          this.value = nota.cteDevolucao ?: ""
+          if (this.value.isNullOrBlank()) {
+            this.value = "CTE "
+          }
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.cteDevolucao = this.value ?: ""
+            viewModel.saveNota(nota)
+          }
+        }
         datePicker("Data") {
           this.localePtBr()
           this.value = nota.dataDevolucao
