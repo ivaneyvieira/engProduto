@@ -59,6 +59,7 @@ class DlgProdutosNotaAcertoPago(val viewModel: TabNotaAcertoPagoViewModel, var n
           this.width = "120px"
           this.value = nota.cteDevolucao ?: ""
           this.isReadOnly = true
+
         }
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()

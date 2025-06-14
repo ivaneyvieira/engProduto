@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -144,6 +145,13 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
 
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
+    this.gridPanel.getColumnBy(NotaRecebimentoDev::tipoDevolucaoName).setFooter("Total R$:")
+    this.gridPanel.getColumnBy(NotaRecebimentoDev::valorNFDevolucao).setFooter(
+      notas.sumOf { it.valorNFDevolucao }.format()
+    )
+    this.gridPanel.getColumnBy(NotaRecebimentoDev::valorDevolucao).setFooter(
+      notas.sumOf { it.valorDevolucao ?: 0.00 }.format()
+    )
   }
 
   override fun updateArquivos() {
