@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldo
-import br.com.astrosoft.produto.model.printText.PrintProdutos
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldoLoja
+import br.com.astrosoft.produto.model.printText.PrintProdutosLoja
 
 class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -21,14 +21,14 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
+      val produtos = ProdutoLoja.findProdutoSaldo(filtro)
 
       subView.updateProdutos(produtos)
     }
   }
 
-  fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
-    val planilha = PlanilhaProdutoSaldo()
+  fun geraPlanilha(produtos: List<ProdutoLoja>): ByteArray {
+    val planilha = PlanilhaProdutoSaldoLoja()
     return planilha.write(produtos)
   }
 
@@ -39,7 +39,7 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
     }
     val filtro = subView.filtro()
 
-    val report = PrintProdutos(filtro)
+    val report = PrintProdutosLoja(filtro)
 
     report.print(
       dados = produtos,
@@ -47,37 +47,13 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
     )
   }
 
-  fun cadastraValidade() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
-    val user = AppConfig.userLogin() as? UserSaci
-
-    if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    val tipoValidade = 2
-    val tempoValidade = itens.firstOrNull()?.mesesGarantia ?: 0
-
-    subView.openValidade(tipoValidade, tempoValidade) { validade: ValidadeSaci ->
-      if (validade.isErro() && user?.admin != true) {
-        DialogHelper.showError("Os dados fornecidos para a validade estão incorretos:\n${validade.msgErro()}")
-      } else {
-        itens.forEach { item ->
-          validade.prdno = item.prdno
-          validade.save()
-        }
-        updateView()
-      }
-    }
-  }
-
   val subView
     get() = viewModel.view.tabProdutoEstoque
 }
 
 interface ITabProdutoEstoque : ITabView {
-  fun filtro(): FiltroProdutoSaldo
-  fun updateProdutos(produtos: List<ProdutoSaldo>)
-  fun produtosSelecionados(): List<ProdutoSaldo>
+  fun filtro(): FiltroProdutoLoja
+  fun updateProdutos(produtos: List<ProdutoLoja>)
+  fun produtosSelecionados(): List<ProdutoLoja>
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
 }

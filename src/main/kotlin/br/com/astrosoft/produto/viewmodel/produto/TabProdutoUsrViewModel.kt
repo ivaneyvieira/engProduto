@@ -18,6 +18,7 @@ class TabProdutoUsrViewModel(val viewModel: ProdutoViewModel) : TabUsrViewModel(
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.produtoList = usuario.produtoList
+    this.produtoEstoque = usuario.produtoEstoque
     this.produtoCadastro = usuario.produtoCadastro
     this.produtoSped = usuario.produtoSped
     this.produtoEstoqueGiro = usuario.produtoEstoqueGiro

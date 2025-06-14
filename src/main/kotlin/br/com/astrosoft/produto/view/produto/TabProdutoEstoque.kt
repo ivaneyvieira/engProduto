@@ -20,13 +20,10 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
-  TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
+  TabPanelGrid<ProdutoLoja>(ProdutoLoja::class),
   ITabProdutoEstoque {
-  private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
-  private lateinit var edtTributo: TextField
-  private lateinit var edtRotulo: TextField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
@@ -34,17 +31,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
-  private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
-
-  fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas())
-    val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaProduto != 0
-    val loja = user?.lojaProduto ?: 1
-    val lojaEscolhida = if (loja == 0) 1 else loja
-    cmbLoja.value = viewModel.findLoja(lojaEscolhida)
-  }
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -54,18 +41,6 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
       horizontalLayout {
         this.isPadding = false
         this.isMargin = false
-        cmbLoja = select("Loja") {
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-
-          addValueChangeListener {
-            if (it.isFromClient) {
-              viewModel.updateView()
-            }
-          }
-        }
-        init()
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -82,23 +57,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-        edtTributo = textField("Tributo") {
-          this.width = "100px"
-          this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
 
-        edtRotulo = textField("Rotulo") {
-          this.width = "100px"
-          this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -154,16 +113,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-        cmbTipoSaldo = select("Tipo Saldo") {
-          this.setItems(ETipoSaldo.entries)
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-          this.value = ETipoSaldo.TOTAL
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
+
         cmdEstoque = select("Estoque") {
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -185,12 +135,6 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
           }
         }
 
-        button("Cadastra Validade") {
-          onClick {
-            viewModel.cadastraValidade()
-          }
-        }
-
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -206,44 +150,36 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
     }
   }
 
-  override fun Grid<ProdutoSaldo>.gridPanel() {
+  override fun Grid<ProdutoLoja>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoSaldo::loja, header = "Loja")
-    columnGrid(ProdutoSaldo::codigo, header = "Código").right()
-    columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldo::unidade, header = "Un")
-    columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
-    columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
-    columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
-    columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
-    columnGrid(ProdutoSaldo::tributacao, header = "Trib")
-    columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
-    columnGrid(ProdutoSaldo::ncm, header = "NCM")
-    columnGrid(ProdutoSaldo::fornecedor, header = "For")
-    columnGrid(ProdutoSaldo::abrev, header = "Abrev")
-    columnGrid(ProdutoSaldo::tipo, header = "Tipo")
-    columnGrid(ProdutoSaldo::cl, header = "C Lucro")
-    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
+    columnGrid(ProdutoLoja::codigo, header = "Código").right()
+    columnGrid(ProdutoLoja::descricao, header = "Descrição").expand()
+    columnGrid(ProdutoLoja::gradeProduto, header = "Grade")
+    columnGrid(ProdutoLoja::unidade, header = "Un")
+    columnGrid(ProdutoLoja::estoqueTotal, header = "Est Total")
+    columnGrid(ProdutoLoja::estoqueDS, header = "DS")
+    columnGrid(ProdutoLoja::estoqueMR, header = "MR")
+    columnGrid(ProdutoLoja::estoqueMF, header = "MF")
+    columnGrid(ProdutoLoja::estoquePK, header = "PK")
+    columnGrid(ProdutoLoja::estoqueTM, header = "TM")
+    columnGrid(ProdutoLoja::ncm, header = "NCM")
+    columnGrid(ProdutoLoja::fornecedor, header = "For")
+    columnGrid(ProdutoLoja::tipo, header = "Tipo")
+    columnGrid(ProdutoLoja::cl, header = "C Lucro")
+    columnGrid(ProdutoLoja::codigoRel, header = "Relac").right()
   }
 
-  override fun filtro(): FiltroProdutoSaldo {
-    return FiltroProdutoSaldo(
-      loja = cmbLoja.value?.no ?: 0,
+  override fun filtro(): FiltroProdutoLoja {
+    return FiltroProdutoLoja(
       pesquisa = edtPesquisa.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
-      tributacao = edtTributo.value ?: "",
-      rotulo = edtRotulo.value ?: "",
       tipo = edtTipo.value ?: 0,
       cl = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
-      tipoSaldo = cmbTipoSaldo.value ?: ETipoSaldo.TOTAL,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
@@ -251,11 +187,11 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
     )
   }
 
-  override fun updateProdutos(produtos: List<ProdutoSaldo>) {
+  override fun updateProdutos(produtos: List<ProdutoLoja>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<ProdutoSaldo> {
+  override fun produtosSelecionados(): List<ProdutoLoja> {
     return itensSelecionados()
   }
 
@@ -268,11 +204,11 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.ProdutoEstoque == true
+    return username?.produtoEstoque == true
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "Estoque"
 
   override fun updateComponent() {
     viewModel.updateView()

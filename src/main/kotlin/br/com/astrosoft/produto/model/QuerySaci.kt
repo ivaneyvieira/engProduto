@@ -2446,6 +2446,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoLoja(filtro: FiltroProdutoLoja): List<ProdutoLoja> {
+    TODO("Not yet implemented")
+  }
+
   companion object {
     private val db = DB("saci")
 

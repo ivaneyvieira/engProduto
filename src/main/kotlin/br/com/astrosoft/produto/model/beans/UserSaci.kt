@@ -157,6 +157,7 @@ class UserSaci : IUser {
   var devFor2NotaDescarte by DelegateAuthorized3(127)
   var devFor2NotaEditor by DelegateAuthorized3(128)
   var estoqueAcertoSimples by DelegateAuthorized3(129)
+  var produtoEstoque by DelegateAuthorized3(130)
 
   //Locais
   private var localEstoque: String?
@@ -446,7 +447,8 @@ class UserSaci : IUser {
 
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
-            produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja || admin
+            produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja ||
+            produtoEstoque || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
@@ -454,6 +456,7 @@ class UserSaci : IUser {
       produtoInventarioAgrupado = value
       produtoEditor = value
       produtoEstoqueValidadeLoja = value
+      produtoEstoque = value
     }
   var nfd
     get() = nfdDevFor || admin
