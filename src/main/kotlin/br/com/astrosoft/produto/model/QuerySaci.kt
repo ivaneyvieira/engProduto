@@ -2447,7 +2447,20 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findProdutoLoja(filtro: FiltroProdutoLoja): List<ProdutoLoja> {
-    TODO("Not yet implemented")
+    val sql = "/sqlSaci/findProdutosLoja.sql"
+    return query(sql, ProdutoLoja::class) {
+      this.addOptionalParameter("pesquisa", filtro.pesquisa)
+      this.addOptionalParameter("fornecedor", filtro.fornecedor)
+      this.addOptionalParameter("tipo", filtro.tipo)
+      this.addOptionalParameter("cl", filtro.cl)
+      this.addOptionalParameter("caracter", filtro.caracter.value)
+      this.addOptionalParameter("letraDup", filtro.letraDup.value)
+      this.addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
+      this.addOptionalParameter("estoque", filtro.estoque.value)
+      this.addOptionalParameter("saldo", filtro.saldo)
+      this.addOptionalParameter("consumo", filtro.consumo.value)
+      this.addOptionalParameter("update", filtro.update)
+    }
   }
 
   companion object {

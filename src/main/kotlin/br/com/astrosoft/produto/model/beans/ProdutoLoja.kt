@@ -15,24 +15,24 @@ class ProdutoLoja(
   var localizacao: String?,
   var prdnoRel: String?,
   var codigoRel: Int?,
-  val estoqueTotal: Int?,
-  val estoqueDS: Int?,
-  val estoqueMR: Int?,
-  val estoqueMF: Int?,
-  val estoquePK: Int?,
-  val estoqueTM: Int?,
+  var estoqueTotal: Int?,
+  var estoqueDS: Int?,
+  var estoqueMR: Int?,
+  var estoqueMF: Int?,
+  var estoquePK: Int?,
+  var estoqueTM: Int?,
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
 
   companion object {
-    fun findProdutoSaldo(filtro: FiltroProdutoLoja): List<ProdutoLoja> {
+    fun findProdutoLoja(filtro: FiltroProdutoLoja): List<ProdutoLoja> {
       return saci.findProdutoLoja(filtro)
     }
   }
 }
 
-data class  FiltroProdutoLoja(
+data class FiltroProdutoLoja(
   val pesquisa: String,
   val fornecedor: Int,
   val tipo: Int,

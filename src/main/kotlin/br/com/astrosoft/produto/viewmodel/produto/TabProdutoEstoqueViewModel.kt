@@ -21,8 +21,7 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoLoja.findProdutoSaldo(filtro)
-
+      val produtos = ProdutoLoja.findProdutoLoja(filtro)
       subView.updateProdutos(produtos)
     }
   }
