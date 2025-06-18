@@ -48,6 +48,5 @@ data class FiltroProdutoLoja(
   val ncm: String,
   val tributacao: String,
   val rotulo: String,
-  val update: Boolean,
 )
 

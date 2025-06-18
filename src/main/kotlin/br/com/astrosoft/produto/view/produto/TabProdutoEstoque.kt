@@ -97,7 +97,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
         }
 
         edtNCM = textField("NCM") {
-          this.width = "100px"
+          this.width = "120px"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           addValueChangeListener {
@@ -218,7 +218,6 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
       tributacao = edtTributo.value ?: "",
       rotulo = edtRotulo.value ?: "",
       ncm = edtNCM.value ?: "",
-      update = true
     )
   }
 

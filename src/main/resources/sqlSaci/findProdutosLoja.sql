@@ -16,7 +16,6 @@ FROM
   sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
-  AND :update = TRUE
 GROUP BY A.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_REL;

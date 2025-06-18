@@ -2462,7 +2462,6 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("estoque", filtro.estoque.value)
       this.addOptionalParameter("saldo", filtro.saldo)
       this.addOptionalParameter("consumo", filtro.consumo.value)
-      this.addOptionalParameter("update", filtro.update)
     }
   }
 
