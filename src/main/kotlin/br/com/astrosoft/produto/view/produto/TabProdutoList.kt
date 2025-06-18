@@ -82,7 +82,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
-        edtTributo = textField("Tributo") {
+        edtTributo = textField("CST") {
           this.width = "100px"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
@@ -219,7 +219,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
     columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
-    columnGrid(ProdutoSaldo::tributacao, header = "Trib")
+    columnGrid(ProdutoSaldo::tributacao, header = "CST")
     columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
     columnGrid(ProdutoSaldo::ncm, header = "NCM")
     columnGrid(ProdutoSaldo::fornecedor, header = "For")

@@ -56,6 +56,9 @@ FROM
     LEFT JOIN sqldados.vend    AS V
               ON V.no = P.mfno
 WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
+  AND (P.taxno = :tributacao OR :tributacao = 0)
+  AND (R.form_label = :rotulo OR :rotulo = '')
+  AND (N.ncm = :ncm OR :ncm = '')
   AND (P.typeno = :tipo OR :tipo = 0)
   AND (P.clno = :cl OR P.deptno = :cl OR P.groupno = :cl OR :cl = 0)
   AND CASE :caracter
@@ -112,6 +115,8 @@ SELECT S.prdno                  AS prdno,
        S.estoqueMF              AS estoqueMF,
        S.estoquePK              AS estoquePK,
        S.estoqueTM              AS estoqueTM,
+       P.tributacao             AS tributacao,
+       P.rotulo                 AS rotulo,
        P.ncm                    AS ncm,
        P.fornecedor             AS fornecedor,
        P.tipo                   AS tipo,
@@ -141,6 +146,8 @@ SELECT prdno,
        estoqueMF,
        estoquePK,
        estoqueTM,
+       tributacao,
+       rotulo,
        ncm,
        fornecedor,
        tipo,

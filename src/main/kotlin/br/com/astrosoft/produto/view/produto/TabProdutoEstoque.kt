@@ -23,6 +23,9 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
   TabPanelGrid<ProdutoLoja>(ProdutoLoja::class),
   ITabProdutoEstoque {
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtTributo: TextField
+  private lateinit var edtRotulo: TextField
+  private lateinit var edtNCM: TextField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTipo: IntegerField
   private lateinit var edtCl: IntegerField
@@ -58,6 +61,24 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
           }
         }
 
+        edtTributo = textField("CST") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtRotulo = textField("Rotulo") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -67,6 +88,15 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
           }
         }
         edtCl = integerField("C Lucro") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtNCM = textField("NCM") {
           this.width = "100px"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
@@ -164,6 +194,8 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
     columnGrid(ProdutoLoja::estoqueMF, header = "MF")
     columnGrid(ProdutoLoja::estoquePK, header = "PK")
     columnGrid(ProdutoLoja::estoqueTM, header = "TM")
+    columnGrid(ProdutoLoja::tributacao, header = "CST")
+    columnGrid(ProdutoLoja::rotulo, header = "Rotulo")
     columnGrid(ProdutoLoja::ncm, header = "NCM")
     columnGrid(ProdutoLoja::fornecedor, header = "For")
     columnGrid(ProdutoLoja::tipo, header = "Tipo")
@@ -183,6 +215,9 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
+      tributacao = edtTributo.value ?: "",
+      rotulo = edtRotulo.value ?: "",
+      ncm = edtNCM.value ?: "",
       update = true
     )
   }

@@ -2451,6 +2451,9 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoLoja::class) {
       this.addOptionalParameter("pesquisa", filtro.pesquisa)
       this.addOptionalParameter("fornecedor", filtro.fornecedor)
+      this.addOptionalParameter("tributacao", filtro.tributacao)
+      this.addOptionalParameter("rotulo", filtro.rotulo)
+      this.addOptionalParameter("ncm", filtro.ncm)
       this.addOptionalParameter("tipo", filtro.tipo)
       this.addOptionalParameter("cl", filtro.cl)
       this.addOptionalParameter("caracter", filtro.caracter.value)

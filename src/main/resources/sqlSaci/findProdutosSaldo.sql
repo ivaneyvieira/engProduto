@@ -64,7 +64,7 @@ FROM
     LEFT JOIN sqldados.vend    AS V
               ON V.no = P.mfno
 WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
-  AND (P.taxno = :tributacao OR :tributacao = 0)
+  AND (P.taxno = :tributacao OR :tributacao = '')
   AND (R.form_label = :rotulo OR :rotulo = '')
   AND (P.typeno = :tipo OR :tipo = 0)
   AND (P.clno = :cl OR P.deptno = :cl OR P.groupno = :cl OR :cl = 0)

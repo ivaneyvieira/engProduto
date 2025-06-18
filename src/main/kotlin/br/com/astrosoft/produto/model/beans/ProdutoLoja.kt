@@ -10,6 +10,8 @@ class ProdutoLoja(
   var unidade: String?,
   var ncm: String?,
   var fornecedor: Int?,
+  var tributacao: String?,
+  var rotulo: String?,
   var tipo: Int?,
   var cl: Int?,
   var localizacao: String?,
@@ -43,6 +45,9 @@ data class FiltroProdutoLoja(
   val estoque: EEstoque,
   val saldo: Int,
   val consumo: EConsumo,
+  val ncm: String,
+  val tributacao: String,
+  val rotulo: String,
   val update: Boolean,
 )
 
