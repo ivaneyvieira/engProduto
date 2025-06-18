@@ -200,7 +200,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
     columnGrid(ProdutoLoja::fornecedor, header = "For")
     columnGrid(ProdutoLoja::tipo, header = "Tipo")
     columnGrid(ProdutoLoja::cl, header = "C Lucro")
-    columnGrid(ProdutoLoja::codigoRel, header = "Relac").right()
+    //columnGrid(ProdutoLoja::codigoRel, header = "Relac").right()
   }
 
   override fun filtro(): FiltroProdutoLoja {
