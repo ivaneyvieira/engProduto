@@ -74,8 +74,7 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
-  AND :update = TRUE;
+  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000));
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
@@ -94,7 +93,6 @@ SELECT S.prdno                                                                  
 FROM
   sqldados.stk AS S
 WHERE (S.storeno IN (2, 3, 4, 5, 8))
-  AND :update = TRUE
 GROUP BY prdno, gradeProduto;
 
 
