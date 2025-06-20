@@ -242,7 +242,6 @@ FROM
                USING (storeno, prdno, grade)
 GROUP BY prdno, grade;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                      AS loja,
@@ -275,7 +274,7 @@ SELECT N.storeno                                                      AS loja,
        P.mfno                                                         AS vendnoProduto,
        ROUND(N.qtty)                                                  AS quant,
        ROUND(E.estoque)                                               AS estoque,
-       P.mfno_ref                                                     AS refFabrica,
+       IFNULL(PR.prdrefno, P.mfno_ref)                                AS refFabrica,
        N.cfop                                                         AS cfop,
        N.cst                                                          AS cst,
        @VALID := IF((tipoGarantia = 3 AND garantia = 999) OR (tipoGarantia = 2 AND garantia > 0), 'S',
@@ -339,6 +338,8 @@ FROM
                ON C.cpf_cgc = V.cgc
     INNER JOIN sqldados.prd    AS P
                ON P.no = N.prdno
+    LEFT JOIN  sqldados.prdref AS PR
+               ON N.prdno = PR.prdno AND N.grade = PR.grade AND P.mfno = PR.vendno
     LEFT JOIN  T_BARCODE       AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
     LEFT JOIN  T_EST           AS E
