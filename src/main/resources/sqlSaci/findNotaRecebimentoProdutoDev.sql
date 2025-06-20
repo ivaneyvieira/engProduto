@@ -485,6 +485,9 @@ UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 
+
+
+
 SELECT *
 FROM
   T_RESULT AS R
