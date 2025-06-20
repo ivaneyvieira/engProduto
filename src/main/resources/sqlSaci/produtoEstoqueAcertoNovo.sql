@@ -36,7 +36,7 @@ SELECT numero,
        estoqueLoja,
        processado,
        transacao,
-       0                            AS gravadoLogin,
-       FALSE                        AS gravado
+       0     AS gravadoLogin,
+       FALSE AS gravado
 FROM
   T_ACERTO

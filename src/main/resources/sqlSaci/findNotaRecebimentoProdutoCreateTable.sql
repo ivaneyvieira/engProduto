@@ -66,5 +66,5 @@ FROM
 SHOW INDEX FROM sqldados.nf;
 
 
-DROP INDEX  e8 ON sqldados.nf;
+DROP INDEX e8 ON sqldados.nf;
 CREATE INDEX e8 ON sqldados.nf (tipo, paymno, status, issuedate);

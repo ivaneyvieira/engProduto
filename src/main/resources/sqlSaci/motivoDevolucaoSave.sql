@@ -19,7 +19,7 @@ WHERE tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 
 UPDATE IGNORE
-sqldados.invAdicionalDevArquivo
+  sqldados.invAdicionalDevArquivo
 SET tipoDevolucao = :tipoDevolucaoNovo
 WHERE tipoDevolucao = :tipoDevolucao
   AND numero = :numero

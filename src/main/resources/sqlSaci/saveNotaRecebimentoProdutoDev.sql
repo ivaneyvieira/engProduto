@@ -24,6 +24,6 @@ FROM
   DUAL
 WHERE @INVNO != 0;
 
-SELECT @INVNO as quant
+SELECT @INVNO AS quant
 FROM
   DUAL

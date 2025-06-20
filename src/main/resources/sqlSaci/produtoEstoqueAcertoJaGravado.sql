@@ -1,4 +1,4 @@
-SELECT count(*) as quant
+SELECT COUNT(*) AS quant
 FROM
   sqldados.produtoEstoqueAcerto
 WHERE numloja = :numLoja

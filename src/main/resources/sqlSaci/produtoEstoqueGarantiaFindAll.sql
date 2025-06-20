@@ -224,6 +224,6 @@ WHERE (
         S.sname LIKE @PESQUISA_LIKE OR
         UR.forReceb = @PESQUISA_NUM OR
         UR.nforReceb LIKE @PESQUISA_LIKE)
-HAVING (:processado = 'S' AND processado = 1) OR
-       (:processado = 'N' AND processado = 0) OR
-       (:processado = 'T' AND processado = 0)
+HAVING (:processado = 'S' AND processado = 1)
+    OR (:processado = 'N' AND processado = 0)
+    OR (:processado = 'T' AND processado = 0)

@@ -51,11 +51,13 @@ CREATE TEMPORARY TABLE T_SAIDAS
 SELECT storeno, prdno, grade, SUM(vendas) AS vendas
 FROM
   ( SELECT storeno, prdno, grade, vendas
-    FROM T_VENDAS
+    FROM
+      T_VENDAS
     UNION
     DISTINCT
     SELECT storeno, prdno, grade, vendas
-    FROM T_STKMOV ) AS S
+    FROM
+      T_STKMOV ) AS S
 GROUP BY storeno, prdno, grade;
 
 UPDATE sqldados.qtd_vencimento AS Q INNER JOIN T_SAIDAS AS S USING (storeno, prdno, grade)

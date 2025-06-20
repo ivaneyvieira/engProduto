@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS sqldados.invDevolucao;
-CREATE  TABLE sqldados.invDevolucao
+CREATE TABLE sqldados.invDevolucao
 (
   INDEX (storeno, nfo, motivo)
 )

@@ -5,28 +5,28 @@ CREATE TEMPORARY TABLE T_NOTA
 (
   PRIMARY KEY (invno)
 )
-SELECT I.invno                                                                                                  AS invno,
-       I.storeno                                                                                                AS codLoja,
-       S.sname                                                                                                  AS loja,
-       CAST(CONCAT(I.nfname, '/', I.invse) AS CHAR)                                                             AS notaFiscal,
-       CAST(I.date AS DATE)                                                                                     AS data,
-       I.vendno                                                                                                 AS vendno,
-       I.remarks                                                                                                AS remarks,
-       IFNULL(NF1.storeno, NF2.storeno)                                                                         AS storeno,
-       IFNULL(NF1.pdvno, NF2.pdvno)                                                                             AS pdvno,
-       IFNULL(NF1.xano, NF2.xano)                                                                               AS xano,
+SELECT I.invno                                                             AS invno,
+       I.storeno                                                           AS codLoja,
+       S.sname                                                             AS loja,
+       CAST(CONCAT(I.nfname, '/', I.invse) AS CHAR)                        AS notaFiscal,
+       CAST(I.date AS DATE)                                                AS data,
+       I.vendno                                                            AS vendno,
+       I.remarks                                                           AS remarks,
+       IFNULL(NF1.storeno, NF2.storeno)                                    AS storeno,
+       IFNULL(NF1.pdvno, NF2.pdvno)                                        AS pdvno,
+       IFNULL(NF1.xano, NF2.xano)                                          AS xano,
        CAST(CONCAT(IFNULL(NF1.nfno, NF2.nfno), '/',
-                   IFNULL(NF1.nfse, NF2.nfse)) AS CHAR)                                                         AS nfVenda,
-       DATE(IFNULL(NF1.issuedate, NF2.base_iss_amt))                                                            AS nfData,
-       IFNULL(NF1.custno, NF2.custno)                                                                           AS custno,
-       IFNULL(NF1.empno, NF2.empno)                                                                             AS empno,
-       C.name                                                                                                   AS cliente,
-       E.sname                                                                                                  AS vendedor,
+                   IFNULL(NF1.nfse, NF2.nfse)) AS CHAR)                    AS nfVenda,
+       DATE(IFNULL(NF1.issuedate, NF2.base_iss_amt))                       AS nfData,
+       IFNULL(NF1.custno, NF2.custno)                                      AS custno,
+       IFNULL(NF1.empno, NF2.empno)                                        AS empno,
+       C.name                                                              AS cliente,
+       E.sname                                                             AS vendedor,
        @NOTA := TRIM(SUBSTRING_INDEX(
            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)), ' ',
-           1))                                                                                                  AS nfRmk,
-       SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                                                       AS nfno,
-       MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2)                                      AS nfse
+           1))                                                             AS nfRmk,
+       SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                  AS nfno,
+       MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2) AS nfse
 FROM
   sqldados.inv               AS I
     LEFT JOIN sqldados.store AS S

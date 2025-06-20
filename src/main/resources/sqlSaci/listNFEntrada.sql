@@ -2,27 +2,27 @@ SET SQL_MODE = '';
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
-SELECT N.id                                                                                                           AS id,
-       L.no                                                                                                           AS loja,
-       L.sname                                                                                                        AS sigla,
-       NUMERO                                                                                                         AS numero,
-       SERIE                                                                                                          AS serie,
-       dataEmissao                                                                                                    AS dataEmissao,
-       V.no                                                                                                           AS fornecedorNota,
-       C.no                                                                                                           AS fornecedorCad,
-       cnpjEmitente                                                                                                   AS cnpjEmitente,
-       nomeFornecedor                                                                                                 AS nomeFornecedor,
-       valorTotalProdutos                                                                                             AS valorTotalProdutos,
+SELECT N.id                                              AS id,
+       L.no                                              AS loja,
+       L.sname                                           AS sigla,
+       NUMERO                                            AS numero,
+       SERIE                                             AS serie,
+       dataEmissao                                       AS dataEmissao,
+       V.no                                              AS fornecedorNota,
+       C.no                                              AS fornecedorCad,
+       cnpjEmitente                                      AS cnpjEmitente,
+       nomeFornecedor                                    AS nomeFornecedor,
+       valorTotalProdutos                                AS valorTotalProdutos,
        MID(N.xmlNfe, LOCATE('<vNF>', N.xmlNfe) + 5, LOCATE('</vNF>', N.xmlNfe) - LOCATE('<vNF>', N.xmlNfe) - 5) *
-       1                                                                                                              AS valorTotal,
+       1                                                 AS valorTotal,
        MID(N.xmlNfe, LOCATE('<natOp>', N.xmlNfe) + 7, LOCATE('</natOp>', N.xmlNfe) - LOCATE('<natOp>', N.xmlNfe) -
-                                                      7)                                                              AS natureza,
-       N.chave                                                                                                        AS chave,
-       xmlNfe                                                                                                         AS xmlNfe,
-       IF(I2.invno IS NULL, 'N', 'S')                                                                                 AS preEntrada,
-       IF(I.invno IS NULL, 'N', 'S')                                                                                  AS entrada,
-       I2.ordno                                                                                                       AS ordno,
-       P.pedido                                                                                                       AS pedidoEdit
+                                                      7) AS natureza,
+       N.chave                                           AS chave,
+       xmlNfe                                            AS xmlNfe,
+       IF(I2.invno IS NULL, 'N', 'S')                    AS preEntrada,
+       IF(I.invno IS NULL, 'N', 'S')                     AS entrada,
+       I2.ordno                                          AS ordno,
+       P.pedido                                          AS pedidoEdit
 FROM
   sqldados.notasEntradaNdd        AS N
     INNER JOIN sqldados.store     AS L
