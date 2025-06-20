@@ -260,7 +260,8 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   FRET_FOB(9, "Frete FOB", false, true),
   ASSISTENCIA(10, "Assistência", false, false),
   AJUSTE(11, "Ajuste", false, false),
-  PRODUTO_TROCADO(12, "Produto Trocado", false, false);
+  PRODUTO_TROCADO(12, "Produto Trocado", false, false),
+  TROCA_CNPJ(14, "Troca CNPJ", false, false);
 
   override fun toString(): String {
     return descricao
@@ -289,7 +290,7 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
 
   companion object {
     fun list(): List<EStituacaoDev> {
-      return entries.filter { it != EDITOR && it != NFD && it != GARANTIA}
+      return entries.filter { it != EDITOR && it != NFD && it != GARANTIA }
     }
 
     fun findByNum(num: Int): EStituacaoDev? {
