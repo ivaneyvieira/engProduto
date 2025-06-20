@@ -261,7 +261,7 @@ enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultipla
   ASSISTENCIA(10, "Assistência", false, false),
   AJUSTE(11, "Ajuste", false, false),
   PRODUTO_TROCADO(12, "Produto Trocado", false, false),
-  TROCA_CNPJ(14, "Troca CNPJ", false, false);
+  TROCA_CNPJ(14, "Muda CNPJ", false, false);
 
   override fun toString(): String {
     return descricao
