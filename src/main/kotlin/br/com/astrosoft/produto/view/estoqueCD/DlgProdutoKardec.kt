@@ -61,6 +61,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       columnGrid(ProdutoKardec::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
       columnGrid(ProdutoKardec::qtde, "Qtd")
       columnGrid(ProdutoKardec::saldo, "Saldo")
+      columnGrid(ProdutoKardec::saldoEmb, "SaldoEmb")
     }
     this.addAndExpand(gridDetail)
     update()

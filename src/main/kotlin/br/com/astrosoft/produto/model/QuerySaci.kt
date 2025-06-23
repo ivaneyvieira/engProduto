@@ -2465,6 +2465,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoEmbalagem(): List<ProdutoEmbalagem> {
+    val sql = "/sqlSaci/produtoEmb.sql"
+    return query(sql, ProdutoEmbalagem::class)
+  }
+
   companion object {
     private val db = DB("saci")
 

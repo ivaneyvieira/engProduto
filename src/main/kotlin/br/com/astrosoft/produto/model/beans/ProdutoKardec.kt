@@ -19,6 +19,14 @@ data class ProdutoKardec(
     saci.saveKardec(this)
   }
 
+  val saldoEmb: Double
+    get() {
+      val prdno = this.prdno ?: return 0.00
+      val prdEmb = ProdutoEmbalagem.findEmbalagem(prdno)
+      val fator = prdEmb?.qtdEmbalagem ?: 1.0
+      return (saldo ?: 0) * 1.00 / fator
+    }
+
   val codigo: Int
     get() = prdno?.trim()?.toIntOrNull() ?: 0
   val tipoDescricao: String
