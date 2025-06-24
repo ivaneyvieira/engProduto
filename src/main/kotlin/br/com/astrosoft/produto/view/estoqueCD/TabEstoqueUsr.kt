@@ -72,6 +72,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Copia Loc") {
         binder.bind(this, UserSaci::estoqueCopiaLoc.name)
       }
+      checkBox("Edita Conf") {
+        binder.bind(this, UserSaci::estoqueEditaConf.name)
+      }
     }
     verticalBlock("Filtros") {
       filtroLocalizacao(binder, UserSaci::listaEstoque)

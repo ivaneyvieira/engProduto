@@ -113,7 +113,10 @@ data class FiltroNota(
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {
-  EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
+  EXP(0, "Expedição"),
+  CD(1, "CD"),
+  ENT(2, "Entregue"),
+  TODOS(999, "Todos")
 }
 
 enum class ETipoNotaFiscal(val descricao: String) {

@@ -230,11 +230,13 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::qtConferencia, header = "Conferência", width = "100px").right()
-    addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-      val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
-        gridPanel.dataProvider.refreshAll()
+    if (user?.estoqueEditaConf == true) {
+      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
+        val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
+          gridPanel.dataProvider.refreshAll()
+        }
+        dlgConferencia.open()
       }
-      dlgConferencia.open()
     }
     //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")

@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
@@ -56,7 +57,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       columnGrid(ProdutoKardec::loja, "Loja")
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::userLogin, "Usuário")
-      columnGrid(ProdutoKardec::doc, "Doc")
+      columnGrid(ProdutoKardec::doc, "Doc").right()
       columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
       columnGrid(ProdutoKardec::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
       columnGrid(ProdutoKardec::qtde, "Qtd")

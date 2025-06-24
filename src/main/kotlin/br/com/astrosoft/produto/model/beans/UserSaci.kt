@@ -158,6 +158,7 @@ class UserSaci : IUser {
   var devFor2NotaEditor by DelegateAuthorized3(128)
   var estoqueAcertoSimples by DelegateAuthorized3(129)
   var produtoEstoque by DelegateAuthorized3(130)
+  var estoqueEditaConf by DelegateAuthorized3(131)
 
   //Locais
   private var localEstoque: String?
