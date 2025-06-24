@@ -119,7 +119,7 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): 
       estoqueSis = it.saldo,
       estoqueCD = it.estoqueCD,
       estoqueLoja = it.estoqueLoja,
-      observacao = it.observacao,
+      observacao = it.qtConferencia?.toString(),
     )
   }
 }

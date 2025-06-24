@@ -11,7 +11,7 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.IntegerField
 import java.time.LocalDate
 
 class DlgConferenciaSaldo(
@@ -20,9 +20,9 @@ class DlgConferenciaSaldo(
   val onClose: () -> Unit = {}
 ) :
   Dialog() {
-  private var edtConferencia: TextField? = null
+  private var edtConferencia: IntegerField? = null
   private var edtDataInicial: DatePicker? = null
-  private var edtDataObservacao: DatePicker? = null
+  private var edtDataConf: DatePicker? = null
 
   init {
     this.isModal = true
@@ -39,15 +39,15 @@ class DlgConferenciaSaldo(
           this.isClearButtonVisible = true
           this.localePtBr()
         }
-        edtDataObservacao = datePicker("Data Conf") {
+        edtDataConf = datePicker("Data Conf") {
           this.setWidthFull()
           this.value = LocalDate.now()
           this.localePtBr()
         }
       }
-      edtConferencia = textField("Conferência") {
+      edtConferencia = integerField("Conferência") {
         this.setWidthFull()
-        value = produto.observacao ?: ""
+        value = produto.qtConferencia ?: 0
       }
     }
     this.width = "60%"
@@ -81,16 +81,16 @@ class DlgConferenciaSaldo(
     }
 
     val localizacao = produto.locApp
-    val dataConferencia = produto.dataObservacao.format()
+    val dataConferencia = produto.dataConferencia.format()
     val saldo = produto.saldo ?: 0
 
     return "$codigo $descricao$grade ($localizacao) Data Conferência: $dataConferencia Estoque: $saldo"
   }
 
   private fun closeForm() {
-    produto.observacao = edtConferencia?.value
-    produto.dataObservacao = edtDataObservacao?.value
     produto.dataInicial = edtDataInicial?.value
+    produto.dataConferencia = edtDataConf?.value
+    produto.qtConferencia = edtConferencia?.value
     viewModel.updateProduto(produto, false)
     onClose.invoke()
     this.close()

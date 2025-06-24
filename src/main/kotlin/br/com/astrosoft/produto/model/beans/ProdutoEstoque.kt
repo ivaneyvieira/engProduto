@@ -24,8 +24,8 @@ class ProdutoEstoque(
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
-  var dataObservacao: LocalDate? = null,
-  var observacao: String? = null,
+  var dataConferencia: LocalDate? = null,
+  var qtConferencia: Int? = null,
   var preco: Double? = null,
   var estoqueUser: Int? = null,
   var estoqueLogin: String? = null,
@@ -73,8 +73,7 @@ class ProdutoEstoque(
       return estSis - estCD
     }
 
-  val dataInicialDefault
-    get() = dataInicial ?: LocalDate.now().withDayOfMonth(1)
+  fun dataInicialDefault(): LocalDate = dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
   val codigoStr
     get() = this.codigo?.toString() ?: ""

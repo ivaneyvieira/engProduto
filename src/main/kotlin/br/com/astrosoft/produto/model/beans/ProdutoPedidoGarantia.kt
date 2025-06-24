@@ -105,7 +105,7 @@ fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoPedidoGarantia> {
       descricao = it.descricao,
       grade = it.grade,
       estoqueLoja = it.saldo,
-      observacao = it.observacao,
+      observacao = it.qtConferencia?.toString(),
     )
   }
 }

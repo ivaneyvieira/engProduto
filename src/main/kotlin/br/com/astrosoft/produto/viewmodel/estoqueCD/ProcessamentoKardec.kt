@@ -66,7 +66,7 @@ object ProcessamentoKardec {
   }
 
   private fun fetchKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val date = produto.dataInicialDefault
+    val date = produto.dataInicialDefault()
     val lista: List<ProdutoKardec> =
         produto.recebimentos(date) +
         produto.ressuprimento(date) +
