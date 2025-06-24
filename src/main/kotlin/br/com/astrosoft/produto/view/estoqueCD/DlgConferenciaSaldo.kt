@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
@@ -12,7 +11,6 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
-import java.time.LocalDate
 
 class DlgConferenciaSaldo(
   val viewModel: IModelConferencia,
@@ -22,7 +20,7 @@ class DlgConferenciaSaldo(
   Dialog() {
   private var edtConferencia: IntegerField? = null
   private var edtDataInicial: DatePicker? = null
-  private var edtDataConf: DatePicker? = null
+  //private var edtDataConf: DatePicker? = null
 
   init {
     this.isModal = true
@@ -39,19 +37,19 @@ class DlgConferenciaSaldo(
           this.isClearButtonVisible = true
           this.localePtBr()
         }
-        edtDataConf = datePicker("Data Conf") {
+        //edtDataConf = datePicker("Data Conf") {
+        //  this.setWidthFull()
+        //  this.value = LocalDate.now()
+        //  this.localePtBr()
+        //}
+        edtConferencia = integerField("Conferência") {
           this.setWidthFull()
-          this.value = LocalDate.now()
-          this.localePtBr()
+          value = produto.qtConferencia ?: 0
         }
       }
-      edtConferencia = integerField("Conferência") {
-        this.setWidthFull()
-        value = produto.qtConferencia ?: 0
-      }
     }
-    this.width = "60%"
-    this.height = "60%"
+    this.width = "30%"
+    this.height = "30%"
   }
 
   fun HasComponents.toolBar() {
@@ -81,16 +79,17 @@ class DlgConferenciaSaldo(
     }
 
     val localizacao = produto.locApp
-    val dataConferencia = produto.dataConferencia.format()
+    //val dataConferencia = produto.dataConferencia.format()
     val saldo = produto.saldo ?: 0
 
-    return "$codigo $descricao$grade ($localizacao) Data Conferência: $dataConferencia Estoque: $saldo"
+    return "$codigo $descricao$grade ($localizacao) Estoque: $saldo"
   }
 
   private fun closeForm() {
     produto.dataInicial = edtDataInicial?.value
-    produto.dataConferencia = edtDataConf?.value
+    //produto.dataConferencia = edtDataConf?.value
     produto.qtConferencia = edtConferencia?.value
+    produto.dataUpdate = null
     viewModel.updateProduto(produto, false)
     onClose.invoke()
     this.close()

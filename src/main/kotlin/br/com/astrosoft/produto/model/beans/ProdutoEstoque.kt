@@ -24,7 +24,7 @@ class ProdutoEstoque(
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
-  var dataConferencia: LocalDate? = null,
+  //var dataConferencia: LocalDate? = null,
   var qtConferencia: Int? = null,
   var preco: Double? = null,
   var estoqueUser: Int? = null,
@@ -73,7 +73,9 @@ class ProdutoEstoque(
       return estSis - estCD
     }
 
-  fun dataInicialDefault(): LocalDate = dataInicial ?: LocalDate.now().withDayOfMonth(1)
+  fun dataInicialDefault(): LocalDate {
+    return dataInicial ?: LocalDate.now().withDayOfMonth(1)
+  }
 
   val codigoStr
     get() = this.codigo?.toString() ?: ""
@@ -274,26 +276,41 @@ class ProdutoEstoque(
     }
   }
 
-  fun saldoAnterior(dataInicial: LocalDate): List<ProdutoKardec> {
-    val list = saci.findSaldoData(
-      loja = 4,
-      codigo = codigo.toString(),
-      grade = grade ?: "",
-      dataInicial = dataInicial
-    )
-    return list.map { saldo ->
-      ProdutoKardec(
-        loja = saldo.storeno,
-        prdno = saldo.prdno,
-        grade = saldo.grade,
-        data = saldo.date,
-        doc = "Estoque",
-        tipo = ETipoKardec.INICIAL,
-        qtde = saldo.quant,
-        saldo = 0,
-        userLogin = "ADM"
+  fun saldoInicial(dataInicial: LocalDate): List<ProdutoKardec> {
+    if (qtConferencia == null) {
+      val list = saci.findSaldoData(
+        loja = 4,
+        codigo = codigo.toString(),
+        grade = grade ?: "",
+        dataInicial = dataInicial
       )
+      return list.map { saldo ->
+        ProdutoKardec(
+          loja = saldo.storeno,
+          prdno = saldo.prdno,
+          grade = saldo.grade,
+          data = dataInicial,
+          doc = "Estoque",
+          tipo = ETipoKardec.INICIAL,
+          qtde = saldo.quant,
+          saldo = 0,
+          userLogin = "ADM"
+        )
+      }
     }
+
+    val produtoKardec = ProdutoKardec(
+      loja = 4,
+      prdno = prdno,
+      grade = grade ?: "",
+      data = dataInicial,
+      doc = "Estoque",
+      tipo = ETipoKardec.INICIAL,
+      qtde = qtConferencia,
+      saldo = 0,
+      userLogin = "ADM"
+    )
+    return listOf(produtoKardec)
   }
 
   fun acertoEstoque(dataInicial: LocalDate): List<ProdutoKardec> {

@@ -72,7 +72,7 @@ object ProcessamentoKardec {
         produto.ressuprimento(date) +
         produto.expedicao(date) +
         produto.reposicao(date) +
-        produto.saldoAnterior(date) +
+        produto.saldoInicial(date) +
         produto.acertoEstoque(date)
     return lista.ajustaOrdem()
   }

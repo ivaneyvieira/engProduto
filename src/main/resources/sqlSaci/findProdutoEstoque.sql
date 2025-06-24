@@ -174,7 +174,7 @@ SELECT loja,
        dataInicial,
        dataUpdate,
        kardec,
-       dataConferencia,
+       /*dataConferencia,*/
        qtConferencia,
        preco,
        estoqueUser,
