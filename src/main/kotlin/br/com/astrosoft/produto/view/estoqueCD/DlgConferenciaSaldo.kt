@@ -38,7 +38,7 @@ class DlgConferenciaSaldo(
       horizontalLayout {
         this.setWidthFull()
         edtDataInicial = datePicker("Início Kardex CD") {
-          this.width = "6rem"
+          this.width = "8.5rem"
           this.value = produto.dataInicial
           this.isClearButtonVisible = true
           this.isClearButtonVisible = true
@@ -62,7 +62,6 @@ class DlgConferenciaSaldo(
         edtEmbalagem = textField("Est Emb") {
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
-          this.setWidthFull()
           this.isReadOnly = true
           this.value = processaEmbalagem(edtConferencia?.value ?: 0).format()
         }
