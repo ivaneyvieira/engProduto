@@ -229,7 +229,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
-    columnGrid(ProdutoEstoque::qtConferencia, header = "Conferência", width = "100px").right()
+    columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "100px").right()
     if (user?.estoqueEditaConf == true) {
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
         val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
@@ -241,7 +241,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
     columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Início Kard", width = "100px")
+    columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
       if (user?.estoqueEditaLoc == true) {

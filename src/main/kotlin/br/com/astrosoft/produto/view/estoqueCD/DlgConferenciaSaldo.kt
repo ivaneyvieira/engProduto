@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
 import com.github.mvysny.karibudsl.v10.*
@@ -11,6 +13,9 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgConferenciaSaldo(
   val viewModel: IModelConferencia,
@@ -19,6 +24,7 @@ class DlgConferenciaSaldo(
 ) :
   Dialog() {
   private var edtConferencia: IntegerField? = null
+  private var edtEmbalagem: TextField? = null
   private var edtDataInicial: DatePicker? = null
   //private var edtDataConf: DatePicker? = null
 
@@ -30,8 +36,9 @@ class DlgConferenciaSaldo(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
-        edtDataInicial = datePicker("Data Inicial Kardex") {
-          this.setWidthFull()
+        this.setWidthFull()
+        edtDataInicial = datePicker("Início Kardex CD") {
+          this.isExpand = true
           this.value = produto.dataInicial
           this.isClearButtonVisible = true
           this.isClearButtonVisible = true
@@ -42,14 +49,36 @@ class DlgConferenciaSaldo(
         //  this.value = LocalDate.now()
         //  this.localePtBr()
         //}
-        edtConferencia = integerField("Conferência") {
-          this.setWidthFull()
+        edtConferencia = integerField("Est CD") {
+          this.isExpand = true
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           value = produto.qtConferencia ?: 0
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.addValueChangeListener {
+            edtEmbalagem?.value = processaEmbalagem(it.value ?: 0).format()
+          }
+        }
+
+        edtEmbalagem = textField("Est Emb") {
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isExpand = true
+          this.setWidthFull()
+          this.isReadOnly = true
+          this.value = processaEmbalagem(edtConferencia?.value ?: 0).format()
         }
       }
     }
     this.width = "30%"
     this.height = "30%"
+  }
+
+  private fun processaEmbalagem(saldo: Int): Double? {
+    val prdno = produto.prdno ?: ""
+    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
+      val fator = embalagem.qtdEmbalagem ?: 1.0
+      val saldoEmb = saldo * 1.00 / fator
+      saldoEmb
+    }
   }
 
   fun HasComponents.toolBar() {
