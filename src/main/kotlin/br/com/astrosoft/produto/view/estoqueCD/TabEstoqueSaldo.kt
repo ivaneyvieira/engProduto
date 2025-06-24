@@ -121,14 +121,14 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
 
-        this.button("Cópia") {
-          val user = AppConfig.userLogin() as? UserSaci
-          this.isVisible = user?.estoqueCopiaLoc == true
-          this.icon = VaadinIcon.COPY.create()
-          onClick {
-            viewModel.copiaLocalizacao()
-          }
-        }
+       // this.button("Cópia") {
+       //   val user = AppConfig.userLogin() as? UserSaci
+       //   this.isVisible = user?.estoqueCopiaLoc == true
+       //   this.icon = VaadinIcon.COPY.create()
+       //   onClick {
+       //     viewModel.copiaLocalizacao()
+       //   }
+       // }
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
@@ -227,9 +227,9 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-    columnGrid(ProdutoEstoque::saldo, header = "Estoque")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "80px")
-    columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "100px").right()
+    columnGrid(ProdutoEstoque::saldo, header = "Estoque", width = "75px")
+    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "75px")
+    columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
     if (user?.estoqueEditaConf == true) {
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
         val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
