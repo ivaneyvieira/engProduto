@@ -56,7 +56,10 @@ object ProcessamentoKardec {
     }
     val saldoKardec = ProdutoKardec.findKardec(produto)
     val saldoHoje = emptyList<ProdutoKardec>() //fetchKardecHoje (produto)
-    return (saldoHoje + saldoKardec).ajustaOrdem()
+    val saldoKardecHoje = (saldoHoje + saldoKardec).ajustaOrdem()
+    produto.kardec = saldoKardecHoje.lastOrNull()?.saldo ?: 0
+    produto.update()
+    return saldoKardecHoje
   }
 
   fun updateKardec(produtos: List<ProdutoEstoque>) {
