@@ -185,11 +185,10 @@ class ProdutoEstoque(
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
       dataFinal = null,
-      todosLocais = true,
       localizacaoNota = listOf("TODOS"),
     )
     val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
-    val notasExp = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.EXP))
+    val notasExp = emptyList<NotaSaida>() // saci.findNotaSaida (filtro = filtro.copy(marca = EMarcaNota.EXP))
     val notas = (notasEnt + notasExp).filter {
       it.cancelada != "S"
     }
@@ -211,7 +210,8 @@ class ProdutoEstoque(
       if (data < dataInicial) return@flatMap emptyList()
 
       val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
-      val produtosExp = nota.produtos(marca = EMarcaNota.EXP, prdno = prdno ?: "", grade = "", todosLocais = true)
+      val produtosExp =
+          emptyList<ProdutoNFS>()// nota.produtos (marca = EMarcaNota.EXP, prdno = prdno ?: "", grade = "", todosLocais = true)
 
       (produtosEnt + produtosExp).filter { produto ->
         produto.gradeEfetiva == (grade ?: "")

@@ -298,7 +298,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataEntregaFinal", filtro.dataEntregaFinal.toSaciDate())
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
-      addOptionalParameter("tipoProduto", filtro.tipoProduto)
     }
 
     println("list.size: ${list.size}")

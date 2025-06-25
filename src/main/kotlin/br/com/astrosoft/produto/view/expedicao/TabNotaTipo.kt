@@ -7,10 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaEntrega
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaImpressoSep
-import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaMotoristaSing
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFEntregaRetira
@@ -153,8 +150,7 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      todosLocais = true,
-      tipoProduto = 2300,
+      localizacaoNota = listOf("CD5A"),
       pesquisa = edtPesquisa.value ?: "",
     )
   }

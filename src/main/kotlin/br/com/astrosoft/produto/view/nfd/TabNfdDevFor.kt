@@ -130,7 +130,6 @@ class TabNfdDevFor(val viewModel: TabNfdDevForViewModel) : TabPanelGrid<NotaSaid
       loja = cmbLoja.value?.no ?: 0,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      todosLocais = true,
       pesquisa = edtPesquisa.value ?: "",
     )
   }
