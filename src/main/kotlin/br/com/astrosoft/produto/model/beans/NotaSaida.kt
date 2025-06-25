@@ -109,6 +109,7 @@ data class FiltroNota(
   val prdno: String = "",
   val grade: String = "",
   val todosLocais: Boolean,
+  val tipoProduto: Int = 0,
   val localizacaoNota: List<String> = user?.localizacaoNota?.toList() ?: listOf("TODOS"),
 )
 

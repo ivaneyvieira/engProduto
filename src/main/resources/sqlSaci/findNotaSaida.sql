@@ -240,6 +240,8 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
   OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
                                 (N.nfse = 7))) OR :marca NOT IN (0, 999))
+  AND (:tipoProduto = 0 OR
+       (X.prdno IN ( SELECT no FROM sqldados.prd AS PRD WHERE PRD.typeno = :tipoProduto ) AND :tipoProduto != 0))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
