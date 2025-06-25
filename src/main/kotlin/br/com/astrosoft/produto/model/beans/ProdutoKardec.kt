@@ -9,6 +9,7 @@ data class ProdutoKardec(
   var grade: String? = null,
   var data: LocalDate?,
   var doc: String? = null,
+  var nfEnt: String? = null,
   var tipo: ETipoKardec? = null,
   var vencimento: LocalDate? = null,
   var qtde: Int? = null,

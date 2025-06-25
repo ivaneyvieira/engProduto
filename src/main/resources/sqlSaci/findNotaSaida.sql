@@ -64,7 +64,7 @@ SELECT P.storeno,
 FROM
   sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
-  AND storeno IN (2, 3, 4, 5, 6, 7, 8)
+  AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
   AND `date` >= @DT
 GROUP BY storeno, ordno;
