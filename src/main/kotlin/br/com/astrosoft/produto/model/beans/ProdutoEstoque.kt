@@ -189,11 +189,11 @@ class ProdutoEstoque(
       localizacaoNota = listOf("TODOS"),
     )
     val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
-    //val notasExp = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.EXP))
-    val notas = (notasEnt).filter {
+    val notasExp = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.EXP))
+    val notas = (notasEnt + notasExp).filter {
       it.cancelada != "S"
     }
-    return notas.flatMap { nota ->
+    val notasExpedicao = notas.flatMap { nota ->
       val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         ETipoKardec.ENTREGA
       } else {
@@ -211,9 +211,9 @@ class ProdutoEstoque(
       if (data < dataInicial) return@flatMap emptyList()
 
       val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
-      //val produtosExp = nota.produtos(marca = EMarcaNota.EXP, prdno = prdno ?: "", grade = "", todosLocais = true)
+      val produtosExp = nota.produtos(marca = EMarcaNota.EXP, prdno = prdno ?: "", grade = "", todosLocais = true)
 
-      (produtosEnt).filter { produto ->
+      (produtosEnt + produtosExp).filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
         ProdutoKardec(
@@ -229,6 +229,8 @@ class ProdutoEstoque(
         )
       }.distinctBy { it.doc }
     }
+
+    return notasExpedicao
   }
 
   fun reposicao(dataInicial: LocalDate): List<ProdutoKardec> {
