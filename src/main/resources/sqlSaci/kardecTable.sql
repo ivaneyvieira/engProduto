@@ -30,3 +30,7 @@ ALTER TABLE sqldados.prdAdicional
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN observacao varchar(100) NULL;
 
+ALTER TABLE sqldados.produtoKardec
+  ADD COLUMN nfEnt varchar(30) NULL AFTER doc;
+
+truncate sqldados.produtoKardec

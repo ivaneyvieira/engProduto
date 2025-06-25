@@ -171,7 +171,11 @@ class ProdutoEstoque(
   }
 
   fun ressuprimento(dataInicial: LocalDate): List<ProdutoKardec> {
-    return ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
+    val listaKardec =
+        ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
+    return listaKardec.filter {
+      it.loja == 4
+    }
   }
 
   fun expedicao(dataInicial: LocalDate): List<ProdutoKardec> {
@@ -210,6 +214,21 @@ class ProdutoEstoque(
 
       val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
 
+      val nota1 = nota.notaEntrega ?: ""
+      val nota2 = "${nota.numero}/${nota.serie}"
+
+      val notaFutura = when {
+        nota1.endsWith("/1") -> nota1
+        nota2.endsWith("/1") -> nota2
+        else                 -> ""
+      }
+
+      val notaEntrega = when {
+        nota1.endsWith("/3") -> nota1
+        nota2.endsWith("/3") -> nota2
+        else                 -> ""
+      }
+
       produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
@@ -218,14 +237,14 @@ class ProdutoEstoque(
           prdno = prdno ?: "",
           grade = produto.gradeEfetiva,
           data = data,
-          doc = "${nota.numero}/${nota.serie}",
-          nfEnt = nota.notaEntrega,
+          doc = notaFutura,
+          nfEnt = notaEntrega,
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
           userLogin = nota.usuarioSingCD ?: usuario,
         )
-      }.distinctBy { it.doc }
+      }.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
     }
   }
 
@@ -237,7 +256,7 @@ class ProdutoEstoque(
       user?.localizacaoRepo.orEmpty().toList()
     }
     val filtro = FiltroReposicao(
-      loja = 0,
+      loja = 4,
       pesquisa = "",
       marca = EMarcaReposicao.ENT,
       localizacao = localizacao,

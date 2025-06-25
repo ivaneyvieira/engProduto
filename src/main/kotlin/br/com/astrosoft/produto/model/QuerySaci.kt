@@ -1958,7 +1958,7 @@ class QuerySaci : QueryDB(database) {
   fun deleteKardec(produto: ProdutoEstoque) {
     val sql = "/sqlSaci/kardecDelete.sql"
     script(sql) {
-      addOptionalParameter("loja", produto.loja)
+      addOptionalParameter("loja", 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
     }
@@ -1972,6 +1972,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produtoKardec.grade)
       addOptionalParameter("data", produtoKardec.data.toSaciDate())
       addOptionalParameter("doc", produtoKardec.doc)
+      addOptionalParameter("nfEnt", produtoKardec.nfEnt)
       addOptionalParameter("tipo", produtoKardec.tipo?.name)
       addOptionalParameter("vencimento", produtoKardec.vencimento.toSaciDate())
       addOptionalParameter("qtde", produtoKardec.qtde)
@@ -1983,7 +1984,7 @@ class QuerySaci : QueryDB(database) {
   fun selectKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     val sql = "/sqlSaci/kardecSelect.sql"
     return query(sql, ProdutoKardec::class) {
-      addOptionalParameter("loja", produto.loja)
+      addOptionalParameter("loja", 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
     }
