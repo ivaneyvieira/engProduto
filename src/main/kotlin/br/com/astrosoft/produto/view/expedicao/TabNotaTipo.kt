@@ -72,7 +72,9 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
         }
       }
       setItems(tiposNota)
-      value = tiposNota.firstOrNull()
+      value = tiposNota.firstOrNull {
+        it == ETipoNotaFiscal.ENTRE_FUT
+      } ?: tiposNota.firstOrNull()
 
       this.setItemLabelGenerator {
         it.descricao
