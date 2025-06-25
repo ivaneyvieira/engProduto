@@ -228,6 +228,7 @@ class ProdutoEstoque(
       val notaEntrega = when {
         nota1.endsWith("/3") -> nota1
         nota2.endsWith("/3") -> nota2
+        nota1.isNotEmpty()   -> nota2
         else                 -> ""
       }
 
