@@ -195,7 +195,7 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
   }
 
   override val label: String
-    get() = "Sep CD5A"
+    get() = "CD5A"
 
   override fun updateComponent() {
     viewModel.updateView()
