@@ -103,7 +103,7 @@ class ProdutoEstoque(
 
   fun recebimentos(dataInicial: LocalDate): List<ProdutoKardec> {
     val filtro = FiltroNotaRecebimentoProduto(
-      loja = 0,
+      loja = 4,
       pesquisa = "",
       marca = EMarcaRecebimento.RECEBIDO,
       dataFinal = null,
@@ -188,8 +188,7 @@ class ProdutoEstoque(
       localizacaoNota = listOf("TODOS"),
     )
     val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
-    //val notasExp = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.EXP))
-    val notas = (notasEnt).filter {
+    val notas = notasEnt.filter {
       it.cancelada != "S"
     }
     return notas.flatMap { nota ->
@@ -210,9 +209,8 @@ class ProdutoEstoque(
       if (data < dataInicial) return@flatMap emptyList()
 
       val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
-      //val produtosExp = nota.produtos(marca = EMarcaNota.EXP, prdno = prdno ?: "", grade = "", todosLocais = true)
 
-      (produtosEnt).filter { produto ->
+      produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
         ProdutoKardec(
@@ -220,7 +218,8 @@ class ProdutoEstoque(
           prdno = prdno ?: "",
           grade = produto.gradeEfetiva,
           data = data,
-          doc = if (nota.notaEntrega.isNullOrBlank()) "${nota.numero}/${nota.serie}" else nota.notaEntrega ?: "",
+          doc = "${nota.numero}/${nota.serie}",
+          nfEnt = nota.notaEntrega,
           tipo = tipo,
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
