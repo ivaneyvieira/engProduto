@@ -22,8 +22,8 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCli
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
-import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaSep
-import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaSepViewModel
+import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaTipo
+import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaTipoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
@@ -37,8 +37,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaTipo(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaSep {
-  private var dlgProduto: DlgProdutosSep? = null
+class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>(NotaSaida::class), ITabNotaTipo {
+  private var dlgProduto: DlgProdutosTipo? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtDataInicial: DatePicker
@@ -120,7 +120,7 @@ class TabNotaTipo(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(
 
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosSep(viewModel, nota)
+      dlgProduto = DlgProdutosTipo(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -130,12 +130,6 @@ class TabNotaTipo(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(
     colunaNFData()
     colunaHora()
     colunaPedido()
-    colunaEntrega()
-    addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formAutoriza(pedido)
-    }
-    colunaMotoristaSing()
-    colunaImpressoSep()
     colunaNFCliente()
     colunaNomeCliente()
     //colunaNomeVendedor()
@@ -167,6 +161,7 @@ class TabNotaTipo(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       todosLocais = true,
+      tipoProduto = 2300,
       pesquisa = edtPesquisa.value ?: "",
     )
   }
@@ -196,7 +191,7 @@ class TabNotaTipo(val viewModel: TabNotaSepViewModel) : TabPanelGrid<NotaSaida>(
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.notaSep == true
+    return username?.notaTipo == true
   }
 
   override val label: String

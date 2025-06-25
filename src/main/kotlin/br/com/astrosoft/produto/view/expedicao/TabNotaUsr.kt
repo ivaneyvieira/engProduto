@@ -15,6 +15,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
   override fun Grid<UserSaci>.configGrid() {
+    columnGrid(UserSaci::notaTipo, "CD5A")
     columnGrid(UserSaci::notaSep, "Sep")
     columnGrid(UserSaci::notaRota, "Rota")
     columnGrid(UserSaci::notaTroca, "Troca")
@@ -25,6 +26,9 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
+      checkBox("CD5A") {
+        binder.bind(this, UserSaci::notaTipo.name)
+      }
       checkBox("Sep CD5A") {
         binder.bind(this, UserSaci::notaSep.name)
       }

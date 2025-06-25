@@ -159,6 +159,7 @@ class UserSaci : IUser {
   var estoqueAcertoSimples by DelegateAuthorized3(129)
   var produtoEstoque by DelegateAuthorized3(130)
   var estoqueEditaConf by DelegateAuthorized3(131)
+  var notaTipo by DelegateAuthorized3(132)
 
   //Locais
   private var localEstoque: String?
@@ -465,7 +466,7 @@ class UserSaci : IUser {
       nfdDevFor = value
     }
   var nota
-    get() = notaSep || notaTroca || notaExp || notaCD || notaEnt || notaRota || admin
+    get() = notaTipo || notaSep || notaTroca || notaExp || notaCD || notaEnt || notaRota || admin
     set(value) {
       notaSep = value
       notaTroca = value
@@ -473,6 +474,7 @@ class UserSaci : IUser {
       notaCD = value
       notaEnt = value
       notaRota = value
+      notaTipo = value
     }
   var devFor2
     get() = devFor2NotaPedido || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||

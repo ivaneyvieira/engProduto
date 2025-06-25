@@ -18,6 +18,7 @@ class TabNotaUsrViewModel(val viewModel: NotaViewModel) : TabUsrViewModel(viewMo
   }
 
   override fun UserSaci.update(usuario: UserSaci) {
+    this.notaTipo = usuario.notaTipo
     this.notaSep = usuario.notaSep
     this.notaRota = usuario.notaRota
     this.notaTroca = usuario.notaTroca

@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.printText.NotaSeparacao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaSepViewModel(val viewModel: NotaViewModel) {
+class TabNotaTipoViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
@@ -122,10 +122,10 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabNotaSep
+    get() = viewModel.view.tabNotaTipo
 }
 
-interface ITabNotaSep : ITabView {
+interface ITabNotaTipo : ITabView {
   fun filtro(marca: EMarcaNota): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
