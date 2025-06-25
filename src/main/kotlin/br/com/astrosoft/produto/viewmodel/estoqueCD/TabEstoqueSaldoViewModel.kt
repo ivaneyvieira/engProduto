@@ -34,17 +34,6 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     return planilha.write(produtos)
   }
 
-  private fun fetchKardecHoje(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val date = LocalDate.now()
-    val lista: List<ProdutoKardec> =
-        produto.recebimentos(date) +
-        produto.ressuprimento(date) +
-        produto.expedicao(date) +
-        produto.reposicao(date) +
-        produto.acertoEstoque(date)
-    return lista.ajustaOrdem()
-  }
-
   fun updateKardec() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
     ProcessamentoKardec.updateKardec(produtos)

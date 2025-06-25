@@ -37,9 +37,7 @@ object ProcessamentoKardec {
   private fun updateKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     ProdutoKardec.deleteList(produto)
     val list = fetchKardec(produto)
-    list.filter { produtoKardec: ProdutoKardec ->
-      true // produtoKardec.data?.isBefore(LocalDate.now()) ?: true
-    }.forEach { produtoKardec: ProdutoKardec ->
+    list.forEach { produtoKardec: ProdutoKardec ->
       produtoKardec.save()
     }
     produto.dataUpdate = LocalDate.now()
@@ -79,7 +77,6 @@ object ProcessamentoKardec {
         produto.acertoEstoque(date)
     return lista.ajustaOrdem()
   }
-
 }
 
 fun List<ProdutoKardec>.ajustaOrdem(): List<ProdutoKardec> {

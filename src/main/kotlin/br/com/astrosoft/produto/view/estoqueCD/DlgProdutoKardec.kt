@@ -58,6 +58,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
       columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::userLogin, "Usuário")
       columnGrid(ProdutoKardec::doc, "Doc").right()
+      columnGrid(ProdutoKardec::nfEnt, "NF Ent").right()
       columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
       columnGrid(ProdutoKardec::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
       columnGrid(ProdutoKardec::qtde, "Qtd")
