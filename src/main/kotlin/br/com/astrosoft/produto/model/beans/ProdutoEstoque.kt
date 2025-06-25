@@ -215,11 +215,13 @@ class ProdutoEstoque(
       val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
 
       val nota1 = nota.notaEntrega ?: ""
-      val nota2 = "${nota.numero}/${nota.serie}"
+      val nota2: String = "${nota.numero}/${nota.serie}"
 
       val notaFutura = when {
         nota1.endsWith("/1") -> nota1
         nota2.endsWith("/1") -> nota2
+        nota1.isNotEmpty()   -> nota1
+        nota2.isNotEmpty()   -> nota2
         else                 -> ""
       }
 
