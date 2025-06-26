@@ -78,13 +78,13 @@ class DlgConferenciaSaldo(
     this.height = "30%"
   }
 
-  private fun processaEmbalagem(saldo: Int): Double? {
+  private fun processaEmbalagem(saldo: Int): Double {
     val prdno = produto.prdno ?: ""
     return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
       val fator = embalagem.qtdEmbalagem ?: 1.0
       val saldoEmb = saldo * 1.00 / fator
       saldoEmb
-    }
+    } ?: (saldo * 1.0)
   }
 
   private fun processaConferencia(emb: Double): Int? {
