@@ -1,9 +1,12 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.util.format
+import com.github.mvysny.karibudsl.v10.VaadinDsl
+import com.github.mvysny.karibudsl.v10.init
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -231,4 +234,14 @@ class BigDecimalToDoubleConverter : Converter<BigDecimal, Double> {
   override fun convertToModel(value: BigDecimal?, context: ValueContext?): Result<Double> {
     return Result.ok(value?.toDouble() ?: 0.00)
   }
+}
+
+@VaadinDsl
+fun (@VaadinDsl HasComponents).superDoubleField(
+  label: String? = null,
+  locale: Locale = Locale.getDefault(),
+  maxFractionDigits: Int = 2,
+  block: (@VaadinDsl SuperDoubleField).() -> Unit = {}
+): @VaadinDsl SuperDoubleField {
+  return init(SuperDoubleField(label, locale, maxFractionDigits), block)
 }

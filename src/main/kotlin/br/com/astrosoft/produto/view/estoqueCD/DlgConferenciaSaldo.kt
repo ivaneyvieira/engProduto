@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
 import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import java.math.BigDecimal
 import kotlin.math.roundToInt
 
@@ -25,7 +27,7 @@ class DlgConferenciaSaldo(
 ) :
   Dialog() {
   private var edtConferencia: IntegerField? = null
-  private var edtEmbalagem: BigDecimalField? = null
+  private var edtEmbalagem: SuperDoubleField? = null
   private var edtDataInicial: DatePicker? = null
 
   init {
@@ -58,7 +60,7 @@ class DlgConferenciaSaldo(
           }
         }
 
-        edtEmbalagem = bigDecimalField("Est Emb") {
+        edtEmbalagem = superDoubleField("Est Emb") {
           this.isAutoselect = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
@@ -66,7 +68,7 @@ class DlgConferenciaSaldo(
           this.valueChangeMode = ValueChangeMode.LAZY
           this.addValueChangeListener {
             if (it.isFromClient) {
-              edtConferencia?.value = processaConferencia(it.value?.toDouble() ?: 0.00)
+              edtConferencia?.value = processaConferencia(it.value ?: 0.00)
             }
           }
         }
@@ -76,12 +78,12 @@ class DlgConferenciaSaldo(
     this.height = "30%"
   }
 
-  private fun processaEmbalagem(saldo: Int): BigDecimal? {
+  private fun processaEmbalagem(saldo: Int): Double? {
     val prdno = produto.prdno ?: ""
     return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
       val fator = embalagem.qtdEmbalagem ?: 1.0
       val saldoEmb = saldo * 1.00 / fator
-      saldoEmb.toBigDecimal()
+      saldoEmb
     }
   }
 

@@ -236,10 +236,10 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
 
     columnGroup("Estoque") {
-      this.columnGrid(ProdutoEstoque::saldo, header = "Estoque", width = "75px")
-      this.columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "75px")
+      this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
+      this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
       this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Est", pattern = "0.##", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
     }
 
     columnGroup("Inventário") {
