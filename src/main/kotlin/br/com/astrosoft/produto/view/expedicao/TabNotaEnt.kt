@@ -157,7 +157,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoNFS> {
+  override fun produtosSelecionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

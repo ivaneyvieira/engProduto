@@ -130,7 +130,7 @@ interface ITabNotaSep : ITabView {
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
   fun formTransportado(nota: NotaSaida)
   fun itensSelecionados(): List<NotaSaida>
 }

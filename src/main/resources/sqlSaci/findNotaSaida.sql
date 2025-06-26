@@ -240,7 +240,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
   OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
                                 (N.nfse = 7))) OR :marca NOT IN (0, 999))
-  AND ('TODOS' IN (:local)  OR :local = '' OR LC.localizacao IN (:local))
+  AND ('TODOS' IN (:local) OR :local = '' OR LC.localizacao IN (:local))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -273,12 +273,13 @@ SELECT Q.loja,
        Q.entrega,
        Q.enderecoCliente,
        Q.bairroCliente,
-       SUM(X.s11 = 0) AS countExp,
-       SUM(X.s11 = 1) AS countCD,
-       SUM(X.s11 = 2) AS countEnt,
-       SUM(X.s10 = 1) AS countImp,
-       SUM(X.s10 = 0) AS countNImp,
-       retiraFutura   AS retiraFutura,
+       SUM(X.s11 = 0)                        AS countExp,
+       SUM(X.s11 = 1)                        AS countCD,
+       SUM(X.s11 = 2)                        AS countEnt,
+       SUM(X.s10 = 1)                        AS countImp,
+       SUM(X.s10 = 0)                        AS countNImp,
+       SUM(IFNULL(locais, '') LIKE '%CD5A%') AS countCD5A,
+       retiraFutura                          AS retiraFutura,
        empnoMotorista,
        nomeMotorista,
        usernoPrint,

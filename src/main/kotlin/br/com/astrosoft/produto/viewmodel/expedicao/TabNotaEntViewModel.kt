@@ -20,7 +20,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   }
 
   fun marcaCD() {
-    val itens = subView.produtosSelcionados()
+    val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -53,5 +53,5 @@ interface ITabNotaEnt : ITabView {
   fun filtro(): FiltroNota
   fun updateNotas(notas: List<NotaSaida>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
 }

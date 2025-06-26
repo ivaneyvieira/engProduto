@@ -31,7 +31,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun marcaCD() = viewModel.exec {
-    val itens = subView.produtosSelcionados()
+    val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
@@ -110,6 +110,6 @@ interface ITabNotaExp : ITabView {
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
   fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
 }

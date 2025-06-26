@@ -169,7 +169,7 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
     dlgProduto?.update()
   }
 
-  override fun produtosSelcionados(): List<ProdutoNFS> {
+  override fun produtosSelecionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 

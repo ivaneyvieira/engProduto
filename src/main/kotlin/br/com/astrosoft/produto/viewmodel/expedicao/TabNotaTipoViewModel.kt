@@ -17,7 +17,9 @@ class TabNotaTipoViewModel(val viewModel: NotaViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro(EMarcaNota.TODOS)
-    val notas = NotaSaida.find(filtro)
+    val notas = NotaSaida.find(filtro).filter {
+      (it.countCD5A ?: 0) > 0
+    }
     subView.updateNotas(notas)
   }
 
@@ -125,7 +127,7 @@ interface ITabNotaTipo : ITabView {
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
   fun formTransportado(nota: NotaSaida)
   fun itensSelecionados(): List<NotaSaida>
 }

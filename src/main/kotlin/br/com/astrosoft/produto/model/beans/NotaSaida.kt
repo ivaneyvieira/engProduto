@@ -37,6 +37,7 @@ class NotaSaida(
   var countEnt: Int?,
   var countImp: Int?,
   var countNImp: Int?,
+  var countCD5A: Int?,
   var retiraFutura: Boolean?,
   var rota: String?,
   var agendado: String?,

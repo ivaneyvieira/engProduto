@@ -124,6 +124,6 @@ interface ITabNotaRota : ITabView {
   fun updateNotas(notas: List<NotaSaida>)
   fun findNota(): NotaSaida?
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoNFS>
+  fun produtosSelecionados(): List<ProdutoNFS>
   fun itensSelecionados(): List<NotaSaida>
 }
