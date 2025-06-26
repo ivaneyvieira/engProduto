@@ -64,6 +64,10 @@ object NotaColumns {
     }
   }
 
+  fun Grid<NotaSaida>.colunaCD() = columnGrid(NotaSaida::cd5A) {
+    this.setHeader("CD")
+  }
+
   fun Grid<NotaSaida>.colunaRota() = columnGrid(NotaSaida::rota) {
     this.setHeader("Rota")
   }

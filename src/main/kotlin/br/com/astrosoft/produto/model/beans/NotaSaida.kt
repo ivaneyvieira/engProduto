@@ -59,6 +59,9 @@ class NotaSaida(
     return "NotaSaida(loja=$loja, pdvno=$pdvno, xano=$xano, numero=$numero, pedido=$pedido, serie=$serie, cliente=$cliente, nomeCliente=$nomeCliente, valorNota=$valorNota, data=$data, hora=$hora, vendedor=$vendedor, nomeVendedor=$nomeVendedor, nomeCompletoVendedor=$nomeCompletoVendedor, usuarioExp=$usuarioExp, usuarioCD=$usuarioCD, totalProdutos=$totalProdutos, marca=$marca, cancelada=$cancelada, tipoNotaSaida=$tipoNotaSaida, notaEntrega=$notaEntrega, usuarioEntrega=$usuarioEntrega, dataEntrega=$dataEntrega, tipo=$tipo, countExp=$countExp, countCD=$countCD, countEnt=$countEnt, countImp=$countImp, countNImp=$countNImp, retiraFutura=$retiraFutura, rota=$rota, agendado=$agendado, entrega=$entrega, enderecoCliente=$enderecoCliente, bairroCliente=$bairroCliente, empnoMotorista=$empnoMotorista, nomeMotorista=$nomeMotorista)"
   }
 
+  val cd5A: String
+    get() = if (countCD5A == 0) "" else "CD5A"
+
   val dataStr
     get() = data?.format() ?: ""
 
