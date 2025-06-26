@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
@@ -12,10 +11,12 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.math.BigDecimal
+import kotlin.math.roundToInt
 
 class DlgConferenciaSaldo(
   val viewModel: IModelConferencia,
@@ -24,9 +25,8 @@ class DlgConferenciaSaldo(
 ) :
   Dialog() {
   private var edtConferencia: IntegerField? = null
-  private var edtEmbalagem: TextField? = null
+  private var edtEmbalagem: BigDecimalField? = null
   private var edtDataInicial: DatePicker? = null
-  //private var edtDataConf: DatePicker? = null
 
   init {
     this.isModal = true
@@ -44,26 +44,31 @@ class DlgConferenciaSaldo(
           this.isClearButtonVisible = true
           this.localePtBr()
         }
-        //edtDataConf = datePicker("Data Conf") {
-        //  this.setWidthFull()
-        //  this.value = LocalDate.now()
-        //  this.localePtBr()
-        //}
+
         edtConferencia = integerField("Est CD") {
+          this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           value = produto.qtConferencia ?: 0
           this.valueChangeMode = ValueChangeMode.LAZY
           this.addValueChangeListener {
-            edtEmbalagem?.value = processaEmbalagem(it.value ?: 0).format()
+            if (it.isFromClient) {
+              edtEmbalagem?.value = processaEmbalagem(it.value ?: 0)
+            }
           }
         }
 
-        edtEmbalagem = textField("Est Emb") {
+        edtEmbalagem = bigDecimalField("Est Emb") {
+          this.isAutoselect = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
-          this.isReadOnly = true
-          this.value = processaEmbalagem(edtConferencia?.value ?: 0).format()
+          this.value = processaEmbalagem(edtConferencia?.value ?: 0)
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.addValueChangeListener {
+            if (it.isFromClient) {
+              edtConferencia?.value = processaConferencia(it.value?.toDouble() ?: 0.00)
+            }
+          }
         }
       }
     }
@@ -71,12 +76,21 @@ class DlgConferenciaSaldo(
     this.height = "30%"
   }
 
-  private fun processaEmbalagem(saldo: Int): Double? {
+  private fun processaEmbalagem(saldo: Int): BigDecimal? {
     val prdno = produto.prdno ?: ""
     return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
       val fator = embalagem.qtdEmbalagem ?: 1.0
       val saldoEmb = saldo * 1.00 / fator
-      saldoEmb
+      saldoEmb.toBigDecimal()
+    }
+  }
+
+  private fun processaConferencia(emb: Double): Int? {
+    val prdno = produto.prdno ?: ""
+    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
+      val fator = embalagem.qtdEmbalagem ?: 1.0
+      val saldoEmb = emb * fator
+      saldoEmb.roundToInt()
     }
   }
 
