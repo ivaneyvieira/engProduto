@@ -2,8 +2,8 @@ package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.columnGrid
-import br.com.astrosoft.framework.view.vaadin.columnGroup
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.ProdutoInventarioResumo
 import br.com.astrosoft.produto.model.beans.Produtos

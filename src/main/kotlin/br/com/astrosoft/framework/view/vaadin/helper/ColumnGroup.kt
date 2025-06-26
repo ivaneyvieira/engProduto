@@ -1,11 +1,8 @@
-package br.com.astrosoft.framework.view.vaadin
+package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import com.github.mvysny.karibudsl.v10.VaadinDsl
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
@@ -79,7 +76,7 @@ fun <T : Any, V : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(valueProvider, key, header, width, isExpand, block))
 }
 
-@JvmName("columnString")
+@JvmName("columnGroupString")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, String?>,
   header: String? = null,
@@ -90,7 +87,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, block))
 }
 
-@JvmName("columnSet")
+@JvmName("columnGroupSet")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Set<Any>>,
   header: String? = null,
@@ -101,7 +98,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, block))
 }
 
-@JvmName("columnBoolean")
+@JvmName("columnGroupBoolean")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Boolean?>,
   header: String? = null,
@@ -111,7 +108,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, block))
 }
 
-@JvmName("columnLocalDate")
+@JvmName("columnGroupLocalDate")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, LocalDate?>,
   header: String? = null,
@@ -123,7 +120,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnDate")
+@JvmName("columnGroupDate")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Date?>,
   header: String? = null,
@@ -135,7 +132,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnLocalTime")
+@JvmName("columnGroupLocalTime")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, LocalTime?>,
   header: String? = null,
@@ -147,7 +144,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnTime")
+@JvmName("columnGroupTime")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Time?>,
   header: String? = null,
@@ -159,7 +156,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnLocalDateTime")
+@JvmName("columnGroupLocalDateTime")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, LocalDateTime?>,
   header: String? = null,
@@ -171,7 +168,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnDouble")
+@JvmName("columnGroupDouble")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Double?>,
   header: String? = null,
@@ -183,7 +180,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
-@JvmName("columnInt")
+@JvmName("columnGroupInt")
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, Int?>,
   header: String? = null,
