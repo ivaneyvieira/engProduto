@@ -2,7 +2,11 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
+import br.com.astrosoft.framework.view.vaadin.columnGrid
+import br.com.astrosoft.framework.view.vaadin.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
@@ -121,14 +125,14 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
 
-       // this.button("Cópia") {
-       //   val user = AppConfig.userLogin() as? UserSaci
-       //   this.isVisible = user?.estoqueCopiaLoc == true
-       //   this.icon = VaadinIcon.COPY.create()
-       //   onClick {
-       //     viewModel.copiaLocalizacao()
-       //   }
-       // }
+        // this.button("Cópia") {
+        //   val user = AppConfig.userLogin() as? UserSaci
+        //   this.isVisible = user?.estoqueCopiaLoc == true
+        //   this.icon = VaadinIcon.COPY.create()
+        //   onClick {
+        //     viewModel.copiaLocalizacao()
+        //   }
+        // }
 
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
@@ -215,41 +219,53 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         })
     }
 
-    addColumnSeq("Seq")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
-      dlgKardec = DlgProdutoKardec(viewModel, produto)
-      dlgKardec?.showDialog {
-        viewModel.updateView()
-      }
-    }
-    columnGrid(ProdutoEstoque::codigo, header = "Código")
-    columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
-    columnGrid(ProdutoEstoque::unidade, header = "UN")
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-    columnGrid(ProdutoEstoque::saldo, header = "Estoque", width = "75px")
-    columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "75px")
-    columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Est", pattern = "0.##", width = "80px")
-    columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
-    if (user?.estoqueEditaConf == true) {
-      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
-        val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
-          gridPanel.dataProvider.refreshAll()
+    columnGroup("Peoduto") {
+      this.addColumnSeq("Seq")
+      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
+        dlgKardec = DlgProdutoKardec(viewModel, produto)
+        dlgKardec?.showDialog {
+          viewModel.updateView()
         }
-        dlgConferencia.open()
       }
+      this.columnGrid(ProdutoEstoque::codigo, header = "Código")
+      this.columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
+      this.columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
+      this.columnGrid(ProdutoEstoque::unidade, header = "UN")
     }
-    //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
-    columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
-    columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-    columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
-      if (user?.estoqueEditaLoc == true) {
-        textFieldEditor()
+
+    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
+
+    columnGroup("Estoque") {
+      this.columnGrid(ProdutoEstoque::saldo, header = "Estoque", width = "75px")
+      this.columnGrid(ProdutoEstoque::kardec, header = "Est CD", width = "75px")
+      this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Est", pattern = "0.##", width = "80px")
+    }
+
+    columnGroup("Inventário") {
+      this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
+      if (user?.estoqueEditaConf == true) {
+        this.addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
+          val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
+            gridPanel.dataProvider.refreshAll()
+          }
+          dlgConferencia.open()
+        }
       }
+      //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
+      this.columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
     }
-    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+
+    columnGroup("Outras Informações") {
+      this.columnGrid(ProdutoEstoque::embalagem, header = "Emb")
+      this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
+        if (user?.estoqueEditaLoc == true) {
+          textFieldEditor()
+        }
+      }
+      this.columnGrid(ProdutoEstoque::codForn, header = "For Cod")
+      //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+    }
   }
 
   override fun filtro(): FiltroProdutoEstoque {

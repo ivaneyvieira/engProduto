@@ -3,12 +3,16 @@ package br.com.astrosoft.framework.view.vaadin
 import br.com.astrosoft.framework.util.DATETIME_PATTERN
 import br.com.astrosoft.framework.util.DATE_PATTERN
 import br.com.astrosoft.framework.util.TIME_PATTERN
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import com.github.mvysny.karibudsl.v10.VaadinDsl
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.Column
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.function.ValueProvider
 import java.sql.Time
 import java.time.LocalDate
@@ -47,6 +51,20 @@ fun <T : Any> Grid<T>.columnGroup(header: String, block: ColumnGroup<T>.() -> Un
   val columnGroup = ColumnGroup(this, header)
   columnGroup.block()
   columnGroup.join()
+}
+
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).addColumnButton(
+  iconButton: VaadinIcon,
+  tooltip: String? = null,
+  header: String? = null,
+  configIcon: (Icon, T) -> Unit = { _, _ -> },
+  execButton: (T) -> Unit = {}
+): Column<T> {
+  return this.addColumn(this.grid.addColumnButton(iconButton, tooltip, header, configIcon, execButton))
+}
+
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).addColumnSeq(label: String, width: String? = null): Column<T> {
+  return this.addColumn(this.grid.addColumnSeq(label, width))
 }
 
 @JvmName("columnProviderString")
