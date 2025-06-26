@@ -219,7 +219,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         })
     }
 
-    columnGroup("Peoduto") {
+    columnGroup("Produto") {
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
         dlgKardec = DlgProdutoKardec(viewModel, produto)
