@@ -72,6 +72,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateMotivo(it.value)
+          it.source.clear()
         }
       }
     }
@@ -84,6 +85,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.marcaSituacao(it.value)
+          it.source.clear()
         }
       }
     }
