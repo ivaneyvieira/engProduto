@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -295,7 +296,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
   }
 }
 
-fun Component.marcaDiferencao(diferenta: Boolean) {
+fun HasStyle.marcaDiferencao(diferenta: Boolean) {
   if (diferenta) {
     this.addClassNames(LumoUtility.TextColor.WARNING)
   } else {
