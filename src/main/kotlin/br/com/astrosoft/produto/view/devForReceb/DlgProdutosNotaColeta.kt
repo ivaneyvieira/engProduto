@@ -33,6 +33,7 @@ class DlgProdutosNotaColeta(val viewModel: TabNotaColetaViewModel, var nota: Not
           this.width = "6rem"
           this.isAutoselect = true
           this.isReadOnly = true
+          this.marcaDiferencao(nota.diferencaVolume())
         }
         bigDecimalField("Peso") {
           this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
@@ -40,17 +41,20 @@ class DlgProdutosNotaColeta(val viewModel: TabNotaColetaViewModel, var nota: Not
           this.width = "6rem"
           this.isAutoselect = true
           this.isReadOnly = true
+          this.marcaDiferencao(nota.diferencaPeso())
         }
         integerField("Cod") {
           this.value = nota.transpDevolucao ?: 0
           this.width = "60px"
           this.isAutoselect = true
           this.isReadOnly = true
+          this.marcaDiferencao(nota.diferencaTransp())
         }
         textField("Transportadora Redespacho") {
           this.isReadOnly = true
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
+          this.marcaDiferencao(nota.diferencaTransp())
         }
         textField("CTE") {
           this.width = "120px"

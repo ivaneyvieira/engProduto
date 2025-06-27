@@ -293,12 +293,12 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
     update()
     return nota
   }
+}
 
-  fun Component.marcaDiferencao(diferenta: Boolean) {
-    if (diferenta) {
-      this.addClassNames(LumoUtility.TextColor.WARNING)
-    } else {
-      this.removeClassName(LumoUtility.TextColor.WARNING)
-    }
+fun Component.marcaDiferencao(diferenta: Boolean) {
+  if (diferenta) {
+    this.addClassNames(LumoUtility.TextColor.WARNING)
+  } else {
+    this.removeClassName(LumoUtility.TextColor.WARNING)
   }
 }
