@@ -7,9 +7,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -47,8 +49,8 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
             this.marcaDiferencao(nota.diferencaVolume())
           }
         }
-        bigDecimalField("Peso") {
-          this.value = nota.pesoDevolucao?.toBigDecimal() ?: 0.toBigDecimal()
+        superDoubleField("Peso", maxFractionDigits = 4) {
+          this.value = nota.pesoDevolucao ?: 0.00
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true

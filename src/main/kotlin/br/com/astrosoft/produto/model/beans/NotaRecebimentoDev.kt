@@ -73,7 +73,7 @@ class NotaRecebimentoDev(
 
   fun diferencaPeso(): Boolean {
     if (notaDevolucao.isNullOrBlank()) return false
-    return (pesoDevolucao ?: 0.00).format() != (pesoNFLiquidoDevolucao ?: 0.00).format()
+    return (pesoDevolucao ?: 0.00).format("0.0000") != (pesoNFBrutoDevolucao ?: 0.00).format("0.0000")
   }
 
   fun diferencaTransp(): Boolean {
