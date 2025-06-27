@@ -67,14 +67,17 @@ class NotaRecebimentoDev(
   }
 
   fun diferencaVolume(): Boolean {
+    if (notaDevolucao.isNullOrBlank()) return false
     return (volumeDevolucao ?: 0) != (volumeNFDevolucao ?: 0)
   }
 
   fun diferencaPeso(): Boolean {
+    if (notaDevolucao.isNullOrBlank()) return false
     return (pesoDevolucao ?: 0.00).format() != (pesoNFLiquidoDevolucao ?: 0.00).format()
   }
 
   fun diferencaTransp(): Boolean {
+    if (notaDevolucao.isNullOrBlank()) return false
     return (transpDevolucao ?: 0) != (transpNFDevolucao ?: 0)
   }
 
