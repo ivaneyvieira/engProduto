@@ -135,10 +135,10 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
 
-    this.setPartNameGenerator{
-      if(it.diferenca()){
+    this.setPartNameGenerator {
+      if (it.diferenca()) {
         "amarelo"
-      }else{
+      } else {
         null
       }
     }
