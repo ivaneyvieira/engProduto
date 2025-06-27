@@ -128,16 +128,13 @@ class TabNotaColeta(val viewModel: TabNotaColetaViewModel) :
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
-    /*
-        this.setPartNameGenerator {
-          if (it.diferenca()) {
-            "amarelo"
-          } else {
-            null
-          }
-        }
-
-     */
+    this.setPartNameGenerator {
+      if (it.diferenca()) {
+        "amarelo"
+      } else {
+        null
+      }
+    }
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

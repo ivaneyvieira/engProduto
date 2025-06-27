@@ -15,6 +15,10 @@ html {
     --lumo-success-color-50pct: rgba(123, 189, 101, 0.5);
     --lumo-success-color-10pct: rgba(123, 189, 101, 0.1);
     --lumo-success-text-color: rgb(123, 189, 101);
+    --lumo-warning-color: rgb(255, 204, 0);
+    --lumo-warning-color-50pct: rgba(255, 204, 0, 0.5);
+    --lumo-warning-color-10pct: rgba(255, 204, 0, 0.1);
+    --lumo-warning-text-color: rgb(255, 204, 0);
     --lumo-size-xl: 3rem;
     --lumo-size-l: 2.5rem;
     --lumo-size-m: 2rem;
@@ -96,4 +100,21 @@ vaadin-text-field.grande::part(input-field) {
 
 vaadin-text-field.grande::part(label) {
     font-size: larger;
+}
+
+vaadin-number-field[readonly].diferenca::part(input-field) {
+    color: var(--lumo-warning-color);
+}
+
+vaadin-bigdecimal-field[readonly].diferenca::part(input-field) {
+    color: var(--lumo-warning-color);
+}
+
+vaadin-integer-field[readonly].diferenca::part(input-field) {
+    color: var(--lumo-warning-color);
+}
+
+
+vaadin-text-field[readonly].diferenca::part(input-field) {
+    color: var(--lumo-warning-color);
 }

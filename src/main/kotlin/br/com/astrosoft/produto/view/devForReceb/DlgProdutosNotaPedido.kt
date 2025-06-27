@@ -298,8 +298,9 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
 
 fun HasStyle.marcaDiferencao(diferenta: Boolean) {
   if (diferenta) {
-    this.addClassNames(LumoUtility.TextColor.WARNING)
+    this.addClassNames(LumoUtility.TextColor.WARNING, "diferenca")
   } else {
     this.removeClassName(LumoUtility.TextColor.WARNING)
+    this.removeClassName("diferenca")
   }
 }
