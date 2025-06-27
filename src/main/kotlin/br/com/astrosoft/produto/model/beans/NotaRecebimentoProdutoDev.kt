@@ -89,12 +89,16 @@ data class NotaRecebimentoProdutoDev(
   var duplicata: String?,
   var dataVencimentoDup: LocalDate?,
   var valorVencimentoDup: Double?,
+  var volumeNFDevolucao: Int?,
+  var transpNFDevolucao: Int?,
+  var pesoNFBrutoDevolucao: Double?,
+  var pesoNFLiquidoDevolucao: Double?,
 ) {
   var item: Int? = null
 
   val valorMVA
     get() = if (((valorTotalDevolucao ?: 0.00) + (valIPIDevolucao
-                                                ?: 0.00)) == 0.00 ||
+                                                  ?: 0.00)) == 0.00 ||
                 (baseIcmsSubst * 10000).roundToInt() == 0
     ) {
       0.00

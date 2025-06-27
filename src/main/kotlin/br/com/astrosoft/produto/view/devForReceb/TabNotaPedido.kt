@@ -134,6 +134,14 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
+
+    this.setPartNameGenerator{
+      if(it.diferenca()){
+        "amarelo"
+      }else{
+        null
+      }
+    }
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

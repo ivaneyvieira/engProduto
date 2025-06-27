@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -53,8 +54,32 @@ class NotaRecebimentoDev(
   var duplicata: String?,
   var dataVencimentoDup: LocalDate?,
   var valorVencimentoDup: Double?,
+  var volumeNFDevolucao: Int?,
+  var transpNFDevolucao: Int?,
+  var pesoNFBrutoDevolucao: Double?,
+  var pesoNFLiquidoDevolucao: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  //********* Diferenças ********
+
+  fun diferenca(): Boolean {
+    return diferencaVolume() || diferencaPeso() || diferencaTransp()
+  }
+
+  fun diferencaVolume(): Boolean {
+    return (volumeDevolucao ?: 0) != (volumeNFDevolucao ?: 0)
+  }
+
+  fun diferencaPeso(): Boolean {
+    return (pesoDevolucao ?: 0.00).format() != (pesoNFLiquidoDevolucao ?: 0.00).format()
+  }
+
+  fun diferencaTransp(): Boolean {
+    return (transpDevolucao ?: 0) != (transpNFDevolucao ?: 0)
+  }
+
+  //*****************************
+
   val baseIcmsProdutos
     get() = produtos.sumOf { it.baseIcmsDevolucao ?: 0.00 }
 
@@ -259,6 +284,10 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         dataVencimentoDup = nota.dataVencimentoDup,
         valorVencimentoDup = nota.valorVencimentoDup,
         transportadoraDevolucao = nota.transportadoraDevolucao,
+        volumeNFDevolucao = nota.volumeNFDevolucao,
+        transpNFDevolucao = nota.transpNFDevolucao,
+        pesoNFBrutoDevolucao = nota.pesoNFBrutoDevolucao,
+        pesoNFLiquidoDevolucao = nota.pesoNFLiquidoDevolucao,
       )
     }
   }

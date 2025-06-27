@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
@@ -36,10 +38,12 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
+          this.marcaDiferencao(nota.diferencaVolume())
 
           addValueChangeListener {
             nota.volumeDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
+            this.marcaDiferencao(nota.diferencaVolume())
           }
         }
         bigDecimalField("Peso") {
@@ -48,10 +52,12 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.width = "6rem"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
+          this.marcaDiferencao(nota.diferencaPeso())
 
           addValueChangeListener {
             nota.pesoDevolucao = this.value?.toDouble() ?: 0.0
             viewModel.saveNota(nota)
+            this.marcaDiferencao(nota.diferencaPeso())
           }
         }
         integerField("Cod") {
@@ -59,17 +65,20 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.width = "60px"
           this.isAutoselect = true
           this.valueChangeMode = ValueChangeMode.LAZY
+          this.marcaDiferencao(nota.diferencaTransp())
 
           addValueChangeListener {
             nota.transpDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
             edtTransportadora?.value = viewModel.findTransportadora(this.value)?.nome ?: ""
+            this.marcaDiferencao(nota.diferencaTransp())
           }
         }
         edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
           this.width = "320px"
           this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
+          this.marcaDiferencao(nota.diferencaTransp())
         }
         textField("CTE") {
           this.width = "120px"
@@ -283,5 +292,13 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
     nota = nota.refreshProdutosDev() ?: return null
     update()
     return nota
+  }
+
+  fun Component.marcaDiferencao(diferenta: Boolean) {
+    if (diferenta) {
+      this.addClassNames(LumoUtility.TextColor.WARNING)
+    } else {
+      this.removeClassName(LumoUtility.TextColor.WARNING)
+    }
   }
 }

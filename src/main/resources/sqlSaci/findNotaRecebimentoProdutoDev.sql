@@ -110,6 +110,32 @@ WHERE issuedate >= 20250401
 /*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
 HAVING niDev IS NOT NULL;
 
+
+DROP TEMPORARY TABLE IF EXISTS T_NOTA_SAIDA;
+CREATE TEMPORARY TABLE T_NOTA_SAIDA
+(
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT NFO.storeno,
+       NFO.pdvno,
+       NFO.xano,
+       NFO.nfno,
+       NFO.nfse,
+       NFO.notaDevolucao,
+       NFO.emissaoDevolucao,
+       NFO.valorDevolucao,
+       NFO.obsDevolucao,
+       NFO.obsGarantia,
+       NFO.niDev,
+       vol_qtty / 100 AS volumeNFDevolucao,
+       N.carrno       AS transpNFDevolucao,
+       vol_gross      AS pesoNFBrutoDevolucao,
+       vol_net        AS pesoNFLiquidoDevolucao
+FROM
+  T_NFO                    AS NFO
+    INNER JOIN sqldados.nf AS N
+               USING (storeno, pdvno, xano);
+
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
 (
@@ -429,6 +455,10 @@ SELECT loja,
        N.storeno               AS storeno,
        N.pdvno                 AS pdvno,
        N.xano                  AS xano,
+       N.volumeNFDevolucao,
+       N.transpNFDevolucao,
+       N.pesoNFBrutoDevolucao,
+       N.pesoNFLiquidoDevolucao,
        observacaoDev,
        dataColeta,
        observacaoAdicional,
@@ -445,10 +475,10 @@ SELECT loja,
        CAST(D.duedate AS date) AS dataVencimentoDup,
        D.amtdue / 100          AS valorVencimentoDup
 FROM
-  T_QUERY           AS Q
-    LEFT JOIN T_NFO AS N
+  T_QUERY                  AS Q
+    LEFT JOIN T_NOTA_SAIDA AS N
               ON (N.niDev = Q.numeroDevolucao)
-    LEFT JOIN T_DUP AS D
+    LEFT JOIN T_DUP        AS D
               ON Q.ni = D.invno;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
