@@ -18,6 +18,7 @@ import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.miki.superfields.numbers.SuperBigDecimalField
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -240,8 +241,10 @@ class BigDecimalToDoubleConverter : Converter<BigDecimal, Double> {
 fun (@VaadinDsl HasComponents).superDoubleField(
   label: String? = null,
   locale: Locale = Locale.getDefault(),
-  maxFractionDigits: Int = 2,
+  quantFractionDigits: Int = 2,
   block: (@VaadinDsl SuperDoubleField).() -> Unit = {}
 ): @VaadinDsl SuperDoubleField {
-  return init(SuperDoubleField(label, locale, maxFractionDigits), block)
+  val field = init(SuperDoubleField(label, locale, quantFractionDigits), block)
+  field.setMinimumFractionDigits(quantFractionDigits)
+  return field
 }

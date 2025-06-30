@@ -49,8 +49,8 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
             this.marcaDiferencao(nota.diferencaVolume())
           }
         }
-        superDoubleField("Peso", maxFractionDigits = 4) {
-          this.value = nota.pesoDevolucao ?: 0.00
+        superDoubleField("Peso", quantFractionDigits = 4) {
+          this.value = (nota.pesoDevolucao ?: 0.00)
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
           this.isAutoselect = true
@@ -58,7 +58,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.marcaDiferencao(nota.diferencaPeso())
 
           addValueChangeListener {
-            nota.pesoDevolucao = this.value?.toDouble() ?: 0.0
+            nota.pesoDevolucao = (this.value?.toDouble() ?: 0.0)
             viewModel.saveNota(nota)
             this.marcaDiferencao(nota.diferencaPeso())
           }

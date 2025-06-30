@@ -12,12 +12,10 @@ import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.textfield.BigDecimalField
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
-import java.math.BigDecimal
 import kotlin.math.roundToInt
 
 class DlgConferenciaSaldo(
