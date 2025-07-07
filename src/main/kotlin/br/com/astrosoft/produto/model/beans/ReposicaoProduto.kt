@@ -6,6 +6,7 @@ import java.time.LocalDate
 class ReposicaoProduto(
   var loja: Int?,
   var numero: Int?,
+  var cliente: String?,
   var data: LocalDate?,
   var localizacao: String?,
   var marca: Int?,

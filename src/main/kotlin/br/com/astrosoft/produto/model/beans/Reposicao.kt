@@ -7,6 +7,7 @@ import java.time.LocalDate
 class Reposicao(
   var loja: Int,
   var numero: Int,
+  var cliente: String,
   var data: LocalDate,
   var localizacao: String,
   var marca: Int,
@@ -178,6 +179,7 @@ class Reposicao(
         Reposicao(
           loja = first?.loja ?: 0,
           numero = first?.numero ?: 0,
+          cliente = first?.cliente ?: "",
           data = first?.data ?: LocalDate.now(),
           localizacao = first?.localizacao ?: "",
           marca = first?.marca ?: 0,

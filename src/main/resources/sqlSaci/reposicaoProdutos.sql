@@ -22,6 +22,7 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
 
 SELECT O.storeno                               AS loja,
        O.ordno                                 AS numero,
+       IF(fjflag = 1, F.name, F.id_sname)      AS cliente,
        CAST(O.date AS DATE)                    AS data,
        IFNULL(L.localizacao, '')               AS localizacao,
        IFNULL(OA.observacao, '')               AS observacao,
@@ -76,6 +77,8 @@ FROM
                ON ER.no = EA.empRecebido
     INNER JOIN sqldados.prd            AS P
                ON P.no = E.prdno
+    LEFT JOIN  sqldados.custp          AS F
+               ON F.no = O.custno
 WHERE (O.paymno IN (431, 432, 433))
   AND (O.paymno = :metodo OR :metodo = 0)
   AND (O.date >= :datacorte)

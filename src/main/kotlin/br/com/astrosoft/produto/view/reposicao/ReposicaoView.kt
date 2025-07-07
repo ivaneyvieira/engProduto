@@ -11,7 +11,7 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import jakarta.annotation.security.PermitAll
 
-@Route(layout = ProdutoLayout::class, value = "repsicao")
+@Route(layout = ProdutoLayout::class, value = "reposicao")
 @PageTitle("Reposição")
 @CssImport("./styles/gridTotal.css")
 @PermitAll

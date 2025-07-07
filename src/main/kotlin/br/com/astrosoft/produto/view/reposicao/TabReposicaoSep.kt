@@ -80,6 +80,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
+    columnGrid(Reposicao::cliente, "Cliente")
     columnGrid(Reposicao::tipoMetodo, "Tipo")
     columnGrid(Reposicao::data, "Data")
     columnGrid(Reposicao::localizacao, "Loc App")
