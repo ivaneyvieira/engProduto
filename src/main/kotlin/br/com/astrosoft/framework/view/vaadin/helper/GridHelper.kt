@@ -101,13 +101,15 @@ fun <T : Any> Grid.Column<T>.textAreaEditor(block: TextArea.() -> Unit = {}): Gr
 fun <T : Any> Grid.Column<T>.integerFieldEditor(block: IntegerField.() -> Unit = {}): Grid.Column<T> {
   val component = integerFieldComponente()
   component.element.addEventListener("keydown") { _ ->
+    grid.editorFinalizado = false
     grid.editor.save()
     grid.editor.closeEditor()
   }.filter = "event.key === 'Enter'"
-  // component.element.addEventListener("keydown") { _ ->
-//    grid.editor.cancel()
-//    grid.editor.closeEditor()
-//  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
+  component.element.addEventListener("keydown") { _ ->
+    grid.editorFinalizado = true
+    grid.editor.cancel()
+    grid.editor.closeEditor()
+  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
@@ -248,3 +250,13 @@ fun (@VaadinDsl HasComponents).superDoubleField(
   field.setMinimumFractionDigits(quantFractionDigits)
   return field
 }
+
+var Grid<*>.editorFinalizado: Boolean
+  get() = this.style.get("fechado") == "true"
+  set(value) {
+    if (value) {
+      this.style.set("fechado", "true")
+    } else {
+      this.style.remove("fechado")
+    }
+  }

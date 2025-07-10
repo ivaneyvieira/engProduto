@@ -1046,6 +1046,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate)
       addOptionalParameter("kardec", produtoEstoque.kardec)
       //addOptionalParameter("dataConferencia", produtoEstoque.dataConferencia)
+      addOptionalParameter("qtConfEdit", produtoEstoque.qtConfEdit)
       addOptionalParameter("qtConferencia", produtoEstoque.qtConferencia)
       addOptionalParameter("estoqueUser", produtoEstoque.estoqueUser)
       addOptionalParameter("estoqueData", produtoEstoque.estoqueData)

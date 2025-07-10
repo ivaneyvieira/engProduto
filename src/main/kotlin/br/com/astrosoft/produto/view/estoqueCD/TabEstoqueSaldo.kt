@@ -2,18 +2,12 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.columnGroup
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.getColumnBy
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -207,6 +201,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
     val user = AppConfig.userLogin() as? UserSaci
 
+    /*
     if (user?.estoqueEditaLoc == true) {
       this.withEditor(
         classBean = ProdutoEstoque::class,
@@ -218,6 +213,27 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           viewModel.updateProduto(it.bean, false)
         })
     }
+    */
+
+    this.withEditor(
+      classBean = ProdutoEstoque::class,
+      isBuffered = false,
+      openEditor = {
+        this.focusEditor(ProdutoEstoque::qtConfEdit)
+      },
+      closeEditor = {
+        viewModel.updateProduto(it.bean, false)
+        if(!this.editorFinalizado) {
+          abreProximo(it.bean)
+        }
+      },
+      saveEditor = {
+        viewModel.updateProduto(it.bean, false)
+        if(!this.editorFinalizado) {
+          abreProximo(it.bean)
+        }
+      }
+    )
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
@@ -241,12 +257,14 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Dif", pattern = "#,##0", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtConfEdit, header = "Conf", pattern = "#,##0", width = "80px")
+        .integerFieldEditor()
     }
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
       if (user?.estoqueEditaConf == true) {
-        this.addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto: ProdutoEstoque ->
+        this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
           val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
             gridPanel.dataProvider.refreshAll()
           }
@@ -259,13 +277,28 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
     columnGroup("Outras Informações") {
       this.columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-      this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").apply {
+      this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px")/*.apply {
         if (user?.estoqueEditaLoc == true) {
           textFieldEditor()
         }
-      }
+      }*/
       this.columnGrid(ProdutoEstoque::codForn, header = "For Cod")
       //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+    }
+  }
+
+  private fun abreProximo(bean: ProdutoEstoque) {
+    val items = gridPanel.list()
+    val index = items.indexOf(bean)
+    if (index >= 0) {
+      val nextIndex = index + 1
+      if (nextIndex < items.size) {
+        val nextBean = items[nextIndex]
+        //gridDetail.select(nextBean)
+        gridPanel.editor.editItem(nextBean)
+      } else {
+        gridPanel.deselectAll()
+      }
     }
   }
 
