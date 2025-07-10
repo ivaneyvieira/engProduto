@@ -44,7 +44,7 @@ class ProdutoEstoque(
       val cd = kardec?.toDouble() ?: 0.0
       val diferenca = sistema - cd
       return if (descricao?.startsWith("SVS E") == true) {
-        diferenca * 1000.0 / 5800.0
+        diferenca * 900.0 / 5800.0
       } else {
         diferenca
       }
