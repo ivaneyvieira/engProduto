@@ -66,7 +66,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         viewModel.removeNota()
       }
     }
-/*
+
     select("Motivo Devoulucao") {
       this.setItems(ETipoDevolucao.entries)
       this.addValueChangeListener {
@@ -89,7 +89,6 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         }
       }
     }
- */
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
