@@ -15,7 +15,7 @@ class TabNotaDivergenteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaView
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.PEDIDO)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.PEDIDO, divergencia = true)
     subView.updateNota(notas)
   }
 

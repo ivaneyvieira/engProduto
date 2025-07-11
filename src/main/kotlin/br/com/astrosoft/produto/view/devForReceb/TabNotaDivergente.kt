@@ -66,7 +66,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         viewModel.removeNota()
       }
     }
-
+/*
     select("Motivo Devoulucao") {
       this.setItems(ETipoDevolucao.entries)
       this.addValueChangeListener {
@@ -89,6 +89,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         }
       }
     }
+ */
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
@@ -127,7 +128,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Divergente").right()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = "5.5rem")

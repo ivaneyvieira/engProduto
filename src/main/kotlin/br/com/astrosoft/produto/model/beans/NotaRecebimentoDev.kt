@@ -201,6 +201,7 @@ class NotaRecebimentoDev(
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,
       situacaoDev: EStituacaoDev,
+      divergencia: Boolean = false
     ): List<NotaRecebimentoDev> {
       val filtroTodos = filtro.copy()
       return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota()
@@ -214,6 +215,12 @@ class NotaRecebimentoDev(
           (it.fornecedor?.contains(pesquisa, ignoreCase = true) == true) ||
           (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true) ||
           (it.numeroDevolucao?.toString() == pesquisa)
+        }.filter {
+          if (divergencia) {
+            it.tipoDevolucaoEnun?.divergente == true
+          } else {
+            it.tipoDevolucaoEnun?.divergente == false
+          }
         }
     }
   }
