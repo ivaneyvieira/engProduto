@@ -247,21 +247,40 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class ETipoDevolucao(val num: Int, val descricao: String, val notasMultiplas: Boolean, val fob: Boolean) {
-  AVARIA_TRANSPORTE(1, "Avaria no Transporte", false, false),
-  FALTA_TRANSPORTE(2, "Falta no Transporte", false, false),
-  FALTA_FABRICA(3, "Falta de Fabrica", false, false),
-  VENCIMENTO(4, "Validade", false, false),
-  DEFEITO_FABRICA(7, "Defeito de Fabricação", false, false),
-  SEM_IDENTIFICACAO(5, "Sem Identificação", false, false),
-  EM_DESACORDO(6, "Em Desacordo", false, false),
-  EM_GARANTIA(8, "Garantia", true, false),
-  ACORDO_COMERCIAL(13, "Acordo Comercial", true, false),
-  FRET_FOB(9, "Frete FOB", false, true),
-  ASSISTENCIA(10, "Assistência", false, false),
-  AJUSTE(11, "Ajuste", false, false),
-  PRODUTO_TROCADO(12, "Produto Trocado", false, false),
-  TROCA_CNPJ(14, "Muda CNPJ", false, false);
+enum class ETipoDevolucao(
+  val num: Int,
+  val descricao: String,
+  val notasMultiplas: Boolean,
+  val fob: Boolean,
+  val divergente: Boolean
+) {
+  AVARIA_TRANSPORTE(
+    num = 1,
+    descricao = "Avaria no Transporte",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  FALTA_TRANSPORTE(num = 2, descricao = "Falta no Transporte", notasMultiplas = false, fob = false, divergente = false),
+  FALTA_FABRICA(num = 3, descricao = "Falta de Fabrica", notasMultiplas = false, fob = false, divergente = false),
+  VENCIMENTO(num = 4, descricao = "Validade", notasMultiplas = false, false, divergente = false),
+  DEFEITO_FABRICA(
+    num = 7,
+    descricao = "Defeito de Fabricação",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  SEM_IDENTIFICACAO(num = 5, descricao = "Sem Identificação", notasMultiplas = false, fob = false, divergente = false),
+  EM_DESACORDO(num = 6, descricao = "Em Desacordo", notasMultiplas = false, fob = false, divergente = false),
+  EM_GARANTIA(num = 8, descricao = "Garantia", notasMultiplas = true, fob = false, divergente = false),
+  ACORDO_COMERCIAL(num = 13, descricao = "Acordo Comercial", notasMultiplas = true, fob = false, divergente = false),
+  FRET_FOB(num = 9, descricao = "Frete FOB", notasMultiplas = false, fob = true, divergente = false),
+  ASSISTENCIA(num = 10, descricao = "Assistência", notasMultiplas = false, fob = false, divergente = false),
+  AJUSTE(num = 11, descricao = "Ajuste", notasMultiplas = false, fob = false, divergente = false),
+  PRODUTO_TROCADO(num = 12, descricao = "Produto Trocado", notasMultiplas = false, fob = false, divergente = false),
+  TROCA_CNPJ(num = 14, descricao = "Muda CNPJ", notasMultiplas = false, fob = false, divergente = false),
+  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = true);
 
   override fun toString(): String {
     return descricao

@@ -95,7 +95,6 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun devolucaoProduto(produtos: List<NotaRecebimentoProduto>, tipo: ETipoDevolucao) = viewModel.exec {
-
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
