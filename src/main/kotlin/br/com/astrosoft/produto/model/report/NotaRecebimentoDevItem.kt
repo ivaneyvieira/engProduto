@@ -13,6 +13,9 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   val fornecedor = saci.findFornecedor(nota.vendno)
   val transportadora = saci.findTransportadora(nota.transp ?: 0)
 
+  override val tituloRelatorio: String
+    get() = "Espelho de Nota Fiscal de Devolução - Ped ${nota.numeroDevolucao}"
+
   override val nomeEmitente: String
     get() = loja?.name ?: ""
   override val enderecoEmitente: String

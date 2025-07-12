@@ -21,6 +21,7 @@
 		</queryString>
 	</subDataset>
 	<parameter name="PRINT_MARCA" class="java.lang.String"/>
+	<parameter name="PEDIDO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT 'ENGECOPI COM MATS CONST LTDA (PK)'                      AS nomeEmitente,
        'AV PRESIDENTE KENNEDY, 1585'                            AS enderecoEmitente,
@@ -107,6 +108,10 @@
        '                                                 AS informacoesComplementares
 FROM dual]]>
 	</queryString>
+	<field name="tituloRelatorio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tituloRelatorio"/>
+		<property name="com.jaspersoft.studio.field.label" value="tituloRelatorio"/>
+	</field>
 	<field name="nomeEmitente" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nomeEmitente"/>
 		<property name="com.jaspersoft.studio.field.label" value="nomeEmitente"/>
@@ -485,13 +490,13 @@ FROM dual]]>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
-				<staticText>
+				<textField>
 					<reportElement stretchType="ContainerHeight" x="0" y="0" width="555" height="30" uuid="831481d1-5318-4f1a-8736-03e61739eb8f"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Espelho de Nota Fiscal de Devolução]]></text>
-				</staticText>
+					<textFieldExpression><![CDATA[$F{tituloRelatorio}]]></textFieldExpression>
+				</textField>
 			</frame>
 			<frame>
 				<reportElement x="0" y="34" width="555" height="130" isPrintWhenDetailOverflows="true" uuid="e8e12d37-63ba-4fa9-b504-74fd17591539">

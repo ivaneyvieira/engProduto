@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.nfeXml
 import java.math.BigDecimal
 
 interface IItensNotaReport {
+  val tituloRelatorio: String
   val nomeEmitente: String
   val enderecoEmitente: String
   val bairroEmitente: String

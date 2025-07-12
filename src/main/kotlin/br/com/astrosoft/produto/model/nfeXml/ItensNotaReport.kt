@@ -14,6 +14,9 @@ class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String
   private fun icmsTotal(): NFNotaInfoICMSTotal? = nota.info?.total?.icmsTotal
   private fun issqnTotal(): NFNotaInfoISSQNTotal? = nota.info?.total?.issqnTotal
 
+  override val tituloRelatorio: String
+    get() = ""
+
   override val nomeEmitente: String
     get() = emitente()?.razaoSocial ?: ""
   override val enderecoEmitente: String
