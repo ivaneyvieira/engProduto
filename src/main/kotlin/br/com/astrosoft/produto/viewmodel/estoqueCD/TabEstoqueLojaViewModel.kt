@@ -29,6 +29,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     subView.updateProduto(produtos)
   }
 
+
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
