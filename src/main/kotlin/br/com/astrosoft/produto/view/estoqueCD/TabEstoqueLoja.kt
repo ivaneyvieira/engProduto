@@ -17,7 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
+class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
   private var dlgKardec: DlgProdutoKardec? = null
   private lateinit var edtProduto: IntegerField
@@ -188,7 +188,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    selectionMode = Grid.SelectionMode.MULTI
+    Grid.setSelectionMode = Grid.SelectionMode.MULTI
 
     val user = AppConfig.userLogin() as? UserSaci
 
