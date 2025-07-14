@@ -10,9 +10,9 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoque
 import java.time.LocalDate
 
-class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
+class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
-    get() = viewModel.view.tabEstoqueSaldo
+    get() = viewModel.view.tabEstoqueLoja
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -28,7 +28,6 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     subView.updateProduto(produtos)
   }
-
 
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
@@ -81,7 +80,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
   }
 }
 
-interface ITabEstoqueSaldo : ITabView {
+interface ITabEstoqueLoja : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
   fun updateKardec()

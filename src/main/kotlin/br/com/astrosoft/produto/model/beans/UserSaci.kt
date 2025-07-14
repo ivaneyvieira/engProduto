@@ -161,6 +161,7 @@ class UserSaci : IUser {
   var estoqueEditaConf by DelegateAuthorized3(131)
   var notaTipo by DelegateAuthorized3(132)
   var devFor2NotaDivergente by DelegateAuthorized3(133)
+  var estoqueLoja by DelegateAuthorized3(134)
 
   //Locais
   private var localEstoque: String?
@@ -576,7 +577,8 @@ class UserSaci : IUser {
 
   var estoqueCD
     get() = estoqueMov || estoqueCad || estoqueCD1A || estoqueSaldo || estoqueConf || estoqueAcerto ||
-            estoqueAcertoSimples || estoqueAcertoMobile || estoqueInventario || estoqueGarantia || admin
+            estoqueAcertoSimples || estoqueAcertoMobile || estoqueInventario || estoqueGarantia ||
+            estoqueLoja || admin
     set(value) {
       estoqueMov = value
       estoqueCad = value
@@ -587,6 +589,7 @@ class UserSaci : IUser {
       estoqueAcertoMobile = value
       estoqueInventario = value
       estoqueGarantia = value
+      estoqueLoja = value
     }
 
   val fornecedor

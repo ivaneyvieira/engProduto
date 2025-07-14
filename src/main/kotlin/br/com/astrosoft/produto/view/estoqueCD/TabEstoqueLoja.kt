@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueLoja
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueLojaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -17,8 +17,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
+class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
+  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueLoja {
   private var dlgKardec: DlgProdutoKardec? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -30,10 +30,29 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var cmbLoja: Select<Loja>
+
+  fun init() {
+    val itens =  viewModel.findAllLojas()
+    cmbLoja.setItems(itens)
+    cmbLoja.value = itens.firstOrNull{
+      it.no == 4
+    } ?: itens.firstOrNull()
+  }
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
+        cmbLoja = select("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient)
+              viewModel.updateView()
+          }
+        }
+        init()
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -188,7 +207,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    Grid.setSelectionMode = Grid.SelectionMode.MULTI
+    setSelectionMode(Grid.SelectionMode.MULTI)
 
     val user = AppConfig.userLogin() as? UserSaci
 
@@ -200,13 +219,13 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
       },
       closeEditor = {
         viewModel.updateProduto(it.bean, false)
-        if(!this.editorFinalizado) {
+        if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
       },
       saveEditor = {
         viewModel.updateProduto(it.bean, false)
-        if(!this.editorFinalizado) {
+        if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
       }
@@ -214,12 +233,6 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
-      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
-        dlgKardec = DlgProdutoKardec(viewModel, produto)
-        dlgKardec?.showDialog {
-          viewModel.updateView()
-        }
-      }
       this.columnGrid(ProdutoEstoque::codigo, header = "Código")
       this.columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
       this.columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
@@ -286,6 +299,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
     }
 
     return FiltroProdutoEstoque(
+      loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
       grade = edtGrade.value ?: "",
@@ -314,11 +328,11 @@ class TabEstoqueLoja(val viewModel: TabEstoqueSaldoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueSaldo == true
+    return username?.estoqueLoja == true
   }
 
   override val label: String
-    get() = "Estoque"
+    get() = "Estoque Loja"
 
   override fun updateComponent() {
     viewModel.updateView()

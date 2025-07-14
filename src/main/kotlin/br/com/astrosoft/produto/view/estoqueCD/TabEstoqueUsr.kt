@@ -25,6 +25,7 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::estoqueAcertoMobile, "Coletor")
     columnGrid(UserSaci::estoqueGarantia, "Garantia")
     columnGrid(UserSaci::estoqueSaldo, "Estoque")
+    columnGrid(UserSaci::estoqueLoja, "Estoque Loja")
     columnGrid(UserSaci::estoqueCad, "Cad Loc")
     columnGrid(UserSaci::estoqueCD1A, "CD1A")
   }
@@ -36,6 +37,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       }
       checkBox("Estoque") {
         binder.bind(this, UserSaci::estoqueSaldo.name)
+      }
+      checkBox("Estoque Loja") {
+        binder.bind(this, UserSaci::estoqueLoja.name)
       }
       checkBox("Conferência") {
         binder.bind(this, UserSaci::estoqueConf.name)
