@@ -110,7 +110,7 @@ SELECT S.no                                                                     
        A.kardec                                                                       AS kardec,
        A.dataObservacao                                                               AS dataConferencia,
        SUBSTRING_INDEX(A.observacao, ',', 1) * 1                                      AS qtConferencia,
-       IF(LOCATE(A.observacao, ',') > 0,
+       IF(LOCATE(',', A.observacao) > 0,
           SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
           0)                                                                          AS qtConfEdit,
        PC.refprice / 100                                                              AS preco,
