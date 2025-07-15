@@ -52,8 +52,8 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     uf = dados.ufTransportadora ?: ""
   )
   val cliente = DadosTermoCliente(
-    cnpj = dados.cliente ?: "",
-    nome = dados.cnpjCliente ?: "",
+    cnpj = dados.cnpjCliente ?: "",
+    nome = dados.cliente ?: "",
     endereco = dados.enderecoCliente ?: "",
     bairro = dados.bairroCliente ?: "",
     cidade = dados.cidadeCliente ?: "",

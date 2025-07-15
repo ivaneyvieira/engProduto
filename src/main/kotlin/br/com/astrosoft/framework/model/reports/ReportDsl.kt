@@ -7,7 +7,7 @@ import net.sf.dynamicreports.report.builder.component.VerticalListBuilder
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.LEFT
 
-fun horizontalBlock(block: (HorizontalListBuilder) -> HorizontalListBuilder): HorizontalListBuilder {
+fun horizontalBlock(block: HorizontalListBuilder.() -> Unit): HorizontalListBuilder {
   val hrizontal = cmp.horizontalFlowList()
   block(hrizontal)
   return hrizontal

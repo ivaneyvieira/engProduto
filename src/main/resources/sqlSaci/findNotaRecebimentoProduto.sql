@@ -176,12 +176,12 @@ SELECT N.storeno                                                   AS loja,
        N.invno                                                     AS ni,
        TRIM(LEADING '0' FROM TRIM(CONCAT(N.nfname, '/', N.invse))) AS nfEntrada,
        C.no                                                        AS custno,
-       C.name                                                      AS cliente,
-       C.cpf_cgc                                                   AS cnpjCliente,
-       C.add1                                                      AS enderecoCliente,
-       C.nei1                                                      AS bairroCliente,
-       C.city1                                                     AS cidadeCliente,
-       C.state1                                                    AS ufCliente,
+       S.name                                                      AS cliente,
+       S.cgc                                                       AS cnpjCliente,
+       S.addr                                                      AS enderecoCliente,
+       S.nei                                                       AS bairroCliente,
+       S.city                                                      AS cidadeCliente,
+       S.state                                                     AS ufCliente,
        N.vendno                                                    AS vendno,
        V.name                                                      AS fornecedor,
        V.cgc                                                       AS cnpjFornecedor,
@@ -290,6 +290,8 @@ FROM
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
     LEFT JOIN  T_EST           AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
+    LEFT JOIN  sqldados.store  AS S
+               ON S.no = N.storeno
 WHERE (P.no = :prdno OR :prdno = '')
   AND (N.grade = :grade OR :grade = '');
 
