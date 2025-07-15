@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
+import br.com.astrosoft.devolucao.model.reports.RelatorioPedido
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -7,7 +8,9 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasEntrada
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import br.com.astrosoft.produto.model.report.ReportTermoRecebimento
 import br.com.astrosoft.produto.model.saci
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import java.time.LocalDate
 
 class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
@@ -64,10 +67,23 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateProduto()
   }
 
+  fun imprimeTermoRecebimento() = viewModel.exec {
+    val notas = subView.notasSelecionadas()
+
+    if (notas.isEmpty()) {
+      fail("Nenhuma nota selecionada")
+    }
+
+    val termo = notas.termoRecebimento() ?: fail("Nenhuma nota selecionada possui termo de recebimento")
+
+    val file = ReportTermoRecebimento.processaRelatorio(termo) ?: fail("Erro ao gerar termo de recebimento")
+    viewModel.view.showReport(chave = "TermoRecebimento${System.nanoTime()}", report = file)
+  }
+
   fun imprimeNotas() = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
-      fail("Nenhum produto selecionado")
+      fail("Nenhuma nota selecionada")
     }
 
     val report = PrintNotaRecebimento()

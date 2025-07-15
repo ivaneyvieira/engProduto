@@ -104,6 +104,13 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
             viewModel.imprimeNotas()
           }
         }
+
+        this.button("Termo Receb") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeTermoRecebimento()
+          }
+        }
       }
     }
   }

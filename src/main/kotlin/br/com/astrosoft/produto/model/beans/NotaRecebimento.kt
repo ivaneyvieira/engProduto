@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import kotlin.String
 
 class NotaRecebimento(
   var loja: Int?,
@@ -12,13 +13,29 @@ class NotaRecebimento(
   var ni: Int?,
   var nfEntrada: String?,
   var custno: Int?,
+  var cliente: String?,
+  var cnpjCliente: String?,
+  var enderecoCliente: String?,
+  var bairroCliente: String?,
+  var cidadeCliente: String?,
+  var ufCliente: String?,
   var vendno: Int?,
   var vendnoProduto: Int?,
   var fornecedor: String?,
+  var cnpjFornecedor: String?,
+  var enderecoFornecedor: String?,
+  var bairroFornecedor: String?,
+  var cidadeFornecedor: String?,
+  var ufFornecedor: String?,
   var valorNF: Double?,
   var pedComp: Int?,
   var transp: Int?,
   var transportadora: String?,
+  var cnpjTransportadora: String?,
+  var enderecoTransportadora: String?,
+  var bairroTransportadora: String?,
+  var cidadeTransportadora: String?,
+  var ufTransportadora: String?,
   var cte: Int?,
   var dataDevolucao: LocalDate?,
   var volume: Int?,
@@ -215,6 +232,22 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         obsDevolucao = nota.obsDevolucao,
         dataDevolucao = nota.dataDevolucao,
         transportadoraDevolucao = nota.transportadoraDevolucao,
+        cliente = nota.cliente,
+        cnpjCliente = nota.cnpjCliente,
+        enderecoCliente = nota.enderecoCliente,
+        bairroCliente = nota.bairroCliente,
+        cidadeCliente = nota.cidadeCliente,
+        ufCliente = nota.ufCliente,
+        cnpjFornecedor = nota.cnpjFornecedor,
+        enderecoFornecedor = nota.enderecoFornecedor,
+        bairroFornecedor = nota.bairroFornecedor,
+        cidadeFornecedor = nota.cidadeFornecedor,
+        ufFornecedor = nota.ufFornecedor,
+        cnpjTransportadora = nota.cnpjTransportadora,
+        enderecoTransportadora = nota.enderecoTransportadora,
+        bairroTransportadora = nota.bairroTransportadora,
+        cidadeTransportadora = nota.cidadeTransportadora,
+        ufTransportadora = nota.ufTransportadora,
       )
     }
   }

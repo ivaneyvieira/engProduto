@@ -20,6 +20,7 @@ class ProdutoEstoque(
   var locApp: String?,
   var codForn: Int,
   var fornecedor: String,
+  var cnpjFornecedor: String?,
   var saldo: Int?,
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,

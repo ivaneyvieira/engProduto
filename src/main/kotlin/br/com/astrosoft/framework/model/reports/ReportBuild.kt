@@ -261,6 +261,12 @@ abstract class ReportBuild<T> {
     return emptyList()
   }
 
+  fun processaRelatorio(itens: List<T>): ByteArray {
+    val report = makeReport(itens)
+    val printList = listOf(report.toJasperPrint())
+    return renderReport(printList)
+  }
+
   open fun makeReport(itens: List<T>): JasperReportBuilder {
     val labelTitleCol = labelTitleCol()
     val itemGroup = if (labelTitleCol == null) null
@@ -299,12 +305,6 @@ abstract class ReportBuild<T> {
         if (itemGroup != null) this.groupBy(itemGroup).addGroupFooter(itemGroup, cmp.text(""))
           .setShowColumnTitle(false)
       }
-  }
-
-  fun processaRelatorio(itens: List<T>): ByteArray {
-    val report = makeReport(itens)
-    val printList = listOf(report.toJasperPrint())
-    return renderReport(printList)
   }
 
   private fun renderReport(printList: List<JasperPrint>): ByteArray {
