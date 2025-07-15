@@ -207,7 +207,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
 
     val user = AppConfig.userLogin() as? UserSaci
 
@@ -215,7 +215,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       classBean = ProdutoEstoque::class,
       isBuffered = false,
       openEditor = {
-        this.focusEditor(ProdutoEstoque::qtConfEdit)
+        this.focusEditor(ProdutoEstoque::qtConfEditLoja)
       },
       closeEditor = {
         viewModel.updateProduto(it.bean, false)
@@ -247,7 +247,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Dif", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtConfEdit, header = "Conf", pattern = "#,##0", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtConfEditLoja, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
     }
 

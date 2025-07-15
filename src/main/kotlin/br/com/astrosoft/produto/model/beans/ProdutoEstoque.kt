@@ -26,6 +26,7 @@ class ProdutoEstoque(
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
   //var dataConferencia: LocalDate? = null,
+  var qtConfEditLoja: Int? = null,
   var qtConfEdit: Int? = null,
   var qtConferencia: Int? = null,
   var preco: Double? = null,

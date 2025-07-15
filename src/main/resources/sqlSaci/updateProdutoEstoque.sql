@@ -2,5 +2,5 @@ REPLACE INTO sqldados.prdAdicional(storeno, prdno, grade, estoque, localizacao, 
                                    dataObservacao, observacao, estoqueUser, estoqueData, estoqueCD,
                                    estoqueLoja)
   VALUE (:loja, :prdno, :grade, :estoque, IFNULL(:locApp, ''), :dataInicial, :dataUpdate, :kardec,
-         NULL, CONCAT(:qtConferencia, ',', :qtConfEdit), :estoqueUser, :estoqueData,
-         :estoqueCD, :estoqueLoja)
+         NULL, CONCAT(:qtConferencia, ',', :qtConfEdit, ',', :qtConfEditLoja), :estoqueUser,
+         :estoqueData, :estoqueCD, :estoqueLoja)
