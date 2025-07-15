@@ -52,10 +52,12 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
       this.text(text = "Termo de Recebimento", horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
         setStyle(Templates.fieldFontTitulo)
       }
-      val paragrafo = """        Declaramos para devidos fins quer recebemos os volumes dados abaixo da nota fiscal 
-        |de origem e Ct-e para posterior conferência sujeito a notificações de irregularidades no recebimento, como: 
-        |Avaria no Transporte, Falha no Transporte, Falta de Fabrica, Validade, Defeito de fabricação, 
-        |Sem Identificação e Em Desacordo.""".trimMargin().replace("\n", " ")
+      val paragrafo = """        Declaramos para os devidos fins que recebemos os volumes constante nas notas 
+        |fiscais e CT-e informados nos dados fiscais abaixo para conferência posterior e sujeitos as notificações de 
+        |irregularidade no recebimento tais como: Produto avaria no transporte, falta de volume e ou falta do produto
+        |dentro do volume, produto próximo ao vencimento ou produto vencido, produto com defeito de fabricação, 
+        |produto em desacordo com o pedido de compra etc.
+""".trimMargin().replace("\n", " ")
       this.text("")
       this.text(text = paragrafo, horizontalTextAlignment = HorizontalTextAlignment.JUSTIFIED) {
         setStyle(Templates.fieldFontTermo)
