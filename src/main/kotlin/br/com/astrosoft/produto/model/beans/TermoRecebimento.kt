@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import java.time.LocalDate
 
 data class TermoRecebimento(
+  val ni: Int,
   val dadosFornecedor: DadosTermoFornecedor,
   val dadosTransportadora: DadosTermoTransportadora,
   val dadosCliente: DadosTermoCliente,
@@ -86,5 +87,10 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     uf = dados.ufCliente ?: ""
   )
 
-  return TermoRecebimento(fornecedor, transportadora, cliente)
+  return TermoRecebimento(
+    ni = dados.ni ?: 0,
+    dadosFornecedor = fornecedor,
+    dadosTransportadora = transportadora,
+    dadosCliente = cliente
+  )
 }

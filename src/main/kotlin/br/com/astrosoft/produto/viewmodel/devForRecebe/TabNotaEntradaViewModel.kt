@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasEntrada
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import br.com.astrosoft.produto.model.printText.PrintTermoCupom
 import br.com.astrosoft.produto.model.report.ReportTermoRecebimento
 import br.com.astrosoft.produto.model.saci
 import org.apache.poi.hssf.usermodel.HeaderFooter.file
@@ -102,6 +103,32 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
         }
       )
     }
+
+    preview.print(buf)
+  }
+
+  fun imprimeTermoCupom() = viewModel.exec {
+    val notas = subView.notasSelecionadas()
+
+    if (notas.isEmpty()) {
+      fail("Nenhuma nota selecionada")
+    }
+
+    val termo = notas.termoRecebimento() ?: fail("Nenhuma nota selecionada possui termo de recebimento")
+
+    val report = PrintTermoCupom()
+    val preview = subView.printerPreview(loja = 0)
+
+    val buf = TextBuffer()
+
+    report.print(
+      dados = listOf(termo),
+      printer = object : IPrinter {
+        override fun print(text: TextBuffer) {
+          buf.println(text.textBuf())
+        }
+      }
+    )
 
     preview.print(buf)
   }
