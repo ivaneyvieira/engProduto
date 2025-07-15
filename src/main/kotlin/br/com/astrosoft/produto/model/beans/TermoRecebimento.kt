@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import java.time.LocalDate
+
 data class TermoRecebimento(
   val dadosFornecedor: DadosTermoFornecedor,
   val dadosTransportadora: DadosTermoTransportadora,
@@ -12,7 +14,13 @@ data class DadosTermoFornecedor(
   val endereco: String,
   val bairro: String,
   val cidade: String,
-  val uf: String
+  val uf: String,
+  val notaFiscal: String,
+  val emissao: LocalDate?,
+  val recebimento: LocalDate?,
+  val valor: Double,
+  val volumes: Double?,
+  val pesoBruto: Double?,
 )
 
 data class DadosTermoTransportadora(
@@ -21,7 +29,13 @@ data class DadosTermoTransportadora(
   val endereco: String,
   val bairro: String,
   val cidade: String,
-  val uf: String
+  val uf: String,
+  val cte: String,
+  val emissao: LocalDate?,
+  val recebimento: LocalDate?,
+  val valor: Double,
+  val volumes: Double?,
+  val pesoBruto: Double?,
 )
 
 data class DadosTermoCliente(
@@ -41,7 +55,13 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     endereco = dados.enderecoFornecedor ?: "",
     bairro = dados.bairroFornecedor ?: "",
     cidade = dados.cidadeFornecedor ?: "",
-    uf = dados.ufFornecedor ?: ""
+    uf = dados.ufFornecedor ?: "",
+    notaFiscal = dados.nfEntrada ?: "",
+    emissao = dados.emissao,
+    recebimento = dados.data,
+    valor = this.sumOf { it.valorNF ?: 0.00 },
+    volumes = this.sumOf { it.volume?.toDouble() ?: 0.00 },
+    pesoBruto = this.sumOf { it.peso ?: 0.0 }
   )
   val transportadora = DadosTermoTransportadora(
     cnpj = dados.cnpjTransportadora ?: "",
@@ -49,7 +69,13 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     endereco = dados.enderecoTransportadora ?: "",
     bairro = dados.bairroTransportadora ?: "",
     cidade = dados.cidadeTransportadora ?: "",
-    uf = dados.ufTransportadora ?: ""
+    uf = dados.ufTransportadora ?: "",
+    cte = dados.cte?.toString() ?: "",
+    emissao = dados.emissao,
+    recebimento = dados.data,
+    valor = this.sumOf { it.valorNF ?: 0.00 },
+    volumes = this.sumOf { it.volume?.toDouble() ?: 0.00 },
+    pesoBruto = this.sumOf { it.peso ?: 0.0 }
   )
   val cliente = DadosTermoCliente(
     cnpj = dados.cnpjCliente ?: "",

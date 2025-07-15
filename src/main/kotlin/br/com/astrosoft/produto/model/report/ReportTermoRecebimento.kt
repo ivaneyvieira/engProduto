@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.model.reports.horizontalList
 import br.com.astrosoft.framework.model.reports.text
 import br.com.astrosoft.framework.model.reports.verticalBlock
 import br.com.astrosoft.framework.model.reports.verticalList
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.TermoRecebimento
 import com.vaadin.copilot.javarewriter.JavaStyleRewriter.setStyle
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
@@ -28,13 +29,19 @@ import java.io.ByteArrayOutputStream
 class ReportTermoRecebimento(val termo: TermoRecebimento) {
   private fun HorizontalListBuilder.quadro(titulo: String, conteudo: List<String>) {
     this.verticalList {
-      this.text(text = titulo, horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
-        setStyle(Templates.fieldFontTituloQuadro)
+      if (titulo.isNotEmpty()) {
+        this.text(text = titulo, horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
+          setStyle(Templates.fieldFontTituloQuadro)
+        }
+      }else {
+        this.text("")
       }
-      conteudo.forEach { item ->
-        this.text(text = item, horizontalTextAlignment = HorizontalTextAlignment.LEFT) {
-          setStyle(Templates.fieldFontQuadro)
-          this.setTextAdjust(TextAdjust.SCALE_FONT)
+      if (conteudo.isNotEmpty()) {
+        conteudo.forEach { item ->
+          this.text(text = item, horizontalTextAlignment = HorizontalTextAlignment.LEFT) {
+            setStyle(Templates.fieldFontQuadro)
+            this.setTextAdjust(TextAdjust.SCALE_FONT)
+          }
         }
       }
     }
@@ -54,6 +61,9 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
         setStyle(Templates.fieldFontTermo)
       }
       this.text("")
+      this.text("Dados Cadastrais", horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
+        setStyle(Templates.fieldFontTitulo)
+      }
       this.horizontalList {
         quadro(
           titulo = "Dados do Fornecedor",
@@ -88,6 +98,35 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
             "Estado: ${termo.dadosCliente.uf}"
           )
         )
+      }
+      this.text("")
+      this.text("Dados Fiscais", horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
+        setStyle(Templates.fieldFontTitulo)
+      }
+      this.horizontalList {
+        quadro(
+          titulo = "Fornecedor",
+          conteudo = listOf(
+            "Nota Fiscal: ${termo.dadosFornecedor.notaFiscal}",
+            "Emissão: ${termo.dadosFornecedor.emissao?.format()}",
+            "Recebimento: ${termo.dadosFornecedor.recebimento?.format()}",
+            "Valor: R$ ${termo.dadosFornecedor.valor.format()}",
+            "Volumes: ${termo.dadosFornecedor.volumes.format()}",
+            "Peso Bruto: ${termo.dadosFornecedor.pesoBruto.format()} kg"
+          )
+        )
+        quadro(
+          titulo = "Transportadora",
+          conteudo = listOf(
+            "CT-e: ${termo.dadosTransportadora.cte}",
+            "Emissão: ${termo.dadosTransportadora.emissao?.format()}",
+            "Recebimento: ${termo.dadosTransportadora.recebimento?.format()}",
+            "Valor: R$ ${termo.dadosTransportadora.valor.format()}",
+            "Volumes: ${termo.dadosTransportadora.volumes.format()}",
+            "Peso Bruto: ${termo.dadosTransportadora.pesoBruto.format()} kg"
+          )
+        )
+        quadro(titulo = "", conteudo = listOf())
       }
     }
   }
