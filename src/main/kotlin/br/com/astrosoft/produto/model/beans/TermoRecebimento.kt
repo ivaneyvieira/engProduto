@@ -61,8 +61,8 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     emissao = dados.emissao,
     recebimento = dados.data,
     valor = this.sumOf { it.valorNF ?: 0.00 },
-    volumes = this.sumOf { it.volume?.toDouble() ?: 0.00 },
-    pesoBruto = this.sumOf { it.peso ?: 0.0 }
+    volumes = this.sumOf { it.volumeDevolucao?.toDouble() ?: it.volume?.toDouble() ?: 0.00 },
+    pesoBruto = this.sumOf { it.pesoDevolucao ?: it.peso ?: 0.0 }
   )
   val transportadora = DadosTermoTransportadora(
     cnpj = dados.cnpjTransportadora ?: "",
@@ -75,8 +75,8 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     emissao = dados.emissao,
     recebimento = dados.data,
     valor = this.sumOf { it.valorNF ?: 0.00 },
-    volumes = this.sumOf { it.volume?.toDouble() ?: 0.00 },
-    pesoBruto = this.sumOf { it.peso ?: 0.0 }
+    volumes = this.sumOf { it.volumeDevolucao?.toDouble() ?: it.volume?.toDouble() ?: 0.00 },
+    pesoBruto = this.sumOf { it.pesoDevolucao ?: it.peso ?: 0.0 }
   )
   val cliente = DadosTermoCliente(
     cnpj = dados.cnpjCliente ?: "",

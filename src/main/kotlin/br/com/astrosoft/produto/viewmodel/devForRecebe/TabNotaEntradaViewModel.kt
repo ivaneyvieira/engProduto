@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
-import br.com.astrosoft.devolucao.model.reports.RelatorioPedido
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
@@ -11,7 +10,6 @@ import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.printText.PrintTermoCupom
 import br.com.astrosoft.produto.model.report.ReportTermoRecebimento
 import br.com.astrosoft.produto.model.saci
-import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import java.time.LocalDate
 
 class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
@@ -176,6 +174,10 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
   fun geraPlanilha(produtos: List<NotaRecebimentoProduto>): ByteArray {
     val planilha = PlanilhaNotasEntrada()
     return planilha.write(produtos)
+  }
+
+  fun saveNota(nota: NotaRecebimento) {
+    nota.save()
   }
 }
 

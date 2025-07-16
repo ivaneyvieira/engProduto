@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
 import br.com.astrosoft.produto.model.beans.ETipoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
@@ -95,6 +96,28 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             this.isReadOnly = true
             this.width = "7rem"
             this.value = nota.cte?.toString()
+          }
+          integerField ("Volume") {
+            this.width = "7rem"
+            this.value = nota.volumeDevolucao ?: nota.volume ?: 0
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.isAutoselect = true
+            addValueChangeListener {
+              nota.volumeDevolucao = it.value ?: 0
+              viewModel.saveNota(nota)
+            }
+          }
+          superDoubleField("Peso") {
+            this.width = "7rem"
+            this.value = nota.pesoDevolucao ?: nota.peso ?: 0.00
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.isAutoselect = true
+            addValueChangeListener {
+              nota.pesoDevolucao = it.value ?: 0.00
+              viewModel.saveNota(nota)
+            }
           }
           textField("Ped Compra") {
             this.isReadOnly = true

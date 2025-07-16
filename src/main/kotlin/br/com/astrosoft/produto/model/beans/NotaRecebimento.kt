@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import kotlin.String
@@ -166,6 +167,10 @@ class NotaRecebimento(
     } else {
       listFile
     }
+  }
+
+  fun save() {
+    saci.saveInvAdicional(this)
   }
 
   companion object {

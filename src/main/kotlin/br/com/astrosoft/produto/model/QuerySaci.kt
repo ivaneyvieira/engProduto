@@ -2219,6 +2219,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun saveInvAdicional(nota: NotaRecebimento) {
+    val sql = "/sqlSaci/invAdicionalSavePesoVolume.sql"
+    script(sql) {
+      addOptionalParameter("invno", nota.ni)
+      addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
+      addOptionalParameter("volume", nota.volumeDevolucao)
+      addOptionalParameter("peso", nota.pesoDevolucao)
+    }
+  }
+
   fun saveInvAdicional(nota: NotaRecebimentoDev, userno: Int) {
     val sql = "/sqlSaci/invAdicionalSave.sql"
     nota.niList.forEach { invno ->
