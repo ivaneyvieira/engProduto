@@ -97,26 +97,50 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             this.width = "7rem"
             this.value = nota.cte?.toString()
           }
-          integerField ("Volume") {
+          integerField("Volume") {
             this.width = "7rem"
-            this.value = nota.volumeDevolucao ?: nota.volume ?: 0
+            if ((nota.volumeDevolucao ?: 0) == 0) {
+              this.value = nota.volume ?: 0
+            } else {
+              this.value = nota.volumeDevolucao ?: 0
+            }
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.valueChangeMode = ValueChangeMode.LAZY
             this.isAutoselect = true
+            this.isClearButtonVisible = true
             addValueChangeListener {
-              nota.volumeDevolucao = it.value ?: 0
-              viewModel.saveNota(nota)
+              if (it.isFromClient) {
+                if( (it.value ?: 0) == 0) {
+                  nota.volumeDevolucao = nota.volume ?: 0
+                } else{
+                  nota.volumeDevolucao = it.value ?: 0
+                }
+                viewModel.saveNota(nota)
+                this.value = nota.volumeDevolucao ?: 0
+              }
             }
           }
           superDoubleField("Peso") {
             this.width = "7rem"
-            this.value = nota.pesoDevolucao ?: nota.peso ?: 0.00
+            if ((nota.pesoDevolucao ?: 0.00) == 0.00) {
+              this.value = nota.peso ?: 0.00
+            } else {
+              this.value = nota.pesoDevolucao ?: 0.00
+            }
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.valueChangeMode = ValueChangeMode.LAZY
             this.isAutoselect = true
+            this.isClearButtonVisible = true
             addValueChangeListener {
-              nota.pesoDevolucao = it.value ?: 0.00
-              viewModel.saveNota(nota)
+              if (it.isFromClient) {
+                if ((it.value ?: 0.00) == 0.00) {
+                  nota.pesoDevolucao = nota.peso ?: 0.00
+                } else {
+                  nota.pesoDevolucao = it.value ?: 0.00
+                }
+                viewModel.saveNota(nota)
+                this.value = nota.pesoDevolucao ?: 0.00
+              }
             }
           }
           textField("Ped Compra") {
