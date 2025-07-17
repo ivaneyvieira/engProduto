@@ -23,8 +23,6 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("produto com defeito de fabricação, produto em  desacordo  com  o")
     writeln("pedido de compra etc.")
     writeln("")
-    writeln("Dados Fiscais", negrito = true, center = true)
-    writeln("")
     writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
     writeln("CNPJ: ${bean.dadosFornecedor.cnpj}")
 
