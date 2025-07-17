@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 data class TermoRecebimento(
   val ni: Int,
@@ -75,8 +76,22 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     emissao = dados.emissao,
     recebimento = dados.data,
     valor = this.sumOf { it.valorNF ?: 0.00 },
-    volumes = this.sumOf { it.volumeDevolucao?.toDouble() ?: it.volume?.toDouble() ?: 0.00 },
-    pesoBruto = this.sumOf { it.pesoDevolucao ?: it.peso ?: 0.0 }
+    volumes = this.sumOf {
+      it.volumeDevolucao?.toDouble() ?: it.volume?.toDouble() ?: 0.00
+      if ((it.volumeDevolucao ?: 0) == 0) {
+        it.volume?.toDouble() ?: 0.00
+      } else {
+        it.volumeDevolucao?.toDouble() ?: 0.00
+      }
+    },
+    pesoBruto = this.sumOf {
+      it.pesoDevolucao ?: it.peso ?: 0.0
+      if (((it.pesoDevolucao ?: 0.0) * 100).roundToInt() == 0) {
+        it.peso ?: 0.0
+      } else {
+        it.pesoDevolucao ?: 0.0
+      }
+    }
   )
   val cliente = DadosTermoCliente(
     cnpj = dados.cnpjCliente ?: "",
