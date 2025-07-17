@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.TermoRecebimento
+import java.time.LocalDate
 
 class PrintTermoCupom() : PrintText<TermoRecebimento>() {
   override fun printTitle(bean: TermoRecebimento) {
@@ -74,9 +75,17 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
   override fun printSumary(bean: TermoRecebimento?) {
     writeln("")
     writeln("")
-    writeln("________________________________")
-    writeln("Nome:")
-    writeln("CPF:")
+    // 17 de julho de 2025
+    writeln("Teresina - PI ${LocalDate.now().format("dd 'de' MMMM 'de' yyyy")}", center = true)
+    writeln("")
+    writeln("")
+    writeln("")
+    val linha = "_____________________________________"
+    val espacoLinha = (64 - linha.length) / 2
+    val margem = " ".repeat(espacoLinha)
+    writeln("${margem}${linha}")
+    writeln("${margem}Nome:")
+    writeln("${margem}CPF:")
     writeln("")
     writeln("")
   }
