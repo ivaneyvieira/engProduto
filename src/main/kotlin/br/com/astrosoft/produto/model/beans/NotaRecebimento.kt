@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import kotlin.Int
 import kotlin.String
 
 class NotaRecebimento(
@@ -44,6 +45,9 @@ class NotaRecebimento(
   val marcaSelecionada: Int?,
   var usernoRecebe: Int?,
   var usuarioRecebe: String?,
+  var empNoTermo: Int?,
+  var empNomeTermo: String?,
+  var empCpfTermo: String?,
   var observacaoNota: String?,
   var tipoNota: String?,
   var countLocalizacao: Int?,
@@ -253,7 +257,10 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         bairroTransportadora = nota.bairroTransportadora,
         cidadeTransportadora = nota.cidadeTransportadora,
         ufTransportadora = nota.ufTransportadora,
-      )
+        empNoTermo = nota.empNoTermo,
+        empNomeTermo = nota.empNomeTermo,
+        empCpfTermo = nota.empCpfTermo,
+        )
     }
   }
 }

@@ -69,6 +69,7 @@ SELECT I.invno,
        I.cfop,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
+       IA.empTermo                                                    AS empTermo,
        N.remarks                                                      AS observacaoNota,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
@@ -234,6 +235,9 @@ SELECT N.storeno                                                   AS loja,
        vencimento                                                  AS vencimento,
        ER.no                                                       AS usernoRecebe,
        ER.login                                                    AS usuarioRecebe,
+       ES.no                                                       AS empNoTermo,
+       ES.name                                                     AS empNomeTermo,
+       ES.cpf                                                      AS empCpfTermo,
        observacaoNota                                              AS observacaoNota,
        tipoNota                                                    AS tipoNota,
        selecionado                                                 AS selecionado,
@@ -276,6 +280,8 @@ FROM
                USING (storeno, prdno, grade)
     LEFT JOIN  sqldados.users  AS ER
                ON ER.no = N.usernoRecebe
+    LEFT JOIN  sqldados.emp    AS ES
+               ON ES.no = N.empTermo
     LEFT JOIN  sqldados.vend   AS V
                ON V.no = N.vendno
     LEFT JOIN  sqldados.custp  AS C
@@ -330,6 +336,9 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
+       empNoTermo,
+       empNomeTermo,
+       empCpfTermo,
   /*Produto*/
        prdno,
        codigo,

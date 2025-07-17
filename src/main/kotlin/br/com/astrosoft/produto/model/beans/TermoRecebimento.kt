@@ -8,6 +8,8 @@ data class TermoRecebimento(
   val dadosFornecedor: DadosTermoFornecedor,
   val dadosTransportadora: DadosTermoTransportadora,
   val dadosCliente: DadosTermoCliente,
+  val nomeassinatura: String,
+  val cpf: String,
 )
 
 data class DadosTermoFornecedor(
@@ -120,6 +122,8 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     ni = dados.ni ?: 0,
     dadosFornecedor = fornecedor,
     dadosTransportadora = transportadora,
-    dadosCliente = cliente
+    dadosCliente = cliente,
+    nomeassinatura = dados.empNomeTermo ?: "",
+    cpf = dados.empCpfTermo ?: ""
   )
 }

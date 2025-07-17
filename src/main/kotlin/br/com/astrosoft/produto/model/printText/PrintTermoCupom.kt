@@ -17,10 +17,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("    Declaramos para os devidos fins  que  recebemos  os  volumes")
     writeln("que constam na NF-e e CT-e informados abaixo,  para  conferência")
     writeln("posterior  e  sujeitos  as  notificações  de  irregularidade  no")
-    writeln("recebimento  tais como: Produto  avaria  no transporte, falta de")
-    writeln("volume e ou falta do produto dentro do volume,  produto  próximo")
-    writeln("ao  vencimento  ou  produto  vencido,  produto  com  defeito  de")
-    writeln("fabricação, produto em desacordo com o pedido de compra etc.")
+    writeln("recebimento.")
     writeln("")
     writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
     writeln("CNPJ: ${bean.dadosFornecedor.cnpj}")
@@ -31,7 +28,6 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
 
     val espacoResto = 64 - (notaFiscal.length + valor.length + emissao.length)
     val espaco1 = espacoResto / 2
-    val espaco2 = (espacoResto - espaco1)
 
     writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao")
 
@@ -46,23 +42,20 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val emissaoTransp = "Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}"
     val espacoResto3 = (64 - (cte.length + emissaoTransp.length)) / 2
     writeln("$cte${" ".repeat(espacoResto3)}$emissaoTransp")
-    printLine()
   }
 
   override fun printSumary(bean: TermoRecebimento?) {
     writeln("")
     writeln("")
-    // 17 de julho de 2025
-    writeln("Teresina - PI ${LocalDate.now().format("dd 'de' MMMM 'de' yyyy")}", center = true)
-    writeln("")
+    writeln("Teresina-PI ${LocalDate.now().format("dd 'de' MMMM 'de' yyyy")}", center = true)
     writeln("")
     writeln("")
     val linha = "_____________________________________"
-    val espacoLinha = (64 - linha.length) / 2
-    val margem = " ".repeat(espacoLinha)
-    writeln("${margem}${linha}")
-    writeln("${margem}Nome:")
-    writeln("${margem}CPF:")
+    val nome = bean?.nomeassinatura ?: ""
+    val cpf = bean?.cpf ?: ""
+    writeln(linha, center = true)
+    writeln(nome, center = true)
+    writeln("CPF: $cpf", center = true)
     writeln("")
     writeln("")
   }
