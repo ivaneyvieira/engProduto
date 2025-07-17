@@ -42,13 +42,32 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("")
     writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
     writeln("CNPJ: ${bean.dadosFornecedor.cnpj}")
-    writeln("Nota Fiscal: ${bean.dadosFornecedor.notaFiscal} Emissão: ${bean.dadosFornecedor.emissao?.format() ?: ""} Valor: ${bean.dadosFornecedor.valor.format()}")
-    writeln("Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""} Peso Bruto: ${bean.dadosFornecedor.pesoBruto?.format() ?: ""}")
+
+    val notaFiscal = "Nota Fiscal: ${bean.dadosFornecedor.notaFiscal}"
+    val emissao = "Emissão: ${bean.dadosFornecedor.emissao?.format() ?: ""}"
+    val valor = "Valor: ${bean.dadosFornecedor.valor.format()}"
+
+    val espacoResto = 64 - (notaFiscal.length + valor.length + emissao.length)
+    val espaco1 = espacoResto / 2
+    val espaco2 = (espacoResto - espaco1)
+
+    writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao${" ".repeat(espaco2)}$valor")
+
+    val volume = "Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""}"
+    val pesoBruto = "Peso Bruto: ${bean.dadosFornecedor.pesoBruto?.format() ?: ""}"
+    val espacoResto2 = (64 - (volume.length + pesoBruto.length)) / 2
+    writeln("$volume${" ".repeat(espacoResto2)}$pesoBruto")
     writeln("")
     writeln("Transportadora: ${bean.dadosTransportadora.nome}")
     writeln("CNPJ: ${bean.dadosTransportadora.cnpj}")
-    writeln("CT-e: ${bean.dadosTransportadora.cte} Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}")
-    writeln("Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""} Peso Bruto: ${bean.dadosFornecedor.pesoBruto?.format() ?: ""}")
+    val cte = "CT-e: ${bean.dadosTransportadora.cte}"
+    val emissaoTransp = "Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}"
+    val espacoResto3 = (64 - (cte.length + emissaoTransp.length)) / 2
+    writeln("$cte${" ".repeat(espacoResto3)}$emissaoTransp")
+    val volume2 = "Volumes: ${bean.dadosTransportadora.volumes?.format() ?: ""}"
+    val pesoBruto2 = "Peso Bruto: ${bean.dadosTransportadora.pesoBruto?.format() ?: ""}"
+    val espacoResto4 = (64 - (volume2.length + pesoBruto2.length)) / 2
+    writeln("$volume2${" ".repeat(espacoResto4)}$pesoBruto2")
     printLine()
   }
 
