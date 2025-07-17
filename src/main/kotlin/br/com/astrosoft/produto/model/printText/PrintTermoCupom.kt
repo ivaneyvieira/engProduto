@@ -23,22 +23,6 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("produto com defeito de fabricação, produto em  desacordo  com  o")
     writeln("pedido de compra etc.")
     writeln("")
-    writeln("Dados Cadastrais", negrito = true, center = true)
-    writeln("")
-    writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
-    writeln("CNPJ: ${bean.dadosFornecedor.cnpj}")
-    writeln("Endo: ${bean.dadosFornecedor.endereco}")
-    writeln("Bairro: ${bean.dadosFornecedor.bairro}")
-    writeln("Cidade: ${bean.dadosFornecedor.cidade}")
-    writeln("Estado: ${bean.dadosFornecedor.uf}")
-    writeln("")
-    writeln("Transportadora: ${bean.dadosTransportadora.nome}")
-    writeln("CNPJ: ${bean.dadosTransportadora.cnpj}")
-    writeln("End: ${bean.dadosTransportadora.endereco}")
-    writeln("Bairro: ${bean.dadosTransportadora.bairro}")
-    writeln("Cidade: ${bean.dadosTransportadora.cidade}")
-    writeln("Estado: ${bean.dadosTransportadora.uf}")
-    writeln("")
     writeln("Dados Fiscais", negrito = true, center = true)
     writeln("")
     writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
@@ -52,7 +36,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val espaco1 = espacoResto / 2
     val espaco2 = (espacoResto - espaco1)
 
-    writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao${" ".repeat(espaco2)}$valor")
+    writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao")
 
     val volume = "Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""}"
     val pesoBruto = "Peso Bruto: ${bean.dadosFornecedor.pesoBruto?.format() ?: ""}"
