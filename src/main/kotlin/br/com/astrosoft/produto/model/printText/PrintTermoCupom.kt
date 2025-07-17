@@ -47,10 +47,6 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val emissaoTransp = "Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}"
     val espacoResto3 = (64 - (cte.length + emissaoTransp.length)) / 2
     writeln("$cte${" ".repeat(espacoResto3)}$emissaoTransp")
-    val volume2 = "Volumes: ${bean.dadosTransportadora.volumes?.format() ?: ""}"
-    val pesoBruto2 = "Peso Bruto: ${bean.dadosTransportadora.pesoBruto?.format() ?: ""}"
-    val espacoResto4 = (64 - (volume2.length + pesoBruto2.length)) / 2
-    writeln("$volume2${" ".repeat(espacoResto4)}$pesoBruto2")
     printLine()
   }
 
