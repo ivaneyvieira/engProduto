@@ -97,7 +97,13 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             this.width = "7rem"
             this.value = nota.cte?.toString()
           }
-          integerField("Volume") {
+          textField("Vol Inf") {
+            this.isReadOnly = true
+            this.width = "7rem"
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.value = nota.volume.format()
+          }
+          integerField("Vol Receb") {
             this.width = "7rem"
             if ((nota.volumeDevolucao ?: 0) == 0) {
               this.value = nota.volume ?: 0

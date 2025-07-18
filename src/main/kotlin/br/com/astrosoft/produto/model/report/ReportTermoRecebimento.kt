@@ -113,8 +113,8 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
             "Emissão: ${termo.dadosFornecedor.emissao?.format()}",
             "Recebimento: ${termo.dadosFornecedor.recebimento?.format()}",
             "Valor: R$ ${termo.dadosFornecedor.valor.format()}",
-            "Volumes: ${termo.dadosFornecedor.volumes.format()}",
-            "Peso Bruto: ${termo.dadosFornecedor.pesoBruto.format()} kg"
+            "Volumes: ${termo.volumesRec.format()}",
+            "Peso Bruto: ${termo.pesoBruto.format()} kg"
           )
         )
         quadro(
@@ -124,8 +124,8 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
             "Emissão: ${termo.dadosTransportadora.emissao?.format()}",
             "Recebimento: ${termo.dadosTransportadora.recebimento?.format()}",
             "Valor: R$ ${termo.dadosTransportadora.valor.format()}",
-            "Volumes: ${termo.dadosTransportadora.volumes.format()}",
-            "Peso Bruto: ${termo.dadosTransportadora.pesoBruto.format()} kg"
+            "Volumes: ${termo.volumesRec.format()}",
+            "Peso Bruto: ${termo.pesoBruto.format()} kg"
           )
         )
         quadro(titulo = "", conteudo = listOf())

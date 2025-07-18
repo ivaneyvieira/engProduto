@@ -1,5 +1,6 @@
 SELECT E.no                                                                                                 AS codigo,
        E.name                                                                                               AS nome,
+       E.sname                                                                                              AS login,
        F.name                                                                                               AS funcao,
        TRIM(IFNULL(CAST(CONCAT(CHAR(ASCII(SUBSTRING(pswd, 1, 1)) + ASCII('e') - ASCII('j')),
                                CHAR(ASCII(SUBSTRING(pswd, 2, 1)) + ASCII('a') - ASCII('h')),

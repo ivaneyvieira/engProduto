@@ -15,10 +15,10 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("E-mail: ${bean.empEmailTermo}", negrito = true)
     writeln("Whatapp: (86) 99978-0752", negrito = true)
     writeln("")
-    val volumeNum = bean.dadosFornecedor.volumes?.toString() ?: "0"
+    val volumeRec = bean.volumesRec?.toString() ?: "0"
     writeln("Termo de Recebimento de Volume - NI ${bean.ni}", negrito = true, center = true)
     writeln("")
-    writeln("      Declaramos para os devidos fins que recebemos ${volumeNum.lpad(4, " ")} volumes")
+    writeln("      Declaramos para os devidos fins que recebemos ${volumeRec.lpad(4, " ")} volumes")
     writeln("que constam na NF-e e CT-e informados abaixo,  para  conferencia")
     writeln("posterior  e  sujeitos  as  notificacoes  de  irregularidade  no")
     writeln("recebimento.")
@@ -35,7 +35,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
 
     writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao")
 
-    val volume = "Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""}"
+    val volume = "Volumes: ${bean.volumesInf?.format() ?: ""}"
     writeln(volume)
     writeln("")
     writeln("Transportadora: ${bean.dadosTransportadora.nome}")

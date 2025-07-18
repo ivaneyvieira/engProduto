@@ -11,6 +11,9 @@ data class TermoRecebimento(
   val nomeassinatura: String,
   val cpf: String,
   val empEmailTermo: String,
+  val volumesInf: Int?,
+  val volumesRec: Int?,
+  val pesoBruto: Double?,
 )
 
 data class DadosTermoFornecedor(
@@ -24,8 +27,6 @@ data class DadosTermoFornecedor(
   val emissao: LocalDate?,
   val recebimento: LocalDate?,
   val valor: Double,
-  val volumes: Int?,
-  val pesoBruto: Double?,
 )
 
 data class DadosTermoTransportadora(
@@ -39,8 +40,6 @@ data class DadosTermoTransportadora(
   val emissao: LocalDate?,
   val recebimento: LocalDate?,
   val valor: Double,
-  val volumes: Int?,
-  val pesoBruto: Double?,
 )
 
 data class DadosTermoCliente(
@@ -65,21 +64,6 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     emissao = dados.emissao,
     recebimento = dados.data,
     valor = this.sumOf { it.valorNF ?: 0.00 },
-    volumes = this.sumOf {
-      if ((it.volumeDevolucao ?: 0) == 0) {
-        it.volume ?: 0
-      } else {
-        it.volumeDevolucao ?: 0
-      }
-    },
-    pesoBruto = this.sumOf {
-      it.pesoDevolucao ?: it.peso ?: 0.0
-      if (((it.pesoDevolucao ?: 0.0) * 100).roundToInt() == 0) {
-        it.peso ?: 0.0
-      } else {
-        it.pesoDevolucao ?: 0.0
-      }
-    }
   )
   val transportadora = DadosTermoTransportadora(
     cnpj = dados.cnpjTransportadora ?: "",
@@ -92,21 +76,6 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     emissao = dados.emissao,
     recebimento = dados.data,
     valor = this.sumOf { it.valorNF ?: 0.00 },
-    volumes = this.sumOf {
-      if ((it.volumeDevolucao ?: 0) == 0) {
-        it.volume ?: 0
-      } else {
-        it.volumeDevolucao ?: 0
-      }
-    },
-    pesoBruto = this.sumOf {
-      it.pesoDevolucao ?: it.peso ?: 0.0
-      if (((it.pesoDevolucao ?: 0.0) * 100).roundToInt() == 0) {
-        it.peso ?: 0.0
-      } else {
-        it.pesoDevolucao ?: 0.0
-      }
-    }
   )
   val cliente = DadosTermoCliente(
     cnpj = dados.cnpjCliente ?: "",
@@ -125,5 +94,15 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     nomeassinatura = dados.empNomeTermo ?: "",
     cpf = dados.empCpfTermo ?: "",
     empEmailTermo = dados.empEmailTermo ?: "",
+    pesoBruto = this.sumOf {
+      it.pesoDevolucao ?: it.peso ?: 0.0
+      if (((it.pesoDevolucao ?: 0.0) * 100).roundToInt() == 0) {
+        it.peso ?: 0.0
+      } else {
+        it.pesoDevolucao ?: 0.0
+      }
+    },
+    volumesInf = dados.volumeDevolucao,
+    volumesRec = dados.volume,
   )
 }
