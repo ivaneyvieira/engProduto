@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.TermoRecebimento
 import java.time.LocalDate
 
@@ -11,12 +12,15 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("CNPJ: ${bean.dadosCliente.cnpj}", negrito = true)
     writeln("End: ${bean.dadosCliente.endereco} Bairro ${bean.dadosCliente.bairro}", negrito = true)
     writeln("Cidade: ${bean.dadosCliente.cidade} Estado: ${bean.dadosCliente.uf}", negrito = true)
+    writeln("E-mail: ${bean.empEmailTermo}", negrito = true)
+    writeln("Whatapp: (86) 99978-0752", negrito = true)
     writeln("")
+    val volumeNum = bean.dadosFornecedor.volumes?.toString() ?: "0"
     writeln("Termo de Recebimento de Volume - NI ${bean.ni}", negrito = true, center = true)
     writeln("")
-    writeln("    Declaramos para os devidos fins  que  recebemos  os  volumes")
-    writeln("que constam na NF-e e CT-e informados abaixo,  para  conferência")
-    writeln("posterior  e  sujeitos  as  notificações  de  irregularidade  no")
+    writeln("      Declaramos para os devidos fins que recebemos ${volumeNum.lpad(4, " ")} volumes")
+    writeln("que constam na NF-e e CT-e informados abaixo,  para  conferencia")
+    writeln("posterior  e  sujeitos  as  notificacoes  de  irregularidade  no")
     writeln("recebimento.")
     writeln("")
     writeln("Fornecedor: ${bean.dadosFornecedor.nome}")
@@ -32,9 +36,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("${notaFiscal}${" ".repeat(espaco1)}$emissao")
 
     val volume = "Volumes: ${bean.dadosFornecedor.volumes?.format() ?: ""}"
-    val pesoBruto = "Peso Bruto: ${bean.dadosFornecedor.pesoBruto?.format() ?: ""}"
-    val espacoResto2 = (64 - (volume.length + pesoBruto.length)) / 2
-    writeln("$volume${" ".repeat(espacoResto2)}$pesoBruto")
+    writeln(volume)
     writeln("")
     writeln("Transportadora: ${bean.dadosTransportadora.nome}")
     writeln("CNPJ: ${bean.dadosTransportadora.cnpj}")
@@ -56,7 +58,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln(linha, center = true)
     writeln(nome, center = true)
     writeln("CPF: $cpf", center = true)
-    writeln("")
+    writeln("Recebedor", center = true)
     writeln("")
   }
 }

@@ -43,6 +43,7 @@ class NotaRecebimentoProduto(
   var empNoTermo: Int?,
   var empNomeTermo: String?,
   var empCpfTermo: String?,
+  var empEmailTermo: String?,
   var prdno: String?,
   var codigo: String?,
   var vendnoProduto: Int?,

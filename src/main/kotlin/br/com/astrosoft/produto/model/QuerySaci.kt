@@ -124,6 +124,13 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun listFuncionarioByName(nome: String): List<Funcionario> {
+    val sql = "/sqlSaci/listFuncionarioName.sql"
+    return query(sql, Funcionario::class) {
+      addOptionalParameter("nome", nome)
+    }
+  }
+
   fun statusPedido(pedido: DadosPedido, status: EStatusPedido) {
     val sql = "/sqlSaci/expiraPedido.sql"
     script(sql) {
