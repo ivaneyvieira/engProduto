@@ -78,7 +78,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
     }
 
     button("Pedido") {
-      this.icon = VaadinIcon.ARROW_LEFT.create()
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
         viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
