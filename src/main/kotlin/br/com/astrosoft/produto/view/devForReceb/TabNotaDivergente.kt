@@ -77,16 +77,10 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
       }
     }
 
-    select("Enviar") {
-      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO)
-      this.setItemLabelGenerator { sit ->
-        sit.descricao
-      }
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.marcaSituacao(it.value)
-          it.source.clear()
-        }
+    button("Pedido") {
+      this.icon = VaadinIcon.ARROW_LEFT.create()
+      this.onClick {
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }

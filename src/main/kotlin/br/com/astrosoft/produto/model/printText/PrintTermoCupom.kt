@@ -9,7 +9,7 @@ import java.time.LocalDate
 class PrintTermoCupom() : PrintText<TermoRecebimento>() {
   override fun printTitle(bean: TermoRecebimento) {
     printLine(' ')
-    writeln("  ${bean.dadosCliente.nome}", negrito = true)
+    writeln(" ${bean.dadosCliente.nome}", negrito = true)
     writeln(" CNPJ: ${bean.dadosCliente.cnpj}", negrito = true)
     writeln(" End: ${bean.dadosCliente.endereco} Bairro ${bean.dadosCliente.bairro}", negrito = true)
     writeln(" Cidade: ${bean.dadosCliente.cidade} Estado: ${bean.dadosCliente.uf}", negrito = true)
@@ -41,7 +41,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val espacoResto = 60 - (notaFiscal.length + valor.length + emissao.length)
     val espaco1 = espacoResto / 2
 
-    writeln("  ${notaFiscal}${" ".repeat(espaco1)}$emissao")
+    writeln(" ${notaFiscal}${" ".repeat(espaco1)}$emissao")
 
     val volume = " Volumes: ${bean.volumesInf?.format() ?: ""}"
     writeln(volume)
@@ -51,7 +51,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val cte = "CT-e: ${bean.dadosTransportadora.cte}"
     val emissaoTransp = "Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}"
     val espacoResto3 = (64 - (cte.length + emissaoTransp.length)) / 2
-    writeln("  $cte${" ".repeat(espacoResto3)}$emissaoTransp")
+    writeln(" $cte${" ".repeat(espacoResto3)}$emissaoTransp")
   }
 
   override fun printSumary(bean: TermoRecebimento?) {
