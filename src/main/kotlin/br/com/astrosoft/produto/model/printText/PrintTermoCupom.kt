@@ -47,8 +47,6 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
   }
 
   override fun printSumary(bean: TermoRecebimento?) {
-    writeln("")
-    writeln("")
     writeln("Teresina-PI ${LocalDate.now().format("dd 'de' MMMM 'de' yyyy")}", center = true)
     writeln("")
     writeln("")
