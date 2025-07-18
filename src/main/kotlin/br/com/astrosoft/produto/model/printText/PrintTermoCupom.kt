@@ -22,12 +22,12 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     if (bean.volumesDivergencia()) {
       writeln("       Declaramos para  os  devidos  fins  que  recebemos ${volumeRec.lpad(4, " ")}")
       writeln(" volume(s) divergente do que constam na NF-e e CT-e informados")
-      writeln(" abaixo, para conferencia posterior e sujeitos as notificacoes")
+      writeln(" abaixo, para posterior conferencia e sujeitos as notificacoes")
       writeln(" de irregularidade no recebimento.")
     } else {
       writeln("       Declaramos para  os  devidos  fins  que  recebemos ${volumeRec.lpad(4, " ")}")
       writeln(" volume(s) que constam  na NF-e e CT-e informados abaixo, para")
-      writeln(" conferencia   posterior  e  sujeitos   as   notificacoes   de")
+      writeln(" posterior  conferencia  e   sujeitos   as   notificacoes   de")
       writeln(" irregularidade no recebimento.")
     }
     writeln("")
