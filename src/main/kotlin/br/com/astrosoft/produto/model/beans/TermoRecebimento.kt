@@ -93,7 +93,7 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
     dadosCliente = cliente,
     nomeassinatura = dados.empNomeTermo ?: "",
     cpf = dados.empCpfTermo ?: "",
-    empEmailTermo = dados.empEmailTermo ?: "",
+    empEmailTermo = "recebimentos@engecopi.com.br",
     pesoBruto = this.sumOf {
       it.pesoDevolucao ?: it.peso ?: 0.0
       if (((it.pesoDevolucao ?: 0.0) * 100).roundToInt() == 0) {
