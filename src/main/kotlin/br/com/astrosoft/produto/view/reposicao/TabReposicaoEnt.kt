@@ -104,6 +104,7 @@ class TabReposicaoEnt(
         viewModel.marcaImpressao(pedido)
       }
     }
+
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")

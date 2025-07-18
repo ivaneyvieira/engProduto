@@ -112,6 +112,10 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
       fail("Nenhuma nota selecionada")
     }
 
+    if(notas.any { (it.empNoTermo ?: 0) == 0 }) {
+      fail("Nota não possui termo de recebimento assinado")
+    }
+
     val termo = notas.termoRecebimento() ?: fail("Nenhuma nota selecionada possui termo de recebimento")
 
     val report = PrintTermoCupom()
@@ -179,6 +183,20 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
   fun saveNota(nota: NotaRecebimento) {
     nota.save()
   }
+
+  fun assinaTermo(nota: NotaRecebimento) {
+    subView.formAssinaTermo(nota)
+  }
+
+  fun assinaTermo(nota: NotaRecebimento, numero: Int, senha: String) = viewModel.exec {
+    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
+    if (funcionario.senha != senha) {
+      fail("Senha inválida")
+    }
+    nota.empNoTermo = numero
+    nota.save()
+    updateView()
+  }
 }
 
 interface ITabNotaEntrada : ITabView {
@@ -194,6 +212,8 @@ interface ITabNotaEntrada : ITabView {
     motivo: ETipoDevolucao,
     block: (numero: Int?, msg: String) -> Unit
   )
+
+  fun formAssinaTermo(nota: NotaRecebimento)
 }
 
 data class ResultDialog(

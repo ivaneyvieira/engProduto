@@ -10,6 +10,7 @@ import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -128,6 +129,18 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
+
+    addColumnButton(
+      VaadinIcon.SIGN_IN, "Ass", "Ass",
+      configIcon = { icon, nota ->
+        if ((nota.empNoTermo ?: 0) > 0) {
+          icon.element.style.set("color", "yellow")
+        }
+      },
+      execButton = { nota ->
+        viewModel.assinaTermo(nota)
+      })
+
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -166,6 +179,13 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     columnGrid(NotaRecebimento::cte, header = "CTe")
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
+  }
+
+  override fun formAssinaTermo(nota: NotaRecebimento) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = "Assina Termo", form = form) {
+      viewModel.assinaTermo(nota, form.numero, form.senha)
+    }
   }
 
   override fun filtro(): FiltroNotaRecebimentoProduto {

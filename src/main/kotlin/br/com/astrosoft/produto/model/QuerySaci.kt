@@ -2226,6 +2226,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
       addOptionalParameter("volume", nota.volumeDevolucao)
       addOptionalParameter("peso", nota.pesoDevolucao)
+      addOptionalParameter("empTermo", nota.empNoTermo)
     }
   }
 

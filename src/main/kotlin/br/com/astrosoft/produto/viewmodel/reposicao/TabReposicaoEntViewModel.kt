@@ -32,14 +32,6 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun formEntregue(pedido: Reposicao) = viewModel.exec {
-    subView.formEntregue(pedido)
-  }
-
-  fun formRecebido(pedido: Reposicao) {
-    subView.formRecebe(pedido)
-  }
-
   fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista
