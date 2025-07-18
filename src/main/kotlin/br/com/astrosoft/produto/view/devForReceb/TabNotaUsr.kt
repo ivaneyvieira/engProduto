@@ -95,6 +95,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
       }
       verticalBlock("Filtros") {
         filtroLoja(binder, UserSaci::devFor2Loja)
+        filtroImpressoraTermica(binder, UserSaci::devFor2ImpressoraTermica)
       }
     }
   }

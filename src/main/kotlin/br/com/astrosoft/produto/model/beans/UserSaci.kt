@@ -434,6 +434,13 @@ class UserSaci : IUser {
       lojas = lojas.setValue(34, value?.toString() ?: "")
     }
 
+  var devFor2ImpressoraTermica: Set<String>
+    get() = lojas.getOrNull(35)?.toString()?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(35, value.joinToString(":"))
+    }
+
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {
