@@ -36,12 +36,10 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
 
     val notaFiscal = "Nota Fiscal: ${bean.dadosFornecedor.notaFiscal}"
     val emissao = "Emissao: ${bean.dadosFornecedor.emissao?.format() ?: ""}"
-    val valor = "Valor: ${bean.dadosFornecedor.valor.format()}"
 
-    val espacoResto = 60 - (notaFiscal.length + valor.length + emissao.length)
-    val espaco1 = espacoResto / 2
+    val espacoResto = 32 - notaFiscal.length
 
-    writeln(" ${notaFiscal}${" ".repeat(espaco1)}$emissao")
+    writeln(" ${notaFiscal}${" ".repeat(espacoResto)}$emissao")
 
     val volume = " Volumes: ${bean.volumesInf?.format() ?: ""}"
     writeln(volume)
@@ -50,7 +48,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln(" CNPJ: ${bean.dadosTransportadora.cnpj}")
     val cte = "CT-e: ${bean.dadosTransportadora.cte}"
     val emissaoTransp = "Emissão: ${bean.dadosTransportadora.emissao?.format() ?: ""}"
-    val espacoResto3 = (64 - (cte.length + emissaoTransp.length)) / 2
+    val espacoResto3 = 32 - cte.length
     writeln(" $cte${" ".repeat(espacoResto3)}$emissaoTransp")
   }
 
