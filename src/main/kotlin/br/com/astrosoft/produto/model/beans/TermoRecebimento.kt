@@ -102,11 +102,11 @@ fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
         it.pesoDevolucao ?: 0.0
       }
     },
-    volumesInf = if ((dados.volumeDevolucao ?: 0) == 0) {
+    volumesInf = dados.volume,
+    volumesRec = if ((dados.volumeDevolucao ?: 0) == 0) {
       dados.volume ?: 0
     } else {
       dados.volumeDevolucao ?: 0
     },
-    volumesRec = dados.volume,
   )
 }
