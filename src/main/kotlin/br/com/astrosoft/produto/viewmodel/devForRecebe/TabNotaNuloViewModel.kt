@@ -9,13 +9,13 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaDescarteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
+class TabNotaNuloViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
-    get() = viewModel.view.tabNotaDescarte
+    get() = viewModel.view.tabNotaNulo
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.DESCARTE)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.NULO)
     subView.updateNota(notas)
   }
 
@@ -127,7 +127,7 @@ class TabNotaDescarteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
   }
 }
 
-interface ITabNotaDescarte : ITabView {
+interface ITabNotaNulo : ITabView {
   fun filtro(): FiltroNotaRecebimentoProdutoDev
   fun updateNota(notas: List<NotaRecebimentoDev>)
   fun updateArquivos()

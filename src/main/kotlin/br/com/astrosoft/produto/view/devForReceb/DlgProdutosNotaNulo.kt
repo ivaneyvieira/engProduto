@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaDescarteViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNuloViewModel
 import com.github.mvysny.karibudsl.v10.bigDecimalField
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -18,7 +18,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgProdutosNotaNulo(val viewModel: TabNotaDescarteViewModel, var nota: NotaRecebimentoDev) {
+class DlgProdutosNotaNulo(val viewModel: TabNotaNuloViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
 
