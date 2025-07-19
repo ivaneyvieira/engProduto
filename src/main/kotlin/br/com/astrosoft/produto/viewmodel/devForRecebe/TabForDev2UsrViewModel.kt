@@ -35,6 +35,7 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
     this.recebimentoNotaEntrada = usuario.recebimentoNotaEntrada
     this.notaNFDAberta = usuario.notaNFDAberta
     this.devFor2ImpressoraTermica = usuario.devFor2ImpressoraTermica
+    this.devFor2NotaFornecedor = usuario.devFor2NotaFornecedor
   }
 }
 

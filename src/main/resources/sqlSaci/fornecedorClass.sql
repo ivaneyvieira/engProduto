@@ -17,7 +17,7 @@ FROM
 WHERE V.fabOufor IN (0, 1, 2)
 ORDER BY no;
 
-SELECT no, descricao, cnpjCpf, fabOufor, classificacao
+SELECT no, descricao, cnpjCpf, classe, classificacao
 FROM
   T_fornecedorClass
 HAVING :pesquisa = ''
