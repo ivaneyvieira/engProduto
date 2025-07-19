@@ -51,7 +51,9 @@ object Templates {
 
   val rootTexto = stl.style().setPadding(1).setFontName("SansSerif")
   val fieldFontTermo: StyleBuilder = stl.style(rootTexto).setFontSize(10)
-  val fieldFontQuadro : StyleBuilder = stl.style(rootTexto).setFontSize(8).setBorder(stl.penThin()).setPadding(3)
-  val fieldFontTituloQuadro : StyleBuilder = stl.style(rootTexto).setFontSize(10).setBorder(stl.penThin()).setPadding(3).bold()
+  val fieldFontTermoNegrido: StyleBuilder = stl.style(rootTexto).setFontSize(10).setBold(true)
+  val fieldFontQuadro: StyleBuilder = stl.style(rootTexto).setFontSize(8).setBorder(stl.penThin()).setPadding(3)
+  val fieldFontTituloQuadro: StyleBuilder =
+      stl.style(rootTexto).setFontSize(10).setBorder(stl.penThin()).setPadding(3).bold()
   val fieldFontTitulo: StyleBuilder = stl.style(rootTexto).setFontSize(12).bold()
 }

@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaNotasEntrada
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.printText.PrintTermoCupom
 import br.com.astrosoft.produto.model.report.ReportTermoRecebimento
+import br.com.astrosoft.produto.model.report.ReportTermoRecebimento2
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -75,7 +76,7 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
 
     val termo = notas.termoRecebimento() ?: fail("Nenhuma nota selecionada possui termo de recebimento")
 
-    val file = ReportTermoRecebimento.processaRelatorio(termo) ?: fail("Erro ao gerar termo de recebimento")
+    val file = ReportTermoRecebimento2.processaRelatorio(termo) ?: fail("Erro ao gerar termo de recebimento")
     viewModel.view.showReport(chave = "TermoRecebimento${System.nanoTime()}", report = file)
   }
 
