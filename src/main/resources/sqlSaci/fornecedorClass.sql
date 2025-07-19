@@ -1,7 +1,9 @@
+SET SQL_MODE = '';
+
 USE sqldados;
 
-DROP TABLE IF EXISTS T_fornecedorClass;
-CREATE TEMPORARY TABLE T_fornecedorClass
+DROP TABLE IF EXISTS T_FORN;
+CREATE TEMPORARY TABLE T_FORN
 SELECT V.no       AS no,
        V.name     AS descricao,
        V.cgc      AS cnpjCpf,
@@ -15,13 +17,14 @@ SELECT V.no       AS no,
 FROM
   sqldados.vend AS V
 WHERE V.fabOufor IN (0, 1, 2)
+HAVING :pesquisa = ''
+    OR no = :pesquisa
+    OR descricao LIKE CONCAT('%', :pesquisa, '%')
+    OR cnpjCpf = :pesquisa
+    OR classificacao LIKE CONCAT('%', :pesquisa, '%')
 ORDER BY no;
 
 SELECT no, descricao, cnpjCpf, classe, classificacao
 FROM
-  T_fornecedorClass
-HAVING :pesquisa = ''
-    OR no = :pesquisa
-    OR descricao LIKE CONCAT('%', :pesquisa, '%')
-    OR cnpjCpf LIKE CONCAT('%', :pesquisa, '%')
-    OR classificacao LIKE CONCAT('%', :pesquisa, '%')
+  T_FORN
+
