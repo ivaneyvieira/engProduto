@@ -2491,6 +2491,13 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProdutoEmbalagem::class)
   }
 
+  fun findFornecedorClass(filtro: FiltroFornecedor): List<FornecedorClass> {
+    val sql = "/sqlSaci/fornecedorClass.sql"
+    return query(sql, FornecedorClass::class){
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
