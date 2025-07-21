@@ -43,6 +43,7 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
     this.format()
 
     columnGrid(FornecedorClass::no, header = "No")
+    columnGrid(FornecedorClass::custno, header = "Cliente")
     columnGrid(FornecedorClass::descricao, header = "Descrição")
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")
     columnGrid(FornecedorClass::classificacao, header = "Classificação")

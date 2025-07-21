@@ -4,6 +4,7 @@ import br.com.astrosoft.produto.model.saci
 
 class FornecedorClass {
   var no: Int? = null
+  var custno: Int? = null
   var descricao: String? = null
   var cnpjCpf: String? = null
   var classe: Int? = null

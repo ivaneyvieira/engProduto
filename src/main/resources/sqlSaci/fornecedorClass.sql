@@ -5,6 +5,7 @@ USE sqldados;
 DROP TABLE IF EXISTS T_FORN;
 CREATE TEMPORARY TABLE T_FORN
 SELECT V.no       AS no,
+       C.no       AS custno,
        V.name     AS descricao,
        V.cgc      AS cnpjCpf,
        V.fabOufor AS classe,
@@ -15,16 +16,18 @@ SELECT V.no       AS no,
                 ELSE 'Desconhecido'
        END        AS classificacao
 FROM
-  sqldados.vend AS V
+  sqldados.vend              AS V
+    LEFT JOIN sqldados.custp AS C
+              ON C.cpf_cgc = V.cgc
 WHERE V.fabOufor IN (0, 1, 2)
 HAVING :pesquisa = ''
     OR no = :pesquisa
     OR descricao LIKE CONCAT('%', :pesquisa, '%')
     OR cnpjCpf = :pesquisa
     OR classificacao LIKE CONCAT('%', :pesquisa, '%')
-ORDER BY no;
+ORDER BY V.no;
 
-SELECT no, descricao, cnpjCpf, classe, classificacao
+SELECT no, custno, descricao, cnpjCpf, classe, classificacao
 FROM
   T_FORN
 
