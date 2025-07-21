@@ -23,9 +23,25 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
     forn.save()
     updateView()
   }
+
+  fun addArquivo(fornecedor: FornecedorClass, fileName: String, dados: ByteArray) {
+    val vendno = fornecedor.no ?: return
+    FornecedorArquivo.save(vendno, fileName, dados)
+    subView.updateArquivos()
+  }
+
+  fun removeArquivosSelecionado() {
+    val selecionado = subView.arquivosSelecionados()
+    selecionado.forEach {
+      it.remove()
+    }
+    subView.updateArquivos()
+  }
 }
 
 interface ITabNotaFornecedor : ITabView {
   fun filtro(): FiltroFornecedor
   fun updateFornecedor(fornecedore: List<FornecedorClass>)
+  fun updateArquivos()
+  fun arquivosSelecionados(): List<FornecedorArquivo>
 }

@@ -25,6 +25,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   TabPanelGrid<FornecedorClass>(FornecedorClass::class), ITabNotaFornecedor {
   private lateinit var edtPesquisa: TextField
+  private var dlgArquivo: DlgArquivoFornecedor? = null
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -51,11 +52,25 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
         viewModel.saveForne(it.bean)
       })
 
-    columnGrid(FornecedorClass::no, header = "No", width = "5rem")
+    addColumnButton(VaadinIcon.EDIT, "Edita", "Edita") { forn ->
+    }
+
+    addColumnButton(VaadinIcon.FILE_ADD, "Anexa", "Anexa", configIcon = { icon, bean ->
+      if (bean.countArq?.let { it > 0 } == true) {
+        icon.element.style.set("color", "yellow")
+      }
+    }) { nota ->
+      dlgArquivo = DlgArquivoFornecedor(viewModel, nota)
+      dlgArquivo?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
+    columnGrid(FornecedorClass::no, header = "No", width = "3rem")
     columnGrid(FornecedorClass::custno, header = "Cliente")
     columnGrid(FornecedorClass::descricao, header = "Descrição", width = "20rem")
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")
-    columnGrid(FornecedorClass::termDev, header = "Term Dev", width = "20rem").textFieldEditor()
+    columnGrid(FornecedorClass::termDev, header = "Term Dev", width = "10rem").textFieldEditor()
   }
 
   override fun filtro(): FiltroFornecedor {
@@ -78,5 +93,13 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun updateArquivos() {
+    dlgArquivo?.update()
+  }
+
+  override fun arquivosSelecionados(): List<FornecedorArquivo> {
+return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 }

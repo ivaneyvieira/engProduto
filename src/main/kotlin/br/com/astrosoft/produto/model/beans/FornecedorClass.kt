@@ -10,9 +10,19 @@ class FornecedorClass {
   var classe: Int? = null
   var classificacao: String? = null
   var termDev: String? = null
+  var countArq: Int? = null
 
   fun save() {
     saci.fornecedorClassSave(this)
+  }
+
+  fun arquivos(): List<FornecedorArquivo> {
+    return FornecedorArquivo.find(this.no ?: 0)
+  }
+
+  fun salvaArquivo(filename: String, file: ByteArray) {
+    val vendno = this.no ?: return
+    FornecedorArquivo.save(vendno, filename, file)
   }
 
   companion object {

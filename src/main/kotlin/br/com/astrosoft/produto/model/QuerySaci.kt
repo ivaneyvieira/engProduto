@@ -2493,16 +2493,39 @@ class QuerySaci : QueryDB(database) {
 
   fun findFornecedorClass(filtro: FiltroFornecedor): List<FornecedorClass> {
     val sql = "/sqlSaci/fornecedorClass.sql"
-    return query(sql, FornecedorClass::class){
+    return query(sql, FornecedorClass::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
     }
   }
 
-  fun fornecedorClassSave(forn : FornecedorClass){
+  fun fornecedorClassSave(forn: FornecedorClass) {
     val sql = "/sqlSaci/fornecedorClassSave.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("vendno", forn.no)
       addOptionalParameter("termDev", forn.termDev)
+    }
+  }
+
+  fun fornecedorArquivo(vendno: Int): List<FornecedorArquivo> {
+    val sql = "/sqlSaci/fornecedorArquivo.sql"
+    return query(sql, FornecedorArquivo::class) {
+      addOptionalParameter("vendno", vendno)
+    }
+  }
+
+  fun fornecedorArquivoSave(arquivo: FornecedorArquivo) {
+    val sql = "/sqlSaci/fornecedorArquivoSave.sql"
+    script(sql) {
+      addOptionalParameter("vendno", arquivo.vendno)
+      addOptionalParameter("filename", arquivo.filename)
+      addOptionalParameter("file", arquivo.file)
+    }
+  }
+
+  fun fornecedorArquivoDelete(arquivo: FornecedorArquivo) {
+    val sql = "/sqlSaci/fornecedorArquivoDelete.sql"
+    script(sql) {
+      addOptionalParameter("seq", arquivo.seq)
     }
   }
 
