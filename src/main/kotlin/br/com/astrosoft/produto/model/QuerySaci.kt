@@ -2498,6 +2498,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun fornecedorClassSave(forn : FornecedorClass){
+    val sql = "/sqlSaci/fornecedorClassSave.sql"
+    script(sql){
+      addOptionalParameter("vendno", forn.no)
+      addOptionalParameter("termDev", forn.termDev)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

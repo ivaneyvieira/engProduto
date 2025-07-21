@@ -14,11 +14,14 @@ SELECT V.no       AS no,
          WHEN 1 THEN 'Fornecedor'
          WHEN 2 THEN 'Fab/Fornecedor'
                 ELSE 'Desconhecido'
-       END        AS classificacao
+       END        AS classificacao,
+       A.termDev  AS termDev
 FROM
   sqldados.vend              AS V
     LEFT JOIN sqldados.custp AS C
               ON C.cpf_cgc = V.cgc
+    LEFT JOIN vendAdicional  AS A
+              ON A.vendno = V.no
 WHERE V.fabOufor IN (0, 1, 2)
 HAVING :pesquisa = ''
     OR no = :pesquisa
@@ -27,7 +30,7 @@ HAVING :pesquisa = ''
     OR classificacao LIKE CONCAT('%', :pesquisa, '%')
 ORDER BY V.no;
 
-SELECT no, custno, descricao, cnpjCpf, classe, classificacao
+SELECT no, custno, descricao, cnpjCpf, classe, classificacao, termDev
 FROM
   T_FORN
 

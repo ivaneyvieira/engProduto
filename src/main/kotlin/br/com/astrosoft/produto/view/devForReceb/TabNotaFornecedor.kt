@@ -26,7 +26,6 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   TabPanelGrid<FornecedorClass>(FornecedorClass::class), ITabNotaFornecedor {
   private lateinit var edtPesquisa: TextField
 
-
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -42,11 +41,21 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
     this.addClassName("styling")
     this.format()
 
-    columnGrid(FornecedorClass::no, header = "No")
+    this.withEditor(
+      classBean = FornecedorClass::class,
+      openEditor = {
+        val edit = getColumnBy(FornecedorClass::termDev) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.saveForne(it.bean)
+      })
+
+    columnGrid(FornecedorClass::no, header = "No", width = "5rem")
     columnGrid(FornecedorClass::custno, header = "Cliente")
-    columnGrid(FornecedorClass::descricao, header = "Descrição")
+    columnGrid(FornecedorClass::descricao, header = "Descrição", width = "20rem")
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")
-    columnGrid(FornecedorClass::classificacao, header = "Classificação")
+    columnGrid(FornecedorClass::termDev, header = "Term Dev", width = "20rem").textFieldEditor()
   }
 
   override fun filtro(): FiltroFornecedor {
@@ -58,7 +67,6 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   override fun updateFornecedor(fornecedore: List<FornecedorClass>) {
     this.updateGrid(fornecedore)
   }
-
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci

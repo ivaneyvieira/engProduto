@@ -18,6 +18,11 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
     val notas = FornecedorClass.findAll(filtro = filtro)
     subView.updateFornecedor(notas)
   }
+
+  fun saveForne(forn: FornecedorClass) {
+    forn.save()
+    updateView()
+  }
 }
 
 interface ITabNotaFornecedor : ITabView {

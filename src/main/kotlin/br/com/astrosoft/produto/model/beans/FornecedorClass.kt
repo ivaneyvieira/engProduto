@@ -9,6 +9,11 @@ class FornecedorClass {
   var cnpjCpf: String? = null
   var classe: Int? = null
   var classificacao: String? = null
+  var termDev: String? = null
+
+  fun save() {
+    saci.fornecedorClassSave(this)
+  }
 
   companion object {
     fun findAll(filtro: FiltroFornecedor): List<FornecedorClass> {
