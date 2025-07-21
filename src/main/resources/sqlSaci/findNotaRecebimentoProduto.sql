@@ -113,8 +113,8 @@ FROM
     LEFT JOIN  sqldados.iprdAdicional AS A
                ON A.invno = I.invno AND A.prdno = I.prdno AND A.grade = I.grade
     LEFT JOIN  sqldados.invAdicional  AS IA
-               ON IA.invno = A.invno
-                 AND IA.tipoDevolucao = A.tipoDevolucao
+               ON IA.invno = I.invno
+                 AND IA.tipoDevolucao = IFNULL(A.tipoDevolucao, 0)
     LEFT JOIN  sqldados.carr          AS CA
                ON CA.no = IA.carrno
     LEFT JOIN  sqldados.users         AS UA
