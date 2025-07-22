@@ -79,9 +79,9 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       }
     }
 
-    columnGrid(FornecedorClass::no, header = "No", width = "3rem")
+    columnGrid(FornecedorClass::no, header = "Forn", width = "3rem")
+    columnGrid(FornecedorClass::descricao, header = "Nome", width = "20rem")
     columnGrid(FornecedorClass::custno, header = "Cliente")
-    columnGrid(FornecedorClass::descricao, header = "Descrição", width = "20rem")
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")
     columnGrid(FornecedorClass::termDev, header = "Term Dev", width = "10rem").textFieldEditor()
   }

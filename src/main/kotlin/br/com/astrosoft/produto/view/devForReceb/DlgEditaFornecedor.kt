@@ -30,6 +30,7 @@ class DlgEditaFornecedor(
 
     edtObs = textArea("Observações") {
       this.isAutoselect = true
+      this.isAutofocus = true
       this.isClearButtonVisible = true
       this.value = fornecedor.obs ?: ""
       this.setSizeFull()
