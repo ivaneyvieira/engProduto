@@ -15,3 +15,11 @@ CREATE TABLE sqldados.vendArquivo
   UNIQUE (vendno, seq)
 );
 
+ALTER TABLE sqldados.vendArquivo
+  ADD COLUMN obs TEXT NULL;
+
+ALTER TABLE sqldados.vendArquivo
+  DROP COLUMN obs;
+
+ALTER TABLE sqldados.vendAdicional
+  ADD COLUMN obs TEXT NULL;

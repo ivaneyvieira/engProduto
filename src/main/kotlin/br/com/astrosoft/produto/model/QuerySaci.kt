@@ -2503,6 +2503,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("vendno", forn.no)
       addOptionalParameter("termDev", forn.termDev)
+      addOptionalParameter("obs", forn.obs)
     }
   }
 

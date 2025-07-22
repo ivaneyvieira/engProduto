@@ -12,6 +12,7 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextArea
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgEditaFornecedor(
@@ -19,7 +20,7 @@ class DlgEditaFornecedor(
   val fornecedor: FornecedorClass,
   val onClose: () -> Unit = {}
 ) : Dialog() {
-
+  var edtObs: TextArea? = null
 
   init {
     this.isModal = true
@@ -27,14 +28,14 @@ class DlgEditaFornecedor(
     this.footer.toolBar()
 
 
-    verticalLayout {
-      setSizeFull()
-      horizontalLayout {
-
-      }
+    edtObs = textArea("Observações") {
+      this.isAutoselect = true
+      this.isClearButtonVisible = true
+      this.value = fornecedor.obs ?: ""
+      this.setSizeFull()
     }
-    this.width = "30%"
-    this.height = "30%"
+    this.width = "60%"
+    this.height = "60%"
   }
 
   fun HasComponents.toolBar() {
@@ -64,6 +65,8 @@ class DlgEditaFornecedor(
   }
 
   private fun confirmaForm() {
+    fornecedor.obs = edtObs?.value ?: ""
+    viewModel.saveForne(fornecedor)
     onClose.invoke()
     this.close()
   }

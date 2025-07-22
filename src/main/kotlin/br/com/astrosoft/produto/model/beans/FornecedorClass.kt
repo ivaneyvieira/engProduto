@@ -11,6 +11,7 @@ class FornecedorClass {
   var classificacao: String? = null
   var termDev: String? = null
   var countArq: Int? = null
+  var obs: String? = null
 
   fun save() {
     saci.fornecedorClassSave(this)

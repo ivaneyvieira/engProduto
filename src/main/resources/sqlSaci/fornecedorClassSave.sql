@@ -1,2 +1,2 @@
-REPLACE sqldados.vendAdicional(vendno, termDev)
-VALUES (:vendno, :termDev)
+REPLACE sqldados.vendAdicional(vendno, termDev, obs)
+VALUES (:vendno, :termDev, :obs)

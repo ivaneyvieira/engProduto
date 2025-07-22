@@ -53,18 +53,26 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
         viewModel.saveForne(it.bean)
       })
 
-    addColumnButton(VaadinIcon.EDIT, "Edita", "Edita") { forn ->
+    addColumnButton(
+      VaadinIcon.EDIT, "Edita", "Edita",
+      configIcon = { icon, bean ->
+        if ((bean.obs ?: "") != "") {
+          icon.element.style.set("color", "yellow")
+        }
+      }) { forn ->
       dlgEdita = DlgEditaFornecedor(viewModel, forn) {
         viewModel.updateView()
       }
       dlgEdita?.open()
     }
 
-    addColumnButton(VaadinIcon.FILE_ADD, "Anexa", "Anexa", configIcon = { icon, bean ->
-      if (bean.countArq?.let { it > 0 } == true) {
-        icon.element.style.set("color", "yellow")
-      }
-    }) { nota ->
+    addColumnButton(
+      VaadinIcon.FILE_ADD, "Anexa", "Anexa",
+      configIcon = { icon, bean ->
+        if (bean.countArq?.let { it > 0 } == true) {
+          icon.element.style.set("color", "yellow")
+        }
+      }) { nota ->
       dlgArquivo = DlgArquivoFornecedor(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
@@ -105,6 +113,6 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   }
 
   override fun arquivosSelecionados(): List<FornecedorArquivo> {
-return dlgArquivo?.produtosSelecionados().orEmpty()
+    return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 }
