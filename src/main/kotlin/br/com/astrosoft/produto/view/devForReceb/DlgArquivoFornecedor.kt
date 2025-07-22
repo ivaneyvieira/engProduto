@@ -20,9 +20,10 @@ class DlgArquivoFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornec
   private val gridDetail = Grid(FornecedorArquivo::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroForn = fornecedor.no?.toString() ?: ""
+    val nomeForm = fornecedor.descricao ?: "Fornecedor"
 
     form = SubWindowForm(
-      title = "Arquivos da fornecedor $numeroForn",
+      title = "Arquivos d fornecedor $numeroForn - $nomeForm",
       toolBar = {
         this.upload("Adicionar") { fileName, dados ->
           viewModel.addArquivo(fornecedor, fileName, dados)

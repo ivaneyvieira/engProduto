@@ -26,6 +26,7 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   TabPanelGrid<FornecedorClass>(FornecedorClass::class), ITabNotaFornecedor {
   private lateinit var edtPesquisa: TextField
   private var dlgArquivo: DlgArquivoFornecedor? = null
+  private var dlgEdita: DlgEditaFornecedor? = null
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -53,6 +54,10 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       })
 
     addColumnButton(VaadinIcon.EDIT, "Edita", "Edita") { forn ->
+      dlgEdita = DlgEditaFornecedor(viewModel, forn) {
+        viewModel.updateView()
+      }
+      dlgEdita?.open()
     }
 
     addColumnButton(VaadinIcon.FILE_ADD, "Anexa", "Anexa", configIcon = { icon, bean ->
