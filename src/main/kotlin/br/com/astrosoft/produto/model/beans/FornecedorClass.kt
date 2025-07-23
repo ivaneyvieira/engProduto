@@ -26,6 +26,11 @@ class FornecedorClass {
     FornecedorArquivo.save(vendno, filename, file)
   }
 
+  fun listRepresentantes(): List<Representante> {
+    val vendno = this.no ?: return emptyList()
+    return saci.representante(vendno)
+  }
+
   companion object {
     fun findAll(filtro: FiltroFornecedor): List<FornecedorClass> {
       return saci.findFornecedorClass(filtro)

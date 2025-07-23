@@ -38,4 +38,5 @@ ORDER BY V.no;
 SELECT no, custno, descricao, cnpjCpf, classe, classificacao, termDev, countArq, obs
 FROM
   T_FORN
+WHERE descricao NOT LIKE 'ENGECOPI%'
 

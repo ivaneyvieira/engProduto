@@ -2531,6 +2531,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun representante(vendno: Int): List<Representante> {
+    val sql = "/sqlSaci/representantes.sql"
+    return query(sql, Representante::class) {
+      addOptionalParameter("vendno", vendno)
+    }.toList()
+  }
+
   companion object {
     private val db = DB("saci")
 

@@ -27,7 +27,6 @@ class DlgEditaFornecedor(
     this.headerTitle = headerTitle()
     this.footer.toolBar()
 
-
     edtObs = textArea("Observações") {
       this.isAutoselect = true
       this.isAutofocus = true

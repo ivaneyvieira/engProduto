@@ -54,7 +54,9 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       })
 
     addColumnButton(
-      VaadinIcon.EDIT, "Edita", "Edita",
+      iconButton = VaadinIcon.EDIT,
+      tooltip = "Edita",
+      header = "Edita",
       configIcon = { icon, bean ->
         if ((bean.obs ?: "") != "") {
           icon.element.style.set("color", "yellow")
@@ -77,6 +79,10 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
+    }
+
+    addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { fornecedor ->
+      DlgFornecedor().showDialogRepresentante(fornecedor)
     }
 
     columnGrid(FornecedorClass::no, header = "Forn", width = "3rem")
