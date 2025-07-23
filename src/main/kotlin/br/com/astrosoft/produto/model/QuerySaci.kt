@@ -250,6 +250,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("xano", nota.xano)
       this.addOptionalParameter("entrega", nota.entrega.toSaciDate())
       this.addOptionalParameter("empnoM", nota.empnoMotorista ?: 0)
+      this.addOptionalParameter("separado", nota.separado)
     }
   }
 

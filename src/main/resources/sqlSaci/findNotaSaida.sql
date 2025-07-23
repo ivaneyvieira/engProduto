@@ -123,6 +123,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                              AS loja,
+       N.s14 != 0                                                             AS separado,
        N.pdvno                                                                AS pdvno,
        N.xano                                                                 AS xano,
        N.nfno                                                                 AS numero,
@@ -244,6 +245,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
+       Q.separado,
        Q.pdvno,
        Q.xano,
        Q.numero,

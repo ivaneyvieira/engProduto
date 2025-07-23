@@ -19,6 +19,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFValor
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNomeCliente
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaPedido
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaSeparado
 import br.com.astrosoft.produto.view.ressuprimento.FormFuncionario
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaTipo
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaTipoViewModel
@@ -119,6 +120,7 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
     this.selectionMode = Grid.SelectionMode.MULTI
 
     colunaNFLoja()
+    colunaSeparado()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosTipo(viewModel, nota)
       dlgProduto?.showDialog {
@@ -138,11 +140,18 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
     colunaNFEntregaRetira()
     colunaNFSituacao()
 
+    this.addItemDoubleClickListener {
+      val nota = it.item
+      nota.separado = !nota.separado
+      viewModel.save(nota, update = false)
+      this.dataProvider.refreshAll()
+    }
+
     this.setPartNameGenerator {
       val countImp = it.countImp ?: 0
       when {
-        countImp > 0     -> "amarelo"
-        else             -> null
+        countImp > 0 -> "amarelo"
+        else         -> null
       }
     }
   }

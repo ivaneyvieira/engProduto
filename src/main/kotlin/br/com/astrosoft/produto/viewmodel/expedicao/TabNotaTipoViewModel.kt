@@ -46,10 +46,12 @@ class TabNotaTipoViewModel(val viewModel: NotaViewModel) {
     )
   }
 
-  fun save(bean: NotaSaida?) {
-    bean ?: return
+  fun save(bean: NotaSaida?, update: Boolean = true) = viewModel.exec {
+    bean ?: return@exec
     bean.save()
-    updateView()
+    if (update) {
+      updateView()
+    }
   }
 
   fun formAutoriza(nota: NotaSaida) {

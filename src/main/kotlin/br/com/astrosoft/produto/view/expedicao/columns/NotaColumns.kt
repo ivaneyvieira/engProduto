@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.expedicao.columns
 
+import br.com.astrosoft.framework.view.vaadin.helper.center
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaSaida
 import com.vaadin.flow.component.grid.Grid
@@ -7,6 +8,11 @@ import com.vaadin.flow.component.grid.Grid
 object NotaColumns {
   fun Grid<NotaSaida>.colunaNFLoja() = columnGrid(NotaSaida::loja) {
     this.setHeader("Loja")
+  }
+
+  fun Grid<NotaSaida>.colunaSeparado() = columnGrid(NotaSaida::separadoStr) {
+    this.setHeader("Separado")
+    this.center()
   }
 
   fun Grid<NotaSaida>.colunaNFNota() = columnGrid(NotaSaida::nota) {
