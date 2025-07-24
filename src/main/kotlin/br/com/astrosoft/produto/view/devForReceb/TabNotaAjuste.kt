@@ -105,7 +105,7 @@ class TabNotaAjuste(val viewModel: TabNotaAjusteViewModel) :
 
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
-    columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
+    columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)

@@ -37,7 +37,7 @@ class InvFileDev(
   }
 
   companion object {
-    fun findAll(invno: Int, tipo: ETipoDevolucao, numero: Int): List<InvFileDev> {
+    fun findAll(invno: Int, tipo: EMotivoDevolucao, numero: Int): List<InvFileDev> {
       return saci.findInvFile(invno, tipo, numero)
     }
   }

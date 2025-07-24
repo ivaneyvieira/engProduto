@@ -31,7 +31,7 @@ class NotaRecebimentoDev(
   var usuarioRecebe: String?,
   var observacaoNota: String?,
   var tipoNota: String?,
-  var tipoDevolucao: Int?,
+  var motivoDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
   var transpDevolucao: Int?,
@@ -60,6 +60,11 @@ class NotaRecebimentoDev(
   var pesoNFLiquidoDevolucao: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val situacaoDevName
+    get() = produtos.mapNotNull{
+      EStituacaoDev.findByNum(it.situacaoDev ?: 0)?.descricao
+    }.distinct().joinToString(", ")
+
   //********* Diferenças ********
 
   fun diferenca(): Boolean {
@@ -117,14 +122,14 @@ class NotaRecebimentoDev(
     get() = icmsSubstProduto + valorFrete + valorSeguro - valorDesconto + valorTotalProduto + outrasDespesas + valorIpiProdutos
 
   val vendnoNF: Int?
-    get() = if (tipoDevolucaoEnun?.fob == true) {
+    get() = if (motivoDevolucaoEnun?.fob == true) {
       transpDevolucao ?: transp
     } else {
       vendno
     }
 
   val fornecedorNF: String?
-    get() = if (tipoDevolucaoEnun?.fob == true) {
+    get() = if (motivoDevolucaoEnun?.fob == true) {
       transportadoraDevolucao ?: transportadora
     } else {
       fornecedor
@@ -137,14 +142,14 @@ class NotaRecebimentoDev(
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
 
-  var tipoDevolucaoEnun
-    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+  var motivoDevolucaoEnun
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
-      tipoDevolucao = value?.num
+      motivoDevolucao = value?.num
     }
 
-  val tipoDevolucaoName: String
-    get() = tipoDevolucaoEnun?.descricao ?: ""
+  val motivoDevolucaoName: String
+    get() = motivoDevolucaoEnun?.descricao ?: ""
 
   fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProdutoDev? {
     if (codigoBarra.isNullOrBlank()) return null
@@ -167,7 +172,7 @@ class NotaRecebimentoDev(
 
   fun listArquivos(): List<InvFileDev> {
     val niList = this.niList
-    val tipo = ETipoDevolucao.findByNum(tipoDevolucao ?: 0) ?: return emptyList()
+    val tipo = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0) ?: return emptyList()
     val numero = this.numeroDevolucao ?: return emptyList()
     return niList.flatMap { invno -> InvFileDev.findAll(invno, tipo, numero) }
   }
@@ -177,8 +182,8 @@ class NotaRecebimentoDev(
     saci.saveInvAdicional(this, userno)
   }
 
-  fun salvaMotivoDevolucao(tipoDevolucaoNovo: Int) {
-    saci.salvaMotivoDevolucao(this, tipoDevolucaoNovo)
+  fun salvaMotivoDevolucao(motivoDevolucaoNovo: Int) {
+    saci.salvaMotivoDevolucao(this, motivoDevolucaoNovo)
   }
 
   fun marcaSituacao(situacao: EStituacaoDev) {
@@ -187,7 +192,7 @@ class NotaRecebimentoDev(
   }
 
   fun delete() {
-    if (tipoDevolucaoEnun?.notasMultiplas == true) {
+    if (motivoDevolucaoEnun?.notasMultiplas == true) {
       saci.removerNotaRecebimentoDevMult(this)
     } else {
       saci.removerNotaRecebimentoDevSimples(this)
@@ -204,22 +209,22 @@ class NotaRecebimentoDev(
       divergencia: Boolean = false,
     ): List<NotaRecebimentoDev> {
       val filtroTodos = filtro.copy()
-      return saci.findNotaRecebimentoProdutoDev(filtroTodos, situacaoDev.num).toNota()
+      return saci.findNotaRecebimentoProdutoDev(filtro = filtroTodos, situacaoDev = situacaoDev.num).toNota()
         .filter { nota ->
-          ((nota.tipoDevolucao ?: 0) > 0)
+          ((nota.motivoDevolucao ?: 0) > 0)
         }.filter {
           val pesquisa = filtro.pesquisa
           (pesquisa == "") ||
-          (it.tipoDevolucaoEnun?.descricao?.startsWith(pesquisa, ignoreCase = true) == true) ||
+          (it.motivoDevolucaoEnun?.descricao?.startsWith(pesquisa, ignoreCase = true) == true) ||
           (it.vendno?.toString() == pesquisa) ||
           (it.fornecedor?.contains(pesquisa, ignoreCase = true) == true) ||
           (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true) ||
           (it.numeroDevolucao?.toString() == pesquisa)
         }.filter {
           if (divergencia) {
-            (it.tipoDevolucaoEnun?.divergente == true) && ((it.situacaoDev ?: 0) == EStituacaoDev.PEDIDO.num)
+            (it.motivoDevolucaoEnun?.divergente == true) && ((it.situacaoDev ?: 0) == EStituacaoDev.PEDIDO.num)
           } else {
-            (it.tipoDevolucaoEnun?.divergente == false) || ((it.situacaoDev ?: 0) != EStituacaoDev.PEDIDO.num)
+            (it.motivoDevolucaoEnun?.divergente == false) || ((it.situacaoDev ?: 0) != EStituacaoDev.PEDIDO.num)
           }
         }
     }
@@ -270,7 +275,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
         transportadora = nota.transportadora,
-        tipoDevolucao = nota.tipoDevolucao ?: 0,
+        motivoDevolucao = nota.motivoDevolucao ?: 0,
         pesoDevolucao = nota.pesoDevolucao ?: 0.00,
         volumeDevolucao = nota.volumeDevolucao ?: 0,
         transpDevolucao = nota.transpDevolucao,

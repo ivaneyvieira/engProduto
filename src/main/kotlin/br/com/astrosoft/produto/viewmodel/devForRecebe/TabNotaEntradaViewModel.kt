@@ -8,7 +8,6 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasEntrada
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import br.com.astrosoft.produto.model.printText.PrintTermoCupom
-import br.com.astrosoft.produto.model.report.ReportTermoRecebimento
 import br.com.astrosoft.produto.model.report.ReportTermoRecebimento2
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -140,7 +139,7 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
     return saci.proximoNumeroDevolucao()
   }
 
-  fun devolucaoProduto(produtos: List<NotaRecebimentoProduto>, tipo: ETipoDevolucao) = viewModel.exec {
+  fun devolucaoProduto(produtos: List<NotaRecebimentoProduto>, tipo: EMotivoDevolucao) = viewModel.exec {
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -150,7 +149,7 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
         viewModel.view.showError(msg)
       } else {
         produtos.forEach { produto ->
-          produto.tipoDevolucao = tipo.num
+          produto.motivoDevolucao = tipo.num
           produto.updateDevolucao(numero, tipo)
         }
 
@@ -214,7 +213,7 @@ interface ITabNotaEntrada : ITabView {
   fun updateProduto(): NotaRecebimento?
   fun dlgDevoucao(
     produtos: List<NotaRecebimentoProduto>,
-    motivo: ETipoDevolucao,
+    motivo: EMotivoDevolucao,
     block: (numero: Int?, msg: String) -> Unit
   )
 

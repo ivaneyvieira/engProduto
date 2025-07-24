@@ -58,7 +58,7 @@ data class NotaRecebimentoProdutoDev(
   var freteNota: Double?,
   var outDesp: Double?,
   var icmsSubst: Double?,
-  var tipoDevolucao: Int?,
+  var motivoDevolucao: Int?,
   var quantDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
@@ -123,11 +123,11 @@ data class NotaRecebimentoProdutoDev(
 
   val chaveDevolucao: String
     get() {
-      val motivo = tipoDevolucaoEnum
+      val motivo = motivoDevolucaoEnum
       return if (motivo?.notasMultiplas == true) {
         "$loja-$numeroDevolucao"
       } else {
-        "$loja-$ni-$tipoDevolucao-$numeroDevolucao"
+        "$loja-$ni-$motivoDevolucao-$numeroDevolucao"
       }
     }
 
@@ -193,10 +193,10 @@ data class NotaRecebimentoProdutoDev(
              (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
     }
 
-  var tipoDevolucaoEnum: ETipoDevolucao?
-    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+  var motivoDevolucaoEnum: EMotivoDevolucao?
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
-      tipoDevolucao = value?.num
+      motivoDevolucao = value?.num
     }
 
   val totalGeral

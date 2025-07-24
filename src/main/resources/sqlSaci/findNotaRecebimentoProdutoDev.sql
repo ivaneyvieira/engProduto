@@ -438,7 +438,7 @@ SELECT loja,
        outDesp,
        icmsSubst,
        numeroDevolucao,
-       tipoDevolucao,
+       tipoDevolucao           AS motivoDevolucao,
        quantDevolucao,
        pesoDevolucao,
        volumeDevolucao,
@@ -484,9 +484,9 @@ FROM
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
 (
-  PRIMARY KEY (tipoDevolucao, numeroDevolucao)
+  PRIMARY KEY (motivoDevolucao, numeroDevolucao)
 )
-SELECT tipoDevolucao,
+SELECT motivoDevolucao,
        numeroDevolucao,
        MAX(userDevolucao)    AS userDevolucao,
        MAX(notaDevolucao)    AS notaDevolucao,
@@ -496,21 +496,21 @@ SELECT tipoDevolucao,
        MAX(situacaoDev)      AS situacaoDev
 FROM
   T_RESULT
-GROUP BY tipoDevolucao, numeroDevolucao;
+GROUP BY motivoDevolucao, numeroDevolucao;
 
-UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (tipoDevolucao, numeroDevolucao)
+UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (motivoDevolucao, numeroDevolucao)
 SET R1.userDevolucao    = R2.userDevolucao,
     R1.notaDevolucao    = R2.notaDevolucao,
     R1.emissaoDevolucao = R2.emissaoDevolucao,
     R1.valorDevolucao   = R2.valorDevolucao,
     R1.obsDevolucao     = R2.obsDevolucao,
     R1.situacaoDev      = R2.situacaoDev
-WHERE R1.tipoDevolucao = R2.tipoDevolucao
+WHERE R1.motivoDevolucao = R2.motivoDevolucao
   AND R1.numeroDevolucao = R2.numeroDevolucao;
 
 UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
   ON I.invno = R.ni
-    AND I.tipoDevolucao = R.tipoDevolucao
+    AND I.tipoDevolucao = R.motivoDevolucao
     AND I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;

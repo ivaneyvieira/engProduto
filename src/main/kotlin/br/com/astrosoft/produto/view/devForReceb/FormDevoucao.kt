@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
-import br.com.astrosoft.produto.model.beans.ETipoDevolucao
+import br.com.astrosoft.produto.model.beans.EMotivoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -9,7 +9,7 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class FormDevoucao(val motivo: ETipoDevolucao, val produtos: List<NotaRecebimentoProduto>) : FormLayout() {
+class FormDevoucao(val motivo: EMotivoDevolucao, val produtos: List<NotaRecebimentoProduto>) : FormLayout() {
   private var edtNumero: IntegerField? = null
   private var chkNumero: Checkbox? = null
 

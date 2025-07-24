@@ -358,7 +358,7 @@ SELECT loja,
        cfop,
        cst,
        un,
-       :marca AS marcaSelecionada,
+       :marca        AS marcaSelecionada,
        validadeValida,
        validade,
        vencimento,
@@ -389,7 +389,7 @@ SELECT loja,
        outDesp,
        icmsSubst,
        baseSubst,
-       tipoDevolucao,
+       tipoDevolucao AS motivoDevolucao,
        quantDevolucao,
        pesoDevolucao,
        volumeDevolucao,
@@ -399,14 +399,14 @@ SELECT loja,
        dataDevolucao,
        situacaoDev,
        userDevolucao,
-       NULL   AS notaDevolucao,
-       NULL   AS emissaoDevolucao,
-       NULL   AS valorDevolucao,
-       ''     AS obsDevolucao
+       NULL          AS notaDevolucao,
+       NULL          AS emissaoDevolucao,
+       NULL          AS valorDevolucao,
+       ''            AS obsDevolucao
 FROM
   T_QUERY AS Q
 HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
-        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR tipoValidade LIKE @PESQUISA_LIKE)
+        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR motivoDevolucao LIKE @PESQUISA_LIKE)
    AND (marca = :marca OR :marca = 999)
 

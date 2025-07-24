@@ -144,7 +144,7 @@ fun VerticalLayout.formHeader(
         textField("Motivo Devolução") {
           this.isReadOnly = true
           this.isExpand = true
-          this.value = nota.tipoDevolucaoName
+          this.value = nota.motivoDevolucaoName
         }
         textField("Valor Frete") {
           this.isReadOnly = true

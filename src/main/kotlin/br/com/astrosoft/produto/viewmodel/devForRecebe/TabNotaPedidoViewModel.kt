@@ -32,7 +32,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     val invFile = InvFileDev(
       invno = nota.niPrincipal,
       numero = nota.numeroDevolucao,
-      tipoDevolucao = nota.tipoDevolucao,
+      tipoDevolucao = nota.motivoDevolucao,
       seq = null,
       date = LocalDate.now(),
       fileName = fileName,
@@ -63,7 +63,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     return saci.findTransportadora(carrno)
   }
 
-  fun updateMotivo(tipoDevolucao: ETipoDevolucao?) = viewModel.exec {
+  fun updateMotivo(tipoDevolucao: EMotivoDevolucao?) = viewModel.exec {
     tipoDevolucao ?: return@exec
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {

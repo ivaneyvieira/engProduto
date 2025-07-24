@@ -68,7 +68,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     }
 
     select("Motivo Devoulucao") {
-      this.setItems(ETipoDevolucao.entries)
+      this.setItems(EMotivoDevolucao.entries - EMotivoDevolucao.DIVERGENTE_PEDIDO)
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateMotivo(it.value)
@@ -126,7 +126,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
 
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
-    columnGrid(NotaRecebimentoDev::tipoDevolucaoName, header = "Motivo Devolução")
+    columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
@@ -155,7 +155,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
 
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
-    this.gridPanel.getColumnBy(NotaRecebimentoDev::tipoDevolucaoName).setFooter("Total R$:")
+    this.gridPanel.getColumnBy(NotaRecebimentoDev::motivoDevolucaoName).setFooter("Total R$:")
     this.gridPanel.getColumnBy(NotaRecebimentoDev::valorNFDevolucao).setFooter(
       notas.sumOf { it.valorNFDevolucao }.format()
     )

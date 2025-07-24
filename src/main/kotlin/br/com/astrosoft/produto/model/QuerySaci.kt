@@ -1440,7 +1440,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findInvFile(invno: Int, tipo: ETipoDevolucao, numero: Int): List<InvFileDev> {
+  fun findInvFile(invno: Int, tipo: EMotivoDevolucao, numero: Int): List<InvFileDev> {
     val sql = "/sqlSaci/invArquivoDev.sql"
     return query(sql, InvFileDev::class) {
       addOptionalParameter("invno", invno)
@@ -2200,7 +2200,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveTipoDevolucao(produto: NotaRecebimentoProduto, tipo: ETipoDevolucao, numero: Int) {
+  fun saveMotivoDevolucao(produto: NotaRecebimentoProduto, tipo: EMotivoDevolucao, numero: Int) {
     val sql = "/sqlSaci/saveTipoDevolucao.sql"
     script(sql) {
       addOptionalParameter("invno", produto.ni)
@@ -2212,7 +2212,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveTipoDevolucao(produto: ProdutoPedidoGarantia) {
+  fun saveMotivoDevolucao(produto: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/updateTipoDevolucaoGarantia.sql"
     if (produto.niReceb == null)
       return
@@ -2222,7 +2222,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", produto.numero)
       addOptionalParameter("situacaoDev", EStituacaoDev.GARANTIA.num)
-      addOptionalParameter("tipoDevolucao", ETipoDevolucao.EM_GARANTIA.num)
+      addOptionalParameter("tipoDevolucao", EMotivoDevolucao.EM_GARANTIA.num)
       addOptionalParameter("quantDevolucao", produto.estoqueDev ?: 0)
     }
   }
@@ -2231,7 +2231,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/invAdicionalSavePesoVolume.sql"
     script(sql) {
       addOptionalParameter("invno", nota.ni)
-      addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", nota.motivoDevolucao)
       addOptionalParameter("volume", nota.volumeDevolucao)
       addOptionalParameter("peso", nota.pesoDevolucao)
       addOptionalParameter("empTermo", nota.empNoTermo)
@@ -2244,7 +2244,7 @@ class QuerySaci : QueryDB(database) {
       script(sql) {
         addOptionalParameter("invno", invno)
         addOptionalParameter("numero", nota.numeroDevolucao)
-        addOptionalParameter("tipoDevolucao", nota.tipoDevolucao)
+        addOptionalParameter("tipoDevolucao", nota.motivoDevolucao)
         addOptionalParameter("volume", nota.volumeDevolucao)
         addOptionalParameter("peso", nota.pesoDevolucao)
         addOptionalParameter("transp", nota.transpDevolucao)
@@ -2271,7 +2271,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("numero", notaRecebimento.numeroDevolucao)
       addOptionalParameter("situacaoDev", notaRecebimento.situacaoDev)
-      addOptionalParameter("tipoDevolucao", notaRecebimento.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", notaRecebimento.motivoDevolucao)
       addOptionalParameter("tipoDevolucaoNovo", tipoDevolucaoNovo)
     }
   }
@@ -2321,7 +2321,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("loja", dev.loja)
       addOptionalParameter("ni", dev.niPrincipal)
-      addOptionalParameter("tipoDevolucao", dev.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", dev.motivoDevolucao)
       addOptionalParameter("numeroDevolucao", dev.numeroDevolucao)
     }
   }
@@ -2334,7 +2334,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", produto.numeroDevolucao)
       addOptionalParameter("situacaoDev", produto.situacaoDev)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
       addOptionalParameter("seq", produto.seq ?: 0)
     }
@@ -2355,7 +2355,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("gradeNova", gradeNova)
       addOptionalParameter("numero", produto.numeroDevolucao)
       addOptionalParameter("situacaoDev", produto.situacaoDev)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
       addOptionalParameter("quantDevolucao", produto.quantDevolucao ?: 0)
       addOptionalParameter("seq", produto.seq ?: 0)
     }
@@ -2372,7 +2372,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", produto.numeroDevolucao)
       addOptionalParameter("situacaoDev", produto.situacaoDev)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
     }
   }
 
@@ -2463,7 +2463,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("tipoDevolucao", produto.tipoDevolucao)
+      addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
       addOptionalParameter("numero", produto.numeroDevolucao)
     }
   }

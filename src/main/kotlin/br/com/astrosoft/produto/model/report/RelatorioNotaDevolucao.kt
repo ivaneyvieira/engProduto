@@ -207,7 +207,7 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       text("ENGECOPI ${nota.lojaSigla}", LEFT).apply {
         this.setStyle(fieldFontGrande)
       }
-      text("Motivo de Devolução: ${nota.tipoDevolucaoEnun?.descricao ?: ""}", LEFT)
+      text("Motivo de Devolução: ${nota.motivoDevolucaoEnun?.descricao ?: ""}", LEFT)
       horizontalList {
         val fornecedor = nota.fornecedor
         val vendno = nota.vendno

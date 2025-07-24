@@ -9,7 +9,7 @@ class DadosDevolucao {
 
   val tipoDevolucaoEnun
     get() = tipoDevolucao?.let {
-      ETipoDevolucao.findByNum(it)
+      EMotivoDevolucao.findByNum(it)
     }
 
   companion object {

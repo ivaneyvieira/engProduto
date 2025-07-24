@@ -8,7 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
-import br.com.astrosoft.produto.model.beans.ETipoDevolucao
+import br.com.astrosoft.produto.model.beans.EMotivoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
@@ -164,7 +164,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
           }
         }
         select("Motivo Devolução") {
-          this.setItems(ETipoDevolucao.entries)
+          this.setItems(EMotivoDevolucao.entries)
 
           this.addValueChangeListener {
             val produtos = gridDetail.selectedItems.toList()

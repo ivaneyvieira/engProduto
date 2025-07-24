@@ -91,7 +91,7 @@ class NotaRecebimentoProduto(
   var outDesp: Double?,
   var icmsSubst: Double?,
   var baseSubst: Double?,
-  var tipoDevolucao: Int?,
+  var motivoDevolucao: Int?,
   var quantDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
@@ -109,7 +109,7 @@ class NotaRecebimentoProduto(
   val chaveNi
     get() = "$loja-$ni"
   val chaveDevolucao
-    get() = "$loja-$ni-$tipoDevolucao-$notaDevolucao"
+    get() = "$loja-$ni-$motivoDevolucao-$notaDevolucao"
 
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
@@ -167,10 +167,10 @@ class NotaRecebimentoProduto(
              (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
     }
 
-  var tipoDevolucaoEnum: ETipoDevolucao?
-    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+  var motivoDevolucaoEnum: EMotivoDevolucao?
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
-      tipoDevolucao = value?.num
+      motivoDevolucao = value?.num
     }
 
   val totalGeral
@@ -219,9 +219,9 @@ class NotaRecebimentoProduto(
     saci.updateProduto(this)
   }
 
-  fun updateDevolucao(numero: Int, tipo: ETipoDevolucao?) {
+  fun updateDevolucao(numero: Int, tipo: EMotivoDevolucao?) {
     tipo ?: return
-    saci.saveTipoDevolucao(this, tipo, numero)
+    saci.saveMotivoDevolucao(this, tipo, numero)
   }
 
   fun desfazerDevolucao() {
@@ -267,7 +267,7 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class ETipoDevolucao(
+enum class EMotivoDevolucao(
   val num: Int,
   val descricao: String,
   val notasMultiplas: Boolean,
@@ -300,14 +300,15 @@ enum class ETipoDevolucao(
   AJUSTE(num = 11, descricao = "Ajuste", notasMultiplas = false, fob = false, divergente = false),
   PRODUTO_TROCADO(num = 12, descricao = "Produto Trocado", notasMultiplas = false, fob = false, divergente = false),
   TROCA_CNPJ(num = 14, descricao = "Muda CNPJ", notasMultiplas = false, fob = false, divergente = false),
-  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = true);
+  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = true),
+  DIVERGENTE_PEDIDO(num = 16, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = false),;
 
   override fun toString(): String {
     return descricao
   }
 
   companion object {
-    fun findByNum(num: Int): ETipoDevolucao? {
+    fun findByNum(num: Int): EMotivoDevolucao? {
       return entries.firstOrNull { it.num == num }
     }
   }

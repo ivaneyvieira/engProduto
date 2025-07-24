@@ -89,7 +89,7 @@ class DlgAdicionaProdutoNota(
     val prdno = linha.prdno() ?: return
     val grade = linha.grade()
     val saldo = linha.saldo()
-    val invno = if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
+    val invno = if (nota.motivoDevolucaoEnun?.notasMultiplas == true) {
       edtNi?.value ?: 0
     } else {
       nota.niPrincipal

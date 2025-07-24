@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
@@ -228,7 +227,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
 
   override fun dlgDevoucao(
     produtos: List<NotaRecebimentoProduto>,
-    motivo: ETipoDevolucao,
+    motivo: EMotivoDevolucao,
     block: (numero: Int?, msg: String) -> Unit
   ) {
     val form = FormDevoucao(motivo, produtos)

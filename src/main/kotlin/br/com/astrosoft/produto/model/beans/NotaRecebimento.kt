@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import kotlin.Int
@@ -52,7 +51,7 @@ class NotaRecebimento(
   var observacaoNota: String?,
   var tipoNota: String?,
   var countLocalizacao: Int?,
-  var tipoDevolucao: Int?,
+  var motivoDevolucao: Int?,
   var pesoDevolucao: Double?,
   var volumeDevolucao: Int?,
   var transpDevolucao: Int?,
@@ -99,14 +98,14 @@ class NotaRecebimento(
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
 
-  var tipoDevolucaoEnun
-    get() = ETipoDevolucao.findByNum(tipoDevolucao ?: 0)
+  var motivoDevolucaoEnun
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
-      tipoDevolucao = value?.num
+      motivoDevolucao = value?.num
     }
 
-  val tipoDevolucaoName
-    get() = tipoDevolucaoEnun?.descricao
+  val motivoDevolucaoName
+    get() = motivoDevolucaoEnun?.descricao
 
   val usuarioLogin: String
     get() = if (usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
@@ -157,10 +156,10 @@ class NotaRecebimento(
   }
 
   fun arquivos(): List<InvFile> {
-    val tipoName = tipoDevolucaoEnun?.name
-    val outrosTipos = ETipoDevolucao.entries.filter { it.name != tipoName }.map { it.name }
+    val tipoName = motivoDevolucaoEnun?.name
+    val outrosTipos = EMotivoDevolucao.entries.filter { it.name != tipoName }.map { it.name }
     val listFile = InvFile.findAll(this.ni ?: 0)
-    val marcaDevolucao = (tipoDevolucao ?: 0) > 0
+    val marcaDevolucao = (motivoDevolucao ?: 0) > 0
     return if (marcaDevolucao) {
       if (tipoName == null) {
         listFile
@@ -228,7 +227,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         tipoNota = nota.tipoNota,
         lojaSigla = nota.lojaSigla,
         transportadora = nota.transportadora,
-        tipoDevolucao = nota.tipoDevolucao ?: 0,
+        motivoDevolucao = nota.motivoDevolucao ?: 0,
         pesoDevolucao = nota.pesoDevolucao ?: 0.00,
         volumeDevolucao = nota.volumeDevolucao ?: 0,
         countLocalizacao = produtos.filter { !it.localizacao.isNullOrBlank() }.size,

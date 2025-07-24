@@ -31,7 +31,7 @@ class TabNotaEditorViewModel(val viewModel: DevFor2ViewModel) {
     val invFile = InvFileDev(
       invno = nota.niPrincipal,
       numero = nota.numeroDevolucao,
-      tipoDevolucao = nota.tipoDevolucao,
+      tipoDevolucao = nota.motivoDevolucao,
       seq = null,
       date = LocalDate.now(),
       fileName = fileName,
