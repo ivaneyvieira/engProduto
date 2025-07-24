@@ -82,7 +82,6 @@ class TabNotaDivergenteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaView
     }
 
     itens.forEach {
-      it.motivoDevolucao = EMotivoDevolucao.DIVERGENTE_PEDIDO.num
       it.marcaSituacao(situacao)
     }
     updateView()

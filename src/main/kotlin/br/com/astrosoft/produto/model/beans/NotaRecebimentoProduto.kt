@@ -300,8 +300,7 @@ enum class EMotivoDevolucao(
   AJUSTE(num = 11, descricao = "Ajuste", notasMultiplas = false, fob = false, divergente = false),
   PRODUTO_TROCADO(num = 12, descricao = "Produto Trocado", notasMultiplas = false, fob = false, divergente = false),
   TROCA_CNPJ(num = 14, descricao = "Muda CNPJ", notasMultiplas = false, fob = false, divergente = false),
-  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = true),
-  DIVERGENTE_PEDIDO(num = 16, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = false),;
+  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = false);
 
   override fun toString(): String {
     return descricao

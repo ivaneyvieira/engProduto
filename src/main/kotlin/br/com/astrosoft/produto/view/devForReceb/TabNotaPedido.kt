@@ -68,7 +68,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     }
 
     select("Motivo Devoulucao") {
-      this.setItems(EMotivoDevolucao.entries - EMotivoDevolucao.DIVERGENTE_PEDIDO)
+      this.setItems(EMotivoDevolucao.entries)
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateMotivo(it.value)
@@ -76,7 +76,6 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
         }
       }
     }
-
 
     select("Enviar") {
       this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO)
