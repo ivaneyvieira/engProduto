@@ -77,6 +77,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       }
     }
 
+
     select("Enviar") {
       this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO)
       this.setItemLabelGenerator { sit ->
