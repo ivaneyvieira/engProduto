@@ -250,6 +250,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
+      columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")
