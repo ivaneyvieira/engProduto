@@ -61,6 +61,20 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
           viewModel.geraPlanilha(produtos)
         }
 
+        this.button("Ad For") {
+          this.icon = VaadinIcon.PLUS.create()
+          this.addClickListener {
+            if (acerto.processado == true) {
+              DialogHelper.showWarning("Acerto já processado")
+              return@addClickListener
+            }
+            val dlg = DlgAdicionaFornecedor(viewModel, acerto) {
+              update()
+            }
+            dlg.open()
+          }
+        }
+
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {

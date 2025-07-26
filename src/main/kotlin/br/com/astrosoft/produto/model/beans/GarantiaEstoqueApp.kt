@@ -22,7 +22,7 @@ class GarantiaEstoqueApp(
   val estoqueLoja
     get() = (estoqueNerus ?: 0) - (estoqueApp ?: 0)
 
-  val abrev = listVend.firstOrNull { it.vendno == vendno }?.abrev ?: ""
+  //val abrev = listVend.firstOrNull { it.vendno == vendno }?.abrev ?: ""
 
   companion object {
     fun findAll(filtro: FiltroEstoqueApp): List<GarantiaEstoqueApp> {
@@ -31,7 +31,7 @@ class GarantiaEstoqueApp(
       return estoque.consultaEstoqueApp(filtro.copy(nfe = nfe))
     }
 
-    val listVend: List<Fornecedor> = saci.findFornecedores()
+    //val listVend: List<Fornecedor> = saci.findFornecedores()
   }
 }
 

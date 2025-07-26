@@ -1290,9 +1290,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+/*
   fun findFornecedores(): List<Fornecedor> {
     val sql = "/sqlSaci/fornecedores.sql"
     return query(sql, Fornecedor::class)
+  }
+*/
+
+  fun findFornecedorByNo(vendno: Int): Fornecedor? {
+    val sql = "/sqlSaci/fornecedor.sql"
+    return query(sql, Fornecedor::class) {
+      addOptionalParameter("vendno", vendno)
+    }.firstOrNull()
   }
 
   fun findPrdNfe(numero: String): List<PrdCodigo> {

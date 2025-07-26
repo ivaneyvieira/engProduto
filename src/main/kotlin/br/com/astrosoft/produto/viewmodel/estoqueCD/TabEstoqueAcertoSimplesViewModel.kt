@@ -137,6 +137,11 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     bean.save()
     updateView()
   }
+
+  fun findFornecedor(vendno: Int?): Fornecedor? {
+    vendno ?: return null
+    return Fornecedor.findByVendno(vendno)
+  }
 }
 
 interface ITabEstoqueAcertoSimples : ITabView {
