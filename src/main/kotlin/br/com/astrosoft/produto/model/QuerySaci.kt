@@ -1290,12 +1290,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-/*
-  fun findFornecedores(): List<Fornecedor> {
-    val sql = "/sqlSaci/fornecedores.sql"
-    return query(sql, Fornecedor::class)
-  }
-*/
+  /*
+    fun findFornecedores(): List<Fornecedor> {
+      val sql = "/sqlSaci/fornecedores.sql"
+      return query(sql, Fornecedor::class)
+    }
+  */
 
   fun findFornecedorByNo(vendno: Int): Fornecedor? {
     val sql = "/sqlSaci/fornecedor.sql"
@@ -2545,6 +2545,14 @@ class QuerySaci : QueryDB(database) {
     return query(sql, Representante::class) {
       addOptionalParameter("vendno", vendno)
     }.toList()
+  }
+
+  fun acertoDelete(numLoja: Int, numero: Int) {
+    val sql = "/sqlSaci/produtoEstoqueAcertoDelete.sql"
+    script(sql) {
+      addOptionalParameter("numLoja", numLoja)
+      addOptionalParameter("numero", numero)
+    }
   }
 
   companion object {

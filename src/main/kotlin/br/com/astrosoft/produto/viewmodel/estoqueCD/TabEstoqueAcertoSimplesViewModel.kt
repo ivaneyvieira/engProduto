@@ -142,6 +142,10 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     vendno ?: return null
     return Fornecedor.findByVendno(vendno)
   }
+
+  fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
+    ProdutoEstoqueAcerto.updateProduto(produtos)
+  }
 }
 
 interface ITabEstoqueAcertoSimples : ITabView {

@@ -31,6 +31,7 @@ class ProdutoEstoqueAcerto(
   var gravado: Boolean? = false,
   var observacao: String? = null
 ) {
+
   val diferencaAcerto: Int?
     get() = if (acertoSimples == true) {
       diferenca
@@ -76,6 +77,28 @@ class ProdutoEstoqueAcerto(
     saci.removeAcertoProduto(this)
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as ProdutoEstoqueAcerto
+
+    if (numero != other.numero) return false
+    if (numloja != other.numloja) return false
+    if (prdno != other.prdno) return false
+    if (grade != other.grade) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = numero ?: 0
+    result = 31 * result + (numloja ?: 0)
+    result = 31 * result + (prdno?.hashCode() ?: 0)
+    result = 31 * result + (grade?.hashCode() ?: 0)
+    return result
+  }
+
   val codigo
     get() = prdno?.trim()
 
@@ -86,6 +109,15 @@ class ProdutoEstoqueAcerto(
 
     fun proximoNumero(numLoja: Int): Int {
       return saci.acertoProximo(numLoja)
+    }
+
+    fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
+      //val numLoja = produtos.firstOrNull()?.numloja ?: return
+      //val numero  = produtos.firstOrNull()?.numero ?: return
+      //saci.acertoDelete(numLoja, numero)
+      produtos.forEach {produto ->
+        produto.save()
+      }
     }
   }
 }
