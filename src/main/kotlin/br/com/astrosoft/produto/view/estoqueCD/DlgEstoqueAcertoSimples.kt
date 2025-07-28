@@ -123,21 +123,21 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
             this.isSpacing = true
             this.setWidthFull()
 
+            edtPesquisa = textField("Pesquisa") {
+              this.width = "200px"
+              this.valueChangeTimeout = 500
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
             edtVendno = integerField("Fornecedor") {
               this.width = "5rem"
               this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
               this.valueChangeTimeout = 500
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtPesquisa = textField("Pesquisa") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
               this.addValueChangeListener {
                 updateGrid()
               }
@@ -238,25 +238,30 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
   private fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val user = AppConfig.userLogin()
+    val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
-    val fornecedor = edtVendno?.value ?: 0
-    if (fornecedor == 0) {
+    val fornecedor = edtVendno?.value?.toString() ?: ""
+
+    if (fornecedor.isBlank() && pesquisa.isBlank()) {
       return emptyList()
     }
+
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
-      pesquisa = edtPesquisa?.value ?: "",
+      pesquisa = pesquisa,
       codigo = 0,
       grade = "",
       caracter = caracter,
       localizacao = "",
-      fornecedor = fornecedor.toString(),
+      fornecedor = fornecedor,
       inativo = EInativo.TODOS,
       uso = EUso.TODOS,
       listaUser = listOf("TODOS"),
     )
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
-      it.codForn == fornecedor
+      fornecedor.isBlank() || it.codForn == fornecedor.toIntOrNull()
+    }.filter {
+      pesquisa .isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
