@@ -16,7 +16,7 @@ class DlgConferenciaAcertoSimples(
   val produto: ProdutoEstoqueAcerto,
   val onClose: () -> Unit = {}
 ) : Dialog() {
-  private var edtDiferenca: IntegerField? = null
+  private var edtInventario: IntegerField? = null
 
   init {
     this.isModal = true
@@ -26,11 +26,11 @@ class DlgConferenciaAcertoSimples(
     verticalLayout {
       setSizeFull()
       horizontalLayout {
-        edtDiferenca = integerField("Quant") {
+        edtInventario = integerField("Quant Inv") {
           this.setWidthFull()
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = produto.estoqueCD
+          this.value = produto.inventarioAcerto
         }
       }
     }
@@ -68,7 +68,7 @@ class DlgConferenciaAcertoSimples(
   }
 
   private fun confirmaForm() {
-    produto.diferenca = edtDiferenca?.value
+    produto.inventarioAcerto = edtInventario?.value
     viewModel.updateProduto(produto)
     onClose.invoke()
     this.close()

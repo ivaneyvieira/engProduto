@@ -201,8 +201,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         }
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
-      //columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Est CD")
-      //columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Est Loja")
+      columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv")
       columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Diferença")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
 

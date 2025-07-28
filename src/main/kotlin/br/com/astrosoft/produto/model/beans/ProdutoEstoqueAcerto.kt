@@ -39,6 +39,14 @@ class ProdutoEstoqueAcerto(
       (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
     }
 
+  var inventarioAcerto: Int?
+    get() {
+      return (estoqueSis ?: 0) + (diferenca ?: 0)
+    }
+    set(value) {
+      diferenca = (value ?: 0) - (estoqueSis ?: 0)
+    }
+
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
@@ -115,7 +123,7 @@ class ProdutoEstoqueAcerto(
       //val numLoja = produtos.firstOrNull()?.numloja ?: return
       //val numero  = produtos.firstOrNull()?.numero ?: return
       //saci.acertoDelete(numLoja, numero)
-      produtos.forEach {produto ->
+      produtos.forEach { produto ->
         produto.save()
       }
     }
