@@ -132,7 +132,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtVendno = integerField("Fornecedor") {
+            edtVendno = integerField("For") {
               this.width = "5rem"
               this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
