@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.EInativo
 import br.com.astrosoft.produto.model.beans.EUso
@@ -11,6 +12,7 @@ import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
+import br.com.astrosoft.produto.model.beans.Produtos
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -178,6 +180,15 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       this.setSelectionMode(Grid.SelectionMode.MULTI)
       isMultiSort = false
 
+      this.withEditor(
+        ProdutoEstoqueAcerto::class,
+        openEditor = {
+          this.focusEditor(ProdutoEstoqueAcerto::estoqueCD)
+        },
+        closeEditor = {
+          viewModel.updateProduto(it.bean)
+        })
+
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "120px")
@@ -201,7 +212,9 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         }
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
-      columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv")
+      columnGrid(ProdutoEstoqueAcerto::estoqueCD, "Inv CD").integerFieldEditor()
+      columnGrid(ProdutoEstoqueAcerto::estoqueLoja, "Inv LJ").integerFieldEditor()
+      columnGrid(ProdutoEstoqueAcerto::estoqueTotal, "Inv Total")
       columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Diferença")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
 
@@ -260,7 +273,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
       fornecedor.isBlank() || it.codForn == fornecedor.toIntOrNull()
     }.filter {
-      pesquisa .isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
+      pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
@@ -303,5 +316,20 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private fun updateProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
     viewModel.updateProduto(selecionados)
+  }
+
+  private fun abreProximo(bean: ProdutoEstoqueAcerto) {
+    val items = gridDetail.list()
+    val index = items.indexOf(bean)
+    if (index >= 0) {
+      val nextIndex = index + 1
+      if (nextIndex < items.size) {
+        val nextBean = items[nextIndex]
+        //gridDetail.select(nextBean)
+        gridDetail.editor.editItem(nextBean)
+      } else {
+        gridDetail.deselectAll()
+      }
+    }
   }
 }
