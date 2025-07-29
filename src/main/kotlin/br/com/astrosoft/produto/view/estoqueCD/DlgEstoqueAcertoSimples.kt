@@ -33,7 +33,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private val gridDetail = Grid(ProdutoEstoqueAcerto::class.java, false)
 
   //Componentes de filtro
-  private var edtVendno: IntegerField? = null
+  private var edtFornecedor: TextField? = null
   private var edtPesquisa: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
 
@@ -73,30 +73,9 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            this.button("Relatório") {
-              this.icon = VaadinIcon.FILE_TEXT.create()
-              this.addClickListener {
-                viewModel.imprimirRelatorio(acerto)
-              }
-            }
-
             this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
               val produtos = estoqueAcertos()
               viewModel.geraPlanilha(produtos)
-            }
-
-            this.button("Ad For") {
-              this.icon = VaadinIcon.PLUS.create()
-              this.addClickListener {
-                if (acerto.processado == true) {
-                  DialogHelper.showWarning("Acerto já processado")
-                  return@addClickListener
-                }
-                val dlg = DlgAdicionaFornecedor(viewModel, acerto) {
-                  update()
-                }
-                dlg.open()
-              }
             }
 
             this.button("Adiciona") {
@@ -133,7 +112,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtVendno = integerField("For") {
+            edtFornecedor = textField("For") {
               this.width = "5rem"
               this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
@@ -218,8 +197,8 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         }
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
-      columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv").integerFieldEditor()
-      columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif")
+      columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
+      columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif", width = "5rem")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
 
       this.addSelectionListener {
@@ -256,7 +235,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val user = AppConfig.userLogin()
     val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
-    val fornecedor = edtVendno?.value?.toString() ?: ""
+    val fornecedor = edtFornecedor?.value ?: ""
 
     if (fornecedor.isBlank() && pesquisa.isBlank()) {
       return emptyList()
@@ -275,7 +254,9 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       listaUser = listOf("TODOS"),
     )
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
-      fornecedor.isBlank() || it.codForn == fornecedor.toIntOrNull()
+      fornecedor.isBlank() ||
+      it.codForn == fornecedor.toIntOrNull() ||
+      it.fornecedor.contains(fornecedor, ignoreCase = true)
     }.filter {
       pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }
