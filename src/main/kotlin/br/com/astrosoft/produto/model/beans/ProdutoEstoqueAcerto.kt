@@ -31,18 +31,20 @@ class ProdutoEstoqueAcerto(
   var gravado: Boolean? = false,
   var observacao: String? = null
 ) {
-  val estoqueTotal: Int?
-    get() = if (estoqueCD == null && estoqueLoja == null) {
-      null
-    } else {
-      (estoqueCD ?: 0) + (estoqueLoja ?: 0)
-    }
 
   val diferencaAcerto: Int?
     get() = if (acertoSimples == true) {
-      (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
+      diferenca
     } else {
       (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
+    }
+
+  var inventarioAcerto: Int?
+    get() {
+      return (estoqueSis ?: 0) + (diferenca ?: 0)
+    }
+    set(value) {
+      diferenca = (value ?: 0) - (estoqueSis ?: 0)
     }
 
   val saldoBarraRef: String
