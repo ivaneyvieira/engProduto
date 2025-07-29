@@ -219,7 +219,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       }
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv").integerFieldEditor()
-      columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Diferença")
+      columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
 
       this.addSelectionListener {
