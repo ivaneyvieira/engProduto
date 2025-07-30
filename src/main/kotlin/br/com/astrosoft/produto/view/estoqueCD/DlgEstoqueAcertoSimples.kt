@@ -289,9 +289,11 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val estoque = cmbEstoque?.value ?: EEstoque.TODOS
     val saldo = edtSaldo?.value ?: 0
 
+    /*
     if (fornecedor.isBlank() && pesquisa.isBlank() && tipo == 0 && cl == 0) {
       return emptyList()
     }
+     */
 
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
