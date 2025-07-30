@@ -30,7 +30,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var cmbInativo: Select<EInativo>
   private lateinit var edtLocalizacao: TextField
-  private lateinit var cmdEstoque: Select<EEstoque>
+  private lateinit var cmbEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -140,7 +140,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
           }
         }
 
-        cmdEstoque = select("Estoque") {
+        cmbEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -225,7 +225,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
       localizacao = edtLocalizacao.value ?: "",
       fornecedor = edtFornecedor.value ?: "",
       centroLucro = edtCentroLucro.value ?: 0,
-      estoque = cmdEstoque.value ?: EEstoque.TODOS,
+      estoque = cmbEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,
       listaUser = listaUser,

@@ -14,6 +14,8 @@ class ProdutoEstoque(
   var descricao: String?,
   var unidade: String?,
   var grade: String?,
+  var tipo: Int?,
+  var cl: Int?,
   var embalagem: Int?,
   var qtdEmbalagem: Double?,
   var estoque: Int?,

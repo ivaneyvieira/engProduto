@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.ECaracter
+import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.EInativo
 import br.com.astrosoft.produto.model.beans.EUso
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
@@ -36,6 +37,10 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtFornecedor: TextField? = null
   private var edtPesquisa: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
+  private var cmbEstoque: Select<EEstoque>? = null
+  private var edtSaldo: IntegerField? = null
+  private var edtTipo: IntegerField? = null
+  private var edtCL: IntegerField? = null
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -112,12 +117,31 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtFornecedor = textField("For") {
-              this.width = "5rem"
-              this.isAutofocus = true
+            edtTipo = integerField("Tipo") {
+              this.width = "80px"
               this.valueChangeMode = ValueChangeMode.LAZY
               this.valueChangeTimeout = 500
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtCL = integerField("CL") {
+              this.width = "80px"
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.valueChangeTimeout = 500
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtFornecedor = textField("For") {
+              this.width = "12rem"
+              this.isAutofocus = true
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.valueChangeTimeout = 500
               this.addValueChangeListener {
                 updateGrid()
               }
@@ -132,6 +156,30 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               this.value = ECaracter.NAO
 
               this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            cmbEstoque = select("Estoque") {
+              this.width = "80px"
+              this.setItems(EEstoque.entries)
+              this.setItemLabelGenerator { item ->
+                item.descricao
+              }
+              this.value = EEstoque.TODOS
+              addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtSaldo = integerField("Saldo") {
+              this.width = "80px"
+              //this.isClearButtonVisible = true
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.valueChangeTimeout = 1500
+              this.value = 0
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              addValueChangeListener {
                 updateGrid()
               }
             }
@@ -235,9 +283,13 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val user = AppConfig.userLogin()
     val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
-    val fornecedor = edtFornecedor?.value ?: ""
+    val fornecedor = edtFornecedor?.value?.trim() ?: ""
+    val tipo = edtTipo?.value ?: 0
+    val cl = edtCL?.value ?: 0
+    val estoque = cmbEstoque?.value ?: EEstoque.TODOS
+    val saldo = edtSaldo?.value ?: 0
 
-    if (fornecedor.isBlank() && pesquisa.isBlank()) {
+    if (fornecedor.isBlank() && pesquisa.isBlank() && tipo == 0 && cl == 0) {
       return emptyList()
     }
 
@@ -248,7 +300,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       grade = "",
       caracter = caracter,
       localizacao = "",
-      fornecedor = fornecedor,
+      fornecedor = "",
       inativo = EInativo.TODOS,
       uso = EUso.TODOS,
       listaUser = listOf("TODOS"),
@@ -259,6 +311,18 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       it.fornecedor.contains(fornecedor, ignoreCase = true)
     }.filter {
       pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
+    }.filter {
+      estoque == EEstoque.TODOS ||
+      when (estoque) {
+        EEstoque.IGUAL -> (it.saldo ?: 0) == saldo
+        EEstoque.MAIOR -> (it.saldo ?: 0) > saldo
+        EEstoque.MENOR -> (it.saldo ?: 0) < saldo
+        else           -> false
+      }
+    }.filter {
+      it.tipo == tipo || tipo == 0
+    }.filter {
+      it.cl == cl || cl == 0
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
