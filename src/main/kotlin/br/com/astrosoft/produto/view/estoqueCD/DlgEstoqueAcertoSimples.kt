@@ -235,7 +235,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
-      columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "120px")
+      columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "100px")
       addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
         val user = AppConfig.userLogin()
         when {
