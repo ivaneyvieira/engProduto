@@ -35,7 +35,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private val gridDetail = Grid(ProdutoEstoqueAcerto::class.java, false)
 
   //Componentes de filtro
-  private var edtFornecedor: TextField? = null
+  private var edtCodFor: IntegerField? = null
   private var edtPesquisa: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
@@ -127,10 +127,11 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtFornecedor = textField("For") {
-              this.width = "12rem"
+            edtCodFor = integerField("For") {
+              this.width = "5rem"
               this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.valueChangeTimeout = 500
               this.addValueChangeListener {
                 updateGrid()
@@ -294,7 +295,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val user = AppConfig.userLogin()
     val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
-    val fornecedor = edtFornecedor?.value?.trim() ?: ""
+    val codFor = edtCodFor?.value ?: 0
     val tipo = edtTipo?.value ?: 0
     val cl = edtCL?.value ?: 0
     val estoque = cmbEstoque?.value ?: EEstoque.TODOS
@@ -319,9 +320,8 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       listaUser = listOf("TODOS"),
     )
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
-      fornecedor.isBlank() ||
-      it.codForn == fornecedor.toIntOrNull() ||
-      it.fornecedor.contains(fornecedor, ignoreCase = true)
+      codFor == 0 ||
+      it.codForn == codFor
     }.filter {
       pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }.filter {
@@ -333,9 +333,11 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         else           -> false
       }
     }.filter {
-      it.tipo == tipo || tipo == 0
+      it.tipo == tipo ||
+      tipo == 0
     }.filter {
-      it.cl == cl || cl == 0
+      it.cl == cl ||
+      cl == 0
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
