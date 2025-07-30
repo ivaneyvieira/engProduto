@@ -127,6 +127,16 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
+            edtFornecedor = textField("For") {
+              this.width = "12rem"
+              this.isAutofocus = true
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.valueChangeTimeout = 500
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
             edtTipo = integerField("Tipo") {
               this.width = "80px"
               this.valueChangeMode = ValueChangeMode.LAZY
@@ -147,23 +157,13 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtFornecedor = textField("For") {
-              this.width = "12rem"
-              this.isAutofocus = true
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
             cmbCaracter = select("Caracter") {
               this.width = "90px"
               this.setItems(ECaracter.entries)
               this.setItemLabelGenerator { item ->
                 item.descricao
               }
-              this.value = ECaracter.NAO
+              this.value = ECaracter.TODOS
 
               this.addValueChangeListener {
                 updateGrid()
@@ -254,6 +254,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
           }
         }
       }
+      columnGrid(ProdutoEstoqueAcerto::codFor, "For")
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif", width = "5rem")
@@ -352,6 +353,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.estoqueSis = linha.saldo
+        this.codFor = linha.codForn
         this.diferenca = null
         this.processado = false
         this.transacao = null

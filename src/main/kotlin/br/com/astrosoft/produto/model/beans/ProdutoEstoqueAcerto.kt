@@ -13,6 +13,7 @@ class ProdutoEstoqueAcerto(
   var data: LocalDate? = null,
   var hora: LocalTime? = null,
   var login: String? = null,
+  var codFor: Int? = null,
   var usuario: String? = null,
   var acertoSimples: Boolean? = false,
   var prdno: String? = null,
@@ -120,9 +121,6 @@ class ProdutoEstoqueAcerto(
     }
 
     fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
-      //val numLoja = produtos.firstOrNull()?.numloja ?: return
-      //val numero  = produtos.firstOrNull()?.numero ?: return
-      //saci.acertoDelete(numLoja, numero)
       produtos.forEach { produto ->
         produto.save()
       }
