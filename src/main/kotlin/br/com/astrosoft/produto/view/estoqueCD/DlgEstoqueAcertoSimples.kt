@@ -36,6 +36,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
   //Componentes de filtro
   private var edtCodFor: IntegerField? = null
+  private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
@@ -122,6 +123,17 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               this.width = "200px"
               this.valueChangeTimeout = 500
               this.valueChangeMode = ValueChangeMode.LAZY
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtCodPrd = integerField("Cod") {
+              this.width = "5rem"
+              this.isAutofocus = true
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.valueChangeTimeout = 500
               this.addValueChangeListener {
                 updateGrid()
               }
@@ -236,25 +248,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "100px")
-      addColumnButton(VaadinIcon.DATE_INPUT, "Conferência", "Conf") { produto ->
-        val user = AppConfig.userLogin()
-        when {
-          acerto.login != user?.login -> {
-            DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
-          }
-
-          acerto.processado == true   -> {
-            DialogHelper.showWarning("Acerto já processado")
-          }
-
-          else                        -> {
-            val dlgConferencia = DlgConferenciaAcertoSimples(viewModel, produto) {
-              gridDetail.dataProvider.refreshAll()
-            }
-            dlgConferencia.open()
-          }
-        }
-      }
       columnGrid(ProdutoEstoqueAcerto::codFor, "For")
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
@@ -295,6 +288,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val user = AppConfig.userLogin()
     val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
+    val codPrd = edtCodPrd?.value ?: 0
     val codFor = edtCodFor?.value ?: 0
     val tipo = edtTipo?.value ?: 0
     val cl = edtCL?.value ?: 0
@@ -310,7 +304,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
       pesquisa = pesquisa,
-      codigo = 0,
+      codigo = codPrd,
       grade = "",
       caracter = caracter,
       localizacao = "",
