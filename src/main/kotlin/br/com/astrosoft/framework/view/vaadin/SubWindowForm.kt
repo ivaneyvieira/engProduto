@@ -11,6 +11,7 @@ class SubWindowForm(
   protected val title: String = "",
   val header: VerticalLayout.(SubWindowForm) -> Unit = {},
   val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
+  val hasButtonClose: Boolean = true,
   val onClose: (Dialog) -> Unit = {},
   val headerGrid: VerticalLayout.(SubWindowForm) -> Unit = {},
   val fullSize: Boolean = true,
@@ -50,12 +51,8 @@ class SubWindowForm(
       }
       horizontalLayout {
         content { align(left, baseline) }
-        button("Fechar") {
-          icon = VaadinIcon.CLOSE.create()
-          onClick {
-            onClose(this@SubWindowForm)
-            this@SubWindowForm.close()
-          }
+        if (hasButtonClose) {
+          buttonClose()
         }
         toolBar(this@SubWindowForm)
       }
@@ -67,6 +64,16 @@ class SubWindowForm(
       addAndExpand(blockForm())
     }
     isCloseOnEsc = true
+  }
+
+  private fun HorizontalLayout.buttonClose() {
+    button("Fechar") {
+      icon = VaadinIcon.CLOSE.create()
+      onClick {
+        onClose(this@SubWindowForm)
+        this@SubWindowForm.close()
+      }
+    }
   }
 }
 

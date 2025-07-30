@@ -16,6 +16,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -49,12 +50,21 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
 
     form = SubWindowForm(
-      "Produtos do Acerto $numero - Loja $loja $gravado",
+      title = "Produtos do Acerto $numero - Loja $loja $gravado",
+      hasButtonClose = false,
       toolBar = {
         verticalBlock {
           horizontalBlock {
             this.isSpacing = true
             this.setWidthFull()
+
+            button("Fechar") {
+              icon = VaadinIcon.CLOSE.create()
+              onClick {
+                closeForm()
+                form?.close()
+              }
+            }
 
             this.button("Pedido") {
               this.icon = VaadinIcon.PRINT.create()
