@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcertoSimples
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -80,6 +81,14 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
         viewModel.cancelarAcerto()
+      }
+    }
+
+    button("Novo Pedido") {
+      this.icon = VaadinIcon.NOTEBOOK.create()
+      onClick {
+        val loja = cmbLoja?.value
+        viewModel.novoPedido(loja?.no ?: 0)
       }
     }
   }
@@ -168,6 +177,11 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
 
   override fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
+  }
+
+  override fun adicionaAcerto(acerto: EstoqueAcerto) {
+    val list = gridPanel.dataProvider.fetchAll() + acerto
+    updateGrid(list)
   }
 
   override fun isAuthorized(): Boolean {

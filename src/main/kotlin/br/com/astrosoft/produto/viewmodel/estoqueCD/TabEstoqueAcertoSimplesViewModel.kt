@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.model.IUser
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -9,6 +10,8 @@ import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
+import kotlin.collections.firstOrNull
+import kotlin.collections.map
 
 class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
@@ -146,6 +149,39 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
     ProdutoEstoqueAcerto.updateProduto(produtos)
   }
+
+  fun novoPedido(numLoja: Int) = viewModel.exec {
+    if (numLoja == 0) {
+      fail("Selecione uma loja")
+    }
+    val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido de acerto")
+    val acerto = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de acerto")
+    subView.adicionaAcerto(acerto)
+  }
+
+  private fun createPedido(numLoja: Int): ProdutoEstoqueAcerto? {
+    val user = AppConfig.userLogin()
+    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
+    val novo = saci.acertoNovo(numero, numLoja) ?: return null
+
+    return ProdutoEstoqueAcerto(
+      numero = novo.numero,
+      numloja = novo.numloja,
+      lojaSigla = novo.lojaSigla,
+      data = novo.data,
+      hora = novo.hora,
+      login = user?.login,
+      acertoSimples = true,
+      usuario = user?.name,
+      prdno = null,
+      descricao = null,
+      grade = null,
+      estoqueSis = null,
+      estoqueCD = null,
+      estoqueLoja = null,
+      observacao = null,
+    )
+  }
 }
 
 interface ITabEstoqueAcertoSimples : ITabView {
@@ -155,4 +191,5 @@ interface ITabEstoqueAcertoSimples : ITabView {
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaAcerto(block: (user: IUser) -> Unit)
   fun produtosSelecionado(): List<ProdutoEstoqueAcerto>
+  fun adicionaAcerto(acerto: EstoqueAcerto)
 }
