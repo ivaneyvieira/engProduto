@@ -39,7 +39,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
-  private var cmbTipoSaldo: Select<ETipoSaldo>? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
   private var edtSaldo: IntegerField? = null
@@ -183,18 +182,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            cmbTipoSaldo = select("Tipo Saldo") {
-              this.width = "100px"
-              this.setItems(ETipoSaldo.entries)
-              this.setItemLabelGenerator { item ->
-                item.descricao
-              }
-              this.value = ETipoSaldo.TOTAL
-              addValueChangeListener {
-                updateGrid()
-              }
-            }
-
             cmbEstoque = select("Estoque") {
               this.width = "80px"
               this.setItems(EEstoque.entries)
@@ -260,7 +247,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "100px")
-      columnGrid(ProdutoEstoqueAcerto::codFor, "For")
+      columnGrid(ProdutoEstoqueAcerto::codFor, "For", width = "5rem")
       columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Est Sist")
       columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif", width = "5rem")
@@ -325,12 +312,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }.filter {
       pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }.filter {
-      val tipoSaldo = cmbTipoSaldo?.value ?: ETipoSaldo.TOTAL
-      val saldoSaci = when (tipoSaldo) {
-        ETipoSaldo.VAREJO -> it.saldoVarejo ?: 0
-        ETipoSaldo.ATACADO -> it.saldoAtacado ?: 0
-        ETipoSaldo.TOTAL -> it.saldo ?: 0
-      }
+      val saldoSaci = it.saldo ?: 0
       estoque == EEstoque.TODOS ||
       when (estoque) {
         EEstoque.IGUAL -> saldoSaci == saldo
