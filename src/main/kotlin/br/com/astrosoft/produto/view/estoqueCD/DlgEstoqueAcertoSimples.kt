@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.DadosProdutosRessuprimento
 import br.com.astrosoft.produto.model.beans.ECaracter
 import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.EInativo
+import br.com.astrosoft.produto.model.beans.ETipoSaldo
 import br.com.astrosoft.produto.model.beans.EUso
 import br.com.astrosoft.produto.model.beans.EstoqueAcerto
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
@@ -38,6 +39,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
+  private var cmbTipoSaldo: Select<ETipoSaldo>? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
   private var edtSaldo: IntegerField? = null
@@ -141,7 +143,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
             edtCodFor = integerField("For") {
               this.width = "5rem"
-              this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.valueChangeTimeout = 500
@@ -180,6 +181,17 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
               this.addValueChangeListener {
                 updateGrid()
+              }
+            }
+
+            cmbTipoSaldo = select("Tipo Saldo") {
+              this.setItems(ETipoSaldo.entries)
+              this.setItemLabelGenerator { item ->
+                item.descricao
+              }
+              this.value = ETipoSaldo.TOTAL
+              addValueChangeListener {
+                viewModel.updateView()
               }
             }
 
@@ -295,12 +307,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val estoque = cmbEstoque?.value ?: EEstoque.TODOS
     val saldo = edtSaldo?.value ?: 0
 
-    /*
-    if (fornecedor.isBlank() && pesquisa.isBlank() && tipo == 0 && cl == 0) {
-      return emptyList()
-    }
-     */
-
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
       pesquisa = pesquisa,
@@ -319,6 +325,12 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }.filter {
       pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
     }.filter {
+      val tipoSaldo = cmbTipoSaldo?.value ?: ETipoSaldo.TOTAL
+      val saldoSaci = when (tipoSaldo) {
+        ETipoSaldo.VAREJO -> it.saldoVarejo
+        ETipoSaldo.ATACADO -> it.saldoAtacado
+        ETipoSaldo.TOTAL -> it.saldo
+      }
       estoque == EEstoque.TODOS ||
       when (estoque) {
         EEstoque.IGUAL -> (it.saldo ?: 0) == saldo

@@ -24,6 +24,8 @@ class ProdutoEstoque(
   var fornecedor: String,
   var cnpjFornecedor: String?,
   var saldo: Int?,
+  var saldoVarejo: Int?,
+  var saldoAtacado: Int?,
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
