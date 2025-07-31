@@ -132,7 +132,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
             edtCodPrd = integerField("Cod") {
               this.width = "5rem"
-              this.isAutofocus = true
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.valueChangeTimeout = 500
@@ -185,6 +184,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
             }
 
             cmbTipoSaldo = select("Tipo Saldo") {
+              this.width = "100px"
               this.setItems(ETipoSaldo.entries)
               this.setItemLabelGenerator { item ->
                 item.descricao
