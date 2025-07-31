@@ -140,6 +140,7 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
     edtDescricao = textField("Descrição") {
       this.setWidthFull()
       this.isReadOnly = true
+      this.tabIndex = -1
     }
 
     edtGrade = select("Grade") {
