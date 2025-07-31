@@ -191,7 +191,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
               this.value = ETipoSaldo.TOTAL
               addValueChangeListener {
-                viewModel.updateView()
+                updateGrid()
               }
             }
 
@@ -327,15 +327,15 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }.filter {
       val tipoSaldo = cmbTipoSaldo?.value ?: ETipoSaldo.TOTAL
       val saldoSaci = when (tipoSaldo) {
-        ETipoSaldo.VAREJO -> it.saldoVarejo
-        ETipoSaldo.ATACADO -> it.saldoAtacado
-        ETipoSaldo.TOTAL -> it.saldo
+        ETipoSaldo.VAREJO -> it.saldoVarejo ?: 0
+        ETipoSaldo.ATACADO -> it.saldoAtacado ?: 0
+        ETipoSaldo.TOTAL -> it.saldo ?: 0
       }
       estoque == EEstoque.TODOS ||
       when (estoque) {
-        EEstoque.IGUAL -> (it.saldo ?: 0) == saldo
-        EEstoque.MAIOR -> (it.saldo ?: 0) > saldo
-        EEstoque.MENOR -> (it.saldo ?: 0) < saldo
+        EEstoque.IGUAL -> saldoSaci == saldo
+        EEstoque.MAIOR -> saldoSaci > saldo
+        EEstoque.MENOR -> saldoSaci < saldo
         else           -> false
       }
     }.filter {
