@@ -125,6 +125,7 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
       this.addValueChangeListener {
         val lista = viewModel.findProdutos(this.value, acerto.numloja)
         produtos.clear()
@@ -134,6 +135,14 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
         edtGrade.value = produtos.firstOrNull()?.grade
         edtDescricao.value = produtos.firstOrNull()?.descricao
         edtGrade.isEnabled = produtos.size > 1
+
+        if (produtos.isNotEmpty()) {
+          if (produtos.size > 1) {
+            edtGrade.focus()
+          } else {
+            edtDiferenca.focus()
+          }
+        }
       }
     }
 
