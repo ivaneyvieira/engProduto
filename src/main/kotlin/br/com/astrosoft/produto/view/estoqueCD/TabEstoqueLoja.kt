@@ -33,9 +33,9 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   private lateinit var cmbLoja: Select<Loja>
 
   fun init() {
-    val itens =  viewModel.findAllLojas()
+    val itens = viewModel.findAllLojas()
     cmbLoja.setItems(itens)
-    cmbLoja.value = itens.firstOrNull{
+    cmbLoja.value = itens.firstOrNull {
       it.no == 4
     } ?: itens.firstOrNull()
   }

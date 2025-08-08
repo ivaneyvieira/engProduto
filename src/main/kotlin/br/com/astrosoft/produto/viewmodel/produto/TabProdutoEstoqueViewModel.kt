@@ -1,10 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.produto
 
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroProdutoLoja
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoLoja
+import br.com.astrosoft.produto.model.beans.ValidadeSaci
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldoLoja
 import br.com.astrosoft.produto.model.printText.PrintProdutosLoja
 

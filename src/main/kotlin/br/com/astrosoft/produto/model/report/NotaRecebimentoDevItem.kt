@@ -155,8 +155,9 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val valorUnitProduto: BigDecimal
     get() = BigDecimal(produto.valorUnit ?: 0.00)
   override val valorTotalProduto: BigDecimal
-    get() =  quantProduto * valorUnitProduto
-        //BigDecimal(produto.valorTotal ?: 0.00)
+    get() = quantProduto * valorUnitProduto
+
+  //BigDecimal(produto.valorTotal ?: 0.00)
   override val bcICMSProduto: BigDecimal
     get() = BigDecimal(produto.baseIcmsDevolucao ?: 0.00)
   override val vlICMSProduto: BigDecimal

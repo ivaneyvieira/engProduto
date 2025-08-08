@@ -200,13 +200,13 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       },
       closeEditor = {
         viewModel.updateProduto(it.bean, false)
-        if(!this.editorFinalizado) {
+        if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
       },
       saveEditor = {
         viewModel.updateProduto(it.bean, false)
-        if(!this.editorFinalizado) {
+        if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
       }

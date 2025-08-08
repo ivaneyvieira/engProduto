@@ -1,15 +1,8 @@
 package br.com.astrosoft.produto.model.report
 
-import br.com.astrosoft.framework.model.reports.Templates
-import br.com.astrosoft.framework.model.reports.Templates.fieldFont
-import br.com.astrosoft.framework.model.reports.horizontalBlock
-import br.com.astrosoft.framework.model.reports.horizontalList
-import br.com.astrosoft.framework.model.reports.text
-import br.com.astrosoft.framework.model.reports.verticalBlock
-import br.com.astrosoft.framework.model.reports.verticalList
+import br.com.astrosoft.framework.model.reports.*
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.TermoRecebimento
-import com.vaadin.copilot.javarewriter.JavaStyleRewriter.setStyle
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
 import net.sf.dynamicreports.report.builder.DynamicReports.*
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder
@@ -18,12 +11,10 @@ import net.sf.dynamicreports.report.constant.HorizontalTextAlignment
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment.RIGHT
 import net.sf.dynamicreports.report.constant.PageOrientation.PORTRAIT
 import net.sf.dynamicreports.report.constant.PageType.A4
-import net.sf.dynamicreports.report.constant.StretchType
 import net.sf.dynamicreports.report.constant.TextAdjust
 import net.sf.jasperreports.engine.export.JRPdfExporter
 import net.sf.jasperreports.export.SimpleExporterInput
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput
-import okhttp3.internal.http2.StreamResetException
 import java.io.ByteArrayOutputStream
 
 class ReportTermoRecebimento(val termo: TermoRecebimento) {
@@ -33,7 +24,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
         this.text(text = titulo, horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
           setStyle(Templates.fieldFontTituloQuadro)
         }
-      }else {
+      } else {
         this.text("")
       }
       if (conteudo.isNotEmpty()) {

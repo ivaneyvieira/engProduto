@@ -10,8 +10,6 @@ import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
 import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
-import kotlin.collections.firstOrNull
-import kotlin.collections.map
 
 class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
   val subView

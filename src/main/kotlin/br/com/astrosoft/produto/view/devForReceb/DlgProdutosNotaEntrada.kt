@@ -3,11 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
-import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMotivoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
@@ -116,9 +112,9 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
             this.isClearButtonVisible = true
             addValueChangeListener {
               if (it.isFromClient) {
-                if( (it.value ?: 0) == 0) {
+                if ((it.value ?: 0) == 0) {
                   nota.volumeDevolucao = nota.volume ?: 0
-                } else{
+                } else {
                   nota.volumeDevolucao = it.value ?: 0
                 }
                 viewModel.saveNota(nota)

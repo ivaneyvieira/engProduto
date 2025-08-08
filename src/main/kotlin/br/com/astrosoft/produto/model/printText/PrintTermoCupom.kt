@@ -16,7 +16,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln(" E-mail: ${bean.empEmailTermo}", negrito = true)
     writeln(" WhatsApp: (86) 99978-0752", negrito = true)
     writeln("")
-        val volumeRec = bean.volumesRec?.toString() ?: "0"
+    val volumeRec = bean.volumesRec?.toString() ?: "0"
     writeln("Termo de Recebimento de Volume(s) - NI ${bean.ni}", negrito = true, center = true)
     printLine(' ')
     if (bean.volumesDivergencia()) {

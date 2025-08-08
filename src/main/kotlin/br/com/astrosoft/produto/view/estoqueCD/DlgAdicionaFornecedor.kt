@@ -122,7 +122,7 @@ class DlgAdicionaFornecedor(
     val user = AppConfig.userLogin()
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
     val fornecedor = edtVendno?.value ?: 0
-    if(fornecedor == 0) {
+    if (fornecedor == 0) {
       return emptyList()
     }
     val filtro = FiltroProdutoEstoque(

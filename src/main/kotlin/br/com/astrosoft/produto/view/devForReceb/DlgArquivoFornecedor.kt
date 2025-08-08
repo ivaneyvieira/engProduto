@@ -4,9 +4,6 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.FornecedorArquivo
 import br.com.astrosoft.produto.model.beans.FornecedorClass
-import br.com.astrosoft.produto.model.beans.InvFileDev
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaAcertoViewModel
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaFornecedorViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand

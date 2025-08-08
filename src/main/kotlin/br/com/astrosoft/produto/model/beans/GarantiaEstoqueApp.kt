@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.estoque
-import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class GarantiaEstoqueApp(

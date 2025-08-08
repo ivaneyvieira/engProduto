@@ -61,7 +61,7 @@ class NotaRecebimentoDev(
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
   val situacaoDevName
-    get() = produtos.mapNotNull{
+    get() = produtos.mapNotNull {
       EStituacaoDev.findByNum(it.situacaoDev ?: 0)?.descricao
     }.distinct().joinToString(", ")
 

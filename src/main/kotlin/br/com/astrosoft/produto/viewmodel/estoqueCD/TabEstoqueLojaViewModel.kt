@@ -8,7 +8,6 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoque
-import java.time.LocalDate
 
 class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView

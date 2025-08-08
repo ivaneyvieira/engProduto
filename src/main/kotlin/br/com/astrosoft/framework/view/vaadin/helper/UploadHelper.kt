@@ -6,7 +6,6 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.upload.FileRejectedEvent
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
-import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer
 
 fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit) {
   uploadFile(label) { buffer, upload ->

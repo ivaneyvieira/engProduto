@@ -1,19 +1,17 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.produto.model.beans.FornecedorClass
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaFornecedorViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.textArea
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextArea
-import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgEditaFornecedor(
   val viewModel: TabNotaFornecedorViewModel,

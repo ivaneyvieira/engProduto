@@ -3,22 +3,18 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroFornecedor
+import br.com.astrosoft.produto.model.beans.FornecedorArquivo
+import br.com.astrosoft.produto.model.beans.FornecedorClass
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaFornecedor
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaNulo
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaFornecedorViewModel
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNuloViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 

@@ -279,16 +279,16 @@ abstract class ReportBuild<T> {
     return report()
       .title(titleBuider(propriedades))
       .setTemplate(Templates.reportTemplate)
-      .columns(* colunms)
+      .columns(*colunms)
       .apply {
-        if (grupos.isNotEmpty()) this.columnGrid(* grupos)
-        else this.columnGrid(* colunms)
+        if (grupos.isNotEmpty()) this.columnGrid(*grupos)
+        else this.columnGrid(*colunms)
       }
       .setDataSource(itens)
       .setPageFormat(propriedades.pageType, propriedades.pageOrientation)
       .setPageMargin(margin(propriedades.margem))
       .summary(pageFooterBuilder())
-      .subtotalsAtSummary(* subtotalBuilder().toTypedArray())
+      .subtotalsAtSummary(*subtotalBuilder().toTypedArray())
       .setSubtotalStyle(stl.style().setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
       .setColumnStyle(

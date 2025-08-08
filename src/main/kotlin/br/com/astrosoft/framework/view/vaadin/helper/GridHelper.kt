@@ -18,7 +18,6 @@ import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.vaadin.miki.superfields.numbers.SuperBigDecimalField
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import java.math.BigDecimal
 import java.time.LocalDate

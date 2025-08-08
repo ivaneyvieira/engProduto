@@ -14,7 +14,7 @@ data class TermoRecebimento(
   val volumesInf: Int?,
   val volumesRec: Int?,
   val pesoBruto: Double?,
-){
+) {
   fun volumesDivergencia(): Boolean {
     return (volumesInf ?: 0) != (volumesRec ?: 0)
   }

@@ -442,7 +442,6 @@ class UserSaci : IUser {
       lojas = lojas.setValue(35, value.joinToString(":"))
     }
 
-
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

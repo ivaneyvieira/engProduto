@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.produto.model.beans.Fornecedor
 import br.com.astrosoft.produto.model.beans.FornecedorClass
 import br.com.astrosoft.produto.model.beans.Representante
 import com.vaadin.flow.component.grid.Grid

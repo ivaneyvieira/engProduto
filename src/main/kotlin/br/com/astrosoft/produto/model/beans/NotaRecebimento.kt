@@ -2,8 +2,6 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
-import kotlin.Int
-import kotlin.String
 
 class NotaRecebimento(
   var loja: Int?,
@@ -261,7 +259,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         empNomeTermo = nota.empNomeTermo,
         empCpfTermo = nota.empCpfTermo,
         empEmailTermo = nota.empEmailTermo,
-        )
+      )
     }
   }
 }
