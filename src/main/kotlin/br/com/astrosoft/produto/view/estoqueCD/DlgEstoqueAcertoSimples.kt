@@ -102,6 +102,14 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
                 viewModel.removeAcerto()
               }
             }
+
+            this.button("Grava") {
+              this.icon = VaadinIcon.CHECK.create()
+              this.addClickListener {
+                gravaProdutos()
+                updateGrid(false)
+              }
+            }
           }
           horizontalBlock {
             this.isSpacing = true
@@ -239,10 +247,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       columnGrid(ProdutoEstoqueAcerto::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoEstoqueAcerto::diferencaAcerto, "Dif", width = "5rem")
       columnGrid(ProdutoEstoqueAcerto::estoqueReal, "Est Real")
-
-      this.addSelectionListener {
-        updateProdutos()
-      }
     }
     this.addAndExpand(gridDetail)
     update()
@@ -341,19 +345,23 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }
   }
 
-  private fun updateGrid() {
+  private fun updateGrid(usaFiltro: Boolean = true) {
+    val findProdutos = if(usaFiltro) {
+      findProdutos()
+    } else {
+      emptyList()
+    }
     val selecionados = (gridDetail.selectedItems.toList() + estoqueAcertos()).distinct()
-    val produtos = findProdutos().filter {
+    val produtos = findProdutos.filter {
       it !in selecionados
     }
     gridDetail.setItems(selecionados + produtos)
     selecionados.forEach {
       gridDetail.select(it)
     }
-    updateProdutos()
   }
 
-  private fun updateProdutos() {
+  private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
     viewModel.updateProduto(selecionados)
   }
