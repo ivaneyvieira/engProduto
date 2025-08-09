@@ -26,9 +26,11 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
+  private var edtPesquisa2: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
   private var edtSaldo: IntegerField? = null
+  private var edtSaldo2: IntegerField? = null
   private var edtTipo: IntegerField? = null
   private var edtCL: IntegerField? = null
 
@@ -106,7 +108,16 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
             this.isSpacing = true
             this.setWidthFull()
 
-            edtPesquisa = textField("Pesquisa") {
+            edtPesquisa = textField("Inicial") {
+              this.width = "200px"
+              this.valueChangeTimeout = 500
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtPesquisa2 = textField("Final") {
               this.width = "200px"
               this.valueChangeTimeout = 500
               this.valueChangeMode = ValueChangeMode.LAZY
@@ -176,13 +187,29 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
               this.value = EEstoque.TODOS
               addValueChangeListener {
+                val value = it.value
+                edtSaldo2?.isVisible = value == EEstoque.ENTRE
+                edtSaldo?.isVisible = value != EEstoque.TODOS
+                edtSaldo?.label = if(value == EEstoque.ENTRE) "Saldo Inicial" else "Saldo"
                 updateGrid()
               }
             }
 
             edtSaldo = integerField("Saldo") {
               this.width = "80px"
-              //this.isClearButtonVisible = true
+              this.isVisible = false
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.valueChangeTimeout = 1500
+              this.value = 0
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtSaldo2 = integerField("Saldo Final") {
+              this.width = "80px"
+              this.isVisible = false
               this.valueChangeMode = ValueChangeMode.LAZY
               this.valueChangeTimeout = 1500
               this.value = 0
@@ -267,7 +294,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
 
   private fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val user = AppConfig.userLogin()
-    val pesquisa = edtPesquisa?.value ?: ""
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
     val codPrd = edtCodPrd?.value ?: 0
     val codFor = edtCodFor?.value ?: 0
@@ -275,10 +301,11 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val cl = edtCL?.value ?: 0
     val estoque = cmbEstoque?.value ?: EEstoque.TODOS
     val saldo = edtSaldo?.value ?: 0
+    val saldo2 = edtSaldo2?.value ?: 0
 
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
-      pesquisa = pesquisa,
+      pesquisa = "",
       codigo = codPrd,
       grade = "",
       caracter = caracter,
@@ -292,7 +319,12 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       codFor == 0 ||
       it.codForn == codFor
     }.filter {
-      pesquisa.isBlank() || it.descricao?.contains(pesquisa, ignoreCase = true) == true
+      val pesquisa = edtPesquisa?.value ?: ""
+      val pesquisa2 = "${edtPesquisa2?.value ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      val descricao = it.descricao ?: ""
+      pesquisa.isBlank() || (
+          descricao in pesquisa..pesquisa2
+                            )
     }.filter {
       val saldoSaci = it.saldo ?: 0
       estoque == EEstoque.TODOS ||
@@ -300,6 +332,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         EEstoque.IGUAL -> saldoSaci == saldo
         EEstoque.MAIOR -> saldoSaci > saldo
         EEstoque.MENOR -> saldoSaci < saldo
+        EEstoque.ENTRE -> saldoSaci in saldo..saldo2
         else           -> false
       }
     }.filter {
