@@ -321,11 +321,15 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       it.codForn == codFor
     }.filter {
       val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-      val pesquisa2 =
-          "${edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-      val descricao = it.descricao ?: ""
+      val pesquisa2 = edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""
+      val pesquisa3 = if (pesquisa2.isBlank()) {
+        "${pesquisa}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      } else {
+        "${pesquisa2}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      }
+      val descricao = it.descricao?.trim() ?: ""
       pesquisa.isBlank() || (
-          descricao in pesquisa..pesquisa2
+          descricao in pesquisa..pesquisa3
                             )
     }.filter {
       val saldoSaci = it.saldo ?: 0

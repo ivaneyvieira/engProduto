@@ -81,7 +81,7 @@ enum class EEstoque(val value: String, val descricao: String) {
   MAIOR(">", ">"),
   IGUAL("=", "="),
   TODOS("T", "Todos"),
-  ENTRE("E", "Entre"),
+  ENTRE("E", "De"),
 }
 
 enum class ETipoSaldo(val descricao: String) {
