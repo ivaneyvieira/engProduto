@@ -191,7 +191,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
                 val value = it.value
                 edtSaldo2?.isVisible = value == EEstoque.ENTRE
                 edtSaldo?.isVisible = value != EEstoque.TODOS
-                edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Inicial" else "Saldo"
+                edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Ini" else "Saldo"
                 updateGrid()
               }
             }
@@ -208,7 +208,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtSaldo2 = integerField("Saldo Final") {
+            edtSaldo2 = integerField("Saldo Fin") {
               this.width = "80px"
               this.isVisible = false
               this.valueChangeMode = ValueChangeMode.LAZY
