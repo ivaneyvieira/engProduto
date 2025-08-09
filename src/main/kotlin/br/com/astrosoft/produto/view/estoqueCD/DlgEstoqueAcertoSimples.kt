@@ -316,6 +316,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       uso = EUso.TODOS,
       listaUser = listOf("TODOS"),
     )
+
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
       codFor == 0 ||
       it.codForn == codFor
