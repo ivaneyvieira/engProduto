@@ -73,7 +73,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
                 viewModel.gravaAcerto(acerto)
-                closeForm()
               }
             }
 
@@ -257,7 +256,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     return acerto.findProdutos(true)
   }
 
-  private fun closeForm() {
+  fun closeForm() {
     onClose?.invoke()
     form?.close()
   }

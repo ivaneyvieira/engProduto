@@ -94,8 +94,8 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     if (acerto.gravado == true) {
       fail("Acerto já gravado")
     }
-    subView.gravaSelecao()
     subView.autorizaAcerto { user ->
+      subView.gravaSelecao()
       val pordutos = acerto.findProdutos(true)
       pordutos.forEach {
         it.gravadoLogin = user.no
@@ -103,6 +103,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
         it.save()
       }
       updateView()
+      subView.closeForm()
     }
   }
 
@@ -192,4 +193,5 @@ interface ITabEstoqueAcertoSimples : ITabView {
   fun produtosSelecionado(): List<ProdutoEstoqueAcerto>
   fun adicionaAcerto(acerto: EstoqueAcerto)
   fun gravaSelecao()
+  fun closeForm()
 }

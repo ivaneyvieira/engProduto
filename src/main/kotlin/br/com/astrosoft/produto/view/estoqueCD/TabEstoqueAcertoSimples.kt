@@ -188,6 +188,10 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     dlgEstoque?.gravaSelecao()
   }
 
+  override fun closeForm() {
+    dlgEstoque?.closeForm()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueAcertoSimples == true
