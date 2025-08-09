@@ -184,6 +184,10 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     updateGrid(list)
   }
 
+  override fun gravaSelecao() {
+    dlgEstoque?.gravaSelecao()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueAcertoSimples == true

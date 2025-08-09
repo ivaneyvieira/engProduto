@@ -102,14 +102,6 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
                 viewModel.removeAcerto()
               }
             }
-
-            this.button("Grava") {
-              this.icon = VaadinIcon.CHECK.create()
-              this.addClickListener {
-                gravaProdutos()
-                updateGrid(false)
-              }
-            }
           }
           horizontalBlock {
             this.isSpacing = true
@@ -346,7 +338,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   }
 
   private fun updateGrid(usaFiltro: Boolean = true) {
-    val findProdutos = if(usaFiltro) {
+    val findProdutos = if (usaFiltro) {
       findProdutos()
     } else {
       emptyList()
@@ -379,5 +371,10 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         gridDetail.deselectAll()
       }
     }
+  }
+
+  fun gravaSelecao() {
+    gravaProdutos()
+    updateGrid(false)
   }
 }
