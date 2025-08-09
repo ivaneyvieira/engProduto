@@ -16,6 +16,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: EstoqueAcerto) {
   private var onClose: (() -> Unit)? = null
@@ -319,8 +321,8 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       codFor == 0 ||
       it.codForn == codFor
     }.filter {
-      val pesquisa = edtPesquisa?.value ?: ""
-      val pesquisa2 = "${edtPesquisa2?.value ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
+      val pesquisa2 = "${edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
       val descricao = it.descricao ?: ""
       pesquisa.isBlank() || (
           descricao in pesquisa..pesquisa2
