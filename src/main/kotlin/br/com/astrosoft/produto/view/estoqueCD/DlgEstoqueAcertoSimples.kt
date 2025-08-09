@@ -16,7 +16,6 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.util.Locale
 import java.util.Locale.getDefault
 
 class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: EstoqueAcerto) {
@@ -192,7 +191,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
                 val value = it.value
                 edtSaldo2?.isVisible = value == EEstoque.ENTRE
                 edtSaldo?.isVisible = value != EEstoque.TODOS
-                edtSaldo?.label = if(value == EEstoque.ENTRE) "Saldo Inicial" else "Saldo"
+                edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Inicial" else "Saldo"
                 updateGrid()
               }
             }
@@ -322,7 +321,8 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       it.codForn == codFor
     }.filter {
       val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-      val pesquisa2 = "${edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      val pesquisa2 =
+          "${edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
       val descricao = it.descricao ?: ""
       pesquisa.isBlank() || (
           descricao in pesquisa..pesquisa2
@@ -334,7 +334,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         EEstoque.IGUAL -> saldoSaci == saldo
         EEstoque.MAIOR -> saldoSaci > saldo
         EEstoque.MENOR -> saldoSaci < saldo
-        EEstoque.ENTRE -> saldoSaci in saldo..saldo2
+        EEstoque.ENTRE -> (saldoSaci > saldo) && (saldoSaci < saldo2)
         else           -> false
       }
     }.filter {
