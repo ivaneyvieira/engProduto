@@ -255,6 +255,14 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         saveEditor = {
           viewModel.updateProduto(it.bean)
           abreProximo(it.bean)
+        },
+        canEdit = {
+          if (acerto.processado == true) {
+            DialogHelper.showWarning("Acerto já processado")
+            false
+          } else {
+            true
+          }
         }
       )
 
