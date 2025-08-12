@@ -4,8 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEmail
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEmailViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaRetornoNFD
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaRetornoNFDViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -20,10 +20,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaEmail {
-  private var dlgProduto: DlgProdutosNotaEmail? = null
-  private var dlgArquivo: DlgArquivoNotaEmail? = null
+class TabNotaRetornoNFD(val viewModel: TabNotaRetornoNFDViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaRetornoNFD {
+  private var dlgProduto: DlgProdutosNotaRetornoNFD? = null
+  private var dlgArquivo: DlgArquivoNotaRetornoNFD? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -59,10 +59,10 @@ class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
       }
     }
 
-    button("Pedido") {
+    button("E-Mail") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
+        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
       }
     }
   }
@@ -84,7 +84,7 @@ class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaEmail(viewModel, nota)
+      dlgProduto = DlgProdutosNotaRetornoNFD(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -95,7 +95,7 @@ class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaEmail(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaRetornoNFD(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -148,7 +148,7 @@ class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaEmail(viewModel, nota)
+    dlgProduto = DlgProdutosNotaRetornoNFD(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -156,11 +156,11 @@ class TabNotaRetornoNFD(val viewModel: TabNotaEmailViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaEmail == true
+    return username?.devFor2NotaRetornoNFD == true
   }
 
   override val label: String
-    get() = "E-mail"
+    get() = "Retorno NFD"
 
   override fun updateComponent() {
     viewModel.updateView()

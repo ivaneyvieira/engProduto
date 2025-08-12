@@ -23,6 +23,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::devFor2NotaGarantia, "Garantia")
     columnGrid(UserSaci::devFor2NotaTransportadora, "Transportadora")
     columnGrid(UserSaci::devFor2NotaEmail, "E-Mail")
+    columnGrid(UserSaci::devFor2NotaRetornoNFD, "Retorno NFD")
     columnGrid(UserSaci::devFor2NotaReposto, "Reposto")
     columnGrid(UserSaci::devFor2NotaAcerto, "Acerto")
     columnGrid(UserSaci::devFor2NotaAcertoPago, "Acerto Pago")
@@ -73,6 +74,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
         checkBox("E-Mail") {
           binder.bind(this, UserSaci::devFor2NotaEmail.name)
+        }
+
+        checkBox("Retorno NFD") {
+          binder.bind(this, UserSaci::devFor2NotaRetornoNFD.name)
         }
 
         checkBox("Reposto") {
