@@ -164,8 +164,14 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): 
 
 fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
-  return grupos.mapNotNull {
-    val acerto = it.value.firstOrNull() ?: return@mapNotNull null
+  return grupos.mapNotNull { mapAcerto ->
+    val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
+    val lista = mapAcerto.value
+    val processado = if (lista.all { (it.diferenca ?: 0) == 0 }) {
+      true
+    } else {
+      lista.all { it.processado == true }
+    }
 
     EstoqueAcerto(
       numero = acerto.numero ?: return@mapNotNull null,
@@ -175,10 +181,10 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       hora = acerto.hora ?: return@mapNotNull null,
       login = acerto.login,
       usuario = acerto.usuario,
-      processado = it.value.map { it.processado }.maxBy { it ?: false },
-      acertoSimples = it.value.firstOrNull()?.acertoSimples ?: false,
-      transacaoEnt = it.value.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
-      transacaoSai = it.value.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
+      processado = processado,
+      acertoSimples = lista.firstOrNull()?.acertoSimples ?: false,
+      transacaoEnt = lista.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
+      transacaoSai = lista.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
       observacao = acerto.observacao,
       gravado = acerto.gravado,
@@ -194,7 +200,7 @@ class EstoqueAcerto(
   var hora: LocalTime,
   var login: String?,
   var usuario: String?,
-  var processado: Boolean?,
+  var processado: Boolean,
   var acertoSimples: Boolean?,
   var transacaoEnt: String?,
   var transacaoSai: String?,
@@ -203,7 +209,7 @@ class EstoqueAcerto(
   var gravado: Boolean?,
 ) {
   val processadoStr
-    get() = if (processado == true) "Sim" else "Não"
+    get() = if (processado) "Sim" else "Não"
 
   val gravadoLoginStr: String
     get() {
