@@ -59,10 +59,10 @@ class TabNotaRetornoNFD(val viewModel: TabNotaRetornoNFDViewModel) :
       }
     }
 
-    button("E-Mail") {
+    button("Pedido") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }
