@@ -167,11 +167,14 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
   return grupos.mapNotNull { mapAcerto ->
     val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
     val lista = mapAcerto.value
+    /*
     val processado = if (lista.all { (it.diferenca ?: 0) == 0 }) {
       true
     } else {
       lista.all { it.processado == true }
     }
+     */
+    val processado = lista.any { it.processado == true }
 
     EstoqueAcerto(
       numero = acerto.numero ?: return@mapNotNull null,
