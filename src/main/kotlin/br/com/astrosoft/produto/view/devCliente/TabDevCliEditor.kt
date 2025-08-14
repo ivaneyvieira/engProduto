@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
@@ -113,6 +114,15 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
 
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
+  }
+
+  override fun ajustaProduto(nota: EntradaDevCli) {
+    val form = FormAjustaProduto(nota)
+    DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
+      form.listAjustes().forEach { ajuste ->
+        viewModel.ajusteProduto(ajuste)
+      }
+    }
   }
 
   override fun isAuthorized(): Boolean {

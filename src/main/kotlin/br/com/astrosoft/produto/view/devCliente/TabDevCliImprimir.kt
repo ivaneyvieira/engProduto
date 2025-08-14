@@ -123,6 +123,15 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     }
   }
 
+  override fun ajustaProduto(nota: EntradaDevCli) {
+    val form = FormAjustaProduto(nota)
+    DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
+      form.listAjustes().forEach { ajuste ->
+        viewModel.ajusteProduto(ajuste)
+      }
+    }
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliImprimir == true

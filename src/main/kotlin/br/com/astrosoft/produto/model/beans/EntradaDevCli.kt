@@ -58,6 +58,7 @@ class EntradaDevCli(
     }
 
   fun produtos() = saci.entradaDevCliPro(invno)
+
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(
       invno = invno,

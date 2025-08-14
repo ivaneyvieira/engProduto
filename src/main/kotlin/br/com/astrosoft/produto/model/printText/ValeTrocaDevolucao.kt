@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.printText
 
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
@@ -56,6 +57,19 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }
+  }
+
+  override fun groupBotton(beanDetail: EntradaDevCliPro): String {
+    val tipo = beanDetail.tipo ?: ""
+    return if (tipo.startsWith("TROCA M")) {
+      beanDetail.tipoPrd ?: ""
+    } else {
+      ""
+    }
+  }
+
+  override fun print(dados: List<EntradaDevCliPro>, printer: IPrinter) {
+    super.print(dados.sortedBy { it.tipoPrd }, printer)
   }
 
   override fun printTitle(bean: EntradaDevCliPro) {

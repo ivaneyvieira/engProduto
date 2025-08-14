@@ -14,7 +14,7 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
   }
 
   override fun groupBotton(beanDetail: EntradaDevCliProList): String {
-    val finalTroca = beanDetail.observacao?.split(")")?.getOrNull(1)?.trim() ?: ""
+    val finalTroca = beanDetail.tipoPrd ?: beanDetail.tipo
     return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} - ${beanDetail.userLogin}"
   }
 

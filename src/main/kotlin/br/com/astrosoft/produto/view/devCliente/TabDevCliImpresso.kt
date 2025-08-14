@@ -133,7 +133,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
     val form = FormAjustaProduto(nota)
     DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
       form.listAjustes().forEach { ajuste ->
-        viewModel.ajusteProduto(nota, ajuste)
+        viewModel.ajusteProduto(ajuste)
       }
     }
   }

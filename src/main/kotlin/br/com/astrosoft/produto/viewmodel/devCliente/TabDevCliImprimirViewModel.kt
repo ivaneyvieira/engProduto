@@ -23,7 +23,17 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     subView.updateNotas(notas)
   }
 
+  fun ajusteProduto(ajuste: AjusteProduto) {
+    val produto = ajuste.produto
+    produto.marcaAjuste(ajuste)
+  }
+
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
+    if (!nota.isTrocaMAjustadas()) {
+      subView.ajustaProduto(nota)
+      return@exec
+    }
+
     val user = AppConfig.userLogin() as? UserSaci
     val assinado = nota.nameAutorizacao?.isBlank() == false
     val valorNota = nota.valor ?: 0.00
@@ -151,6 +161,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 interface ITabDevCliImprimir : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
-
   fun formAutoriza(nota: EntradaDevCli)
+  fun ajustaProduto(nota: EntradaDevCli)
 }

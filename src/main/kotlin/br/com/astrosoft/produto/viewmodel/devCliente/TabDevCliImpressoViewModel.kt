@@ -26,11 +26,11 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) {
-    if(!nota.isTrocaMAjustadas()) {
+    if (!nota.isTrocaMAjustadas()) {
       subView.ajustaProduto(nota)
     }
 
-    if(nota.isTrocaMAjustadas()) {
+    if (nota.isTrocaMAjustadas()) {
       val relatorio = ValeTrocaDevolucao(nota, nota.nameAutorizacao ?: "")
       relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) {
         updateView()
@@ -80,13 +80,9 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun ajusteProduto(nota: EntradaDevCli, ajuste: AjusteProduto) {
-    val produtos = nota.produtos().filter {
-      it.prdno == ajuste.prdno && it.grade == ajuste.grade
-    }
-    produtos.forEach {produto ->
-      produto.marcaAjuste(ajuste)
-    }
+  fun ajusteProduto(ajuste: AjusteProduto) {
+    val produto = ajuste.produto
+    produto.marcaAjuste(ajuste)
   }
 
   val subView

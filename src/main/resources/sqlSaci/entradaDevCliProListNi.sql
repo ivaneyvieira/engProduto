@@ -25,20 +25,24 @@ WHERE (I.invno IN (:listNi))
   AND (I.bits & POW(2, 4) = 0)
   AND I.account = '2.01.25';
 
-SELECT CAST(data AS DATE)        AS data,
-       I.codLoja                 AS codLoja,
-       I.loja                    AS loja,
-       X.prdno                   AS prdno,
-       U.name                    AS userName,
-       U.login                   AS userLogin,
-       TRIM(X.prdno)             AS codigo,
-       TRIM(MID(P.name, 1, 37))  AS descricao,
-       X.grade                   AS grade,
-       SUM(ROUND(X.qtty / 1000)) AS quantidade,
-       observacao                AS observacao,
-       I.invno                   AS ni,
-       I.nota                    AS nota,
-       I.valor                   AS valor
+DROP TEMPORARY TABLE IF EXISTS T_RESULT;
+CREATE TEMPORARY TABLE T_RESULT
+SELECT CAST(data AS DATE)                                                  AS data,
+       I.codLoja                                                           AS codLoja,
+       I.loja                                                              AS loja,
+       X.prdno                                                             AS prdno,
+       U.name                                                              AS userName,
+       U.login                                                             AS userLogin,
+       TRIM(X.prdno)                                                       AS codigo,
+       TRIM(MID(P.name, 1, 37))                                            AS descricao,
+       X.grade                                                             AS grade,
+       SUM(ROUND(X.qtty / 1000))                                           AS quantidade,
+       observacao                                                          AS observacao,
+       TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(observacao, ')', 2), ')', -1)) AS tipo,
+       X.c10                                                               AS tipoPrd,
+       I.invno                                                             AS ni,
+       I.nota                                                              AS nota,
+       I.valor                                                             AS valor
 FROM
   T_NOTA                      AS I
     INNER JOIN sqldados.iprd  AS X
@@ -48,6 +52,25 @@ FROM
     LEFT JOIN  sqldados.users AS U
                ON U.no = I.userno
 GROUP BY I.codLoja, X.prdno, X.grade, I.observacao
-ORDER BY descricao, grade, codigo
+ORDER BY descricao, grade, codigo;
+
+SELECT data,
+       codLoja,
+       loja,
+       prdno,
+       userName,
+       userLogin,
+       codigo,
+       descricao,
+       grade,
+       quantidade,
+       observacao,
+       tipo,
+       IF(tipo LIKE 'TROCA M%', tipoPrd, tipo) AS tipoPrd,
+       ni,
+       nota,
+       valor
+FROM
+  T_RESULT
 
 
