@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class EntradaDevCliPro(
   var invno: Int,
   var codLoja: Int,
@@ -16,7 +18,7 @@ class EntradaDevCliPro(
   var custno: Int?,
   var empno: Int?,
   var fornecedor: String?,
-  var prdno: Int?,
+  var prdno: String?,
   var codigo: String?,
   var grade: String?,
   var descricao: String?,
@@ -25,7 +27,13 @@ class EntradaDevCliPro(
   var valorTotal: Double?,
   var cliente: String?,
   var vendedor: String?,
+  var tipo: String?,
+  var tipoPrd: String?,
 ) {
+  fun marcaAjuste(ajuste: AjusteProduto) {
+    saci.marcaAjuste(this, ajuste)
+  }
+
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 }

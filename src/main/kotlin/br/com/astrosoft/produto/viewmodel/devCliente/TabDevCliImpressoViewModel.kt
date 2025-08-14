@@ -26,10 +26,16 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) {
-    val relatorio = ValeTrocaDevolucao(nota, nota.nameAutorizacao ?: "")
-    relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) {
-      updateView()
-    })
+    if(!nota.isTrocaMAjustadas()) {
+      subView.ajustaProduto(nota)
+    }
+
+    if(nota.isTrocaMAjustadas()) {
+      val relatorio = ValeTrocaDevolucao(nota, nota.nameAutorizacao ?: "")
+      relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) {
+        updateView()
+      })
+    }
   }
 
   fun imprimeRelatorio() {
@@ -74,6 +80,15 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun ajusteProduto(nota: EntradaDevCli, ajuste: AjusteProduto) {
+    val produtos = nota.produtos().filter {
+      it.prdno == ajuste.prdno && it.grade == ajuste.grade
+    }
+    produtos.forEach {produto ->
+      produto.marcaAjuste(ajuste)
+    }
+  }
+
   val subView
     get() = viewModel.view.tabDevCliImpresso
 }
@@ -82,4 +97,5 @@ interface ITabDevCliImpresso : ITabView {
   fun filtro(): FiltroEntradaDevCli
   fun updateNotas(notas: List<EntradaDevCli>)
   fun itensNotasSelecionados(): List<EntradaDevCli>
+  fun ajustaProduto(nota: EntradaDevCli)
 }

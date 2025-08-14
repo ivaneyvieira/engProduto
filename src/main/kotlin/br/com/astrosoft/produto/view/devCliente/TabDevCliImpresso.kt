@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliImpresso
@@ -130,6 +127,15 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
 
   override fun itensNotasSelecionados(): List<EntradaDevCli> {
     return itensSelecionados()
+  }
+
+  override fun ajustaProduto(nota: EntradaDevCli) {
+    val form = FormAjustaProduto(nota)
+    DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
+      form.listAjustes().forEach { ajuste ->
+        viewModel.ajusteProduto(nota, ajuste)
+      }
+    }
   }
 
   override fun printerUser(): List<String> {

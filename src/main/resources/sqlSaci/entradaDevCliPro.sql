@@ -65,7 +65,9 @@ SELECT I.invno,
        (X.qtty / 1000) * (X.fob / 100)                                               AS valorTotal,
        TRIM(MID(P.name, 1, 37))                                                      AS descricao,
        IFNULL(I.cliente, C.name)                                                     AS cliente,
-       MID(IFNULL(I.vendedor, E.sname), 1, 15)                                       AS vendedor
+       MID(IFNULL(I.vendedor, E.sname), 1, 15)                                       AS vendedor,
+       @TIPO := TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(N.remarks, ')', 2), ')', -1))   AS tipo,
+       IF(@TIPO LIKE 'TROCA M%', X.c10, @TIPO)                                       AS tipoPrd
 FROM
   T_NOTA                      AS I
     LEFT JOIN  sqldados.nf    AS N

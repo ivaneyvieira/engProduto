@@ -149,6 +149,17 @@ class EntradaDevCli(
     )
   }
 
+  fun isTrocaMAjustadas(): Boolean {
+    return if (this.tipoObs.startsWith("TROCA M")) {
+      val produtos = produtos()
+      produtos.all {
+        (it.tipoPrd?.trim() ?: "") != ""
+      }
+    } else {
+      true
+    }
+  }
+
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
   }
