@@ -186,7 +186,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     }
     promocaoCFinanceiro()
     promocaoPrecoCusto().apply {
-      this.setClassNameGenerator {
+      this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
