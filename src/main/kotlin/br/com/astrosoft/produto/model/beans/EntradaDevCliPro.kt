@@ -39,8 +39,8 @@ class EntradaDevCliPro(
 
   fun isTipoMisto(): Boolean {
     val tipoNota = this.tipo ?: ""
-    return tipoNota.startsWith("TROCA M") ||
-           tipoNota.startsWith("ESTORNO M") ||
-           tipoNota.startsWith("REEMBOLSO M")
+    return "TRO.* M.*".toRegex().matches(tipoNota) ||
+           "EST.* M.*".toRegex().matches(tipoNota) ||
+           "REE.* M.*".toRegex().matches(tipoNota)
   }
 }

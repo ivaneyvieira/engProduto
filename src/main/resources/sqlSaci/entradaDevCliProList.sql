@@ -74,9 +74,9 @@ SELECT data,
        quantidade,
        observacao,
        tipo,
-       IF(tipo LIKE 'TROCA M%' OR
-          tipo LIKE 'ESTORNO M%' OR
-          tipo LIKE 'REEMBOLSO M%', tipoPrd, tipo) AS tipoPrd,
+       IF(tipo REGEXP '^TRO.* M.*' OR
+          tipo REGEXP '^EST.* M.*' OR
+          tipo REGEXP '^REE.* M.*', tipoPrd, tipo) AS tipoPrd,
        ni,
        nota,
        valor

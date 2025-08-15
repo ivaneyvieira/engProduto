@@ -151,9 +151,9 @@ class EntradaDevCli(
   }
 
   fun isTipoMisto(): Boolean {
-    return this.tipoObs.startsWith("TROCA M") ||
-           this.tipoObs.startsWith("ESTORNO M") ||
-           this.tipoObs.startsWith("REEMBOLSO M")
+    return "TRO.* M.*".toRegex().matches(this.tipoObs) ||
+           "EST.* M.*".toRegex().matches(this.tipoObs) ||
+           "REE.* M.*".toRegex().matches(this.tipoObs)
   }
 
   fun isAjusteMisto(): Boolean {
