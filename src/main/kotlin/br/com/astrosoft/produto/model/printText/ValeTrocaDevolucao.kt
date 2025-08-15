@@ -60,8 +60,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
   }
 
   override fun groupBotton(beanDetail: EntradaDevCliPro): String {
-    val tipo = beanDetail.tipo ?: ""
-    return if (tipo.startsWith("TROCA M")) {
+    return if (beanDetail.isTipoMisto()) {
       beanDetail.tipoPrd ?: ""
     } else {
       ""

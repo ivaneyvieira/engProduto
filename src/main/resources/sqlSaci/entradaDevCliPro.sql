@@ -67,7 +67,9 @@ SELECT I.invno,
        IFNULL(I.cliente, C.name)                                                     AS cliente,
        MID(IFNULL(I.vendedor, E.sname), 1, 15)                                       AS vendedor,
        @TIPO := TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.remarks, ')', 2), ')', -1))   AS tipo,
-       IF(@TIPO LIKE 'TROCA M%', X.c10, @TIPO)                                       AS tipoPrd
+       IF(@TIPO LIKE 'TROCA M%' OR
+          @TIPO LIKE 'ESTORNO M%' OR
+          @TIPO LIKE 'REEMBOLSO M%', X.c10, @TIPO)                                   AS tipoPrd
 FROM
   T_NOTA                      AS I
     LEFT JOIN  sqldados.nf    AS N

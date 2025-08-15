@@ -150,8 +150,14 @@ class EntradaDevCli(
     )
   }
 
-  fun isTrocaMAjustadas(): Boolean {
-    return if (this.tipoObs.startsWith("TROCA M")) {
+  fun isTipoMisto(): Boolean {
+    return this.tipoObs.startsWith("TROCA M") ||
+           this.tipoObs.startsWith("ESTORNO M") ||
+           this.tipoObs.startsWith("REEMBOLSO M")
+  }
+
+  fun isAjusteMisto(): Boolean {
+    return if (isTipoMisto()) {
       val produtos = produtos()
       produtos.all {
         (it.tipoPrd?.trim() ?: "") != ""

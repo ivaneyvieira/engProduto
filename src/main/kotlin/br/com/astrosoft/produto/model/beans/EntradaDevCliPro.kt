@@ -36,4 +36,11 @@ class EntradaDevCliPro(
 
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
+
+  fun isTipoMisto(): Boolean {
+    val tipoNota = this.tipo ?: ""
+    return tipoNota.startsWith("TROCA M") ||
+           tipoNota.startsWith("ESTORNO M") ||
+           tipoNota.startsWith("REEMBOLSO M")
+  }
 }

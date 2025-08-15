@@ -74,7 +74,9 @@ SELECT data,
        quantidade,
        observacao,
        tipo,
-       IF(tipo LIKE 'TROCA M%', tipoPrd, tipo) AS tipoPrd,
+       IF(tipo LIKE 'TROCA M%' OR
+          tipo LIKE 'ESTORNO M%' OR
+          tipo LIKE 'REEMBOLSO M%', tipoPrd, tipo) AS tipoPrd,
        ni,
        nota,
        valor

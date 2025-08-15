@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.produto.model.beans.AjusteProduto
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
-import com.github.mvysny.karibudsl.v10.checkBox
-import com.github.mvysny.karibudsl.v10.isExpand
-import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.karibudsl.v10.verticalLayout
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -45,7 +42,9 @@ private class Linha(val produto: EntradaDevCliPro) : HorizontalLayout() {
     this.isMargin = false
     this.width = "600px"
 
-
+    content {
+      align(horizontalAlignment = right, verticalAlignment = bottom)
+    }
 
     textField("Código") {
       this.isReadOnly = true
