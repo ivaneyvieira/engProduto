@@ -61,7 +61,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
 
   override fun groupBotton(beanDetail: EntradaDevCliPro): String {
     return if (beanDetail.isTipoMisto()) {
-      beanDetail.tipoPrd ?: ""
+      beanDetail.tipoPrdTratado()
     } else {
       ""
     }

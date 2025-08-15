@@ -30,6 +30,11 @@ class EntradaDevCliPro(
   var tipo: String?,
   var tipoPrd: String?,
 ) {
+  fun tipoPrdTratado(): String {
+    val temProduto = this.tipoPrd?.endsWith(" P") == true
+    return tipoNotaPre() + if (temProduto) " P" else ""
+  }
+
   fun marcaAjuste(ajuste: AjusteProduto) {
     saci.marcaAjuste(this, ajuste)
   }
@@ -42,5 +47,15 @@ class EntradaDevCliPro(
     return "TRO.* M.*".toRegex().matches(tipoNota) ||
            "EST.* M.*".toRegex().matches(tipoNota) ||
            "REE.* M.*".toRegex().matches(tipoNota)
+  }
+
+  fun tipoNotaPre(): String {
+    val tipoNota = this.tipo ?: return ""
+    return when {
+      "TRO.*".toRegex().matches(tipoNota) -> "TROCA"
+      "EST.*".toRegex().matches(tipoNota) -> "ESTORNO"
+      "REE.*".toRegex().matches(tipoNota) -> "REEMBOLSO"
+      else                                -> tipoNota
+    }
   }
 }

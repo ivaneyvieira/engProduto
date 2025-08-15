@@ -21,6 +21,28 @@ class EntradaDevCliProList(
   var tipo: String?,
   var tipoPrd: String?,
 ) {
+  fun tipoPrdTratado(): String {
+    val temProduto = this.tipoPrd?.endsWith(" P") == true
+    return tipoNotaPre() + if (temProduto) " P" else ""
+  }
+
+  fun tipoNotaPre(): String {
+    val tipoNota = this.tipo ?: return ""
+    return when {
+      "TRO.*".toRegex().matches(tipoNota) -> "TROCA"
+      "EST.*".toRegex().matches(tipoNota) -> "ESTORNO"
+      "REE.*".toRegex().matches(tipoNota) -> "REEMBOLSO"
+      else                                -> tipoNota
+    }
+  }
+
+  fun isTipoMisto(): Boolean {
+    val tipoNota = this.tipo ?: ""
+    return "TRO.* M.*".toRegex().matches(tipoNota) ||
+           "EST.* M.*".toRegex().matches(tipoNota) ||
+           "REE.* M.*".toRegex().matches(tipoNota)
+  }
+
   val observacao01: String
     get() {
       val parte1 = observacao?.split(")")?.getOrNull(0) ?: return ""
