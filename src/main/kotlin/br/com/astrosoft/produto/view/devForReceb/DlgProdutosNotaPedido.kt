@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -249,7 +250,15 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       }
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
-      columnGrid(NotaRecebimentoProdutoDev::ni, "NI").right()
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI"){
+        this.right()
+        this.setComparator {prd ->
+          val ni = (prd.ni ?: 0).toString().lpad(10, "0")
+          val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
+          val grade = (prd.grade ?: "").toString().lpad(10, "0")
+          "$ni$codigo$grade"
+        }
+      }
       columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
