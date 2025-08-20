@@ -197,26 +197,59 @@ fun VerticalLayout.formHeader(
 }
 
 private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
-  return if (this.motivoDevolucaoEnun == EMotivoDevolucao.AVARIA_TRANSPORTE) {
-    val temValorNulo: Boolean = nfEntrada == null || emissao == null
-    if (temValorNulo) {
-      ""
-    } else {
-      val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-      val linha2 = "Produto(s) Avariados(s) no Transporte Notificação No CTe"
-      val linha3 = "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomePropioCapitalize()}"
-      "$linha1\n$linha2\n$linha3"
+  return when (this.motivoDevolucaoEnun) {
+    EMotivoDevolucao.AVARIA_TRANSPORTE -> {
+      observacaoAvariaTransporte()
     }
-  } else {
-    ""
+
+    EMotivoDevolucao.ACORDO_COMERCIAL  -> {
+      observacaoAcordoComercial()
+    }
+
+    else                               -> {
+      ""
+    }
   }
 }
 
+private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
+  val temValorNulo: Boolean = nfEntrada == null || emissao == null
+  return if (temValorNulo) {
+    ""
+  } else {
+    val quantProdutos = this.produtos.size
+    val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
+    val linha2 = if (quantProdutos > 1) {
+      "Produto(s) Avariados(s) no Transporte Notificação No CTe"
+    } else {
+      "Produto Avariados no Transporte Notificação No CTe"
+    }
+    val linha3 =
+        "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomePropioCapitalize()}"
+    "$linha1\n$linha2\n$linha3"
+  }
+}
+
+private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
+  val produtos = this.produtos
+  val linha1 = if (produtos.size == 1) {
+    "Devolução Referente Acordo Comercial de Item da Nota"
+  } else {
+    "Devolução Referente Acordo Comercial de Itens da Notas"
+  }
+  val linha2 = if (produtos.size == 1) {
+    "Fiscal de Origem:"
+  } else {
+    "Fiscais de Origem:"
+  }
+  return "$linha1\n$linha2"
+}
+
 private fun String.nomePropioCapitalize(): String {
-  return this.split(" ").joinToString(" ") {palavra ->
+  return this.split(" ").joinToString(" ") { palavra ->
     val palavraMinuscula = palavra.lowercase()
     val preposicoes = listOf("de", "da", "do", "das", "dos", "e", "a", "o", "as", "os", "em", "para", "por")
-    if(palavraMinuscula in preposicoes){
+    if (palavraMinuscula in preposicoes) {
       palavraMinuscula
     } else {
       palavraMinuscula.replaceFirstChar { it.uppercase() }
