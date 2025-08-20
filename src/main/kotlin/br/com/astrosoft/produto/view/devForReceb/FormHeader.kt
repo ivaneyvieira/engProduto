@@ -203,12 +203,24 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       ""
     } else {
       val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-      val linha2 = "Produto(s) Avariados(s) no Transporte Notificação No Cte"
-      val linha3 = "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao}"
+      val linha2 = "Produto(s) Avariados(s) no Transporte Notificação No CTe"
+      val linha3 = "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomePropioCapitalize()}"
       "$linha1\n$linha2\n$linha3"
     }
   } else {
     ""
+  }
+}
+
+private fun String.nomePropioCapitalize(): String {
+  return this.split(" ").joinToString(" ") {palavra ->
+    val palavraMinuscula = palavra.lowercase()
+    val preposicoes = listOf("de", "da", "do", "das", "dos", "e", "a", "o", "as", "os", "em", "para", "por")
+    if(palavraMinuscula in preposicoes){
+      palavraMinuscula
+    } else {
+      palavraMinuscula.replaceFirstChar { it.uppercase() }
+    }
   }
 }
 
