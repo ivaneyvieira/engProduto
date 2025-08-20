@@ -211,6 +211,10 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       observacaoFaltaTransporte()
     }
 
+    EMotivoDevolucao.FALTA_FABRICA  -> {
+      observacaoFaltaFabrica()
+    }
+
     else                               -> {
       ""
     }
@@ -248,6 +252,14 @@ private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
 private fun NotaRecebimentoDev.observacaoFaltaTransporte(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
   val linha2 = "Falta No Transporte Notificado no CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()}"
+  val linha3 = "da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
+  return "$linha1\n$linha2\n$linha3"
+}
+
+
+private fun NotaRecebimentoDev.observacaoFaltaFabrica(): String {
+  val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
+  val linha2 = "Falta de Fabrica Notificado no CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()}"
   val linha3 = "da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
 }
