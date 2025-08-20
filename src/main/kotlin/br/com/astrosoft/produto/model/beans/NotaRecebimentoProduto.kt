@@ -283,7 +283,7 @@ enum class EMotivoDevolucao(
   ),
   FALTA_TRANSPORTE(num = 2, descricao = "Falta no Transporte", notasMultiplas = false, fob = false, divergente = false),
   FALTA_FABRICA(num = 3, descricao = "Falta de Fabrica", notasMultiplas = false, fob = false, divergente = false),
-  VENCIMENTO(num = 4, descricao = "Validade", notasMultiplas = false, false, divergente = false),
+  VALIDADE(num = 4, descricao = "Validade", notasMultiplas = false, false, divergente = false),
   DEFEITO_FABRICA(
     num = 7,
     descricao = "Defeito de Fabricação",
