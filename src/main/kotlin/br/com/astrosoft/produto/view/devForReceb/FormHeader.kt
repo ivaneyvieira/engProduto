@@ -221,9 +221,9 @@ private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   val quantProdutos = this.produtos.size
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
   val linha2 = if (quantProdutos == 1) {
-    "Produto Avariado no Transporte Notificação No CTe"
+    "Produto Avariado no Transporte Notificado No CTe"
   } else {
-    "Produtos Avariados no Transporte Notificação No CTe"
+    "Produtos Avariados no Transporte Notificado No CTe"
   }
   val linha3 =
       "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
@@ -247,7 +247,7 @@ private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
 
 private fun NotaRecebimentoDev.observacaoFaltaTransporte(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-  val linha2 = "Falta No Transporte no CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()}"
+  val linha2 = "Falta No Transporte Notificado no CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()}"
   val linha3 = "da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
 }
