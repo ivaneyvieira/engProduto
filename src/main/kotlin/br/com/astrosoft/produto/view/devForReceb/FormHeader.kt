@@ -219,6 +219,10 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       observacaoValidade()
     }
 
+    EMotivoDevolucao.EM_GARANTIA          -> {
+      observacaoGarantia()
+    }
+
     else                               -> {
       ""
     }
@@ -278,6 +282,17 @@ private fun NotaRecebimentoDev.observacaoValidade(): String {
   val linha3 =
       "CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
+}
+
+private fun NotaRecebimentoDev.observacaoGarantia(): String {
+  val produtos = this.produtos
+  val linha1 = if (produtos.size == 1) {
+    "Devolução de Item em Garantia Referente Nota Fiscal"
+  } else {
+    "Devolução de Itens em Garantia Referente Notas Fiscais"
+  }
+  val linha2 = "de Origem:"
+  return "$linha1\n$linha2"
 }
 
 private val preposicoes = setOf("de", "da", "do", "das", "dos", "e")
