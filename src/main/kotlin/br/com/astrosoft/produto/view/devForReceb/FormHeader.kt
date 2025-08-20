@@ -207,11 +207,9 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       observacaoAcordoComercial()
     }
 
-
     EMotivoDevolucao.FALTA_TRANSPORTE  -> {
       observacaoFaltaTransporte()
     }
-
 
     else                               -> {
       ""
@@ -220,21 +218,16 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
 }
 
 private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
-  val temValorNulo: Boolean = nfEntrada == null || emissao == null
-  return if (temValorNulo) {
-    ""
+  val quantProdutos = this.produtos.size
+  val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
+  val linha2 = if (quantProdutos == 1) {
+    "Produto Avariado no Transporte Notificação No CTe"
   } else {
-    val quantProdutos = this.produtos.size
-    val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-    val linha2 = if (quantProdutos == 1) {
-      "Produto Avariado no Transporte Notificação No CTe"
-    } else {
-      "Produtos Avariados no Transporte Notificação No CTe"
-    }
-    val linha3 =
-        "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
-    "$linha1\n$linha2\n$linha3"
+    "Produtos Avariados no Transporte Notificação No CTe"
   }
+  val linha3 =
+      "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
+  return "$linha1\n$linha2\n$linha3"
 }
 
 private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
