@@ -165,11 +165,24 @@ fun VerticalLayout.formHeader(
         this.isSpacing = true
         this.setWidthFull()
         textArea("Observação") {
+          this.width = "18rem"
+          this.height = "100%"
+          this.isExpand = true
+          this.isReadOnly = true
+          val obsAjustada = nota.obsDevolucaoAjustada()
+          val obsCalculado = nota.obsDevolucaoCalculada()
+          this.value = if (obsAjustada.isNullOrBlank()) {
+            obsCalculado
+          } else {
+            obsAjustada
+          }
+        }
+        textArea("Dados Adicionais") {
           this.isReadOnly = readOnly
           this.height = "100%"
           this.isExpand = true
-          //this.value = nota.observacaoAdicional ?: ""
-          this.value = nota.obsDevolucaoAjustada() ?: ""
+          this.value = nota.observacaoAdicional ?: ""
+          //this.value = nota.obsDevolucaoAjustada() ?: ""
 
           this.valueChangeMode = ValueChangeMode.LAZY
 
@@ -178,13 +191,6 @@ fun VerticalLayout.formHeader(
             salvaNota(nota)
           }
         }
-        textArea("Dados Adicionais") {
-          this.width = "18rem"
-          this.height = "100%"
-          this.isExpand = true
-          this.isReadOnly = true
-          this.value = nota.obsDevolucaoCalculada() ?: ""
-        }
       }
     }
   }
@@ -192,8 +198,7 @@ fun VerticalLayout.formHeader(
 
 private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
   return if (this.motivoDevolucaoEnun == EMotivoDevolucao.AVARIA_TRANSPORTE) {
-    val temValorNulo: Boolean = nfEntrada == null || emissao == null || cteDevolucao == null ||
-                                dataDevolucao == null || nomeTransportadoraDevolucao == ""
+    val temValorNulo: Boolean = nfEntrada == null || emissao == null
     if (temValorNulo) {
       ""
     } else {
