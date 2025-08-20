@@ -207,6 +207,12 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       observacaoAcordoComercial()
     }
 
+
+    EMotivoDevolucao.FALTA_TRANSPORTE  -> {
+      observacaoFaltaTransporte()
+    }
+
+
     else                               -> {
       ""
     }
@@ -244,6 +250,13 @@ private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
     "Fiscais de Origem:"
   }
   return "$linha1\n$linha2"
+}
+
+private fun NotaRecebimentoDev.observacaoFaltaTransporte(): String {
+  val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
+  val linha2 = "Falta No Transporte no CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()}"
+  val linha3 = "da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
+  return "$linha1\n$linha2\n$linha3"
 }
 
 private val preposicoes = setOf("de", "da", "do", "das", "dos", "e")
