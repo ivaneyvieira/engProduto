@@ -10,6 +10,7 @@ import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.util.*
 
 fun VerticalLayout.formHeader(
   nota: NotaRecebimentoDev,
@@ -219,13 +220,13 @@ private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   } else {
     val quantProdutos = this.produtos.size
     val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-    val linha2 = if (quantProdutos > 1) {
-      "Produto(s) Avariados(s) no Transporte Notificação No CTe"
+    val linha2 = if (quantProdutos == 1) {
+      "Produto Avariado no Transporte Notificação No CTe"
     } else {
-      "Produto Avariados no Transporte Notificação No CTe"
+      "Produtos Avariados no Transporte Notificação No CTe"
     }
     val linha3 =
-        "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomePropioCapitalize()}"
+        "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
     "$linha1\n$linha2\n$linha3"
   }
 }
@@ -245,16 +246,19 @@ private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
   return "$linha1\n$linha2"
 }
 
-private fun String.nomePropioCapitalize(): String {
-  return this.split(" ").joinToString(" ") { palavra ->
-    val palavraMinuscula = palavra.lowercase()
-    val preposicoes = listOf("de", "da", "do", "das", "dos", "e", "a", "o", "as", "os", "em", "para", "por")
-    if (palavraMinuscula in preposicoes) {
-      palavraMinuscula
-    } else {
-      palavraMinuscula.replaceFirstChar { it.uppercase() }
+private val preposicoes = setOf("de", "da", "do", "das", "dos", "e")
+
+fun String.nomeProprioCapitalize(): String {
+  return this.trim()
+    .split("\\s+".toRegex()) // divide por 1+ espaços
+    .joinToString(" ") { palavra ->
+      val minuscula = palavra.lowercase(Locale.forLanguageTag("pt-BR"))
+      if (minuscula in preposicoes) {
+        minuscula
+      } else {
+        minuscula.replaceFirstChar { it.titlecase(Locale.forLanguageTag("pt-BR")) }
+      }
     }
-  }
 }
 
 private fun NotaRecebimentoDev.obsDevolucaoAjustada(): String? {
