@@ -42,7 +42,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
           integerField("NI") {
             this.isReadOnly = true
             this.width = "6rem"
-            this.value = numeroInterno
+            this.value = numeroInterno ?: 0
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           }
           textField("NFO") {
@@ -64,13 +64,13 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
           integerField("Cod") {
             this.isReadOnly = true
             this.width = "3.5rem"
-            this.value = nota.vendno
+            this.value = nota.vendno ?: 0
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           }
           textField("Fornecedor") {
             this.isReadOnly = true
             this.width = "20rem"
-            this.value = nota.fornecedor
+            this.value = nota.fornecedor ?: ""
           }
         }
 
@@ -80,18 +80,18 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
           textField("Cod") {
             this.isReadOnly = true
             this.width = "3.5rem"
-            this.value = nota.transp?.toString()
+            this.value = nota.transp?.toString() ?: ""
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           }
           textField("Transportadora") {
             this.isReadOnly = true
             this.width = "20rem"
-            this.value = nota.transportadora
+            this.value = nota.transportadora ?: ""
           }
           textField("CTE") {
             this.isReadOnly = true
             this.width = "7rem"
-            this.value = nota.cte?.toString()
+            this.value = nota.cte?.toString() ?: ""
           }
           textField("Vol Inf") {
             this.isReadOnly = true
@@ -148,7 +148,7 @@ class DlgProdutosNotaEntrada(val viewModel: TabNotaEntradaViewModel, var nota: N
           textField("Ped Compra") {
             this.isReadOnly = true
             this.width = "7rem"
-            this.value = nota.pedComp?.toString()
+            this.value = nota.pedComp?.toString() ?: ""
           }
         }
       },
