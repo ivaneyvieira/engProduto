@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
+import br.com.astrosoft.produto.model.beans.EMotivoDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -25,10 +26,11 @@ fun VerticalLayout.formHeader(
       this.isPadding = false
       this.isMargin = false
       this.isSpacing = false
+      this.setWidthFull()
 
       horizontalBlock {
         this.isSpacing = true
-        this.width = "55rem"
+        this.setWidthFull()
 
         integerField("NI") {
           this.isReadOnly = true
@@ -163,18 +165,18 @@ fun VerticalLayout.formHeader(
         this.isSpacing = true
         this.setWidthFull()
         textArea("Dados Adicionais") {
-          this.width = "100%"
+          this.width = "18rem"
           this.height = "100%"
           this.isExpand = true
           this.isReadOnly = true
-          this.value = nota.obsDevolucaoAjustada() ?: ""
+          this.value = nota.obsDevolucaoCalculada() ?: ""
         }
         textArea("Observação") {
           this.isReadOnly = readOnly
-          this.width = "100%"
           this.height = "100%"
           this.isExpand = true
-          this.value = nota.observacaoAdicional ?: ""
+          //this.value = nota.observacaoAdicional ?: ""
+          this.value = nota.obsDevolucaoAjustada() ?: ""
 
           this.valueChangeMode = ValueChangeMode.LAZY
 
@@ -185,6 +187,23 @@ fun VerticalLayout.formHeader(
         }
       }
     }
+  }
+}
+
+private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
+  return if (this.motivoDevolucaoEnun == EMotivoDevolucao.AVARIA_TRANSPORTE) {
+    val temValorNulo: Boolean = nfEntrada == null || emissao == null || cteDevolucao == null ||
+                                dataDevolucao == null || nomeTransportadoraDevolucao == ""
+    if (temValorNulo) {
+      ""
+    } else {
+      val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
+      val linha2 = "Produto(s) Avariados(s) no Transporte Notificação No Cte"
+      val linha3 = "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao}"
+      "$linha1\n$linha2\n$linha3"
+    }
+  } else {
+    ""
   }
 }
 

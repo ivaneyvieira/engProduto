@@ -74,14 +74,14 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           addValueChangeListener {
             nota.transpDevolucao = this.value ?: 0
             viewModel.saveNota(nota)
-            edtTransportadora?.value = viewModel.findTransportadora(this.value)?.nome ?: ""
+            edtTransportadora?.value = nota.nomeTransportadoraDevolucao
             this.marcaDiferencao(nota.diferencaTransp())
           }
         }
         edtTransportadora = textField("Transportadora Redespacho") {
           this.isReadOnly = true
           this.width = "320px"
-          this.value = viewModel.findTransportadora(nota.transpDevolucao)?.nome ?: ""
+          this.value = nota.nomeTransportadoraDevolucao
           this.marcaDiferencao(nota.diferencaTransp())
         }
         textField("CTE") {

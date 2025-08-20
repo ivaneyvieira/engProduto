@@ -58,11 +58,6 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     }
   }
 
-  fun findTransportadora(carrno: Int?): Transportadora? {
-    carrno ?: return null
-    return saci.findTransportadora(carrno)
-  }
-
   fun updateMotivo(tipoDevolucao: EMotivoDevolucao?) = viewModel.exec {
     tipoDevolucao ?: return@exec
     val itens = subView.notasSelecionadas()

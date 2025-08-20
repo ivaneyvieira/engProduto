@@ -60,6 +60,12 @@ class NotaRecebimentoDev(
   var pesoNFLiquidoDevolucao: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val nomeTransportadoraDevolucao: String
+    get() {
+      val vendno = transpDevolucao ?: return ""
+      return saci.findTransportadora(vendno)?.nome ?: ""
+    }
+
   val situacaoDevName
     get() = produtos.mapNotNull {
       EStituacaoDev.findByNum(it.situacaoDev ?: 0)?.descricao
