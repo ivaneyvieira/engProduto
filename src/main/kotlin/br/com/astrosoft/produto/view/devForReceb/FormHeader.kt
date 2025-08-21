@@ -238,8 +238,7 @@ private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   }
   val transportadora = this.nomeTransportadoraDevolucao.nomeProprioCapitalize()
   val linha3 = "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da $transportadora"
-  val linha4 = "Produtos"
-  return "$linha1\n$linha2\n$linha3\n$linha4"
+  return "$linha1\n$linha2\n$linha3"
 }
 
 private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
