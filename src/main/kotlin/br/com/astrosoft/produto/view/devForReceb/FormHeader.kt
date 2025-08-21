@@ -266,7 +266,11 @@ private fun NotaRecebimentoDev.observacaoValidade(): String {
 }
 
 private fun NotaRecebimentoDev.observacaoGarantia(): String {
-  val linha1 = "Devolução de Iten(s) em Garantia Referente Nota(s) Fiscai(is)"
+  val linha1 = if(produtos.size == 1) {
+    "Devolução de Item em Garantia Referente Notas Fiscais"
+  }else {
+    "Devolução de Items em Garantia Referente Notas Fiscais"
+  }
   val linha2 = "de Origem:"
   return "$linha1\n$linha2"
 }
