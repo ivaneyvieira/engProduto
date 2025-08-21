@@ -230,30 +230,16 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
 }
 
 private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
-  val quantProdutos = this.produtos.size
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-  val linha2 = if (quantProdutos == 1) {
-    "Produto Avariado no Transporte Notificado No CTe"
-  } else {
-    "Produtos Avariados no Transporte Notificado No CTe"
-  }
+  val linha2 = "Produto(s) Avariado(s) no Transporte Notificado No CTe"
   val linha3 =
       "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
   return "$linha1\n$linha2\n$linha3"
 }
 
 private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
-  val produtos = this.produtos
-  val linha1 = if (produtos.size == 1) {
-    "Devolução Referente Acordo Comercial de Item da Nota"
-  } else {
-    "Devolução Referente Acordo Comercial de Itens da Notas"
-  }
-  val linha2 = if (produtos.size == 1) {
-    "Fiscal de Origem:"
-  } else {
-    "Fiscais de Origem:"
-  }
+  val linha1 = "Devolução Referente Acordo Comercial de Iten(s) da(s) Nota(s)"
+  val linha2 = "Fiscai(s) de Origem:"
   return "$linha1\n$linha2"
 }
 
@@ -272,25 +258,15 @@ private fun NotaRecebimentoDev.observacaoFaltaFabrica(): String {
 }
 
 private fun NotaRecebimentoDev.observacaoValidade(): String {
-  val produtos = this.produtos
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-  val linha2 = if (produtos.size == 1) {
-    "Produto com Validade Proximo do Vencimento Notificado No"
-  } else {
-    "Produtos com Validade Proximo do Vencimento Notificado No"
-  }
+  val linha2 = "Produto(s) com Validade Proximo do Vencimento Notificado No"
   val linha3 =
       "CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
 }
 
 private fun NotaRecebimentoDev.observacaoGarantia(): String {
-  val produtos = this.produtos
-  val linha1 = if (produtos.size == 1) {
-    "Devolução de Item em Garantia Referente Nota Fiscal"
-  } else {
-    "Devolução de Itens em Garantia Referente Notas Fiscais"
-  }
+  val linha1 = "Devolução de Iten(s) em Garantia Referente Nota(s) Fiscai(is)"
   val linha2 = "de Origem:"
   return "$linha1\n$linha2"
 }
