@@ -219,7 +219,7 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
       observacaoValidade()
     }
 
-    EMotivoDevolucao.EM_GARANTIA          -> {
+    EMotivoDevolucao.EM_GARANTIA       -> {
       observacaoGarantia()
     }
 
@@ -259,16 +259,20 @@ private fun NotaRecebimentoDev.observacaoFaltaFabrica(): String {
 
 private fun NotaRecebimentoDev.observacaoValidade(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-  val linha2 = "Produto(s) com Validade Proximo do Vencimento Notificado No"
+  val linha2 = if (produtoUnitatio()) {
+    "Produto com Validade Proximo do Vencimento Notificado no"
+  } else {
+    "Produtos com Validade Proximo do Vencimento Notificado no"
+  }
   val linha3 =
       "CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
 }
 
 private fun NotaRecebimentoDev.observacaoGarantia(): String {
-  val linha1 = if(produtos.size == 1) {
+  val linha1 = if (produtoUnitatio()) {
     "Devolução de Item em Garantia Referente Notas Fiscais"
-  }else {
+  } else {
     "Devolução de Itens em Garantia Referente Notas Fiscais"
   }
   val linha2 = "de Origem:"
@@ -331,4 +335,9 @@ private fun String.substringPos(pos1: Int, pos2: Int = 1000): String {
     return this.substring(pos1)
   }
   return this.substring(pos1, pos2)
+}
+
+private fun NotaRecebimentoDev.produtoUnitatio(): Boolean {
+  val quant = produtos.sumOf { it.quant ?: 0 }
+  return quant == 1
 }
