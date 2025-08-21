@@ -231,7 +231,7 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
 
 private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
-  val linha2 = "Produto(s) Avariado(s) no Transporte Notificado No CTe"
+  val linha2 = "Produto Avariado no Transporte Notificado No CTe"
   val linha3 =
       "${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}"
   return "$linha1\n$linha2\n$linha3"
