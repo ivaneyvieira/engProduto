@@ -232,7 +232,7 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
 private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
   val linha2 = if (produtoUnitatio()) {
-    "Produto Avariado no Transporte Notificado No CTe"
+    "Produtos Avariados no Transporte Notificado No CTe"
   }else{
     "Produtos Avariados no Transporte Notificado No CTe"
   }
