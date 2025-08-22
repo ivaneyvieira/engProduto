@@ -242,8 +242,8 @@ private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
 }
 
 private fun NotaRecebimentoDev.observacaoAcordoComercial(): String {
-  val linha1 = "Devolução Referente Acordo Comercial de Iten(s) da(s) Nota(s)"
-  val linha2 = "Fiscai(s) de Origem:"
+  val linha1 = "Devolução Referente Acordo Comercial de Itens das Notas"
+  val linha2 = "Fiscais de Origem:"
   return "$linha1\n$linha2"
 }
 
