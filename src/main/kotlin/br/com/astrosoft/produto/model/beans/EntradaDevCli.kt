@@ -57,7 +57,7 @@ class EntradaDevCli(
       return parte2.trim()
     }
 
-  fun produtos() = saci.entradaDevCliPro(invno)
+  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto()
 
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(

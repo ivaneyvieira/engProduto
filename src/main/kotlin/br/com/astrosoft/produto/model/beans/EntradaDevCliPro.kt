@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class EntradaDevCliPro(
+data class EntradaDevCliPro(
   var invno: Int,
   var codLoja: Int,
   var loja: String,
@@ -59,5 +59,31 @@ class EntradaDevCliPro(
       "REE.*".toRegex().matches(tipoNota) -> "REEMBOLSO"
       else                                -> tipoNota
     }
+  }
+}
+
+fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
+  return this.flatMap { bean ->
+    val quantComProduto = (bean.tipoQtd ?: 0)
+    val quantSemProduto = (bean.quantidade ?: 0) - (bean.tipoQtd ?: 0)
+    val itemsComProdutos = if (quantComProduto == 0) {
+      null
+    } else {
+      bean.copy(
+        tipoPrd = "${bean.tipoNotaPre()} P",
+        tipoQtd = quantComProduto,
+        tipoQtdEfetiva = quantComProduto
+      )
+    }
+    val itemsSemProdutos = if (quantSemProduto == 0) {
+      null
+    } else {
+      bean.copy(
+        tipoPrd = bean.tipoNotaPre(),
+        tipoQtd = quantSemProduto,
+        tipoQtdEfetiva = quantSemProduto
+      )
+    }
+    listOfNotNull(itemsComProdutos, itemsSemProdutos)
   }
 }

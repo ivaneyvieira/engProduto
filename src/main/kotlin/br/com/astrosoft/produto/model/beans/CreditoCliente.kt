@@ -23,7 +23,7 @@ class CreditoCliente(
   var remarks: String?,
   var valorVenda: Double?,
 ) {
-  fun produtos() = saci.entradaDevCliPro(ni ?: 0)
+  fun produtos() = saci.entradaDevCliPro(ni ?: 0).explodeMisto()
 
   fun mudaCliente(): String {
     return ""
