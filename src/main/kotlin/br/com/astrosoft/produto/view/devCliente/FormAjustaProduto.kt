@@ -7,6 +7,8 @@ import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class FormAjustaProduto(val nota: EntradaDevCli) : FormLayout() {
   private val linhas: MutableList<Linha> = mutableListOf()
@@ -29,7 +31,8 @@ class FormAjustaProduto(val nota: EntradaDevCli) : FormLayout() {
     return linhas.map { linha ->
       AjusteProduto(
         produto = linha.produto,
-        temProduto = linha.temProduto()
+        temProduto = linha.temProduto(),
+        quant = linha.quant(),
       )
     }
   }
@@ -37,6 +40,7 @@ class FormAjustaProduto(val nota: EntradaDevCli) : FormLayout() {
 
 private class Linha(val produto: EntradaDevCliPro) : HorizontalLayout() {
   private var check: Checkbox? = null
+  private var quant: IntegerField? = null
 
   init {
     this.isMargin = false
@@ -71,9 +75,29 @@ private class Linha(val produto: EntradaDevCliPro) : HorizontalLayout() {
       this.style.set("prdno", produto.prdno)
       this.style.set("grade", produto.grade)
       this.width = "8rem"
-      this.value = produto.tipoPrd?.startsWith("TROCA P") ?: false
+      this.value = produto.tipoPrd?.contains(" P") ?: false
+
+      addValueChangeListener {
+        val value = it.value ?: false
+        quant?.isEnabled = value
+        if(value){
+          quant?.focus()
+        }
+      }
+    }
+
+    quant = integerField("Quant") {
+      this.value = produto.tipoQtd ?: 0
+      this.isClearButtonVisible = true
+      this.isAutoselect = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.width = "6rem"
+      this.isEnabled = produto.tipoPrd?.contains(" P") ?: false
+      this.value = produto.tipoQtdEfetiva
     }
   }
 
   fun temProduto() = check?.value ?: false
+
+  fun quant(): Int = quant?.value ?: 0
 }

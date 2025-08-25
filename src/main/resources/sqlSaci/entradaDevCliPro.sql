@@ -69,7 +69,13 @@ SELECT I.invno,
        @TIPO := TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.remarks, ')', 2), ')', -1))   AS tipo,
        IF(@TIPO REGEXP '^TRO.* M.*' OR
           @TIPO REGEXP '^EST.* M.*' OR
-          @TIPO REGEXP '^REE.* M.*', X.c10, @TIPO)                                   AS tipoPrd
+          @TIPO REGEXP '^REE.* M.*',
+          SUBSTRING_INDEX(X.c10, '|', 1),
+          @TIPO)                                                                     AS tipoPrd,
+       @QTTIPO := IF(X.c10 LIKE '%|%',
+                     SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1),
+                     '0') * 1                                                        AS tipoQtd,
+       IF(IFNULL(@QTTIPO, 0) = 0, X.qtty / 1000, @QTTIPO)                            AS tipoQtdEfetiva
 FROM
   T_NOTA                      AS I
     LEFT JOIN  sqldados.nf    AS N

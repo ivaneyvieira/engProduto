@@ -44,7 +44,10 @@ SELECT CAST(data AS DATE)                                                  AS da
        SUM(ROUND(X.qtty / 1000))                                           AS quantidade,
        observacao                                                          AS observacao,
        TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(observacao, ')', 2), ')', -1)) AS tipo,
-       X.c10                                                               AS tipoPrd,
+       SUBSTRING_INDEX(X.c10, '|', 1)                                      AS tipoPrd,
+       IF(X.c10 LIKE '%|%',
+          SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1),
+          '0') * 1                                                         AS tipoQtd,
        I.invno                                                             AS ni,
        I.nota                                                              AS nota,
        I.valor                                                             AS valor
@@ -76,7 +79,9 @@ SELECT data,
        tipo,
        IF(tipo REGEXP '^TRO.* M.*' OR
           tipo REGEXP '^EST.* M.*' OR
-          tipo REGEXP '^REE.* M.*', tipoPrd, tipo) AS tipoPrd,
+          tipo REGEXP '^REE.* M.*', tipoPrd, tipo)     AS tipoPrd,
+       tipoQtd,
+       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd) AS tipoQtdEfetiva,
        ni,
        nota,
        valor

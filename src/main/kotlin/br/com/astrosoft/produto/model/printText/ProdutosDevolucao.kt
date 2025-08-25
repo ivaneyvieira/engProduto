@@ -10,7 +10,7 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
     column(EntradaDevCliProList::codigoFormat, "Codigo", 6)
     column(EntradaDevCliProList::descricao, "Descricao", 41)
     column(EntradaDevCliProList::grade, "Grade", 8)
-    column(EntradaDevCliProList::quantidade, "Qtd", 6)
+    column(EntradaDevCliProList::tipoQtdEfetiva, "Qtd", 6)
   }
 
   override fun groupBotton(beanDetail: EntradaDevCliProList): String {

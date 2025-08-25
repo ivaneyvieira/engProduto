@@ -11,7 +11,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
     column(EntradaDevCliPro::codigoFormat, "Codigo", 6)
     column(EntradaDevCliPro::descricao, "Descricao", 41)
     column(EntradaDevCliPro::grade, "Grade", 8)
-    column(EntradaDevCliPro::quantidade, "Qtd", 6)
+    column(EntradaDevCliPro::tipoQtdEfetiva, "Qtd", 6)
   }
 
   private fun tituloValeTroca() {

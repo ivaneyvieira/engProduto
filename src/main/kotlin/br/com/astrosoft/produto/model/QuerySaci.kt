@@ -2563,6 +2563,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("grade", nota.grade)
       this.addOptionalParameter("tipo", nota.tipoNotaPre())
       this.addOptionalParameter("temProduto", ajuste.temProduto)
+      this.addOptionalParameter("quant", ajuste.quant)
     }
   }
 

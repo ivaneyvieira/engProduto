@@ -29,6 +29,8 @@ class EntradaDevCliPro(
   var vendedor: String?,
   var tipo: String?,
   var tipoPrd: String?,
+  var tipoQtd: Int?,
+  var tipoQtdEfetiva: Int?,
 ) {
   fun tipoPrdTratado(): String {
     val temProduto = this.tipoPrd?.endsWith(" P") == true

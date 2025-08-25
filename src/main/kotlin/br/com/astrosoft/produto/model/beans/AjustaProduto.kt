@@ -1,3 +1,3 @@
 package br.com.astrosoft.produto.model.beans
 
-data class AjusteProduto(val produto : EntradaDevCliPro, val temProduto: Boolean)
+data class AjusteProduto(val produto: EntradaDevCliPro, val temProduto: Boolean, val quant: Int)
