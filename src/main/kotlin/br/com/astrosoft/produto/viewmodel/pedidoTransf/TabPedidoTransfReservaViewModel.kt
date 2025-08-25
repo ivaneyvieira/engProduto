@@ -6,7 +6,9 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
+import br.com.astrosoft.produto.model.printText.RequisicaoTransferenciaConsulta
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
+import org.apache.xmlbeans.impl.common.XmlStreamUtils.printEvent
 
 class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {
@@ -99,6 +101,15 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     relatorio.print(
       dados = pedido.produtos(),
       printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0, printEvent = printEvent)
+    )
+  }
+
+  fun consultaPedido(pedido: PedidoTransf) = viewModel.exec {
+    val relatorio = RequisicaoTransferenciaConsulta(pedido)
+
+    relatorio.print(
+      dados = pedido.produtos(),
+      printer = subView.printerPreview()
     )
   }
 

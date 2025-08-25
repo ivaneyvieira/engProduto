@@ -91,6 +91,9 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
         viewModel.marcaImpressao(pedido, impressora)
       }
     }
+    addColumnButton(VaadinIcon.SEARCH, "Consulta", "Consulta") { pedido ->
+      viewModel.consultaPedido(pedido)
+    }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()
     colunaPedidoTransfCliente()

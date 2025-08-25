@@ -19,15 +19,23 @@ SELECT X.storeno                                          AS loja,
        X.s12                                              AS marca,
        CAST(MID(IFNULL(L.localizacao, ''), 1, 4) AS CHAR) AS localizacao,
        X.c4                                               AS usuarioCD,
-       ROUND(IFNULL(S.qtty_varejo, 0) / 1000)             AS estoque
+       ROUND(IFNULL(S.qtty_varejo, 0) / 1000)             AS estoque,
+       ROUND((IFNULL(ED.qtty_varejo, 0) +
+              IFNULL(ED.qtty_varejo, 0)) / 1000)          AS estoqueD
 FROM
   sqldados.prd                 AS P
     INNER JOIN sqldados.eoprd  AS X
                ON P.no = X.prdno
     INNER JOIN sqldados.eord   AS N
                USING (storeno, ordno)
+    LEFT JOIN  sqldados.custp  AS C
+               ON C.no = N.custno
+    LEFT JOIN  sqldados.store  AS SD
+               ON SD.cgc = C.cpf_cgc
     LEFT JOIN  sqldados.stk    AS S
                ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
+    LEFT JOIN  sqldados.stk    AS ED
+               ON ED.prdno = X.prdno AND ED.grade = X.grade AND ED.storeno = SD.no
     LEFT JOIN  sqldados.prdbar AS B
                ON P.no = B.prdno AND B.grade = X.grade
     LEFT JOIN  sqldados.prdloc AS L
