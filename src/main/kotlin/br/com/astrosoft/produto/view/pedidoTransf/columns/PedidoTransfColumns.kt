@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.pedidoTransf.columns
 
+import br.com.astrosoft.framework.view.vaadin.helper.center
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.PedidoTransf
@@ -9,6 +10,11 @@ import com.vaadin.flow.component.grid.Grid
 object PedidoTransfColumns {
   fun Grid<PedidoTransf>.colunaPedidoTransfLojaOrig() = columnGrid(PedidoTransf::lojaOrigem) {
     this.setHeader("Lj Orig")
+  }
+
+  fun Grid<PedidoTransf>.colunaPedidoTransfLibera() = columnGrid(PedidoTransf::liberaStr) {
+    this.setHeader("Libera")
+    this.center()
   }
 
   fun Grid<PedidoTransf>.colunaPedidoTransfLojaDest() = columnGrid(PedidoTransf::lojaDestino) {

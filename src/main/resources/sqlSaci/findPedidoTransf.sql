@@ -62,7 +62,13 @@ SELECT N.storeno                                                                
          WHEN 69  THEN 'FISCAL'
          WHEN 434 THEN 'INTERNA'
                   ELSE 'OUTRA'
-       END                                                                              AS tipoTransf
+       END                                                                              AS tipoTransf,
+       IF(TRIM(MID(R.remarks__480, 1, 40)) LIKE '%RESSU4%',
+          CASE TRIM(N.auxString4)
+            WHEN 'S' THEN 'S'
+            WHEN 'N' THEN 'N'
+                     ELSE 'N'
+          END, '')                                                                      AS libera
 FROM
   sqldados.eord                AS N
     INNER JOIN sqldados.eoprd  AS X
@@ -153,7 +159,8 @@ SELECT lojaNoOri,
        nameTransfLogin,
        userReserva,
        nameReserva,
-       tipoTransf
+       tipoTransf,
+       libera
 FROM
   T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR lojaDestino = @PESQUISA OR cliente = @PESQUISANUM OR ordno = @PESQUISANUM OR

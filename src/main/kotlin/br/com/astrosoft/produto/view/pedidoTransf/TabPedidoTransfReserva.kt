@@ -2,12 +2,11 @@ package br.com.astrosoft.produto.view.pedidoTransf
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfCliente
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfData
+import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLibera
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaDest
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfLojaOrig
 import br.com.astrosoft.produto.view.pedidoTransf.columns.PedidoTransfColumns.colunaPedidoTransfNumero
@@ -86,6 +85,16 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
 
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
+
+    this.withEditor(
+      classBean = PedidoTransf::class,
+      openEditor = {
+        this.focusEditor(PedidoTransf::liberaStr)
+      },
+      closeEditor = {
+        viewModel.salvaPedido(it.bean)
+      })
+
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) { impressora ->
         viewModel.marcaImpressao(pedido, impressora)
@@ -93,6 +102,14 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     }
     addColumnButton(VaadinIcon.SEARCH, "Consulta", "Consulta") { pedido ->
       viewModel.consultaPedido(pedido)
+    }
+    if (AppConfig.userLogin()?.admin == true) {
+      colunaPedidoTransfLibera().comboFieldEditor {
+        it.setItems(listOf("Sim", "Não", ""))
+        it.isEmptySelectionAllowed = true
+        it.emptySelectionCaption = ""
+        it.setWidthFull()
+      }
     }
     colunaPedidoTransfLojaOrig()
     colunaPedidoTransfLojaDest()

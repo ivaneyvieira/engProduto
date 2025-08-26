@@ -2567,6 +2567,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun savePedidoTransf(transf: PedidoTransf) {
+    val sql = "/sqlSaci/savePedidoTransf.sql"
+    script(sql) {
+      addOptionalParameter("storeno", transf.lojaNoOri)
+      addOptionalParameter("ordno", transf.ordno)
+      addOptionalParameter("libera", transf.libera)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

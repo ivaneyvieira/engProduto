@@ -43,7 +43,21 @@ class PedidoTransf(
   var userReserva: Int?,
   var nameReserva: String?,
   var tipoTransf: String?,
+  var libera: String?,
 ) {
+  var liberaStr: String
+    get() = when (libera) {
+      "S"  -> "Sim"
+      "N"  -> "Não"
+      else -> ""
+    }
+    set(value) {
+      libera = when (value) {
+        "Sim" -> "S"
+        "Não" -> "N"
+        else  -> ""
+      }
+    }
 
   private fun extrairNumeros(str: String): List<Int> {
     val regex = "\\d+".toRegex()
@@ -159,6 +173,10 @@ class PedidoTransf(
   fun nomeVendedor(): String {
     val nota = findNotaVenda() ?: return ""
     return "${nota.vendedor} - ${nota.nomeVendedor}"
+  }
+
+  fun save() {
+    saci.savePedidoTransf(this)
   }
 
   companion object {

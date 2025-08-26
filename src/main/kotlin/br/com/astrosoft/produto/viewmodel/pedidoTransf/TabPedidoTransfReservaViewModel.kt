@@ -74,6 +74,9 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   }
 
   fun formAutoriza(pedido: PedidoTransf) = viewModel.exec {
+    if(pedido.libera == "N") {
+      fail("Pedido não liberado para autorização")
+    }
     val camposVazios = listOfNotNull(
       if (pedido.referente.isNullOrEmpty()) "Referência"
       else null,
@@ -122,6 +125,11 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun allPrinters(): List<String> {
     val impressoras = Impressora.allTermica().map { it.name }
     return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
+  }
+
+  fun salvaPedido(bean: PedidoTransf) {
+    bean.save()
+    updateView()
   }
 
   val subView
