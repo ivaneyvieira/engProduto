@@ -239,10 +239,10 @@ class NotaRecebimentoDev(
 
 fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
   return this.groupBy { it.chaveDevolucao }.mapNotNull { entry ->
-    val produtos = entry.value.distinctBy { "${it.codigo}${it.grade}" }
+    val produtos = entry.value.distinctBy { "${it.ni}${it.codigo}${it.grade}" }
     val seqMax = produtos.maxOfOrNull { it.seq ?: 0 } ?: 0
     produtos.sortedBy {
-      "${it.codigo}${it.grade}"
+      "${it.codigo}${it.grade}${it.ni}"
     }.filter {
       it.seq == null
     }.forEachIndexed { index, produto ->
