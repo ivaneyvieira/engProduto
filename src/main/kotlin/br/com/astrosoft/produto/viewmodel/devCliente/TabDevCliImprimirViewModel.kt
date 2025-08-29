@@ -107,8 +107,8 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     })
   }
 
-  fun formAutoriza(nota: EntradaDevCli) {
-    if (nota.temAjusteMisto()) fail("Tipo de devolução não informado")
+  fun formAutoriza(nota: EntradaDevCli) = viewModel.exec {
+    if (!nota.temAjusteMisto()) fail("Tipo de devolução não informado")
     subView.formAutoriza(nota)
   }
 
