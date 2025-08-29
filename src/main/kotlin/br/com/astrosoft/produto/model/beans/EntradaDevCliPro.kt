@@ -71,6 +71,7 @@ fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
     if (!(bean.tipoPrd ?: "").endsWith(" P")) {
       return@flatMap listOf(
         bean.copy(
+          tipoPrd = bean.tipoNotaPre(),
           tipoQtd = 0,
           tipoQtdEfetiva = (bean.quantidade ?: 0)
         )
