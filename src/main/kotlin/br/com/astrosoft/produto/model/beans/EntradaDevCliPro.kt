@@ -64,8 +64,17 @@ data class EntradaDevCliPro(
 
 fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
   return this.flatMap { bean ->
-    if((bean.tipoPrd ?: "") == ""){
+    if ((bean.tipoPrd ?: "") == "") {
       return@flatMap listOf(bean)
+    }
+
+    if (!(bean.tipoPrd ?: "").endsWith(" P")) {
+      return@flatMap listOf(
+        bean.copy(
+          tipoQtd = 0,
+          tipoQtdEfetiva = (bean.quantidade ?: 0)
+        )
+      )
     }
 
     val quantComProduto = (bean.tipoQtd ?: 0)

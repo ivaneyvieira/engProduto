@@ -22,11 +22,11 @@ class TabDevCliEditorViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) {
-    if (!nota.isAjusteMisto()) {
+    if (!nota.temAjusteMisto()) {
       subView.ajustaProduto(nota)
     }
 
-    if (nota.isAjusteMisto()) {
+    if (nota.temAjusteMisto()) {
       val relatorio = ValeTrocaDevolucao(nota)
       relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
         nota.marcaImpresso(Impressora(0, impressora))

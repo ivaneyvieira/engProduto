@@ -156,7 +156,7 @@ class EntradaDevCli(
            "REE.* M.*".toRegex().matches(this.tipoObs)
   }
 
-  fun isAjusteMisto(): Boolean {
+  fun temAjusteMisto(): Boolean {
     return if (isTipoMisto()) {
       val produtos = produtos()
       produtos.all {

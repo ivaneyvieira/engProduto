@@ -29,7 +29,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    if (!nota.isAjusteMisto()) {
+    if (!nota.temAjusteMisto()) {
       subView.ajustaProduto(nota)
       return@exec
     }
@@ -108,7 +108,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun formAutoriza(nota: EntradaDevCli) {
-    //if (nota.tipoDev.isNullOrBlank()) fail("Tipo de devolução não informado")
+    if (nota.temAjusteMisto()) fail("Tipo de devolução não informado")
     subView.formAutoriza(nota)
   }
 
