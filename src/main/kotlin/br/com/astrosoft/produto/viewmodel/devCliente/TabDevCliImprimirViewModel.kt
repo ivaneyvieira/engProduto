@@ -30,6 +30,10 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     if (!nota.temAjusteMisto()) {
+      val user = AppConfig.userLogin() as? UserSaci
+      if (user?.ajustaMista != true) {
+        fail("Usuário sem permissão para ajuste misto")
+      }
       subView.ajustaProduto(nota)
       return@exec
     }
@@ -147,7 +151,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           fail("Usuário não autorizado para Muda Cliente")
         }
 
-        nota.tipoObs.startsWith("TROCA M") && !user.autorizaMista       -> {
+        nota.tipoObs.startsWith("TROCA M") && !user.autorizaMista   -> {
           fail("Usuário não autorizado para Muda Cliente")
         }
       }

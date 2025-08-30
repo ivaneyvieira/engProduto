@@ -25,8 +25,12 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     subView.updateNotas(notas)
   }
 
-  fun imprimeValeTroca(nota: EntradaDevCli) {
+  fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     if (!nota.temAjusteMisto()) {
+      val user = AppConfig.userLogin() as? UserSaci
+      if (user?.ajustaMista != true) {
+        fail("Usuário sem permissão para ajuste misto")
+      }
       subView.ajustaProduto(nota)
     }
 

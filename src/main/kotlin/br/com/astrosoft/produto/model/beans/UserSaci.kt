@@ -166,6 +166,7 @@ class UserSaci : IUser {
   var devFor2NotaFornecedor by DelegateAuthorized3(136)
   var devFor2NotaRetornoNFD by DelegateAuthorized3(137)
   var autorizaMista by DelegateAuthorized3(138)
+  var ajustaMista by DelegateAuthorized3(139)
 
   //Locais
   private var localEstoque: String?

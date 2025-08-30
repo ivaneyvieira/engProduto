@@ -68,6 +68,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         checkBox("Autoriza Mista") {
           binder.bind(this, UserSaci::autorizaMista.name)
         }
+        checkBox("Ajusta Troca Mista") {
+          binder.bind(this, UserSaci::ajustaMista.name)
+        }
       }
     }
     verticalBlock("Filtros") {
