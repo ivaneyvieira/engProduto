@@ -1802,23 +1802,24 @@ class QuerySaci : QueryDB(database) {
     return query(sql, PedidoAcerto::class)
   }
 
-  fun findProdutoAcerto(pedido: PedidoAcerto, lojaAcerto: Int): List<ProdutoAcerto> {
+  fun findProdutoAcerto(pedido: PedidoAcerto): List<ProdutoAcerto> {
     val sql = "/sqlSaci/findPedidoProdutosAcerto.sql"
 
     return query(sql, ProdutoAcerto::class) {
       addOptionalParameter("loja", pedido.loja ?: 0)
       addOptionalParameter("pedido", pedido.pedido ?: 0)
-      addOptionalParameter("lojaAcerto", lojaAcerto)
+      addOptionalParameter("lojaAcerto", 0)
     }
   }
 
-  fun removeProdutoAcerto(acerto: ProdutoAcerto) {
+  fun removeProdutoAcerto(acerto: ProdutoAcerto, lojaAcerto: Int) {
     val sql = "/sqlSaci/removeProdutoAcerto.sql"
     script(sql) {
       addOptionalParameter("loja", acerto.loja ?: 0)
       addOptionalParameter("pedido", acerto.pedido ?: 0)
       addOptionalParameter("prdno", acerto.prdno)
       addOptionalParameter("grade", acerto.grade)
+      addOptionalParameter("lojaAcerto", lojaAcerto)
     }
   }
 

@@ -40,7 +40,7 @@ class ProdutoAcerto {
     return "$prdno $codigo $descricao $barcode $grade $localizacao $vendno"
   }
 
-  fun removerProduto() {
-    saci.removeProdutoAcerto(this)
+  fun removerProduto(lojaAcerto: Int) {
+    saci.removeProdutoAcerto(this, lojaAcerto)
   }
 }

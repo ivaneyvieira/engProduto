@@ -36,7 +36,6 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
           }
         }
 
-
         button("Remove") {
           val user = AppConfig.userLogin() as? UserSaci
           this.isVisible = user?.acertoRemoveProd == true
@@ -132,13 +131,17 @@ class DlgProdutosAcerto(val viewModel: TabAcertoPedidoViewModel, val pedido: Ped
 
   fun update() {
     val lojaAcerto = user?.lojaAcerto ?: 0
-    val listProdutos = pedido.produtos(lojaAcerto)
+    val listProdutos = pedido.produtos()
 
     if (pedido.loja == 1 && pedido.pedido == 2) {
       val filter = edtPesquisa?.value.orEmpty()
       val listProdutosFiltro = listProdutos
-        .filter { produto -> filterProduto(produto, filter) }
-        .filter { produto -> produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0 }
+        .filter { produto ->
+          filterProduto(produto, filter)
+        }
+        .filter { produto ->
+          produto.qtPedido.toString().contains(lojaAcerto.toString()) || lojaAcerto == 0
+        }
 
       gridDetail.setItems(listProdutosFiltro)
     } else {

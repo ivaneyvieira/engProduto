@@ -28,9 +28,9 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
     val pedidos = subView.pedidoSelecionado().ifEmpty {
       fail("Nenhum pedido selecionado")
     }
-    val lojaAcerto = user?.lojaAcerto ?: 0
+    //val lojaAcerto = user?.lojaAcerto ?: 0
     val produtos = pedidos.flatMap {
-      it.produtos(lojaAcerto)
+      it.produtos()
     }
     val planilha = PlanilhaProdutoAcerto()
     planilha.write(produtos)
@@ -57,9 +57,9 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
   }
 
   fun previewPedido(acerto: PedidoAcerto) {
-    val user = AppConfig.userLogin() as? UserSaci
-    val lojaAcerto = user?.lojaAcerto ?: 0
-    val produtos = acerto.produtos(lojaAcerto)
+    //val user = AppConfig.userLogin() as? UserSaci
+    //val lojaAcerto = user?.lojaAcerto ?: 0
+    val produtos = acerto.produtos()
 
     val relatorio = PrintPedidoAcerto(acerto, ProdutoAcerto::qtPedido)
 
@@ -80,8 +80,10 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
       fail("Nenhum produto selecionado")
     }
     subView.confirmaLogin("Confirma a remoção do produto?", UserSaci::acertoRemoveProd) {
+      val user = AppConfig.userLogin() as? UserSaci
+      val lojaAcerto = user?.lojaAcerto ?: 0
       produtos.filter { it.prdno?.trim() != "139500" }.forEach { produto ->
-        produto.removerProduto()
+        produto.removerProduto(lojaAcerto)
       }
       subView.updateProdutos()
       updateView()
