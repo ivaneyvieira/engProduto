@@ -64,6 +64,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           binder.bind(this, UserSaci::devFor2NotaColeta.name)
         }
 
+        checkBox("Retorno NFD") {
+          binder.bind(this, UserSaci::devFor2NotaRetornoNFD.name)
+        }
+
         checkBox("NFD Aberta") {
           binder.bind(this, UserSaci::notaNFDAberta.name)
         }
@@ -78,10 +82,6 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
         checkBox("E-Mail") {
           binder.bind(this, UserSaci::devFor2NotaEmail.name)
-        }
-
-        checkBox("Retorno NFD") {
-          binder.bind(this, UserSaci::devFor2NotaRetornoNFD.name)
         }
 
         checkBox("Reposto") {
