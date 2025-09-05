@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.tabs.TabSheet
 
 fun TabSheet.tabPanel(tabPanel: ITabPanel) {
@@ -12,7 +13,10 @@ fun TabSheet.tabPanel(tabPanel: ITabPanel) {
   }
   button.addThemeVariants(ButtonVariant.LUMO_SMALL)
 
-  this.add(button, tabPanel.createComponent())
+  val label = Div(tabPanel.label)
+
+  this.add(label, tabPanel.createComponent())
+  label.addSingleClickListener { tabPanel.updateComponent() }
 }
 
 interface ITabPanel : ITabView {
