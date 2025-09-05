@@ -7,7 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaColetaRepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
@@ -23,7 +23,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.theme.lumo.LumoUtility
 
-class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebimentoDev) {
+class DlgProdutosNotaColetaRep(val viewModel: TabNotaColetaRepViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProdutoDev::class.java, false)
   private var edtTransportadora: TextField? = null
@@ -305,14 +305,5 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
     nota = nota.refreshProdutosDev() ?: return null
     update()
     return nota
-  }
-}
-
-fun HasStyle.marcaDiferencao(diferenta: Boolean) {
-  if (diferenta) {
-    this.addClassNames(LumoUtility.TextColor.WARNING, "diferenca")
-  } else {
-    this.removeClassName(LumoUtility.TextColor.WARNING)
-    this.removeClassName("diferenca")
   }
 }

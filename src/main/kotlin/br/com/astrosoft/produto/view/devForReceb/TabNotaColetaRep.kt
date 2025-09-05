@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaPedido
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaColetaRep
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaColetaRepViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -21,10 +21,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPedido {
-  private var dlgProduto: DlgProdutosNotaPedido? = null
-  private var dlgArquivo: DlgArquivoNotaPedido? = null
+class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
+  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaColetaRep {
+  private var dlgProduto: DlgProdutosNotaColetaRep? = null
+  private var dlgArquivo: DlgArquivoNotaColetaRep? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -108,7 +108,7 @@ class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
+      dlgProduto = DlgProdutosNotaColetaRep(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -118,7 +118,7 @@ class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaPedido(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaColetaRep(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -127,7 +127,7 @@ class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
+    columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "ColetaRep").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = "5.5rem")
@@ -185,7 +185,7 @@ class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
+    dlgProduto = DlgProdutosNotaColetaRep(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -193,11 +193,11 @@ class TabNotaColetaRep(val viewModel: TabNotaPedidoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaPedido == true
+    return username?.devFor2NotaColetaRep == true
   }
 
   override val label: String
-    get() = "Pedido"
+    get() = "ColetaRep"
 
   override fun updateComponent() {
     viewModel.updateView()

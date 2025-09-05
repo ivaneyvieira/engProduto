@@ -315,6 +315,7 @@ enum class EMotivoDevolucao(
 
 enum class EStituacaoDev(val num: Int, val descricao: String) {
   EDITOR(999, "Editor"),
+  COLETAREP(12, "Coleta Rep"),
   PEDIDO(0, "Pedido"),
   COLETA(9, "Coleta"),
   NFD(1, "NFD"),

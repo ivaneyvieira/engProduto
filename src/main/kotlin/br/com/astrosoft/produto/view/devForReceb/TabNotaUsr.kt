@@ -48,6 +48,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
           binder.bind(this, UserSaci::devFor2NotaDivergente.name)
         }
 
+        checkBox("Coleta/Rep") {
+          binder.bind(this, UserSaci::devFor2NotaColetaRep.name)
+        }
+
         checkBox("Pedido") {
           binder.bind(this, UserSaci::devFor2NotaPedido.name)
         }
