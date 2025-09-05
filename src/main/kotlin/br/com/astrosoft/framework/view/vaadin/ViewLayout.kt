@@ -22,7 +22,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.TabSheet
 import com.vaadin.flow.component.tabs.TabSheetVariant
-import com.vaadin.flow.component.tabs.TabsVariant
 import com.vaadin.flow.router.*
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
@@ -46,7 +45,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
       setSizeFull()
       addThemeVariants(
         TabSheetVariant.MATERIAL_BORDERED,
-       // TabSheetVariant.LUMO_TABS_MINIMAL,
+        // TabSheetVariant.LUMO_TABS_MINIMAL,
         //TabSheetVariant.LUMO_TABS_SMALL,
         //TabSheetVariant.LUMO_NO_PADDING
       )
