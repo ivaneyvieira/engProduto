@@ -315,14 +315,14 @@ enum class EMotivoDevolucao(
 
 enum class EStituacaoDev(val num: Int, val descricao: String) {
   EDITOR(999, "Editor"),
-  COLETAREP(12, "Coleta Rep"),
   PEDIDO(0, "Pedido"),
   COLETA(9, "Coleta"),
   NFD(1, "NFD"),
   GARANTIA(6, "Garantia"),
   TRANSPORTADORA(2, "Transportadora"),
   EMAIL(3, "E-mail"),
-  RETORNO_NFD(num = 12, "Retorno NFD"),
+  COLETAREP(12, "Coleta Rep"),
+  RETORNO_NFD(num = 13, "Retorno NFD"),
   REPOSTO(4, "Reposto"),
   ACERTO(5, "Acerto"),
   ACERTO_PAGO(7, "Acerto Pago"),
