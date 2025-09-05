@@ -67,26 +67,10 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
       }
     }
 
-    select("Motivo Devoulucao") {
-      this.setItems(EMotivoDevolucao.entries)
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateMotivo(it.value)
-          it.source.clear()
-        }
-      }
-    }
-
-    select("Enviar") {
-      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO)
-      this.setItemLabelGenerator { sit ->
-        sit.descricao
-      }
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.marcaSituacao(it.value)
-          it.source.clear()
-        }
+    button("Pedido") {
+      this.icon = VaadinIcon.ARROW_LEFT.create()
+      this.onClick {
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }
@@ -197,7 +181,7 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
   }
 
   override val label: String
-    get() = "ColetaRep"
+    get() = "Coleta Rep"
 
   override fun updateComponent() {
     viewModel.updateView()
