@@ -1,3 +1,7 @@
+USE sqldados;
+
+SET SQL_MODE = '';
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
@@ -60,11 +64,7 @@ FROM
     INNER JOIN sqldados.xaprd2           AS X
                ON P.no = X.prdno
     LEFT JOIN  sqldados.xaprd2Marca      AS M
-               ON X.storeno = M.storeno AND
-                  X.pdvno = M.pdvno AND
-                  X.xano = M.xano AND
-                  X.prdno = M.prdno AND
-                  X.grade = M.grade
+               USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  T_LOC                     AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users            AS EC
