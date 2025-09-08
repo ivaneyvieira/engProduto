@@ -30,4 +30,30 @@ FROM
 SELECT *
 FROM
   sqlpdv.pxaprd
-ORDER BY xano DESC
+ORDER BY xano DESC;
+
+
+/*******************************************/
+
+CREATE TABLE sqldados.xaprd2Marca
+(
+  storeno  SMALLINT DEFAULT 0  NOT NULL,
+  pdvno    SMALLINT DEFAULT 0  NOT NULL,
+  xano     INT      DEFAULT 0  NOT NULL,
+  prdno    CHAR(16) DEFAULT '' NOT NULL,
+  grade    CHAR(8)  DEFAULT '' NOT NULL,
+  marca    INT,
+  impresso INT,
+  PRIMARY KEY (storeno, pdvno, xano, prdno, grade)
+);
+
+REPLACE sqldados.xaprd2Marca(storeno, pdvno, xano, prdno, grade, marca, impresso)
+SELECT storeno, pdvno, xano, prdno, grade, s11 AS marca, s11 AS impresso
+FROM
+  sqldados.xaprd2
+WHERE s11 > 0
+   OR s11 > 0;
+
+
+
+

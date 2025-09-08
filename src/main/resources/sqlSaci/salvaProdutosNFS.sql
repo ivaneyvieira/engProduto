@@ -1,7 +1,5 @@
 UPDATE sqldados.xaprd2 AS X
 SET X.c6  = :gradeAlternativa,
-    X.s11 = :marca,
-    X.s10 = :marcaImpressao,
     X.c3  = :usuarioSep,
     X.s4  = :usuarioCD,
     X.s5  = :usuarioExp,
@@ -11,4 +9,7 @@ WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano
   AND prdno = LPAD(:codigo, 16, ' ')
-  AND grade = :grade
+  AND grade = :grade;
+
+REPLACE sqldados.xaprd2Marca(storeno, pdvno, xano, prdno, grade, marca, impresso)
+SELECT :storeno, :pdvno, :xano, LPAD(:codigo, 16, ' ') AS prdno, :grade, :marca, :marcaImpressao

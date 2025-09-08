@@ -10,7 +10,7 @@ val slf4jVersion: String by extra
 plugins {
   kotlin("jvm") version "2.1.20"
   application
-  id("com.vaadin")
+  id("com.vaadin") version "24.6.2"
 }
 
 //defaultTasks("clean", "build")
@@ -68,9 +68,6 @@ dependencies {
   implementation("org.vaadin.stefan:lazy-download-button:1.0.0")
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:5.2.2")
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
-  //implementation("com.wontlost:zxing-vaadin:3.1.0-8")
-  //implementation("org.vaadin.addons.parttio:vcamera:4.0.0")
-  //implementation("sk.smartbase.component:barcode-scanner:1.0.1")
 
   //Report
   implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1") {
@@ -81,8 +78,6 @@ dependencies {
   // implementation("com.lowagie:itext:2.1.7")
 
   //Planilhas
-  //implementation("com.github.nwillc:poink:0.4.6")
-  //implementation("io.github.rushuat:ocell:0.1.7")
   implementation("org.apache.poi:poi:5.2.5")
   implementation("org.apache.poi:poi-ooxml:5.2.5")
 

@@ -141,7 +141,7 @@ SELECT N.storeno                                                              AS
        MAX(X.c5)                                                              AS usuarioExp,
        MAX(X.c4)                                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
-       MAX(X.s11)                                                             AS marca,
+       MAX(IFNULL(M.marca, 0))                                                AS marca,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        CASE
          WHEN N.remarks LIKE '%RECLASSIFI%' THEN 'RECLASS'
@@ -206,6 +206,12 @@ FROM
                USING (storeno, pdvno, xano)
     INNER JOIN sqldados.xaprd2      AS X
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.xaprd2Marca AS M
+               ON X.storeno = M.storeno AND
+                  X.pdvno = M.pdvno AND
+                  X.xano = M.xano AND
+                  X.prdno = M.prdno AND
+                  X.grade = M.grade
     LEFT JOIN  sqldados.users       AS EC
                ON EC.no = X.s4
     LEFT JOIN  sqldados.users       AS EE
@@ -275,11 +281,11 @@ SELECT Q.loja,
        Q.entrega,
        Q.enderecoCliente,
        Q.bairroCliente,
-       SUM(X.s11 = 0)                        AS countExp,
-       SUM(X.s11 = 1)                        AS countCD,
-       SUM(X.s11 = 2)                        AS countEnt,
-       SUM(X.s10 = 1)                        AS countImp,
-       SUM(X.s10 = 0)                        AS countNImp,
+       SUM(IFNULL(M.marca, 0) = 0)           AS countExp,
+       SUM(IFNULL(M.marca, 0) = 1)           AS countCD,
+       SUM(IFNULL(M.marca, 0) = 2)           AS countEnt,
+       SUM(IFNULL(M.impresso, 0) = 1)        AS countImp,
+       SUM(IFNULL(M.impresso, 0) = 0)        AS countNImp,
        SUM(IFNULL(locais, '') LIKE '%CD5A%') AS countCD5A,
        retiraFutura                          AS retiraFutura,
        empnoMotorista,
@@ -293,9 +299,17 @@ SELECT Q.loja,
        usuarioSep,
        observacaoPrint
 FROM
-  T_QUERY                      AS Q
-    INNER JOIN sqldados.xaprd2 AS X
-               ON X.storeno = Q.loja AND X.pdvno = Q.pdvno AND X.xano = Q.xano
+  T_QUERY                           AS Q
+    INNER JOIN sqldados.xaprd2      AS X
+               ON X.storeno = Q.loja AND
+                  X.pdvno = Q.pdvno AND
+                  X.xano = Q.xano
+    LEFT JOIN  sqldados.xaprd2Marca AS M
+               ON X.storeno = M.storeno AND
+                  X.pdvno = M.pdvno AND
+                  X.xano = M.xano AND
+                  X.prdno = M.prdno AND
+                  X.grade = M.grade
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR

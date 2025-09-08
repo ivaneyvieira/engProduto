@@ -43,8 +43,8 @@ SELECT X.storeno                                                     AS loja,
        X.preco                                                       AS preco,
        (X.qtty / 1000) * X.preco                                     AS total,
        X.c6                                                          AS gradeAlternativa,
-       X.s11                                                         AS marca,
-       X.s10                                                         AS marcaImpressao,
+       IFNULL(M.marca, 0)                                            AS marca,
+       IFNULL(M.impresso, 0)                                         AS marcaImpressao,
        EE.no                                                         AS usernoExp,
        EE.login                                                      AS usuarioExp,
        X.c5                                                          AS dataHoraExp,
@@ -59,6 +59,12 @@ FROM
   sqldados.prd                           AS P
     INNER JOIN sqldados.xaprd2           AS X
                ON P.no = X.prdno
+    LEFT JOIN  sqldados.xaprd2Marca      AS M
+               ON X.storeno = M.storeno AND
+                  X.pdvno = M.pdvno AND
+                  X.xano = M.xano AND
+                  X.prdno = M.prdno AND
+                  X.grade = M.grade
     LEFT JOIN  T_LOC                     AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users            AS EC
@@ -86,7 +92,7 @@ FROM
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
   AND X.xano = :xano
-  AND (X.s11 = :marca OR :marca = 999)
+  AND (IFNULL(M.marca, 0) = :marca OR :marca = 999)
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
 GROUP BY codigo, grade;
