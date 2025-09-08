@@ -287,7 +287,7 @@ enum class EMotivoDevolucao(
   DEFEITO_FABRICA(
     num = 7,
     descricao = "Defeito de Fabricação",
-    notasMultiplas = false,
+    notasMultiplas = true,
     fob = false,
     divergente = false
   ),
