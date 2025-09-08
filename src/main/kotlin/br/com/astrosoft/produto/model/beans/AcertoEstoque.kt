@@ -9,4 +9,5 @@ class AcertoEstoque {
   var prdno: String = ""
   var grade: String = ""
   var quantidade: Int = 0
+  var observacao: String = ""
 }

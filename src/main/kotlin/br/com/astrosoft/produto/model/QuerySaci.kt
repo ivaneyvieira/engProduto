@@ -1997,6 +1997,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("vencimento", produtoKardec.vencimento.toSaciDate())
       addOptionalParameter("qtde", produtoKardec.qtde)
       addOptionalParameter("saldo", produtoKardec.saldo)
+      addOptionalParameter("observacao", produtoKardec.observacao)
       addOptionalParameter("userLogin", produtoKardec.userLogin)
     }
   }

@@ -11,6 +11,7 @@ data class ProdutoKardec(
   var doc: String? = null,
   var nfEnt: String? = null,
   var tipo: ETipoKardec? = null,
+  var observacao: String?,
   var vencimento: LocalDate? = null,
   var qtde: Int? = null,
   var saldo: Int? = null,
@@ -19,6 +20,9 @@ data class ProdutoKardec(
   fun save() {
     saci.saveKardec(this)
   }
+
+  val observacaoAbrev
+    get() = observacao?.trim()?.split(" ")?.firstOrNull()
 
   val saldoEmb: Double
     get() {

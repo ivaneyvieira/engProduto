@@ -191,7 +191,8 @@ SELECT N.storeno                                                              AS
        MAX(EE.no)                                                             AS usernoSingExp,
        GROUP_CONCAT(DISTINCT IF(EE.login = '', '', EE.login))                 AS usuarioSingExp,
        MAX(IF('CD5A' = IFNULL(LC.localizacao, ''), IFNULL(X.c3, ''), ''))     AS usuarioSep,
-       print_remarks                                                          AS observacaoPrint
+       print_remarks                                                          AS observacaoPrint,
+       N.remarks                                                              AS observacao
 FROM
   sqldados.nf                       AS N
     LEFT JOIN  sqldados.nfUserPrint AS PT
@@ -297,7 +298,8 @@ SELECT Q.loja,
        usernoSingExp,
        usuarioSingExp,
        usuarioSep,
-       observacaoPrint
+       observacaoPrint,
+       observacao
 FROM
   T_QUERY                           AS Q
     INNER JOIN sqldados.xaprd2      AS X

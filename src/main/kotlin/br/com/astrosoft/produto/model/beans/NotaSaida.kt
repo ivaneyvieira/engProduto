@@ -55,6 +55,7 @@ class NotaSaida(
   var usuarioSingExp: String?,
   var usuarioSep: String?,
   var observacaoPrint: String?,
+  var observacao: String?,
 ) {
   val separadoStr
     get() = if (separado) "Sim" else ""

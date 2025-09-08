@@ -7,7 +7,8 @@ SELECT E.storeno            AS loja,
                WHEN R.remarks__480 LIKE 'ENTRADA%' THEN P.qtty / 1000
                WHEN R.remarks__480 LIKE 'SAIDA%'   THEN -P.qtty / 1000
                                                    ELSE 0.00
-             END)           AS quantidade
+             END)           AS quantidade,
+       R.remarks__480       AS observacao
 FROM
   sqldados.eord                AS E
     INNER JOIN sqldados.eoprd  AS P

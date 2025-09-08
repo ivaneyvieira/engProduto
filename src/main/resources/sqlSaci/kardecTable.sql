@@ -15,6 +15,17 @@ CREATE TABLE sqldados.produtoKardec
   PRIMARY KEY (loja, prdno, grade, data, doc, tipo)
 );
 
+ALTER TABLE sqldados.produtoKardec
+  ADD COLUMN observacao varchar(100) NULL;
+
+SELECT *
+FROM
+  sqldados.prdAdicional;
+
+UPDATE sqldados.prdAdicional
+SET dataUpdate = NULL
+WHERE dataUpdate IS NOT NULL;
+
 ALTER TABLE sqldados.prdAdicional
   ADD COLUMN dataUpdate date NULL;
 
@@ -33,4 +44,4 @@ ALTER TABLE sqldados.prdAdicional
 ALTER TABLE sqldados.produtoKardec
   ADD COLUMN nfEnt varchar(30) NULL AFTER doc;
 
-truncate sqldados.produtoKardec
+TRUNCATE sqldados.produtoKardec

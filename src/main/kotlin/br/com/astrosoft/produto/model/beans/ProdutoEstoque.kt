@@ -143,7 +143,8 @@ class ProdutoEstoque(
         vencimento = nota.vencimento,
         qtde = nota.quant ?: 0,
         saldo = 0,
-        userLogin = nota.login ?: ""
+        userLogin = nota.login ?: "",
+        observacao = nota.observacaoNota
       )
     }
   }
@@ -183,7 +184,8 @@ class ProdutoEstoque(
           tipo = ETipoKardec.RESSUPRIMENTO,
           qtde = (produto.qtQuantNF ?: 0) * mult,
           saldo = 0,
-          userLogin = ressuprimento.entregueSPor ?: ""
+          userLogin = ressuprimento.entregueSPor ?: "",
+          observacao = ressuprimento.observacao
         )
       }
     }
@@ -265,6 +267,7 @@ class ProdutoEstoque(
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
           userLogin = nota.usuarioSingCD ?: usuario,
+          observacao = nota.observacao
         )
       }.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
     }
@@ -314,7 +317,8 @@ class ProdutoEstoque(
         tipo = tipo,
         qtde = mult * (produto.quantidade ?: 0),
         saldo = 0,
-        userLogin = produto.entregueSNome ?: ""
+        userLogin = produto.entregueSNome ?: "",
+        observacao = produto.observacao
       )
     }
   }
@@ -337,7 +341,8 @@ class ProdutoEstoque(
           tipo = ETipoKardec.INICIAL,
           qtde = saldo.quant,
           saldo = 0,
-          userLogin = "ADM"
+          userLogin = "ADM",
+          observacao = ""
         )
       }
     }
@@ -351,7 +356,8 @@ class ProdutoEstoque(
       tipo = ETipoKardec.INICIAL,
       qtde = qtConferencia,
       saldo = 0,
-      userLogin = "ADM"
+      userLogin = "ADM",
+      observacao = ""
     )
     return listOf(produtoKardec)
   }
@@ -373,7 +379,8 @@ class ProdutoEstoque(
         tipo = ETipoKardec.ACERTO_ESTOQUE,
         qtde = saldo.quantidade,
         saldo = 0,
-        userLogin = "ADM"
+        userLogin = "ADM",
+        observacao = saldo.observacao
       )
     }
   }
