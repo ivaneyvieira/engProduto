@@ -69,7 +69,7 @@ object ProcessamentoKardec {
     val date = produto.dataInicialDefault()
     val lista: List<ProdutoKardec> =
         produto.recebimentos(date) +
-        produto.ressuprimento(date) +
+        //produto.ressuprimento(date) +
         produto.expedicao(date) +
         produto.reposicao(date) +
         produto.saldoInicial(date) +
