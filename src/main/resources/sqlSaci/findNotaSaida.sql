@@ -141,7 +141,7 @@ SELECT N.storeno                                                              AS
        MAX(X.c5)                                                              AS usuarioExp,
        MAX(X.c4)                                                              AS usuarioCD,
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
-       MAX(IFNULL(M.marca, 0))                                                AS marca,
+       MAX(IFNULL(MC.marca, 0))                                               AS marca,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
        CASE
          WHEN N.remarks LIKE '%RECLASSIFI%' THEN 'RECLASS'
@@ -206,12 +206,12 @@ FROM
                USING (storeno, pdvno, xano)
     INNER JOIN sqldados.xaprd2      AS X
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.xaprd2Marca AS M
-               ON X.storeno = M.storeno AND
-                  X.pdvno = M.pdvno AND
-                  X.xano = M.xano AND
-                  X.prdno = M.prdno AND
-                  X.grade = M.grade
+    LEFT JOIN  sqldados.xaprd2Marca AS MC
+               ON X.storeno = MC.storeno AND
+                  X.pdvno = MC.pdvno AND
+                  X.xano = MC.xano AND
+                  X.prdno = MC.prdno AND
+                  X.grade = MC.grade
     LEFT JOIN  sqldados.users       AS EC
                ON EC.no = X.s4
     LEFT JOIN  sqldados.users       AS EE
