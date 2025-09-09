@@ -38,12 +38,12 @@ class PrintReposicao() :
 
   override fun printSumary(bean: ReposicaoProduto?) {
     val titlulo01 = if (bean?.metodo == EMetodo.RETORNO.num) {
-      "Conferido"
+      "Entregue"
     } else {
       "Separado/Entregue"
     }
     val titlulo02 = if (bean?.metodo == EMetodo.RETORNO.num) {
-      "Finalizado"
+      "Recebido"
     } else {
       "Recebido"
     }
