@@ -57,6 +57,10 @@ class NotaSaida(
   var observacaoPrint: String?,
   var observacao: String?,
 ) {
+  fun isRessuprimento(): Boolean {
+    return this.observacao?.startsWith("RESSU") == true
+  }
+
   val separadoStr
     get() = if (separado) "Sim" else ""
 

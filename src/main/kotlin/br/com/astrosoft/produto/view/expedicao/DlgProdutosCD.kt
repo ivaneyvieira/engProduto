@@ -167,6 +167,11 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
 
   fun update() {
     val listProdutos = nota.produtos(EMarcaNota.CD, todosLocais = false)
+    if(nota.isRessuprimento()){
+      listProdutos.forEach {prd ->
+        prd.selecionado = prd.marca == 2
+      }
+    }
     gridDetail.setItems(listProdutos)
   }
 
