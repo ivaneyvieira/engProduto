@@ -12,9 +12,9 @@ CREATE TEMPORARY TABLE T_LOC_NERUS
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                  AS prdno,
-       grade                  AS grade,
-       MID(localizacao, 1, 4) AS locNerus
+SELECT prdno       AS prdno,
+       grade       AS grade,
+       localizacao AS locNerus
 FROM
   sqldados.prdloc
 WHERE storeno = 4
