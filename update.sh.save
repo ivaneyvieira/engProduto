@@ -3,9 +3,12 @@
 source variables.env
 
 git pull
-DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
+docker-compose build
 
+sleep 15
 docker-compose stop
+
+sleep 2
 docker-compose up --force-recreate -d
 
 # Verifica se o comando foi bem-sucedido
@@ -15,6 +18,5 @@ else
   echo "Failed to start containers" >&2
   exit 1
 fi
-
 
 date

@@ -1,9 +1,9 @@
 version: "3"
 services:
   eng_produtoh:
-    container_name: eng_produtoh
+    container_name: eng_produto_transf
     ports:
-      - "8036:8080"
+      - "8036:8888"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
