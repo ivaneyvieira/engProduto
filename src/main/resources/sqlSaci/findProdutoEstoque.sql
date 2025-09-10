@@ -7,6 +7,20 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
+DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
+CREATE TEMPORARY TABLE T_LOC_NERUS
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno                  AS prdno,
+       grade                  AS grade,
+       MID(localizacao, 1, 4) AS locNerus
+FROM
+  sqldados.prdloc
+WHERE storeno = 4
+  AND (prdno = :prdno OR :prdno = '')
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
@@ -103,9 +117,11 @@ SELECT S.no                                                                     
                                                  (P.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
+       LN.locNerus                                                                    AS locNerus,
        A.locApp                                                                       AS locApp,
        V.no                                                                           AS codForn,
        V.name                                                                         AS fornecedor,
+       V.sname                                                                        AS fornecedorAbrev,
        V.cgc                                                                          AS cnpjFornecedor,
        ROUND(SUM(E.qtty_atacado + E.qtty_varejo) / 1000)                              AS saldo,
        ROUND(SUM(E.qtty_varejo) / 1000)                                               AS saldoVarejo,
@@ -140,6 +156,8 @@ FROM
     LEFT JOIN  sqldados.vend  AS V
                ON V.no = P.mfno
     LEFT JOIN  T_LOC_APP      AS A
+               USING (prdno, grade)
+    LEFT JOIN  T_LOC_NERUS    AS LN
                USING (prdno, grade)
     LEFT JOIN  sqldados.users AS U
                ON U.no = A.estoqueUser
@@ -180,9 +198,11 @@ SELECT loja,
        embalagem,
        qtdEmbalagem,
        estoque,
+       locNerus,
        locApp,
        codForn,
        fornecedor,
+       fornecedorAbrev,
        cnpjFornecedor,
        saldo,
        saldoVarejo,

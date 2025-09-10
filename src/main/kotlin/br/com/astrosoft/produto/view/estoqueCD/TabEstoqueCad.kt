@@ -45,6 +45,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
+
     edtGrade = textField("Grade") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -53,6 +54,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
+
     edtLocalizacao = textField("Loc App") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -61,6 +63,34 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
+
+    this.button("Localização") {
+      this.icon = VaadinIcon.LOCATION_ARROW.create()
+      onClick {
+        val produtos = itensSelecionados()
+        if (produtos.isEmpty()) {
+          DialogHelper.showWarning("Nenhum item selecionado")
+        } else {
+          val localizacaoSel = produtos
+                                 .asSequence()
+                                 .mapNotNull { it.locApp }
+                                 .groupBy { it }
+                                 .map { Pair(it.key, it.value.size) }
+                                 .sortedBy { -it.second }
+                                 .map { it.first }
+                                 .firstOrNull() ?: ""
+          val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
+            produtos.forEach { produto ->
+              produto.locApp = localizacao
+              viewModel.updateProduto(produto)
+            }
+            gridPanel.dataProvider.refreshAll()
+          }
+          dlg.open()
+        }
+      }
+    }
+
     edtFornecedor = textField("Fornecedor") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -70,6 +100,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       }
     }
     cmbCaracter = select("Caracter") {
+      this.width = "6rem"
       this.setItems(ECaracter.entries)
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -80,6 +111,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       }
     }
     cmbInativo = select("Inativo") {
+      this.width = "6rem"
       this.setItems(EInativo.entries)
       this.setItemLabelGenerator { item ->
         item.descricao
@@ -121,11 +153,11 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci", width = "100px")
+    columnGrid(ProdutoEstoque::locNerus, header = "Loc Nerus", width = "100px")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px").textFieldEditor()
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    columnGrid(ProdutoEstoque::fornecedor, header = "For Abr").expand()
+    columnGrid(ProdutoEstoque::fornecedorAbrev, header = "For Abr").expand()
   }
 
   override fun filtro(): FiltroProdutoEstoque {

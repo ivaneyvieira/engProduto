@@ -11,7 +11,7 @@ class PrintReposicao() :
   PrintText<ReposicaoProduto>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ReposicaoProduto) {
-    writeln("Reposicao Loja", negrito = true, center = true)
+    writeln("Retorno Loja", negrito = true, center = true)
     writeln("")
     writeln(
       "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
