@@ -31,7 +31,7 @@ class PrintPedidoRessuprimento(val pedido: PedidoRessuprimento, propertyQuant: K
     column(ProdutoRessuprimento::grade, "Grade", 8)
     //column(ProdutoRessuprimento::localizacao, "Loc", 4)
     column(propertyQuant, "_Quant", 6, lineBreak = true)
-    column(ProdutoRessuprimento::vendnoRefRel, "", 45 + 3)
+    column(ProdutoRessuprimento::vendnoRefRel, "", 45 + 3 - 8)
     column(ProdutoRessuprimento::localizacaoRel, "", 10)
   }
 
