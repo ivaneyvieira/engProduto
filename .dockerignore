@@ -1,0 +1,30 @@
+# VCS and IDE
+.git
+.gitignore
+.idea
+.vscode
+
+# Build outputs and caches
+build
+out
+.gradle
+
+# Node artifacts
+node_modules
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# OS / misc
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+
+# Do NOT ignore cache/ because Dockerfile uses it
+!cache
