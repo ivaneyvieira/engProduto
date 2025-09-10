@@ -1,28 +1,25 @@
 version: "3"
 services:
   eng_produtoh:
-    container_name: ${EMP_NAME}_${APP_NAME}
-    image: ${EMP_NAME}/${APP_NAME}:latest
-    build: .
-    env_file:
-      - variables.env
+    container_name: eng_produto_transf
     ports:
-      - "${PORT:-8036}:8080"
+      - "8036:8888"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
       LANG: 'pt_BR.UTF-8'
       LANGUAGE: 'pt_BR:pt'
       LC_ALL: 'pt_BR.UTF-8'
+    build: .
     volumes:
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
       net_produtoh:
-        ipv4_address: ${NET_IP}.9.1
+        ipv4_address: 172.195.9.1
 networks:
   net_produtoh:
     ipam:
       driver: default
       config:
-        - subnet: ${NET_IP}.0.0/16
+        - subnet: 172.195.0.0/16
