@@ -77,6 +77,9 @@ class ProdutoRessuprimento(
   val vendnoRefRel: String
     get() = "       Ref Fab ${vendnoRef ?: ""}"
 
+  val localizacaoRel: String
+    get() = "Loc ${localizacao ?: ""}"
+
   var estoqueLoja: Boolean? = false
 
   val qttyMax

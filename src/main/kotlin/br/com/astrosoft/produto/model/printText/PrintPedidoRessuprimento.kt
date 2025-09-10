@@ -27,11 +27,12 @@ class PrintPedidoRessuprimento(val pedido: PedidoRessuprimento, propertyQuant: K
 
   init {
     column(ProdutoRessuprimento::codigo, "Codigo", 6)
-    column(ProdutoRessuprimento::descricao, "Descricao", 36)
+    column(ProdutoRessuprimento::descricao, "Descricao", 36 + 5)
     column(ProdutoRessuprimento::grade, "Grade", 8)
-    column(ProdutoRessuprimento::localizacao, "Loc", 4)
+    //column(ProdutoRessuprimento::localizacao, "Loc", 4)
     column(propertyQuant, "_Quant", 6, lineBreak = true)
-    column(ProdutoRessuprimento::vendnoRefRel, "", 45)
+    column(ProdutoRessuprimento::vendnoRefRel, "", 45 + 3)
+    column(ProdutoRessuprimento::localizacaoRel, "", 10)
   }
 
   override fun printSumary(bean: ProdutoRessuprimento?) {
