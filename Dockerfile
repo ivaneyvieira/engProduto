@@ -2,6 +2,7 @@
 #RUN apt update && apt install unzip -y
 
 FROM gradle:8.5.0-jdk21-alpine AS BUILD
+RUN apk add --no-cache unzip
 COPY . /app/
 COPY ./cache/gradle /home/gradle/.gradle/
 COPY ./cache/vaadin /root/.vaadin/
