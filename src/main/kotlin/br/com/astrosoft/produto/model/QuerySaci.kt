@@ -300,6 +300,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("dataNotas", filtro.dataNotas.toSaciDate())
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("dataEntregaInicial", filtro.dataEntregaInicial.toSaciDate())
@@ -307,9 +308,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
     }
-
-    println("list.size: ${list.size}")
-    println(filtro)
 
     val listFilter = list.filter {
       when (filtro.tipoNota) {
@@ -327,8 +325,6 @@ class QuerySaci : QueryDB(database) {
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
     }
-
-    println("listFilter.size: ${listFilter.size}")
 
     return listFilter
   }

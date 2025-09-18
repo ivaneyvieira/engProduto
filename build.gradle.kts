@@ -85,6 +85,8 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("org.claspina:confirm-dialog:2.0.0")
   //implementation("org.codehaus.woodstox:stax2-api:4.1")
+
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 }
 
 tasks.withType<KotlinCompile> {
@@ -102,7 +104,7 @@ application {
 }
 
 tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 

@@ -38,7 +38,7 @@ data class ProdutoKardec(
     get() = tipo?.descricao ?: ""
 
   companion object {
-    fun deleteList(produto: ProdutoEstoque) {
+    fun deleteKarde(produto: ProdutoEstoque) {
       saci.deleteKardec(produto)
     }
 

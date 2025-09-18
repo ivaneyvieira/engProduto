@@ -117,6 +117,7 @@ data class FiltroNota(
   val marca: EMarcaNota,
   val tipoNota: ETipoNotaFiscal,
   val loja: Int,
+  val dataNotas: LocalDate = LocalDate.of(2007,1,1),
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val dataEntregaInicial: LocalDate? = null,

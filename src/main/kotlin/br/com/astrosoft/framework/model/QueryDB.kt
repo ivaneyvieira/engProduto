@@ -2,11 +2,12 @@ package br.com.astrosoft.framework.model
 
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection
 import org.sql2o.Query
 import org.sql2o.Sql2o
-import org.sql2o.converters.Converter
 import org.sql2o.quirks.NoQuirks
 import java.time.LocalDate
 import kotlin.reflect.KClass
@@ -19,11 +20,17 @@ open class QueryDB(database: DatabaseConfig) {
   init {
     try {
       Class.forName(database.driver)
-      val maps = HashMap<Class<*>, Converter<*>>()
-      //maps[LocalDate::class.java] = LocalDateConverter()
-      //maps[LocalTime::class.java] = LocalSqlTimeConverter()
-      //maps[ByteArray::class.java] = ByteArrayConverter()
-      this.sql2o = Sql2o(database.url, database.user, database.password, NoQuirks(maps))
+      val config = HikariConfig()
+      config.jdbcUrl = database.url
+      config.username = database.user
+      config.password = database.password
+      config.addDataSourceProperty("cachePrepStmts", "true")
+      config.addDataSourceProperty("prepStmtCacheSize", "250")
+      config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+      config.isAutoCommit = false
+      val ds = HikariDataSource(config)
+      ds.maximumPoolSize = 2
+      this.sql2o = Sql2o(ds)
     } catch (e: Exception) {
       throw RuntimeException(e)
     }
@@ -93,7 +100,7 @@ open class QueryDB(database: DatabaseConfig) {
     try {
       val query = con.createQueryConfig(sql)
       query.lambda()
-      println(sql)
+      //println(sql)
       return query.executeAndFetch(classes.java)
     } catch (e: Exception) {
       failDB(e.message)
@@ -128,7 +135,7 @@ open class QueryDB(database: DatabaseConfig) {
         query.lambda()
         query.executeUpdate()
         query.paramNameToIdxMap
-        println(sql)
+        //println(sql)
       }
     } catch (e: Exception) {
       failDB(e.message)
@@ -142,7 +149,7 @@ open class QueryDB(database: DatabaseConfig) {
         lambda.forEach { lamb ->
           query.lamb()
           query.executeUpdate()
-          println(sql)
+          //println(sql)
         }
       }
     } catch (e: Exception) {

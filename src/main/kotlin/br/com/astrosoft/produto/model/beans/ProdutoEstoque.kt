@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.lpad
+import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -46,6 +47,10 @@ class ProdutoEstoque(
   var numeroAcerto: Int? = null,
   var processado: Boolean? = false,
 ) {
+  fun isUpdated(): Boolean {
+    return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
+  }
+
   val qtdDif: Double
     get() {
       val sistema = saldo?.toDouble() ?: 0.0
@@ -209,9 +214,10 @@ class ProdutoEstoque(
       pesquisa = "",
       prdno = prdno ?: "",
       grade = "",
-      dataInicial = dataInicial.minusDays(30),
+      dataInicial = dataInicial.minusDays(60),
       dataEntregaInicial = null,
       dataFinal = null,
+      dataNotas = LocalDate.now().minusDays(60),
       localizacaoNota = listOf("TODOS"),
     )
     val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
