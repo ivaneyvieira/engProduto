@@ -4,7 +4,6 @@ import br.com.astrosoft.produto.model.beans.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.toList
 import org.apache.poi.ss.formula.functions.T
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
@@ -35,7 +34,10 @@ object ProcessamentoKardec {
 
   fun updateSaldoKardec(produto: ProdutoEstoque) {
     produto.dataUpdate = null
-    updateKardec(produto)
+    val listaKardec = updateKardec(produto)
+    produto.dataUpdate = LocalDate.now()
+    produto.kardec = listaKardec.lastOrNull()?.saldo ?: 0
+    produto.update()
   }
 
   private fun updateKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
