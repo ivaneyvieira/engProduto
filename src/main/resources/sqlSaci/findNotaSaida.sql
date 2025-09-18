@@ -122,6 +122,9 @@ GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
+(
+  PRIMARY KEY (loja, pdvno, xano)
+)
 SELECT N.storeno                                                              AS loja,
        N.s14 != 0                                                             AS separado,
        N.pdvno                                                                AS pdvno,
@@ -302,16 +305,10 @@ SELECT Q.loja,
        observacao
 FROM
   T_QUERY                           AS Q
-    INNER JOIN sqldados.xaprd2      AS X
-               ON X.storeno = Q.loja AND
-                  X.pdvno = Q.pdvno AND
-                  X.xano = Q.xano
     LEFT JOIN  sqldados.xaprd2Marca AS M
-               ON X.storeno = M.storeno AND
-                  X.pdvno = M.pdvno AND
-                  X.xano = M.xano AND
-                  X.prdno = M.prdno AND
-                  X.grade = M.grade
+               ON M.storeno = Q.loja AND
+                  M.pdvno = Q.pdvno AND
+                  M.xano = Q.xano
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
