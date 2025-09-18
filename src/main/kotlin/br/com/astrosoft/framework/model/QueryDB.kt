@@ -30,7 +30,7 @@ open class QueryDB(database: DatabaseConfig) {
       config.isAutoCommit = false
       val ds = HikariDataSource(config)
       ds.maximumPoolSize = 2
-      this.sql2o = Sql2o(ds)
+      this.sql2o = Sql2o(database.url, database.user, database.password)
     } catch (e: Exception) {
       throw RuntimeException(e)
     }
