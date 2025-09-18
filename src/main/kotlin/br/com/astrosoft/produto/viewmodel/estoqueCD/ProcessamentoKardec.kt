@@ -36,7 +36,7 @@ object ProcessamentoKardec {
     produto.dataUpdate = null
     val listaKardec = updateKardec(produto)
     produto.dataUpdate = LocalDate.now()
-    produto.kardec = listaKardec.lastOrNull()?.saldo ?: 0
+    produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
   }
 
@@ -61,7 +61,7 @@ object ProcessamentoKardec {
     }
 
     produto.dataUpdate = LocalDate.now()
-    produto.kardec = listaKardec.lastOrNull()?.saldo ?: 0
+    produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
     return listaKardec.ajustaOrdem()
   }
