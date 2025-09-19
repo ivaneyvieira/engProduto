@@ -238,5 +238,5 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
        (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
-  AND ((IFNULL(locApp, '') IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
+  AND (IFNULL(locApp, '') IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser))
   AND (numeroAcerto = :pedido OR :pedido = 0)
