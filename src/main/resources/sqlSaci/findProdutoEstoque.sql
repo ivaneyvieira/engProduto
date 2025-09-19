@@ -137,7 +137,7 @@ SELECT S.no                                                                     
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        LN.locNerus                                                                    AS locNerus,
-       A.locApp                                                                       AS locApp,
+       IFNULL(A.locApp, '')                                                           AS locApp,
        V.no                                                                           AS codForn,
        V.name                                                                         AS fornecedor,
        V.sname                                                                        AS fornecedorAbrev,
