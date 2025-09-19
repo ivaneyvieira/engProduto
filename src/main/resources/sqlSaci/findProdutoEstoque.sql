@@ -10,10 +10,11 @@ DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
-    PRIMARY KEY (prdno)
+  PRIMARY KEY (prdno)
 )
-select no as prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
-from sqldados.prd AS P
+SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
+FROM
+  sqldados.prd AS P
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
        ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
@@ -28,12 +29,13 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
 DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
 CREATE TEMPORARY TABLE T_LOC_NERUS
 (
-    PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
 SELECT prdno       AS prdno,
        grade       AS grade,
        localizacao AS locNerus
-FROM sqldados.prdloc
+FROM
+  sqldados.prdloc
 WHERE storeno = 4
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
@@ -41,7 +43,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
-    PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
 SELECT prdno,
        grade,
@@ -56,7 +58,8 @@ SELECT prdno,
        MAX(estoqueCD)                                        AS estoqueCD,
        MAX(estoqueLoja)                                      AS estoqueLoja,
        MAX(estoqueUser)                                      AS estoqueUser
-FROM sqldados.prdAdicional
+FROM
+  sqldados.prdAdicional
 WHERE (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
@@ -64,32 +67,34 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
 CREATE TEMPORARY TABLE T_BARCODE
 (
-    PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
 SELECT P.no                                                                  AS prdno,
        IFNULL(B.grade, '')                                                   AS grade,
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
-FROM sqldados.prd AS P
-         LEFT JOIN sqldados.prd2 AS P2
-                   ON P.no = P2.prdno
-         LEFT JOIN sqldados.prdbar AS B
-                   ON P.no = B.prdno AND B.grade != ''
+FROM
+  sqldados.prd                AS P
+    LEFT JOIN sqldados.prd2   AS P2
+              ON P.no = P2.prdno
+    LEFT JOIN sqldados.prdbar AS B
+              ON P.no = B.prdno AND B.grade != ''
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
 DROP TEMPORARY TABLE IF EXISTS T_ULT_ACERTO;
 CREATE TEMPORARY TABLE T_ULT_ACERTO
 (
-    PRIMARY KEY (numloja, prdno, grade)
+  PRIMARY KEY (numloja, prdno, grade)
 )
 SELECT numloja, prdno, grade, MAX(numero) AS numero
-FROM sqldados.produtoEstoqueAcerto A
+FROM
+  sqldados.produtoEstoqueAcerto A
 GROUP BY numloja, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
 CREATE TEMPORARY TABLE T_ACERTO
 (
-    PRIMARY KEY (numloja, prdno, grade)
+  PRIMARY KEY (numloja, prdno, grade)
 )
 SELECT A.numero,
        A.numloja,
@@ -104,9 +109,10 @@ SELECT A.numero,
        A.processado,
        A.transacao,
        A.login
-FROM sqldados.produtoEstoqueAcerto A
-         INNER JOIN T_ULT_ACERTO
-                    USING (numloja, prdno, grade, numero);
+FROM
+  sqldados.produtoEstoqueAcerto A
+    INNER JOIN T_ULT_ACERTO
+               USING (numloja, prdno, grade, numero);
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
@@ -121,13 +127,13 @@ SELECT S.no                                                                     
        E.grade                                                                        AS grade,
        ROUND(PD.qttyPackClosed / 1000)                                                AS embalagem,
        SUM(CASE
-               WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                       ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 5800, 2)
-               WHEN PD.name LIKE 'VRC COLOR%' THEN TRUNCATE(
-                       ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
-               ELSE TRUNCATE(
-                       ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
-                       (PD.qttyPackClosed / 1000), 0)
+             WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
+                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 5800, 2)
+             WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
+                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
+                                              ELSE TRUNCATE(
+                                                  ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
+                                                  (PD.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        LN.locNerus                                                                    AS locNerus,
@@ -160,25 +166,26 @@ SELECT S.no                                                                     
        PD.mfno_ref                                                                    AS ref,
        AC.numero                                                                      AS numeroAcerto,
        AC.processado                                                                  AS processado
-FROM sqldados.stk AS E
-         INNER JOIN sqldados.store AS S
-                    ON E.storeno = S.no
-         INNER JOIN T_PRD AS PD
-                    USING (prdno)
-         LEFT JOIN sqldados.vend AS V
-                   ON V.no = PD.mfno
-         LEFT JOIN T_LOC_APP AS A
-                   USING (prdno, grade)
-         LEFT JOIN T_LOC_NERUS AS LN
-                   USING (prdno, grade)
-         LEFT JOIN sqldados.users AS U
-                   ON U.no = A.estoqueUser
-         LEFT JOIN T_BARCODE AS B
-                   USING (prdno, grade)
-         LEFT JOIN sqldados.prp AS PC
-                   ON PC.storeno = 10 AND PC.prdno = E.prdno
-         LEFT JOIN T_ACERTO AS AC
-                   ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
+FROM
+  sqldados.stk                AS E
+    INNER JOIN sqldados.store AS S
+               ON E.storeno = S.no
+    INNER JOIN T_PRD          AS PD
+               USING (prdno)
+    LEFT JOIN  sqldados.vend  AS V
+               ON V.no = PD.mfno
+    LEFT JOIN  T_LOC_APP      AS A
+               USING (prdno, grade)
+    LEFT JOIN  T_LOC_NERUS    AS LN
+               USING (prdno, grade)
+    LEFT JOIN  sqldados.users AS U
+               ON U.no = A.estoqueUser
+    LEFT JOIN  T_BARCODE      AS B
+               USING (prdno, grade)
+    LEFT JOIN  sqldados.prp   AS PC
+               ON PC.storeno = 10 AND PC.prdno = E.prdno
+    LEFT JOIN  T_ACERTO       AS AC
+               ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
 WHERE (E.storeno = :loja OR :loja = 0)
   AND (PD.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
 GROUP BY E.prdno, E.grade
@@ -211,7 +218,7 @@ SELECT loja,
        dataInicial,
        dataUpdate,
        kardec,
-    /*dataConferencia,*/
+  /*dataConferencia,*/
        qtConferencia,
        qtConfEdit,
        qtConfEditLoja,
@@ -225,11 +232,12 @@ SELECT loja,
        ref,
        numeroAcerto,
        processado
-FROM temp_pesquisa
+FROM
+  temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR
        (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
-  AND ((locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '') AND
-       (locApp IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
+  AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
+  AND ((IFNULL(locApp, '') IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
   AND (numeroAcerto = :pedido OR :pedido = 0)
 
