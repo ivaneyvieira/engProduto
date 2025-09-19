@@ -214,10 +214,10 @@ class ProdutoEstoque(
       pesquisa = "",
       prdno = prdno ?: "",
       grade = "",
-      dataInicial = dataInicial.minusDays(35),
+      dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
       dataFinal = null,
-      dataNotas = LocalDate.now().minusDays(35),
+      dataNotas = LocalDate.now().minusDays(180),
       numero = 0,
       localizacaoNota = listOf("TODOS"),
     )
