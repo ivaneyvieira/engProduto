@@ -92,6 +92,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
     edtNumero = integerField("NF") {
+      this.width = "5rem"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
