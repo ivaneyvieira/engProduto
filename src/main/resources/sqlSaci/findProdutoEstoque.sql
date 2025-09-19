@@ -240,4 +240,3 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND ((IFNULL(locApp, '') IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR IFNULL(locApp, '') = ''))
   AND (numeroAcerto = :pedido OR :pedido = 0)
-
