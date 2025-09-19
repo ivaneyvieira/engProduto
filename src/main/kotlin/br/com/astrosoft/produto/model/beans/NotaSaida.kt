@@ -124,6 +124,7 @@ data class FiltroNota(
   val dataEntregaFinal: LocalDate? = null,
   //val notaEntreg2: String = "T",
   val pesquisa: String,
+  val numero: Int = 0,
   val prdno: String = "",
   val grade: String = "",
   val localizacaoNota: List<String> = user?.localizacaoNota?.toList() ?: listOf("TODOS"),

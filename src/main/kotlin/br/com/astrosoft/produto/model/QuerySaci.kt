@@ -299,6 +299,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("marca", filtro.marca.num)
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("numero", filtro.numero)
       addOptionalParameter("local", listOf("TODOS"))
       addOptionalParameter("dataNotas", filtro.dataNotas.toSaciDate())
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())

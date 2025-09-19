@@ -20,11 +20,10 @@ DO @DT := :dataNotas;
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno AS storeno, ordno AS ordno, SUM((E.bits & 2) > 0) AS tipoR, SUM((E.bits & 2) = 0) AS tipoE
-FROM
-  sqldados.eoprdf AS E
+FROM sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (`date` >= @DT)
 GROUP BY storeno, ordno;
@@ -32,7 +31,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
        P.eordno                                  AS ordno,
@@ -40,10 +39,9 @@ SELECT P.storeno,
        P.date                                    AS data,
        P.s3                                      AS userno,
        U.login                                   AS usuario
-FROM
-  sqlpdv.pxa                 AS P
-    LEFT JOIN sqldados.users AS U
-              ON U.no = P.s3
+FROM sqlpdv.pxa AS P
+         LEFT JOIN sqldados.users AS U
+                   ON U.no = P.s3
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
   AND P.date >= @DT
@@ -52,7 +50,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
 (
-  PRIMARY KEY (storeno, ordno)
+    PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -61,8 +59,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
@@ -72,7 +69,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
 (
-  PRIMARY KEY (storeno, pdvno, xano)
+    PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT V.storeno,
        V.pdvno,
@@ -81,20 +78,18 @@ SELECT V.storeno,
        MAX(E.numero)  AS notaEntrega,
        MAX(E.usuario) AS usuario,
        MAX(E.data)    AS dataEntrega
-FROM
-  T_V             AS V
-    LEFT JOIN T_E AS E
-              USING (storeno, ordno)
+FROM T_V AS V
+         LEFT JOIN T_E AS E
+                   USING (storeno, ordno)
 GROUP BY V.storeno, V.pdvno, V.xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+    PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
@@ -108,11 +103,10 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 DROP TEMPORARY TABLE IF EXISTS T_CARGA;
 CREATE TEMPORARY TABLE T_CARGA
 (
-  PRIMARY KEY (storeno, pdvno, xano)
+    PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT storeno, pdvno, xano
-FROM
-  sqldados.nfrprd
+FROM sqldados.nfrprd
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
   AND `date` > @DT
@@ -242,9 +236,6 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.issuedate >= @DT
-  AND (((X.date >= :dataInicial OR :dataInicial = 0)
-    AND (X.date <= :dataFinal OR :dataFinal = 0)
-    AND (X.date >= @DT)) OR :prdno = '')
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
   AND (X.storeno IN (2, 3, 4, 5, 8))
@@ -256,6 +247,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
                                 (IFNULL(CG.storeno, 0) != :loja) OR
                                 (N.nfse = 7))) OR :marca NOT IN (0, 999))
   AND ('TODOS' IN (:local) OR LC.localizacao IN (:local))
+  AND (N.nfno = :numero OR :numero = 0)
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -273,7 +265,7 @@ SELECT Q.loja,
        Q.vendedor,
        Q.nomeVendedor,
        Q.nomeCompletoVendedor,
-  /*Q.locais,*/
+    /*Q.locais,*/
        Q.usuarioExp,
        Q.usuarioCD,
        Q.totalProdutos,
@@ -307,12 +299,11 @@ SELECT Q.loja,
        usuarioSep,
        observacaoPrint,
        observacao
-FROM
-  T_QUERY                           AS Q
-    LEFT JOIN  sqldados.xaprd2Marca AS M
-               ON M.storeno = Q.loja AND
-                  M.pdvno = Q.pdvno AND
-                  M.xano = Q.xano
+FROM T_QUERY AS Q
+         LEFT JOIN sqldados.xaprd2Marca AS M
+                   ON M.storeno = Q.loja AND
+                      M.pdvno = Q.pdvno AND
+                      M.xano = Q.xano
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR

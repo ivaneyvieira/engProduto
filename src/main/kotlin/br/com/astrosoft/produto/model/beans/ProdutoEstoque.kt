@@ -218,6 +218,7 @@ class ProdutoEstoque(
       dataEntregaInicial = null,
       dataFinal = null,
       dataNotas = LocalDate.now().minusDays(35),
+      numero = 0,
       localizacaoNota = listOf("TODOS"),
     )
     val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
