@@ -133,9 +133,10 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
         when {
-          marcaImpressao > 0         -> "azul"
-          marca == EMarcaNota.CD.num -> "amarelo"
-          else                       -> null
+          marcaImpressao > 0          -> "azul"
+          marca == EMarcaNota.CD.num  -> "amarelo"
+          marca == EMarcaNota.ENT.num -> "amarelo"
+          else                        -> null
         }
       }
     }

@@ -31,9 +31,18 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun marcaCD() = viewModel.exec {
-    val itens = subView.produtosSelecionados()
-    itens.ifEmpty {
+    val selecionados = subView.produtosSelecionados()
+
+    selecionados.ifEmpty {
       fail("Nenhum produto selecionado")
+    }
+
+    val itens = selecionados.filter {
+      it.marca == EMarcaNota.EXP.num
+    }
+
+    itens.ifEmpty {
+      fail("Nenhum produto para marcar como CD")
     }
 
     itens.forEach {
