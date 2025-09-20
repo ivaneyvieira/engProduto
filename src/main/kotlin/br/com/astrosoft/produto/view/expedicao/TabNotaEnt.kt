@@ -24,6 +24,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaRota
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaEnt
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaEntViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -31,7 +32,9 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
@@ -43,6 +46,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtNumero: IntegerField
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -88,6 +92,15 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
     edtPesquisa = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtNumero = integerField("NF") {
+      this.width = "5rem"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -146,6 +159,7 @@ class TabNotaEnt(val viewModel: TabNotaEntViewModel) : TabPanelGrid<NotaSaida>(N
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       pesquisa = edtPesquisa.value ?: "",
+      numero = edtNumero.value ?: 0,
     )
   }
 
