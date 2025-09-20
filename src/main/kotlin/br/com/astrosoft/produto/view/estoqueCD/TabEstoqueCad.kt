@@ -105,7 +105,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      this.value = ECaracter.TODOS
+      this.value = ECaracter.NAO
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -116,7 +116,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      this.value = EInativo.TODOS
+      this.value = EInativo.NAO
       addValueChangeListener {
         viewModel.updateView()
       }

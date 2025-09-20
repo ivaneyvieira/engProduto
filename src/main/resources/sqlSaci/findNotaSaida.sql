@@ -300,10 +300,16 @@ SELECT Q.loja,
        observacaoPrint,
        observacao
 FROM T_QUERY AS Q
-         LEFT JOIN sqldados.xaprd2Marca AS M
-                   ON M.storeno = Q.loja AND
-                      M.pdvno = Q.pdvno AND
-                      M.xano = Q.xano
+    INNER JOIN sqldados.xaprd2      AS X
+               ON X.storeno = Q.loja AND
+                  X.pdvno = Q.pdvno AND
+                  X.xano = Q.xano
+    LEFT JOIN  sqldados.xaprd2Marca AS M
+               ON X.storeno = M.storeno AND
+                  X.pdvno = M.pdvno AND
+                  X.xano = M.xano AND
+                  X.prdno = M.prdno AND
+                  X.grade = M.grade
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
