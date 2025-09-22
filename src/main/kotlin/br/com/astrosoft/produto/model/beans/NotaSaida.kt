@@ -94,7 +94,7 @@ class NotaSaida(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean) =
+  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean): List<ProdutoNFS> =
       saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
 
   fun marcaImpressao() {

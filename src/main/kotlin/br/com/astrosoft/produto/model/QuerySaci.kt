@@ -2594,7 +2594,7 @@ class QuerySaci : QueryDB(database) {
 
   fun marcaAjuste(nota: EntradaDevCliPro, ajuste: AjusteProduto) {
     val sql = "/sqlSaci/marcaAjuste.sql"
-    script(sql){
+    script(sql) {
       this.addOptionalParameter("invno", nota.invno)
       this.addOptionalParameter("prdno", nota.prdno)
       this.addOptionalParameter("grade", nota.grade)
