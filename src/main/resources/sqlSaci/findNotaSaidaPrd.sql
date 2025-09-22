@@ -296,7 +296,7 @@ FROM
     LEFT JOIN sqldados.xaprd2Marca AS M
               ON Q.loja = M.storeno AND
                  Q.pdvno = M.pdvno AND
-                 Q.xano = M.xano AND
+                 Q.xano = M.xano
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR
        nomeMotorista LIKE @PESQUISA_LIKE OR usuarioPrint LIKE @PESQUISA_LIKE OR usuarioSingCD LIKE @PESQUISA_LIKE OR
