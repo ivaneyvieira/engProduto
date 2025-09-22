@@ -221,7 +221,7 @@ class ProdutoEstoque(
       numero = 0,
       localizacaoNota = listOf("TODOS"),
     )
-    val notasEnt = saci.findNotaSaida(filtro = filtro.copy(marca = EMarcaNota.ENT))
+    val notasEnt = saci.findNotaSaidaPrd(filtro = filtro.copy(marca = EMarcaNota.ENT))
     val notas = notasEnt.filter {
       it.cancelada != "S"
     }
