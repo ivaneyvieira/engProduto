@@ -54,11 +54,7 @@ object ProcessamentoKardec {
   }
 
   fun kardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
-    val listaKardec = if (produto.isUpdated()) {
-      ProdutoKardec.findKardec(produto, dataIncial)
-    } else {
-      updateKardec(produto, dataIncial)
-    }
+    val listaKardec = ProdutoKardec.findKardec(produto, dataIncial)
 
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
