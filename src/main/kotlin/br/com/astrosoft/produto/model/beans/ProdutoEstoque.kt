@@ -216,8 +216,8 @@ class ProdutoEstoque(
       grade = "",
       dataInicial = dataInicial.minusDays(30),
       dataEntregaInicial = null,
-      dataFinal = null,
-      dataNotas = LocalDate.now().minusDays(180),
+      dataFinal = LocalDate.now(),
+      dataNotas = dataInicial.minusDays(30),
       numero = 0,
       localizacaoNota = listOf("TODOS"),
     )

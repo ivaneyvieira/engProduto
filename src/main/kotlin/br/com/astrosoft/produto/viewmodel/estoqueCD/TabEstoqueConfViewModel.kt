@@ -125,8 +125,8 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     )
   }
 
-  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    return ProcessamentoKardec.kardec(produto)
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+    return ProcessamentoKardec.kardec(produto, dataIncial)
   }
 
   fun marcaProduto(listaSelecionando: List<ProdutoEstoque>) {

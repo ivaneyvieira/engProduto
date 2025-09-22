@@ -42,8 +42,8 @@ data class ProdutoKardec(
       saci.deleteKardec(produto)
     }
 
-    fun findKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-      return saci.selectKardec(produto)
+    fun findKardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
+      return saci.selectKardec(produto, dataIncial)
     }
   }
 }

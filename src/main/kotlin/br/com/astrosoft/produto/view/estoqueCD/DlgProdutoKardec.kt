@@ -13,7 +13,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import java.time.LocalDate
 
-class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: ProdutoEstoque) {
+class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: ProdutoEstoque, val dataIncial: LocalDate?) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoKardec::class.java, false)
@@ -75,7 +75,7 @@ class DlgProdutoKardec(val viewModel: TabEstoqueSaldoViewModel, val produto: Pro
   }
 
   fun update() {
-    val kardec = viewModel.kardec(produto)
+    val kardec = viewModel.kardec(produto, dataIncial)
     gridDetail.setItems(kardec)
   }
 

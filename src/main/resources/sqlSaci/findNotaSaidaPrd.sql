@@ -251,9 +251,9 @@ SELECT Q.loja,
        observacao
 FROM
   T_QUERY                          AS Q
-    LEFT JOIN sqldados.xaprd2Marca AS M
+    INNER JOIN sqldados.xaprd2Marca AS M
               ON Q.loja = M.storeno AND
                  Q.pdvno = M.pdvno AND
                  Q.xano = M.xano
-WHERE (IFNULL(M.marca, 0) = 2)
+WHERE M.marca = 2
 GROUP BY Q.loja, Q.pdvno, Q.xano

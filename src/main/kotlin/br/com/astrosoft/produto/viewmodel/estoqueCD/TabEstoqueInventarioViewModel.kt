@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
 import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque2
+import java.time.LocalDate
 
 class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
@@ -32,9 +33,9 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
     return planilha.write(produtos)
   }
 
-  fun updateKardec() = viewModel.exec {
+  fun updateKardec(dataIncial: LocalDate?) = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-    ProcessamentoKardec.updateKardec(produtos)
+    ProcessamentoKardec.updateKardec(produtos, dataIncial)
     subView.reloadGrid()
   }
 
@@ -96,8 +97,8 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
     )
   }
 
-  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    return ProcessamentoKardec.kardec(produto)
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+    return ProcessamentoKardec.kardec(produto, dataIncial)
   }
 
   fun limpaAcerto() {

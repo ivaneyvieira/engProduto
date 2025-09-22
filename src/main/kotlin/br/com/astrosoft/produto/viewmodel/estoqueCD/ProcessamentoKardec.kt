@@ -27,23 +27,23 @@ object ProcessamentoKardec {
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     produtos.forEach { prd ->
       if (!prd.isUpdated()) {
-        updateSaldoKardec(prd)
+        updateSaldoKardec(prd, null)
       }
     }
   }
 
-  fun updateSaldoKardec(produto: ProdutoEstoque) {
+  fun updateSaldoKardec(produto: ProdutoEstoque, dataIncial: LocalDate?) {
     produto.dataUpdate = null
-    val listaKardec = updateKardec(produto)
+    val listaKardec = updateKardec(produto, dataIncial)
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
   }
 
-  private fun updateKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  private fun updateKardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
     return runBlocking {
       ProdutoKardec.deleteKarde(produto)
-      val list = fetchKardecFlow(produto)
+      val list = fetchKardecFlow(produto, dataIncial)
       buildList {
         list.collect { produtoKardec: ProdutoKardec ->
           produtoKardec.save()
@@ -53,11 +53,11 @@ object ProcessamentoKardec {
     }
   }
 
-  fun kardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  fun kardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
     val listaKardec = if (produto.isUpdated()) {
-      ProdutoKardec.findKardec(produto)
+      ProdutoKardec.findKardec(produto, dataIncial)
     } else {
-      updateKardec(produto)
+      updateKardec(produto, dataIncial)
     }
 
     produto.dataUpdate = LocalDate.now()
@@ -66,9 +66,9 @@ object ProcessamentoKardec {
     return listaKardec.ajustaOrdem()
   }
 
-  fun updateKardec(produtos: List<ProdutoEstoque>) {
+  fun updateKardec(produtos: List<ProdutoEstoque>, dataIncial : LocalDate?) {
     produtos.forEach { produto ->
-      updateSaldoKardec(produto)
+      updateSaldoKardec(produto, dataIncial)
     }
   }
 
@@ -109,8 +109,8 @@ object ProcessamentoKardec {
       .ajustaOrdem()// List<ProdutoKardec>
   }
 
-  fun fetchKardecFlow(produto: ProdutoEstoque): Flow<ProdutoKardec> = channelFlow {
-    val date = produto.dataInicialDefault()
+  fun fetchKardecFlow(produto: ProdutoEstoque, dataIncial: LocalDate?): Flow<ProdutoKardec> = channelFlow {
+    val date = dataIncial ?: produto.dataInicialDefault()
     println("Início do processamento do produto ${produto.codigo} na data $date")
 
     fun launchSource(tipo: String, block: suspend () -> List<ProdutoKardec>) = launch {

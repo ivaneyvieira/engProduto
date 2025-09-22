@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueSaldo
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueSaldo {
@@ -30,6 +32,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var edtDataInicial: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
@@ -115,7 +118,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
-            viewModel.updateKardec()
+            val dataIncial: LocalDate? = edtDataInicial.value
+            viewModel.updateKardec(dataIncial)
           }
         }
 
@@ -181,6 +185,12 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
             viewModel.updateView()
           }
         }
+
+        edtDataInicial = datePicker("Data Inv. Inicial") {
+          this.localePtBr()
+          this.isClearButtonVisible = true
+          this.value = LocalDate.now().withDayOfMonth(1)
+        }
       }
     }
   }
@@ -215,7 +225,8 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
-        dlgKardec = DlgProdutoKardec(viewModel, produto)
+        val dataIncial: LocalDate? = edtDataInicial.value
+        dlgKardec = DlgProdutoKardec(viewModel, produto, dataIncial)
         dlgKardec?.showDialog {
           viewModel.updateView()
         }
