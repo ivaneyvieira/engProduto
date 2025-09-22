@@ -120,16 +120,14 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       }
     }
 
-    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
+    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
+      if (bean.arquivos().isNotEmpty()) {
+        icon.element.style.set("color", "yellow")
+      }
+    }) { nota ->
       dlgArquivo = DlgArquivoNotaRecebida(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
-      }
-    }.setPartNameGenerator { bean ->
-      if (bean.arquivos().isNotEmpty()) {
-        "amarelo"
-      } else {
-        ""
       }
     }
 
