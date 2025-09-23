@@ -1,9 +1,14 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.produto.model.beans.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.apache.poi.ss.formula.functions.T
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
@@ -34,15 +39,15 @@ object ProcessamentoKardec {
 
   fun updateSaldoKardec(produto: ProdutoEstoque, dataIncial: LocalDate?) {
     produto.dataUpdate = null
-    val listaKardec = updateKardec(produto, dataIncial)
+    val listaKardec = updateKardec(produto, dataIncial ?: produto.dataInicialDefault())
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
   }
 
-  private fun updateKardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+  private fun updateKardec(produto: ProdutoEstoque, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
-      ProdutoKardec.deleteKarde(produto)
+      //ProdutoKardec.deleteKarde(produto)
       val list = fetchKardecFlow(produto, dataIncial)
       buildList {
         list.collect { produtoKardec: ProdutoKardec ->
@@ -53,61 +58,45 @@ object ProcessamentoKardec {
     }
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
-    val listaKardec = ProdutoKardec.findKardec(produto, dataIncial)
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+    return runBlocking {
+      val data = dataIncial ?: produto.dataInicialDefault()
 
-    produto.dataUpdate = LocalDate.now()
-    produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
-    produto.update()
-    return listaKardec.ajustaOrdem()
+      val lista = ProdutoKardec.findKardec(produto).filter {
+        it.tipo != ETipoKardec.INICIAL
+      }
+      val minDate = lista.mapNotNull { it.data }.minByOrNull { it } ?: data
+      val maxDate = lista.mapNotNull { it.data }.maxByOrNull { it } ?: LocalDate.now()
+
+      val listaKardec = if (data.isBefore(minDate)) {
+        fetchKardecFlow(produto, minDate).toList()
+      } else {
+        val listaSaldoIncial = produto.saldoInicial(data)
+        val listaMeio = lista.filter {
+          val dataK = it.data ?: return@filter false
+          dataK in data..maxDate
+        }
+        val listaFinal = fetchKardecFlow(produto, maxDate).filter {
+          it.tipo != ETipoKardec.INICIAL
+        }
+        listaSaldoIncial + listaMeio + listaFinal.toList()
+      }.ajustaOrdem()
+
+      produto.dataUpdate = LocalDate.now()
+      produto.kardec = listaKardec.lastOrNull()?.saldo ?: 0
+      produto.update()
+      listaKardec
+    }
   }
 
-  fun updateKardec(produtos: List<ProdutoEstoque>, dataIncial : LocalDate?) {
+  fun updateKardec(produtos: List<ProdutoEstoque>, dataIncial: LocalDate?) {
     produtos.forEach { produto ->
       updateSaldoKardec(produto, dataIncial)
     }
   }
 
-  private fun fetchKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
-    val date = produto.dataInicialDefault()
-    val lista: List<ProdutoKardec> =
-        produto.recebimentos(date) +
-        //produto.ressuprimento(date) +
-        produto.expedicao(date) +
-        produto.reposicao(date) +
-        produto.saldoInicial(date) +
-        produto.acertoEstoque(date)
-    return lista
-  }
-
-  suspend fun fetchKardecParallel(produto: ProdutoEstoque): List<ProdutoKardec> = coroutineScope {
-    val date = produto.dataInicialDefault()
-
-    // Dispare tudo em paralelo
-    val recebimentosDefer = async { callSafely("Recebimento") { produto.recebimentos(date) } }
-    // val ressuprimentoDefer = async { callSafely { produto.ressuprimento(date) } } // se/quando reativar
-    val expedicaoDefer = async { callSafely("Expedição") { produto.expedicao(date) } }
-    val reposicaoDefer = async { callSafely("Reposicao") { produto.reposicao(date) } }
-    val saldoInicialDefer = async { callSafely("Saldo Inicial") { produto.saldoInicial(date) } }
-    val acertoEstoqueDefer = async { callSafely("Acerto") { produto.acertoEstoque(date) } }
-
-    val listaDeffer =
-        listOf(
-          recebimentosDefer,
-          // ressuprimentoDefer,
-          expedicaoDefer,
-          reposicaoDefer,
-          saldoInicialDefer,
-          acertoEstoqueDefer
-        )
-    listaDeffer.awaitAll()                 // List<List<ProdutoKardec>>
-      .flatten()
-      .ajustaOrdem()// List<ProdutoKardec>
-  }
-
-  fun fetchKardecFlow(produto: ProdutoEstoque, dataIncial: LocalDate?): Flow<ProdutoKardec> = channelFlow {
-    val date = dataIncial ?: produto.dataInicialDefault()
-    println("Início do processamento do produto ${produto.codigo} na data $date")
+  fun fetchKardecFlow(produto: ProdutoEstoque, dataIncial: LocalDate): Flow<ProdutoKardec> = channelFlow {
+    println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
     fun launchSource(tipo: String, block: suspend () -> List<ProdutoKardec>) = launch {
       val itens = withContext(Dispatchers.IO) {
@@ -121,38 +110,19 @@ object ProcessamentoKardec {
       for (item in itens) trySend(item)
     }
 
-    launchSource("Recebimento") { produto.recebimentos(date) }
+    launchSource("Recebimento") { produto.recebimentos(dataIncial) }
     // launchSource { produto.ressuprimento(date) }
-    launchSource("Expedicao") { produto.expedicao(date) }
-    launchSource("Reposicao") { produto.reposicao(date) }
-    launchSource("Saldo Inicial") { produto.saldoInicial(date) }
-    launchSource("Acerto") { produto.acertoEstoque(date) }
+    launchSource("Expedicao") { produto.expedicao(dataIncial) }
+    launchSource("Reposicao") { produto.reposicao(dataIncial) }
+    launchSource("Saldo Inicial") { produto.saldoInicial(dataIncial) }
+    launchSource("Acerto") { produto.acertoEstoque(dataIncial) }
   }
-
-  // Helper para isolar IO e tratar falhas sem derrubar tudo
-  private suspend inline fun <reified T> callSafely(tipo: String, crossinline block: suspend () -> T): T =
-      withContext(Dispatchers.IO) {
-        try {
-          var ret: T
-          val tempo = measureTimeMillis {
-            ret = block()
-          }
-          println("Tempo $tipo = ${T::class.simpleName} ${tempo / 1000} s")
-          ret
-        } catch (e: Exception) {
-          @Suppress("UNCHECKED_CAST")
-          when (val empty = emptyList<Any>()) {
-            is T -> empty
-            else -> throw e // se não for lista, repropague
-          }
-        }
-      }
 }
 
 fun List<ProdutoKardec>.ajustaOrdem(): List<ProdutoKardec> {
   var saldoAcumulado = 0
-  return this.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo}" }
-    .sortedWith(compareBy({ it.data }, { it.loja }, { it.doc })).map {
+  return this.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo?.num}" }
+    .sortedWith(compareBy({ it.data }, { it.loja }, { it.tipo?.num }, { it.doc })).map {
       saldoAcumulado += (it.qtde ?: 0)
       it.copy(saldo = saldoAcumulado)
     }

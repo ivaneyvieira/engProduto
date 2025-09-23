@@ -42,21 +42,21 @@ data class ProdutoKardec(
       saci.deleteKardec(produto)
     }
 
-    fun findKardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
-      return saci.selectKardec(produto, dataIncial)
+    fun findKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+      return saci.selectKardec(produto)
     }
   }
 }
 
-enum class ETipoKardec(val descricao: String) {
-  RECEBIMENTO("Recebimento"),
-  RESSUPRIMENTO("Ressuprimento"),
-  EXPEDICAO("Expedição"),
-  REPOSICAO("Reposição Loja"),
-  ACERTO_ESTOQUE("Acerto Estoque"),
-  ENTREGA("Entrega"),
-  INICIAL("Inicial"),
-  RETORNO("Retorno Loja"),
-  ACERTO("Acerto Estoque"),
+enum class ETipoKardec(val num: String, val descricao: String) {
+  RECEBIMENTO("01", "Recebimento"),
+  RESSUPRIMENTO("01", "Ressuprimento"),
+  EXPEDICAO("01", "Expedição"),
+  REPOSICAO("01", "Reposição Loja"),
+  ACERTO_ESTOQUE("01", "Acerto Estoque"),
+  ENTREGA("01", "Entrega"),
+  INICIAL("00", "Inicial"),
+  RETORNO("01", "Retorno Loja"),
+  ACERTO("01", "Acerto Estoque"),
 }
 

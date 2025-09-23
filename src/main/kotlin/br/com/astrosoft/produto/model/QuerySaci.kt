@@ -2037,11 +2037,10 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun selectKardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
+  fun selectKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
     val sql = "/sqlSaci/kardecSelect.sql"
     return query(sql, ProdutoKardec::class) {
       addOptionalParameter("loja", 0)
-      addOptionalParameter("dataIncial", dataIncial.toSaciDate())
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
     }
