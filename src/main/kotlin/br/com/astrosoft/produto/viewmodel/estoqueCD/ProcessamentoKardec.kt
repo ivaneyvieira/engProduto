@@ -4,8 +4,6 @@ import br.com.astrosoft.produto.model.beans.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -32,14 +30,14 @@ object ProcessamentoKardec {
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     produtos.forEach { prd ->
       if (!prd.isUpdated()) {
-        updateSaldoKardec(prd, null)
+        updateSaldoKardec(produto = prd)
       }
     }
   }
 
-  fun updateSaldoKardec(produto: ProdutoEstoque, dataIncial: LocalDate?) {
+  fun updateSaldoKardec(produto: ProdutoEstoque) {
     produto.dataUpdate = null
-    val listaKardec = updateKardec(produto, dataIncial ?: produto.dataInicialDefault())
+    val listaKardec = updateKardec(produto = produto, dataIncial = produto.dataInicialDefault())
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
@@ -47,7 +45,7 @@ object ProcessamentoKardec {
 
   private fun updateKardec(produto: ProdutoEstoque, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
-      //ProdutoKardec.deleteKarde(produto)
+      ProdutoKardec.deleteKarde(produto)
       val list = fetchKardecFlow(produto, dataIncial)
       buildList {
         list.collect { produtoKardec: ProdutoKardec ->
@@ -59,39 +57,43 @@ object ProcessamentoKardec {
   }
 
   fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
-    return runBlocking {
-      val data = dataIncial ?: produto.dataInicialDefault()
-
-      val lista = ProdutoKardec.findKardec(produto).filter {
-        it.tipo != ETipoKardec.INICIAL
-      }
-      val minDate = lista.mapNotNull { it.data }.minByOrNull { it } ?: data
-      val maxDate = lista.mapNotNull { it.data }.maxByOrNull { it } ?: LocalDate.now()
-
-      val listaKardec = if (data.isBefore(minDate)) {
-        fetchKardecFlow(produto, data).toList()
-      } else {
-        val listaSaldoIncial = produto.saldoInicial(data)
-        val listaMeio = lista.filter {
-          val dataK = it.data ?: return@filter false
-          dataK in data..maxDate
-        }
-        val listaFinal = fetchKardecFlow(produto, maxDate).filter {
-          it.tipo != ETipoKardec.INICIAL
-        }
-        listaSaldoIncial + listaMeio + listaFinal.toList()
-      }.ajustaOrdem()
-
-      produto.dataUpdate = LocalDate.now()
-      produto.kardec = listaKardec.lastOrNull()?.saldo ?: 0
-      produto.update()
-      listaKardec
+    val data = dataIncial ?: produto.dataInicialDefault()
+    val lista = ProdutoKardec.findKardec(produto).ajustaOrdem()
+    val listaAntes = lista.filter {
+      val dataK = it.data ?: return@filter false
+      dataK < data
     }
+    val listaDepois = lista.filter {
+      val dataK = it.data ?: return@filter false
+      dataK >= data
+    }
+
+    val ultimoMov = listaAntes.lastOrNull()?.copy(data = data)
+    val listaSaldo = saldoAnterior(produto, ultimoMov)
+    return listaSaldo + listaDepois
   }
 
-  fun updateKardec(produtos: List<ProdutoEstoque>, dataIncial: LocalDate?) {
+  private fun saldoAnterior(produto: ProdutoEstoque, ultimoMov: ProdutoKardec?): List<ProdutoKardec> {
+    ultimoMov ?: return emptyList()
+    return listOf(
+      ProdutoKardec(
+        loja = produto.loja,
+        prdno = produto.prdno,
+        grade = produto.grade,
+        data = ultimoMov.data,
+        doc = "Estoque",
+        tipo = ETipoKardec.INICIAL,
+        qtde = ultimoMov.saldo,
+        saldo = 0,
+        userLogin = "ADM",
+        observacao = ""
+      )
+    )
+  }
+
+  fun updateKardec(produtos: List<ProdutoEstoque>) {
     produtos.forEach { produto ->
-      updateSaldoKardec(produto, dataIncial)
+      updateSaldoKardec(produto)
     }
   }
 

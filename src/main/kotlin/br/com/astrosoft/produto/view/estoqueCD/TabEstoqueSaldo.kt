@@ -118,8 +118,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
-            val dataIncial: LocalDate? = edtDataInicial.value
-            viewModel.updateKardec(dataIncial)
+            viewModel.updateKardec()
           }
         }
 
