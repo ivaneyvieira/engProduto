@@ -69,7 +69,7 @@ object ProcessamentoKardec {
       val maxDate = lista.mapNotNull { it.data }.maxByOrNull { it } ?: LocalDate.now()
 
       val listaKardec = if (data.isBefore(minDate)) {
-        fetchKardecFlow(produto, minDate).toList()
+        fetchKardecFlow(produto, data).toList()
       } else {
         val listaSaldoIncial = produto.saldoInicial(data)
         val listaMeio = lista.filter {
