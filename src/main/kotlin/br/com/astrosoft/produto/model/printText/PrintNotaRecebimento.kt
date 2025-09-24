@@ -7,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import java.time.LocalDate
 
 class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
-  private var valorPedido: Double = 0.0
   override fun printTitle(bean: NotaRecebimentoProduto) {
     writeln("Nota Recebimento", negrito = true, center = true)
     writeln("")

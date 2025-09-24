@@ -49,6 +49,14 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
         binder.bind(this, UserSaci::recebimentoNotaRecebida.name)
       }
     }
+    verticalBlock("Comandos") {
+      checkBox("Usuário Envio Doc") {
+        binder.bind(this, UserSaci::ressuprimentoEnvioDoc.name)
+      }
+      checkBox("Usuário Recebe Doc") {
+        binder.bind(this, UserSaci::ressuprimentoRecebeDoc.name)
+      }
+    }
     verticalBlock("Filtros") {
       filtroLoja(binder, UserSaci::lojaRec)
       filtroLocalizacao(binder, UserSaci::localizacaoRec)

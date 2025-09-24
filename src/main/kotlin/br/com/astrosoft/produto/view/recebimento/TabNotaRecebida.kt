@@ -1,11 +1,9 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.devForReceb.FormFuncionario
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaRecebida
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -112,6 +110,12 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
           this.icon = VaadinIcon.SIGN_IN.create()
           onClick {
             viewModel.assinaRecebe()
+          }
+        }
+        button("Imp Lista Doc") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeListaDoc()
           }
         }
       }

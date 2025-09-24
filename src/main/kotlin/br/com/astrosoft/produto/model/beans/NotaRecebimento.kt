@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -67,6 +69,14 @@ class NotaRecebimento(
   var obsDevolucao: String?,
   var produtos: List<NotaRecebimentoProduto>,
 ) {
+  val dataStr get() = data?.format("dd/MM/yy") ?: ""
+
+  val emissaoStr get() = emissao?.format("dd/MM/yy") ?: ""
+
+  val niStr get() = ni?.toString()?.lpad(7, " ") ?: ""
+
+  val nfEntradaStr get() = nfEntrada?.lpad(12, " ") ?: ""
+
   val valorTotal
     get() = produtos.sumOf { it.valorTotal ?: 0.0 }
 

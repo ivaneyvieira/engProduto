@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.printText.TextBuffer
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintNotaDoc
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
 import java.time.LocalDate
 
@@ -73,7 +74,6 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
 
     val buf = TextBuffer()
 
-
     itens.forEach { nota ->
       report.print(
         dados = nota.produtos,
@@ -116,6 +116,10 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Senha inválida")
     }
 
+    if (!user.ressuprimentoEnvioDoc) {
+      fail("Usuário sem permissão para Assinar Envio")
+    }
+
     itens.forEach { nota ->
       nota.usernoEnvio = user.no
       nota.save()
@@ -135,11 +139,35 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Senha inválida")
     }
 
+    if (!user.ressuprimentoRecebeDoc) {
+      fail("Usuário sem permissão para Assinar Recebimento")
+    }
+
     itens.forEach { nota ->
       nota.usernoReceb = user.no
       nota.save()
     }
     updateView()
+  }
+
+  fun imprimeListaDoc() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    val relatorio = PrintNotaDoc()
+
+    relatorio.print(
+      dados = itens.sortedWith(
+        compareBy(
+          NotaRecebimento::loja,
+          NotaRecebimento::data,
+          NotaRecebimento::nfEntrada
+        )
+      ),
+      printer = subView.printerPreview()
+    )
   }
 }
 
