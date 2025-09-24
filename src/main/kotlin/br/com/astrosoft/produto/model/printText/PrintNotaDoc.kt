@@ -15,16 +15,17 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
     column(NotaRecebimento::nfEntradaStr, "NF Ent", 12)
     column(NotaRecebimento::emissaoStr, "Emissao", 8)
     column(NotaRecebimento::dataStr, "Entrada", 8)
-    column(NotaRecebimento::fornecedorSigla, "Fornecedor", 25)
+    column(NotaRecebimento::fornecedorSigla, "Fornecedor", 12)
+    column(NotaRecebimento::valorNF, "Valor", 12)
   }
 
   override fun printSumary(bean: NotaRecebimento?) {
     writeln("")
     writeln("")
-    writeln("________________________________________________________", center = true)
+    writeln("_______________________________________________", center = true)
     writeln(bean?.nomeEnvio ?: "", center = true)
     writeln("")
-    writeln("________________________________________________________", center = true)
+    writeln("_______________________________________________", center = true)
     writeln(bean?.nomeReceb ?: "", center = true)
     writeln("")
   }
