@@ -87,6 +87,60 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
 
     preview.print(buf)
   }
+
+  fun assinaEnvio() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    subView.formAssinaEnvio(itens)
+  }
+
+  fun assinaRecebe() = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    subView.formAssinaRecebe(itens)
+  }
+
+  fun assinaEnvio(itens: List<NotaRecebimento>, login: String, senha: String) = viewModel.exec {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.equals(login, ignoreCase = true) && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    if (user.senha != senha) {
+      fail("Senha inválida")
+    }
+
+    itens.forEach { nota ->
+      nota.usernoEnvio = user.no
+      nota.save()
+    }
+    updateView()
+  }
+
+  fun assinaRecebe(itens: List<NotaRecebimento>, login: String, senha: String) = viewModel.exec {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.equals(login, ignoreCase = true) && it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    if (user.senha != senha) {
+      fail("Senha inválida")
+    }
+
+    itens.forEach { nota ->
+      nota.usernoReceb = user.no
+      nota.save()
+    }
+    updateView()
+  }
 }
 
 interface ITabNotaRecebida : ITabView {
@@ -97,4 +151,6 @@ interface ITabNotaRecebida : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
+  fun formAssinaEnvio(itens: List<NotaRecebimento>)
+  fun formAssinaRecebe(itens: List<NotaRecebimento>)
 }

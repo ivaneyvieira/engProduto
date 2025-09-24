@@ -130,7 +130,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
 
     addColumnButton(
-      VaadinIcon.SIGN_IN, "Ass", "Ass",
+      iconButton = VaadinIcon.SIGN_IN, tooltip = "Ass", header = "Ass",
       configIcon = { icon, nota ->
         if ((nota.empNoTermo ?: 0) > 0) {
           icon.element.style.set("color", "yellow")

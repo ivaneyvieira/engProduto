@@ -46,6 +46,10 @@ class NotaRecebimento(
   var empNomeTermo: String?,
   var empCpfTermo: String?,
   var empEmailTermo: String?,
+  var usernoEnvio: Int?,
+  var loginEnvio: String?,
+  var usernoReceb: Int?,
+  var loginReceb: String?,
   var observacaoNota: String?,
   var tipoNota: String?,
   var countLocalizacao: Int?,
@@ -259,6 +263,10 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         empNomeTermo = nota.empNomeTermo,
         empCpfTermo = nota.empCpfTermo,
         empEmailTermo = nota.empEmailTermo,
+        usernoEnvio = nota.usernoEnvio,
+        loginEnvio = nota.loginEnvio,
+        usernoReceb = nota.usernoReceb,
+        loginReceb = nota.loginReceb,
       )
     }
   }

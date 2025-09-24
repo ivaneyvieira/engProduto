@@ -1,12 +1,11 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.devForReceb.FormFuncionario
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabNotaRecebida
 import br.com.astrosoft.produto.viewmodel.recebimento.TabNotaRecebidaViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -102,6 +101,20 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
           }
         }
       }
+      horizontalLayout {
+        button("Ass Envio Doc") {
+          this.icon = VaadinIcon.SIGN_IN.create()
+          onClick {
+            viewModel.assinaEnvio()
+          }
+        }
+        button("Ass Recebe Doc") {
+          this.icon = VaadinIcon.SIGN_IN.create()
+          onClick {
+            viewModel.assinaRecebe()
+          }
+        }
+      }
     }
   }
 
@@ -111,6 +124,8 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
 
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
+    columnGrid(NotaRecebimento::loginEnvio, header = "Envio Doc")
+    columnGrid(NotaRecebimento::loginReceb, header = "Recebe Doc")
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -185,6 +200,20 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
 
   override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
+  }
+
+  override fun formAssinaEnvio(itens: List<NotaRecebimento>) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Assina Envio", form = form) {
+      viewModel.assinaEnvio(itens, form.login, form.senha)
+    }
+  }
+
+  override fun formAssinaRecebe(itens: List<NotaRecebimento>) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Assina Recebimento", form = form) {
+      viewModel.assinaRecebe(itens, form.login, form.senha)
+    }
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {

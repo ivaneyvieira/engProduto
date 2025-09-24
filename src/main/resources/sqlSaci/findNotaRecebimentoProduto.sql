@@ -70,6 +70,8 @@ SELECT I.invno,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
        IA.empTermo                                                    AS empTermo,
+       IA.empEnvio                                                    AS usuarioEnvio,
+       IA.empReceb                                                    AS usuarioReceb,
        N.remarks                                                      AS observacaoNota,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
@@ -237,6 +239,10 @@ SELECT N.storeno                                                   AS loja,
        ER.login                                                    AS usuarioRecebe,
        ES.no                                                       AS empNoTermo,
        ES.name                                                     AS empNomeTermo,
+       UE.no                                                       AS usernoEnvio,
+       UE.login                                                    AS loginEnvio,
+       UR.no                                                       AS usernoReceb,
+       UR.login                                                    AS loginReceb,
        ES.cpf                                                      AS empCpfTermo,
        ES.email                                                    AS empEmailTermo,
        observacaoNota                                              AS observacaoNota,
@@ -283,6 +289,10 @@ FROM
                ON ER.no = N.usernoRecebe
     LEFT JOIN  sqldados.emp    AS ES
                ON ES.no = N.empTermo
+    LEFT JOIN  sqldados.users  AS UE
+               ON UE.no = N.usuarioEnvio
+    LEFT JOIN  sqldados.users  AS UR
+               ON UR.no = N.usuarioReceb
     LEFT JOIN  sqldados.vend   AS V
                ON V.no = N.vendno
     LEFT JOIN  sqldados.custp  AS C
@@ -339,6 +349,10 @@ SELECT loja,
        usuarioRecebe,
        empNoTermo,
        empNomeTermo,
+       usernoEnvio,
+       loginEnvio,
+       usernoReceb,
+       loginReceb,
        empCpfTermo,
        empEmailTermo,
   /*Produto*/

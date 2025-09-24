@@ -6,13 +6,13 @@ FROM
 WHERE invno = :invno
   AND tipoDevolucao = :tipoDevolucao;
 
-REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, volume, peso, empTermo)
-SELECT invno, tipoDevolucao, numero, :volume, :peso, :empTermo
+REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, volume, peso, empTermo, empEnvio, empReceb)
+SELECT invno, tipoDevolucao, numero, :volume, :peso, :empTermo, :empEnvio, :empReceb
 FROM
   T_INV;
 
-REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, volume, peso, empTermo)
-SELECT :invno, :tipoDevolucao, 0, :volume, :peso, :empTermo
+REPLACE sqldados.invAdicional(invno, tipoDevolucao, numero, volume, peso, empTermo, empEnvio, empReceb)
+SELECT :invno, :tipoDevolucao, 0, :volume, :peso, :empTermo, :empEnvio, :empReceb
 FROM
   DUAL
 WHERE NOT EXISTS( SELECT * FROM T_INV )

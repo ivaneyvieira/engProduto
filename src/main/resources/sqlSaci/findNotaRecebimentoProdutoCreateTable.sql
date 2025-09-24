@@ -20,6 +20,12 @@ ALTER TABLE sqldados.iprdAdicional
 ALTER TABLE sqldados.iprdAdicional
   ADD vencimento DATE NULL;
 
+ALTER TABLE sqldados.invAdicional
+  ADD empEnvio int DEFAULT 0 NULL;
+
+ALTER TABLE sqldados.invAdicional
+  ADD empReceb int DEFAULT 0 NULL;
+
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_RECEBIMENTO;
 CREATE TEMPORARY TABLE T_NOTA_RECEBIMENTO
