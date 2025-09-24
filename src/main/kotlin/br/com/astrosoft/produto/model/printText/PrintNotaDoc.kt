@@ -22,11 +22,13 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
   override fun printSumary(bean: NotaRecebimento?) {
     writeln("")
     writeln("")
-    writeln("_______________________________________________", center = true)
+    writeln("_______________________________________", center = true)
     writeln(bean?.nomeEnvio ?: "", center = true)
+    writeln("Envio", center = true)
     writeln("")
-    writeln("_______________________________________________", center = true)
+    writeln("_______________________________________", center = true)
     writeln(bean?.nomeReceb ?: "", center = true)
+    writeln("Recebido", center = true)
     writeln("")
   }
 }
