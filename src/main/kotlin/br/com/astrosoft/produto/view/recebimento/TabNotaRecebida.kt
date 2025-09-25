@@ -26,6 +26,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtTipoNota: Select<EListaContas>
   private lateinit var edtTemAnexo: Select<ETemAnexo>
+  private lateinit var cmbDoc: Select<ENotaDoc>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -118,6 +119,16 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
             viewModel.imprimeListaDoc()
           }
         }
+        cmbDoc = select("Doc") {
+          this.setItems(ENotaDoc.entries)
+          this.value = ENotaDoc.DOC_TODOS
+          this.setItemLabelGenerator {
+            it.descricao
+          }
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
       }
     }
   }
@@ -179,6 +190,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       localizacao = usr?.localizacaoRec.orEmpty().toList(),
       tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
       temAnexo = edtTemAnexo.value ?: ETemAnexo.TODOS,
+      docNota = cmbDoc.value ?: ENotaDoc.DOC_TODOS
     )
   }
 

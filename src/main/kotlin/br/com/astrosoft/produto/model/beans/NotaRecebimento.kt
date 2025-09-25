@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
+import br.com.astrosoft.produto.model.beans.toNota
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -201,13 +202,20 @@ class NotaRecebimento(
         .filter { nota ->
           nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
         }
-        .filter {nota ->
+        .filter { nota ->
           when (filtro.temAnexo) {
             ETemAnexo.TEM_ANEXO -> nota.arquivos().isNotEmpty()
             ETemAnexo.SEM_ANEXO -> nota.arquivos().isEmpty()
-            else -> true
+            else                -> true
           }
         }
+      .filter { nota ->
+        when (filtro.docNota) {
+          ENotaDoc.DOC_ENVIO -> (nota.usernoEnvio ?: 0) > 0
+          ENotaDoc.DOC_RECEB -> (nota.usernoReceb ?: 0) > 0
+          ENotaDoc.DOC_TODOS -> true
+        }
+      }
     }
   }
 }
@@ -295,3 +303,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
   }
 }
 
+enum class ENotaDoc(val descricao: String) {
+  DOC_ENVIO("Ass Envio"),
+  DOC_RECEB("Ass Recebido"),
+  DOC_TODOS("Todos")
+}

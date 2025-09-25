@@ -252,6 +252,7 @@ data class FiltroNotaRecebimentoProduto(
   val grade: String = "",
   val tipoNota: EListaContas,
   val temAnexo: ETemAnexo = ETemAnexo.TODOS,
+  val docNota: ENotaDoc = ENotaDoc.DOC_TODOS,
 )
 
 enum class ETemAnexo(val codigo: String, val descricao: String) {
