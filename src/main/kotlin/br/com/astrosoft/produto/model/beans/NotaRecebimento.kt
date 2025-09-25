@@ -201,6 +201,13 @@ class NotaRecebimento(
         .filter { nota ->
           nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
         }
+        .filter {nota ->
+          when (filtro.temAnexo) {
+            ETemAnexo.TEM_ANEXO -> nota.arquivos().isNotEmpty()
+            ETemAnexo.SEM_ANEXO -> nota.arquivos().isEmpty()
+            else -> true
+          }
+        }
     }
   }
 }

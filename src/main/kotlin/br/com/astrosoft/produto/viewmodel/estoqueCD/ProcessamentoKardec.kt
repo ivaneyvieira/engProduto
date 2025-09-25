@@ -70,7 +70,7 @@ object ProcessamentoKardec {
 
     val ultimoMov = listaAntes.lastOrNull()?.copy(data = data)
     val listaSaldo = saldoAnterior(produto, ultimoMov)
-    return listaSaldo + listaDepois
+    return (listaSaldo + listaDepois).ajustaOrdem()
   }
 
   private fun saldoAnterior(produto: ProdutoEstoque, ultimoMov: ProdutoKardec?): List<ProdutoKardec> {
