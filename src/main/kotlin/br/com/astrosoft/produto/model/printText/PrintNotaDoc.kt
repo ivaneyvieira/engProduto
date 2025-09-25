@@ -2,6 +2,9 @@ package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 class PrintNotaDoc : PrintText<NotaRecebimento>() {
   override fun printTitle(bean: NotaRecebimento) {
@@ -30,5 +33,11 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
     writeln(bean?.nomeReceb ?: "", center = true)
     writeln("Recebido", center = true)
     writeln("")
+    writeln("")
+    val data = LocalDate.now()
+    val dia = data.dayOfMonth
+    val mes = data.month.getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR")).lowercase().replaceFirstChar { it.uppercase() }
+    val ano = data.year
+    writeln("Teresina-PI, $dia de $mes de $ano", center = true)
   }
 }
