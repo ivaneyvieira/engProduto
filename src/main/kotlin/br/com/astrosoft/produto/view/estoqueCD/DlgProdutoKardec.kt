@@ -90,6 +90,7 @@ class DlgProdutoKardec(
     return gridDetail.selectedItems.toList()
   }
 
+
   fun update() {
     val kardec = viewModel.kardec(produto, dataIncial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
