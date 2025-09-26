@@ -428,8 +428,9 @@ SELECT loja,
        ''            AS obsDevolucao
 FROM
   T_QUERY AS Q
-HAVING (@PESQUISA = '' OR ni = @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
-        vendno = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp = @PESQUISA_NUM OR transp = @PESQUISA_NUM OR
-        cte = @PESQUISA_NUM OR volume = @PESQUISA_NUM OR motivoDevolucao LIKE @PESQUISA_LIKE)
+HAVING (@PESQUISA = '' OR ni LIKE @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
+        vendno LIKE @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp LIKE @PESQUISA_NUM OR
+        transp LIKE @PESQUISA_NUM OR cte LIKE @PESQUISA_NUM OR volume LIKE @PESQUISA_NUM OR
+        motivoDevolucao LIKE @PESQUISA_LIKE OR protocolo LIKE @PESQUISA)
    AND (marca = :marca OR :marca = 999)
 
