@@ -41,7 +41,7 @@ class DlgProdutoKardec(
     form = SubWindowForm(
       "$codigo $descricao$grade ($localizacao) Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
       toolBar = {
-        edtPesquisa = textField("Psquisa") {
+        edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
