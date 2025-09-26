@@ -211,6 +211,8 @@ class NotaRecebimento(
         }
       .filter { nota ->
         when (filtro.docNota) {
+          ENotaDoc.DOC_SEM_ENVIO -> (nota.usernoEnvio ?: 0) == 0
+          ENotaDoc.DOC_SEM_RECEB -> (nota.usernoReceb ?: 0) == 0
           ENotaDoc.DOC_ENVIO -> (nota.usernoEnvio ?: 0) > 0
           ENotaDoc.DOC_RECEB -> (nota.usernoReceb ?: 0) > 0
           ENotaDoc.DOC_TODOS -> true
@@ -304,6 +306,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
 }
 
 enum class ENotaDoc(val descricao: String) {
+  DOC_SEM_ENVIO("Sem Ass Envio"),
+  DOC_SEM_RECEB("Sem Ass Recebido"),
   DOC_ENVIO("Ass Envio"),
   DOC_RECEB("Ass Recebido"),
   DOC_TODOS("Todos")
