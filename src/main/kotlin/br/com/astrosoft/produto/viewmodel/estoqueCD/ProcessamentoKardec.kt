@@ -123,8 +123,8 @@ object ProcessamentoKardec {
 
 fun List<ProdutoKardec>.ajustaOrdem(): List<ProdutoKardec> {
   var saldoAcumulado = 0
-  return this.distinctBy { "${it.loja}${it.prdno}${it.grade}${it.data}${it.doc}${it.tipo?.num}" }
-    .sortedWith(compareBy({ it.data }, { it.loja }, { it.tipo?.num }, { it.doc })).map {
+  return this.distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.data} ${it.doc} ${it.tipo?.num}" }
+    .sortedWith(comparator = compareBy({ it.data }, { it.tipo?.num }, { it.loja }, { it.doc })).map {
       saldoAcumulado += (it.qtde ?: 0)
       it.copy(saldo = saldoAcumulado)
     }
