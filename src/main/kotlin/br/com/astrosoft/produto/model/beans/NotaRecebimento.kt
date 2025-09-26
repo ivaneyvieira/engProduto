@@ -55,6 +55,7 @@ class NotaRecebimento(
   var nomeEnvio: String?,
   var usernoReceb: Int?,
   var loginReceb: String?,
+  var protocolo: String?,
   var nomeReceb: String?,
   var observacaoNota: String?,
   var tipoNota: String?,
@@ -300,6 +301,7 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
         nomeEnvio = nota.nomeEnvio,
         nomeReceb = nota.nomeReceb,
         fornecedorSigla = nota.fornecedorSigla,
+        protocolo = nota.protocolo
       )
     }
   }

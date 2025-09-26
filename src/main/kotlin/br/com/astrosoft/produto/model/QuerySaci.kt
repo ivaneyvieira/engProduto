@@ -2283,6 +2283,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("empTermo", nota.empNoTermo)
       addOptionalParameter("empEnvio", nota.usernoEnvio)
       addOptionalParameter("empReceb", nota.usernoReceb)
+      addOptionalParameter("protocolo", nota.protocolo?.toIntOrNull() ?: 0)
     }
   }
 
@@ -2613,6 +2614,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("ordno", transf.ordno)
       addOptionalParameter("libera", transf.libera)
     }
+  }
+
+  fun proximoNumero(nome: String): ProximoNumero {
+    val sql = "/sqlSaci/proximoNumero.sql"
+    return query(sql, ProximoNumero::class) {
+      addOptionalParameter("nome", nome)
+    }.firstOrNull() ?: ProximoNumero(nome = nome, numero = 1)
   }
 
   companion object {

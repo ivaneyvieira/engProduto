@@ -10,6 +10,7 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
   override fun printTitle(bean: NotaRecebimento) {
     writeln("Relatório de Notas Fiscais de Entrada Recebidas", negrito = true, center = true)
     writeln("Loja : ${bean.loja} - ${bean.lojaSigla}", negrito = true)
+    writeln("Protocolo: ${bean.protocolo}", negrito = true)
     printLine()
   }
 

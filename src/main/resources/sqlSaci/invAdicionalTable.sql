@@ -29,6 +29,9 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD empTermo int NULL DEFAULT 0;
 
+ALTER TABLE sqldados.invAdicional
+  ADD protocolo int NULL DEFAULT 0;
+
 
 SELECT *
 FROM
@@ -96,3 +99,11 @@ UPDATE sqldados.invAdicional AS A
   USING (invno, tipoDevolucao)
 SET A.numero = T.numero
 WHERE A.numero = 0;
+
+DROP TABLE IF EXISTS sqldados.appNumeracao;
+CREATE TABLE sqldados.appNumeracao
+(
+    nome   varchar(50) PRIMARY KEY,
+    numero int NOT NULL
+);
+

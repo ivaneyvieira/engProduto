@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintNotaDoc
 import br.com.astrosoft.produto.model.printText.PrintNotaRecebimento
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
@@ -120,8 +121,11 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
       fail("Usuário sem permissão para Assinar Envio")
     }
 
+    val protocolo = saci.proximoNumero("PROTNOTA").numero?.toString() ?: "0"
+
     itens.forEach { nota ->
       nota.usernoEnvio = user.no
+      nota.protocolo = protocolo
       nota.save()
     }
     updateView()

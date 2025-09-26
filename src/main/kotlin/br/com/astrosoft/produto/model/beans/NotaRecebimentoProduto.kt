@@ -112,6 +112,7 @@ class NotaRecebimentoProduto(
   var valorDevolucao: Double?,
   var obsDevolucao: String?,
   var observacaoAdicional: String?,
+  var protocolo: String?,
 ) {
   val chaveNi
     get() = "$loja-$ni"
