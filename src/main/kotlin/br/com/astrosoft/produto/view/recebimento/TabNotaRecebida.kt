@@ -141,7 +141,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
     columnGrid(NotaRecebimento::loginEnvio, header = "Envio Doc")
     columnGrid(NotaRecebimento::loginReceb, header = "Recebe Doc")
-    columnGrid(NotaRecebimento::protocolo, "Protocolo")
+    columnGrid(NotaRecebimento::protocolo, "Protocolo").right()
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
