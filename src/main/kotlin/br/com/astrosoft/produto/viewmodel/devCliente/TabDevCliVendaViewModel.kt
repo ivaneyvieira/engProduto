@@ -35,6 +35,15 @@ class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) {
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
 
+  fun autorizaTroca() {
+    val notas = subView.itensNotasSelecionados()
+    notas.forEach {
+      it.autoriza  = "S"
+      it.update()
+    }
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliVenda
 }

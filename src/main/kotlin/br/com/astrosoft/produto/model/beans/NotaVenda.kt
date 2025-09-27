@@ -21,7 +21,11 @@ class NotaVenda(
   var vendedor: String?,
   var valorTipo: Double?,
   var obs: String?,
+  var autoriza: String?,
 ) {
+  fun update() {
+    saci.updateNotaVenda(this)
+  }
 
   val numeroInterno: Int?
     get() {
@@ -42,6 +46,7 @@ class NotaVenda(
 data class FiltroNotaVenda(
   val loja: Int,
   val pesquisa: String,
+  val autoriza: String = "T",
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )

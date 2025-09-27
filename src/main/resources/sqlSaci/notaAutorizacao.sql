@@ -22,6 +22,9 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column dataInsert int default '0' after impresso
 
+alter table sqldados.nfAutorizacao
+  add column autoriza varchar(1) default 'N';
+
 */
 
 DO @PESQUISA := :pesquisa;

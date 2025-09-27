@@ -89,6 +89,12 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
+    button("Autoriza") {
+      icon = VaadinIcon.KEY.create()
+      onClick {
+        viewModel.autorizaTroca()
+      }
+    }
   }
 
   override fun Grid<NotaVenda>.gridPanel() {
@@ -114,6 +120,14 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
+
+    this.setPartNameGenerator {
+      if (it.autoriza == "S") {
+        "amarelo"
+      } else {
+        null
+      }
+    }
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()

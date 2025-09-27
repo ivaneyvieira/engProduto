@@ -930,6 +930,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, NotaVenda::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("autoriza", filtro.autoriza)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
@@ -2621,6 +2622,16 @@ class QuerySaci : QueryDB(database) {
     return query(sql, ProximoNumero::class) {
       addOptionalParameter("nome", nome)
     }.firstOrNull() ?: ProximoNumero(nome = nome, numero = 1)
+  }
+
+  fun updateNotaVenda(venda: NotaVenda) {
+    val sql = "/sqlSaci/updateNotaVenda.sql"
+    script(sql) {
+      addOptionalParameter("storeno", venda.loja ?: 0)
+      addOptionalParameter("pdvno", venda.pdv ?: 0)
+      addOptionalParameter("xano", venda.transacao ?: 0)
+      addOptionalParameter("autoriza", venda.autoriza)
+    }
   }
 
   companion object {
