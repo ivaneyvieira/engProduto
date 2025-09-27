@@ -162,6 +162,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       }
     }
 
+
     this.selectionMode = Grid.SelectionMode.MULTI
 
     columnGrid(NotaRecebimento::data, header = "Data")
