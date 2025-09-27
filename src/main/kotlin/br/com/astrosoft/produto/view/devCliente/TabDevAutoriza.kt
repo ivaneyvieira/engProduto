@@ -12,8 +12,9 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevAutoriza
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevVenda
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliVendaViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -26,9 +27,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevAutoriza(val viewModel: TabDevCliVendaViewModel) :
-  TabPanelGrid<NotaVenda>(NotaVenda::class),
-  ITabDevVenda {
+class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaVenda>(NotaVenda::class),
+  ITabDevAutoriza {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -85,7 +85,7 @@ class TabDevAutoriza(val viewModel: TabDevCliVendaViewModel) :
         viewModel.imprimeRelatorio()
       }
     }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "Autoriza") {
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
@@ -146,11 +146,11 @@ class TabDevAutoriza(val viewModel: TabDevCliVendaViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliVenda == true
+    return username?.devCliAutoriza == true
   }
 
   override val label: String
-    get() = "Venda"
+    get() = "Autoriza"
 
   override fun updateComponent() {
     viewModel.updateView()

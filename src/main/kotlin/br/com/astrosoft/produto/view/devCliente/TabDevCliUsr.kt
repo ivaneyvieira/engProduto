@@ -16,6 +16,7 @@ import com.vaadin.flow.component.grid.Grid
 class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), ITabDevCliUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::devCliEditor, "Editor")
+    columnGrid(UserSaci::devCliAutoriza, "Editor")
     columnGrid(UserSaci::devCliImprimir, "VC Imprimir")
     columnGrid(UserSaci::devCliImpresso, "VC Impresso")
     columnGrid(UserSaci::devCliValeTrocaProduto, "Produto")
@@ -29,6 +30,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
       verticalBlock("Menu") {
         checkBox("Editor") {
           binder.bind(this, UserSaci::devCliEditor.name)
+        }
+        checkBox("Autoriza") {
+          binder.bind(this, UserSaci::devCliAutoriza.name)
         }
         checkBox("VC Imprimir") {
           binder.bind(this, UserSaci::devCliImprimir.name)
