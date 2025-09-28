@@ -25,6 +25,15 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column autoriza varchar(1) default 'N';
 
+alter table sqldados.nfAutorizacao
+  add column solicitacaoTroca varchar(1) default '';
+
+alter table sqldados.nfAutorizacao
+  add column produtoTroca varchar(1) default '';
+
+alter table sqldados.nfAutorizacao
+  add column userTroca int default 0;
+
 */
 
 DO @PESQUISA := :pesquisa;

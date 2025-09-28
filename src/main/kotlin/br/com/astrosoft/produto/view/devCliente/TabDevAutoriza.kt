@@ -4,7 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -13,7 +14,6 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevAutoriza
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevVenda
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -97,6 +97,12 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
+      viewModel.formAutoriza(nota)
+    }
+    columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Solicitação")
+    columnGrid(NotaVenda::produtoTrocaDescricao, header = "Produto")
+    columnGrid(NotaVenda::loginTroca, header = "Autorização")
     columnGrid(NotaVenda::data, header = "Data")
     columnGrid(NotaVenda::nota, header = "NF")
     columnGrid(NotaVenda::uf, header = "UF")
@@ -138,6 +144,15 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
   override fun itensNotasSelecionados(): List<NotaVenda> {
     return itensSelecionados()
+  }
+
+  override fun formAutoriza(nota: NotaVenda) {
+    val form = FormAutorizaNotaTroca()
+    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+      nota.solicitacaoTrocaEnnum = form.solicitacao
+      nota.produtoTrocaEnnum = form.produto
+      viewModel.autorizaNota(nota, form.login, form.senha)
+    }
   }
 
   override fun isAuthorized(): Boolean {

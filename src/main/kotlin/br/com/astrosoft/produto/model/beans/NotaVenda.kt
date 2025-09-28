@@ -22,7 +22,28 @@ class NotaVenda(
   var valorTipo: Double?,
   var obs: String?,
   var autoriza: String?,
+  var solicitacaoTroca: String?,
+  var produtoTroca: String?,
+  var userTroca: Int?,
+  var loginTroca: String?,
 ) {
+  var solicitacaoTrocaEnnum: ESolicitacaoTroca?
+    get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
+    set(value) {
+      solicitacaoTroca = value?.codigo
+    }
+
+  var produtoTrocaEnnum: EProdutoTroca?
+    get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
+    set(value) {
+      produtoTroca = value?.codigo
+    }
+
+  val solicitacaoTrocaDescricao: String
+    get() = solicitacaoTrocaEnnum?.descricao ?: ""
+  val produtoTrocaDescricao: String
+    get() = produtoTrocaEnnum?.descricao ?: ""
+
   fun update() {
     saci.updateNotaVenda(this)
   }
@@ -50,3 +71,16 @@ data class FiltroNotaVenda(
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )
+
+enum class ESolicitacaoTroca(val codigo: String, val descricao: String){
+  Troca("T", "Troca"),
+  Estorno("E", "Estorno"),
+  Reembolso("R", "Reembolso"),
+  MudaCliente("M", "Muda Cliente"),
+}
+
+enum class EProdutoTroca(val codigo: String, val descricao: String){
+  Com("C", "Com Produto"),
+  Sem("S", "Sem Produto"),
+  Misto("M", "Misto"),
+}

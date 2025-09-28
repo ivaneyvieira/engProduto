@@ -13,7 +13,10 @@ FROM
   dual;
 
 UPDATE sqldados.nfAutorizacao
-SET autoriza = :autoriza
+SET autoriza         = :autoriza,
+    solicitacaoTroca = :solicitacaoTroca,
+    produtoTroca     = :produtoTroca,
+    userTroca        = :userTroca
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano

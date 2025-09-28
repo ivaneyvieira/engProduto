@@ -39,7 +39,11 @@ SELECT N.storeno                                                AS loja,
        CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                 AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100)               AS valorTipo,
        CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs,
-       IFNULL(AT.autoriza, 'N')                                 AS autoriza
+       IFNULL(AT.autoriza, 'N')                                 AS autoriza,
+       IFNULL(AT.solicitacaoTroca, 'N')                         AS solicitacaoTroca,
+       IFNULL(AT.produtoTroca, 'N')                             AS produtoTroca,
+       IFNULL(AT.userTroca, 'N')                                AS userTroca,
+       IFNULL(UT.login, '')                                     AS loginTroca
 FROM
   sqldados.nf                         AS N
     LEFT JOIN  sqldados.ctadd         AS A
@@ -50,6 +54,8 @@ FROM
                USING (storeno, pdvno, xano)
     LEFT JOIN  sqldados.nfAutorizacao AS AT
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.users         AS UT
+               ON UT.no = AT.userTroca
     INNER JOIN sqldados.custp         AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp           AS E
