@@ -35,10 +35,18 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun formSolicitacao(nota: NotaVenda) = viewModel.exec {
+    val userSolicitacao = nota.userSolicitacao ?: 0
+    if (userSolicitacao != 0) {
+      fail("Devolução já Solicitada")
+    }
     subView.formSolicitacao(nota)
   }
 
   fun formAutoriza(nota: NotaVenda) = viewModel.exec {
+    val userTroca = nota.userTroca ?: 0
+    if (userTroca != 0) {
+      fail("Devolução já Autorizada")
+    }
     subView.formAutoriza(nota)
   }
 
@@ -60,7 +68,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    if(!user.autorizaDev) {
+    if (!user.autorizaDev) {
       fail("Usuário sem permissão para autorizar devolução")
     }
 
@@ -89,7 +97,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
     user ?: fail("Usuário ou senha inválidos")
 
-    if(!user.autorizaSolicitacao){
+    if (!user.autorizaSolicitacao) {
       fail("Usuário sem permissão para solicitar devolução")
     }
 
