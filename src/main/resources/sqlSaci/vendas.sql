@@ -42,7 +42,7 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.autoriza, 'N')                                 AS autoriza,
        IFNULL(AT.solicitacaoTroca, 'N')                         AS solicitacaoTroca,
        IFNULL(AT.produtoTroca, 'N')                             AS produtoTroca,
-       IFNULL(AT.userTroca, 'N')                                AS userTroca,
+       IFNULL(AT.userTroca, 0)                                  AS userTroca,
        IFNULL(UT.login, '')                                     AS loginTroca
 FROM
   sqldados.nf                         AS N
