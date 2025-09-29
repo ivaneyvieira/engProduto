@@ -171,6 +171,8 @@ class UserSaci : IUser {
   var ressuprimentoEnvioDoc by DelegateAuthorized3(141)
   var ressuprimentoRecebeDoc by DelegateAuthorized3(142)
   var devCliAutoriza by DelegateAuthorized3(143)
+  var autorizaSolicitacao by DelegateAuthorized3(144)
+  var autorizaDev  by DelegateAuthorized3(145)
 
   //Locais
   private var localEstoque: String?

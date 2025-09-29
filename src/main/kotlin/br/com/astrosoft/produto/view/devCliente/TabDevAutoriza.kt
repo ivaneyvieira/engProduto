@@ -148,7 +148,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
   override fun formAutoriza(nota: NotaVenda) {
     val form = FormAutorizaNota()
-    DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
+    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
   }

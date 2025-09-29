@@ -59,6 +59,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         it.senha.uppercase().trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
+
+    if(!user.autorizaDev) {
+      fail("Usuário sem permissão para autorizar devolução")
+    }
+
     val usernoAutal = nota.userTroca ?: 0
     if (usernoAutal != 0) {
       fail("Nota já autorizada por outro usuário")
@@ -83,6 +88,10 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         it.senha.uppercase().trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
+
+    if(!user.autorizaSolicitacao){
+      fail("Usuário sem permissão para solicitar devolução")
+    }
 
     val usernoAutal = nota.userSolicitacao ?: 0
     if (usernoAutal != 0) {
