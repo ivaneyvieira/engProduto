@@ -39,6 +39,9 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column userTroca int default 0;
 
+alter table sqldados.nfAutorizacao
+  add column motivoTroca text;
+
 */
 
 DO @PESQUISA := :pesquisa;

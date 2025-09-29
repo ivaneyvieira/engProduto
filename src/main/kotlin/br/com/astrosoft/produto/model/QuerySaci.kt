@@ -2635,6 +2635,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("userSolicitacao", venda.userSolicitacao)
       addOptionalParameter("solicitacaoTroca", venda.solicitacaoTroca)
       addOptionalParameter("produtoTroca", venda.produtoTroca)
+      addOptionalParameter("motivoTroca", venda.motivoTroca)
     }
   }
 

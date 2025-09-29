@@ -93,6 +93,16 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
+    addColumnButton(VaadinIcon.EDIT, "Motivo", "Motivo", configIcon = { icon, bean ->
+      if ((bean.motivoTroca ?: "").isNotBlank()) {
+        icon.element.style.set("color", "yellow")
+      }
+    }) { nota ->
+      val dlg = DlgEditaMotivo(viewModel, nota) {
+        viewModel.updateView()
+      }
+      dlg.open()
+    }
     addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
       viewModel.formSolicitacao(nota)
     }

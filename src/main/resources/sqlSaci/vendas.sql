@@ -51,6 +51,7 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.userSolicitacao, 0)                            AS userSolicitacao,
        IFNULL(UT.login, '')                                     AS loginTroca,
        IFNULL(US.login, '')                                     AS loginSolicitacao,
+       IFNULL(AT.motivoTroca, '')                               AS motivoTroca,
        CASE
          WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
          WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
@@ -82,17 +83,11 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-GROUP BY N.storeno, N.pdvno, N.xano, tipo
-HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
-        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
-        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-        vendedor LIKE @PESQUISA_LIKE)
-   AND (autoriza = :autoriza OR :autoriza = 'T')
-ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto;
+GROUP BY N.storeno, N.pdvno, N.xano, tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI
-SELECT storeno AS loja, invno, date,  CONCAT('NI *', I.invno) obsNI
+SELECT storeno AS loja, invno, date, CONCAT('NI *', I.invno) AS obsNI
 FROM
   sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
@@ -121,10 +116,17 @@ SELECT U.loja,
        userSolicitacao,
        loginTroca,
        loginSolicitacao,
+       motivoTroca,
        I.invno              AS ni,
        CAST(I.date AS date) AS dataNi
 FROM
-  T_VENDA                  AS U
+  T_VENDA          AS U
     LEFT JOIN T_NI AS I
               ON U.loja = I.loja AND U.obsNI REGEXP I.obsNI
+WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
+       tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
+       UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
+       vendedor LIKE @PESQUISA_LIKE)
+  AND (autoriza = :autoriza OR :autoriza = 'T')
 GROUP BY loja, pdv, transacao, tipo
+
