@@ -96,7 +96,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
       viewModel.formSolicitacao(nota)
     }
-    columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Solicitação")
+    columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Tipo Dev")
     columnGrid(NotaVenda::produtoTrocaDescricao, header = "Produto")
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
       viewModel.formAutoriza(nota)
