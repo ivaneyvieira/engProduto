@@ -26,6 +26,8 @@ class NotaVenda(
   var produtoTroca: String?,
   var userTroca: Int?,
   var loginTroca: String?,
+  var userSolicitacao: Int?,
+  var loginSolicitacao: String?,
 ) {
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
@@ -72,14 +74,14 @@ data class FiltroNotaVenda(
   val dataFinal: LocalDate?,
 )
 
-enum class ESolicitacaoTroca(val codigo: String, val descricao: String){
+enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
   Troca("T", "Troca"),
   Estorno("E", "Estorno"),
   Reembolso("R", "Reembolso"),
   MudaCliente("M", "Muda Cliente"),
 }
 
-enum class EProdutoTroca(val codigo: String, val descricao: String){
+enum class EProdutoTroca(val codigo: String, val descricao: String) {
   Com("C", "Com Produto"),
   Sem("S", "Sem Produto"),
   Misto("M", "Misto"),

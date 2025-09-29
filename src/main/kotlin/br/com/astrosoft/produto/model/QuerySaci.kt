@@ -2632,6 +2632,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("xano", venda.transacao ?: 0)
       addOptionalParameter("autoriza", venda.autoriza)
       addOptionalParameter("userTroca", venda.userTroca)
+      addOptionalParameter("userSolicitacao", venda.userSolicitacao)
       addOptionalParameter("solicitacaoTroca", venda.solicitacaoTroca)
       addOptionalParameter("produtoTroca", venda.produtoTroca)
     }

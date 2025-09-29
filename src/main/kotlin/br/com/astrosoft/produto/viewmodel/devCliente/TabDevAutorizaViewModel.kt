@@ -2,12 +2,7 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EProdutoTroca
-import br.com.astrosoft.produto.model.beans.ESolicitacaoTroca
-import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVenda
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
 import br.com.astrosoft.produto.model.report.ReportVenda
 
@@ -50,6 +45,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   fun autorizaNota(nota: NotaVenda, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
+      fail("A solicitação de troca não foi autorizada")
+    }
     if (nota.autoriza != "S") {
       fail("Nota não marcada para autorizar")
     }
@@ -71,10 +69,24 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun solicitacaoNota(nota: NotaVenda, solicitacao: ESolicitacaoTroca?, produto: EProdutoTroca?) = viewModel.exec {
-    val usernoAutal = nota.userTroca ?: 0
+  fun solicitacaoNota(
+    nota: NotaVenda,
+    solicitacao: ESolicitacaoTroca?,
+    produto: EProdutoTroca?,
+    login: String,
+    senha: String
+  ) = viewModel.exec {
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.equals(login, ignoreCase = true) &&
+        it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    val usernoAutal = nota.userSolicitacao ?: 0
     if (usernoAutal != 0) {
-      fail("Nota já autorizada por outro usuário")
+      fail("Solicitação já autorizada por outro usuário")
     }
     nota.solicitacaoTrocaEnnum = solicitacao
     nota.produtoTrocaEnnum = produto
@@ -85,6 +97,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       fail("Nota não marcada para autorizar")
     }
 
+    nota.userSolicitacao = user.no
     nota.update()
     updateView()
   }

@@ -16,7 +16,8 @@ UPDATE sqldados.nfAutorizacao
 SET autoriza         = :autoriza,
     solicitacaoTroca = :solicitacaoTroca,
     produtoTroca     = :produtoTroca,
-    userTroca        = :userTroca
+    userTroca        = :userTroca,
+    userSolicitacao  = :userSolicitacao
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano

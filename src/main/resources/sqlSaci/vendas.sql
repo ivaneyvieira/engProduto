@@ -43,7 +43,9 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.solicitacaoTroca, 'N')                         AS solicitacaoTroca,
        IFNULL(AT.produtoTroca, 'N')                             AS produtoTroca,
        IFNULL(AT.userTroca, 0)                                  AS userTroca,
-       IFNULL(UT.login, '')                                     AS loginTroca
+       IFNULL(AT.userSolicitacao, 0)                            AS userSolicitacao,
+       IFNULL(UT.login, '')                                     AS loginTroca,
+       IFNULL(US.login, '')                                     AS loginSolicitacao
 FROM
   sqldados.nf                         AS N
     LEFT JOIN  sqldados.ctadd         AS A
@@ -56,6 +58,8 @@ FROM
                USING (storeno, pdvno, xano)
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
+    LEFT JOIN  sqldados.users         AS US
+                ON US.no = AT.userSolicitacao
     INNER JOIN sqldados.custp         AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp           AS E

@@ -31,6 +31,11 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column produtoTroca varchar(1) default '';
 
+
+alter table sqldados.nfAutorizacao
+  add column userSolicitacao int default 0;
+
+
 alter table sqldados.nfAutorizacao
   add column userTroca int default 0;
 

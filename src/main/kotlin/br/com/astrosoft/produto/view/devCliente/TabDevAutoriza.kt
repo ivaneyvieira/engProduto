@@ -96,6 +96,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
       viewModel.formSolicitacao(nota)
     }
+    columnGrid(NotaVenda::loginSolicitacao, header = "Autorização")
     columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Tipo Dev")
     columnGrid(NotaVenda::produtoTrocaDescricao, header = "Produto")
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
@@ -155,7 +156,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   override fun formSolicitacao(nota: NotaVenda) {
     val form = FormSolicitacaoNotaTroca()
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
-      viewModel.solicitacaoNota(nota, form.solicitacao, form.produto)
+      viewModel.solicitacaoNota(nota, form.solicitacao, form.produto, form.login, form.senha)
     }
   }
 
