@@ -28,6 +28,8 @@ class NotaVenda(
   var loginTroca: String?,
   var userSolicitacao: Int?,
   var loginSolicitacao: String?,
+  var ni: Int?,
+  var dataNi: LocalDate?,
 ) {
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }

@@ -103,6 +103,10 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       viewModel.formAutoriza(nota)
     }
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
+
+    columnGrid(NotaVenda::ni, header = "NI")
+    columnGrid(NotaVenda::dataNi, header = "Data NI")
+
     columnGrid(NotaVenda::data, header = "Data")
     columnGrid(NotaVenda::nota, header = "NF")
     columnGrid(NotaVenda::uf, header = "UF")
@@ -115,6 +119,14 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
+
+    this.setPartNameGenerator {
+      if (it.ni == null) {
+        null
+      } else {
+        "amarelo"
+      }
+    }
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()

@@ -1,13 +1,18 @@
 USE sqldados;
 
+SET SQL_MODE = '';
+
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
+DROP TEMPORARY TABLE IF EXISTS T_VENDA;
+CREATE TEMPORARY TABLE T_VENDA
 SELECT N.storeno                                                AS loja,
        N.pdvno                                                  AS pdv,
        N.xano                                                   AS transacao,
+       IF(N.xatype = 999, V.xatype, N.xatype)                   AS tipo,
        N.eordno                                                 AS pedido,
        CAST(N.issuedate AS DATE)                                AS data,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
@@ -45,7 +50,12 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.userTroca, 0)                                  AS userTroca,
        IFNULL(AT.userSolicitacao, 0)                            AS userSolicitacao,
        IFNULL(UT.login, '')                                     AS loginTroca,
-       IFNULL(US.login, '')                                     AS loginSolicitacao
+       IFNULL(US.login, '')                                     AS loginSolicitacao,
+       CASE
+         WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
+         WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
+                                                  ELSE ''
+       END                                                      AS obsNI
 FROM
   sqldados.nf                         AS N
     LEFT JOIN  sqldados.ctadd         AS A
@@ -59,7 +69,7 @@ FROM
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
     LEFT JOIN  sqldados.users         AS US
-                ON US.no = AT.userSolicitacao
+               ON US.no = AT.userSolicitacao
     INNER JOIN sqldados.custp         AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp           AS E
@@ -72,10 +82,49 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
+GROUP BY N.storeno, N.pdvno, N.xano, tipo
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE)
    AND (autoriza = :autoriza OR :autoriza = 'T')
-ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto
+ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto;
+
+DROP TEMPORARY TABLE IF EXISTS T_NI;
+CREATE TEMPORARY TABLE T_NI
+SELECT storeno AS loja, invno, date,  CONCAT('NI *', I.invno) obsNI
+FROM
+  sqldados.inv AS I
+WHERE I.storeno IN (2, 3, 4, 5, 8)
+  AND I.date >= :dataInicial;
+
+SELECT U.loja,
+       pdv,
+       transacao,
+       pedido,
+       data,
+       nota,
+       tipoNf,
+       hora,
+       tipoPgto,
+       valor,
+       cliente,
+       nomeCliente,
+       uf,
+       vendedor,
+       valorTipo,
+       obs,
+       autoriza,
+       solicitacaoTroca,
+       produtoTroca,
+       userTroca,
+       userSolicitacao,
+       loginTroca,
+       loginSolicitacao,
+       I.invno              AS ni,
+       CAST(I.date AS date) AS dataNi
+FROM
+  T_VENDA                  AS U
+    LEFT JOIN T_NI AS I
+              ON U.loja = I.loja AND U.obsNI REGEXP I.obsNI
+GROUP BY loja, pdv, transacao, tipo
