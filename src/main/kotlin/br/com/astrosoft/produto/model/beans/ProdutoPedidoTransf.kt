@@ -29,6 +29,10 @@ class ProdutoPedidoTransf(
   var usuarioCD: String?,
   var estoque: Int?,
   var estoqueD: Int?,
+  var saldoO: Int?,
+  var saldoD: Int?,
+  var lojaO: String?,
+  var lojaD: String?,
 ) {
   val codigoFormat
     get() = codigo?.padStart(6, '0')

@@ -4,14 +4,20 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.PedidoTransf
 import br.com.astrosoft.produto.model.beans.ProdutoPedidoTransf
+import br.com.astrosoft.produto.model.saci
 
 class RequisicaoTransferenciaConsulta(val nota: PedidoTransf) : PrintText<ProdutoPedidoTransf>() {
   init {
+    val rota = nota.rotaPedido()
+    val listLoja = saci.allLojas()
+    val lojaOrigem = listLoja.firstOrNull { it.no == nota.lojaNoOri }?.sname ?: ""
+    val lojaDestino = listLoja.firstOrNull { it.no == nota.lojaNoDes }?.sname ?: ""
     column(ProdutoPedidoTransf::codigoFormat, "Codigo", 6)
-    column(ProdutoPedidoTransf::descricao, "Descricao", 34)
-    column(ProdutoPedidoTransf::grade, "Grade", 9)
-    column(ProdutoPedidoTransf::quantidade, "Quant", 6)
-    column(ProdutoPedidoTransf::estoqueD, "Saldo", 6)
+    column(ProdutoPedidoTransf::descricao, "Descricao", 27)
+    column(ProdutoPedidoTransf::grade, "Grade", 8)
+    column(ProdutoPedidoTransf::saldoO, "Qt_$lojaOrigem", 6)
+    column(ProdutoPedidoTransf::saldoD, "Qt_$lojaDestino", 6)
+    column(ProdutoPedidoTransf::quantidade, "Qt_Ped", 6)
   }
 
   override fun printTitle(bean: ProdutoPedidoTransf) {

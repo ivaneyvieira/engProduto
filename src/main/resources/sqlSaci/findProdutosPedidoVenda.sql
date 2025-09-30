@@ -21,19 +21,29 @@ SELECT X.storeno                                          AS loja,
        X.c4                                               AS usuarioCD,
        ROUND(IFNULL(S.qtty_varejo, 0) / 1000)             AS estoque,
        ROUND((IFNULL(ED.qtty_varejo, 0) +
-              IFNULL(ED.qtty_varejo, 0)) / 1000)          AS estoqueD
+              IFNULL(ED.qtty_atacado, 0)) / 1000)         AS estoqueD,
+       ROUND((IFNULL(EO.qtty_varejo, 0) +
+              IFNULL(EO.qtty_atacado, 0)) / 1000)         AS saldoO,
+       ROUND((IFNULL(ED.qtty_varejo, 0) +
+              IFNULL(ED.qtty_atacado, 0)) / 1000)         AS saldoD,
+       IFNULL(SO.name, '')                                AS lojaO,
+       IFNULL(SD.name, '')                                AS lojaD
 FROM
   sqldados.prd                 AS P
     INNER JOIN sqldados.eoprd  AS X
                ON P.no = X.prdno
     INNER JOIN sqldados.eord   AS N
                USING (storeno, ordno)
+    LEFT JOIN  sqldados.store  AS SO
+               ON SO.no = X.storeno
     LEFT JOIN  sqldados.custp  AS C
                ON C.no = N.custno
     LEFT JOIN  sqldados.store  AS SD
                ON SD.cgc = C.cpf_cgc
     LEFT JOIN  sqldados.stk    AS S
                ON S.prdno = X.prdno AND S.grade = X.grade AND S.storeno = 4
+    LEFT JOIN  sqldados.stk    AS EO
+               ON EO.prdno = X.prdno AND EO.grade = X.grade AND EO.storeno = N.storeno
     LEFT JOIN  sqldados.stk    AS ED
                ON ED.prdno = X.prdno AND ED.grade = X.grade AND ED.storeno = SD.no
     LEFT JOIN  sqldados.prdbar AS B
