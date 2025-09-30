@@ -162,12 +162,12 @@ fun VerticalLayout.formHeader(
       this.isMargin = false
       this.isSpacing = false
       this.setSizeFull()
-      horizontalBlock {
-        this.isSpacing = true
-        this.setWidthFull()
-        textArea("Observação") {
-          this.width = "18rem"
-          this.height = "100%"
+      verticalBlock {
+        this.isSpacing = false
+        this.setHeightFull()
+        textArea("Dados Adicionais") {
+          this.width = "100%"
+          this.height = "66%"
           this.isExpand = true
           this.isReadOnly = true
           val obsAjustada = nota.obsDevolucaoAjustada()
@@ -178,9 +178,10 @@ fun VerticalLayout.formHeader(
             obsAjustada
           }
         }
-        textArea("Dados Adicionais") {
+        textArea("Observação") {
           this.isReadOnly = readOnly
-          this.height = "100%"
+          this.height = "34%"
+          this.width = "100%"
           this.isExpand = true
           this.value = nota.observacaoAdicional ?: ""
           //this.value = nota.obsDevolucaoAjustada() ?: ""
