@@ -27,7 +27,7 @@ fun VerticalLayout.formHeader(
       this.isPadding = false
       this.isMargin = false
       this.isSpacing = false
-      this.setWidthFull()
+      this.width = "60%"
 
       horizontalBlock {
         this.isSpacing = true
@@ -161,7 +161,8 @@ fun VerticalLayout.formHeader(
       this.isPadding = false
       this.isMargin = false
       this.isSpacing = false
-      this.setSizeFull()
+      this.setHeightFull()
+      this.width = "40%"
       verticalBlock {
         this.isSpacing = false
         this.setHeightFull()
