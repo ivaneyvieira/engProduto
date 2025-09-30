@@ -47,12 +47,12 @@ fun VerticalLayout.formHeader(
         }
         textField("Emissão") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.value = nota.emissao.format()
         }
         textField("Entrada") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.value = nota.dataEntrada.format()
         }
         integerField("Cod") {
@@ -85,25 +85,25 @@ fun VerticalLayout.formHeader(
         }
         textField("CTE") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.cte?.toString()
         }
         textField("Ped Compra") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.pedComp?.toString()
         }
         textField("Dup Vcto") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.dataVencimentoDup.format()
         }
         textField("Dup Valor") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.valorVencimentoDup.format()
         }
@@ -140,7 +140,7 @@ fun VerticalLayout.formHeader(
         }
         textField("Emissão") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.emissaoDevolucao.format()
         }
@@ -151,7 +151,7 @@ fun VerticalLayout.formHeader(
         }
         textField("Valor Frete") {
           this.isReadOnly = true
-          this.width = "7rem"
+          this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.freteNota.format()
         }
