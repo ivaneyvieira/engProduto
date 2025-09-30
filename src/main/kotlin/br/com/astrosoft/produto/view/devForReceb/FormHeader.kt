@@ -188,6 +188,7 @@ fun VerticalLayout.formHeader(
 
           this.valueChangeMode = ValueChangeMode.LAZY
 
+
           addValueChangeListener {
             nota.observacaoAdicional = this.value ?: ""
             salvaNota(nota)
