@@ -35,13 +35,13 @@ fun VerticalLayout.formHeader(
 
         integerField("NI") {
           this.isReadOnly = true
-          this.width = "6rem"
+          this.width = "5rem"
           this.value = nota.niPrincipal ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
         textField("NFO") {
           this.isReadOnly = true
-          this.width = "6rem"
+          this.width = "5rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.nfEntrada ?: ""
         }
@@ -85,13 +85,13 @@ fun VerticalLayout.formHeader(
         }
         textField("CTE") {
           this.isReadOnly = true
-          this.width = "6rem"
+          this.width = "5rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.cte?.toString()
         }
         textField("Ped Compra") {
           this.isReadOnly = true
-          this.width = "6rem"
+          this.width = "5rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.pedComp?.toString()
         }
