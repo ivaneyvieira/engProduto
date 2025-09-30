@@ -132,8 +132,8 @@ SELECT NFO.storeno,
        vol_gross      AS pesoNFBrutoDevolucao,
        vol_net        AS pesoNFLiquidoDevolucao
 FROM
-  T_NFO                    AS NFO
-    INNER JOIN sqldados.nf AS N
+  T_NFO                        AS NFO
+    INNER JOIN sqldados.nf     AS N
                USING (storeno, pdvno, xano);
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
@@ -289,6 +289,7 @@ SELECT N.storeno                                                      AS loja,
   /*Produto*/
        N.seq                                                          AS seq,
        P.no                                                           AS prdno,
+       IF(P.taxno = '06', '06', '')                                   AS taxno,
        TRIM(P.no)                                                     AS codigo,
        IF(N.grade = '', CONCAT(IFNULL(B.barcodeList, ''), IF(IFNULL(B.barcodeList, '') = '', '', ','), TRIM(P.barcode)),
           COALESCE(B.barcodeList, TRIM(P.barcode), ''))               AS barcodeStrList,
@@ -408,6 +409,7 @@ SELECT loja,
        seq,
        prdno,
        codigo,
+       taxno,
        barcodeStrList,
        barcodeStrListEntrada,
        descricao,
@@ -519,3 +521,4 @@ SELECT *
 FROM
   T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
+

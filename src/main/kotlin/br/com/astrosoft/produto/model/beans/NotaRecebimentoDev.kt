@@ -11,6 +11,7 @@ class NotaRecebimentoDev(
   var dataEntrada: LocalDate?,
   var emissao: LocalDate?,
   val niPrincipal: Int?,
+  val nfdstnr: Boolean,
   val freteNota: Double?,
   var niList: List<Int>,
   var numeroDevolucao: Int?,
@@ -232,6 +233,8 @@ class NotaRecebimentoDev(
           } else {
             (it.motivoDevolucaoEnun?.divergente == false) || ((it.situacaoDev ?: 0) != EStituacaoDev.PEDIDO.num)
           }
+        }.filter {
+          !filtro.nfdstnr || it.nfdstnr
         }
     }
   }
@@ -309,6 +312,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         transpNFDevolucao = nota.transpNFDevolucao,
         pesoNFBrutoDevolucao = nota.pesoNFBrutoDevolucao,
         pesoNFLiquidoDevolucao = nota.pesoNFLiquidoDevolucao,
+        nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000"}
       )
     }
   }

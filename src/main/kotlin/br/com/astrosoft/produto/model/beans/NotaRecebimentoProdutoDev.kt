@@ -28,6 +28,7 @@ data class NotaRecebimentoProdutoDev(
   var usuarioRecebe: String?,
   var seq: Int?,
   var prdno: String?,
+  var taxno: String?,
   var codigo: Int?,
   var vendnoProduto: Int?,
   var barcodeStrList: String?,
@@ -228,6 +229,7 @@ data class NotaRecebimentoProdutoDev(
 data class FiltroNotaRecebimentoProdutoDev(
   val loja: Int,
   val pesquisa: String,
+  val nfdstnr: Boolean = false,
 )
 
 
