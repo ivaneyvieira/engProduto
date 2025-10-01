@@ -38,6 +38,7 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
     this.devFor2NotaFornecedor = usuario.devFor2NotaFornecedor
     this.devFor2NotaRetornoNFD = usuario.devFor2NotaRetornoNFD
     this.devFor2NotaColetaRep = usuario.devFor2NotaColetaRep
+    this.devFor2NotaNFDSTNR = usuario.devFor2NotaNFDSTNR
   }
 }
 

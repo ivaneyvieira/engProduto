@@ -31,6 +31,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::devFor2NotaDescarte, "Descarte")
     columnGrid(UserSaci::devFor2NotaNulo, "Nulo")
     columnGrid(UserSaci::devFor2NotaFornecedor, "Forn")
+    columnGrid(UserSaci::devFor2NotaNFDSTNR, "NFD ST/NR")
   }
 
   override fun FormUsuario.configFields() {
@@ -110,6 +111,10 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
 
         checkBox("Forn") {
           binder.bind(this, UserSaci::devFor2NotaFornecedor.name)
+        }
+
+        checkBox("NFD ST/NR") {
+          binder.bind(this, UserSaci::devFor2NotaNFDSTNR.name)
         }
       }
       verticalBlock("Filtros") {

@@ -59,36 +59,6 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
         viewModel.updateView()
       }
     }
-
-    button("Remove") {
-      this.icon = VaadinIcon.TRASH.create()
-      this.onClick {
-        viewModel.removeNota()
-      }
-    }
-
-    select("Motivo Devoulucao") {
-      this.setItems(EMotivoDevolucao.entries)
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateMotivo(it.value)
-          it.source.clear()
-        }
-      }
-    }
-
-    select("Enviar") {
-      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO)
-      this.setItemLabelGenerator { sit ->
-        sit.descricao
-      }
-      this.addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.marcaSituacao(it.value)
-          it.source.clear()
-        }
-      }
-    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
@@ -150,6 +120,7 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      nfdstnr = true
     )
   }
 
@@ -197,7 +168,7 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
   }
 
   override val label: String
-    get() = "Pedido"
+    get() = "NFD ST/NR"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -13,7 +13,6 @@ import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.fetchAll
-import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -21,7 +20,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.theme.lumo.LumoUtility
 
 class DlgProdutosNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
@@ -250,9 +248,9 @@ class DlgProdutosNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel, var nota: N
       }
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
-      columnGrid(NotaRecebimentoProdutoDev::ni, "NI"){
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
-        this.setComparator {prd ->
+        this.setComparator { prd ->
           val ni = (prd.ni ?: 0).toString().lpad(10, "0")
           val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
           val grade = (prd.grade ?: "").toString().lpad(10, "0")
@@ -308,11 +306,3 @@ class DlgProdutosNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel, var nota: N
   }
 }
 
-fun HasStyle.marcaDiferencao(diferenta: Boolean) {
-  if (diferenta) {
-    this.addClassNames(LumoUtility.TextColor.WARNING, "diferenca")
-  } else {
-    this.removeClassName(LumoUtility.TextColor.WARNING)
-    this.removeClassName("diferenca")
-  }
-}
