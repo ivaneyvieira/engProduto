@@ -86,7 +86,6 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-  AND (IFNULL(AT.autoriza, 'N') = :autoriza OR :autoriza = 'T')
 GROUP BY N.storeno, N.pdvno, N.xano, tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
