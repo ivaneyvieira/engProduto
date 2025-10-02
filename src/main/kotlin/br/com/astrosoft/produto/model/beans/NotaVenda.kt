@@ -71,7 +71,12 @@ class NotaVenda(
 
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
-      return saci.findNotaVenda(filtro).filter {
+      val filtroAlterado = if(filtro.devolucaoStatus == EDevolucaoStatus.Pendente) {
+        filtro.copy(dataInicial = LocalDate.now().minusDays(360*2), dataFinal = LocalDate.now())
+      } else {
+        filtro
+      }
+      return saci.findNotaVenda(filtroAlterado).filter {
         val invno = it.ni ?: 0
         when(filtro.devolucaoStatus) {
           EDevolucaoStatus.Pendente -> invno == 0
