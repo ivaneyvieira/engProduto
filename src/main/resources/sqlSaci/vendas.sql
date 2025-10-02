@@ -15,6 +15,8 @@ SELECT N.storeno                                                AS loja,
        IF(N.xatype = 999, V.xatype, N.xatype)                   AS tipo,
        N.eordno                                                 AS pedido,
        CAST(N.issuedate AS DATE)                                AS data,
+       N.nfno                                                   AS nfno,
+       N.nfse                                                   AS nfse,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
        CASE
          WHEN tipo = 0  THEN 'VENDA NF'
@@ -117,12 +119,16 @@ SELECT U.loja,
        loginTroca,
        loginSolicitacao,
        motivoTroca,
-       I.invno              AS ni,
-       CAST(I.date AS date) AS dataNi
+       COALESCE(I1.invno, I2.invno, I3.invno)            AS ni,
+       CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
 FROM
-  T_VENDA          AS U
-    LEFT JOIN T_NI AS I
-              ON U.loja = I.loja AND U.obsNI REGEXP I.obsNI
+  T_VENDA                  AS U
+    LEFT JOIN sqldados.inv AS I1
+              ON (U.nfno = I1.nfNfno AND U.loja = I1.nfStoreno AND U.nfse = I1.nfNfse)
+    LEFT JOIN sqldados.inv AS I2
+              ON (U.loja = I2.s1 AND U.pdv = I2.s2 AND U.transacao = I2.l2)
+    LEFT JOIN T_NI         AS I3
+              ON U.loja = I3.loja AND U.obsNI REGEXP I3.obsNI
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
