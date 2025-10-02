@@ -94,6 +94,7 @@ SELECT storeno AS loja, invno, date, CONCAT('NI *', I.invno) AS obsNI
 FROM
   sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
+  AND I.bits & POW(2, 4) = 0
   AND I.date >= :dataInicial;
 
 SELECT U.loja,
@@ -126,9 +127,9 @@ SELECT U.loja,
 FROM
   T_VENDA                  AS U
     LEFT JOIN sqldados.inv AS I1
-              ON (U.nfno = I1.nfNfno AND U.loja = I1.nfStoreno AND U.nfse = I1.nfNfse)
+              ON U.nfno = I1.nfNfno AND U.loja = I1.nfStoreno AND U.nfse = I1.nfNfse AND I1.bits & POW(2, 4) = 0
     LEFT JOIN sqldados.inv AS I2
-              ON (U.loja = I2.s1 AND U.pdv = I2.s2 AND U.transacao = I2.l2)
+              ON U.loja = I2.s1 AND U.pdv = I2.s2 AND U.transacao = I2.l2 AND I2.bits & POW(2, 4) = 0
     LEFT JOIN T_NI         AS I3
               ON U.loja = I3.loja AND U.obsNI REGEXP I3.obsNI
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
