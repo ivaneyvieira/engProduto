@@ -20,22 +20,22 @@ SELECT N.storeno                                                AS loja,
        N.eordno                                                 AS eordno,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
        CASE
-         WHEN tipo = 0  THEN 'VENDA NF'
-         WHEN tipo = 1  THEN 'TRANSFERENCIA'
-         WHEN tipo = 2  THEN 'DEVOLUCAO'
-         WHEN tipo = 3  THEN 'SIMP REME'
-         WHEN tipo = 4  THEN 'ENTRE FUT'
-         WHEN tipo = 5  THEN 'RET DEMON'
-         WHEN tipo = 6  THEN 'VENDA USA'
-         WHEN tipo = 7  THEN 'OUTROS'
-         WHEN tipo = 8  THEN 'NF CF'
-         WHEN tipo = 9  THEN 'PERD/CONSER'
-         WHEN tipo = 10 THEN 'REPOSICAO'
-         WHEN tipo = 11 THEN 'RESSARCI'
-         WHEN tipo = 12 THEN 'COMODATO'
-         WHEN tipo = 13 THEN 'NF EMPRESA'
-         WHEN tipo = 14 THEN 'BONIFICA'
-         WHEN tipo = 15 THEN 'NFE'
+         WHEN N.tipo = 0  THEN 'VENDA NF'
+         WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
+         WHEN N.tipo = 2  THEN 'DEVOLUCAO'
+         WHEN N.tipo = 3  THEN 'SIMP REME'
+         WHEN N.tipo = 4  THEN 'ENTRE FUT'
+         WHEN N.tipo = 5  THEN 'RET DEMON'
+         WHEN N.tipo = 6  THEN 'VENDA USA'
+         WHEN N.tipo = 7  THEN 'OUTROS'
+         WHEN N.tipo = 8  THEN 'NF CF'
+         WHEN N.tipo = 9  THEN 'PERD/CONSER'
+         WHEN N.tipo = 10 THEN 'REPOSICAO'
+         WHEN N.tipo = 11 THEN 'RESSARCI'
+         WHEN N.tipo = 12 THEN 'COMODATO'
+         WHEN N.tipo = 13 THEN 'NF EMPRESA'
+         WHEN N.tipo = 14 THEN 'BONIFICA'
+         WHEN N.tipo = 15 THEN 'NFE'
                         ELSE 'TIPO INVALIDO'
        END                                                      AS tipoNf,
        SEC_TO_TIME(P.time)                                      AS hora,
@@ -60,17 +60,24 @@ SELECT N.storeno                                                AS loja,
          WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
          WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
                                                   ELSE ''
-       END                                                      AS obsNI
+       END                                                      AS obsNI,
+       IFNULL(EF.storeno, N.storeno)                            AS storenoE,
+       IFNULL(EF.nfno, N.nfno)                                  AS nfnoE,
+       IFNULL(EF.nfse, N.nfse)                                  AS nfseE,
+       IFNULL(EF.pdvno, N.pdvno)                                AS pdvnoE,
+       IFNULL(EF.xano, N.xano)                                  AS xanoE
 FROM
   sqldados.nf                         AS N
+    LEFT JOIN  sqldados.nf            AS EF
+               ON N.storeno = EF.storeno AND N.eordno = EF.eordno AND N.nfse = '1' AND EF.nfse = '3'
     LEFT JOIN  sqldados.ctadd         AS A
                ON A.custno = N.custno AND A.seqno = N.custno_addno
     LEFT JOIN  sqlpdv.pxa             AS P
-               USING (storeno, pdvno, xano)
+               ON P.storeno = N.storeno AND P.pdvno = N.pdvno AND P.xano = N.xano
     LEFT JOIN  sqlpdv.pxaval          AS V
-               USING (storeno, pdvno, xano)
+               ON V.storeno = N.storeno AND V.pdvno = N.pdvno AND V.xano = N.xano
     LEFT JOIN  sqldados.nfAutorizacao AS AT
-               USING (storeno, pdvno, xano)
+               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
     LEFT JOIN  sqldados.users         AS US
@@ -87,7 +94,7 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-GROUP BY N.storeno, N.pdvno, N.xano, tipo;
+GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI
@@ -128,14 +135,12 @@ SELECT U.loja,
 
 FROM
   T_VENDA                  AS U
-    LEFT JOIN sqldados.nf  AS N
-              ON N.storeno = U.loja AND N.eordno = U.eordno AND N.nfse = '3'
     LEFT JOIN sqldados.inv AS I1
-              ON IFNULL(N.nfno, U.nfno) = I1.nfNfno AND IFNULL(N.storeno, U.loja) = I1.nfStoreno AND
-                 IFNULL(N.nfse, U.nfse) = I1.nfNfse AND I1.bits & POW(2, 4) = 0
+              ON U.nfnoE = I1.nfNfno AND U.storenoE = I1.nfStoreno AND
+                 U.nfseE = I1.nfNfse AND I1.bits & POW(2, 4) = 0
     LEFT JOIN sqldados.inv AS I2
-              ON IFNULL(N.storeno, U.loja) = I2.s1 AND IFNULL(N.pdvno, U.pdv) = I2.s2 AND
-                 IFNULL(N.xano, U.transacao) = I2.l2 AND I2.bits & POW(2, 4) = 0
+              ON U.storenoE = I2.s1 AND U.pdvnoE = I2.s2 AND
+                 U.xanoE = I2.l2 AND I2.bits & POW(2, 4) = 0
     LEFT JOIN T_NI         AS I3
               ON U.loja = I3.loja AND U.obsNI REGEXP I3.obsNI
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
