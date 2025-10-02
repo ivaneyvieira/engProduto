@@ -125,6 +125,7 @@ SELECT U.loja,
        motivoTrocaCod,
        COALESCE(I1.invno, I2.invno, I3.invno)            AS ni,
        CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
+
 FROM
   T_VENDA                  AS U
     LEFT JOIN sqldados.nf  AS N
