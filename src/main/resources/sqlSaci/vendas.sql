@@ -17,6 +17,7 @@ SELECT N.storeno                                                AS loja,
        CAST(N.issuedate AS DATE)                                AS data,
        N.nfno                                                   AS nfno,
        N.nfse                                                   AS nfse,
+       N.eordno                                                 AS eordno,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
        CASE
          WHEN tipo = 0  THEN 'VENDA NF'
@@ -126,10 +127,14 @@ SELECT U.loja,
        CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
 FROM
   T_VENDA                  AS U
+    LEFT JOIN sqldados.nf  AS N
+              ON N.storeno = U.loja AND N.eordno = U.eordno AND N.nfse = '3'
     LEFT JOIN sqldados.inv AS I1
-              ON U.nfno = I1.nfNfno AND U.loja = I1.nfStoreno AND U.nfse = I1.nfNfse AND I1.bits & POW(2, 4) = 0
+              ON IFNULL(N.nfno, U.nfno) = I1.nfNfno AND IFNULL(N.storeno, U.loja) = I1.nfStoreno AND
+                 IFNULL(N.nfse, U.nfse) = I1.nfNfse AND I1.bits & POW(2, 4) = 0
     LEFT JOIN sqldados.inv AS I2
-              ON U.loja = I2.s1 AND U.pdv = I2.s2 AND U.transacao = I2.l2 AND I2.bits & POW(2, 4) = 0
+              ON IFNULL(N.storeno, U.loja) = I2.s1 AND IFNULL(N.pdvno, U.pdv) = I2.s2 AND
+                 IFNULL(N.xano, U.transacao) = I2.l2 AND I2.bits & POW(2, 4) = 0
     LEFT JOIN T_NI         AS I3
               ON U.loja = I3.loja AND U.obsNI REGEXP I3.obsNI
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
@@ -137,5 +142,5 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota L
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE)
   AND (autoriza = :autoriza OR :autoriza = 'T')
-GROUP BY loja, pdv, transacao, tipo
+GROUP BY U.loja, U.pdv, U.transacao, U.tipo
 
