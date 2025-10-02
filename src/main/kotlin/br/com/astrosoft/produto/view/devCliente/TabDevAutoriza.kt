@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.EDevolucaoStatus
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
@@ -29,6 +30,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private lateinit var cmdDevolucaoStatus: Select<EDevolucaoStatus>
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -57,6 +59,15 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmdDevolucaoStatus = select("Devolução") {
+      this.width = "8rem"
+      this.setItemLabelGenerator { item -> item.descricao }
+      this.setItems(EDevolucaoStatus.entries)
+      this.value = EDevolucaoStatus.Todos
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -156,6 +167,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autoriza = "S",
+      devolucaoStatus = cmdDevolucaoStatus.value ?: EDevolucaoStatus.Todos,
     )
   }
 

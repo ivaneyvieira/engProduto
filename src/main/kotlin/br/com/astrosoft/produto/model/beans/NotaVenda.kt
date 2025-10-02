@@ -71,7 +71,14 @@ class NotaVenda(
 
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
-      return saci.findNotaVenda(filtro)
+      return saci.findNotaVenda(filtro).filter {
+        val invno = it.ni ?: 0
+        when(filtro.devolucaoStatus) {
+          EDevolucaoStatus.Pendente -> invno == 0
+          EDevolucaoStatus.Gerada  -> invno != 0
+          EDevolucaoStatus.Todos   -> true
+        }
+      }
     }
   }
 }
@@ -82,6 +89,7 @@ data class FiltroNotaVenda(
   val autoriza: String = "T",
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val devolucaoStatus: EDevolucaoStatus,
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
@@ -112,4 +120,10 @@ enum class EMotivoTroca(val codigo: String, val descricao: String) {
       return EMotivoTroca.entries.firstOrNull { it.codigo == codigo }
     }
   }
+}
+
+enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
+  Pendente("P", "Pendente"),
+  Gerada("G", "Gerada"),
+  Todos("T", "Todos");
 }

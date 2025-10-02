@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.produto.model.beans.EDevolucaoStatus
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
@@ -145,6 +146,7 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     return FiltroNotaVenda(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      devolucaoStatus = EDevolucaoStatus.Todos,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
     )
