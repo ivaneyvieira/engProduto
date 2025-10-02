@@ -29,9 +29,16 @@ class NotaVenda(
   var userSolicitacao: Int?,
   var loginSolicitacao: String?,
   var motivoTroca: String?,
+  var motivoTrocaCod: String?,
   var ni: Int?,
   var dataNi: LocalDate?,
 ) {
+  var setMotivoTroca: Set<EMotivoTroca>
+    get() = motivoTrocaCod?.split(";")?.mapNotNull {  EMotivoTroca.find( it.trim()) }?.toSet().orEmpty()
+    set(value) {
+      motivoTrocaCod = value.joinToString(";") { it.codigo }
+    }
+
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
     set(value) {
@@ -88,4 +95,21 @@ enum class EProdutoTroca(val codigo: String, val descricao: String) {
   Com("C", "Com Produto"),
   Sem("S", "Sem Produto"),
   Misto("M", "Misto"),
+}
+
+enum class EMotivoTroca(val codigo: String, val descricao: String) {
+  CompraErrada("CE", "Compra Errada"),
+  VendaErrada("VE", "Venda Errada"),
+  Desistencia("D", "Desistência"),
+  MudaCliente("MC", "Muda Cliente"),
+  MudaTipoNF("MT", "Muda Tipo NF"),
+  MudaTipoVenda("MV", "Muda Tipo Venda"),
+  ProdutoComDefeito("PD", "Produto com Defeito"),
+  ProdutoSemEstoque("PE", "Produto sem Estoque");
+
+  companion object {
+    fun find(codigo: String): EMotivoTroca? {
+      return EMotivoTroca.entries.firstOrNull { it.codigo == codigo }
+    }
+  }
 }

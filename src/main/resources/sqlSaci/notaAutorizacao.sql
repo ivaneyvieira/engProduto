@@ -42,6 +42,12 @@ alter table sqldados.nfAutorizacao
 alter table sqldados.nfAutorizacao
   add column motivoTroca text;
 
+alter table sqldados.nfAutorizacao
+  add column motivoTrocaCod varchar(1) default '';
+
+alter table sqldados.nfAutorizacao
+  modify column motivoTrocaCod varchar(100) default '';
+
 */
 
 DO @PESQUISA := :pesquisa;

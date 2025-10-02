@@ -54,6 +54,7 @@ SELECT N.storeno                                                AS loja,
        IFNULL(UT.login, '')                                     AS loginTroca,
        IFNULL(US.login, '')                                     AS loginSolicitacao,
        IFNULL(AT.motivoTroca, '')                               AS motivoTroca,
+       IFNULL(AT.motivoTrocaCod, '')                            AS motivoTrocaCod,
        CASE
          WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
          WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
@@ -119,6 +120,7 @@ SELECT U.loja,
        loginTroca,
        loginSolicitacao,
        motivoTroca,
+       motivoTrocaCod,
        COALESCE(I1.invno, I2.invno, I3.invno)            AS ni,
        CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
 FROM
