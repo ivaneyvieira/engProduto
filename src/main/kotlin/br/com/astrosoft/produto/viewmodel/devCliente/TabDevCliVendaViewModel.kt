@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
@@ -35,10 +36,14 @@ class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) {
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
 
-  fun autorizaTroca() {
+  fun autorizaTroca() = viewModel.exec {
     val notas = subView.itensNotasSelecionados()
+    if (notas.isEmpty()) {
+      fail("Nenhuma nota selecionada")
+    }
+
     notas.forEach {
-      it.autoriza  = "S"
+      it.autoriza = "S"
       it.update()
     }
     updateView()

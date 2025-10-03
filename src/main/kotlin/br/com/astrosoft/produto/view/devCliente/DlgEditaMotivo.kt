@@ -29,7 +29,7 @@ class DlgEditaMotivo(
 
     if(nota.tipoNf == "ENTRE FUT" ) {
       horizontalLayout {
-        p("NF Ent/Ret:")
+        nativeLabel("NF Ent/Ret:")
         notaEntRet = integerField {
           this.value = nota.nfEntRet
           this.width = "6rem"

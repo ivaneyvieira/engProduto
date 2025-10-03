@@ -123,6 +123,18 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.update()
   }
 
+  fun desatorizaTroca() = viewModel.exec {
+    val notas = subView.itensNotasSelecionados()
+    if(notas.isEmpty()){
+      fail("Nenhuma nota selecionada")
+    }
+    notas.forEach {
+      it.autoriza = "N"
+      it.update()
+    }
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevAutoriza
 }
