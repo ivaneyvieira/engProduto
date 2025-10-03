@@ -25,6 +25,8 @@ repositories {
   maven {
     url = uri("https://jaspersoft.jfrog.io/jaspersoft/jaspersoft-repo")
   }
+  maven { url = uri("https://repo.maven.apache.org/maven2") }
+  maven { url = uri("https://repo1.maven.org/maven2") }
 }
 
 dependencies {
