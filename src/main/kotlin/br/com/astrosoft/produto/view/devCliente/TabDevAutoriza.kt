@@ -5,11 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.EDevolucaoStatus
-import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVenda
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevAutoriza
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.*

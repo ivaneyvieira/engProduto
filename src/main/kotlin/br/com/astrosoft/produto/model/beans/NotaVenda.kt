@@ -30,6 +30,7 @@ class NotaVenda(
   var loginSolicitacao: String?,
   var motivoTroca: String?,
   var motivoTrocaCod: String?,
+  var nfEntRet : Int?,
   var ni: Int?,
   var dataNi: LocalDate?,
 ) {

@@ -56,6 +56,7 @@ SELECT N.storeno                                                AS loja,
        IFNULL(US.login, '')                                     AS loginSolicitacao,
        IFNULL(AT.motivoTroca, '')                               AS motivoTroca,
        IFNULL(AT.motivoTrocaCod, '')                            AS motivoTrocaCod,
+       IFNULL(AT.nfEntRet, 0)                                   AS nfEntRet,
        CASE
          WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
          WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
@@ -68,8 +69,6 @@ SELECT N.storeno                                                AS loja,
        IFNULL(EF.xano, N.xano)                                  AS xanoE
 FROM
   sqldados.nf                         AS N
-    LEFT JOIN  sqldados.nf            AS EF
-               ON N.storeno = EF.storeno AND N.eordno = EF.eordno AND N.nfse = '1' AND EF.nfse = '3' AND FALSE
     LEFT JOIN  sqldados.ctadd         AS A
                ON A.custno = N.custno AND A.seqno = N.custno_addno
     LEFT JOIN  sqlpdv.pxa             AS P
@@ -78,6 +77,8 @@ FROM
                ON V.storeno = N.storeno AND V.pdvno = N.pdvno AND V.xano = N.xano
     LEFT JOIN  sqldados.nfAutorizacao AS AT
                ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
+    LEFT JOIN  sqldados.nf            AS EF
+               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0)  AND EF.nfse = '3'
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
     LEFT JOIN  sqldados.users         AS US
@@ -130,9 +131,9 @@ SELECT U.loja,
        loginSolicitacao,
        motivoTroca,
        motivoTrocaCod,
+       nfEntRet,
        COALESCE(I1.invno, I2.invno, I3.invno)            AS ni,
        CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
-
 FROM
   T_VENDA                  AS U
     LEFT JOIN sqldados.inv AS I1

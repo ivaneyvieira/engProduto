@@ -1,15 +1,9 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.produto.model.beans.EMotivoTroca
-import br.com.astrosoft.produto.model.beans.FornecedorClass
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaFornecedorViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.checkBoxGroup
-import com.github.mvysny.karibudsl.v10.horizontalLayout
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.textArea
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
@@ -17,7 +11,8 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgEditaMotivo(
   val viewModel: TabDevAutorizaViewModel,
@@ -25,11 +20,21 @@ class DlgEditaMotivo(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   var edtMotivo: CheckboxGroup<EMotivoTroca>? = null
+  var notaEntRet: IntegerField? = null
 
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
+
+    if(nota.tipoNf == "ENTRE FUT" ) {
+      notaEntRet = integerField("NF Ent/Ret") {
+        this.value = nota.nfEntRet
+        this.width = "6rem"
+        this.isAutoselect = true
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      }
+    }
 
     edtMotivo = checkBoxGroup("Motivo:") {
       this.setItems(EMotivoTroca.entries)
@@ -39,8 +44,9 @@ class DlgEditaMotivo(
       this.isReadOnly = false
       this.width = "100%"
     }
+
     this.width = "18rem"
-    this.height = "22rem"
+    this.height = "25rem"
   }
 
   fun HasComponents.toolBar() {
@@ -71,6 +77,7 @@ class DlgEditaMotivo(
 
   private fun confirmaForm() {
     nota.setMotivoTroca = edtMotivo?.value.orEmpty()
+    nota.nfEntRet = notaEntRet?.value ?: 0
     viewModel.saveNota(nota)
     onClose.invoke()
     this.close()
