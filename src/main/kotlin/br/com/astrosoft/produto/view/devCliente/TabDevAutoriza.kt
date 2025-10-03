@@ -92,10 +92,10 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
-    button("Desatoriza") {
+    button("Desfaz") {
       icon = VaadinIcon.KEY.create()
       onClick {
-        viewModel.desatorizaTroca()
+        viewModel.desfazTroca()
       }
     }
   }
