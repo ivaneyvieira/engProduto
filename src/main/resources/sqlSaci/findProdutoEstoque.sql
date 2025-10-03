@@ -128,7 +128,7 @@ SELECT S.no                                                                     
        ROUND(PD.qttyPackClosed / 1000)                                                AS embalagem,
        SUM(CASE
              WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 5800, 2)
+                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
              WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
                  ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
                                               ELSE TRUNCATE(

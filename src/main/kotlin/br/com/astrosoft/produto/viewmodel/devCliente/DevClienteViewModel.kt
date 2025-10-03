@@ -16,9 +16,9 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
 
   override fun listTab() = listOf(
     view.tabDevCliImprimir,
-    view.tabDevCliEditor,
-    view.tabDevAutoriza,
     view.tabDevCliImpresso,
+    view.tabDevAutoriza,
+    view.tabDevCliEditor,
     view.tabDevCliValeTrocaProduto,
     view.tabDevCliCredito,
     view.tabDevCliDevTroca,
