@@ -28,11 +28,14 @@ class DlgEditaMotivo(
     this.footer.toolBar()
 
     if(nota.tipoNf == "ENTRE FUT" ) {
-      notaEntRet = integerField("NF Ent/Ret") {
-        this.value = nota.nfEntRet
-        this.width = "6rem"
-        this.isAutoselect = true
-        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      horizontalLayout {
+        p("NF Ent/Ret:")
+        notaEntRet = integerField {
+          this.value = nota.nfEntRet
+          this.width = "6rem"
+          this.isAutoselect = true
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        }
       }
     }
 
