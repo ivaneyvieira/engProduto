@@ -139,6 +139,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     get() = viewModel.view.tabDevAutoriza
 }
 
+
 interface ITabDevAutoriza : ITabView {
   fun filtro(): FiltroNotaVenda
   fun updateNotas(notas: List<NotaVenda>)
