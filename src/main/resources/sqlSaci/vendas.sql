@@ -69,7 +69,7 @@ SELECT N.storeno                                                AS loja,
 FROM
   sqldados.nf                         AS N
     LEFT JOIN  sqldados.nf            AS EF
-               ON N.storeno = EF.storeno AND N.eordno = EF.eordno AND N.nfse = '1' AND EF.nfse = '3'
+               ON N.storeno = EF.storeno AND N.eordno = EF.eordno AND N.nfse = '1' AND EF.nfse = '3' AND FALSE
     LEFT JOIN  sqldados.ctadd         AS A
                ON A.custno = N.custno AND A.seqno = N.custno_addno
     LEFT JOIN  sqlpdv.pxa             AS P
