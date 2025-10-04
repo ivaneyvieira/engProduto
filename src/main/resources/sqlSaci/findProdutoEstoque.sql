@@ -26,10 +26,12 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
        (:caracter = 'T'))
   AND (P.no = :prdno OR :prdno = '')
   AND CASE :letraDup
-        WHEN 'S' THEN SUBSTRING_INDEX(P.name, ' ', 1) REGEXP
-                      'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
-        WHEN 'N' THEN SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP
-                      'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
+        WHEN 'S' THEN (SUBSTRING_INDEX(P.name, ' ', 2) REGEXP
+                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)' OR
+                       P.name LIKE '3MM%') = TRUE
+        WHEN 'N' THEN (SUBSTRING_INDEX(P.name, ' ', 2) REGEXP
+                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)' OR
+                       P.name LIKE '3MM%') = FALSE
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END;
