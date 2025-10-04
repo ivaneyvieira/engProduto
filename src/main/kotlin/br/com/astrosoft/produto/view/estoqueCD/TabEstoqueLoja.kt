@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueLoja
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueLojaViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -33,6 +34,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbLetraDup: Select<ELetraDup>
+  private lateinit var edtDataInicial: DatePicker
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -216,6 +218,13 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
             viewModel.updateView()
           }
         }
+
+        edtDataInicial = datePicker("Data Inv. Inicial") {
+          this.localePtBr()
+          this.isClearButtonVisible = true
+          this.value = LocalDate.now().withDayOfMonth(1)
+        }
+
       }
     }
   }
@@ -250,7 +259,8 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
-        dlgKardec = DlgProdutoKardecLoja(viewModel, produto)
+        val dataIncial: LocalDate? = edtDataInicial.value
+        dlgKardec = DlgProdutoKardecLoja(viewModel, produto, dataIncial)
         dlgKardec?.showDialog {
           viewModel.updateView()
         }

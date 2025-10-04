@@ -20,6 +20,7 @@ import java.time.LocalDate
 class DlgProdutoKardecLoja(
   val viewModel: TabEstoqueLojaViewModel,
   val produto: ProdutoEstoque,
+  val dataIncial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
@@ -90,9 +91,8 @@ class DlgProdutoKardecLoja(
     return gridDetail.selectedItems.toList()
   }
 
-
   fun update() {
-    val kardec = viewModel.kardec(produto, null).filter {
+    val kardec = viewModel.kardec(produto, dataIncial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
       if (pesquisa.isEmpty()) return@filter true
       val doc = it.doc ?: ""
