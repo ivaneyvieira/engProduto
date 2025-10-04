@@ -1021,6 +1021,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("saldo", filter.saldo)
       addOptionalParameter("inativo", filter.inativo.codigo)
       addOptionalParameter("uso", filter.uso.codigo)
+      addOptionalParameter("letraDup", filter.letraDup.value)
     }
   }
 

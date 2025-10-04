@@ -24,7 +24,15 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
        (:caracter = 'T'))
-  AND (P.no = :prdno OR :prdno = '');
+  AND (P.no = :prdno OR :prdno = '')
+  AND CASE :letraDup
+        WHEN 'S' THEN SUBSTRING_INDEX(P.name, ' ', 1) REGEXP
+                      'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
+        WHEN 'N' THEN SUBSTRING_INDEX(P.name, ' ', 1) NOT REGEXP
+                      'AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ'
+        WHEN 'T' THEN TRUE
+                 ELSE FALSE
+      END;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
 CREATE TEMPORARY TABLE T_LOC_NERUS

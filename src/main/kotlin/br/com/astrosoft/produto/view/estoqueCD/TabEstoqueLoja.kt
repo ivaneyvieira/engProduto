@@ -31,6 +31,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbLetraDup: Select<ELetraDup>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -119,6 +120,16 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
             item.descricao
           }
           this.value = ECaracter.NAO
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        cmbLetraDup = select("Letra Dup") {
+          this.setItems(ELetraDup.entries)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = ELetraDup.TODOS
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -315,6 +326,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,
       listaUser = listaUser,
+      letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
     )
   }
 
