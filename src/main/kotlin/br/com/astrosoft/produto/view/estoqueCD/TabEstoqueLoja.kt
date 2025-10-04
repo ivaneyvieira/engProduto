@@ -16,10 +16,11 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueLoja {
-  private var dlgKardec: DlgProdutoKardec? = null
+  private var dlgKardec: DlgProdutoKardecLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -248,6 +249,12 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
+      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
+        dlgKardec = DlgProdutoKardecLoja(viewModel, produto)
+        dlgKardec?.showDialog {
+          viewModel.updateView()
+        }
+      }
       this.columnGrid(ProdutoEstoque::codigo, header = "Código")
       this.columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
       this.columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
