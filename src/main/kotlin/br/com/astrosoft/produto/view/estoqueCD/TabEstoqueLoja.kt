@@ -128,6 +128,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
           }
         }
         cmbLetraDup = select("Letra Dup") {
+          this.width = "90px"
           this.setItems(ELetraDup.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
