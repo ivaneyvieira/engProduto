@@ -236,8 +236,6 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.columnGrid(ProdutoEstoque::unidade, header = "UN")
     }
 
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-
     columnGroup("Estoque") {
       this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")

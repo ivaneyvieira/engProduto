@@ -254,15 +254,11 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::unidade, header = "UN")
     }
 
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
-
     columnGroup("Estoque") {
       this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
+      this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
-      this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtdDif, header = "Dif", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtConfEditLoja, header = "Conf", pattern = "#,##0", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtConfEdit, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
     }
 
@@ -278,6 +274,8 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       }
       //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
       this.columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
+      this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
     }
 
     columnGroup("Outras Informações") {
