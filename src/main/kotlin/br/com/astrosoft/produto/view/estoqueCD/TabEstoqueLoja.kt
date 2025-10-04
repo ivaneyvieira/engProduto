@@ -33,7 +33,11 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   private lateinit var cmbLoja: Select<Loja>
 
   fun init() {
-    val itens = viewModel.findAllLojas()
+    val user = AppConfig.userLogin() as? UserSaci
+    val lojaConferencia = user?.lojaConferencia ?: 0
+    val itens = viewModel.findAllLojas().filter {
+      it.no == lojaConferencia || lojaConferencia == 0 || user?.admin == true
+    }
     cmbLoja.setItems(itens)
     cmbLoja.value = itens.firstOrNull {
       it.no == 4
