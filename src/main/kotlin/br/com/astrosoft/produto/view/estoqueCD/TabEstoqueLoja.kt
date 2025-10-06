@@ -276,7 +276,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
-      this.columnGrid(ProdutoEstoque::qtConfEdit, header = "Conf", pattern = "#,##0", width = "80px")
+      this.columnGrid(ProdutoEstoque::qtConfEditLoja, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
     }
 
