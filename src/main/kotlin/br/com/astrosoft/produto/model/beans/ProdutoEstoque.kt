@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 class ProdutoEstoque(
   var loja: Int?,
@@ -62,6 +63,9 @@ class ProdutoEstoque(
         diferenca
       }
     }
+
+  val qtdDifInt
+    get() = qtdDif.roundToInt()
 
   val saldoBarraRef: String
     get() {
