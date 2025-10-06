@@ -26,17 +26,9 @@ class PrintProdutosEstoqueLoja(private val filtro: FiltroProdutoEstoque) : Print
       }   Cl:${filtro.centroLucro.toString().rpad(5, " ")}",
       negrito = true
     )
-    writeln(
-      text = "Caracter: ${filtro.caracter.descricao}",
-      negrito = true
-    )
     val saldo = if (filtro.estoque == EEstoque.TODOS) "" else filtro.saldo.toString()
     writeln(
-      text = "Estoque: ${filtro.estoque.descricao}  $saldo",
-      negrito = true
-    )
-    writeln(
-      text = "Localização: ${bean.locApp}",
+      text = "Caracter: ${filtro.caracter.descricao}   Estoque: ${filtro.estoque.descricao} $saldo   Localização: ${bean.locApp}",
       negrito = true
     )
     writeln(
