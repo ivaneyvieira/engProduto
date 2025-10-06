@@ -63,11 +63,19 @@ SELECT prdno                                                 AS prdno,
              WHEN storeno = :loja THEN localizacao
                                   ELSE ''
            END)                                              AS locApp,
-       MAX(dataInicial)                                      AS dataInicial,
+       MAX(CASE
+             WHEN :loja = 0       THEN IF(storeno = 4, dataInicial, 0)
+             WHEN storeno = :loja THEN dataInicial
+                                  ELSE 0
+           END)                                              AS dataInicial,
        MAX(IF(dataUpdate * 1 = 0, NULL, dataUpdate))         AS dataUpdate,
        MAX(kardec)                                           AS kardec,
        MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
-       MAX(observacao)                                       AS observacao,
+       MAX(CASE
+             WHEN :loja = 0       THEN IF(storeno = 4, observacao, '')
+             WHEN storeno = :loja THEN observacao
+                                  ELSE ''
+           END)                                              AS observacao,
        MAX(estoque)                                          AS estoque,
        MAX(estoqueData)                                      AS estoqueData,
        MAX(estoqueCD)                                        AS estoqueCD,
