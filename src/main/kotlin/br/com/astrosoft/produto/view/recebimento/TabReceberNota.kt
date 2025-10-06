@@ -39,153 +39,152 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
       allLojas.firstOrNull { it.no == lojaRec } ?: Loja.lojaZero
     }
   }
-}
 
-override fun HorizontalLayout.toolBarConfig() {
-  cmbLoja = select("Loja") {
-    this.setItemLabelGenerator { item ->
-      item.descricao
+  override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
     }
-    addValueChangeListener {
-      if (it.isFromClient)
+    init()
+    edtTipoNota = select("Tipo Nota") {
+      this.setItems(EListaContas.entries)
+      this.value = EListaContas.RECEBIMENTO
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "300px"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data Inicial") {
+      value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
     }
   }
-  init()
-  edtTipoNota = select("Tipo Nota") {
-    this.setItems(EListaContas.entries)
-    this.value = EListaContas.RECEBIMENTO
-    this.setItemLabelGenerator {
-      it.descricao
-    }
-    addValueChangeListener {
-      viewModel.updateView()
-    }
-  }
-  edtPesquisa = textField("Pesquisa") {
-    this.width = "300px"
-    this.valueChangeMode = ValueChangeMode.LAZY
-    this.valueChangeTimeout = 1500
-    addValueChangeListener {
-      viewModel.updateView()
-    }
-  }
-  edtDataInicial = datePicker("Data Inicial") {
-    value = LocalDate.now()
-    this.localePtBr()
-    addValueChangeListener {
-      viewModel.updateView()
-    }
-  }
-  edtDataFinal = datePicker("Data Final") {
-    value = LocalDate.now()
-    this.localePtBr()
-    addValueChangeListener {
-      viewModel.updateView()
-    }
-  }
-}
 
-override fun Grid<NotaRecebimento>.gridPanel() {
-  this.addClassName("styling")
-  this.format()
+  override fun Grid<NotaRecebimento>.gridPanel() {
+    this.addClassName("styling")
+    this.format()
 
-  columnGrid(NotaRecebimento::loja, header = "Loja")
-  columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
-  columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
+    columnGrid(NotaRecebimento::loja, header = "Loja")
+    columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
+    columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
-  addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      dlgProduto = DlgProdutosReceberNota(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
+    columnGrid(NotaRecebimento::data, header = "Data")
+    columnGrid(NotaRecebimento::emissao, header = "Emissão")
+    columnGrid(NotaRecebimento::ni, header = "NI")
+    columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada")
+    columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
+    columnGrid(NotaRecebimento::vendno, header = "For NF")
+    columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
+    columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
+    columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
+    columnGrid(NotaRecebimento::pedComp, header = "Ped Comp")
+    columnGrid(NotaRecebimento::transp, header = "Transp")
+    columnGrid(NotaRecebimento::cte, header = "CTe")
+    columnGrid(NotaRecebimento::volume, header = "Volume")
+    columnGrid(NotaRecebimento::peso, header = "Peso")
+  }
+
+  override fun filtro(): FiltroNotaRecebimentoProduto {
+    val usr = AppConfig.userLogin() as? UserSaci
+    return FiltroNotaRecebimentoProduto(
+      loja = cmbLoja.value?.no ?: 0,
+      pesquisa = edtPesquisa.value ?: "",
+      marca = EMarcaRecebimento.RECEBER,
+      dataFinal = edtDataFinal.value,
+      dataInicial = edtDataInicial.value,
+      localizacao = usr?.localizacaoRec.orEmpty().toList(),
+      tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
+    )
+  }
+
+  override fun updateNota(notas: List<NotaRecebimento>) {
+    this.updateGrid(notas)
+    dlgProduto?.nota?.let { notaDlg ->
+      notas.firstOrNull { it.ni == notaDlg.ni }?.let { notaAtualizada ->
+        dlgProduto?.update(notaAtualizada)
+      }
+    }
+  }
+
+  override fun updateProduto(): NotaRecebimento? {
+    return dlgProduto?.updateProduto()
+  }
+
+  override fun closeDialog() {
+    dlgProduto?.close()
+  }
+
+  override fun focusCodigoBarra() {
+    dlgProduto?.focusCodigoBarra()
+  }
+
+  override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
+    return this.dlgProduto?.produtosSelecionados().orEmpty()
+  }
+
+  override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
+    dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
+  }
+
+  override fun formAssina(produtos: List<NotaRecebimentoProduto>) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Recebe Nota", form = form) {
+      viewModel.recebeNotaProduto(produtos, form.login, form.senha)
+    }
+  }
+
+  override fun reloadGrid() {
+    dlgProduto?.reloadGrid()
+  }
+
+  fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosReceberNota(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
 
-  columnGrid(NotaRecebimento::data, header = "Data")
-  columnGrid(NotaRecebimento::emissao, header = "Emissão")
-  columnGrid(NotaRecebimento::ni, header = "NI")
-  columnGrid(NotaRecebimento::nfEntrada, header = "NF Entrada")
-  columnGrid(NotaRecebimento::vendnoProduto, header = "For Cad")
-  columnGrid(NotaRecebimento::vendno, header = "For NF")
-  columnGrid(NotaRecebimento::fornecedor, header = "Nome Fornecedor")
-  columnGrid(NotaRecebimento::valorNF, header = "Valor NF")
-  columnGrid(NotaRecebimento::observacaoNota, header = "Observação")
-  columnGrid(NotaRecebimento::pedComp, header = "Ped Comp")
-  columnGrid(NotaRecebimento::transp, header = "Transp")
-  columnGrid(NotaRecebimento::cte, header = "CTe")
-  columnGrid(NotaRecebimento::volume, header = "Volume")
-  columnGrid(NotaRecebimento::peso, header = "Peso")
-}
-
-override fun filtro(): FiltroNotaRecebimentoProduto {
-  val usr = AppConfig.userLogin() as? UserSaci
-  return FiltroNotaRecebimentoProduto(
-    loja = cmbLoja.value?.no ?: 0,
-    pesquisa = edtPesquisa.value ?: "",
-    marca = EMarcaRecebimento.RECEBER,
-    dataFinal = edtDataFinal.value,
-    dataInicial = edtDataInicial.value,
-    localizacao = usr?.localizacaoRec.orEmpty().toList(),
-    tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
-  )
-}
-
-override fun updateNota(notas: List<NotaRecebimento>) {
-  this.updateGrid(notas)
-  dlgProduto?.nota?.let { notaDlg ->
-    notas.firstOrNull { it.ni == notaDlg.ni }?.let { notaAtualizada ->
-      dlgProduto?.update(notaAtualizada)
-    }
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.recebimentoReceberNota == true
   }
-}
 
-override fun updateProduto(): NotaRecebimento? {
-  return dlgProduto?.updateProduto()
-}
+  override val label: String
+    get() = "Recebe Nota"
 
-override fun closeDialog() {
-  dlgProduto?.close()
-}
-
-override fun focusCodigoBarra() {
-  dlgProduto?.focusCodigoBarra()
-}
-
-override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
-  return this.dlgProduto?.produtosSelecionados().orEmpty()
-}
-
-override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
-  dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
-}
-
-override fun formAssina(produtos: List<NotaRecebimentoProduto>) {
-  val form = FormAutoriza()
-  DialogHelper.showForm(caption = "Recebe Nota", form = form) {
-    viewModel.recebeNotaProduto(produtos, form.login, form.senha)
-  }
-}
-
-override fun reloadGrid() {
-  dlgProduto?.reloadGrid()
-}
-
-fun showDlgProdutos(nota: NotaRecebimento) {
-  dlgProduto = DlgProdutosReceberNota(viewModel, nota)
-  dlgProduto?.showDialog {
+  override fun updateComponent() {
     viewModel.updateView()
   }
-}
-
-override fun isAuthorized(): Boolean {
-  val username = AppConfig.userLogin() as? UserSaci
-  return username?.recebimentoReceberNota == true
-}
-
-override val label: String
-  get() = "Recebe Nota"
-
-override fun updateComponent() {
-  viewModel.updateView()
-}
 }
