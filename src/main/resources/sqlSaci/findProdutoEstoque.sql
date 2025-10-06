@@ -46,7 +46,8 @@ SELECT prdno       AS prdno,
        localizacao AS locNerus
 FROM
   sqldados.prdloc
-WHERE storeno = 4
+WHERE storeno IN (2, 3, 4, 5, 8)
+  AND (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
@@ -55,9 +56,13 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno,
-       grade,
-       MAX(localizacao)                                      AS locApp,
+SELECT prdno                                                 AS prdno,
+       grade                                                 AS grade,
+       MAX(CASE
+             WHEN :loja = 0       THEN IF(storeno = 4, localizacao, '')
+             WHEN storeno = :loja THEN localizacao
+                                  ELSE ''
+           END)                                              AS locApp,
        MAX(dataInicial)                                      AS dataInicial,
        MAX(IF(dataUpdate * 1 = 0, NULL, dataUpdate))         AS dataUpdate,
        MAX(kardec)                                           AS kardec,
@@ -70,7 +75,7 @@ SELECT prdno,
        MAX(estoqueUser)                                      AS estoqueUser
 FROM
   sqldados.prdAdicional
-WHERE (storeno = :loja OR :loja = 0)
+WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
