@@ -11,7 +11,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PrintProdutosEstoqueLoja(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
+class PrintProdutosEstoqueLojaConf(private val filtro: FiltroProdutoEstoque) : PrintText<ProdutoEstoque>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoEstoque) {
     writeln("Relatorio Estoque", negrito = true, center = true)
@@ -46,10 +46,8 @@ class PrintProdutosEstoqueLoja(private val filtro: FiltroProdutoEstoque) : Print
 
   init {
     column(ProdutoEstoque::codigoStr, "Codigo", 6)
-    column(ProdutoEstoque::descricao, "Descricao", 24)
+    column(ProdutoEstoque::descricao, "Descricao", 40)
     column(ProdutoEstoque::grade, "Grade", 8)
-    column(ProdutoEstoque::qtdDifInt, "___Loja", 7)
-    column(ProdutoEstoque::kardec, "_____CD", 7)
     column(ProdutoEstoque::saldo, "___Sist", 7, lineBreak = true)
   }
 

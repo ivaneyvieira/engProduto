@@ -8,6 +8,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
+import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
 import java.time.LocalDate
 
 class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -59,6 +60,20 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       item.update()
     }
     updateView()
+  }
+
+  fun imprimeProdutosConf() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val filtro = subView.filtro()
+
+    val report = PrintProdutosEstoqueLojaConf(filtro)
+
+    report.print(
+      dados = produtos, printer = subView.printerPreview(loja = 0)
+    )
   }
 
   fun imprimeProdutos() = viewModel.exec {

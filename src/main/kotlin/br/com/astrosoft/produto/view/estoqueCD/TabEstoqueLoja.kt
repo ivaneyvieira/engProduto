@@ -162,6 +162,13 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
           viewModel.geraPlanilha(produtos)
         }
 
+        this.button("Imp Conf") {
+          this.icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeProdutosConf()
+          }
+        }
+
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
