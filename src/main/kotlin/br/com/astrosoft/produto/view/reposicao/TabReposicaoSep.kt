@@ -26,8 +26,13 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   private lateinit var edtPesquisa: TextField
 
   fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
-    cmbLoja.value = viewModel.findLoja(0) ?: Loja.lojaZero
+    val user = AppConfig.userLogin() as? UserSaci
+    val lojaReposicao = user?.lojaReposicao ?: 0
+    val listLojas = (viewModel.findAllLojas() + listOf(Loja.lojaZero)).filter {
+      lojaReposicao == 0 || it.no == lojaReposicao
+    }
+    cmbLoja.setItems(listLojas)
+    cmbLoja.value = viewModel.findLoja(0) ?: listLojas.firstOrNull()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
