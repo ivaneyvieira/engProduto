@@ -29,10 +29,16 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   private lateinit var cmbDoc: Select<ENotaDoc>
 
   fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
+    val allLojas = viewModel.findAllLojas() + listOf(Loja.lojaZero)
+    cmbLoja.setItems(allLojas)
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaRec != 0
-    cmbLoja.value = viewModel.findLoja(4) ?: viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
+    val lojaRec = user?.lojaRec ?: 0
+    cmbLoja.isReadOnly = lojaRec != 0
+    cmbLoja.value = if (lojaRec == 0) {
+      allLojas.firstOrNull { it.no == 4 }
+    } else {
+      allLojas.firstOrNull { it.no == lojaRec } ?: Loja.lojaZero
+    }
   }
 
   override fun HorizontalLayout.toolBarConfig() {
