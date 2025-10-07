@@ -3,11 +3,14 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
-  PRIMARY KEY (prdno)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT no AS prdno, IF(MID(grade_l, 1, 10) = 0, 'N', 'S') AS temGrade, grade_l
+SELECT no AS prdno, IFNULL(B.grade, '') AS grade, IF(MID(grade_l, 1, 10) = 0, 'N', 'S') AS temGrade, grade_l
 FROM
-  sqldados.prd;
+  sqldados.prd                AS P
+    LEFT JOIN sqldados.prdbar AS B
+              ON P.no = B.prdno
+GROUP BY P.no, IFNULL(B.grade, '');
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE;
 CREATE TEMPORARY TABLE T_PRD_GRADE
@@ -16,10 +19,7 @@ CREATE TEMPORARY TABLE T_PRD_GRADE
 )
 SELECT prdno, grade
 FROM
-  sqldados.prdloc   AS L
-    LEFT JOIN T_PRD AS P
-              USING (prdno)
-WHERE storeno = 4
+  T_PRD
 GROUP BY prdno, grade;
 
 
@@ -34,22 +34,22 @@ FROM
     INNER JOIN sqldados.store AS S
                ON S.no IN (2, 3, 5, 8)
 GROUP BY prdno, grade, storeno, localizacao
-
 ORDER BY prdno, grade, storeno, localizacao;
 
+/*
 UPDATE prdAdicional AS A
   INNER JOIN T_PRD_LOC AS L
   ON L.storeno = A.storeno AND L.prdno = A.prdno AND L.grade = A.grade AND A.localizacao = 'CD'
 SET A.localizacao = L.localizacao
 WHERE A.localizacao = 'CD'
   AND A.storeno != 4;
+*/
 
-/*
-REPLACE INTO prdAdicional(storeno, prdno, grade, localizacao)
+INSERT IGNORE INTO prdAdicional(storeno, prdno, grade, localizacao)
 select storeno, prdno, grade, localizacao
 from T_PRD_LOC AS L
 where storeno != 4;
-*/
+
 
 
 REPLACE INTO sqldados.prdloc(stkmin, stkmax, storeno, bits, prdno, localizacao, grade)
