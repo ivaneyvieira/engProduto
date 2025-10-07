@@ -48,7 +48,7 @@ class PrintProdutosEstoqueLojaConf(private val filtro: FiltroProdutoEstoque) : P
     column(ProdutoEstoque::codigoStr, "Codigo", 6)
     column(ProdutoEstoque::descricao, "Descricao", 40)
     column(ProdutoEstoque::grade, "Grade", 8)
-    column(ProdutoEstoque::saldo, "___Sist", 7, lineBreak = true)
+    column(ProdutoEstoque::saldo, "Estoque", 7, lineBreak = true)
   }
 
   override fun printSumary(bean: ProdutoEstoque?) {
