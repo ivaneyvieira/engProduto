@@ -5,15 +5,16 @@ SET SQL_MODE = '';
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (storeno, prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT A.storeno, A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
+SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
+  AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '')
-GROUP BY A.storeno, A.prdno, A.grade;
+GROUP BY A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
@@ -66,7 +67,7 @@ FROM
     LEFT JOIN  sqldados.xaprd2Marca      AS M
                USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  T_LOC                     AS L
-               ON L.storeno = X.storeno AND L.prdno = X.prdno AND L.grade = X.grade
+               ON L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users            AS EC
                ON EC.no = X.s4
     LEFT JOIN  sqldados.users            AS EE

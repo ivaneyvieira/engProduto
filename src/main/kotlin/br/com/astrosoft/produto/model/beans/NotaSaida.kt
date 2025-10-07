@@ -8,6 +8,7 @@ import java.time.LocalTime
 
 class NotaSaida(
   var loja: Int,
+  var lojaFiltro: Int?,
   var separado: Boolean,
   var pdvno: Int,
   var xano: Long,
@@ -94,8 +95,13 @@ class NotaSaida(
     saci.saveNotaSaida(this)
   }
 
-  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean): List<ProdutoNFS> =
-      saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
+  fun produtos(
+    marca: EMarcaNota,
+    prdno: String = "",
+    grade: String = "",
+    todosLocais: Boolean
+  ): List<ProdutoNFS> =
+      saci.findProdutoNF(this,  marca, prdno, grade, todosLocais)
 
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -117,7 +123,7 @@ data class FiltroNota(
   val marca: EMarcaNota,
   val tipoNota: ETipoNotaFiscal,
   val loja: Int,
-  val dataNotas: LocalDate = LocalDate.of(2007,1,1),
+  val dataNotas: LocalDate = LocalDate.of(2007, 1, 1),
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val dataEntregaInicial: LocalDate? = null,

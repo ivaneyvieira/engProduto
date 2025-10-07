@@ -442,32 +442,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", nfs.loja)
       addOptionalParameter("pdvno", nfs.pdvno)
       addOptionalParameter("xano", nfs.xano)
+      addOptionalParameter("loja", nfs.lojaFiltro)
       addOptionalParameter("marca", marca.num)
-      addOptionalParameter("prdno", prdno)
-      addOptionalParameter("grade", grade)
-      addOptionalParameter("lojaLocal", 4)
-      addOptionalParameter("todosLocais", todosLocais.let { if (it) "S" else "N" })
-      addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
-    }
-    produtos.forEach {
-      println(it.local)
-    }
-    return produtos
-  }
-
-  fun findProdutoNF(
-    nfs: NotaSaidaDev,
-    prdno: String,
-    grade: String,
-    todosLocais: Boolean
-  ): List<ProdutoNFS> {
-    val sql = "/sqlSaci/findProdutosNFSaida.sql"
-    val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
-    val produtos = query(sql, ProdutoNFS::class) {
-      addOptionalParameter("storeno", nfs.loja)
-      addOptionalParameter("pdvno", nfs.pdvno)
-      addOptionalParameter("xano", nfs.xano)
-      addOptionalParameter("marca", 999)
       addOptionalParameter("prdno", prdno)
       addOptionalParameter("grade", grade)
       addOptionalParameter("lojaLocal", 4)
@@ -486,6 +462,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", prd.loja)
       addOptionalParameter("pdvno", prd.pdvno)
       addOptionalParameter("xano", prd.xano)
+      addOptionalParameter("loja", 0)
       addOptionalParameter("marca", EMarcaNota.TODOS.num)
       addOptionalParameter("prdno", prd.codigo.lpad(16, " "))
       addOptionalParameter("grade", prd.grade)
