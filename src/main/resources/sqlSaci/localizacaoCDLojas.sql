@@ -1,85 +1,101 @@
-use sqldados;
+USE sqldados;
 
-drop temporary table if exists T_PRD;
-create temporary table T_PRD
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
 (
-    primary key (prdno)
+  PRIMARY KEY (prdno)
 )
-select no as prdno, if(MID(grade_l, 1, 10) = 0, 'N', 'S') as temGrade, grade_l
-from sqldados.prd;
+SELECT no AS prdno, IF(MID(grade_l, 1, 10) = 0, 'N', 'S') AS temGrade, grade_l
+FROM
+  sqldados.prd;
 
-drop temporary table if exists T_PRD_GRADE;
-create temporary table T_PRD_GRADE
+DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE;
+CREATE TEMPORARY TABLE T_PRD_GRADE
 (
-    primary key (prdno, grade)
+  PRIMARY KEY (prdno, grade)
 )
-select prdno, grade
-from sqldados.prdloc AS L
-         left join T_PRD AS P
-                   using (prdno)
-where storeno = 4
-group by prdno, grade;
+SELECT prdno, grade
+FROM
+  sqldados.prdloc   AS L
+    LEFT JOIN T_PRD AS P
+              USING (prdno)
+WHERE storeno = 4
+GROUP BY prdno, grade;
 
 
-drop temporary table if exists T_PRD_LOC;
-create temporary table T_PRD_LOC
+DROP TEMPORARY TABLE IF EXISTS T_PRD_LOC;
+CREATE TEMPORARY TABLE T_PRD_LOC
 (
-    primary key (prdno, grade, storeno, localizacao)
+  PRIMARY KEY (prdno, grade, storeno, localizacao)
 )
-select prdno, grade, S.no as storeno, 'CD' as localizacao
-from T_PRD_GRADE AS G
-         inner join sqldados.store AS S
-                    ON S.no in (2, 3, 5, 8)
+SELECT prdno, grade, S.no AS storeno, CONCAT('CD', S.sname) AS localizacao
+FROM
+  T_PRD_GRADE                 AS G
+    INNER JOIN sqldados.store AS S
+               ON S.no IN (2, 3, 5, 8)
 GROUP BY prdno, grade, storeno, localizacao
+
 ORDER BY prdno, grade, storeno, localizacao;
 
+UPDATE prdAdicional AS A
+  INNER JOIN T_PRD_LOC AS L
+  ON L.storeno = A.storeno AND L.prdno = A.prdno AND L.grade = A.grade AND A.localizacao = 'CD'
+SET A.localizacao = L.localizacao
+WHERE A.localizacao = 'CD'
+  AND A.storeno != 4;
+
+/*
 REPLACE INTO prdAdicional(storeno, prdno, grade, localizacao)
 select storeno, prdno, grade, localizacao
 from T_PRD_LOC AS L
 where storeno != 4;
+*/
+
 
 REPLACE INTO sqldados.prdloc(stkmin, stkmax, storeno, bits, prdno, localizacao, grade)
-SELECT 0 as stkmin, 0 as stkmax, storeno, 0 as bits, prdno, localizacao, grade
-FROM T_PRD_LOC;
+SELECT 0 AS stkmin, 0 AS stkmax, storeno, 0 AS bits, prdno, localizacao, grade
+FROM
+  T_PRD_LOC;
 
 REPLACE INTO sqldados.prdloc2(stkmin, stkmax, l1, l2, l3, l4, l5, l6, l7, l8, m1, m2, m3, m4, m5, m6, m7, m8,
                               storeno, sano, bits, s1, s2, s3, s4, s5, s6, s7, prdno, grade, localizacao, c1, c2)
-select 0  as stkmin,
-       0  as stkmax,
-       0  as l1,
-       0  as l2,
-       0  as l3,
-       0  as l4,
-       0  as l5,
-       0  as l6,
-       0  as l7,
-       0  as l8,
-       0  as m1,
-       0  as m2,
-       0  as m3,
-       0  as m4,
-       0  as m5,
-       0  as m6,
-       0  as m7,
-       0  as m8,
+SELECT 0  AS stkmin,
+       0  AS stkmax,
+       0  AS l1,
+       0  AS l2,
+       0  AS l3,
+       0  AS l4,
+       0  AS l5,
+       0  AS l6,
+       0  AS l7,
+       0  AS l8,
+       0  AS m1,
+       0  AS m2,
+       0  AS m3,
+       0  AS m4,
+       0  AS m5,
+       0  AS m6,
+       0  AS m7,
+       0  AS m8,
        storeno,
-       0  as sano,
-       0  as bits,
-       0  as s1,
-       0  as s2,
-       0  as s3,
-       0  as s4,
-       0  as s5,
-       0  as s6,
-       0  as s7,
+       0  AS sano,
+       0  AS bits,
+       0  AS s1,
+       0  AS s2,
+       0  AS s3,
+       0  AS s4,
+       0  AS s5,
+       0  AS s6,
+       0  AS s7,
        prdno,
        grade,
        localizacao,
-       '' as c1,
-       '' as c2
-FROM T_PRD_LOC AS L
-         LEFT JOIN sqldados.prdloc2 AS L2
-                   USING (prdno, grade, storeno, localizacao)
+       '' AS c1,
+       '' AS c2
+FROM
+  T_PRD_LOC                    AS L
+    LEFT JOIN sqldados.prdloc2 AS L2
+              USING (prdno, grade, storeno, localizacao)
 WHERE L2.prdno IS NULL
 GROUP BY L.prdno, L.grade, L.storeno, L.localizacao;
 

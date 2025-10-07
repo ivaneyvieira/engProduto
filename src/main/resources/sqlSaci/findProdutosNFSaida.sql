@@ -11,7 +11,7 @@ SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS loc
 FROM
   sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = 4)
+  AND (A.storeno = IF(:storeno = 0, 4, :storeno))
   AND (A.prdno = :prdno OR :prdno = '')
   AND (A.grade = :grade OR :grade = '');
 
