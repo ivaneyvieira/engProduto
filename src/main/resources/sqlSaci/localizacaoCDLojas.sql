@@ -51,6 +51,16 @@ from T_PRD_LOC AS L
 where storeno != 4;
 
 
+select * from prdAdicional
+where prdno = 2976;
+
+UPDATE prdAdicional AS A
+  INNER JOIN T_PRD_LOC AS L
+  ON L.storeno = A.storeno AND L.prdno = A.prdno AND L.grade = A.grade AND A.localizacao != L.localizacao
+SET A.localizacao = L.localizacao
+WHERE A.localizacao != L.localizacao
+  AND A.storeno != 4;
+
 
 REPLACE INTO sqldados.prdloc(stkmin, stkmax, storeno, bits, prdno, localizacao, grade)
 SELECT 0 AS stkmin, 0 AS stkmax, storeno, 0 AS bits, prdno, localizacao, grade
