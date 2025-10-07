@@ -90,15 +90,16 @@ GROUP BY V.storeno, V.pdvno, V.xano;
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
+SELECT A.storeno, A.prdno, A.grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+  AND (A.grade = :grade OR :grade = '')
+GROUP BY A.storeno, A.prdno, A.grade;
 
 DO @PESQUISA := :pesquisa;
 DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
@@ -223,7 +224,7 @@ FROM
     LEFT JOIN  T_TIPO               AS T
                ON N.storeno = T.storeno AND N.eordno = T.ordno
     LEFT JOIN  T_LOC                AS LC
-               ON LC.prdno = X.prdno AND LC.grade = X.grade
+               ON LC.storeno = X.storeno AND LC.prdno = X.prdno AND LC.grade = X.grade
     LEFT JOIN  sqldados.emp         AS E
                ON E.no = N.empno
     LEFT JOIN  sqldados.custp       AS C

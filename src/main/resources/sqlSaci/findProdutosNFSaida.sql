@@ -5,15 +5,15 @@ SET SQL_MODE = '';
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
+SELECT A.storeno, A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
-  AND (A.storeno = IF(:storeno = 0, 4, :storeno))
   AND (A.prdno = :prdno OR :prdno = '')
-  AND (A.grade = :grade OR :grade = '');
+  AND (A.grade = :grade OR :grade = '')
+GROUP BY A.storeno, A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
@@ -21,8 +21,8 @@ CREATE TEMPORARY TABLE T_DADOS
   PRIMARY KEY (codigo, grade)
 )
 SELECT X.storeno                                                     AS loja,
-       pdvno                                                         AS pdvno,
-       xano                                                          AS xano,
+       X.pdvno                                                         AS pdvno,
+       X.xano                                                          AS xano,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(X.grade, '')                                           AS grade,
@@ -66,13 +66,13 @@ FROM
     LEFT JOIN  sqldados.xaprd2Marca      AS M
                USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  T_LOC                     AS L
-               ON L.prdno = X.prdno AND L.grade = X.grade
+               ON L.storeno = X.storeno AND L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users            AS EC
                ON EC.no = X.s4
     LEFT JOIN  sqldados.users            AS EE
                ON EE.no = X.s5
     INNER JOIN sqldados.nf               AS N
-               USING (storeno, pdvno, xano)
+               ON N.storeno =  X.storeno AND  N.pdvno = X.pdvno AND  N.xano = X.xano
     LEFT JOIN  sqldados.prdbar           AS BC
                ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
     LEFT JOIN  ( SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
