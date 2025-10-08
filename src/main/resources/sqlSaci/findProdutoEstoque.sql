@@ -84,6 +84,7 @@ SELECT prdno                                                 AS prdno,
 FROM
   sqldados.prdAdicional
 WHERE (storeno IN (2, 3, 4, 5, 8))
+  AND (storeno = IF(:loja = 0, 4, :loja))
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 

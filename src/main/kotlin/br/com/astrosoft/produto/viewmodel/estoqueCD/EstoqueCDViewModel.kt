@@ -18,7 +18,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
 
   override fun listTab() = listOf(
-    view.tabEstoqueSaldo,
+    //view.tabEstoqueSaldo,
     view.tabEstoqueLoja,
     view.tabEstoqueConf,
     view.tabEstoqueAcerto,

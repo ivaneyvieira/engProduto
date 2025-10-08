@@ -12,41 +12,24 @@ import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
 object ProcessamentoKardec {
+ /*
   fun updateAll() {
 
-    val filtro = FiltroProdutoEstoque(
-      pesquisa = "",
-      codigo = 0,
-      grade = "",
-      caracter = ECaracter.TODOS,
-      localizacao = "",
-      fornecedor = "",
-      centroLucro = 0,
-      estoque = EEstoque.TODOS,
-      saldo = 0,
-      inativo = EInativo.TODOS,
-      listaUser = listOf("TODOS"),
-    )
-    val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
-    produtos.forEach { prd ->
-      if (!prd.isUpdated()) {
-        updateSaldoKardec(produto = prd)
-      }
-    }
   }
-
+*/
   fun updateSaldoKardec(produto: ProdutoEstoque) {
+    val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    val listaKardec = updateKardec(produto = produto, dataIncial = produto.dataInicialDefault())
+    val listaKardec = updateKardec(produto = produto, loja, dataIncial = produto.dataInicialDefault())
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.update()
   }
 
-  private fun updateKardec(produto: ProdutoEstoque, dataIncial: LocalDate): List<ProdutoKardec> {
+  private fun updateKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
       ProdutoKardec.deleteKarde(produto)
-      val list = fetchKardecFlow(produto, dataIncial)
+      val list = fetchKardecFlow(produto, loja, dataIncial)
       buildList {
         list.collect { produtoKardec: ProdutoKardec ->
           produtoKardec.save()
@@ -97,7 +80,7 @@ object ProcessamentoKardec {
     }
   }
 
-  fun fetchKardecFlow(produto: ProdutoEstoque, dataIncial: LocalDate): Flow<ProdutoKardec> = channelFlow {
+  fun fetchKardecFlow(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): Flow<ProdutoKardec> = channelFlow {
     println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
     fun launchSource(tipo: String, block: suspend () -> List<ProdutoKardec>) = launch {
@@ -112,12 +95,12 @@ object ProcessamentoKardec {
       for (item in itens) trySend(item)
     }
 
-    launchSource("Recebimento") { produto.recebimentos(dataIncial) }
+    launchSource("Recebimento") { produto.recebimentos(loja, dataIncial) }
     // launchSource { produto.ressuprimento(date) }
-    launchSource("Expedicao") { produto.expedicao(dataIncial) }
-    launchSource("Reposicao") { produto.reposicao(dataIncial) }
-    launchSource("Saldo Inicial") { produto.saldoInicial(dataIncial) }
-    launchSource("Acerto") { produto.acertoEstoque(dataIncial) }
+    launchSource("Expedicao") { produto.expedicao(loja, dataIncial) }
+    launchSource("Reposicao") { produto.reposicao(loja, dataIncial) }
+    launchSource("Saldo Inicial") { produto.saldoInicial(loja, dataIncial) }
+    launchSource("Acerto") { produto.acertoEstoque(loja, dataIncial) }
   }
 }
 
@@ -134,5 +117,5 @@ fun main() {
   val home = System.getenv("HOME")
   val fileName = System.getenv("EBEAN_PROPS") ?: "$home/ebean.properties"
   System.setProperty("ebean.props.file", fileName)
-  ProcessamentoKardec.updateAll()
+  //ProcessamentoKardec.updateAll()
 }
