@@ -42,7 +42,6 @@ object AppConfig {
   val test: Boolean = properties.getProperty("app.test").toBoolean()
 
   fun userLogin(): IUser? {
-    val ui = UI.getCurrent() ?: return null
     val currentUser = LoginService.get().currentUser
     return findUser(currentUser?.username, currentUser?.hashedPassword)
   }

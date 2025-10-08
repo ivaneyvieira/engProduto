@@ -72,9 +72,9 @@ SELECT prdno                                                 AS prdno,
        MAX(kardec)                                           AS kardec,
        MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
        MAX(CASE
-             WHEN :loja = 0       THEN IF(storeno = 4, observacao, '')
+             WHEN :loja = 0       THEN IF(storeno = 4, observacao, null)
              WHEN storeno = :loja THEN observacao
-                                  ELSE ''
+                                  ELSE null
            END)                                              AS observacao,
        MAX(estoque)                                          AS estoque,
        MAX(estoqueData)                                      AS estoqueData,
@@ -176,10 +176,10 @@ SELECT S.no                                                                     
        SUBSTRING_INDEX(A.observacao, ',', 1) * 1                                      AS qtConferencia,
        IF(A.observacao LIKE '%,%',
           SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
-          0)                                                                          AS qtConfEdit,
+          null)                                                                          AS qtConfEdit,
        IF(A.observacao LIKE '%,%,%',
           SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1,
-          0)                                                                          AS qtConfEditLoja,
+          null)                                                                          AS qtConfEditLoja,
        PC.refprice / 100                                                              AS preco,
        A.estoqueUser                                                                  AS estoqueUser,
        U.login                                                                        AS estoqueLogin,

@@ -211,7 +211,7 @@ class ProdutoEstoque(
   }
 
   fun expedicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    if(loja != 4) return emptyList()
+    if (loja != 4) return emptyList()
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
@@ -288,12 +288,7 @@ class ProdutoEstoque(
   }
 
   fun reposicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    val user = AppConfig.userLogin() as? UserSaci
-    val localizacao = if (user?.admin == true) {
-      listOf("TODOS")
-    } else {
-      user?.localizacaoRepo.orEmpty().toList()
-    }
+    val localizacao = listOf("TODOS")
     val filtro = FiltroReposicao(
       loja = loja,
       pesquisa = "",
@@ -338,45 +333,29 @@ class ProdutoEstoque(
   }
 
   fun saldoInicial(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    if (qtConferencia == null) {
-      val list = saci.findSaldoData(
-        loja = loja,
-        codigo = codigo.toString(),
-        grade = grade ?: "",
-        dataInicial = dataInicial
-      )
-      return list.map { saldo ->
-        ProdutoKardec(
-          loja = saldo.storeno,
-          prdno = saldo.prdno,
-          grade = saldo.grade,
-          data = dataInicial,
-          doc = "Estoque",
-          tipo = ETipoKardec.INICIAL,
-          qtde = saldo.quant,
-          saldo = 0,
-          userLogin = "ADM",
-          observacao = ""
-        )
-      }
-    }
-
-    val produtoKardec = ProdutoKardec(
+    val list = saci.findSaldoData(
       loja = loja,
-      prdno = prdno,
+      codigo = codigo.toString(),
       grade = grade ?: "",
-      data = dataInicial,
-      doc = "Estoque",
-      tipo = ETipoKardec.INICIAL,
-      qtde = qtConferencia,
-      saldo = 0,
-      userLogin = "ADM",
-      observacao = ""
+      dataInicial = dataInicial
     )
-    return listOf(produtoKardec)
+    return list.map { saldo ->
+      ProdutoKardec(
+        loja = saldo.storeno,
+        prdno = saldo.prdno,
+        grade = saldo.grade,
+        data = dataInicial,
+        doc = "Estoque",
+        tipo = ETipoKardec.INICIAL,
+        qtde = saldo.quant,
+        saldo = 0,
+        userLogin = "ADM",
+        observacao = ""
+      )
+    }
   }
 
-  fun acertoEstoque(loja: Int,dataInicial: LocalDate): List<ProdutoKardec> {
+  fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
     val list = saci.findAcertoEstoque(
       loja = loja,
       codigo = codigo.toString(),
