@@ -32,7 +32,7 @@ class TabReposicaoRetorno(val viewModel: TabReposicaoRetornoViewModel) :
       lojaReposicao == 0 || it.no == lojaReposicao
     }
     cmbLoja.setItems(listLojas)
-    cmbLoja.value = viewModel.findLoja(0) ?: listLojas.firstOrNull()
+    cmbLoja.value = listLojas.firstOrNull()
   }
 
   override fun HorizontalLayout.toolBarConfig() {
