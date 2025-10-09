@@ -386,7 +386,6 @@ class ProdutoEstoque(
     return listOf(produtoKardec)
   }
 
-
   fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
     val list = saci.findAcertoEstoque(
       loja = loja,
