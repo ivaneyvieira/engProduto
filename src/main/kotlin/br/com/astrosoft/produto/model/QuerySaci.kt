@@ -1127,7 +1127,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
       addOptionalParameter("grade", produtoEstoque.grade ?: "")
       addOptionalParameter("kardec", produtoEstoque.kardec)
-      addOptionalParameter("kardec", produtoEstoque.dataUpdate.toSaciDate())
+      addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate.toSaciDate())
     }
   }
 
