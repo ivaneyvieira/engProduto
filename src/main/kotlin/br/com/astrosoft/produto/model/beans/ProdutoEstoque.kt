@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.UserSaci.Companion.userRessuprimentoLocais
@@ -127,8 +126,24 @@ class ProdutoEstoque(
       }
     }
 
-  fun update() {
-    saci.updateProdutoEstoque(this)
+  fun updateConferencia() {
+    saci.updateProdutoConferencia(this)
+  }
+
+  fun updateAcerto() {
+    saci.updateProdutoAcerto(this)
+  }
+
+  fun updateMarca() {
+    saci.updateProdutoMarca(this)
+  }
+
+  fun updateLocalizacao() {
+    saci.updateProdutoLocalizacao(this)
+  }
+
+  fun updateKardec() {
+    saci.updateProdutoKardec(this)
   }
 
   fun recebimentos(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
@@ -385,10 +400,6 @@ class ProdutoEstoque(
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
-    }
-
-    fun update(produtos: List<ProdutoEstoque>) {
-      saci.updateProdutoEstoque(produtos)
     }
   }
 }

@@ -1047,13 +1047,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun updateProdutoEstoque(produtos: List<ProdutoEstoque>) {
-    transaction {
-      produtos.forEach { produto ->
-        updateProdutoEstoque(produto)
-      }
-    }
-  }
 
   fun updateProdutoEstoque(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoEstoque.sql"
@@ -1075,6 +1068,66 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("estoqueData", produtoEstoque.estoqueData)
       addOptionalParameter("estoqueCD", produtoEstoque.estoqueCD)
       addOptionalParameter("estoqueLoja", produtoEstoque.estoqueLoja)
+    }
+  }
+
+  fun updateProdutoConferencia(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/updateProdutoConferencia.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
+      addOptionalParameter("qtConferencia", produtoEstoque.qtConferencia ?: 0)
+      addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate ?: 0)
+    }
+  }
+
+  fun updateProdutoAcerto(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/updateProdutoAcerto.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("estoqueCD", produtoEstoque.estoqueCD ?: 0)
+      addOptionalParameter("estoqueLoja", produtoEstoque.estoqueLoja ?: 0)
+    }
+  }
+
+  fun updateProdutoMarca(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/updateProdutoMarca.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("estoqueUser", produtoEstoque.estoqueUser ?: 0)
+      addOptionalParameter("estoqueData", produtoEstoque.estoqueData.toSaciDate())
+    }
+  }
+
+  fun updateProdutoLocalizacao(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/updateProdutoLocalizacao.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("localizacao", produtoEstoque.locApp ?: "")
+    }
+  }
+
+  fun updateProdutoKardec(produtoEstoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/updateProdutoKardec.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("kardec", produtoEstoque.kardec)
+      addOptionalParameter("kardec", produtoEstoque.dataUpdate.toSaciDate())
     }
   }
 

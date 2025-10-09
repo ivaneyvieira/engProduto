@@ -56,31 +56,21 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                                                 AS prdno,
-       grade                                                 AS grade,
-       MAX(CASE
-             WHEN :loja = 0       THEN IF(storeno = 4, localizacao, '')
-             WHEN storeno = :loja THEN localizacao
-                                  ELSE ''
-           END)                                              AS locApp,
-       MAX(CASE
-             WHEN :loja = 0       THEN IF(storeno = 4, dataInicial, 0)
-             WHEN storeno = :loja THEN dataInicial
-                                  ELSE 0
-           END)                                              AS dataInicial,
-       MAX(IF(dataUpdate * 1 = 0, NULL, dataUpdate))         AS dataUpdate,
-       MAX(kardec)                                           AS kardec,
-       MAX(IF(dataObservacao * 1 = 0, NULL, dataObservacao)) AS dataObservacao,
-       MAX(CASE
-             WHEN :loja = 0       THEN IF(storeno = 4, observacao, null)
-             WHEN storeno = :loja THEN observacao
-                                  ELSE null
-           END)                                              AS observacao,
-       MAX(estoque)                                          AS estoque,
-       MAX(estoqueData)                                      AS estoqueData,
-       MAX(estoqueCD)                                        AS estoqueCD,
-       MAX(estoqueLoja)                                      AS estoqueLoja,
-       MAX(estoqueUser)                                      AS estoqueUser
+SELECT prdno                                          AS prdno,
+       grade                                          AS grade,
+       localizacao                                    AS locApp,
+       dataInicial                                    AS dataInicial,
+       IF(dataUpdate * 1 = 0, NULL, dataUpdate)       AS dataUpdate,
+       kardec                                         AS kardec,
+       IF(dataObservacao * 1 = 0, '', dataObservacao) AS dataObservacao,
+       qtConferencia                                  AS qtConferencia,
+       qtConfEdit                                     AS qtConfEdit,
+       qtConfEditLoja                                 AS qtConfEditLoja,
+       estoque                                        AS estoque,
+       estoqueData                                    AS estoqueData,
+       estoqueCD                                      AS estoqueCD,
+       estoqueLoja                                    AS estoqueLoja,
+       estoqueUser                                    AS estoqueUser
 FROM
   sqldados.prdAdicional
 WHERE (storeno IN (2, 3, 4, 5, 8))
@@ -173,13 +163,9 @@ SELECT S.no                                                                     
        A.dataUpdate                                                                   AS dataUpdate,
        A.kardec                                                                       AS kardec,
        A.dataObservacao                                                               AS dataConferencia,
-       SUBSTRING_INDEX(A.observacao, ',', 1) * 1                                      AS qtConferencia,
-       IF(A.observacao LIKE '%,%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
-          null)                                                                          AS qtConfEdit,
-       IF(A.observacao LIKE '%,%,%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1,
-          null)                                                                          AS qtConfEditLoja,
+       qtConferencia                                                                  AS qtConferencia,
+       qtConfEdit                                                                     AS qtConfEdit,
+       qtConfEditLoja                                                                 AS qtConfEditLoja,
        PC.refprice / 100                                                              AS preco,
        A.estoqueUser                                                                  AS estoqueUser,
        U.login                                                                        AS estoqueLogin,

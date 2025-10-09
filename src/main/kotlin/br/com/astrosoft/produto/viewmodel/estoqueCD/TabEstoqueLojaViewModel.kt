@@ -41,13 +41,12 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     subView.reloadGrid()
   }
 
-  override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
-    if (bean != null) {
-      bean.update()
-      if (updateGrid) {
-        updateView()
-      }
-    }
+  override fun updateConferencia(bean: ProdutoEstoque?) {
+    bean?.updateConferencia()
+  }
+
+  override fun updateLocalizacao(bean: ProdutoEstoque?) {
+    bean?.updateLocalizacao()
   }
 
   fun copiaLocalizacao() = viewModel.exec {
@@ -57,7 +56,7 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
     itens.forEach { item ->
       item.locApp = primeiro.locApp
-      item.update()
+      item.updateLocalizacao()
     }
     updateView()
   }

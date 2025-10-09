@@ -271,7 +271,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
           edit?.focus()
         },
         closeEditor = {
-          viewModel.updateProduto(it.bean, false)
+          viewModel.updateLocalizacao(it.bean)
         })
     }
 

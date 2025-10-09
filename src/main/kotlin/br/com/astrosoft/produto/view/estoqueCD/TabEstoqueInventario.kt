@@ -182,7 +182,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
           edit?.focus()
         },
         closeEditor = {
-          viewModel.updateProduto(it.bean, false)
+          viewModel.updateLocalizacao(it.bean)
         })
     }
 

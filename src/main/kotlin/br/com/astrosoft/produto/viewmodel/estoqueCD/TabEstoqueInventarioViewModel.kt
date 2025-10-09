@@ -39,14 +39,14 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
     subView.reloadGrid()
   }
 
-  override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
-    if (bean != null) {
-      bean.update()
-      if (updateGrid) {
-        updateView()
-      }
-    }
+  override fun updateConferencia(bean: ProdutoEstoque?) {
+    bean?.updateConferencia()
   }
+
+  override fun updateLocalizacao(bean: ProdutoEstoque?) {
+    bean?.updateLocalizacao()
+  }
+
 
   fun imprimeProdutosEstoque() = viewModel.exec {
     val produtos = subView.itensSelecionados()
@@ -111,7 +111,7 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
         produto.estoqueCD = null
         produto.estoqueLoja = null
         produto.limpaAcerto()
-        produto.update()
+        produto.updateAcerto()
       }
       updateView()
     }

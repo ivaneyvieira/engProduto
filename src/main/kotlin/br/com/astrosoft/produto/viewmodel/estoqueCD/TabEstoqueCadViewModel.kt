@@ -31,9 +31,9 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
     return planilha.write(produtos)
   }
 
-  fun updateProduto(bean: ProdutoEstoque?) = viewModel.exec {
+  fun updateLocalizacao(bean: ProdutoEstoque?) = viewModel.exec {
     bean ?: fail("Produto não informado")
-    bean.update()
+    bean.updateLocalizacao()
     updateView()
   }
 
@@ -44,7 +44,7 @@ class TabEstoqueCadViewModel(val viewModel: EstoqueCDViewModel) {
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
     itens.forEach { item ->
       item.locApp = primeiro.locApp
-      item.update()
+      item.updateLocalizacao()
     }
     updateView()
   }

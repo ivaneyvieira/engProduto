@@ -32,13 +32,12 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     return planilha.write(produtos)
   }
 
-  override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
-    if (bean != null) {
-      bean.update()
-      if (updateGrid) {
-        updateView()
-      }
-    }
+  override fun updateConferencia(bean: ProdutoEstoque?) {
+    bean?.updateConferencia()
+  }
+
+  override fun updateLocalizacao(bean: ProdutoEstoque?) {
+    bean?.updateLocalizacao()
   }
 
   fun processaAcerto() = viewModel.exec {
@@ -68,8 +67,8 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
           produto.estoqueUser = null
           produto.estoqueLogin = null
           produto.estoqueData = null
+          produto.updateMarca()
         }
-        ProdutoEstoque.update(produtos)
         updateView()
       }
     }
@@ -115,8 +114,8 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
                 produto.estoqueUser = null
                 produto.estoqueLogin = null
                 produto.estoqueData = null
+                produto.updateMarca()
               }
-              ProdutoEstoque.update(produtos)
               updateView()
             }
           }
@@ -138,7 +137,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
         produto.estoqueUser = user.no
         produto.estoqueLogin = user.login
         produto.estoqueData = LocalDate.now()
-        produto.update()
+        produto.updateMarca()
       }
     }
   }
@@ -162,8 +161,8 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       produto.estoqueUser = null
       produto.estoqueLogin = null
       produto.estoqueData = null
+      produto.updateMarca()
     }
-    ProdutoEstoque.update(listaSelecionando)
     subView.reloadGrid()
   }
 }

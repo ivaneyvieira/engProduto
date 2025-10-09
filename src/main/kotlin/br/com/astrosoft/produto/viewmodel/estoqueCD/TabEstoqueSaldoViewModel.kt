@@ -40,13 +40,12 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     subView.reloadGrid()
   }
 
-  override fun updateProduto(bean: ProdutoEstoque?, updateGrid: Boolean) {
-    if (bean != null) {
-      bean.update()
-      if (updateGrid) {
-        updateView()
-      }
-    }
+  override fun updateConferencia(bean: ProdutoEstoque?) {
+    bean?.updateConferencia()
+  }
+
+  override fun updateLocalizacao(bean: ProdutoEstoque?) {
+    bean?.updateLocalizacao()
   }
 
   fun copiaLocalizacao() = viewModel.exec {
@@ -56,7 +55,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
     itens.forEach { item ->
       item.locApp = primeiro.locApp
-      item.update()
+      item.updateLocalizacao()
     }
     updateView()
   }
@@ -75,7 +74,7 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     )
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial : LocalDate?): List<ProdutoKardec> {
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
 }

@@ -132,7 +132,7 @@ class DlgConferenciaSaldo(
     //produto.dataConferencia = edtDataConf?.value
     produto.qtConferencia = edtConferencia?.value
     produto.dataUpdate = null
-    viewModel.updateProduto(produto, false)
+    viewModel.updateConferencia(produto)
     onClose.invoke()
     this.close()
   }

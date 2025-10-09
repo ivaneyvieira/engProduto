@@ -82,7 +82,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
           val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
             produtos.forEach { produto ->
               produto.locApp = localizacao
-              viewModel.updateProduto(produto)
+              viewModel.updateLocalizacao(produto)
             }
             gridPanel.dataProvider.refreshAll()
           }
@@ -145,7 +145,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         edit?.focus()
       },
       closeEditor = {
-        viewModel.updateProduto(it.bean)
+        viewModel.updateLocalizacao(it.bean)
       })
 
     addColumnSeq("Seq")

@@ -194,7 +194,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
               val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
                 produtos.forEach { produto ->
                   produto.locApp = localizacao
-                  viewModel.updateProduto(produto, false)
+                  viewModel.updateLocalizacao(produto)
                 }
                 gridPanel.dataProvider.refreshAll()
               }
@@ -251,13 +251,13 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
         this.focusEditor(ProdutoEstoque::qtConfEditLoja)
       },
       closeEditor = {
-        viewModel.updateProduto(it.bean, false)
+        viewModel.updateConferencia(it.bean)
         if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
       },
       saveEditor = {
-        viewModel.updateProduto(it.bean, false)
+        viewModel.updateConferencia(it.bean)
         if (!this.editorFinalizado) {
           abreProximo(it.bean)
         }
