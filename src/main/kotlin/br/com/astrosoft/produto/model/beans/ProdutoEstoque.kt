@@ -348,27 +348,44 @@ class ProdutoEstoque(
   }
 
   fun saldoInicial(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    val list = saci.findSaldoData(
-      loja = loja,
-      codigo = codigo.toString(),
-      grade = grade ?: "",
-      dataInicial = dataInicial
-    )
-    return list.map { saldo ->
-      ProdutoKardec(
-        loja = saldo.storeno,
-        prdno = saldo.prdno,
-        grade = saldo.grade,
-        data = dataInicial,
-        doc = "Estoque",
-        tipo = ETipoKardec.INICIAL,
-        qtde = saldo.quant,
-        saldo = 0,
-        userLogin = "ADM",
-        observacao = ""
+    if (qtConferencia == null) {
+      val list = saci.findSaldoData(
+        loja = loja,
+        codigo = codigo.toString(),
+        grade = grade ?: "",
+        dataInicial = dataInicial
       )
+      return list.map { saldo ->
+        ProdutoKardec(
+          loja = saldo.storeno,
+          prdno = saldo.prdno,
+          grade = saldo.grade,
+          data = dataInicial,
+          doc = "Estoque",
+          tipo = ETipoKardec.INICIAL,
+          qtde = saldo.quant,
+          saldo = 0,
+          userLogin = "ADM",
+          observacao = ""
+        )
+      }
     }
+
+    val produtoKardec = ProdutoKardec(
+      loja = loja,
+      prdno = prdno,
+      grade = grade ?: "",
+      data = dataInicial,
+      doc = "Estoque",
+      tipo = ETipoKardec.INICIAL,
+      qtde = qtConferencia,
+      saldo = 0,
+      userLogin = "ADM",
+      observacao = ""
+    )
+    return listOf(produtoKardec)
   }
+
 
   fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
     val list = saci.findAcertoEstoque(
