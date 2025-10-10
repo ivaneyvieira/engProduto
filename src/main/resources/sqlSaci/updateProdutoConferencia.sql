@@ -1,10 +1,11 @@
-INSERT IGNORE sqldados.prdAdicional(storeno, prdno, grade, dataInicial, qtConferencia, dataUpdate)
-  VALUE (:loja, :prdno, :grade, :dataInicial, :qtConferencia, :dataUpdate);
+INSERT IGNORE sqldados.prdAdicional(storeno, prdno, grade, dataInicial, qtConferencia, dataUpdate, qtConfEditLoja)
+  VALUE (:loja, :prdno, :grade, :dataInicial, :qtConferencia, :dataUpdate, :qtConfEditLoja);
 
 UPDATE sqldados.prdAdicional
-SET dataInicial   = :dataInicial,
-    qtConferencia = :qtConferencia,
-    dataUpdate    = :dataUpdate
+SET dataInicial    = :dataInicial,
+    qtConferencia  = :qtConferencia,
+    qtConfEditLoja = :qtConfEditLoja,
+    dataUpdate     = :dataUpdate
 WHERE storeno = :loja
   AND prdno = :prdno
   AND grade = :grade
