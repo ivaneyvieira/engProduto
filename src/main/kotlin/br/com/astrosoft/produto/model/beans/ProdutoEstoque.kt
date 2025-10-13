@@ -226,11 +226,10 @@ class ProdutoEstoque(
   }
 
   fun expedicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    if (loja != 4) return emptyList()
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
-      loja = 0,
+      loja = loja,
       pesquisa = "",
       prdno = prdno ?: "",
       grade = "",
