@@ -7,6 +7,9 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
+DO @FORNECEDOR_NUMERO := IF(:fornecedor REGEXP '^[0-9]+$', :fornecedor, 0);
+DO @FORNECEDOR_NOME := IF(:fornecedor REGEXP '^[0-9]+$', '', :fornecedor);
+
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
@@ -197,7 +200,8 @@ FROM
     LEFT JOIN  T_ACERTO       AS AC
                ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
 WHERE (E.storeno = :loja OR :loja = 0)
-  AND (PD.mfno = :fornecedor OR V.sname LIKE CONCAT('%', :fornecedor, '%') OR :fornecedor = '')
+  AND (PD.mfno = @FORNECEDOR_NUMERO OR @FORNECEDOR_NUMERO = 0)
+  AND (V.name LIKE CONCAT('%', @FORNECEDOR_NOME, '%') OR @FORNECEDOR_NOME = '')
 GROUP BY E.prdno, E.grade
 HAVING (:estoque = '>' AND saldo > :saldo)
     OR (:estoque = '<' AND saldo < :saldo)
