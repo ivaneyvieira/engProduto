@@ -254,6 +254,7 @@ data class FiltroNotaRecebimentoProduto(
   val tipoNota: EListaContas,
   val temAnexo: ETemAnexo = ETemAnexo.TODOS,
   val docNota: ENotaDoc = ENotaDoc.DOC_TODOS,
+  val protocolo: EProtocolo = EProtocolo.TODOS
 )
 
 enum class ETemAnexo(val codigo: String, val descricao: String) {

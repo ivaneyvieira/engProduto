@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
-import br.com.astrosoft.produto.model.beans.toNota
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -210,15 +209,22 @@ class NotaRecebimento(
             else                -> true
           }
         }
-      .filter { nota ->
-        when (filtro.docNota) {
-          ENotaDoc.DOC_SEM_ENVIO -> (nota.usernoEnvio ?: 0) == 0
-          ENotaDoc.DOC_SEM_RECEB -> (nota.usernoReceb ?: 0) == 0
-          ENotaDoc.DOC_ENVIO -> (nota.usernoEnvio ?: 0) > 0
-          ENotaDoc.DOC_RECEB -> (nota.usernoReceb ?: 0) > 0
-          ENotaDoc.DOC_TODOS -> true
+        .filter { nota ->
+          when (filtro.docNota) {
+            ENotaDoc.DOC_SEM_ENVIO -> (nota.usernoEnvio ?: 0) == 0
+            ENotaDoc.DOC_SEM_RECEB -> (nota.usernoReceb ?: 0) == 0
+            ENotaDoc.DOC_ENVIO     -> (nota.usernoEnvio ?: 0) > 0
+            ENotaDoc.DOC_RECEB     -> (nota.usernoReceb ?: 0) > 0
+            ENotaDoc.DOC_TODOS     -> true
+          }
         }
-      }
+        .filter {nota->
+          when (filtro.protocolo) {
+            EProtocolo.SIM   -> !(nota.protocolo.isNullOrBlank() || nota.protocolo == "0")
+            EProtocolo.NAO   -> nota.protocolo.isNullOrBlank() || nota.protocolo == "0"
+            EProtocolo.TODOS -> true
+          }
+        }
     }
   }
 }
@@ -313,4 +319,10 @@ enum class ENotaDoc(val descricao: String) {
   DOC_ENVIO("Ass Envio"),
   DOC_RECEB("Ass Recebido"),
   DOC_TODOS("Todos")
+}
+
+enum class EProtocolo(val descricao: String) {
+  SIM("Sim"),
+  NAO("Não"),
+  TODOS("Todos")
 }
