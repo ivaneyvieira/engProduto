@@ -1047,7 +1047,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-
   fun updateProdutoEstoque(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoEstoque.sql"
 
@@ -2670,6 +2669,30 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("motivoTroca", venda.motivoTroca)
       addOptionalParameter("motivoTrocaCod", venda.motivoTrocaCod)
       addOptionalParameter("nfEntRet", venda.nfEntRet)
+    }
+  }
+
+  fun findFornLoja(): List<FornecedorLoja> {
+    val sql = "/sqlSaci/fornLojaSelect.sql"
+    return query(sql, FornecedorLoja::class)
+  }
+
+  fun saveFornLoja(fornecedorLoja: FornecedorLoja) {
+    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 2, data = fornecedorLoja.dataDS)
+    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 3, data = fornecedorLoja.dataMR)
+    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 4, data = fornecedorLoja.dataMF)
+    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 5, data = fornecedorLoja.dataPK)
+    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 8, data = fornecedorLoja.dataMF)
+  }
+
+  fun saveFornLoja(vendno: Int?, storeno: Int?, data: LocalDate?) {
+    vendno ?: return
+    storeno ?: return
+    val sql = "/sqlSaci/fornLojaSave.sql"
+    script(sql) {
+      addOptionalParameter("vendno", vendno)
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("date", data.toSaciDate())
     }
   }
 
