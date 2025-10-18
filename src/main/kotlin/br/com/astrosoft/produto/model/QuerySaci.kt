@@ -2681,22 +2681,49 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveFornLoja(fornecedorLoja: FornecedorLoja) {
-    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 2, data = fornecedorLoja.dataDS)
-    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 3, data = fornecedorLoja.dataMR)
-    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 4, data = fornecedorLoja.dataMF)
-    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 5, data = fornecedorLoja.dataPK)
-    saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 8, data = fornecedorLoja.dataMF)
+  fun saveFornLojaData(fornecedorLoja: FornecedorLoja) {
+    saveFornLojaData(
+      vendno = fornecedorLoja.vendno,
+      storeno = 2,
+      data = fornecedorLoja.dataDS,
+    )
+    saveFornLojaData(
+      vendno = fornecedorLoja.vendno,
+      storeno = 3,
+      data = fornecedorLoja.dataMR,
+    )
+    saveFornLojaData(
+      vendno = fornecedorLoja.vendno,
+      storeno = 4,
+      data = fornecedorLoja.dataMF,
+    )
+    saveFornLojaData(
+      vendno = fornecedorLoja.vendno,
+      storeno = 5,
+      data = fornecedorLoja.dataPK,
+    )
+    saveFornLojaData(
+      vendno = fornecedorLoja.vendno,
+      storeno = 8,
+      data = fornecedorLoja.dataMF,
+    )
   }
 
-  fun saveFornLoja(vendno: Int, storeno: Int, data: LocalDate?) {
-    vendno ?: return
-    storeno ?: return
-    val sql = "/sqlSaci/fornLojaSave.sql"
+  fun saveFornLojaData(vendno: Int, storeno: Int, data: LocalDate?) {
+    val sql = "/sqlSaci/fornLojaSaveData.sql"
     script(sql) {
       addOptionalParameter("vendno", vendno)
       addOptionalParameter("storeno", storeno)
       addOptionalParameter("data", data.toSaciDate())
+    }
+  }
+
+  fun saveFornLojaUser(vendno: Int, storeno: Int, userno: Int) {
+    val sql = "/sqlSaci/fornLojaSaveUser.sql"
+    script(sql) {
+      addOptionalParameter("vendno", vendno)
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("userno", userno)
     }
   }
 
