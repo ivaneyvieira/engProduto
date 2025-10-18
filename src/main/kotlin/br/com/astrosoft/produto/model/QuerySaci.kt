@@ -2672,9 +2672,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findFornLoja(): List<FornecedorLoja> {
+  fun findFornLoja(filtro: FiltroFornecedorLoja): List<FornecedorLoja> {
     val sql = "/sqlSaci/fornLojaSelect.sql"
-    return query(sql, FornecedorLoja::class)
+    return query(sql, FornecedorLoja::class) {
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter(        "data", filtro.data.toSaciDate()      )
+    }
   }
 
   fun saveFornLoja(fornecedorLoja: FornecedorLoja) {
@@ -2685,14 +2688,14 @@ class QuerySaci : QueryDB(database) {
     saveFornLoja(vendno = fornecedorLoja.vendno, storeno = 8, data = fornecedorLoja.dataMF)
   }
 
-  fun saveFornLoja(vendno: Int?, storeno: Int?, data: LocalDate?) {
+  fun saveFornLoja(vendno: Int, storeno: Int, data: LocalDate?) {
     vendno ?: return
     storeno ?: return
     val sql = "/sqlSaci/fornLojaSave.sql"
     script(sql) {
       addOptionalParameter("vendno", vendno)
       addOptionalParameter("storeno", storeno)
-      addOptionalParameter("date", data.toSaciDate())
+      addOptionalParameter("data", data.toSaciDate())
     }
   }
 

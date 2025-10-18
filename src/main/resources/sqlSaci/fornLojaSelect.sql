@@ -13,4 +13,7 @@ FROM
                ON P.mfno = V.no
     LEFT JOIN  sqldados.vendLojaAdicional AS A
                ON A.vendno = V.no
+WHERE (:pesquisa = '' OR V.no LIKE :pesquisa OR V.sname LIKE CONCAT('%', :pesquisa, '%'))
+  AND (A.data = :data OR :data = 0)
 GROUP BY V.no
+ORDER BY V.no

@@ -11,12 +11,14 @@ data class FornecedorLoja(
   var dataMF: LocalDate? = null,
   var dataPK: LocalDate? = null,
   var dataTM: LocalDate? = null
-){
+) {
   fun update() {
     saci.saveFornLoja(this)
   }
 
-  companion object{
-    fun findAll() = saci.findFornLoja()
+  companion object {
+    fun findAll(filtro :FiltroFornecedorLoja) = saci.findFornLoja(filtro)
   }
 }
+
+data class FiltroFornecedorLoja(val pesquisa: String, val data: LocalDate?)

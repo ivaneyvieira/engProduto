@@ -41,10 +41,9 @@ fun <T : Any> Grid<T>.withEditor(
   editor.binder = binder
   editor.isBuffered = isBuffered
   addItemDoubleClickListener { event ->
-    //val bean = this.selectedItems.firstOrNull()
-    val bean = this.editor.binder.bean
-    if (canEdit(bean)) {
-      editor.editItem(event.item)
+    val bean = event.item ?: this.editor.binder.bean ?: this.selectedItems.firstOrNull()
+    if (canEdit(bean) && bean != null) {
+      editor.editItem(bean)
     }
   }
   editor.addOpenListener {

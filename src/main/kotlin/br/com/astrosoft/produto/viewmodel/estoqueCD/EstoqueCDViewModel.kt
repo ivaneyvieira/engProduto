@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view) {
   val tabEstoqueMovViewModel = TabEstoqueMovViewModel(this)
   val tabEstoqueAcertoViewModel = TabEstoqueAcertoViewModel(this)
+  val tabEstoqueFornViewModel = TabEstoqueFornViewModel(this)
   val tabEstoqueAcertoSimplesViewModel = TabEstoqueAcertoSimplesViewModel(this)
   val tabEstoqueAcertoMobileViewModel = TabEstoqueAcertoMobileViewModel(this)
   val tabEstoqueLojaViewModel = TabEstoqueLojaViewModel(this)
@@ -23,6 +24,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
     view.tabEstoqueConf,
     view.tabEstoqueAcerto,
     view.tabEstoqueAcertoSimples,
+    view.tabEstoqueForn,
     view.tabEstoqueAcertoMobile,
     view.tabEstoqueMov,
     view.tabEstoqueCad,
@@ -35,6 +37,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
 interface IEstoqueCDView : IView {
   val tabEstoqueMov: ITabEstoqueMov
   val tabEstoqueAcerto: ITabEstoqueAcerto
+  val tabEstoqueForn: ITabEstoqueForn
   val tabEstoqueAcertoSimples: ITabEstoqueAcertoSimples
   val tabEstoqueAcertoMobile: ITabEstoqueAcertoMobile
   val tabEstoqueSaldo: ITabEstoqueSaldo

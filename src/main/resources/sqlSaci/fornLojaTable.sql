@@ -7,4 +7,4 @@ CREATE TABLE sqldados.vendLojaAdicional
   PRIMARY KEY (vendno, storeno)
 );
 
-select * from sqldados.vendAdicional;
+select * from sqldados.vendLojaAdicional;
