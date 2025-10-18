@@ -112,7 +112,7 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
 fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(
   property: KProperty1<T, LocalDate?>,
   header: String? = null,
-  width: String? = "7rem",
+  width: String? = "6rem",
   isExpand: Boolean = false,
   pattern: String = DATE_PATTERN,
   block: (@VaadinDsl Column<T>).() -> Unit = {}
