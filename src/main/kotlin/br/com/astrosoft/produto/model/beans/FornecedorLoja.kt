@@ -17,8 +17,8 @@ data class FornecedorLoja(
   }
 
   companion object {
-    fun findAll(filtro :FiltroFornecedorLoja) = saci.findFornLoja(filtro)
+    fun findAll(filtro: FiltroFornecedorLoja) = saci.findFornLoja(filtro)
   }
 }
 
-data class FiltroFornecedorLoja(val pesquisa: String, val data: LocalDate?)
+data class FiltroFornecedorLoja(val pesquisa: String, val dataInicial: LocalDate?, val dataFinal: LocalDate?)

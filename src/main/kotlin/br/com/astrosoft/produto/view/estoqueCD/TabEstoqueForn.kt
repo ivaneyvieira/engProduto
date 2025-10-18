@@ -18,7 +18,8 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
   TabPanelGrid<FornecedorLoja>(FornecedorLoja::class), ITabEstoqueForn {
   private lateinit var edtPesquisa: TextField
-  private lateinit var edtDate: DatePicker
+  private lateinit var edtDateInicial: DatePicker
+  private lateinit var edtDateFinal: DatePicker
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -29,7 +30,16 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         viewModel.updateView()
       }
     }
-    edtDate = datePicker("Data") {
+
+    edtDateInicial = datePicker("Data Inicial") {
+      this.localePtBr()
+      this.isClearButtonVisible = true
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    edtDateFinal = datePicker("Data Final") {
       this.localePtBr()
       this.isClearButtonVisible = true
       addValueChangeListener {
@@ -63,7 +73,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
   override fun filtro(): FiltroFornecedorLoja {
     return FiltroFornecedorLoja(
       pesquisa = edtPesquisa.value ?: "",
-      data = edtDate.value
+      dataInicial = edtDateInicial.value,
+      dataFinal = edtDateFinal.value
     )
   }
 

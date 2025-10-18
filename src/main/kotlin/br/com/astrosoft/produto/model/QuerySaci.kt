@@ -2676,7 +2676,8 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/fornLojaSelect.sql"
     return query(sql, FornecedorLoja::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
-      addOptionalParameter(        "data", filtro.data.toSaciDate()      )
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
   }
 
