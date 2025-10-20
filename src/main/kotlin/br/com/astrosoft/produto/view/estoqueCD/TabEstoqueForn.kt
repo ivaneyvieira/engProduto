@@ -11,8 +11,6 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueForn
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueFornViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.getColumnBy
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -65,8 +63,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
     this.withEditor(
       classBean = FornecedorLoja::class,
       openEditor = {
-        val edit = getColumnBy(FornecedorLoja::dataDS) as? Focusable<*>
-        edit?.focus()
+//        val edit = this.columns.firstOrNull { it is Focusable<*> } as? Focusable<*>
+        //      edit?.focus()
       },
       closeEditor = {
         viewModel.saveForn(it.bean)
@@ -76,8 +74,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       this.columnGrid(property = FornecedorLoja::vendno, header = "Codigo")
       this.columnGrid(property = FornecedorLoja::abrev, header = "Nome", width = "200px")
     }
-    this.columnGroup("DS") {
-      if (lojaConferencia == 2 || lojaConferencia == 0) {
+    if (lojaConferencia == 2 || lojaConferencia == 0) {
+      this.columnGroup("DS") {
         this.columnGrid(property = FornecedorLoja::dataDS, header = "Data").dateFieldEditor()
         this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { forn ->
           viewModel.formAutoriza(forn, 2)
@@ -86,8 +84,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
 
-    this.columnGroup("MR") {
-      if (lojaConferencia == 3 || lojaConferencia == 0) {
+    if (lojaConferencia == 3 || lojaConferencia == 0) {
+      this.columnGroup("MR") {
         this.columnGrid(property = FornecedorLoja::dataMR, header = "Data").dateFieldEditor()
         this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { forn ->
           viewModel.formAutoriza(forn, 3)
@@ -96,8 +94,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
 
-    this.columnGroup("MF") {
-      if (lojaConferencia == 4 || lojaConferencia == 0) {
+    if (lojaConferencia == 4 || lojaConferencia == 0) {
+      this.columnGroup("MF") {
         this.columnGrid(property = FornecedorLoja::dataMF, header = "Data").dateFieldEditor()
         this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { forn ->
           viewModel.formAutoriza(forn, 4)
@@ -106,8 +104,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
 
-    this.columnGroup("PK") {
-      if (lojaConferencia == 5 || lojaConferencia == 0) {
+    if (lojaConferencia == 5 || lojaConferencia == 0) {
+      this.columnGroup("PK") {
         this.columnGrid(property = FornecedorLoja::dataPK, header = "Data").dateFieldEditor()
         this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { forn ->
           viewModel.formAutoriza(forn, 5)
@@ -116,8 +114,8 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
 
-    this.columnGroup("TM") {
-      if (lojaConferencia == 8 || lojaConferencia == 0) {
+    if (lojaConferencia == 8 || lojaConferencia == 0) {
+      this.columnGroup("TM") {
         this.columnGrid(property = FornecedorLoja::dataTM, header = "Data").dateFieldEditor()
         this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { forn ->
           viewModel.formAutoriza(forn, 8)

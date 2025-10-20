@@ -2705,7 +2705,7 @@ class QuerySaci : QueryDB(database) {
     saveFornLojaData(
       vendno = fornecedorLoja.vendno,
       storeno = 8,
-      data = fornecedorLoja.dataMF,
+      data = fornecedorLoja.dataTM,
     )
   }
 
