@@ -21,12 +21,15 @@ FROM
   sqldados.vend                           AS V
     INNER JOIN sqldados.prd               AS P
                ON P.mfno = V.no
+    INNER JOIN sqldados.stk               AS S
+               ON S.prdno = P.no AND storeno IN (2, 3, 4, 5, 8)
     LEFT JOIN  sqldados.vendLojaAdicional AS A
                ON A.vendno = V.no
     LEFT JOIN  sqldados.users             AS U
-                ON U.no = A.userno
+               ON U.no = A.userno
 WHERE (:pesquisa = '' OR V.no LIKE :pesquisa OR V.sname LIKE CONCAT('%', :pesquisa, '%'))
   AND (A.data >= :dataInicial OR :dataInicial = 0)
   AND (A.data <= :dataFinal OR :dataFinal = 0)
+  AND (P.no < '          960001')
 GROUP BY V.no
 ORDER BY V.no
