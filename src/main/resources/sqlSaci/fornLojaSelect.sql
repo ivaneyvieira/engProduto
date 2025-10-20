@@ -22,7 +22,7 @@ FROM
     INNER JOIN sqldados.prd               AS P
                ON P.mfno = V.no
     INNER JOIN sqldados.stk               AS S
-               ON S.prdno = P.no AND storeno IN (2, 3, 4, 5, 8)
+               ON S.prdno = P.no AND storeno IN (2, 3, 4, 5, 8) and (qtty_varejo > 0 or qtty_atacado > 0)
     LEFT JOIN  sqldados.vendLojaAdicional AS A
                ON A.vendno = V.no
     LEFT JOIN  sqldados.users             AS U
