@@ -305,13 +305,8 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
 
     columnGroup("Outras Informações") {
       this.columnGrid(ProdutoEstoque::embalagem, header = "Emb")
-      this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px")/*.apply {
-        if (user?.estoqueEditaLoc == true) {
-          textFieldEditor()
-        }
-      }*/
+      this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px")
       this.columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-      //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
     }
   }
 

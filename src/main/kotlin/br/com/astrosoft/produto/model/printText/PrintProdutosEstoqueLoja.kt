@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -51,6 +52,7 @@ class PrintProdutosEstoqueLoja(private val filtro: FiltroProdutoEstoque) : Print
     column(ProdutoEstoque::qtdDifInt, "___Loja", 7)
     column(ProdutoEstoque::kardec, "_____CD", 7)
     column(ProdutoEstoque::saldo, "___Sist", 7, lineBreak = true)
+    column(ProdutoEstoque::saldoBarraRef, "", 47)
   }
 
   override fun printSumary(bean: ProdutoEstoque?) {
