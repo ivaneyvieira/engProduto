@@ -16,14 +16,28 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
   AND (A.grade = :grade OR :grade = '')
 GROUP BY A.prdno, A.grade;
 
+
+DROP TEMPORARY TABLE IF EXISTS T_STK;
+CREATE TEMPORARY TABLE T_STK
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
+FROM
+  sqldados.stk
+WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+  AND (prdno = :prdno OR :prdno = '')
+  AND (grade = :grade OR :grade = '')
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
   PRIMARY KEY (codigo, grade)
 )
 SELECT X.storeno                                                     AS loja,
-       X.pdvno                                                         AS pdvno,
-       X.xano                                                          AS xano,
+       X.pdvno                                                       AS pdvno,
+       X.xano                                                        AS xano,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(X.grade, '')                                           AS grade,
@@ -73,14 +87,10 @@ FROM
     LEFT JOIN  sqldados.users            AS EE
                ON EE.no = X.s5
     INNER JOIN sqldados.nf               AS N
-               ON N.storeno =  X.storeno AND  N.pdvno = X.pdvno AND  N.xano = X.xano
+               ON N.storeno = X.storeno AND N.pdvno = X.pdvno AND N.xano = X.xano
     LEFT JOIN  sqldados.prdbar           AS BC
                ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
-    LEFT JOIN  ( SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
-                 FROM
-                   sqldados.stk
-                 WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
-                 GROUP BY prdno, grade ) AS STK
+    LEFT JOIN  T_STK AS STK
                ON X.prdno = STK.prdno AND X.grade = STK.grade
     LEFT JOIN  sqldados.vend             AS F
                ON F.no = P.mfno

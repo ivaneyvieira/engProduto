@@ -232,7 +232,7 @@ class ProdutoEstoque(
       loja = loja,
       pesquisa = "",
       prdno = prdno ?: "",
-      grade = "",
+      grade = grade ?: "",
       dataInicial = dataInicial.minusDays(7),
       dataEntregaInicial = null,
       dataFinal = LocalDate.now(),
@@ -244,7 +244,7 @@ class ProdutoEstoque(
     val notas = notasEnt.filter {
       it.cancelada != "S"
     }
-    return notas.flatMap { nota ->
+    val ret = notas.flatMap { nota ->
       val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         ETipoKardec.ENTREGA
       } else {
@@ -261,7 +261,8 @@ class ProdutoEstoque(
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
 
-      val produtosEnt = nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = "", todosLocais = true)
+      val produtosEnt =
+          nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = grade ?: "", todosLocais = true)
 
       val nota1 = nota.notaEntrega ?: ""
       val nota2: String = "${nota.numero}/${nota.serie}"
@@ -281,7 +282,7 @@ class ProdutoEstoque(
         else                 -> ""
       }
 
-      produtosEnt.filter { produto ->
+      val listExp = produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
         ProdutoKardec(
@@ -297,8 +298,10 @@ class ProdutoEstoque(
           userLogin = nota.usuarioSingCD ?: usuario,
           observacao = "${nota.observacao} loja ${nota.loja}"
         )
-      }.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
+      }
+      listExp.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
     }
+    return ret
   }
 
   fun reposicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {

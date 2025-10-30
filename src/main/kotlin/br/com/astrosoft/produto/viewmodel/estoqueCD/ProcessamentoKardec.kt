@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.ETipoKardec
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -12,11 +14,11 @@ import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
 object ProcessamentoKardec {
- /*
-  fun updateAll() {
+  /*
+   fun updateAll() {
 
-  }
-*/
+   }
+ */
   fun updateSaldoKardec(produto: ProdutoEstoque) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
@@ -28,14 +30,14 @@ object ProcessamentoKardec {
 
   private fun updateKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
-      ProdutoKardec.deleteKarde(produto)
-      val list = fetchKardecFlow(produto, loja, dataIncial)
-      buildList {
-        list.collect { produtoKardec: ProdutoKardec ->
-          produtoKardec.save()
-          add(produtoKardec)
-        }
+      ProdutoKardec.deleteKardec(produto)
+      //val list = fetchKardecFlow(produto, loja, dataIncial)
+      val listBuild = fetchKardec(produto, loja, dataIncial)
+      listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
+        produtoKardec.save()
+        println(index)
       }
+      listBuild
     }
   }
 
@@ -101,6 +103,17 @@ object ProcessamentoKardec {
     launchSource("Reposicao") { produto.reposicao(loja, dataIncial) }
     launchSource("Saldo Inicial") { produto.saldoInicial(loja, dataIncial) }
     launchSource("Acerto") { produto.acertoEstoque(loja, dataIncial) }
+  }
+
+  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+    println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
+
+    val recebimento = produto.recebimentos(loja, dataIncial)
+    val expedicao = produto.expedicao(loja, dataIncial)
+    val reposicao = produto.reposicao(loja, dataIncial)
+    val saldoInicial = produto.saldoInicial(loja, dataIncial)
+    val acertoEstoque = produto.acertoEstoque(loja, dataIncial)
+    return recebimento + expedicao + reposicao + saldoInicial + acertoEstoque
   }
 }
 

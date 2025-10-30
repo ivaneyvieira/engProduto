@@ -348,8 +348,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", filtro.grade)
     }
 
-    println(list)
-
     val listFilter = list.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
@@ -452,9 +450,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("todosLocais", todosLocais.let { if (it) "S" else "N" })
       addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
     }
-    produtos.forEach {
-      println(it.local)
-    }
     return produtos
   }
 
@@ -471,9 +466,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 0)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
-    }
-    produtos.forEach {
-      println(it.local)
     }
     return produtos
   }
