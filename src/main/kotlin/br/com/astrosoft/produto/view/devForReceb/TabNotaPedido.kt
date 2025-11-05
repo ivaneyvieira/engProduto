@@ -107,6 +107,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       })
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
       dlgProduto?.showDialog {

@@ -177,6 +177,5 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val valorISSQN: BigDecimal
     get() = BigDecimal(0)
   override val informacoesComplementares: String
-    get() = nota.observacaoDev ?: ""
-
+    get() =  nota.observacaoAdicional ?: nota.observacaoDev ?: ""
 }
