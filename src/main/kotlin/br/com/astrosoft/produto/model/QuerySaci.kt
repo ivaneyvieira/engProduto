@@ -429,6 +429,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoNF(nfs: NotaVenda): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdv)
+      addOptionalParameter("xano", nfs.transacao)
+      addOptionalParameter("loja", 0)
+      addOptionalParameter("marca", EMarcaNota.TODOS.num)
+      addOptionalParameter("prdno", "")
+      addOptionalParameter("grade", "")
+      addOptionalParameter("lojaLocal", 4)
+      addOptionalParameter("todosLocais", "S")
+      addOptionalParameter("local",  listOf("TODOS"))
+    }
+    return produtos
+  }
+
   fun findProdutoNF(
     nfs: NotaSaida,
     marca: EMarcaNota,

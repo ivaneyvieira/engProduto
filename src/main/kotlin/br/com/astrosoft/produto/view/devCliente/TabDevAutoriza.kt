@@ -27,6 +27,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmdDevolucaoStatus: Select<EDevolucaoStatus>
+  private var dlgProduto: DlgProdutosVenda? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -106,6 +107,12 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      dlgProduto = DlgProdutosVenda(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     addColumnButton(VaadinIcon.EDIT, "Motivo", "Motivo", configIcon = { icon, bean ->
       if (bean.setMotivoTroca.isNotEmpty()) {
         icon.element.style.set("color", "yellow")
