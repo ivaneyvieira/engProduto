@@ -83,6 +83,10 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
+    addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
+      val form = FormSolicitacaoNotaTrocaView(nota)
+      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
+    }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")

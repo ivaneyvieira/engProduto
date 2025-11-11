@@ -11,13 +11,13 @@ import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.component.textfield.TextField
 
 class FormSolicitacaoNotaTroca : FormLayout() {
-  private var edtSolitacao: Select<ESolicitacaoTroca>? = null
+  private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
 
   init {
-    edtSolitacao = select("Solicitacao") {
+    edtTipo = select("Tipo") {
       this.setItems(ESolicitacaoTroca.entries)
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
@@ -38,7 +38,7 @@ class FormSolicitacaoNotaTroca : FormLayout() {
   }
 
   val solicitacao: ESolicitacaoTroca?
-    get() = edtSolitacao?.value
+    get() = edtTipo?.value
   val produto: EProdutoTroca?
     get() = edtProduto?.value
   val login: String

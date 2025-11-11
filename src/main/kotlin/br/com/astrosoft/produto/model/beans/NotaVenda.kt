@@ -40,6 +40,9 @@ class NotaVenda(
       motivoTrocaCod = value.joinToString(";") { it.codigo }
     }
 
+  val strMotivoTroca: String
+    get() = setMotivoTroca.sortedBy { it.codigo }.joinToString(", ") { it.descricao }
+
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
     set(value) {

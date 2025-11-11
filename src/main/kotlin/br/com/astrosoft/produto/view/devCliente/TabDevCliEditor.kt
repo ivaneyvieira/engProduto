@@ -2,11 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliEditor
@@ -84,6 +80,10 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
+    }
+    addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
+      val form = FormSolicitacaoNotaTrocaView(nota)
+      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
     }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev").right()

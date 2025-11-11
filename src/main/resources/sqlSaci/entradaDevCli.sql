@@ -158,11 +158,16 @@ SELECT DISTINCT I.invno,
                 A.userno                                                               AS usernoAutorizacao,
                 UA.name                                                                AS nameAutorizacao,
                 UA.login                                                               AS loginAutorizacao,
-                IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto
+                IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
+                IFNULL(AT.solicitacaoTroca, 'N')                                       AS solicitacaoTroca,
+                IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
+                IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod
 FROM
   T_NOTA                              AS I
     LEFT JOIN sqldados.nf             AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
+    LEFT JOIN sqldados.nfAutorizacao  AS AT
+              ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
     LEFT JOIN sqldados.custp          AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp            AS E

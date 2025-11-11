@@ -41,7 +41,22 @@ class EntradaDevCli(
   var nameAutorizacao: String?,
   var loginAutorizacao: String?,
   var comProduto: String?,
+  var solicitacaoTroca: String?,
+  var produtoTroca: String?,
+  var motivoTrocaCod: String?,
 ) {
+  val setMotivoTroca: Set<EMotivoTroca>
+    get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
+
+  val strMotivoTroca: String
+    get() = setMotivoTroca.sortedBy { it.codigo }.joinToString(", ") { it.descricao }
+
+  val solicitacaoTrocaEnnum: ESolicitacaoTroca?
+    get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
+
+  val produtoTrocaEnnum: EProdutoTroca?
+    get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
+
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
 
