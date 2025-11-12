@@ -24,15 +24,22 @@ class SubWindowForm(
     }
 
     verticalLayout {
+      this.isPadding = false
+      this.isMargin = false
+
       content { align(stretch, top) }
       isPadding = false
       verticalLayout {
+        this.isPadding = false
+        this.isMargin = false
+
         this.header(this@SubWindowForm)
       }
 
       verticalLayout {
-        isSpacing = false
-        isPadding = false
+        this.isPadding = false
+        this.isMargin = false
+
         if (fullSize) {
           setWidthFull()
         }
@@ -50,6 +57,9 @@ class SubWindowForm(
         }
       }
       horizontalLayout {
+        this.isPadding = false
+        this.isMargin = false
+
         content { align(left, baseline) }
         if (hasButtonClose) {
           buttonClose()
@@ -57,9 +67,11 @@ class SubWindowForm(
         toolBar(this@SubWindowForm)
       }
       verticalLayout {
+        this.isPadding = false
+        this.isMargin = false
+
         this.headerGrid(this@SubWindowForm)
       }
-
 
       addAndExpand(blockForm())
     }

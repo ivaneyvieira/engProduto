@@ -67,8 +67,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFQuantidade()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
-      produtoNFUsuarioSep()
-      produtoNFEstoque()
 
       this.setPartNameGenerator {
         val marca = it.marca
