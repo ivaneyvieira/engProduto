@@ -36,10 +36,10 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun formSolicitacao(nota: NotaVenda) = viewModel.exec {
     val userSolicitacao = nota.userSolicitacao ?: 0
-    if (userSolicitacao != 0) {
-      fail("Devolução já Solicitada")
-    }
-    subView.formSolicitacao(nota)
+//    if (userSolicitacao != 0) {
+//      fail("Devolução já Solicitada")
+//    }
+    subView.formSolicitacao(nota, readOnly = userSolicitacao != 0)
   }
 
   fun formAutoriza(nota: NotaVenda) = viewModel.exec {
@@ -86,6 +86,8 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota: NotaVenda,
     solicitacao: ESolicitacaoTroca?,
     produto: EProdutoTroca?,
+    nfEntRet: Int?,
+    setMotivoTroca: Set<EMotivoTroca>,
     login: String,
     senha: String
   ) = viewModel.exec {
@@ -107,6 +109,8 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     }
     nota.solicitacaoTrocaEnnum = solicitacao
     nota.produtoTrocaEnnum = produto
+    nota.nfEntRet = nfEntRet
+    nota.setMotivoTroca = setMotivoTroca
 
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
@@ -145,5 +149,5 @@ interface ITabDevAutoriza : ITabView {
   fun updateNotas(notas: List<NotaVenda>)
   fun itensNotasSelecionados(): List<NotaVenda>
   fun formAutoriza(nota: NotaVenda)
-  fun formSolicitacao(nota: NotaVenda)
+  fun formSolicitacao(nota: NotaVenda, readOnly: Boolean)
 }

@@ -113,6 +113,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         viewModel.updateView()
       }
     }
+
     addColumnButton(VaadinIcon.EDIT, "Motivo", "Motivo", configIcon = { icon, bean ->
       if (bean.setMotivoTroca.isNotEmpty()) {
         icon.element.style.set("color", "yellow")
@@ -122,13 +123,16 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         viewModel.updateView()
       }
       dlg.open()
+    }.apply {
+      this.isVisible = false
     }
+
     addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
       viewModel.formSolicitacao(nota)
     }
     columnGrid(NotaVenda::loginSolicitacao, header = "Autorização")
-    columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Tipo Dev")
-    columnGrid(NotaVenda::produtoTrocaDescricao, header = "Produto")
+    //columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Tipo Dev")
+    //columnGrid(NotaVenda::produtoTrocaDescricao, header = "Produto")
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
       viewModel.formAutoriza(nota)
     }
@@ -141,7 +145,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::uf, header = "UF")
     columnGrid(NotaVenda::tipoNf, header = "Tipo NF")
     columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto") {
-      this.setFooter(Html("<b><font size=4>Total</font></b>"))
+      this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
     }
     val valorCol = columnGrid(NotaVenda::valor, header = "Valor NF")
     val valorTipoCol = columnGrid(NotaVenda::valorTipo, header = "Valor TP")
@@ -195,10 +199,22 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
   }
 
-  override fun formSolicitacao(nota: NotaVenda) {
-    val form = FormSolicitacaoNotaTroca()
-    DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
-      viewModel.solicitacaoNota(nota, form.solicitacao, form.produto, form.login, form.senha)
+  override fun formSolicitacao(nota: NotaVenda, readOnly: Boolean) {
+    val form = FormSolicitacaoNotaTroca(nota, readOnly)
+    if (readOnly) {
+      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
+    } else {
+      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
+        viewModel.solicitacaoNota(
+          nota = nota,
+          solicitacao = form.solicitacao,
+          produto = form.produto,
+          nfEntRet = form.notaEntRet,
+          setMotivoTroca = form.motivo,
+          login = form.login,
+          senha = form.senha
+        )
+      }
     }
   }
 
