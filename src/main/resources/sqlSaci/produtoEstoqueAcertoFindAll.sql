@@ -77,7 +77,7 @@ FROM
     LEFT JOIN T_BARCODE               AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN produtoObservacaoAcerto AS O
+    LEFT JOIN sqldados.produtoObservacaoAcerto AS O
               USING (numero, numloja)
     LEFT JOIN sqldados.store          AS S
               ON S.no = A.numloja

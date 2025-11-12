@@ -167,14 +167,18 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
   return grupos.mapNotNull { mapAcerto ->
     val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
     val lista = mapAcerto.value
-    /*
-    val processado = if (lista.all { (it.diferenca ?: 0) == 0 }) {
-      true
-    } else {
-      lista.all { it.processado == true }
-    }
-     */
+
     val processado = lista.any { it.processado == true }
+
+    val diferencaEntrada = lista.sumOf {
+      val dif = it.diferencaAcerto ?: 0
+      if (dif > 0) dif else 0
+    }
+
+    val diferencaSaida = lista.sumOf {
+      val dif = it.diferencaAcerto ?: 0
+      if (dif < 0) dif else 0
+    }
 
     EstoqueAcerto(
       numero = acerto.numero ?: return@mapNotNull null,
@@ -189,7 +193,12 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       transacaoEnt = lista.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
       transacaoSai = lista.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
-      observacao = acerto.observacao,
+      observacao = when {
+        diferencaSaida == 0 && diferencaEntrada == 0 -> "Sem Diferença"
+        diferencaSaida != 0 && diferencaEntrada == 0 -> "Saída"
+        diferencaSaida == 0 && diferencaEntrada != 0 -> "Entrada"
+        else                                         -> "Entrada e Saída"
+      },
       gravado = acerto.gravado,
     )
   }
