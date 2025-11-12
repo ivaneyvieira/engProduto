@@ -251,8 +251,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
     }.forEachIndexed { index, produto ->
       produto.saveSeq(seqMax + index + 1)
     }
-    val nota = produtos.firstOrNull() ?: produtos.firstOrNull { it.notaDevolucao != null }
-               ?: produtos.firstOrNull { it.notaDevolucao == null }
+    val nota = produtos.minByOrNull { it.seq ?: 99999 }
 
     nota?.let {
       NotaRecebimentoDev(
