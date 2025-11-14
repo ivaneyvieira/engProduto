@@ -126,7 +126,7 @@ data class NotaRecebimentoProdutoDev(
     get() {
       val motivo = motivoDevolucaoEnum
       return if (motivo?.notasMultiplas == true) {
-        "$motivoDevolucao-$numeroDevolucao"
+        "$loja-$motivoDevolucao-$numeroDevolucao"
       } else {
         "$loja-$ni-$motivoDevolucao-$numeroDevolucao"
       }

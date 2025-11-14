@@ -10,6 +10,7 @@ DO @INVNO := IF(:invno = 0,
                            AND I.prdno = :prdno
                            AND I.grade = :grade
                            AND :invno = 0
+                           AND N.storeno = :loja
                          GROUP BY prdno, grade ), :invno), :invno);
 
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao, seq)

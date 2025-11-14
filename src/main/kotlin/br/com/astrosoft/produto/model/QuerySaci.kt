@@ -2422,6 +2422,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/saveNotaRecebimentoProdutoDev.sql"
     val count = query(sql, Count::class) {
       addOptionalParameter("invno", produto.ni ?: 0)
+      addOptionalParameter("loja", produto.loja ?: 0)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
       addOptionalParameter("numero", produto.numeroDevolucao)

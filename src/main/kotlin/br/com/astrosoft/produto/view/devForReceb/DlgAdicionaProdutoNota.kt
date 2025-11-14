@@ -97,6 +97,7 @@ class DlgAdicionaProdutoNota(
     if (saldo == null || saldo <= 0) return
 
     val produto = produtoNota.copy(
+      loja = nota.loja,
       seq = seq,
       ni = invno,
       prdno = prdno,
