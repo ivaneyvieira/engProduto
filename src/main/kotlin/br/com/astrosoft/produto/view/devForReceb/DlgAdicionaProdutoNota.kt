@@ -149,6 +149,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
             //  this.addThemeVariants(NotificationVariant.LUMO_ERROR)
             //}
             edtCodigo?.focus()
+
             //edtCodigo?.selectAll()
           }
         } else if (produtos.size == 1) {
