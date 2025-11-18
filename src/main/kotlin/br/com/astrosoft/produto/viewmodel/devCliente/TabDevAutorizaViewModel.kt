@@ -36,9 +36,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun formSolicitacao(nota: NotaVenda) = viewModel.exec {
     val userSolicitacao = nota.userSolicitacao ?: 0
-//    if (userSolicitacao != 0) {
-//      fail("Devolução já Solicitada")
-//    }
     subView.formSolicitacao(nota, readOnly = userSolicitacao != 0)
   }
 

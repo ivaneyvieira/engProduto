@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.produto.model.beans.EMotivoTroca
+import br.com.astrosoft.produto.model.beans.EProdutoTroca
+import br.com.astrosoft.produto.model.beans.ESolicitacaoTroca
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -11,6 +13,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
@@ -27,7 +30,7 @@ class DlgEditaMotivo(
     this.headerTitle = headerTitle()
     this.footer.toolBar()
 
-    if(nota.tipoNf == "ENTRE FUT" ) {
+    if (nota.tipoNf == "ENTRE FUT") {
       horizontalLayout {
         nativeLabel("NF Ent/Ret:")
         notaEntRet = integerField {
