@@ -39,6 +39,7 @@ SELECT X.storeno                                                     AS loja,
        X.pdvno                                                       AS pdvno,
        X.xano                                                        AS xano,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
+       P.no                                                          AS prdno,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
        IFNULL(X.grade, '')                                           AS grade,
        IF(LENGTH(TRIM(P.barcode)) = 13, TRIM(P.barcode), NULL)       AS barcodeProd,
@@ -73,32 +74,35 @@ SELECT X.storeno                                                     AS loja,
        EC.login                                                      AS usuarioCD,
        X.c4                                                          AS dataHoraCD,
        N.tipo                                                        AS tipoNota,
-       ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque
+       ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque,
+       IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev
 FROM
-  sqldados.prd                           AS P
-    INNER JOIN sqldados.xaprd2           AS X
+  sqldados.prd                          AS P
+    INNER JOIN sqldados.xaprd2          AS X
                ON P.no = X.prdno
-    LEFT JOIN  sqldados.xaprd2Marca      AS M
+    LEFT JOIN  sqldados.xaprd2Marca     AS M
                USING (storeno, pdvno, xano, prdno, grade)
-    LEFT JOIN  T_LOC                     AS L
+    LEFT JOIN  sqldados.xaprd2Devolucao AS D
+               USING (storeno, pdvno, xano, prdno, grade)
+    LEFT JOIN  T_LOC                    AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
-    LEFT JOIN  sqldados.users            AS EC
+    LEFT JOIN  sqldados.users           AS EC
                ON EC.no = X.s4
-    LEFT JOIN  sqldados.users            AS EE
+    LEFT JOIN  sqldados.users           AS EE
                ON EE.no = X.s5
-    INNER JOIN sqldados.nf               AS N
+    INNER JOIN sqldados.nf              AS N
                ON N.storeno = X.storeno AND N.pdvno = X.pdvno AND N.xano = X.xano
-    LEFT JOIN  sqldados.prdbar           AS BC
+    LEFT JOIN  sqldados.prdbar          AS BC
                ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
-    LEFT JOIN  T_STK AS STK
+    LEFT JOIN  T_STK                    AS STK
                ON X.prdno = STK.prdno AND X.grade = STK.grade
-    LEFT JOIN  sqldados.vend             AS F
+    LEFT JOIN  sqldados.vend            AS F
                ON F.no = P.mfno
-    LEFT JOIN  sqldados.type             AS T
+    LEFT JOIN  sqldados.type            AS T
                ON T.no = P.typeno
     LEFT JOIN  sqldados.cl
                ON cl.no = P.clno
-    LEFT JOIN  sqldados.spedprd          AS S
+    LEFT JOIN  sqldados.spedprd         AS S
                ON P.no = S.prdno
 WHERE X.storeno = :storeno
   AND X.pdvno = :pdvno
@@ -112,6 +116,7 @@ SELECT loja,
        pdvno,
        xano,
        nota,
+       prdno,
        codigo,
        grade,
        local,
@@ -143,7 +148,8 @@ SELECT loja,
        dataHoraCD,
        usuarioSep,
        tipoNota,
-       estoque
+       estoque,
+       quantDev
 FROM
   T_DADOS
 WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')

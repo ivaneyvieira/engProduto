@@ -9,6 +9,7 @@ class ProdutoNFS(
   var pdvno: Int,
   var xano: Long,
   var nota: String?,
+  var prdno: String?,
   var codigo: String?,
   var grade: String?,
   var barcodeProd: String?,
@@ -41,7 +42,9 @@ class ProdutoNFS(
   var usuarioSep: String?,
   var tipoNota: Int?,
   var estoque: Int?,
+  var quantDev: Int?,
 ) {
+
   override fun toString(): String {
     return "ProdutoNFS(loja=$loja, pdvno=$pdvno, xano=$xano, nota=$nota, codigo=$codigo, grade=$grade, barcodeProd=$barcodeProd, barcodeStrList=$barcodeStrList, descricao=$descricao, vendno=$vendno, fornecedor=$fornecedor, typeno=$typeno, typeName=$typeName, clno=$clno, clname=$clname, altura=$altura, comprimento=$comprimento, largura=$largura, precoCheio=$precoCheio, ncm=$ncm, local=$local, quantidade=$quantidade, preco=$preco, total=$total, gradeAlternativa=$gradeAlternativa, marca=$marca, marcaImpressao=$marcaImpressao, usernoExp=$usernoExp, usuarioExp=$usuarioExp, dataHoraExp=$dataHoraExp, usernoCD=$usernoCD, usuarioCD=$usuarioCD, dataHoraCD=$dataHoraCD, usuarioSep='$usuarioSep', tipoNota=$tipoNota)"
   }
@@ -113,5 +116,33 @@ class ProdutoNFS(
     this.marcaImpressao = 1
     this.usuarioSep = user?.login ?: ""
     saci.salvaProdutosNFS(this)
+  }
+
+  fun updateQuantDev() {
+    saci.updateQuantDev(this)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as ProdutoNFS
+
+    if (loja != other.loja) return false
+    if (pdvno != other.pdvno) return false
+    if (xano != other.xano) return false
+    if (prdno != other.prdno) return false
+    if (grade != other.grade) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = loja
+    result = 31 * result + pdvno
+    result = 31 * result + xano.hashCode()
+    result = 31 * result + (prdno?.hashCode() ?: 0)
+    result = 31 * result + (grade?.hashCode() ?: 0)
+    return result
   }
 }

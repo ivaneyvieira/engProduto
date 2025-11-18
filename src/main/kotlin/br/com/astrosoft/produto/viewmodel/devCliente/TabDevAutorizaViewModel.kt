@@ -136,6 +136,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun updateProduto(bean: ProdutoNFS) {
+    bean.updateQuantDev()
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabDevAutoriza
 }
@@ -147,4 +152,5 @@ interface ITabDevAutoriza : ITabView {
   fun itensNotasSelecionados(): List<NotaVenda>
   fun formAutoriza(nota: NotaVenda)
   fun formSolicitacao(nota: NotaVenda, readOnly: Boolean)
+  fun updateProdutos()
 }

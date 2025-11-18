@@ -312,16 +312,9 @@ class QuerySaci : QueryDB(database) {
 
     val listFilter = list.filter {
       when (filtro.tipoNota) {
-        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja != filtro.loja &&
-                                       filtro.loja != 0
+        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name && it.loja != filtro.loja && filtro.loja != 0
 
-        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja == filtro.loja &&
-                                       filtro.loja != 0 &&
-                                       it.serie == "3"
+        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name && it.loja == filtro.loja && filtro.loja != 0 && it.serie == "3"
 
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
@@ -350,16 +343,9 @@ class QuerySaci : QueryDB(database) {
 
     val listFilter = list.filter {
       when (filtro.tipoNota) {
-        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja != filtro.loja &&
-                                       filtro.loja != 0
+        ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name && it.loja != filtro.loja && filtro.loja != 0
 
-        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true &&
-                                       it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name &&
-                                       it.loja == filtro.loja &&
-                                       filtro.loja != 0 &&
-                                       it.serie == "3"
+        ETipoNotaFiscal.SIMP_REME   -> it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name && it.loja == filtro.loja && filtro.loja != 0 && it.serie == "3"
 
         else                        -> it.tipoNotaSaida == filtro.tipoNota.name || filtro.tipoNota == ETipoNotaFiscal.TODOS
       }
@@ -441,17 +427,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", "")
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
-      addOptionalParameter("local",  listOf("TODOS"))
+      addOptionalParameter("local", listOf("TODOS"))
     }
     return produtos
   }
 
   fun findProdutoNF(
-    nfs: NotaSaida,
-    marca: EMarcaNota,
-    prdno: String,
-    grade: String,
-    todosLocais: Boolean
+    nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String, todosLocais: Boolean
   ): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
@@ -506,11 +488,7 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findProdutoRessuprimento(
-    pedido: Ressuprimento,
-    prdno: String,
-    grade: String,
-    marca: EMarcaRessuprimento,
-    locais: List<String>
+    pedido: Ressuprimento, prdno: String, grade: String, marca: EMarcaRessuprimento, locais: List<String>
   ): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql"
     //val localList = pedido.localList()
@@ -2303,8 +2281,7 @@ class QuerySaci : QueryDB(database) {
 
   fun saveMotivoDevolucao(produto: ProdutoPedidoGarantia) {
     val sql = "/sqlSaci/updateTipoDevolucaoGarantia.sql"
-    if (produto.niReceb == null)
-      return
+    if (produto.niReceb == null) return
     script(sql) {
       addOptionalParameter("invno", produto.niReceb)
       addOptionalParameter("prdno", produto.prdno)
@@ -2398,8 +2375,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun removerNotaRecebimentoDevMult(dev: NotaRecebimentoDev) {
-    /* "$loja-$numeroDevolucao" */
+  fun removerNotaRecebimentoDevMult(dev: NotaRecebimentoDev) {/* "$loja-$numeroDevolucao" */
     val sql = "/sqlSaci/removerNotaRecebimentoDevMult.sql"
     script(sql) {
       addOptionalParameter("loja", dev.loja)
@@ -2438,8 +2414,7 @@ class QuerySaci : QueryDB(database) {
   fun updateNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
     val sql = "/sqlSaci/updateNotaRecebimentoProdutoDev.sql"
 
-    if (produto.ni == null)
-      return
+    if (produto.ni == null) return
     script(sql) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("invnoNovo", niNovo)
@@ -2457,8 +2432,7 @@ class QuerySaci : QueryDB(database) {
   fun deleteNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev) {
     val sql = "/sqlSaci/deleteNotaRecebimentoProdutoDev.sql"
 
-    if (produto.ni == null)
-      return
+    if (produto.ni == null) return
     script(sql) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
@@ -2739,14 +2713,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateQuantDev(produtoNF: ProdutoNFS) {
+    val sql = "/sqlSaci/findProdutosNFSaidaSave.sql"
+    script(sql) {
+      addOptionalParameter("storeno", produtoNF.loja)
+      addOptionalParameter("pdvno", produtoNF.pdvno)
+      addOptionalParameter("xano", produtoNF.xano)
+      addOptionalParameter("prdno", produtoNF.prdno)
+      addOptionalParameter("grade", produtoNF.grade)
+      addOptionalParameter("quantDev", produtoNF.quantDev)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
     internal val database = DatabaseConfig(
-      driver = db.driver,
-      url = db.url,
-      user = db.username,
-      password = db.password
+      driver = db.driver, url = db.url, user = db.username, password = db.password
     )
   }
 }

@@ -1,6 +1,11 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -11,6 +16,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.select
@@ -75,8 +81,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
       EProdutoTroca.Com   -> {
         gridDetail.selectionMode = Grid.SelectionMode.MULTI
-        val allItens = gridDetail.dataProvider.fetchAll()
-        gridDetail.asMultiSelect().select(allItens)
+        val allItem = gridDetail.list()
+        gridDetail.asMultiSelect().select(allItem)
       }
 
       EProdutoTroca.Sem   -> {
@@ -100,14 +106,21 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-
-      addItemDoubleClickListener { e ->
-        editor.editItem(e.item)
-        val editorComponent: Component = e.column.editorComponent
-        if (editorComponent is Focusable<*>) {
-          (editorComponent as Focusable<*>).focus()
+      this.withEditor(
+        classBean = ProdutoNFS::class,
+        isBuffered = false,
+        openEditor = {
+          this.focusEditor(ProdutoNFS::quantDev)
+        },
+        closeEditor = {
+          viewModel.updateProduto(it.bean)
+          abreProximo(it.bean)
+        },
+        saveEditor = {
+          viewModel.updateProduto(it.bean)
+          abreProximo(it.bean)
         }
-      }
+      )
 
       produtoNFCodigo()
       produtoNFBarcode()
@@ -116,6 +129,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFGrade()
       produtoNFLocalizacao()
       produtoNFQuantidade()
+      produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
 
@@ -133,6 +147,20 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     this.addAndExpand(gridDetail)
 
     update()
+    updateSelectionProdutos(edtProduto?.value)
+  }
+
+  private fun abreProximo(bean: ProdutoNFS) {
+    val items = gridDetail.list()
+    val index = items.indexOf(bean)
+    if (index >= 0) {
+      val nextIndex = index + 1
+      if (nextIndex < items.size) {
+        val nextBean = items[nextIndex]
+        //gridDetail.select(nextBean)
+        gridDetail.editor.editItem(nextBean)
+      }
+    }
     updateSelectionProdutos(edtProduto?.value)
   }
 
