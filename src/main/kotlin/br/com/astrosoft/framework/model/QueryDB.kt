@@ -2,15 +2,14 @@ package br.com.astrosoft.framework.model
 
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
-import br.com.astrosoft.framework.util.toSaciDate
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection
 import org.sql2o.Query
 import org.sql2o.Sql2o
+import org.sql2o.quirks.NoQuirks
 import java.time.LocalDate
-import java.time.LocalTime
 import kotlin.reflect.KClass
 
 typealias QueryHandler = Query.() -> Unit
@@ -105,6 +104,7 @@ open class QueryDB(database: DatabaseConfig) {
       return query.executeAndFetch(classes.java)
     } catch (e: Exception) {
       failDB(e.message)
+      return emptyList()
     }
   }
 
@@ -158,47 +158,30 @@ open class QueryDB(database: DatabaseConfig) {
     }
   }
 
-  @JvmName("addOptionalParameterBoolean")
-  fun Query.addOptionalParameter(name: String, value: Boolean?): Query {
-    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
-    return this
-  }
-
-  @JvmName("addOptionalParameterString")
-  fun Query.addOptionalParameter(name: String, value: String?): Query {
-    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
-    return this
-  }
-
-  @JvmName("addOptionalParameterAny")
   fun Query.addOptionalParameter(name: String, value: Any?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  @JvmName("addOptionalParameterTime")
-  fun Query.addOptionalParameter(name: String, value: LocalTime?): Query {
+  fun Query.addOptionalParameter(name: String, value: String): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  @JvmName("addOptionalParameterInt")
-  fun Query.addOptionalParameter(name: String, value: Int?): Query {
+  fun Query.addOptionalParameter(name: String, value: LocalDate): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  @JvmName("addOptionalParameterLocalDate")
-  fun Query.addOptionalParameter(name: String, value: LocalDate?): Query {
-    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value.toSaciDate())
-    return this
-  }
-
-  @JvmName("addOptionalParameterByteArray")
-  fun Query.addOptionalParameter(name: String, value: ByteArray?): Query {
+  fun Query.addOptionalParameter(name: String, value: ByteArray): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
+
+  //fun Query.addOptionalParameter(name: String, value: Int?): Query {
+  //  if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
+  //  return this
+  // }
 
   @JvmName("addOptionalParameterString")
   fun Query.addOptionalParameter(name: String, value: List<String>): Query {
@@ -206,20 +189,23 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
-  @JvmName("addOptionalParameterListInt")
+  @JvmName("addOptionalParameterInt")
   fun Query.addOptionalParameter(name: String, value: List<Int>): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  @JvmName("addOptionalParameterLong")
-  fun Query.addOptionalParameter(name: String, value: Long?): Query {
+  fun Query.addOptionalParameter(name: String, value: Long): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  @JvmName("addOptionalParameterDouble")
-  fun Query.addOptionalParameter(name: String, value: Double?): Query {
+  fun Query.addOptionalParameter(name: String, value: Boolean): Query {
+    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
+    return this
+  }
+
+  fun Query.addOptionalParameter(name: String, value: Double): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
@@ -236,6 +222,7 @@ open class QueryDB(database: DatabaseConfig) {
 data class ScripyUpdate(val query: Query, val queryText: String)
 data class DatabaseConfig(val url: String, val user: String, val password: String, val driver: String)
 
-fun failDB(message: String?): Nothing {
-  throw EModelFail(message)
+fun failDB(message: String?) {
+  //throw EModelFail(message)
+  println("ERRO DB $message")
 }
