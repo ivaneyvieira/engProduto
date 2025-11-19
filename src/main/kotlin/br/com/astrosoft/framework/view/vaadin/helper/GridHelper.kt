@@ -8,6 +8,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -91,6 +92,24 @@ fun <T : Any> Grid.Column<T>.decimalFieldEditor(): Grid.Column<T> {
 
 fun <T : Any> Grid.Column<T>.textAreaEditor(block: TextArea.() -> Unit = {}): Grid.Column<T> {
   val component = textAreaComponente()
+  component.block()
+  grid.editor.binder.forField(component).bind(this.key)
+  this.editorComponent = component
+  return this
+}
+
+fun <T : Any> Grid.Column<T>.checkBoxEditor(block: Checkbox.() -> Unit = {}): Grid.Column<T> {
+  val component = checkBoxComponente()
+  component.element.addEventListener("keydown") { _ ->
+    grid.editorFinalizado = false
+    grid.editor.save()
+    grid.editor.closeEditor()
+  }.filter = "event.key === 'Enter'"
+  component.element.addEventListener("keydown") { _ ->
+    grid.editorFinalizado = true
+    grid.editor.cancel()
+    grid.editor.closeEditor()
+  }.filter = "event.key === 'Escape' || event.key === 'Esc'"
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
@@ -224,6 +243,10 @@ private fun textAreaComponente() = TextArea().apply {
   style.set("minHeight", "2em")
   addThemeVariants(TextAreaVariant.LUMO_SMALL)
   this.isAutoselect = true
+  setSizeFull()
+}
+
+private fun checkBoxComponente() = Checkbox().apply {
   setSizeFull()
 }
 

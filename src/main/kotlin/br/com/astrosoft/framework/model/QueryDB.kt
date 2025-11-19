@@ -2,14 +2,15 @@ package br.com.astrosoft.framework.model
 
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
+import br.com.astrosoft.framework.util.toSaciDate
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection
 import org.sql2o.Query
 import org.sql2o.Sql2o
-import org.sql2o.quirks.NoQuirks
 import java.time.LocalDate
+import java.time.LocalTime
 import kotlin.reflect.KClass
 
 typealias QueryHandler = Query.() -> Unit
@@ -157,30 +158,41 @@ open class QueryDB(database: DatabaseConfig) {
     }
   }
 
-  fun Query.addOptionalParameter(name: String, value: Any?): Query {
+  @JvmName("addOptionalParameterBoolean")
+  fun Query.addOptionalParameter(name: String, value: Boolean?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: String): Query {
+  @JvmName("addOptionalParameterString")
+  fun Query.addOptionalParameter(name: String, value: String?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: LocalDate): Query {
+  @JvmName("addOptionalParameterTime")
+  fun Query.addOptionalParameter(name: String, value: LocalTime?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: ByteArray): Query {
+  @JvmName("addOptionalParameterInt")
+  fun Query.addOptionalParameter(name: String, value: Int?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  //fun Query.addOptionalParameter(name: String, value: Int?): Query {
-  //  if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
-  //  return this
-  // }
+  @JvmName("addOptionalParameterLocalDate")
+  fun Query.addOptionalParameter(name: String, value: LocalDate?): Query {
+    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value.toSaciDate())
+    return this
+  }
+
+  @JvmName("addOptionalParameterByteArray")
+  fun Query.addOptionalParameter(name: String, value: ByteArray?): Query {
+    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
+    return this
+  }
 
   @JvmName("addOptionalParameterString")
   fun Query.addOptionalParameter(name: String, value: List<String>): Query {
@@ -188,23 +200,20 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
-  @JvmName("addOptionalParameterInt")
+  @JvmName("addOptionalParameterListInt")
   fun Query.addOptionalParameter(name: String, value: List<Int>): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Long): Query {
+  @JvmName("addOptionalParameterLong")
+  fun Query.addOptionalParameter(name: String, value: Long?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
 
-  fun Query.addOptionalParameter(name: String, value: Boolean): Query {
-    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
-    return this
-  }
-
-  fun Query.addOptionalParameter(name: String, value: Double): Query {
+  @JvmName("addOptionalParameterDouble")
+  fun Query.addOptionalParameter(name: String, value: Double?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }

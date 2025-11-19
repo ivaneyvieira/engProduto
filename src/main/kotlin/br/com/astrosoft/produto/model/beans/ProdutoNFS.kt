@@ -42,6 +42,7 @@ class ProdutoNFS(
   var usuarioSep: String?,
   var tipoNota: Int?,
   var estoque: Int?,
+  var temProduto: Boolean?,
   var quantDev: Int?,
 ) {
 

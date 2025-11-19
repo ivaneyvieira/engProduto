@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.checkBoxEditor
 import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
 import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.list
@@ -17,6 +18,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.select
@@ -77,7 +79,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   }
 
   private fun updateSelectionProdutos(value: EProdutoTroca?) {
-    when (value) {
+    /*when (value) {
 
       EProdutoTroca.Com   -> {
         gridDetail.selectionMode = Grid.SelectionMode.MULTI
@@ -95,7 +97,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       }
 
       else                -> {}
-    }
+    }*/
   }
 
   private fun HorizontalLayout.createGridProdutos() {
@@ -104,13 +106,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      selectionMode = Grid.SelectionMode.MULTI
+      selectionMode = Grid.SelectionMode.NONE
 
       this.withEditor(
         classBean = ProdutoNFS::class,
         isBuffered = false,
         openEditor = {
-          this.focusEditor(ProdutoNFS::quantDev)
+          this.focusEditor(ProdutoNFS::temProduto)
         },
         closeEditor = {
           viewModel.updateProduto(it.bean)
@@ -129,6 +131,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFGrade()
       produtoNFLocalizacao()
       produtoNFQuantidade()
+      produtoNFTemProduto().checkBoxEditor()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()

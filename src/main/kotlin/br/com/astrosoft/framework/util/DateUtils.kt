@@ -9,7 +9,7 @@ import java.util.*
 
 const val DATE_PATTERN = "dd/MM/yyyy"
 const val DATETIME_PATTERN = "dd/MM/yyyy HH:mm"
-const val TIME_PATTERN = "HH:mm"
+const val TIME_PATTERN = "HH:mm:ss"
 val DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN)
 val DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DATETIME_PATTERN)
 val TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN)

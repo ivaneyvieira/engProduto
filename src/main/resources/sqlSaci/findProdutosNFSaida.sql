@@ -75,7 +75,8 @@ SELECT X.storeno                                                     AS loja,
        X.c4                                                          AS dataHoraCD,
        N.tipo                                                        AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque,
-       IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev
+       IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev,
+       IFNULL(temProduto, FALSE)                                     AS temProduto
 FROM
   sqldados.prd                          AS P
     INNER JOIN sqldados.xaprd2          AS X
@@ -149,6 +150,7 @@ SELECT loja,
        usuarioSep,
        tipoNota,
        estoque,
+       temProduto,
        quantDev
 FROM
   T_DADOS

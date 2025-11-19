@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
@@ -1069,7 +1070,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", produtoEstoque.dataInicial.toSaciDate())
       addOptionalParameter("qtConferencia", produtoEstoque.qtConferencia ?: 0)
       addOptionalParameter("qtConfEditLoja", produtoEstoque.qtConfEditLoja ?: 0)
-      addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate ?: 0)
+      addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate)
     }
   }
 
@@ -2722,6 +2723,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", produtoNF.prdno)
       addOptionalParameter("grade", produtoNF.grade)
       addOptionalParameter("quantDev", produtoNF.quantDev)
+      addOptionalParameter("temProduto", produtoNF.temProduto)
     }
   }
 

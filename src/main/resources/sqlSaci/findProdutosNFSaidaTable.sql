@@ -10,8 +10,11 @@ CREATE TABLE xaprd2Devolucao
   xano     int      DEFAULT 0  NOT NULL,
   prdno    char(16) DEFAULT '' NOT NULL,
   grade    char(8)  DEFAULT '' NOT NULL,
-  quantDev    int                 NULL,
+  quantDev int                 NULL,
   PRIMARY KEY (storeno, pdvno, xano, prdno, grade)
 )
   ENGINE = MyISAM
   CHARSET = latin1;
+
+ALTER TABLE xaprd2Devolucao
+  ADD COLUMN temProduto tinyint DEFAULT 0;
