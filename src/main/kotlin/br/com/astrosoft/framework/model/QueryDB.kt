@@ -170,6 +170,12 @@ open class QueryDB(database: DatabaseConfig) {
     return this
   }
 
+  @JvmName("addOptionalParameterAny")
+  fun Query.addOptionalParameter(name: String, value: Any?): Query {
+    if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
+    return this
+  }
+
   @JvmName("addOptionalParameterTime")
   fun Query.addOptionalParameter(name: String, value: LocalTime?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
