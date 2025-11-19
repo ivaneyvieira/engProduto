@@ -104,7 +104,6 @@ open class QueryDB(database: DatabaseConfig) {
       return query.executeAndFetch(classes.java)
     } catch (e: Exception) {
       failDB(e.message)
-      return emptyList()
     }
   }
 
@@ -222,7 +221,6 @@ open class QueryDB(database: DatabaseConfig) {
 data class ScripyUpdate(val query: Query, val queryText: String)
 data class DatabaseConfig(val url: String, val user: String, val password: String, val driver: String)
 
-fun failDB(message: String?) {
-  //throw EModelFail(message)
-  println("ERRO DB $message")
+fun failDB(message: String?): Nothing {
+  throw EModelFail(message)
 }
