@@ -152,6 +152,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       )
 
       produtoNFDev().checkBoxEditor()
+      produtoNFTemProduto().checkBoxEditor()
+      produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFCodigo()
       produtoNFBarcode()
       produtoAutorizacaoExp()
@@ -159,8 +161,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFGrade()
       produtoNFLocalizacao()
       produtoNFQuantidade()
-      produtoNFTemProduto().checkBoxEditor()
-      produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
 
