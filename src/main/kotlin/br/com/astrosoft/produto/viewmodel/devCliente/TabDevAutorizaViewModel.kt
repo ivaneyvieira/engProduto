@@ -141,6 +141,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     subView.updateProdutos()
   }
 
+  fun processaSolicitacao(nota: NotaVenda) {
+    nota.update()
+    subView.updateProdutos()
+  }
+
   val subView
     get() = viewModel.view.tabDevAutoriza
 }

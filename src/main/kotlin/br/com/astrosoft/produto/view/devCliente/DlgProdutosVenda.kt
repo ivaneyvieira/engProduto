@@ -1,12 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.checkBoxEditor
-import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
-import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.list
-import br.com.astrosoft.framework.view.vaadin.helper.withEditor
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -20,16 +15,18 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.kaributools.fetchAll
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Focusable
+import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.vaadin.flow.component.checkbox.CheckboxGroup
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant
+import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVenda) {
   private var form: SubWindowForm? = null
@@ -37,6 +34,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
   private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
+  private var edtNotaEntRet: IntegerField? = null
+  private var edtMotivo: MultiSelectComboBox<EMotivoTroca>? = null
 
   fun showDialog(onClose: () -> Unit) {
     val readOnly = (nota.userSolicitacao ?: 0) != 0
@@ -47,7 +46,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isReadOnly = readOnly
           this.setItems(ESolicitacaoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
-          this.width = "300px"
+          this.width = "10rem"
           this.value = nota.solicitacaoTrocaEnnum ?: ESolicitacaoTroca.Troca
         }
 
@@ -55,7 +54,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isReadOnly = readOnly
           this.setItems(EProdutoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
-          this.width = "300px"
+          this.width = "10rem"
           this.value = nota.produtoTrocaEnnum ?: EProdutoTroca.Com
 
           addValueChangeListener {
@@ -63,8 +62,35 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           }
         }
 
+        if (nota.tipoNf == "ENTRE FUT") {
+          edtNotaEntRet = integerField {
+            this.isReadOnly = readOnly
+            this.value = nota.nfEntRet
+            this.width = "6rem"
+            this.isAutoselect = true
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          }
+        }
+
+        edtMotivo = multiSelectComboBox("Motivo:") {
+          this.isReadOnly = readOnly
+          this.setItems(EMotivoTroca.entries)
+          this.setItemLabelGenerator { item -> item.descricao }
+          this.value = nota.setMotivoTroca
+          this.width = "30rem"
+        }
+
         button("Processar") {
           this.icon = VaadinIcon.COG.create()
+          this.isEnabled = !readOnly
+
+          this.onClick {
+            nota.solicitacaoTrocaEnnum = edtTipo?.value
+            nota.produtoTrocaEnnum = edtProduto?.value
+            nota.nfEntRet = edtNotaEntRet?.value ?: 0
+            nota.setMotivoTroca = edtMotivo?.value ?: emptySet()
+            viewModel.processaSolicitacao(nota)
+          }
         }
       },
       onClose = {
