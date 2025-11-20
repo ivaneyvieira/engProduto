@@ -139,7 +139,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         classBean = ProdutoNFS::class,
         isBuffered = false,
         openEditor = {
-          this.focusEditor(ProdutoNFS::temProduto)
+          this.focusEditor(ProdutoNFS::dev)
         },
         closeEditor = {
           viewModel.updateProduto(it.bean)
