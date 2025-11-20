@@ -2,6 +2,8 @@ package br.com.astrosoft.framework.view.vaadin.helper
 
 import br.com.astrosoft.framework.util.format
 import com.github.mvysny.karibudsl.v10.VaadinDsl
+import com.github.mvysny.karibudsl.v10.alignSelf
+import com.github.mvysny.karibudsl.v10.horizontalAlignSelf
 import com.github.mvysny.karibudsl.v10.init
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
@@ -11,7 +13,9 @@ import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.datepicker.DatePicker
+import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.*
 import com.vaadin.flow.data.binder.Binder
@@ -113,6 +117,7 @@ fun <T : Any> Grid.Column<T>.checkBoxEditor(block: Checkbox.() -> Unit = {}): Gr
   component.block()
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
+  this.textAlign = ColumnTextAlign.CENTER
   return this
 }
 
@@ -233,6 +238,7 @@ fun mesAnoFieldComponente() = ComboBox<String>().apply {
 private fun integerFieldComponente() = IntegerField().apply {
   this.valueChangeMode = ValueChangeMode.ON_CHANGE
   addThemeVariants(TextFieldVariant.LUMO_SMALL)
+  this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
   this.isAutoselect = true
   setSizeFull()
 }

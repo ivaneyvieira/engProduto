@@ -240,8 +240,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 ): Column<T> {
   val column: Column<T> = this.addComponentColumn { bean ->
     val boleanValue = property.get(bean) ?: false
-    if (boleanValue) VaadinIcon.CHECK_CIRCLE_O.create()
-    else VaadinIcon.CIRCLE_THIN.create()
+    if (boleanValue) VaadinIcon.CHECK_SQUARE_O.create()
+    else VaadinIcon.THIN_SQUARE.create()
   }
   if (isExpand) {
     column.isExpand = true

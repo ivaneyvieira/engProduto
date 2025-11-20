@@ -27,6 +27,7 @@ class ProdutoEstoque(
   var fornecedorAbrev: String?,
   var cnpjFornecedor: String?,
   var saldo: Int?,
+  var valorEstoque: Double?,
   var saldoVarejo: Int?,
   var saldoAtacado: Int?,
   var dataInicial: LocalDate?,

@@ -2724,6 +2724,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produtoNF.grade)
       addOptionalParameter("quantDev", produtoNF.quantDev)
       addOptionalParameter("temProduto", produtoNF.temProduto)
+      addOptionalParameter("dev", produtoNF.dev)
     }
   }
 

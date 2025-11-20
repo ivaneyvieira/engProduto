@@ -307,6 +307,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::embalagem, header = "Emb")
       this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px")
       this.columnGrid(ProdutoEstoque::codForn, header = "For Cod")
+      this.columnGrid(ProdutoEstoque::valorEstoque, header = "Valor Est")
     }
   }
 

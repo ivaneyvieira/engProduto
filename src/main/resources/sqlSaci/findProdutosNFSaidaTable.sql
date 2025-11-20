@@ -18,3 +18,6 @@ CREATE TABLE xaprd2Devolucao
 
 ALTER TABLE xaprd2Devolucao
   ADD COLUMN temProduto tinyint DEFAULT 0;
+
+ALTER TABLE xaprd2Devolucao
+  ADD COLUMN dev tinyint DEFAULT 0;
