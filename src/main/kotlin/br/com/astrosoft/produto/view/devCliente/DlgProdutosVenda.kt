@@ -174,6 +174,9 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             it.item.dev = !(it.item.dev ?: false)
             if (it.item.dev == true) {
               it.item.temProduto = true
+            }else {
+              it.item.temProduto = null
+              it.item.quantDev = it.item.quantidade
             }
             this.dataProvider.refreshAll()
           }
