@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -16,10 +18,12 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
-import com.vaadin.flow.component.checkbox.CheckboxGroup
-import com.vaadin.flow.component.checkbox.CheckboxGroupVariant
+import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -90,7 +94,20 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             nota.produtoTrocaEnnum = edtProduto?.value
             nota.nfEntRet = edtNotaEntRet?.value ?: 0
             nota.setMotivoTroca = edtMotivo?.value ?: emptySet()
-            viewModel.processaSolicitacao(nota)
+            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
+            viewModel.processaSolicitacao(nota, produtos)
+          }
+        }
+
+        button("Autoriza") {
+          this.icon = VaadinIcon.SIGN_IN.create()
+          this.isEnabled = !readOnly
+
+          onClick {
+            val form = FormAutorizaNota()
+            DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+              viewModel.autorizaNota(nota, form.login, form.senha)
+            }
           }
         }
       },
@@ -135,24 +152,46 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
 
-      this.withEditor(
-        classBean = ProdutoNFS::class,
-        isBuffered = false,
-        openEditor = {
-          this.focusEditor(ProdutoNFS::dev)
-        },
-        closeEditor = {
-          viewModel.updateProduto(it.bean)
-          abreProximo(it.bean)
-        },
-        saveEditor = {
-          viewModel.updateProduto(it.bean)
-          abreProximo(it.bean)
-        }
-      )
+      /*
+            this.withEditor(
+              classBean = ProdutoNFS::class,
+              isBuffered = false,
+              openEditor = {
+                this.focusEditor(ProdutoNFS::quantDev)
+              },
+              closeEditor = {
+                viewModel.updateProduto(it.bean)
+              },
+              saveEditor = {
+                viewModel.updateProduto(it.bean)
+              }
+            )
+      */
 
-      produtoNFDev().checkBoxEditor()
-      produtoNFTemProduto().checkBoxEditor()
+      this.addItemClickListener {
+        when {
+          it.column.key == ProdutoNFS::dev.name                               -> {
+            it.item.dev = !(it.item.dev ?: false)
+            if (it.item.dev == true) {
+              it.item.temProduto = true
+            }
+            this.dataProvider.refreshAll()
+          }
+
+          it.column.key == ProdutoNFS::temProduto.name && it.item.dev == true -> {
+            it.item.temProduto = !(it.item.temProduto ?: false)
+            this.dataProvider.refreshAll()
+          }
+
+          it.column.key == ProdutoNFS::quantDev.name && it.item.dev == true   -> {
+            this.editor.editItem(it.item)
+            this.focusEditor(ProdutoNFS::quantDev)
+          }
+        }
+      }
+
+      produtoNFDev()
+      produtoNFTemProduto()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFCodigo()
       produtoNFBarcode()
@@ -178,20 +217,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     this.addAndExpand(gridDetail)
 
     update()
-    updateSelectionProdutos(edtProduto?.value)
-  }
-
-  private fun abreProximo(bean: ProdutoNFS) {
-    val items = gridDetail.list()
-    val index = items.indexOf(bean)
-    if (index >= 0) {
-      val nextIndex = index + 1
-      if (nextIndex < items.size) {
-        val nextBean = items[nextIndex]
-        //gridDetail.select(nextBean)
-        gridDetail.editor.editItem(nextBean)
-      }
-    }
     updateSelectionProdutos(edtProduto?.value)
   }
 

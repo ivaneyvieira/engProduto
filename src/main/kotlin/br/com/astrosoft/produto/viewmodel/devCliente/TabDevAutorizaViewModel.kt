@@ -126,7 +126,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun desfazTroca() = viewModel.exec {
     val notas = subView.itensNotasSelecionados()
-    if(notas.isEmpty()){
+    if (notas.isEmpty()) {
       fail("Nenhuma nota selecionada")
     }
     notas.forEach {
@@ -136,20 +136,33 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun updateProduto(bean: ProdutoNFS) {
+  private fun updateProduto(bean: ProdutoNFS) {
     bean.updateQuantDev()
     subView.updateProdutos()
   }
 
-  fun processaSolicitacao(nota: NotaVenda) {
+  fun processaSolicitacao(nota: NotaVenda, produtos: List<ProdutoNFS>) = viewModel.exec {
+    val produtoDev = produtos.filter { it.dev == true }
+    produtoDev.ifEmpty {
+      fail("Nenhum produto selecionado")
+    }
+
+    nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
+    nota.produtoTrocaEnnum ?: fail("Tipo Produto não informado")
+    nota.setMotivoTroca.ifEmpty {
+      fail("Motivo de troca não informado")
+    }
+
     nota.update()
+    produtoDev.forEach { prd ->
+      prd.updateQuantDev()
+    }
     subView.updateProdutos()
   }
 
   val subView
     get() = viewModel.view.tabDevAutoriza
 }
-
 
 interface ITabDevAutoriza : ITabView {
   fun filtro(): FiltroNotaVenda
