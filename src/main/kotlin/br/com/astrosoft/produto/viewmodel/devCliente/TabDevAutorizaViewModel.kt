@@ -79,6 +79,39 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun autorizaNotaVenda(nota: NotaVenda, login: String, senha: String) = viewModel.exec {
+    nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
+    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    /*
+    if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
+      fail("A solicitação de troca não foi autorizada")
+    }
+    if (nota.autoriza != "S") {
+      fail("Nota não marcada para autorizar")
+    }*/
+
+    val lista = UserSaci.findAll()
+    val user = lista
+      .firstOrNull {
+        it.login.equals(login, ignoreCase = true) &&
+        it.senha.uppercase().trim() == senha.uppercase().trim()
+      }
+    user ?: fail("Usuário ou senha inválidos")
+
+    if (!user.autorizaDev) {
+      fail("Usuário sem permissão para autorizar devolução")
+    }
+
+    val usernoAutal = nota.userTroca ?: 0
+    if (usernoAutal != 0) {
+      fail("Nota já autorizada por outro usuário")
+    }
+
+    nota.userTroca = user.no
+    nota.update()
+    subView.updateProdutos()
+  }
+
   fun solicitacaoNota(
     nota: NotaVenda,
     solicitacao: ESolicitacaoTroca?,
@@ -141,23 +174,36 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     subView.updateProdutos()
   }
 
+  fun validaProcesamento(nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
+    try {
+      val produtoDev = produtos.filter { it.dev == true }
+      produtoDev.ifEmpty {
+        fail("Nenhum produto selecionado")
+      }
+
+      nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
+      nota.produtoTrocaEnnum ?: fail("Tipo Produto não informado")
+      nota.setMotivoTroca.ifEmpty {
+        fail("Motivo de troca não informado")
+      }
+    }catch (e: Exception){
+      val msg = e.message
+      viewModel.view.showWarning(msg ?: "Erro genérico")
+      return false
+    }
+    return true
+  }
+
   fun processaSolicitacao(nota: NotaVenda, produtos: List<ProdutoNFS>) = viewModel.exec {
-    val produtoDev = produtos.filter { it.dev == true }
-    produtoDev.ifEmpty {
-      fail("Nenhum produto selecionado")
-    }
+    if (validaProcesamento(nota, produtos)) {
+      val produtoDev = produtos.filter { it.dev == true }
 
-    nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
-    nota.produtoTrocaEnnum ?: fail("Tipo Produto não informado")
-    nota.setMotivoTroca.ifEmpty {
-      fail("Motivo de troca não informado")
+      nota.update()
+      produtoDev.forEach { prd ->
+        prd.updateQuantDev()
+      }
+      subView.updateProdutos()
     }
-
-    nota.update()
-    produtoDev.forEach { prd ->
-      prd.updateQuantDev()
-    }
-    subView.updateProdutos()
   }
 
   val subView

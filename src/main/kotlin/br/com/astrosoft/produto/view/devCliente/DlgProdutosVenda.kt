@@ -22,9 +22,7 @@ import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.github.mvysny.kaributools.fetchAll
-import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -40,7 +38,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
   private var edtNotaEntRet: IntegerField? = null
-  private var edtMotivo: MultiSelectComboBox<EMotivoTroca>? = null
+  private var edtMotivo: Select<EMotivoTroca>? = null
 
   fun showDialog(onClose: () -> Unit) {
     val readOnly = (nota.userSolicitacao ?: 0) != 0
@@ -77,26 +75,12 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           }
         }
 
-        edtMotivo = multiSelectComboBox("Motivo:") {
+        edtMotivo = select("Motivo:") {
           this.isReadOnly = readOnly
           this.setItems(EMotivoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
-          this.value = nota.setMotivoTroca
-          this.width = "12rem"
-        }
-
-        button("Processar") {
-          this.icon = VaadinIcon.COG.create()
-          this.isEnabled = !readOnly
-
-          this.onClick {
-            nota.solicitacaoTrocaEnnum = edtTipo?.value
-            nota.produtoTrocaEnnum = edtProduto?.value
-            nota.nfEntRet = edtNotaEntRet?.value ?: 0
-            nota.setMotivoTroca = edtMotivo?.value ?: emptySet()
-            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
-            viewModel.processaSolicitacao(nota, produtos)
-          }
+          this.value = nota.setMotivoTroca.firstOrNull()
+          this.width = "10rem"
         }
 
         button("Autoriza") {
@@ -104,9 +88,18 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isEnabled = !readOnly
 
           onClick {
-            val form = FormAutorizaNota()
-            DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
-              viewModel.autorizaNota(nota, form.login, form.senha)
+            nota.solicitacaoTrocaEnnum = edtTipo?.value
+            nota.produtoTrocaEnnum = edtProduto?.value
+            nota.nfEntRet = edtNotaEntRet?.value ?: 0
+            nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
+            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
+            val validacao = viewModel.validaProcesamento(nota, produtos)
+
+            if (validacao) {
+              val form = FormAutorizaNota()
+              DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+                viewModel.autorizaNotaVenda(nota, form.login, form.senha)
+              }
             }
           }
         }
@@ -174,7 +167,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             it.item.dev = !(it.item.dev ?: false)
             if (it.item.dev == true) {
               it.item.temProduto = true
-            }else {
+            } else {
               it.item.temProduto = null
               it.item.quantDev = it.item.quantidade
             }
