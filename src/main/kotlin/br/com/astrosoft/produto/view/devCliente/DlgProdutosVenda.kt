@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.devCliente
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
@@ -101,6 +102,19 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
                 viewModel.autorizaNotaVenda(nota, form.login, form.senha)
               }
             }
+          }
+        }
+
+        button("Desfaz") {
+          val user = AppConfig.userLogin() as? UserSaci
+
+          isVisible = user?.desautorizaDev == true
+
+          this.icon = VaadinIcon.TRASH.create()
+          this.isEnabled = !readOnly
+
+          onClick {
+            viewModel.desatorizaTroca(nota)
           }
         }
       },

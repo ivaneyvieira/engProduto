@@ -9,6 +9,7 @@ DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
 CREATE TEMPORARY TABLE T_VENDA
+  (INDEX(autoriza))
 SELECT N.storeno                                                AS loja,
        N.pdvno                                                  AS pdv,
        N.xano                                                   AS transacao,
@@ -36,7 +37,7 @@ SELECT N.storeno                                                AS loja,
          WHEN N.tipo = 13 THEN 'NF EMPRESA'
          WHEN N.tipo = 14 THEN 'BONIFICA'
          WHEN N.tipo = 15 THEN 'NFE'
-                        ELSE 'TIPO INVALIDO'
+                          ELSE 'TIPO INVALIDO'
        END                                                      AS tipoNf,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
@@ -78,7 +79,7 @@ FROM
     LEFT JOIN  sqldados.nfAutorizacao AS AT
                ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
     LEFT JOIN  sqldados.nf            AS EF
-               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0)  AND EF.nfse = '3'
+               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
     LEFT JOIN  sqldados.users         AS US
@@ -89,7 +90,7 @@ FROM
                ON E.no = N.empno
     LEFT JOIN  sqldados.query1        AS Q
                ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
-WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
+WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
@@ -97,8 +98,36 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND N.status <> 1
 GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
-DROP TEMPORARY TABLE IF EXISTS T_NI;
-CREATE TEMPORARY TABLE T_NI
+DROP TEMPORARY TABLE IF EXISTS T_NI1;
+CREATE TEMPORARY TABLE T_NI1
+(
+  INDEX (nfNfno, nfStoreno, nfNfse)
+)
+SELECT storeno AS loja, invno, date, nfNfno, nfStoreno, nfNfse
+FROM
+  sqldados.inv AS I
+WHERE I.storeno IN (2, 3, 4, 5, 8)
+  AND I.bits & POW(2, 4) = 0
+  AND I.date >= :dataInicial;
+
+DROP TEMPORARY TABLE IF EXISTS T_NI2;
+CREATE TEMPORARY TABLE T_NI2
+(
+  INDEX (s1, s2, l2)
+)
+SELECT storeno AS loja, invno, date, s1, s2, l2
+FROM
+  sqldados.inv AS I
+WHERE I.storeno IN (2, 3, 4, 5, 8)
+  AND I.bits & POW(2, 4) = 0
+  AND I.date >= :dataInicial;
+
+
+DROP TEMPORARY TABLE IF EXISTS T_NI3;
+CREATE TEMPORARY TABLE T_NI3
+(
+  INDEX (loja, invno)
+)
 SELECT storeno AS loja, invno, date, CONCAT('NI *', I.invno) AS obsNI
 FROM
   sqldados.inv AS I
@@ -135,20 +164,18 @@ SELECT U.loja,
        COALESCE(I1.invno, I2.invno, I3.invno)            AS ni,
        CAST(COALESCE(I1.date, I2.date, I3.date) AS date) AS dataNi
 FROM
-  T_VENDA                  AS U
-    LEFT JOIN sqldados.inv AS I1
+  T_VENDA           AS U
+    LEFT JOIN T_NI1 AS I1
               ON U.nfnoE = I1.nfNfno AND U.storenoE = I1.nfStoreno AND
-                 U.nfseE = I1.nfNfse AND I1.bits & POW(2, 4) = 0
-    LEFT JOIN sqldados.inv AS I2
+                 U.nfseE = I1.nfNfse
+    LEFT JOIN T_NI2 AS I2
               ON U.storenoE = I2.s1 AND U.pdvnoE = I2.s2 AND
-                 U.xanoE = I2.l2 AND I2.bits & POW(2, 4) = 0
-    LEFT JOIN T_NI         AS I3
+                 U.xanoE = I2.l2
+    LEFT JOIN T_NI3 AS I3
               ON U.loja = I3.loja AND U.obsNI REGEXP I3.obsNI
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE)
   AND (autoriza = :autoriza OR :autoriza = 'T')
-AND (COALESCE(I1.invno, I2.invno, I3.invno) IS NULL)
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo
-

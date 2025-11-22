@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -205,6 +206,20 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
       subView.updateProdutos()
     }
+  }
+
+  fun desatorizaTroca(nota: NotaVenda) = viewModel.exec {
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if (user?.desautorizaDev == false) {
+      fail("Usuário sem permissão")
+    }
+
+    nota.solicitacaoTrocaEnnum = null
+    nota.produtoTrocaEnnum = null
+    nota.userTroca = 0
+    nota.update()
+    subView.updateProdutos()
   }
 
   val subView

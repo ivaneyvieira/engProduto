@@ -81,6 +81,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         checkBox("Autoriza Dev") {
           binder.bind(this, UserSaci::autorizaDev.name)
         }
+        checkBox("Desautoriza Dev") {
+          binder.bind(this, UserSaci::desautorizaDev.name)
+        }
       }
     }
     verticalBlock("Filtros") {
