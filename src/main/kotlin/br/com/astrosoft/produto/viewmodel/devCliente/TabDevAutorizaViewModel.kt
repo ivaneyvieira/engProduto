@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
 import br.com.astrosoft.produto.model.report.ReportVenda
+import kotlinx.coroutines.runBlocking
 
 class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -16,7 +17,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     return Loja.allLojas()
   }
 
-  fun updateView() {
+  fun updateView() = runBlocking {
     val filtro = subView.filtro()
     val notas = NotaVenda.findAll(filtro)
     subView.updateNotas(notas)
@@ -186,7 +187,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
-    }catch (e: Exception){
+    } catch (e: Exception) {
       val msg = e.message
       viewModel.view.showWarning(msg ?: "Erro genérico")
       return false

@@ -30,12 +30,12 @@ class NotaVenda(
   var loginSolicitacao: String?,
   var motivoTroca: String?,
   var motivoTrocaCod: String?,
-  var nfEntRet : Int?,
+  var nfEntRet: Int?,
   var ni: Int?,
   var dataNi: LocalDate?,
 ) {
   var setMotivoTroca: Set<EMotivoTroca>
-    get() = motivoTrocaCod?.split(";")?.mapNotNull {  EMotivoTroca.find( it.trim()) }?.toSet().orEmpty()
+    get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
     set(value) {
       motivoTrocaCod = value.joinToString(";") { it.codigo }
     }
@@ -77,13 +77,12 @@ class NotaVenda(
 
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
-
       return saci.findNotaVenda(filtro).filter {
         val invno = it.ni ?: 0
-        when(filtro.devolucaoStatus) {
+        when (filtro.devolucaoStatus) {
           EDevolucaoStatus.Pendente -> invno == 0
-          EDevolucaoStatus.Gerada  -> invno != 0
-          EDevolucaoStatus.Todos   -> true
+          EDevolucaoStatus.Gerada   -> invno != 0
+          EDevolucaoStatus.Todos    -> true
         }
       }
     }

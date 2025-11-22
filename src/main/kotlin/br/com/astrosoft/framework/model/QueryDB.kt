@@ -4,11 +4,15 @@ import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.withContext
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection
 import org.sql2o.Query
 import org.sql2o.Sql2o
-import org.sql2o.quirks.NoQuirks
 import java.time.LocalDate
 import kotlin.reflect.KClass
 
@@ -40,6 +44,61 @@ open class QueryDB(database: DatabaseConfig) {
     try {
       Class.forName(driver)
     } catch (e: ClassNotFoundException) { //throw RuntimeException(e)
+    }
+  }
+
+  private suspend fun scriptSQLFlow(con: Connection, stratments: List<String>, lambda: QueryHandler = {}) =
+      withContext(Dispatchers.IO) {
+        try {
+          stratments.forEach { sql ->
+            val query = con.createQueryConfig(sql)
+            query.lambda()
+            query.executeUpdate()
+          }
+        } catch (e: Exception) {
+          failDB(e.message)
+        }
+      }
+
+  protected fun <T : Any> queryFlow(
+    file: String,
+    classes: KClass<T>,
+    lambda: QueryHandler = {}
+  ) = flow {
+    val statements = toStratments(file)
+    if (statements.isEmpty()) return@flow
+    val lastIndex = statements.lastIndex
+    val querySql = statements[lastIndex]
+    val updates = if (statements.size > 1) statements.subList(0, lastIndex) else emptyList()
+    try {
+      val con = sql2o.beginTransaction()
+      scriptSQLFlow(con, updates, lambda)
+
+      val iterator = querySequence(con, querySql, lambda, classes)
+
+      iterator.collect { row ->
+        emit(row)
+      }
+      con.commit()
+      con.close()
+    } catch (e: Exception) {
+      failDB(e.message)
+    }
+  }.flowOn(Dispatchers.IO)
+
+  private fun <T : Any> querySequence(
+    con: Connection,
+    querySql: String,
+    lambda: QueryHandler,
+    classes: KClass<T>
+  ) = flow<T> {
+    val query = con.createQueryConfig(querySql).also { q ->
+      q.lambda()
+    }
+
+    val iterator = query.executeAndFetchLazy(classes.java)
+    iterator.forEach { row ->
+      emit(row)
     }
   }
 
@@ -135,7 +194,6 @@ open class QueryDB(database: DatabaseConfig) {
         query.lambda()
         query.executeUpdate()
         query.paramNameToIdxMap
-        //println(sql)
       }
     } catch (e: Exception) {
       failDB(e.message)

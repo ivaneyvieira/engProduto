@@ -149,5 +149,6 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota L
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE)
   AND (autoriza = :autoriza OR :autoriza = 'T')
+AND (COALESCE(I1.invno, I2.invno, I3.invno) IS NULL)
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo
 
