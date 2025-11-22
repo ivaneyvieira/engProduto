@@ -92,11 +92,11 @@ object ProdutoNFNFSViewColumns {
   }
 
   fun Grid<ProdutoNFS>.produtoNFTemProduto() = columnGrid(ProdutoNFS::temProduto) {
-    this.setHeader("Tem Produto")
+    this.setHeader("Com Produto")
   }
 
   fun Grid<ProdutoNFS>.produtoNFQuantidadeDevolucao() = columnGrid(ProdutoNFS::quantDev) {
-    this.setHeader("Quant Edit")
+    this.setHeader("Qtd Dev")
   }
 
   fun Grid<ProdutoNFS>.produtoNFPrecoUnitario() = columnGrid(ProdutoNFS::preco) {

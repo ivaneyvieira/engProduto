@@ -18,6 +18,11 @@ fun Double?.format(pat: String): String {
   return DecimalFormat(pat).format(this)
 }
 
+fun Int?.format(pat: String): String {
+  this ?: return ""
+  return DecimalFormat(pat).format(this)
+}
+
 fun Int?.format(): String {
   this ?: return ""
   return formatInteger.format(this)

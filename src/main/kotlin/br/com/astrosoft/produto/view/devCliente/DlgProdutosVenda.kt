@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
@@ -22,9 +23,10 @@ import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.p
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -44,15 +46,18 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
   fun showDialog(onClose: () -> Unit) {
     val readOnly = (nota.userSolicitacao ?: 0) != 0
+    val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
+    val linha1 =
+        "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
+    val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente}"
     form = SubWindowForm(
-      "Produtos da expedicao ${nota.nota} loja: ${nota.loja}",
+      title = "$linha1|$linha2",
       toolBar = {
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
           this.setItems(ESolicitacaoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
-          this.value = nota.solicitacaoTrocaEnnum ?: ESolicitacaoTroca.Troca
         }
 
         edtProduto = select("Produto") {
@@ -60,7 +65,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.setItems(EProdutoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
-          this.value = nota.produtoTrocaEnnum ?: EProdutoTroca.Com
 
           addValueChangeListener {
             updateSelectionProdutos(it.value)
@@ -70,7 +74,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         if (nota.tipoNf == "ENTRE FUT") {
           edtNotaEntRet = integerField {
             this.isReadOnly = readOnly
-            this.value = nota.nfEntRet
             this.width = "6rem"
             this.isAutoselect = true
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -81,7 +84,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isReadOnly = readOnly
           this.setItems(EMotivoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
-          this.value = nota.setMotivoTroca.firstOrNull()
           this.width = "10rem"
         }
 
@@ -129,6 +131,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       }
     }
     form?.open()
+  }
+
+  private fun updateNota() {
+    edtTipo?.value = nota.solicitacaoTrocaEnnum
+    edtProduto?.value = nota.produtoTrocaEnnum
+    edtNotaEntRet?.value = nota.nfEntRet
+    edtMotivo?.value = nota.setMotivoTroca.firstOrNull()
   }
 
   private fun updateSelectionProdutos(value: EProdutoTroca?) {
@@ -206,13 +215,15 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFTemProduto()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFCodigo()
-      produtoNFBarcode()
-      produtoAutorizacaoExp()
       produtoNFDescricao()
       produtoNFGrade()
+      produtoNFBarcode()
+      produtoAutorizacaoExp()
       produtoNFLocalizacao()
       produtoNFQuantidade()
-      produtoNFPrecoUnitario()
+      produtoNFPrecoUnitario().apply {
+        this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
+      }
       produtoNFPrecoTotal()
 
       this.setPartNameGenerator {
@@ -239,5 +250,10 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   fun update() {
     val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)
+    updateNota()
+
+    val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
+    val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
+    totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
   }
 }

@@ -187,7 +187,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
 
       nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
-      nota.produtoTrocaEnnum ?: fail("Tipo Produto não informado")
+      nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
@@ -220,7 +220,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
     nota.solicitacaoTrocaEnnum = null
     nota.produtoTrocaEnnum = null
+    nota.nfEntRet = null
     nota.userTroca = 0
+    nota.setMotivoTroca = emptySet()
     nota.update()
     produtos.forEach { prd ->
       prd.dev = false
