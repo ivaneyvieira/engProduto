@@ -22,6 +22,7 @@ import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.p
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -99,7 +100,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             if (validacao) {
               val form = FormAutorizaNota()
               DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
-                viewModel.autorizaNotaVenda(nota, form.login, form.senha)
+                viewModel.autorizaNotaVenda(nota, produtos, form.login, form.senha)
               }
             }
           }
@@ -114,7 +115,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isEnabled = !readOnly
 
           onClick {
-            viewModel.desatorizaTroca(nota)
+            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
+            viewModel.desatorizaTroca(nota, produtos)
           }
         }
       },

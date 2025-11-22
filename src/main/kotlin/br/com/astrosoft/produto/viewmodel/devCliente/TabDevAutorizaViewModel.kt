@@ -81,7 +81,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun autorizaNotaVenda(nota: NotaVenda, login: String, senha: String) = viewModel.exec {
+  fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
     /*
@@ -111,6 +111,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
     nota.userTroca = user.no
     nota.update()
+    produtos.forEach { prd ->
+      prd.updateQuantDev()
+    }
     subView.updateProdutos()
   }
 
@@ -208,7 +211,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
-  fun desatorizaTroca(nota: NotaVenda) = viewModel.exec {
+  fun desatorizaTroca(nota: NotaVenda, produtos: List<ProdutoNFS>) = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
 
     if (user?.desautorizaDev == false) {
@@ -219,6 +222,12 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.produtoTrocaEnnum = null
     nota.userTroca = 0
     nota.update()
+    produtos.forEach { prd ->
+      prd.dev = false
+      prd.temProduto = false
+      prd.quantDev = prd.quantidade
+      prd.updateQuantDev()
+    }
     subView.updateProdutos()
   }
 
