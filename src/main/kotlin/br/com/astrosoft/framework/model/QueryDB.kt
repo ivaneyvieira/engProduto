@@ -159,7 +159,7 @@ open class QueryDB(database: DatabaseConfig) {
     try {
       val query = con.createQueryConfig(sql)
       query.lambda()
-      //println(sql)
+      println(sql)
       return query.executeAndFetch(classes.java)
     } catch (e: Exception) {
       failDB(e.message)
@@ -193,7 +193,7 @@ open class QueryDB(database: DatabaseConfig) {
         val query = con.createQueryConfig(sql)
         query.lambda()
         query.executeUpdate()
-        query.paramNameToIdxMap
+        println(sql)
       }
     } catch (e: Exception) {
       failDB(e.message)
