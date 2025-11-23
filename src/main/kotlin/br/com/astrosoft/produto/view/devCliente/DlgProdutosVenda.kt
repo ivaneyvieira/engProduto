@@ -47,9 +47,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   fun showDialog(onClose: () -> Unit) {
     val readOnly = (nota.userSolicitacao ?: 0) != 0
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
+    val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
+      "NÃO INFORMADO"
+    else
+      nota.nomeCliente
     val linha1 =
         "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
-    val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente}"
+    val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
     form = SubWindowForm(
       title = "$linha1|$linha2",
       toolBar = {
@@ -169,22 +173,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
-
-      /*
-            this.withEditor(
-              classBean = ProdutoNFS::class,
-              isBuffered = false,
-              openEditor = {
-                this.focusEditor(ProdutoNFS::quantDev)
-              },
-              closeEditor = {
-                viewModel.updateProduto(it.bean)
-              },
-              saveEditor = {
-                viewModel.updateProduto(it.bean)
-              }
-            )
-      */
 
       this.addItemClickListener {
         when {
