@@ -82,10 +82,10 @@ class NotaVenda(
         val invno = it.ni ?: 0
         val pendente = it.pendente ?: "S"
         when (filtro.devolucaoStatus) {
-          EDevolucaoStatus.Pendente -> invno == 0
-          EDevolucaoStatus.Gerada   -> invno != 0 && pendente == "N"
+          EDevolucaoStatus.Pendente      -> invno == 0
+          EDevolucaoStatus.Gerada        -> invno != 0 && pendente == "N"
           EDevolucaoStatus.GeradaParcial -> invno != 0 && pendente == "S"
-          EDevolucaoStatus.Todos    -> true
+          EDevolucaoStatus.Todos         -> true
         }
       }
     }
@@ -133,7 +133,7 @@ enum class EMotivoTroca(val codigo: String, val descricao: String) {
 
 enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
   Pendente("P", "Pendente"),
-  Gerada("G", "Gerada"),
-  GeradaParcial("GP", "Gerada Parcial"),
+  GeradaParcial("GP", "Parcial"),
+  Gerada("G", "Total"),
   Todos("T", "Todos");
 }

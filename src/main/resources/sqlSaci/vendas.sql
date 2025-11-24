@@ -241,9 +241,9 @@ SELECT U.loja,
        motivoTroca,
        motivoTrocaCod,
        nfEntRet,
-       I.invno                               AS ni,
-       CAST(I.date AS DATE)                  AS dataNi,
-       IF(P.transacao IS NOT NULL, 'S', 'N') AS pendente
+       I.invno                           AS ni,
+       CAST(I.date AS DATE)              AS dataNi,
+       IF(P.transacao IS NULL, 'S', 'N') AS pendente
 FROM
   T_VENDA                      AS U
     LEFT JOIN T_VENDA_PENDENTE AS P
