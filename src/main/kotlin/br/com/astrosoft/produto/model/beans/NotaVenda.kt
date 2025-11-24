@@ -26,6 +26,7 @@ class NotaVenda(
   var produtoTroca: String?,
   var userTroca: Int?,
   var loginTroca: String?,
+  var nameTroca: String?,
   var userSolicitacao: Int?,
   var loginSolicitacao: String?,
   var motivoTroca: String?,
@@ -67,6 +68,21 @@ class NotaVenda(
 
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
+  }
+
+  fun notaDev(): EntradaDevCli? {
+    val filtro = FiltroEntradaDevCli(
+      loja = 0,
+      query = ni.toString(),
+      dataI = dataNi,
+      dataF = dataNi,
+      dataLimiteInicial = null,
+      impresso = null,
+      tipo = ETipoDevCli.TODOS,
+    )
+    return EntradaDevCli.findAll(filtro).firstOrNull{
+      it.invno == ni
+    }
   }
 
   val numeroInterno: Int?
