@@ -51,7 +51,7 @@ interface IView {
     showPrinter: Boolean = true,
     printerUser: List<String> = emptyList(),
     rota: Rota? = null,
-    loja: Int,
+    loja: Int = 0,
     showPrintBunton: Boolean = true,
     actionSave: ((SubWindowPrinter) -> Unit)? = null,
     printEvent: (impressora: String) -> Unit

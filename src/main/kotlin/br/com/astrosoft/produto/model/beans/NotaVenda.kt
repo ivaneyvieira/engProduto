@@ -70,19 +70,23 @@ class NotaVenda(
     return saci.findProdutoNF(this)
   }
 
-  fun notaDev(): EntradaDevCli? {
-    val filtro = FiltroEntradaDevCli(
-      loja = 0,
-      query = ni.toString(),
-      dataI = dataNi,
-      dataF = dataNi,
-      dataLimiteInicial = null,
-      impresso = null,
-      tipo = ETipoDevCli.TODOS,
-    )
-    return EntradaDevCli.findAll(filtro).firstOrNull{
-      it.invno == ni
-    }
+  fun notaDev(): List<EntradaDevCli> {
+    return produtos().mapNotNull { produto ->
+      produto.ni ?: return@mapNotNull null
+      val filtro = FiltroEntradaDevCli(
+        loja = 0,
+        query = produto.ni.toString(),
+        dataI = produto.dataNi,
+        dataF = produto.dataNi,
+        dataLimiteInicial = null,
+        impresso = null,
+        tipo = ETipoDevCli.TODOS,
+      )
+
+      EntradaDevCli.findAll(filtro).firstOrNull {
+        it.invno == produto.ni
+      }
+    }.distinctBy { it.invno }
   }
 
   val numeroInterno: Int?
