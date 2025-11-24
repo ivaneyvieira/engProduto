@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class ProdutoNFS(
   var loja: Int,
@@ -45,6 +46,8 @@ class ProdutoNFS(
   var estoque: Int?,
   var temProduto: Boolean?,
   var quantDev: Int?,
+  var ni: Int?,
+  var dataNi: LocalDate?
 ) {
 
   override fun toString(): String {

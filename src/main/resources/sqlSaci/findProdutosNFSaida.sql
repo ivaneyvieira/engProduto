@@ -16,7 +16,6 @@ WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR 
   AND (A.grade = :grade OR :grade = '')
 GROUP BY A.prdno, A.grade;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
@@ -33,7 +32,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
-  PRIMARY KEY (codigo, grade)
+  PRIMARY KEY (prdno, grade)
 )
 SELECT X.storeno                                                     AS loja,
        X.pdvno                                                       AS pdvno,
@@ -77,7 +76,8 @@ SELECT X.storeno                                                     AS loja,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque,
        IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev,
        IFNULL(temProduto, FALSE)                                     AS temProduto,
-       IFNULL(dev, FALSE)                                            AS dev
+       IFNULL(dev, FALSE)                                            AS dev,
+       X.date                                                        AS dataNota
 FROM
   sqldados.prd                          AS P
     INNER JOIN sqldados.xaprd2          AS X
@@ -112,16 +112,136 @@ WHERE X.storeno = :storeno
   AND (IFNULL(M.marca, 0) = :marca OR :marca = 999)
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-GROUP BY codigo, grade;
+GROUP BY prdno, grade;
 
-SELECT loja,
+/************************************************************************/
+DROP TEMPORARY TABLE IF EXISTS T_VENDA;
+CREATE TEMPORARY TABLE T_VENDA
+(
+  INDEX v1 (storenoE, pdvnoE, xanoE),
+  INDEX v2 (storenoE, nfnoE, nfseE),
+  INDEX v3 (loja, obsNI)
+)
+SELECT N.storeno                     AS loja,
+       N.pdvno                       AS pdv,
+       N.xano                        AS transacao,
+       CAST(MID(CASE
+                  WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
+                  WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
+                                                           ELSE ''
+                END, 1, 60) AS CHAR) AS obsNI,
+       IFNULL(EF.storeno, N.storeno) AS storenoE,
+       IFNULL(EF.nfno, N.nfno)       AS nfnoE,
+       IFNULL(EF.nfse, N.nfse)       AS nfseE,
+       IFNULL(EF.pdvno, N.pdvno)     AS pdvnoE,
+       IFNULL(EF.xano, N.xano)       AS xanoE
+FROM
+  sqldados.nf                         AS N
+    INNER JOIN T_DADOS                AS D
+               ON N.storeno = D.loja
+                 AND N.pdvno = D.pdvno
+                 AND N.xano = D.xano
+    LEFT JOIN  sqldados.nfAutorizacao AS AT
+               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
+    LEFT JOIN  sqldados.nf            AS EF
+               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
+GROUP BY loja, pdv, transacao;
+
+DROP TEMPORARY TABLE IF EXISTS T_INV;
+CREATE TEMPORARY TABLE T_INV
+(
+  PRIMARY KEY (invno),
+  INDEX v1 (nfStoreno, nfNfno, nfNfse),
+  INDEX v2 (s1, s2, l2),
+  INDEX v3 (storeno, obsReg)
+)
+SELECT invno,
+       storeno,
+       date,
+       nfNfno,
+       nfStoreno,
+       nfNfse,
+       s1,
+       s2,
+       l2,
+       CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
+FROM
+  sqldados.inv AS I
+WHERE I.storeno IN (2, 3, 4, 5, 8)
+  AND I.bits & POW(2, 4) = 0
+  AND I.date >= ( SELECT MIN(dataNota) FROM T_DADOS );
+
+DROP TEMPORARY TABLE IF EXISTS T_NI1;
+CREATE TEMPORARY TABLE T_NI1
+SELECT loja, pdv, transacao, invno, date
+FROM
+  T_VENDA            AS U USE INDEX (v2)
+    INNER JOIN T_INV AS I
+               ON U.storenoE = I.nfStoreno AND
+                  U.nfnoE = I.nfNfno AND
+                  U.nfseE = I.nfNfse;
+
+DROP TEMPORARY TABLE IF EXISTS T_NI2;
+CREATE TEMPORARY TABLE T_NI2
+SELECT loja, pdv, transacao, invno, date
+FROM
+  T_INV                AS I
+    INNER JOIN T_VENDA AS U
+               ON U.storenoE = I.s1 AND
+                  U.pdvnoE = I.s2 AND
+                  U.xanoE = I.l2;
+
+DROP TEMPORARY TABLE IF EXISTS T_NI3;
+CREATE TEMPORARY TABLE T_NI3
+SELECT loja, pdv, transacao, invno, I.date, U.obsNI
+FROM
+  T_INV                AS I
+    INNER JOIN T_VENDA AS U
+               ON U.loja = I.storeno AND
+                  U.obsNI LIKE 'NI%' AND
+                  U.obsNI LIKE CONCAT('%', I.invno, '%');
+
+DROP TEMPORARY TABLE IF EXISTS T_NI;
+CREATE TEMPORARY TABLE T_NI
+(
+  INDEX (loja, pdv, transacao)
+)
+SELECT loja, pdv, transacao, invno, date
+FROM
+  T_NI1
+UNION
+DISTINCT
+SELECT loja, pdv, transacao, invno, date
+FROM
+  T_NI2
+UNION
+DISTINCT
+SELECT loja, pdv, transacao, invno, date
+FROM
+  T_NI3;
+
+DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
+CREATE TEMPORARY TABLE T_NI_PRD
+(
+  INDEX (loja, pdv, transacao, prdno, grade)
+)
+SELECT loja, pdv, transacao, prdno, grade, T_NI.invno, T_NI.date
+FROM
+  sqldados.iprd
+    INNER JOIN T_NI
+               USING (invno)
+GROUP BY loja, pdv, transacao, prdno, grade;
+
+/************************************************************************/
+
+SELECT D.loja,
        pdvno,
        xano,
        nota,
-       prdno,
+       D.prdno,
        dev,
        codigo,
-       grade,
+       D.grade,
        local,
        barcodeProd,
        barcodeStrList,
@@ -153,7 +273,12 @@ SELECT loja,
        tipoNota,
        estoque,
        temProduto,
-       quantDev
+       quantDev,
+       X.invno              AS ni,
+       CAST(X.date AS date) AS dataNi
 FROM
-  T_DADOS
+  T_DADOS              AS D
+    LEFT JOIN T_NI_PRD AS X
+              ON X.loja = D.loja AND X.pdv = D.pdvno AND X.transacao = D.xano AND X.prdno = D.prdno AND
+                 X.grade = D.grade
 WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')

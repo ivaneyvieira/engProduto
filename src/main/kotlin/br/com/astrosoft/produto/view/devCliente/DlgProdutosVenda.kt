@@ -14,6 +14,8 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDev
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFNI
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFNIData
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
@@ -53,7 +55,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       nota.nomeCliente
     val linha1 =
         "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
-    val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+    val linha2 =
+        "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
     form = SubWindowForm(
       title = "$linha1|$linha2",
       toolBar = {
@@ -202,6 +205,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFDev()
       produtoNFTemProduto()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
+      produtoNFNI()
+      produtoNFNIData()
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
@@ -229,6 +234,14 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
     update()
     updateSelectionProdutos(edtProduto?.value)
+
+    gridDetail.setPartNameGenerator {
+      if (it.dev == true) {
+        "amarelo"
+      } else {
+        null
+      }
+    }
   }
 
   fun itensSelecionados(): List<ProdutoNFS> {

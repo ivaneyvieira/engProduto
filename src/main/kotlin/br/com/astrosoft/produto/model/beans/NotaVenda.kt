@@ -65,7 +65,9 @@ class NotaVenda(
     saci.updateNotaVenda(this)
   }
 
-  fun produtos() = saci.findProdutoNF(this)
+  fun produtos(): List<ProdutoNFS> {
+    return saci.findProdutoNF(this)
+  }
 
   val numeroInterno: Int?
     get() {

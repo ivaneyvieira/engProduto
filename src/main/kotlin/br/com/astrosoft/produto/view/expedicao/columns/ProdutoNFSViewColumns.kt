@@ -14,6 +14,14 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Código")
   }
 
+  fun Grid<ProdutoNFS>.produtoNFNI() = columnGrid(ProdutoNFS::ni) {
+    this.setHeader("NI")
+  }
+
+  fun Grid<ProdutoNFS>.produtoNFNIData() = columnGrid(ProdutoNFS::dataNi) {
+    this.setHeader("Data NI")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFGrade() = columnGrid(ProdutoNFS::grade) {
     this.setHeader("Grade")
   }
