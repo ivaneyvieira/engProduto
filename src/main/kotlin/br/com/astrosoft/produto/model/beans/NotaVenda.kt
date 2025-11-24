@@ -70,7 +70,6 @@ class NotaVenda(
     return saci.findProdutoNF(this)
   }
 
-
   fun notaDev(): List<EntradaDevCli> {
     return produtos().mapNotNull { produto ->
       produto.ni ?: return@mapNotNull null
@@ -101,16 +100,7 @@ class NotaVenda(
 
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
-      return saci.findNotaVenda(filtro).filter {
-        val invno = it.ni ?: 0
-        val pendente = it.pendente ?: "S"
-        when (filtro.devolucaoStatus) {
-          EDevolucaoStatus.Pendente      -> invno == 0
-          EDevolucaoStatus.Gerada        -> invno != 0 && pendente == "N"
-          EDevolucaoStatus.GeradaParcial -> invno != 0 && pendente == "S"
-          EDevolucaoStatus.Todos         -> true
-        }
-      }
+      return saci.findNotaVenda(filtro)
     }
   }
 }
@@ -155,6 +145,7 @@ enum class EMotivoTroca(val codigo: String, val descricao: String) {
 }
 
 enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
+  Vendas("V", "Vendas"),
   Pendente("P", "Pendente"),
   GeradaParcial("GP", "Parcial"),
   Gerada("G", "Total"),

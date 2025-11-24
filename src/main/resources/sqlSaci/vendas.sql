@@ -101,7 +101,7 @@ WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-  AND (autoriza = :autoriza OR :autoriza = 'T')
+  AND (autoriza = :autoriza OR :autoriza = 'T' OR :devolucaoStatus = 'V')
 GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
@@ -256,4 +256,12 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota L
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE)
+  AND CASE
+        WHEN :devolucaoStatus = 'V'  THEN TRUE
+        WHEN :devolucaoStatus = 'P'  THEN I.invno IS NULL
+        WHEN :devolucaoStatus = 'GP' THEN I.invno IS NOT NULL AND P.transacao IS NOT NULL
+        WHEN :devolucaoStatus = 'G'  THEN I.invno IS NOT NULL AND P.transacao IS NULL
+        WHEN :devolucaoStatus = 'T'  THEN TRUE
+      END
+
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno

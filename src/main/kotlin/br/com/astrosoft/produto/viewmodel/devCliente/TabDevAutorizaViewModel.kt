@@ -237,7 +237,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: NotaVenda) = viewModel.exec {
-    val notaDev = nota.notaDev()
+    val notaDev = nota.notaDev().ifEmpty {
+      fail("Não foi encontrado nenhuma nota de devolução")
+    }
     imprimeValeTroca(notaDev)
   }
 
