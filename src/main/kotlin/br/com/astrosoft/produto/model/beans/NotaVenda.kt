@@ -70,6 +70,7 @@ class NotaVenda(
     return saci.findProdutoNF(this)
   }
 
+
   fun notaDev(): List<EntradaDevCli> {
     return produtos().mapNotNull { produto ->
       produto.ni ?: return@mapNotNull null
