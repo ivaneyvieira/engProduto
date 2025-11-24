@@ -137,15 +137,13 @@ SELECT N.storeno                     AS loja,
        IFNULL(EF.xano, N.xano)       AS xanoE
 FROM
   sqldados.nf                         AS N
-    INNER JOIN T_DADOS                AS D
-               ON N.storeno = D.loja
-                 AND N.pdvno = D.pdvno
-                 AND N.xano = D.xano
     LEFT JOIN  sqldados.nfAutorizacao AS AT
                ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
     LEFT JOIN  sqldados.nf            AS EF
                ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
-GROUP BY loja, pdv, transacao;
+WHERE N.storeno = :storeno
+  AND N.pdvno = :pdvno
+  AND N.xano = :xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
