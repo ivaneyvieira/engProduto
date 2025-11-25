@@ -195,6 +195,10 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
           EProdutoTroca.Com -> if (!user.autorizaTrocaP) {
             fail("O usuário não tem permissão para autorizar troca com produto")
           }
+
+          EProdutoTroca.Misto -> {
+
+          }
         }
 
         solicitacao == ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
