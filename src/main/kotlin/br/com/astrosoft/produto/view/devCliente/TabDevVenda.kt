@@ -90,12 +90,13 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
+    /*
     button("Autoriza") {
       icon = VaadinIcon.KEY.create()
       onClick {
         viewModel.autorizaTroca()
       }
-    }
+    }*/
   }
 
   override fun Grid<NotaVenda>.gridPanel() {
