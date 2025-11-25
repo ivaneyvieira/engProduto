@@ -74,11 +74,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       fail("Usuário sem permissão para autorizar devolução")
     }
 
-    val usernoAutal = nota.userTroca ?: 0
-    if (usernoAutal != 0) {
-      fail("Nota já autorizada por outro usuário")
-    }
-
     nota.userTroca = user.no
     nota.update()
     updateView()
@@ -87,13 +82,8 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
-    /*
-    if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
-      fail("A solicitação de troca não foi autorizada")
-    }
-    if (nota.autoriza != "S") {
-      fail("Nota não marcada para autorizar")
-    }*/
+
+    nota.autoriza = "S"
 
     val lista = UserSaci.findAll()
     val user = lista
@@ -107,10 +97,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       fail("Usuário sem permissão para autorizar devolução")
     }
 
-    val usernoAutal = nota.userTroca ?: 0
-    if (usernoAutal != 0) {
-      fail("Nota já autorizada por outro usuário")
-    }
 
     nota.userTroca = user.no
     nota.update()
