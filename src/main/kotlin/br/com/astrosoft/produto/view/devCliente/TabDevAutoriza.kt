@@ -64,7 +64,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       this.width = "8rem"
       this.setItemLabelGenerator { item -> item.descricao }
       this.setItems(EDevolucaoStatus.entries)
-      this.value = EDevolucaoStatus.Pendente
+      this.value = EDevolucaoStatus.Vendas
       addValueChangeListener {
         viewModel.updateView()
       }
