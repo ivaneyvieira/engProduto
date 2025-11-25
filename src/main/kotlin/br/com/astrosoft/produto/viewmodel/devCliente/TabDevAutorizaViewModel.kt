@@ -170,16 +170,46 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun validaProcesamento(nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
+      val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não logado")
       val produtoDev = produtos.filter { it.dev == true }
       produtoDev.ifEmpty {
         fail("Nenhum produto selecionado")
       }
 
-      nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
-      nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
+      val solicitacao = nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
+      val produto = nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
+
+      when (solicitacao) {
+        ESolicitacaoTroca.Troca       -> when (produto) {
+          EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+            fail("O usuário não tem permissão para autorizar troca sem produto")
+          }
+
+          EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+            fail("O usuário não tem permissão para autorizar troca com produto")
+          }
+
+          EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
+            fail("O usuário não tem permissão para autorizar troca mista")
+          }
+        }
+
+        ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+          fail("O usuário não tem permissão para estorno")
+        }
+
+        ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+          fail("O usuário não tem permissão para reembolso")
+        }
+
+        ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+          fail("O usuário não tem permissão para muda de cliente")
+        }
+      }
+
     } catch (e: Exception) {
       val msg = e.message
       viewModel.view.showWarning(msg ?: "Erro genérico")
