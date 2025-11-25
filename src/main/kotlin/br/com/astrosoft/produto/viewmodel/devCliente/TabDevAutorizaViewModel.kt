@@ -182,34 +182,33 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         fail("Motivo de troca não informado")
       }
 
-      when (solicitacao) {
-        ESolicitacaoTroca.Troca       -> when (produto) {
-          EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+      when {
+        produto == EProdutoTroca.Misto               -> if (!user.autorizaMista) {
+          fail("O usuário não tem permissão para autorizar troca mista")
+        }
+
+        solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
+          EProdutoTroca.Sem -> if (!user.autorizaTroca) {
             fail("O usuário não tem permissão para autorizar troca sem produto")
           }
 
-          EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+          EProdutoTroca.Com -> if (!user.autorizaTrocaP) {
             fail("O usuário não tem permissão para autorizar troca com produto")
-          }
-
-          EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
-            fail("O usuário não tem permissão para autorizar troca mista")
           }
         }
 
-        ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+        solicitacao == ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
           fail("O usuário não tem permissão para estorno")
         }
 
-        ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+        solicitacao == ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
           fail("O usuário não tem permissão para reembolso")
         }
 
-        ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+        solicitacao == ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
           fail("O usuário não tem permissão para muda de cliente")
         }
       }
-
     } catch (e: Exception) {
       val msg = e.message
       viewModel.view.showWarning(msg ?: "Erro genérico")
