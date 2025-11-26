@@ -71,7 +71,8 @@ class NotaVenda(
   }
 
   fun notaDev(): List<EntradaDevCli> {
-    return produtos().mapNotNull { produto ->
+    val produtos = produtos()
+    val produtosMap = produtos.mapNotNull { produto ->
       produto.ni ?: return@mapNotNull null
       val filtro = FiltroEntradaDevCli(
         loja = 0,
@@ -87,6 +88,7 @@ class NotaVenda(
         it.invno == produto.ni
       }
     }.distinctBy { it.invno }
+    return produtosMap
   }
 
   val numeroInterno: Int?
