@@ -12,6 +12,7 @@ class ProdutoNFS(
   var nota: String?,
   var prdno: String?,
   var dev: Boolean?,
+  var devDB: Boolean?,
   var codigo: String?,
   var grade: String?,
   var barcodeProd: String?,

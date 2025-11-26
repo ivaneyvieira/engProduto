@@ -171,8 +171,10 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   fun validaProcesamento(nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
       val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não logado")
-      val produtoDev = produtos.filter { it.dev == true }
-      produtoDev.ifEmpty {
+      val produtosDev = produtos
+        .filter { it.devDB == false }
+        .filter { it.dev == true }
+      produtosDev.ifEmpty {
         fail("Nenhum produto selecionado")
       }
 
@@ -182,17 +184,30 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         fail("Motivo de troca não informado")
       }
 
+      val produtosDevComProduto = produtosDev.filter { it.temProduto == true }
+      val produtosDevSemProduto = produtosDev.filter { it.temProduto == false }
+
+      val tipoResultante = when {
+        produtosDevComProduto.isNotEmpty() && produtosDevSemProduto.isEmpty() -> EProdutoTroca.Com
+        produtosDevComProduto.isEmpty() && produtosDevSemProduto.isNotEmpty() -> EProdutoTroca.Sem
+        else                                                                  -> EProdutoTroca.Misto
+      }
+
+      if (tipoResultante != produto) {
+        fail("Tipo de devolução de produto inválida")
+      }
+
       when {
         produto == EProdutoTroca.Misto               -> if (!user.autorizaMista) {
           fail("O usuário não tem permissão para autorizar troca mista")
         }
 
         solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
-          EProdutoTroca.Sem -> if (!user.autorizaTroca) {
+          EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
             fail("O usuário não tem permissão para autorizar troca sem produto")
           }
 
-          EProdutoTroca.Com -> if (!user.autorizaTrocaP) {
+          EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
             fail("O usuário não tem permissão para autorizar troca com produto")
           }
 

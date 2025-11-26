@@ -136,11 +136,11 @@ SELECT N.storeno                     AS loja,
        IFNULL(EF.pdvno, N.pdvno)     AS pdvnoE,
        IFNULL(EF.xano, N.xano)       AS xanoE
 FROM
-  sqldados.nf                         AS N
-    LEFT JOIN  sqldados.nfAutorizacao AS AT
-               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
-    LEFT JOIN  sqldados.nf            AS EF
-               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
+  sqldados.nf                        AS N
+    LEFT JOIN sqldados.nfAutorizacao AS AT
+              ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
+    LEFT JOIN sqldados.nf            AS EF
+              ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
 WHERE N.storeno = :storeno
   AND N.pdvno = :pdvno
   AND N.xano = :xano;
@@ -238,6 +238,7 @@ SELECT D.loja,
        nota,
        D.prdno,
        dev,
+       dev                  AS devDB,
        codigo,
        D.grade,
        local,
