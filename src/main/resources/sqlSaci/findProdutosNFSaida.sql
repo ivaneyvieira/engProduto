@@ -75,7 +75,7 @@ SELECT X.storeno                                                     AS loja,
        N.tipo                                                        AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque,
        IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev,
-       IFNULL(temProduto, FALSE)                                     AS temProduto,
+       IFNULL(D.temProduto, FALSE)                                   AS temProduto,
        IFNULL(dev, FALSE)                                            AS dev,
        X.date                                                        AS dataNota
 FROM

@@ -55,10 +55,13 @@ data class EntradaDevCliProList(
     get() = codigo?.padStart(6, '0') ?: ""
 
   companion object {
-    fun findAll(filtro: FiltroEntradaDevCliProList): List<EntradaDevCliProList> =
-        saci.entradaDevCliProList(filtro).explodeMisto()
+    fun findAll(filtro: FiltroEntradaDevCliProList): List<EntradaDevCliProList> {
+      return saci.entradaDevCliProList(filtro).explodeMisto()
+    }
 
-    fun findAll(listNi: List<Int>): List<EntradaDevCliProList> = saci.entradaDevCliProList(listNi).explodeMisto()
+    fun findAll(listNi: List<Int>): List<EntradaDevCliProList> {
+      return saci.entradaDevCliProList(listNi).explodeMisto()
+    }
   }
 }
 
@@ -77,7 +80,7 @@ fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
     if (!(bean.tipoPrd ?: "").endsWith(" P")) {
       return@flatMap listOf(
         bean.copy(
-          tipoPrd = bean.tipoNotaPre(),
+          //tipoPrd = bean.tipoNotaPre(),
           tipoQtd = 0,
           tipoQtdEfetiva = (bean.quantidade ?: 0)
         )
@@ -90,7 +93,7 @@ fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
       null
     } else {
       bean.copy(
-        tipoPrd = "${bean.tipoNotaPre()} P",
+        //tipoPrd = "${bean.tipoNotaPre()} P",
         tipoQtd = quantComProduto,
         tipoQtdEfetiva = quantComProduto
       )
@@ -99,7 +102,7 @@ fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
       null
     } else {
       bean.copy(
-        tipoPrd = bean.tipoNotaPre(),
+        //tipoPrd = bean.tipoNotaPre(),
         tipoQtd = quantSemProduto,
         tipoQtdEfetiva = quantSemProduto
       )
