@@ -196,11 +196,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         fail("Tipo de devolução de produto inválida")
       }
 
-      when {
-        produto == EProdutoTroca.Misto               -> if (!user.autorizaMista) {
-          fail("O usuário não tem permissão para autorizar troca mista")
-        }
+      if (produto == EProdutoTroca.Misto && !user.autorizaMista) {
+        fail("O usuário não tem permissão para autorizar devolução mista")
+      }
 
+      when {
         solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
           EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
             fail("O usuário não tem permissão para autorizar troca sem produto")
@@ -210,8 +210,8 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
             fail("O usuário não tem permissão para autorizar troca com produto")
           }
 
-          EProdutoTroca.Misto -> {
-
+          EProdutoTroca.Misto -> if(!user.autorizaTroca || !user.autorizaTrocaP) {
+            fail("O usuário não tem permissão para autorizar troca mista")
           }
         }
 
@@ -275,7 +275,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       fail("Não foi encontrado nenhuma nota de devolução")
     }
     val produtosAutoriza = nota.produtos().filter { it.dev == true }
-    if(produtosAutoriza.isEmpty()){
+    if (produtosAutoriza.isEmpty()) {
       fail("Não foi encontrado nenhum produto marcado para devolução")
     }
     imprimeValeTroca(notaDev, produtosAutoriza)
@@ -285,7 +285,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     val dummyPrinter = DummyPrinter()
     notas.forEach { nota ->
       val relatorio = ValeTrocaAutoriza(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
-      val produtosNota = produtosAutoriza.filter {prd ->
+      val produtosNota = produtosAutoriza.filter { prd ->
         prd.dev == true && prd.ni == nota.invno
       }
       relatorio.print(produtosNota, dummyPrinter)
