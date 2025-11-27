@@ -274,10 +274,20 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     if (notaDev.isEmpty()) {
       fail("Não foi encontrado nenhuma nota de devolução")
     }
+
     val produtosAutoriza = nota.produtos().filter { it.dev == true }
     if (produtosAutoriza.isEmpty()) {
       fail("Não foi encontrado nenhum produto marcado para devolução")
     }
+
+    val motivoAuto = nota.motivo()?.uppercase() ?: ""
+    notaDev.forEach { ndev ->
+      val motivoDev = ndev.tipoObs.uppercase()
+      if (motivoDev != motivoAuto) {
+        fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
+      }
+    }
+
     imprimeValeTroca(notaDev, produtosAutoriza)
   }
 
@@ -288,19 +298,21 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       val produtosNota = produtosAutoriza.filter { prd ->
         prd.dev == true && prd.ni == nota.invno
       }
+
       val produtosDev = nota.produtos()
+
       produtosDev.forEach { prdDev ->
         val prdAuto = produtosNota.filter { prd ->
           prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
         }
 
-        if(prdAuto.isEmpty()){
+        if (prdAuto.isEmpty()) {
           fail("Produto devolvido diferente do autorizado")
         }
 
         val qtDev = prdDev.tipoQtdEfetiva ?: 0
         val qtAuto = prdAuto.sumOf { it.quantDev ?: 0 }
-        if(qtDev != qtAuto){
+        if (qtDev != qtAuto) {
           fail("Quantidade devolvida diferente da autorizada")
         }
       }

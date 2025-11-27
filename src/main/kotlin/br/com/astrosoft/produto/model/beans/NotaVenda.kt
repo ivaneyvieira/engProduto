@@ -95,6 +95,25 @@ class NotaVenda(
     return produtosMap
   }
 
+  fun motivo(): String? {
+    val produtoTroca = when (produtoTrocaEnnum) {
+      EProdutoTroca.Com   -> "P"
+      EProdutoTroca.Sem   -> ""
+      EProdutoTroca.Misto -> "M"
+      null                -> return null
+    }
+
+    val solicitacaoTroca = when (solicitacaoTrocaEnnum) {
+      ESolicitacaoTroca.Troca       -> "Troca"
+      ESolicitacaoTroca.Estorno     -> "Estorno"
+      ESolicitacaoTroca.Reembolso   -> "Reembolso"
+      ESolicitacaoTroca.MudaCliente -> "Muda"
+      null                          -> return null
+    }
+
+    return "$solicitacaoTroca $produtoTroca".trim()
+  }
+
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
