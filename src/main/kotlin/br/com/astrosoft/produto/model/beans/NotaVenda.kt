@@ -67,7 +67,11 @@ class NotaVenda(
   }
 
   fun produtos(): List<ProdutoNFS> {
-    return saci.findProdutoNF(this)
+    val motivo = solicitacaoTrocaEnnum?.descricao
+    return saci.findProdutoNF(this).map {
+      it.motivo = motivo
+      it
+    }
   }
 
   fun notaDev(): List<EntradaDevCli> {

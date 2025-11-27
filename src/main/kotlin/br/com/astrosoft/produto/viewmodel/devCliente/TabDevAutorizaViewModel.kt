@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
-import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
+import br.com.astrosoft.produto.model.printText.ValeTrocaAutoriza
 import br.com.astrosoft.produto.model.report.ReportVenda
 import kotlinx.coroutines.runBlocking
 
@@ -274,14 +274,21 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     if (notaDev.isEmpty()) {
       fail("Não foi encontrado nenhuma nota de devolução")
     }
-    imprimeValeTroca(notaDev)
+    val produtosAutoriza = nota.produtos().filter { it.dev == true }
+    if(produtosAutoriza.isEmpty()){
+      fail("Não foi encontrado nenhum produto marcado para devolução")
+    }
+    imprimeValeTroca(notaDev, produtosAutoriza)
   }
 
-  private fun imprimeValeTroca(notas: List<EntradaDevCli>) = viewModel.exec {
+  private fun imprimeValeTroca(notas: List<EntradaDevCli>, produtosAutoriza: List<ProdutoNFS>) = viewModel.exec {
     val dummyPrinter = DummyPrinter()
     notas.forEach { nota ->
-      val relatorio = ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
-      relatorio.print(nota.produtos(), dummyPrinter)
+      val relatorio = ValeTrocaAutoriza(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
+      val produtosNota = produtosAutoriza.filter {prd ->
+        prd.dev == true && prd.ni == nota.invno
+      }
+      relatorio.print(produtosNota, dummyPrinter)
     }
 
     val text = dummyPrinter.textBuffer()

@@ -50,6 +50,7 @@ class ProdutoNFS(
   var ni: Int?,
   var dataNi: LocalDate?
 ) {
+  var motivo: String? = null
 
   override fun toString(): String {
     return "ProdutoNFS(loja=$loja, pdvno=$pdvno, xano=$xano, nota=$nota, codigo=$codigo, grade=$grade, barcodeProd=$barcodeProd, barcodeStrList=$barcodeStrList, descricao=$descricao, vendno=$vendno, fornecedor=$fornecedor, typeno=$typeno, typeName=$typeName, clno=$clno, clname=$clname, altura=$altura, comprimento=$comprimento, largura=$largura, precoCheio=$precoCheio, ncm=$ncm, local=$local, quantidade=$quantidade, preco=$preco, total=$total, gradeAlternativa=$gradeAlternativa, marca=$marca, marcaImpressao=$marcaImpressao, usernoExp=$usernoExp, usuarioExp=$usuarioExp, dataHoraExp=$dataHoraExp, usernoCD=$usernoCD, usuarioCD=$usuarioCD, dataHoraCD=$dataHoraCD, usuarioSep='$usuarioSep', tipoNota=$tipoNota)"
@@ -150,5 +151,11 @@ class ProdutoNFS(
     result = 31 * result + (prdno?.hashCode() ?: 0)
     result = 31 * result + (grade?.hashCode() ?: 0)
     return result
+  }
+
+  fun tipoPrd(): String? {
+    motivo ?: return ""
+    return if(temProduto == true) "$motivo P"
+    else motivo
   }
 }
