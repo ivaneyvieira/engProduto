@@ -210,7 +210,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
             fail("O usuário não tem permissão para autorizar troca com produto")
           }
 
-          EProdutoTroca.Misto -> if(!user.autorizaTroca || !user.autorizaTrocaP) {
+          EProdutoTroca.Misto -> if (!user.autorizaTroca || !user.autorizaTrocaP) {
             fail("O usuário não tem permissão para autorizar troca mista")
           }
         }
@@ -288,13 +288,29 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       val produtosNota = produtosAutoriza.filter { prd ->
         prd.dev == true && prd.ni == nota.invno
       }
+      val produtosDev = nota.produtos()
+      produtosDev.forEach { prdDev ->
+        val prdAuto = produtosNota.filter { prd ->
+          prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
+        }
+
+        if(prdAuto.isEmpty()){
+          fail("Produto devolvido diferente do autorizado")
+        }
+
+        val qtDev = prdDev.tipoQtdEfetiva ?: 0
+        val qtAuto = prdAuto.sumOf { it.quantDev ?: 0 }
+        if(qtDev != qtAuto){
+          fail("Quantidade devolvida diferente da autorizada")
+        }
+      }
+
       relatorio.print(produtosNota, dummyPrinter)
     }
 
     val text = dummyPrinter.textBuffer()
 
-    viewModel.view.showPrintText(text) {
-    }
+    viewModel.view.showPrintText(text)
   }
 
   val subView

@@ -54,6 +54,6 @@ interface IView {
     loja: Int = 0,
     showPrintBunton: Boolean = true,
     actionSave: ((SubWindowPrinter) -> Unit)? = null,
-    printEvent: (impressora: String) -> Unit
+    printEvent: (impressora: String) -> Unit = {}
   )
 }
