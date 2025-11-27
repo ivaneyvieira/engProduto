@@ -282,6 +282,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
     val motivoAuto = nota.motivo()?.uppercase() ?: ""
     notaDev.forEach { ndev ->
+      ndev.nameAutorizacao = nota.nameTroca
       val motivoDev = ndev.tipoObs.uppercase()
       if (motivoDev != motivoAuto) {
         fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
