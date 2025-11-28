@@ -195,6 +195,25 @@ class EntradaDevCli(
     return NotaVenda.findAll(filtro)
   }
 
+  fun motivo(): String? {
+    val produtoTroca = when (produtoTrocaEnnum) {
+      EProdutoTroca.Com   -> "P"
+      EProdutoTroca.Sem   -> ""
+      EProdutoTroca.Misto -> "M"
+      null                -> return null
+    }
+
+    val solicitacaoTroca = when (solicitacaoTrocaEnnum) {
+      ESolicitacaoTroca.Troca       -> "Troca"
+      ESolicitacaoTroca.Estorno     -> "Estorno"
+      ESolicitacaoTroca.Reembolso   -> "Reembolso"
+      ESolicitacaoTroca.MudaCliente -> "Muda"
+      null                          -> return null
+    }
+
+    return "$solicitacaoTroca $produtoTroca".trim()
+  }
+
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
   }
