@@ -133,6 +133,7 @@ class NotaVenda(
 data class FiltroNotaVenda(
   val loja: Int,
   val pesquisa: String,
+  val invno: Int = 0,
   val autoriza: String = "T",
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,

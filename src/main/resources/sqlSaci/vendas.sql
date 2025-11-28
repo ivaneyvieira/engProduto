@@ -126,6 +126,7 @@ FROM
   sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
+  AND (I.invno = :invno OR :invno = 0)
   AND I.date >= :dataInicial;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI1;

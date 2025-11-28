@@ -186,6 +186,7 @@ class EntradaDevCli(
     val filtro = FiltroNotaVenda(
       loja = 0,
       pesquisa = "$invno",
+      invno = invno,
       autoriza = "S",
       dataInicial = dataVenda,
       dataFinal = dataVenda,
