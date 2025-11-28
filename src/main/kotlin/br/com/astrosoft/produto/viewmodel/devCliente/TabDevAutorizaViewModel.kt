@@ -289,6 +289,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
+
     imprimeValeTroca(notaDev, produtosAutoriza)
   }
 
