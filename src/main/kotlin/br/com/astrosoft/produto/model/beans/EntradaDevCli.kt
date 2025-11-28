@@ -188,8 +188,8 @@ class EntradaDevCli(
       pesquisa = "$invno",
       invno = invno,
       autoriza = "S",
-      dataInicial = dataVenda,
-      dataFinal = dataVenda,
+      dataInicial = nfData,
+      dataFinal = nfData,
       devolucaoStatus = EDevolucaoStatus.Todos,
     )
     return NotaVenda.findAll(filtro)
