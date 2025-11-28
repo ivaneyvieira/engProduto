@@ -110,6 +110,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
 
+
     colunaImprimir = addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }

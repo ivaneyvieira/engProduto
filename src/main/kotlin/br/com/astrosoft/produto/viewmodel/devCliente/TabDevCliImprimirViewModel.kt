@@ -29,6 +29,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
+    /*
     val notasAuto = nota.notaAtuoriza()
 
     notasAuto.forEach { notaAuto ->
@@ -61,7 +62,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           fail("Quantidade devolvida diferente da autorizada")
         }
       }
-    }
+    }*/
 
     if (!nota.temAjusteMisto()) {
       val user = AppConfig.userLogin() as? UserSaci
