@@ -42,7 +42,7 @@ SELECT N.storeno                                                AS loja,
          WHEN N.tipo = 14 THEN 'BONIFICA'
          WHEN N.tipo = 15 THEN 'NFE'
                           ELSE 'TIPO INVALIDO'
-       END                                                      AS tipoNf,
+         END                                                      AS tipoNf,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
        N.grossamt / 100                                         AS valor,
@@ -67,7 +67,7 @@ SELECT N.storeno                                                AS loja,
                   WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
                   WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
                                                            ELSE ''
-                END, 1, 60) AS CHAR)                            AS obsNI,
+                  END, 1, 60) AS CHAR)                            AS obsNI,
        IFNULL(EF.storeno, N.storeno)                            AS storenoE,
        IFNULL(EF.nfno, N.nfno)                                  AS nfnoE,
        IFNULL(EF.nfse, N.nfse)                                  AS nfseE,
@@ -256,13 +256,12 @@ FROM
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-       vendedor LIKE @PESQUISA_LIKE)
+       vendedor LIKE @PESQUISA_LIKE) OR IFNULL(I.invno, 0) = @PESQUISA_INT
   AND CASE
         WHEN :devolucaoStatus = 'V'  THEN TRUE
         WHEN :devolucaoStatus = 'P'  THEN I.invno IS NULL
         WHEN :devolucaoStatus = 'GP' THEN I.invno IS NOT NULL AND P.transacao IS NOT NULL
         WHEN :devolucaoStatus = 'G'  THEN I.invno IS NOT NULL AND P.transacao IS NULL
         WHEN :devolucaoStatus = 'T'  THEN TRUE
-      END
-
+  END
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno
