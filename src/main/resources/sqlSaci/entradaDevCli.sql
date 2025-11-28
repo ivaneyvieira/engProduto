@@ -155,7 +155,7 @@ SELECT DISTINCT I.invno,
                 clienteNome                                                            AS clienteNome,
                 nfValorVenda                                                           AS nfValorVenda,
                 IF(IF(I.estorno = 'N', pdvVenda, N.remarks LIKE '') IS NULL, 'N', 'S') AS fezTroca,
-                A.userno                                                               AS usernoAutorizacao,
+                AT.userTroca                                                           AS usernoAutorizacao,
                 UA.name                                                                AS nameAutorizacao,
                 UA.login                                                               AS loginAutorizacao,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
@@ -163,22 +163,22 @@ SELECT DISTINCT I.invno,
                 IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
                 IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod
 FROM
-  T_NOTA                              AS I
-    LEFT JOIN sqldados.nf             AS N
+  T_NOTA                             AS I
+    LEFT JOIN sqldados.nf            AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
-    LEFT JOIN sqldados.nfAutorizacao  AS AT
+    LEFT JOIN sqldados.nfAutorizacao AS AT
               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
-    LEFT JOIN sqldados.custp          AS C
+    LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
-    LEFT JOIN sqldados.emp            AS E
+    LEFT JOIN sqldados.emp           AS E
               ON E.no = N.empno
-    LEFT JOIN sqldados.users          AS U
+    LEFT JOIN sqldados.users         AS U
               ON U.no = I.userno
-    LEFT JOIN sqldados.invAutorizacao AS A
-              ON A.invno = I.invno AND A.storeno = IFNULL(I.storeno, N.storeno) AND
-                 A.pdvno = IFNULL(I.pdvno, N.pdvno) AND A.xano = IFNULL(I.xano, N.xano)
-    LEFT JOIN sqldados.users          AS UA
-              ON UA.no = A.userno
+                /*  LEFT JOIN sqldados.invAutorizacao AS A
+                            ON A.invno = I.invno AND A.storeno = IFNULL(I.storeno, N.storeno) AND
+                               A.pdvno = IFNULL(I.pdvno, N.pdvno) AND A.xano = IFNULL(I.xano, N.xano)*/
+    LEFT JOIN sqldados.users         AS UA
+              ON UA.no = AT.userTroca
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR

@@ -87,16 +87,13 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       val form = FormSolicitacaoNotaTrocaView(nota)
       DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
     }
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
     columnGrid(EntradaDevCli::valor, header = "Valor Devolução")
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza", "Autoriza") { nota ->
-      viewModel.formAutoriza(nota)
-    }
-    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cliente")
