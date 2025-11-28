@@ -47,7 +47,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   private var edtMotivo: Select<EMotivoTroca>? = null
 
   fun showDialog(onClose: () -> Unit) {
-    val readOnly = (nota.ni ?: 0) > 0
+    //val readOnly = (nota.ni ?: 0) > 0
+    val readOnly = false
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
     val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
       "NÃO INFORMADO"
