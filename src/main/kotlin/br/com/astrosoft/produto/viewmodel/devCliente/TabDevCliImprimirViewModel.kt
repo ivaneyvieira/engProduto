@@ -29,6 +29,40 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
+    val notasAuto = nota.notaAtuoriza()
+
+    notasAuto.forEach { notaAuto ->
+      val motivoAuto = notaAuto.motivo()?.uppercase() ?: ""
+      nota.nameAutorizacao = notaAuto.nameTroca
+      val motivoDev = nota.tipoObs.uppercase()
+      if (motivoDev != motivoAuto) {
+        fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
+      }
+    }
+
+    val produtosDev = nota.produtos()
+    val produtosNota = notasAuto.flatMap { it.produtos() }.filter {
+      it.dev == true
+    }
+
+    if (produtosNota.isNotEmpty()) {
+      produtosDev.forEach { prdDev ->
+        val prdAuto = produtosNota.filter { prd ->
+          prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
+        }
+
+        if (prdAuto.isEmpty()) {
+          fail("Produto devolvido diferente do autorizado")
+        }
+
+        val qtDev = prdDev.tipoQtdEfetiva ?: 0
+        val qtAuto = prdAuto.sumOf { it.quantDev ?: 0 }
+        if (qtDev != qtAuto) {
+          fail("Quantidade devolvida diferente da autorizada")
+        }
+      }
+    }
+
     if (!nota.temAjusteMisto()) {
       val user = AppConfig.userLogin() as? UserSaci
       if (user?.ajustaMista != true) {

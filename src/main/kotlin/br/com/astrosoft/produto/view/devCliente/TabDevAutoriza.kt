@@ -27,6 +27,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmdDevolucaoStatus: Select<EDevolucaoStatus>
+  private var colunaImprimir: Grid.Column<NotaVenda>? = null
   private var dlgProduto: DlgProdutosVenda? = null
 
   fun init() {
@@ -67,6 +68,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       this.value = EDevolucaoStatus.Vendas
       addValueChangeListener {
         viewModel.updateView()
+        colunaImprimir?.isVisible = it.value != EDevolucaoStatus.Vendas
       }
     }
     edtDataInicial = datePicker("Data inicial") {
@@ -108,7 +110,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
 
-    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+    colunaImprimir = addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
 

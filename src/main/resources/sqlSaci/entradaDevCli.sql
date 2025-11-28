@@ -28,7 +28,7 @@ FROM
                ON C.no = N.custno
 WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
   AND N.issuedate >= SUBDATE(:dataI, INTERVAL 1 MONTH) * 1
-  AND N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
+  AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.xatype IN (1, 999)
   AND N.status <> 1;
 

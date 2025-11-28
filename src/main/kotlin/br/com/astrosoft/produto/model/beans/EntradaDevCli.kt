@@ -182,6 +182,18 @@ class EntradaDevCli(
     }
   }
 
+  fun notaAtuoriza(): List<NotaVenda> {
+    val filtro = FiltroNotaVenda(
+      loja = 0,
+      pesquisa = "$invno",
+      autoriza = "S",
+      dataInicial = dataVenda,
+      dataFinal = dataVenda,
+      devolucaoStatus = EDevolucaoStatus.Todos,
+    )
+    return NotaVenda.findAll(filtro)
+  }
+
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
   }
