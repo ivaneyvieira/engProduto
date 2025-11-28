@@ -29,6 +29,11 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
+    val loginAutorizacao = nota.loginAutorizacao ?: ""
+    if(loginAutorizacao.isBlank()) {
+      fail("Devolução não foi autorizada.")
+    }
+
     val notasAuto = nota.notaAtuoriza()
 
     notasAuto.forEach { notaAuto ->
