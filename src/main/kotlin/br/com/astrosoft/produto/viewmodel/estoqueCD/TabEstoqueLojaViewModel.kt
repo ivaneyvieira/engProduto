@@ -42,7 +42,12 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 
   override fun updateConferencia(bean: ProdutoEstoque?) {
-    bean?.updateConferencia()
+    try {
+      bean?.updateConferencia()
+    }catch (e: Exception) {
+      e.printStackTrace()
+      viewModel.view.showError(e.message ?: "Erro desconhecido")
+    }
   }
 
   override fun updateLocalizacao(bean: ProdutoEstoque?) {
