@@ -1,32 +1,28 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
-import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
-import com.vaadin.flow.data.value.ValueChangeMode
-import org.vaadin.miki.superfields.numbers.SuperDoubleField
-import kotlin.math.roundToInt
 
-class DlgConferenciaSaldo(
+class DlgConferenciaLoja(
   val viewModel: IModelConferencia,
   val produto: ProdutoEstoque,
   val onClose: () -> Unit = {}
 ) :
   Dialog() {
-  private var edtConferencia: IntegerField? = null
-  private var edtEmbalagem: SuperDoubleField? = null
-  private var edtDataInicial: DatePicker? = null
+  private var edtDataConf: DatePicker? = null
+  private var edtEditCD: IntegerField? = null
+  private var edtEditLoja: IntegerField? = null
 
   init {
     this.isModal = true
@@ -37,61 +33,41 @@ class DlgConferenciaSaldo(
       setSizeFull()
       horizontalLayout {
         this.setWidthFull()
-        edtDataInicial = datePicker("Início Kardec") {
+        edtDataConf = datePicker("Conferencia") {
           this.width = "8.5rem"
-          this.value = produto.dataInicial
+          this.value = produto.dataConferencia
           this.isClearButtonVisible = true
           this.isClearButtonVisible = true
           this.localePtBr()
         }
 
-        edtConferencia = integerField("Est CD") {
+        edtEditCD = integerField("Est CD") {
           this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          value = produto.qtConferencia ?: 0
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.addValueChangeListener {
-            if (it.isFromClient) {
-              edtEmbalagem?.value = processaEmbalagem(it.value ?: 0)
-            }
-          }
+          value = produto.qtConfEdit ?: 0
+
+          addKeyUpListener(Key.ENTER, {
+            edtEditLoja?.focus()
+          })
         }
 
-        edtEmbalagem = superDoubleField("Est Emb") {
+        edtEditLoja = integerField("Est Loja") {
           this.isAutoselect = true
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
-          this.value = processaEmbalagem(edtConferencia?.value ?: 0)
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.addValueChangeListener {
-            if (it.isFromClient) {
-              edtConferencia?.value = processaConferencia(it.value ?: 0.00)
-            }
-          }
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          value = produto.qtConfEditLoja
+
+          addKeyUpListener(Key.ENTER, {
+            edtDataConf?.focus()
+          })
         }
+
+        edtDataConf?.focus()
       }
     }
     this.width = "30%"
     this.height = "30%"
-  }
-
-  private fun processaEmbalagem(saldo: Int): Double {
-    val prdno = produto.prdno ?: ""
-    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
-      val fator = embalagem.qtdEmbalagem ?: 1.0
-      val saldoEmb = saldo * 1.00 / fator
-      saldoEmb
-    } ?: (saldo * 1.0)
-  }
-
-  private fun processaConferencia(emb: Double): Int? {
-    val prdno = produto.prdno ?: ""
-    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
-      val fator = embalagem.qtdEmbalagem ?: 1.0
-      val saldoEmb = emb * fator
-      saldoEmb.roundToInt()
-    }
   }
 
   fun HasComponents.toolBar() {
@@ -107,7 +83,7 @@ class DlgConferenciaSaldo(
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
-          this@DlgConferenciaSaldo.close()
+          this@DlgConferenciaLoja.close()
         }
       }
     }
@@ -128,10 +104,9 @@ class DlgConferenciaSaldo(
   }
 
   private fun closeForm() {
-    produto.dataInicial = edtDataInicial?.value
-    //produto.dataConferencia = edtDataConf?.value
-    produto.qtConferencia = edtConferencia?.value
-    produto.dataUpdate = null
+    produto.dataConferencia = edtDataConf?.value
+    produto.qtConfEdit = edtEditCD?.value
+    produto.qtConfEditLoja = edtEditLoja?.value
     viewModel.updateConferencia(produto)
     onClose.invoke()
     this.close()

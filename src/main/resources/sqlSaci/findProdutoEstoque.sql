@@ -59,21 +59,21 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                                          AS prdno,
-       grade                                          AS grade,
-       localizacao                                    AS locApp,
-       dataInicial                                    AS dataInicial,
-       IF(dataUpdate * 1 = 0, NULL, dataUpdate)       AS dataUpdate,
-       kardec                                         AS kardec,
-       IF(dataObservacao * 1 = 0, '', dataObservacao) AS dataObservacao,
-       qtConferencia                                  AS qtConferencia,
-       qtConfEdit                                     AS qtConfEdit,
-       qtConfEditLoja                                 AS qtConfEditLoja,
-       estoque                                        AS estoque,
-       estoqueData                                    AS estoqueData,
-       estoqueCD                                      AS estoqueCD,
-       estoqueLoja                                    AS estoqueLoja,
-       estoqueUser                                    AS estoqueUser
+SELECT prdno                                                     AS prdno,
+       grade                                                     AS grade,
+       localizacao                                               AS locApp,
+       dataInicial                                               AS dataInicial,
+       IF(dataUpdate * 1 = 0, NULL, dataUpdate)                  AS dataUpdate,
+       kardec                                                    AS kardec,
+       IF(dataObservacao * 1 = 0, CURDATE() * 1, dataObservacao) AS dataObservacao,
+       qtConferencia                                             AS qtConferencia,
+       qtConfEdit                                                AS qtConfEdit,
+       qtConfEditLoja                                            AS qtConfEditLoja,
+       estoque                                                   AS estoque,
+       estoqueData                                               AS estoqueData,
+       estoqueCD                                                 AS estoqueCD,
+       estoqueLoja                                               AS estoqueLoja,
+       estoqueUser                                               AS estoqueUser
 FROM
   sqldados.prdAdicional
 WHERE (storeno IN (2, 3, 4, 5, 8))
@@ -166,7 +166,7 @@ SELECT S.no                                                                     
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
        A.dataUpdate                                                                   AS dataUpdate,
        A.kardec                                                                       AS kardec,
-       A.dataObservacao                                                               AS dataConferencia,
+       CAST(A.dataObservacao AS DATE)                                                 AS dataConferencia,
        qtConferencia                                                                  AS qtConferencia,
        qtConfEdit                                                                     AS qtConfEdit,
        qtConfEditLoja                                                                 AS qtConfEditLoja,
@@ -234,7 +234,7 @@ SELECT loja,
        dataInicial,
        dataUpdate,
        kardec,
-  /*dataConferencia,*/
+       IFNULL(dataConferencia, CURDATE()) AS dataConferencia,
        qtConferencia,
        qtConfEdit,
        qtConfEditLoja,

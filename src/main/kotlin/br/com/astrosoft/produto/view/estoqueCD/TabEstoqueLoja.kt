@@ -285,16 +285,24 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
       this.columnGrid(ProdutoEstoque::qtConfEditLoja, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
+      if (user?.estoqueEditaConf == true) {
+        this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
+          val dlgConferenciaSaldo = DlgConferenciaLoja(viewModel, produto) {
+            gridPanel.dataProvider.refreshAll()
+          }
+          dlgConferenciaSaldo.open()
+        }
+      }
     }
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
       if (user?.estoqueEditaConf == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
-          val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
+          val dlgConferenciaLoja = DlgConferenciaSaldo(viewModel, produto) {
             gridPanel.dataProvider.refreshAll()
           }
-          dlgConferencia.open()
+          dlgConferenciaLoja.open()
         }
       }
       //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")

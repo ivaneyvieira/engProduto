@@ -33,7 +33,7 @@ class ProdutoEstoque(
   var dataInicial: LocalDate?,
   var dataUpdate: LocalDate?,
   var kardec: Int? = null,
-  //var dataConferencia: LocalDate? = null,
+  var dataConferencia: LocalDate? = null,
   var qtConfEditLoja: Int? = null,
   var qtConfEdit: Int? = null,
   var qtConferencia: Int? = null,
