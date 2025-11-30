@@ -83,6 +83,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Edita Conf") {
         binder.bind(this, UserSaci::estoqueEditaConf.name)
       }
+      checkBox("Edita Inventário") {
+        binder.bind(this, UserSaci::estoqueEditaInv.name)
+      }
     }
     verticalBlock("Filtros") {
       filtroLocalizacao(binder, UserSaci::listaEstoque)

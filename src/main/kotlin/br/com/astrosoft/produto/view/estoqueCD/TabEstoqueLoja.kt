@@ -285,7 +285,8 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
       this.columnGrid(ProdutoEstoque::qtConfCalc, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
-      if (user?.estoqueEditaConf == true) {
+
+      if (user?.estoqueEditaInv == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
           val dlgConferenciaSaldo = DlgConferenciaLoja(viewModel, produto) {
             gridPanel.dataProvider.refreshAll()
