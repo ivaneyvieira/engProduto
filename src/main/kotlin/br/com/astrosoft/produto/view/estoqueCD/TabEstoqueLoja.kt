@@ -286,7 +286,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::qtConfCalc, header = "Conf", pattern = "#,##0", width = "80px")
         .integerFieldEditor()
 
-      if (user?.estoqueEditaInv == true) {
+      if (user?.estoqueEditaConferencia == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
           val dlgConferenciaSaldo = DlgConferenciaLoja(viewModel, produto) {
             gridPanel.dataProvider.refreshAll()
@@ -298,7 +298,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
-      if (user?.estoqueEditaConf == true) {
+      if (user?.estoqueEditaInventario == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
           val dlgConferenciaLoja = DlgConferenciaSaldo(viewModel, produto) {
             gridPanel.dataProvider.refreshAll()
