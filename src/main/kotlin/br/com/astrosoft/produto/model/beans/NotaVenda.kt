@@ -186,10 +186,14 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
     val seqNI = listPrd.mapNotNull { it.ni }.distinct()
 
     val listPrdDev = listPrd.filter { it.devDB == true }.map {
-      it.copy(quantidade = it.quantDev)
+      it.copy(
+        quantidade = it.quantDev,
+        total = ((it.quantDev ?: 0) * 1.00) * (it.preco ?: 0.00)
+      )
     }
     val totalDev = listPrdDev.sumOf { it.quantDev ?: 0 }
     val quantidade = (listPrd.firstOrNull()?.quantidade ?: 0) - totalDev
+    val total = (quantidade * 1.00) * (listPrd.firstOrNull()?.preco ?: 0.00)
     val prdCopy = listPrd.firstOrNull()?.copy(
       devDB = false,
       dev = false,
@@ -199,6 +203,7 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
       qtDevNI = null,
       temProduto = false,
       quantidade = quantidade,
+      total = total,
       seq = null
     )
     buildList {
