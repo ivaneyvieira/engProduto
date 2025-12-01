@@ -115,6 +115,14 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Total")
   }
 
+  fun Grid<ProdutoNFS>.produtoNFSeq() = columnGrid(ProdutoNFS::seq) {
+    this.setHeader("Seq")
+  }
+
+  fun Grid<ProdutoNFS>.produtoNFQuantDevNI() = columnGrid(ProdutoNFS::qtDevNI) {
+    this.setHeader("Qt NF Dev")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFUsuarioSep() = columnGrid(ProdutoNFS::usuarioSep) {
     this.setHeader("Impresso")
   }

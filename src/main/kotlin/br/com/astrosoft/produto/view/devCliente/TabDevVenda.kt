@@ -8,11 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.EDevolucaoStatus
-import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVenda
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevVenda
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliVendaViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -53,8 +49,9 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
+        if (it.isFromClient) {
           viewModel.updateView()
+        }
       }
     }
     init()

@@ -18,8 +18,10 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFNIData
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantDevNI
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -219,6 +221,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
       }
       produtoNFPrecoTotal()
+      produtoNFSeq()
+      produtoNFQuantDevNI()
 
       this.setPartNameGenerator {
         val marca = it.marca
@@ -250,7 +254,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   }
 
   fun update() {
-    val listProdutos = nota.produtos()
+    val listProdutos = nota.produtos().expande()
     gridDetail.setItems(listProdutos)
     updateNota()
 

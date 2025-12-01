@@ -177,3 +177,43 @@ enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
   Gerada("G", "Total"),
   Todos("T", "Todos");
 }
+
+fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
+  val grupo = this.groupBy { "${it.prdno} ${it.grade}" }
+  val result = grupo.flatMap { entry ->
+    val listPrd = entry.value
+    val seqList = listPrd.mapNotNull { it.seq }.distinct()
+    val seqNI = listPrd.mapNotNull { it.ni }.distinct()
+
+    val listPrdDev = listPrd.filter { it.devDB == true }.map {
+      it.copy(quantidade = it.quantDev)
+    }
+    val totalDev = listPrdDev.sumOf { it.quantDev ?: 0 }
+    val quantidade = (listPrd.firstOrNull()?.quantidade ?: 0) - totalDev
+    val prdCopy = listPrd.firstOrNull()?.copy(
+      devDB = false,
+      dev = false,
+      ni = 0,
+      dataNi = null,
+      quantDev = quantidade,
+      qtDevNI = null,
+      temProduto = false,
+      quantidade = quantidade,
+      seq = null
+    )
+    buildList {
+      listPrdDev.forEachIndexed { index, prd ->
+        add(
+          prd.copy(
+            seq = seqList.getOrNull(index),
+            ni = seqNI.getOrNull(index)
+          )
+        )
+      }
+      if (prdCopy != null && (prdCopy.quantidade ?: 0) > 0) {
+        add(prdCopy)
+      }
+    }
+  }
+  return result
+}

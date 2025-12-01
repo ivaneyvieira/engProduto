@@ -32,7 +32,7 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
 CREATE TEMPORARY TABLE T_DADOS
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, grade, seq)
 )
 SELECT X.storeno                                                     AS loja,
        X.pdvno                                                       AS pdvno,
@@ -77,7 +77,8 @@ SELECT X.storeno                                                     AS loja,
        IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev,
        IFNULL(D.temProduto, FALSE)                                   AS temProduto,
        IFNULL(dev, FALSE)                                            AS dev,
-       X.date                                                        AS dataNota
+       X.date                                                        AS dataNota,
+       IFNULL(D.seq, 0)                                              AS seq
 FROM
   sqldados.prd                          AS P
     INNER JOIN sqldados.xaprd2          AS X
@@ -112,7 +113,7 @@ WHERE X.storeno = :storeno
   AND (IFNULL(M.marca, 0) = :marca OR :marca = 999)
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-GROUP BY prdno, grade;
+GROUP BY prdno, grade, seq;
 
 /************************************************************************/
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
@@ -221,14 +222,14 @@ FROM
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
 (
-  INDEX (loja, pdv, transacao, prdno, grade)
+  INDEX (loja, pdv, transacao, prdno, grade, invno)
 )
-SELECT loja, pdv, transacao, prdno, grade, T_NI.invno, T_NI.date
+SELECT N.loja, N.pdv, N.transacao, P.prdno, P.grade, P.invno, P.date, ROUND(P.qtty / 1000) AS qtDev
 FROM
-  sqldados.iprd
-    INNER JOIN T_NI
+  sqldados.iprd     AS P
+    INNER JOIN T_NI AS N
                USING (invno)
-GROUP BY loja, pdv, transacao, prdno, grade;
+GROUP BY loja, pdv, transacao, prdno, grade, invno;
 
 /************************************************************************/
 
@@ -273,8 +274,10 @@ SELECT D.loja,
        estoque,
        temProduto,
        quantDev,
+       D.seq,
        X.invno              AS ni,
-       CAST(X.date AS date) AS dataNi
+       CAST(X.date AS date) AS dataNi,
+       X.qtDev              AS qtDevNI
 FROM
   T_DADOS              AS D
     LEFT JOIN T_NI_PRD AS X

@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class ProdutoNFS(
+data class ProdutoNFS(
   var loja: Int,
   var pdvno: Int,
   var xano: Long,
@@ -48,8 +48,12 @@ class ProdutoNFS(
   var temProduto: Boolean?,
   var quantDev: Int?,
   var ni: Int?,
-  var dataNi: LocalDate?
+  var dataNi: LocalDate?,
+  var qtDevNI: Int?,
+  var seq: Int?,
 ) {
+
+
   var motivo: String? = null
 
   override fun toString(): String {
@@ -129,6 +133,12 @@ class ProdutoNFS(
     saci.updateQuantDev(this)
   }
 
+  fun tipoPrd(): String? {
+    motivo ?: return ""
+    return if (temProduto == true) "$motivo P"
+    else motivo
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
@@ -138,8 +148,10 @@ class ProdutoNFS(
     if (loja != other.loja) return false
     if (pdvno != other.pdvno) return false
     if (xano != other.xano) return false
+    if (ni != other.ni) return false
     if (prdno != other.prdno) return false
     if (grade != other.grade) return false
+    if (seq != other.seq) return false
 
     return true
   }
@@ -148,14 +160,10 @@ class ProdutoNFS(
     var result = loja
     result = 31 * result + pdvno
     result = 31 * result + xano.hashCode()
+    result = 31 * result + (ni ?: 0)
     result = 31 * result + (prdno?.hashCode() ?: 0)
     result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + (seq?.hashCode() ?: 0)
     return result
-  }
-
-  fun tipoPrd(): String? {
-    motivo ?: return ""
-    return if(temProduto == true) "$motivo P"
-    else motivo
   }
 }

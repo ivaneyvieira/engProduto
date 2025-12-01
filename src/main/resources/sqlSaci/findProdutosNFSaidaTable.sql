@@ -21,3 +21,13 @@ ALTER TABLE xaprd2Devolucao
 
 ALTER TABLE xaprd2Devolucao
   ADD COLUMN dev tinyint DEFAULT 0;
+
+ALTER TABLE xaprd2Devolucao
+  ADD COLUMN seq int DEFAULT 1 AFTER grade;
+
+ALTER TABLE xaprd2Devolucao
+  DROP PRIMARY KEY;
+
+ALTER TABLE xaprd2Devolucao
+  ADD PRIMARY KEY (storeno, pdvno, xano, prdno, grade, seq);
+

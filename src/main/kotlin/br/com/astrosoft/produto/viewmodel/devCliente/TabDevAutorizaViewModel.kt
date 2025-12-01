@@ -260,7 +260,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.userTroca = 0
     nota.setMotivoTroca = emptySet()
     nota.update()
-    produtos.forEach { prd ->
+    produtos.filter {prd ->
+      prd.dev == false && prd.devDB == true
+    }.forEach { prd ->
       prd.dev = false
       prd.temProduto = false
       prd.quantDev = prd.quantidade
