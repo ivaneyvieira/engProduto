@@ -6,13 +6,13 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgConferenciaLoja(
   val viewModel: IModelConferencia,
@@ -23,6 +23,7 @@ class DlgConferenciaLoja(
   private var edtDataConf: DatePicker? = null
   private var edtEditCD: IntegerField? = null
   private var edtEditLoja: IntegerField? = null
+  private var edtDiferenca: IntegerField? = null
 
   init {
     this.isModal = true
@@ -46,10 +47,13 @@ class DlgConferenciaLoja(
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           value = produto.qtConfEdit ?: 0
+          this.valueChangeMode = ValueChangeMode.LAZY
 
-          addKeyUpListener(Key.ENTER, {
-            edtEditLoja?.focus()
-          })
+          addValueChangeListener {
+            if (it.isFromClient) {
+              atualizaDiferenca()
+            }
+          }
         }
 
         edtEditLoja = integerField("Est Loja") {
@@ -57,17 +61,31 @@ class DlgConferenciaLoja(
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           value = produto.qtConfEditLoja
+          this.valueChangeMode = ValueChangeMode.LAZY
 
-          addKeyUpListener(Key.ENTER, {
-            edtDataConf?.focus()
-          })
+          addValueChangeListener {
+            if (it.isFromClient) {
+              atualizaDiferenca()
+            }
+          }
+        }
+
+        edtDiferenca = integerField("Diferença") {
+          this.isReadOnly = true
+          this.width = "6rem"
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
 
         edtDataConf?.focus()
+        atualizaDiferenca()
       }
     }
     this.width = "30%"
     this.height = "30%"
+  }
+
+  private fun atualizaDiferenca(){
+    edtDiferenca?.value = ((edtEditLoja?.value ?: 0) + (edtEditCD?.value ?: 0)) - (produto.saldo ?: 0)
   }
 
   fun HasComponents.toolBar() {
