@@ -7,7 +7,6 @@ UPDATE sqldados.prdAdicional
 SET dataInicial    = :dataInicial,
     qtConferencia  = :qtConferencia,
     qtConfEditLoja = :qtConfEditLoja,
-    qtConfEdit     = :qtConfEdit,
     dataUpdate     = :dataUpdate,
     dataObservacao = IF(:dataConferencia = 0, NULL, :dataConferencia)
 WHERE storeno = :loja
