@@ -84,6 +84,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             this.isReadOnly = readOnly
             this.width = "6rem"
             this.isAutoselect = true
+            this.value = nota.nfEntRet
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           }
         }
@@ -115,20 +116,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             }
           }
         }
-
-        /*button("Desfaz") {
-          val user = AppConfig.userLogin() as? UserSaci
-
-          isVisible = user?.desautorizaDev == true
-
-          this.icon = VaadinIcon.TRASH.create()
-          this.isEnabled = !readOnly
-
-          onClick {
-            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
-            viewModel.desatorizaTroca(nota, produtos)
-          }
-        }*/
       },
       onClose = {
         onClose()
