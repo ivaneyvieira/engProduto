@@ -32,7 +32,7 @@ WHERE (I.date = :data)
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
-SELECT CAST(data AS DATE)                                                    AS data,
+SELECT CAST(I.data AS DATE)                                                  AS data,
        I.codLoja                                                             AS codLoja,
        I.loja                                                                AS loja,
        X.prdno                                                               AS prdno,
@@ -243,6 +243,7 @@ SELECT data,
        valor
 FROM
   T_PRODUTOS
+GROUP BY ni, data, codLoja, loja, prdno, grade
 ORDER BY data, codLoja, loja, prdno, grade
 
 
