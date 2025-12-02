@@ -4,8 +4,10 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
 import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -75,14 +77,10 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.setItems(EProdutoTroca.entries)
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
-
-          addValueChangeListener {
-            updateSelectionProdutos(it.value)
-          }
         }
 
         if (nota.tipoNf == "ENTRE FUT") {
-          edtNotaEntRet = integerField {
+          edtNotaEntRet = integerField("Entrega Fut") {
             this.isReadOnly = readOnly
             this.width = "6rem"
             this.isAutoselect = true
@@ -118,7 +116,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           }
         }
 
-        button("Desfaz") {
+        /*button("Desfaz") {
           val user = AppConfig.userLogin() as? UserSaci
 
           isVisible = user?.desautorizaDev == true
@@ -130,7 +128,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
             viewModel.desatorizaTroca(nota, produtos)
           }
-        }
+        }*/
       },
       onClose = {
         onClose()
@@ -148,28 +146,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     edtProduto?.value = nota.produtoTrocaEnnum
     edtNotaEntRet?.value = nota.nfEntRet
     edtMotivo?.value = nota.setMotivoTroca.firstOrNull()
-  }
-
-  private fun updateSelectionProdutos(value: EProdutoTroca?) {
-    /*when (value) {
-
-      EProdutoTroca.Com   -> {
-        gridDetail.selectionMode = Grid.SelectionMode.MULTI
-        val allItem = gridDetail.list()
-        gridDetail.asMultiSelect().select(allItem)
-      }
-
-      EProdutoTroca.Sem   -> {
-        gridDetail.selectionMode = Grid.SelectionMode.NONE
-      }
-
-      EProdutoTroca.Misto -> {
-        gridDetail.selectionMode = Grid.SelectionMode.MULTI
-        gridDetail.asMultiSelect().deselectAll()
-      }
-
-      else                -> {}
-    }*/
   }
 
   private fun HorizontalLayout.createGridProdutos() {
@@ -210,6 +186,9 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFNI()
       produtoNFNIData()
+      addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
+        viewModel.desatorizaTroca(nota, produto)
+      }
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
@@ -238,7 +217,6 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     this.addAndExpand(gridDetail)
 
     update()
-    updateSelectionProdutos(edtProduto?.value)
 
     gridDetail.setPartNameGenerator {
       if (it.dev == true) {
@@ -261,5 +239,9 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
+  }
+
+  fun produtos(): List<ProdutoNFS> {
+    return gridDetail.list()
   }
 }

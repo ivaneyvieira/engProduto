@@ -27,8 +27,8 @@ class NotaVenda(
   var userTroca: Int?,
   var loginTroca: String?,
   var nameTroca: String?,
-  var userSolicitacao: Int?,
-  var loginSolicitacao: String?,
+  //var userSolicitacao: Int?,
+  //var loginSolicitacao: String?,
   var motivoTroca: String?,
   var motivoTrocaCod: String?,
   var nfEntRet: Int?,
@@ -182,15 +182,14 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
   val grupo = this.groupBy { "${it.prdno} ${it.grade}" }
   val result = grupo.flatMap { entry ->
     val listPrd = entry.value
-    val seqList = listPrd.mapNotNull { it.seq }.distinct()
-    val seqNI = listPrd.mapNotNull { it.ni }.distinct()
+    val seqNI = listPrd.mapNotNull { it.ni }.distinct().sorted()
 
     val listPrdDev = listPrd.filter { it.devDB == true }.map {
       it.copy(
         quantidade = it.quantDev,
         total = ((it.quantDev ?: 0) * 1.00) * (it.preco ?: 0.00)
       )
-    }
+    }.sortedBy { it.seq ?: 0 }
     val totalDev = listPrdDev.sumOf { it.quantDev ?: 0 }
     val quantidade = (listPrd.firstOrNull()?.quantidade ?: 0) - totalDev
     val total = (quantidade * 1.00) * (listPrd.firstOrNull()?.preco ?: 0.00)
@@ -210,7 +209,6 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
       listPrdDev.forEachIndexed { index, prd ->
         add(
           prd.copy(
-            seq = seqList.getOrNull(index),
             ni = seqNI.getOrNull(index)
           )
         )

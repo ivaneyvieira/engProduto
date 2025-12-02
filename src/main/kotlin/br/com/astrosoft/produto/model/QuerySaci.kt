@@ -7,11 +7,9 @@ import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
-import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -2654,7 +2652,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("xano", venda.transacao ?: 0)
       addOptionalParameter("autoriza", venda.autoriza)
       addOptionalParameter("userTroca", venda.userTroca)
-      addOptionalParameter("userSolicitacao", venda.userSolicitacao)
+      addOptionalParameter("userSolicitacao", 0)
       addOptionalParameter("solicitacaoTroca", venda.solicitacaoTroca)
       addOptionalParameter("produtoTroca", venda.produtoTroca)
       addOptionalParameter("motivoTroca", venda.motivoTroca)

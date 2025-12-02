@@ -206,6 +206,10 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     dlgProduto?.update()
   }
 
+  override fun produtos(): List<ProdutoNFS> {
+    return dlgProduto?.produtos().orEmpty()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliAutoriza == true
