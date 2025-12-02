@@ -1072,6 +1072,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataConferencia", produtoEstoque.dataConferencia.toSaciDate())
       addOptionalParameter("qtConferencia", produtoEstoque.qtConferencia ?: 0)
       addOptionalParameter("qtConfEditLoja", produtoEstoque.qtConfEditLoja ?: 0)
+      addOptionalParameter("qtConfEdit", produtoEstoque.qtConfEdit ?: 0)
       addOptionalParameter("dataUpdate", produtoEstoque.dataUpdate)
     }
   }
