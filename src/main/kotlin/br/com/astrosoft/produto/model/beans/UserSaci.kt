@@ -176,7 +176,7 @@ class UserSaci : IUser {
   var devFor2NotaNFDSTNR by DelegateAuthorized3(146)
   var estoqueForn by DelegateAuthorized3(147)
   var desautorizaDev by DelegateAuthorized3(148)
-  var estoqueEditaConferencia by  DelegateAuthorized3(149)
+  var estoqueEditaConferencia by DelegateAuthorized3(149)
 
   //Locais
   private var localEstoque: String?
@@ -372,15 +372,19 @@ class UserSaci : IUser {
     }
 
   var tipoMetodo: Set<EMetodo>
-    get() = lojas.getOrNull(23)?.split(",").orEmpty().mapNotNull { tipo ->
+    get() = lojas.getOrNull(23)?.split(":").orEmpty().mapNotNull { tipo ->
       tipo.toIntOrNull()?.let { num ->
         EMetodo.entries.firstOrNull { it.num == num }
       }
     }.toSet()
     set(value) {
-      lojas = lojas.setValue(23, value.joinToString(",") {
+      val valueLoja = value.joinToString(":") {
         it.num.toString()
-      })
+      }
+      lojas.setValue(23, valueLoja)
+      val lojaStr = lojas.setValue(23, valueLoja)
+      lojas = lojaStr
+      println("Lojas: ${lojas.get(23)}")
     }
 
   var impressoraRec: Set<String>
