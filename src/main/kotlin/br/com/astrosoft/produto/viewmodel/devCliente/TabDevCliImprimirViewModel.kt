@@ -63,7 +63,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         val qtDev = prdDev.tipoQtdEfetiva ?: 0
         val qtAuto = prdAuto.sumOf { it.quantDev ?: 0 }
         if (qtDev != qtAuto) {
-          fail("Quantidade devolvida diferente da autorizada")
+          //fail("Quantidade devolvida diferente da autorizada")
         }
       }
     }
