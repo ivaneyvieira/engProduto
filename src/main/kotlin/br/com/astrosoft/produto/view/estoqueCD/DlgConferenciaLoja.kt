@@ -46,7 +46,7 @@ class DlgConferenciaLoja(
           this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          value = produto.qtConfEdit ?: 0
+          value = produto.estoqueConfCD ?: 0
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
@@ -60,7 +60,7 @@ class DlgConferenciaLoja(
           this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          value = produto.qtConfEditLoja
+          value = produto.estoqueConfLoja
           this.valueChangeMode = ValueChangeMode.LAZY
 
           addValueChangeListener {
@@ -123,8 +123,8 @@ class DlgConferenciaLoja(
 
   private fun closeForm() {
     produto.dataConferencia = edtDataConf?.value
-    produto.qtConfEdit = edtEditCD?.value
-    produto.qtConfEditLoja = edtEditLoja?.value
+    produto.estoqueConfCD = edtEditCD?.value
+    produto.estoqueConfLoja = edtEditLoja?.value
     viewModel.updateConferencia(produto)
     onClose.invoke()
     this.close()

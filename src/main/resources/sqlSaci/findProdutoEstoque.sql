@@ -69,6 +69,8 @@ SELECT prdno                                                     AS prdno,
        qtConferencia                                             AS qtConferencia,
        qtConfEdit                                                AS qtConfEdit,
        qtConfEditLoja                                            AS qtConfEditLoja,
+       estoqueConfCD                                             AS estoqueConfCD,
+       estoqueConfLoja                                           AS estoqueConfLoja,
        estoque                                                   AS estoque,
        estoqueData                                               AS estoqueData,
        estoqueCD                                                 AS estoqueCD,
@@ -166,6 +168,8 @@ SELECT S.no                                                                     
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
        A.dataUpdate                                                                   AS dataUpdate,
        A.kardec                                                                       AS kardec,
+       A.estoqueConfCD                                                                AS estoqueConfCD,
+       A.estoqueConfLoja                                                              AS estoqueConfLoja,
        CAST(A.dataObservacao AS DATE)                                                 AS dataConferencia,
        qtConferencia                                                                  AS qtConferencia,
        qtConfEdit                                                                     AS qtConfEdit,
@@ -247,7 +251,9 @@ SELECT loja,
        barcode,
        ref,
        numeroAcerto,
-       processado
+       processado,
+       estoqueConfCD,
+       estoqueConfLoja
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR

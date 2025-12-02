@@ -44,4 +44,18 @@ ALTER TABLE sqldados.prdAdicional
 ALTER TABLE sqldados.produtoKardec
   ADD COLUMN nfEnt varchar(30) NULL AFTER doc;
 
-TRUNCATE sqldados.produtoKardec
+TRUNCATE sqldados.produtoKardec;
+
+ALTER TABLE sqldados.prdAdicional
+  ADD COLUMN estoqueConfCD   int NULL,
+  ADD COLUMN estoqueConfLoja int NULL;
+
+UPDATE sqldados.prdAdicional
+SET estoqueConfCD   = qtConfEdit,
+    estoqueConfLoja = qtConfEditLoja
+WHERE IFNULL(estoqueConfCD, 0) != IFNULL(qtConfEdit, 0)
+   OR IFNULL(estoqueConfLoja, 0) != IFNULL(qtConfEditLoja, 0);
+
+SELECT storeno AS loja, TRIM(prdno) AS codigo, grade
+FROM
+  sqldados.prdAdicional

@@ -47,9 +47,11 @@ class ProdutoEstoque(
   var ref: String? = null,
   var numeroAcerto: Int? = null,
   var processado: Boolean? = false,
+  var estoqueConfCD: Int? = null,
+  var estoqueConfLoja: Int? = null,
 ) {
   val qtConfCalc: Int
-    get() = (qtConfEdit?: 0) + (qtConfEditLoja ?: 0)
+    get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
 
   fun isUpdated(): Boolean {
     return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
