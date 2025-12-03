@@ -125,7 +125,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
     columnGrid(NotaVenda::ni, header = "NI")
     columnGrid(NotaVenda::nota, header = "NF")
-    columnGrid(NotaVenda::nfEntRet, header = "NF Ent")
+    columnGrid(NotaVenda::notaEntrega, header = "NF Ent")
     columnGrid(NotaVenda::uf, header = "UF")
     columnGrid(NotaVenda::tipoNf, header = "Tipo NF")
     columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto") {

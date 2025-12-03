@@ -32,6 +32,7 @@ class NotaVenda(
   var motivoTroca: String?,
   var motivoTrocaCod: String?,
   var nfEntRet: Int?,
+  var notaEntrega: String?,
   var ni: Int?,
   var dataNi: LocalDate?,
   var pendente: String?,

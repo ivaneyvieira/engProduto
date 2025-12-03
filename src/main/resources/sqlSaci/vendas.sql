@@ -104,6 +104,76 @@ WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (autoriza = :autoriza OR :autoriza = 'T' OR :devolucaoStatus = 'V')
 GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
+/****************************************************************************************/
+
+DROP TEMPORARY TABLE IF EXISTS T_XANO;
+CREATE TEMPORARY TABLE T_XANO
+(
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT loja AS storeno, pdv AS pdvno, transacao AS xano
+FROM
+  T_VENDA
+GROUP BY storeno, pdvno, xano;
+
+DROP TEMPORARY TABLE IF EXISTS T_V;
+CREATE TEMPORARY TABLE T_V
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       nfno,
+       nfse
+FROM
+  sqlpdv.pxa AS P
+    INNER JOIN T_XANO
+               USING (storeno, pdvno, xano)
+WHERE P.cfo IN (5922, 6922)
+  AND storeno IN (2, 3, 4, 5, 8)
+  AND nfse = '1'
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_E;
+CREATE TEMPORARY TABLE T_E
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       P.date                                    AS data
+FROM
+  sqlpdv.pxa       AS P
+    INNER JOIN T_V AS V
+               ON P.storeno = V.storeno
+                 AND P.eordno = V.ordno
+WHERE P.cfo IN (5117, 6117)
+  AND P.storeno IN (2, 3, 4, 5, 8)
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
+CREATE TEMPORARY TABLE T_ENTREGA
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT V.storeno     AS loja,
+       V.pdvno       AS pdv,
+       V.xano        AS transacao,
+       V.numero      AS notaVenda,
+       MAX(E.numero) AS notaEntrega,
+       MAX(E.data)   AS dataEntrega
+FROM
+  T_V             AS V
+    LEFT JOIN T_E AS E
+              USING (storeno, ordno)
+GROUP BY V.storeno, V.pdvno, V.xano;
+
+/****************************************************************************************/
+
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
 (
@@ -243,7 +313,9 @@ SELECT DISTINCT U.loja,
 /*       loginSolicitacao,*/
                 motivoTroca,
                 motivoTrocaCod,
+                E.notaEntrega                     AS notaEntrega,
                 nfEntRet,
+
                 I.invno                           AS ni,
                 CAST(I.date AS DATE)              AS dataNi,
                 IF(P.transacao IS NULL, 'S', 'N') AS pendente
@@ -252,6 +324,8 @@ FROM
     LEFT JOIN T_VENDA_PENDENTE AS P
               USING (loja, pdv, transacao)
     LEFT JOIN T_NI             AS I
+              USING (loja, pdv, transacao)
+    LEFT JOIN T_ENTREGA        AS E
               USING (loja, pdv, transacao)
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
