@@ -32,6 +32,79 @@ WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
   AND N.xatype IN (1, 999)
   AND N.status <> 1;
 
+/****************************************************************************************/
+
+DROP TEMPORARY TABLE IF EXISTS T_XANO;
+CREATE TEMPORARY TABLE T_XANO
+(
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT loja AS storeno, pdv AS pdvno, xano AS xano
+FROM
+  T_VENDA
+GROUP BY storeno, pdvno, xano;
+
+DROP TEMPORARY TABLE IF EXISTS T_V;
+CREATE TEMPORARY TABLE T_V
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       nfno,
+       nfse
+FROM
+  sqlpdv.pxa AS P
+    INNER JOIN T_XANO
+               USING (storeno, pdvno, xano)
+WHERE P.cfo IN (5922, 6922)
+  AND storeno IN (2, 3, 4, 5, 8)
+  AND nfse = '1'
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_E;
+CREATE TEMPORARY TABLE T_E
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       P.date                                    AS data
+FROM
+  sqlpdv.pxa       AS P
+    INNER JOIN T_V AS V
+               ON P.storeno = V.storeno
+                 AND P.eordno = V.ordno
+WHERE P.cfo IN (5117, 6117)
+  AND P.storeno IN (2, 3, 4, 5, 8)
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
+CREATE TEMPORARY TABLE T_ENTREGA
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT V.storeno AS loja,
+       V.pdvno   AS pdv,
+       V.xano    AS transacao,
+       V.numero  AS notaVenda,
+       E.storeno AS lojaE,
+       E.pdvno   AS pdvE,
+       E.xano    AS transacaoE
+FROM
+  T_V             AS V
+    LEFT JOIN T_E AS E
+              USING (storeno, ordno)
+GROUP BY V.storeno, V.pdvno, V.xano;
+
+/****************************************************************************************/
+
 DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
 CREATE TEMPORARY TABLE T_REEMBOLSO
 SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
@@ -166,17 +239,20 @@ FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
+    LEFT JOIN T_ENTREGA              AS EF
+              ON N.storeno = EF.loja
+                AND N.pdvno = EF.pdv
+                AND N.xano = EF.transacao
     LEFT JOIN sqldados.nfAutorizacao AS AT
-              ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
+              ON AT.storeno = IFNULL(EF.pdvE, N.storeno)
+                AND AT.pdvno = IFNULL(EF.pdvE, N.pdvno)
+                AND AT.xano = IFNULL(EF.transacaoE, N.xano)
     LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp           AS E
               ON E.no = N.empno
     LEFT JOIN sqldados.users         AS U
               ON U.no = I.userno
-                /*  LEFT JOIN sqldados.invAutorizacao AS A
-                            ON A.invno = I.invno AND A.storeno = IFNULL(I.storeno, N.storeno) AND
-                               A.pdvno = IFNULL(I.pdvno, N.pdvno) AND A.xano = IFNULL(I.xano, N.xano)*/
     LEFT JOIN sqldados.users         AS UA
               ON UA.no = AT.userTroca
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
