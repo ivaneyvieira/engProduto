@@ -36,6 +36,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVenda) {
   private var form: SubWindowForm? = null
@@ -82,6 +83,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             this.isAutoselect = true
             this.value = nota.nfEntRet
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeMode = ValueChangeMode.LAZY
+
+            addValueChangeListener {
+              if (it.isFromClient) {
+                viewModel.salvaNfEntRet(nota, this.value)
+              }
+            }
           }
         }
 

@@ -2734,6 +2734,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun salvaNfEntRet(venda: NotaVenda) {
+    val sql = "/sqlSaci/salvaNfEntRet.sql"
+    script(sql) {
+      addOptionalParameter("nfEntRet", venda.nfEntRet ?: 0)
+      addOptionalParameter("storeno", venda.loja ?: 0)
+      addOptionalParameter("pdvno", venda.pdv ?: 0)
+      addOptionalParameter("xano", venda.transacao ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

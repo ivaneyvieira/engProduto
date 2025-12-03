@@ -255,6 +255,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
+  fun salvaNfEntRet(nota: NotaVenda, nfEntRet: Int) {
+    nota.nfEntRet = nfEntRet
+    nota.salvaNfEntRet()
+  }
+
   val subView
     get() = viewModel.view.tabDevAutoriza
 }

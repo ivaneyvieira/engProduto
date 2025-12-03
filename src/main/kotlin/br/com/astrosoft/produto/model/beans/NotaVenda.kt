@@ -114,6 +114,10 @@ class NotaVenda(
     return "$solicitacaoTroca $produtoTroca".trim()
   }
 
+  fun salvaNfEntRet() {
+    saci.salvaNfEntRet(this)
+  }
+
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
