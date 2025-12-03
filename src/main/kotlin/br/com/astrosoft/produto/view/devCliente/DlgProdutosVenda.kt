@@ -3,11 +3,7 @@ package br.com.astrosoft.produto.view.devCliente
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.focusEditor
-import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -168,13 +164,17 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         }
       }
 
+      val user = AppConfig.userLogin() as? UserSaci
+
       produtoNFDev()
       produtoNFTemProduto()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFNI()
       produtoNFNIData()
-      addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
-        viewModel.desatorizaTroca(nota, produto)
+      if (user?.desautorizaDev == true) {
+        addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
+          viewModel.desatorizaTroca(nota, produto)
+        }
       }
       produtoNFCodigo()
       produtoNFDescricao()
