@@ -267,3 +267,4 @@ WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.no
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
 
+
