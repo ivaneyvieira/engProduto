@@ -62,7 +62,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-      //this.isVisible = AppConfig.userLogin()?.admin == true
+
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -70,7 +70,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
-      //this.isVisible = AppConfig.userLogin()?.admin == true
+
       addValueChangeListener {
         viewModel.updateView()
       }

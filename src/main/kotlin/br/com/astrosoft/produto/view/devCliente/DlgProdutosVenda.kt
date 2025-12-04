@@ -22,10 +22,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Html
@@ -35,6 +32,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -42,13 +40,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 
+  private var edtPesquisa: TextField? = null
   private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
   private var edtNotaEntRet: IntegerField? = null
   private var edtMotivo: Select<EMotivoTroca>? = null
 
   fun showDialog(onClose: () -> Unit) {
-    //val readOnly = (nota.ni ?: 0) > 0
     val readOnly = false
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
     val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
@@ -62,6 +60,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
     form = SubWindowForm(
       title = "$linha1|$linha2",
       toolBar = {
+        edtPesquisa = textField("Pesquisa") {
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            update()
+          }
+        }
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
           this.setItems(ESolicitacaoTroca.entries)
@@ -77,7 +82,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         }
 
         if (nota.tipoNf == "ENTRE FUT") {
-          edtNotaEntRet = integerField("Entrega Fut") {
+          edtNotaEntRet = integerField("NF Ent Fut") {
             this.isReadOnly = readOnly
             this.width = "6rem"
             this.isAutoselect = true
@@ -229,7 +234,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   }
 
   fun update() {
-    val listProdutos = nota.produtos().expande()
+    val pesquisa = edtPesquisa?.value.orEmpty()
+    val listProdutos = nota.produtos().expande().filter { prd ->
+      pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
+      (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
+      (prd.barcodeStrList ?: "").contains(pesquisa) ||
+      (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
+    }
     gridDetail.setItems(listProdutos)
     updateNota()
 

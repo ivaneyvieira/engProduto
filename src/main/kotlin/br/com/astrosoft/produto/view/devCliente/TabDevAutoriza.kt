@@ -84,12 +84,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
-    button("Desfaz") {
-      icon = VaadinIcon.KEY.create()
-      onClick {
-        viewModel.desfazTroca()
-      }
-    }
   }
 
   override fun Grid<NotaVenda>.gridPanel() {
@@ -99,11 +93,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pdv, header = "PDV")
 
-    /*
-    colunaImprimir = addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
-      viewModel.imprimeValeTroca(nota)
-    }*/
-
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosVenda(viewModel, nota)
       dlgProduto?.showDialog {
@@ -112,17 +101,15 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
 
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
-    columnGrid(NotaVenda::ni, header = "NI")
-    columnGrid(NotaVenda::data, header = "Data")
-    columnGrid(NotaVenda::nota, header = "NF")
-    columnGrid(NotaVenda::notaEntrega, header = "NF Ent")
+    columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
+    columnGrid(NotaVenda::data, header = "Data", width = "6rem")
+    columnGrid(NotaVenda::nota, header = "NF", width = "6rem").right()
+    columnGrid(NotaVenda::notaEntrega, header = "NF Ent", width = "6rem").right()
     columnGrid(NotaVenda::uf, header = "UF")
     columnGrid(NotaVenda::tipoNf, header = "Tipo NF") {
       this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
     }
-    //columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto")
     val valorCol = columnGrid(NotaVenda::valor, header = "Valor NF")
-    //val valorTipoCol = columnGrid(NotaVenda::valorTipo, header = "Valor TP")
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
@@ -143,7 +130,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-      //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
 
