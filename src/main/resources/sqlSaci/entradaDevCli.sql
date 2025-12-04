@@ -266,5 +266,3 @@ WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.no
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
-
-
