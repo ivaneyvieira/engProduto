@@ -94,7 +94,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     columnGrid(EntradaDevCli::vendno, header = "Cód For")
     columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
     columnGrid(EntradaDevCli::valor, header = "Valor Devolução")
-    columnGrid(EntradaDevCli::nfVendaVenda, header = "Nota Fatura")
+    columnGrid(EntradaDevCli::nfVendaVenda, header = "NF Fatura")
     columnGrid(EntradaDevCli::nfVenda, header = "Nota Venda")
     columnGrid(EntradaDevCli::nfData, header = "Data")
     columnGrid(EntradaDevCli::custno, header = "Cód Cliente")
