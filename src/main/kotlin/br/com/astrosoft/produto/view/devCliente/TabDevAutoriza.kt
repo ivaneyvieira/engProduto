@@ -26,7 +26,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private lateinit var cmdDevolucaoStatus: Select<EDevolucaoStatus>
   private var colunaImprimir: Grid.Column<NotaVenda>? = null
   private var dlgProduto: DlgProdutosVenda? = null
 
@@ -59,16 +58,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
-      }
-    }
-    cmdDevolucaoStatus = select("Devolução") {
-      this.width = "8rem"
-      this.setItemLabelGenerator { item -> item.descricao }
-      this.setItems(EDevolucaoStatus.entries)
-      this.value = EDevolucaoStatus.Vendas
-      addValueChangeListener {
-        viewModel.updateView()
-        colunaImprimir?.isVisible = it.value != EDevolucaoStatus.Vendas
       }
     }
     edtDataInicial = datePicker("Data inicial") {
@@ -124,15 +113,16 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
     columnGrid(NotaVenda::ni, header = "NI")
+    columnGrid(NotaVenda::data, header = "Data")
     columnGrid(NotaVenda::nota, header = "NF")
     columnGrid(NotaVenda::notaEntrega, header = "NF Ent")
     columnGrid(NotaVenda::uf, header = "UF")
-    columnGrid(NotaVenda::tipoNf, header = "Tipo NF")
-    columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto") {
+    columnGrid(NotaVenda::tipoNf, header = "Tipo NF") {
       this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
     }
+    //columnGrid(NotaVenda::tipoPgto, header = "Tipo Pgto")
     val valorCol = columnGrid(NotaVenda::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaVenda::valorTipo, header = "Valor TP")
+    //val valorTipoCol = columnGrid(NotaVenda::valorTipo, header = "Valor TP")
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
@@ -153,7 +143,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-      valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
 
@@ -164,7 +154,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
       autoriza = "S",
-      devolucaoStatus = cmdDevolucaoStatus.value ?: EDevolucaoStatus.Todos,
+      devolucaoStatus = EDevolucaoStatus.Vendas,
     )
   }
 

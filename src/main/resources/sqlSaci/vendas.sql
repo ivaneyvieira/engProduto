@@ -315,7 +315,6 @@ SELECT DISTINCT U.loja,
                 motivoTrocaCod,
                 E.notaEntrega                     AS notaEntrega,
                 nfEntRet,
-
                 I.invno                           AS ni,
                 CAST(I.date AS DATE)              AS dataNi,
                 IF(P.transacao IS NULL, 'S', 'N') AS pendente
@@ -330,8 +329,7 @@ FROM
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-       vendedor LIKE @PESQUISA_LIKE)
-   OR IFNULL(I.invno, 0) = @PESQUISA_INT
+       vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
   AND CASE
         WHEN :devolucaoStatus = 'V'  THEN TRUE
         WHEN :devolucaoStatus = 'P'  THEN I.invno IS NULL
