@@ -81,9 +81,11 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             this.isReadOnly = readOnly
             this.width = "6rem"
             this.isAutoselect = true
-            this.value = nota.nfEntRet
+            this.value = nota.notaEntrega?.split("/")?.getOrNull(0)?.toIntOrNull()
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.valueChangeMode = ValueChangeMode.LAZY
+
+            viewModel.salvaNfEntRet(nota, this.value)
 
             addValueChangeListener {
               if (it.isFromClient) {
