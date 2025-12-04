@@ -27,7 +27,7 @@ FROM
     INNER JOIN sqldados.custp AS C
                ON C.no = N.custno
 WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
-  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 2 MONTH) * 1
+  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 1 MONTH) * 1
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.xatype IN (1, 999)
   AND N.status <> 1;
@@ -148,9 +148,7 @@ SELECT I.invno                                                             AS in
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                  AS nfno,
        MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2) AS nfse,
        I.c9                                                                AS impressora,
-       U.loja                                                              AS lojaVenda,
        U.pdv                                                               AS pdvVenda,
-       U.xano                                                              AS xanoVenda,
        U.nfVenda                                                           AS nfVendaVenda,
        U.data                                                              AS dataVenda,
        U.cliente                                                           AS clienteVenda,
@@ -230,7 +228,7 @@ SELECT DISTINCT I.invno,
                 clienteNome                                                            AS clienteNome,
                 nfValorVenda                                                           AS nfValorVenda,
                 IF(IF(I.estorno = 'N', pdvVenda, N.remarks LIKE '') IS NULL, 'N', 'S') AS fezTroca,
-                UA.no                                                                  AS usernoAutorizacao,
+                AT.userTroca                                                           AS usernoAutorizacao,
                 UA.name                                                                AS nameAutorizacao,
                 UA.login                                                               AS loginAutorizacao,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
@@ -242,17 +240,13 @@ FROM
     LEFT JOIN sqldados.nf            AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
     LEFT JOIN T_ENTREGA              AS EF
-              ON EF.loja = IFNULL(I.storeno, N.storeno)
-                AND EF.pdv = IFNULL(I.pdvno, N.pdvno)
-                AND EF.transacao = IFNULL(I.xano, N.xano)
+              ON N.storeno = EF.loja
+                AND N.pdvno = EF.pdv
+                AND N.xano = EF.transacao
     LEFT JOIN sqldados.nfAutorizacao AS AT
-              ON AT.storeno = IFNULL(EF.lojaE, IFNULL(I.storeno, N.storeno))
-                AND AT.pdvno = IFNULL(EF.pdvE, IFNULL(I.pdvno, N.pdvno))
-                AND AT.xano = IFNULL(EF.transacaoE, IFNULL(I.xano, N.xano))
-    LEFT JOIN sqldados.nfAutorizacao AS ATV
-              ON ATV.storeno = I.lojaVenda
-                AND ATV.pdvno = I.pdvVenda
-                AND ATV.xano = I.xanoVenda
+              ON AT.storeno = IFNULL(EF.pdvE, N.storeno)
+                AND AT.pdvno = IFNULL(EF.pdvE, N.pdvno)
+                AND AT.xano = IFNULL(EF.transacaoE, N.xano)
     LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp           AS E
@@ -260,9 +254,10 @@ FROM
     LEFT JOIN sqldados.users         AS U
               ON U.no = I.userno
     LEFT JOIN sqldados.users         AS UA
-              ON UA.no = IFNULL(AT.userTroca, ATV.userTroca)
+              ON UA.no = AT.userTroca
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
+
