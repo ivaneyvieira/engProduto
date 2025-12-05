@@ -17,32 +17,21 @@ SELECT N.storeno                 AS loja,
        N.grossamt / 100          AS nfValor,
        N.custno                  AS cliente,
        C.name                    AS clienteNome,
-       CASE
-         WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
-         WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
-                                                  ELSE ''
-       END                       AS obsNI
+       CAST(CASE
+              WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
+              WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
+                                                       ELSE ''
+            END AS CHAR)         AS obsNI
 FROM
   sqldados.nf                 AS N
     INNER JOIN sqldados.custp AS C
                ON C.no = N.custno
 WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
-  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 1 MONTH) * 1
+  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 2 MONTH) * 1
   AND N.storeno IN (2, 3, 4, 5, 8)
-  AND N.xatype IN (1, 999)
   AND N.status <> 1;
 
 /****************************************************************************************/
-
-DROP TEMPORARY TABLE IF EXISTS T_XANO;
-CREATE TEMPORARY TABLE T_XANO
-(
-  PRIMARY KEY (storeno, pdvno, xano)
-)
-SELECT loja AS storeno, pdv AS pdvno, xano AS xano
-FROM
-  T_VENDA
-GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
@@ -58,11 +47,10 @@ SELECT P.storeno,
        nfse
 FROM
   sqlpdv.pxa AS P
-    INNER JOIN T_XANO
-               USING (storeno, pdvno, xano)
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
+  AND date >= SUBDATE(:dataI, INTERVAL 2 MONTH)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
@@ -88,7 +76,8 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
 (
-  PRIMARY KEY (loja, pdv, transacao)
+  PRIMARY KEY (loja, pdv, transacao),
+  INDEX (lojaE, pdvE, transacaoE)
 )
 SELECT V.storeno AS loja,
        V.pdvno   AS pdv,
@@ -133,6 +122,8 @@ SELECT I.invno                                                             AS in
        IFNULL(NF1.storeno, NF2.storeno)                                    AS storeno,
        IFNULL(NF1.pdvno, NF2.pdvno)                                        AS pdvno,
        IFNULL(NF1.xano, NF2.xano)                                          AS xano,
+       NF1.xano                                                            AS xanoNf1,
+       nfNfno                                                              AS nfNfno,
        IFNULL(NF1.custno, NF2.custno)                                      AS custno,
        IFNULL(NF1.cfo, NF2.cfo)                                            AS cfo,
        CAST(CONCAT(IFNULL(NF1.nfno, NF2.nfno), '/',
@@ -148,7 +139,9 @@ SELECT I.invno                                                             AS in
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                  AS nfno,
        MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2) AS nfse,
        I.c9                                                                AS impressora,
+       U.loja                                                              AS lojaVenda,
        U.pdv                                                               AS pdvVenda,
+       U.xano                                                              AS xanoVenda,
        U.nfVenda                                                           AS nfVendaVenda,
        U.data                                                              AS dataVenda,
        U.cliente                                                           AS clienteVenda,
@@ -162,7 +155,7 @@ SELECT I.invno                                                             AS in
 FROM
   sqldados.inv               AS I
     LEFT JOIN T_VENDA        AS U
-              ON U.loja = I.storeno AND U.obsNI REGEXP CONCAT('NI *', I.invno)
+              ON U.loja = I.storeno AND U.obsNI LIKE CONCAT('NI%', I.invno, '%') AND U.obsNI LIKE 'NI%'
     LEFT JOIN T_REEMBOLSO    AS R
               ON R.loja = I.storeno AND R.obs LIKE CONCAT('REEMBOLSO%', I.invno, '%')
     LEFT JOIN sqldados.nf    AS NF1
@@ -228,7 +221,7 @@ SELECT DISTINCT I.invno,
                 clienteNome                                                            AS clienteNome,
                 nfValorVenda                                                           AS nfValorVenda,
                 IF(IF(I.estorno = 'N', pdvVenda, N.remarks LIKE '') IS NULL, 'N', 'S') AS fezTroca,
-                AT.userTroca                                                           AS usernoAutorizacao,
+                UA.no                                                                  AS usernoAutorizacao,
                 UA.name                                                                AS nameAutorizacao,
                 UA.login                                                               AS loginAutorizacao,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
@@ -240,13 +233,17 @@ FROM
     LEFT JOIN sqldados.nf            AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
     LEFT JOIN T_ENTREGA              AS EF
-              ON N.storeno = EF.loja
-                AND N.pdvno = EF.pdv
-                AND N.xano = EF.transacao
+              ON EF.lojaE = I.storeno
+                AND EF.pdvE = I.pdvno
+                AND EF.transacaoE = I.xano
     LEFT JOIN sqldados.nfAutorizacao AS AT
-              ON AT.storeno = IFNULL(EF.pdvE, N.storeno)
-                AND AT.pdvno = IFNULL(EF.pdvE, N.pdvno)
-                AND AT.xano = IFNULL(EF.transacaoE, N.xano)
+              ON AT.storeno = IFNULL(EF.loja, IFNULL(I.storeno, N.storeno))
+                AND AT.pdvno = IFNULL(EF.pdv, IFNULL(I.pdvno, N.pdvno))
+                AND AT.xano = IFNULL(EF.transacao, IFNULL(I.xano, N.xano))
+    LEFT JOIN sqldados.nfAutorizacao AS ATV
+              ON ATV.storeno = I.lojaVenda
+                AND ATV.pdvno = I.pdvVenda
+                AND ATV.xano = I.xanoVenda
     LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp           AS E
@@ -254,10 +251,9 @@ FROM
     LEFT JOIN sqldados.users         AS U
               ON U.no = I.userno
     LEFT JOIN sqldados.users         AS UA
-              ON UA.no = AT.userTroca
+              ON UA.no = IFNULL(AT.userTroca, ATV.userTroca)
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
-
