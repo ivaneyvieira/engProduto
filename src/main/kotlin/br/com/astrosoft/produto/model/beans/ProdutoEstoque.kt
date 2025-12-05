@@ -53,6 +53,12 @@ class ProdutoEstoque(
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
 
+  val qtConfCalcEstoque: Int
+    get() = (estoqueConfCD ?: 0) + (estoqueConfLoja ?: 0)
+
+  val qtDifCalcEstoque: Int
+    get() = qtConfCalcEstoque - (saldo ?: 0)
+
   fun isUpdated(): Boolean {
     return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
   }
