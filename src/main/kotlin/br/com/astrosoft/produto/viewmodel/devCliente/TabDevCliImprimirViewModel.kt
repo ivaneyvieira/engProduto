@@ -73,11 +73,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
     val assinado = nota.nameAutorizacao?.isBlank() == false
     val valorNota = nota.valor ?: 0.00
-    val valorLimitTrocap = user?.valorMinimoTrocaP ?: 500
-    val valorLimitTroca = user?.valorMinimoTroca ?: 0
-    val valorLimitEstorno = user?.valorMinimoEstorno ?: 0
-    val valorLimitReembolso = user?.valorMinimoReembolso ?: 0
-    val valorLimitMuda = user?.valorMinimoMuda ?: 0
+    val valorDevolucao = user?.valorDevolucao ?: 0
 
     val relatorio = when {
       assinado                         -> {
@@ -87,45 +83,35 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       nota.tipoObs.startsWith("TROCA") -> {
 
         if (nota.isComProduto()) {
-          if (valorLimitTrocap == 0) {
-            fail("Nota não assinada")
-          } else if (valorNota > valorLimitTrocap) {
-            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTrocap.format()})")
+          if (valorNota > valorDevolucao) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
           }
           ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
         } else {
-          if (valorLimitTroca == 0) {
-            fail("Nota não assinada")
-          } else if (valorNota > valorLimitTroca) {
-            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTroca.format()})")
+          if (valorNota > valorDevolucao) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
           }
           ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
         }
       }
 
       nota.tipoObs.startsWith("EST")   -> {
-        if (valorLimitEstorno == 0) {
-          fail("Nota não assinada")
-        } else if (valorNota > valorLimitEstorno) {
-          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitEstorno.format()})")
+        if (valorNota > valorDevolucao) {
+          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       nota.tipoObs.startsWith("REEMB") -> {
-        if (valorLimitReembolso == 0) {
-          fail("Nota não assinada")
-        } else if (valorNota > valorLimitReembolso) {
-          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitReembolso.format()})")
+        if (valorNota > valorDevolucao) {
+          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       nota.tipoObs.startsWith("MUDA")  -> {
-        if (valorLimitMuda == 0) {
-          fail("Nota não assinada")
-        } else if (valorNota > valorLimitMuda) {
-          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitMuda.format()})")
+        if (valorNota > valorDevolucao) {
+          fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }

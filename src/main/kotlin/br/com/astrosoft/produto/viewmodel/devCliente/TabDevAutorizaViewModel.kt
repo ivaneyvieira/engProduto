@@ -178,40 +178,36 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       val valorProdutos = produtosDev.sumOf { prd ->
         (prd.quantDev ?: 0) * 1.0 * (prd.preco ?: 0.00)
       }
-      val valorLimitTrocap = user.valorMinimoTrocaP
-      val valorLimitTroca = user.valorMinimoTroca
-      val valorLimitEstorno = user.valorMinimoEstorno
-      val valorLimitReembolso = user.valorMinimoReembolso
-      val valorLimitMuda = user.valorMinimoMuda
+      val valorDevolucao = user.valorDevolucao
 
       when {
         solicitacao == ESolicitacaoTroca.Troca       -> {
 
           if (produto == EProdutoTroca.Com) {
-            if (valorProdutos > valorLimitTrocap) {
+            if (valorProdutos > valorDevolucao) {
               fail("Valor da devolução maior que o autorizado")
             }
           } else {
-            if (valorProdutos > valorLimitTroca) {
+            if (valorProdutos > valorDevolucao) {
               fail("Valor da devolução maior que o autorizado")
             }
           }
         }
 
         solicitacao == ESolicitacaoTroca.Estorno     -> {
-          if (valorProdutos > valorLimitEstorno) {
+          if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
         solicitacao == ESolicitacaoTroca.Reembolso   -> {
-          if (valorProdutos > valorLimitReembolso) {
+          if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
         solicitacao == ESolicitacaoTroca.MudaCliente -> {
-          if (valorProdutos > valorLimitMuda) {
+          if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
