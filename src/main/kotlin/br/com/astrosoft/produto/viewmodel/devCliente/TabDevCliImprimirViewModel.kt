@@ -28,6 +28,8 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     produto.marcaAjuste(ajuste)
   }
 
+  /**************************** imprimeValeTroca ************************************/
+
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     val loginAutorizacao = nota.loginAutorizacao ?: ""
     if(loginAutorizacao.isBlank()) {
@@ -38,7 +40,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
     notasAuto.forEach { notaAuto ->
       val motivoAuto = notaAuto.motivo()?.uppercase() ?: ""
-      nota.nameAutorizacao = notaAuto.nameTroca
+      //nota.nameAutorizacao = notaAuto.nameTroca
       val motivoDev = nota.motivo()?.uppercase() ?: ""
       if (motivoDev != motivoAuto) {
         fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
@@ -142,13 +144,13 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-    ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
-
     relatorio.print(nota.produtos(), subView.printerPreview(loja = 0) { impressora ->
       nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     })
   }
+
+  /**************************** imprimeValeTroca ************************************/
 
   fun formAutoriza(nota: EntradaDevCli) = viewModel.exec {
     if (!nota.temAjusteMisto()) fail("Tipo de devolução não informado")
