@@ -227,46 +227,36 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         solicitacao == ESolicitacaoTroca.Troca       -> {
 
           if (produto == EProdutoTroca.Com) {
-            if (valorLimitTrocap == 0) {
-              fail("Nota não assinada")
-            } else if (valorNota > valorLimitTrocap) {
+            if (valorNota > valorLimitTrocap) {
               fail("Valor da devolução maior que o autorizado")
             }
           } else {
-            if (valorLimitTroca == 0) {
-              fail("Nota não assinada")
-            } else if (valorNota > valorLimitTroca) {
+            if (valorNota > valorLimitTroca) {
               fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTroca.format()})")
             }
           }
         }
 
         solicitacao == ESolicitacaoTroca.Estorno     -> {
-          if (valorLimitEstorno == 0) {
-            fail("Nota não assinada")
-          } else if (valorNota > valorLimitEstorno) {
+          if (valorNota > valorLimitEstorno) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitEstorno.format()})")
           }
         }
 
         solicitacao == ESolicitacaoTroca.Reembolso   -> {
-          if (valorLimitReembolso == 0) {
-            fail("Nota não assinada")
-          } else if (valorNota > valorLimitReembolso) {
+          if (valorNota > valorLimitReembolso) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitReembolso.format()})")
           }
         }
 
         solicitacao == ESolicitacaoTroca.MudaCliente -> {
-          if (valorLimitMuda == 0) {
-            fail("Nota não assinada")
-          } else if (valorNota > valorLimitMuda) {
+          if (valorNota > valorLimitMuda) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitMuda.format()})")
           }
         }
 
         else                                         -> {
-          fail("Nota não assinada")
+          //Não faz nada
         }
       }
 
