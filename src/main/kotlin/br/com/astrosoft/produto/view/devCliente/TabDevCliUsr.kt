@@ -79,7 +79,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)
       filtroLoja(binder, UserSaci::lojaVale)
-      integerField("Valor Muda") {
+      integerField("Valor Devolução") {
         binder.bind(this, UserSaci::valorDevolucao.name)
       }
     }
