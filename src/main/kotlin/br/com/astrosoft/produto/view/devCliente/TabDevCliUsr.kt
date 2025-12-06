@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), ITabDevCliUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -81,6 +82,8 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
       filtroLoja(binder, UserSaci::lojaVale)
       integerField("Valor Máximo para Devolução") {
         this.width = "12rem"
+        this.isAutoselect = true
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         binder.bind(this, UserSaci::valorDevolucao.name)
       }
     }
