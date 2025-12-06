@@ -79,7 +79,8 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)
       filtroLoja(binder, UserSaci::lojaVale)
-      integerField("Valor Devolução") {
+      integerField("Valor Máximo para Devolução") {
+        this.width = "12rem"
         binder.bind(this, UserSaci::valorDevolucao.name)
       }
     }
