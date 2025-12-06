@@ -230,7 +230,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
             if (valorLimitTrocap == 0) {
               fail("Nota não assinada")
             } else if (valorNota > valorLimitTrocap) {
-              fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTrocap.format()})")
+              fail("Valor da devolução maior que o autorizado")
             }
           } else {
             if (valorLimitTroca == 0) {
