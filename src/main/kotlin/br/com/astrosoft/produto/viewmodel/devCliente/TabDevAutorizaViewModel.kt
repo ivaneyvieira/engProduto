@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -212,6 +213,65 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
           fail("O usuário não tem permissão para muda de cliente")
         }
       }
+
+      /*********************************************************************************/
+
+      val valorNota = nota.valor ?: 0.00
+      val valorLimitTrocap = user.valorMinimoTrocaP
+      val valorLimitTroca = user.valorMinimoTroca
+      val valorLimitEstorno = user.valorMinimoEstorno
+      val valorLimitReembolso = user.valorMinimoReembolso
+      val valorLimitMuda = user.valorMinimoMuda
+
+      when {
+        solicitacao == ESolicitacaoTroca.Troca       -> {
+
+          if (produto == EProdutoTroca.Com) {
+            if (valorLimitTrocap == 0) {
+              fail("Nota não assinada")
+            } else if (valorNota > valorLimitTrocap) {
+              fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTrocap.format()})")
+            }
+          } else {
+            if (valorLimitTroca == 0) {
+              fail("Nota não assinada")
+            } else if (valorNota > valorLimitTroca) {
+              fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTroca.format()})")
+            }
+          }
+        }
+
+        solicitacao == ESolicitacaoTroca.Estorno     -> {
+          if (valorLimitEstorno == 0) {
+            fail("Nota não assinada")
+          } else if (valorNota > valorLimitEstorno) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitEstorno.format()})")
+          }
+        }
+
+        solicitacao == ESolicitacaoTroca.Reembolso   -> {
+          if (valorLimitReembolso == 0) {
+            fail("Nota não assinada")
+          } else if (valorNota > valorLimitReembolso) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitReembolso.format()})")
+          }
+        }
+
+        solicitacao == ESolicitacaoTroca.MudaCliente -> {
+          if (valorLimitMuda == 0) {
+            fail("Nota não assinada")
+          } else if (valorNota > valorLimitMuda) {
+            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitMuda.format()})")
+          }
+        }
+
+        else                                         -> {
+          fail("Nota não assinada")
+        }
+      }
+
+      /***********************************************************************************/
+
     } catch (e: Exception) {
       val msg = e.message
       viewModel.view.showWarning(msg ?: "Erro genérico")
