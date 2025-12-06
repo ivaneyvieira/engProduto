@@ -81,7 +81,6 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)
       filtroLoja(binder, UserSaci::lojaVale)
       integerField("Valor Devolução") {
-        this.width = "6rem"
         this.isAutoselect = true
         this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         binder.bind(this, UserSaci::valorDevolucao.name)
