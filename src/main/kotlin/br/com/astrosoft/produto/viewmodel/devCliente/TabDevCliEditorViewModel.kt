@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
 
@@ -23,21 +22,11 @@ class TabDevCliEditorViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    if (!nota.temAjusteMisto()) {
-      val user = AppConfig.userLogin() as? UserSaci
-      if (user?.ajustaMista != true) {
-        fail("Usuário sem permissão para ajuste misto")
-      }
-      subView.ajustaProduto(nota)
-    }
-
-    if (nota.temAjusteMisto()) {
-      val relatorio = ValeTrocaDevolucao(nota)
-      relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
-        nota.marcaImpresso(Impressora(0, impressora))
-        updateView()
-      })
-    }
+    val relatorio = ValeTrocaDevolucao(nota)
+    relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
+      nota.marcaImpresso(Impressora(0, impressora))
+      updateView()
+    })
   }
 
   fun ajusteProduto(ajuste: AjusteProduto) {

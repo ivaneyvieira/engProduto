@@ -30,12 +30,9 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
     this.autorizaEstorno = usuario.autorizaEstorno
     this.autorizaReembolso = usuario.autorizaReembolso
     this.autorizaMuda = usuario.autorizaMuda
-    this.autorizaMista = usuario.autorizaMista
     this.impressoraDev = usuario.impressoraDev
     this.lojaVale = usuario.lojaVale
-    this.ajustaMista = usuario.ajustaMista
     this.devCliAutoriza = usuario.devCliAutoriza
-    this.autorizaSolicitacao = usuario.autorizaSolicitacao
     this.autorizaDev = usuario.autorizaDev
     this.desautorizaDev = usuario.desautorizaDev
   }

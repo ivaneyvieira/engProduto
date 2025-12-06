@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -96,42 +95,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     subView.updateProdutos()
   }
 
-  fun solicitacaoNota(
-    nota: NotaVenda,
-    solicitacao: ESolicitacaoTroca?,
-    produto: EProdutoTroca?,
-    nfEntRet: Int?,
-    setMotivoTroca: Set<EMotivoTroca>,
-    login: String,
-    senha: String
-  ) = viewModel.exec {
-    val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) &&
-        it.senha.uppercase().trim() == senha.uppercase().trim()
-      }
-    user ?: fail("Usuário ou senha inválidos")
-
-    if (!user.autorizaSolicitacao) {
-      fail("Usuário sem permissão para solicitar devolução")
-    }
-
-    nota.solicitacaoTrocaEnnum = solicitacao
-    nota.produtoTrocaEnnum = produto
-    nota.nfEntRet = nfEntRet
-    nota.setMotivoTroca = setMotivoTroca
-
-    nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
-    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
-    if (nota.autoriza != "S") {
-      fail("Nota não marcada para autorizar")
-    }
-
-    nota.update()
-    updateView()
-  }
-
   fun saveNota(nota: NotaVenda) = viewModel.exec {
     nota.update()
   }
@@ -182,10 +145,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         fail("Tipo de devolução de produto inválida")
       }
 
-      if (produto == EProdutoTroca.Misto && !user.autorizaMista) {
-        fail("O usuário não tem permissão para autorizar devolução mista")
-      }
-
       when {
         solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
           EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
@@ -216,7 +175,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
       /*********************************************************************************/
 
-      val valorNota = nota.valor ?: 0.00
+      val valorProdutos = produtosDev.sumOf { prd ->
+        (prd.quantDev ?: 0) * 1.0 * (prd.preco ?: 0.00)
+      }
       val valorLimitTrocap = user.valorMinimoTrocaP
       val valorLimitTroca = user.valorMinimoTroca
       val valorLimitEstorno = user.valorMinimoEstorno
@@ -227,31 +188,31 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         solicitacao == ESolicitacaoTroca.Troca       -> {
 
           if (produto == EProdutoTroca.Com) {
-            if (valorNota > valorLimitTrocap) {
+            if (valorProdutos > valorLimitTrocap) {
               fail("Valor da devolução maior que o autorizado")
             }
           } else {
-            if (valorNota > valorLimitTroca) {
+            if (valorProdutos > valorLimitTroca) {
               fail("Valor da devolução maior que o autorizado")
             }
           }
         }
 
         solicitacao == ESolicitacaoTroca.Estorno     -> {
-          if (valorNota > valorLimitEstorno) {
-            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitEstorno.format()})")
+          if (valorProdutos > valorLimitEstorno) {
+            fail("Valor da devolução maior que o autorizado")
           }
         }
 
         solicitacao == ESolicitacaoTroca.Reembolso   -> {
-          if (valorNota > valorLimitReembolso) {
-            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitReembolso.format()})")
+          if (valorProdutos > valorLimitReembolso) {
+            fail("Valor da devolução maior que o autorizado")
           }
         }
 
         solicitacao == ESolicitacaoTroca.MudaCliente -> {
-          if (valorNota > valorLimitMuda) {
-            fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitMuda.format()})")
+          if (valorProdutos > valorLimitMuda) {
+            fail("Valor da devolução maior que o autorizado")
           }
         }
 
@@ -319,7 +280,6 @@ interface ITabDevAutoriza : ITabView {
   fun updateNotas(notas: List<NotaVenda>)
   fun itensNotasSelecionados(): List<NotaVenda>
   fun formAutoriza(nota: NotaVenda)
-  fun formSolicitacao(nota: NotaVenda, readOnly: Boolean)
   fun updateProdutos()
   fun produtos(): List<ProdutoNFS>
 }

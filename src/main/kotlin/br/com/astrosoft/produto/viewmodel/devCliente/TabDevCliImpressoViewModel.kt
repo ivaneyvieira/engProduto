@@ -26,20 +26,11 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    if (!nota.temAjusteMisto()) {
-      val user = AppConfig.userLogin() as? UserSaci
-      if (user?.ajustaMista != true) {
-        fail("Usuário sem permissão para ajuste misto")
-      }
-      subView.ajustaProduto(nota)
-    }
 
-    if (nota.temAjusteMisto()) {
-      val relatorio = ValeTrocaDevolucao(nota, nota.nameAutorizacao ?: "")
-      relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) {
-        updateView()
-      })
-    }
+    val relatorio = ValeTrocaDevolucao(nota, nota.nameAutorizacao ?: "")
+    relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) {
+      updateView()
+    })
   }
 
   fun imprimeRelatorio() {

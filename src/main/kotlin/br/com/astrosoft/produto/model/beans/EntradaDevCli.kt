@@ -171,6 +171,7 @@ class EntradaDevCli(
            "REE.* M.*".toRegex().matches(this.tipoObs)
   }
 
+  /*
   fun temAjusteMisto(): Boolean {
     return if (isTipoMisto()) {
       val produtos = produtos()
@@ -180,7 +181,7 @@ class EntradaDevCli(
     } else {
       true
     }
-  }
+  }*/
 
   fun notaAtuoriza(): List<NotaVenda> {
     val filtro = FiltroNotaVenda(

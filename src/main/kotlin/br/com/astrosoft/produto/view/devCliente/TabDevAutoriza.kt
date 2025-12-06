@@ -159,25 +159,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
   }
 
-  override fun formSolicitacao(nota: NotaVenda, readOnly: Boolean) {
-    val form = FormSolicitacaoNotaTroca(nota, readOnly)
-    if (readOnly) {
-      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
-    } else {
-      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
-        viewModel.solicitacaoNota(
-          nota = nota,
-          solicitacao = form.solicitacao,
-          produto = form.produto,
-          nfEntRet = form.notaEntRet,
-          setMotivoTroca = form.motivo,
-          login = form.login,
-          senha = form.senha
-        )
-      }
-    }
-  }
-
   override fun updateProdutos() {
     dlgProduto?.update()
   }

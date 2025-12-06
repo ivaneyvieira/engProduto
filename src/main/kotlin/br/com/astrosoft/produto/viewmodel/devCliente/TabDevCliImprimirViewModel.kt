@@ -32,7 +32,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     val loginAutorizacao = nota.loginAutorizacao ?: ""
-    if(loginAutorizacao.isBlank()) {
+    if (loginAutorizacao.isBlank()) {
       fail("Devolução não foi autorizada.")
     }
 
@@ -68,15 +68,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           //fail("Quantidade devolvida diferente da autorizada")
         }
       }
-    }
-
-    if (!nota.temAjusteMisto()) {
-      val user = AppConfig.userLogin() as? UserSaci
-      if (user?.ajustaMista != true) {
-        fail("Usuário sem permissão para ajuste misto")
-      }
-      subView.ajustaProduto(nota)
-      return@exec
     }
 
     val user = AppConfig.userLogin() as? UserSaci
@@ -153,7 +144,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   /**************************** imprimeValeTroca ************************************/
 
   fun formAutoriza(nota: EntradaDevCli) = viewModel.exec {
-    if (!nota.temAjusteMisto()) fail("Tipo de devolução não informado")
     subView.formAutoriza(nota)
   }
 
@@ -171,7 +161,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
 
       when {
-        nota.tipoObs.startsWith("TROCA")                            -> {
+        nota.tipoObs.startsWith("TROCA")                                                   -> {
           if (nota.isComProduto() && !user.autorizaTrocaP) {
             fail("Usuário não autorizado para Troca P")
           }
@@ -180,20 +170,20 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           }
         }
 
-        nota.tipoObs.startsWith("EST") && !user.autorizaEstorno     -> {
+        nota.tipoObs.startsWith("EST") && !user.autorizaEstorno                            -> {
           fail("Usuário não autorizado para Estorno")
         }
 
-        nota.tipoObs.startsWith("REEMB") && !user.autorizaReembolso -> {
+        nota.tipoObs.startsWith("REEMB") && !user.autorizaReembolso                        -> {
           fail("Usuário não autorizado para Reembolso")
         }
 
-        nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda       -> {
+        nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda                              -> {
           fail("Usuário não autorizado para Muda Cliente")
         }
 
-        nota.tipoObs.startsWith("TROCA M") && !user.autorizaMista   -> {
-          fail("Usuário não autorizado para Muda Cliente")
+        nota.tipoObs.startsWith("TROCA M") && !(user.autorizaTrocaP && user.autorizaTroca) -> {
+          fail("Usuário não autorizado para Troca Mista")
         }
       }
     }
