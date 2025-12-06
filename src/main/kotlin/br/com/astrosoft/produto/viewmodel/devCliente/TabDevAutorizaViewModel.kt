@@ -232,7 +232,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
             }
           } else {
             if (valorNota > valorLimitTroca) {
-              fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorLimitTroca.format()})")
+              fail("Valor da devolução maior que o autorizado")
             }
           }
         }
