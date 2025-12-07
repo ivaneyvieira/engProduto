@@ -137,7 +137,6 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     return FiltroNotaVenda(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      devolucaoStatus = EDevolucaoStatus.Todos,
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
     )

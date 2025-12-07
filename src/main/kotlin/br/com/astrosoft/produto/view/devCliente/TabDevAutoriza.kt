@@ -139,8 +139,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      autoriza = "S",
-      devolucaoStatus = EDevolucaoStatus.Vendas,
     )
   }
 

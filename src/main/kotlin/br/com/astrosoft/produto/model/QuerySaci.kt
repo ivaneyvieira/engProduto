@@ -897,8 +897,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("invno", filtro.invno)
-      addOptionalParameter("autoriza", filtro.autoriza)
-      addOptionalParameter("devolucaoStatus", filtro.devolucaoStatus.codigo)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
