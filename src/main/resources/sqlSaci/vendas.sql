@@ -108,7 +108,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -125,12 +125,12 @@ FROM
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
-GROUP BY storeno, ordno;
+  AND (bits & POW(2, 4)) = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -145,7 +145,7 @@ FROM
                  AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
-GROUP BY storeno, ordno;
+  AND (bits & POW(2, 4)) = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
