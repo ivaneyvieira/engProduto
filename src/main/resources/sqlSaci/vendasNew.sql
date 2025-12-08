@@ -91,7 +91,6 @@ WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-  AND (autoriza = :autoriza OR :autoriza = 'T' OR :devolucaoStatus = 'V')
 GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
 DROP TEMPORARY TABLE IF EXISTS T_XA;
@@ -109,7 +108,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -126,12 +125,12 @@ FROM
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
-GROUP BY storeno, ordno;
+  AND (bits & POW(2, 4)) = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -146,7 +145,7 @@ FROM
                  AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
-GROUP BY storeno, ordno;
+  AND (bits & POW(2, 4)) = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
@@ -276,9 +275,7 @@ SELECT U.loja,
        produtoTroca,
        userTroca,
        nameTroca,
-/*       userSolicitacao,*/
        loginTroca,
-/*       loginSolicitacao,*/
        motivoTroca,
        motivoTrocaCod,
        E.notaEntrega                     AS notaEntrega,
@@ -296,14 +293,6 @@ FROM
               USING (loja, pdv, transacao)
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR U.pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
-  /*UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR*/ nomeCliente LIKE @PESQUISA_LIKE OR
-       vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR
+       nomeCliente LIKE @PESQUISA_LIKE OR vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR
        IFNULL(I.invno, 0) = @PESQUISA_INT)
-  AND CASE
-        WHEN :devolucaoStatus = 'V'  THEN TRUE
-        WHEN :devolucaoStatus = 'P'  THEN I.invno IS NULL
-        WHEN :devolucaoStatus = 'GP' THEN I.invno IS NOT NULL AND P.transacao IS NOT NULL
-        WHEN :devolucaoStatus = 'G'  THEN I.invno IS NOT NULL AND P.transacao IS NULL
-        WHEN :devolucaoStatus = 'T'  THEN TRUE
-      END
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo, IFNULL(I.invno, 0)
