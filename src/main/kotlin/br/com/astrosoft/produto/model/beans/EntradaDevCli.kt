@@ -72,7 +72,29 @@ class EntradaDevCli(
       return parte2.trim()
     }
 
-  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto()
+  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto().ajustaTipo(produtosAutoriacao())
+
+  private fun produtosAutoriacao(): List<ProdutoNFS> {
+    return notaAtuoriza().flatMap {
+      it.produtos()
+    }
+  }
+
+  private fun List<EntradaDevCliPro>.ajustaTipo(produtosAutorizacao: List<ProdutoNFS>): List<EntradaDevCliPro> {
+    return this.map { prdCli ->
+      val produtoAut = produtosAutorizacao.firstOrNull { prdAut ->
+        prdCli.prdno == prdAut.prdno && prdCli.grade == prdAut.grade
+      }
+
+      if (produtoAut == null) {
+        return@map prdCli
+      }
+
+      prdCli.copy(
+        tipoPrd = produtoAut.tipoPrd()
+      )
+    }
+  }
 
   fun marcaImpresso(impressora: Impressora) {
     saci.marcaImpresso(
@@ -170,18 +192,6 @@ class EntradaDevCli(
            "EST.* M.*".toRegex().matches(this.tipoObs) ||
            "REE.* M.*".toRegex().matches(this.tipoObs)
   }
-
-  /*
-  fun temAjusteMisto(): Boolean {
-    return if (isTipoMisto()) {
-      val produtos = produtos()
-      produtos.all {
-        (it.tipoPrd?.trim() ?: "") != ""
-      }
-    } else {
-      true
-    }
-  }*/
 
   fun notaAtuoriza(): List<NotaVenda> {
     val filtro = FiltroNotaVenda(
