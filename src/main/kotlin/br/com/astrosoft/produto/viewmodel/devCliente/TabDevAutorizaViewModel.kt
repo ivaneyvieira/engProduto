@@ -92,7 +92,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     produtos.forEach { prd ->
       prd.updateQuantDev()
     }
+    subView.fechaFormProduto()
     subView.updateProdutos()
+    updateView()
   }
 
   fun saveNota(nota: NotaVenda) = viewModel.exec {
@@ -276,6 +278,7 @@ interface ITabDevAutoriza : ITabView {
   fun updateNotas(notas: List<NotaVenda>)
   fun itensNotasSelecionados(): List<NotaVenda>
   fun formAutoriza(nota: NotaVenda)
+  fun fechaFormProduto()
   fun updateProdutos()
   fun produtos(): List<ProdutoNFS>
 }

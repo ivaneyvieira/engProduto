@@ -158,6 +158,10 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
   }
 
+  override fun fechaFormProduto() {
+    dlgProduto?.fecha()
+  }
+
   override fun updateProdutos() {
     dlgProduto?.update()
   }
