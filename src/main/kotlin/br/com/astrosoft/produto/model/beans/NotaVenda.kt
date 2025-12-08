@@ -35,6 +35,7 @@ class NotaVenda(
   var notaEntrega: String?,
   var ni: Int?,
   var dataNi: LocalDate?,
+  var valorNi: Double?,
   var pendente: String?,
 ) {
   var setMotivoTroca: Set<EMotivoTroca>

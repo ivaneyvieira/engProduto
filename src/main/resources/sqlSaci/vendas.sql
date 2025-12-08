@@ -190,6 +190,7 @@ SELECT invno,
        s1,
        s2,
        l2,
+       grossamt / 100                        AS valorNi,
        CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
 FROM
   sqldados.inv AS I
@@ -200,7 +201,7 @@ WHERE I.storeno IN (2, 3, 4, 5, 8)
 
 DROP TEMPORARY TABLE IF EXISTS T_NI1;
 CREATE TEMPORARY TABLE T_NI1
-SELECT loja, pdv, transacao, invno, date
+SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_VENDA            AS U USE INDEX (v2)
     INNER JOIN T_INV AS I
@@ -210,7 +211,7 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS T_NI2;
 CREATE TEMPORARY TABLE T_NI2
-SELECT loja, pdv, transacao, invno, date
+SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
@@ -220,7 +221,7 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS T_NI3;
 CREATE TEMPORARY TABLE T_NI3
-SELECT loja, pdv, transacao, invno, I.date, U.obsNI
+SELECT loja, pdv, transacao, invno, I.date, valorNi, U.obsNI
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
@@ -233,17 +234,17 @@ CREATE TEMPORARY TABLE T_NI
 (
   INDEX (loja, pdv, transacao)
 )
-SELECT loja, pdv, transacao, invno, date
+SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_NI1
 UNION
 DISTINCT
-SELECT loja, pdv, transacao, invno, date
+SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_NI2
 UNION
 DISTINCT
-SELECT loja, pdv, transacao, invno, date
+SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_NI3;
 
@@ -316,6 +317,7 @@ SELECT U.loja,
        nfEntRet,
        I.invno                           AS ni,
        CAST(I.date AS DATE)              AS dataNi,
+       I.valorNi                         AS valorNi,
        IF(P.transacao IS NULL, 'S', 'N') AS pendente
 FROM
   T_VENDA                      AS U

@@ -102,7 +102,9 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
 
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
+    columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
     columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
+    columnGrid(NotaVenda::valorNi, header = "Valor Dev")
     columnGrid(NotaVenda::data, header = "Data", width = "6rem")
     columnGrid(NotaVenda::nota, header = "NF", width = "6rem").right()
     columnGrid(NotaVenda::notaEntrega, header = "NF Ent", width = "6rem").right()
