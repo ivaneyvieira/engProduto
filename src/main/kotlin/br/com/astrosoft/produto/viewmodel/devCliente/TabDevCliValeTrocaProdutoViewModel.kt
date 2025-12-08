@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.explodeMisto
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 
 class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {

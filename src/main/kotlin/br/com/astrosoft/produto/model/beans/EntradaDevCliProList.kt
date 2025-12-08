@@ -32,11 +32,18 @@ data class EntradaDevCliProList(
     val tipoNota = this.tipo ?: return ""
     return when {
       "TRO.*".toRegex().matches(tipoNota) -> "TROCA"
-      "EST.*".toRegex().matches(tipoNota) -> "ESTORNO"
+      "EST.*".toRegex().matches(tipoNota) -> "EST CARTAO"
       "REE.*".toRegex().matches(tipoNota) -> "REEMBOLSO"
+      "MUD.*".toRegex().matches(tipoNota) -> "MUDA CLIENTE"
       else                                -> tipoNota
     }
   }
+
+  val tipoNotaPre: String
+    get() {
+      val tipoPrdPre = if(this.tipoPrd?.endsWith(" P") == true) " P" else ""
+      return "${tipoNotaPre()} $tipoPrdPre"
+    }
 
   fun isTipoMisto(): Boolean {
     val tipoNota = this.tipo ?: ""
