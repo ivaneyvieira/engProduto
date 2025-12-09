@@ -80,7 +80,12 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
         it.login.equals(login, ignoreCase = true) &&
         it.senha.uppercase().trim() == senha.uppercase().trim()
       }
-    user ?: fail("Usuário ou senha inválidos")
+
+    if (!validaProcesamento(user, nota, produtos)) {
+      return@exec
+    }
+
+    user ?: fail("Usuário inválido")
 
     if (!user.autorizaDev) {
       fail("Usuário sem permissão para autorizar devolução")
@@ -118,9 +123,9 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     subView.updateProdutos()
   }
 
-  fun validaProcesamento(nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
+  fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
-      val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não logado")
+      user ?: fail("Usuário inválido")
       val produtosDev = produtos
         .filter { it.devDB == false }
         .filter { it.dev == true }

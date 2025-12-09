@@ -144,7 +144,10 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             nota.nfEntRet = edtNotaEntRet?.value ?: 0
             nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
             val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
-            val validacao = viewModel.validaProcesamento(nota, produtos)
+
+            val user = AppConfig.userLogin() as? UserSaci
+
+            val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
 
             if (validacao) {
               val formAutoriza = FormAutorizaNota()
