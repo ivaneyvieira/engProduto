@@ -13,6 +13,8 @@ data class EntradaDevCliProList(
   var grade: String?,
   var userName: String?,
   var userLogin: String?,
+  var autorizacaoName: String?,
+  var autorizacaoLogin: String?,
   var quantidade: Int?,
   var observacao: String?,
   var ni: Int?,
@@ -41,7 +43,7 @@ data class EntradaDevCliProList(
 
   val tipoNotaPre: String
     get() {
-      val tipoPrdPre = if(this.tipoPrd?.endsWith(" P") == true) " P" else ""
+      val tipoPrdPre = if (this.tipoPrd?.endsWith(" P") == true) " P" else ""
       return "${tipoNotaPre()} $tipoPrdPre"
     }
 

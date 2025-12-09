@@ -180,6 +180,7 @@ CREATE TEMPORARY TABLE T_INV
 SELECT invno,
        storeno,
        date,
+       grossamt / 100 AS valorNi,
        nfStoreno,
        nfNfno,
        nfNfse
@@ -203,7 +204,8 @@ SELECT IFNULL(E.loja, U.storeno)   AS loja,
        E.pdvE                      AS pdvE,
        E.transacaoE                AS transacaoE,
        I.invno                     AS invno,
-       I.date                      AS date
+       I.date                      AS date,
+       valorNi                     AS valorNi
 FROM
   T_INV                    AS I
     INNER JOIN sqldados.nf AS U
@@ -282,6 +284,7 @@ SELECT U.loja,
        nfEntRet,
        IFNULL(I.invno, 0)                AS ni,
        CAST(I.date AS DATE)              AS dataNi,
+       I.valorNi                         AS valorNi,
        IF(P.transacao IS NULL, 'S', 'N') AS pendente
 FROM
   T_VENDA                      AS U

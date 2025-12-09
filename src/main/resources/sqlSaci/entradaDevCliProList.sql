@@ -188,7 +188,69 @@ FROM
                   D.dev = TRUE
 GROUP BY loja, pdv, transacao, prdno, grade;
 
-/************************************************************************/
+/****************************************************************************************/
+
+DROP TEMPORARY TABLE IF EXISTS T_V;
+CREATE TEMPORARY TABLE T_V
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       nfno,
+       nfse
+FROM
+  sqlpdv.pxa AS P
+WHERE P.cfo IN (5922, 6922)
+  AND storeno IN (2, 3, 4, 5, 8)
+  AND nfse = '1'
+  AND date >= SUBDATE(:data, INTERVAL 2 MONTH)
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_E;
+CREATE TEMPORARY TABLE T_E
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.pdvno,
+       P.xano,
+       P.eordno                                  AS ordno,
+       CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
+       P.date                                    AS data
+FROM
+  sqlpdv.pxa       AS P
+    INNER JOIN T_V AS V
+               ON P.storeno = V.storeno
+                 AND P.eordno = V.ordno
+WHERE P.cfo IN (5117, 6117)
+  AND P.storeno IN (2, 3, 4, 5, 8)
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
+CREATE TEMPORARY TABLE T_ENTREGA
+(
+  PRIMARY KEY (loja, pdv, transacao),
+  INDEX (lojaE, pdvE, transacaoE)
+)
+SELECT V.storeno AS loja,
+       V.pdvno   AS pdv,
+       V.xano    AS transacao,
+       V.numero  AS notaVenda,
+       E.storeno AS lojaE,
+       E.pdvno   AS pdvE,
+       E.xano    AS transacaoE
+FROM
+  T_V             AS V
+    LEFT JOIN T_E AS E
+              USING (storeno, ordno)
+GROUP BY V.storeno, V.pdvno, V.xano;
+
+/****************************************************************************************/
+
 
 DROP TEMPORARY TABLE IF EXISTS T_PRODUTOS;
 CREATE TEMPORARY TABLE T_PRODUTOS
@@ -198,11 +260,13 @@ SELECT data,
        R.prdno,
        userName,
        userLogin,
+       UA.name                                         AS autorizacaoName,
+       UA.login                                        AS autorizacaoLogin,
        codigo,
        descricao,
        R.grade,
        quantidade,
-       observacao,
+       R.observacao,
        tipo,
        IF(tipo REGEXP '^TRO.* M.*' OR
           tipo REGEXP '^EST.* M.*' OR
@@ -214,11 +278,21 @@ SELECT data,
        nota,
        valor
 FROM
-  T_RESULT             AS R
-    LEFT JOIN T_NI_PRD AS N
+  T_RESULT                           AS R
+    LEFT JOIN T_NI_PRD               AS N
               ON R.ni = N.invno
                 AND R.prdno = N.prdno
-                AND R.grade = N.grade;
+                AND R.grade = N.grade
+    LEFT JOIN T_ENTREGA              AS EF
+              ON EF.lojaE = N.loja
+                AND EF.pdvE = N.pdv
+                AND EF.transacaoE = N.transacao
+    LEFT JOIN sqldados.nfAutorizacao AS A
+              ON A.storeno = IFNULL(EF.loja, N.loja)
+                AND A.pdvno = IFNULL(EF.pdv, N.pdv)
+                AND A.xano = IFNULL(EF.transacao, N.transacao)
+    LEFT JOIN sqldados.users         AS UA
+              ON UA.no = A.userTroca;
 
 SELECT data,
        codLoja,
@@ -226,6 +300,8 @@ SELECT data,
        prdno,
        userName,
        userLogin,
+       autorizacaoName,
+       autorizacaoLogin,
        codigo,
        descricao,
        grade,

@@ -19,7 +19,7 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
     } else {
       beanDetail.tipo ?: ""
     }
-    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} - ${beanDetail.userLogin}"
+    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} - ${beanDetail.autorizacaoLogin}"
   }
 
   override fun printTitle(bean: EntradaDevCliProList) {
