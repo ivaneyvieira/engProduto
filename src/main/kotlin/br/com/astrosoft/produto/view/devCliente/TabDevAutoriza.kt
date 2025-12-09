@@ -115,10 +115,10 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
     columnGrid(NotaVenda::pdv, header = "PDV")
-    columnGrid(NotaVenda::transacao, header = "Transacao")
+    columnGrid(NotaVenda::transacao, header = "Transação")
 
     this.setPartNameGenerator {
-      if (it.ni == null) {
+      if (it.ni == null || it.ni == 0) {
         null
       } else {
         "amarelo"
