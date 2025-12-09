@@ -91,8 +91,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     columnGrid(NotaVenda::loja, header = "Loja")
-    columnGrid(NotaVenda::pdv, header = "PDV")
-    columnGrid(NotaVenda::transacao, header = "Transacao")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosVenda(viewModel, nota)
@@ -116,6 +114,8 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
+    columnGrid(NotaVenda::pdv, header = "PDV")
+    columnGrid(NotaVenda::transacao, header = "Transacao")
 
     this.setPartNameGenerator {
       if (it.ni == null) {
