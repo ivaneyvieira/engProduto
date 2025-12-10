@@ -50,10 +50,10 @@ data class ProdutoNFS(
   var ni: Int?,
   var dataNi: LocalDate?,
   var qtDevNI: Int?,
+  var notaEnt: String?,
+  var quantEnt: Int?,
   var seq: Int?,
 ) {
-
-
   var motivo: String? = null
 
   override fun toString(): String {

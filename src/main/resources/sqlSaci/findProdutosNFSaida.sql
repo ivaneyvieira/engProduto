@@ -37,6 +37,7 @@ CREATE TEMPORARY TABLE T_DADOS
 SELECT X.storeno                                                     AS loja,
        X.pdvno                                                       AS pdvno,
        X.xano                                                        AS xano,
+       N.eordno                                                      AS eordno,
        CAST(CONCAT(N.nfno, '/', N.nfse) AS CHAR)                     AS nota,
        P.no                                                          AS prdno,
        CAST(TRIM(P.no) AS CHAR)                                      AS codigo,
@@ -233,9 +234,37 @@ GROUP BY loja, pdv, transacao, prdno, grade, invno;
 
 /************************************************************************/
 
+DROP TEMPORARY TABLE IF EXISTS T_NOTA_DEV;
+CREATE TEMPORARY TABLE T_NOTA_DEV
+(
+  INDEX (storeno, pdvno, xano, prdno, grade)
+)
+SELECT D.loja                        AS storeno,
+       D.pdvno,
+       D.xano,
+       D.prdno,
+       D.grade,
+       CONCAT(XF.nfno, '/', XF.nfse) AS notaEnt,
+       PF.qtty / 1000                AS quantEnt
+FROM
+  T_DADOS                    AS D
+    INNER JOIN sqlpdv.pxa    AS XF
+               ON XF.storeno = D.loja
+                 AND XF.eordno = D.eordno
+                 AND XF.cfo IN (5117, 6117)
+                 AND (bits & POW(2, 4)) = 0
+    INNER JOIN sqlpdv.pxaprd AS PF
+               ON XF.storeno = PF.storeno
+                 AND XF.pdvno = PF.pdvno
+                 AND XF.xano = PF.xano
+                 AND D.prdno = PF.prdno
+                 AND D.grade = PF.grade;
+
+/************************************************************************/
+
 SELECT D.loja,
-       pdvno,
-       xano,
+       D.pdvno,
+       D.xano,
        nota,
        D.prdno,
        dev,
@@ -277,10 +306,21 @@ SELECT D.loja,
        D.seq,
        X.invno              AS ni,
        CAST(X.date AS date) AS dataNi,
-       X.qtDev              AS qtDevNI
+       X.qtDev              AS qtDevNI,
+       ND.notaEnt           AS notaEnt,
+       ND.quantEnt          AS quantEnt
 FROM
-  T_DADOS              AS D
-    LEFT JOIN T_NI_PRD AS X
-              ON X.loja = D.loja AND X.pdv = D.pdvno AND X.transacao = D.xano AND X.prdno = D.prdno AND
-                 X.grade = D.grade
+  T_DADOS                AS D
+    LEFT JOIN T_NI_PRD   AS X
+              ON X.loja = D.loja
+                AND X.pdv = D.pdvno
+                AND X.transacao = D.xano
+                AND X.prdno = D.prdno
+                AND X.grade = D.grade
+    LEFT JOIN T_NOTA_DEV AS ND
+              ON D.loja = ND.storeno
+                AND D.pdvno = ND.pdvno
+                AND D.xano = ND.xano
+                AND D.prdno = ND.prdno
+                AND D.grade = ND.grade
 WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')

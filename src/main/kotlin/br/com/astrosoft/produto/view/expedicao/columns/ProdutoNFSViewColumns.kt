@@ -120,6 +120,10 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Seq")
   }
 
+  fun Grid<ProdutoNFS>.produtoNFNotaEnt() = columnGrid(ProdutoNFS::notaEnt) {
+    this.setHeader("Nota Ent")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFQuantDevNI() = columnGrid(ProdutoNFS::qtDevNI) {
     this.setHeader("Qt NF Dev")
   }
