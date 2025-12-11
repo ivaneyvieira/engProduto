@@ -298,4 +298,4 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR U.pdv = @PESQUISA_INT OR nota
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR
        IFNULL(I.invno, 0) = @PESQUISA_INT)
-GROUP BY U.loja, U.pdv, U.transacao, U.tipo, IFNULL(I.invno, 0)
+GROUP BY U.loja, U.pdv, U.transacao, IFNULL(I.invno, 0)
