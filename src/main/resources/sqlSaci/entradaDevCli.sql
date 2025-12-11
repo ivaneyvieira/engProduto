@@ -27,7 +27,7 @@ FROM
     INNER JOIN sqldados.custp AS C
                ON C.no = N.custno
 WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
-  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 2 MONTH) * 1
+  AND N.issuedate >= SUBDATE(:dataI, INTERVAL 4 MONTH) * 1
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.status <> 1;
 
@@ -50,7 +50,7 @@ FROM
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
-  AND date >= SUBDATE(:dataI, INTERVAL 2 MONTH)
+  AND date >= SUBDATE(:dataI, INTERVAL 4 MONTH)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
