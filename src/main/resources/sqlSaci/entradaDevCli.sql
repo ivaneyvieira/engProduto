@@ -26,7 +26,7 @@ FROM
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
-  AND date >= SUBDATE(:dataI, INTERVAL 2 MONTH)
+  AND date >= SUBDATE(:dataI, INTERVAL 4 MONTH)
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
