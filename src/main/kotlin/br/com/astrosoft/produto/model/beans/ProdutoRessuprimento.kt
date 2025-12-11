@@ -48,6 +48,8 @@ class ProdutoRessuprimento(
   var origemApp: String?,
   var validade: Int?,
   var vencimentoStrList: String?,
+  var valorUltCompra: Double?,
+  var valorTotal: Double?
 ) {
   val vencimento
     get() = vencimentoStrList?.split(",")?.lastOrNull()?.toIntOrNull()

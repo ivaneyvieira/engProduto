@@ -6,57 +6,49 @@ import br.com.astrosoft.produto.model.beans.ProdutoRessuprimento
 import com.vaadin.flow.component.grid.Grid
 
 object ProdutoRessuViewColumns {
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() =
-      columnGrid(ProdutoRessuprimento::codigo) {
-        this.right()
-        this.setHeader("Código")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigo() = columnGrid(ProdutoRessuprimento::codigo) {
+    this.right()
+    this.setHeader("Código")
+  }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoCodigoCorrecao() =
       columnGrid(ProdutoRessuprimento::codigoCorrecao) {
         this.setHeader("Código")
       }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGradeCorrecao() =
-      columnGrid(ProdutoRessuprimento::gradeCorrecao) {
-        this.setHeader("Grade")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGradeCorrecao() = columnGrid(ProdutoRessuprimento::gradeCorrecao) {
+    this.setHeader("Grade")
+  }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDescricaoCorrecao() =
       columnGrid(ProdutoRessuprimento::descricaoCorrecao) {
         this.setHeader("Descrição")
       }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() =
-      columnGrid(ProdutoRessuprimento::grade) {
-        this.setHeader("Grade")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoGrade() = columnGrid(ProdutoRessuprimento::grade) {
+    this.setHeader("Grade")
+  }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() =
-      columnGrid(ProdutoRessuprimento::localizacao) {
-        this.setHeader("Loc App")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoLocalizacao() = columnGrid(ProdutoRessuprimento::localizacao) {
+    this.setHeader("Loc App")
+  }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVencimento() =
-      columnGrid(ProdutoRessuprimento::vencimentoStr) {
-        this.setHeader("Venc")
-        this.setComparator(Comparator.comparingInt { it.vencimento ?: 0 })
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoVencimento() = columnGrid(ProdutoRessuprimento::vencimentoStr) {
+    this.setHeader("Venc")
+    this.setComparator(Comparator.comparingInt { it.vencimento ?: 0 })
+  }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValidade() =
-      columnGrid(ProdutoRessuprimento::validade) {
-        this.setHeader("Val")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValidade() = columnGrid(ProdutoRessuprimento::validade) {
+    this.setHeader("Val")
+  }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDataNF() =
-      columnGrid(ProdutoRessuprimento::dataNota) {
-        this.setHeader("Data")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoDataNF() = columnGrid(ProdutoRessuprimento::dataNota) {
+    this.setHeader("Data")
+  }
 
-  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoNumeroNF() =
-      columnGrid(ProdutoRessuprimento::numeroNota) {
-        this.setHeader("NF")
-      }
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoNumeroNF() = columnGrid(ProdutoRessuprimento::numeroNota) {
+    this.setHeader("NF")
+  }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoTipo() = columnGrid(ProdutoRessuprimento::statusStr) {
     this.setHeader("Status")
@@ -137,6 +129,16 @@ object ProdutoRessuViewColumns {
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoEstoque() = columnGrid(ProdutoRessuprimento::estoque) {
     this.setHeader("Estoque")
   }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValorUltCompra() =
+      columnGrid(ProdutoRessuprimento::valorUltCompra, pattern = "#,##0.0000") {
+        this.setHeader("V. U. Comp")
+      }
+
+  fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValorTotal() =
+      columnGrid(ProdutoRessuprimento::valorTotal, pattern = "#,##0.0000") {
+        this.setHeader("V. Total")
+      }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoPrecoUnitario() = columnGrid(ProdutoRessuprimento::preco) {
     this.setHeader("Preço")

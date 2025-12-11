@@ -151,6 +151,8 @@ WHERE mesAno > 0
   AND date >= 20240501
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_ORDS_RESULT;
+CREATE TEMPORARY TABLE T_ORDS_RESULT
 SELECT X.ordno                                                     AS ordno,
        CAST(TRIM(P.no) AS CHAR)                                    AS codigo,
        P.no                                                        AS prdno,
@@ -223,16 +225,119 @@ FROM
 WHERE X.storeno = 1
   AND X.ordno = :ordno
   AND (X.auxShort4 = :marca OR :marca = 999)
-GROUP BY codigo, IFNULL(X.grade, ''), numeroNota
+GROUP BY codigo, IFNULL(X.grade, ''), numeroNota;
 
-/*
-update sqldados.oprdRessu
-set auxLong1 = 0
-where storeno = 1
-  and ordno > 100000000
+DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE;
+CREATE TEMPORARY TABLE T_PRD_GRADE
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade
+FROM
+  T_ORDS_RESULT
+GROUP BY prdno, grade;
 
-update sqldados.oprd
-set auxLong1 = 0
-where storeno = 1
-  and ordno > 100000000
-*/
+DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE_INV;
+CREATE TEMPORARY TABLE T_PRD_GRADE_INV
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, MAX(invno) AS invno
+FROM
+  sqldados.inv               AS N
+    INNER JOIN sqldados.iprd AS X
+               USING (invno)
+    INNER JOIN T_PRD_GRADE
+               USING (prdno, grade)
+WHERE N.type = 0
+GROUP BY prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD_INV;
+CREATE TEMPORARY TABLE T_PRD_INV
+(
+  PRIMARY KEY (prdno)
+)
+SELECT prdno, MAX(invno) AS invno
+FROM
+  sqldados.inv               AS N
+    INNER JOIN sqldados.iprd AS X
+               USING (invno)
+    INNER JOIN T_PRD_GRADE
+               USING (prdno, grade)
+WHERE N.type = 0
+GROUP BY prdno;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE_VALOR;
+CREATE TEMPORARY TABLE T_PRD_GRADE_VALOR
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno, grade, X.dfob AS valor
+FROM
+  sqldados.iprd                AS X
+    INNER JOIN T_PRD_GRADE_INV AS P
+               USING (invno, prdno, grade)
+GROUP BY prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD_VALOR;
+CREATE TEMPORARY TABLE T_PRD_VALOR
+(
+  PRIMARY KEY (prdno)
+)
+SELECT prdno, X.dfob AS valor
+FROM
+  sqldados.iprd          AS X
+    INNER JOIN T_PRD_INV AS P
+               USING (invno, prdno)
+GROUP BY prdno;
+
+SELECT ordno,
+       codigo,
+       prdno,
+       grade,
+       barcodeListStr,
+       descricao,
+       vendno,
+       fornecedor,
+       vendnoRef,
+       typeno,
+       typeName,
+       clno,
+       clname,
+       altura,
+       comprimento,
+       largura,
+       precoCheio,
+       qtPedido,
+       qttyOriginal,
+       qtQuantNF,
+       vlPedido,
+       vlQuantNF,
+       qtEntregue,
+       qtRecebido,
+       qtAvaria,
+       qtVencido,
+       preco,
+       total,
+       marca,
+       selecionado,
+       posicao,
+       localizacao,
+       estoque,
+       codigoCorrecao,
+       descricaoCorrecao,
+       gradeCorrecao,
+       numeroNota,
+       dataNota,
+       origemSaci,
+       origemApp,
+       validade,
+       vencimentoStrList,
+       COALESCE(G.valor, P.valor)            AS valorUltCompra,
+       qtPedido * COALESCE(G.valor, P.valor) AS valorTotal
+FROM
+  T_ORDS_RESULT                 AS R
+    LEFT JOIN T_PRD_GRADE_VALOR AS G
+              USING (prdno, grade)
+    LEFT JOIN T_PRD_VALOR       AS P
+              USING (prdno)

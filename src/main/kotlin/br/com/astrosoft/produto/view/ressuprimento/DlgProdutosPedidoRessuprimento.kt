@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.ressuprimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.EMarcaRessuprimento
@@ -15,6 +16,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValorTotal
+import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValorUltCompra
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabPedidoRessuprimentoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
@@ -105,6 +108,9 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       produtoRessuprimentoValidade()
       produtoRessuprimentoQtPedido().integerFieldEditor()
       produtoRessuprimentoEstoque()
+      produtoRessuprimentoValorUltCompra()
+      produtoRessuprimentoValorTotal()
+
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
@@ -141,6 +147,11 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       it.dadosStr().contains(pesquisa, ignoreCase = true)
     }
     gridDetail.setItems(listProdutos)
+    val colLabel = gridDetail.getColumnBy(ProdutoRessuprimento::valorUltCompra)
+    colLabel.setFooter("Total")
+
+    val colTotal = gridDetail.getColumnBy(ProdutoRessuprimento::valorTotal)
+    colTotal.setFooter( listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.0000"))
   }
 
   fun updateProduto(produto: ProdutoRessuprimento) {
