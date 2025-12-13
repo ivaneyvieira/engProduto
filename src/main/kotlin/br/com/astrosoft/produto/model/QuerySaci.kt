@@ -1002,14 +1002,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("fornecedor", filter.fornecedor)
       addOptionalParameter("centroLucro", filter.centroLucro)
-      addOptionalParameter("pedido", filter.pedido)
       addOptionalParameter("localizacaoUser", filter.listaUser)
       addOptionalParameter("localizacao", filter.localizacao)
       addOptionalParameter("estoque", filter.estoque.value)
       addOptionalParameter("saldo", filter.saldo)
       addOptionalParameter("inativo", filter.inativo.codigo)
-      addOptionalParameter("uso", filter.uso.codigo)
       addOptionalParameter("letraDup", filter.letraDup.value)
+      addOptionalParameter("cl", filter.cl)
     }
   }
 
@@ -2762,6 +2761,24 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pdvno", venda.pdv ?: 0)
       addOptionalParameter("xano", venda.transacao ?: 0)
     }
+  }
+
+  fun findProdutoKardec(loja: Int, prdno: String, grade: String, dataInicial: LocalDate?): List<ControleKardec> {
+    val sql = "/sqlSaci/findProdutoKardec.sql"
+    val listKardec = query(sql, ControleKardec::class) {
+      this.addOptionalParameter("loja", loja)
+      this.addOptionalParameter("prdno", prdno)
+      this.addOptionalParameter("grade", grade)
+      this.addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+    }
+
+    var saldo = 0
+    listKardec.forEach { kad ->
+      saldo = saldo + (kad.qtde ?: 0)
+      kad.saldo = saldo
+    }
+
+    return listKardec
   }
 
   companion object {

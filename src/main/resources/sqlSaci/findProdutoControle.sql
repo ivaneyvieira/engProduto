@@ -21,13 +21,11 @@ FROM
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
        ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
-  AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR
-       ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR
-       (:uso = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
        (:caracter = 'T'))
   AND (P.no = :prdno OR :prdno = '')
+  AND (P.clno = :cl OR P.deptno = :cl OR P.groupno = :cl OR :cl = 0)
   AND CASE :letraDup
         WHEN 'S' THEN (SUBSTRING_INDEX(P.name, ' ', 2) REGEXP
                        '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)' OR
@@ -39,6 +37,15 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
                  ELSE FALSE
       END;
 
+DROP TEMPORARY TABLE IF EXISTS T_PRDNO;
+CREATE TEMPORARY TABLE T_PRDNO
+(
+  PRIMARY KEY (prdno)
+)
+SELECT prdno
+FROM
+  T_PRD;
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
 CREATE TEMPORARY TABLE T_LOC_NERUS
 (
@@ -49,6 +56,8 @@ SELECT prdno       AS prdno,
        localizacao AS locNerus
 FROM
   sqldados.prdloc
+    INNER JOIN T_PRDNO
+               USING (prdno)
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
@@ -78,6 +87,8 @@ SELECT prdno                                                     AS prdno,
        estoqueUser                                               AS estoqueUser
 FROM
   sqldados.prdAdicional
+    INNER JOIN T_PRDNO
+               USING (prdno)
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (storeno = IF(:loja = 0, 4, :loja))
   AND (prdno = :prdno OR :prdno = '')
@@ -92,46 +103,15 @@ SELECT P.no                                                                  AS 
        IFNULL(B.grade, '')                                                   AS grade,
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
 FROM
-  sqldados.prd                AS P
-    LEFT JOIN sqldados.prd2   AS P2
-              ON P.no = P2.prdno
-    LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno AND B.grade != ''
+  sqldados.prd                 AS P
+    INNER JOIN T_PRDNO
+               ON T_PRDNO.prdno = P.no
+    LEFT JOIN  sqldados.prd2   AS P2
+               ON P.no = P2.prdno
+    LEFT JOIN  sqldados.prdbar AS B
+               ON P.no = B.prdno AND B.grade != ''
 GROUP BY P.no, B.grade
 HAVING codbar != '';
-
-DROP TEMPORARY TABLE IF EXISTS T_ULT_ACERTO;
-CREATE TEMPORARY TABLE T_ULT_ACERTO
-(
-  PRIMARY KEY (numloja, prdno, grade)
-)
-SELECT numloja, prdno, grade, MAX(numero) AS numero
-FROM
-  sqldados.produtoEstoqueAcerto A
-GROUP BY numloja, prdno, grade;
-
-DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
-CREATE TEMPORARY TABLE T_ACERTO
-(
-  PRIMARY KEY (numloja, prdno, grade)
-)
-SELECT A.numero,
-       A.numloja,
-       A.data,
-       A.hora,
-       A.usuario,
-       A.prdno,
-       A.grade,
-       A.estoqueSis,
-       A.estoqueLoja,
-       A.estoqueCD,
-       A.processado,
-       A.transacao,
-       A.login
-FROM
-  sqldados.produtoEstoqueAcerto A
-    INNER JOIN T_ULT_ACERTO
-               USING (numloja, prdno, grade, numero);
 
 DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
 CREATE TEMPORARY TABLE temp_pesquisa
@@ -178,12 +158,8 @@ SELECT S.no                                                                     
        A.estoqueUser                                                                  AS estoqueUser,
        U.login                                                                        AS estoqueLogin,
        A.estoqueData                                                                  AS estoqueData,
-       AC.estoqueCD                                                                   AS estoqueCD,
-       AC.estoqueLoja                                                                 AS estoqueLoja,
        B.codbar                                                                       AS barcode,
-       PD.mfno_ref                                                                    AS ref,
-       AC.numero                                                                      AS numeroAcerto,
-       AC.processado                                                                  AS processado
+       PD.mfno_ref                                                                    AS ref
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -202,8 +178,6 @@ FROM
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
                ON PC.storeno = 10 AND PC.prdno = E.prdno
-    LEFT JOIN  T_ACERTO       AS AC
-               ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
 WHERE (E.storeno = :loja OR :loja = 0)
   AND (PD.mfno = @FORNECEDOR_NUMERO OR @FORNECEDOR_NUMERO = 0)
   AND (V.name LIKE CONCAT('%', @FORNECEDOR_NOME, '%') OR @FORNECEDOR_NOME = '')
@@ -246,12 +220,8 @@ SELECT loja,
        estoqueUser,
        estoqueLogin,
        estoqueData,
-       estoqueCD,
-       estoqueLoja,
        barcode,
        ref,
-       numeroAcerto,
-       processado,
        estoqueConfCD,
        estoqueConfLoja
 FROM
@@ -261,4 +231,3 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (MID(locApp, 1, 4) IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR TRIM(IFNULL(locApp, '')) = '')
-  AND (numeroAcerto = :pedido OR :pedido = 0)

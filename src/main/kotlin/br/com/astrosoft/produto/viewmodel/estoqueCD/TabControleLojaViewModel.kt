@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.produto.model.beans.ControleKardec
 import br.com.astrosoft.produto.model.beans.FiltroProdutoControle
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoControle
@@ -34,8 +35,8 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
     //TODO
   }
 
-  fun kardec(produto: ProdutoControle, dataIncial: LocalDate?): List<ProdutoKardec> {
-    TODO()
+  fun kardec(produto: ProdutoControle, dataIncial: LocalDate?): List<ControleKardec> {
+    return produto.findKardec(dataIncial ?: LocalDate.now())
   }
 }
 

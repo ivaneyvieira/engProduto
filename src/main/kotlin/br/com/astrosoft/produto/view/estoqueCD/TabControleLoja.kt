@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 class TabControleLoja(val viewModel: TabControleLojaViewModel) :
   TabPanelGrid<ProdutoControle>(ProdutoControle::class), ITabControleLoja {
-  private var dlgKardec: DlgProdutoKardecConferenciaLoja? = null
+  private var dlgKardec: DlgControleKardecConferenciaLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -206,7 +206,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoControle ->
         val dataIncial: LocalDate? = edtDataInicial.value
-        dlgKardec = DlgProdutoKardecConferenciaLoja(viewModel, produto, dataIncial)
+        dlgKardec = DlgControleKardecConferenciaLoja(viewModel, produto, dataIncial)
         dlgKardec?.showDialog {
           viewModel.updateView()
         }
@@ -221,15 +221,12 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoControle::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoControle::kardec, header = "CD", width = "75px")
-      //this.columnGrid(ProdutoEstoque::qtConfCalc, header = "Conf", pattern = "#,##0", width = "80px")
-      //  .integerFieldEditor()
       this.columnGrid(ProdutoControle::qtConfCalcEstoque, header = "Conf", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoControle::qtDifCalcEstoque, header = "Dif", pattern = "#,##0", width = "80px")
     }
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoControle::qtConferencia, header = "Inv", width = "75px").right()
-      //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
       this.columnGrid(ProdutoControle::dataInicial, header = "Início Inv", width = "100px")
       this.columnGrid(ProdutoControle::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoControle::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
@@ -263,6 +260,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       inativo = cmbInativo.value ?: EInativo.TODOS,
       listaUser = listaUser,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
+      cl = 61101,
     )
   }
 
