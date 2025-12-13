@@ -17,33 +17,30 @@ import com.vaadin.flow.component.grid.Grid
 
 class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel), ITabEstoqueUsr {
   override fun Grid<UserSaci>.configGrid() {
-    columnGrid(UserSaci::estoqueMov, "Mov")
-    columnGrid(UserSaci::estoqueConf, "Conf")
-    //columnGrid(UserSaci::estoqueInventario, "Inventário")
+    columnGrid(UserSaci::estoqueLoja, "Estoque Loja")
+    columnGrid(UserSaci::controleLoja, "Controle Loja")
     columnGrid(UserSaci::estoqueAcerto, "Acerto")
     columnGrid(UserSaci::estoqueAcertoSimples, "Acerto 2")
     columnGrid(UserSaci::estoqueForn, "Fornecedor")
     columnGrid(UserSaci::estoqueAcertoMobile, "Coletor")
-    columnGrid(UserSaci::estoqueGarantia, "Garantia")
-    columnGrid(UserSaci::estoqueSaldo, "Estoque")
-    columnGrid(UserSaci::estoqueLoja, "Estoque Loja")
+    columnGrid(UserSaci::estoqueMov, "Mov")
+    columnGrid(UserSaci::estoqueConf, "Conf")
     columnGrid(UserSaci::estoqueCad, "Cad Loc")
+    //columnGrid(UserSaci::estoqueInventario, "Inventário")
     columnGrid(UserSaci::estoqueCD1A, "CD1A")
+    columnGrid(UserSaci::estoqueSaldo, "Estoque")
   }
 
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
-      checkBox("Mov") {
-        binder.bind(this, UserSaci::estoqueMov.name)
-      }
       checkBox("Estoque") {
         binder.bind(this, UserSaci::estoqueSaldo.name)
       }
       checkBox("Estoque Loja") {
         binder.bind(this, UserSaci::estoqueLoja.name)
       }
-      checkBox("Conferência") {
-        binder.bind(this, UserSaci::estoqueConf.name)
+      checkBox("Controle Loja") {
+        binder.bind(this, UserSaci::controleLoja.name)
       }
       checkBox("Acerto") {
         binder.bind(this, UserSaci::estoqueAcerto.name)
@@ -57,8 +54,11 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Coletor") {
         binder.bind(this, UserSaci::estoqueAcertoMobile.name)
       }
-      checkBox("Garantia") {
-        binder.bind(this, UserSaci::estoqueGarantia.name)
+      checkBox("Mov") {
+        binder.bind(this, UserSaci::estoqueMov.name)
+      }
+      checkBox("Conferência") {
+        binder.bind(this, UserSaci::estoqueConf.name)
       }
       checkBox("Cad Loc") {
         binder.bind(this, UserSaci::estoqueCad.name)

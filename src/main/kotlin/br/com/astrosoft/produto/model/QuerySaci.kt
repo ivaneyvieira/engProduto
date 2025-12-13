@@ -991,6 +991,28 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoControle(filter: FiltroProdutoControle): List<ProdutoControle> {
+    val sql = "/sqlSaci/findProdutoControle.sql"
+
+    return query(sql, ProdutoControle::class) {
+      addOptionalParameter("loja", filter.loja)
+      addOptionalParameter("pesquisa", filter.pesquisa)
+      addOptionalParameter("grade", filter.grade)
+      addOptionalParameter("prdno", filter.prdno)
+      addOptionalParameter("caracter", filter.caracter.value)
+      addOptionalParameter("fornecedor", filter.fornecedor)
+      addOptionalParameter("centroLucro", filter.centroLucro)
+      addOptionalParameter("pedido", filter.pedido)
+      addOptionalParameter("localizacaoUser", filter.listaUser)
+      addOptionalParameter("localizacao", filter.localizacao)
+      addOptionalParameter("estoque", filter.estoque.value)
+      addOptionalParameter("saldo", filter.saldo)
+      addOptionalParameter("inativo", filter.inativo.codigo)
+      addOptionalParameter("uso", filter.uso.codigo)
+      addOptionalParameter("letraDup", filter.letraDup.value)
+    }
+  }
+
   fun autorizaRessuprimento(ressuprimento: Ressuprimento) {
     val sql = "/sqlSaci/autorizaRessuprimento.sql"
     script(sql) {

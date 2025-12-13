@@ -1,19 +1,15 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.FiltroProdutoControle
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoControle
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
-import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
 import java.time.LocalDate
 
-class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
+class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
-    get() = viewModel.view.tabEstoqueLoja
+    get() = viewModel.view.tabControleLoja
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -26,83 +22,27 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
+    val produtos = ProdutoControle.findProdutoControle(filtro)
     subView.updateProduto(produtos)
   }
 
-  fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
-    val planilha = PlanilhaProdutoEstoque()
-    return planilha.write(produtos)
-  }
-
   fun updateKardec() = viewModel.exec {
-    val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-    ProcessamentoKardec.updateKardec(produtos)
-    subView.reloadGrid()
-  }
-
-  override fun updateConferencia(bean: ProdutoEstoque?) {
-    try {
-      bean?.updateConferencia()
-    }catch (e: Exception) {
-      e.printStackTrace()
-      viewModel.view.showError(e.message ?: "Erro desconhecido")
-    }
-  }
-
-  override fun updateLocalizacao(bean: ProdutoEstoque?) {
-    bean?.updateLocalizacao()
-  }
-
-  fun copiaLocalizacao() = viewModel.exec {
-    val itens = subView.itensSelecionados()
-    if (itens.isEmpty()) fail("Nenhum item selecionado")
-
-    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
-    itens.forEach { item ->
-      item.locApp = primeiro.locApp
-      item.updateLocalizacao()
-    }
-    updateView()
-  }
-
-  fun imprimeProdutosConf() = viewModel.exec {
-    val produtos = subView.itensSelecionados()
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-    val filtro = subView.filtro()
-
-    val report = PrintProdutosEstoqueLojaConf(filtro)
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview(loja = 0)
-    )
+    //TODO
   }
 
   fun imprimeProdutos() = viewModel.exec {
-    val produtos = subView.itensSelecionados()
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-    val filtro = subView.filtro()
-
-    val report = PrintProdutosEstoqueLoja(filtro)
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview(loja = 0)
-    )
+    //TODO
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
-    return ProcessamentoKardec.kardec(produto, dataIncial)
+  fun kardec(produto: ProdutoControle, dataIncial: LocalDate?): List<ProdutoKardec> {
+    TODO()
   }
 }
 
-interface ITabEstoqueLoja : ITabView {
-  fun filtro(): FiltroProdutoEstoque
-  fun updateProduto(produtos: List<ProdutoEstoque>)
+interface ITabControleLoja : ITabView {
+  fun filtro(): FiltroProdutoControle
+  fun updateProduto(produtos: List<ProdutoControle>)
   fun updateKardec()
-  fun itensSelecionados(): List<ProdutoEstoque>
+  fun itensSelecionados(): List<ProdutoControle>
   fun reloadGrid()
 }
