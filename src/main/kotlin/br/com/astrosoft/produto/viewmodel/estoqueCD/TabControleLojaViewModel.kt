@@ -1,11 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.ControleKardec
 import br.com.astrosoft.produto.model.beans.FiltroProdutoControle
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoControle
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import java.time.LocalDate
 
 class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
@@ -27,16 +27,32 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
     subView.updateProduto(produtos)
   }
 
-  fun updateKardec() = viewModel.exec {
-    //TODO
+  fun updateKardec(dataIncial : LocalDate?) = viewModel.exec {
+    val listProdutos = subView.itensSelecionados()
+    if (listProdutos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    listProdutos.forEach {
+      kardec(produto = it, dataIncial = dataIncial)
+    }
+
+    updateView()
   }
 
   fun imprimeProdutos() = viewModel.exec {
     //TODO
   }
 
-  fun kardec(produto: ProdutoControle, dataIncial: LocalDate?): List<ControleKardec> {
-    return produto.findKardec(dataIncial ?: LocalDate.now())
+  fun kardec(produto: ProdutoControle, dataIncial : LocalDate?): List<ControleKardec> {
+    if(produto.dataInicial == null){
+      produto.dataInicial = dataIncial ?: LocalDate.now()
+    }
+    val listaKardex = produto.findKardec()
+    val saldoKardex = listaKardex.lastOrNull()?.saldo ?: 0
+    produto.kardexLoja = saldoKardex
+    produto.updateControle()
+    return listaKardex
   }
 
   fun updateControle(produto: ProdutoControle) {

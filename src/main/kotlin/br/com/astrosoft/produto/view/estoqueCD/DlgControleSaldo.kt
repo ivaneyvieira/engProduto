@@ -18,11 +18,13 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 class DlgControleSaldo(
   val viewModel: TabControleLojaViewModel,
   val produto: ProdutoControle,
+  val dataInicial: LocalDate?,
   val onClose: () -> Unit = {}
 ) :
   Dialog() {
@@ -94,6 +96,7 @@ class DlgControleSaldo(
     produto.dataInicial = edtDataInicial?.value
     produto.estoqueLoja = edtConferencia?.value
     viewModel.updateControle(produto)
+    viewModel.kardec(produto = produto, dataIncial = dataInicial)
     onClose.invoke()
     this.close()
   }

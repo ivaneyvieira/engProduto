@@ -2787,6 +2787,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", controle.grade)
       addOptionalParameter("dataInicial", controle.dataInicial.toSaciDate())
       addOptionalParameter("estoqueLoja", controle.estoqueLoja)
+      addOptionalParameter("kardexLoja", controle.kardexLoja)
     }
   }
 

@@ -28,6 +28,7 @@ class ProdutoControle(
   var saldoAtacado: Int?,
   var dataInicial: LocalDate?,
   var estoqueLoja: Int? = null,
+  var kardexLoja: Int? = null,
   var preco: Double? = null,
   var barcode: String? = null,
   var ref: String? = null,
@@ -35,12 +36,12 @@ class ProdutoControle(
   val codigoStr
     get() = this.codigo?.toString() ?: ""
 
-  fun findKardec(dataInicial: LocalDate?): List<ControleKardec> {
+  fun findKardec(): List<ControleKardec> {
     val vendas = saci.findProdutoKardec(
       loja = loja ?: return emptyList(),
       prdno = prdno ?: return emptyList(),
       grade = grade ?: return emptyList(),
-      dataInicial = dataInicial
+      dataInicial = dataInicial ?: LocalDate.now()
     )
 
     val result = saldoInicial(dataInicial) + vendas

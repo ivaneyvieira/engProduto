@@ -1,4 +1,4 @@
 USE sqldados;
 
-REPLACE prdControle(storeno, prdno, grade, dataInicial, estoqueLoja)
-VALUES (:storeno, :prdno, :grade, :dataInicial, :estoqueLoja)
+REPLACE prdControle(storeno, prdno, grade, dataInicial, estoqueLoja, kardexLoja)
+VALUES (:storeno, :prdno, :grade, :dataInicial, :estoqueLoja, :kardexLoja)

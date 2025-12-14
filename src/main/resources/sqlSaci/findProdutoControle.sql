@@ -71,7 +71,8 @@ CREATE TEMPORARY TABLE T_LOC_APP
 SELECT prdno       AS prdno,
        grade       AS grade,
        dataInicial AS dataInicial,
-       estoqueLoja AS estoqueLoja
+       estoqueLoja AS estoqueLoja,
+       kardexLoja  AS kardexLoja
 FROM
   sqldados.prdControle
     INNER JOIN T_PRDNO
@@ -132,6 +133,7 @@ SELECT S.no                                                                     
        ROUND(SUM(E.qtty_atacado) / 1000)                                              AS saldoAtacado,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
        A.estoqueLoja                                                                  AS estoqueLoja,
+       A.kardexLoja                                                                   AS kardexLoja,
        PC.refprice / 100                                                              AS preco,
        B.codbar                                                                       AS barcode,
        PD.mfno_ref                                                                    AS ref
@@ -182,6 +184,7 @@ SELECT loja,
        saldoAtacado,
        dataInicial,
        estoqueLoja,
+       kardexLoja,
        barcode,
        ref
 FROM

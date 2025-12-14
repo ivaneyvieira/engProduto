@@ -1,5 +1,6 @@
-use sqldados;
+USE sqldados;
 
+DROP TABLE IF EXISTS prdControle;
 CREATE TABLE prdControle
 (
   storeno     int           NOT NULL,
@@ -7,6 +8,7 @@ CREATE TABLE prdControle
   grade       varchar(10)   NOT NULL,
   dataInicial int DEFAULT 0 NULL,
   estoqueLoja int           NULL,
+  kardexLoja  int           NULL,
   PRIMARY KEY (storeno, prdno, grade)
 )
   CHARSET = latin1;

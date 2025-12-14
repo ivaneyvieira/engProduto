@@ -152,7 +152,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
-            viewModel.updateKardec()
+            viewModel.updateKardec(edtDataInicial.value)
           }
         }
 
@@ -221,10 +221,11 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoControle::dataInicial, header = "Início Inv", width = "100px")
       this.columnGrid(ProdutoControle::estoqueLoja, header = "Est Loja", width = "75px").right()
+      this.columnGrid(ProdutoControle::kardexLoja, header = "Kardex", width = "75px").right()
       val user = AppConfig.userLogin() as? UserSaci
       if (user?.estoqueEditaInventario == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoControle ->
-          val dlgControleLoja = DlgControleSaldo(viewModel, produto) {
+          val dlgControleLoja = DlgControleSaldo(viewModel, produto, edtDataInicial.value) {
             gridPanel.dataProvider.refreshAll()
           }
           dlgControleLoja.open()

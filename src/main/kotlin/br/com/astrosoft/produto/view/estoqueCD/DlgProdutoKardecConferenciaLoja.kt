@@ -17,7 +17,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class DlgControleKardecConferenciaLoja(
-  val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataIncial: LocalDate?
+  val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataInicial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
@@ -83,7 +83,7 @@ class DlgControleKardecConferenciaLoja(
   }
 
   fun update() {
-    val kardec = viewModel.kardec(produto, dataIncial).filter {
+    val kardec = viewModel.kardec(produto = produto, dataIncial = dataInicial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
       if (pesquisa.isEmpty()) return@filter true
       val doc = it.doc ?: ""
