@@ -1,14 +1,13 @@
 DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
-
-SELECT storeno            AS loja,
-       prdno              AS prdno,
-       grade              AS grade,
-       CAST(date AS date) AS data,
-       doc                AS doc,
-       'VENDA'            AS tipo,
-       ROUND(qtty / 1000) AS qtde,
-       0                  AS saldo
+SELECT storeno                      AS loja,
+       prdno                        AS prdno,
+       grade                        AS grade,
+       CAST(date AS date)           AS data,
+       SUBSTRING_INDEX(doc, '.', 1) AS doc,
+       'VENDA'                      AS tipo,
+       ROUND(-qtty / 1000)          AS qtde,
+       0                            AS saldo
 FROM
   sqldados.xalog2 AS X
 WHERE prdno = :prdno

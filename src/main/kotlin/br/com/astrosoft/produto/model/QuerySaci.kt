@@ -1002,8 +1002,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("caracter", filter.caracter.value)
       addOptionalParameter("fornecedor", filter.fornecedor)
       addOptionalParameter("centroLucro", filter.centroLucro)
-      addOptionalParameter("localizacaoUser", filter.listaUser)
-      addOptionalParameter("localizacao", filter.localizacao)
       addOptionalParameter("estoque", filter.estoque.value)
       addOptionalParameter("saldo", filter.saldo)
       addOptionalParameter("inativo", filter.inativo.codigo)
@@ -2774,11 +2772,22 @@ class QuerySaci : QueryDB(database) {
 
     var saldo = 0
     listKardec.forEach { kad ->
-      saldo = saldo + (kad.qtde ?: 0)
+      saldo += (kad.qtde ?: 0)
       kad.saldo = saldo
     }
 
     return listKardec
+  }
+
+  fun updateControle(controle: ProdutoControle) {
+    val sql = "/sqlSaci/prdControleSave.sql"
+    script(sql){
+      addOptionalParameter("storeno", controle.loja)
+      addOptionalParameter("prdno", controle.prdno)
+      addOptionalParameter("grade", controle.grade)
+      addOptionalParameter("dataInicial", controle.dataInicial.toSaciDate())
+      addOptionalParameter("estoqueLoja", controle.estoqueLoja)
+    }
   }
 
   companion object {

@@ -68,25 +68,12 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno                                                     AS prdno,
-       grade                                                     AS grade,
-       localizacao                                               AS locApp,
-       dataInicial                                               AS dataInicial,
-       IF(dataUpdate * 1 = 0, NULL, dataUpdate)                  AS dataUpdate,
-       kardec                                                    AS kardec,
-       IF(dataObservacao * 1 = 0, CURDATE() * 1, dataObservacao) AS dataObservacao,
-       qtConferencia                                             AS qtConferencia,
-       qtConfEdit                                                AS qtConfEdit,
-       qtConfEditLoja                                            AS qtConfEditLoja,
-       estoqueConfCD                                             AS estoqueConfCD,
-       estoqueConfLoja                                           AS estoqueConfLoja,
-       estoque                                                   AS estoque,
-       estoqueData                                               AS estoqueData,
-       estoqueCD                                                 AS estoqueCD,
-       estoqueLoja                                               AS estoqueLoja,
-       estoqueUser                                               AS estoqueUser
+SELECT prdno       AS prdno,
+       grade       AS grade,
+       dataInicial AS dataInicial,
+       estoqueLoja AS estoqueLoja
 FROM
-  sqldados.prdAdicional
+  sqldados.prdControle
     INNER JOIN T_PRDNO
                USING (prdno)
 WHERE (storeno IN (2, 3, 4, 5, 8))
@@ -134,9 +121,7 @@ SELECT S.no                                                                     
                                                   ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
                                                   (PD.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
-       IFNULL(A.estoque, 0)                                                           AS estoque,
        LN.locNerus                                                                    AS locNerus,
-       IFNULL(A.locApp, '')                                                           AS locApp,
        V.no                                                                           AS codForn,
        V.name                                                                         AS fornecedor,
        V.sname                                                                        AS fornecedorAbrev,
@@ -146,18 +131,8 @@ SELECT S.no                                                                     
        ROUND(SUM(E.qtty_varejo) / 1000)                                               AS saldoVarejo,
        ROUND(SUM(E.qtty_atacado) / 1000)                                              AS saldoAtacado,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial,
-       A.dataUpdate                                                                   AS dataUpdate,
-       A.kardec                                                                       AS kardec,
-       A.estoqueConfCD                                                                AS estoqueConfCD,
-       A.estoqueConfLoja                                                              AS estoqueConfLoja,
-       CAST(A.dataObservacao AS DATE)                                                 AS dataConferencia,
-       qtConferencia                                                                  AS qtConferencia,
-       qtConfEdit                                                                     AS qtConfEdit,
-       qtConfEditLoja                                                                 AS qtConfEditLoja,
+       A.estoqueLoja                                                                  AS estoqueLoja,
        PC.refprice / 100                                                              AS preco,
-       A.estoqueUser                                                                  AS estoqueUser,
-       U.login                                                                        AS estoqueLogin,
-       A.estoqueData                                                                  AS estoqueData,
        B.codbar                                                                       AS barcode,
        PD.mfno_ref                                                                    AS ref
 FROM
@@ -172,8 +147,6 @@ FROM
                USING (prdno, grade)
     LEFT JOIN  T_LOC_NERUS    AS LN
                USING (prdno, grade)
-    LEFT JOIN  sqldados.users AS U
-               ON U.no = A.estoqueUser
     LEFT JOIN  T_BARCODE      AS B
                USING (prdno, grade)
     LEFT JOIN  sqldados.prp   AS PC
@@ -198,9 +171,7 @@ SELECT loja,
        cl,
        embalagem,
        qtdEmbalagem,
-       estoque,
        locNerus,
-       locApp,
        codForn,
        fornecedor,
        fornecedorAbrev,
@@ -210,24 +181,10 @@ SELECT loja,
        saldoVarejo,
        saldoAtacado,
        dataInicial,
-       dataUpdate,
-       kardec,
-       IFNULL(dataConferencia, CURDATE()) AS dataConferencia,
-       qtConferencia,
-       qtConfEdit,
-       qtConfEditLoja,
-       preco,
-       estoqueUser,
-       estoqueLogin,
-       estoqueData,
+       estoqueLoja,
        barcode,
-       ref,
-       estoqueConfCD,
-       estoqueConfLoja
+       ref
 FROM
   temp_pesquisa
-WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR
-       (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
+WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
-  AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
-  AND (MID(locApp, 1, 4) IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR TRIM(IFNULL(locApp, '')) = '')

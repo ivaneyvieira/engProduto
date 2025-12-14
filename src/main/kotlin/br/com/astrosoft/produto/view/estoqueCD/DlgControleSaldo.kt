@@ -2,9 +2,11 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
+import br.com.astrosoft.produto.model.beans.ProdutoControle
 import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleLojaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -19,14 +21,13 @@ import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import kotlin.math.roundToInt
 
 class DlgControleSaldo(
-  val viewModel: IModelConferencia,
-  val produto: ProdutoEstoque,
+  val viewModel: TabControleLojaViewModel,
+  val produto: ProdutoControle,
   val onClose: () -> Unit = {}
 ) :
   Dialog() {
-  private var edtConferencia: IntegerField? = null
-  private var edtEmbalagem: SuperDoubleField? = null
   private var edtDataInicial: DatePicker? = null
+  private var edtConferencia: IntegerField? = null
 
   init {
     this.isModal = true
@@ -45,53 +46,17 @@ class DlgControleSaldo(
           this.localePtBr()
         }
 
-        edtConferencia = integerField("Est CD") {
+        edtConferencia = integerField("Estoque Loja") {
           this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          value = produto.qtConferencia ?: 0
+          value = produto.estoqueLoja ?: 0
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.addValueChangeListener {
-            if (it.isFromClient) {
-              edtEmbalagem?.value = processaEmbalagem(it.value ?: 0)
-            }
-          }
-        }
-
-        edtEmbalagem = superDoubleField("Est Emb") {
-          this.isAutoselect = true
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.width = "6rem"
-          this.value = processaEmbalagem(edtConferencia?.value ?: 0)
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.addValueChangeListener {
-            if (it.isFromClient) {
-              edtConferencia?.value = processaConferencia(it.value ?: 0.00)
-            }
-          }
         }
       }
     }
     this.width = "30%"
     this.height = "30%"
-  }
-
-  private fun processaEmbalagem(saldo: Int): Double {
-    val prdno = produto.prdno ?: ""
-    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
-      val fator = embalagem.qtdEmbalagem ?: 1.0
-      val saldoEmb = saldo * 1.00 / fator
-      saldoEmb
-    } ?: (saldo * 1.0)
-  }
-
-  private fun processaConferencia(emb: Double): Int? {
-    val prdno = produto.prdno ?: ""
-    return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
-      val fator = embalagem.qtdEmbalagem ?: 1.0
-      val saldoEmb = emb * fator
-      saldoEmb.roundToInt()
-    }
   }
 
   fun HasComponents.toolBar() {
@@ -120,19 +85,15 @@ class DlgControleSaldo(
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
 
-    val localizacao = produto.locApp
-    //val dataConferencia = produto.dataConferencia.format()
     val saldo = produto.saldo ?: 0
 
-    return "$codigo $descricao$grade ($localizacao) Estoque: $saldo"
+    return "$codigo $descricao $grade Estoque: $saldo"
   }
 
   private fun closeForm() {
     produto.dataInicial = edtDataInicial?.value
-    //produto.dataConferencia = edtDataConf?.value
-    produto.qtConferencia = edtConferencia?.value
-    produto.dataUpdate = null
-    viewModel.updateConferencia(produto)
+    produto.estoqueLoja = edtConferencia?.value
+    viewModel.updateControle(produto)
     onClose.invoke()
     this.close()
   }

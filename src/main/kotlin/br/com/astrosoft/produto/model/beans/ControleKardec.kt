@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 data class ControleKardec(
@@ -28,8 +27,9 @@ data class ControleKardec(
     get() = tipo?.descricao ?: ""
 }
 
-enum class ETipoKardecControle(val num: String, val descricao: String) {
-  VENDA("01", "Venda"),
+enum class ETipoKardecControle(val descricao: String) {
+  VENDA("Venda"),
+  INICIAL("Inicial"),
 }
 
 

@@ -217,24 +217,24 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::unidade, header = "UN")
     }
 
-    columnGroup("Estoque") {
-      this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
-      this.columnGrid(ProdutoControle::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoControle::kardec, header = "CD", width = "75px")
-      this.columnGrid(ProdutoControle::qtConfCalcEstoque, header = "Conf", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoControle::qtDifCalcEstoque, header = "Dif", pattern = "#,##0", width = "80px")
-    }
-
     columnGroup("Inventário") {
-      this.columnGrid(ProdutoControle::qtConferencia, header = "Inv", width = "75px").right()
+      this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoControle::dataInicial, header = "Início Inv", width = "100px")
-      this.columnGrid(ProdutoControle::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
+      this.columnGrid(ProdutoControle::estoqueLoja, header = "Est Loja", width = "75px").right()
+      val user = AppConfig.userLogin() as? UserSaci
+      if (user?.estoqueEditaInventario == true) {
+        this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoControle ->
+          val dlgControleLoja = DlgControleSaldo(viewModel, produto) {
+            gridPanel.dataProvider.refreshAll()
+          }
+          dlgControleLoja.open()
+        }
+      }
       this.columnGrid(ProdutoControle::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
     }
 
     columnGroup("Outras Informações") {
       this.columnGrid(ProdutoControle::embalagem, header = "Emb")
-      this.columnGrid(ProdutoControle::locApp, header = "Loc App", width = "100px")
       this.columnGrid(ProdutoControle::codForn, header = "For Cod")
       this.columnGrid(ProdutoControle::valorEstoque, header = "Valor Est")
     }
@@ -242,9 +242,6 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
 
   override fun filtro(): FiltroProdutoControle {
     val user = AppConfig.userLogin() as? UserSaci
-    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
-      listOf("TODOS")
-    }
 
     return FiltroProdutoControle(
       loja = cmbLoja.value?.no ?: 0,
@@ -252,13 +249,11 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       codigo = edtProduto.value ?: 0,
       grade = edtGrade.value ?: "",
       caracter = cmbCaracter.value ?: ECaracter.TODOS,
-      localizacao = edtLocalizacao.value ?: "",
       fornecedor = edtFornecedor.value ?: "",
       centroLucro = edtCentroLucro.value ?: 0,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,
-      listaUser = listaUser,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       cl = 61101,
     )

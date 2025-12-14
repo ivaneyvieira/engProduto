@@ -17,9 +17,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class DlgControleKardecConferenciaLoja(
-  val viewModel: TabControleLojaViewModel,
-  val produto: ProdutoControle,
-  val dataIncial: LocalDate?
+  val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataIncial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
@@ -33,12 +31,11 @@ class DlgControleKardecConferenciaLoja(
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-    val locApp = produto.locApp
 
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
 
     form = SubWindowForm(
-      "$codigo $descricao$grade ($locApp) Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
+      title = "$codigo $descricao$grade Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
@@ -92,9 +89,10 @@ class DlgControleKardecConferenciaLoja(
       val doc = it.doc ?: ""
       val data = it.data?.format() ?: ""
       val tipo = it.tipoDescricao
-      doc.contains(pesquisa, ignoreCase = true)
-      || data.startsWith(pesquisa)
-      || tipo.contains(pesquisa, ignoreCase = true)
+      doc.contains(pesquisa, ignoreCase = true) || data.startsWith(pesquisa) || tipo.contains(
+        pesquisa,
+        ignoreCase = true
+      )
     }
     gridDetail.setItems(kardec)
   }

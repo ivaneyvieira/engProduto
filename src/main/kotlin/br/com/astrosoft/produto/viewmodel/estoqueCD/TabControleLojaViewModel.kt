@@ -38,6 +38,10 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
   fun kardec(produto: ProdutoControle, dataIncial: LocalDate?): List<ControleKardec> {
     return produto.findKardec(dataIncial ?: LocalDate.now())
   }
+
+  fun updateControle(produto: ProdutoControle) {
+    produto.updateControle()
+  }
 }
 
 interface ITabControleLoja : ITabView {
