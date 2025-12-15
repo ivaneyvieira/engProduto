@@ -10,6 +10,7 @@ data class ControleKardec(
   var doc: String? = null,
   var tipo: ETipoKardecControle? = null,
   var qtde: Int? = null,
+  var observacao: String? = null,
   var saldo: Int? = null,
 ) {
   val saldoEmb: Double

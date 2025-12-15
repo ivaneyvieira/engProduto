@@ -70,6 +70,7 @@ class DlgControleKardecConferenciaLoja(
       columnGrid(ControleKardec::data, "Data")
       columnGrid(ControleKardec::doc, "Doc").right()
       columnGrid(ControleKardec::tipoDescricao, "Tipo")
+      columnGrid(ControleKardec::observacao, "Observação")
       columnGrid(ControleKardec::qtde, "Qtd")
       columnGrid(ControleKardec::saldo, "Est CD")
       columnGrid(ControleKardec::saldoEmb, "Est Emb")

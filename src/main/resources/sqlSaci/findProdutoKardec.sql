@@ -3,7 +3,8 @@ USE sqldados;
 DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
 DROP TABLE IF EXISTS T_VENDA;
-CREATE TEMPORARY TABLE T_VENDA(
+CREATE TEMPORARY TABLE T_VENDA
+(
   tipo VARCHAR(15)
 )
 SELECT storeno                      AS loja,
@@ -13,6 +14,7 @@ SELECT storeno                      AS loja,
        SUBSTRING_INDEX(doc, '.', 1) AS doc,
        'VENDA'                      AS tipo,
        ROUND(-qtty / 1000)          AS qtde,
+       N.remarks                    AS observacao,
        0                            AS saldo
 FROM
   sqldados.xalog2          AS X
@@ -25,7 +27,7 @@ WHERE prdno = :prdno
   AND qtty > 0
   AND N.tipo = 0;
 
-INSERT INTO T_VENDA(loja, prdno, grade, data, doc, tipo, qtde, saldo)
+INSERT INTO T_VENDA(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
        P.grade                     AS grade,
@@ -33,6 +35,7 @@ SELECT N.storeno                   AS loja,
        CONCAT(N.nfno, '/', N.nfse) AS doc,
        'FATURA'                    AS tipo,
        ROUND(-P.qtty)              AS qtde,
+       remarks                     AS observacao,
        0                           AS saldo
 FROM
   sqldados.nf                 AS N
@@ -45,7 +48,7 @@ WHERE P.prdno = :prdno
   AND N.nfse = '3'
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL;
 
-INSERT INTO T_VENDA(loja, prdno, grade, data, doc, tipo, qtde, saldo)
+INSERT INTO T_VENDA(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
        P.grade                     AS grade,
@@ -53,6 +56,7 @@ SELECT N.storeno                   AS loja,
        CONCAT(N.nfno, '/', N.nfse) AS doc,
        'TRANSF'                    AS tipo,
        ROUND(-P.qtty)              AS qtde,
+       remarks                     AS observacao,
        0                           AS saldo
 FROM
   sqldados.nf                 AS N
@@ -71,7 +75,7 @@ WHERE P.prdno = :prdno
                   ELSE TRUE
       END;
 
-SELECT loja, prdno, grade, data, doc, tipo, qtde, saldo
+SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
 FROM
   T_VENDA
 ORDER BY data, loja, prdno, grade, doc
