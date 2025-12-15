@@ -88,7 +88,7 @@ SELECT V.storeno AS loja,
        E.xano    AS transacaoE
 FROM
   T_V             AS V
-    LEFT JOIN T_E AS E
+    INNER JOIN T_E AS E
               USING (storeno, ordno)
 GROUP BY E.storeno, E.pdvno, E.xano;
 
