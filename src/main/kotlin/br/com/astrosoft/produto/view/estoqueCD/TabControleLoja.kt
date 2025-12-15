@@ -219,9 +219,9 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
-      this.columnGrid(ProdutoControle::dataInicial, header = "Início Inv", width = "100px")
-      this.columnGrid(ProdutoControle::estoqueLoja, header = "Est Loja", width = "75px").right()
-      this.columnGrid(ProdutoControle::kardexLoja, header = "Kardex", width = "75px").right()
+      this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", width = "75px").right()
+      this.columnGrid(ProdutoControle::dataInicial, header = "Estoque", width = "100px")
+      this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", width = "75px").right()
       val user = AppConfig.userLogin() as? UserSaci
       if (user?.estoqueEditaInventario == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoControle ->
