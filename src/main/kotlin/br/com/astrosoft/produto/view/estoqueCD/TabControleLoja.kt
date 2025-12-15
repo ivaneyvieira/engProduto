@@ -214,7 +214,6 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::codigo, header = "Código")
       this.columnGrid(ProdutoControle::descricao, header = "Descrição", width = "16rem")
       this.columnGrid(ProdutoControle::grade, header = "Grade", width = "6rem")
-      this.columnGrid(ProdutoControle::unidade, header = "UN")
     }
 
     columnGroup("Estoque") {
