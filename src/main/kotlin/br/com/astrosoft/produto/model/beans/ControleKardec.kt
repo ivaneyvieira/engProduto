@@ -29,6 +29,8 @@ data class ControleKardec(
 
 enum class ETipoKardecControle(val descricao: String) {
   VENDA("Venda"),
+  TRANSF("Transferência"),
+  FATURA("Fatura"),
   INICIAL("Inicial"),
 }
 
