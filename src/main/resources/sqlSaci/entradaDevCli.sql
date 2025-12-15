@@ -76,7 +76,7 @@ GROUP BY storeno, ordno;
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
 (
-  PRIMARY KEY (loja, pdv, transacao),
+  INDEX (loja, pdv, transacao),
   INDEX (lojaE, pdvE, transacaoE)
 )
 SELECT V.storeno AS loja,
@@ -90,7 +90,7 @@ FROM
   T_V             AS V
     LEFT JOIN T_E AS E
               USING (storeno, ordno)
-GROUP BY V.storeno, V.pdvno, V.xano;
+GROUP BY E.storeno, E.pdvno, E.xano;
 
 /****************************************************************************************/
 
