@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoControle
 import br.com.astrosoft.produto.model.planilha.PlanilhaKardexControle
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleLojaViewModel
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.label
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
@@ -120,11 +121,10 @@ class DlgControleKardecConferenciaLoja(
   }
 
   private fun HasComponents.downloadExcel(planilha: PlanilhaKardexControle) {
-    val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
+    val button = LazyDownloadButton("Planilha",VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(gridDetail.list())
       ByteArrayInputStream(bytes)
     })
-    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
     add(button)
   }
 }
