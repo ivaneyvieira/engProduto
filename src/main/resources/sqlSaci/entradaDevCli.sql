@@ -21,7 +21,7 @@ SELECT N.storeno                 AS loja,
               WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
               WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
                                                        ELSE ''
-            END AS CHAR)         AS obsNI
+         END AS CHAR)         AS obsNI
 FROM
   sqldados.nf                 AS N
     INNER JOIN sqldados.custp AS C
@@ -36,7 +36,7 @@ WHERE (N.print_remarks REGEXP 'NI *[0-9]+' OR N.remarks REGEXP 'NI *[0-9]+')
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -50,13 +50,12 @@ FROM
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
-  AND date >= SUBDATE(:dataI, INTERVAL 6 MONTH)
-GROUP BY storeno, ordno;
+  AND date >= SUBDATE(:dataI, INTERVAL 6 MONTH);
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -70,8 +69,7 @@ FROM
                ON P.storeno = V.storeno
                  AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
-  AND P.storeno IN (2, 3, 4, 5, 8)
-GROUP BY storeno, ordno;
+  AND P.storeno IN (2, 3, 4, 5, 8);
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
@@ -89,8 +87,7 @@ SELECT V.storeno AS loja,
 FROM
   T_V             AS V
     INNER JOIN T_E AS E
-              USING (storeno, ordno)
-GROUP BY E.storeno, E.pdvno, E.xano;
+               USING (storeno, ordno);
 
 /****************************************************************************************/
 
@@ -134,8 +131,8 @@ SELECT I.invno                                                             AS in
        C.name                                                              AS cliente,
        E.name                                                              AS vendedor,
        @NOTA := TRIM(SUBSTRING_INDEX(
-           TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)), ' ',
-           1))                                                             AS nfRmk,
+         TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)), ' ',
+         1))                                                             AS nfRmk,
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                  AS nfno,
        MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2) AS nfse,
        I.c9                                                                AS impressora,
@@ -185,7 +182,7 @@ WHERE I.account = '2.01.25'
         WHEN 'N' THEN I.c9 = ''
         WHEN 'T' THEN TRUE
                  ELSE FALSE
-      END;
+  END;
 
 SELECT DISTINCT I.invno,
                 I.loja,
