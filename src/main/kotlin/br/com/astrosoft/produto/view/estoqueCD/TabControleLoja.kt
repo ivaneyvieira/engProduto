@@ -218,9 +218,9 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
     }
 
     columnGroup("Estoque") {
-      this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "5rem")
-      this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", width = "5rem").right()
-      this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", width = "5rem").right()
+      this.columnGrid(ProdutoControle::saldo, header = "Sistema", pattern = "#,##0", width = "6rem")
+      this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", pattern = "#,##0", width = "6rem").right()
+      this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", pattern = "#,##0", width = "6rem").right()
       this.columnGrid(ProdutoControle::dataInicial, header = "Data Inv", width = "6.5rem")
       val user = AppConfig.userLogin() as? UserSaci
       if (user?.estoqueEditaInventarioLoja == true) {
