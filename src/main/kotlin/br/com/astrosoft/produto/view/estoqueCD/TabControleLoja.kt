@@ -212,18 +212,18 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         }
       }
       this.columnGrid(ProdutoControle::codigo, header = "Código")
-      this.columnGrid(ProdutoControle::descricao, header = "Descrição").expand()
-      this.columnGrid(ProdutoControle::grade, header = "Grade", width = "80px")
+      this.columnGrid(ProdutoControle::descricao, header = "Descrição", width = "16rem")
+      this.columnGrid(ProdutoControle::grade, header = "Grade", width = "6rem")
       this.columnGrid(ProdutoControle::unidade, header = "UN")
     }
 
     columnGroup("Estoque") {
-      this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "75px")
-      this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", width = "75px").right()
-      this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", width = "75px").right()
-      this.columnGrid(ProdutoControle::dataInicial, header = "Data Inv", width = "100px")
+      this.columnGrid(ProdutoControle::saldo, header = "Sistema", width = "5rem")
+      this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", width = "5rem").right()
+      this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", width = "5rem").right()
+      this.columnGrid(ProdutoControle::dataInicial, header = "Data Inv", width = "6.5rem")
       val user = AppConfig.userLogin() as? UserSaci
-      if (user?.estoqueEditaInventario == true) {
+      if (user?.estoqueEditaInventarioLoja == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoControle ->
           val dlgControleLoja = DlgControleSaldo(viewModel, produto, edtDataInicial.value) {
             gridPanel.dataProvider.refreshAll()
@@ -231,14 +231,9 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
           dlgControleLoja.open()
         }
       }
-      this.columnGrid(ProdutoControle::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
     }
 
-    columnGroup("Outras Informações") {
-      this.columnGrid(ProdutoControle::embalagem, header = "Emb")
-      this.columnGrid(ProdutoControle::codForn, header = "For Cod")
-      this.columnGrid(ProdutoControle::valorEstoque, header = "Valor Est")
-    }
+    this.columnGrid(ProdutoControle::codForn, header = "For Cod", width = "5rem")
   }
 
   override fun filtro(): FiltroProdutoControle {
