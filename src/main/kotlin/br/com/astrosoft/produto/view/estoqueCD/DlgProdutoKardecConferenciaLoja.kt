@@ -4,17 +4,26 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
+import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ControleKardec
 import br.com.astrosoft.produto.model.beans.ProdutoControle
+import br.com.astrosoft.produto.model.planilha.PlanilhaKardexControle
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleLojaViewModel
 import com.github.mvysny.karibudsl.v10.textField
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.stefan.LazyDownloadButton
+import java.io.ByteArrayInputStream
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DlgControleKardecConferenciaLoja(
   val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataInicial: LocalDate?
@@ -45,6 +54,8 @@ class DlgControleKardecConferenciaLoja(
             update()
           }
         }
+
+        downloadExcel(PlanilhaKardexControle())
       },
       onClose = {
         closeForm()
@@ -70,7 +81,7 @@ class DlgControleKardecConferenciaLoja(
       columnGrid(ControleKardec::data, "Data")
       columnGrid(ControleKardec::doc, "Doc").right()
       columnGrid(ControleKardec::tipoDescricao, "Tipo")
-      columnGrid(ControleKardec::observacao, "Observação")
+      columnGrid(ControleKardec::observacao, "Observação", width = "20rem")
       columnGrid(ControleKardec::qtde, "Qtd")
       columnGrid(ControleKardec::saldo, "Saldo LJ")
     }
@@ -100,5 +111,20 @@ class DlgControleKardecConferenciaLoja(
   private fun closeForm() {
     onClose?.invoke()
     form?.close()
+  }
+
+  private fun filename(): String {
+    val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
+    val textTime = LocalDateTime.now().format(sdf)
+    return "produtoKardex$textTime.xlsx"
+  }
+
+  private fun HasComponents.downloadExcel(planilha: PlanilhaKardexControle) {
+    val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
+      val bytes = planilha.write(gridDetail.list())
+      ByteArrayInputStream(bytes)
+    })
+    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    add(button)
   }
 }

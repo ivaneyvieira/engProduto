@@ -32,6 +32,7 @@ enum class ETipoKardecControle(val descricao: String) {
   VENDA("Venda"),
   TRANSF("Transferência"),
   FATURA("Fatura"),
+  DEVOLUCAO("Devolução"),
   INICIAL("Inicial"),
 }
 

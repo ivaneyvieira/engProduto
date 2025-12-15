@@ -1,11 +1,14 @@
 USE sqldados;
 
+SET SQL_MODE = '';
+
 DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
 DROP TABLE IF EXISTS T_KARDEX;
 CREATE TEMPORARY TABLE T_KARDEX
 (
-  tipo VARCHAR(15)
+  tipo       VARCHAR(15),
+  observacao VARCHAR(255)
 )
 SELECT storeno                      AS loja,
        prdno                        AS prdno,
