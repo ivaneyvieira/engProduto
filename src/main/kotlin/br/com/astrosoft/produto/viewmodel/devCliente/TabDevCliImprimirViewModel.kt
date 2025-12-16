@@ -37,16 +37,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     }
 
     val notasAuto = nota.notaAtuoriza()
-
-    notasAuto.forEach { notaAuto ->
-      val motivoAuto = notaAuto.motivo()?.uppercase() ?: ""
-      //nota.nameAutorizacao = notaAuto.nameTroca
-      val motivoDev = nota.motivo()?.uppercase() ?: ""
-      if (motivoDev != motivoAuto) {
-        //fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
-      }
-    }
-
     val produtosDev = nota.produtos()
     val produtosNota = notasAuto.flatMap { it.produtos() }.filter {
       it.dev == true
@@ -59,13 +49,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }
 
         if (prdAuto.isEmpty()) {
-          fail("Produto devolvido diferente do autorizado")
-        }
-
-        val qtDev = prdDev.tipoQtdEfetiva ?: 0
-        val qtAuto = prdAuto.sumOf { it.quantDev ?: 0 }
-        if (qtDev != qtAuto) {
-          //fail("Quantidade devolvida diferente da autorizada")
+          //fail("Produto devolvido diferente do autorizado")
         }
       }
     }
