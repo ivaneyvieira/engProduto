@@ -43,7 +43,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       //nota.nameAutorizacao = notaAuto.nameTroca
       val motivoDev = nota.motivo()?.uppercase() ?: ""
       if (motivoDev != motivoAuto) {
-        fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
+        //fail("Motivos divergentes entre as notas autorizadas e devolvidas: $motivoAuto - $motivoDev")
       }
     }
 
