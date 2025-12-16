@@ -26,7 +26,6 @@ class TabReposicaoEnt(
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-  // private lateinit var cmbMetodo: Select<EMetodo>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -56,20 +55,6 @@ class TabReposicaoEnt(
       }
     }
     init()
-    /*
-    cmbMetodo = select("Tipo") {
-      val user = AppConfig.userLogin() as? UserSaci
-      val tipos = user?.tipoMetodo ?: EMetodo.entries
-      this.setItems(EMetodo.entries.filter {
-        it in tipos || EMetodo.TODOS in tipos || user?.admin == true
-      })
-      this.value = tipos.firstOrNull()
-      this.setItemLabelGenerator { it.descricao }
-      this.addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    */
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       addValueChangeListener {

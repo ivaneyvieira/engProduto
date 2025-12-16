@@ -103,6 +103,47 @@ WHERE P.prdno = :prdno
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL;
 
+DROP TABLE IF EXISTS T_REPOSICAO;
+CREATE TEMPORARY TABLE T_REPOSICAO
+SELECT O.storeno                                    AS loja,
+       E.prdno                                      AS prdno,
+       E.grade                                      AS grade,
+       CAST(O.date AS DATE)                         AS data,
+       O.ordno                                      AS doc,
+       ROUND(E.qtty / 1000)                         AS qtde,
+       TRIM(MID(IFNULL(R.remarks__480, ''), 1, 40)) AS observacao,
+       CASE O.paymno
+         WHEN 431 THEN 'REPOSICAO'
+         WHEN 432 THEN 'RETORNO'
+         WHEN 433 THEN 'ACERTO'
+                  ELSE ''
+       END                                          AS metodo,
+       IF(O.paymno = 433,
+          ROUND(CASE
+                  WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
+                  WHEN R.remarks__480 LIKE 'SAIDA%'   THEN -1
+                                                      ELSE 0
+                END), 1)                            AS multAcerto
+FROM
+  sqldados.eoprd               AS E
+    INNER JOIN sqldados.eord   AS O
+               USING (storeno, ordno)
+    LEFT JOIN  sqldados.eordrk AS R
+               USING (storeno, ordno)
+WHERE (O.paymno IN (431, 432, 433))
+  AND (O.date BETWEEN :dataInicial AND @DATA_FINAL)
+  AND (E.storeno = :loja)
+  AND (E.prdno = :prdno)
+  AND (E.grade = :grade)
+GROUP BY E.storeno, E.ordno, E.prdno, E.grade
+HAVING multAcerto != 0;
+
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
+SELECT loja, prdno, grade, data, doc, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo
+FROM
+  T_REPOSICAO
+WHERE metodo IN ('REPOSICAO');
+
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
 FROM
   T_KARDEX

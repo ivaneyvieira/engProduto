@@ -34,6 +34,9 @@ enum class ETipoKardecControle(val descricao: String) {
   FATURA("Fatura"),
   DEVOLUCAO("Devolução"),
   INICIAL("Inicial"),
+  REPOSICAO("Reposição"),
+  RETORNO("Retorno"),
+  ACERTO("Acerto"),
 }
 
 
