@@ -51,6 +51,8 @@ class ProdutoRessuprimento(
   var valorUltCompra: Double?,
   var valorTotal: Double?
 ) {
+  val codigoNum: Int?
+    get() = codigo?.toIntOrNull()
   val vencimento
     get() = vencimentoStrList?.split(",")?.lastOrNull()?.toIntOrNull()
 
