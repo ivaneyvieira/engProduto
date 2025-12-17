@@ -180,7 +180,7 @@ class DlgProdutosRessuEnt(
 
       val headerRow = this.prependHeaderRow()
       headerRow.join(
-        this.getColumnBy(ProdutoRessuprimento::codigo),
+        this.getColumnBy(ProdutoRessuprimento::codigoNum),
         this.getColumnBy(ProdutoRessuprimento::barcodes),
         this.getColumnBy(ProdutoRessuprimento::descricao),
         this.getColumnBy(ProdutoRessuprimento::grade),
