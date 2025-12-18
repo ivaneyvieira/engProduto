@@ -118,6 +118,7 @@ SELECT O.storeno                                    AS loja,
          WHEN 433 THEN 'ACERTO'
                   ELSE ''
        END                                          AS metodo,
+       IFNULL(EA.marca, 0)                          AS marca,
        IF(O.paymno = 433,
           ROUND(CASE
                   WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
@@ -125,10 +126,12 @@ SELECT O.storeno                                    AS loja,
                                                       ELSE 0
                 END), 1)                            AS multAcerto
 FROM
-  sqldados.eoprd               AS E
-    INNER JOIN sqldados.eord   AS O
+  sqldados.eoprd                       AS E
+    LEFT JOIN  sqldados.eoprdAdicional AS EA
+               USING (storeno, ordno, prdno, grade)
+    INNER JOIN sqldados.eord           AS O
                USING (storeno, ordno)
-    LEFT JOIN  sqldados.eordrk AS R
+    LEFT JOIN  sqldados.eordrk         AS R
                USING (storeno, ordno)
 WHERE (O.paymno IN (431, 432, 433))
   AND (O.date BETWEEN :dataInicial AND @DATA_FINAL)
@@ -142,6 +145,7 @@ INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, sald
 SELECT loja, prdno, grade, data, doc, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo
 FROM
   T_REPOSICAO
+WHERE marca = 1
 WHERE metodo IN ('REPOSICAO');
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
