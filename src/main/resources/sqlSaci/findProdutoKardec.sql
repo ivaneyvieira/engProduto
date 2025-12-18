@@ -146,7 +146,7 @@ SELECT loja, prdno, grade, data, doc, metodo AS tipo, qtde * multAcerto AS qtde,
 FROM
   T_REPOSICAO
 WHERE marca = 1
-WHERE metodo IN ('REPOSICAO');
+  AND  metodo IN ('REPOSICAO');
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
 FROM
