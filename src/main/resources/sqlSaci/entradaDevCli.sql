@@ -221,6 +221,9 @@ SELECT DISTINCT I.invno,
                 UA.no                                                                  AS usernoAutorizacao,
                 UA.name                                                                AS nameAutorizacao,
                 UA.login                                                               AS loginAutorizacao,
+                US.no                                                                  AS usernoSolicitacao,
+                US.name                                                                AS nameSolicitacao,
+                US.login                                                               AS loginSolicitacao,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
                 IFNULL(AT.solicitacaoTroca, 'N')                                       AS solicitacaoTroca,
                 IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
@@ -249,6 +252,8 @@ FROM
               ON U.no = I.userno
     LEFT JOIN sqldados.users         AS UA
               ON UA.no = IFNULL(AT.userTroca, ATV.userTroca)
+    LEFT JOIN sqldados.users         AS US
+              ON US.no = IFNULL(AT.userSolicitacao, ATV.userSolicitacao)
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
