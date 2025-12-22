@@ -7,7 +7,7 @@ import java.time.LocalDate
 class ProdutoRessuprimento(
   var ordno: Int?,
   var prdno: String?,
-  var codigo: String? = null,
+  var codigo: String?,
   var grade: String?,
   var barcodeListStr: String?,
   var descricao: String?,

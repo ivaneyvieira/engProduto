@@ -71,20 +71,38 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         }
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
-          val tipos = ESolicitacaoTroca.entries
+          val tipos = buildList {
+            if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
+              add(ESolicitacaoTroca.Troca)
+            }
+
+            if (user?.autorizaEstorno == true) {
+              add(ESolicitacaoTroca.Estorno)
+            }
+
+            if (user?.autorizaReembolso == true) {
+              add(ESolicitacaoTroca.Reembolso)
+            }
+
+            if (user?.autorizaMuda == true) {
+              add(ESolicitacaoTroca.MudaCliente)
+            }
+          }
           this.setItems(tipos)
-          this.value = nota.solicitacaoTrocaEnnum
-          this.isReadOnly = false
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
 
         edtProduto = select("Produto") {
           this.isReadOnly = readOnly
-          val produtoTrocas = EProdutoTroca.entries
-          this.setItems(produtoTrocas)
-          this.value = nota.produtoTrocaEnnum
-          this.isReadOnly = false
+          val entries = buildList {
+            val comProduto = user?.autorizaTrocaP == true
+            val semProduto = user?.autorizaTroca == true
+            if (comProduto) add(EProdutoTroca.Com)
+            if (semProduto) add(EProdutoTroca.Sem)
+            if (comProduto && semProduto) add(EProdutoTroca.Misto)
+          }
+          this.setItems(entries)
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }

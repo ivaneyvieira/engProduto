@@ -674,16 +674,6 @@ class UserSaci : IUser {
     get() = login == "ADM"
 
   companion object {
-    fun userLogin(login: String, senha: String): UserSaci? {
-      val lista = findAll()
-      val user = lista
-        .firstOrNull {
-          it.login.equals(login, ignoreCase = true) &&
-          it.senha.uppercase().trim() == senha.uppercase().trim()
-        }
-      return user
-    }
-
     fun findAll(): List<UserSaci> {
       return saci.findAllUser().filter { it.ativo }
     }

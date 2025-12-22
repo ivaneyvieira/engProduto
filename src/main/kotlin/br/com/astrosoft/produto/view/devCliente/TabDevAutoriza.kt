@@ -103,6 +103,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       }
     }
 
+<<<<<<< HEAD
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota ->
       val form = FormSolicitacaoNotaTroca(nota)
       DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
@@ -112,6 +113,8 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     }
     columnGrid(NotaVenda::loginSolicitacao, header = "Solicitação")
 
+=======
+>>>>>>> parent of aadf3f4... Criação do botão para solicitar o a autorização de devolução
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
     columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
     columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
