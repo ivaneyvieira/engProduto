@@ -99,6 +99,14 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       }
     }
 
+    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota ->
+      val form = FormSolicitacaoNotaTroca(nota)
+      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
+        val solicitacaoTroca = form.solicitacaoTroca
+        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+      }
+    }
+
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
     columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
     columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
