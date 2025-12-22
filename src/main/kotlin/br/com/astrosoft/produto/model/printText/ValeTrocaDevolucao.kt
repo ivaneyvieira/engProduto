@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
 
-class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") : PrintText<EntradaDevCliPro>() {
+class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
   init {
     column(EntradaDevCliPro::codigoFormat, "Codigo", 6)
     column(EntradaDevCliPro::descricao, "Descricao", 41)
@@ -91,12 +91,24 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
   }
 
   override fun printSumary(bean: EntradaDevCliPro?) {
+    val autorizacao = if (nota.nameAutorizacao.isNullOrBlank()) {
+      nota.nameSolicitacao ?: ""
+    } else {
+      nota.nameAutorizacao ?: ""
+    }
+
+    val solicitacao = if (nota.nameSolicitacao.isNullOrBlank()) {
+      nota.nameAutorizacao ?: ""
+    } else {
+      nota.nameSolicitacao ?: ""
+    }
+
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
     writeln("")
     writeln("______________________________________", center = true)
-    writeln(nota.userName ?: "", center = true)
+    writeln(solicitacao ?: "", center = true)
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
