@@ -16,6 +16,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
+  private var edtMotivo: Select<EMotivoTroca>? = null
 
   init {
     val readOnly = !nota.nameSolicitacao.isNullOrBlank()
@@ -73,6 +74,13 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       }
     }
 
+    edtMotivo = select("Motivo:") {
+      this.isReadOnly = readOnly
+      this.setItems(EMotivoTroca.entries)
+      this.setItemLabelGenerator { item -> item.descricao }
+      this.width = "10rem"
+    }
+
     edtLogin = textField("Login") {
       this.isVisible = !readOnly
       this.isReadOnly = readOnly
@@ -91,12 +99,14 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       val solicitacaoTrocaEnnum = edtTipo?.value ?: return null
       val produtoTrocaEnnum = edtProduto?.value ?: return null
       val nfEntRet = edtNotaEntRet?.value
+      val motivo = edtMotivo?.value ?: return null
       val login: String = edtLogin?.value ?: ""
       val senha: String = edtSenha?.value ?: ""
       return SolicitacaoTroca(
         solicitacaoTrocaEnnum,
         produtoTrocaEnnum,
         nfEntRet,
+        motivo,
         login,
         senha
       )

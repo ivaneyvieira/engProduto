@@ -108,21 +108,16 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("")
     writeln("")
     writeln("______________________________________", center = true)
-    writeln(solicitacao ?: "", center = true)
+    writeln(autorizacao ?: "", center = true)
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
-    if (autorizacao.isBlank()) {
-      writeln("_______________________________  _______________________________")
-      writeln("            Gerencia                           Caixa")
-    } else {
-      val len = ("_______________________________  ".length - autorizacao.length) / 2
-      val str = " ".repeat(len)
+    val len = ("_______________________________  ".length - solicitacao.length) / 2
+    val str = " ".repeat(len)
 
-      writeln("_______________________________  _______________________________")
-      writeln("${str}${autorizacao}${str}                     Caixa")
-      writeln("           Autorizacao")
-    }
+    writeln("_______________________________  _______________________________")
+    writeln("${str}${solicitacao}${str}                     Caixa")
+    writeln("           Autorizacao")
     writeln("")
     writeln("")
   }

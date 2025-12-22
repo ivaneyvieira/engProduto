@@ -112,11 +112,13 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         edtMotivo = select("Motivo:") {
           this.isReadOnly = readOnly
           this.setItems(EMotivoTroca.entries)
+          this.value = nota.setMotivoTroca.firstOrNull()
+          this.isReadOnly = true
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
 
-        button("Autoriza") {
+        button("Assina Troca") {
           this.icon = VaadinIcon.SIGN_IN.create()
           this.isEnabled = !readOnly
 

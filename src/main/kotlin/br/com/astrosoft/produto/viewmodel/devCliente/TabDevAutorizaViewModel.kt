@@ -301,6 +301,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnnum = solicitacaoTroca.produtoTrocaEnnum
     nota.userSolicitacao = user.no
+    nota.setMotivoTroca = setOf(solicitacaoTroca.motivo)
     nota.update()
 
     updateView()
@@ -310,6 +311,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.solicitacaoTrocaEnnum = null
     nota.produtoTrocaEnnum = null
     nota.userSolicitacao = null
+    nota.motivoTroca = null
     nota.update()
 
     updateView()
