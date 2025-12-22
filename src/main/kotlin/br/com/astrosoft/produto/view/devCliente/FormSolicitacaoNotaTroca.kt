@@ -1,9 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
-import br.com.astrosoft.produto.model.beans.EProdutoTroca
-import br.com.astrosoft.produto.model.beans.ESolicitacaoTroca
-import br.com.astrosoft.produto.model.beans.NotaVenda
-import br.com.astrosoft.produto.model.beans.SolicitacaoTroca
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.produto.model.beans.*
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.select.Select
@@ -20,21 +18,46 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
   private var edtNotaEntRet: IntegerField? = null
 
   init {
-    val readOnly = ! nota.nameSolicitacao.isNullOrBlank()
+    val readOnly = !nota.nameSolicitacao.isNullOrBlank()
+    val user = AppConfig.userLogin() as? UserSaci
     edtTipo = select("Tipo") {
       this.isReadOnly = readOnly
-      this.setItems(ESolicitacaoTroca.entries)
+      val tipos = buildList {
+        if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
+          add(ESolicitacaoTroca.Troca)
+        }
+
+        if (user?.autorizaEstorno == true) {
+          add(ESolicitacaoTroca.Estorno)
+        }
+
+        if (user?.autorizaReembolso == true) {
+          add(ESolicitacaoTroca.Reembolso)
+        }
+
+        if (user?.autorizaMuda == true) {
+          add(ESolicitacaoTroca.MudaCliente)
+        }
+      }
+      this.setItems(tipos)
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
-      this.value = nota.solicitacaoTrocaEnnum ?: ESolicitacaoTroca.Troca
+      this.value = nota.solicitacaoTrocaEnnum
     }
 
     edtProduto = select("Produto") {
       this.isReadOnly = readOnly
-      this.setItems(EProdutoTroca.entries)
+      val entries = buildList {
+        val comProduto = user?.autorizaTrocaP == true
+        val semProduto = user?.autorizaTroca == true
+        if (comProduto) add(EProdutoTroca.Com)
+        if (semProduto) add(EProdutoTroca.Sem)
+        if (comProduto && semProduto) add(EProdutoTroca.Misto)
+      }
+      this.setItems(entries)
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
-      this.value = nota.produtoTrocaEnnum ?: EProdutoTroca.Com
+      this.value = nota.produtoTrocaEnnum
     }
 
     if (nota?.tipoNf == "ENTRE FUT") {
