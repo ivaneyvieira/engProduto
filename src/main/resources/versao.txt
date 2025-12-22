@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 1.0.2821
 =======
 1.0.2818
 >>>>>>> parent of aadf3f4... Criação do botão para solicitar o a autorização de devolução
+=======
+1.0.2817
+>>>>>>> parent of 43618f4... Cria os campos para gravar o usuário que autoriza a solicitação de troca

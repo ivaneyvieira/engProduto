@@ -61,7 +61,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
     val relatorio = when {
       assinado                         -> {
-        ValeTrocaDevolucao(nota = nota)
+        ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       nota.tipoObs.startsWith("TROCA") -> {
@@ -70,12 +70,12 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
           if (valorNota > valorDevolucao) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
           }
-          ValeTrocaDevolucao(nota = nota)
+          ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
         } else {
           if (valorNota > valorDevolucao) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
           }
-          ValeTrocaDevolucao(nota = nota)
+          ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
         }
       }
 
@@ -83,21 +83,21 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
-        ValeTrocaDevolucao(nota = nota)
+        ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       nota.tipoObs.startsWith("REEMB") -> {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
-        ValeTrocaDevolucao(nota = nota)
+        ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       nota.tipoObs.startsWith("MUDA")  -> {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
-        ValeTrocaDevolucao(nota = nota)
+        ValeTrocaDevolucao(nota = nota, autorizacao = nota.nameAutorizacao ?: "")
       }
 
       else                             -> {

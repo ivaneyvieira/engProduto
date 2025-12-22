@@ -91,6 +91,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       fail("Usuário sem permissão para autorizar devolução")
     }
 
+
     nota.userTroca = user.no
     nota.update()
     produtos.forEach { prd ->
