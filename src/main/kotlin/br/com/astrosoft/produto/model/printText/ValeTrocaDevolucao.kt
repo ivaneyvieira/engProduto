@@ -91,15 +91,24 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   }
 
   override fun printSumary(bean: EntradaDevCliPro?) {
-    val autorizacao =  nota.nameAutorizacao ?: ""
+    val autorizacao = if (nota.nameAutorizacao.isNullOrBlank()) {
+      nota.nameSolicitacao ?: ""
+    } else {
+      nota.nameAutorizacao ?: ""
+    }
 
+    val solicitacao = if (nota.nameSolicitacao.isNullOrBlank()) {
+      nota.nameAutorizacao ?: ""
+    } else {
+      nota.nameSolicitacao ?: ""
+    }
 
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
     writeln("")
     writeln("______________________________________", center = true)
-    writeln(nota.userName ?: "", center = true)
+    writeln(solicitacao ?: "", center = true)
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
