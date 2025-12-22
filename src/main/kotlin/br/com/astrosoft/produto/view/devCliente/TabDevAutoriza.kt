@@ -110,6 +110,15 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
       }
     }
+    addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
+      if(nota.loginSolicitacao.isNullOrBlank()) {
+        DialogHelper.showError("Não existe solicitação para desfazer")
+      }else {
+        DialogHelper.showQuestion("Desfaz a solicitação?"){
+          viewModel.desfazSolicitacao(nota)
+        }
+      }
+    }
     columnGrid(NotaVenda::loginSolicitacao, header = "Solicitação")
 
     columnGrid(NotaVenda::loginTroca, header = "Autorização")
