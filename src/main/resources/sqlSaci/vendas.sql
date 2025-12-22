@@ -56,10 +56,11 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.solicitacaoTroca, 'N')                         AS solicitacaoTroca,
        IFNULL(AT.produtoTroca, 'N')                             AS produtoTroca,
        IFNULL(AT.userTroca, 0)                                  AS userTroca,
-  /*IFNULL(AT.userSolicitacao, 0)                            AS userSolicitacao,*/
        IFNULL(UT.login, '')                                     AS loginTroca,
        IFNULL(UT.name, '')                                      AS nameTroca,
-  /*IFNULL(US.login, '')                                     AS loginSolicitacao,*/
+       IFNULL(AT.userSolicitacao, 0)                            AS userSolicitacao,
+       IFNULL(US.login, '')                                     AS loginSolicitacao,
+       IFNULL(US.name, '')                                      AS nameSolicitacao,
        IFNULL(AT.motivoTroca, '')                               AS motivoTroca,
        IFNULL(AT.motivoTrocaCod, '')                            AS motivoTrocaCod,
        IFNULL(AT.nfEntRet, 0)                                   AS nfEntRet,
@@ -87,8 +88,8 @@ FROM
                ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
     LEFT JOIN  sqldados.users         AS UT
                ON UT.no = AT.userTroca
-                 /*LEFT JOIN  sqldados.users         AS US
-                            ON US.no = AT.userSolicitacao*/
+    LEFT JOIN  sqldados.users         AS US
+               ON US.no = AT.userSolicitacao
     INNER JOIN sqldados.custp         AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp           AS E
@@ -308,9 +309,10 @@ SELECT U.loja,
        produtoTroca,
        userTroca,
        nameTroca,
-/*       userSolicitacao,*/
        loginTroca,
-/*       loginSolicitacao,*/
+       userSolicitacao,
+       loginSolicitacao,
+       nameSolicitacao,
        motivoTroca,
        motivoTrocaCod,
        E.notaEntrega                     AS notaEntrega,

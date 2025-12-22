@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
 
-class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") : PrintText<EntradaDevCliPro>() {
+class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>() {
   init {
     column(EntradaDevCliPro::codigoFormat, "Codigo", 6)
     column(EntradaDevCliPro::descricao, "Descricao", 41)
@@ -91,7 +91,6 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
   }
 
   override fun printSumary(bean: EntradaDevCliPro?) {
-<<<<<<< HEAD
     val autorizacao = if (nota.nameAutorizacao.isNullOrBlank()) {
       nota.nameSolicitacao ?: ""
     } else {
@@ -104,8 +103,6 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli, val autorizacao: String = "") 
       nota.nameSolicitacao ?: ""
     }
 
-=======
->>>>>>> parent of 43618f4... Cria os campos para gravar o usuário que autoriza a solicitação de troca
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
