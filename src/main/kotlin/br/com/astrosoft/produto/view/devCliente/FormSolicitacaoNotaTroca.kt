@@ -20,7 +20,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
   private var edtNotaEntRet: IntegerField? = null
 
   init {
-    val readOnly = nota.nameSolicitacao.isNullOrBlank()
+    val readOnly = ! nota.nameSolicitacao.isNullOrBlank()
     edtTipo = select("Tipo") {
       this.isReadOnly = readOnly
       this.setItems(ESolicitacaoTroca.entries)
