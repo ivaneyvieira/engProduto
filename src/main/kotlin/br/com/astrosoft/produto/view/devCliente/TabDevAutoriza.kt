@@ -103,6 +103,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       }
     }
 
+    val user = AppConfig.userLogin() as? UserSaci
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota ->
       val form = FormSolicitacaoNotaTroca(nota)
       DialogHelper.showForm(caption = "Solicitação de Devolução", form = form) {
@@ -110,12 +111,15 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
       }
     }
-    addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
-      if(nota.loginSolicitacao.isNullOrBlank()) {
-        DialogHelper.showError("Não existe solicitação para desfazer")
-      }else {
-        DialogHelper.showQuestion("Desfaz a solicitação?"){
-          viewModel.desfazSolicitacao(nota)
+
+    if (user?.defazSolicitacao == true) {
+      addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
+        if (nota.loginSolicitacao.isNullOrBlank()) {
+          DialogHelper.showError("Não existe solicitação para desfazer")
+        } else {
+          DialogHelper.showQuestion("Desfaz a solicitação?") {
+            viewModel.desfazSolicitacao(nota)
+          }
         }
       }
     }
