@@ -140,35 +140,35 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       if (tipoResultante != produto) {
         fail("Tipo de devolução de produto inválida")
       }
-/*
-      when {
-        solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
-          EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
-            fail("O usuário não tem permissão para autorizar troca sem produto")
-          }
+      /*
+            when {
+              solicitacao == ESolicitacaoTroca.Troca       -> when (produto) {
+                EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+                  fail("O usuário não tem permissão para autorizar troca sem produto")
+                }
 
-          EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
-            fail("O usuário não tem permissão para autorizar troca com produto")
-          }
+                EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+                  fail("O usuário não tem permissão para autorizar troca com produto")
+                }
 
-          EProdutoTroca.Misto -> if (!user.autorizaTroca || !user.autorizaTrocaP) {
-            fail("O usuário não tem permissão para autorizar troca mista")
-          }
-        }
+                EProdutoTroca.Misto -> if (!user.autorizaTroca || !user.autorizaTrocaP) {
+                  fail("O usuário não tem permissão para autorizar troca mista")
+                }
+              }
 
-        solicitacao == ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
-          fail("O usuário não tem permissão para estorno")
-        }
+              solicitacao == ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+                fail("O usuário não tem permissão para estorno")
+              }
 
-        solicitacao == ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
-          fail("O usuário não tem permissão para reembolso")
-        }
+              solicitacao == ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+                fail("O usuário não tem permissão para reembolso")
+              }
 
-        solicitacao == ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
-          fail("O usuário não tem permissão para muda de cliente")
-        }
-      }
-*/
+              solicitacao == ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+                fail("O usuário não tem permissão para muda de cliente")
+              }
+            }
+      */
       /*********************************************************************************/
 
       val valorProdutos = produtosDev.sumOf { prd ->
@@ -272,11 +272,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
     when (solicitacaoTroca.solicitacaoTrocaEnnum) {
       ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnnum) {
-        EProdutoTroca.Com   -> if (!user.autorizaTrocaP || user.autorizaTroca) {
+        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
           fail("Troca com produto não autorizada")
         }
 
-        EProdutoTroca.Sem   -> if (user.autorizaTrocaP || !user.autorizaTroca) {
+        EProdutoTroca.Sem   -> if (user.autorizaTrocaP) {
           fail("Troca sem produto não autorizada")
         }
 

@@ -74,7 +74,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           val tipos = ESolicitacaoTroca.entries
           this.setItems(tipos)
           this.value = nota.solicitacaoTrocaEnnum
-          this.isReadOnly = false
+          this.isReadOnly = true
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
@@ -84,7 +84,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           val produtoTrocas = EProdutoTroca.entries
           this.setItems(produtoTrocas)
           this.value = nota.produtoTrocaEnnum
-          this.isReadOnly = false
+          this.isReadOnly = true
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
