@@ -635,7 +635,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/entradaDevCli.sql"
     val dataCorte = filtro.dataCorte.toSaciDate().let{
         if(it == 0){
-          LocalDate.now().toSaciDate()
+          LocalDate.now().minusMonths(2).toSaciDate()
         }else{
           it
         }
