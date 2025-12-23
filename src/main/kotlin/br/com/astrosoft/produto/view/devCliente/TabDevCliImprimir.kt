@@ -103,6 +103,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   }
 
   override fun filtro(): FiltroEntradaDevCli {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
       loja = cmbLoja.value?.no ?: 0,
       query = edtPesquisa.value ?: "",
@@ -111,6 +112,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       impresso = false,
       dataLimiteInicial = LocalDate.of(2023, 12, 1),
       tipo = ETipoDevCli.COM,
+      dataCorte = user?.dataVendaDevolucao
     )
   }
 

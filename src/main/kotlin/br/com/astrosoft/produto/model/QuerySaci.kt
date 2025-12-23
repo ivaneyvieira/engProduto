@@ -639,6 +639,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataF", filtro.dataF.toSaciDate())
       addOptionalParameter("query", filtro.query)
       addOptionalParameter("tipo", filtro.tipo.codigo)
+      addOptionalParameter("dataCorte", filtro.dataCorte ?: LocalDate.now().minusMonths(2))
       addOptionalParameter("dataLimiteInicial", filtro.dataLimiteInicial.toSaciDate())
       addOptionalParameter("impresso", filtro.impresso.let {
         when {
@@ -2781,7 +2782,7 @@ class QuerySaci : QueryDB(database) {
 
   fun updateControle(controle: ProdutoControle) {
     val sql = "/sqlSaci/prdControleSave.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("storeno", controle.loja)
       addOptionalParameter("prdno", controle.prdno)
       addOptionalParameter("grade", controle.grade)

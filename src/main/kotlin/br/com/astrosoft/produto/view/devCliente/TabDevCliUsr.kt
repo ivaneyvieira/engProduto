@@ -4,11 +4,13 @@ import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.horizontalBlock
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliUsr
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
+import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.textfield.TextFieldVariant
@@ -88,6 +90,10 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         this.isAutoselect = true
         this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         binder.bind(this, UserSaci::valorDevolucao.name)
+      }
+      datePicker("Data Venda") {
+        this.localePtBr()
+        binder.bind(this, UserSaci::dataVendaDevolucao.name)
       }
     }
   }

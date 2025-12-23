@@ -101,6 +101,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
   }
 
   override fun filtro(): FiltroEntradaDevCli {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
       loja = cmbLoja.value?.no ?: 0,
       query = edtPesquisa.value ?: "",
@@ -109,6 +110,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
       impresso = null,
       dataLimiteInicial = null,
       tipo = ETipoDevCli.TODOS,
+      dataCorte = user?.dataVendaDevolucao
     )
   }
 

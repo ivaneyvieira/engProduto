@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -78,6 +79,7 @@ class NotaVenda(
   }
 
   fun notaDev(): List<EntradaDevCli> {
+    val user = AppConfig.userLogin() as? UserSaci ?: return emptyList()
     val produtos = produtos()
     val produtosMap = produtos.mapNotNull { produto ->
       produto.ni ?: return@mapNotNull null
@@ -89,6 +91,7 @@ class NotaVenda(
         dataLimiteInicial = null,
         impresso = null,
         tipo = ETipoDevCli.TODOS,
+        dataCorte = user.dataVendaDevolucao
       )
 
       EntradaDevCli.findAll(filtro).firstOrNull {

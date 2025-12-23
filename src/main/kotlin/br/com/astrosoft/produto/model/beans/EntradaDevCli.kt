@@ -239,6 +239,7 @@ data class FiltroEntradaDevCli(
   val dataLimiteInicial: LocalDate?,
   val impresso: Boolean?,
   val tipo: ETipoDevCli,
+  var dataCorte: LocalDate?
 )
 
 enum class ETipoDevCli(val codigo: String) {
