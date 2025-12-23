@@ -633,13 +633,20 @@ class QuerySaci : QueryDB(database) {
 
   fun entradaDevCli(filtro: FiltroEntradaDevCli): List<EntradaDevCli> {
     val sql = "/sqlSaci/entradaDevCli.sql"
+    val dataCorte = filtro.dataCorte.toSaciDate().let{
+        if(it == 0){
+          LocalDate.now().toSaciDate()
+        }else{
+          it
+        }
+      }
     return query(sql, EntradaDevCli::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("dataI", filtro.dataI.toSaciDate())
       addOptionalParameter("dataF", filtro.dataF.toSaciDate())
       addOptionalParameter("query", filtro.query)
       addOptionalParameter("tipo", filtro.tipo.codigo)
-      addOptionalParameter("dataCorte", filtro.dataCorte ?: LocalDate.now().minusMonths(2))
+      addOptionalParameter("dataCorte", dataCorte)
       addOptionalParameter("dataLimiteInicial", filtro.dataLimiteInicial.toSaciDate())
       addOptionalParameter("impresso", filtro.impresso.let {
         when {
