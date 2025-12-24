@@ -159,20 +159,21 @@ WHERE P.cfo IN (5117, 6117)
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
 (
-  INDEX (loja, pdv, transacao)
+  PRIMARY KEY (loja, pdv, transacao)
 )
-SELECT V.storeno AS loja,
-       V.pdvno   AS pdv,
-       V.xano    AS transacao,
-       V.numero  AS notaVenda,
-       E.storeno AS lojaE,
-       E.pdvno   AS pdvE,
-       E.xano    AS transacaoE,
-       E.numero  AS numeroE
+SELECT V.storeno                                     AS loja,
+       V.pdvno                                       AS pdv,
+       V.xano                                        AS transacao,
+       CAST(GROUP_CONCAT(DISTINCT E.numero) AS CHAR) AS notaEntrega,
+       E.storeno                                     AS lojaE,
+       E.pdvno                                       AS pdvE,
+       E.xano                                        AS transacaoE,
+       V.numero                                      AS numeroV
 FROM
   T_V              AS V
     INNER JOIN T_E AS E
-               USING (storeno, ordno);
+               USING (storeno, ordno)
+GROUP BY loja, pdv, transacao;
 
 /****************************************************************************************/
 
@@ -318,15 +319,15 @@ SELECT U.loja,
        nameSolicitacao,
        motivoTroca,
        motivoTrocaCod,
-       E.numeroE                         AS notaEntrega,
+       E.notaEntrega                     AS notaEntrega,
        nfEntRet,
        I.invno                           AS ni,
        CAST(I.date AS DATE)              AS dataNi,
        I.valorNi                         AS valorNi,
        IF(P.transacao IS NULL, 'S', 'N') AS pendente,
-       IFNULL(E.lojaE, U.loja)            AS LojaE,
-       IFNULL(E.pdvE, U.pdv)              AS pdvE,
-       IFNULL(E.transacaoE, U.transacao)  AS transacaoE
+       IFNULL(E.lojaE, U.loja)           AS LojaE,
+       IFNULL(E.pdvE, U.pdv)             AS pdvE,
+       IFNULL(E.transacaoE, U.transacao) AS transacaoE
 FROM
   T_VENDA                      AS U
     LEFT JOIN T_VENDA_PENDENTE AS P
@@ -338,5 +339,5 @@ FROM
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-       vendedor LIKE @PESQUISA_LIKE OR E.numeroE LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
-GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno, E.lojaE, E.pdvE, E.transacaoE
+       vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
+GROUP BY U.loja, U.pdv, U.transacao, U.tipo/*, I.invno, E.lojaE, E.pdvE, E.transacaoE*/
