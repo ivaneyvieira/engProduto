@@ -9,6 +9,9 @@ class NotaVenda(
   var loja: Int?,
   var pdv: Int?,
   var transacao: Int?,
+  var lojaE: Int?,
+  var pdvE: Int?,
+  var transacaoE: Int?,
   var pedido: Int?,
   var data: LocalDate?,
   var nota: String?,
@@ -73,6 +76,14 @@ class NotaVenda(
   fun produtos(): List<ProdutoNFS> {
     val motivo = solicitacaoTrocaEnnum?.descricao
     return saci.findProdutoNF(this).map {
+      it.motivo = motivo
+      it
+    }
+  }
+
+  fun produtosEntrega(): List<ProdutoNFS> {
+    val motivo = solicitacaoTrocaEnnum?.descricao
+    return saci.findProdutoEntrega(this).map {
       it.motivo = motivo
       it
     }
@@ -146,6 +157,7 @@ data class FiltroNotaVenda(
   val invno: Int = 0,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val dataCorte: LocalDate?
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {

@@ -98,6 +98,7 @@ FROM
                ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
+  AND (N.issuedate >= :dataCorte)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
@@ -119,7 +120,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TEMPORARY TABLE IF EXISTS T_V;
 CREATE TEMPORARY TABLE T_V
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.pdvno,
@@ -134,16 +135,17 @@ FROM
                USING (storeno, pdvno, xano)
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
-  AND nfse = '1'
-GROUP BY storeno, ordno;
+  AND nfse = '1';
 
 DROP TEMPORARY TABLE IF EXISTS T_E;
 CREATE TEMPORARY TABLE T_E
 (
-  PRIMARY KEY (storeno, ordno)
+  INDEX (storeno, ordno)
 )
 SELECT P.storeno,
        P.eordno                                  AS ordno,
+       P.pdvno,
+       P.xano,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        P.date                                    AS data
 FROM
@@ -152,25 +154,25 @@ FROM
                ON P.storeno = V.storeno
                  AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
-  AND P.storeno IN (2, 3, 4, 5, 8)
-GROUP BY storeno, ordno;
+  AND P.storeno IN (2, 3, 4, 5, 8);
 
 DROP TEMPORARY TABLE IF EXISTS T_ENTREGA;
 CREATE TEMPORARY TABLE T_ENTREGA
 (
-  PRIMARY KEY (loja, pdv, transacao)
+  INDEX (loja, pdv, transacao)
 )
-SELECT V.storeno     AS loja,
-       V.pdvno       AS pdv,
-       V.xano        AS transacao,
-       V.numero      AS notaVenda,
-       MAX(E.numero) AS notaEntrega,
-       MAX(E.data)   AS dataEntrega
+SELECT V.storeno AS loja,
+       V.pdvno   AS pdv,
+       V.xano    AS transacao,
+       V.numero  AS notaVenda,
+       E.storeno AS lojaE,
+       E.pdvno   AS pdvE,
+       E.xano    AS transacaoE,
+       E.numero  AS numeroE
 FROM
-  T_V             AS V
-    LEFT JOIN T_E AS E
-              USING (storeno, ordno)
-GROUP BY V.storeno, V.pdvno, V.xano;
+  T_V              AS V
+    INNER JOIN T_E AS E
+               USING (storeno, ordno);
 
 /****************************************************************************************/
 
@@ -198,6 +200,7 @@ FROM
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
   AND (I.invno = :invno OR :invno = 0)
+  AND I.date >= :dataCorte
   AND I.date >= :dataInicial;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI1;
@@ -289,8 +292,8 @@ WHERE (IFNULL(X.qtty, 0) - IFNULL(N.qtty, 0)) > 0
 GROUP BY loja, pdv, transacao;
 
 SELECT U.loja,
-       pdv,
-       transacao,
+       U.pdv,
+       U.transacao,
        pedido,
        data,
        nota,
@@ -315,12 +318,15 @@ SELECT U.loja,
        nameSolicitacao,
        motivoTroca,
        motivoTrocaCod,
-       E.notaEntrega                     AS notaEntrega,
+       E.numeroE                         AS notaEntrega,
        nfEntRet,
        I.invno                           AS ni,
        CAST(I.date AS DATE)              AS dataNi,
        I.valorNi                         AS valorNi,
-       IF(P.transacao IS NULL, 'S', 'N') AS pendente
+       IF(P.transacao IS NULL, 'S', 'N') AS pendente,
+       IFNULL(E.lojaE, U.loja)            AS LojaE,
+       IFNULL(E.pdvE, U.pdv)              AS pdvE,
+       IFNULL(E.transacaoE, U.transacao)  AS transacaoE
 FROM
   T_VENDA                      AS U
     LEFT JOIN T_VENDA_PENDENTE AS P
@@ -332,5 +338,5 @@ FROM
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-       vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
-GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno
+       vendedor LIKE @PESQUISA_LIKE OR E.numeroE LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
+GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno, E.lojaE, E.pdvE, E.transacaoE

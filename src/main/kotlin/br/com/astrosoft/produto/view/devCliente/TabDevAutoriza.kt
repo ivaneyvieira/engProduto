@@ -163,11 +163,13 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   }
 
   override fun filtro(): FiltroNotaVenda {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroNotaVenda(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
+      dataCorte = user?.dataVendaDevolucao
     )
   }
 

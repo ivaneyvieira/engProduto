@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -197,12 +198,14 @@ class EntradaDevCli(
   }
 
   fun notaAtuoriza(): List<NotaVenda> {
+    val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNotaVenda(
       loja = 0,
       pesquisa = "$invno",
       invno = invno,
       dataInicial = nfData,
       dataFinal = nfData,
+      dataCorte = user?.dataVendaDevolucao
     )
     return NotaVenda.findAll(filtro)
   }

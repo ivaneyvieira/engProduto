@@ -470,10 +470,10 @@ class UserSaci : IUser {
       lojas = lojas.setValue(36, value?.toString() ?: "")
     }
 
-  var dataVendaDevolucao: LocalDate?
+  var dataVendaDevolucao: LocalDate
     get() = lojas.getOrNull(37)?.toIntOrNull()?.localDate() ?: LocalDate.now().minusMonths(2)
     set(value) {
-      lojas = lojas.setValue(37, value?.toSaciDate()?.toString() ?: "")
+      lojas = lojas.setValue(37, value.toSaciDate().toString())
     }
 
   //-------------------------------------------------
