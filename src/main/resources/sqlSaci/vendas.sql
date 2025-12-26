@@ -340,4 +340,4 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota L
        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
-GROUP BY U.loja, U.pdv, U.transacao, U.tipo/*, I.invno, E.lojaE, E.pdvE, E.transacaoE*/
+GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno/*, E.lojaE, E.pdvE, E.transacaoE*/

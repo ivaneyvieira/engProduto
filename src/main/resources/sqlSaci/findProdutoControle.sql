@@ -46,6 +46,27 @@ SELECT prdno
 FROM
   T_PRD;
 
+DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
+DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD_VENDA;
+CREATE TEMPORARY TABLE T_PRD_VENDA
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno                                       AS prdno,
+       grade                                       AS grade,
+       SUM(IF(ym = @MES_ATUAL, ROUND(qtty), 0))    AS vendaMesAtual,
+       SUM(IF(ym = @NES_ANTERIOR, ROUND(qtty), 0)) AS vendaMesAnterior
+FROM
+  sqldados.smlp      AS S
+    INNER JOIN T_PRD AS P
+               USING (prdno)
+WHERE ym IN (@MES_ATUAL, @NES_ANTERIOR)
+  AND S.storeno IN (2, 3, 4, 5, 8)
+  AND (S.storeno = :loja OR :loja = 0)
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
 CREATE TEMPORARY TABLE T_LOC_NERUS
 (
@@ -136,7 +157,9 @@ SELECT S.no                                                                     
        A.kardexLoja                                                                   AS kardexLoja,
        PC.refprice / 100                                                              AS preco,
        B.codbar                                                                       AS barcode,
-       PD.mfno_ref                                                                    AS ref
+       PD.mfno_ref                                                                    AS ref,
+       SV.vendaMesAnterior                                                            AS vendaMesAnterior,
+       SV.vendaMesAtual                                                               AS vendaMesAtual
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -148,6 +171,8 @@ FROM
     LEFT JOIN  T_LOC_APP      AS A
                USING (prdno, grade)
     LEFT JOIN  T_LOC_NERUS    AS LN
+               USING (prdno, grade)
+    LEFT JOIN  T_PRD_VENDA    AS SV
                USING (prdno, grade)
     LEFT JOIN  T_BARCODE      AS B
                USING (prdno, grade)
@@ -186,7 +211,9 @@ SELECT loja,
        estoqueLoja,
        kardexLoja,
        barcode,
-       ref
+       ref,
+       vendaMesAnterior,
+       vendaMesAtual
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)

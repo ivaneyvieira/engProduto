@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
-import kotlin.collections.forEach
 
 class ProdutoControle(
   var loja: Int?,
@@ -32,6 +31,8 @@ class ProdutoControle(
   var preco: Double? = null,
   var barcode: String? = null,
   var ref: String? = null,
+  var vendaMesAnterior: Int?,
+  var vendaMesAtual: Int?
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""

@@ -39,6 +39,27 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
                  ELSE FALSE
       END;
 
+DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
+DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD_VENDA;
+CREATE TEMPORARY TABLE T_PRD_VENDA
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno                                       AS prdno,
+       grade                                       AS grade,
+       SUM(IF(ym = @MES_ATUAL, ROUND(qtty), 0))    AS vendaMesAtual,
+       SUM(IF(ym = @NES_ANTERIOR, ROUND(qtty), 0)) AS vendaMesAnterior
+FROM
+  sqldados.smlp      AS S
+    INNER JOIN T_PRD AS P
+               USING (prdno)
+WHERE ym IN (@MES_ATUAL, @NES_ANTERIOR)
+  AND S.storeno IN (2, 3, 4, 5, 8)
+  AND (S.storeno = :loja OR :loja = 0)
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
 CREATE TEMPORARY TABLE T_LOC_NERUS
 (
@@ -183,7 +204,9 @@ SELECT S.no                                                                     
        B.codbar                                                                       AS barcode,
        PD.mfno_ref                                                                    AS ref,
        AC.numero                                                                      AS numeroAcerto,
-       AC.processado                                                                  AS processado
+       AC.processado                                                                  AS processado,
+       SV.vendaMesAnterior                                                            AS vendaMesAnterior,
+       SV.vendaMesAtual                                                               AS vendaMesAtual
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
@@ -195,6 +218,8 @@ FROM
     LEFT JOIN  T_LOC_APP      AS A
                USING (prdno, grade)
     LEFT JOIN  T_LOC_NERUS    AS LN
+               USING (prdno, grade)
+    LEFT JOIN  T_PRD_VENDA    AS SV
                USING (prdno, grade)
     LEFT JOIN  sqldados.users AS U
                ON U.no = A.estoqueUser
@@ -253,7 +278,9 @@ SELECT loja,
        numeroAcerto,
        processado,
        estoqueConfCD,
-       estoqueConfLoja
+       estoqueConfLoja,
+       vendaMesAnterior,
+       vendaMesAtual
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR

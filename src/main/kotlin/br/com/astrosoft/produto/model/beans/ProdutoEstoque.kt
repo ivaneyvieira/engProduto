@@ -49,6 +49,8 @@ class ProdutoEstoque(
   var processado: Boolean? = false,
   var estoqueConfCD: Int? = null,
   var estoqueConfLoja: Int? = null,
+  var vendaMesAnterior: Int?,
+  var vendaMesAtual: Int?
 ) {
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
