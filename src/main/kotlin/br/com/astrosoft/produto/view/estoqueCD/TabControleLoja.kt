@@ -217,8 +217,8 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
     }
 
     columnGroup("Venda") {
-      this.columnGrid(ProdutoControle::vendaMesAnterior, header = "Mês Ant", pattern = "#,##0", width = "6rem")
-      this.columnGrid(ProdutoControle::vendaMesAtual, header = "Mês Atu", pattern = "#,##0", width = "6rem")
+      this.columnGrid(ProdutoControle::vendaMesAnterior, header = "Mês Ant", pattern = "#,##0", width = "5rem")
+      this.columnGrid(ProdutoControle::vendaMesAtual, header = "Mês Atu", pattern = "#,##0", width = "5rem")
     }
 
     columnGroup("Estoque") {
