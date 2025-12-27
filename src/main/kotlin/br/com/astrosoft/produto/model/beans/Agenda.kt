@@ -37,7 +37,7 @@ class Agenda {
     coleta = coleta,
     data = data,
     hora = hora,
-    recebedor = if (empno == 0) "" else empno.toString(),
+    recebedor = empno,
     conhecimento = conhecimento,
     emissaoConhecimento = emissaoConhecimento,
     dataRecbedor = dataRecbedor,

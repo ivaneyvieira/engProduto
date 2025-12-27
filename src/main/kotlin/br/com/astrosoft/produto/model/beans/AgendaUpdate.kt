@@ -9,7 +9,7 @@ data class AgendaUpdate(
   var coleta: LocalDate?,
   var data: LocalDate?,
   var hora: LocalTime?,
-  var recebedor: String?,
+  var recebedor: Int?,
   var conhecimento: String?,
   var emissaoConhecimento: LocalDate? = null,
   val dataRecbedor: LocalDate?,

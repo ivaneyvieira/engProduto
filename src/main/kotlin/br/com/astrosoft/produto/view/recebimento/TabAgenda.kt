@@ -1,15 +1,17 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.Agenda
-import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.produto.model.beans.Agenda
+import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabAgenda
 import br.com.astrosoft.produto.viewmodel.recebimento.TabAgendaViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -31,8 +33,12 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
 
   override fun Grid<Agenda>.gridPanel() {
     columnGrid(Agenda::loja, "Loja")
+    addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
+      DlgAgendamento(viewModel).edtAgendamento(agenda)
+    }
     columnGrid(Agenda::data, "Data")
     columnGrid(Agenda::hora, "Hora")
+    columnGrid(Agenda::conhecimento, "CT-e")
     columnGrid(Agenda::frete, "Frete")
     columnGrid(Agenda::emissao, "Emissão")
     columnGrid(Agenda::nf, "NF")

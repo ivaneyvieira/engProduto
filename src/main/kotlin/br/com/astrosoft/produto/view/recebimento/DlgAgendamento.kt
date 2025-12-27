@@ -1,43 +1,54 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.produto.model.beans.AgendaUpdate
-import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabAgendaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
-import kotlin.jvm.java
+import java.time.Duration
 
-class DlgAgendamento(val viewModel: TabRecebimentoPreEntViewModel) : VerticalLayout() {
+class DlgAgendamento(val viewModel: TabAgendaViewModel) : VerticalLayout() {
   private val binder = Binder(AgendaUpdate::class.java)
 
   init {
     horizontalLayout {
+      textField("CTe") {
+        this.focus()
+        bind(binder).bind(AgendaUpdate::conhecimento)
+      }
+      datePicker("Emissão") {
+        this.localePtBr()
+        this.isClearButtonVisible = true
+        this.isAutoOpen = true
+        bind(binder).bind(AgendaUpdate::emissaoConhecimento)
+      }
+    }
+    horizontalLayout {
       datePicker("Data Coleta") {
+        this.localePtBr()
         this.isClearButtonVisible = true
         this.isAutoOpen = true
         bind(binder).bind(AgendaUpdate::coleta)
       }
       datePicker("Data Agendada") {
+        this.localePtBr()
         this.isClearButtonVisible = true
         this.isAutoOpen = true
         bind(binder).bind(AgendaUpdate::data)
       }
     }
     horizontalLayout {
-      textField("Horário") {
-        //bind(binder).bind(AgendaUpdate::hora)
+      timePicker("Horário") {
+        this.step = Duration.ofMinutes(30)
+        bind(binder).bind(AgendaUpdate::hora)
       }
-      textField("Recebedor") {
+      integerField("Recebedor") {
         bind(binder).bind(AgendaUpdate::recebedor)
-      }
-    }
-    horizontalLayout {
-      textField("CTe") {
-        bind(binder).bind(AgendaUpdate::conhecimento)
       }
     }
   }

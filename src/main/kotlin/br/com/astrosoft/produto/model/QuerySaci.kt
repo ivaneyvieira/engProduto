@@ -2820,17 +2820,16 @@ class QuerySaci : QueryDB(database) {
 
   fun updateAgenda(agendaUpdate: AgendaUpdate) {
     val sql = "/sqlSaci/updateAgenda.sql"
-    val dataStr = agendaUpdate.data.format()
-    val coleta = agendaUpdate.coleta?.toSaciDate()?.toString() ?: ""
     script(sql) {
       addOptionalParameter("invno", agendaUpdate.invno)
-      addOptionalParameter("data", dataStr)
-      addOptionalParameter("coleta", coleta)
-      addOptionalParameter("hora", agendaUpdate.hora ?: "")
+      addOptionalParameter("data", agendaUpdate.data.toSaciDate())
+      addOptionalParameter("coleta", agendaUpdate.coleta?.toSaciDate())
+      addOptionalParameter("hora", agendaUpdate.hora)
       addOptionalParameter("recebedor", agendaUpdate.recebedor ?: "")
       addOptionalParameter("conhecimento", agendaUpdate.conhecimento ?: "")
-      addOptionalParameter("dataRecbedor", agendaUpdate.dataRecbedor.format())
-      addOptionalParameter("horaRecebedor", agendaUpdate.horaRecebedor ?: "")
+      addOptionalParameter("dataRecbedor", agendaUpdate.dataRecbedor.toSaciDate())
+      addOptionalParameter("horaRecebedor", agendaUpdate.horaRecebedor)
+      addOptionalParameter("emissaoConhecimento", agendaUpdate.emissaoConhecimento.toSaciDate())
     }
   }
 

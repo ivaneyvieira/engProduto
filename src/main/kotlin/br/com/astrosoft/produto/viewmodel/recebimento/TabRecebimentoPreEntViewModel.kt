@@ -79,10 +79,6 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
       updateViewBD()
     }
   }
-
-  fun salvaAgendamento(bean: AgendaUpdate) {
-    TODO("Not yet implemented")
-  }
 }
 
 interface ITabRecebimentoPreEnt : ITabView {
