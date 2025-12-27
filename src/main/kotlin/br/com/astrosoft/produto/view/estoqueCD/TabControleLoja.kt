@@ -255,7 +255,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       saldo = edtSaldo.value ?: 0,
       inativo = cmbInativo.value ?: EInativo.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      cl = 61101,
+      cl = 0,
     )
   }
 
