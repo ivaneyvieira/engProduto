@@ -9,9 +9,7 @@ DO @FILTRO_COD := :filtro;
 DROP TABLE IF EXISTS sqldados.T_INV2;
 CREATE TEMPORARY TABLE sqldados.T_INV2 /*T2*/
 SELECT inv2.storeno                                               AS loja,
-       IF(IFNULL(A.data, 0) <> 0, CAST(A.data AS date),
-          IF(vend.state = 'PI', DATE_ADD(inv2.issue_date, INTERVAL 2 DAY),
-             DATE_ADD(inv2.issue_date, INTERVAL 1 MONTH)))        AS data,
+       CAST(IF(IFNULL(A.data, 0) = 0, NULL, A.data) AS date)      AS data,
        SEC_TO_TIME(A.hora)                                        AS hora,
        IFNULL(emp.no, 0)                                          AS empno,
        IFNULL(emp.sname, '')                                      AS recebedor,
@@ -57,7 +55,11 @@ WHERE inv.invno IS NULL
   AND (inv2.storeno = @LOJA OR @LOJA = 0);
 
 SELECT loja,
-       CAST(IF(data = 0, NULL, data * 1) AS DATE)   AS data,
+       IFNULL(data, CASE frete
+                      WHEN 'FOB' THEN ADDDATE(CAST(IF(emissao = 0, NULL, emissao) AS DATE), INTERVAL 7 DAY)
+                      WHEN 'CIF' THEN ADDDATE(CAST(IF(emissao = 0, NULL, emissao) AS DATE), INTERVAL 15 DAY)
+                                 ELSE data
+                    END)                            AS data,
        hora                                         AS hora,
        CAST(empno AS UNSIGNED)                      AS empno,
        IFNULL(recebedor, '')                        AS recebedor,
