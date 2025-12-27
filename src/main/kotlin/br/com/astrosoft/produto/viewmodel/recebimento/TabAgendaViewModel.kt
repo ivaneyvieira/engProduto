@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.devolucao.model.beans.Agenda
-import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
+import br.com.astrosoft.produto.model.beans.Agenda
+import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.viewmodel.ITabView
 
 class TabAgendaViewModel(val viewModel: RecebimentoViewModel) {

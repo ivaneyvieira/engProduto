@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.recebimento
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.AgendaUpdate
 import br.com.astrosoft.produto.model.beans.FiltroNotaEntradaXML
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaEntradaXML
@@ -77,6 +78,10 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
       }
       updateViewBD()
     }
+  }
+
+  fun salvaAgendamento(bean: AgendaUpdate) {
+    TODO("Not yet implemented")
   }
 }
 

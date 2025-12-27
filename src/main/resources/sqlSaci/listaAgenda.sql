@@ -1,3 +1,5 @@
+SET SQL_MODE = '';
+
 DO @LOJA := :loja;
 DO @FILTRO_LIKE := CONCAT(:filtro, '%');
 DO @FILTRO_NUM := IF(:filtro REGEXP '^[0-9]+', :filtro * 1, NULL);
@@ -7,18 +9,17 @@ DO @FILTRO_COD := :filtro;
 DROP TABLE IF EXISTS sqldados.T_INV2;
 CREATE TEMPORARY TABLE sqldados.T_INV2 /*T2*/
 SELECT inv2.storeno                                               AS loja,
-       IF(inv2.c1 <> '', TRUNCATE(CONCAT(RIGHT(inv2.c1, 4), MID(inv2.c1, 4, 2), LEFT(inv2.c1, 2)), 0) * 1,
-          IF(vend.state = 'PI', DATE_ADD(inv2.issue_date, INTERVAL 2 DAY) * 1,
-             DATE_ADD(inv2.issue_date, INTERVAL 1 MONTH)) *
-          1)                                                      AS data,
-       LEFT(inv2.c2, 8)                                           AS hora,
+       IF(IFNULL(A.data, 0) <> 0, CAST(A.data AS date),
+          IF(vend.state = 'PI', DATE_ADD(inv2.issue_date, INTERVAL 2 DAY),
+             DATE_ADD(inv2.issue_date, INTERVAL 1 MONTH)))        AS data,
+       SEC_TO_TIME(A.hora)                                        AS hora,
        IFNULL(emp.no, 0)                                          AS empno,
        IFNULL(emp.sname, '')                                      AS recebedor,
-       IF(IFNULL(emp.sname, '') = '', NULL,
-          TRUNCATE(CONCAT(RIGHT(inv2.c3, 4), MID(inv2.c3, 4, 2), LEFT(inv2.c3, 2)), 0) *
-          1)                                                      AS dataRecbedor,
-       IF(IFNULL(emp.sname, '') = '', NULL, LEFT(inv2.c4, 8))     AS horaRecebedor,
-       IFNULL(inv2.c5, '')                                        AS conhecimento,
+       CAST(IF(A.dataRecbedor = 0, NULL, A.dataRecbedor) AS DATE) AS dataRecbedor,
+       SEC_TO_TIME(A.horaRecebedor)                               AS horaRecebedor,
+       IFNULL(A.conhecimento, '')                                 AS conhecimento,
+       CAST(IF(IFNULL(emissaoConhecimento, 0) = 0,
+               NULL, emissaoConhecimento) AS DATE)                AS emissaoConhecimento,
        inv2.invno                                                 AS invno,
        inv2.vendno                                                AS forn,
        IFNULL(vend.sname, 'NAO ENCONTRADO')                       AS abrev,
@@ -31,22 +32,24 @@ SELECT inv2.storeno                                               AS loja,
        CAST(IFNULL(LEFT(carr.name, 10), 'NAO ENCONT') AS CHAR)    AS nome,
        CAST(inv2.packages AS CHAR)                                AS volume,
        inv2.grossamt                                              AS total,
-       IF(TRIM(inv2.c1) <> '' AND (TRIM(LEFT(inv2.c2, 5)) <> '' AND TRIM(LEFT(inv2.c2, 5)) <> '00:00'), 'S',
+       IF(IFNULL(A.data, 0) <> 0 AND IFNULL(A.hora, 0) <> 0, 'S',
           'N')                                                    AS agendado,
        IF(emp.sname IS NULL, 'N', 'S')                            AS recebido,
        IF((ords.bits & POW(2, 3)) != 0, 'FOB', 'CIF')             AS frete,
-       CAST(IF(inv2.c6 = '', NULL, inv2.c6 * 1) AS DATE)          AS coleta
+       CAST(IF(IFNULL(coleta, 0) = 0, NULL, coleta) AS DATE)      AS coleta
 FROM
   sqldados.inv2
+    LEFT JOIN sqldados.invAgenda AS A
+              USING (invno)
     LEFT JOIN sqldados.vend
               ON (vend.no = inv2.vendno)
-    LEFT JOIN sqldados.carr AS carr
+    LEFT JOIN sqldados.carr      AS carr
               ON (carr.no = inv2.carrno)
-    LEFT JOIN sqldados.inv  AS inv
+    LEFT JOIN sqldados.inv       AS inv
               ON (inv.vendno = inv2.vendno AND inv.nfname = inv2.nfname AND inv.ordno = inv2.ordno AND
                   inv.grossamt = inv2.grossamt)
     LEFT JOIN sqldados.emp
-              ON (emp.no = inv2.auxStr6 AND emp.no <> 0)
+              ON (emp.no = A.recebedor AND emp.no <> 0)
     LEFT JOIN sqldados.ords
               ON (inv2.storeno = ords.storeno AND inv2.ordno = ords.no)
 WHERE inv.invno IS NULL
@@ -54,26 +57,27 @@ WHERE inv.invno IS NULL
   AND (inv2.storeno = @LOJA OR @LOJA = 0);
 
 SELECT loja,
-       CAST(IF(data = 0, NULL, data * 1) AS DATE)                 AS data,
-       IFNULL(hora, '')                                           AS hora,
-       CAST(empno AS UNSIGNED)                                    AS empno,
-       IFNULL(recebedor, '')                                      AS recebedor,
-       IFNULL(conhecimento, '')                                   AS conhecimento,
-       CAST(IF(dataRecbedor = 0, NULL, dataRecbedor * 1) AS DATE) AS dataRecbedor,
-       IFNULL(horaRecebedor, '')                                  AS horaRecebedor,
-       IFNULL(CAST(invno AS CHAR), '')                            AS invno,
-       forn                                                       AS fornecedor,
-       abrev                                                      AS abreviacao,
-       cnpj                                                       AS cnpj,
-       CAST(IF(emissao = 0, NULL, emissao) AS DATE)               AS emissao,
-       IFNULL(nf, '')                                             AS nf,
-       IFNULL(volume, '')                                         AS volume,
-       IFNULL(total / 100, 0.00)                                  AS total,
-       transp                                                     AS transp,
-       nome                                                       AS nome,
-       pedido                                                     AS pedido,
-       frete                                                      AS frete,
-       coleta                                                     AS coleta
+       CAST(IF(data = 0, NULL, data * 1) AS DATE)   AS data,
+       hora                                         AS hora,
+       CAST(empno AS UNSIGNED)                      AS empno,
+       IFNULL(recebedor, '')                        AS recebedor,
+       IFNULL(conhecimento, '')                     AS conhecimento,
+       emissaoConhecimento                          AS emissaoConhecimento,
+       dataRecbedor                                 AS dataRecbedor,
+       horaRecebedor                                AS horaRecebedor,
+       IFNULL(CAST(invno AS CHAR), '')              AS invno,
+       forn                                         AS fornecedor,
+       abrev                                        AS abreviacao,
+       cnpj                                         AS cnpj,
+       CAST(IF(emissao = 0, NULL, emissao) AS DATE) AS emissao,
+       IFNULL(nf, '')                               AS nf,
+       IFNULL(volume, '')                           AS volume,
+       IFNULL(total / 100, 0.00)                    AS total,
+       transp                                       AS transp,
+       nome                                         AS nome,
+       pedido                                       AS pedido,
+       frete                                        AS frete,
+       coleta                                       AS coleta
 FROM
   sqldados.T_INV2
 WHERE loja <> 0

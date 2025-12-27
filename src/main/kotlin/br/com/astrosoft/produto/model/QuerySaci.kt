@@ -1,12 +1,13 @@
 package br.com.astrosoft.produto.model
 
-import br.com.astrosoft.devolucao.model.beans.Agenda
-import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
+import br.com.astrosoft.produto.model.beans.Agenda
+import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
@@ -650,13 +651,13 @@ class QuerySaci : QueryDB(database) {
 
   fun entradaDevCli(filtro: FiltroEntradaDevCli): List<EntradaDevCli> {
     val sql = "/sqlSaci/entradaDevCli.sql"
-    val dataCorte = filtro.dataCorte.toSaciDate().let{
-        if(it == 0){
-          LocalDate.now().minusMonths(2).toSaciDate()
-        }else{
-          it
-        }
+    val dataCorte = filtro.dataCorte.toSaciDate().let {
+      if (it == 0) {
+        LocalDate.now().minusMonths(2).toSaciDate()
+      } else {
+        it
       }
+    }
     return query(sql, EntradaDevCli::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("dataI", filtro.dataI.toSaciDate())
@@ -2814,6 +2815,22 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", controle.dataInicial.toSaciDate())
       addOptionalParameter("estoqueLoja", controle.estoqueLoja)
       addOptionalParameter("kardexLoja", controle.kardexLoja)
+    }
+  }
+
+  fun updateAgenda(agendaUpdate: AgendaUpdate) {
+    val sql = "/sqlSaci/updateAgenda.sql"
+    val dataStr = agendaUpdate.data.format()
+    val coleta = agendaUpdate.coleta?.toSaciDate()?.toString() ?: ""
+    script(sql) {
+      addOptionalParameter("invno", agendaUpdate.invno)
+      addOptionalParameter("data", dataStr)
+      addOptionalParameter("coleta", coleta)
+      addOptionalParameter("hora", agendaUpdate.hora ?: "")
+      addOptionalParameter("recebedor", agendaUpdate.recebedor ?: "")
+      addOptionalParameter("conhecimento", agendaUpdate.conhecimento ?: "")
+      addOptionalParameter("dataRecbedor", agendaUpdate.dataRecbedor.format())
+      addOptionalParameter("horaRecebedor", agendaUpdate.horaRecebedor ?: "")
     }
   }
 

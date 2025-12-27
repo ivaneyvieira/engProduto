@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.recebimento
 
-import br.com.astrosoft.devolucao.model.beans.Agenda
-import br.com.astrosoft.devolucao.model.beans.FiltroAgenda
+import br.com.astrosoft.produto.model.beans.Agenda
+import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
