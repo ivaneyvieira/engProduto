@@ -246,12 +246,16 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
 
     columnGroup("Inventário") {
       this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
-      if (user?.estoqueEditaInventarioCD == true) {
+      if (user?.estoqueInsereInventarioCD == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
-          val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
-            gridPanel.dataProvider.refreshAll()
+          if (user.estoqueAlteraInventarioCD || !produto.isEditadoCD()) {
+            val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
+              gridPanel.dataProvider.refreshAll()
+            }
+            dlgConferencia.open()
+          }else{
+            DialogHelper.showError("Não tem permissão para alterar")
           }
-          dlgConferencia.open()
         }
       }
       //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")

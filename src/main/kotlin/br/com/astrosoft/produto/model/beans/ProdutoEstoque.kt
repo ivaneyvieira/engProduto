@@ -65,6 +65,10 @@ class ProdutoEstoque(
     return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
   }
 
+  fun isEditadoCD(): Boolean {
+    return dataInicial != null && (qtConferencia ?: 0) != 0
+  }
+
   val qtdDif: Double
     get() {
       val sistema = saldo?.toDouble() ?: 0.0

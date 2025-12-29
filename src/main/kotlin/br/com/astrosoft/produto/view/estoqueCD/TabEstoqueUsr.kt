@@ -80,11 +80,17 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Copia Loc") {
         binder.bind(this, UserSaci::estoqueCopiaLoc.name)
       }
-      checkBox("Edita Inventário CD") {
-        binder.bind(this, UserSaci::estoqueEditaInventarioCD.name)
+      checkBox("Insere Inventário CD") {
+        binder.bind(this, UserSaci::estoqueInsereInventarioCD.name)
       }
-      checkBox("Edita Inventário Loja") {
-        binder.bind(this, UserSaci::estoqueEditaInventarioLoja.name)
+      checkBox("Altera Inventário CD") {
+        binder.bind(this, UserSaci::estoqueAlteraInventarioCD.name)
+      }
+      checkBox("Insere Inventário Loja") {
+        binder.bind(this, UserSaci::estoqueInsereInventarioLoja.name)
+      }
+      checkBox("Altera Inventário Loja") {
+        binder.bind(this, UserSaci::estoqueAlteraInventarioLoja.name)
       }
       checkBox("Edita Conf") {
         binder.bind(this, UserSaci::estoqueEditaConferencia.name)

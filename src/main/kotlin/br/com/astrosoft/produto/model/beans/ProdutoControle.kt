@@ -73,6 +73,10 @@ class ProdutoControle(
     saci.updateControle(this)
   }
 
+  fun isEditadoLoja(): Boolean {
+    return dataInicial != null && (estoqueLoja ?: 0) != 0
+  }
+
   companion object {
     fun findProdutoControle(filter: FiltroProdutoControle): List<ProdutoControle> {
       return saci.findProdutoControle(filter)

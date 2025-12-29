@@ -158,7 +158,7 @@ class UserSaci : IUser {
   var devFor2NotaEditor by DelegateAuthorized3(128)
   var estoqueAcertoSimples by DelegateAuthorized3(129)
   var produtoEstoque by DelegateAuthorized3(130)
-  var estoqueEditaInventarioCD by DelegateAuthorized3(131)
+  var estoqueInsereInventarioCD by DelegateAuthorized3(131)
   var notaTipo by DelegateAuthorized3(132)
   var devFor2NotaDivergente by DelegateAuthorized3(133)
   var estoqueLoja by DelegateAuthorized3(134)
@@ -180,8 +180,10 @@ class UserSaci : IUser {
   var desautorizaDev by DelegateAuthorized3(148)
   var estoqueEditaConferencia by DelegateAuthorized3(149)
   var controleLoja by DelegateAuthorized3(150)
-  var estoqueEditaInventarioLoja by DelegateAuthorized3(151)
+  var estoqueInsereInventarioLoja by DelegateAuthorized3(151)
   var defazSolicitacao by DelegateAuthorized3(152)
+  var estoqueAlteraInventarioCD by DelegateAuthorized3(153)
+  var estoqueAlteraInventarioLoja by DelegateAuthorized3(154)
 
   //Locais
   private var localEstoque: String?

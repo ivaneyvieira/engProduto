@@ -227,12 +227,16 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::estoqueLoja, header = "Inv", pattern = "#,##0", width = "6rem").right()
       this.columnGrid(ProdutoControle::dataInicial, header = "Data Inv", width = "6.5rem")
       val user = AppConfig.userLogin() as? UserSaci
-      if (user?.estoqueEditaInventarioLoja == true) {
+      if (user?.estoqueInsereInventarioLoja == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoControle ->
-          val dlgControleLoja = DlgControleSaldo(viewModel, produto, edtDataInicial.value) {
-            gridPanel.dataProvider.refreshAll()
+          if (user.estoqueAlteraInventarioLoja || !produto.isEditadoLoja()) {
+            val dlgControleLoja = DlgControleSaldo(viewModel, produto, edtDataInicial.value) {
+              gridPanel.dataProvider.refreshAll()
+            }
+            dlgControleLoja.open()
+          } else {
+            DialogHelper.showError("Não tem permissão para alterar")
           }
-          dlgControleLoja.open()
         }
       }
     }
