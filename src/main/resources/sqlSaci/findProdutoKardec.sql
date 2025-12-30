@@ -78,7 +78,7 @@ WHERE P.prdno = :prdno
   AND CASE C.mfno
         WHEN 46   THEN (P.qtty % 900) != 0
         WHEN 1040 THEN (P.qtty % 1000) != 0
-                  ELSE TRUE
+                  ELSE remarks NOT REGEXP '^RES[A-Z]+ *PED +[0-9]{9} '
       END;
 
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
@@ -146,7 +146,7 @@ SELECT loja, prdno, grade, data, doc, metodo AS tipo, qtde * multAcerto AS qtde,
 FROM
   T_REPOSICAO
 WHERE marca = 1
-  AND  metodo IN ('REPOSICAO');
+  AND metodo IN ('REPOSICAO');
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
 FROM

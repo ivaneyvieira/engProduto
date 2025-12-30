@@ -248,7 +248,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
       this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
       if (user?.estoqueInsereInventarioCD == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
-          if (user.estoqueAlteraInventarioCD || !produto.isEditadoCD()) {
+          if (user.estoqueAlteraInventarioCD || !produto.isEditadoCDSaldo()) {
             val dlgConferencia = DlgConferenciaSaldo(viewModel, produto) {
               gridPanel.dataProvider.refreshAll()
             }

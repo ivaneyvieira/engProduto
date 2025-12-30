@@ -65,7 +65,11 @@ class ProdutoEstoque(
     return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
   }
 
-  fun isEditadoCD(): Boolean {
+  fun isEditadoCDConferencia(): Boolean {
+    return dataInicial != null && (qtConferencia ?: 0) != 0
+  }
+
+  fun isEditadoCDSaldo(): Boolean {
     return dataInicial != null && (qtConferencia ?: 0) != 0
   }
 
