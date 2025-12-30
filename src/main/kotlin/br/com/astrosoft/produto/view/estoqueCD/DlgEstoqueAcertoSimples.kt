@@ -27,7 +27,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
-  private var edtPesquisa2: TextField? = null
+  private var edtCodigoBarra: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var cmbEstoque: Select<EEstoque>? = null
   private var edtSaldo: IntegerField? = null
@@ -109,7 +109,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
             this.isSpacing = true
             this.setWidthFull()
 
-            edtPesquisa = textField("Inicial") {
+            edtPesquisa = textField("Pesquisa") {
               this.width = "200px"
               this.valueChangeTimeout = 500
               this.valueChangeMode = ValueChangeMode.LAZY
@@ -118,7 +118,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
               }
             }
 
-            edtPesquisa2 = textField("Final") {
+            edtCodigoBarra = textField("Código Barras") {
               this.width = "200px"
               this.valueChangeTimeout = 500
               this.valueChangeMode = ValueChangeMode.LAZY
@@ -267,6 +267,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       )
 
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
+      columnGrid(ProdutoEstoqueAcerto::barcode, "Código de Barras").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoEstoqueAcerto::grade, "Grade", width = "100px")
       columnGrid(ProdutoEstoqueAcerto::codFor, "For", width = "5rem")
@@ -311,6 +312,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val estoque = cmbEstoque?.value ?: EEstoque.TODOS
     val saldo = edtSaldo?.value ?: 0
     val saldo2 = edtSaldo2?.value ?: 0
+    val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
 
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
@@ -330,7 +332,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       it.codForn == codFor
     }.filter {
       val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-      val pesquisa2 = edtPesquisa2?.value?.trim()?.uppercase(getDefault()) ?: ""
+      val pesquisa2 = ""
       val pesquisa3 = if (pesquisa2.isBlank()) {
         "${pesquisa}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
       } else {
@@ -356,6 +358,10 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }.filter {
       it.cl == cl ||
       cl == 0
+    }.filter {
+      val barcode = it.barcode?.trim()?.uppercase(getDefault()) ?: ""
+      barcode == codigoBarra
+      || codigoBarra.isEmpty()
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
@@ -364,6 +370,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       produto.apply {
         this.numero = acerto.numero
         this.numloja = acerto.numloja
+        this.barcode = linha.barcode
         this.acertoSimples = true
         this.data = acerto.data
         this.hora = acerto.hora

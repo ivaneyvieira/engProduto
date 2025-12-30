@@ -284,6 +284,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
       this.columnGrid(ProdutoEstoque::quantDevolucao, header = "Gar", pattern = "#,##0", width = "80px")
+      /*
       this.columnGrid(ProdutoEstoque::qtConfCalcEstoque, header = "Conf", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::qtDifCalcEstoque, header = "Dif", pattern = "#,##0", width = "80px")
 
@@ -294,7 +295,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
           }
           dlgConferenciaSaldo.open()
         }
-      }
+      }*/
     }
 
     columnGroup("Inventário") {
