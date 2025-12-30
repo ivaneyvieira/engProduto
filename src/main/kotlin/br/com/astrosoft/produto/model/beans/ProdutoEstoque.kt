@@ -50,7 +50,8 @@ class ProdutoEstoque(
   var estoqueConfCD: Int? = null,
   var estoqueConfLoja: Int? = null,
   var vendaMesAnterior: Int?,
-  var vendaMesAtual: Int?
+  var vendaMesAtual: Int?,
+  var quantDevolucao: Int?,
 ) {
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)

@@ -42,6 +42,27 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
 DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
 DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
 
+DROP TEMPORARY TABLE IF EXISTS T_PRD_DEV;
+CREATE TEMPORARY TABLE T_PRD_DEV
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT N.storeno           AS storeno,
+       prdno               AS prdno,
+       grade               AS grade,
+       SUM(quantDevolucao) AS quantDevolucao
+FROM
+  sqldados.iprdAdicionalDev          AS A
+    LEFT JOIN  sqldados.invAdicional AS IA
+               USING (invno, tipoDevolucao, numero)
+    INNER JOIN T_PRD                 AS P
+               USING (prdno)
+    INNER JOIN sqldados.inv          AS N
+               USING (invno)
+WHERE (situacaoDev = 0 OR situacaoDev IS NULL)
+  AND tipoDevolucao = 8
+GROUP BY storeno, prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_PRD_VENDA;
 CREATE TEMPORARY TABLE T_PRD_VENDA
 (
@@ -206,13 +227,16 @@ SELECT S.no                                                                     
        AC.numero                                                                      AS numeroAcerto,
        AC.processado                                                                  AS processado,
        SV.vendaMesAnterior                                                            AS vendaMesAnterior,
-       SV.vendaMesAtual                                                               AS vendaMesAtual
+       SV.vendaMesAtual                                                               AS vendaMesAtual,
+       DEV.quantDevolucao                                                             AS quantDevolucao
 FROM
   sqldados.stk                AS E
     INNER JOIN sqldados.store AS S
                ON E.storeno = S.no
     INNER JOIN T_PRD          AS PD
                USING (prdno)
+    LEFT JOIN  T_PRD_DEV      AS DEV
+               USING (storeno, prdno, grade)
     LEFT JOIN  sqldados.vend  AS V
                ON V.no = PD.mfno
     LEFT JOIN  T_LOC_APP      AS A
@@ -280,7 +304,8 @@ SELECT loja,
        estoqueConfCD,
        estoqueConfLoja,
        vendaMesAnterior,
-       vendaMesAtual
+       vendaMesAtual,
+       quantDevolucao
 FROM
   temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR

@@ -108,13 +108,13 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
 
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+    addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produtos", header = "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
+    addColumnButton(iconButton = VaadinIcon.FILE, tooltip = "Arquivo", header = "Arquivo", configIcon = { icon, bean ->
       if (bean.countArq?.let { it > 0 } == true) {
         icon.element.style.set("color", "yellow")
       }

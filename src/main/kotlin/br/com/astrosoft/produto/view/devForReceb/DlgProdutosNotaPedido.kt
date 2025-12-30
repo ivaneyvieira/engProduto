@@ -255,7 +255,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         this.setComparator {prd ->
           val ni = (prd.ni ?: 0).toString().lpad(10, "0")
           val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
-          val grade = (prd.grade ?: "").toString().lpad(10, "0")
+          val grade = (prd.grade ?: "").lpad(10, "0")
           "$ni$codigo$grade"
         }
       }

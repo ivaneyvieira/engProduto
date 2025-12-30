@@ -283,8 +283,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
-      //this.columnGrid(ProdutoEstoque::qtConfCalc, header = "Conf", pattern = "#,##0", width = "80px")
-      //  .integerFieldEditor()
+      this.columnGrid(ProdutoEstoque::quantDevolucao, header = "Gar", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::qtConfCalcEstoque, header = "Conf", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::qtDifCalcEstoque, header = "Dif", pattern = "#,##0", width = "80px")
 
@@ -312,7 +311,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
           }
         }
       }
-      //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
+
       this.columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
       this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
