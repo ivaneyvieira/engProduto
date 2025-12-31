@@ -247,7 +247,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
           fail("Troca com produto não autorizada")
         }
 
-        EProdutoTroca.Sem   -> if (user.autorizaTrocaP) {
+        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
           fail("Troca sem produto não autorizada")
         }
 
