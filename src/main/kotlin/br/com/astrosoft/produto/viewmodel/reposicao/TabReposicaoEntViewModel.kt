@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.PrintReposicao
+import br.com.astrosoft.produto.model.printText.PrintReposicaoRetorno
 import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
@@ -93,7 +93,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
 
     val produtos = pedido.produtosEnt()
 
-    val relatorio = PrintReposicao()
+    val relatorio = PrintReposicaoRetorno()
 
     relatorio.print(
       dados = produtos.sortedWith(

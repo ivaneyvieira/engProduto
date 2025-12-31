@@ -4,13 +4,14 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.produto.model.beans.EMetodo
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 
 class PrintReposicaoRetorno() :
   PrintText<ReposicaoProduto>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ReposicaoProduto) {
-    writeln("Reposicao Loja", negrito = true, center = true)
+    writeln("Retorno Loja", negrito = true, center = true)
     writeln("")
     writeln(
       "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
@@ -36,16 +37,26 @@ class PrintReposicaoRetorno() :
   }
 
   override fun printSumary(bean: ReposicaoProduto?) {
+    val titlulo01 = if (bean?.metodo == EMetodo.RETORNO.num) {
+      "Entregue"
+    } else {
+      "Separado/Entregue"
+    }
+    val titlulo02 = if (bean?.metodo == EMetodo.RETORNO.num) {
+      "Recebido"
+    } else {
+      "Recebido"
+    }
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln(bean?.recebidoNome ?: "", center = true)
-    writeln("Separado/Entregue", center = true)
+    writeln(bean?.entregueNomeAjuste ?: "", center = true)
+    writeln(titlulo01, center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln(bean?.entregueNome ?: "", center = true)
-    writeln("Recebido", center = true)
+    writeln(bean?.recebidoNomeAjuste ?: "", center = true)
+    writeln(titlulo02, center = true)
     writeln("")
     writeln("")
   }

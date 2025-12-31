@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.reposicao
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintReposicaoSeparacao
 import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
@@ -97,13 +98,30 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login.equals(login, ignoreCase = true) && it.senha.uppercase().trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 
     reposicao.entregue(user)
 
     updateView()
+  }
+
+  fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit = {}) = viewModel.exec {
+    val produtos = pedido.produtos
+
+    val relatorio = PrintReposicaoSeparacao()
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ReposicaoProduto::descricao,
+          ReposicaoProduto::codigo,
+          ReposicaoProduto::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+    )
   }
 
   val subView

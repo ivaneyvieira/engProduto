@@ -82,6 +82,10 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       }
     )
 
+    addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
+
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
