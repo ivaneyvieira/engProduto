@@ -13,8 +13,6 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
   private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
-  private var edtLogin: TextField? = null
-  private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
   private var edtMotivo: Select<EMotivoTroca>? = null
 
@@ -80,18 +78,6 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "10rem"
     }
-
-    edtLogin = textField("Login") {
-      this.isVisible = !readOnly
-      this.isReadOnly = readOnly
-      this.width = "300px"
-    }
-
-    edtSenha = passwordField("Senha") {
-      this.isVisible = !readOnly
-      this.isReadOnly = readOnly
-      this.width = "300px"
-    }
   }
 
   val solicitacaoTroca: SolicitacaoTroca?
@@ -100,15 +86,11 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       val produtoTrocaEnnum = edtProduto?.value ?: return null
       val nfEntRet = edtNotaEntRet?.value
       val motivo = edtMotivo?.value ?: return null
-      val login: String = edtLogin?.value ?: ""
-      val senha: String = edtSenha?.value ?: ""
       return SolicitacaoTroca(
         solicitacaoTrocaEnnum,
         produtoTrocaEnnum,
         nfEntRet,
         motivo,
-        login,
-        senha
       )
     }
 }

@@ -5,6 +5,4 @@ data class SolicitacaoTroca(
   val produtoTrocaEnnum: EProdutoTroca,
   val nfEntRet: Int?,
   val motivo: EMotivoTroca,
-  val login: String,
-  val senha: String
 )

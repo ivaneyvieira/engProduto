@@ -93,8 +93,8 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if (nota.loginSolicitacao.isNullOrBlank()) {
-        DialogHelper.showError("Solicitação não autorizada")
+      if (nota.solicitacaoTrocaEnnum == null || nota.produtoTrocaEnnum == null) {
+        DialogHelper.showError("Solicitação não configurada")
       } else {
         dlgProduto = DlgProdutosVenda(viewModel, nota)
         dlgProduto?.showDialog {
@@ -108,7 +108,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       val form = FormSolicitacaoNotaTroca(nota)
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
         val solicitacaoTroca = form.solicitacaoTroca
-        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+        viewModel.salvaSolicitacao(nota, solicitacaoTroca)
       }
     }
 
@@ -124,6 +124,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
       }
     }
 
+    columnGrid(NotaVenda::solicitacaoTrocaDescricao, header = "Tipo")
     columnGrid(NotaVenda::loginSolicitacao, header = "Autorização")
     columnGrid(NotaVenda::loginTroca, header = "Assina Troca")
     columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
