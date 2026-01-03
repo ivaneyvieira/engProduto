@@ -162,6 +162,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         }
       },
       onClose = {
+        viewModel.salvaProduto()
         onClose()
       }) {
       HorizontalLayout().apply {
@@ -287,6 +288,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   }
 
   fun fecha() {
+    viewModel.salvaProduto()
     form?.close()
   }
 }

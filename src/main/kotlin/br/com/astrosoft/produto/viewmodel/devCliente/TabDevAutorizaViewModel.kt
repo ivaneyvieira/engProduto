@@ -121,11 +121,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  private fun updateProduto(bean: ProdutoNFS) {
-    bean.updateQuantDev()
-    subView.updateProdutos()
-  }
-
   fun validaAssinatura(nota: NotaVenda): Boolean {
     try {
       if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
@@ -158,8 +153,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
 
       val produtosDev = produtos
-        .filter { it.devDB == false }
-        .filter { it.dev == true }
+        .filter { it.devDB == false || it.dev == true}
       produtosDev.ifEmpty {
         fail("Nenhum produto selecionado")
       }
@@ -278,36 +272,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun salvaSolicitacao(nota: NotaVenda, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
     solicitacaoTroca ?: fail("Solicitação de troca inválida")
-    val user = AppConfig.userLogin() as? UserSaci
-    user ?: fail("Usuário ou senha inválidos")
-
-    when (solicitacaoTroca.solicitacaoTrocaEnnum) {
-      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnnum) {
-        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
-          fail("Troca com produto não autorizada")
-        }
-
-        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
-          fail("Troca sem produto não autorizada")
-        }
-
-        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
-          fail("Troca mista de produto não autorizada")
-        }
-      }
-
-      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
-        fail("Estorno de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
-        fail("Reembolso de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
-        fail("Mudança de cliente não autorizada")
-      }
-    }
 
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnnum = solicitacaoTroca.produtoTrocaEnnum
@@ -325,6 +289,13 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.update()
 
     updateView()
+  }
+
+  fun salvaProduto() {
+    val produtos = subView.produtos()
+    produtos.forEach { prd ->
+      prd.updateQuantDev()
+    }
   }
 
   val subView

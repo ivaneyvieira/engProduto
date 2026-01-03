@@ -216,6 +216,7 @@ class EntradaDevCli(
       EProdutoTroca.Sem   -> ""
       EProdutoTroca.Misto -> "M"
       null                -> return null
+      else                -> null
     }
 
     val solicitacaoTroca = when (solicitacaoTrocaEnnum) {
@@ -224,6 +225,7 @@ class EntradaDevCli(
       ESolicitacaoTroca.Reembolso   -> "Reembolso"
       ESolicitacaoTroca.MudaCliente -> "Muda"
       null                          -> return null
+      else                          -> null
     }
 
     return "$solicitacaoTroca $produtoTroca".trim()

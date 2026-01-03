@@ -93,13 +93,13 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
     columnGrid(NotaVenda::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if (nota.solicitacaoTrocaEnnum == null || nota.produtoTrocaEnnum == null) {
-        DialogHelper.showError("Solicitação não configurada")
-      } else {
+      if (nota.solicitacaoConfigurada()) {
         dlgProduto = DlgProdutosVenda(viewModel, nota)
         dlgProduto?.showDialog {
           viewModel.updateView()
         }
+      } else {
+        DialogHelper.showError("Solicitação não configurada")
       }
     }
 
