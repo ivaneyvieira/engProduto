@@ -1,9 +1,9 @@
 version: "3"
 services:
-  eng_produtoh:
-    container_name: eng_produto_transf
+  eng_produtoh_t:
+    container_name: eng_produto_transf_teste
     ports:
-      - "8036:8888"
+      - "8034:8888"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
@@ -15,11 +15,11 @@ services:
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
-      net_produtoh:
-        ipv4_address: 172.195.9.1
+      net_produtoh_t:
+        ipv4_address: 172.134.34.1
 networks:
-  net_produtoh:
+  net_produtoh_t:
     ipam:
       driver: default
       config:
-        - subnet: 172.195.0.0/16
+        - subnet: 172.134.0.0/16
