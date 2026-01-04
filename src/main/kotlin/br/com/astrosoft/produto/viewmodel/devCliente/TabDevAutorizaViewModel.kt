@@ -35,14 +35,14 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     val file = report.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
-
-  fun formAutoriza(nota: NotaVenda) = viewModel.exec {
-    val userTroca = nota.userTroca ?: 0
-    if (userTroca != 0) {
-      fail("Devolução já Autorizada")
-    }
-    subView.formAutoriza(nota)
-  }
+  /*
+    fun formAutoriza(nota: NotaVenda) = viewModel.exec {
+      val userTroca = nota.userTroca ?: 0
+      if (userTroca != 0) {
+        fail("Devolução já Autorizada")
+      }
+      subView.formAutoriza(nota)
+    }*/
 
   fun autorizaNota(nota: NotaVenda, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
@@ -63,17 +63,16 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
+  fun assinaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
+      fail("Solicitação ainda não autorizada")
+    }
 
     nota.autoriza = "S"
 
     val user = UserSaci.userLogin(login, senha)
-
-    if (!validaProcesamento(user, nota, produtos)) {
-      return@exec
-    }
 
     user ?: fail("Usuário inválido")
 
@@ -82,6 +81,21 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     }
 
     nota.userTroca = user.no
+    nota.update()
+    subView.fechaFormProduto()
+    subView.updateProdutos()
+    updateView()
+  }
+
+  fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
+    nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
+    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+
+    val user = UserSaci.userLogin(login, senha)
+
+    user ?: fail("Usuário inválido")
+
+    nota.userSolicitacao = user.no
     nota.update()
     produtos.forEach { prd ->
       prd.updateQuantDev()
@@ -107,17 +121,39 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  private fun updateProduto(bean: ProdutoNFS) {
-    bean.updateQuantDev()
-    subView.updateProdutos()
+  fun validaAssinatura(nota: NotaVenda): Boolean {
+    try {
+      if (nota.userSolicitacao == null || nota.userSolicitacao == 0) {
+        fail("Troca não autorizada")
+      }
+
+      if (nota.userTroca != null && nota.userTroca != 0) {
+        fail("Troca já assinada")
+      }
+
+      nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
+      nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
+      nota.setMotivoTroca.ifEmpty {
+        fail("Motivo de troca não informado")
+      }
+    } catch (e: Exception) {
+      val msg = e.message
+      viewModel.view.showWarning(msg ?: "Erro genérico")
+      return false
+    }
+    return true
   }
 
-  fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
+  fun validaAutorizacao(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
       user ?: fail("Usuário inválido")
+
+      if (nota.userSolicitacao != null && nota.userSolicitacao != 0) {
+        fail("Troca já autorizada")
+      }
+
       val produtosDev = produtos
-        .filter { it.devDB == false }
-        .filter { it.dev == true }
+        .filter { it.devDB == false || it.dev == true}
       produtosDev.ifEmpty {
         fail("Nenhum produto selecionado")
       }
@@ -234,44 +270,11 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.salvaNfEntRet()
   }
 
-  fun autorizaSolicitacao(nota: NotaVenda, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
+  fun salvaSolicitacao(nota: NotaVenda, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
     solicitacaoTroca ?: fail("Solicitação de troca inválida")
-    val login = solicitacaoTroca.login
-    val senha = solicitacaoTroca.senha
-    val user = UserSaci.userLogin(login, senha)
-    user ?: fail("Usuário ou senha inválidos")
-
-    when (solicitacaoTroca.solicitacaoTrocaEnnum) {
-      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnnum) {
-        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
-          fail("Troca com produto não autorizada")
-        }
-
-        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
-          fail("Troca sem produto não autorizada")
-        }
-
-        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
-          fail("Troca mista de produto não autorizada")
-        }
-      }
-
-      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
-        fail("Estorno de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
-        fail("Reembolso de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
-        fail("Mudança de cliente não autorizada")
-      }
-    }
 
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnnum = solicitacaoTroca.produtoTrocaEnnum
-    nota.userSolicitacao = user.no
     nota.setMotivoTroca = setOf(solicitacaoTroca.motivo)
     nota.update()
 
@@ -286,6 +289,13 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     nota.update()
 
     updateView()
+  }
+
+  fun salvaProduto() {
+    val produtos = subView.produtos()
+    produtos.forEach { prd ->
+      prd.updateQuantDev()
+    }
   }
 
   val subView

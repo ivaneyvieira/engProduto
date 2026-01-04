@@ -69,6 +69,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             update()
           }
         }
+
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
           val tipos = ESolicitacaoTroca.entries
@@ -118,9 +119,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.width = "10rem"
         }
 
-        button("Assina Troca") {
+        button("Autoriza") {
           this.icon = VaadinIcon.SIGN_IN.create()
-          this.isEnabled = !readOnly
 
           onClick {
             nota.solicitacaoTrocaEnnum = edtTipo?.value
@@ -131,7 +131,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
             val user = AppConfig.userLogin() as? UserSaci
 
-            val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
+            val validacao = viewModel.validaAutorizacao(user = user, nota = nota, produtos = produtos)
 
             if (validacao) {
               val formAutoriza = FormAutorizaNota()
@@ -141,8 +141,30 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             }
           }
         }
+
+        button("Assina Troca") {
+          this.icon = VaadinIcon.SIGN_IN.create()
+
+          onClick {
+            nota.solicitacaoTrocaEnnum = edtTipo?.value
+            nota.produtoTrocaEnnum = edtProduto?.value
+            nota.nfEntRet = edtNotaEntRet?.value ?: 0
+            nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
+            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
+
+            val validacao = viewModel.validaAssinatura(nota = nota)
+
+            if (validacao) {
+              val formAutoriza = FormAutorizaNota()
+              DialogHelper.showForm(caption = "Assina Devolução", form = formAutoriza) {
+                viewModel.assinaNotaVenda(nota, produtos, formAutoriza.login, formAutoriza.senha)
+              }
+            }
+          }
+        }
       },
       onClose = {
+        viewModel.salvaProduto()
         onClose()
       }) {
       HorizontalLayout().apply {
@@ -268,6 +290,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
   }
 
   fun fecha() {
+    viewModel.salvaProduto()
     form?.close()
   }
 }
