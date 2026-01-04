@@ -69,6 +69,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             update()
           }
         }
+
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
           val tipos = ESolicitacaoTroca.entries
@@ -117,6 +118,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
+
         button("Autoriza") {
           this.icon = VaadinIcon.SIGN_IN.create()
 
