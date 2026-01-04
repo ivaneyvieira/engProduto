@@ -44,34 +44,24 @@ class NotaVenda(
   var pendente: String?,
 ) {
   var setMotivoTroca: Set<EMotivoTroca>
-    get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }.orEmpty()
-      .filter { it != EMotivoTroca.Vazio }.toSet()
+    get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
     set(value) {
-      motivoTrocaCod = value.filter { it != EMotivoTroca.Vazio }.joinToString(";") { it.codigo }
+      motivoTrocaCod = value.joinToString(";") { it.codigo }
     }
 
   val strMotivoTroca: String
     get() = setMotivoTroca.sortedBy { it.codigo }.joinToString(", ") { it.descricao }
 
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
-    get() = ESolicitacaoTroca.entries.filter { it != ESolicitacaoTroca.Vazio }
-      .firstOrNull { it.codigo == solicitacaoTroca }
+    get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
     set(value) {
-      solicitacaoTroca = if (value == ESolicitacaoTroca.Vazio) {
-        null
-      } else {
-        value?.codigo
-      }
+      solicitacaoTroca = value?.codigo
     }
 
   var produtoTrocaEnnum: EProdutoTroca?
-    get() = EProdutoTroca.entries.filter { it != EProdutoTroca.Vazio }.firstOrNull { it.codigo == produtoTroca }
+    get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
     set(value) {
-      produtoTroca = if (value == EProdutoTroca.Vazio) {
-        null
-      } else {
-        value?.codigo
-      }
+      produtoTroca = value?.codigo
     }
 
   val solicitacaoTrocaDescricao: String
@@ -128,7 +118,6 @@ class NotaVenda(
       EProdutoTroca.Sem   -> ""
       EProdutoTroca.Misto -> "M"
       null                -> return null
-      else                -> null
     }
 
     val solicitacaoTroca = when (solicitacaoTrocaEnnum) {
@@ -137,7 +126,6 @@ class NotaVenda(
       ESolicitacaoTroca.Reembolso   -> "Reembolso"
       ESolicitacaoTroca.MudaCliente -> "Muda"
       null                          -> return null
-      else                          -> null
     }
 
     return "$solicitacaoTroca $produtoTroca".trim()
@@ -145,10 +133,6 @@ class NotaVenda(
 
   fun salvaNfEntRet() {
     saci.salvaNfEntRet(this)
-  }
-
-  fun solicitacaoConfigurada(): Boolean {
-    return solicitacaoTrocaEnnum != null && produtoTrocaEnnum != null && setMotivoTroca.isNotEmpty()
   }
 
   val numeroInterno: Int?
@@ -177,7 +161,6 @@ data class FiltroNotaVenda(
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
-  Vazio("", ""),
   Troca("T", "Troca"),
   Estorno("E", "Estorno"),
   Reembolso("R", "Reembolso"),
@@ -185,14 +168,12 @@ enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
 }
 
 enum class EProdutoTroca(val codigo: String, val descricao: String) {
-  Vazio("", ""),
   Com("C", "Com Produto"),
   Sem("S", "Sem Produto"),
   Misto("M", "Misto"),
 }
 
 enum class EMotivoTroca(val codigo: String, val descricao: String) {
-  Vazio("", ""),
   CompraErrada("CE", "Compra Errada"),
   VendaErrada("VE", "Venda Errada"),
   Desistencia("D", "Desistência"),
