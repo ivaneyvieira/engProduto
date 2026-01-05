@@ -76,8 +76,8 @@ WHERE P.prdno = :prdno
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
   AND N.status <> 1
   AND CASE C.mfno
-        WHEN 46   THEN (P.qtty % 900) != 0
-        WHEN 1040 THEN (P.qtty % 1000) != 0
+        WHEN 46   THEN (ROUND(P.qtty) % 900) != 0
+        WHEN 1040 THEN (ROUND(P.qtty) % 1000) != 0
                   ELSE remarks NOT REGEXP '^RES[A-Z]+ *PED +[0-9]{9} '
       END;
 
