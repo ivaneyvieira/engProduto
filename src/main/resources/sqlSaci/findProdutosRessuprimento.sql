@@ -333,8 +333,8 @@ SELECT ordno,
        origemApp,
        validade,
        vencimentoStrList,
-       COALESCE(G.valor, P.valor)            AS valorUltCompra,
-       qtPedido * COALESCE(G.valor, P.valor) AS valorTotal
+       ROUND(COALESCE(G.valor, P.valor), 2)            AS valorUltCompra,
+       qtPedido * ROUND(COALESCE(G.valor, P.valor), 2) AS valorTotal
 FROM
   T_ORDS_RESULT                 AS R
     LEFT JOIN T_PRD_GRADE_VALOR AS G

@@ -131,12 +131,12 @@ object ProdutoRessuViewColumns {
   }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValorUltCompra() =
-      columnGrid(ProdutoRessuprimento::valorUltCompra, pattern = "#,##0.0000") {
+      columnGrid(ProdutoRessuprimento::valorUltCompra, pattern = "#,##0.00") {
         this.setHeader("V. U. Comp")
       }
 
   fun Grid<ProdutoRessuprimento>.produtoRessuprimentoValorTotal() =
-      columnGrid(ProdutoRessuprimento::valorTotal, pattern = "#,##0.0000") {
+      columnGrid(ProdutoRessuprimento::valorTotal, pattern = "#,##0.00") {
         this.setHeader("V. Total")
       }
 
