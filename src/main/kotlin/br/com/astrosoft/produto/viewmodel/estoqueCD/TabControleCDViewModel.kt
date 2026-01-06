@@ -1,0 +1,108 @@
+package br.com.astrosoft.produto.viewmodel.estoqueCD
+
+import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
+import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.beans.ProdutoEstoque
+import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
+import br.com.astrosoft.produto.model.printText.PrintProdutosControleCD
+import br.com.astrosoft.produto.model.printText.PrintProdutosControleCDConf
+import java.time.LocalDate
+
+class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
+  val subView
+    get() = viewModel.view.tabControleCD
+
+  fun findLoja(storeno: Int): Loja? {
+    val lojas = Loja.allLojas()
+    return lojas.firstOrNull { it.no == storeno }
+  }
+
+  fun findAllLojas(): List<Loja> {
+    return Loja.allLojas()
+  }
+
+  fun updateView() = viewModel.exec {
+    val filtro = subView.filtro()
+    val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
+    subView.updateProduto(produtos)
+  }
+
+  fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
+    val planilha = PlanilhaProdutoEstoque()
+    return planilha.write(produtos)
+  }
+
+  fun updateKardec() = viewModel.exec {
+    val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
+    ProcessamentoKardec.updateKardec(produtos)
+    subView.reloadGrid()
+  }
+
+  override fun updateConferencia(bean: ProdutoEstoque?) {
+    try {
+      bean?.updateConferencia()
+    }catch (e: Exception) {
+      e.printStackTrace()
+      viewModel.view.showError(e.message ?: "Erro desconhecido")
+    }
+  }
+
+  override fun updateLocalizacao(bean: ProdutoEstoque?) {
+    bean?.updateLocalizacao()
+  }
+
+  fun copiaLocalizacao() = viewModel.exec {
+    val itens = subView.itensSelecionados()
+    if (itens.isEmpty()) fail("Nenhum item selecionado")
+
+    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
+    itens.forEach { item ->
+      item.locApp = primeiro.locApp
+      item.updateLocalizacao()
+    }
+    updateView()
+  }
+
+  fun imprimeProdutosConf() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val filtro = subView.filtro()
+
+    val report = PrintProdutosControleCDConf(filtro)
+
+    report.print(
+      dados = produtos, printer = subView.printerPreview(loja = 0)
+    )
+  }
+
+  fun imprimeProdutos() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    val filtro = subView.filtro()
+
+    val report = PrintProdutosControleCD(filtro)
+
+    report.print(
+      dados = produtos, printer = subView.printerPreview(loja = 0)
+    )
+  }
+
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+    return ProcessamentoKardec.kardec(produto, dataIncial)
+  }
+}
+
+interface ITabControleCD : ITabView {
+  fun filtro(): FiltroProdutoEstoque
+  fun updateProduto(produtos: List<ProdutoEstoque>)
+  fun updateKardec()
+  fun itensSelecionados(): List<ProdutoEstoque>
+  fun reloadGrid()
+}
