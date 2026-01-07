@@ -643,6 +643,7 @@ class UserSaci : IUser {
       estoqueLoja = value
       estoqueForn = value
       controleLoja = value
+      controleCD = value
     }
 
   val fornecedor

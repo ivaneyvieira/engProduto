@@ -39,6 +39,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       checkBox("Estoque Loja") {
         binder.bind(this, UserSaci::estoqueLoja.name)
       }
+      checkBox("Controle CD") {
+        binder.bind(this, UserSaci::controleCD.name)
+      }
       checkBox("Controle Loja") {
         binder.bind(this, UserSaci::controleLoja.name)
       }

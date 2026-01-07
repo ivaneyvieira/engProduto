@@ -7,8 +7,8 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutosControleCD
-import br.com.astrosoft.produto.model.printText.PrintProdutosControleCDConf
+import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
+import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
 import java.time.LocalDate
 
 class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -73,7 +73,7 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     }
     val filtro = subView.filtro()
 
-    val report = PrintProdutosControleCDConf(filtro)
+    val report = PrintProdutosEstoqueLojaConf(filtro)
 
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
@@ -87,7 +87,7 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     }
     val filtro = subView.filtro()
 
-    val report = PrintProdutosControleCD(filtro)
+    val report = PrintProdutosEstoqueLoja(filtro)
 
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
