@@ -284,18 +284,6 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
       this.columnGrid(ProdutoEstoque::quantDevolucao, header = "Gar", pattern = "#,##0", width = "80px")
-      /*
-      this.columnGrid(ProdutoEstoque::qtConfCalcEstoque, header = "Conf", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoEstoque::qtDifCalcEstoque, header = "Dif", pattern = "#,##0", width = "80px")
-
-      if (user?.estoqueEditaConferencia == true) {
-        this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
-          val dlgConferenciaSaldo = DlgConferenciaLoja(viewModel, produto) {
-            gridPanel.dataProvider.refreshAll()
-          }
-          dlgConferenciaSaldo.open()
-        }
-      }*/
     }
 
     columnGroup("Inventário") {

@@ -438,6 +438,10 @@ class ProdutoEstoque(
     saci.removeAcertoProduto(this)
   }
 
+  fun controleKardec(): List<ProdutoKardec> {
+    return saci.controleKardec(this)
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)

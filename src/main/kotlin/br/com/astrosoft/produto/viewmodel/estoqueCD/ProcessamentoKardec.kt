@@ -3,22 +3,18 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 import br.com.astrosoft.produto.model.beans.ETipoKardec
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import org.apache.poi.ss.formula.functions.T
 import java.time.LocalDate
-import kotlin.system.measureTimeMillis
 
 object ProcessamentoKardec {
-  /*
-   fun updateAll() {
+  fun updateSaldoControleKardec(produto: ProdutoEstoque) {
+    produto.dataUpdate = null
+    val listaKardec = updateControleKardec(produto = produto)
+    produto.dataUpdate = LocalDate.now()
+    produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
+    produto.updateKardec()
+  }
 
-   }
- */
   fun updateSaldoKardec(produto: ProdutoEstoque) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
@@ -31,8 +27,19 @@ object ProcessamentoKardec {
   private fun updateKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
       ProdutoKardec.deleteKardec(produto)
-      //val list = fetchKardecFlow(produto, loja, dataIncial)
       val listBuild = fetchKardec(produto, loja, dataIncial)
+      listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
+        produtoKardec.save()
+        println(index)
+      }
+      listBuild
+    }
+  }
+
+  private fun updateControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    return runBlocking {
+      ProdutoKardec.deleteKardec(produto)
+      val listBuild = fetchControleKardec(produto)
       listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
         produtoKardec.save()
         println(index)
@@ -82,27 +89,10 @@ object ProcessamentoKardec {
     }
   }
 
-  fun fetchKardecFlow(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): Flow<ProdutoKardec> = channelFlow {
-    println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
-
-    fun launchSource(tipo: String, block: suspend () -> List<ProdutoKardec>) = launch {
-      val itens = withContext(Dispatchers.IO) {
-        var ret: List<ProdutoKardec>
-        val tempo = measureTimeMillis {
-          ret = runCatching { block() }.getOrElse { emptyList() }
-        }
-        println("Tempo $tipo = ${T::class.simpleName} ${tempo / 1000} s")
-        ret
-      }
-      for (item in itens) trySend(item)
+  fun updateControleKardec(produtos: List<ProdutoEstoque>) {
+    produtos.forEach { produto ->
+      updateSaldoControleKardec(produto)
     }
-
-    launchSource("Recebimento") { produto.recebimentos(loja, dataIncial) }
-    // launchSource { produto.ressuprimento(date) }
-    launchSource("Expedicao") { produto.expedicao(loja, dataIncial) }
-    launchSource("Reposicao") { produto.reposicao(loja, dataIncial) }
-    launchSource("Saldo Inicial") { produto.saldoInicial(loja, dataIncial) }
-    launchSource("Acerto") { produto.acertoEstoque(loja, dataIncial) }
   }
 
   fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
@@ -114,6 +104,11 @@ object ProcessamentoKardec {
     val saldoInicial = produto.saldoInicial(loja, dataIncial)
     val acertoEstoque = produto.acertoEstoque(loja, dataIncial)
     return recebimento + expedicao + reposicao + saldoInicial + acertoEstoque
+  }
+
+  fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    println("Início do processamento do produto ${produto.codigo}")
+    return produto.controleKardec()
   }
 }
 

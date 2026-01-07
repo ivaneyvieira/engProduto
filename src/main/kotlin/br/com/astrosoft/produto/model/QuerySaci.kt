@@ -1,13 +1,10 @@
 package br.com.astrosoft.produto.model
 
-import br.com.astrosoft.produto.model.beans.Agenda
-import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.config.AppConfig.appName
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
@@ -2830,6 +2827,21 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataRecbedor", agendaUpdate.dataRecbedor.toSaciDate())
       addOptionalParameter("horaRecebedor", agendaUpdate.horaRecebedor)
       addOptionalParameter("emissaoConhecimento", agendaUpdate.emissaoConhecimento.toSaciDate())
+    }
+  }
+
+  fun controleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    val sql = "/sqlSaci/controleKardec.sql"
+    val loja = produto.loja ?: 4
+    val dataIncial = produto.dataInicialDefault()
+    val prdno = produto.prdno ?: return emptyList()
+    val grade = produto.grade ?: return emptyList()
+    return query(sql, ProdutoKardec::class) {
+      this.addOptionalParameter("loja", loja)
+      this.addOptionalParameter("prdno", prdno)
+      this.addOptionalParameter("grade", grade)
+      this.addOptionalParameter("dataInicial", dataIncial.toSaciDate())
+      this.addOptionalParameter("dataFinal", LocalDate.now().toSaciDate())
     }
   }
 
