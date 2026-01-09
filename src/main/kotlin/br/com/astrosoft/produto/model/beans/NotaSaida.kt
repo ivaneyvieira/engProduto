@@ -59,7 +59,7 @@ class NotaSaida(
   var observacao: String?,
 ) {
   fun isRessuprimento(): Boolean {
-    return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456)
+    return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456 || this.usernoSingExp == 471)
   }
 
   val separadoStr

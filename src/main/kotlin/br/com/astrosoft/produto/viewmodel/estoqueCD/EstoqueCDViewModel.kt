@@ -23,7 +23,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
   override fun listTab() = listOf(
     //view.tabEstoqueSaldo,
     view.tabEstoqueLoja,
-    view.tabControleCD,
+    //view.tabControleCD,
     view.tabControleLoja,
     view.tabEstoqueConf,
     view.tabEstoqueAcerto,
