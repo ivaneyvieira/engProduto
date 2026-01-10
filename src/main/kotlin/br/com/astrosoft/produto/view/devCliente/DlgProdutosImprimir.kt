@@ -137,7 +137,7 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
 
-      val user = AppConfig.userLogin() as? UserSaci
+      //val user = AppConfig.userLogin() as? UserSaci
 
       produtoNFDev()
       produtoNFTemProduto()
@@ -149,7 +149,7 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       produtoNFGrade()
       produtoNFBarcode()
       produtoAutorizacaoExp()
-      produtoNFLocalizacao()
+      //produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario().apply {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
