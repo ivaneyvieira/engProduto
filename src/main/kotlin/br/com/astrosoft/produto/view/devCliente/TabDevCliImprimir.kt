@@ -28,6 +28,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private var dlgProduto: DlgProdutosImprimir? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -83,6 +84,23 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      val notasAutoriza = nota.notaAtuoriza()
+      if (notasAutoriza.isEmpty()) {
+        DialogHelper.showError("Nota de autorização não localizada ")
+      } else {
+        val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
+
+        if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
+          DialogHelper.showError("Solicitação não autorizada")
+        } else {
+          dlgProduto = DlgProdutosImprimir(viewModel, notaLocalizada)
+          dlgProduto?.showDialog {
+            viewModel.updateView()
+          }
+        }
+      }
+    }
     addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
       val form = FormSolicitacaoNotaTrocaView(nota)
       DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
@@ -134,6 +152,18 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         viewModel.ajusteProduto(ajuste)
       }
     }
+  }
+
+  override fun fechaFormProduto() {
+    dlgProduto?.fecha()
+  }
+
+  override fun updateProdutos() {
+    dlgProduto?.update()
+  }
+
+  override fun produtos(): List<ProdutoNFS> {
+    return dlgProduto?.produtos().orEmpty()
   }
 
   override fun isAuthorized(): Boolean {
