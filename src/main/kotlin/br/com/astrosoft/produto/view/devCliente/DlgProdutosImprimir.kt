@@ -62,13 +62,6 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       toolBar = {
         val user = AppConfig.userLogin() as? UserSaci
 
-        edtPesquisa = textField("Pesquisa") {
-          this.valueChangeMode = ValueChangeMode.LAZY
-
-          addValueChangeListener {
-            update()
-          }
-        }
         edtTipo = select("Tipo") {
           this.isReadOnly = readOnly
           val tipos = ESolicitacaoTroca.entries
@@ -117,30 +110,6 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
         }
-
-        button("Assina Troca") {
-          this.icon = VaadinIcon.SIGN_IN.create()
-          this.isEnabled = !readOnly
-
-          onClick {
-            nota.solicitacaoTrocaEnnum = edtTipo?.value
-            nota.produtoTrocaEnnum = edtProduto?.value
-            nota.nfEntRet = edtNotaEntRet?.value ?: 0
-            nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
-            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
-
-            val user = AppConfig.userLogin() as? UserSaci
-
-            val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
-
-            if (validacao) {
-              val formAutoriza = FormAutorizaNota()
-              DialogHelper.showForm(caption = "Autoriza Devolução", form = formAutoriza) {
-                viewModel.autorizaNotaVenda(nota, produtos, formAutoriza.login, formAutoriza.senha)
-              }
-            }
-          }
-        }
       },
       onClose = {
         onClose()
@@ -168,31 +137,6 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
 
-      this.addItemClickListener {
-        when {
-          it.column.key == ProdutoNFS::dev.name                               -> {
-            it.item.dev = !(it.item.dev ?: false)
-            if (it.item.dev == true) {
-              it.item.temProduto = true
-            } else {
-              it.item.temProduto = null
-              it.item.quantDev = it.item.quantidade
-            }
-            this.dataProvider.refreshAll()
-          }
-
-          it.column.key == ProdutoNFS::temProduto.name && it.item.dev == true -> {
-            it.item.temProduto = !(it.item.temProduto ?: false)
-            this.dataProvider.refreshAll()
-          }
-
-          it.column.key == ProdutoNFS::quantDev.name && it.item.dev == true   -> {
-            this.editor.editItem(it.item)
-            this.focusEditor(ProdutoNFS::quantDev)
-          }
-        }
-      }
-
       val user = AppConfig.userLogin() as? UserSaci
 
       produtoNFDev()
@@ -200,11 +144,6 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFNI()
       produtoNFNIData()
-      if (user?.desautorizaDev == true) {
-        addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
-          viewModel.desatorizaTroca(nota, produto)
-        }
-      }
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
