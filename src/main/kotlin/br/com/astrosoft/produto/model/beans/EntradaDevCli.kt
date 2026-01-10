@@ -54,13 +54,13 @@ class EntradaDevCli(
     get() = when (liberaImpressao) {
       "S"  -> "Sim"
       "N"  -> "Não"
-      else -> ""
+      else -> "Não"
     }
     set(value) {
       liberaImpressao = when (value) {
         "Sim" -> "S"
         "Não" -> "N"
-        else  -> ""
+        else  -> "N"
       }
     }
 
@@ -252,7 +252,7 @@ class EntradaDevCli(
     val tipoOk = tipoObs.startsWith("EST") || tipoObs.startsWith("MUDA") ||
                  tipoObs.startsWith("MUDA") || isComProduto()
     return if (tipoOk) {
-      liberaImpressao == "N"
+      liberaImpressao == "N" || liberaImpressao == "" || liberaImpressao == null
     } else {
       true
     }
