@@ -249,8 +249,11 @@ class EntradaDevCli(
   }
 
   fun naoLiberado(): Boolean {
-    val tipoOk = tipoObs.startsWith("EST") || tipoObs.startsWith("MUDA") ||
-                 tipoObs.startsWith("REEMB") || comProduto == "SEM"
+    val nota = notaAtuoriza().firstOrNull() ?: return true
+    val tipo = nota.solicitacaoTrocaEnnum ?: return true
+    val produto = nota.produtoTrocaEnnum ?: return true
+    val tipoOk = tipo == ESolicitacaoTroca.Estorno || tipo == ESolicitacaoTroca.MudaCliente
+                 || tipo == ESolicitacaoTroca.Reembolso || produto == EProdutoTroca.Sem || produto == EProdutoTroca.Misto
     return if (tipoOk) {
       liberaImpressao == "N" || liberaImpressao == "" || liberaImpressao == null
     } else {
