@@ -80,6 +80,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         checkBox("Desfaz Solicitação") {
           binder.bind(this, UserSaci::defazSolicitacao.name)
         }
+        checkBox("Libera Impressão") {
+          binder.bind(this, UserSaci::liberaImpressao.name)
+        }
       }
     }
     verticalBlock("Filtros") {
@@ -95,9 +98,6 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         this.localePtBr()
         binder.bind(this, UserSaci::dataVendaDevolucao.name)
       }
-      checkBox("Libera Impressão") {
-          binder.bind(this, UserSaci::liberaImpressao.name)
-        }
     }
   }
 }
