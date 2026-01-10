@@ -59,7 +59,8 @@ class NotaSaida(
   var observacao: String?,
 ) {
   fun isRessuprimento(): Boolean {
-    return (this.observacao?.startsWith("RESSU") == true)
+    return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456 || this.usernoSingExp == 471
+                                                              || this.usernoSingExp == 1)
   }
 
   val separadoStr
@@ -101,7 +102,7 @@ class NotaSaida(
     grade: String = "",
     todosLocais: Boolean
   ): List<ProdutoNFS> =
-      saci.findProdutoNF(this,  marca, prdno, grade, todosLocais)
+      saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
 
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci

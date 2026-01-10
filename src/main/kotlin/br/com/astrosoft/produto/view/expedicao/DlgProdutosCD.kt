@@ -168,7 +168,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
   fun update() {
     val listProdutos = nota.produtos(EMarcaNota.CD, todosLocais = false)
     val user = AppConfig.userLogin() as? UserSaci
-    if(nota.isRessuprimento() && (user?.notaRessuprimento == true)){
+    if(nota.isRessuprimento()){
       listProdutos.forEach {prd ->
         prd.selecionado = (prd.marca ?: 0) >= 1
       }
