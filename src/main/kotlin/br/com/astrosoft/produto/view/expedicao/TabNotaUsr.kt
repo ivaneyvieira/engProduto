@@ -61,6 +61,9 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
       }
       filtroLoja(binder, UserSaci::lojaLocExpedicao, "Loja Localização")
       filtroLocalizacao(binder, UserSaci::localizacaoNota)
+      checkBox("Ressuprimento") {
+        binder.bind(this, UserSaci::notaRessuprimento.name)
+      }
     }
   }
 }
