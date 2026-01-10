@@ -250,7 +250,7 @@ class EntradaDevCli(
 
   fun naoLiberado(): Boolean {
     val tipoOk = tipoObs.startsWith("EST") || tipoObs.startsWith("MUDA") ||
-                 tipoObs.startsWith("REEMB") || isComProduto()
+                 tipoObs.startsWith("REEMB") || comProduto == "SEM"
     return if (tipoOk) {
       liberaImpressao == "N" || liberaImpressao == "" || liberaImpressao == null
     } else {
