@@ -106,6 +106,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     //  DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
     //}
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginSolicitacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")

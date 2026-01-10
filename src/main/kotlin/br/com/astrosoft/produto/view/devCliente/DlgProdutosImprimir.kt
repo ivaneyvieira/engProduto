@@ -147,8 +147,8 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
-      produtoNFBarcode()
-      produtoAutorizacaoExp()
+      //produtoNFBarcode()
+      //produtoAutorizacaoExp()
       //produtoNFLocalizacao()
       produtoNFQuantidade()
       produtoNFPrecoUnitario().apply {
