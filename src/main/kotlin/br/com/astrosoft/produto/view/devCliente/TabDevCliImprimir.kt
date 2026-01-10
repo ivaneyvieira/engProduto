@@ -97,7 +97,8 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
-    if (AppConfig.userLogin()?.admin == true) {
+    val user = AppConfig.userLogin() as? UserSaci
+    if (user?.liberaImpressao == true) {
       columnGrid(EntradaDevCli::liberaStr, header = "Libera")
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->

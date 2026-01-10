@@ -95,6 +95,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         this.localePtBr()
         binder.bind(this, UserSaci::dataVendaDevolucao.name)
       }
+      checkBox("Libera Impressão") {
+          binder.bind(this, UserSaci::liberaImpressao.name)
+        }
     }
   }
 }

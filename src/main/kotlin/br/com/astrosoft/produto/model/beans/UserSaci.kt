@@ -186,6 +186,7 @@ class UserSaci : IUser {
   var estoqueAlteraInventarioLoja by DelegateAuthorized3(154)
   var controleCD by DelegateAuthorized3(155)
   var notaRessuprimento by DelegateAuthorized3(156)
+  var liberaImpressao by DelegateAuthorized3(157)
 
   //Locais
   private var localEstoque: String?
