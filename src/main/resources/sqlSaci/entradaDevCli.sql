@@ -21,7 +21,7 @@ SELECT N.storeno                 AS loja,
               WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
               WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
                                                        ELSE ''
-         END AS CHAR)         AS obsNI
+            END AS CHAR)         AS obsNI
 FROM
   sqldados.nf                 AS N
     INNER JOIN sqldados.custp AS C
@@ -85,7 +85,7 @@ SELECT V.storeno AS loja,
        E.pdvno   AS pdvE,
        E.xano    AS transacaoE
 FROM
-  T_V             AS V
+  T_V              AS V
     INNER JOIN T_E AS E
                USING (storeno, ordno);
 
@@ -131,8 +131,8 @@ SELECT I.invno                                                             AS in
        C.name                                                              AS cliente,
        E.name                                                              AS vendedor,
        @NOTA := TRIM(SUBSTRING_INDEX(
-         TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)), ' ',
-         1))                                                             AS nfRmk,
+           TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(I.remarks, 'NFE', 'NF'), 'NF', 2), 'NF', -1)), ' ',
+           1))                                                             AS nfRmk,
        SUBSTRING_INDEX(@NOTA, '/', 1) * 1                                  AS nfno,
        MID(SUBSTRING_INDEX(SUBSTRING_INDEX(@NOTA, '/', 2), '/', -1), 1, 2) AS nfse,
        I.c9                                                                AS impressora,
@@ -148,7 +148,8 @@ SELECT I.invno                                                             AS in
           I.remarks LIKE '%REEMBOLSO%', 'S',
           'N')                                                             AS estorno,
        R.pdvReembolso                                                      AS pdvReembolso,
-       obsNI                                                               AS obsNI
+       obsNI                                                               AS obsNI,
+       I.c8                                                                AS liberaImpressao
 FROM
   sqldados.inv               AS I
     LEFT JOIN T_VENDA        AS U
@@ -182,7 +183,7 @@ WHERE I.account = '2.01.25'
         WHEN 'N' THEN I.c9 = ''
         WHEN 'T' THEN TRUE
                  ELSE FALSE
-  END;
+      END;
 
 SELECT DISTINCT I.invno,
                 I.loja,
@@ -227,7 +228,8 @@ SELECT DISTINCT I.invno,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                       AS comProduto,
                 IFNULL(AT.solicitacaoTroca, 'N')                                       AS solicitacaoTroca,
                 IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
-                IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod
+                IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod,
+                liberaImpressao                                                        AS liberaImpressao
 FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N

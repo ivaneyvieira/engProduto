@@ -2845,6 +2845,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun salvaLiberaPedido(cli: EntradaDevCli) {
+    val sql = "/sqlSaci/salvaLiberaPedido.sql"
+    script(sql){
+      addOptionalParameter("invno", cli.invno)
+      addOptionalParameter("liberaImpressao", cli.liberaImpressao)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

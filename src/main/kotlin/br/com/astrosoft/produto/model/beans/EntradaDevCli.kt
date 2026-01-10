@@ -48,7 +48,22 @@ class EntradaDevCli(
   var solicitacaoTroca: String?,
   var produtoTroca: String?,
   var motivoTrocaCod: String?,
+  var liberaImpressao: String?,
 ) {
+  var liberaStr: String
+    get() = when (liberaImpressao) {
+      "S"  -> "Sim"
+      "N"  -> "Não"
+      else -> ""
+    }
+    set(value) {
+      liberaImpressao = when (value) {
+        "Sim" -> "S"
+        "Não" -> "N"
+        else  -> ""
+      }
+    }
+
   val setMotivoTroca: Set<EMotivoTroca>
     get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
 
@@ -227,6 +242,20 @@ class EntradaDevCli(
     }
 
     return "$solicitacaoTroca $produtoTroca".trim()
+  }
+
+  fun salvaLiberaPedido() {
+    saci.salvaLiberaPedido(this)
+  }
+
+  fun naoLiberado(): Boolean {
+    val tipoOk = tipoObs.startsWith("EST") || tipoObs.startsWith("MUDA") ||
+                 tipoObs.startsWith("MUDA") || isComProduto()
+    return if (tipoOk) {
+      liberaImpressao == "N"
+    } else {
+      true
+    }
   }
 
   companion object {
