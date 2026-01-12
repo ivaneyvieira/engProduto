@@ -118,10 +118,6 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         }
       }
     }
-    //addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
-    //  val form = FormSolicitacaoNotaTrocaView(nota)
-    //  DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
-    //}
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")

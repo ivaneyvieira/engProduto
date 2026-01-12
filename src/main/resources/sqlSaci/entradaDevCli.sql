@@ -229,7 +229,8 @@ SELECT DISTINCT I.invno,
                 IFNULL(AT.solicitacaoTroca, 'N')                                       AS solicitacaoTroca,
                 IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
                 IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod,
-                liberaImpressao                                                        AS liberaImpressao
+                IF(IFNULL(AT.solicitacaoTroca, ATV.solicitacaoTroca) = 'T',
+                   'S', liberaImpressao)                                               AS liberaImpressao
 FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N
