@@ -156,7 +156,7 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
       }
       produtoNFPrecoTotal()
       produtoNFSeq()
-      produtoNFQuantDevNI()
+      //produtoNFQuantDevNI()
 
       this.setPartNameGenerator {
         val marca = it.marca
