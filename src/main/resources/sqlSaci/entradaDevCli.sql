@@ -229,7 +229,8 @@ SELECT DISTINCT I.invno,
                 IFNULL(AT.solicitacaoTroca, 'N')                                       AS solicitacaoTroca,
                 IFNULL(AT.produtoTroca, 'N')                                           AS produtoTroca,
                 IFNULL(AT.motivoTrocaCod, '')                                          AS motivoTrocaCod,
-                IF(IFNULL(AT.solicitacaoTroca, ATV.solicitacaoTroca) = 'T',
+                IF(IFNULL(AT.solicitacaoTroca, ATV.solicitacaoTroca) = 'T' AND
+                   IFNULL(AT.produtoTroca, ATV.produtoTroca) = 'C',
                    'S', liberaImpressao)                                               AS liberaImpressao
 FROM
   T_NOTA                             AS I
