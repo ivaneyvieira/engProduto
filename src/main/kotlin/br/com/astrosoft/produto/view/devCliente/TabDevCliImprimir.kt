@@ -102,13 +102,13 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       columnGrid(EntradaDevCli::liberaStr, header = "Libera")
     }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      val notasAutoriza = nota.notaAtuoriza()
+      val notasAutoriza = nota.notaAutoriza()
       if (notasAutoriza.isEmpty()) {
         DialogHelper.showError("Nota de autorização não localizada ")
       } else {
         val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
 
-        if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
+        if (notaLocalizada.loginTroca.isNullOrBlank()) {
           DialogHelper.showError("Solicitação não autorizada")
         } else {
           dlgProduto = DlgProdutosImprimir(viewModel, notaLocalizada)
@@ -118,8 +118,8 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         }
       }
     }
-    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
-    columnGrid(EntradaDevCli::loginSolicitacao, header = "Assina Troca")
+    columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")

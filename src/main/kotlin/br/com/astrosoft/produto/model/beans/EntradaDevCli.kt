@@ -49,6 +49,9 @@ class EntradaDevCli(
   var produtoTroca: String?,
   var motivoTrocaCod: String?,
   var liberaImpressao: String?,
+  var storenoAutorizacao: Int?,
+  var pdvnoAutorizacao: Int?,
+  var xanoAutorizacao: Int?
 ) {
   var liberaStr: String
     get() = when (liberaImpressao) {
@@ -94,7 +97,7 @@ class EntradaDevCli(
   fun produtos() = saci.entradaDevCliPro(invno).explodeMisto().ajustaTipo(produtosAutoriacao())
 
   private fun produtosAutoriacao(): List<ProdutoNFS> {
-    return notaAtuoriza().flatMap {
+    return notaAutoriza().flatMap {
       it.produtos()
     }
   }
@@ -212,7 +215,7 @@ class EntradaDevCli(
            "REE.* M.*".toRegex().matches(this.tipoObs)
   }
 
-  fun notaAtuoriza(): List<NotaVenda> {
+  fun notaAutoriza(): List<NotaVenda> {
     val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNotaVenda(
       loja = 0,
@@ -223,6 +226,11 @@ class EntradaDevCli(
       dataCorte = user?.dataVendaDevolucao
     )
     return NotaVenda.findAll(filtro)
+      .filter {
+        it.loja == storenoAutorizacao &&
+        it.pdv == pdvnoAutorizacao &&
+        it.transacao == xanoAutorizacao
+      }
   }
 
   fun motivo(): String? {
@@ -249,7 +257,7 @@ class EntradaDevCli(
   }
 
   fun naoLiberado(): Boolean {
-    val nota = notaAtuoriza().firstOrNull() ?: return true
+    val nota = notaAutoriza().firstOrNull() ?: return true
     val tipo = nota.solicitacaoTrocaEnnum ?: return true
     val produto = nota.produtoTrocaEnnum ?: return true
     val tipoOk = tipo == ESolicitacaoTroca.Estorno ||

@@ -40,7 +40,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       fail("Devolução não foi autorizada.")
     }
 
-    val notasAuto = nota.notaAtuoriza()
+    val notasAuto = nota.notaAutoriza()
     val produtosDev = nota.produtos()
     val produtosNota = notasAuto.flatMap { it.produtos() }.filter {
       it.dev == true
