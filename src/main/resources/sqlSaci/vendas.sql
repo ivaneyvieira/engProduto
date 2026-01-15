@@ -103,6 +103,8 @@ WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
+  AND (N.pdvno = :pdv OR :pdv = 0)
+  AND (N.xano = :transacao OR :transacao = 0)
 GROUP BY N.storeno, N.pdvno, N.xano, N.tipo;
 
 /****************************************************************************************/

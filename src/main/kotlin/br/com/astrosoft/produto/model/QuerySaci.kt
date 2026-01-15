@@ -920,6 +920,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("invno", filtro.invno)
+      addOptionalParameter("pdv", filtro.pdv)
+      addOptionalParameter("transacao", filtro.transacao)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataCorte", filtro.dataCorte.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())

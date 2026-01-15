@@ -155,6 +155,8 @@ data class FiltroNotaVenda(
   val loja: Int,
   val pesquisa: String,
   val invno: Int = 0,
+  val pdv: Int = 0,
+  val transacao: Int = 0,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val dataCorte: LocalDate?
