@@ -221,7 +221,7 @@ class EntradaDevCli(
       loja = 0,
       pesquisa = "$invno",
       invno = invno,
-      dataInicial = nfData?.minusDays(5),
+      dataInicial = nfData?.minusDays(15),
       dataFinal = nfData,
       dataCorte = user?.dataVendaDevolucao
     )
