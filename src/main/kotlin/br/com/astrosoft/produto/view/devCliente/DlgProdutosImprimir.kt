@@ -91,14 +91,6 @@ class DlgProdutosImprimir(val viewModel: TabDevCliImprimirViewModel, val nota: N
             this.value = nfNumero
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.valueChangeMode = ValueChangeMode.LAZY
-
-            viewModel.salvaNfEntRet(nota, nfNumero)
-
-            addValueChangeListener {
-              if (it.isFromClient) {
-                viewModel.salvaNfEntRet(nota, this.value)
-              }
-            }
           }
         }
 

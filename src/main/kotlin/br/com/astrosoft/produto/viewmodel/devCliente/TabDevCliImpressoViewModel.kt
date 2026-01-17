@@ -80,6 +80,11 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     produto.marcaAjuste(ajuste)
   }
 
+  fun salvaNfEntRet(nota: NotaVenda, nfEntRet: Int) {
+    nota.nfEntRet = nfEntRet
+    nota.salvaNfEntRet()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliImpresso
 }

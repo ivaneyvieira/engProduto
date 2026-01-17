@@ -21,6 +21,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImpressoViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -36,7 +37,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosImpresso(val viewModel: TabDevCliImprimirViewModel, val nota: NotaVenda) {
+class DlgProdutosImpresso(val viewModel: TabDevCliImpressoViewModel, val nota: NotaVenda) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 
@@ -91,14 +92,6 @@ class DlgProdutosImpresso(val viewModel: TabDevCliImprimirViewModel, val nota: N
             this.value = nfNumero
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
             this.valueChangeMode = ValueChangeMode.LAZY
-
-            viewModel.salvaNfEntRet(nota, nfNumero)
-
-            addValueChangeListener {
-              if (it.isFromClient) {
-                viewModel.salvaNfEntRet(nota, this.value)
-              }
-            }
           }
         }
 
@@ -147,9 +140,7 @@ class DlgProdutosImpresso(val viewModel: TabDevCliImprimirViewModel, val nota: N
       produtoNFCodigo()
       produtoNFDescricao()
       produtoNFGrade()
-      //produtoNFBarcode()
-      //produtoAutorizacaoExp()
-      //produtoNFLocalizacao()
+
       produtoNFQuantidade()
       produtoNFPrecoUnitario().apply {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))

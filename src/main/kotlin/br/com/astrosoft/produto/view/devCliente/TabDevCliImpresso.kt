@@ -25,6 +25,7 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private var dlgProduto: DlgProdutosImpresso? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -94,7 +95,25 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
       val form = FormSolicitacaoNotaTrocaView(nota)
       DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
     }
-    columnGrid(EntradaDevCli::loginAutorizacao, header = "Autorização")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      val notasAutoriza = nota.notaAutoriza()
+      if (notasAutoriza.isEmpty()) {
+        DialogHelper.showError("Nota de autorização não localizada ")
+      } else {
+        val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
+
+        if (notaLocalizada.loginTroca.isNullOrBlank()) {
+          DialogHelper.showError("Solicitação não autorizada")
+        } else {
+          dlgProduto = DlgProdutosImpresso(viewModel, notaLocalizada)
+          dlgProduto?.showDialog {
+            viewModel.updateView()
+          }
+        }
+      }
+    }
+    columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::fezTrocaCol, header = "Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev").right()
