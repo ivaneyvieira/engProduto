@@ -212,31 +212,28 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
         total = ((it.quantDev ?: 0) * 1.00) * (it.preco ?: 0.00)
       )
     }.sortedBy { it.seq ?: 0 }
-    val totalDev = listPrdDev.sumOf { it.quantDev ?: 0 }
-    val quantidade = (listPrd.firstOrNull()?.quantidade ?: 0) - totalDev
-    val total = (quantidade * 1.00) * (listPrd.firstOrNull()?.preco ?: 0.00)
-    val prdCopy = listPrd.firstOrNull()?.copy(
+    val totalQuantDev = listPrdDev.sumOf { it.quantDev ?: 0 }
+    val quantidadeSobra = (listPrd.firstOrNull()?.quantidade ?: 0) - totalQuantDev
+    val totalSobra = (quantidadeSobra * 1.00) * (listPrd.firstOrNull()?.preco ?: 0.00)
+    val prdDevSobra = listPrd.firstOrNull()?.copy(
       devDB = false,
       dev = false,
       ni = 0,
       dataNi = null,
-      quantDev = quantidade,
+      quantDev = quantidadeSobra,
       qtDevNI = null,
       temProduto = false,
-      quantidade = quantidade,
-      total = total,
+      quantidade = quantidadeSobra,
+      total = totalSobra,
       seq = null
     )
     buildList {
       listPrdDev.forEachIndexed { index, prd ->
-        add(
-          prd.copy(
-            ni = seqNI.getOrNull(index)
-          )
-        )
+        add(prd)
       }
-      if (prdCopy != null && (prdCopy.quantidade ?: 0) > 0) {
-        add(prdCopy)
+
+      if (prdDevSobra != null && (prdDevSobra.quantidade ?: 0) > 0) {
+        add(prdDevSobra)
       }
     }
   }
