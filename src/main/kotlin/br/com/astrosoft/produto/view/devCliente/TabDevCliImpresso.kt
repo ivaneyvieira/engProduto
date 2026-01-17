@@ -91,10 +91,6 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) :
     addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
-    addColumnButton(VaadinIcon.BULLSEYE, "Solicitação", "Solicitação") { nota ->
-      val form = FormSolicitacaoNotaTrocaView(nota)
-      DialogHelper.showForm(caption = "Solicitação de Devolução", form = form)
-    }
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       val notasAutoriza = nota.notaAutoriza()
       if (notasAutoriza.isEmpty()) {
