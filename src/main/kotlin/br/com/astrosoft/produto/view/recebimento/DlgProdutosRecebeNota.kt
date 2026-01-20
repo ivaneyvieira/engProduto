@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberNotaViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebeNotaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
@@ -17,7 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: NotaRecebimento) {
+class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: NotaRecebimento) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
@@ -56,6 +56,33 @@ class DlgProdutosReceberNota(val viewModel: TabReceberNotaViewModel, var nota: N
         button("Envia") {
           onClick {
             viewModel.enviaProdutoSelecionado()
+          }
+        }
+
+
+        button("Localização") {
+          onClick {
+            val produtos = gridDetail.selectedItems.toList()
+            if (produtos.isEmpty()) {
+              DialogHelper.showWarning("Nenhum item selecionado")
+            } else {
+              val localizacaoSel = produtos
+                                     .asSequence()
+                                     .mapNotNull { it.localizacao }
+                                     .groupBy { it }
+                                     .map { Pair(it.key, it.value.size) }
+                                     .sortedBy { -it.second }
+                                     .map { it.first }
+                                     .firstOrNull() ?: ""
+              val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
+                produtos.forEach { produto ->
+                  produto.localizacao = localizacao
+                  viewModel.updateLocalizacao(produto)
+                }
+                gridDetail.dataProvider.refreshAll()
+              }
+              dlg.open()
+            }
           }
         }
 

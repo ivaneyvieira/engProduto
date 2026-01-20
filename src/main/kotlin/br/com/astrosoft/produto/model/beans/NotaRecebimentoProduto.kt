@@ -239,6 +239,10 @@ class NotaRecebimentoProduto(
   fun devolucoes(): List<DevolucaoProduto> {
     return saci.findDevolucoes(this)
   }
+
+  fun updateLocalizacao() {
+    saci.updateProdutoLocalizacao(this)
+  }
 }
 
 data class FiltroNotaRecebimentoProduto(

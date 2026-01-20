@@ -1157,6 +1157,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun updateProdutoLocalizacao(produtoEstoque: NotaRecebimentoProduto) {
+    val sql = "/sqlSaci/updateProdutoLocalizacao.sql"
+
+    script(sql) {
+      addOptionalParameter("loja", produtoEstoque.loja ?: 0)
+      addOptionalParameter("prdno", produtoEstoque.prdno ?: "")
+      addOptionalParameter("grade", produtoEstoque.grade ?: "")
+      addOptionalParameter("localizacao", produtoEstoque.localizacao ?: "")
+    }
+  }
+
   fun updateProdutoKardec(produtoEstoque: ProdutoEstoque) {
     val sql = "/sqlSaci/updateProdutoKardec.sql"
 

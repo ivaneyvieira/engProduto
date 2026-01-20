@@ -8,9 +8,9 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 
-class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
+class TabRecebeNotaViewModel(val viewModel: RecebimentoViewModel) {
   val subView
-    get() = viewModel.view.tabReceberNota
+    get() = viewModel.view.tabRecebeNota
 
   fun updateView() {
     val filtro = subView.filtro()
@@ -114,6 +114,10 @@ class TabReceberNotaViewModel(val viewModel: RecebimentoViewModel) {
     }
 
     subView.formAssina(produtosSelecionados)
+  }
+
+  fun updateLocalizacao(produto: NotaRecebimentoProduto?) {
+    produto?.updateLocalizacao()
   }
 }
 

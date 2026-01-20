@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabReceberNota
-import br.com.astrosoft.produto.viewmodel.recebimento.TabReceberNotaViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebeNotaViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -18,9 +18,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
+class TabRecebeNota(val viewModel: TabRecebeNotaViewModel) :
   TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabReceberNota {
-  private var dlgProduto: DlgProdutosReceberNota? = null
+  private var dlgProduto: DlgProdutosRecebeNota? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -94,7 +94,7 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosReceberNota(viewModel, nota)
+      dlgProduto = DlgProdutosRecebeNota(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -170,7 +170,7 @@ class TabReceberNota(val viewModel: TabReceberNotaViewModel) :
   }
 
   fun showDlgProdutos(nota: NotaRecebimento) {
-    dlgProduto = DlgProdutosReceberNota(viewModel, nota)
+    dlgProduto = DlgProdutosRecebeNota(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }

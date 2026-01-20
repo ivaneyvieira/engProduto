@@ -40,6 +40,6 @@ class TabEstoqueFornViewModel(val viewModel: EstoqueCDViewModel) {
 
 interface ITabEstoqueForn : ITabView {
   fun filtro(): FiltroFornecedorLoja
-  fun updateGrid(fornecedores: List<FornecedorLoja>)
+  fun updateGrid(itens: List<FornecedorLoja>)
   fun formAutoriza(block: LoginBean.() -> Unit)
 }
