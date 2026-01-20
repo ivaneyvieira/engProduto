@@ -2,7 +2,10 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliImprimir
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
@@ -79,22 +82,22 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     this.addClassName("styling")
 
     this.addItemClickListener {
-        when {
-          it.column.key == EntradaDevCli::liberaStr .name                              -> {
-            val liberaImpressao = it.item.liberaImpressao ?: ""
-            if(liberaImpressao == "S"){
-              it.item.liberaImpressao = "N"
-            }else{
-              it.item.liberaImpressao = "S"
-            }
-            viewModel.salvaLiberaPedido(it.item)
-            this.dataProvider.refreshAll()
+      when {
+        it.column.key == EntradaDevCli::liberaStr.name -> {
+          val liberaImpressao = it.item.liberaImpressao ?: ""
+          if (liberaImpressao == "S") {
+            it.item.liberaImpressao = "N"
+          } else {
+            it.item.liberaImpressao = "S"
           }
+          viewModel.salvaLiberaPedido(it.item)
+          this.dataProvider.refreshAll()
         }
       }
+    }
 
     columnGrid(EntradaDevCli::loja, header = "Loja")
-    addColumnButton(VaadinIcon.PRINT, "Imprimir vale troca", "Imprimir") { nota ->
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
     val user = AppConfig.userLogin() as? UserSaci

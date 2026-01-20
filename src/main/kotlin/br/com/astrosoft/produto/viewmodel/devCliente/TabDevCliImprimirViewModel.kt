@@ -31,7 +31,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   /**************************** imprimeValeTroca ************************************/
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
-    if(nota.naoLiberado()){
+    if (nota.naoLiberado()) {
       fail("Liberar impressão para: Estorno, Reembolso, Muda Cliente e Sem Produto")
     }
 
@@ -53,7 +53,17 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }
 
         if (prdAuto.isEmpty()) {
-          //fail("Produto devolvido diferente do autorizado")
+          fail("Produto devolvido diferente do autorizado")
+        }
+
+        val quantAuto = produtosNota.filter { prd ->
+          prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
+        }.sumOf { it.quantDev ?: 0 }
+
+        if (quantAuto != prdDev.quantidade) {
+          fail(
+            "Quantidade devolvida diferente da autorizada"
+          )
         }
       }
     }
@@ -109,10 +119,12 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-    relatorio.print(nota.produtos(), subView.printerPreview(loja = 0) { impressora ->
-      nota.marcaImpresso(Impressora(0, impressora))
-      updateView()
-    })
+    relatorio.print(
+      nota.produtos(), subView.printerPreview(loja = 0)
+      { impressora ->
+        nota.marcaImpresso(Impressora(0, impressora))
+        updateView()
+      })
   }
 
   /**************************** imprimeValeTroca ************************************/
