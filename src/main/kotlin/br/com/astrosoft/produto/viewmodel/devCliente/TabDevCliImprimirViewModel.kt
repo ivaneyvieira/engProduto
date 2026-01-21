@@ -61,9 +61,9 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }.sumOf { it.quantDev ?: 0 }
 
         if (quantAuto != prdDev.quantidade) {
-          fail(
-            "Quantidade devolvida diferente da autorizada"
-          )
+         // fail(
+         //   "Quantidade devolvida diferente da autorizada"
+          //)
         }
       }
     }
