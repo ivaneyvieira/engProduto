@@ -10,4 +10,9 @@ SET data                = :data,
     conhecimento        = :conhecimento,
     emissaoConhecimento = :emissaoConhecimento,
     coleta              = :coleta
+WHERE invno = :invno;
+
+UPDATE sqldados.inv2
+SET c1 = DATE_FORMAT(:data, '%d/%m/%Y'),
+    c2 = TIME_FORMAT(:hora, '%H:%i')
 WHERE invno = :invno
