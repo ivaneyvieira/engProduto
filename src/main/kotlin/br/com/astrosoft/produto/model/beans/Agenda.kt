@@ -29,6 +29,12 @@ class Agenda {
   var frete: String? = null
   var coleta: LocalDate? = null
 
+  val dias: Int?
+    get() {
+      val emiss = emissao ?: return null
+      return data?.let { -LocalDate.now().until(emiss).days }
+    }
+
   val dataHoraRecebimento
     get() = "${dataRecbedor.format()} $horaRecebedor".trim()
 
