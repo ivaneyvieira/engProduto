@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -38,16 +39,16 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
-    columnGrid(Agenda::data, "Data")
-    columnGrid(Agenda::hora, "Hora")
+    columnGrid(Agenda::data, "Agendamento")
+    columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
     columnGrid(Agenda::conhecimento, "CT-e")
     columnGrid(Agenda::frete, "Frete")
     columnGrid(Agenda::emissao, "Emissão")
     columnGrid(Agenda::nf, "NF")
     columnGrid(Agenda::transp, "Transp")
     columnGrid(Agenda::nome, "Nome")
-    columnGrid(Agenda::cnpj, "CNPJ")
-    columnGrid(Agenda::volume, "Volume")
+    //columnGrid(Agenda::cnpj, "CNPJ")
+    columnGrid(Agenda::volume, "Volume").right()
     columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
