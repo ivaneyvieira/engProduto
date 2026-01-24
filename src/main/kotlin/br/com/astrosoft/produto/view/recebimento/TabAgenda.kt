@@ -44,15 +44,15 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::frete, "Frete")
     columnGrid(Agenda::transp, "Transp")
     columnGrid(Agenda::nome, "Nome")
-    columnGrid(Agenda::conhecimento, "CT-e")
-    columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "8rem")
-    columnGrid(Agenda::volume, "Vol").right()
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
     columnGrid(Agenda::dias, "Dias")
     columnGrid(Agenda::data, "Agendado", width = "6rem")
     columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
+    columnGrid(Agenda::conhecimento, "CT-e")
+    columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "7rem")
+    columnGrid(Agenda::volume, "Vol").right()
     columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
