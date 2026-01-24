@@ -36,7 +36,7 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
 
   override fun Grid<Agenda>.gridPanel() {
     columnGrid(Agenda::loja, "Loja")
-    columnGrid(Agenda::emissao, "Emissão")
+    columnGrid(Agenda::emissao, "Emissão", width = "6rem")
     columnGrid(Agenda::nf, "NF")
     columnGrid(Agenda::fornecedor, "For")
     columnGrid(Agenda::abreviacao, "Abrev")
