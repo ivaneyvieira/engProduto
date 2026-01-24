@@ -53,7 +53,7 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::conhecimento, "CT-e")
     columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "7rem")
     columnGrid(Agenda::volume, "Vol").right()
-    columnGrid(Agenda::recebedor, "Recebedor")
+    //columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
   }
