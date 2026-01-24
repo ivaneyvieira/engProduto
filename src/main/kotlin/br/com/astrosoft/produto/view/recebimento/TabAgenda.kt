@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.recebimento
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -10,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabAgenda
 import br.com.astrosoft.produto.viewmodel.recebimento.TabAgendaViewModel
 import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -63,6 +65,8 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
 
   override fun updateNota(notas: List<Agenda>) {
     this.updateGrid(notas)
+    gridPanel.getColumnBy(Agenda::abreviacao).setFooter("Total")
+    gridPanel.getColumnBy(Agenda::total).setFooter(notas.sumOf { it.total }.format())
   }
 
   override fun isAuthorized(): Boolean {
