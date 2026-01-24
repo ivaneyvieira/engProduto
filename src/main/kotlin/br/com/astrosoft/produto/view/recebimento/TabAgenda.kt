@@ -45,7 +45,7 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::transp, "Transp")
     columnGrid(Agenda::nome, "Nome")
     columnGrid(Agenda::conhecimento, "CT-e")
-    columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "7rem")
+    columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "8rem")
     columnGrid(Agenda::volume, "Vol").right()
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
