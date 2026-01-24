@@ -38,6 +38,9 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::loja, "Loja")
     columnGrid(Agenda::emissao, "Emissão")
     columnGrid(Agenda::nf, "NF")
+    columnGrid(Agenda::fornecedor, "For")
+    columnGrid(Agenda::abreviacao, "Abrev")
+    columnGrid(Agenda::total, "Valor NF")
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
@@ -52,9 +55,6 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
-    columnGrid(Agenda::fornecedor, "Fornecedor")
-    columnGrid(Agenda::abreviacao, "Abrev")
-    columnGrid(Agenda::total, "Valor NF")
   }
 
   override fun filtro(): FiltroAgenda {
