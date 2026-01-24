@@ -36,6 +36,8 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
 
   override fun Grid<Agenda>.gridPanel() {
     columnGrid(Agenda::loja, "Loja")
+    columnGrid(Agenda::emissao, "Emissão")
+    columnGrid(Agenda::nf, "NF")
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
@@ -43,8 +45,6 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
     columnGrid(Agenda::conhecimento, "CT-e")
     columnGrid(Agenda::frete, "Frete")
-    columnGrid(Agenda::emissao, "Emissão")
-    columnGrid(Agenda::nf, "NF")
     columnGrid(Agenda::transp, "Transp")
     columnGrid(Agenda::nome, "Nome")
     //columnGrid(Agenda::cnpj, "CNPJ")
