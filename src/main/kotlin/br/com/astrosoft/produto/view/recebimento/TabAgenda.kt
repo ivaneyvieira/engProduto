@@ -51,6 +51,7 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::pedido, "Pedido")
     columnGrid(Agenda::fornecedor, "Fornecedor")
     columnGrid(Agenda::abreviacao, "Abrev")
+    columnGrid(Agenda::total, "Valor NF")
   }
 
   override fun filtro(): FiltroAgenda {
