@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS sqldados.T_INV2;
 CREATE TEMPORARY TABLE sqldados.T_INV2 /*T2*/
 SELECT inv2.storeno                                               AS loja,
        CAST(IF(IFNULL(A.data, 0) = 0, NULL, A.data) AS date)      AS data,
-       SEC_TO_TIME(A.hora)                                        AS hora,
+       SEC_TO_TIME(A.hora)                                         AS hora,
        CAST(
            IF(TRUNCATE(CONCAT(RIGHT(inv2.c1, 4),
                               MID(inv2.c1, 4, 2),
