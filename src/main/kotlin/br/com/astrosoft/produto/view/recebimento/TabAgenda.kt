@@ -50,7 +50,7 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     addColumnButton(VaadinIcon.EDIT, "Agendamento", "Agd") { agenda ->
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
-    columnGrid(Agenda::data, "Agendto")
+    columnGrid(Agenda::data, "Agendado")
     columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
     columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
