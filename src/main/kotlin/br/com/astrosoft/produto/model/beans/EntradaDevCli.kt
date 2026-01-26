@@ -220,7 +220,7 @@ class EntradaDevCli(
     val filtro = FiltroNotaVenda(
       loja = storenoAutorizacao ?: 0,
       pdv = pdvnoAutorizacao ?: 0,
-      transacao = xanoAutorizacao ?: 0,
+      transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
       invno = 0,
       dataInicial = user?.dataVendaDevolucao,
