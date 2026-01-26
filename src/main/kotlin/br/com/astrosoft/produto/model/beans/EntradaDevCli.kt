@@ -218,7 +218,7 @@ class EntradaDevCli(
   fun notaAutoriza(): List<NotaVenda> {
     val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNotaVenda(
-      loja = storenoAutorizacao ?: 0,
+      loja = storenoAutorizacao ?: loja,
       pdv = pdvnoAutorizacao ?: 0,
       transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
