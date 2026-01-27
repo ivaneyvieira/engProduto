@@ -7,21 +7,25 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.Agenda
+import br.com.astrosoft.produto.model.beans.ETipoAgenda
 import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabPreEntrada
 import br.com.astrosoft.produto.viewmodel.recebimento.TabPreEntradaViewModel
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
   TabPanelGrid<Agenda>(Agenda::class), ITabPreEntrada {
   private lateinit var edtPesquisa: TextField
+  private lateinit var cmbTipoAgenda: Select<ETipoAgenda>
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -31,6 +35,15 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
       addValueChangeListener {
         viewModel.updateView()
       }
+    }
+
+    cmbTipoAgenda = select("Agendamento") {
+      setItems(*ETipoAgenda.entries.toTypedArray())
+      setItemLabelGenerator {
+        it.descricao
+      }
+      value = ETipoAgenda.PENDENTE
+      addValueChangeListener { viewModel.updateView() }
     }
   }
 
@@ -59,10 +72,10 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
     columnGrid(Agenda::pedido, "Pedido")
     columnGrid(Agenda::recebedor, "Recebido")
 
-    this.setPartNameGenerator{agend ->
-      if(agend.empno == 0){
+    this.setPartNameGenerator { agend ->
+      if (agend.empno == 0) {
         null
-      }else {
+      } else {
         "amarelo"
       }
     }
@@ -71,7 +84,8 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
   override fun filtro(): FiltroAgenda {
     return FiltroAgenda(
       loja = 0,
-      pesquisa = edtPesquisa.value ?: ""
+      pesquisa = edtPesquisa.value ?: "",
+      tipoAgenda = cmbTipoAgenda.value ?: ETipoAgenda.PENDENTE
     )
   }
 

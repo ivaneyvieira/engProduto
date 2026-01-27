@@ -14,7 +14,9 @@ class TabPreEntradaViewModel(val viewModel: RecebimentoViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = Agenda.listaAgenda(filtro)
+    val notas = Agenda.listaAgenda(filtro).filter {
+      it.tipoAgenda == filtro.tipoAgenda
+    }
     subView.updateNota(notas)
   }
 

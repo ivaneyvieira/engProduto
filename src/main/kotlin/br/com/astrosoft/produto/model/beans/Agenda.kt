@@ -50,6 +50,15 @@ class Agenda {
     horaRecebedor = horaRecebedor,
   )
 
+  val tipoAgenda: ETipoAgenda
+    get() {
+      return when {
+        hora == null                -> ETipoAgenda.PENDENTE
+        hora.format() == "06:00:00" -> ETipoAgenda.PREVISTA
+        else                        -> ETipoAgenda.CONFIRMADA
+      }
+    }
+
   companion object {
     fun listaAgenda(filtro: FiltroAgenda) = saci.listaAgenda(filtro)
   }
@@ -58,4 +67,11 @@ class Agenda {
 data class FiltroAgenda(
   val loja: Int,
   val pesquisa: String,
+  val tipoAgenda: ETipoAgenda,
 )
+
+enum class ETipoAgenda(val descricao: String) {
+  CONFIRMADA("Confirmada"),
+  PREVISTA("Prevista"),
+  PENDENTE("Pendente")
+}
