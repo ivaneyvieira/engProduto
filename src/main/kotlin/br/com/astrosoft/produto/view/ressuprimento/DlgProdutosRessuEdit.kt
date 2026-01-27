@@ -26,7 +26,9 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(DadosProdutosRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val pedido = "${ressuprimento.pedido}/${ressuprimento.loja}"
+    val loja = ressuprimento.lojaRessuprimento
+    val numero = ressuprimento.pedido
+    val pedido = "$loja/$numero"
     form = SubWindowForm(
       title = "Pedido $pedido",
       toolBar = {
