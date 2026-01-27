@@ -22,6 +22,9 @@ class NotaVendaRef(
   var valorTipo: Double?,
   var obs: String?,
 ) {
+  fun produtos(): List<ProdutoNFS> {
+    return saci.findProdutoNF(this)
+  }
 
   val numeroInterno: Int?
     get() {

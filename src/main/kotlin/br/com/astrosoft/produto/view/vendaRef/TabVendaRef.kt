@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
@@ -32,6 +29,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
+  private var dlgProduto: DlgProdutosVenda? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -95,6 +93,12 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(NotaVendaRef::loja, header = "Loja")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
+      dlgProduto = DlgProdutosVenda(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
+      }
+    }
     columnGrid(NotaVendaRef::pedido, header = "Pedido")
     columnGrid(NotaVendaRef::pdv, header = "PDV")
     columnGrid(NotaVendaRef::data, header = "Data")
