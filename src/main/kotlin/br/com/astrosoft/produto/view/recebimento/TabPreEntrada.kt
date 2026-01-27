@@ -42,7 +42,7 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
       setItemLabelGenerator {
         it.descricao
       }
-      value = ETipoAgenda.PENDENTE
+      value = ETipoAgenda.TODOS
       addValueChangeListener { viewModel.updateView() }
     }
   }

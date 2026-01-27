@@ -26,7 +26,6 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var colunaImprimir: Grid.Column<NotaVenda>? = null
   private var dlgProduto: DlgProdutosVenda? = null
 
   fun init() {
