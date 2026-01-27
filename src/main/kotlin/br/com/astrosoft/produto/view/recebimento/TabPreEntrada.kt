@@ -65,7 +65,7 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
     columnGrid(Agenda::dias, "Dias")
     columnGrid(Agenda::data, "Agendado", width = "6rem")
     columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
-    columnGrid(Agenda::conhecimento, "CT-e")
+    columnGrid(Agenda::conhecimento, "CT-e").right()
     columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "7rem")
     columnGrid(Agenda::volume, "Vol").right()
     columnGrid(Agenda::invno, "Ord")

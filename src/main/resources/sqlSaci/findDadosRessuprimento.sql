@@ -4,23 +4,24 @@ SET SQL_MODE = '';
 
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO;
 CREATE TEMPORARY TABLE T_PEDIDO
-SELECT O.storeno                  AS loja,
-       O.no                       AS pedido,
-       MID(O.no, 1, 1) * 1        AS lojaRessuprimento,
-       CAST(O.date AS date)       AS data,
-       O.vendno                   AS codFornecedor,
-       ROUND(O.amt / 100, 2)      AS totalPedido,
-       O.remarks                  AS observacao,
-       I.prdno                    AS prdno,
-       TRIM(I.prdno) * 1          AS codigo,
-       TRIM(MID(P.name, 1, 37))   AS descricao,
-       I.grade                    AS grade,
-       I.seqno                    AS seqno,
-       ROUND(I.qttyVendaMes)      AS qttyVendaMes,
-       ROUND(I.qttyVendaMesAnt)   AS qttyVendaMesAnt,
-       ROUND(I.qttyVendaMedia, 2) AS qttyVendaMedia,
-       ROUND(I.qttyAbc, 0)        AS qttySugerida,
-       ROUND(I.qtty, 0)           AS qttyPedida
+SELECT O.storeno                          AS loja,
+       O.no                               AS pedido,
+       IF(O.no >= 20000,
+          MID(O.no, 1, 1) * 1, O.storeno) AS lojaRessuprimento,
+       CAST(O.date AS date)               AS data,
+       O.vendno                           AS codFornecedor,
+       ROUND(O.amt / 100, 2)              AS totalPedido,
+       O.remarks                          AS observacao,
+       I.prdno                            AS prdno,
+       TRIM(I.prdno) * 1                  AS codigo,
+       TRIM(MID(P.name, 1, 37))           AS descricao,
+       I.grade                            AS grade,
+       I.seqno                            AS seqno,
+       ROUND(I.qttyVendaMes)              AS qttyVendaMes,
+       ROUND(I.qttyVendaMesAnt)           AS qttyVendaMesAnt,
+       ROUND(I.qttyVendaMedia, 2)         AS qttyVendaMedia,
+       ROUND(I.qttyAbc, 0)                AS qttySugerida,
+       ROUND(I.qtty, 0)                   AS qttyPedida
 FROM
   sqldados.oprd              AS I
     INNER JOIN sqldados.ords AS O
@@ -28,8 +29,9 @@ FROM
     INNER JOIN sqldados.prd  AS P
                ON P.no = I.prdno
 WHERE I.storeno = 1
-  AND (I.ordno IN (20000, 30000, 40000, 50000, 80000, 3))
-  AND (MID(O.no, 1, 1) * 1 = :loja OR :loja = 0)
+  AND (O.no IN (20000, 30000, 40000, 50000, 80000, 3))
+  AND (IF(O.no >= 20000,
+          MID(O.no, 1, 1) * 1, O.storeno) = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (:pesquisa = '' OR I.ordno = :pesquisa OR O.vendno = :pesquisa OR O.remarks LIKE CONCAT('%', :pesquisa, '%'));
