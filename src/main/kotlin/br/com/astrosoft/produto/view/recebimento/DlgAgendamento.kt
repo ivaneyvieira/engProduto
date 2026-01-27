@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.produto.model.beans.AgendaUpdate
-import br.com.astrosoft.produto.viewmodel.recebimento.TabAgendaViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.TabPreEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -12,7 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
 import java.time.Duration
 
-class DlgAgendamento(val viewModel: TabAgendaViewModel) : VerticalLayout() {
+class DlgAgendamento(val viewModel: TabPreEntradaViewModel) : VerticalLayout() {
   private lateinit var form: SubWindowForm
   private val binder = Binder(AgendaUpdate::class.java)
 

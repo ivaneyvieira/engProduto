@@ -11,7 +11,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoNotaEntradaNdd
 
 class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
   val subView
-    get() = viewModel.view.tabRecebimentoPreEnt
+    get() = viewModel.view.tabRecebimentoPreEntXml
 
   val list = mutableListOf<NotaEntradaXML>()
 
@@ -81,7 +81,7 @@ class TabRecebimentoPreEntViewModel(val viewModel: RecebimentoViewModel) {
   }
 }
 
-interface ITabRecebimentoPreEnt : ITabView {
+interface ITabRecebimentoPreEntXml : ITabView {
   fun getFiltro(): FiltroNotaEntradaXML
   fun updateList(list: List<NotaEntradaXML>)
   fun updateDlgPedidos()

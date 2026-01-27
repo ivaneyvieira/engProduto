@@ -8,9 +8,9 @@ import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabAgendaViewModel(val viewModel: RecebimentoViewModel) {
+class TabPreEntradaViewModel(val viewModel: RecebimentoViewModel) {
   val subView
-    get() = viewModel.view.tabAgenda
+    get() = viewModel.view.tabPreEntrada
 
   fun updateView() {
     val filtro = subView.filtro()
@@ -31,7 +31,7 @@ class TabAgendaViewModel(val viewModel: RecebimentoViewModel) {
   }
 }
 
-interface ITabAgenda : ITabView {
+interface ITabPreEntrada : ITabView {
   fun filtro(): FiltroAgenda
   fun updateNota(notas: List<Agenda>)
 }

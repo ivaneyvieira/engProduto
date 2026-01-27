@@ -9,8 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabAgenda
-import br.com.astrosoft.produto.viewmodel.recebimento.TabAgendaViewModel
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabPreEntrada
+import br.com.astrosoft.produto.viewmodel.recebimento.TabPreEntradaViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.grid.Grid
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabAgenda(val viewModel: TabAgendaViewModel) :
-  TabPanelGrid<Agenda>(Agenda::class), ITabAgenda {
+class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
+  TabPanelGrid<Agenda>(Agenda::class), ITabPreEntrada {
   private lateinit var edtPesquisa: TextField
 
   override fun HorizontalLayout.toolBarConfig() {
@@ -35,6 +35,8 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
   }
 
   override fun Grid<Agenda>.gridPanel() {
+    this.addClassName("styling")
+
     columnGrid(Agenda::loja, "Loja")
     columnGrid(Agenda::emissao, "Emissão", width = "6rem")
     columnGrid(Agenda::nf, "NF")
@@ -53,9 +55,17 @@ class TabAgenda(val viewModel: TabAgendaViewModel) :
     columnGrid(Agenda::conhecimento, "CT-e")
     columnGrid(Agenda::emissaoConhecimento, "Emissão CTe", width = "7rem")
     columnGrid(Agenda::volume, "Vol").right()
-    //columnGrid(Agenda::recebedor, "Recebedor")
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
+    columnGrid(Agenda::recebedor, "Recebido")
+
+    this.setPartNameGenerator{agend ->
+      if(agend.empno == 0){
+        null
+      }else {
+        "amarelo"
+      }
+    }
   }
 
   override fun filtro(): FiltroAgenda {

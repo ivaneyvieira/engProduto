@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEnt
+import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoPreEntXml
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoPreEntViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -20,7 +20,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
-class TabRecebimentoPreEnt(val viewModel: TabRecebimentoPreEntViewModel) : ITabRecebimentoPreEnt,
+class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : ITabRecebimentoPreEntXml,
   TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
   private var dialog: DlgPreEntProduto? = null
   private lateinit var edtNota: IntegerField
