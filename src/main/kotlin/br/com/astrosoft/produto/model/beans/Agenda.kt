@@ -54,8 +54,8 @@ class Agenda {
     get() {
       return when {
         hora == null                -> ETipoAgenda.PENDENTE
-        hora.format() == "06:00:00" -> ETipoAgenda.PREVISTA
-        else                        -> ETipoAgenda.CONFIRMADA
+        hora.format() == "06:00:00" -> ETipoAgenda.PREVISTO
+        else                        -> ETipoAgenda.CONFIRMADO
       }
     }
 
@@ -71,7 +71,8 @@ data class FiltroAgenda(
 )
 
 enum class ETipoAgenda(val descricao: String) {
-  CONFIRMADA("Confirmada"),
-  PREVISTA("Prevista"),
-  PENDENTE("Pendente")
+  CONFIRMADO("Confirmado"),
+  PREVISTO("Previsto"),
+  PENDENTE("Pendente"),
+  TODOS("Todos")
 }

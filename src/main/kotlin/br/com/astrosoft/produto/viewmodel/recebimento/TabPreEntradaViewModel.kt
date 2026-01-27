@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.Agenda
 import br.com.astrosoft.produto.model.beans.AgendaUpdate
+import br.com.astrosoft.produto.model.beans.ETipoAgenda
 import br.com.astrosoft.produto.model.beans.FiltroAgenda
 import java.time.LocalDate
 import java.time.LocalTime
@@ -15,6 +16,7 @@ class TabPreEntradaViewModel(val viewModel: RecebimentoViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val notas = Agenda.listaAgenda(filtro).filter {
+      filtro.tipoAgenda == ETipoAgenda.TODOS ||
       it.tipoAgenda == filtro.tipoAgenda
     }
     subView.updateNota(notas)
