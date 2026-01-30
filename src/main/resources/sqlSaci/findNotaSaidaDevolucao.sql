@@ -101,12 +101,17 @@ GROUP BY N.storeno, N.pdvno, N.xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT;
 CREATE TEMPORARY TABLE T_FILE_COUNT
-SELECT Q.loja, Q.pdvno, Q.xano, COUNT(DISTINCT seq) AS quant
+(
+  INDEX (loja, pdvno, xano, situacaoDev)
+)
+SELECT Q.loja, Q.pdvno, Q.xano, situacaoDev, COUNT(DISTINCT seq) AS quant
 FROM
-  sqldados.invAdicionalDevArquivo AS A
-    INNER JOIN T_QUERY            AS Q
+  sqldados.invAdicionalDevArquivo    AS A
+    INNER JOIN sqldados.invAdicional AS IA
+               USING (invno, tipoDevolucao, numero)
+    INNER JOIN T_QUERY               AS Q
                ON A.numero = Q.niDev
-GROUP BY Q.loja, Q.pdvno, Q.xano;
+GROUP BY Q.loja, Q.pdvno, Q.xano, IA.situacaoDev;
 
 SELECT loja,
        pdvno,
@@ -133,6 +138,7 @@ SELECT loja,
        observacaoAdd,
        duplicata,
        situacaoDup,
+       situacaoDev,
        IFNULL(C.quant, 0) AS quantArquivos
 FROM
   T_QUERY                  AS Q

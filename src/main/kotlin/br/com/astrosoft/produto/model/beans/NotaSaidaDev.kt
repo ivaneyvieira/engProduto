@@ -31,8 +31,15 @@ class NotaSaidaDev(
   var observacaoAdd: String?,
   var situacaoDup: String?,
   var duplicata: String?,
+  var situacaoDev: Int?,
   var quantArquivos: Int?,
 ) {
+  val situacaoDevName: String?
+    get() {
+      situacaoDev ?: return ""
+      return EStituacaoDev.findByNum(situacaoDev ?: 0)?.descricao
+    }
+
   val dataStr
     get() = dataEmissao?.format() ?: ""
 

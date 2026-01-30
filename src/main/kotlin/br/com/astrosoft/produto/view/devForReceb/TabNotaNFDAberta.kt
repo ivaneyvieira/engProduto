@@ -103,6 +103,10 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       }
     }
 
+    columnGrid(NotaSaidaDev::situacaoDevName, width = "6rem") {
+      this.setHeader("Aba")
+    }
+
     columnGrid(NotaSaidaDev::nota) {
       this.setHeader("Nota")
     }
