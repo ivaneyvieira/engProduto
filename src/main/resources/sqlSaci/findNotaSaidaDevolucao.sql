@@ -104,19 +104,28 @@ CREATE TEMPORARY TABLE T_FILE_COUNT
 (
   INDEX (loja, pdvno, xano, situacaoDev)
 )
-SELECT Q.loja, Q.pdvno, Q.xano, situacaoDev, COUNT(DISTINCT seq) AS quant
+SELECT Q.loja,
+       Q.pdvno,
+       Q.xano,
+       IA.situacaoDev,
+       IA.invno,
+       IA.numero,
+       IA.tipoDevolucao,
+       COUNT(DISTINCT seq) AS quant
 FROM
-  sqldados.invAdicionalDevArquivo    AS A
-    INNER JOIN sqldados.invAdicional AS IA
-               USING (invno, tipoDevolucao, numero)
-    INNER JOIN T_QUERY               AS Q
-               ON A.numero = Q.niDev
-GROUP BY Q.loja, Q.pdvno, Q.xano, IA.situacaoDev;
+  T_QUERY                                      AS Q
+    INNER JOIN sqldados.invAdicional           AS IA
+               ON IA.numero = Q.niDev
+    LEFT JOIN  sqldados.invAdicionalDevArquivo AS A
+               ON A.invno = IA.invno AND
+                  A.tipoDevolucao = IA.tipoDevolucao AND
+                  A.numero = IA.numero
+GROUP BY Q.loja, Q.pdvno, Q.xano, IA.situacaoDev, A.invno, A.numero, A.tipoDevolucao;
 
 SELECT loja,
        pdvno,
        xano,
-       numero,
+       Q.numero,
        pedido,
        serie,
        cliente,
@@ -138,17 +147,19 @@ SELECT loja,
        observacaoAdd,
        duplicata,
        situacaoDup,
-       situacaoDev,
+       C.situacaoDev,
+       C.invno,
+       C.numero           AS numeroDev,
+       C.tipoDevolucao,
        IFNULL(C.quant, 0) AS quantArquivos
 FROM
   T_QUERY                  AS Q
     LEFT JOIN T_FILE_COUNT AS C
               USING (loja, pdvno, xano)
-WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
+WHERE (@PESQUISA = '' OR Q.numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
        pedido LIKE @PESQUISA)
   AND situacaoDupStatus NOT IN (2, 5)
   AND (IFNULL(duplicata, '') != '' OR observacaoNota NOT LIKE '%PAGO%')
-GROUP BY Q.loja, Q.pdvno, Q.xano
-
+GROUP BY Q.loja, Q.pdvno, Q.xano, C.situacaoDev, C.invno, C.numero, C.tipoDevolucao
 

@@ -32,6 +32,9 @@ class NotaSaidaDev(
   var situacaoDup: String?,
   var duplicata: String?,
   var situacaoDev: Int?,
+  var invno: Int?,
+  var numeroDev: Int?,
+  var tipoDevolucao: Int?,
   var quantArquivos: Int?,
 ) {
   val situacaoDevName: String?
@@ -96,7 +99,7 @@ class NotaSaidaDev(
     saci.notaSaidaObservacaoSave(this)
   }
 
-  fun listArquivos(): List<NotaSaidaDevFile> {
+  fun listArquivos(): List<InvFileDev> {
     return saci.notaSaidaDevolucaoSelect(this)
   }
 

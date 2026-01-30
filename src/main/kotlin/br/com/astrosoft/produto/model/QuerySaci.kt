@@ -2883,29 +2883,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun notaSaidaDevolucaoSave(notaFile: NotaSaidaDevFile) {
-    val sql = "/sqlSaci/findNotaSaidaDevolucaoSave.sql"
-    script(sql) {
-      addOptionalParameter("storeno", notaFile.loja)
-      addOptionalParameter("pdvno", notaFile.pdvno)
-      addOptionalParameter("xano", notaFile.xano)
-      addOptionalParameter("date", notaFile.date.toSaciDate())
-      addOptionalParameter("filename", notaFile.filename)
-      addOptionalParameter("file", notaFile.file)
-    }
-  }
-
-  fun notaSaidaDevolucaoDelete(notaFile: NotaSaidaDevFile) {
-    val sql = "/sqlSaci/findNotaSaidaDevolucaoDelete.sql"
-    script(sql) {
-      addOptionalParameter("seq", notaFile.seq)
-    }
-  }
-
-
-  fun notaSaidaDevolucaoSelect(notaFile: NotaSaidaDev): List<NotaSaidaDevFile> {
+  fun notaSaidaDevolucaoSelect(notaFile: NotaSaidaDev): List<InvFileDev> {
     val sql = "/sqlSaci/findNotaSaidaDevolucaoSelect.sql"
-    return query(sql, NotaSaidaDevFile::class) {
+    return query(sql, InvFileDev::class) {
       addOptionalParameter("storeno", notaFile.loja)
       addOptionalParameter("pdvno", notaFile.pdvno)
       addOptionalParameter("xano", notaFile.xano)

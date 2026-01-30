@@ -72,23 +72,23 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     nota.saveObs()
   }
 
-  fun addArquivo(nota: NotaSaidaDev, fileName: String, dados: ByteArray) {
-    val notaFile = NotaSaidaDevFile(
+  fun addArquivo(nota: NotaSaidaDev, fileName: String, dados: ByteArray) = viewModel.exec {
+    val notaFile = InvFileDev(
+      invno = nota.invno ?: fail("NI não encontrado"),
+      numero = nota.numeroDev ?: fail("Número não encontrado"),
+      tipoDevolucao = nota.tipoDevolucao ?: fail("Tipo de Devolução não encontrado"),
       seq = 0,
-      loja = nota.loja,
-      pdvno = nota.pdvno,
-      xano = nota.xano,
       date = LocalDate.now(),
-      filename = fileName,
-      file = dados
+      fileName = fileName,
+      file = dados,
     )
-    notaFile.save()
+    notaFile.update()
     subView.updateViewFile()
   }
 
   fun removeArquivosSelecionado() {
     val arquivoSelectionado = subView.arquivosSelecionados()
-    arquivoSelectionado.forEach {file ->
+    arquivoSelectionado.forEach { file ->
       file.delete()
     }
     subView.updateViewFile()
@@ -104,6 +104,6 @@ interface ITabNotaNFDAberta : ITabView {
   fun findNota(): NotaSaidaDev?
   fun updateProdutos()
   fun produtosSelcionados(): List<NotaSaidaDevProduto>
-  fun arquivosSelecionados(): List<NotaSaidaDevFile>
+  fun arquivosSelecionados(): List<InvFileDev>
   fun updateViewFile()
 }

@@ -31,7 +31,7 @@ WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano;
 
-SELECT seq, storeno AS loja, pdvno, xano, CAST(IF(date = 0, NULL, date) AS date) AS date, filename, file
+SELECT A.invno, A.numero, A.tipoDevolucao, A.seq, CAST(A.date AS DATE) AS date, A.filename, A.file
 FROM
   T_NF                                         AS N
     INNER JOIN sqldados.invAdicionalDevArquivo AS A

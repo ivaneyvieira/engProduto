@@ -28,7 +28,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
-  private  var dlgArquivo: DlgArquivoNotaNFDAberta? = null
+  private var dlgArquivo: DlgArquivoNotaNFDAberta? = null
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -93,18 +93,24 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
-      if (bean.quantArquivos?.let { it > 0 } == true) {
-        icon.element.style.set("color", "yellow")
-      }
+      if (bean.situacaoDevName.isNullOrBlank()) {
+        icon.element.style.set("color", "SlateGrey")
+      } else
+        if (bean.quantArquivos?.let { it > 0 } == true) {
+          icon.element.style.set("color", "yellow")
+        }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
-      dlgArquivo?.showDialog {
-        AppConfig
-        viewModel.updateView()
+      if (nota.situacaoDevName.isNullOrBlank()) {
+        DialogHelper.showError("A Nota não está em nenhuma aba")
+      } else {
+        dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
+        dlgArquivo?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
 
-    columnGrid(NotaSaidaDev::situacaoDevName, width = "6rem") {
+    columnGrid(NotaSaidaDev::situacaoDevName, width = "7rem") {
       this.setHeader("Aba")
     }
 
@@ -116,10 +122,10 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     columnGrid(NotaSaidaDev::cliente) {
     }
-    columnGrid(NotaSaidaDev::nomeCliente) {
+    columnGrid(NotaSaidaDev::nomeCliente, width = "20rem") {
       this.setHeader("Nome Cliente")
     }
-    columnGrid(NotaSaidaDev::valorNota, width = "120px") {
+    columnGrid(NotaSaidaDev::valorNota, width = "7rem") {
       this.setHeader("Valor")
     }
     columnGrid(NotaSaidaDev::situacaoDup) {
@@ -129,7 +135,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       this.setHeader("Duplicata")
       this.right()
     }
-    columnGrid(NotaSaidaDev::observacaoNota) {
+    columnGrid(NotaSaidaDev::observacaoNota, width = "14rem") {
       this.setHeader("Observação")
     }
   }
@@ -161,7 +167,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun arquivosSelecionados(): List<NotaSaidaDevFile> {
+  override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 
