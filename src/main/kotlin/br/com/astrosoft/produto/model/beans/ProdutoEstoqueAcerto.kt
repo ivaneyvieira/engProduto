@@ -199,6 +199,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
         diferencaSaida == 0 && diferencaEntrada != 0 -> "Entrada"
         else                                         -> "Entrada e Saída"
       },
+      observacaoAcerto = "",
       gravado = acerto.gravado,
     )
   }
@@ -218,6 +219,7 @@ class EstoqueAcerto(
   var transacaoSai: String?,
   var gravadoLogin: Int?,
   var observacao: String?,
+  var observacaoAcerto: String?,
   var gravado: Boolean?,
 ) {
   val processadoStr

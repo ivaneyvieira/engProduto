@@ -46,7 +46,8 @@ object AppConfig {
   }
 
   fun userLogin(): IUser? {
-    return userLogin
+    val currentUser = LoginService.get().currentUser
+    return findUser(currentUser?.username, currentUser?.hashedPassword)
   }
 
   val isAdmin: Boolean

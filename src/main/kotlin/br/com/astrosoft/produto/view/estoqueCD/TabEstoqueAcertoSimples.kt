@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.open.App
 import java.time.LocalDate
 
 class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
@@ -105,6 +106,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
       closeEditor = {
         viewModel.updateAcerto(it.bean)
       })
+    AppConfig
 
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
@@ -122,7 +124,8 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
     columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "200px")
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
-    columnGrid(EstoqueAcerto::observacao, header = "Observação", isExpand = true).textFieldEditor()
+    columnGrid(EstoqueAcerto::observacao, header = "Movimentação", isExpand = true).textFieldEditor()
+    columnGrid(EstoqueAcerto::observacaoAcerto, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroAcerto {
