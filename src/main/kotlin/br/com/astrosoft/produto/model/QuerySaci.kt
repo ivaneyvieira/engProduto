@@ -2909,6 +2909,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", notaFile.loja)
       addOptionalParameter("pdvno", notaFile.pdvno)
       addOptionalParameter("xano", notaFile.xano)
+      addOptionalParameter("situacaoDev", notaFile.situacaoDev ?: -1)
     }
   }
 

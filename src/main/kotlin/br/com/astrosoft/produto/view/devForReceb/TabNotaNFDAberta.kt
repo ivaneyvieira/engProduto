@@ -99,6 +99,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }) { nota ->
       dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
       dlgArquivo?.showDialog {
+        AppConfig
         viewModel.updateView()
       }
     }

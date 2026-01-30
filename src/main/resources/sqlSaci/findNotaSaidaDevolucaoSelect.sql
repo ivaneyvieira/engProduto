@@ -36,5 +36,7 @@ FROM
   T_NF                                         AS N
     INNER JOIN sqldados.invAdicionalDevArquivo AS A
                ON A.numero = N.niDev
-
+    INNER JOIN sqldados.invAdicional           AS IA
+               USING (invno, tipoDevolucao, numero)
+WHERE IA.situacaoDev = :situacaoDev
 
