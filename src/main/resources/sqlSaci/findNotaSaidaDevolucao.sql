@@ -124,5 +124,7 @@ WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM 
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
        pedido LIKE @PESQUISA)
   AND situacaoDupStatus NOT IN (2, 5)
+  AND (IFNULL(duplicata, '') != '' OR observacaoNota NOT LIKE '%PAGO%')
 GROUP BY Q.loja, Q.pdvno, Q.xano
+
 
