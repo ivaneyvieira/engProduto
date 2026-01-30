@@ -49,7 +49,24 @@ SELECT N.storeno                                                              AS
                 ELSE 'Pendente'
        END                                                                    AS situacaoDup,
        CONCAT(D.dupno, '/', D.dupse)                                          AS duplicata,
-       IFNULL(D.status, 999)                                                  AS situacaoDupStatus
+       IFNULL(D.status, 999)                                                  AS situacaoDupStatus,
+       COALESCE(
+           IF(LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                                        LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5,
+                                        200),
+                              ' ', 1), NULL),
+           IF(LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                                        LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5,
+                                        200),
+                              ' ', 1), NULL),
+           IF(LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
+              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                                        LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8,
+                                        200),
+                              ' ', 1), NULL)
+       ) * 1                                                                  AS niDev
 FROM
   sqldados.nf                               AS N
     LEFT JOIN  sqldados.nfUserPrint         AS PT
@@ -81,14 +98,15 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.tipo = 2)
 GROUP BY N.storeno, N.pdvno, N.xano;
 
+
 DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT;
 CREATE TEMPORARY TABLE T_FILE_COUNT
-SELECT A.storeno AS loja, A.pdvno, A.xano, COUNT(DISTINCT seq) AS quant
+SELECT Q.loja, Q.pdvno, Q.xano, COUNT(DISTINCT seq) AS quant
 FROM
-  sqldados.nfSaidaArquivoDevolucao AS A
-    INNER JOIN T_QUERY             AS Q
-               ON A.storeno = Q.loja AND A.pdvno = Q.pdvno AND A.xano = Q.xano
-GROUP BY A.storeno, A.pdvno, A.xano;
+  sqldados.invAdicionalDevArquivo AS A
+    INNER JOIN T_QUERY            AS Q
+               ON A.numero = Q.niDev
+GROUP BY Q.loja, Q.pdvno, Q.xano;
 
 SELECT loja,
        pdvno,

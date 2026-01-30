@@ -19,6 +19,7 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
     val numeroNota = nota.nota ?: ""
 
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
+      /*
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
       }
@@ -28,6 +29,8 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
           viewModel.removeArquivosSelecionado()
         }
       }
+
+       */
     }, onClose = {
       onClose()
     }) {
