@@ -34,6 +34,10 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
     button("Duplica") {
       this.icon = VaadinIcon.COPY.create()
+      val user = AppConfig.userLogin() as? UserSaci
+
+      this.isVisible = user?.ressuprimentoDuplica == true
+
       addClickListener {
         viewModel.duplicaPedido()
       }
@@ -41,6 +45,11 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
 
     button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
+
+      val user = AppConfig.userLogin() as? UserSaci
+
+      this.isVisible = user?.ressuprimentoRemove == true
+
       addClickListener {
         viewModel.removePedido()
       }
@@ -51,6 +60,10 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
     }
 
     button("Copia Pedido") {
+      val user = AppConfig.userLogin() as? UserSaci
+
+      this.isVisible = user?.ressuprimentoCopiaPedido == true
+
       this.icon = VaadinIcon.COPY.create()
       addClickListener {
         viewModel.copiaPedido()
