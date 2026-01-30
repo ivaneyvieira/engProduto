@@ -28,6 +28,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
+  private  var dlgArquivo: DlgArquivoNotaNFDAberta? = null
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -90,6 +91,18 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
         viewModel.updateView()
       }
     }
+
+    addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
+      if (bean.quantArquivos?.let { it > 0 } == true) {
+        icon.element.style.set("color", "yellow")
+      }
+    }) { nota ->
+      dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
+      dlgArquivo?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
     columnGrid(NotaSaidaDev::nota) {
       this.setHeader("Nota")
     }
@@ -141,6 +154,14 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
 
   override fun produtosSelcionados(): List<NotaSaidaDevProduto> {
     return dlgProduto?.itensSelecionados().orEmpty()
+  }
+
+  override fun arquivosSelecionados(): List<NotaSaidaDevFile> {
+    return dlgArquivo?.produtosSelecionados().orEmpty()
+  }
+
+  override fun updateViewFile() {
+    dlgArquivo?.update()
   }
 
   override fun isAuthorized(): Boolean {

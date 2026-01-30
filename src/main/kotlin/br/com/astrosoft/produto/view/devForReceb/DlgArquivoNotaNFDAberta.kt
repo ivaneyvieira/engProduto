@@ -2,9 +2,9 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.InvFileDev
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEmailViewModel
+import br.com.astrosoft.produto.model.beans.NotaSaidaDev
+import br.com.astrosoft.produto.model.beans.NotaSaidaDevFile
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
@@ -12,11 +12,11 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgArquivoNotaNFDAberta(val viewModel: TabNotaEmailViewModel, val nota: NotaRecebimentoDev) {
+class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(InvFileDev::class.java, false)
+  private val gridDetail = Grid(NotaSaidaDevFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    val numeroNota = nota.nfEntrada ?: ""
+    val numeroNota = nota.nota ?: ""
 
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
@@ -48,32 +48,32 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaEmailViewModel, val nota: No
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
-        val file = invFile.file ?: return@addColumnButton
-        val fileName = invFile.fileName ?: return@addColumnButton
+      addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { nfFile ->
+        val file = nfFile.file ?: return@addColumnButton
+        val fileName = nfFile.filename ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
         iconButton = VaadinIcon.DOWNLOAD,
         tooltip = "Download",
         header = "Download",
-        filename = { invFile ->
-          invFile.fileName ?: "arquivo"
-        }) { invFile ->
-        invFile.file
+        filename = { nfFile ->
+          nfFile.filename ?: "arquivo"
+        }) { nfFile ->
+        nfFile.file
       }
 
-      columnGrid(InvFileDev::fileName, "Nome do Arquivo") {
+      columnGrid(NotaSaidaDevFile::filename, "Nome do Arquivo") {
         this.isExpand = true
       }
-      columnGrid(InvFileDev::date, "Data")
-      columnGrid(InvFileDev::filesize, "Tamanho")
+      columnGrid(NotaSaidaDevFile::date, "Data")
+      columnGrid(NotaSaidaDevFile::filesize, "Tamanho")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun produtosSelecionados(): List<InvFileDev> {
+  fun produtosSelecionados(): List<NotaSaidaDevFile> {
     return gridDetail.selectedItems.toList()
   }
 

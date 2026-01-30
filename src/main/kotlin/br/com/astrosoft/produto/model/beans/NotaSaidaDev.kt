@@ -31,6 +31,7 @@ class NotaSaidaDev(
   var observacaoAdd: String?,
   var situacaoDup: String?,
   var duplicata: String?,
+  var quantArquivos: Int?,
 ) {
   val dataStr
     get() = dataEmissao?.format() ?: ""
@@ -86,6 +87,10 @@ class NotaSaidaDev(
 
   fun saveObs() {
     saci.notaSaidaObservacaoSave(this)
+  }
+
+  fun listArquivos(): List<NotaSaidaDevFile> {
+    return saci.notaSaidaDevolucaoSelect(this)
   }
 
   companion object {

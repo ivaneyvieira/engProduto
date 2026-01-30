@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoDev
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
+import java.time.LocalDate
 
 class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -71,6 +72,28 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     nota.saveObs()
   }
 
+  fun addArquivo(nota: NotaSaidaDev, fileName: String, dados: ByteArray) {
+    val notaFile = NotaSaidaDevFile(
+      seq = 0,
+      loja = nota.loja,
+      pdvno = nota.pdvno,
+      xano = nota.xano,
+      date = LocalDate.now(),
+      filename = fileName,
+      file = dados
+    )
+    notaFile.save()
+    subView.updateViewFile()
+  }
+
+  fun removeArquivosSelecionado() {
+    val arquivoSelectionado = subView.arquivosSelecionados()
+    arquivoSelectionado.forEach {file ->
+      file.delete()
+    }
+    subView.updateViewFile()
+  }
+
   val subView
     get() = viewModel.view.tabNotaNFDAberta
 }
@@ -81,4 +104,6 @@ interface ITabNotaNFDAberta : ITabView {
   fun findNota(): NotaSaidaDev?
   fun updateProdutos()
   fun produtosSelcionados(): List<NotaSaidaDevProduto>
+  fun arquivosSelecionados(): List<NotaSaidaDevFile>
+  fun updateViewFile()
 }

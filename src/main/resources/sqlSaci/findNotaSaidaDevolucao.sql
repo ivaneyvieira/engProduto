@@ -9,6 +9,9 @@ DO @PESQUISA_NUM := IF(:pesquisa REGEXP '^[0-9]+$', :pesquisa, -1);
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
+(
+  INDEX (loja, pdvno, xano)
+)
 SELECT N.storeno                                                              AS loja,
        N.pdvno                                                                AS pdvno,
        N.xano                                                                 AS xano,
@@ -78,6 +81,15 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.tipo = 2)
 GROUP BY N.storeno, N.pdvno, N.xano;
 
+DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT;
+CREATE TEMPORARY TABLE T_FILE_COUNT
+SELECT A.storeno AS loja, A.pdvno, A.xano, COUNT(DISTINCT seq) AS quant
+FROM
+  sqldados.nfSaidaArquivoDevolucao AS A
+    INNER JOIN T_QUERY             AS Q
+               ON A.storeno = Q.loja AND A.pdvno = Q.pdvno AND A.xano = Q.xano
+GROUP BY A.storeno, A.pdvno, A.xano;
+
 SELECT loja,
        pdvno,
        xano,
@@ -102,9 +114,12 @@ SELECT loja,
        observacaoNota,
        observacaoAdd,
        duplicata,
-       situacaoDup
+       situacaoDup,
+       IFNULL(C.quant, 0) AS quantArquivos
 FROM
-  T_QUERY AS Q
+  T_QUERY                  AS Q
+    LEFT JOIN T_FILE_COUNT AS C
+              USING (loja, pdvno, xano)
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
        pedido LIKE @PESQUISA)
