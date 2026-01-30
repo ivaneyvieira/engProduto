@@ -30,7 +30,7 @@ class ProdutoEstoqueAcerto(
   var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
-  var observacao: String? = null
+  var observacao: String? = null,
 ) {
 
   val diferencaAcerto: Int?
@@ -193,13 +193,13 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       transacaoEnt = lista.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
       transacaoSai = lista.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
       gravadoLogin = acerto.gravadoLogin,
-      observacao = when {
+      movimentacao = when {
         diferencaSaida == 0 && diferencaEntrada == 0 -> "Sem Diferença"
         diferencaSaida != 0 && diferencaEntrada == 0 -> "Saída"
         diferencaSaida == 0 && diferencaEntrada != 0 -> "Entrada"
         else                                         -> "Entrada e Saída"
       },
-      observacaoAcerto = "",
+      observacaoAcerto = lista.firstOrNull()?.observacao,
       gravado = acerto.gravado,
     )
   }
@@ -218,7 +218,7 @@ class EstoqueAcerto(
   var transacaoEnt: String?,
   var transacaoSai: String?,
   var gravadoLogin: Int?,
-  var observacao: String?,
+  val movimentacao: String,
   var observacaoAcerto: String?,
   var gravado: Boolean?,
 ) {

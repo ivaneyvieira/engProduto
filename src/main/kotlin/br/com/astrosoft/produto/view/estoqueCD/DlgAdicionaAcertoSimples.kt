@@ -93,7 +93,7 @@ class DlgAdicionaAcertoSimples(
         this.processado = false
         this.transacao = null
         this.gravadoLogin = user?.no
-        this.observacao = acerto.observacao
+        this.observacao = acerto.observacaoAcerto
         this.gravado = acerto.gravado
       }
     }

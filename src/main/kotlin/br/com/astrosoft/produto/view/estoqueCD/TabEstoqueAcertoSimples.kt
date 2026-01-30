@@ -100,13 +100,12 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     this.withEditor(
       classBean = EstoqueAcerto::class,
       openEditor = {
-        val edit = getColumnBy(EstoqueAcerto::observacao) as? Focusable<*>
+        val edit = getColumnBy(EstoqueAcerto::observacaoAcerto) as? Focusable<*>
         edit?.focus()
       },
       closeEditor = {
         viewModel.updateAcerto(it.bean)
       })
-    AppConfig
 
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
@@ -118,13 +117,13 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     }
     columnGrid(EstoqueAcerto::data, header = "Data")
     columnGrid(EstoqueAcerto::hora, header = "Hora")
-    columnGrid(EstoqueAcerto::login, header = "Usuário", width = "80px")
+    columnGrid(EstoqueAcerto::login, header = "Usuário", width = "7rem")
     columnGrid(EstoqueAcerto::transacaoEnt, header = "Trans Ent")
     columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
-    columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
-    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "200px")
+    columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado").center()
+    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "20rem")
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
-    columnGrid(EstoqueAcerto::observacao, header = "Movimentação", isExpand = true).textFieldEditor()
+    columnGrid(EstoqueAcerto::movimentacao, header = "Movimentação", width = "8rem")
     columnGrid(EstoqueAcerto::observacaoAcerto, header = "Observação", isExpand = true).textFieldEditor()
   }
 

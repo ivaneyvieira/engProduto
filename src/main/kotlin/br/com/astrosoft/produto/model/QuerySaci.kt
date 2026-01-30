@@ -2329,7 +2329,7 @@ class QuerySaci : QueryDB(database) {
     script(sql) {
       addOptionalParameter("numloja", acertoEstoque.numloja)
       addOptionalParameter("numero", acertoEstoque.numero)
-      addOptionalParameter("observacao", acertoEstoque.observacao)
+      addOptionalParameter("observacao", acertoEstoque.observacaoAcerto)
     }
   }
 

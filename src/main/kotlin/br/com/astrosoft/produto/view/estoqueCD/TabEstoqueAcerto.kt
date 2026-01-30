@@ -90,7 +90,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     this.withEditor(
       classBean = EstoqueAcerto::class,
       openEditor = {
-        val edit = getColumnBy(EstoqueAcerto::observacao) as? Focusable<*>
+        val edit = getColumnBy(EstoqueAcerto::observacaoAcerto) as? Focusable<*>
         edit?.focus()
       },
       closeEditor = {
@@ -113,7 +113,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado")
     columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "200px")
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
-    columnGrid(EstoqueAcerto::observacao, header = "Observação", isExpand = true).textFieldEditor()
+    columnGrid(EstoqueAcerto::observacaoAcerto, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroAcerto {
