@@ -93,20 +93,13 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
 
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
-      if (bean.situacaoDevName.isNullOrBlank()) {
-        icon.element.style.set("color", "SlateGrey")
-      } else
-        if (bean.quantArquivos?.let { it > 0 } == true) {
-          icon.element.style.set("color", "yellow")
-        }
+      if (bean.quantArquivos?.let { it > 0 } == true) {
+        icon.element.style.set("color", "yellow")
+      }
     }) { nota ->
-      if (nota.situacaoDevName.isNullOrBlank()) {
-        DialogHelper.showError("A Nota não está em nenhuma aba")
-      } else {
-        dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
-        dlgArquivo?.showDialog {
-          viewModel.updateView()
-        }
+      dlgArquivo = DlgArquivoNotaNFDAberta(viewModel, nota)
+      dlgArquivo?.showDialog {
+        viewModel.updateView()
       }
     }
 
@@ -167,7 +160,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     return dlgProduto?.itensSelecionados().orEmpty()
   }
 
-  override fun arquivosSelecionados(): List<InvFileDev> {
+  override fun arquivosSelecionados(): List<NotaSaidaDevFile> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
 

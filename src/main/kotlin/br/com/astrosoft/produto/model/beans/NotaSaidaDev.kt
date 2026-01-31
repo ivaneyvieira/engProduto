@@ -99,8 +99,10 @@ class NotaSaidaDev(
     saci.notaSaidaObservacaoSave(this)
   }
 
-  fun listArquivos(): List<InvFileDev> {
-    return saci.notaSaidaDevolucaoSelect(this)
+  fun listArquivos(): List<NotaSaidaDevFile> {
+    val saida = saci.notaSaidaDevolucaoSaidaSelect(this)
+    val entrada = saci.notaSaidaDevolucaoEntradaSelect(this)
+    return saida + entrada
   }
 
   companion object {

@@ -38,7 +38,7 @@ class TabNotaColetaRepViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
       fileName = fileName,
       file = dados,
     )
-    invFile.update()
+    invFile.save()
     subView.updateArquivos()
   }
 

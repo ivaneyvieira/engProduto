@@ -122,6 +122,16 @@ FROM
                   A.numero = IA.numero
 GROUP BY Q.loja, Q.pdvno, Q.xano, IA.situacaoDev, A.invno, A.numero, A.tipoDevolucao;
 
+DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT2;
+CREATE TEMPORARY TABLE T_FILE_COUNT2
+(
+  INDEX (loja, pdvno, xano)
+)
+SELECT storeno AS loja, pdvno, xano, COUNT(seq) as quant
+FROM
+  sqldados.nfSaidaArquivoDevolucao
+GROUP BY storeno, pdvno, xano;
+
 SELECT loja,
        pdvno,
        xano,
@@ -149,12 +159,14 @@ SELECT loja,
        situacaoDup,
        C.situacaoDev,
        C.invno,
-       C.numero           AS numeroDev,
+       C.numero                                 AS numeroDev,
        C.tipoDevolucao,
-       IFNULL(C.quant, 0) AS quantArquivos
+       IFNULL(C.quant, 0) + IFNULL(C2.quant, 0) AS quantArquivos
 FROM
-  T_QUERY                  AS Q
-    LEFT JOIN T_FILE_COUNT AS C
+  T_QUERY                   AS Q
+    LEFT JOIN T_FILE_COUNT  AS C
+              USING (loja, pdvno, xano)
+    LEFT JOIN T_FILE_COUNT2 AS C2
               USING (loja, pdvno, xano)
 WHERE (@PESQUISA = '' OR Q.numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR

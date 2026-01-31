@@ -45,7 +45,7 @@ class TabNotaNuloViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel 
       fileName = fileName,
       file = dados,
     )
-    invFile.update()
+    invFile.save()
 
     subView.updateArquivos()
   }

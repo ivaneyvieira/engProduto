@@ -2883,9 +2883,37 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun notaSaidaDevolucaoSelect(notaFile: NotaSaidaDev): List<InvFileDev> {
+  fun notaSaidaDevolucaoSave(notaFile: NotaSaidaDevFile) {
+    val sql = "/sqlSaci/findNotaSaidaDevolucaoSave.sql"
+    script(sql) {
+      addOptionalParameter("storeno", notaFile.loja)
+      addOptionalParameter("pdvno", notaFile.pdvno)
+      addOptionalParameter("xano", notaFile.xano)
+      addOptionalParameter("date", notaFile.date.toSaciDate())
+      addOptionalParameter("filename", notaFile.filename)
+      addOptionalParameter("file", notaFile.file)
+    }
+  }
+
+  fun notaSaidaDevolucaoDelete(notaFile: NotaSaidaDevFile) {
+    val sql = "/sqlSaci/findNotaSaidaDevolucaoDelete.sql"
+    script(sql) {
+      addOptionalParameter("seq", notaFile.seq)
+    }
+  }
+
+  fun notaSaidaDevolucaoSaidaSelect(notaFile: NotaSaidaDev): List<NotaSaidaDevFile> {
+    val sql = "/sqlSaci/findNotaSaidaDevolucaoSaidaSelect.sql"
+    return query(sql, NotaSaidaDevFile::class) {
+      addOptionalParameter("storeno", notaFile.loja)
+      addOptionalParameter("pdvno", notaFile.pdvno)
+      addOptionalParameter("xano", notaFile.xano)
+    }
+  }
+
+  fun notaSaidaDevolucaoEntradaSelect(notaFile: NotaSaidaDev): List<NotaSaidaDevFile> {
     val sql = "/sqlSaci/findNotaSaidaDevolucaoSelect.sql"
-    return query(sql, InvFileDev::class) {
+    return query(sql, NotaSaidaDevFile::class) {
       addOptionalParameter("storeno", notaFile.loja)
       addOptionalParameter("pdvno", notaFile.pdvno)
       addOptionalParameter("xano", notaFile.xano)

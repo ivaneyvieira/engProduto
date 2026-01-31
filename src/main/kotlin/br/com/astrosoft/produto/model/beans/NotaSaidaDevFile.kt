@@ -4,14 +4,15 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class InvFileDev(
-  var invno: Int?,
-  var numero: Int?,
-  var tipoDevolucao: Int?,
+class NotaSaidaDevFile(
   var seq: Int?,
+  var loja: Int,
+  var pdvno: Int,
+  var xano: Long,
+  var tipo: String?,
   var date: LocalDate?,
-  var fileName: String?,
-  var file: ByteArray?,
+  var filename: String?,
+  var file: ByteArray?
 ) {
   val filesize: String
     get() = formatFileSize(file?.size ?: 0)
@@ -29,16 +30,23 @@ class InvFileDev(
   }
 
   fun save() {
-    saci.updateInvFile(this)
+    saci.notaSaidaDevolucaoSave(this)
   }
 
   fun delete() {
-    saci.deleteInvFile(this)
-  }
-
-  companion object {
-    fun findAll(invno: Int, tipo: EMotivoDevolucao, numero: Int): List<InvFileDev> {
-      return saci.findInvFile(invno, tipo, numero)
+    if (tipo == "S") {
+      saci.notaSaidaDevolucaoDelete(this)
+    } else {
+      val notaFile = InvFileDev(
+        invno = 0,
+        numero = 0,
+        tipoDevolucao = 0,
+        seq = seq,
+        date = LocalDate.now(),
+        fileName = filename,
+        file = file,
+      )
+      notaFile.delete()
     }
   }
 }

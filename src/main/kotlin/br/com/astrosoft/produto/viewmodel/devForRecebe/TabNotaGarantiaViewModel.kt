@@ -38,7 +38,7 @@ class TabNotaGarantiaViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
       fileName = fileName,
       file = dados,
     )
-    invFile.update()
+    invFile.save()
 
     subView.updateArquivos()
   }

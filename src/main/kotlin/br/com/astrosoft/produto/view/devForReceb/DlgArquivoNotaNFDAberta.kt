@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.InvFileDev
 import br.com.astrosoft.produto.model.beans.NotaSaidaDev
+import br.com.astrosoft.produto.model.beans.NotaSaidaDevFile
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.icon
@@ -16,7 +17,7 @@ import kotlin.jvm.java
 
 class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(InvFileDev::class.java, false)
+  private val gridDetail = Grid(NotaSaidaDevFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nota ?: ""
 
@@ -52,7 +53,7 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
 
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { nfFile ->
         val file = nfFile.file ?: return@addColumnButton
-        val fileName = nfFile.fileName ?: return@addColumnButton
+        val fileName = nfFile.filename ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
@@ -60,27 +61,27 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
         tooltip = "Download",
         header = "Download",
         filename = { nfFile ->
-          nfFile.fileName ?: "arquivo"
+          nfFile.filename ?: "arquivo"
         }) { nfFile ->
         nfFile.file
       }
 
-      columnGrid(InvFileDev::fileName, "Nome do Arquivo") {
+      columnGrid(NotaSaidaDevFile::filename, "Nome do Arquivo") {
         this.isExpand = true
       }
-      columnGrid(InvFileDev::date, "Data")
-      columnGrid(InvFileDev::filesize, "Tamanho")
+      columnGrid(NotaSaidaDevFile::date, "Data")
+      columnGrid(NotaSaidaDevFile::filesize, "Tamanho")
     }
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun produtosSelecionados(): List<InvFileDev> {
+  fun produtosSelecionados(): List<NotaSaidaDevFile> {
     return gridDetail.selectedItems.toList()
   }
 
   fun update() {
-    val listProdutos = nota.listArquivos()
+    val listProdutos: List<NotaSaidaDevFile> = nota.listArquivos()
     gridDetail.setItems(listProdutos)
   }
 }
