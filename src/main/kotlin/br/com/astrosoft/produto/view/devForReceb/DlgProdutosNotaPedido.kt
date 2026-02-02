@@ -261,7 +261,10 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       }
       columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       addColumnButton(VaadinIcon.DATE_INPUT, "Acerto", "Acerto") { produto ->
-        val dlgAcerto = DlgAcertoProduto(viewModel, produto) {
+        val produtoSelecionado = gridDetail.selectedItems.toList().ifEmpty {
+          listOf(produto)
+        }
+        val dlgAcerto = DlgAcertoProduto(viewModel, produtoSelecionado) {
           update()
         }
         dlgAcerto.open()

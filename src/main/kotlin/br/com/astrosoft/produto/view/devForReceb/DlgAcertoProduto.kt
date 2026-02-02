@@ -8,13 +8,12 @@ import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class DlgAcertoProduto(
   val viewModel: ITabNotaViewModel,
-  val produto: NotaRecebimentoProdutoDev,
+  val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private var edtAcerto: IntegerField? = null
@@ -24,23 +23,16 @@ class DlgAcertoProduto(
     this.headerTitle = headerTitle()
     this.footer.toolBar()
 
-    val listaGrades = produto.codigo?.toString()?.let {
-      viewModel.findProdutos(it)
-    }.orEmpty().map {
-      it.grade
-    }.filter {
-      it.isNotBlank()
-    }.distinct()
-
     verticalLayout {
       setSizeFull()
       horizontalLayout {
         edtAcerto = integerField("Acerto") {
+          this.isAutofocus = true
           this.width = "10rem"
           this.isAutoselect = true
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.value = produto.numAcerto
+          this.value = produtoSelecionado.firstOrNull { (it.numAcerto ?: 0) > 0 }?.numAcerto ?: 0
         }
       }
     }
@@ -68,18 +60,14 @@ class DlgAcertoProduto(
   }
 
   private fun headerTitle(): String {
-    val codigo = produto.codigo ?: 0
-    val descricao = produto.descricao ?: ""
-    val grade = produto.grade.let { gd ->
-      if (gd.isNullOrBlank()) "" else " - $gd"
-    }
-
-    return "$codigo $descricao $grade"
+    return "Acerto de Produtos"
   }
 
   private fun confirmaForm() {
-    produto.numAcerto = edtAcerto?.value ?: 0
-    viewModel.updateAcertoProduto(produto = produto)
+    produtoSelecionado.forEach { produto ->
+      produto.numAcerto = edtAcerto?.value ?: 0
+      viewModel.updateAcertoProduto(produto = produto)
+    }
     onClose.invoke()
     this.close()
   }
