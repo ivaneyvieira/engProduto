@@ -2488,6 +2488,21 @@ class QuerySaci : QueryDB(database) {
     return count.firstOrNull()?.quant ?: 0
   }
 
+  fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
+    val sql = "/sqlSaci/updateAcertoProduto.sql"
+
+    if (produto.ni == null) return
+
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("numero", produto.numeroDevolucao)
+      addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
+      addOptionalParameter("numAcerto", produto.numAcerto)
+    }
+  }
+
   fun updateNotaRecebimentoProduto(produto: NotaRecebimentoProdutoDev, gradeNova: String, niNovo: Int) {
     val sql = "/sqlSaci/updateNotaRecebimentoProdutoDev.sql"
 

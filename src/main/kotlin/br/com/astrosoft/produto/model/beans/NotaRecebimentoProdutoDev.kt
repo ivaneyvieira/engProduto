@@ -38,6 +38,7 @@ data class NotaRecebimentoProdutoDev(
   var quant: Int?,
   var estoque: Int?,
   var refFabrica: String?,
+  var numAcerto: Int?,
   var cfop: String?,
   var cst: String?,
   var un: String?,
@@ -214,6 +215,10 @@ data class NotaRecebimentoProdutoDev(
 
   fun updateProduto(gradeNova: String?, niNovo: Int?) {
     saci.updateNotaRecebimentoProduto(produto = this, gradeNova = gradeNova ?: grade ?: "", niNovo = niNovo ?: ni ?: 0)
+  }
+
+  fun updateAcertoProduto() {
+    saci.updateAcertoProduto(this)
   }
 
   fun deleteProduto() {

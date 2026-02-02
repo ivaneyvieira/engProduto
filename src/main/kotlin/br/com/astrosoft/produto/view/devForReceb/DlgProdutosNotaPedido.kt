@@ -260,6 +260,13 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         }
       }
       columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
+      addColumnButton(VaadinIcon.DATE_INPUT, "Acerto", "Acerto") { produto ->
+        val dlgAcerto = DlgAcertoProduto(viewModel, produto) {
+          update()
+        }
+        dlgAcerto.open()
+      }
+      columnGrid(NotaRecebimentoProdutoDev::numAcerto, "Acerto").right()
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")

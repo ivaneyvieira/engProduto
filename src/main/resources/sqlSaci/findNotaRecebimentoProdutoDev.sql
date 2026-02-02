@@ -132,8 +132,8 @@ SELECT NFO.storeno,
        vol_gross      AS pesoNFBrutoDevolucao,
        vol_net        AS pesoNFLiquidoDevolucao
 FROM
-  T_NFO                        AS NFO
-    INNER JOIN sqldados.nf     AS N
+  T_NFO                    AS NFO
+    INNER JOIN sqldados.nf AS N
                USING (storeno, pdvno, xano);
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
@@ -212,7 +212,8 @@ SELECT A.invno,
        SUM(I.baseIcmsSubst / 100) / SUM(I.qtty / 1000)                AS baseSTUnit,
        IFNULL(X.nfekey, '')                                           AS chaveUlt,
        I.c1                                                           AS chaveSefaz,
-       IFNULL(S.ncm, '')                                              AS ncm
+       IFNULL(S.ncm, '')                                              AS ncm,
+       A.numAcerto                                                    AS numAcerto
 FROM
   sqldados.iprdAdicionalDev          AS A
     INNER JOIN sqldados.inv          AS N
@@ -301,6 +302,7 @@ SELECT N.storeno                                                      AS loja,
        P.mfno                                                         AS vendnoProduto,
        ROUND(N.qtty)                                                  AS quant,
        ROUND(E.estoque)                                               AS estoque,
+       numAcerto                                                      AS numAcerto,
        IFNULL(PR.prdrefno, P.mfno_ref)                                AS refFabrica,
        N.cfop                                                         AS cfop,
        N.cst                                                          AS cst,
@@ -416,6 +418,7 @@ SELECT loja,
        grade,
        vendnoProduto,
        quant,
+       numAcerto,
        estoque,
        refFabrica,
        cfop,

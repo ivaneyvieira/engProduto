@@ -7,4 +7,7 @@ interface ITabNotaViewModel {
   fun findProdutos(codigo: String): List<PrdGrade>
   fun addProduto(produto: NotaRecebimentoProdutoDev?)
   fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?)
+  fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
+    produto.updateAcertoProduto()
+  }
 }

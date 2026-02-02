@@ -111,6 +111,10 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     subView.updateProduto()
   }
 
+  override fun  updateAcertoProduto(produto: NotaRecebimentoProdutoDev){
+    produto.updateAcertoProduto()
+  }
+
   fun removeNota() = viewModel.exec {
     val lista = subView.notasSelecionadas()
     if (lista.isEmpty()) {
