@@ -250,9 +250,9 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       }
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
-      columnGrid(NotaRecebimentoProdutoDev::ni, "NI"){
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
-        this.setComparator {prd ->
+        this.setComparator { prd ->
           val ni = (prd.ni ?: 0).toString().lpad(10, "0")
           val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
           val grade = (prd.grade ?: "").lpad(10, "0")
@@ -291,6 +291,14 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::icms, "ICMS", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::ipi, "IPI", width = "50px")
       columnGrid(NotaRecebimentoProdutoDev::totalGeralDevolucao, "Total", width = "90px")
+
+      this.setPartNameGenerator {
+        if ((it.numAcerto ?: 0) > 0) {
+          "amarelo"
+        } else {
+          null
+        }
+      }
     }
     this.addAndExpand(gridDetail)
     update()
