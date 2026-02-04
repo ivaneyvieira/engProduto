@@ -43,6 +43,12 @@ class NotaSaidaDev(
       return EStituacaoDev.findByNum(situacaoDev ?: 0)?.descricao
     }
 
+  var motivoDevolucaoEnun
+    get() = EMotivoDevolucao.findByNum(tipoDevolucao ?: 0)
+    set(value) {
+      tipoDevolucao = value?.num
+    }
+
   val dataStr
     get() = dataEmissao?.format() ?: ""
 
