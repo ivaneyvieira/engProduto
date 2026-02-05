@@ -168,7 +168,9 @@ fun VerticalLayout.formHeader(
         this.setHeightFull()
         textArea("Dados Adicionais") {
           this.width = "100%"
-          this.height = "66%"
+          this.height = "50%"
+          this.minRows = 1
+          this.maxRows = 4
           this.isExpand = true
           this.isReadOnly = true
           val obsAjustada = nota.obsDevolucaoAjustada()
@@ -181,7 +183,9 @@ fun VerticalLayout.formHeader(
         }
         textArea("Observação") {
           this.isReadOnly = readOnly
-          this.height = "34%"
+          this.height = "50%"
+          this.minRows = 4
+          this.maxRows = 4
           this.width = "100%"
           this.isExpand = true
           this.value = nota.observacaoAdicional ?: ""
@@ -236,7 +240,7 @@ private fun NotaRecebimentoDev.observacaoAvariaTransporte(): String {
   val linha1 = "Devolução Parcial da NFO ${nfEntrada ?: ""} de ${emissao.format()} Referente"
   val linha2 = if (produtoUnitatio()) {
     "Produtos Avariados no Transporte Notificado No CTe"
-  }else{
+  } else {
     "Produtos Avariados no Transporte Notificado No CTe"
   }
   val transportadora = this.nomeTransportadoraDevolucao.nomeProprioCapitalize()
