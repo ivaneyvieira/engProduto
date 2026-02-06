@@ -63,6 +63,7 @@ dependencies {
   implementation("com.jcraft:jsch:0.1.55")
   implementation("org.imgscalr:imgscalr-lib:4.2")
   implementation("com.github.wmixvideo:nfe:4.0.73")
+  implementation("com.sun.mail:jakarta.mail:2.0.2")
 
   //vaadin
   implementation("pl.unforgiven:superfields:0.18.1")
