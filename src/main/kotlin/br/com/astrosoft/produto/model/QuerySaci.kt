@@ -2936,6 +2936,60 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  // Email
+  fun emailSelect(chave: String): List<EmailDevolucao> {
+    val sql = "/sqlSaci/emailSelect.sql"
+    return query(sql, EmailDevolucao::class) {
+      addOptionalParameter("chave", chave)
+    }
+  }
+
+  fun emailSave(email: EmailDevolucao) {
+    val sql = "/sqlSaci/emailSave.sql"
+    script(sql) {
+      addOptionalParameter("id", email.id)
+      addOptionalParameter("chave", email.chave)
+      addOptionalParameter("fromEmail", email.fromEmail)
+      addOptionalParameter("toEmail", email.toEmail)
+      addOptionalParameter("ccEmail", email.ccEmail)
+      addOptionalParameter("bccEmail", email.bccEmail)
+      addOptionalParameter("subject", email.subject)
+      addOptionalParameter("enviado", email.enviado)
+      addOptionalParameter("htmlContent", email.htmlContent)
+    }
+  }
+
+  fun emailDelete(email: EmailDevolucao) {
+    val sql = "/sqlSaci/emailDelete.sql"
+    script(sql) {
+      addOptionalParameter("id", email.id)
+    }
+  }
+
+  fun emailAnexoSelect(email: EmailDevolucao): List<AnexoEmail> {
+    val sql = "/sqlSaci/emailSelectAnexo.sql"
+    return query(sql, AnexoEmail::class) {
+      addOptionalParameter("idEmail", email.id)
+    }
+  }
+
+  fun emailAnexoDelete(anexo: AnexoEmail) {
+    val sql = "/sqlSaci/emailDeleteAnexo.sql"
+    script(sql) {
+      addOptionalParameter("id", anexo.id)
+    }
+  }
+
+  fun emailAnexoSave(anexo: AnexoEmail){
+    val sql = "/sqlSaci/emailSaveAnexo.sql"
+    script(sql){
+      addOptionalParameter("idEmail", anexo.idEmail)
+      addOptionalParameter("mimeType", anexo.mimeType)
+      addOptionalParameter("nomeArquivo", anexo.nomeArquivo)
+      addOptionalParameter("conteudo", anexo.conteudo)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
