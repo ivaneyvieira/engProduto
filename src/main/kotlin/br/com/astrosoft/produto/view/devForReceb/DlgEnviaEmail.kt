@@ -5,16 +5,13 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.textfield.TextField
 
 class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
@@ -28,7 +25,7 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
           this.icon = VaadinIcon.ENVELOPE.create()
 
           onClick {
-            val email = EmailDevolucao()
+            val email = viewModel.emailDevolucao(nota)
             val form = FormEmail(viewModel, email)
             DialogHelper.showForm("Nova mensagem", form)
           }

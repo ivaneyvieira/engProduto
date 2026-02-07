@@ -158,6 +158,18 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     )
     email.addAnexo(anexo)
   }
+
+  fun emailDevolucao(nota: NotaRecebimentoDev): EmailDevolucao {
+    val listaEmail = nota.listRepresentantes().map {
+      it.email
+    }.distinct()
+
+    val email = EmailDevolucao()
+
+    email.toEmailList = listaEmail.toSet()
+
+    return email
+  }
 }
 
 interface ITabNotaPedido : ITabView {

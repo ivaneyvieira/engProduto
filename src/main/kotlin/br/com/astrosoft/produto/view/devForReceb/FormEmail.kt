@@ -15,7 +15,7 @@ import com.vaadin.flow.data.binder.Binder
 
 class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao) : VerticalLayout() {
   val binder = Binder(EmailDevolucao::class.java)
-  var listAnexos : HorizontalLayout? = null
+  var listAnexos: HorizontalLayout? = null
 
   init {
     this.width = "60%"
@@ -23,13 +23,9 @@ class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao
 
     this.textField {
       this.label = "Para"
+      this.isAutofocus = true
       this.setWidthFull()
       this.bind(binder).bind(EmailDevolucao::toEmail)
-    }
-
-    this.textField("Assunto") {
-      this.setWidthFull()
-      this.bind(binder).bind(EmailDevolucao::subject)
     }
 
     horizontalLayout {
@@ -37,19 +33,24 @@ class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao
       this.isPadding = false
       this.setWidthFull()
 
+      this.textField("Assunto") {
+        this.setWidthFull()
+        this.bind(binder).bind(EmailDevolucao::subject)
+      }
+
       this.upload("Anexos") { fileName, dados ->
         viewModel.addAnexo(email, fileName, dados)
         updateListAnexos()
       }.apply {
         this.isDropAllowed = false
       }
-      listAnexos = horizontalLayout {
-        this.isMargin = false
-        this.isPadding = false
-        this.isWrap = true
-      }
+    }
 
-      updateListAnexos()
+    listAnexos = horizontalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.isWrap = true
+      this.setWidthFull()
     }
 
     this.hugeRTE("Mensagem") {
@@ -58,13 +59,14 @@ class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao
       this.bind(binder).bind(EmailDevolucao::htmlContent)
     }
 
+    updateListAnexos()
     binder.readBean(email)
   }
 
   fun updateListAnexos() {
     listAnexos?.removeAll()
     email.anexos.forEach { anexo ->
-      val  badge = Span(anexo.nomeArquivoSimples)
+      val badge = Span(anexo.nomeArquivoSimples)
       badge.getElement().themeList.add("badge success")
       listAnexos?.add(badge)
 
