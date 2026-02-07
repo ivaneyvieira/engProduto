@@ -39,7 +39,9 @@ class DlgRepresentante {
         this.isAutoWidth = false
         this.width = "12rem"
       }
-      columnGrid(Representante::email, "Email")
+      columnGrid(Representante::email, "Contato")
+
+      this.expand(listRepresentantes)
     }
   }
 
