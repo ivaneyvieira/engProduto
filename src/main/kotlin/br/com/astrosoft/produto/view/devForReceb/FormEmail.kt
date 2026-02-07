@@ -20,7 +20,14 @@ class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao
   init {
     this.width = "60%"
     this.height = "60%"
-
+/*
+    this.textField {
+      this.label = "Para"
+      this.isAutofocus = true
+      this.setWidthFull()
+      this.bind(binder).bind(EmailDevolucao::toEmail)
+    }
+*/
     this.textField {
       this.label = "Para"
       this.isAutofocus = true

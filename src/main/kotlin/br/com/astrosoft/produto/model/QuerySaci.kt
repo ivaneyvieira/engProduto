@@ -2692,9 +2692,20 @@ class QuerySaci : QueryDB(database) {
 
   fun representante(vendno: Int): List<Representante> {
     val sql = "/sqlSaci/representantes.sql"
-    return query(sql, Representante::class) {
+    val contatos = query(sql, RepresentanteContato::class) {
       addOptionalParameter("vendno", vendno)
     }.toList()
+    return contatos.groupBy { "${it.vendno} ${it.repno}" }.mapNotNull {
+      val rep = it.value.firstOrNull() ?: return@mapNotNull null
+      Representante(
+        vendno = rep.vendno,
+        nome = rep.nome,
+        telefone = rep.telefone,
+        email = rep.email,
+        celular = rep.celular,
+        contatos = it.value
+      )
+    }
   }
 
   fun acertoDelete(numLoja: Int, numero: Int) {
@@ -2980,9 +2991,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun emailAnexoSave(anexo: AnexoEmail){
+  fun emailAnexoSave(anexo: AnexoEmail) {
     val sql = "/sqlSaci/emailSaveAnexo.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("idEmail", anexo.idEmail)
       addOptionalParameter("mimeType", anexo.mimeType)
       addOptionalParameter("nomeArquivo", anexo.nomeArquivo)
