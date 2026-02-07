@@ -61,6 +61,9 @@ class NotaRecebimentoDev(
   var pesoNFLiquidoDevolucao: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
 ) {
+  val chaveEmail: String
+    get() = produtos.firstOrNull()?.chaveDevolucao ?: ""
+
   val nomeTransportadoraDevolucao: String
     get() {
       val vendno = transpDevolucao ?: return ""

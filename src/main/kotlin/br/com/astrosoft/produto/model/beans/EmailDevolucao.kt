@@ -13,29 +13,42 @@ class EmailDevolucao(
   var enviado: Boolean = false,
   var htmlContent: String = ""
 ) {
-  var toEmailList: List<String>
-    get() = toEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }
+  private val anexos = mutableListOf<AnexoEmail>()
+
+  fun addAnexo(anexo: AnexoEmail) {
+    anexos.add(anexo)
+  }
+
+  var toEmailList: Set<String>
+    get() = toEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet()
     set(value) {
       toEmail = value.joinToString(",")
     }
 
-  var ccEmailList: List<String>
-    get() = ccEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }
+  var ccEmailList: Set<String>
+    get() = ccEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet()
     set(value) {
       ccEmail = value.joinToString(",")
     }
 
-  var bccEmailList: List<String>
-    get() = bccEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }
+  var bccEmailList: Set<String>
+    get() = bccEmail.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet()
     set(value) {
       bccEmail = value.joinToString(",")
     }
 
   fun save() {
-    saci.emailSave(this)
+    val last = saci.emailSave(this)
+    this.id = last?.id ?: 0
+    anexos.forEach {
+      anexoSave(it)
+    }
   }
 
   fun delete() {
+    anexos.forEach {
+      anexoDelete(it)
+    }
     saci.emailDelete(this)
   }
 

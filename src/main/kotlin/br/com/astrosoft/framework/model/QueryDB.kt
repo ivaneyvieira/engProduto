@@ -192,7 +192,7 @@ open class QueryDB(database: DatabaseConfig) {
       stratments.forEach { sql ->
         val query = con.createQueryConfig(sql)
         query.lambda()
-        query.executeUpdate()
+        query.executeUpdate().getKey()
         println(sql)
       }
     } catch (e: Exception) {

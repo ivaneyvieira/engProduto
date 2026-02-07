@@ -2944,9 +2944,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun emailSave(email: EmailDevolucao) {
+  fun emailSave(email: EmailDevolucao): LastKey? {
     val sql = "/sqlSaci/emailSave.sql"
-    script(sql) {
+    return query(sql, LastKey::class) {
       addOptionalParameter("id", email.id)
       addOptionalParameter("chave", email.chave)
       addOptionalParameter("fromEmail", email.fromEmail)
@@ -2956,7 +2956,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("subject", email.subject)
       addOptionalParameter("enviado", email.enviado)
       addOptionalParameter("htmlContent", email.htmlContent)
-    }
+    }.firstOrNull()
   }
 
   fun emailDelete(email: EmailDevolucao) {
@@ -3003,4 +3003,8 @@ val saci = QuerySaci()
 
 class Count {
   var quant: Int? = 0
+}
+
+class LastKey {
+  var id: Int? = 0
 }

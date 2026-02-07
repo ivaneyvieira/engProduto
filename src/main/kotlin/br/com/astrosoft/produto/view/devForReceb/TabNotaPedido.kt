@@ -25,6 +25,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPedido {
   private var dlgProduto: DlgProdutosNotaPedido? = null
   private var dlgArquivo: DlgArquivoNotaPedido? = null
+  private var dlgEMail: DlgEnviaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -121,6 +122,13 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     }) { nota ->
       dlgArquivo = DlgArquivoNotaPedido(viewModel, nota)
       dlgArquivo?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
+    addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
+      dlgEMail = DlgEnviaEmail(viewModel, nota)
+      dlgEMail?.showDialog {
         viewModel.updateView()
       }
     }
