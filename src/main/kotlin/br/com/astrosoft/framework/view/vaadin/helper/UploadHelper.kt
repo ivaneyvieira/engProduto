@@ -7,8 +7,8 @@ import com.vaadin.flow.component.upload.FileRejectedEvent
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 
-fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit) {
-  uploadFile(label) { buffer, upload ->
+fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit): Upload {
+  return uploadFile(label) { buffer, upload ->
     upload.addSucceededListener {
       val fileName = it.fileName ?: ""
       val bytes = buffer.getInputStream().readBytes()
@@ -21,7 +21,7 @@ fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: Byte
   }
 }
 
-private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Upload) -> Unit) {
+private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Upload) -> Unit): Upload {
   val buffer = MemoryBuffer()
   val upload = Upload(buffer)
   //upload.isDropAllowed = false
@@ -41,4 +41,6 @@ private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Uplo
   }
 
   block(buffer, upload)
+
+  return upload
 }

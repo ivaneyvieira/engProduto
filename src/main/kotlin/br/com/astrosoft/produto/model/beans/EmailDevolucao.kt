@@ -13,10 +13,14 @@ class EmailDevolucao(
   var enviado: Boolean = false,
   var htmlContent: String = ""
 ) {
-  private val anexos = mutableListOf<AnexoEmail>()
+  val anexos = mutableListOf<AnexoEmail>()
 
   fun addAnexo(anexo: AnexoEmail) {
     anexos.add(anexo)
+  }
+
+  fun removeAnexo(anexo: AnexoEmail) {
+    anexos.remove(anexo)
   }
 
   var toEmailList: Set<String>

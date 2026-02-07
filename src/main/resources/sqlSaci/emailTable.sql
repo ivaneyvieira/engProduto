@@ -19,6 +19,5 @@ CREATE TABLE sqldados.anexoEmail
   id          INTEGER PRIMARY KEY AUTO_INCREMENT,
   idEmail     INTEGER REFERENCES sqldados.emailDevolucao (id),
   nomeArquivo VARCHAR(255) NOT NULL DEFAULT '',
-  mimeType    VARCHAR(255) NOT NULL DEFAULT '',
   conteudo    BLOB
 );

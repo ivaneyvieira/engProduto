@@ -9,9 +9,10 @@ import com.github.mvysny.karibudsl.v10.html
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 object DialogHelper {
-  fun showForm(caption: String, form: FormLayout, runConfirm: () -> Unit ) {
+  fun showForm(caption: String, form: FormLayout, runConfirm: () -> Unit) {
     ConfirmDialog().apply {
       this.setHeader(caption)
       this.setText(form)
@@ -28,6 +29,18 @@ object DialogHelper {
   }
 
   fun showForm(caption: String, form: FormLayout) {
+    ConfirmDialog().apply {
+      this.setHeader(caption)
+      this.setText(form)
+      this.isCloseOnEsc = true
+      this.setConfirmText("Ok")
+      this.width = form.width
+      form.setWidthFull()
+      this.open()
+    }
+  }
+
+  fun showForm(caption: String, form: VerticalLayout) {
     ConfirmDialog().apply {
       this.setHeader(caption)
       this.setText(form)

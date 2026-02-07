@@ -1,42 +1,77 @@
 package br.com.astrosoft.produto.view.devForReceb
 
+import br.com.astrosoft.framework.view.vaadin.helper.upload
 import br.com.astrosoft.framework.view.vaadin.hugeRTE
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.bind
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.multiSelectListBox
+import com.github.mvysny.karibudsl.v10.horizontalLayout
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.label
-import com.vaadin.flow.component.formlayout.FormLayout
-import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
 
-class FormEmail(val email: EmailDevolucao) : FormLayout() {
+class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao) : VerticalLayout() {
   val binder = Binder(EmailDevolucao::class.java)
+  var listAnexos : HorizontalLayout? = null
 
   init {
     this.width = "60%"
     this.height = "60%"
-    this.setResponsiveSteps(ResponsiveStep("0", 1))
-    multiSelectListBox<String> {
+
+    this.textField {
       this.label = "Para"
-      this.bind(binder).bind(EmailDevolucao::toEmailList)
+      this.setWidthFull()
+      this.bind(binder).bind(EmailDevolucao::toEmail)
     }
 
-    textField("Assunto") {
+    this.textField("Assunto") {
+      this.setWidthFull()
       this.bind(binder).bind(EmailDevolucao::subject)
     }
 
-    button("Adicionar Anexos") {
-      this.icon = VaadinIcon.PAPERCLIP.create()
+    horizontalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.setWidthFull()
+
+      this.upload("Anexos") { fileName, dados ->
+        viewModel.addAnexo(email, fileName, dados)
+        updateListAnexos()
+      }.apply {
+        this.isDropAllowed = false
+      }
+      listAnexos = horizontalLayout {
+        this.isMargin = false
+        this.isPadding = false
+        this.isWrap = true
+      }
+
+      updateListAnexos()
     }
 
-    hugeRTE("Mensagem") {
+    this.hugeRTE("Mensagem") {
       this.setWidthFull()
       this.setHeightFull()
       this.bind(binder).bind(EmailDevolucao::htmlContent)
     }
 
     binder.readBean(email)
+  }
+
+  fun updateListAnexos() {
+    listAnexos?.removeAll()
+    email.anexos.forEach { anexo ->
+      val  badge = Span(anexo.nomeArquivoSimples)
+      badge.getElement().themeList.add("badge success")
+      listAnexos?.add(badge)
+
+      badge.onClick {
+        email.removeAnexo(anexo)
+        updateListAnexos()
+      }
+    }
   }
 }

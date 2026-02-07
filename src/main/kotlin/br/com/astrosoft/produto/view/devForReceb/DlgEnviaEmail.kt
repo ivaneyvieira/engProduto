@@ -22,13 +22,14 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
 
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
+      title = "E-mails enviados para o fornecedor ${nota.fornecedor}",
       toolBar = {
         button("Novo Email") {
           this.icon = VaadinIcon.ENVELOPE.create()
 
           onClick {
             val email = EmailDevolucao()
-            val form = FormEmail(email)
+            val form = FormEmail(viewModel, email)
             DialogHelper.showForm("Nova mensagem", form)
           }
         }

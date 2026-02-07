@@ -148,6 +148,16 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
   }
+
+  fun addAnexo(email: EmailDevolucao, fileName: String, dados: ByteArray) {
+    val anexo = AnexoEmail(
+      id = 0,
+      idEmail = email.id,
+      nomeArquivo = fileName,
+      conteudo = dados
+    )
+    email.addAnexo(anexo)
+  }
 }
 
 interface ITabNotaPedido : ITabView {
