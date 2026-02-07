@@ -126,6 +126,10 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       }
     }
 
+    addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { nota: NotaRecebimentoDev ->
+      DlgRepresentante().showDialogRepresentante(nota)
+    }
+
     addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
       dlgEMail = DlgEnviaEmail(viewModel, nota)
       dlgEMail?.showDialog {

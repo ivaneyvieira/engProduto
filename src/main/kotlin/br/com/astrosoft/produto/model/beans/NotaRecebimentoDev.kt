@@ -212,6 +212,11 @@ class NotaRecebimentoDev(
     }
   }
 
+  fun listRepresentantes(): List<Representante> {
+    val vendno = this.vendno ?: return emptyList()
+    return saci.representante(vendno)
+  }
+
   companion object {
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,
@@ -314,7 +319,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         transpNFDevolucao = nota.transpNFDevolucao,
         pesoNFBrutoDevolucao = nota.pesoNFBrutoDevolucao,
         pesoNFLiquidoDevolucao = nota.pesoNFLiquidoDevolucao,
-        nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000"}
+        nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000" }
       )
     }
   }
