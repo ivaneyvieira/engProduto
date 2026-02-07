@@ -5,9 +5,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.Representante
 import br.com.astrosoft.produto.model.beans.RepresentanteContato
+import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.treegrid.TreeGrid
 import com.vaadin.flow.data.renderer.ComponentRenderer
 
 class DlgRepresentante {
@@ -20,18 +22,37 @@ class DlgRepresentante {
     form.open()
   }
 
-  private fun createGridRepresentantes(listRepresentantes: List<Representante>): Grid<Representante> {
-    val gridDetail = Grid(Representante::class.java, false)
+  private fun createGridRepresentantes(listRepresentantes: List<Representante>): TreeGrid<Representante> {
+    val gridDetail = TreeGrid(Representante::class.java, false)
     return gridDetail.apply {
       addThemeVariants()
       isMultiSort = false
-      setItems(listRepresentantes)
-      columnGrid(Representante::nome, "Representante")
-      //columnGrid(Representante::telefone, "Telefone")
-      columnGrid(Representante::celular, "Celular")
-      columnGrid(Representante::email, "Email")
+      setItems(listRepresentantes, this@DlgRepresentante::getContatos)
 
-      this.setItemDetailsRenderer(createContatosRender())
+      addHierarchyColumn(Representante::nome).setHeader("Representante").apply {
+        this.isExpand = false
+        this.isAutoWidth = false
+        this.width = "25rem"
+      }
+      columnGrid(Representante::celular).setHeader("Telefone").apply {
+        this.isExpand = false
+        this.isAutoWidth = false
+        this.width = "12rem"
+      }
+      columnGrid(Representante::email, "Email")
+    }
+  }
+
+  private fun getContatos(representante: Representante): List<Representante> {
+    return representante.contatos.map {
+      Representante(
+        vendno = null,
+        nome = "",
+        telefone = "",
+        celular = it.telefone,
+        email = it.obsTel,
+        contatos = emptyList()
+      )
     }
   }
 
