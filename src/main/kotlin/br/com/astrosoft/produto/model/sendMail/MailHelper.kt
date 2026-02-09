@@ -8,6 +8,7 @@ import jakarta.mail.internet.*
 import jakarta.mail.util.ByteArrayDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.Normalizer
 import java.util.*
 
 // ---------------------------
@@ -116,7 +117,7 @@ private fun buildMessage(session: Session, request: EmailRequest): MimeMessage {
     request.anexos.forEach { anexo ->
       val attachmentPart = MimeBodyPart().apply {
         // Evita problemas com acentos no nome
-        fileName = MimeUtility.encodeText(anexo.filename, "UTF-8", null)
+        fileName = anexo.filename.removerAcentos()
 
         val ds: DataSource = ByteArrayDataSource(anexo.dados, anexo.mimeType)
         dataHandler = DataHandler(ds)
@@ -192,4 +193,9 @@ private fun findSmtpAddressFailed(ex: MessagingException): SMTPAddressFailedExce
     current = (current as? MessagingException)?.nextException
   }
   return null
+}
+
+fun String.removerAcentos(): String {
+  val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
+  return normalized.replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
 }

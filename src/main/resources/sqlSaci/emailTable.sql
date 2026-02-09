@@ -22,3 +22,7 @@ CREATE TABLE sqldados.anexoEmail
   nomeArquivo VARCHAR(255) NOT NULL DEFAULT '',
   conteudo    BLOB
 );
+
+
+ALTER TABLE sqldados.anexoEmail
+  MODIFY conteudo LONGBLOB;

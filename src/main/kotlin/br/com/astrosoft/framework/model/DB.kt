@@ -24,9 +24,10 @@ class DB(banco: String) {
     }
 
     private val prop = properties()
-    val gmailUser: String = prop.getProperty("gmailUser") ?: ""
-    val gmailPass: String = prop.getProperty("gmailPass") ?: ""
-    val gmailName: String = prop.getProperty("gmailName") ?: ""
+    val garantiaUser: String = prop.getProperty("garantiaUser") ?: ""
+    val garantiaPass: String = prop.getProperty("garantiaPass") ?: ""
+    val garantiaName: String = prop.getProperty("garantiaName") ?: ""
+    val garantiaCopy: String = prop.getProperty("garantiaCopy") ?: ""
     val test = prop.getProperty("test") == "true"
   }
 }

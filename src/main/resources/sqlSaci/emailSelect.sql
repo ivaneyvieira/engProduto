@@ -10,5 +10,6 @@ SELECT id,
        htmlContent
 FROM
   sqldados.emailDevolucao
+where chave = :chave
 
 

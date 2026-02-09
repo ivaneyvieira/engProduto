@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
+import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
@@ -181,6 +182,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     val email = EmailDevolucao()
     email.chave = nota.chaveEmail
     email.addAnexo(anexos)
+    email.ccEmailList = DB.garantiaCopy.split(",").map { it.trim() }.toSet()
     email.toEmailList = listaEmail.toSet()
     email.dataEmail = LocalDateTime.now()
     return email
@@ -191,6 +193,8 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       val request = EmailRequest(
         to = email.toEmailList.toList(),
         subject = email.subject,
+        cc = email.ccEmailList.toList(),
+        bcc = email.bccEmailList.toList(),
         htmlContent = email.htmlContent,
         anexos = email.anexos.map { anexoEmail ->
           Anexo(

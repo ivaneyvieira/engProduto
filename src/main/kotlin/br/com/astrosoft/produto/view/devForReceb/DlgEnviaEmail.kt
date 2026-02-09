@@ -66,7 +66,6 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
       columnGrid(EmailDevolucao::dataEmail, "Data")
       columnGrid(EmailDevolucao::subject, "Assunto")
       columnGrid(EmailDevolucao::temAnexos, "Anexos")
-
     }
     this.addAndExpand(gridDetail)
     update()

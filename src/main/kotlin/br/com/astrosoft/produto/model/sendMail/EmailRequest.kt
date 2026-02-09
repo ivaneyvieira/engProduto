@@ -9,7 +9,7 @@ class Anexo(
 data class EmailRequest(
   val smtp: SmtpCredentials = SmtpCredentials.default(),
 
-  val fromEmail: String = smtp.username,
+  val fromEmail: String = smtp.fromEmail,
 
   val to: List<String>,
   val cc: List<String> = emptyList(),
