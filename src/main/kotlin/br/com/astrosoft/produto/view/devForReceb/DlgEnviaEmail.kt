@@ -36,6 +36,10 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
         }
         button("Remover Email") {
           this.icon = VaadinIcon.TRASH.create()
+
+          onClick {
+            viewModel.removeEmail()
+          }
         }
         button("Reenviar") {
           this.icon = VaadinIcon.MAILBOX.create()

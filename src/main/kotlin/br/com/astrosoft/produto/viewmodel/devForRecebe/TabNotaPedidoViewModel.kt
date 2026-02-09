@@ -235,6 +235,21 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       enviaEmail(email)
     }
   }
+
+  fun removeEmail() {
+    val emailSelecionados = subView.emailSelecionados()
+
+    if (emailSelecionados.isEmpty()) {
+      fail("Nenhum e-mail selecionado")
+    }
+
+    emailSelecionados.forEach { email ->
+      email.dataEmail = LocalDateTime.now()
+      email.delete()
+    }
+
+    subView.updateEmails()
+  }
 }
 
 interface ITabNotaPedido : ITabView {
