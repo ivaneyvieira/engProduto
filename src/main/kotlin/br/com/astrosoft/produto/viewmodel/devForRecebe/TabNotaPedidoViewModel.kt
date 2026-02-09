@@ -223,7 +223,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     }
   }
 
-  fun reenviarEmail() = viewModel.exec{
+  fun reenviarEmail() = viewModel.exec {
     val emailSelecionados = subView.emailSelecionados()
 
     if (emailSelecionados.isEmpty()) {
@@ -243,12 +243,14 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       fail("Nenhum e-mail selecionado")
     }
 
-    emailSelecionados.forEach { email ->
-      email.dataEmail = LocalDateTime.now()
-      email.delete()
-    }
+    viewModel.view.showQuestion("Remover e-mails selecionados?") {
+      emailSelecionados.forEach { email ->
+        email.dataEmail = LocalDateTime.now()
+        email.delete()
+      }
 
-    subView.updateEmails()
+      subView.updateEmails()
+    }
   }
 }
 
