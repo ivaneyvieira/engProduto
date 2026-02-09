@@ -39,6 +39,10 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
         }
         button("Reenviar") {
           this.icon = VaadinIcon.MAILBOX.create()
+
+          onClick {
+            viewModel.reenviarEmail()
+          }
         }
       },
       onClose = {
@@ -71,7 +75,7 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
     update()
   }
 
-  fun produtosSelecionados(): List<EmailDevolucao> {
+  fun emailSelecionados(): List<EmailDevolucao> {
     return gridDetail.selectedItems.toList()
   }
 

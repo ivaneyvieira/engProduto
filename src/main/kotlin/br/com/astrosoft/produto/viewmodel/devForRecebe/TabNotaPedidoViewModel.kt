@@ -222,6 +222,19 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       }
     }
   }
+
+  fun reenviarEmail() = viewModel.exec{
+    val emailSelecionados = subView.emailSelecionados()
+
+    if (emailSelecionados.isEmpty()) {
+      fail("Nenhum e-mail selecionado")
+    }
+
+    emailSelecionados.forEach { email ->
+      email.dataEmail = LocalDateTime.now()
+      enviaEmail(email)
+    }
+  }
 }
 
 interface ITabNotaPedido : ITabView {
@@ -233,4 +246,5 @@ interface ITabNotaPedido : ITabView {
   fun notasSelecionadas(): List<NotaRecebimentoDev>
   fun updateProduto(): NotaRecebimentoDev?
   fun updateEmails()
+  fun emailSelecionados(): List<EmailDevolucao>
 }

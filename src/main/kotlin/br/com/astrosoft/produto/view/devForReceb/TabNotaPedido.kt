@@ -201,6 +201,10 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     dlgEMail?.updateEmail()
   }
 
+  override fun emailSelecionados(): List<EmailDevolucao> {
+    return dlgEMail?.emailSelecionados() ?: emptyList()
+  }
+
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
     dlgProduto?.showDialog {
