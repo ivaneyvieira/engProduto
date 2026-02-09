@@ -46,6 +46,7 @@ interface IView {
   fun showInformation(msg: String)
   fun showQuestion(msg: String, execYes: () -> Unit)
   fun showReport(chave: String, report: ByteArray)
+  fun execUI(block: () -> Unit)
   fun showPrintText(
     text: TextBuffer,
     showPrinter: Boolean = true,

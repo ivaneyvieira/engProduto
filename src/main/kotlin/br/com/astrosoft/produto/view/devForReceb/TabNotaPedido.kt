@@ -197,6 +197,10 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     return dlgProduto?.updateProduto()
   }
 
+  override fun updateEmails() {
+    dlgEMail?.updateEmail()
+  }
+
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaPedido(viewModel, nota)
     dlgProduto?.showDialog {

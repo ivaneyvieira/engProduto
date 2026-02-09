@@ -28,6 +28,22 @@ object DialogHelper {
     }
   }
 
+  fun showForm(caption: String, form: VerticalLayout, runConfirm: () -> Unit) {
+    ConfirmDialog().apply {
+      this.setHeader(caption)
+      this.setText(form)
+      this.setConfirmText("Confirma")
+      this.addConfirmListener {
+        runConfirm()
+      }
+      this.width = form.width
+      form.setWidthFull()
+      this.setCancelable(true)
+      this.setCancelText("Cancela")
+      this.open()
+    }
+  }
+
   fun showForm(caption: String, form: FormLayout) {
     ConfirmDialog().apply {
       this.setHeader(caption)

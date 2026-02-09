@@ -19,6 +19,10 @@ class EmailDevolucao(
     anexos.add(anexo)
   }
 
+  fun addAnexo(anexos: List<AnexoEmail>) {
+    anexos.forEach { addAnexo(it) }
+  }
+
   fun removeAnexo(anexo: AnexoEmail) {
     anexos.remove(anexo)
   }

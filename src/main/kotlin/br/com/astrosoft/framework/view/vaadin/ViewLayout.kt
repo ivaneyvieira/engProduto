@@ -13,6 +13,7 @@ import com.github.mvysny.karibudsl.v23.tab
 import com.github.mvysny.karibudsl.v23.tabSheet
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -27,12 +28,15 @@ import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.jvm.optionals.getOrNull
 
 abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLeaveObserver, BeforeEnterObserver,
   AfterNavigationObserver {
   abstract val viewModel: VM
+  private var uiCurrent: UI? = null
 
   init {
+    uiCurrent = ui.getOrNull()
     this.setSizeFull()
     this.isMargin = false
     this.isPadding = false
@@ -60,6 +64,12 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
         tabs.getOrNull(indexTab)?.updateComponent()
       if (tabs.size < indexTab)
         this.selectedIndex = indexTab
+    }
+  }
+
+  override fun execUI(block: () -> Unit) {
+    uiCurrent?.access {
+      block()
     }
   }
 

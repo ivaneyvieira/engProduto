@@ -27,7 +27,10 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
           onClick {
             val email = viewModel.emailDevolucao(nota)
             val form = FormEmail(viewModel, email)
-            DialogHelper.showForm("Nova mensagem", form)
+            DialogHelper.showForm("Nova mensagem", form){
+              val email = form.emailDevolucao()
+              viewModel.enviaEmail(email)
+            }
           }
         }
         button("Remover Email") {

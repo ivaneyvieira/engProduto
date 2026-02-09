@@ -7,6 +7,10 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
+import br.com.astrosoft.produto.model.sendMail.Anexo
+import br.com.astrosoft.produto.model.sendMail.EmailRequest
+import br.com.astrosoft.produto.model.sendMail.sendEmailAsync
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
 class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
@@ -111,7 +115,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     subView.updateProduto()
   }
 
-  override fun  updateAcertoProduto(produto: NotaRecebimentoProdutoDev){
+  override fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
     produto.updateAcertoProduto()
   }
 
@@ -164,11 +168,53 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
       it.email
     }.distinct()
 
+    val anexos = nota.listArquivos().map { file ->
+      AnexoEmail(
+        id = 0,
+        idEmail = 0,
+        nomeArquivo = file.fileName ?: "",
+        conteudo = file.file ?: byteArrayOf()
+      )
+    }
+
     val email = EmailDevolucao()
-
+    email.chave = nota.chaveEmail
+    email.addAnexo(anexos)
     email.toEmailList = listaEmail.toSet()
-
     return email
+  }
+
+  fun enviaEmail(email: EmailDevolucao) {
+    runBlocking {
+      val request = EmailRequest(
+        to = email.toEmailList.toList(),
+        subject = email.subject,
+        htmlContent = email.htmlContent,
+        anexos = email.anexos.map { anexoEmail ->
+          Anexo(
+            filename = anexoEmail.nomeArquivo,
+            mimeType = anexoEmail.mimeType,
+            dados = anexoEmail.conteudo
+          )
+        }
+      )
+      val result = sendEmailAsync(request)
+      result.onSuccess {
+        viewModel.view.execUI {
+          email.enviado = true
+          email.save()
+          subView.updateEmails()
+        }
+      }
+      result.onFailure {
+        viewModel.view.execUI {
+          email.enviado = false
+          email.save()
+          viewModel.view.showError(it.message ?: "Erro ao enviar e-mail")
+          subView.updateEmails()
+        }
+      }
+    }
   }
 }
 
@@ -180,4 +226,5 @@ interface ITabNotaPedido : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProdutoDev>
   fun notasSelecionadas(): List<NotaRecebimentoDev>
   fun updateProduto(): NotaRecebimentoDev?
+  fun updateEmails()
 }
