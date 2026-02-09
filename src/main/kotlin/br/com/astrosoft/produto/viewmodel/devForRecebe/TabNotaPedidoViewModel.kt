@@ -12,6 +12,7 @@ import br.com.astrosoft.produto.model.sendMail.EmailRequest
 import br.com.astrosoft.produto.model.sendMail.sendEmailAsync
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
@@ -181,6 +182,7 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
     email.chave = nota.chaveEmail
     email.addAnexo(anexos)
     email.toEmailList = listaEmail.toSet()
+    email.dataEmail = LocalDateTime.now()
     return email
   }
 

@@ -9,7 +9,9 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class QuerySaci : QueryDB(database) {
   fun findUser(login: String?): List<UserSaci> {
@@ -2960,6 +2962,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, LastKey::class) {
       addOptionalParameter("id", email.id)
       addOptionalParameter("chave", email.chave)
+      addOptionalParameter("dataEmail", email.dataEmail.toDataHoraMysql())
       addOptionalParameter("fromEmail", email.fromEmail)
       addOptionalParameter("toEmail", email.toEmail)
       addOptionalParameter("ccEmail", email.ccEmail)
@@ -3008,6 +3011,10 @@ class QuerySaci : QueryDB(database) {
       driver = db.driver, url = db.url, user = db.username, password = db.password
     )
   }
+}
+
+private fun LocalDateTime?.toDataHoraMysql(): String {
+  return this?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) ?: ""
 }
 
 val saci = QuerySaci()

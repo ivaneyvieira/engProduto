@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
@@ -60,6 +61,12 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
       removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
+
+      columnGrid(EmailDevolucao::toEmail, "E-mail")
+      columnGrid(EmailDevolucao::dataEmail, "Data")
+      columnGrid(EmailDevolucao::subject, "Assunto")
+      columnGrid(EmailDevolucao::temAnexos, "Anexos")
+
     }
     this.addAndExpand(gridDetail)
     update()

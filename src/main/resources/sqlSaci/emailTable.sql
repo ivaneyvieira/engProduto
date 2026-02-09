@@ -3,6 +3,7 @@ CREATE TABLE sqldados.emailDevolucao
 (
   id          INTEGER PRIMARY KEY AUTO_INCREMENT,
   chave       VARCHAR(30)   NOT NULL DEFAULT '',
+  dataEmail   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fromEmail   varchar(60)   NOT NULL DEFAULT '',
   toEmail     varchar(1000) NOT NULL DEFAULT '',
   ccEmail     varchar(1000) NOT NULL DEFAULT '',

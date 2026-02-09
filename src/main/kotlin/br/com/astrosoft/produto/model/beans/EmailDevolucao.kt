@@ -1,10 +1,13 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class EmailDevolucao(
   var id: Int = 0,
   var chave: String = "",
+  var dataEmail: LocalDateTime? = LocalDateTime.now(),
   var fromEmail: String = "",
   var toEmail: String = "",
   var ccEmail: String = "",
@@ -14,6 +17,9 @@ class EmailDevolucao(
   var htmlContent: String = ""
 ) {
   val anexos = mutableListOf<AnexoEmail>()
+
+  val temAnexos: Boolean
+    get() = anexos.isNotEmpty()
 
   fun addAnexo(anexo: AnexoEmail) {
     anexos.add(anexo)

@@ -36,7 +36,7 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
   private var uiCurrent: UI? = null
 
   init {
-    uiCurrent = ui.getOrNull()
+    uiCurrent = UI.getCurrent()
     this.setSizeFull()
     this.isMargin = false
     this.isPadding = false
