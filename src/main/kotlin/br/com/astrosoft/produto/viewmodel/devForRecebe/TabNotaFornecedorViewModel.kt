@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroFornecedor
 import br.com.astrosoft.produto.model.beans.FornecedorArquivo
 import br.com.astrosoft.produto.model.beans.FornecedorClass
+import br.com.astrosoft.produto.model.beans.Representante
 
 class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
   val subView
@@ -33,6 +34,11 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
     }
     subView.updateArquivos()
   }
+
+  fun saveEmail(rep: Representante) {
+    rep.saveEmail()
+    subView.updateRepresentante()
+  }
 }
 
 interface ITabNotaFornecedor : ITabView {
@@ -40,4 +46,5 @@ interface ITabNotaFornecedor : ITabView {
   fun updateFornecedor(fornecedore: List<FornecedorClass>)
   fun updateArquivos()
   fun arquivosSelecionados(): List<FornecedorArquivo>
+  fun updateRepresentante()
 }

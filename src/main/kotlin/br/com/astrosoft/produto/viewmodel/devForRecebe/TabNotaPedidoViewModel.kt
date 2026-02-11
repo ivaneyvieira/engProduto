@@ -166,8 +166,8 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
   }
 
   fun emailDevolucao(nota: NotaRecebimentoDev): EmailDevolucao {
-    val listaEmail = nota.listRepresentantes().map {
-      it.email
+    val listaEmail = nota.listRepresentantes().flatMap {
+      it.emailList
     }.distinct()
 
     val anexos = nota.listArquivos().map { file ->

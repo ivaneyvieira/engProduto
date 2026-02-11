@@ -23,6 +23,7 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
   private lateinit var edtPesquisa: TextField
   private var dlgArquivo: DlgArquivoFornecedor? = null
   private var dlgEdita: DlgEditaFornecedor? = null
+  private var dlgRepresentante: DlgFornecedor? = null
 
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
@@ -78,7 +79,8 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
     }
 
     addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { fornecedor ->
-      DlgFornecedor().showDialogRepresentante(fornecedor)
+      dlgRepresentante = DlgFornecedor(viewModel, fornecedor)
+      dlgRepresentante?.showDialogRepresentante()
     }
 
     columnGrid(FornecedorClass::no, header = "Forn", width = "3rem")
@@ -116,5 +118,9 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
 
   override fun arquivosSelecionados(): List<FornecedorArquivo> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
+  }
+
+  override fun updateRepresentante() {
+    dlgRepresentante?.update()
   }
 }

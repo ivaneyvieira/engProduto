@@ -2700,6 +2700,7 @@ class QuerySaci : QueryDB(database) {
     return contatos.groupBy { "${it.vendno} ${it.repno}" }.mapNotNull {
       val rep = it.value.firstOrNull() ?: return@mapNotNull null
       Representante(
+        repno = rep.repno,
         vendno = rep.vendno,
         nome = rep.nome,
         telefone = rep.telefone,
@@ -3001,6 +3002,14 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("mimeType", anexo.mimeType)
       addOptionalParameter("nomeArquivo", anexo.nomeArquivo)
       addOptionalParameter("conteudo", anexo.conteudo)
+    }
+  }
+
+  fun saveEmail(rep: Representante) {
+    val sql = "/sqlSaci/representanteSaveEmail.sql"
+    script(sql) {
+      addOptionalParameter("idEmail", rep.repno)
+      addOptionalParameter("emailList", rep.email)
     }
   }
 

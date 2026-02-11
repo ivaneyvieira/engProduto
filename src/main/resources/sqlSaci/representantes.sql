@@ -47,18 +47,19 @@ SELECT 4 AS numPhone, repno, TRIM(MID(ddd, 16, 5)) AS ddd, TRIM(MID(phone, 31, 1
 FROM
   T_REP;
 
-
 SELECT vendno,
        repno,
        nome,
        numPhone,
-       CONCAT(P.ddd, ' ', P.phone) AS telefone,
-       P.obs_tel                   AS obsTel,
-       email                       AS email,
-       celular                     AS celular
+       CONCAT(P.ddd, ' ', P.phone)                 AS telefone,
+       P.obs_tel                                   AS obsTel,
+       IF(A.emailList IS NULL, R.email, emailList) AS email,
+       celular                                     AS celular
 FROM
-  T_REP                    AS R
-    INNER JOIN T_REP_PHONE AS P
+  T_REP                              AS R
+    INNER JOIN T_REP_PHONE           AS P
+               USING (repno)
+    LEFT JOIN  sqldados.repAdicional AS A
                USING (repno)
 WHERE P.phone > 0
 ORDER BY vendno, repno, numPhone

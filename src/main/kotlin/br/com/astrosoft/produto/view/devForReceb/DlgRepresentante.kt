@@ -48,6 +48,7 @@ class DlgRepresentante {
   private fun getContatos(representante: Representante): List<Representante> {
     return representante.contatos.map {
       Representante(
+        repno = null,
         vendno = null,
         nome = "",
         telefone = "",
