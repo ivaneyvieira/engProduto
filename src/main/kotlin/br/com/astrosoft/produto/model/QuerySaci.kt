@@ -111,6 +111,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("bitAcesso3", user.bitAcesso3)
       addOptionalParameter("loja", user.storeno)
       addOptionalParameter("appName", appName)
+      addOptionalParameter("senha", user.senha)
       addOptionalParameter("locais", user.locais)
       addOptionalParameter("listaImpressora", user.listaImpressora)
       addOptionalParameter("listaLoja", user.listaLoja)

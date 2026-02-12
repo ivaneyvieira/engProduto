@@ -9,12 +9,14 @@ import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.ETipoRota
 import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.passwordField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
+import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -96,6 +98,8 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
   abstract fun FormUsuario.configFields()
 
   private fun FormUsuario.configFieldsDefault(isReadOnly: Boolean) {
+    setResponsiveSteps(FormLayout.ResponsiveStep("0", 3))
+
     textField("Login do Usuário") {
       this.isReadOnly = isReadOnly
       this.width = "300px"
@@ -106,6 +110,11 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       this.width = "300px"
       this.isReadOnly = true
       binder.bind(this, UserSaci::name.name)
+    }
+    passwordField("Senha") {
+      this.isReadOnly = isReadOnly
+      this.width = "8rem"
+      binder.bind(this, UserSaci::senha.name)
     }
   }
 
