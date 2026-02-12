@@ -20,11 +20,11 @@ abstract class AppLayoutAbstract : AppLayout() {
         this.isPadding = false
       }
       horizontalLayout {
-        this.isMargin = true
+        this.isMargin = false
         this.isPadding = false
         this.isSpacing = true
 
-        button("Senha") {
+        button("Alterar senha") {
           onClick {
             DlgAlteraSenha().show()
           }
@@ -33,6 +33,11 @@ abstract class AppLayoutAbstract : AppLayout() {
           onClick {
             LoginService.get().logout()
           }
+        }
+        horizontalLayout {
+          width = "0.25rem"
+          this.isMargin = false
+          this.isPadding = false
         }
       }
     }
