@@ -1304,6 +1304,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, NotaRecebimentoProdutoDev::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("pago", filtro.pago)
       addOptionalParameter("situacaoDev", situacaoDev)
     }
   }

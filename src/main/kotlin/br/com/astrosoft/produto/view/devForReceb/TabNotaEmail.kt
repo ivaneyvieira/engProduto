@@ -7,11 +7,13 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEmail
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEmailViewModel
 import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -26,6 +28,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
   private var dlgArquivo: DlgArquivoNotaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var chkPago: Checkbox
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -55,6 +58,13 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
       addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    chkPago = checkBox("Pago") {
+      this.value = false
+      this.addValueChangeListener {
         viewModel.updateView()
       }
     }
@@ -127,6 +137,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      pago = chkPago.value ?: true
     )
   }
 

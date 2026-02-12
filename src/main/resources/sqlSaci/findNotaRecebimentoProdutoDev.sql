@@ -484,7 +484,8 @@ FROM
     LEFT JOIN T_NOTA_SAIDA AS N
               ON (N.niDev = Q.numeroDevolucao)
     LEFT JOIN T_DUP        AS D
-              ON Q.ni = D.invno;
+              ON Q.ni = D.invno
+WHERE ((:pago = TRUE) OR (N.notaDevolucao IS NULL));
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT2;
 CREATE TEMPORARY TABLE T_RESULT2
