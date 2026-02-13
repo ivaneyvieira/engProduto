@@ -20,6 +20,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     return Loja.allLojas()
   }
 
+
   fun updateView() = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
 

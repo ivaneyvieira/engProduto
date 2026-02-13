@@ -1,12 +1,27 @@
-SELECT TRIM(prdno)                           AS codigo,
-       prdno                                 AS prdno,
-       TRIM(MID(prd.name, 1, 37))            AS descricao,
-       grade                                 AS grade,
-       ((qtty_varejo + qtty_atacado) / 1000) AS saldo
+USE sqldados;
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT no AS prdno, IFNULL(grade, '') AS grade, TRIM(MID(P.name, 1, 37)) AS descricao
 FROM
-  sqldados.stk
-    INNER JOIN sqldados.prd
-               ON prd.no = stk.prdno
-WHERE storeno = :loja
-  AND prdno = LPAD(:codigo, 16, ' ')
+  sqldados.prd                AS P
+    LEFT JOIN sqldados.prdbar AS B
+              ON P.no = B.prdno
+WHERE P.no = LPAD(:codigo, 16, ' ')
+GROUP BY IFNULL(B.grade, '');
+
+SELECT TRIM(P.prdno)                                             AS codigo,
+       P.prdno                                                   AS prdno,
+       P.descricao                                               AS descricao,
+       P.grade                                                   AS grade,
+       ROUND(IFNULL((S.qtty_varejo + S.qtty_atacado) / 1000, 0)) AS saldo
+FROM
+  T_PRD                    AS P
+    LEFT JOIN sqldados.stk AS S
+              ON S.prdno = P.prdno
+                AND S.grade = P.grade
+                AND S.storeno = :loja
 GROUP BY prdno, grade

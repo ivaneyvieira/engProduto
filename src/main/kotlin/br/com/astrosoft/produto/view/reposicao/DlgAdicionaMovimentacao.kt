@@ -89,6 +89,7 @@ class DlgAdicionaMovimentacao(
         this.grade = linha.grade
         this.gravadoLogin = user?.no
         this.gravado = acerto.gravado
+        this.movimentacao = linha.movimentacao ?: 0
       }
     }
 
@@ -106,7 +107,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
   private var edtCodigo: TextField
   private var edtDescricao: TextField
   private var edtGrade: Select<String>
-  private var edtDiferenca: IntegerField
+  private var edtMovimentacao: IntegerField
 
   init {
     this.isPadding = false
@@ -134,7 +135,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
           if (produtos.size > 1) {
             edtGrade.focus()
           } else {
-            edtDiferenca.focus()
+            edtMovimentacao.focus()
           }
         }
       }
@@ -150,7 +151,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
       this.width = "120px"
     }
 
-    edtDiferenca = integerField("Diferença") {
+    edtMovimentacao = integerField("Movimentação") {
       this.width = "100px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -165,6 +166,8 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     get() = produtos.firstOrNull {
       it.grade == edtGrade.value
     }?.saldo
+  val movimentacao: Int?
+    get() = edtMovimentacao.value
 
   fun focus() {
     edtCodigo.focus()
