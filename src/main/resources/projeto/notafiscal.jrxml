@@ -1606,7 +1606,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[BASE CÁLC ICMS]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="111" height="12" uuid="852233ae-822b-4965-9fc0-066f3c3a4fbc">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1643,7 +1643,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR ICMS]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="111" height="12" uuid="a5ad55f1-e38e-472f-ba8f-0957d6597cc4">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1680,7 +1680,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[BASE CÁLC ICMS ST]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="111" height="12" uuid="6e166742-57e3-46d3-bb8b-7accdf339516">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1717,7 +1717,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR ICMS ST]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="111" height="12" uuid="edeb393e-18d2-4cfa-aecc-3ad9458aabd6">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1747,7 +1747,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[TOTAL DOS PRODUTOS]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="111" height="12" uuid="87ef6614-4b98-40e6-b409-7efc4cd1933e">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1797,7 +1797,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR FRETE]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="95" height="12" uuid="57f56616-0d62-49b1-a783-c94b8ba5df7e">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1834,7 +1834,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR SEGURO]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="8c8e283e-e1b8-4882-9075-7562f0aaa57f">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1871,7 +1871,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR DESCONTO]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="fc326137-8dbd-407a-930f-510c2324f0b0">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1908,7 +1908,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[OUTRAS DESP]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="9c387a09-8375-4883-8568-0341dfeba64c">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1938,7 +1938,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[VALOR IPI]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="b0f50dfd-19f5-4e56-887c-401d789bfdd6">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -1968,7 +1968,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[TOTAL DA NOTA]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="b07d4658-702f-422a-958e-f02fa904da6c">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -2558,7 +2558,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[PESO BRUTO]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="20e9df27-bc08-4fd5-8fe7-ac51950ac76f">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -2595,7 +2595,7 @@ $F{cepEmitente} + " " + $F{cidadeEmitente} + " - " + $F{ufEmitente} + "\n" +
 							</reportElement>
 							<text><![CDATA[PESO LÍQUIDO]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="92" height="12" uuid="ca2d5faf-8c16-468f-850a-193ff9e4b3a1">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -3199,7 +3199,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="33" height="8" uuid="461f8525-013d-4b4f-91e4-e666fc4b930e">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f4e7cc5-0b78-4e19-b70f-965bb98c6112"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3239,7 +3239,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="32" height="8" uuid="255d0664-b4d8-4885-a6c5-cc1e6c620c20">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="38e7a9f0-6dd6-40ad-9e51-1d301bf99126"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3279,7 +3279,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="32" height="8" uuid="88d30801-8137-499c-9045-08e4dd205cdf">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d90503e6-c7ed-4103-b2c0-6601ff5b2e78"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3319,7 +3319,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="32" height="8" uuid="ebdab909-8a6f-4da2-8652-46665bef1c1b">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9bc9fbeb-87ba-40a4-a684-7fba6d29c222"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3359,7 +3359,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="32" height="8" uuid="4f1c0856-85c0-45a6-b1ff-1dae6f29f5ea">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="648c664f-ceeb-4a4d-aaab-915767e0ceb8"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3399,7 +3399,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="32" height="8" uuid="39d9bd33-7d52-43d1-909e-212dfe9b7781">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 							<property name="com.jaspersoft.layout.grid.x" value="-1"/>
@@ -3439,7 +3439,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="17" height="8" uuid="486c247f-44f7-4a40-af4e-b46d5a7a6282">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 						</reportElement>
@@ -3472,7 +3472,7 @@ PRODUTO]]></text>
 						<bottomPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 						<rightPen lineWidth="0.75" lineStyle="Dotted" lineColor="#000000"/>
 					</box>
-					<textField textAdjust="StretchHeight" pattern="#,##0.00#;#,##0.00#-">
+					<textField textAdjust="StretchHeight" pattern="#,##0.00;#,##0.00-">
 						<reportElement style="fontLabel" x="0" y="0" width="17" height="8" uuid="039a8b9c-07af-4342-acea-cb3aecffcbbe">
 							<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2923aacb-7dc6-48f0-890c-906b66c75fff"/>
 						</reportElement>
@@ -3682,7 +3682,7 @@ PRODUTO]]></text>
 							</reportElement>
 							<text><![CDATA[VALOR TOTAL DOS SERVIÇOS]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="138" height="12" uuid="3e27f712-0c31-48a5-b240-65c2b4708371">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -3715,7 +3715,7 @@ PRODUTO]]></text>
 							</reportElement>
 							<text><![CDATA[BASE DE CALCULO DO ISSQN]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="138" height="12" uuid="271e23f9-4612-483d-b85b-553b682ced58">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>
@@ -3748,7 +3748,7 @@ PRODUTO]]></text>
 							</reportElement>
 							<text><![CDATA[VALOR DO ISSQN]]></text>
 						</staticText>
-						<textField pattern="#,##0.00#;#,##0.00#-">
+						<textField pattern="#,##0.00;#,##0.00-">
 							<reportElement style="fontValor" x="0" y="8" width="138" height="12" uuid="fb38af1e-ca54-487d-9b4e-6df11112dd70">
 								<property name="com.jaspersoft.layout.grid.x" value="0"/>
 								<property name="com.jaspersoft.layout.grid.y" value="1"/>

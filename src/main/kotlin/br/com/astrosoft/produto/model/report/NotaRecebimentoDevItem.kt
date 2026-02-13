@@ -6,12 +6,13 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
 import br.com.astrosoft.produto.model.saci
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalTime
 
 class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev) : IItensNotaReport {
   val loja = saci.findLoja(nota.loja)
   val fornecedor = saci.findFornecedor(nota.vendno)
-  val transportadora = saci.findTransportadora(nota.transp ?: 0)
+  val transportadora = saci.findTransportadora(nota.transpDevolucao ?: 0) ?: saci.findTransportadora(nota.transp ?: 0)
 
   override val tituloRelatorio: String
     get() = "Espelho de Nota Fiscal de Devolução - Ped ${nota.numeroDevolucao}"
@@ -53,7 +54,10 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val cnpjCpfDestinatario: String
     get() = fornecedor?.cgc ?: ""
   override val dataEmissao: String
-    get() = nota.emissaoDevolucao.format()
+    get() {
+      val data = nota.emissaoDevolucao ?: LocalDate.now()
+      return data.format()
+    }
   override val enderecoDestinatario: String
     get() = fornecedor?.addr ?: ""
   override val bairroDestinatario: String
@@ -99,7 +103,9 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val vlNota: BigDecimal
     get() = BigDecimal(nota.valorTotalNota)
   override val nomeTransportadora: String
-    get() = nota.transportadora ?: ""
+    get() {
+      return transportadora?.nome ?: ""
+    }
   override val fretePorConta: String
     get() = ""
   override val codigoANTT: String
@@ -177,5 +183,5 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val valorISSQN: BigDecimal
     get() = BigDecimal(0)
   override val informacoesComplementares: String
-    get() =  nota.observacaoAdicional ?: nota.observacaoDev ?: ""
+    get() = nota.observacaoAdicional ?: nota.observacaoDev ?: ""
 }
