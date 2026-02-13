@@ -187,6 +187,7 @@ class UserSaci : IUser {
   var controleCD by DelegateAuthorized3(155)
   var notaRessuprimento by DelegateAuthorized3(156)
   var liberaImpressao by DelegateAuthorized3(157)
+  var reposicaoMov by DelegateAuthorized3(158)
 
   //Locais
   private var localEstoque: String?
@@ -590,15 +591,18 @@ class UserSaci : IUser {
     }
 
   var reposicao
-    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || admin
+    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoMov || admin
     set(value) {
       reposicaoSep = value
       reposicaoEnt = value
       reposicaoAcerto = value
       reposicaoRetorno = value
+      reposicaoMov = value
     }
+
   val pedido
     get() = pedidoCD || pedidoEnt || admin
+
   var pedidoTransf
     get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt ||
             pedidoTransfAutorizada || pedidoTransfCD5A || admin

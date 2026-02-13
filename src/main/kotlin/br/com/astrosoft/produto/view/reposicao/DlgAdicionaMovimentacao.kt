@@ -81,19 +81,13 @@ class DlgAdicionaMovimentacao(
       produto.apply {
         this.numero = acerto.numero
         this.numloja = acerto.numloja
-        this.acertoSimples = true
         this.data = acerto.data
         this.hora = acerto.hora
         this.login = acerto.login
         this.usuario = acerto.usuario
         this.prdno = linha.prdno
         this.grade = linha.grade
-        this.estoqueSis = linha.saldo
-        this.diferenca = linha.diferenca
-        this.processado = false
-        this.transacao = null
         this.gravadoLogin = user?.no
-        this.observacao = acerto.observacaoAcerto
         this.gravado = acerto.gravado
       }
     }
@@ -167,8 +161,6 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     get() = produtos.firstOrNull()?.prdno
   val grade: String?
     get() = edtGrade.value
-  val diferenca: Int?
-    get() = edtDiferenca.value
   val saldo: Int?
     get() = produtos.firstOrNull {
       it.grade == edtGrade.value

@@ -2163,6 +2163,21 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun moviumentacaoNova(numero: Int, numLoja: Int): ProdutoMovimentacao? {
+    val sql = "/sqlSaci/produtoMovimentacaoNova.sql"
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    return query(sql, ProdutoMovimentacao::class) {
+      addOptionalParameter("numLoja", numLoja)
+      addOptionalParameter("numero", numero)
+      addOptionalParameter("login", user?.login ?: "")
+      addOptionalParameter("usuario", user?.name ?: "")
+      addOptionalParameter("data", LocalDate.now().toSaciDate())
+      addOptionalParameter("hora", LocalTime.now().toSecondOfDay())
+    }.firstOrNull()
+  }
+
   fun garantiaNovo(numero: Int, numLoja: Int): ProdutoPedidoGarantia? {
     val sql = "/sqlSaci/produtoEstoqueGarantiaNovo.sql"
 
@@ -2228,14 +2243,9 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
       addOptionalParameter("login", produto.login)
-      addOptionalParameter("acertoSimples", produto.acertoSimples)
       addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("estoqueSis", produto.estoqueSis)
-      addOptionalParameter("estoqueCD", produto.estoqueCD)
-      addOptionalParameter("estoqueLoja", produto.estoqueLoja)
-      addOptionalParameter("diferenca", produto.diferenca)
       addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
       addOptionalParameter("gravado", produto.gravado ?: false)
     }
@@ -2275,7 +2285,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
-      addOptionalParameter("simples", filtro.simples)
     }
   }
 
@@ -2397,15 +2406,6 @@ class QuerySaci : QueryDB(database) {
 
   fun updateAcerto(acertoEstoque: EstoqueAcerto) {
     val sql = "/sqlSaci/produtoObservacaoAcertoUpdate.sql"
-    script(sql) {
-      addOptionalParameter("numloja", acertoEstoque.numloja)
-      addOptionalParameter("numero", acertoEstoque.numero)
-      addOptionalParameter("observacao", acertoEstoque.observacaoAcerto)
-    }
-  }
-
-  fun updateMovimentacao(acertoEstoque: Movimentacao) {
-    val sql = "/sqlSaci/produtoObservacaoMovimentacaoUpdate.sql"
     script(sql) {
       addOptionalParameter("numloja", acertoEstoque.numloja)
       addOptionalParameter("numero", acertoEstoque.numero)

@@ -8,8 +8,7 @@ FROM
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
-  AND (data <= :dataFinal OR :dataFinal = 0)
-  AND (IFNULL(acertoSimples, FALSE) = :simples);
+  AND (data <= :dataFinal OR :dataFinal = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -55,7 +54,6 @@ SELECT numero,
        hora,
        login,
        usuario,
-       acertoSimples,
        A.prdno,
        TRIM(MID(P.name, 1, 37)) AS descricao,
        A.grade,
@@ -63,22 +61,14 @@ SELECT numero,
        L.locApp,
        B.codbar                 AS barcode,
        TRIM(P.mfno_ref)         AS ref,
-       estoqueSis,
-       estoqueCD,
-       diferenca,
-       estoqueLoja,
-       processado,
-       transacao,
        gravadoLogin,
        gravado,
-       O.observacao
+       movimentacao
 FROM
   T_ACERTO                            AS A
     LEFT JOIN T_BARCODE               AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN sqldados.produtoObservacaoAcerto AS O
-              USING (numero, numloja)
     LEFT JOIN sqldados.store          AS S
               ON S.no = A.numloja
     LEFT JOIN sqldados.prd            AS P

@@ -5,14 +5,11 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.estoqueCD.DlgEstoqueAcertoSimples
-import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaAcerto
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueAcertoSimples
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueAcertoSimplesViewModel
+import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoMov
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
-import com.github.mvysny.kaributools.getColumnBy
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -20,12 +17,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.open.App
 import java.time.LocalDate
 
-class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
-  TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoSimples {
-  private var dlgEstoque: DlgEstoqueAcertoSimples? = null
+class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
+  TabPanelGrid<Movimentacao>(Movimentacao::class), ITabReposicaoMov {
+  private var dlgEstoque: DlgReposicaoMov? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -80,13 +76,6 @@ class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
       }
     }
 
-    button("Cancelar") {
-      this.icon = VaadinIcon.CLOSE.create()
-      onClick {
-        viewModel.cancelarAcerto()
-      }
-    }
-
     button("Novo Pedido") {
       this.icon = VaadinIcon.NOTEBOOK.create()
       onClick {
@@ -96,50 +85,34 @@ class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     }
   }
 
-  override fun Grid<EstoqueAcerto>.gridPanel() {
+  override fun Grid<Movimentacao>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
-    this.withEditor(
-      classBean = EstoqueAcerto::class,
-      openEditor = {
-        val edit = getColumnBy(EstoqueAcerto::observacaoAcerto) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.updateAcerto(it.bean)
-      })
-
-    columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
-    columnGrid(EstoqueAcerto::numero, header = "Acerto")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
-      dlgEstoque = DlgEstoqueAcertoSimples(viewModel, acerto)
+    columnGrid(Movimentacao::lojaSigla, header = "Loja")
+    columnGrid(Movimentacao::numero, header = "Pedido")
+    addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { pedido ->
+      dlgEstoque = DlgReposicaoMov(viewModel, pedido)
       dlgEstoque?.showDialog {
         viewModel.updateView()
       }
     }
-    columnGrid(EstoqueAcerto::data, header = "Data")
-    columnGrid(EstoqueAcerto::hora, header = "Hora")
-    columnGrid(EstoqueAcerto::login, header = "Usuário", width = "7rem")
-    columnGrid(EstoqueAcerto::transacaoEnt, header = "Trans Ent")
-    columnGrid(EstoqueAcerto::transacaoSai, header = "Trans Sai")
-    columnGrid(EstoqueAcerto::gravadoStr, header = "Gravado").center()
-    columnGrid(EstoqueAcerto::gravadoLoginStr, header = "Usuário", width = "20rem")
-    columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
-    columnGrid(EstoqueAcerto::movimentacao, header = "Movimentação", width = "8rem")
-    columnGrid(EstoqueAcerto::observacaoAcerto, header = "Observação", isExpand = true).textFieldEditor()
+    columnGrid(Movimentacao::data, header = "Data")
+    columnGrid(Movimentacao::hora, header = "Hora")
+    columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
+    columnGrid(Movimentacao::gravadoStr, header = "Gravado").center()
+    columnGrid(Movimentacao::gravadoLoginStr, header = "Usuário", width = "20rem")
   }
 
-  override fun filtro(): FiltroAcerto {
-    return FiltroAcerto(
+  override fun filtro(): FiltroMovimentacao {
+    return FiltroMovimentacao(
       numLoja = cmbLoja.value?.no ?: 0,
       numero = edtNumero.value ?: 0,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
-      simples = true,
     )
   }
 
-  override fun updateProduto(produtos: List<EstoqueAcerto>) {
+  override fun updateProduto(produtos: List<Movimentacao>) {
     updateGrid(produtos)
     dlgEstoque?.update()
   }
@@ -167,9 +140,9 @@ class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     )
   }
 
-  override fun autorizaAcerto(block: (IUser) -> Unit) {
-    val form = FormAutorizaAcerto()
-    DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
+  override fun autorizaPedido(block: (IUser) -> Unit) {
+    val form = FormAutorizaPedido()
+    DialogHelper.showForm(caption = "Autoriza gravação do pedido", form = form) {
       val user = AppConfig.findUser(form.login, form.senha)
       if (user != null) {
         block(user)
@@ -179,12 +152,12 @@ class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     }
   }
 
-  override fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
+  override fun produtosSelecionado(): List<ProdutoMovimentacao> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
 
-  override fun adicionaAcerto(acerto: EstoqueAcerto) {
-    val list = gridPanel.dataProvider.fetchAll() + acerto
+  override fun adicionaPedido(pedido: Movimentacao) {
+    val list = gridPanel.dataProvider.fetchAll() + pedido
     updateGrid(list)
   }
 
@@ -198,11 +171,11 @@ class TabReposicaoMov(val viewModel: TabEstoqueAcertoSimplesViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueAcertoSimples == true
+    return username?.reposicaoMov == true
   }
 
   override val label: String
-    get() = "Acerto 2"
+    get() = "Movimentação"
 
   override fun updateComponent() {
     viewModel.updateView()

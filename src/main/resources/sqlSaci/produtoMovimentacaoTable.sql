@@ -22,3 +22,28 @@ CREATE TABLE sqldados.produtoMovimentacao
   ENGINE = MyISAM
   CHARSET = latin1;
 
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN transacao;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN processado;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN acertoSimples;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN estoqueCD;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN estoqueLoja;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN estoqueSis;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN diferenca;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN movimentacao int DEFAULT 0 NULL;
+
+

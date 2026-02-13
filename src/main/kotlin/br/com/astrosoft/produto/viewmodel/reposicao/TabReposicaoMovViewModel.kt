@@ -5,16 +5,11 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoqueAcerto
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaAcerto
-import br.com.astrosoft.produto.model.printText.PrintProdutosConferenciaEstoque
-import br.com.astrosoft.produto.model.report.ReportAcerto
 import br.com.astrosoft.produto.model.saci
-import br.com.astrosoft.produto.viewmodel.estoqueCD.EstoqueCDViewModel
 
-class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
+class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   val subView
-    get() = viewModel.view.tabEstoqueAcertoSimples
+    get() = viewModel.view.tabReposicaoMov
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -29,7 +24,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupa().sortedBy { it.numero }.filter {
+    val produtos = ProdutoMovimentacao.findAll(filtro).agrupa().sortedBy { it.numero }.filter {
       if (user == null) {
         return@filter true
       }
@@ -43,73 +38,17 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     subView.updateProduto(produtos)
   }
 
-  fun imprimirPedido(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos = acerto.findProdutos(true)
-
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    val report = PrintProdutosConferenciaEstoque("Pedido de acerto: ${acerto.numero}")
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview()
-    )
-  }
-
-  fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
-    val produtos = acerto.findProdutos(true).filter {
-      (it.diferencaAcerto ?: 0) != 0
-    }.sortedBy { it.diferencaAcerto ?: 999999 }
-    if (produtos.isEmpty()) {
-      fail("Nenhum produto válido selecionado")
-    }
-
-    val report = PrintProdutosConferenciaAcerto()
-
-    report.print(
-      dados = produtos, printer = subView.printerPreview()
-    )
-  }
-
-  fun cancelarAcerto() = viewModel.exec {
-    val itensSelecionado = subView.itensSelecionados().filter {
-      it.processado == false
-    }
-    if (itensSelecionado.isEmpty()) {
-      fail("Nenhum acerto não processado selecionado")
-    }
-    viewModel.view.showQuestion("Confirma o cancelamento do acerto selecionado?") {
-      itensSelecionado.forEach {
-        it.cancela()
-      }
-      updateView()
-    }
-  }
-
-  fun imprimirRelatorio(acerto: EstoqueAcerto) {
-    val produtos = acerto.findProdutos(true)
-    val report = ReportAcerto()
-    val file = report.processaRelatorio(produtos)
-    viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
-  }
-
-  fun geraPlanilha(produtos: List<ProdutoEstoqueAcerto>): ByteArray {
-    val planilha = PlanilhaProdutoEstoqueAcerto()
-    return planilha.write(produtos)
-  }
-
-  fun updateProduto(produto: ProdutoEstoqueAcerto) = viewModel.exec {
+  fun updateProduto(produto: ProdutoMovimentacao) = viewModel.exec {
     produto.save()
   }
 
-  fun gravaAcerto(acerto: EstoqueAcerto) = viewModel.exec {
-    if (acerto.gravado == true) {
-      fail("Acerto já gravado")
+  fun gravaPedido(pedido: Movimentacao) = viewModel.exec {
+    if (pedido.gravado == true) {
+      fail("Pedido já gravado")
     }
-    subView.autorizaAcerto { user ->
+    subView.autorizaPedido { user ->
       subView.gravaSelecao()
-      val pordutos = acerto.findProdutos(true)
+      val pordutos = pedido.findProdutos()
       pordutos.forEach {
         it.gravadoLogin = user.no
         it.gravado = true
@@ -120,18 +59,14 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun removeAcerto() = viewModel.exec {
+  fun removePedido() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
 
     itensSelecionado.ifEmpty {
-      fail("Nenhum acerto selecionado")
+      fail("Nenhum Pedido selecionado")
     }
 
-    if (itensSelecionado.any { it.processado == true }) {
-      fail("Acerto está processado")
-    }
-
-    subView.autorizaAcerto {
+    subView.autorizaPedido {
       itensSelecionado.forEach { produto ->
         produto.remove()
       }
@@ -139,7 +74,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     }
   }
 
-  fun addProduto(produto: ProdutoEstoqueAcerto) {
+  fun addProduto(produto: ProdutoMovimentacao) {
     produto.save()
     updateView()
   }
@@ -148,63 +83,52 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     return saci.findGrades(codigo, loja)
   }
 
-  fun updateAcerto(bean: EstoqueAcerto?) = viewModel.exec {
-    bean ?: fail("Nenhum produto selecionado")
-    bean.save()
-    updateView()
-  }
-
   fun findFornecedor(vendno: Int?): Fornecedor? {
     vendno ?: return null
     return Fornecedor.findByVendno(vendno)
   }
 
-  fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
-    ProdutoEstoqueAcerto.updateProduto(produtos)
+  fun updateProduto(produtos: List<ProdutoMovimentacao>) {
+    ProdutoMovimentacao.updateProduto(produtos)
   }
 
   fun novoPedido(numLoja: Int) = viewModel.exec {
     if (numLoja == 0) {
       fail("Selecione uma loja")
     }
-    val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido de acerto")
-    val acerto = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de acerto")
-    subView.adicionaAcerto(acerto)
+    val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido")
+    val pedido = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de pedido")
+    subView.adicionaPedido(pedido)
   }
 
-  private fun createPedido(numLoja: Int): ProdutoEstoqueAcerto? {
+  private fun createPedido(numLoja: Int): ProdutoMovimentacao? {
     val user = AppConfig.userLogin()
-    val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
-    val novo = saci.acertoNovo(numero, numLoja) ?: return null
+    val numero = ProdutoMovimentacao.proximoNumero(numLoja)
+    val novo = saci.moviumentacaoNova(numero, numLoja) ?: return null
 
-    return ProdutoEstoqueAcerto(
+    return ProdutoMovimentacao(
       numero = novo.numero,
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
       data = novo.data,
       hora = novo.hora,
       login = user?.login,
-      acertoSimples = true,
       usuario = user?.name,
       prdno = null,
       descricao = null,
       grade = null,
-      estoqueSis = null,
-      estoqueCD = null,
-      estoqueLoja = null,
-      observacao = null,
     )
   }
 }
 
-interface ITabEstoqueAcertoSimples : ITabView {
-  fun filtro(): FiltroAcerto
-  fun updateProduto(produtos: List<EstoqueAcerto>)
-  fun itensSelecionados(): List<EstoqueAcerto>
+interface ITabReposicaoMov : ITabView {
+  fun filtro(): FiltroMovimentacao
+  fun updateProduto(produtos: List<Movimentacao>)
+  fun itensSelecionados(): List<Movimentacao>
   fun filtroVazio(): FiltroProdutoEstoque
-  fun autorizaAcerto(block: (user: IUser) -> Unit)
-  fun produtosSelecionado(): List<ProdutoEstoqueAcerto>
-  fun adicionaAcerto(acerto: EstoqueAcerto)
+  fun autorizaPedido(block: (user: IUser) -> Unit)
+  fun produtosSelecionado(): List<ProdutoMovimentacao>
+  fun adicionaPedido(movimentacao: Movimentacao)
   fun gravaSelecao()
   fun closeForm()
 }

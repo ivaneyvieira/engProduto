@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -14,63 +13,19 @@ class ProdutoMovimentacao(
   var login: String? = null,
   var codFor: Int? = null,
   var usuario: String? = null,
-  var acertoSimples: Boolean? = false,
   var prdno: String? = null,
   var descricao: String? = null,
   var locApp: String? = null,
   var barcode: String? = null,
   var ref: String? = null,
   var grade: String? = null,
-  var estoqueSis: Int? = null,
-  var estoqueCD: Int? = null,
-  var diferenca: Int? = null,
-  var estoqueLoja: Int? = null,
-  var processado: Boolean? = null,
-  var transacao: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
-  var observacao: String? = null,
+  var movimentacao: Int? = null
 ) {
-
-  val diferencaAcerto: Int?
-    get() = if (acertoSimples == true) {
-      diferenca
-    } else {
-      (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
-    }
-
-  var inventarioAcerto: Int?
-    get() {
-      return (estoqueSis ?: 0) + (diferenca ?: 0)
-    }
-    set(value) {
-      diferenca = (value ?: 0) - (estoqueSis ?: 0)
-    }
-
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
-    }
-
-  val acertado
-    get() = estoqueCD != null && estoqueLoja != null
-
-  val estoqueReal: Int
-    get() = if (acertoSimples == true) {
-      (estoqueSis ?: 0) + (diferenca ?: 0)
-    } else {
-      (estoqueSis ?: 0) + (diferencaAcerto ?: 0)
-    }
-
-  val estoqueRelatorio: String
-    get() {
-      val estSis = estoqueSis?.format() ?: ""
-      val estCD = estoqueCD?.format() ?: ""
-      val estLj = estoqueLoja?.format() ?: ""
-      val estReal = estoqueReal.format()
-      val linha = "       Est Sis: $estSis | Est CD: $estCD | Est Loja: $estLj | Est Real: $estReal"
-      val linhaMenor = "       E Sis: $estSis | E CD: $estCD | E Loja: $estLj | E Real: $estReal"
-      return if (linha.length > 64) linhaMenor else linha
     }
 
   fun save() {
@@ -131,77 +86,25 @@ data class FiltroMovimentacao(
   val numLoja: Int = 0,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
-  val simples: Boolean = false,
   val numero: Int = 0,
 )
 
-/*
-fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoMovimentacao> {
-  val user = AppConfig.userLogin()
-
-  val numLoja = this.firstOrNull()?.loja ?: return emptyList()
-  val novo = saci.acertoNovo(numero, numLoja) ?: return emptyList()
-  return this.map {
-    ProdutoMovimentacao(
-      numero = novo.numero,
-      numloja = novo.numloja,
-      lojaSigla = novo.lojaSigla,
-      data = novo.data,
-      hora = novo.hora,
-      login = user?.login,
-      acertoSimples = acertoSimples,
-      usuario = user?.name,
-      prdno = it.prdno,
-      descricao = it.descricao,
-      grade = it.grade,
-      estoqueSis = it.saldo,
-      estoqueCD = it.estoqueCD,
-      estoqueLoja = it.estoqueLoja,
-      observacao = it.qtConferencia?.toString(),
-    )
-  }
-}
-*/
-
 fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
-  return grupos.mapNotNull { mapAcerto ->
-    val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
-    val lista = mapAcerto.value
-
-    val processado = lista.any { it.processado == true }
-
-    val diferencaEntrada = lista.sumOf {
-      val dif = it.diferencaAcerto ?: 0
-      if (dif > 0) dif else 0
-    }
-
-    val diferencaSaida = lista.sumOf {
-      val dif = it.diferencaAcerto ?: 0
-      if (dif < 0) dif else 0
-    }
+  return grupos.mapNotNull { mapPedido ->
+    val pedido = mapPedido.value.firstOrNull() ?: return@mapNotNull null
+    val lista = mapPedido.value
 
     Movimentacao(
-      numero = acerto.numero ?: return@mapNotNull null,
-      numloja = acerto.numloja ?: return@mapNotNull null,
-      lojaSigla = acerto.lojaSigla ?: return@mapNotNull null,
-      data = acerto.data ?: return@mapNotNull null,
-      hora = acerto.hora ?: return@mapNotNull null,
-      login = acerto.login,
-      usuario = acerto.usuario,
-      processado = processado,
-      acertoSimples = lista.firstOrNull()?.acertoSimples ?: false,
-      transacaoEnt = lista.firstOrNull { (it.diferencaAcerto ?: 0) > 0 }?.transacao,
-      transacaoSai = lista.firstOrNull { (it.diferencaAcerto ?: 0) < 0 }?.transacao,
-      gravadoLogin = acerto.gravadoLogin,
-      movimentacao = when {
-        diferencaSaida == 0 && diferencaEntrada == 0 -> "Sem Diferença"
-        diferencaSaida != 0 && diferencaEntrada == 0 -> "Saída"
-        diferencaSaida == 0 && diferencaEntrada != 0 -> "Entrada"
-        else                                         -> "Entrada e Saída"
-      },
-      observacaoAcerto = lista.firstOrNull()?.observacao,
-      gravado = acerto.gravado,
+      numero = pedido.numero ?: return@mapNotNull null,
+      numloja = pedido.numloja ?: return@mapNotNull null,
+      lojaSigla = pedido.lojaSigla ?: return@mapNotNull null,
+      data = pedido.data ?: return@mapNotNull null,
+      hora = pedido.hora ?: return@mapNotNull null,
+      login = pedido.login,
+      usuario = pedido.usuario,
+      gravadoLogin = pedido.gravadoLogin,
+      gravado = pedido.gravado,
     )
   }
 }
@@ -214,18 +117,9 @@ class Movimentacao(
   var hora: LocalTime,
   var login: String?,
   var usuario: String?,
-  var processado: Boolean,
-  var acertoSimples: Boolean?,
-  var transacaoEnt: String?,
-  var transacaoSai: String?,
   var gravadoLogin: Int?,
-  val movimentacao: String,
-  var observacaoAcerto: String?,
   var gravado: Boolean?,
 ) {
-  val processadoStr
-    get() = if (processado) "Sim" else "Não"
-
   val gravadoLoginStr: String
     get() {
       return getUser(gravadoLogin ?: 0)?.name ?: ""
@@ -234,18 +128,13 @@ class Movimentacao(
   val gravadoStr: String
     get() = if (gravado == true) "Sim" else "Não"
 
-  fun findProdutos(simples: Boolean = false): List<ProdutoMovimentacao> {
+  fun findProdutos(): List<ProdutoMovimentacao> {
     val filtro = FiltroMovimentacao(
       numLoja = numloja,
       numero = numero,
-      simples = simples,
     )
     val produtos = ProdutoMovimentacao.findAll(filtro)
     return produtos
-  }
-
-  fun save() {
-    saci.updateMovimentacao(this)
   }
 
   companion object {

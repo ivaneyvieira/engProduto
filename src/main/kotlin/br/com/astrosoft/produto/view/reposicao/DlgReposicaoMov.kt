@@ -2,10 +2,8 @@ package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.view.estoqueCD.DlgAdicionaAcertoSimples
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.grid.Grid
@@ -43,7 +41,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
     val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
 
     form = SubWindowForm(
-      title = "Produtos do Acerto $numero - Loja $loja $gravado",
+      title = "Produtos do Pedido $numero - Loja $loja $gravado",
       hasButtonClose = false,
       toolBar = {
         verticalBlock {
@@ -59,39 +57,16 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
               }
             }
 
-            this.button("Pedido") {
-              this.icon = VaadinIcon.PRINT.create()
-              this.addClickListener {
-                viewModel.imprimirPedido(acerto)
-              }
-            }
-
-            this.button("Acerto") {
-              this.icon = VaadinIcon.PRINT.create()
-              this.addClickListener {
-                viewModel.imprimirAcerto(acerto)
-              }
-            }
-
-            this.button("Grava Acerto") {
+            this.button("Grava Pedido") {
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
-                viewModel.gravaAcerto(acerto)
+                viewModel.gravaPedido(acerto)
               }
-            }
-
-            this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
-              val produtos = Movimentacaos()
-              viewModel.geraPlanilha(produtos)
             }
 
             this.button("Adiciona") {
               this.icon = VaadinIcon.PLUS.create()
               this.addClickListener {
-                if (acerto.processado == true) {
-                  DialogHelper.showWarning("Acerto já processado")
-                  return@addClickListener
-                }
                 val dlg = DlgAdicionaMovimentacao(viewModel, acerto) {
                   update()
                 }
@@ -102,7 +77,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
             this.button("Remove") {
               this.icon = VaadinIcon.TRASH.create()
               this.addClickListener {
-                viewModel.removeAcerto()
+                //viewModel.removeAcerto()
               }
             }
           }
@@ -247,7 +222,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
         classBean = ProdutoMovimentacao::class,
         isBuffered = false,
         openEditor = {
-          this.focusEditor(ProdutoMovimentacao::inventarioAcerto)
+          this.focusEditor(ProdutoMovimentacao::movimentacao)
         },
         closeEditor = {
           viewModel.updateProduto(it.bean)
@@ -258,12 +233,8 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
           abreProximo(it.bean)
         },
         canEdit = {
-          if (acerto.processado == true) {
-            DialogHelper.showWarning("Acerto já processado")
-            false
-          } else {
-            true
-          }
+          //Verifica se foi processadp
+          false
         }
       )
 
@@ -272,10 +243,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
       columnGrid(ProdutoMovimentacao::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoMovimentacao::grade, "Grade", width = "100px")
       columnGrid(ProdutoMovimentacao::codFor, "For", width = "5rem")
-      columnGrid(ProdutoMovimentacao::estoqueSis, "Est Sist")
-      columnGrid(ProdutoMovimentacao::inventarioAcerto, "Inv", width = "5rem").integerFieldEditor()
-      columnGrid(ProdutoMovimentacao::diferencaAcerto, "Dif", width = "5rem")
-      columnGrid(ProdutoMovimentacao::estoqueReal, "Est Real")
+      columnGrid(ProdutoMovimentacao::movimentacao, "Inv", width = "5rem").integerFieldEditor()
     }
     this.addAndExpand(gridDetail)
     update()
@@ -291,7 +259,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
   }
 
   private fun Movimentacaos(): List<ProdutoMovimentacao> {
-    return acerto.findProdutos(true)
+    return acerto.findProdutos()
   }
 
   fun closeForm() {
@@ -372,7 +340,6 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
         this.numero = acerto.numero
         this.numloja = acerto.numloja
         this.barcode = linha.barcode
-        this.acertoSimples = true
         this.data = acerto.data
         this.hora = acerto.hora
         this.login = acerto.login
@@ -380,13 +347,8 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
         this.usuario = acerto.usuario
         this.prdno = linha.prdno
         this.grade = linha.grade
-        this.estoqueSis = linha.saldo
         this.codFor = linha.codForn
-        this.diferenca = null
-        this.processado = false
-        this.transacao = null
         this.gravadoLogin = user?.no
-        this.observacao = acerto.observacaoAcerto
         this.gravado = acerto.gravado
       }
     }
