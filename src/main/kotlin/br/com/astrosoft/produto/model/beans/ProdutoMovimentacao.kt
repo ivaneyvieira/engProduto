@@ -1,12 +1,11 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class ProdutoEstoqueAcerto(
+class ProdutoMovimentacao(
   var numero: Int? = null,
   var numloja: Int? = null,
   var lojaSigla: String? = null,
@@ -75,7 +74,7 @@ class ProdutoEstoqueAcerto(
     }
 
   fun save() {
-    saci.acertoUpdate(this)
+    saci.updateMovimentacao(this)
   }
 
   fun jaGravado(): Boolean {
@@ -83,14 +82,14 @@ class ProdutoEstoqueAcerto(
   }
 
   fun remove() {
-    saci.removeAcertoProduto(this)
+    saci.removeMovimentacao(this)
   }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as ProdutoEstoqueAcerto
+    other as ProdutoMovimentacao
 
     if (numero != other.numero) return false
     if (numloja != other.numloja) return false
@@ -112,15 +111,15 @@ class ProdutoEstoqueAcerto(
     get() = prdno?.trim()
 
   companion object {
-    fun findAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
-      return saci.acertoFindAll(filtro)
+    fun findAll(filtro: FiltroMovimentacao): List<ProdutoMovimentacao> {
+      return saci.movimentacaoFindAll(filtro)
     }
 
     fun proximoNumero(numLoja: Int): Int {
-      return saci.acertoProximo(numLoja)
+      return saci.movimentacaoProximo(numLoja)
     }
 
-    fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
+    fun updateProduto(produtos: List<ProdutoMovimentacao>) {
       produtos.forEach { produto ->
         produto.save()
       }
@@ -128,7 +127,7 @@ class ProdutoEstoqueAcerto(
   }
 }
 
-data class FiltroAcerto(
+data class FiltroMovimentacao(
   val numLoja: Int = 0,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
@@ -136,13 +135,14 @@ data class FiltroAcerto(
   val numero: Int = 0,
 )
 
-fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoEstoqueAcerto> {
+/*
+fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoMovimentacao> {
   val user = AppConfig.userLogin()
 
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
   val novo = saci.acertoNovo(numero, numLoja) ?: return emptyList()
   return this.map {
-    ProdutoEstoqueAcerto(
+    ProdutoMovimentacao(
       numero = novo.numero,
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
@@ -161,8 +161,9 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): 
     )
   }
 }
+*/
 
-fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
+fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull { mapAcerto ->
     val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
@@ -180,7 +181,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
       if (dif < 0) dif else 0
     }
 
-    EstoqueAcerto(
+    Movimentacao(
       numero = acerto.numero ?: return@mapNotNull null,
       numloja = acerto.numloja ?: return@mapNotNull null,
       lojaSigla = acerto.lojaSigla ?: return@mapNotNull null,
@@ -205,7 +206,7 @@ fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
   }
 }
 
-class EstoqueAcerto(
+class Movimentacao(
   var numero: Int,
   var numloja: Int,
   var lojaSigla: String,
@@ -233,22 +234,18 @@ class EstoqueAcerto(
   val gravadoStr: String
     get() = if (gravado == true) "Sim" else "Não"
 
-  fun cancela() {
-    saci.acertoCancela(this)
-  }
-
-  fun findProdutos(simples: Boolean = false): List<ProdutoEstoqueAcerto> {
-    val filtro = FiltroAcerto(
+  fun findProdutos(simples: Boolean = false): List<ProdutoMovimentacao> {
+    val filtro = FiltroMovimentacao(
       numLoja = numloja,
       numero = numero,
       simples = simples,
     )
-    val produtos = ProdutoEstoqueAcerto.findAll(filtro)
+    val produtos = ProdutoMovimentacao.findAll(filtro)
     return produtos
   }
 
   fun save() {
-    saci.updateAcerto(this)
+    saci.updateMovimentacao(this)
   }
 
   companion object {
