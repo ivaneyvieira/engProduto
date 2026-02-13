@@ -127,17 +127,17 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val ieTransportadora: String
     get() = transportadora?.insc ?: ""
   override val quantidade: Long
-    get() = nota.produtos.sumOf { it.quantDevolucao ?: 0 }.toLong()
+    get() = nota.volumeDevolucao?.toLong() ?: 0
   override val especie: String
-    get() = ""
+    get() = "Volume(s)"
   override val marca: String
     get() = ""
   override val numeracao: String
     get() = ""
   override val pesoBruto: BigDecimal
-    get() = BigDecimal(nota.produtos.sumOf { (it.pesoBruto ?: 0.00) * (it.quantDevolucao ?: 0) })
+    get() = BigDecimal(nota.pesoDevolucao ?: 0.00)
   override val pesoLiquido: BigDecimal
-    get() = BigDecimal(nota.produtos.sumOf { (it.pesoLiquido ?: 0.00) * (it.quantDevolucao ?: 0) })
+    get() = BigDecimal(nota.pesoDevolucao ?: 0.00)
   override val codigo: String
     get() = produto.refFabrica ?: ""
   override val descricao: String

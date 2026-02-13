@@ -59,7 +59,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           this.marcaDiferencao(nota.diferencaPeso())
 
           addValueChangeListener {
-            nota.pesoDevolucao = (this.value?.toDouble() ?: 0.0)
+            nota.pesoDevolucao = (this.value ?: 0.0)
             viewModel.saveNota(nota)
             this.marcaDiferencao(nota.diferencaPeso())
           }
