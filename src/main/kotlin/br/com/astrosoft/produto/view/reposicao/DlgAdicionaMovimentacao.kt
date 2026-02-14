@@ -24,7 +24,7 @@ class DlgAdicionaMovimentacao(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private val produtoLinha: List<LinhaProduto> = buildList {
-    repeat(10) {num ->
+    repeat(10) { num ->
       add(LinhaProduto(viewModel = viewModel, acerto = acerto, index = num))
     }
   }
@@ -106,6 +106,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
   HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField
+  private var edtCodigoBarras: TextField
   private var edtDescricao: TextField
   private var edtGrade: Select<String>
   private var edtMovimentacao: IntegerField
@@ -131,6 +132,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
         edtGrade.setItems(produtos.map { it.grade })
         edtGrade.value = produtos.firstOrNull()?.grade
         edtDescricao.value = produtos.firstOrNull()?.descricao
+        edtCodigoBarras.value = produtos.firstOrNull()?.codigoBarras
         edtGrade.isEnabled = produtos.size > 1
 
         if (produtos.isNotEmpty()) {
@@ -143,6 +145,13 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
       }
     }
 
+    edtCodigoBarras = textField("Código de Barras") {
+      if (index > 0) this.label = ""
+      this.width = "8rem"
+      this.isReadOnly = true
+      this.tabIndex = -1
+    }
+
     edtDescricao = textField("Descrição") {
       if (index > 0) this.label = ""
       this.setWidthFull()
@@ -153,6 +162,11 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     edtGrade = select("Grade") {
       if (index > 0) this.label = ""
       this.width = "120px"
+
+      this.addValueChangeListener { event ->
+        val grade = event.value
+        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
+      }
     }
 
     edtMovimentacao = integerField("Quant") {
