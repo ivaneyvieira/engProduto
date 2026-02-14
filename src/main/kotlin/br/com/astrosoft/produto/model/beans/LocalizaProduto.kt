@@ -38,7 +38,6 @@ data class FiltroLocalizaProduto(
            this.barcode.isBlank() &&
            this.codForn == 0 &&
            this.cl == 0 &&
-           this.tipo == 0 &&
-           this.loja == 0
+           this.tipo == 0
   }
 }

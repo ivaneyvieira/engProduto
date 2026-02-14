@@ -79,20 +79,20 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             this.isSpacing = true
             this.setWidthFull()
 
-            edtCodigoBarra = textField("Código Barras") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
             edtCodPrd = integerField("Cod") {
               this.width = "5rem"
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.valueChangeTimeout = 500
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtCodigoBarra = textField("Código Barras") {
+              this.width = "200px"
+              this.valueChangeTimeout = 500
+              this.valueChangeMode = ValueChangeMode.LAZY
               this.addValueChangeListener {
                 updateGrid()
               }
@@ -232,6 +232,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
     }
     gridDetail.setItems(selecionados + produtos)
     selecionados.forEach {
+      gridDetail.select(it)
+    }
+    produtos.forEach {
       gridDetail.select(it)
     }
   }

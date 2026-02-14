@@ -44,9 +44,12 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun gravaPedido(pedido: Movimentacao) = viewModel.exec {
+    /*
     if (pedido.gravado == true) {
       fail("Pedido já gravado")
     }
+
+     */
     subView.autorizaPedido { user ->
       subView.gravaSelecao()
       val pordutos = pedido.findProdutos()
