@@ -79,15 +79,6 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             this.isSpacing = true
             this.setWidthFull()
 
-            edtPesquisa = textField("Pesquisa") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
             edtCodigoBarra = textField("Código Barras") {
               this.width = "200px"
               this.valueChangeTimeout = 500
@@ -102,6 +93,15 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.valueChangeTimeout = 500
+              this.addValueChangeListener {
+                updateGrid()
+              }
+            }
+
+            edtPesquisa = textField("Pesquisa") {
+              this.width = "200px"
+              this.valueChangeTimeout = 500
+              this.valueChangeMode = ValueChangeMode.LAZY
               this.addValueChangeListener {
                 updateGrid()
               }
