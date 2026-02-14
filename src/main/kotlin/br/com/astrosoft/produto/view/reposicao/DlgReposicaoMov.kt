@@ -1,17 +1,21 @@
 package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.FiltroLocalizaProduto
+import br.com.astrosoft.produto.model.beans.LocalizaProduto
+import br.com.astrosoft.produto.model.beans.Movimentacao
+import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.onClick
+import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
@@ -234,8 +238,10 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
     selecionados.forEach {
       gridDetail.select(it)
     }
-    produtos.forEach {
-      gridDetail.select(it)
+    if (produtos.size == 1) {
+      produtos.forEach {
+        gridDetail.select(it)
+      }
     }
   }
 
