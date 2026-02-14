@@ -24,6 +24,9 @@ class ProdutoMovimentacao(
   var movimentacao: Int? = null,
   var estoque: Int? = null
 ) {
+  val localAbrev
+    get() = locApp?.substring(0, 3) ?: ""
+
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
