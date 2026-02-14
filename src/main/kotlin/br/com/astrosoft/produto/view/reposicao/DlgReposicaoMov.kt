@@ -245,6 +245,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
       columnGrid(ProdutoMovimentacao::descricao, "Descrição", width = "300px")
       columnGrid(ProdutoMovimentacao::grade, "Grade", width = "100px")
       columnGrid(ProdutoMovimentacao::codFor, "For", width = "5rem")
+      columnGrid(ProdutoMovimentacao::locApp, "Loc App", width = "5rem")
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoMovimentacao::estoque, "Estoque", width = "5rem")
     }
