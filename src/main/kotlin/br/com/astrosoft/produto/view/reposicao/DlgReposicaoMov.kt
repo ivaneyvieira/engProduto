@@ -186,6 +186,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
 
     val filtro = FiltroLocalizaProduto(
       loja = movimentacao.numloja,
+      codPrd = edtCodPrd?.value?.toString() ?: "",
       codForn = 0,
       pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: "",
       tipo = 0,

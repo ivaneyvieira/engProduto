@@ -21,6 +21,7 @@ WHERE (P.mfno = :codForn OR :codForn = 0)
   AND (P.typeno = :tipo OR :tipo = 0)
   AND (P.clno = :cl OR :cl = 0)
   AND (P.name LIKE CONCAT(:pesquisa, '%') OR :pesquisa = '')
+  AND (P.no = LPAD(:codPrd, 16, ' ') OR :codPrd = 0)
 GROUP BY P.no, IFNULL(B.grade, '')
 HAVING (barcode = :barcode OR :barcode = '');
 

@@ -3097,6 +3097,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/localizaProduto.sql"
     return query(sql, LocalizaProduto::class){
       addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("codPrd", filtro.codPrd)
       addOptionalParameter("codForn", filtro.codForn)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("tipo", filtro.tipo)
