@@ -24,16 +24,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
 
   //Componentes de filtro
-  private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
   private var edtCodigoBarra: TextField? = null
-  private var cmbCaracter: Select<ECaracter>? = null
-  private var cmbEstoque: Select<EEstoque>? = null
-  private var edtSaldo: IntegerField? = null
-  private var edtSaldo2: IntegerField? = null
-  private var edtTipo: IntegerField? = null
-  private var edtCL: IntegerField? = null
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -86,15 +79,6 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             this.isSpacing = true
             this.setWidthFull()
 
-            edtPesquisa = textField("Pesquisa") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
             edtCodigoBarra = textField("Código Barras") {
               this.width = "200px"
               this.valueChangeTimeout = 500
@@ -114,87 +98,11 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               }
             }
 
-            edtCodFor = integerField("For") {
-              this.width = "5rem"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            edtPesquisa = textField("Pesquisa") {
+              this.width = "200px"
               this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtTipo = integerField("Tipo") {
-              this.width = "80px"
               this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 500
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
               this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtCL = integerField("CL") {
-              this.width = "80px"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 500
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            cmbCaracter = select("Caracter") {
-              this.isVisible = false
-              this.width = "90px"
-              this.setItems(ECaracter.entries)
-              this.setItemLabelGenerator { item ->
-                item.descricao
-              }
-              this.value = ECaracter.TODOS
-
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            cmbEstoque = select("Estoque") {
-              this.isVisible = false
-              this.width = "80px"
-              this.setItems(EEstoque.entries)
-              this.setItemLabelGenerator { item ->
-                item.descricao
-              }
-              this.value = EEstoque.TODOS
-              addValueChangeListener {
-                val value = it.value
-                edtSaldo2?.isVisible = value == EEstoque.ENTRE
-                edtSaldo?.isVisible = value != EEstoque.TODOS
-                edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Ini" else "Saldo"
-                updateGrid()
-              }
-            }
-
-            edtSaldo = integerField("Saldo") {
-              this.width = "80px"
-              this.isVisible = false
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 1500
-              this.value = 0
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtSaldo2 = integerField("Saldo Fin") {
-              this.width = "80px"
-              this.isVisible = false
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 1500
-              this.value = 0
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              addValueChangeListener {
                 updateGrid()
               }
             }
@@ -274,17 +182,14 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
 
   private fun findProdutos(): List<ProdutoMovimentacao> {
     val user = AppConfig.userLogin()
-    val codFor = edtCodFor?.value ?: 0
-    val tipo = edtTipo?.value ?: 0
-    val cl = edtCL?.value ?: 0
     val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
 
     val filtro = FiltroLocalizaProduto(
       loja = movimentacao.numloja,
-      codForn = codFor,
+      codForn = 0,
       pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: "",
-      tipo = tipo,
-      cl = cl,
+      tipo = 0,
+      cl = 0,
       barcode = codigoBarra
     )
 
