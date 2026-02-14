@@ -67,7 +67,7 @@ class ProdutoMovimentacao(
   }
 
   val codigo
-    get() = prdno?.trim()
+    get() = prdno?.trim()?.toIntOrNull() ?: 0
 
   companion object {
     fun findAll(filtro: FiltroMovimentacao): List<ProdutoMovimentacao> {
