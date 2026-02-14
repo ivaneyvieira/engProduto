@@ -63,6 +63,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Adiciona") {
+              this.isVisible = false
               this.icon = VaadinIcon.PLUS.create()
               this.addClickListener {
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
@@ -73,6 +74,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Remove") {
+              this.isVisible = false
               this.icon = VaadinIcon.TRASH.create()
               this.addClickListener {
                 viewModel.removePedido()
