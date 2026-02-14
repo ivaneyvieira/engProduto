@@ -25,7 +25,7 @@ class ProdutoMovimentacao(
   var estoque: Int? = null
 ) {
   val localAbrev
-    get() = locApp?.substring(0, 3) ?: ""
+    get() = locApp?.substring(0, 4) ?: ""
 
   val saldoBarraRef: String
     get() {

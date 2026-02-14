@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -17,7 +18,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
 
-class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movimentacao) {
+class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao: Movimentacao) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
@@ -36,9 +37,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
-    val numero = acerto.numero
-    val loja = acerto.lojaSigla
-    val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
+    val numero = movimentacao.numero
+    val loja = movimentacao.lojaSigla
+    val gravado = if (movimentacao.gravado == true) "(Gravado ${movimentacao.gravadoLoginStr})" else ""
 
     form = SubWindowForm(
       title = "Produtos do Pedido $numero - Loja $loja $gravado",
@@ -60,14 +61,14 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
             this.button("Grava Pedido") {
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
-                viewModel.gravaPedido(acerto)
+                viewModel.gravaPedido(movimentacao)
               }
             }
 
             this.button("Adiciona") {
               this.icon = VaadinIcon.PLUS.create()
               this.addClickListener {
-                val dlg = DlgAdicionaMovimentacao(viewModel, acerto) {
+                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
                   update()
                 }
                 dlg.open()
@@ -259,7 +260,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
   }
 
   private fun Movimentacaos(): List<ProdutoMovimentacao> {
-    return acerto.findProdutos()
+    return movimentacao.findProdutos()
   }
 
   fun closeForm() {
@@ -273,83 +274,42 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
 
   private fun findProdutos(): List<ProdutoMovimentacao> {
     val user = AppConfig.userLogin()
-    val caracter = cmbCaracter?.value ?: ECaracter.NAO
-    val codPrd = edtCodPrd?.value ?: 0
     val codFor = edtCodFor?.value ?: 0
     val tipo = edtTipo?.value ?: 0
     val cl = edtCL?.value ?: 0
-    val estoque = cmbEstoque?.value ?: EEstoque.TODOS
-    val saldo = edtSaldo?.value ?: 0
-    val saldo2 = edtSaldo2?.value ?: 0
     val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
 
-    val filtro = FiltroProdutoEstoque(
-      loja = acerto.numloja,
-      pesquisa = "",
-      codigo = codPrd,
-      grade = "",
-      caracter = caracter,
-      localizacao = "",
-      fornecedor = "",
-      inativo = EInativo.TODOS,
-      uso = EUso.TODOS,
-      listaUser = listOf("TODOS"),
+    val filtro = FiltroLocalizaProduto(
+      loja = movimentacao.numloja,
+      codForn = codFor,
+      pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: "",
+      tipo = tipo,
+      cl = cl,
+      barcode = codigoBarra
     )
 
-    val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
-      codFor == 0 ||
-      it.codForn == codFor
-    }.filter {
-      val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-      val pesquisa2 = ""
-      val pesquisa3 = if (pesquisa2.isBlank()) {
-        "${pesquisa}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-      } else {
-        "${pesquisa2}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-      }
-      val descricao = it.descricao?.trim() ?: ""
-      pesquisa.isBlank() || (
-          descricao in pesquisa..pesquisa3
-                            )
-    }.filter {
-      val saldoSaci = it.saldo ?: 0
-      estoque == EEstoque.TODOS ||
-      when (estoque) {
-        EEstoque.IGUAL -> saldoSaci == saldo
-        EEstoque.MAIOR -> saldoSaci > saldo
-        EEstoque.MENOR -> saldoSaci < saldo
-        EEstoque.ENTRE -> (saldoSaci > saldo) && (saldoSaci < saldo2)
-        else           -> false
-      }
-    }.filter {
-      it.tipo == tipo ||
-      tipo == 0
-    }.filter {
-      it.cl == cl ||
-      cl == 0
-    }.filter {
-      val barcode = it.barcode?.trim()?.uppercase(getDefault()) ?: ""
-      barcode == codigoBarra
-      || codigoBarra.isEmpty()
-    }
-    return produtosFornecedor.mapNotNull { linha ->
+    val localizaProduto: List<LocalizaProduto> = LocalizaProduto.findAll(filtro)
+
+    return localizaProduto.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
 
       val produto = ProdutoMovimentacao()
       produto.apply {
-        this.numero = acerto.numero
-        this.numloja = acerto.numloja
+        this.numero = this@DlgReposicaoMov.movimentacao.numero
+        this.numloja = this@DlgReposicaoMov.movimentacao.numloja
         this.barcode = linha.barcode
-        this.data = acerto.data
-        this.hora = acerto.hora
-        this.login = acerto.login
+        this.data = this@DlgReposicaoMov.movimentacao.data
+        this.hora = this@DlgReposicaoMov.movimentacao.hora
+        this.login = this@DlgReposicaoMov.movimentacao.login
         this.descricao = linha.descricao ?: ""
-        this.usuario = acerto.usuario
+        this.usuario = this@DlgReposicaoMov.movimentacao.usuario
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.codFor = linha.codForn
         this.gravadoLogin = user?.no
-        this.gravado = acerto.gravado
+        this.gravado = this@DlgReposicaoMov.movimentacao.gravado
+        this.locApp = linha.locApp
+        this.estoque = linha.estoqueLoja
       }
     }
   }

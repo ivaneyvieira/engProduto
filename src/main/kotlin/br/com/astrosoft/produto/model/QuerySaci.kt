@@ -3093,6 +3093,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun localizaProduto(filtro: FiltroLocalizaProduto): List<LocalizaProduto> {
+    val sql = "/sqlSaci/localizaProduto.sql"
+    return query(sql, LocalizaProduto::class){
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("codForn", filtro.codForn)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("tipo", filtro.tipo)
+      addOptionalParameter("cl", filtro.cl)
+      addOptionalParameter("barcode", filtro.barcode)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
