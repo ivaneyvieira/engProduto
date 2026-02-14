@@ -24,8 +24,8 @@ class DlgAdicionaMovimentacao(
   val onClose: () -> Unit = {}
 ) : Dialog() {
   private val produtoLinha: List<LinhaProduto> = buildList {
-    repeat(10) {
-      add(LinhaProduto(viewModel, acerto))
+    repeat(10) {num ->
+      add(LinhaProduto(viewModel = viewModel, acerto = acerto, index = num))
     }
   }
 
@@ -102,7 +102,8 @@ class DlgAdicionaMovimentacao(
   }
 }
 
-class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Movimentacao) : HorizontalLayout() {
+class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Movimentacao, val index: Int) :
+  HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField
   private var edtDescricao: TextField
@@ -116,6 +117,7 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     this.setWidthFull()
 
     edtCodigo = textField("Código") {
+      if (index > 0) this.label = ""
       this.width = "120px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -142,16 +144,19 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     }
 
     edtDescricao = textField("Descrição") {
+      if (index > 0) this.label = ""
       this.setWidthFull()
       this.isReadOnly = true
       this.tabIndex = -1
     }
 
     edtGrade = select("Grade") {
+      if (index > 0) this.label = ""
       this.width = "120px"
     }
 
-    edtMovimentacao = integerField("Movimentação") {
+    edtMovimentacao = integerField("Quant") {
+      if (index > 0) this.label = ""
       this.width = "100px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
