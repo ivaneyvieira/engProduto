@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintReposicaoMovimentacao
 import br.com.astrosoft.produto.model.saci
 
 class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
@@ -19,7 +20,6 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
 
   fun updateView() = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
@@ -118,6 +118,23 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       prdno = null,
       descricao = null,
       grade = null,
+    )
+  }
+
+  fun previewPedido(pedido: Movimentacao, printEvent: (impressora: String) -> Unit = {}) = viewModel.exec {
+    val produtos: List<ProdutoMovimentacao> = pedido.findProdutos()
+
+    val relatorio = PrintReposicaoMovimentacao()
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoMovimentacao::descricao,
+          ProdutoMovimentacao::codigo,
+          ProdutoMovimentacao::grade
+        )
+      ),
+      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
 }

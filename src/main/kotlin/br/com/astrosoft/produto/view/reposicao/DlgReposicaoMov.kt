@@ -144,6 +144,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
             }
 
             cmbCaracter = select("Caracter") {
+              this.isVisible = false
               this.width = "90px"
               this.setItems(ECaracter.entries)
               this.setItemLabelGenerator { item ->
@@ -157,6 +158,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val acerto: Movim
             }
 
             cmbEstoque = select("Estoque") {
+              this.isVisible = false
               this.width = "80px"
               this.setItems(EEstoque.entries)
               this.setItemLabelGenerator { item ->

@@ -88,14 +88,19 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
   override fun Grid<Movimentacao>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
-    columnGrid(Movimentacao::lojaSigla, header = "Loja")
-    columnGrid(Movimentacao::numero, header = "Pedido")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { pedido ->
+    addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
       dlgEstoque = DlgReposicaoMov(viewModel, pedido)
       dlgEstoque?.showDialog {
         viewModel.updateView()
       }
     }
+
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Preview", header = "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
+
+    columnGrid(Movimentacao::lojaSigla, header = "Loja")
+    columnGrid(Movimentacao::numero, header = "Pedido")
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora")
     columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
