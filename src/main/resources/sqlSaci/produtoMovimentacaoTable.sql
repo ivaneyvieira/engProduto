@@ -46,4 +46,7 @@ ALTER TABLE sqldados.produtoMovimentacao
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN movimentacao int DEFAULT 0 NULL;
 
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN estoque int  NULL DEFAULT NULL;
+
 

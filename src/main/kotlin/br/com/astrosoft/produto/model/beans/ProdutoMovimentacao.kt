@@ -21,7 +21,8 @@ class ProdutoMovimentacao(
   var grade: String? = null,
   var gravadoLogin: Int? = 0,
   var gravado: Boolean? = false,
-  var movimentacao: Int? = null
+  var movimentacao: Int? = null,
+  var estoque: Int? = null
 ) {
   val saldoBarraRef: String
     get() {

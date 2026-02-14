@@ -2249,6 +2249,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
       addOptionalParameter("gravado", produto.gravado ?: false)
       addOptionalParameter("movimentacao", produto.movimentacao ?: 0)
+      addOptionalParameter("estoque", produto.estoque ?: 0)
     }
   }
 

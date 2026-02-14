@@ -33,6 +33,7 @@ SELECT numero,
        grade,
        0     AS gravadoLogin,
        FALSE AS gravado,
-       0     AS movimentacao
+       0     AS movimentacao,
+       0     AS estoque
 FROM
   T_ACERTO

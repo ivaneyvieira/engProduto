@@ -2,9 +2,20 @@ USE sqldados;
 
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
 CREATE TEMPORARY TABLE T_ACERTO
-SELECT *
+SELECT M.numero,
+       M.numloja,
+       M.data,
+       M.hora,
+       M.usuario,
+       M.prdno,
+       M.grade,
+       M.gravado,
+       M.gravadoLogin,
+       M.login,
+       M.movimentacao,
+       M.estoque
 FROM
-  sqldados.produtoMovimentacao
+  sqldados.produtoMovimentacao AS M
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
@@ -63,17 +74,18 @@ SELECT numero,
        TRIM(P.mfno_ref)         AS ref,
        gravadoLogin,
        gravado,
-       movimentacao
+       movimentacao,
+       A.estoque
 FROM
-  T_ACERTO                            AS A
-    LEFT JOIN T_BARCODE               AS B
+  T_ACERTO                   AS A
+    LEFT JOIN T_BARCODE      AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
-    LEFT JOIN sqldados.store          AS S
+    LEFT JOIN sqldados.store AS S
               ON S.no = A.numloja
-    LEFT JOIN sqldados.prd            AS P
+    LEFT JOIN sqldados.prd   AS P
               ON P.no = A.prdno
-    LEFT JOIN T_LOC_APP               AS L
+    LEFT JOIN T_LOC_APP      AS L
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
