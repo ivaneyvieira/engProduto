@@ -39,3 +39,5 @@ cahche/*
 .kotlin
 src/main/bundles/
 *.log
+*.json
+*.ts
