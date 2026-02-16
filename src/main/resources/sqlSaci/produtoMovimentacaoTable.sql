@@ -47,6 +47,44 @@ ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN movimentacao int DEFAULT 0 NULL;
 
 ALTER TABLE sqldados.produtoMovimentacao
-  ADD COLUMN estoque int  NULL DEFAULT NULL;
+  ADD COLUMN estoque int NULL DEFAULT NULL;
 
+/********************************************************************************/
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN usuario;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN gravado;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN login;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN noLogin int NULL;
+
+UPDATE sqldados.produtoMovimentacao
+SET noLogin = 1
+WHERE noLogin IS NULL;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN noEntregue int NULL;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN noRecebido int NULL;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  RENAME COLUMN gravadoLogin TO noGravado;
+
+
+/********************************************************************************/
+
+SELECT *
+FROM
+  sqldados.produtoMovimentacao;
+
+SELECT *
+FROM
+  sqldados.users
+WHERE no = 1;
 

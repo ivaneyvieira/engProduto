@@ -47,8 +47,8 @@ class ProdutoNotaEntradaVO(
     return ProdutoNotaEntradaNdd(
       id = id,
       numeroProtocolo = numeroProtocolo ?: "",
-      codigo = produto?.codigo?.toString() ?: "",
-      codBarra = produto?.codigoDeBarras ?: "",
+      codigo = produto?.codigo ?: "",
+      codBarra = produto?.codigoDeBarrasGtin ?: "",
       descricao = produto?.descricao ?: "",
       ncm = produto?.ncm ?: "",
       cst = item.icms().cst() ?: "",

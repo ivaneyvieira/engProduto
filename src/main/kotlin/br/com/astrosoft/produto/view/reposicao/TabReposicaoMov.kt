@@ -104,8 +104,7 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora")
     columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
-    columnGrid(Movimentacao::gravadoStr, header = "Gravado").center()
-    columnGrid(Movimentacao::gravadoLoginStr, header = "Usuário", width = "20rem")
+    columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "20rem")
   }
 
   override fun filtro(): FiltroMovimentacao {
@@ -161,8 +160,8 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
 
-  override fun adicionaPedido(pedido: Movimentacao) {
-    val list = gridPanel.dataProvider.fetchAll() + pedido
+  override fun adicionaPedido(movimentacao: Movimentacao) {
+    val list = gridPanel.dataProvider.fetchAll() + movimentacao
     updateGrid(list)
   }
 

@@ -6,12 +6,12 @@ SELECT M.numero,
        M.numloja,
        M.data,
        M.hora,
-       M.usuario,
        M.prdno,
        M.grade,
-       M.gravado,
-       M.gravadoLogin,
-       M.login,
+       M.noLogin,
+       M.noGravado,
+       M.noEntregue,
+       M.noRecebido,
        M.movimentacao,
        M.estoque
 FROM
@@ -58,26 +58,41 @@ WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
-SELECT numero,
-       numloja,
+SELECT numero                   AS numero,
+       numloja                  AS numloja,
        S.sname                  AS lojaSigla,
-       data,
-       hora,
-       login,
-       usuario,
-       A.prdno,
+       data                     AS data,
+       hora                     AS hora,
+       UL.no                    AS noLogin,
+       UL.login                 AS login,
+       UL.name                  AS usuario,
+       A.prdno                  AS prdno,
        TRIM(MID(P.name, 1, 37)) AS descricao,
-       A.grade,
+       A.grade                  AS grade,
        P.mfno                   AS codFor,
-       L.locApp,
+       L.locApp                 AS locApp,
        B.codbar                 AS barcode,
        TRIM(P.mfno_ref)         AS ref,
-       gravadoLogin,
-       gravado,
-       movimentacao,
-       A.estoque
+       UG.no                    AS noGravado,
+       UG.login                 AS gravadoLogin,
+       EE.no                    AS noEntregue,
+       EE.sname                 AS entregue,
+       EE.name                  AS entregueNome,
+       ER.no                    AS noRecebido,
+       ER.sname                 AS recebido,
+       ER.name                  AS recebidoNome,
+       A.movimentacao           AS movimentacao,
+       A.estoque                AS estoque
 FROM
   T_ACERTO                   AS A
+    LEFT JOIN sqldados.users AS UL
+              ON UL.no = A.noLogin
+    LEFT JOIN sqldados.users AS UG
+              ON UG.no = A.noGravado
+    LEFT JOIN sqldados.emp   AS EE
+              ON EE.no = A.noEntregue
+    LEFT JOIN sqldados.emp   AS ER
+              ON ER.no = noRecebido
     LEFT JOIN T_BARCODE      AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade

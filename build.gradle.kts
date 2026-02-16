@@ -8,12 +8,12 @@ val vaadinSimpleSecurityVersion: String by extra
 val slf4jVersion: String by extra
 
 plugins {
-  kotlin("jvm") version "2.1.20"
+  kotlin("jvm") version "2.2.0"
   application
   id("com.vaadin") version "24.6.2"
 }
 
-//defaultTasks("clean", "build")
+defaultTasks("clean", "build")
 
 repositories {
   mavenLocal()
@@ -48,7 +48,8 @@ dependencies {
   // currently we are logging through the SLF4J API to slf4j-simple. See src/main/resources/simplelogger.properties file for the logger configuration
   implementation("org.slf4j:slf4j-simple:$slf4jVersion")
 
-  implementation(kotlin("stdlib-jdk8"))
+//  implementation(kotlin("stdlib-jdk8"))
+  implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
 
   // db

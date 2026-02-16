@@ -2237,19 +2237,19 @@ class QuerySaci : QueryDB(database) {
 
   fun updateMovimentacao(produto: ProdutoMovimentacao) {
     val sql = "/sqlSaci/produtoMovimentacaoUpdate.sql"
+
     script(sql) {
       addOptionalParameter("numero", produto.numero)
       addOptionalParameter("numloja", produto.numloja)
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
-      addOptionalParameter("login", produto.login)
-      addOptionalParameter("usuario", produto.usuario)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("gravadoLogin", produto.gravadoLogin ?: 0)
-      addOptionalParameter("gravado", produto.gravado ?: false)
-      addOptionalParameter("movimentacao", produto.movimentacao ?: 0)
-      addOptionalParameter("estoque", produto.estoque ?: 0)
+      addOptionalParameter("noGravado", produto.noGravado)
+      addOptionalParameter("movimentacao", produto.movimentacao)
+      addOptionalParameter("noLogin", produto.noLogin ?: 0)
+      addOptionalParameter("noEntregue", produto.noEntregue)
+      addOptionalParameter("noRecebido", produto.noRecebido ?: 0)
     }
   }
 

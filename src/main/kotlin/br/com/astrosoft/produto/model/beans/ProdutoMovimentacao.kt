@@ -10,17 +10,24 @@ class ProdutoMovimentacao(
   var lojaSigla: String? = null,
   var data: LocalDate? = null,
   var hora: LocalTime? = null,
+  var noLogin: Int? = null,
   var login: String? = null,
-  var codFor: Int? = null,
   var usuario: String? = null,
+  var codFor: Int? = null,
   var prdno: String? = null,
   var descricao: String? = null,
   var locApp: String? = null,
   var barcode: String? = null,
   var ref: String? = null,
   var grade: String? = null,
-  var gravadoLogin: Int? = 0,
-  var gravado: Boolean? = false,
+  var noGravado: Int? = 0,
+  var gravadoLogin: String? = null,
+  var noEntregue: Int? = 0,
+  var entregue: String? = null,
+  var entregueNome: String? = null,
+  var noRecebido: Int? = 0,
+  var recebido: String? = null,
+  var recebidoNome: String? = null,
   var movimentacao: Int? = null,
   var estoque: Int? = null
 ) {
@@ -105,10 +112,17 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       lojaSigla = pedido.lojaSigla ?: return@mapNotNull null,
       data = pedido.data ?: return@mapNotNull null,
       hora = pedido.hora ?: return@mapNotNull null,
-      login = pedido.login,
-      usuario = pedido.usuario,
-      gravadoLogin = pedido.gravadoLogin,
-      gravado = pedido.gravado,
+      noLogin = pedido.noLogin ?: 0,
+      login = pedido.login ?: "",
+      usuario = pedido.usuario ?: "",
+      noGravado = pedido.noGravado ?: 0,
+      gravadoLogin = pedido.gravadoLogin ?: "",
+      noEntregue = pedido.noEntregue ?: 0,
+      entregue = pedido.entregue ?: "",
+      entregueNome = pedido.entregueNome ?: "",
+      noRecebido = pedido.noRecebido ?: 0,
+      recebido = pedido.recebido ?: "",
+      recebidoNome = pedido.recebidoNome ?: ""
     )
   }
 }
@@ -119,19 +133,18 @@ class Movimentacao(
   var lojaSigla: String,
   var data: LocalDate,
   var hora: LocalTime,
-  var login: String?,
-  var usuario: String?,
-  var gravadoLogin: Int?,
-  var gravado: Boolean?,
+  var noLogin: Int,
+  var login: String,
+  var usuario: String,
+  var noGravado: Int,
+  var gravadoLogin: String,
+  var noEntregue: Int,
+  var entregue: String,
+  var entregueNome: String,
+  var noRecebido: Int,
+  var recebido: String,
+  var recebidoNome: String
 ) {
-  val gravadoLoginStr: String
-    get() {
-      return getUser(gravadoLogin ?: 0)?.name ?: ""
-    }
-
-  val gravadoStr: String
-    get() = if (gravado == true) "Sim" else "Não"
-
   fun findProdutos(): List<ProdutoMovimentacao> {
     val filtro = FiltroMovimentacao(
       numLoja = numloja,

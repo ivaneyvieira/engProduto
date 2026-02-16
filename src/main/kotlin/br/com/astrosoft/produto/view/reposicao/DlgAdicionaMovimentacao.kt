@@ -83,12 +83,23 @@ class DlgAdicionaMovimentacao(
         this.numloja = acerto.numloja
         this.data = acerto.data
         this.hora = acerto.hora
+        this.noLogin = acerto.noLogin
         this.login = acerto.login
         this.usuario = acerto.usuario
+
         this.prdno = linha.prdno
         this.grade = linha.grade
-        this.gravadoLogin = user?.no
-        this.gravado = acerto.gravado
+        this.noGravado = user?.no
+        this.gravadoLogin = acerto.gravadoLogin
+
+        this.noEntregue = acerto.noEntregue
+        this.entregue = acerto.entregue
+        this.entregueNome = acerto.entregueNome
+
+        this.noRecebido = acerto.noRecebido
+        this.recebido = acerto.recebido
+        this.recebidoNome = acerto.recebidoNome
+
         this.movimentacao = linha.movimentacao ?: 0
       }
     }

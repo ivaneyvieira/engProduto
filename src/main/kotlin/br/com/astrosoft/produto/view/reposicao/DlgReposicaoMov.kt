@@ -36,7 +36,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
     this.onClose = onClose
     val numero = movimentacao.numero
     val loja = movimentacao.lojaSigla
-    val gravado = if (movimentacao.gravado == true) "(Gravado ${movimentacao.gravadoLoginStr})" else ""
+    val gravado = if (movimentacao.noGravado > 0) "(Gravado ${movimentacao.gravadoLogin})" else ""
 
     form = SubWindowForm(
       title = "Produtos do Pedido $numero - Loja $loja $gravado",
@@ -63,7 +63,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Adiciona") {
-              this.isVisible = false
+              this.isVisible = true
               this.icon = VaadinIcon.PLUS.create()
               this.addClickListener {
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
@@ -169,11 +169,11 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   }
 
   fun update() {
-    val produtos = Movimentacaos()
+    val produtos = movimentacoes()
     gridDetail.setItems(produtos)
   }
 
-  private fun Movimentacaos(): List<ProdutoMovimentacao> {
+  private fun movimentacoes(): List<ProdutoMovimentacao> {
     return movimentacao.findProdutos()
   }
 
@@ -218,8 +218,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.codFor = linha.codForn
-        this.gravadoLogin = user?.no
-        this.gravado = this@DlgReposicaoMov.movimentacao.gravado
+        this.gravadoLogin = user?.login
         this.locApp = linha.locApp
         this.estoque = linha.estoqueLoja
       }
@@ -232,7 +231,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
     } else {
       emptyList()
     }
-    val selecionados = (gridDetail.selectedItems.toList() + Movimentacaos()).distinct()
+    val selecionados = (gridDetail.selectedItems.toList() + movimentacoes()).distinct()
     val produtos = findProdutos.filter {
       it !in selecionados
     }
