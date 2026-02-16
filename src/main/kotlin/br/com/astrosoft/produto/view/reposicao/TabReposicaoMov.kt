@@ -3,7 +3,10 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoMov
@@ -104,7 +107,9 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora")
     columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
-    columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "20rem")
+    columnGrid(Movimentacao::gravadoLogin, header = "Gravado", width = "7rem")
+    columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
+    columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
   }
 
   override fun filtro(): FiltroMovimentacao {
@@ -116,8 +121,12 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     )
   }
 
-  override fun updateProduto(produtos: List<Movimentacao>) {
-    updateGrid(produtos)
+  override fun updatePedidos(pedidos: List<Movimentacao>) {
+    updateGrid(pedidos)
+    dlgEstoque?.update()
+  }
+
+  override fun updateProdutos() {
     dlgEstoque?.update()
   }
 
@@ -156,8 +165,21 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     }
   }
 
+  override fun autorizaAssinatura(assunto: String, block: (empno: Int, senha: String) -> Unit) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = assunto, form = form) {
+      val empno = form.numero
+      val senha = form.senha
+      block(empno, senha)
+    }
+  }
+
   override fun produtosSelecionado(): List<ProdutoMovimentacao> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
+  }
+
+  override fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
+    return dlgEstoque?.produtosNaoSelecionado().orEmpty()
   }
 
   override fun adicionaPedido(movimentacao: Movimentacao) {

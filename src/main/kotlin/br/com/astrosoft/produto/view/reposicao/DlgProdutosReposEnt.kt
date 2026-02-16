@@ -28,7 +28,7 @@ class DlgProdutosReposEnt(
       val data = reposicoes.map { it.data.format() }.distinct().joinToString(", ")
       "Loja: $loja    Data: $data"
     }
-    form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
+    form = SubWindowForm("Produtos de reposicao $reposicaoTitle", toolBar = {
 
     }, onClose = {
       onClose()

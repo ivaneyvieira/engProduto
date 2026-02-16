@@ -20,7 +20,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val reposicaoTitle = "${reposicao.numero}     ${reposicao.data.format()}"
-    form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
+    form = SubWindowForm("Produtos de reposicao $reposicaoTitle", toolBar = {
       button("Assina") {
         icon = VaadinIcon.SIGN_IN.create()
         onClick {

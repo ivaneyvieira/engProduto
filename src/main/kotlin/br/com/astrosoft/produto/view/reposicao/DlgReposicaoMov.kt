@@ -63,9 +63,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Adiciona") {
-              this.isVisible = true
+              this.isVisible = false
               this.icon = VaadinIcon.PLUS.create()
-              this.addClickListener {
+              this.onClick {
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
                   update()
                 }
@@ -76,8 +76,22 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             this.button("Remove") {
               this.isVisible = false
               this.icon = VaadinIcon.TRASH.create()
-              this.addClickListener {
+              this.onClick {
                 viewModel.removePedido()
+              }
+            }
+
+            this.button("Assina Entrega"){
+              this.icon = VaadinIcon.SIGN_IN.create()
+              this.onClick {
+                viewModel.assinaEntrega(movimentacao)
+              }
+            }
+
+            this.button("Assina Recebimento"){
+              this.icon = VaadinIcon.SIGN_OUT.create()
+              this.onClick{
+                viewModel.assinaRecebimento(movimentacao)
               }
             }
           }
@@ -269,5 +283,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   fun gravaSelecao() {
     gravaProdutos()
     updateGrid(false)
+  }
+
+  fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
+    return gridDetail.list() - produtosSelecionado().toSet()
   }
 }

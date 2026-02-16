@@ -36,7 +36,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
       (it.usuario == user.name) || (it.login == user.login)
     }
-    subView.updateProduto(produtos)
+    subView.updatePedidos(produtos)
   }
 
   fun updateProduto(produto: ProdutoMovimentacao) = viewModel.exec {
@@ -47,10 +47,13 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     if (pedido.noGravado > 0) {
       fail("Pedido já gravado")
     }
+
     subView.autorizaPedido { user ->
       subView.gravaSelecao()
       val pordutos = pedido.findProdutos()
       pordutos.forEach {
+        val userLogin = AppConfig.userLogin() as? UserSaci
+        it.noLogin = userLogin?.no
         it.noGravado = user.no
         it.save()
       }
@@ -136,15 +139,84 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
+
+  fun assinaEntrega(mov: Movimentacao) = viewModel.exec {
+    if (mov.noGravado == 0) {
+      fail("O pedido não está gravado")
+    }
+
+    val pedidosSelecionado = subView.produtosSelecionado()
+    val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
+
+    if (pedidosSelecionado.isEmpty()) {
+      fail("Nenhum pedido selecionado")
+    }
+
+    if (pedidosNaoSelecionado.isNotEmpty()) {
+      fail("Pedidos não selecionados")
+    }
+
+    subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
+      val funcionario = saci.listFuncionario(empno)
+
+      if (funcionario?.senha != senha) {
+        fail("Funcionário ou senha inválido")
+      }
+
+      pedidosSelecionado.forEach {
+        it.noEntregue = empno
+        it.save()
+      }
+      subView.updateProdutos()
+    }
+  }
+
+  fun assinaRecebimento(mov: Movimentacao) = viewModel.exec {
+    if (mov.noGravado == 0) {
+      fail("O pedido não está gravado")
+    }
+
+    if (mov.noEntregue == 0) {
+      fail("O pedido ainda não foi entregue")
+    }
+
+    val pedidosSelecionado = subView.produtosSelecionado()
+    val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
+
+    if (pedidosSelecionado.isEmpty()) {
+      fail("Nenhum pedido selecionado")
+    }
+
+    if (pedidosNaoSelecionado.isNotEmpty()) {
+      fail("Pedidos não selecionados")
+    }
+
+    subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->
+      val funcionario = saci.listFuncionario(empno)
+
+      if (funcionario?.senha != senha) {
+        fail("Funcionário ou senha inválido")
+      }
+
+      pedidosSelecionado.forEach {
+        it.noRecebido = empno
+        it.save()
+      }
+      subView.updateProdutos()
+    }
+  }
 }
 
 interface ITabReposicaoMov : ITabView {
   fun filtro(): FiltroMovimentacao
-  fun updateProduto(produtos: List<Movimentacao>)
+  fun updatePedidos(produtos: List<Movimentacao>)
+  fun updateProdutos()
   fun itensSelecionados(): List<Movimentacao>
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaPedido(block: (user: IUser) -> Unit)
+  fun autorizaAssinatura(assunto: String, block: (empno: Int, senha: String) -> Unit)
   fun produtosSelecionado(): List<ProdutoMovimentacao>
+  fun produtosNaoSelecionado(): List<ProdutoMovimentacao>
   fun adicionaPedido(movimentacao: Movimentacao)
   fun gravaSelecao()
   fun closeForm()

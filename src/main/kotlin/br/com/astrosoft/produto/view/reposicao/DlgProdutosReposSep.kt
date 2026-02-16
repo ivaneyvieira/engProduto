@@ -22,41 +22,43 @@ class DlgProdutosReposSep(val viewModel: TabReposicaoSepViewModel, var reposicao
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val reposicaoTitle = "${reposicao.numero}     ${reposicao.data.format()}"
-    form = SubWindowForm("Produtos do reposicao $reposicaoTitle", toolBar = {
-      textField("Código de barras") {
-        this.valueChangeMode = ValueChangeMode.ON_CHANGE
-        addValueChangeListener {
-          if (it.isFromClient) {
-            viewModel.selecionaProdutos(it.value)
-            this@textField.value = ""
-            this@textField.focus()
+    form = SubWindowForm(
+      title = "Produtos de reposicao $reposicaoTitle",
+      toolBar = {
+        textField("Código de barras") {
+          this.valueChangeMode = ValueChangeMode.ON_CHANGE
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.selecionaProdutos(it.value)
+              this@textField.value = ""
+              this@textField.focus()
+              tentaAssinar()
+            }
+          }
+        }
+        button("Entregue") {
+          this.isVisible = false
+          icon = VaadinIcon.ARROW_RIGHT.create()
+          onClick {
+            viewModel.marca()
+          }
+        }
+        button("Desmarcar") {
+          icon = VaadinIcon.ARROW_LEFT.create()
+          onClick {
+            viewModel.desmarcar()
+          }
+        }
+        button("Assina") {
+          icon = VaadinIcon.SIGN_IN.create()
+          //this.isVisible = reposicao.isProntoAssinar()
+          onClick {
             tentaAssinar()
           }
         }
-      }
-      button("Entregue") {
-        this.isVisible = false
-        icon = VaadinIcon.ARROW_RIGHT.create()
-        onClick {
-          viewModel.marca()
-        }
-      }
-      button("Desmarcar") {
-        icon = VaadinIcon.ARROW_LEFT.create()
-        onClick {
-          viewModel.desmarcar()
-        }
-      }
-      button("Assina") {
-        icon = VaadinIcon.SIGN_IN.create()
-        //this.isVisible = reposicao.isProntoAssinar()
-        onClick {
-          tentaAssinar()
-        }
-      }
-    }, onClose = {
-      onClose()
-    }) {
+      }, onClose = {
+        onClose()
+      }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
