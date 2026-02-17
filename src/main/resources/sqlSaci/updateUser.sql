@@ -1,18 +1,17 @@
-DO @NO := ( SELECT MAX(no)
-            FROM
-              sqldados.users
-            WHERE login = :login
-              AND (bits1 & POW(2, 0)) = 0 );
-
 UPDATE sqldados.users
-SET auxLong1 = :loja
-WHERE no = @NO;
+SET auxLong1 = :storeno
+WHERE no = :no;
 
 INSERT INTO sqldados.userApp(userno, appName, bitAcesso, bitAcesso2, bitAcesso3, locais, senhaApp)
-VALUES (@NO, :appName, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :senha)
+VALUES (:no, :appName, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :senha)
 ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
                         bitAcesso2  = :bitAcesso2,
                         bitAcesso3  = :bitAcesso3,
                         locais      = :locais,
                         impressoras = :listaImpressora,
-                        lojas       = :listaLoja
+                        lojas       = :listaLoja;
+
+REPLACE INTO sqldados.userSaciApp(no, appName, name, login, storeno, senha, bitAcesso, bitAcesso2, bitAcesso3, locais,
+                                  impressora, listaImpressora, ativoSaci, listaLoja)
+VALUES (:no, :appName, :name, :login, :storeno, :senha, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :impressora,
+        :listaImpressora, :ativoSaci, :listaLoja)

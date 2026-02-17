@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.localDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import kotlin.math.pow
 import kotlin.reflect.KProperty
@@ -691,6 +692,8 @@ class UserSaci : IUser {
     get() = login == "ADM"
 
   companion object {
+    private val userList = mutableListOf<UserSaci>()
+
     fun userLogin(login: String, senha: String): UserSaci? {
       val lista = findAll()
       val user = lista
@@ -702,7 +705,13 @@ class UserSaci : IUser {
     }
 
     fun findAll(): List<UserSaci> {
-      return saci.findAllUser().filter { it.ativo }
+      return updateAll().filter { it.ativo }
+    }
+
+    private fun updateAll(): List<UserSaci> {
+      userList.clear()
+      userList.addAll(saci.findAllUser())
+      return userList
     }
 
     fun updateUser(user: UserSaci) {
@@ -710,11 +719,19 @@ class UserSaci : IUser {
     }
 
     fun findUser(login: String?): List<UserSaci> {
-      login ?: return emptyList()
-      if (login.isBlank()) {
+      if (userList.isEmpty()) {
+        runBlocking {
+          updateAll()
+        }
+      }
+
+      if (login.isNullOrBlank() || login.isEmpty()) {
         return emptyList()
       }
-      return saci.findUser(login)
+
+      return userList.filter {
+        it.login.equals(login, ignoreCase = true)
+      }
     }
 
     fun userEstoqueLocais(): List<String> {

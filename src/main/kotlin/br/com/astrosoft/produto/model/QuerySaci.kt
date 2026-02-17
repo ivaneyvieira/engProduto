@@ -18,16 +18,16 @@ class QuerySaci : QueryDB(database) {
     login ?: return emptyList()
     val sql = "/sqlSaci/userSenha.sql"
     return query(sql, UserSaci::class) {
-      addParameter("login", login)
-      addParameter("appName", appName)
+      addOptionalParameter("login", login)
+      addOptionalParameter("appName", appName)
     }
   }
 
   fun findAllUser(): List<UserSaci> {
     val sql = "/sqlSaci/userSenha.sql"
     return query(sql, UserSaci::class) {
-      addParameter("login", "TODOS")
-      addParameter("appName", appName)
+      addOptionalParameter("login", "TODOS")
+      addOptionalParameter("appName", appName)
     }
   }
 
@@ -105,15 +105,19 @@ class QuerySaci : QueryDB(database) {
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {
+      addOptionalParameter("no", user.no)
+      addOptionalParameter("appName", appName)
+      addOptionalParameter("name", user.name)
       addOptionalParameter("login", user.login)
+      addOptionalParameter("storeno", user.storeno)
+      addOptionalParameter("senha", user.senha)
       addOptionalParameter("bitAcesso", user.bitAcesso)
       addOptionalParameter("bitAcesso2", user.bitAcesso2)
       addOptionalParameter("bitAcesso3", user.bitAcesso3)
-      addOptionalParameter("loja", user.storeno)
-      addOptionalParameter("appName", appName)
-      addOptionalParameter("senha", user.senha)
       addOptionalParameter("locais", user.locais)
+      addOptionalParameter("impressora", user.impressora)
       addOptionalParameter("listaImpressora", user.listaImpressora)
+      addOptionalParameter("ativoSaci", user.ativoSaci)
       addOptionalParameter("listaLoja", user.listaLoja)
     }
   }
@@ -767,11 +771,11 @@ class QuerySaci : QueryDB(database) {
   fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?, userno: Int) {
     val sql = "/sqlSaci/ativaDataHoraImpressao.sql"
     script(sql) {
-      addParameter("storeno", storeno)
-      addParameter("ordno", ordno)
-      addParameter("data", data?.toSaciDate() ?: 0)
-      addParameter("hora", hora ?: LocalTime.MIN)
-      addParameter("userno", userno)
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("ordno", ordno)
+      addOptionalParameter("data", data?.toSaciDate() ?: 0)
+      addOptionalParameter("hora", hora ?: LocalTime.MIN)
+      addOptionalParameter("userno", userno)
     }
   }
 
