@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.view.reposicao
 
-import br.com.astrosoft.framework.view.FormUsuario
 import br.com.astrosoft.framework.view.vaadin.TabPanelUser
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
@@ -8,7 +7,6 @@ import br.com.astrosoft.produto.model.beans.EMetodo
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoUsr
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoUsrViewModel
-import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
@@ -59,8 +57,22 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
         binder.bind(this, UserSaci::tipoMetodo.name)
       }
     }
-    checkBox("Autoriza Acerto") {
-      binder.bind(this, UserSaci::autorizaAcerto.name)
+    verticalBlock("Comandos") {
+      checkBox("Autoriza Acerto") {
+        binder.bind(this, UserSaci::autorizaAcerto.name)
+      }
+
+      checkBox("Assina Entrega") {
+        binder.bind(this, UserSaci::reposicaoAssinaEntrega.name)
+      }
+
+      checkBox("Assina Recebimento") {
+        binder.bind(this, UserSaci::reposicaoAssinaRecebimento.name)
+      }
+
+      checkBox("Defaz Asssinatura") {
+        binder.bind(this, UserSaci::reposicaoDesfazAssina.name)
+      }
     }
   }
 }

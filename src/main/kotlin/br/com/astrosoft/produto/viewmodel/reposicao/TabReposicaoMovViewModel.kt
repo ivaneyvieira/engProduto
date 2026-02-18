@@ -53,6 +53,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Selecionar produtos para gravar pedido")
     }
 
+    if(produtosSelecionados.any { (it.movimentacao ?: 0) == 0 }){
+      fail("Não é possível gravar pedido com quantidade zero")
+    }
+
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
       produtosSelecionados.forEach {

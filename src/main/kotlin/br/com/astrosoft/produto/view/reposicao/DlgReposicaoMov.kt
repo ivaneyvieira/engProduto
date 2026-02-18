@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.FiltroLocalizaProduto
 import br.com.astrosoft.produto.model.beans.LocalizaProduto
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.beans.agrupa
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -78,7 +79,10 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               }
             }
 
+            val user = AppConfig.userLogin() as? UserSaci
+
             this.button("Assina Entrega") {
+              this.isVisible = user?.reposicaoAssinaEntrega == true
               this.icon = VaadinIcon.SIGN_IN.create()
               this.onClick {
                 viewModel.assinaEntrega(movimentacao)
@@ -86,6 +90,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Assina Recebimento") {
+              this.isVisible = user?.reposicaoAssinaRecebimento == true
               this.icon = VaadinIcon.SIGN_OUT.create()
               this.onClick {
                 viewModel.assinaRecebimento(movimentacao)
@@ -101,6 +106,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Desfaz Ass") {
+              this.isVisible = user?.reposicaoDesfazAssina == true
               this.icon = VaadinIcon.UNLINK.create()
               this.onClick {
                 viewModel.desfazAssinatura(movimentacao)
