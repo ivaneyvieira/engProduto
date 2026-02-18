@@ -168,6 +168,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Produtos não selecionados")
     }
 
+    if(mov.noEntregue > 0){
+      fail("O produto já foi entregue")
+    }
+
     subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
       val funcionario = saci.listFuncionario(empno)
 
@@ -190,6 +194,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
     if (mov.noEntregue == 0) {
       fail("O produto ainda não foi entregue")
+    }
+
+    if(mov.noRecebido > 0){
+      fail("O produto já foi recebido")
     }
 
     val pedidosSelecionado = subView.produtosSelecionado()
