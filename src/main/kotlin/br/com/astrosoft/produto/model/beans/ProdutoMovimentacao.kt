@@ -106,6 +106,17 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
     val pedido = mapPedido.value.firstOrNull() ?: return@mapNotNull null
     val lista = mapPedido.value
 
+    val noGravado = lista.maxOfOrNull { it.noGravado ?: 0 } ?: 0
+    val gravadoLogin = lista.firstOrNull { (it.noGravado ?: 0) == noGravado }?.gravadoLogin ?: ""
+
+    val noEntregue = lista.maxOfOrNull { it.noEntregue ?: 0 } ?: 0
+    val entregue = lista.firstOrNull { (it.noEntregue ?: 0) == noEntregue }?.entregue ?: ""
+    val entregueNome = lista.firstOrNull { (it.noEntregue ?: 0) == noEntregue }?.entregueNome ?: ""
+
+    val noRecebido = lista.maxOfOrNull { it.noRecebido ?: 0 } ?: 0
+    val recebido = lista.firstOrNull { (it.noRecebido ?: 0) == noRecebido }?.recebido ?: ""
+    val recebidoNome = lista.firstOrNull { (it.noRecebido ?: 0) == noRecebido }?.recebidoNome ?: ""
+
     Movimentacao(
       numero = pedido.numero ?: return@mapNotNull null,
       numloja = pedido.numloja ?: return@mapNotNull null,
@@ -115,14 +126,14 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       noLogin = pedido.noLogin ?: 0,
       login = pedido.login ?: "",
       usuario = pedido.usuario ?: "",
-      noGravado = pedido.noGravado ?: 0,
-      gravadoLogin = pedido.gravadoLogin ?: "",
-      noEntregue = pedido.noEntregue ?: 0,
-      entregue = pedido.entregue ?: "",
-      entregueNome = pedido.entregueNome ?: "",
-      noRecebido = pedido.noRecebido ?: 0,
-      recebido = pedido.recebido ?: "",
-      recebidoNome = pedido.recebidoNome ?: ""
+      noGravado = noGravado,
+      gravadoLogin = gravadoLogin,
+      noEntregue = noEntregue,
+      entregue = entregue,
+      entregueNome = entregueNome,
+      noRecebido = noRecebido,
+      recebido = recebido,
+      recebidoNome = recebidoNome
     )
   }
 }

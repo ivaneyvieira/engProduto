@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.FiltroLocalizaProduto
 import br.com.astrosoft.produto.model.beans.LocalizaProduto
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
+import br.com.astrosoft.produto.model.beans.agrupa
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -66,8 +67,8 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               this.isVisible = true
               this.icon = VaadinIcon.PLUS.create()
               this.onClick {
-                if (movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0) {
-                  DialogHelper.showError("O pedido já está assinado")
+                if (movimentacao.noEntregue > 0) {
+                  DialogHelper.showError("O pedido já está assinado a Entrega")
                   return@onClick
                 }
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
@@ -203,12 +204,26 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   }
 
   fun update() {
-    val produtos = movimentacoes()
+    val produtos = produtosMovimentacoes()
     gridDetail.setItems(produtos)
   }
 
-  private fun movimentacoes(): List<ProdutoMovimentacao> {
-    return movimentacao.findProdutos()
+  private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {
+    val produtos = movimentacao.findProdutos()
+    val produtosAgrupados = produtos.agrupa().firstOrNull()
+    if(produtosAgrupados != null) {
+      movimentacao.noEntregue = produtosAgrupados.noEntregue
+      movimentacao.entregue = produtosAgrupados.entregue
+      movimentacao.entregueNome = produtosAgrupados.entregueNome
+
+      movimentacao.noGravado = produtosAgrupados.noGravado
+      movimentacao.gravadoLogin = produtosAgrupados.gravadoLogin
+
+      movimentacao.noRecebido = produtosAgrupados.noRecebido
+      movimentacao.recebido = produtosAgrupados.recebido
+      movimentacao.recebidoNome = produtosAgrupados.recebidoNome
+    }
+    return produtos
   }
 
   fun closeForm() {
@@ -265,7 +280,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
     } else {
       emptyList()
     }
-    val selecionados = (gridDetail.selectedItems.toList() + movimentacoes()).distinct()
+    val selecionados = (gridDetail.selectedItems.toList() + produtosMovimentacoes()).distinct()
     val produtos = findProdutos.filter {
       it !in selecionados
     }

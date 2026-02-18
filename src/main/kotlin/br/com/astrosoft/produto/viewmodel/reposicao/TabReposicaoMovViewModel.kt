@@ -168,7 +168,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       val funcionario = saci.listFuncionario(empno)
 
       if (funcionario?.senha != senha) {
-        fail("Funcionário ou senha inválido")
+        viewModel.view.showError("Funcionário ou senha inválido")
       }
 
       pedidosSelecionado.forEach {
@@ -203,7 +203,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       val funcionario = saci.listFuncionario(empno)
 
       if (funcionario?.senha != senha) {
-        fail("Funcionário ou senha inválido")
+        viewModel.view.showError("Funcionário ou senha inválido")
       }
 
       pedidosSelecionado.forEach {
