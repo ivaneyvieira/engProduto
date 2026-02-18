@@ -51,7 +51,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     val produtosSelecionados = subView.produtosSelecionado()
     val produtosNaoSelecionados = subView.produtosNaoSelecionado()
     if (produtosSelecionados.isEmpty()) {
-      fail("Selecionar produtos para assinar a entrega")
+      fail("Selecionar produtos para gravar pedido")
     }
     if (produtosNaoSelecionados.isNotEmpty()) {
       fail("Existem produtos não selecionados")
