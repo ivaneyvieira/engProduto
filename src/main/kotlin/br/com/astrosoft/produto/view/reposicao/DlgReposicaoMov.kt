@@ -73,27 +73,28 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               }
             }
 
-            this.button("Remove") {
-              this.isVisible = false
-              this.icon = VaadinIcon.TRASH.create()
-              this.onClick {
-                viewModel.removePedido()
-              }
-            }
-
-            this.button("Assina Entrega"){
+            this.button("Assina Entrega") {
               this.icon = VaadinIcon.SIGN_IN.create()
               this.onClick {
                 viewModel.assinaEntrega(movimentacao)
               }
             }
 
-            this.button("Assina Recebimento"){
+            this.button("Assina Recebimento") {
               this.icon = VaadinIcon.SIGN_OUT.create()
-              this.onClick{
+              this.onClick {
                 viewModel.assinaRecebimento(movimentacao)
               }
             }
+
+            this.button("Remove") {
+              this.isVisible = true
+              this.icon = VaadinIcon.TRASH.create()
+              this.onClick {
+                viewModel.removePedido()
+              }
+            }
+
           }
           horizontalBlock {
             this.isSpacing = true
