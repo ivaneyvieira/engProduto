@@ -153,9 +153,9 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     )
   }
 
-  override fun autorizaPedido(block: (IUser) -> Unit) {
+  override fun autorizaPedido(caption: String, block: (IUser) -> Unit) {
     val form = FormAutorizaPedido()
-    DialogHelper.showForm(caption = "Autoriza gravação do pedido", form = form) {
+    DialogHelper.showForm(caption = caption, form = form) {
       val user = AppConfig.findUser(form.login, form.senha)
       if (user != null) {
         block(user)

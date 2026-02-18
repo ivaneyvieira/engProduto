@@ -48,7 +48,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido já gravado")
     }
 
-    subView.autorizaPedido { user ->
+    subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
       val pordutos = pedido.findProdutos()
       pordutos.forEach {
@@ -69,7 +69,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Nenhum Pedido selecionado")
     }
 
-    subView.autorizaPedido {
+    subView.autorizaPedido("Autoriza remover do pedido") {
       itensSelecionado.forEach { produto ->
         produto.remove()
       }
@@ -213,7 +213,7 @@ interface ITabReposicaoMov : ITabView {
   fun updateProdutos()
   fun itensSelecionados(): List<Movimentacao>
   fun filtroVazio(): FiltroProdutoEstoque
-  fun autorizaPedido(block: (user: IUser) -> Unit)
+  fun autorizaPedido(caption: String, block: (user: IUser) -> Unit)
   fun autorizaAssinatura(assunto: String, block: (empno: Int, senha: String) -> Unit)
   fun produtosSelecionado(): List<ProdutoMovimentacao>
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao>

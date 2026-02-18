@@ -35,16 +35,22 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
   }
 
   override fun printSumary(bean: ProdutoMovimentacao?) {
+    val entregueNome = bean?.entregueNome ?: ""
+    val recebidoNome = bean?.recebidoNome ?: ""
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln(bean?.entregueNome ?: "", center = true)
+    if (entregueNome.isNotBlank()) {
+      writeln(entregueNome ?: "", center = true)
+    }
     writeln("")
     writeln("Separado/Entregue", center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
-    writeln(bean?.recebidoNome ?: "", center = true)
+    if (recebidoNome.isNotBlank()) {
+      writeln(recebidoNome ?: "", center = true)
+    }
     writeln("")
     writeln("Recebido", center = true)
     writeln("")
