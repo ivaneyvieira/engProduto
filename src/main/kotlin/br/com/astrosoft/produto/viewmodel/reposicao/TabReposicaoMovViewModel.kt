@@ -74,7 +74,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     }
 
     if (pedido.noEntregue > 0) {
-      fail("Entrega assina, produto não pode ser removido")
+      fail("Entrega assinada, produto não pode ser removido")
     }
 
     subView.autorizaPedido("Autoriza remover do produto") {
@@ -150,18 +150,18 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
   fun assinaEntrega(mov: Movimentacao) = viewModel.exec {
     if (mov.noGravado == 0) {
-      fail("O pedido não está gravado")
+      fail("O produto não está gravado")
     }
 
     val pedidosSelecionado = subView.produtosSelecionado()
     val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
 
     if (pedidosSelecionado.isEmpty()) {
-      fail("Nenhum pedido selecionado")
+      fail("Nenhum produto selecionado")
     }
 
     if (pedidosNaoSelecionado.isNotEmpty()) {
-      fail("Pedidos não selecionados")
+      fail("Produtos não selecionados")
     }
 
     subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
@@ -181,22 +181,22 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
   fun assinaRecebimento(mov: Movimentacao) = viewModel.exec {
     if (mov.noGravado == 0) {
-      fail("O pedido não está gravado")
+      fail("O produto não está gravado")
     }
 
     if (mov.noEntregue == 0) {
-      fail("O pedido ainda não foi entregue")
+      fail("O produto ainda não foi entregue")
     }
 
     val pedidosSelecionado = subView.produtosSelecionado()
     val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
 
     if (pedidosSelecionado.isEmpty()) {
-      fail("Nenhum pedido selecionado")
+      fail("Nenhum produto selecionado")
     }
 
     if (pedidosNaoSelecionado.isNotEmpty()) {
-      fail("Pedidos não selecionados")
+      fail("Produtos não selecionados")
     }
 
     subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->
