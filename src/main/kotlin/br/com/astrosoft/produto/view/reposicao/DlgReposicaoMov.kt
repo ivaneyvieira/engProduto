@@ -66,6 +66,10 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               this.isVisible = true
               this.icon = VaadinIcon.PLUS.create()
               this.onClick {
+                if (movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0) {
+                  DialogHelper.showError("O pedido já está assinado")
+                  return@onClick
+                }
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
                   update()
                 }
@@ -180,6 +184,15 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
       columnGrid(ProdutoMovimentacao::localAbrev, "Loc App", width = "5rem")
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoMovimentacao::estoque, "Estoque", width = "5rem")
+
+      this.setPartNameGenerator { produto ->
+        val entregue = produto.noEntregue ?: 0
+        if (entregue > 0) {
+          "amarelo"
+        } else {
+          null
+        }
+      }
     }
     this.addAndExpand(gridDetail)
     update()
