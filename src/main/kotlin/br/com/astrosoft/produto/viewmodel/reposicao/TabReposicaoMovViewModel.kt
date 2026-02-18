@@ -48,6 +48,15 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido já gravado")
     }
 
+    val produtosSelecionados = subView.produtosSelecionado()
+    val produtosNaoSelecionados = subView.produtosNaoSelecionado()
+    if (produtosSelecionados.isEmpty()) {
+      fail("Selecionar produtos para assinar a entrega")
+    }
+    if(produtosNaoSelecionados.isNotEmpty()) {
+      fail("Existem produtos não selecionados")
+    }
+
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
       val pordutos = pedido.findProdutos()
