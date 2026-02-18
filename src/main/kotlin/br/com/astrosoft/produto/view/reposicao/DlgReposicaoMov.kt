@@ -63,7 +63,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
             }
 
             this.button("Adiciona") {
-              this.isVisible = false
+              this.isVisible = true
               this.icon = VaadinIcon.PLUS.create()
               this.onClick {
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
