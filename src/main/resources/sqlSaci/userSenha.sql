@@ -4,7 +4,7 @@ DROP TEMPORARY TABLE IF EXISTS T_USER_SACI;
 CREATE TEMPORARY TABLE T_USER_SACI
 SELECT U.no                                      AS no,
        U.name                                    AS name,
-       A.appName                                 AS appName,
+       :appName                                  AS appName,
        login                                     AS login,
        U.auxLong1                                AS storeno,
        IF(A.senhaApp IS NULL,
@@ -69,3 +69,4 @@ FROM
   sqldados.userSaciApp
 WHERE appName = :appName
   AND (login = :login OR :login = 'TODOS')
+ORDER BY no

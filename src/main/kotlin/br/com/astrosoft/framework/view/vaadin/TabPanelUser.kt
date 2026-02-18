@@ -9,6 +9,8 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.github.mvysny.kaributools.asc
+import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
@@ -39,6 +41,8 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     columnGrid(UserSaci::name, "Nome")
 
     this.configGrid()
+
+    this.sort(UserSaci::no.asc)
   }
 
   fun filter(): String {
@@ -60,14 +64,14 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
         viewModel.adicionaUsuario()
       }
     }
-    button("Atualizar") {
+    button("Editar") {
       this.icon = VaadinIcon.EDIT.create()
 
       addClickListener {
         viewModel.modificarUsuario()
       }
     }
-    button("Remove") {
+    button("Remover") {
       this.icon = VaadinIcon.TRASH.create()
 
       addClickListener {
@@ -101,10 +105,12 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
   private fun KFormLayout.configFieldsDefault(binder: Binder<UserSaci>, isReadOnly: Boolean) {
     setResponsiveSteps(FormLayout.ResponsiveStep("0", 12))
 
-    val edtNum = integerField("Número") {
+    integerField("Número") {
       this.colspan = 2
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.isReadOnly = isReadOnly
+      this.isAutoselect = true
+      this.isAutofocus = true
       bind(binder).bind(UserSaci::no)
       this.valueChangeMode = ValueChangeMode.EAGER
 
@@ -129,17 +135,20 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
         }
       }
     }
-    val edtNome = textField("Nome do Usuário") {
+    textField("Nome do Usuário") {
       this.colspan = 10
+      this.isAutoselect = true
       bind(binder).withNullRepresentation("").bind(UserSaci::name)
     }
 
     textField("Login do Usuário") {
       this.colspan = 6
+      this.isAutoselect = true
       bind(binder).bind(UserSaci::login)
     }
     passwordField("Senha") {
       this.colspan = 6
+     // this.isAutoselect = true
       bind(binder).bind(UserSaci::senha)
     }
 
@@ -160,12 +169,6 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
         impressoras.firstOrNull { impressora -> impressora.no == numImpressora }?.name ?: ""
       }
       bind(binder).bind(UserSaci::storeno)
-    }
-
-    if (!isReadOnly) {
-      edtNum.focus()
-    } else {
-      edtNome.focus()
     }
   }
 

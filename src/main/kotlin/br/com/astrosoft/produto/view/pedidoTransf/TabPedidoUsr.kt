@@ -17,7 +17,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::pedidoTransfReserva, "Reserva")
     columnGrid(UserSaci::pedidoTransfAutorizada, "Autorizada")
-    columnGrid(UserSaci::pedidoTransfCD5A, "Autorizada")
+    columnGrid(UserSaci::pedidoTransfCD5A, "CD5A")
     columnGrid(UserSaci::pedidoTransfEnt, "Entregue")
     columnGrid(UserSaci::pedidoTransfRessu4, "Ressu4")
   }
