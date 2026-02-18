@@ -49,11 +49,9 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     }
 
     val produtosSelecionados = subView.produtosSelecionado()
-    val produtosNaoSelecionados = subView.produtosNaoSelecionado()
     if (produtosSelecionados.isEmpty()) {
       fail("Selecionar produtos para gravar pedido")
     }
-
 
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
@@ -72,14 +70,14 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     val itensSelecionado = subView.produtosSelecionado()
 
     itensSelecionado.ifEmpty {
-      fail("Nenhum Pedido selecionado")
+      fail("Nenhum produto selecionado")
     }
 
     if (pedido.noEntregue > 0) {
       fail("Entrega assina, produto não pode ser removido")
     }
 
-    subView.autorizaPedido("Autoriza remover do pedido") {
+    subView.autorizaPedido("Autoriza remover do produto") {
       itensSelecionado.forEach { produto ->
         produto.remove()
       }
