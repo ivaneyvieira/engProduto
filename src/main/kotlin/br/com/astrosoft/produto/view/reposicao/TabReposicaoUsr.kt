@@ -8,9 +8,12 @@ import br.com.astrosoft.produto.model.beans.EMetodo
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoUsr
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoUsrViewModel
+import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.data.binder.Binder
 
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -24,7 +27,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     columnGrid(UserSaci::autorizaAcerto, "Autoriza Acerto")
   }
 
-  override fun FormUsuario.configFields() {
+  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
     verticalBlock("Menu") {
       checkBox("Separar") {
         binder.bind(this, UserSaci::reposicaoSep.name)

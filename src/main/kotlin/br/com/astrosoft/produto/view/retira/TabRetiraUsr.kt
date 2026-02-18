@@ -9,10 +9,13 @@ import br.com.astrosoft.produto.model.beans.ETipoRetira
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.retira.ITabPedidoRetiraUsr
 import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraUsrViewModel
+import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.data.binder.Binder
 
 class TabRetiraUsr(viewModel: PedidoRetiraUsrViewModel) : TabPanelUser(viewModel), ITabPedidoRetiraUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -20,7 +23,7 @@ class TabRetiraUsr(viewModel: PedidoRetiraUsrViewModel) : TabPanelUser(viewModel
     columnGrid(UserSaci::retiraImpresso, "Impresso")
   }
 
-  override fun FormUsuario.configFields() {
+  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
     horizontalBlock {
       verticalBlock("Menu") {
         checkBox("Imprimir") {

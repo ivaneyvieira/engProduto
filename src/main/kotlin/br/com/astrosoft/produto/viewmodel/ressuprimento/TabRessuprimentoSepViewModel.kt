@@ -31,7 +31,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 
@@ -44,7 +44,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 

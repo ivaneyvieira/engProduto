@@ -95,7 +95,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
 
     if (user == null) {

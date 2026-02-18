@@ -9,11 +9,14 @@ import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliUsr
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliUsrViewModel
+import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.binder.Binder
 
 class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), ITabDevCliUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -27,7 +30,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     columnGrid(UserSaci::devCliVenda, "Venda")
   }
 
-  override fun FormUsuario.configFields() {
+  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
     horizontalBlock {
       verticalBlock("Menu") {
         checkBox("Editor") {

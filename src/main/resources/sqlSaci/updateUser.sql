@@ -12,6 +12,6 @@ ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
                         lojas       = :listaLoja;
 
 REPLACE INTO sqldados.userSaciApp(no, appName, name, login, storeno, senha, bitAcesso, bitAcesso2, bitAcesso3, locais,
-                                  impressora, listaImpressora, ativoSaci, listaLoja)
+                                  impressora, listaImpressora, listaLoja)
 VALUES (:no, :appName, :name, :login, :storeno, :senha, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :impressora,
-        :listaImpressora, :ativoSaci, :listaLoja)
+        :listaImpressora, :listaLoja)

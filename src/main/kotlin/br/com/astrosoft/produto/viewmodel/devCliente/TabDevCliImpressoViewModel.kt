@@ -60,7 +60,7 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 

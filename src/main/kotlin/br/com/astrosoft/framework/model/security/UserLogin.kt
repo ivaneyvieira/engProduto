@@ -21,8 +21,8 @@ data class UserLogin(val id: Long, val username: String, private var hashedPassw
       return optUser?.let { u ->
         UserLogin(
           id = u.no.toLong(),
-          username = u.login,
-          hashedPassword = u.senha,
+          username = u.login ?: "",
+          hashedPassword = u.senha ?: "",
           roles = ""
         )
       }

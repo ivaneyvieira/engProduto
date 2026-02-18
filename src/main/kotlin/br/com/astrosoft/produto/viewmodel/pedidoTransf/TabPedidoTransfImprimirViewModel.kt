@@ -45,7 +45,7 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
 
   fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
     val user = UserSaci.findAll()
-      .firstOrNull { it.login.uppercase() == login.uppercase() && it.senha.uppercase() == senha.uppercase() }
+      .firstOrNull { it.login.equals(login, ignoreCase = true) && it.senha.equals(senha, ignoreCase = true) }
     user ?: fail("Usuário ou senha inválidos")
 
     pedido.autoriza(user)

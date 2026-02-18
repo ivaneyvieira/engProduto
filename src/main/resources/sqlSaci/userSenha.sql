@@ -36,7 +36,7 @@ WHERE (U.login = :login OR :login = 'TODOS')
   AND U.bits1 & POW(2, 0) = 0;
 
 INSERT IGNORE sqldados.userSaciApp(no, name, appName, login, storeno, senha, bitAcesso, bitAcesso2, bitAcesso3, locais,
-                                   impressora, listaImpressora, ativoSaci, listaLoja)
+                                   impressora, listaImpressora, listaLoja)
 SELECT no,
        name,
        appName,
@@ -49,7 +49,6 @@ SELECT no,
        locais,
        impressora,
        listaImpressora,
-       ativoSaci,
        listaLoja
 FROM
   T_USER_SACI;
@@ -65,7 +64,6 @@ SELECT no,
        locais,
        impressora,
        listaImpressora,
-       ativoSaci,
        listaLoja
 FROM
   sqldados.userSaciApp

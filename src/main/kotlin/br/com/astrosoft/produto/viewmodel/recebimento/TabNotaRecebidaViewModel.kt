@@ -109,7 +109,7 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 
@@ -135,7 +135,7 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
     user ?: fail("Usuário ou senha inválidos")
 

@@ -5,16 +5,15 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.localDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import kotlin.math.pow
 import kotlin.reflect.KProperty
 
 class UserSaci : IUser {
   override var no: Int = 0
-  override var name: String = ""
-  override var login: String = ""
-  override var senha: String = ""
+  override var name: String? = ""
+  override var login: String? = ""
+  override var senha: String? = ""
   var bitAcesso: Long = 0
   var bitAcesso2: Long = 0
   var bitAcesso3: Long = 0
@@ -23,7 +22,6 @@ class UserSaci : IUser {
   var listaImpressora: String = ""
   var listaLoja: String = ""
   var impressora: String? = ""
-  var ativoSaci: String = ""
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
   var produtoEstoqueGiro by DelegateAuthorized(2)
@@ -692,46 +690,118 @@ class UserSaci : IUser {
     get() = login == "ADM"
 
   companion object {
-    private val userList = mutableListOf<UserSaci>()
+    @Volatile
+    private var userCache: List<UserSaci> = emptyList()
+
+    @Volatile
+    private var userByLogin: Map<String, UserSaci> = emptyMap()
+
+    @Volatile
+    private var lastRefreshMillis: Long = 0L
+
+    @Volatile
+    private var cacheTtlMillis: Long? = null
+
+    private fun normalizeLogin(login: String): String = login.trim().uppercase()
+
+    fun setCacheTtlMillis(ttlMillis: Long?) {
+      cacheTtlMillis = ttlMillis
+    }
+
+    init {
+      setCacheTtlMillis(5 * 60 * 1000)
+    }
+
+    private fun isCacheExpired(nowMillis: Long = System.currentTimeMillis()): Boolean {
+      val ttl = cacheTtlMillis ?: return false
+      if (ttl <= 0L) return false
+      return nowMillis - lastRefreshMillis > ttl
+    }
+
+    fun refreshAll(): List<UserSaci> {
+      val list = saci.findAllUser()
+      synchronized(this) {
+        userCache = list
+        userByLogin = list.associateBy { normalizeLogin(it.login ?: "") }
+        lastRefreshMillis = System.currentTimeMillis()
+        return userCache
+      }
+    }
+
+    fun findAllCached(): List<UserSaci> {
+      return if (userCache.isEmpty() || isCacheExpired()) {
+        refreshAll()
+      } else {
+        userCache
+      }
+    }
 
     fun userLogin(login: String, senha: String): UserSaci? {
       val lista = findAll()
       val user = lista
         .firstOrNull {
           it.login.equals(login, ignoreCase = true) &&
-          it.senha.uppercase().trim() == senha.uppercase().trim()
+          (it.senha ?: "").uppercase().trim() == senha.uppercase().trim()
         }
       return user
     }
 
     fun findAll(): List<UserSaci> {
-      return updateAll().filter { it.ativo }
-    }
-
-    private fun updateAll(): List<UserSaci> {
-      userList.clear()
-      userList.addAll(saci.findAllUser())
-      return userList
+      return findAllCached().filter { it.ativo }
     }
 
     fun updateUser(user: UserSaci) {
       saci.updateUser(user)
+      updateCacheAfterUserUpdate(user)
+      //invalidateCache()
+    }
+
+    private fun updateCacheAfterUserUpdate(user: UserSaci) {
+      synchronized(this) {
+        if (userCache.isEmpty()) return
+
+        val key = normalizeLogin(user.login ?: "")
+        if (!userByLogin.containsKey(key)) {
+          invalidateCache()
+          return
+        }
+
+        userCache = userCache.map {
+          if (it.login.equals(user.login, ignoreCase = true)) user else it
+        }
+        val updatedMap = userByLogin.toMutableMap()
+        updatedMap[key] = user
+        userByLogin = updatedMap
+      }
+    }
+
+    fun invalidateCache() {
+      synchronized(this) {
+        userCache = emptyList()
+        userByLogin = emptyMap()
+        lastRefreshMillis = 0L
+      }
+    }
+
+    fun findUser(numUser: Int): UserSaci? {
+      if (userCache.isEmpty() || isCacheExpired()) {
+        refreshAll()
+      }
+
+      return userCache.firstOrNull { it.no == numUser }
     }
 
     fun findUser(login: String?): List<UserSaci> {
-      if (userList.isEmpty()) {
-        runBlocking {
-          updateAll()
-        }
-      }
-
-      if (login.isNullOrBlank() || login.isEmpty()) {
+      if (login.isNullOrBlank()) {
         return emptyList()
       }
 
-      return userList.filter {
-        it.login.equals(login, ignoreCase = true)
+      if (userCache.isEmpty() || isCacheExpired()) {
+        refreshAll()
       }
+
+      val user = userByLogin[normalizeLogin(login)]
+      return listOfNotNull(user)
     }
 
     fun userEstoqueLocais(): List<String> {
@@ -748,6 +818,10 @@ class UserSaci : IUser {
 
     fun userAdmin(): UserSaci? {
       return findUser("ADM").firstOrNull()
+    }
+
+    fun existNumber(numero: Int): Boolean {
+      return userCache.filter { it.ativo == true }.count { it.no == numero } > 0
     }
   }
 }

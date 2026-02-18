@@ -5,7 +5,41 @@ import br.com.astrosoft.produto.model.saci
 
 class Impressora(var no: Int, var name: String) {
   companion object {
-    fun all() = saci.findImpressoras()
+    private const val CACHE_TTL_MILLIS = 5 * 60 * 1000L
+
+    @Volatile
+    private var impressoraCache: List<Impressora> = emptyList()
+
+    @Volatile
+    private var lastRefreshMillis: Long = 0L
+
+    private fun isCacheExpired(nowMillis: Long = System.currentTimeMillis()): Boolean {
+      return nowMillis - lastRefreshMillis > CACHE_TTL_MILLIS
+    }
+
+    private fun refreshAll(): List<Impressora> {
+      val list = saci.findImpressoras()
+      synchronized(this) {
+        impressoraCache = list
+        lastRefreshMillis = System.currentTimeMillis()
+        return impressoraCache
+      }
+    }
+
+    fun invalidateCache() {
+      synchronized(this) {
+        impressoraCache = emptyList()
+        lastRefreshMillis = 0L
+      }
+    }
+
+    fun all(): List<Impressora> {
+      return if (impressoraCache.isEmpty() || isCacheExpired()) {
+        refreshAll()
+      } else {
+        impressoraCache
+      }
+    }
     fun allTermica() = all().filter { it.name.contains("Termica", ignoreCase = true) }
     fun allEtiqueta() = all().filter { it.name.contains("Etiqueta", ignoreCase = true) }
     fun findImpressora(loja: Int?, tipoRota: ETipoRota): Impressora? {

@@ -8,8 +8,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoUsr
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoUsrViewModel
+import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.data.binder.Binder
 
 class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel), ITabProdutoUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -21,7 +24,7 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::produtoEstoqueValidadeLoja, "Validade")
   }
 
-  override fun FormUsuario.configFields() {
+  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
     horizontalBlock {
       verticalBlock("Menus") {
         checkBox("Produto") {

@@ -117,7 +117,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("locais", user.locais)
       addOptionalParameter("impressora", user.impressora)
       addOptionalParameter("listaImpressora", user.listaImpressora)
-      addOptionalParameter("ativoSaci", user.ativoSaci)
       addOptionalParameter("listaLoja", user.listaLoja)
     }
   }
@@ -3108,6 +3107,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("cl", filtro.cl)
       addOptionalParameter("barcode", filtro.barcode)
     }
+  }
+
+  fun findUserSaci(numUser: Int): UserSaci? {
+    val sql = "/sqlSaci/userSaci.sql"
+    return query(sql, UserSaci::class){
+      addOptionalParameter("no", numUser)
+    }.firstOrNull()
   }
 
   companion object {

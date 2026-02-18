@@ -26,8 +26,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
 
   override fun columns(): List<String> {
     return listOf(
-      UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name,
-      UserSaci::ativoSaci.name
+      UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name
     )
   }
 

@@ -19,7 +19,7 @@ class DlgAlteraSenha {
       val confirmaSenha = edtConfirmaSenha.value ?: ""
 
       when {
-        user.senha.uppercase().trim() != senhaAtual.uppercase().trim() -> {
+        user.senha?.uppercase()?.trim() != senhaAtual.uppercase().trim() -> {
           DialogHelper.showError("Senha atual incorreta")
         }
         novaSenha.isBlank() -> {

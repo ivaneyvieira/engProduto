@@ -7,8 +7,11 @@ import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.recebimento.ITabRecebimentoUsr
 import br.com.astrosoft.produto.viewmodel.recebimento.TabRecebimentoUsrViewModel
+import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.data.binder.Binder
 
 class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(viewModel), ITabRecebimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -22,7 +25,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
   }
 
-  override fun FormUsuario.configFields() {
+  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
     verticalBlock("Menu") {
       checkBox("Pedidos") {
         binder.bind(this, UserSaci::recebimentoPedido.name)

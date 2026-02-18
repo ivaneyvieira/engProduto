@@ -6,6 +6,8 @@ FROM
   sqldados.userApp
 WHERE appName = 'engProduto';
 
+select * from sqldados.userSaciApp;
+
 DROP TABLE sqldados.userSaciApp;
 CREATE TABLE sqldados.`userSaciApp`
 (
@@ -21,7 +23,6 @@ CREATE TABLE sqldados.`userSaciApp`
   `locais`          text CHARACTER SET latin1         NOT NULL,
   `impressora`      char(16) CHARACTER SET latin1              DEFAULT '',
   `listaImpressora` text CHARACTER SET latin1         NOT NULL,
-  `ativoSaci`       varchar(3)                        NOT NULL DEFAULT '',
   `listaLoja`       text CHARACTER SET latin1         NOT NULL,
   PRIMARY KEY (`no`, `appName`),
   INDEX (appName, `login`)

@@ -29,7 +29,7 @@ class NotaEntradaFileXML(
   }
 
   companion object {
-    val lojas = Loja.allLojas()
+    //val lojas = Loja.allLojas()
     fun find(chave: String) = ndd.listNFEntrada(chave)
   }
 }

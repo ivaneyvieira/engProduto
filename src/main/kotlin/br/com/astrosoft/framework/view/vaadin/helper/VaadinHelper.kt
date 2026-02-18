@@ -4,12 +4,14 @@ import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.theme.lumo.LumoUtility
 import java.util.*
 
 fun Component.style(name: String, value: String) {
@@ -85,4 +87,18 @@ fun (@VaadinDsl HasComponents).horizontalBlock(
     content { align(left, top) }
   }
   return init(layout, block)
+}
+
+fun HasStyle.borderRountend() {
+  this.addClassNames(
+    LumoUtility.BorderColor.PRIMARY,
+    LumoUtility.Border.ALL,
+    LumoUtility.BorderRadius.LARGE,
+    LumoUtility.Padding.MEDIUM,
+    LumoUtility.BoxShadow.MEDIUM,
+    LumoUtility.BorderColor.CONTRAST,
+  )
+  this.style.set("border", "1px solid var(--lumo-primary-color)")
+  this.style.set("border-radius", "10px")
+  this.style.set("padding", "10px")
 }

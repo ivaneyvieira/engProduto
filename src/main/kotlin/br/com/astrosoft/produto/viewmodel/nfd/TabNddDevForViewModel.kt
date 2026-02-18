@@ -59,7 +59,7 @@ class TabNfdDevForViewModel(val viewModel: NfdViewModel) {
     val lista = UserSaci.findAll()
     val user = lista
       .firstOrNull {
-        it.login.uppercase() == login.uppercase() && it.senha.uppercase().trim() == senha.uppercase().trim()
+        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
       }
 
     if (user == null) {
