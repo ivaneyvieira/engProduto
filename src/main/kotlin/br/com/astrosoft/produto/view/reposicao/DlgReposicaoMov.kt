@@ -91,10 +91,16 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               this.isVisible = true
               this.icon = VaadinIcon.TRASH.create()
               this.onClick {
-                viewModel.removePedido()
+                viewModel.removePedido(movimentacao)
               }
             }
 
+            this.button("Desfaz Ass") {
+              this.icon = VaadinIcon.UNLINK.create()
+              this.onClick {
+                viewModel.desfazAssinatura(movimentacao)
+              }
+            }
           }
           horizontalBlock {
             this.isSpacing = true

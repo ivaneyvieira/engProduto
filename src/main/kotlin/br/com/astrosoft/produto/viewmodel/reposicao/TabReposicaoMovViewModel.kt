@@ -53,7 +53,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     if (produtosSelecionados.isEmpty()) {
       fail("Selecionar produtos para assinar a entrega")
     }
-    if(produtosNaoSelecionados.isNotEmpty()) {
+    if (produtosNaoSelecionados.isNotEmpty()) {
       fail("Existem produtos não selecionados")
     }
 
@@ -71,11 +71,15 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun removePedido() = viewModel.exec {
+  fun removePedido(pedido: Movimentacao) = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
 
     itensSelecionado.ifEmpty {
       fail("Nenhum Pedido selecionado")
+    }
+
+    if (pedido.noEntregue > 0) {
+      fail("Entrega assina, produto não pode ser removido")
     }
 
     subView.autorizaPedido("Autoriza remover do pedido") {
@@ -209,6 +213,28 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
       pedidosSelecionado.forEach {
         it.noRecebido = empno
+        it.save()
+      }
+      subView.updateProdutos()
+    }
+  }
+
+  fun desfazAssinatura(movimentacao: Movimentacao) {
+    val pedidosSelecionado = subView.produtosSelecionado()
+    val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
+
+    if (pedidosSelecionado.isEmpty()) {
+      fail("Nenhum pedido selecionado")
+    }
+
+    if (pedidosNaoSelecionado.isNotEmpty()) {
+      fail("Pedidos não selecionados")
+    }
+
+    viewModel.view.showQuestion("Desfaz assinatura?") {
+      movimentacao.findProdutos().forEach {
+        it.noRecebido = 0
+        it.noEntregue = 0
         it.save()
       }
       subView.updateProdutos()
