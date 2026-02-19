@@ -117,15 +117,19 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
     val recebido = lista.firstOrNull { (it.noRecebido ?: 0) == noRecebido }?.recebido ?: ""
     val recebidoNome = lista.firstOrNull { (it.noRecebido ?: 0) == noRecebido }?.recebidoNome ?: ""
 
+    val noLogin = lista.maxOfOrNull { it.noLogin ?: 0 } ?: 0
+    val login = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.login ?: ""
+    val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
+
     Movimentacao(
       numero = pedido.numero ?: return@mapNotNull null,
       numloja = pedido.numloja ?: return@mapNotNull null,
       lojaSigla = pedido.lojaSigla ?: return@mapNotNull null,
       data = pedido.data ?: return@mapNotNull null,
       hora = pedido.hora ?: return@mapNotNull null,
-      noLogin = pedido.noLogin ?: 0,
-      login = pedido.login ?: "",
-      usuario = pedido.usuario ?: "",
+      noLogin = noLogin,
+      login = login,
+      usuario = usuario,
       noGravado = noGravado,
       gravadoLogin = gravadoLogin,
       noEntregue = noEntregue,
