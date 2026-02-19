@@ -49,7 +49,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Selecionar produtos para gravar pedido")
     }
 
-    if(produtosSelecionados.any { (it.movimentacao ?: 0) == 0 }){
+    if (produtosSelecionados.any { (it.movimentacao ?: 0) == 0 }) {
       fail("Não é possível gravar pedido com quantidade zero")
     }
 
@@ -164,8 +164,18 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("Produtos não selecionados")
     }
 
-    if(mov.noEntregue > 0){
+    if (mov.noEntregue > 0) {
       fail("O produto já foi entregue")
+    }
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioCD == false) {
+      fail("Usuário não autorizado para assinar entrega em CD/LJ")
+    }
+
+    if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioLJ == false) {
+      fail("Usuário não autorizado para assinar entrega em LJ/CD")
     }
 
     subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
@@ -192,7 +202,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto ainda não foi entregue")
     }
 
-    if(mov.noRecebido > 0){
+    if (mov.noRecebido > 0) {
       fail("O produto já foi recebido")
     }
 
@@ -205,6 +215,16 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
     if (pedidosNaoSelecionado.isNotEmpty()) {
       fail("Produtos não selecionados")
+    }
+
+    val user = AppConfig.userLogin() as? UserSaci
+
+    if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioLJ == false) {
+      fail("Usuário não autorizado para assinar recebimento em CD/LJ")
+    }
+
+    if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioCD == false) {
+      fail("Usuário não autorizado para assinar recebimento em LJ/CD")
     }
 
     subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->

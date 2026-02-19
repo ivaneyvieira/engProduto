@@ -73,6 +73,14 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       checkBox("Defaz Asssinatura") {
         binder.bind(this, UserSaci::reposicaoDesfazAssina.name)
       }
+
+      checkBox("Usuário do CD") {
+        binder.bind(this, UserSaci::reposicaoUsuarioCD.name)
+      }
+
+      checkBox("Usuário da Loja") {
+        binder.bind(this, UserSaci::reposicaoUsuarioLJ.name)
+      }
     }
   }
 }

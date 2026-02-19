@@ -31,6 +31,8 @@ class TabReposicaoUsrViewModel(val viewModel: ReposicaoViewModel) : TabUsrViewMo
     this.reposicaoAssinaEntrega = usuario.reposicaoAssinaEntrega
     this.reposicaoAssinaRecebimento = usuario.reposicaoAssinaRecebimento
     this.reposicaoDesfazAssina = usuario.reposicaoDesfazAssina
+    this.reposicaoUsuarioCD = usuario.reposicaoUsuarioCD
+    this.reposicaoUsuarioLJ = usuario.reposicaoUsuarioLJ
   }
 }
 

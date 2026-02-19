@@ -194,7 +194,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
           viewModel.updateProduto(produtos = listOf(it.bean))
           abreProximo(it.bean)
         },
-        canEdit = { prd ->
+        canEdit = { _ ->
           movimentacao.noEntregue == 0
         }
       )
