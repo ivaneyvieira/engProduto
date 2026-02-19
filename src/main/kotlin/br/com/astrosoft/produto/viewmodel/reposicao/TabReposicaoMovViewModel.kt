@@ -39,10 +39,6 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     subView.updatePedidos(produtos)
   }
 
-  fun updateProduto(produto: ProdutoMovimentacao) = viewModel.exec {
-    produto.save()
-  }
-
   fun gravaPedido(pedido: Movimentacao) = viewModel.exec {
     if (pedido.noGravado > 0) {
       fail("Pedido já gravado")
@@ -246,6 +242,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       }
       subView.updateProdutos()
     }
+  }
+
+  fun gravaRota(movimentacao: Movimentacao) {
+    movimentacao.salvaRota()
   }
 }
 

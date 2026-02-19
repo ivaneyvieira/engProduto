@@ -8,6 +8,6 @@ DO @ESTOQUE := ( SELECT MAX(ROUND((S.qtty_varejo + S.qtty_atacado) / 1000))
                    AND grade = :grade );
 
 REPLACE INTO produtoMovimentacao (numero, numloja, data, hora, prdno, grade, noGravado, movimentacao, estoque, noLogin,
-                                  noEntregue, noRecebido)
+                                  noEntregue, noRecebido, noRota)
   VALUE (:numero, :numloja, :data, :hora, :prdno, :grade, :noGravado, :movimentacao, @ESTOQUE, :noLogin, :noEntregue,
-         :noRecebido)
+         :noRecebido, :noRota)

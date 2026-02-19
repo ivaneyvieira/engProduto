@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.integerField
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -139,6 +136,21 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
                 updateGrid()
               }
             }
+
+            select("Rota") {
+              this.setItems(ERota.entries)
+              this.setItemLabelGenerator {
+                it.descricao
+              }
+              this.value = movimentacao.enumRota
+              addValueChangeListener {
+                if(it.isFromClient) {
+                  val rota = it.value
+                  movimentacao.enumRota = rota
+                  updateMovimentacao()
+                }
+              }
+            }
           }
         }
       },
@@ -151,6 +163,12 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
       }
     }
     form?.open()
+  }
+
+  private fun updateMovimentacao() {
+    if(movimentacao.noGravado > 0){
+      viewModel.gravaRota(movimentacao)
+    }
   }
 
   private fun HorizontalLayout.createGridProdutos() {
@@ -169,14 +187,14 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
           this.focusEditor(ProdutoMovimentacao::movimentacao)
         },
         closeEditor = {
-          viewModel.updateProduto(it.bean)
+          viewModel.updateProduto(produtos = listOf(it.bean))
           abreProximo(it.bean)
         },
         saveEditor = {
-          viewModel.updateProduto(it.bean)
+          viewModel.updateProduto(produtos = listOf(it.bean))
           abreProximo(it.bean)
         },
-        canEdit = {prd ->
+        canEdit = { prd ->
           movimentacao.noEntregue == 0
         }
       )
@@ -215,7 +233,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {
     val produtos = movimentacao.findProdutos()
     val produtosAgrupados = produtos.agrupa().firstOrNull()
-    if(produtosAgrupados != null) {
+    if (produtosAgrupados != null) {
       movimentacao.noEntregue = produtosAgrupados.noEntregue
       movimentacao.entregue = produtosAgrupados.entregue
       movimentacao.entregueNome = produtosAgrupados.entregueNome

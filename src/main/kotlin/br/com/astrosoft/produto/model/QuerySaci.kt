@@ -2253,6 +2253,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("noLogin", produto.noLogin ?: 0)
       addOptionalParameter("noEntregue", produto.noEntregue)
       addOptionalParameter("noRecebido", produto.noRecebido ?: 0)
+      addOptionalParameter("noRota", produto.noRota ?: 0)
     }
   }
 
@@ -3114,6 +3115,15 @@ class QuerySaci : QueryDB(database) {
     return query(sql, UserSaci::class){
       addOptionalParameter("no", numUser)
     }.firstOrNull()
+  }
+
+  fun salvaRota(movimentacao: Movimentacao) {
+    val sql = "/sqlSaci/produtoMovimentacaoRota.sql"
+    script(sql) {
+      addOptionalParameter("numloja", movimentacao.numloja)
+      addOptionalParameter("numero", movimentacao.numero)
+      addOptionalParameter("noRota", movimentacao.noRota)
+    }
   }
 
   companion object {

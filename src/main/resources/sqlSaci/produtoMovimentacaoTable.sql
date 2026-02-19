@@ -76,7 +76,8 @@ ALTER TABLE sqldados.produtoMovimentacao
 ALTER TABLE sqldados.produtoMovimentacao
   RENAME COLUMN gravadoLogin TO noGravado;
 
-
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN noRota int NULL DEFAULT 0;
 /********************************************************************************/
 
 SELECT *

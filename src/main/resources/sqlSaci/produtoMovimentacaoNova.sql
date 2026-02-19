@@ -34,6 +34,7 @@ SELECT numero,
        0     AS gravadoLogin,
        FALSE AS gravado,
        0     AS movimentacao,
-       0     AS estoque
+       0     AS estoque,
+       0     AS noRota
 FROM
   T_ACERTO

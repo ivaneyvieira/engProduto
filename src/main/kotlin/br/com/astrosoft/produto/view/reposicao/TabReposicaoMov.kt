@@ -102,6 +102,7 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
       viewModel.previewPedido(pedido)
     }
 
+    columnGrid(Movimentacao::descricaoRota, header = "Rota")
     columnGrid(Movimentacao::lojaSigla, header = "Loja")
     columnGrid(Movimentacao::numero, header = "Pedido")
     columnGrid(Movimentacao::data, header = "Data")

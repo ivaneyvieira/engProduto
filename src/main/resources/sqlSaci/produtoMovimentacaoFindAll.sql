@@ -13,7 +13,8 @@ SELECT M.numero,
        M.noEntregue,
        M.noRecebido,
        M.movimentacao,
-       M.estoque
+       M.estoque,
+       M.noRota
 FROM
   sqldados.produtoMovimentacao AS M
 WHERE (numero = :numero OR :numero = 0)
@@ -84,7 +85,8 @@ SELECT numero                   AS numero,
        ER.sname                 AS recebido,
        ER.name                  AS recebidoNome,
        A.movimentacao           AS movimentacao,
-       A.estoque                AS estoque
+       A.estoque                AS estoque,
+       A.noRota                 AS noRota
 FROM
   T_ACERTO                   AS A
     LEFT JOIN sqldados.users AS UL

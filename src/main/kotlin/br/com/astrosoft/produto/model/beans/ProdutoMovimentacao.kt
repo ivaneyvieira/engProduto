@@ -29,7 +29,8 @@ class ProdutoMovimentacao(
   var recebido: String? = null,
   var recebidoNome: String? = null,
   var movimentacao: Int? = null,
-  var estoque: Int? = null
+  var estoque: Int? = null,
+  var noRota: Int? = null
 ) {
   val localAbrev
     get() = locApp?.substring(0, 4) ?: ""
@@ -137,7 +138,8 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       entregueNome = entregueNome,
       noRecebido = noRecebido,
       recebido = recebido,
-      recebidoNome = recebidoNome
+      recebidoNome = recebidoNome,
+      noRota = lista.firstOrNull()?.noRota
     )
   }
 }
@@ -158,8 +160,18 @@ class Movimentacao(
   var entregueNome: String,
   var noRecebido: Int,
   var recebido: String,
-  var recebidoNome: String
+  var recebidoNome: String,
+  var noRota: Int?
 ) {
+  var enumRota: ERota?
+    get() = ERota.entries.firstOrNull { it.numero == noRota }
+    set(value) {
+      noRota = value?.numero
+    }
+
+  val descricaoRota
+    get() = enumRota?.descricao
+
   fun findProdutos(): List<ProdutoMovimentacao> {
     val filtro = FiltroMovimentacao(
       numLoja = numloja,
@@ -169,6 +181,10 @@ class Movimentacao(
     return produtos
   }
 
+  fun salvaRota() {
+    saci.salvaRota(this)
+  }
+
   companion object {
     private val listUserSaci = saci.findAllUser()
 
@@ -176,4 +192,9 @@ class Movimentacao(
       return listUserSaci.firstOrNull { it.no == no }
     }
   }
+}
+
+enum class ERota(val numero: Int, val descricao: String) {
+  CD_LJ(0, "CD-LJ"),
+  LJ_CD(1, "LJ-CD")
 }
