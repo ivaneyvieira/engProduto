@@ -25,7 +25,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     val filtro = subView.filtro()
-    val produtos = ProdutoMovimentacao.findAll(filtro).agrupa().sortedBy { it.numero }.filter {
+    val produtos = ProdutoMovimentacao.findAll(filtro).agrupa().sortedBy { it.numero }.filter { mov: Movimentacao ->
       if (user == null) {
         return@filter true
       }
@@ -34,7 +34,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
         return@filter true
       }
 
-      (it.usuario == user.name) || (it.login == user.login)
+      (mov.noGravado == user.no) || (mov.entregue == user.login)
     }
     subView.updatePedidos(produtos)
   }
