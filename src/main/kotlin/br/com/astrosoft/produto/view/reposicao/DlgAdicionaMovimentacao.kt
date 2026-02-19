@@ -83,7 +83,7 @@ class DlgAdicionaMovimentacao(
         this.numloja = acerto.numloja
         this.data = acerto.data
         this.hora = acerto.hora
-        this.noLogin = acerto.noLogin
+        this.noLogin = user?.no
         this.login = acerto.login
         this.usuario = acerto.usuario
 
