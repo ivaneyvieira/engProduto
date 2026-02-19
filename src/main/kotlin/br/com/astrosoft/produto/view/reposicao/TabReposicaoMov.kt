@@ -121,8 +121,8 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     )
   }
 
-  override fun updatePedidos(pedidos: List<Movimentacao>) {
-    updateGrid(pedidos)
+  override fun updatePedidos(produtos: List<Movimentacao>) {
+    updateGrid(produtos)
     dlgEstoque?.update()
   }
 

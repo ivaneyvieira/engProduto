@@ -3,12 +3,7 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.FiltroLocalizaProduto
-import br.com.astrosoft.produto.model.beans.LocalizaProduto
-import br.com.astrosoft.produto.model.beans.Movimentacao
-import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
-import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.model.beans.agrupa
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.integerField
@@ -181,6 +176,9 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
           viewModel.updateProduto(it.bean)
           abreProximo(it.bean)
         },
+        canEdit = {prd ->
+          movimentacao.noEntregue == 0
+        }
       )
 
       columnGrid(ProdutoMovimentacao::codigo, "Código").right()

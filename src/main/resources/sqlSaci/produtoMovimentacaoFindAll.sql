@@ -53,7 +53,9 @@ FROM
     LEFT JOIN sqldados.prd2   AS P2
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno AND B.grade != '' AND LENGTH(TRIM(B.barcode)) = 13
+              ON P.no = B.prdno
+                AND B.grade != ''
+                AND LENGTH(TRIM(B.barcode)) = 13
 WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
 GROUP BY P.no, B.grade
 HAVING codbar != '';

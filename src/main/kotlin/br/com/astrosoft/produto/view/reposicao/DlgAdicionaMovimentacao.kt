@@ -89,6 +89,7 @@ class DlgAdicionaMovimentacao(
 
         this.prdno = linha.prdno
         this.grade = linha.grade
+        this.barcode = linha.codigoBarras ?: ""
         this.noGravado = user?.no
         this.gravadoLogin = acerto.gravadoLogin
 
@@ -135,22 +136,25 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1000
+
       this.addValueChangeListener {
-        val lista = viewModel.findProdutos(this.value, acerto.numloja)
-        produtos.clear()
-        produtos.addAll(lista)
+        if (it.isFromClient) {
+          val lista = viewModel.findProdutos(codigo = this.value, acerto.numloja)
+          produtos.clear()
+          produtos.addAll(lista)
 
-        edtGrade.setItems(produtos.map { it.grade })
-        edtGrade.value = produtos.firstOrNull()?.grade
-        edtDescricao.value = produtos.firstOrNull()?.descricao
-        edtCodigoBarras.value = produtos.firstOrNull()?.codigoBarras
-        edtGrade.isEnabled = produtos.size > 1
+          edtGrade.setItems(produtos.map { it.grade })
+          edtGrade.value = produtos.firstOrNull()?.grade
+          edtDescricao.value = produtos.firstOrNull()?.descricao
+          edtCodigoBarras.value = produtos.firstOrNull()?.codigoBarras
+          edtGrade.isEnabled = produtos.size > 1
 
-        if (produtos.isNotEmpty()) {
-          if (produtos.size > 1) {
-            edtGrade.focus()
-          } else {
-            edtMovimentacao.focus()
+          if (produtos.isNotEmpty()) {
+            if (produtos.size > 1) {
+              edtGrade.focus()
+            } else {
+              edtMovimentacao.focus()
+            }
           }
         }
       }
@@ -159,8 +163,32 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     edtCodigoBarras = textField("Código de Barras") {
       if (index > 0) this.label = ""
       this.width = "8rem"
-      this.isReadOnly = true
+      this.isReadOnly = false
       this.tabIndex = -1
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
+
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          val lista = viewModel.findProdutos(codigo = this.value, loja = acerto.numloja)
+          produtos.clear()
+          produtos.addAll(lista)
+
+          edtGrade.setItems(produtos.map { it.grade })
+          edtGrade.value = produtos.firstOrNull()?.grade
+          edtDescricao.value = produtos.firstOrNull()?.descricao
+          edtCodigo.value = produtos.firstOrNull()?.codigo
+          edtGrade.isEnabled = produtos.size > 1
+
+          if (produtos.isNotEmpty()) {
+            if (produtos.size > 1) {
+              edtGrade.focus()
+            } else {
+              edtMovimentacao.focus()
+            }
+          }
+        }
+      }
     }
 
     edtDescricao = textField("Descrição") {
@@ -198,6 +226,8 @@ class LinhaProduto(val viewModel: TabReposicaoMovViewModel, val acerto: Moviment
     }?.saldo
   val movimentacao: Int?
     get() = edtMovimentacao.value
+  val codigoBarras: String?
+    get() = edtCodigoBarras.value ?: ""
 
   fun focus() {
     edtCodigo.focus()
