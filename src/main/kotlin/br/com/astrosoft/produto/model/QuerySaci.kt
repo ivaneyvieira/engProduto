@@ -3126,13 +3126,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+  fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
     val sql = "/sqlSaci/movimentacaoEstoque.sql"
     return query(sql, ProdutoKardec::class) {
       addOptionalParameter("prdno", estoque.prdno)
       addOptionalParameter("grade", estoque.grade)
       addOptionalParameter("loja", loja)
-      addOptionalParameter("dataIncial", dataIncial)
+      addOptionalParameter("dataInicial", dataInicial)
     }
   }
 

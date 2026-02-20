@@ -20,7 +20,7 @@ FROM
 WHERE prdno = :prdno
   AND grade = :grade
   AND (numloja = :loja OR :loja = 4)
-  AND data >= :dataIncial
+  AND data >= :dataInicial
   AND noGravado > 0
   AND noRota IN (0, 1);
 
@@ -40,7 +40,7 @@ SELECT numloja                                          AS loja,
        IF(noRota = 0, 'MOV_RECEBIMENTO', 'MOV_ENTREGA') AS tipo,
        IF(noRota = 0,
           'do\tCD',
-          CONCAT('para\ta\tLoja\t', numero))                     AS observacao,
+          CONCAT('para\ta\tLoja\t', numero))            AS observacao,
        NULL                                             AS vencimento,
        IF(noRota = 0, movimentacao, -movimentacao)      AS qtde,
        0                                                AS saldo,
@@ -64,7 +64,7 @@ SELECT 4                                                AS loja,
        IF(noRota = 1, 'MOV_RECEBIMENTO', 'MOV_ENTREGA') AS tipo,
        IF(noRota = 1,
           CONCAT('da\tLoja\t', numero),
-          'para\to\tCD')                                     AS observacao,
+          'para\to\tCD')                                AS observacao,
        NULL                                             AS vencimento,
        IF(noRota = 1, movimentacao, -movimentacao)      AS qtde,
        0                                                AS saldo,

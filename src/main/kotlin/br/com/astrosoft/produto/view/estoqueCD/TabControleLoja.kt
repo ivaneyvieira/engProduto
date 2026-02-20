@@ -192,7 +192,6 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
           this.isClearButtonVisible = true
           this.value = LocalDate.now().withDayOfMonth(1)
         }
-
       }
     }
   }
