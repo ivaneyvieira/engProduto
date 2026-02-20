@@ -2316,7 +2316,7 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()?.quant ?: 0) > 0
   }
 
-    fun jaGravado(produtoEstoqueAcerto: ProdutoMovimentacao): Boolean {
+  fun jaGravado(produtoEstoqueAcerto: ProdutoMovimentacao): Boolean {
     val sql = "/sqlSaci/produtoMovimentacaoJaGravado.sql"
     return (query(sql, Count::class) {
       addOptionalParameter("numLoja", produtoEstoqueAcerto.numloja)
@@ -3099,7 +3099,7 @@ class QuerySaci : QueryDB(database) {
 
   fun localizaProduto(filtro: FiltroLocalizaProduto): List<LocalizaProduto> {
     val sql = "/sqlSaci/localizaProduto.sql"
-    return query(sql, LocalizaProduto::class){
+    return query(sql, LocalizaProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("codPrd", filtro.codPrd)
       addOptionalParameter("codForn", filtro.codForn)
@@ -3112,7 +3112,7 @@ class QuerySaci : QueryDB(database) {
 
   fun findUserSaci(numUser: Int): UserSaci? {
     val sql = "/sqlSaci/userSaci.sql"
-    return query(sql, UserSaci::class){
+    return query(sql, UserSaci::class) {
       addOptionalParameter("no", numUser)
     }.firstOrNull()
   }
@@ -3123,6 +3123,16 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numloja", movimentacao.numloja)
       addOptionalParameter("numero", movimentacao.numero)
       addOptionalParameter("noRota", movimentacao.noRota)
+    }
+  }
+
+  fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+    val sql = "/sqlSaci/movimentacaoEstoque.sql"
+    return query(sql, ProdutoKardec::class) {
+      addOptionalParameter("prdno", estoque.prdno)
+      addOptionalParameter("grade", estoque.grade)
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("dataIncial", dataIncial)
     }
   }
 

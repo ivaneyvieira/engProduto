@@ -442,6 +442,10 @@ class ProdutoEstoque(
     return saci.controleKardec(this)
   }
 
+  fun movimentacaoEstoque(loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+    return saci.movimentacaoEstoque(this, loja, dataIncial)
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)

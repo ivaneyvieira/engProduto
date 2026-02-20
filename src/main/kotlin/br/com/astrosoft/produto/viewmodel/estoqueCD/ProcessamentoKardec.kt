@@ -18,7 +18,7 @@ object ProcessamentoKardec {
   fun updateSaldoKardec(produto: ProdutoEstoque) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    val listaKardec = updateKardec(produto = produto, loja, dataIncial = produto.dataInicialDefault())
+    val listaKardec = updateKardec(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault())
     produto.dataUpdate = LocalDate.now()
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.updateKardec()
@@ -103,7 +103,8 @@ object ProcessamentoKardec {
     val reposicao = produto.reposicao(loja, dataIncial)
     val saldoInicial = produto.saldoInicial(loja, dataIncial)
     val acertoEstoque = produto.acertoEstoque(loja, dataIncial)
-    return recebimento + expedicao + reposicao + saldoInicial + acertoEstoque
+    val movimentacaoEstoque = produto.movimentacaoEstoque(loja, dataIncial)
+    return recebimento + expedicao + reposicao + saldoInicial + acertoEstoque + movimentacaoEstoque
   }
 
   fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
