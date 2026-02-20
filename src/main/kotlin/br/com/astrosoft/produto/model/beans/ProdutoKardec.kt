@@ -59,6 +59,8 @@ enum class ETipoKardec(val num: String, val descricao: String) {
   RETORNO("01", "Retorno Loja"),
   ACERTO("01", "Acerto Estoque"),
   MOV_ENTREGA("01", "Movimentação de Entrega"),
-  MOV_RECEBIMENTO("01", "Movimentação de Recebimento")
+  MOV_RECEBIMENTO("01", "Movimentação de Recebimento"),
+  REPOSICAO_CDLJ("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_LJCD("01", "Reposição Rota LJ -CD"),
 }
 

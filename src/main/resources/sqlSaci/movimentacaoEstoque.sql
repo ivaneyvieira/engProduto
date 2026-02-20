@@ -29,20 +29,20 @@ WHERE prdno = :prdno
 /*Loado da loja*/
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
-SELECT numloja                                          AS loja,
+SELECT numloja                                            AS loja,
        prdno,
        grade,
        data,
-       numero                                           AS doc,
-       ''                                               AS nfEnt,
-       IF(noRota = 0, 'MOV_RECEBIMENTO', 'MOV_ENTREGA') AS tipo,
+       numero                                             AS doc,
+       ''                                                 AS nfEnt,
+       IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_CDLJ') AS tipo,
        IF(noRota = 0,
           'do\tCD',
-          CONCAT('para\ta\tLoja\t', numero))            AS observacao,
-       NULL                                             AS vencimento,
-       IF(noRota = 0, movimentacao, -movimentacao)      AS qtde,
-       0                                                AS saldo,
-       IF(noRota = 0, ER.sname, EE.sname)               AS userLogin
+          CONCAT('para\ta\tLoja\t', numero))              AS observacao,
+       NULL                                               AS vencimento,
+       IF(noRota = 0, movimentacao, -movimentacao)        AS qtde,
+       0                                                  AS saldo,
+       IF(noRota = 0, ER.sname, EE.sname)                 AS userLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE   AS E
     LEFT JOIN sqldados.emp AS ER
@@ -53,20 +53,20 @@ WHERE numloja = :loja;
 
 INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, doc, nfEnt, tipo, observacao, vencimento, qtde, saldo,
                                   userLogin)
-SELECT 4                                                AS loja,
+SELECT 4                                                  AS loja,
        prdno,
        grade,
        data,
-       numero                                           AS doc,
-       ''                                               AS nfEnt,
-       IF(noRota = 1, 'MOV_RECEBIMENTO', 'MOV_ENTREGA') AS tipo,
+       numero                                             AS doc,
+       ''                                                 AS nfEnt,
+       IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_CDLJ') AS tipo,
        IF(noRota = 1,
           CONCAT('da\tLoja\t', numero),
-          'para\to\tCD')                                AS observacao,
-       NULL                                             AS vencimento,
-       IF(noRota = 1, movimentacao, -movimentacao)      AS qtde,
-       0                                                AS saldo,
-       IF(noRota = 1, ER.sname, EE.sname)               AS userLogin
+          'para\to\tCD')                                  AS observacao,
+       NULL                                               AS vencimento,
+       IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
+       0                                                  AS saldo,
+       IF(noRota = 1, ER.sname, EE.sname)                 AS userLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE   AS E
     LEFT JOIN sqldados.emp AS ER
@@ -81,7 +81,7 @@ SELECT loja,
        doc,
        nfEnt,
        tipo,
-       observacao,
+       '' AS observacao,
        vencimento,
        qtde,
        saldo,
