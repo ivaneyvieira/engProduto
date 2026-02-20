@@ -171,11 +171,11 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioCD == false) {
-      fail("Usuário não autorizado para assinar entrega em CD/LJ")
+      fail("Usuário não autorizado para assinar entrega da rota CD/LJ")
     }
 
     if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioLJ == false) {
-      fail("Usuário não autorizado para assinar entrega em LJ/CD")
+      fail("Usuário não autorizado para assinar entrega da rota LJ/CD")
     }
 
     subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
@@ -220,11 +220,11 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioLJ == false) {
-      fail("Usuário não autorizado para assinar recebimento em CD/LJ")
+      fail("Usuário não autorizado para assinar recebimento da rota CD/LJ")
     }
 
     if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioCD == false) {
-      fail("Usuário não autorizado para assinar recebimento em LJ/CD")
+      fail("Usuário não autorizado para assinar recebimento da rota LJ/CD")
     }
 
     subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->
