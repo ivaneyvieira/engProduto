@@ -88,4 +88,4 @@ SELECT loja,
        userLogin
 FROM
   T_MOVIMENTACAO_KARDEC
-WHERE tipo = 'MOV_RECEBIMENTO'
+WHERE qtde > 0

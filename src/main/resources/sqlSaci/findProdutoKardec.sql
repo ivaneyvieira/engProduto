@@ -225,7 +225,7 @@ INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, sald
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo
 FROM
   T_MOVIMENTACAO_KARDEC
-WHERE tipo = 'MOV_RECEBIMENTO';
+WHERE qtde > 0;
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, '' AS observacao, saldo
 FROM

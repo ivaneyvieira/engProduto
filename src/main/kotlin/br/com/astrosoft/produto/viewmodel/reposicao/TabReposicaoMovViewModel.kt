@@ -183,6 +183,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
       if (funcionario?.senha != senha) {
         viewModel.view.showError("Funcionário ou senha inválido")
+        return@autorizaAssinatura
       }
 
       pedidosSelecionado.forEach {
@@ -232,6 +233,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
 
       if (funcionario?.senha != senha) {
         viewModel.view.showError("Funcionário ou senha inválido")
+        return@autorizaAssinatura
       }
 
       pedidosSelecionado.forEach {
