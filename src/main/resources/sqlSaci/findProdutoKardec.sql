@@ -170,6 +170,8 @@ WHERE prdno = :prdno
   AND (numloja = :loja OR :loja = 4)
   AND data >= :dataInicial
   AND noGravado > 0
+  AND noEntregue > 0
+  AND noRecebido > 0
   AND noRota IN (0, 1);
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
@@ -222,7 +224,8 @@ FROM
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo
 FROM
-  T_MOVIMENTACAO_KARDEC;
+  T_MOVIMENTACAO_KARDEC
+WHERE tipo = 'MOV_RECEBIMENTO';
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo
 FROM

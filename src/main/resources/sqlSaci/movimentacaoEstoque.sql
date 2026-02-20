@@ -22,11 +22,9 @@ WHERE prdno = :prdno
   AND (numloja = :loja OR :loja = 4)
   AND data >= :dataInicial
   AND noGravado > 0
+  AND noEntregue > 0
+  AND noRecebido > 0
   AND noRota IN (0, 1);
-
-/*
-select * from sqldados.produtoKardec
-*/
 
 /*Loado da loja*/
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
@@ -90,3 +88,4 @@ SELECT loja,
        userLogin
 FROM
   T_MOVIMENTACAO_KARDEC
+WHERE tipo = 'MOV_RECEBIMENTO'
