@@ -10,6 +10,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
@@ -25,6 +26,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
   private var edtCodigoBarra: TextField? = null
+  private var cmbRota: Select<ERota>? = null
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -137,7 +139,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
               }
             }
 
-            select("Rota") {
+           cmbRota= select("Rota") {
               this.setItems(ERota.entries)
               this.setItemLabelGenerator {
                 it.descricao
@@ -245,6 +247,7 @@ class DlgReposicaoMov(val viewModel: TabReposicaoMovViewModel, val movimentacao:
       movimentacao.recebido = produtosAgrupados.recebido
       movimentacao.recebidoNome = produtosAgrupados.recebidoNome
     }
+    cmbRota?.isReadOnly = movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0
     return produtos
   }
 
