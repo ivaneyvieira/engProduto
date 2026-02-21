@@ -19,7 +19,7 @@ class ReposicaoView(val init: Boolean = true, prdno: String = "", grade: String 
   ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
-  override val tabReposicaoMov = TabReposicaoMov(viewModel.tabReposicaoMovViewModel)
+  override val tabReposicaoMov = TabReposicaoRep(viewModel.tabReposicaoMovViewModel)
   override val tabReposicaoAcerto = TabReposicaoAcerto(viewModel.tabReposicaoAcertoViewModel)
   override val tabReposicaoRetorno = TabReposicaoRetorno(viewModel.tabReposicaoRetornoViewModel)
   override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel, prdno, grade)

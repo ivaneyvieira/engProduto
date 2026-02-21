@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintReposicaoMovimentacao
 import br.com.astrosoft.produto.model.saci
 
-class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
+class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   val subView
     get() = viewModel.view.tabReposicaoMov
 
@@ -42,6 +42,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   fun gravaPedido(pedido: Movimentacao) = viewModel.exec {
     if (pedido.noGravado > 0) {
       fail("Pedido já gravado")
+    }
+
+    if ((pedido.noRota ?: 0) == 0) {
+      fail("Pedido sem rota definida")
     }
 
     val produtosSelecionados = subView.produtosSelecionado()
@@ -153,6 +157,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto não está gravado")
     }
 
+    if ((mov.noRota ?: 0) == 0) {
+      fail("Pedido sem rota definida")
+    }
+
     val pedidosSelecionado = subView.produtosSelecionado()
     val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
 
@@ -197,6 +205,10 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   fun assinaRecebimento(mov: Movimentacao) = viewModel.exec {
     if (mov.noGravado == 0) {
       fail("O produto não está gravado")
+    }
+
+    if ((mov.noRota ?: 0) == 0) {
+      fail("Pedido sem rota definida")
     }
 
     if (mov.noEntregue == 0) {
@@ -271,7 +283,7 @@ class TabReposicaoMovViewModel(val viewModel: ReposicaoViewModel) {
   }
 }
 
-interface ITabReposicaoMov : ITabView {
+interface ITabReposicaoRep : ITabView {
   fun filtro(): FiltroMovimentacao
   fun updatePedidos(produtos: List<Movimentacao>)
   fun updateProdutos()

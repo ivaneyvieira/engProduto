@@ -9,8 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
-import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoMov
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoMovViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoRep
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -22,9 +22,9 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
-  TabPanelGrid<Movimentacao>(Movimentacao::class), ITabReposicaoMov {
-  private var dlgEstoque: DlgReposicaoMov? = null
+class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
+  TabPanelGrid<Movimentacao>(Movimentacao::class), ITabReposicaoRep {
+  private var dlgEstoque: DlgReposicaoRep? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -82,7 +82,7 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     button("Novo Pedido") {
       this.icon = VaadinIcon.NOTEBOOK.create()
       onClick {
-        val loja = cmbLoja?.value
+        val loja = cmbLoja.value
         viewModel.novoPedido(loja?.no ?: 0)
       }
     }
@@ -92,7 +92,7 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
     selectionMode = Grid.SelectionMode.MULTI
 
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
-      dlgEstoque = DlgReposicaoMov(viewModel, pedido)
+      dlgEstoque = DlgReposicaoRep(viewModel, pedido)
       dlgEstoque?.showDialog {
         viewModel.updateView()
       }
@@ -202,7 +202,7 @@ class TabReposicaoMov(val viewModel: TabReposicaoMovViewModel) :
   }
 
   override val label: String
-    get() = "Movimentação"
+    get() = "Reposição"
 
   override fun updateComponent() {
     viewModel.updateView()
