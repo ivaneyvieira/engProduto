@@ -98,7 +98,7 @@ object ProcessamentoKardec {
     println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
     val recebimento = produto.recebimentosKardec(loja, dataIncial)
-    val expedicao = produto.expedicao(loja, dataIncial)
+    val expedicao = produto.expedicaoKardec(loja, dataIncial)
     val reposicao = produto.reposicao(loja, dataIncial)
     val saldoInicial = produto.saldoInicial(loja, dataIncial)
     val acertoEstoque = produto.acertoEstoque(loja, dataIncial)

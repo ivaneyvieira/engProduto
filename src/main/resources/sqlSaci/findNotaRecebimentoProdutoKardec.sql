@@ -120,7 +120,6 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND I.grade = :grade
 GROUP BY I.invno, I.prdno, I.grade;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                   AS loja,
@@ -257,7 +256,7 @@ FROM
                ON LS.prdno = N.prdno AND LS.grade = N.grade AND LS.storeno = 4
     LEFT JOIN  sqldados.store  AS S
                ON S.no = N.storeno
-WHERE (P.no = :prdno OR :prdno = '')
+WHERE (N.prdno = :prdno OR :prdno = '')
   AND (N.grade = :grade OR :grade = '');
 
 SELECT loja,

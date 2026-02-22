@@ -358,6 +358,22 @@ class QuerySaci : QueryDB(database) {
     return listFilter
   }
 
+  fun findNotaSaidaPrd(loja: Int, dataInicial: LocalDate, prdno: String?, grade: String?): List<NotaSaida> {
+    val sql = "/sqlSaci/findNotaSaidaPrdKardec.sql"
+    prdno ?: return emptyList()
+    grade ?: return emptyList()
+    val dataSaida = dataInicial.minusDays(7).toSaciDate()
+
+    val list = query(sql, NotaSaida::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("dataInicial", dataSaida)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+    }
+
+    return list
+  }
+
   fun findPedidoVenda(filtro: FiltroPedidoVenda, locais: List<String>): List<PedidoVenda> {
     val sql = "/sqlSaci/findPedidoVenda.sql"
     return query(sql, PedidoVenda::class) {
