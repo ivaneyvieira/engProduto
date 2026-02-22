@@ -198,6 +198,24 @@ class ProdutoEstoque(
     }
   }
 
+  fun recebimentosKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+    return saci.findNotaRecebimentoProduto(loja, dataInicial, prdno, grade).map { nota ->
+      ProdutoKardec(
+        loja = loja,
+        prdno = prdno ?: "",
+        grade = grade ?: "",
+        data = nota.data,
+        doc = nota.nfEntrada ?: "",
+        tipo = ETipoKardec.RECEBIMENTO,
+        vencimento = nota.vencimento,
+        qtde = nota.quant ?: 0,
+        saldo = 0,
+        userLogin = nota.login ?: "",
+        observacao = nota.observacaoNota
+      )
+    }
+  }
+
   private fun filtroRessuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): FiltroRessuprimento {
     return FiltroRessuprimento(
       numero = 0,

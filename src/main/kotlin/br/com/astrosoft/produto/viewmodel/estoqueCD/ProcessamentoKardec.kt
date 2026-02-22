@@ -30,7 +30,6 @@ object ProcessamentoKardec {
       val listBuild = fetchKardec(produto, loja, dataIncial)
       listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
         produtoKardec.save()
-        println(index)
       }
       listBuild
     }
@@ -98,7 +97,7 @@ object ProcessamentoKardec {
   fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
     println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
-    val recebimento = produto.recebimentos(loja, dataIncial)
+    val recebimento = produto.recebimentosKardec(loja, dataIncial)
     val expedicao = produto.expedicao(loja, dataIncial)
     val reposicao = produto.reposicao(loja, dataIncial)
     val saldoInicial = produto.saldoInicial(loja, dataIncial)

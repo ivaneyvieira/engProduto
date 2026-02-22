@@ -1018,13 +1018,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoEstoque(loja: Int, prdno: String, grade: String): List<ProdutoEstoque>{
-        val sql = "/sqlSaci/findProdutoEstoqueKardec.sql"
+  fun findProdutoEstoque(loja: Int, prdno: String, grade: String): List<ProdutoEstoque> {
+    val sql = "/sqlSaci/findProdutoEstoqueKardec.sql"
 
     return query(sql, ProdutoEstoque::class) {
-       addOptionalParameter("loja", loja)
-       addOptionalParameter("prdno", prdno)
-       addOptionalParameter("grade", grade)
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
     }
   }
 
@@ -1306,6 +1306,23 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("tipoNota", filtro.tipoNota.codigo)
       addOptionalParameter("anexo", filtro.temAnexo.codigo)
+    }
+  }
+
+  fun findNotaRecebimentoProduto(
+    loja: Int,
+    dataInicial: LocalDate,
+    prdno: String?,
+    grade: String?
+  ): List<NotaRecebimentoProduto> {
+    prdno ?: return emptyList()
+    grade ?: return emptyList()
+    val sql = "/sqlSaci/findNotaRecebimentoProdutoKardec.sql"
+    return query(sql, NotaRecebimentoProduto::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
     }
   }
 
