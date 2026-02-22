@@ -167,8 +167,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     form?.open()
   }
 
-
-
   private fun updateMovimentacao() {
     if (movimentacao.noGravado > 0) {
       viewModel.gravaRota(movimentacao)

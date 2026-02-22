@@ -99,7 +99,8 @@ SELECT N.storeno                                                   AS loja,
        ''                                                          AS usuarioSingExp,
        ''                                                          AS usuarioSep,
        N.print_remarks                                             AS observacaoPrint,
-       N.remarks                                                   AS observacao
+       N.remarks                                                   AS observacao,
+       X.qtty / 1000                                               AS quantidade
 FROM
   sqldados.nf                       AS N
     LEFT JOIN  sqldados.nfUserPrint AS PT
@@ -114,8 +115,8 @@ FROM
                ON N.storeno = T.storeno AND N.eordno = T.ordno
 WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (X.date >= :dataInicial OR :dataInicial = 0)
-  AND (X.prdno = :prdno OR :prdno = '')
-  AND (X.grade = :grade OR :grade = '')
+  AND (X.prdno = :prdno)
+  AND (X.grade = :grade)
   AND (X.storeno IN (2, 3, 4, 5, 8))
   AND ((:loja = 0 OR (N.storeno != :loja AND IFNULL(tipoR, 0) = 0 AND N.tipo NOT IN (0, 1)) OR
         (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))

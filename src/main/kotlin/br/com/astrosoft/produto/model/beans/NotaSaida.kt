@@ -57,6 +57,7 @@ class NotaSaida(
   var usuarioSep: String?,
   var observacaoPrint: String?,
   var observacao: String?,
+  var quantidade: Int?,
 ) {
   fun isRessuprimento(): Boolean {
     return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456

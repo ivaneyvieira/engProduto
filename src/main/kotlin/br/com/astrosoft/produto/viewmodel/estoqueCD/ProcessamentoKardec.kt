@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 import br.com.astrosoft.produto.model.beans.ETipoKardec
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
@@ -94,16 +95,16 @@ object ProcessamentoKardec {
     }
   }
 
-  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> = runBlocking {
     println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
-    val recebimento = produto.recebimentosKardec(loja, dataIncial)
-    val expedicao = produto.expedicaoKardec(loja, dataIncial)
-    val reposicao = produto.reposicaoKardec(loja, dataIncial)
-    val saldoInicial = produto.saldoInicial(loja, dataIncial)
-    val acertoEstoque = produto.acertoEstoque(loja, dataIncial)
-    val movimentacaoEstoque = produto.movimentacaoEstoque(loja, dataIncial)
-    return recebimento + expedicao + reposicao + saldoInicial + acertoEstoque + movimentacaoEstoque
+    val recebimento = async { produto.recebimentosKardec(loja, dataIncial) }
+    val expedicao = async { produto.expedicaoKardec(loja, dataIncial) }
+    val reposicao = async { produto.reposicaoKardec(loja, dataIncial) }
+    val saldoInicial = async { produto.saldoInicial(loja, dataIncial) }
+    val acertoEstoque = async { produto.acertoEstoque(loja, dataIncial) }
+    val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataIncial) }
+    recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await()
   }
 
   fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
