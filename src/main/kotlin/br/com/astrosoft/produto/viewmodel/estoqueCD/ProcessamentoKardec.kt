@@ -99,7 +99,7 @@ object ProcessamentoKardec {
 
     val recebimento = produto.recebimentosKardec(loja, dataIncial)
     val expedicao = produto.expedicaoKardec(loja, dataIncial)
-    val reposicao = produto.reposicao(loja, dataIncial)
+    val reposicao = produto.reposicaoKardec(loja, dataIncial)
     val saldoInicial = produto.saldoInicial(loja, dataIncial)
     val acertoEstoque = produto.acertoEstoque(loja, dataIncial)
     val movimentacaoEstoque = produto.movimentacaoEstoque(loja, dataIncial)

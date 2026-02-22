@@ -1278,6 +1278,19 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findResposicaoProduto(loja: Int, dataInicial: LocalDate, prdno: String?, grade: String?): List<ReposicaoProduto> {
+    prdno ?: return emptyList()
+    grade ?: return emptyList()
+    val sql = "/sqlSaci/reposicaoProdutosKardec.sql"
+
+    return query(sql, ReposicaoProduto::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+    }
+  }
+
   fun updateReposicao(reposicao: Reposicao) {
     val sql = "/sqlSaci/updateReposicao.sql"
     script(sql) {

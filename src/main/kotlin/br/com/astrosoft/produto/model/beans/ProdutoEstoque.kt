@@ -346,20 +346,6 @@ class ProdutoEstoque(
   }
 
   fun expedicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
-    val filtro = FiltroNota(
-      marca = EMarcaNota.ENT,
-      tipoNota = ETipoNotaFiscal.TODOS,
-      loja = loja,
-      pesquisa = "",
-      prdno = prdno ?: "",
-      grade = grade ?: "",
-      dataInicial = dataInicial.minusDays(7),
-      dataEntregaInicial = null,
-      dataFinal = LocalDate.now(),
-      dataNotas = dataInicial.minusDays(7),
-      numero = 0,
-      localizacaoNota = listOf("TODOS"),
-    )
     val notasEnt = saci.findNotaSaidaPrd(loja, dataInicial, prdno, grade = grade)
     val notas = notasEnt.filter {
       it.cancelada != "S"
@@ -438,6 +424,51 @@ class ProdutoEstoque(
       metodo = EMetodo.TODOS,
     )
     return saci.findResposicaoProduto(filtro).mapNotNull { produto ->
+      if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
+
+      val tipo = when (produto.metodo) {
+        431  -> ETipoKardec.REPOSICAO
+        432  -> ETipoKardec.RETORNO
+        433  -> ETipoKardec.ACERTO
+        else -> return@mapNotNull null
+      }
+
+      val mult = when (produto.metodo) {
+        431  -> -1
+        432  -> 1
+        433  -> produto.multAcerto ?: 0
+        else -> return@mapNotNull null
+      }
+
+      ProdutoKardec(
+        loja = produto.loja ?: 0,
+        prdno = produto.prdno ?: "",
+        grade = produto.grade ?: "",
+        data = produto.data,
+        doc = produto.numero.toString(),
+        tipo = tipo,
+        qtde = mult * (produto.quantidade ?: 0),
+        saldo = 0,
+        userLogin = produto.entregueSNome ?: "",
+        observacao = produto.observacao
+      )
+    }
+  }
+
+  fun reposicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+    val localizacao = listOf("TODOS")
+    val filtro = FiltroReposicao(
+      loja = loja,
+      pesquisa = "",
+      marca = EMarcaReposicao.ENT,
+      localizacao = localizacao,
+      dataInicial = dataInicial,
+      dataFinal = null,
+      prdno = prdno ?: "",
+      grade = grade ?: "",
+      metodo = EMetodo.TODOS,
+    )
+    return saci.findResposicaoProduto(loja, dataInicial, prdno, grade).mapNotNull { produto ->
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
 
       val tipo = when (produto.metodo) {
