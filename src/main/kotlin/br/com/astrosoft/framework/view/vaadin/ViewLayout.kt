@@ -24,11 +24,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.TabSheet
 import com.vaadin.flow.component.tabs.TabSheetVariant
 import com.vaadin.flow.router.*
+import kotlinx.coroutines.runBlocking
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.jvm.optionals.getOrNull
 
 abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLeaveObserver, BeforeEnterObserver,
   AfterNavigationObserver {
@@ -89,12 +89,22 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     DialogHelper.showForm(caption, form, runConfirm)
   }
 
-  override fun showQuestion(msg: String, execYes: () -> Unit) {
-    showQuestion(msg, execYes) {}
+  override fun showQuestion(msg: String, execYes: suspend () -> Unit) {
+    runBlocking {
+      showQuestion(msg, execYes) {}
+    }
   }
 
-  private fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit) {
-    DialogHelper.showQuestion(msg, execYes, execNo)
+  private fun showQuestion(msg: String, execYes: suspend () -> Unit, execNo: suspend () -> Unit) {
+    DialogHelper.showQuestion(msg, {
+      runBlocking {
+        execYes()
+      }
+    }, {
+      runBlocking {
+        execNo()
+      }
+    })
   }
 
   override fun showReport(chave: String, report: ByteArray) {

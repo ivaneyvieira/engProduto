@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
-import br.com.astrosoft.framework.view.vaadin.vaadin
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroNotaVenda
@@ -8,11 +7,8 @@ import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVenda
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendas
 import br.com.astrosoft.produto.model.report.ReportVenda
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlin.coroutines.CoroutineContext
 
-class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) : CoroutineScope {
+class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -55,11 +51,6 @@ class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) : CoroutineSco
 
   val subView
     get() = viewModel.view.tabDevCliVenda
-
-  private val uiCoroutineScope = SupervisorJob()
-  private val uiCoroutineContext = vaadin()
-  override val coroutineContext: CoroutineContext
-    get() = uiCoroutineContext + uiCoroutineScope
 }
 
 interface ITabDevVenda : ITabView {

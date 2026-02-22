@@ -173,7 +173,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     }
   }
 
-
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
