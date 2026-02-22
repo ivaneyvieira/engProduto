@@ -139,14 +139,14 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               }
             }
 
-           cmbRota= select("Rota") {
+            cmbRota = select("Rota") {
               this.setItems(ERota.entries)
               this.setItemLabelGenerator {
                 it.descricao
               }
               this.value = movimentacao.enumRota
               addValueChangeListener {
-                if(it.isFromClient) {
+                if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
                   updateMovimentacao()
@@ -167,11 +167,14 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     form?.open()
   }
 
+
+
   private fun updateMovimentacao() {
-    if(movimentacao.noGravado > 0){
+    if (movimentacao.noGravado > 0) {
       viewModel.gravaRota(movimentacao)
     }
   }
+
 
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {

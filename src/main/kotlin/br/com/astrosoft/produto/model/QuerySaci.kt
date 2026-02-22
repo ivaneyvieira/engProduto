@@ -1018,6 +1018,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findProdutoEstoque(loja: Int, prdno: String, grade: String): List<ProdutoEstoque>{
+        val sql = "/sqlSaci/findProdutoEstoqueKardec.sql"
+
+    return query(sql, ProdutoEstoque::class) {
+       addOptionalParameter("loja", loja)
+       addOptionalParameter("prdno", prdno)
+       addOptionalParameter("grade", grade)
+    }
+  }
+
   fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
     val sql = "/sqlSaci/findProdutoEstoque.sql"
 

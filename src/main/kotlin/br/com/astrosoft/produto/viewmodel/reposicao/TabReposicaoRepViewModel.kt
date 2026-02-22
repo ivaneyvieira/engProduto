@@ -7,6 +7,9 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintReposicaoMovimentacao
 import br.com.astrosoft.produto.model.saci
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   val subView
@@ -65,6 +68,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noGravado = user.no
         it.save()
       }
+      atualizaKardec(produtosSelecionados)
       updateView()
       subView.closeForm()
     }
@@ -198,6 +202,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noEntregue = empno
         it.save()
       }
+      atualizaKardec(pedidosSelecionado)
       subView.updateProdutos()
     }
   }
@@ -252,6 +257,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noRecebido = empno
         it.save()
       }
+      atualizaKardec(pedidosSelecionado)
       subView.updateProdutos()
     }
   }
@@ -269,17 +275,33 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
 
     viewModel.view.showQuestion("Desfaz assinatura?") {
-      movimentacao.findProdutos().forEach {
+      val produtos = movimentacao.findProdutos()
+      produtos.forEach {
         it.noRecebido = 0
         it.noEntregue = 0
         it.save()
       }
+      atualizaKardec(produtos)
       subView.updateProdutos()
     }
   }
 
+  private fun atualizaKardec(produtos: List<ProdutoMovimentacao>) = runBlocking {
+    val produtosKad = produtos.flatMap { produto ->
+      val produtoEstoque = ProdutoEstoque.findProdutoEstoque(
+        loja = produto.numloja ?: 0,
+        prdno = produto.prdno ?: "",
+        grade = produto.grade ?: "",
+      )
+      produtoEstoque
+    }
+    launch { ProcessamentoKardec.updateKardec(produtosKad) }
+    launch { ProcessamentoKardec.updateControleKardec(produtosKad) }
+  }
+
   fun gravaRota(movimentacao: Movimentacao) {
     movimentacao.salvaRota()
+    atualizaKardec(movimentacao.findProdutos())
   }
 }
 

@@ -8,30 +8,30 @@ import java.time.LocalDate
 import kotlin.math.roundToInt
 
 class ProdutoEstoque(
-  var loja: Int?,
-  var lojaSigla: String?,
-  var prdno: String?,
-  var codigo: Int?,
-  var descricao: String?,
-  var unidade: String?,
-  var grade: String?,
-  var tipo: Int?,
-  var cl: Int?,
-  var embalagem: Int?,
-  var qtdEmbalagem: Double?,
-  var estoque: Int?,
-  var locNerus: String?,
-  var locApp: String?,
-  var codForn: Int?,
-  var fornecedor: String?,
-  var fornecedorAbrev: String?,
-  var cnpjFornecedor: String?,
-  var saldo: Int?,
-  var valorEstoque: Double?,
-  var saldoVarejo: Int?,
-  var saldoAtacado: Int?,
-  var dataInicial: LocalDate?,
-  var dataUpdate: LocalDate?,
+  var loja: Int? = null,
+  var lojaSigla: String? = null,
+  var prdno: String? = null,
+  var codigo: Int? = null,
+  var descricao: String? = null,
+  var unidade: String? = null,
+  var grade: String? = null,
+  var tipo: Int? = null,
+  var cl: Int? = null,
+  var embalagem: Int? = null,
+  var qtdEmbalagem: Double? = null,
+  var estoque: Int? = null,
+  var locNerus: String? = null,
+  var locApp: String? = null,
+  var codForn: Int? = null,
+  var fornecedor: String? = null,
+  var fornecedorAbrev: String? = null,
+  var cnpjFornecedor: String? = null,
+  var saldo: Int? = null,
+  var valorEstoque: Double? = null,
+  var saldoVarejo: Int? = null,
+  var saldoAtacado: Int? = null,
+  var dataInicial: LocalDate? = null,
+  var dataUpdate: LocalDate? = null,
   var kardec: Int? = null,
   var dataConferencia: LocalDate? = null,
   var qtConfEditLoja: Int? = null,
@@ -49,9 +49,9 @@ class ProdutoEstoque(
   var processado: Boolean? = false,
   var estoqueConfCD: Int? = null,
   var estoqueConfLoja: Int? = null,
-  var vendaMesAnterior: Int?,
-  var vendaMesAtual: Int?,
-  var quantDevolucao: Int?,
+  var vendaMesAnterior: Int? = null,
+  var vendaMesAtual: Int? = null,
+  var quantDevolucao: Int? = null,
 ) {
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
@@ -449,6 +449,13 @@ class ProdutoEstoque(
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
+    }
+
+    fun findProdutoEstoque(loja: Int?, prdno: String?, grade: String?): List<ProdutoEstoque> {
+      loja ?: return emptyList()
+      prdno ?: return emptyList()
+      grade ?: return emptyList()
+      return saci.findProdutoEstoque(loja, prdno, grade)
     }
   }
 }
