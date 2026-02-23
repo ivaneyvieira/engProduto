@@ -287,6 +287,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   private fun atualizaKardec(produtos: List<ProdutoMovimentacao>) = runBlocking {
+    return@runBlocking
     val produtosKad = produtos.flatMap { produto ->
       val produtoEstoque = ProdutoEstoque.findProdutoEstoque(
         loja = produto.numloja ?: 0,
