@@ -161,7 +161,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto não está gravado")
     }
 
-    if ((mov.noRota ?: 0) == 0) {
+    if (mov.noRota == null) {
       fail("Pedido sem rota definida")
     }
 
@@ -212,7 +212,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto não está gravado")
     }
 
-    if ((mov.noRota ?: 0) == 0) {
+    if (mov.noRota == null) {
       fail("Pedido sem rota definida")
     }
 
