@@ -98,9 +98,9 @@ object ProcessamentoKardec {
   fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> = runBlocking {
     println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
 
-    val recebimento = async { produto.recebimentosKardec(loja, dataIncial) }
-    val expedicao = async { produto.expedicaoKardec(loja, dataIncial) }
-    val reposicao = async { produto.reposicaoKardec(loja, dataIncial) }
+    val recebimento = async { produto.recebimentos(loja, dataIncial) }
+    val expedicao = async { produto.expedicao(loja, dataIncial) }
+    val reposicao = async { produto.reposicao(loja, dataIncial) }
     val saldoInicial = async { produto.saldoInicial(loja, dataIncial) }
     val acertoEstoque = async { produto.acertoEstoque(loja, dataIncial) }
     val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataIncial) }
