@@ -47,7 +47,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido já gravado")
     }
 
-    if ((pedido.noRota ?: 0) == 0) {
+    if (pedido.noRota == null) {
       fail("Pedido sem rota definida")
     }
 
