@@ -246,6 +246,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       movimentacao.noRecebido = produtosAgrupados.noRecebido
       movimentacao.recebido = produtosAgrupados.recebido
       movimentacao.recebidoNome = produtosAgrupados.recebidoNome
+      movimentacao.noRota = produtosAgrupados.noRota
     }
     cmbRota?.isReadOnly = movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0
     return produtos
