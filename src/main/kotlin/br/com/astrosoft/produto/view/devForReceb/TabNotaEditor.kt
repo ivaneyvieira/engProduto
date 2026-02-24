@@ -25,6 +25,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   private var dlgArquivo: DlgArquivoNotaEditor? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var cmbSituacao: Select<EStituacaoDev?>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -55,6 +56,32 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       this.valueChangeTimeout = 1500
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+
+    cmbSituacao = select("Situação") {
+      val itens = listOf(
+        EStituacaoDev.PEDIDO,
+        EStituacaoDev.TRANSPORTADORA,
+        EStituacaoDev.EMAIL,
+        EStituacaoDev.RETORNO_NFD,
+        EStituacaoDev.REPOSTO,
+        EStituacaoDev.ACERTO,
+        EStituacaoDev.ACERTO_PAGO,
+        EStituacaoDev.AJUSTE,
+        EStituacaoDev.DESCARTE,
+        EStituacaoDev.NULO
+      )
+      this.emptySelectionCaption = "Todos"
+      this.isEmptySelectionAllowed = true
+      this.setItems(itens)
+      this.setItemLabelGenerator { item ->
+        item?.descricao ?: "Todos"
+      }
+      addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+        }
       }
     }
   }
@@ -110,7 +137,8 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   }
 
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
-    this.updateGrid(notas)
+    val situacao = cmbSituacao.value
+    this.updateGrid(notas.filter { situacao == null || it.situacaoDev == situacao.num })
   }
 
   override fun updateArquivos() {
