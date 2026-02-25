@@ -187,11 +187,13 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
 
       if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioCD) {
-        fail("Usuário não autorizado para assinar entrega da rota CD/LJ")
+        viewModel.view.showError("Usuário não autorizado para assinar entrega da rota CD/LJ")
+        return@autorizaAssinatura
       }
 
       if (mov.enumRota == ERota.LJ_CD && !user.reposicaoUsuarioLJ) {
-        fail("Usuário não autorizado para assinar entrega da rota LJ/CD")
+        viewModel.view.showError("Usuário não autorizado para assinar entrega da rota LJ/CD")
+        return@autorizaAssinatura
       }
 
       if (funcionario.senha != senha) {
@@ -245,11 +247,13 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
 
       if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioLJ) {
-        fail("Usuário não autorizado para assinar recebimento da rota CD/LJ")
+        viewModel.view.showError("Usuário não autorizado para assinar recebimento da rota CD/LJ")
+        return@autorizaAssinatura
       }
 
       if (mov.enumRota == ERota.LJ_CD && !user.reposicaoUsuarioCD) {
-        fail("Usuário não autorizado para assinar recebimento da rota LJ/CD")
+        viewModel.view.showError("Usuário não autorizado para assinar recebimento da rota LJ/CD")
+        return@autorizaAssinatura
       }
 
       if (funcionario.senha != senha) {
