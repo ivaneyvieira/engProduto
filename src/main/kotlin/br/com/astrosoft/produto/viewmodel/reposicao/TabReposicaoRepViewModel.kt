@@ -296,10 +296,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       produtoEstoque
     }
     launch {
-      val numero = produtos.firstOrNull()?.numero ?: ""
-      val numloja = produtos.firstOrNull()?.numloja ?: 0
-      val doc = "$numero/$numloja"
-
       ProcessamentoKardec.updateKardec(produtosKad)
     }
     launch {
