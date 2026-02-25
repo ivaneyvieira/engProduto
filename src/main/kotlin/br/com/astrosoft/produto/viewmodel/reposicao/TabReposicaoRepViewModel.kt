@@ -180,20 +180,21 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto já foi entregue")
     }
 
-    val user = AppConfig.userLogin() as? UserSaci
-
-    if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioCD == false) {
-      fail("Usuário não autorizado para assinar entrega da rota CD/LJ")
-    }
-
-    if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioLJ == false) {
-      fail("Usuário não autorizado para assinar entrega da rota LJ/CD")
-    }
-
     subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
-      val funcionario = saci.listFuncionario(empno)
+      val funcionario = saci.listFuncionario(empno) ?: fail("Funcionário não encontrado")
 
-      if (funcionario?.senha != senha) {
+      val login = funcionario.login
+      val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
+
+      if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioCD) {
+        fail("Usuário não autorizado para assinar entrega da rota CD/LJ")
+      }
+
+      if (mov.enumRota == ERota.LJ_CD && !user.reposicaoUsuarioLJ) {
+        fail("Usuário não autorizado para assinar entrega da rota LJ/CD")
+      }
+
+      if (funcionario.senha != senha) {
         viewModel.view.showError("Funcionário ou senha inválido")
         return@autorizaAssinatura
       }
@@ -235,20 +236,23 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Produtos não selecionados")
     }
 
-    val user = AppConfig.userLogin() as? UserSaci
 
-    if (mov.enumRota == ERota.CD_LJ && user?.reposicaoUsuarioLJ == false) {
-      fail("Usuário não autorizado para assinar recebimento da rota CD/LJ")
-    }
-
-    if (mov.enumRota == ERota.LJ_CD && user?.reposicaoUsuarioCD == false) {
-      fail("Usuário não autorizado para assinar recebimento da rota LJ/CD")
-    }
 
     subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->
-      val funcionario = saci.listFuncionario(empno)
+      val funcionario = saci.listFuncionario(empno) ?: fail("Funcionário não encontrado")
 
-      if (funcionario?.senha != senha) {
+      val login = funcionario.login
+      val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
+
+      if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioLJ) {
+        fail("Usuário não autorizado para assinar recebimento da rota CD/LJ")
+      }
+
+      if (mov.enumRota == ERota.LJ_CD && !user.reposicaoUsuarioCD) {
+        fail("Usuário não autorizado para assinar recebimento da rota LJ/CD")
+      }
+
+      if (funcionario.senha != senha) {
         viewModel.view.showError("Funcionário ou senha inválido")
         return@autorizaAssinatura
       }
