@@ -487,9 +487,37 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findProdutoNF(
-    nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String, todosLocais: Boolean
+    nfs: NotaSaida,
+    marca: EMarcaNota,
+    prdno: String,
+    grade: String,
+    todosLocais: Boolean
   ): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdvno)
+      addOptionalParameter("xano", nfs.xano)
+      addOptionalParameter("loja", nfs.lojaFiltro)
+      addOptionalParameter("marca", marca.num)
+      addOptionalParameter("prdno", prdno)
+      addOptionalParameter("grade", grade)
+      addOptionalParameter("lojaLocal", 4)
+      addOptionalParameter("todosLocais", todosLocais.let { if (it) "S" else "N" })
+      addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
+    }
+    return produtos
+  }
+
+  fun findProdutoNF2(
+    nfs: NotaSaida,
+    marca: EMarcaNota,
+    prdno: String,
+    grade: String,
+    todosLocais: Boolean
+  ): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida2.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
     val produtos = query(sql, ProdutoNFS::class) {
       addOptionalParameter("storeno", nfs.loja)
@@ -2177,6 +2205,16 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", produto.loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+    }
+  }
+
+  fun deleteKardecMov(produto: ProdutoEstoque, doc: String) {
+    val sql = "/sqlSaci/kardecDeleteMov.sql"
+    script(sql) {
+      addOptionalParameter("loja", produto.loja)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("doc", doc)
     }
   }
 

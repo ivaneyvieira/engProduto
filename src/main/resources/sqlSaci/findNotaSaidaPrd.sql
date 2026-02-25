@@ -167,7 +167,8 @@ SELECT N.storeno                                                   AS loja,
        ''                                                          AS usuarioSingExp,
        ''                                                          AS usuarioSep,
        N.print_remarks                                             AS observacaoPrint,
-       N.remarks                                                   AS observacao
+       N.remarks                                                   AS observacao,
+       SUM(IF(M.marca = 2, X.qtty / 1000, 0.00))                   AS quantidade
 FROM
   sqldados.nf                       AS N
     LEFT JOIN  sqldados.nfUserPrint AS PT
@@ -178,6 +179,8 @@ FROM
                USING (storeno, pdvno, xano)
     INNER JOIN sqldados.xaprd2      AS X
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.xaprd2Marca AS M
+               USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  sqldados.users       AS EC
                ON EC.no = X.s4
     LEFT JOIN  T_TIPO               AS T
@@ -196,8 +199,8 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND ((2 IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
   OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR
-                                (IFNULL(CG.storeno, 0) != :loja) OR
-                                (N.nfse = 7))) OR 2 NOT IN (0, 999))
+                           (IFNULL(CG.storeno, 0) != :loja) OR
+                           (N.nfse = 7))) OR 2 NOT IN (0, 999))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
 SELECT Q.loja,
@@ -248,12 +251,13 @@ SELECT Q.loja,
        usuarioSingExp,
        usuarioSep,
        observacaoPrint,
-       observacao
+       observacao,
+       quantidade
 FROM
-  T_QUERY                          AS Q
+  T_QUERY                           AS Q
     INNER JOIN sqldados.xaprd2Marca AS M
-              ON Q.loja = M.storeno AND
-                 Q.pdvno = M.pdvno AND
-                 Q.xano = M.xano
+               ON Q.loja = M.storeno AND
+                  Q.pdvno = M.pdvno AND
+                  Q.xano = M.xano
 WHERE M.marca = 2
 GROUP BY Q.loja, Q.pdvno, Q.xano

@@ -345,6 +345,95 @@ class ProdutoEstoque(
     return ret
   }
 
+  fun expedicao2(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+    val filtro = FiltroNota(
+      marca = EMarcaNota.ENT,
+      tipoNota = ETipoNotaFiscal.TODOS,
+      loja = loja,
+      pesquisa = "",
+      prdno = prdno ?: "",
+      grade = grade ?: "",
+      dataInicial = dataInicial.minusDays(7),
+      dataEntregaInicial = null,
+      dataFinal = LocalDate.now(),
+      dataNotas = dataInicial.minusDays(7),
+      numero = 0,
+      localizacaoNota = listOf("TODOS"),
+    )
+    val notasEnt = saci.findNotaSaidaPrd(filtro = filtro.copy(marca = EMarcaNota.ENT))
+    val notas = notasEnt.filter {
+      (it.cancelada != "S") && (it.quantidade ?: 0) > 0
+    }
+    val ret = notas.flatMap { nota ->
+      val tipo = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
+        ETipoKardec.ENTREGA
+      } else {
+        ETipoKardec.EXPEDICAO
+      }
+
+      val usuario = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
+        (nota.usuarioCD ?: "").split("-").firstOrNull() ?: ""
+      } else {
+        (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
+      }
+
+      //Validações
+      val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
+      if (data < dataInicial) return@flatMap emptyList()
+
+      val produtosEnt = nota.produtos2(
+        marca = EMarcaNota.ENT,
+        prdno = prdno ?: "",
+        grade = grade ?: "",
+        todosLocais = true
+      )
+
+      if ((nota.quantidade ?: 0) > 0) {
+        println(nota.quantidade)
+        println(produtosEnt.map { it.quantidade })
+        println(produtosEnt.size)
+      }
+
+      val nota1 = nota.notaEntrega ?: ""
+      val nota2: String = "${nota.numero}/${nota.serie}"
+
+      val notaFutura = when {
+        nota1.endsWith("/1") -> nota1
+        nota2.endsWith("/1") -> nota2
+        nota1.isNotEmpty()   -> nota1
+        nota2.isNotEmpty()   -> nota2
+        else                 -> ""
+      }
+
+      val notaEntrega = when {
+        nota1.endsWith("/3") -> nota1
+        nota2.endsWith("/3") -> nota2
+        nota1.isNotEmpty()   -> nota2
+        else                 -> ""
+      }
+
+      val listExp = produtosEnt.filter { produto ->
+        produto.gradeEfetiva == (grade ?: "")
+      }.map { produto ->
+        ProdutoKardec(
+          loja = loja,
+          prdno = prdno ?: "",
+          grade = produto.gradeEfetiva,
+          data = data,
+          doc = notaFutura,
+          nfEnt = notaEntrega,
+          tipo = tipo,
+          qtde = -(produto.quantidade ?: 0),
+          saldo = 0,
+          userLogin = nota.usuarioSingCD ?: usuario,
+          observacao = "${nota.observacao} loja ${nota.loja}"
+        )
+      }
+      listExp.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
+    }
+    return ret
+  }
+
   fun expedicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
     val notasEnt = saci.findNotaSaidaPrd(loja, dataInicial, prdno, grade = grade)
     val notas = notasEnt.filter {

@@ -107,6 +107,14 @@ class NotaSaida(
   ): List<ProdutoNFS> =
       saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
 
+  fun produtos2(
+    marca: EMarcaNota,
+    prdno: String = "",
+    grade: String = "",
+    todosLocais: Boolean
+  ): List<ProdutoNFS> =
+      saci.findProdutoNF2(this, marca, prdno, grade, todosLocais)
+
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
     this.usernoPrint = user?.no

@@ -42,6 +42,14 @@ data class ProdutoKardec(
       saci.deleteKardec(produto)
     }
 
+    fun deleteKardecMov(produto: ProdutoEstoque, doc: String) {
+      saci.deleteKardecMov(produto, doc)
+      if(produto.loja != 4) {
+        produto.loja = 4
+        saci.deleteKardecMov(produto, doc)
+      }
+    }
+
     fun findKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
       return saci.selectKardec(produto)
     }

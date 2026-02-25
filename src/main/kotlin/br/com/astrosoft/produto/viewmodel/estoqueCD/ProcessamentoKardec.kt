@@ -25,11 +25,30 @@ object ProcessamentoKardec {
     produto.updateKardec()
   }
 
+  fun updateSaldoKardecMov(produto: ProdutoEstoque, doc: String) {
+    val loja = produto.loja ?: 4
+    produto.dataUpdate = null
+    ProdutoKardec.deleteKardecMov(produto, doc)
+    val listaKardec = produto.movimentacaoEstoque(loja, produto.dataInicialDefault())
+    listaKardec.forEach { produto ->
+      produto.save()
+    }
+
+    val kardecProduto = ProdutoKardec.findKardec(produto).ajustaOrdem()
+    kardecProduto.forEach { produto ->
+      produto.save()
+    }
+
+    produto.dataUpdate = LocalDate.now()
+    produto.kardec = kardecProduto.ajustaOrdem().lastOrNull()?.saldo ?: 0
+    produto.updateKardec()
+  }
+
   private fun updateKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
     return runBlocking {
       ProdutoKardec.deleteKardec(produto)
       val listBuild = fetchKardec(produto, loja, dataIncial)
-      listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
+      listBuild.forEach { produtoKardec: ProdutoKardec ->
         produtoKardec.save()
       }
       listBuild
@@ -89,21 +108,27 @@ object ProcessamentoKardec {
     }
   }
 
+  fun updateKardecMov(produtos: List<ProdutoEstoque>, doc: String) {
+    produtos.forEach { produto ->
+      updateSaldoKardecMov(produto, doc)
+    }
+  }
+
   fun updateControleKardec(produtos: List<ProdutoEstoque>) {
     produtos.forEach { produto ->
       updateSaldoControleKardec(produto)
     }
   }
 
-  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> = runBlocking {
-    println("Início do processamento do produto ${produto.codigo} na data $dataIncial")
+  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardec> = runBlocking {
+    println("Início do processamento do produto ${produto.codigo} na data $dataInicial")
 
-    val recebimento = async { produto.recebimentos(loja, dataIncial) }
-    val expedicao = async { produto.expedicao(loja, dataIncial) }
-    val reposicao = async { produto.reposicao(loja, dataIncial) }
-    val saldoInicial = async { produto.saldoInicial(loja, dataIncial) }
-    val acertoEstoque = async { produto.acertoEstoque(loja, dataIncial) }
-    val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataIncial) }
+    val recebimento = async { produto.recebimentos(loja, dataInicial) }
+    val expedicao = async { produto.expedicao2(loja, dataInicial) }
+    val reposicao = async { produto.reposicao(loja, dataInicial) }
+    val saldoInicial = async { produto.saldoInicial(loja, dataInicial) }
+    val acertoEstoque = async { produto.acertoEstoque(loja, dataInicial) }
+    val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataInicial) }
     recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await()
   }
 

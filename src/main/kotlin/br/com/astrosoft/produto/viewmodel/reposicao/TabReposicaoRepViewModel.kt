@@ -262,7 +262,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun desfazAssinatura(movimentacao: Movimentacao) {
+  fun desfazAssinatura(movimentacao: Movimentacao) = viewModel.exec {
     val pedidosSelecionado = subView.produtosSelecionado()
     val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
 
@@ -287,7 +287,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   private fun atualizaKardec(produtos: List<ProdutoMovimentacao>) = runBlocking {
-    return@runBlocking
     val produtosKad = produtos.flatMap { produto ->
       val produtoEstoque = ProdutoEstoque.findProdutoEstoque(
         loja = produto.numloja ?: 0,
@@ -296,8 +295,16 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       )
       produtoEstoque
     }
-    launch { ProcessamentoKardec.updateKardec(produtosKad) }
-    launch { ProcessamentoKardec.updateControleKardec(produtosKad) }
+    launch {
+      val numero = produtos.firstOrNull()?.numero ?: ""
+      val numloja = produtos.firstOrNull()?.numloja ?: 0
+      val doc = "$numero/$numloja"
+
+      ProcessamentoKardec.updateKardec(produtosKad)
+    }
+    launch {
+      ProcessamentoKardec.updateControleKardec(produtosKad)
+    }
   }
 
   fun gravaRota(movimentacao: Movimentacao) {
