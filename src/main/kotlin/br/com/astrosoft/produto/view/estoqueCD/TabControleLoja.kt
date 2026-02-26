@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 class TabControleLoja(val viewModel: TabControleLojaViewModel) :
   TabPanelGrid<ProdutoControle>(ProdutoControle::class), ITabControleLoja {
-  private var dlgKardec: DlgControleKardecConferenciaLoja? = null
+  private var dlgKardec: DlgProdutoKardecLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -205,7 +205,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoControle ->
         val dataIncial: LocalDate? = edtDataInicial.value
-        dlgKardec = DlgControleKardecConferenciaLoja(viewModel, produto, dataIncial)
+        dlgKardec = DlgProdutoKardecLoja(viewModel, produto, dataIncial)
         dlgKardec?.showDialog {
           viewModel.updateView()
         }

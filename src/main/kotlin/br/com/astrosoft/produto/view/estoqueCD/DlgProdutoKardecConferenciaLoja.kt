@@ -11,9 +11,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoControle
 import br.com.astrosoft.produto.model.planilha.PlanilhaKardexControle
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleLojaViewModel
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.label
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -26,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class DlgControleKardecConferenciaLoja(
+class DlgProdutoKardecLoja(
   val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataInicial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
