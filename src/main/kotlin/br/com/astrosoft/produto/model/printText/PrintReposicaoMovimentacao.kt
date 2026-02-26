@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ERota
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
+import java.time.LocalTime
 
 class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
   private var valorPedido: Double = 0.0
@@ -16,11 +17,13 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
 
     val rotaDescricao = rota?.descricao ?: ""
 
-
     writeln("Reposicao Rota $rotaDescricao", negrito = true, center = true)
     writeln("")
+    val text1 ="Data: ${bean.data.format()} - ${LocalTime.now().format("HH:mm")}"
+    val text2 = "Pedido : ${bean.numero}"
+    val spaces = widthPage - text1.length - text2.length
     writeln(
-      "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
+      text = "$text1${" ".repeat(spaces)}$text2",
       negrito = true
     )
     val user = AppConfig.userLogin()
