@@ -212,7 +212,8 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
 
       this.setPartNameGenerator { produto ->
         val entregue = produto.noEntregue ?: 0
-        if (entregue > 0) {
+        val recebido = produto.noRecebido ?: 0
+        if (entregue > 0 && recebido > 0) {
           "amarelo"
         } else {
           null
