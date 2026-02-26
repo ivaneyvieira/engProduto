@@ -149,7 +149,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
-                  updateMovimentacao()
+                  viewModel.gravaRota(movimentacao)
                 }
               }
             }
@@ -165,12 +165,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       }
     }
     form?.open()
-  }
-
-  private fun updateMovimentacao() {
-    if (movimentacao.noGravado > 0) {
-      viewModel.gravaRota(movimentacao)
-    }
   }
 
   private fun HorizontalLayout.createGridProdutos() {
