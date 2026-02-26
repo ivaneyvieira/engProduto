@@ -4,7 +4,6 @@ import br.com.astrosoft.produto.model.beans.Impressora
 import br.com.astrosoft.produto.model.beans.Local
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.model.saci
 
 abstract class TabUsrViewModel(val vm: ViewModel<*>) {
   abstract val subView: ITabUser
@@ -51,10 +50,10 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
   fun updateView() = vm.exec {
     val filter = subView.filter()
     val usuarios = usuarios().filter {
-      filter == "" ||
-      it.no.toString() == filter ||
-      (it.name ?: "").contains(filter, ignoreCase = true) ||
-      (it.login ?: "").startsWith(filter, ignoreCase = true)
+      (filter == "") ||
+      (it.no.toString() == filter) ||
+      (it.name?.contains(filter, ignoreCase = true) == true) ||
+      (it.login?.startsWith(filter, ignoreCase = true) == true)
     }
     subView.updateUsuarios(usuarios)
   }
@@ -72,21 +71,13 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
   }
 
   fun addUser(userSaci: UserSaci) {
-    //val user = UserSaci.findUser(userSaci.no)
-    userSaci.let { u ->
+    val user = UserSaci.findUser(userSaci.login)
+    user.forEach { u ->
       u.ativo = true
       u.update(userSaci)
       UserSaci.updateUser(u)
     }
     updateView()
-  }
-
-  fun findUser(numUser: Int): UserSaci? {
-    return saci.findUserSaci(numUser)
-  }
-
-  fun existNumber(numero: Int): Boolean {
-    return UserSaci.existNumber(numero)
   }
 }
 
