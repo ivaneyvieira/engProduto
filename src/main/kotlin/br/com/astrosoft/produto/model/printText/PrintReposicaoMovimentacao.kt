@@ -4,12 +4,20 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.produto.model.beans.ERota
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
 
 class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoMovimentacao) {
-    writeln("Reposicao Loja", negrito = true, center = true)
+    val rota = bean.noRota?.let { noRota ->
+      ERota.entries.firstOrNull { it.numero == noRota }
+    }
+
+    val rotaDescricao = rota?.descricao ?: ""
+
+
+    writeln("Reposicao Loja Rota $rotaDescricao", negrito = true, center = true)
     writeln("")
     writeln(
       "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
