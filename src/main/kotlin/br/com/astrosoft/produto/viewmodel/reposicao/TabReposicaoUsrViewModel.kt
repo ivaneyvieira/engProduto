@@ -27,7 +27,7 @@ class TabReposicaoUsrViewModel(val viewModel: ReposicaoViewModel) : TabUsrViewMo
     this.autorizaAcerto = usuario.autorizaAcerto
     this.reposicaoRetorno = usuario.reposicaoRetorno
     this.lojaReposicao = usuario.lojaReposicao
-    this.reposicaoMov = usuario.reposicaoMov
+    this.reposicaoRep = usuario.reposicaoRep
     this.reposicaoAssinaEntrega = usuario.reposicaoAssinaEntrega
     this.reposicaoAssinaRecebimento = usuario.reposicaoAssinaRecebimento
     this.reposicaoDesfazAssina = usuario.reposicaoDesfazAssina

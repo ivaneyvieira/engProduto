@@ -207,7 +207,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.reposicaoMov == true
+    return username?.reposicaoRep == true
   }
 
   override val label: String
