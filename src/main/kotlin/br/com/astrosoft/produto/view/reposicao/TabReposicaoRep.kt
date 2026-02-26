@@ -35,7 +35,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     val itens = if (user?.admin == true) {
       listOf(Loja.lojaZero) + viewModel.findAllLojas()
     } else {
-      viewModel.findAllLojas().filter { it.no == (user?.lojaConferencia ?: 0) }
+      viewModel.findAllLojas().filter { it.no == (user?.lojaReposicao ?: 0) }
     }
     cmbLoja.setItems(itens)
     cmbLoja.value = itens.firstOrNull()
