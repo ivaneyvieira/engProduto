@@ -51,16 +51,16 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
     if (entregueNome.isNotBlank()) {
       writeln(entregueNome ?: "", center = true)
     }
-    writeln("")
     writeln("Separado/Entregue", center = true)
+    writeln("${bean?.dataEntrege.format()}          ${bean?.horaEntrege.format()}", center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
     if (recebidoNome.isNotBlank()) {
       writeln(recebidoNome ?: "", center = true)
     }
-    writeln("")
     writeln("Recebido", center = true)
+    writeln("${bean?.dataRecebido.format()}          ${bean?.horaRecebido.format()}", center = true)
     writeln("")
     writeln("")
   }

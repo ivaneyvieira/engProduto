@@ -30,7 +30,11 @@ class ProdutoMovimentacao(
   var recebidoNome: String? = null,
   var movimentacao: Int? = null,
   var estoque: Int? = null,
-  var noRota: Int? = null
+  var noRota: Int? = null,
+  var dataEntrege: LocalDate? = null,
+  var horaEntrege: LocalTime? = null,
+  var dataRecebido: LocalDate? = null,
+  var horaRecebido: LocalTime? = null,
 ) {
   val localAbrev
     get() = locApp?.substring(0, 4) ?: ""
@@ -139,7 +143,11 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       noRecebido = noRecebido,
       recebido = recebido,
       recebidoNome = recebidoNome,
-      noRota = lista.firstOrNull()?.noRota
+      noRota = pedido.noRota,
+      dataEntrege = pedido.dataEntrege,
+      horaEntrege = pedido.horaEntrege,
+      dataRecebido = pedido.dataRecebido,
+      horaRecebido = pedido.horaRecebido,
     )
   }
 }
@@ -161,7 +169,11 @@ class Movimentacao(
   var noRecebido: Int,
   var recebido: String,
   var recebidoNome: String,
-  var noRota: Int?
+  var noRota: Int?,
+  var dataEntrege: LocalDate?,
+  var horaEntrege: LocalTime?  ,
+  var dataRecebido: LocalDate?,
+  var horaRecebido: LocalTime?,
 ) {
   var enumRota: ERota?
     get() = ERota.entries.firstOrNull { it.numero == noRota }

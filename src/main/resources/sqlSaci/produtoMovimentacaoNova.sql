@@ -35,6 +35,10 @@ SELECT numero,
        FALSE AS gravado,
        0     AS movimentacao,
        0     AS estoque,
-       0     AS noRota
+       0     AS noRota,
+       NULL  AS dataEntrege,
+       NULL  AS horaEntrege,
+       NULL  AS dataRecebido,
+       NULL  AS horaRecebido
 FROM
   T_ACERTO

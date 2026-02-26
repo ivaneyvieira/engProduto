@@ -10,6 +10,8 @@ import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
+import java.time.LocalTime
 
 class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   val subView
@@ -200,6 +202,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
       pedidosSelecionado.forEach {
         it.noEntregue = user.no
+        it.dataEntrege = LocalDate.now()
+        it.horaEntrege = LocalTime.now()
         it.save()
       }
       atualizaKardec(mov)
@@ -235,8 +239,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Produtos não selecionados")
     }
 
-
-
     subView.autorizaAssinatura("Recebimento") { login: String, senha: String ->
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
 
@@ -257,6 +259,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
       pedidosSelecionado.forEach {
         it.noRecebido = user.no
+        it.dataEntrege = LocalDate.now()
+        it.horaEntrege = LocalTime.now()
         it.save()
       }
       atualizaKardec(mov)

@@ -14,7 +14,11 @@ SELECT M.numero,
        M.noRecebido,
        M.movimentacao,
        M.estoque,
-       M.noRota
+       M.noRota,
+       CAST(IF(dataEntrege = 0, NULL, dataEntrege) AS date)   AS dataEntrege,
+       SEC_TO_TIME(horaEntrege)                               AS horaEntrege,
+       CAST(IF(dataRecebido = 0, NULL, dataRecebido) AS date) AS dataRecebido,
+       SEC_TO_TIME(horaRecebido)                              AS horaRecebido
 FROM
   sqldados.produtoMovimentacao AS M
 WHERE (numero = :numero OR :numero = 0)
@@ -86,16 +90,21 @@ SELECT numero                   AS numero,
        ER.name                  AS recebidoNome,
        A.movimentacao           AS movimentacao,
        A.estoque                AS estoque,
-       A.noRota                 AS noRota
+       A.noRota                 AS noRota,
+       dataEntrege              AS dataEntrege,
+       horaEntrege              AS horaEntrege,
+       dataRecebido             AS dataRecebido,
+       horaRecebido             AS horaRecebido
+
 FROM
   T_ACERTO                   AS A
     LEFT JOIN sqldados.users AS UL
               ON UL.no = A.noLogin
     LEFT JOIN sqldados.users AS UG
               ON UG.no = A.noGravado
-    LEFT JOIN sqldados.users   AS EE
+    LEFT JOIN sqldados.users AS EE
               ON EE.no = A.noEntregue
-    LEFT JOIN sqldados.users   AS ER
+    LEFT JOIN sqldados.users AS ER
               ON ER.no = noRecebido
     LEFT JOIN T_BARCODE      AS B
               ON B.prdno = A.prdno

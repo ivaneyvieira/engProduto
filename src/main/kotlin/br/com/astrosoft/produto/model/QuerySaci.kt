@@ -2345,6 +2345,10 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("noEntregue", produto.noEntregue)
       addOptionalParameter("noRecebido", produto.noRecebido ?: 0)
       addOptionalParameter("noRota", produto.noRota ?: 0)
+      addOptionalParameter("dataEntrege", produto.dataEntrege.toSaciDate())
+      addOptionalParameter("horaEntrege", produto.horaEntrege?.toSecondOfDay() ?: 0)
+      addOptionalParameter("dataRecebido", produto.dataRecebido.toSaciDate())
+      addOptionalParameter("horaRecebido", produto.horaRecebido?.toSecondOfDay() ?: 0)
     }
   }
 

@@ -78,6 +78,21 @@ ALTER TABLE sqldados.produtoMovimentacao
 
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN noRota int NULL DEFAULT 0;
+
+ALTER TABLE sqldados.produtoMovimentacao
+ADD COLUMN dataEntrege int NULL DEFAULT 0;
+
+ALTER TABLE sqldados.produtoMovimentacao
+ADD COLUMN horaEntrege int NULL DEFAULT 0;
+
+ALTER TABLE sqldados.produtoMovimentacao
+ADD COLUMN dataRecebido int NULL DEFAULT 0;
+
+ALTER TABLE sqldados.produtoMovimentacao
+ADD COLUMN horaRecebido int NULL DEFAULT 0;
+
+
+
 /********************************************************************************/
 
 SELECT *
