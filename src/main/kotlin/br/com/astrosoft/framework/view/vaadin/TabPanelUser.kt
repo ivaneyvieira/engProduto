@@ -112,7 +112,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, UserSaci::name.name)
     }
     passwordField("Senha") {
-      this.isReadOnly = isReadOnly
+      this.isReadOnly = false
       this.width = "8rem"
       binder.bind(this, UserSaci::senha.name)
     }
