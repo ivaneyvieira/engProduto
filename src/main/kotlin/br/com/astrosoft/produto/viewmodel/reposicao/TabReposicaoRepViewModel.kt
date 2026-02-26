@@ -208,6 +208,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       }
       atualizaKardec(mov)
       subView.updateProdutos()
+      viewModel.view.showInformation("Entrega Assinada com sucesso")
     }
   }
 
@@ -265,6 +266,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       }
       atualizaKardec(mov)
       subView.updateProdutos()
+      viewModel.view.showInformation("Recebimento Assinado com sucesso")
     }
   }
 
