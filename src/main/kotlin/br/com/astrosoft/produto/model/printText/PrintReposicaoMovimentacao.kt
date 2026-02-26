@@ -52,7 +52,7 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
       writeln(entregueNome ?: "", center = true)
     }
     writeln("Separado/Entregue", center = true)
-    writeln("${bean?.dataEntrege.format()}          ${bean?.horaEntrege.format("HH:mm")}", center = true)
+    writeln("${bean?.dataEntrege.format()} - ${bean?.horaEntrege.format("HH:mm")}", center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)
@@ -60,7 +60,7 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
       writeln(recebidoNome ?: "", center = true)
     }
     writeln("Recebido", center = true)
-    writeln("${bean?.dataRecebido.format()}          ${bean?.horaRecebido.format("HH:mm")}", center = true)
+    writeln("${bean?.dataRecebido.format()} - ${bean?.horaRecebido.format("HH:mm")}", center = true)
     writeln("")
     writeln("")
   }
