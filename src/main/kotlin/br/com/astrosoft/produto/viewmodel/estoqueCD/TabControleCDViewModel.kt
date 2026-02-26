@@ -11,9 +11,9 @@ import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
 import java.time.LocalDate
 
-class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
+class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
-    get() = viewModel.view.tabEstoqueLoja
+    get() = viewModel.view.tabControleCD
 
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -99,7 +99,7 @@ class TabEstoqueLojaViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
   }
 }
 
-interface ITabEstoqueLoja : ITabView {
+interface ITabControleCD : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
   fun updateKardec()

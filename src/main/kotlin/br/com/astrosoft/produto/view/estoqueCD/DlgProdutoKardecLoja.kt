@@ -7,7 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoKardec
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueLojaViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleCDViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -17,7 +17,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class DlgProdutoKardecLoja(
-  val viewModel: TabEstoqueLojaViewModel,
+  val viewModel: TabControleCDViewModel,
   val produto: ProdutoEstoque,
   val dataIncial: LocalDate?
 ) {

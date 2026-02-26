@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueLoja
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueLojaViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabControleCD
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleCDViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -19,8 +19,8 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueLoja {
+class TabControleCD(val viewModel: TabControleCDViewModel) :
+  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabControleCD {
   private var dlgKardec: DlgProdutoKardecLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -370,7 +370,7 @@ class TabEstoqueLoja(val viewModel: TabEstoqueLojaViewModel) :
   }
 
   override val label: String
-    get() = "Estoque Loja"
+    get() = "Controle CD"
 
   override fun updateComponent() {
     viewModel.updateView()
