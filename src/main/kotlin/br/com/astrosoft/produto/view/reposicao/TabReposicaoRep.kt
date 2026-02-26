@@ -166,12 +166,21 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     }
   }
 
-  override fun autorizaAssinatura(assunto: String, block: (empno: Int, senha: String) -> Unit) {
+  fun autorizaAssinaturaFuncionario(assunto: String, block: (empno: Int, senha: String) -> Unit) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = assunto, form = form) {
       val empno = form.numero
       val senha = form.senha
       block(empno, senha)
+    }
+  }
+
+  override fun autorizaAssinatura(assunto: String, block: (login: String, senha: String) -> Unit) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = assunto, form = form) {
+      val login = form.login
+      val senha = form.senha
+      block(login, senha)
     }
   }
 

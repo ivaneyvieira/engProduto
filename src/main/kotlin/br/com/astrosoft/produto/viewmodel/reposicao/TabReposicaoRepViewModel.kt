@@ -68,7 +68,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noGravado = user.no
         it.save()
       }
-      atualizaKardec(produtosSelecionados)
+      atualizaKardec(pedido)
       updateView()
       subView.closeForm()
     }
@@ -180,11 +180,13 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto já foi entregue")
     }
 
-    subView.autorizaAssinatura("Entrega") { empno: Int, senha: String ->
-      val funcionario = saci.listFuncionario(empno) ?: fail("Funcionário não encontrado")
-
-      val login = funcionario.login
+    subView.autorizaAssinatura("Entrega") { login: String, senha: String ->
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
+
+      if (user.senha != senha) {
+        viewModel.view.showError("Funcionário ou senha inválido")
+        return@autorizaAssinatura
+      }
 
       if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioCD) {
         viewModel.view.showError("Usuário não autorizado para assinar entrega da rota CD/LJ")
@@ -196,16 +198,11 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         return@autorizaAssinatura
       }
 
-      if (funcionario.senha != senha) {
-        viewModel.view.showError("Funcionário ou senha inválido")
-        return@autorizaAssinatura
-      }
-
       pedidosSelecionado.forEach {
-        it.noEntregue = empno
+        it.noEntregue = user.no
         it.save()
       }
-      atualizaKardec(pedidosSelecionado)
+      atualizaKardec(mov)
       subView.updateProdutos()
     }
   }
@@ -240,11 +237,13 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
 
 
-    subView.autorizaAssinatura("Recebimento") { empno: Int, senha: String ->
-      val funcionario = saci.listFuncionario(empno) ?: fail("Funcionário não encontrado")
-
-      val login = funcionario.login
+    subView.autorizaAssinatura("Recebimento") { login: String, senha: String ->
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
+
+      if (user.senha != senha) {
+        viewModel.view.showError("Funcionário ou senha inválido")
+        return@autorizaAssinatura
+      }
 
       if (mov.enumRota == ERota.CD_LJ && !user.reposicaoUsuarioLJ) {
         viewModel.view.showError("Usuário não autorizado para assinar recebimento da rota CD/LJ")
@@ -256,16 +255,11 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         return@autorizaAssinatura
       }
 
-      if (funcionario.senha != senha) {
-        viewModel.view.showError("Funcionário ou senha inválido")
-        return@autorizaAssinatura
-      }
-
       pedidosSelecionado.forEach {
-        it.noRecebido = empno
+        it.noRecebido = user.no
         it.save()
       }
-      atualizaKardec(pedidosSelecionado)
+      atualizaKardec(mov)
       subView.updateProdutos()
     }
   }
@@ -289,12 +283,17 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noEntregue = 0
         it.save()
       }
-      atualizaKardec(produtos)
+      atualizaKardec(movimentacao)
       subView.updateProdutos()
     }
   }
 
-  private fun atualizaKardec(produtos: List<ProdutoMovimentacao>) = runBlocking {
+  private fun atualizaKardec(pedido: Movimentacao) = runBlocking {
+    if (pedido.noEntregue == 0 || pedido.noGravado == 0) {
+      return@runBlocking
+    }
+
+    val produtos = pedido.findProdutos()
     val produtosKad = produtos.flatMap { produto ->
       val produtoEstoque = ProdutoEstoque.findProdutoEstoque(
         loja = produto.numloja ?: 0,
@@ -313,7 +312,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
   fun gravaRota(movimentacao: Movimentacao) {
     movimentacao.salvaRota()
-    atualizaKardec(movimentacao.findProdutos())
+    atualizaKardec(movimentacao)
   }
 }
 
@@ -324,7 +323,7 @@ interface ITabReposicaoRep : ITabView {
   fun itensSelecionados(): List<Movimentacao>
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaPedido(caption: String, block: (user: IUser) -> Unit)
-  fun autorizaAssinatura(assunto: String, block: (empno: Int, senha: String) -> Unit)
+  fun autorizaAssinatura(assunto: String, block: (login: String, senha: String) -> Unit)
   fun produtosSelecionado(): List<ProdutoMovimentacao>
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao>
   fun adicionaPedido(movimentacao: Movimentacao)

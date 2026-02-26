@@ -79,10 +79,10 @@ SELECT numero                   AS numero,
        UG.no                    AS noGravado,
        UG.login                 AS gravadoLogin,
        EE.no                    AS noEntregue,
-       EE.sname                 AS entregue,
+       EE.login                 AS entregue,
        EE.name                  AS entregueNome,
        ER.no                    AS noRecebido,
-       ER.sname                 AS recebido,
+       ER.login                 AS recebido,
        ER.name                  AS recebidoNome,
        A.movimentacao           AS movimentacao,
        A.estoque                AS estoque,
@@ -93,9 +93,9 @@ FROM
               ON UL.no = A.noLogin
     LEFT JOIN sqldados.users AS UG
               ON UG.no = A.noGravado
-    LEFT JOIN sqldados.emp   AS EE
+    LEFT JOIN sqldados.users   AS EE
               ON EE.no = A.noEntregue
-    LEFT JOIN sqldados.emp   AS ER
+    LEFT JOIN sqldados.users   AS ER
               ON ER.no = noRecebido
     LEFT JOIN T_BARCODE      AS B
               ON B.prdno = A.prdno

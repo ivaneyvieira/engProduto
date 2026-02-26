@@ -213,12 +213,12 @@ SELECT 4                                                  AS loja,
        NULL                                               AS vencimento,
        IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
-       IF(noRota = 1, ER.sname, EE.sname)                 AS userLogin
+       IF(noRota = 1, ER.login, EE.login)                 AS userLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE   AS E
-    LEFT JOIN sqldados.emp AS ER
+    LEFT JOIN sqldados.users AS ER
               ON ER.no = E.noRecebido
-    LEFT JOIN sqldados.emp AS EE
+    LEFT JOIN sqldados.users AS EE
               ON EE.no = E.noEntregue;
 
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)

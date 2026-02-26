@@ -42,12 +42,12 @@ SELECT numloja                                            AS loja,
        NULL                                               AS vencimento,
        IF(noRota = 0, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
-       IF(noRota = 0, ER.sname, EE.sname)                 AS userLogin
+       IF(noRota = 0, ER.login, EE.login)                 AS userLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE   AS E
-    LEFT JOIN sqldados.emp AS ER
+    LEFT JOIN sqldados.users AS ER
               ON ER.no = E.noRecebido
-    LEFT JOIN sqldados.emp AS EE
+    LEFT JOIN sqldados.users AS EE
               ON EE.no = E.noEntregue
 WHERE numloja = :loja;
 
