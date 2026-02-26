@@ -72,7 +72,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       }
       atualizaKardec(pedido)
       updateView()
-      subView.closeForm()
+      viewModel.view.showInformation("Pedido gravado com sucesso")
     }
   }
 
