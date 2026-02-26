@@ -259,8 +259,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
       pedidosSelecionado.forEach {
         it.noRecebido = user.no
-        it.dataEntrege = LocalDate.now()
-        it.horaEntrege = LocalTime.now()
+        it.dataRecebido = LocalDate.now()
+        it.horaRecebido = LocalTime.now()
         it.save()
       }
       atualizaKardec(mov)
