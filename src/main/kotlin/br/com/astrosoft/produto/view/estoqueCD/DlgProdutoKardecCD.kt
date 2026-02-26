@@ -16,7 +16,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutoKardecLoja(
+class DlgProdutoKardecCD(
   val viewModel: TabControleCDViewModel,
   val produto: ProdutoEstoque,
   val dataIncial: LocalDate?
