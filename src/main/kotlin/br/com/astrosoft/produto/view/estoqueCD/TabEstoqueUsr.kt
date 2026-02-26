@@ -8,15 +8,12 @@ import br.com.astrosoft.framework.view.vaadin.helper.verticalBlock
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueUsr
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueUsrViewModel
-import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.datepicker.DatePickerVariant
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.data.binder.Binder
 
 class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel), ITabEstoqueUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -34,7 +31,7 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::estoqueSaldo, "Estoque")
   }
 
-  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
+  override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("Estoque") {
         binder.bind(this, UserSaci::estoqueSaldo.name)

@@ -2,29 +2,26 @@ package br.com.astrosoft.framework.view.vaadin
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.FormUsuario
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.ETipoRota
-import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.passwordField
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
-import com.github.mvysny.kaributools.asc
-import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.notification.Notification
-import com.vaadin.flow.component.notification.NotificationVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.SelectVariant
-import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
 import kotlin.reflect.KMutableProperty1
@@ -41,8 +38,6 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     columnGrid(UserSaci::name, "Nome")
 
     this.configGrid()
-
-    this.sort(UserSaci::no.asc)
   }
 
   fun filter(): String {
@@ -64,14 +59,14 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
         viewModel.adicionaUsuario()
       }
     }
-    button("Editar") {
-      this.icon = VaadinIcon.EDIT.create()
+    button("Atualizar") {
+      this.icon = VaadinIcon.REFRESH.create()
 
       addClickListener {
         viewModel.modificarUsuario()
       }
     }
-    button("Remover") {
+    button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
 
       addClickListener {
@@ -100,105 +95,34 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     return itensSelecionados().firstOrNull()
   }
 
-  abstract fun HorizontalLayout.configFields(binder: Binder<UserSaci>)
+  abstract fun FormUsuario.configFields()
 
-  private fun KFormLayout.configFieldsDefault(binder: Binder<UserSaci>, isReadOnly: Boolean) {
-    setResponsiveSteps(FormLayout.ResponsiveStep("0", 12))
-
-    integerField("Número") {
-      this.colspan = 2
-      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-      this.isReadOnly = isReadOnly
-      this.isAutoselect = true
-      this.isAutofocus = true
-      bind(binder).bind(UserSaci::no)
-      this.valueChangeMode = ValueChangeMode.EAGER
-
-      this.addValueChangeListener { event ->
-        if (event.isFromClient) {
-          val numUser = event.value
-
-          if (numUser == null) {
-            invalidaNumero(event.source, "Preencha com um numero")
-            return@addValueChangeListener
-          }
-
-          val user = viewModel.findUser(numUser)
-          if (user != null) {
-            binder.bean = user
-          } else {
-            val userNew = UserSaci()
-            userNew.no = numUser
-            binder.bean = userNew
-          }
-          event.source.isInvalid = false
-        }
-      }
-    }
-    textField("Nome do Usuário") {
-      this.colspan = 10
-      this.isAutoselect = true
-      bind(binder).withNullRepresentation("").bind(UserSaci::name)
-    }
+  private fun FormUsuario.configFieldsDefault(isReadOnly: Boolean) {
+    setResponsiveSteps(FormLayout.ResponsiveStep("0", 3))
 
     textField("Login do Usuário") {
-      this.colspan = 6
-      this.isAutoselect = true
-      bind(binder).bind(UserSaci::login)
+      this.isReadOnly = isReadOnly
+      this.width = "300px"
+      binder.bind(this, UserSaci::login.name)
+    }
+    textField("Nome do Usuário") {
+      this.isReadOnly = isReadOnly
+      this.width = "300px"
+      this.isReadOnly = true
+      binder.bind(this, UserSaci::name.name)
     }
     passwordField("Senha") {
-      this.colspan = 6
-     // this.isAutoselect = true
-      bind(binder).bind(UserSaci::senha)
+      this.isReadOnly = isReadOnly
+      this.width = "8rem"
+      binder.bind(this, UserSaci::senha.name)
     }
-
-    select<Int>("Loja") {
-      val lojas = listOf(Loja.lojaZero) + viewModel.findAllLojas()
-      this.colspan = 6
-      this.setItems(lojas.map { it.no })
-      this.setItemLabelGenerator { numLoja ->
-        lojas.firstOrNull { loja -> loja.no == numLoja }?.descricao ?: ""
-      }
-      bind(binder).bind(UserSaci::storeno)
-    }
-    select<Int>("Impressora") {
-      val impressoras = viewModel.allImpressoras()
-      this.colspan = 6
-      this.setItems(impressoras.map { it.no })
-      this.setItemLabelGenerator { numImpressora ->
-        impressoras.firstOrNull { impressora -> impressora.no == numImpressora }?.name ?: ""
-      }
-      bind(binder).bind(UserSaci::storeno)
-    }
-  }
-
-  fun invalidaNumero(field: IntegerField, message: String) {
-    val notification = Notification()
-    notification.addThemeVariants(NotificationVariant.LUMO_ERROR)
-    notification.add(Text(message))
-    notification.duration = 3000
-    notification.position = Notification.Position.TOP_CENTER
-    notification.open()
-    field.isInvalid = true
-    field.focus()
   }
 
   fun formUpdUsuario(usuario: UserSaci) {
-    val form = FormUsuario(usuario) { binder: Binder<UserSaci> ->
+    val form = FormUsuario(usuario) {
       this.width = "60%"
-      this.isMargin = false
-      this.isPadding = false
-      this.formLayout {
-        this.borderRountend()
-        this.configFieldsDefault(binder, true)
-      }
-
-      this.horizontalBlock {
-        this.isSpacing = true
-        this.setWidthFull()
-        this.borderRountend()
-        this.configFields(binder)
-      }
+      this.configFieldsDefault(true)
+      this.configFields()
     }
     DialogHelper.showForm(caption = "Usuário", form = form) {
       viewModel.updUser(form.userSaci)
@@ -206,20 +130,10 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
   }
 
   fun formAddUsuario() {
-    val form = FormUsuario(UserSaci()) { binder: Binder<UserSaci> ->
+    val form = FormUsuario(UserSaci()) {
       this.width = "60%"
-      this.formLayout {
-        this.configFieldsDefault(binder = binder, isReadOnly = false)
-        this.borderRountend()
-      }
-
-      this.horizontalBlock {
-        this.isSpacing = true
-        this.setWidthFull()
-        this.borderRountend()
-
-        this.configFields(binder)
-      }
+      this.configFieldsDefault(false)
+      this.configFields()
     }
     DialogHelper.showForm(caption = "Usuário", form = form) {
       viewModel.addUser(form.userSaci)

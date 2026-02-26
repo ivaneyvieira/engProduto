@@ -1,11 +1,6 @@
-USE sqldados;
-
-DROP TEMPORARY TABLE IF EXISTS T_USER_SACI;
-CREATE TEMPORARY TABLE T_USER_SACI
-SELECT U.no                                      AS no,
-       U.name                                    AS name,
-       :appName                                  AS appName,
-       login                                     AS login,
+SELECT U.no,
+       U.name,
+       login,
        U.auxLong1                                AS storeno,
        IF(A.senhaApp IS NULL,
           TRIM(IFNULL(CAST(CONCAT(CHAR(ASCII(SUBSTRING(pswd, 1, 1)) + ASCII('e') - ASCII('j')),
@@ -30,43 +25,6 @@ FROM
     LEFT JOIN sqldados.prntr   AS P
               ON P.no = U.prntno
     LEFT JOIN sqldados.userApp AS A
-              ON A.userno = U.no AND
-                 A.appName = :appName
-WHERE (U.login = :login OR :login = 'TODOS')
-  AND U.bits1 & POW(2, 0) = 0;
-
-INSERT IGNORE sqldados.userSaciApp(no, name, appName, login, storeno, senha, bitAcesso, bitAcesso2, bitAcesso3, locais,
-                                   impressora, listaImpressora, listaLoja)
-SELECT no,
-       name,
-       appName,
-       login,
-       storeno,
-       senha,
-       bitAcesso,
-       bitAcesso2,
-       bitAcesso3,
-       locais,
-       impressora,
-       listaImpressora,
-       listaLoja
-FROM
-  T_USER_SACI;
-
-SELECT no,
-       name,
-       login,
-       storeno,
-       senha,
-       bitAcesso,
-       bitAcesso2,
-       bitAcesso3,
-       locais,
-       impressora,
-       listaImpressora,
-       listaLoja
-FROM
-  sqldados.userSaciApp
-WHERE appName = :appName
-  AND (login = :login OR :login = 'TODOS')
-ORDER BY no
+              ON A.userno = U.no AND A.appName = :appName
+WHERE (login = :login OR :login = 'TODOS')
+  AND U.bits1 & POW(2, 0) = 0

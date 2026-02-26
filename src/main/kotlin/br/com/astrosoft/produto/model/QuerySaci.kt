@@ -105,17 +105,14 @@ class QuerySaci : QueryDB(database) {
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {
-      addOptionalParameter("no", user.no)
-      addOptionalParameter("appName", appName)
-      addOptionalParameter("name", user.name)
       addOptionalParameter("login", user.login)
-      addOptionalParameter("storeno", user.storeno)
-      addOptionalParameter("senha", user.senha)
       addOptionalParameter("bitAcesso", user.bitAcesso)
       addOptionalParameter("bitAcesso2", user.bitAcesso2)
       addOptionalParameter("bitAcesso3", user.bitAcesso3)
+      addOptionalParameter("loja", user.storeno)
+      addOptionalParameter("appName", appName)
+      addOptionalParameter("senha", user.senha)
       addOptionalParameter("locais", user.locais)
-      addOptionalParameter("impressora", user.impressora)
       addOptionalParameter("listaImpressora", user.listaImpressora)
       addOptionalParameter("listaLoja", user.listaLoja)
     }

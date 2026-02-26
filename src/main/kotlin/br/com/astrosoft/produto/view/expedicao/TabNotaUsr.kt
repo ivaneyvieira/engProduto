@@ -8,13 +8,10 @@ import br.com.astrosoft.produto.model.beans.ETipoNotaFiscal
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.expedicao.ITabNotaUsr
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaUsrViewModel
-import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.vaadin.flow.component.combobox.MultiSelectComboBoxVariant
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.data.binder.Binder
 
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -27,7 +24,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::notaEnt, "Entregue")
   }
 
-  override fun HorizontalLayout.configFields(binder: Binder<UserSaci>) {
+  override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("CD5A") {
         binder.bind(this, UserSaci::notaTipo.name)

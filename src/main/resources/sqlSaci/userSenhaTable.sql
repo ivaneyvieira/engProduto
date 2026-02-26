@@ -28,3 +28,4 @@ CREATE TABLE sqldados.`userSaciApp`
   INDEX (appName, `login`)
 ) ENGINE = InnoDB;
 
+DROP TABLE sqldados.userSaciApp;
