@@ -159,7 +159,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
-            viewModel.imprimeProdutos()
+            //TODO não implementado
           }
         }
 

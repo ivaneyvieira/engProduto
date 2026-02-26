@@ -40,10 +40,6 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
     updateView()
   }
 
-  fun imprimeProdutos() = viewModel.exec {
-    //TODO
-  }
-
   fun kardec(produto: ProdutoControle, dataIncial : LocalDate?): List<ControleKardec> {
     if(produto.dataInicial == null){
       produto.dataInicial = dataIncial ?: LocalDate.now()

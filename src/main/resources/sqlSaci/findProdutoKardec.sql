@@ -198,34 +198,10 @@ FROM
               ON EE.no = E.noEntregue
 WHERE numloja = :loja;
 
-INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, doc, nfEnt, tipo, observacao, vencimento, qtde, saldo,
-                                  userLogin)
-SELECT 4                                                  AS loja,
-       prdno,
-       grade,
-       data,
-       CONCAT(numero, '/', numloja)                       AS doc,
-       ''                                                 AS nfEnt,
-       IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_LJCD') AS tipo,
-       IF(noRota = 1,
-          CONCAT('da\tLoja\t', numloja),
-          'para\to\tCD')                                  AS observacao,
-       NULL                                               AS vencimento,
-       IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
-       0                                                  AS saldo,
-       IF(noRota = 1, ER.login, EE.login)                 AS userLogin
-FROM
-  T_MOVIMENTACAO_ESTOQUE   AS E
-    LEFT JOIN sqldados.users AS ER
-              ON ER.no = E.noRecebido
-    LEFT JOIN sqldados.users AS EE
-              ON EE.no = E.noEntregue;
-
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo
 FROM
-  T_MOVIMENTACAO_KARDEC
-WHERE qtde > 0;
+  T_MOVIMENTACAO_KARDEC;
 
 SELECT loja, prdno, grade, data, doc, tipo, qtde, '' AS observacao, saldo
 FROM
