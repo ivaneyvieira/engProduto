@@ -17,7 +17,7 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
     val rotaDescricao = rota?.descricao ?: ""
 
 
-    writeln("Reposicao Loja Rota $rotaDescricao", negrito = true, center = true)
+    writeln("Reposicao Rota $rotaDescricao", negrito = true, center = true)
     writeln("")
     writeln(
       "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
