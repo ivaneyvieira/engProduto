@@ -44,7 +44,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       )
       if (userSaci?.reposicao == true) route(
         icon = SIGNAL,
-        label = "Reposição Loja",
+        label = "Reposições",
         routeClass = ReposicaoView::class
       )
       if (userSaci?.pedidoTransf == true) route(

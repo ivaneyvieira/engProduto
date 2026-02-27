@@ -716,7 +716,7 @@ class UserSaci : IUser {
     }
 
     init {
-      setCacheTtlMillis(5 * 60 * 1000)
+      setCacheTtlMillis(1 * 60 * 1000)
     }
 
     private fun isCacheExpired(nowMillis: Long = System.currentTimeMillis()): Boolean {
