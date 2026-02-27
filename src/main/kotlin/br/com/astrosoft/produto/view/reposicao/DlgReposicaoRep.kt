@@ -66,6 +66,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   DialogHelper.showError("O pedido já está assinado a Entrega")
                   return@onClick
                 }
+                if (movimentacao.enumRota == null) {
+                  DialogHelper.showError("Rota não informada")
+                  return@onClick
+                }
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
                   update()
                 }
@@ -110,6 +114,9 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
           horizontalBlock {
             this.isSpacing = true
             this.setWidthFull()
+            content {
+              align(left, bottom)
+            }
 
             edtCodPrd = integerField("Cod") {
               this.width = "5rem"
@@ -145,15 +152,25 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 it.descricao
               }
               this.value = movimentacao.enumRota
+              this.width = "6rem"
+
               addValueChangeListener {
                 if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
-                  gridDetail.list().forEach { produto ->
-                    produto.noRota = rota.numero
-                  }
-                  viewModel.gravaRota(movimentacao)
                 }
+              }
+            }
+
+            button("Salva Rota") {
+              this.icon = VaadinIcon.ENTER.create()
+              onClick {
+                val rota = cmbRota?.value
+                movimentacao.enumRota = rota
+                gridDetail.list().forEach { produto ->
+                  produto.noRota = rota?.numero
+                }
+                viewModel.gravaRota(movimentacao)
               }
             }
           }
@@ -194,7 +211,15 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
           abreProximo(it.bean)
         },
         canEdit = { _ ->
-          movimentacao.noEntregue == 0
+          if (movimentacao.enumRota == null) {
+            DialogHelper.showError("Reposição sem rota")
+            false
+          } else if (movimentacao.noEntregue > 0) {
+            DialogHelper.showError("Reposição já entregue")
+            false
+          } else {
+            true
+          }
         }
       )
 
@@ -228,6 +253,14 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
   fun update() {
     val produtos = produtosMovimentacoes()
     gridDetail.setItems(produtos)
+    val mov = produtos.agrupa().firstOrNull()
+    if(mov != null) {
+      movimentacao.noEntregue = mov.noEntregue
+      movimentacao.noRecebido = mov.noRecebido
+      movimentacao.noRota = mov.noRota
+
+      cmbRota?.value = movimentacao.enumRota
+    }
   }
 
   private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {

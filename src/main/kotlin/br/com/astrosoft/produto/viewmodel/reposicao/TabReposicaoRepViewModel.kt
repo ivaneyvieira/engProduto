@@ -290,6 +290,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       produtos.forEach {
         it.noRecebido = 0
         it.noEntregue = 0
+        it.noRota = null
         it.save()
       }
       atualizaKardec(movimentacao)
