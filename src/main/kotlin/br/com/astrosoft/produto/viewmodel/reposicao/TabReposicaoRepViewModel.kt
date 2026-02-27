@@ -68,6 +68,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         val userLogin = AppConfig.userLogin() as? UserSaci
         it.noLogin = userLogin?.no
         it.noGravado = user.no
+        it.noRota = pedido.noRota
         it.save()
       }
       atualizaKardec(pedido)
@@ -204,6 +205,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noEntregue = user.no
         it.dataEntrege = LocalDate.now()
         it.horaEntrege = LocalTime.now()
+        it.noRota = mov.noRota
         it.save()
       }
       atualizaKardec(mov)
@@ -262,6 +264,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noRecebido = user.no
         it.dataRecebido = LocalDate.now()
         it.horaRecebido = LocalTime.now()
+        it.noRota = mov.noRota
         it.save()
       }
       atualizaKardec(mov)
@@ -319,6 +322,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   fun gravaRota(movimentacao: Movimentacao) {
     movimentacao.salvaRota()
     atualizaKardec(movimentacao)
+    subView.updateProdutos()
   }
 }
 

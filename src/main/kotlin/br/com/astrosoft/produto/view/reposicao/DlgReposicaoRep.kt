@@ -149,6 +149,9 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
+                  gridDetail.list().forEach { produto ->
+                    produto.noRota = rota.numero
+                  }
                   viewModel.gravaRota(movimentacao)
                 }
               }
@@ -291,6 +294,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
         this.gravadoLogin = user?.login
         this.locApp = linha.locApp
         this.estoque = linha.estoqueLoja
+        this.noRota = cmbRota?.value?.numero
       }
     }
   }
