@@ -174,10 +174,15 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 }
                 viewModel.gravaRota(movimentacao)
                 updateGrid()
-                gridDetail.setItems(itensSelecionados.map {
+                val itensRota = itensSelecionados.map {
                   it.noRota = rota?.numero
                   it
-                })
+                }
+                gridDetail.setItems(itensRota)
+
+                itensRota.forEach {
+                  gridDetail.select(it)
+                }
               }
             }
           }

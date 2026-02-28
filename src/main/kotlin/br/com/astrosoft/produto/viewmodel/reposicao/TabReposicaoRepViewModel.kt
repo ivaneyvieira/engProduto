@@ -54,9 +54,11 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
 
     val produtosSelecionados = subView.produtosSelecionado()
+    /*
     if (produtosSelecionados.isEmpty()) {
       fail("Selecionar produtos para gravar pedido")
     }
+     */
 
     if (produtosSelecionados.any { (it.movimentacao ?: 0) == 0 }) {
       fail("Não é possível gravar pedido com quantidade zero")
