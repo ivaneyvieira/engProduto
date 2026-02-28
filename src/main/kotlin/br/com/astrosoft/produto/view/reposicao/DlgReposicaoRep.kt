@@ -166,12 +166,18 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
             button("Salva Rota") {
               this.icon = VaadinIcon.ENTER.create()
               onClick {
+                val itensSelecionados = gridDetail.selectedItems.toList()
                 val rota = cmbRota?.value
                 movimentacao.enumRota = rota
                 gridDetail.list().forEach { produto ->
                   produto.noRota = rota?.numero
                 }
                 viewModel.gravaRota(movimentacao)
+                updateGrid()
+                gridDetail.setItems(itensSelecionados.map {
+                  it.noRota = rota?.numero
+                  it
+                })
               }
             }
           }
