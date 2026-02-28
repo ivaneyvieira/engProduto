@@ -266,7 +266,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     val produtos = produtosMovimentacoes()
     gridDetail.setItems(produtos)
     val mov = produtos.agrupa().firstOrNull()
-    if(mov != null) {
+    if (mov != null) {
       movimentacao.noEntregue = mov.noEntregue
       movimentacao.noRecebido = mov.noRecebido
       movimentacao.noRota = mov.noRota
@@ -302,6 +302,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
 
   fun produtosSelecionado(): List<ProdutoMovimentacao> {
     return gridDetail.selectedItemsSort()
+  }
+
+  fun produtos(): List<ProdutoMovimentacao> {
+    return gridDetail.list()
   }
 
   private fun findProdutos(): List<ProdutoMovimentacao> {

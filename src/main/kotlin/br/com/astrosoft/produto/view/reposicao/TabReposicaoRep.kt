@@ -188,6 +188,11 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
 
+
+  override fun produtos(): List<ProdutoMovimentacao> {
+    return dlgEstoque?.produtos().orEmpty()
+  }
+
   override fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
     return dlgEstoque?.produtosNaoSelecionado().orEmpty()
   }

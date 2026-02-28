@@ -53,20 +53,16 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido sem rota definida")
     }
 
-    val produtosSelecionados = pedido.findProdutos()
-    /*
-    if (produtosSelecionados.isEmpty()) {
-      fail("Selecionar produtos para gravar pedido")
-    }
-     */
+    val produtos = subView.produtos()
 
-    if (produtosSelecionados.any { (it.movimentacao ?: 0) == 0 }) {
+
+    if (produtos.any { (it.movimentacao ?: 0) == 0 }) {
       fail("Não é possível gravar pedido com quantidade zero")
     }
 
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
-      produtosSelecionados.forEach {
+      produtos.forEach {
         val userLogin = AppConfig.userLogin() as? UserSaci
         it.noLogin = userLogin?.no
         it.noGravado = user.no
@@ -170,16 +166,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido sem rota definida")
     }
 
-    val pedidosSelecionado = subView.produtosSelecionado()
-    val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
-
-    if (pedidosSelecionado.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    if (pedidosNaoSelecionado.isNotEmpty()) {
-      fail("Produtos não selecionados")
-    }
+    val produtos = subView.produtos()
 
     if (mov.noEntregue > 0) {
       fail("O produto já foi entregue")
@@ -203,7 +190,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         return@autorizaAssinatura
       }
 
-      pedidosSelecionado.forEach {
+      produtos.forEach {
         it.noEntregue = user.no
         it.dataEntrege = LocalDate.now()
         it.horaEntrege = LocalTime.now()
@@ -233,16 +220,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("O produto já foi recebido")
     }
 
-    val pedidosSelecionado = subView.produtosSelecionado()
-    val pedidosNaoSelecionado = subView.produtosNaoSelecionado()
-
-    if (pedidosSelecionado.isEmpty()) {
-      fail("Nenhum produto selecionado")
-    }
-
-    if (pedidosNaoSelecionado.isNotEmpty()) {
-      fail("Produtos não selecionados")
-    }
+    val produtos = subView.produtos()
 
     subView.autorizaAssinatura("Recebimento") { login: String, senha: String ->
       val user = UserSaci.findUser(login).firstOrNull() ?: fail("Não encontrado usuário do funcionário")
@@ -262,7 +240,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         return@autorizaAssinatura
       }
 
-      pedidosSelecionado.forEach {
+      produtos.forEach {
         it.noRecebido = user.no
         it.dataRecebido = LocalDate.now()
         it.horaRecebido = LocalTime.now()
@@ -340,6 +318,7 @@ interface ITabReposicaoRep : ITabView {
   fun filtroVazio(): FiltroProdutoEstoque
   fun autorizaPedido(caption: String, block: (user: IUser) -> Unit)
   fun autorizaAssinatura(assunto: String, block: (login: String, senha: String) -> Unit)
+  fun produtos(): List<ProdutoMovimentacao>
   fun produtosSelecionado(): List<ProdutoMovimentacao>
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao>
   fun adicionaPedido(movimentacao: Movimentacao)
