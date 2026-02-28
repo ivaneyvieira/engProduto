@@ -299,6 +299,9 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   private fun atualizaKardec(pedido: Movimentacao) = runBlocking {
+    if (pedido.noEntregue > 0) {
+      return@runBlocking
+    }
     if (pedido.noEntregue == 0 || pedido.noGravado == 0) {
       return@runBlocking
     }

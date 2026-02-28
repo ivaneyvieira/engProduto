@@ -90,7 +90,7 @@ class DlgAdicionaMovimentacao(
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.barcode = linha.codigoBarras ?: ""
-        this.noGravado = user?.no
+        this.noGravado = 0
         this.gravadoLogin = acerto.gravadoLogin
 
         this.noEntregue = acerto.noEntregue

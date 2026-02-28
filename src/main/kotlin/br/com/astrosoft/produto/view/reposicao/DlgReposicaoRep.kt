@@ -159,6 +159,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   val rota = it.value
                   movimentacao.enumRota = rota
                 }
+                updateGrid()
               }
             }
 
