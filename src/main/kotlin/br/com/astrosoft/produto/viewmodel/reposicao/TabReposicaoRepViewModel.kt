@@ -53,7 +53,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido sem rota definida")
     }
 
-    val produtosSelecionados = subView.produtosSelecionado()
+    val produtosSelecionados = pedido.findProdutos()
     /*
     if (produtosSelecionados.isEmpty()) {
       fail("Selecionar produtos para gravar pedido")
