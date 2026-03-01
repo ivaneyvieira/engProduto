@@ -58,25 +58,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               }
             }
 
-            this.button("Adiciona") {
-              this.isVisible = true
-              this.icon = VaadinIcon.PLUS.create()
-              this.onClick {
-                if (movimentacao.noEntregue > 0) {
-                  DialogHelper.showError("O pedido já está assinado a Entrega")
-                  return@onClick
-                }
-                if (movimentacao.enumRota == null) {
-                  DialogHelper.showError("Rota não informada")
-                  return@onClick
-                }
-                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
-                  update()
-                }
-                dlg.open()
-              }
-            }
-
             val user = AppConfig.userLogin() as? UserSaci
 
             this.button("Assina Entrega") {
@@ -143,6 +124,25 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addValueChangeListener {
                 updateGrid()
+              }
+            }
+
+            this.button("Adiciona") {
+              this.isVisible = true
+              this.icon = VaadinIcon.PLUS.create()
+              this.onClick {
+                if (movimentacao.noEntregue > 0) {
+                  DialogHelper.showError("O pedido já está assinado a Entrega")
+                  return@onClick
+                }
+                if (movimentacao.enumRota == null) {
+                  DialogHelper.showError("Rota não informada")
+                  return@onClick
+                }
+                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
+                  update()
+                }
+                dlg.open()
               }
             }
 
