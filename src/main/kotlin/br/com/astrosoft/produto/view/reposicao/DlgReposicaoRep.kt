@@ -334,6 +334,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
         this.barcode = linha.barcode
         this.data = this@DlgReposicaoRep.movimentacao.data
         this.hora = this@DlgReposicaoRep.movimentacao.hora
+        this.noLogin = this@DlgReposicaoRep.movimentacao.noLogin
         this.login = this@DlgReposicaoRep.movimentacao.login
         this.descricao = linha.descricao ?: ""
         this.usuario = this@DlgReposicaoRep.movimentacao.usuario

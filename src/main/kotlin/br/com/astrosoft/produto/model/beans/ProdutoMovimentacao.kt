@@ -83,9 +83,7 @@ class ProdutoMovimentacao(
 
   companion object {
     fun findAll(filtro: FiltroMovimentacao): List<ProdutoMovimentacao> {
-      return saci.movimentacaoFindAll(filtro).filter {
-        (it.noGravado ?: 0) > 0
-      }
+      return saci.movimentacaoFindAll(filtro)
     }
 
     fun proximoNumero(numLoja: Int): Int {

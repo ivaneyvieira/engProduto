@@ -30,7 +30,13 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     val filtro = subView.filtro()
-    val produtos = ProdutoMovimentacao.findAll(filtro).agrupa().sortedBy { it.numero }.filter { mov: Movimentacao ->
+    val produtos = ProdutoMovimentacao.findAll(filtro)
+      .agrupa()
+      .filter {
+        it.noGravado > 0
+      }
+      .sortedBy { it.numero }
+      .filter { mov: Movimentacao ->
       if (user == null) {
         return@filter true
       }
@@ -131,6 +137,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
       data = novo.data,
+      noLogin = user?.no,
       hora = novo.hora,
       login = user?.login,
       usuario = user?.name,
@@ -310,9 +317,10 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun removePedidoNaoGravado(pedido: Movimentacao) {
+    val userNo = AppConfig.userLogin()?.no ?: 0
     if (pedido.noGravado == 0) {
       pedido.findProdutos().forEach { produto ->
-        if ((produto.noGravado ?: 0) == 0) {
+        if ((produto.noGravado ?: 0) == 0 && (produto.noLogin ?: 0) == userNo) {
           produto.remove()
         }
       }
