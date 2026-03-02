@@ -94,6 +94,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
       dlgEstoque = DlgReposicaoRep(viewModel, pedido)
       dlgEstoque?.showDialog {
+        viewModel.removePedidoNaoGravado(pedido)
         viewModel.updateView()
       }
     }
@@ -187,7 +188,6 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   override fun produtosSelecionado(): List<ProdutoMovimentacao> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
-
 
   override fun produtos(): List<ProdutoMovimentacao> {
     return dlgEstoque?.produtos().orEmpty()

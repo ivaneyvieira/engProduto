@@ -308,6 +308,16 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     atualizaKardec(movimentacao)
     subView.updateProdutos()
   }
+
+  fun removePedidoNaoGravado(pedido: Movimentacao) {
+    if (pedido.noGravado == 0) {
+      pedido.findProdutos().forEach { produto ->
+        if ((produto.noGravado ?: 0) == 0) {
+          produto.remove()
+        }
+      }
+    }
+  }
 }
 
 interface ITabReposicaoRep : ITabView {
