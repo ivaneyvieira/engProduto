@@ -58,8 +58,11 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
+      val numero = pedido.novoNumero()
+
       produtos.forEach {
         val userLogin = AppConfig.userLogin() as? UserSaci
+        it.numero = numero
         it.noLogin = userLogin?.no
         it.noGravado = user.no
         it.noRota = pedido.noRota
@@ -123,7 +126,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val novo = saci.moviumentacaoNova(numero, numLoja) ?: return null
 
     return ProdutoMovimentacao(
-      numero = novo.numero,
+      numero = null,
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
       data = novo.data,

@@ -88,7 +88,6 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     }
   }
 
-
   override fun Grid<Movimentacao>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 

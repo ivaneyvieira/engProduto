@@ -197,6 +197,14 @@ class Movimentacao(
     saci.salvaRota(this)
   }
 
+  fun novoNumero(): Int {
+    return if(numero == 0) {
+      ProdutoMovimentacao.proximoNumero(numloja)
+    }else{
+      numero
+    }
+  }
+
   companion object {
     private val listUserSaci = saci.findAllUser()
 
