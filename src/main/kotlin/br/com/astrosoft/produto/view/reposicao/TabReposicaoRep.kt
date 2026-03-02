@@ -135,7 +135,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
 
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
-    val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
+    val listaUser = user?.localizacaoRepo.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
 
@@ -225,6 +225,6 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
 
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraEstoque.orEmpty().toList()
+    return user?.impressoraRepo.orEmpty().toList()
   }
 }

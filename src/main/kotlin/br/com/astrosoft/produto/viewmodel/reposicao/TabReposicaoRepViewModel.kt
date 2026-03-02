@@ -36,17 +36,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         it.noGravado > 0
       }
       .sortedBy { it.numero }
-      .filter { mov: Movimentacao ->
-      if (user == null) {
-        return@filter true
-      }
 
-      if (user.admin) {
-        return@filter true
-      }
-
-      (mov.noGravado == user.no) || (mov.entregue == user.login)
-    }
     subView.updatePedidos(produtos)
   }
 
