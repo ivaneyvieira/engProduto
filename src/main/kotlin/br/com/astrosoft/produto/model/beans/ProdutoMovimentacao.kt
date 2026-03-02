@@ -127,7 +127,7 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
 
     Movimentacao(
-      numero = pedido.numero ?: return@mapNotNull null,
+      numero = pedido.numero ?: 0,
       numloja = pedido.numloja ?: return@mapNotNull null,
       lojaSigla = pedido.lojaSigla ?: return@mapNotNull null,
       data = pedido.data ?: return@mapNotNull null,

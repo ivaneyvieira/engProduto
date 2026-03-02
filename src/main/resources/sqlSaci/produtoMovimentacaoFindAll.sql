@@ -117,4 +117,4 @@ FROM
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
-
+WHERE numero > 0
