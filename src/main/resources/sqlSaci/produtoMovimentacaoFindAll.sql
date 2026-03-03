@@ -21,7 +21,7 @@ SELECT M.numero,
        SEC_TO_TIME(horaRecebido)                              AS horaRecebido
 FROM
   sqldados.produtoMovimentacao AS M
-WHERE (numero = :numero OR :numero = 0)
+WHERE (numero = :numero)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
   AND (data <= :dataFinal OR :dataFinal = 0);
