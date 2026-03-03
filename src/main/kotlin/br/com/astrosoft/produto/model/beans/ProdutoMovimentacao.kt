@@ -127,7 +127,7 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
 
     Movimentacao(
-      numero = pedido.numero ?: 0,
+      numero = pedido.numero ?: return@mapNotNull null,
       numloja = pedido.numloja ?: return@mapNotNull null,
       lojaSigla = pedido.lojaSigla ?: return@mapNotNull null,
       data = pedido.data ?: return@mapNotNull null,
@@ -195,14 +195,6 @@ class Movimentacao(
 
   fun salvaRota() {
     saci.salvaRota(this)
-  }
-
-  fun novoNumero(): Int {
-    return if(numero == 0) {
-      ProdutoMovimentacao.proximoNumero(numloja)
-    }else{
-      numero
-    }
   }
 
   companion object {
