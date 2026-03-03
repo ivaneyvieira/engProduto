@@ -88,16 +88,19 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     }
   }
 
+  override fun openProduto(pedido: Movimentacao) {
+    dlgEstoque = DlgReposicaoRep(viewModel, pedido)
+    dlgEstoque?.showDialog {
+      viewModel.removePedidoNaoGravado(pedido)
+      viewModel.updateView()
+    }
+  }
 
   override fun Grid<Movimentacao>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
-      dlgEstoque = DlgReposicaoRep(viewModel, pedido)
-      dlgEstoque?.showDialog {
-        viewModel.removePedidoNaoGravado(pedido)
-        viewModel.updateView()
-      }
+      openProduto(pedido)
     }
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Preview", header = "Preview") { pedido ->
@@ -116,9 +119,14 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   }
 
   override fun filtro(): FiltroMovimentacao {
+    val numero = if ((edtNumero.value ?: 0) == 0) {
+      -1
+    } else {
+      (edtNumero.value ?: 0)
+    }
     return FiltroMovimentacao(
       numLoja = cmbLoja.value?.no ?: 0,
-      numero = edtNumero.value ?: 0,
+      numero = numero,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
     )

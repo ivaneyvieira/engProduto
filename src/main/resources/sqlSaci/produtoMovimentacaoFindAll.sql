@@ -21,10 +21,10 @@ SELECT M.numero,
        SEC_TO_TIME(horaRecebido)                              AS horaRecebido
 FROM
   sqldados.produtoMovimentacao AS M
-WHERE (numero = :numero OR :numero = 0)
+WHERE (numero = :numero OR :numero = -1)
   AND (numloja = :numLoja OR :numLoja = 0)
-  AND (data >= :dataInicial OR :dataInicial = 0)
-  AND (data <= :dataFinal OR :dataFinal = 0);
+  AND (data*1 >= :dataInicial OR :dataInicial = 0)
+  AND (data*1 <= :dataFinal OR :dataFinal = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -117,4 +117,4 @@ FROM
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
-
+WHERE numero > 0

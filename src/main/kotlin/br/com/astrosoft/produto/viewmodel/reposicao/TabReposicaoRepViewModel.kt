@@ -27,8 +27,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun updateView() = viewModel.exec {
-    val user = AppConfig.userLogin() as? UserSaci
-
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro)
       .agrupa()
@@ -58,8 +56,12 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
 
     subView.autorizaPedido("Autoriza gravação do pedido") { user ->
       subView.gravaSelecao()
+      val numero = pedido.novoNumero()
+      pedido.numero = numero
+
       produtos.forEach {
         val userLogin = AppConfig.userLogin() as? UserSaci
+        it.numero = numero
         it.noLogin = userLogin?.no
         it.noGravado = user.no
         it.noRota = pedido.noRota
@@ -115,6 +117,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido")
     val pedido = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de pedido")
     subView.adicionaPedido(pedido)
+    subView.openProduto(pedido)
   }
 
   private fun createPedido(numLoja: Int): ProdutoMovimentacao? {
@@ -123,7 +126,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val novo = saci.moviumentacaoNova(numero, numLoja) ?: return null
 
     return ProdutoMovimentacao(
-      numero = novo.numero,
+      numero = null,
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
       data = novo.data,
@@ -330,6 +333,7 @@ interface ITabReposicaoRep : ITabView {
   fun produtosSelecionado(): List<ProdutoMovimentacao>
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao>
   fun adicionaPedido(movimentacao: Movimentacao)
+  fun openProduto(pedido: Movimentacao)
   fun gravaSelecao()
   fun closeForm()
 }
