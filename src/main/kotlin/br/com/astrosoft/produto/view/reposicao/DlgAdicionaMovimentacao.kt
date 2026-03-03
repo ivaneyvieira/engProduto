@@ -20,12 +20,13 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaMovimentacao(
   val viewModel: TabReposicaoRepViewModel,
-  val acerto: Movimentacao,
-  val onClose: () -> Unit = {}
+  val pedido: Movimentacao,
+  val onClose: (DlgAdicionaMovimentacao) -> Unit = {}
 ) : Dialog() {
+  private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) { num ->
-      add(LinhaProduto(viewModel = viewModel, acerto = acerto, index = num))
+      add(LinhaProduto(viewModel = viewModel, acerto = pedido, index = num))
     }
   }
 
@@ -79,38 +80,43 @@ class DlgAdicionaMovimentacao(
 
       val produto = ProdutoMovimentacao()
       produto.apply {
-        this.numero = acerto.numero
-        this.numloja = acerto.numloja
-        this.data = acerto.data
-        this.hora = acerto.hora
+        this.numero = pedido.numero
+        this.numloja = pedido.numloja
+        this.data = pedido.data
+        this.hora = pedido.hora
         this.noLogin = user?.no
-        this.login = acerto.login
-        this.usuario = acerto.usuario
+        this.login = pedido.login
+        this.usuario = pedido.usuario
+        this.noRota = pedido.noRota
 
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.barcode = linha.codigoBarras ?: ""
         this.noGravado = 0
-        this.gravadoLogin = acerto.gravadoLogin
+        this.gravadoLogin = pedido.gravadoLogin
 
-        this.noEntregue = acerto.noEntregue
-        this.entregue = acerto.entregue
-        this.entregueNome = acerto.entregueNome
+        this.noEntregue = pedido.noEntregue
+        this.entregue = pedido.entregue
+        this.entregueNome = pedido.entregueNome
 
-        this.noRecebido = acerto.noRecebido
-        this.recebido = acerto.recebido
-        this.recebidoNome = acerto.recebidoNome
+        this.noRecebido = pedido.noRecebido
+        this.recebido = pedido.recebido
+        this.recebidoNome = pedido.recebidoNome
 
         this.movimentacao = linha.movimentacao ?: 0
       }
     }
 
-    produtos.forEach {
-      viewModel.addProduto(it)
-    }
+    produtosAdd.clear()
+    produtosAdd.addAll(produtos)
+    viewModel.updateProduto(pedido = pedido, produtos)
 
-    onClose.invoke()
+    onClose.invoke(this)
     this.close()
+  }
+
+  fun produtos(): List<ProdutoMovimentacao>{
+    return produtosAdd.toList()
   }
 }
 

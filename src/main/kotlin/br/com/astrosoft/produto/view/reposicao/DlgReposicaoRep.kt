@@ -139,7 +139,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   DialogHelper.showError("Rota não informada")
                   return@onClick
                 }
-                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
+                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
                   update()
                 }
                 dlg.open()
@@ -158,6 +158,9 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
+                  gridDetail.list().forEach {
+                    it.noRota = rota?.numero
+                  }
                 }
                 updateGrid()
               }
@@ -215,11 +218,11 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
           this.focusEditor(ProdutoMovimentacao::movimentacao)
         },
         closeEditor = {
-          viewModel.updateProduto(produtos = listOf(it.bean))
+          viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
           abreProximo(it.bean)
         },
         saveEditor = {
-          viewModel.updateProduto(produtos = listOf(it.bean))
+          viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
           abreProximo(it.bean)
         },
         canEdit = { _ ->
@@ -372,7 +375,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
 
   private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
-    viewModel.updateProduto(selecionados)
+    viewModel.updateProduto(movimentacao, selecionados)
   }
 
   private fun abreProximo(bean: ProdutoMovimentacao) {
