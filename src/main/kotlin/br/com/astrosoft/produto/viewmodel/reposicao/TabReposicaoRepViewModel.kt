@@ -27,11 +27,15 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun updateView() = viewModel.exec {
+    val user = AppConfig.userLogin()
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro)
       .agrupa()
       .filter {
         it.noGravado > 0
+      }
+      .filter {
+        (it.noGravado == user?.no) || (user?.admin == true)
       }
       .sortedBy { it.numero }
 
@@ -107,7 +111,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) {
-    pedido.numero  = pedido.novoNumero()
+    pedido.numero = pedido.novoNumero()
     produtos.forEach {
       it.numero = pedido.novoNumero()
     }

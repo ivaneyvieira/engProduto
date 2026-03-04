@@ -41,6 +41,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
 
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
+      this.width = "8rem"
       this.setItemLabelGenerator { item ->
         item.descricao
       }
