@@ -19,7 +19,7 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
 
     writeln("Reposicao Rota $rotaDescricao", negrito = true, center = true)
     writeln("")
-    val text1 ="Data: ${bean.data.format()} - ${LocalTime.now().format("HH:mm")}"
+    val text1 = "Data: ${bean.data.format()} - ${LocalTime.now().format("HH:mm")}"
     val text2 = "Pedido : ${bean.numero}"
     val spaces = widthPage - text1.length - text2.length
     writeln(
@@ -46,8 +46,12 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
   }
 
   override fun printSumary(bean: ProdutoMovimentacao?) {
+
     val entregueNome = bean?.entregueNome ?: ""
     val recebidoNome = bean?.recebidoNome ?: ""
+    writeln("")
+    writeln("")
+    writeln("DOCUMENTO NÃO FISCAL", center = true)
     writeln("")
     writeln("")
     writeln("____________________________________", center = true)

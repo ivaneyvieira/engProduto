@@ -1,5 +1,8 @@
 USE sqldados;
 
+DO @PESQUISA := :pesquisa;
+DO @PESQUISA_LIKE := CONCAT('%', :pesquisa, '%');
+
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
 CREATE TEMPORARY TABLE T_ACERTO
 SELECT M.numero,
@@ -23,8 +26,8 @@ FROM
   sqldados.produtoMovimentacao AS M
 WHERE (numero = :numero OR :numero = -1)
   AND (numloja = :numLoja OR :numLoja = 0)
-  AND (data*1 >= :dataInicial OR :dataInicial = 0)
-  AND (data*1 <= :dataFinal OR :dataFinal = 0);
+  AND (data >= :dataInicial OR :dataInicial = 0)
+  AND (data <= :dataFinal OR :dataFinal = 0);
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -95,7 +98,6 @@ SELECT numero                   AS numero,
        horaEntrege              AS horaEntrege,
        dataRecebido             AS dataRecebido,
        horaRecebido             AS horaRecebido
-
 FROM
   T_ACERTO                   AS A
     LEFT JOIN sqldados.users AS UL
@@ -118,3 +120,9 @@ FROM
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
 WHERE numero > 0
+HAVING (@PESQUISA = '' OR
+        numero LIKE @PESQUISA OR
+        lojaSigla LIKE @PESQUISA OR
+        recebido LIKE @PESQUISA_LIKE OR
+        entregue LIKE @PESQUISA_LIKE OR
+        gravadoLogin LIKE @PESQUISA_LIKE)

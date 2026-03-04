@@ -91,7 +91,7 @@ class DlgAdicionaMovimentacao(
 
         this.prdno = linha.prdno
         this.grade = linha.grade
-        this.barcode = linha.codigoBarras ?: ""
+        this.barcode = linha.codigoBarras
         this.noGravado = 0
         this.gravadoLogin = pedido.gravadoLogin
 
@@ -143,8 +143,8 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1000
 
-      this.addValueChangeListener {
-        if (it.isFromClient) {
+      this.addValueChangeListener { e ->
+        if (e.isFromClient) {
           val lista = viewModel.findProdutos(codigo = this.value, acerto.numloja)
           produtos.clear()
           produtos.addAll(lista)
@@ -174,8 +174,8 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1000
 
-      this.addValueChangeListener {
-        if (it.isFromClient) {
+      this.addValueChangeListener { e ->
+        if (e.isFromClient) {
           val lista = viewModel.findProdutos(codigo = this.value, loja = acerto.numloja)
           produtos.clear()
           produtos.addAll(lista)
@@ -232,7 +232,7 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
     }?.saldo
   val movimentacao: Int?
     get() = edtMovimentacao.value
-  val codigoBarras: String?
+  val codigoBarras: String
     get() = edtCodigoBarras.value ?: ""
 
   fun focus() {

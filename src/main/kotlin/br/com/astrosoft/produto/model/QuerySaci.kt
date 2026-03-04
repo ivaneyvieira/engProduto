@@ -2383,6 +2383,7 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/produtoMovimentacaoFindAll.sql"
     return query(sql, ProdutoMovimentacao::class) {
       addOptionalParameter("numLoja", filtro.numLoja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)

@@ -102,7 +102,8 @@ data class FiltroMovimentacao(
   val numLoja: Int = 0,
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
-  val numero: Int = 0,
+  val pesquisa: String = "",
+  val numero: Int = -1
 )
 
 fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {

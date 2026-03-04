@@ -18,14 +18,14 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   TabPanelGrid<Movimentacao>(Movimentacao::class), ITabReposicaoRep {
   private var dlgEstoque: DlgReposicaoRep? = null
-  private lateinit var edtNumero: IntegerField
+  private lateinit var edtPesquisa: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
@@ -54,8 +54,8 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
 
     init()
 
-    edtNumero = integerField("Número") {
-      this.width = "300px"
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "10rem"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
       addValueChangeListener {
@@ -119,14 +119,9 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   }
 
   override fun filtro(): FiltroMovimentacao {
-    val numero = if ((edtNumero.value ?: 0) == 0) {
-      -1
-    } else {
-      (edtNumero.value ?: 0)
-    }
     return FiltroMovimentacao(
       numLoja = cmbLoja.value?.no ?: 0,
-      numero = numero,
+      pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
     )
