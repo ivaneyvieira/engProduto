@@ -221,6 +221,7 @@ enum class ERota(val numero: Int, val descricao: String) {
   LJ_CD(1, "LJ-CD")
 }
 
+
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
   GRAVADO("G", "Gravado"),
   ENTREGUE("E", "Entregue"),
