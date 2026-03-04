@@ -62,7 +62,8 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       }
     }
 
-    cmbStatus = select("Status") {
+    cmbStatus = select("Status Pendente") {
+      this.width = "10rem"
       this.setItems(EStatusMovimentacao.entries)
       this.setItemLabelGenerator { item ->
         item.descricao

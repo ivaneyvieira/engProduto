@@ -32,9 +32,9 @@ WHERE (numero = :numero OR :numero = -1)
   AND (
   CASE :status
     WHEN 'T' THEN TRUE
-    WHEN 'E' THEN M.noEntregue > 0
-    WHEN 'R' THEN M.noRecebido > 0
-    WHEN 'G' THEN M.noGravado > 0
+    WHEN 'E' THEN M.noEntregue = 0
+    WHEN 'R' THEN M.noRecebido = 0
+    WHEN 'G' THEN M.noGravado = 0
              ELSE FALSE
   END
   );
