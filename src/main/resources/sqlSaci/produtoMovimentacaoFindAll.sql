@@ -27,7 +27,16 @@ FROM
 WHERE (numero = :numero OR :numero = -1)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
-  AND (data <= :dataFinal OR :dataFinal = 0);
+  AND (data <= :dataFinal OR :dataFinal = 0)
+  AND (
+  CASE :status
+    WHEN 'T' THEN TRUE
+    WHEN 'E' THEN M.noEntregue > 0
+    WHEN 'R' THEN M.noRecebido > 0
+    WHEN 'G' THEN M.noGravado > 0
+    ELSE FALSE
+  END
+  );
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP

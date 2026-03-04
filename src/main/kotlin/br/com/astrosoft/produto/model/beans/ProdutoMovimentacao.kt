@@ -103,7 +103,8 @@ data class FiltroMovimentacao(
   val dataInicial: LocalDate? = null,
   val dataFinal: LocalDate? = null,
   val pesquisa: String = "",
-  val numero: Int = -1
+  val numero: Int = -1,
+  val status: EStatusMovimentacao = EStatusMovimentacao.TODOS,
 )
 
 fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
@@ -218,4 +219,11 @@ class Movimentacao(
 enum class ERota(val numero: Int, val descricao: String) {
   CD_LJ(0, "CD-LJ"),
   LJ_CD(1, "LJ-CD")
+}
+
+enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
+  GRAVADO("G", "Gravado"),
+  ENTREGUE("E", "Entregue"),
+  RECEBIDO("R", "Recebido"),
+  TODOS("T", "Todos")
 }

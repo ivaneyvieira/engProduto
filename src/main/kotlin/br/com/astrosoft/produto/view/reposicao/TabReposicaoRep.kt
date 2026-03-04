@@ -29,6 +29,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbStatus: Select<EStatusMovimentacao>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -59,6 +60,17 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
       addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    cmbStatus = select("Status") {
+      this.setItems(EStatusMovimentacao.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EStatusMovimentacao.TODOS
+      this.addValueChangeListener {
         viewModel.updateView()
       }
     }
@@ -124,6 +136,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      status = cmbStatus.value ?: EStatusMovimentacao.TODOS,
     )
   }
 
