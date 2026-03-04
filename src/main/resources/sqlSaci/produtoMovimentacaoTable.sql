@@ -104,3 +104,6 @@ FROM
   sqldados.users
 WHERE no = 1;
 
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN observacao VARCHAR(200) NULL DEFAULT NULL;
+

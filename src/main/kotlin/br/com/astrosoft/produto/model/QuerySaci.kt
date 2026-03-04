@@ -2349,6 +2349,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("horaEntrege", produto.horaEntrege?.toSecondOfDay() ?: 0)
       addOptionalParameter("dataRecebido", produto.dataRecebido.toSaciDate())
       addOptionalParameter("horaRecebido", produto.horaRecebido?.toSecondOfDay() ?: 0)
+      addOptionalParameter("observacao", produto.observacao)
     }
   }
 

@@ -15,6 +15,7 @@ SELECT M.numero,
        M.noGravado,
        M.noEntregue,
        M.noRecebido,
+       M.observacao,
        M.movimentacao,
        M.estoque,
        M.noRota,
@@ -34,7 +35,7 @@ WHERE (numero = :numero OR :numero = -1)
     WHEN 'E' THEN M.noEntregue > 0
     WHEN 'R' THEN M.noRecebido > 0
     WHEN 'G' THEN M.noGravado > 0
-    ELSE FALSE
+             ELSE FALSE
   END
   );
 
@@ -106,7 +107,8 @@ SELECT numero                   AS numero,
        dataEntrege              AS dataEntrege,
        horaEntrege              AS horaEntrege,
        dataRecebido             AS dataRecebido,
-       horaRecebido             AS horaRecebido
+       horaRecebido             AS horaRecebido,
+       observacao               AS observacao
 FROM
   T_ACERTO                   AS A
     LEFT JOIN sqldados.users AS UL

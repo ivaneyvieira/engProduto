@@ -106,7 +106,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     return Fornecedor.findByVendno(vendno)
   }
 
-  fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao>) {
+  fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) {
     pedido.numero  = pedido.novoNumero()
     produtos.forEach {
       it.numero = pedido.novoNumero()

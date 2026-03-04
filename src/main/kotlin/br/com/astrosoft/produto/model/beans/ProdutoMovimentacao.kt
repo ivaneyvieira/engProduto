@@ -35,6 +35,7 @@ class ProdutoMovimentacao(
   var horaEntrege: LocalTime? = null,
   var dataRecebido: LocalDate? = null,
   var horaRecebido: LocalTime? = null,
+  var observacao: String? = null
 ) {
   val localAbrev
     get() = locApp?.substring(0, 4) ?: ""
@@ -150,6 +151,7 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       horaEntrege = pedido.horaEntrege,
       dataRecebido = pedido.dataRecebido,
       horaRecebido = pedido.horaRecebido,
+      observacao = pedido.observacao
     )
   }
 }
@@ -173,9 +175,10 @@ class Movimentacao(
   var recebidoNome: String,
   var noRota: Int?,
   var dataEntrege: LocalDate?,
-  var horaEntrege: LocalTime?  ,
+  var horaEntrege: LocalTime?,
   var dataRecebido: LocalDate?,
   var horaRecebido: LocalTime?,
+  var observacao: String?
 ) {
   var enumRota: ERota?
     get() = ERota.entries.firstOrNull { it.numero == noRota }
@@ -200,9 +203,9 @@ class Movimentacao(
   }
 
   fun novoNumero(): Int {
-    return if(numero == 0) {
+    return if (numero == 0) {
       ProdutoMovimentacao.proximoNumero(numloja)
-    }else{
+    } else {
       numero
     }
   }
@@ -220,7 +223,6 @@ enum class ERota(val numero: Int, val descricao: String) {
   CD_LJ(0, "CD-LJ"),
   LJ_CD(1, "LJ-CD")
 }
-
 
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
   GRAVADO("G", "Gravado"),

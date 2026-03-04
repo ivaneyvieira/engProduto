@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.reposicao
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
 import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoRep
@@ -111,6 +108,16 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
   override fun Grid<Movimentacao>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
 
+    this.withEditor(
+      classBean = Movimentacao::class,
+      openEditor = {
+        this.focusEditor(Movimentacao::observacao)
+      },
+      closeEditor = {
+        viewModel.updateProduto(it.bean)
+      }
+    )
+
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
       openProduto(pedido)
     }
@@ -128,6 +135,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     columnGrid(Movimentacao::gravadoLogin, header = "Gravado", width = "7rem")
     columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
     columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
+    columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
 
   override fun filtro(): FiltroMovimentacao {
