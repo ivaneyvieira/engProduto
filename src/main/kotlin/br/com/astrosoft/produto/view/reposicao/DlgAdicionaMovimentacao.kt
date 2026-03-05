@@ -166,6 +166,23 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
       }
     }
 
+    edtGrade = select("Grade") {
+      if (index > 0) this.label = ""
+      this.width = "120px"
+
+      this.addValueChangeListener { event ->
+        val grade = event.value
+        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
+      }
+    }
+
+    edtMovimentacao = integerField("Quant") {
+      if (index > 0) this.label = ""
+      this.width = "100px"
+      this.isClearButtonVisible = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+    }
+
     edtCodigoBarras = textField("Código de Barras") {
       if (index > 0) this.label = ""
       this.width = "8rem"
@@ -202,23 +219,6 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
       this.setWidthFull()
       this.isReadOnly = true
       this.tabIndex = -1
-    }
-
-    edtGrade = select("Grade") {
-      if (index > 0) this.label = ""
-      this.width = "120px"
-
-      this.addValueChangeListener { event ->
-        val grade = event.value
-        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
-      }
-    }
-
-    edtMovimentacao = integerField("Quant") {
-      if (index > 0) this.label = ""
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     }
   }
 

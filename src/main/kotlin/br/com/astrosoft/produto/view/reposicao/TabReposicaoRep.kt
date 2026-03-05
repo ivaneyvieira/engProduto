@@ -62,6 +62,14 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       }
     }
 
+    button("Novo Pedido") {
+      this.icon = VaadinIcon.NOTEBOOK.create()
+      onClick {
+        val loja = cmbLoja.value
+        viewModel.novoPedido(loja?.no ?: 0)
+      }
+    }
+
     cmbStatus = select("Status Pendente") {
       this.width = "10rem"
       this.setItems(EStatusMovimentacao.entries)
@@ -87,14 +95,6 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       this.localePtBr()
       addValueChangeListener {
         viewModel.updateView()
-      }
-    }
-
-    button("Novo Pedido") {
-      this.icon = VaadinIcon.NOTEBOOK.create()
-      onClick {
-        val loja = cmbLoja.value
-        viewModel.novoPedido(loja?.no ?: 0)
       }
     }
   }
