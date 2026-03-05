@@ -26,8 +26,16 @@ class DlgAdicionaMovimentacao(
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) { num ->
-      add(LinhaProduto(viewModel = viewModel, acerto = pedido, index = num))
+      val linha = LinhaProduto(viewModel = viewModel, acerto = pedido, index = num){linha ->
+        selecionaLinha(linha)
+      }
+      add(linha)
     }
+  }
+
+  fun selecionaLinha(linha: Int){
+    val linhaProduto = produtoLinha.getOrNull(linha)
+    linhaProduto?.focus()
   }
 
   init {
@@ -115,12 +123,17 @@ class DlgAdicionaMovimentacao(
     this.close()
   }
 
-  fun produtos(): List<ProdutoMovimentacao>{
+  fun produtos(): List<ProdutoMovimentacao> {
     return produtosAdd.toList()
   }
 }
 
-class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Movimentacao, val index: Int) :
+class LinhaProduto(
+  val viewModel: TabReposicaoRepViewModel,
+  val acerto: Movimentacao,
+  val index: Int,
+  val selecionaLinha: (linha: Int) -> Unit
+) :
   HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField
@@ -181,6 +194,14 @@ class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Moviment
       this.width = "100px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
+
+      this.addValueChangeListener {
+        if(it.isFromClient){
+         selecionaLinha(index + 1)
+        }
+      }
     }
 
     edtCodigoBarras = textField("Código de Barras") {
