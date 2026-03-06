@@ -44,7 +44,7 @@ data class ProdutoKardec(
 
     fun deleteKardecMov(produto: ProdutoEstoque, doc: String) {
       saci.deleteKardecMov(produto, doc)
-      if(produto.loja != 4) {
+      if (produto.loja != 4) {
         produto.loja = 4
         saci.deleteKardecMov(produto, doc)
       }
@@ -69,6 +69,11 @@ enum class ETipoKardec(val num: String, val descricao: String) {
   MOV_ENTREGA("01", "Movimentação de Entrega"),
   MOV_RECEBIMENTO("01", "Movimentação de Recebimento"),
   REPOSICAO_CDLJ("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_CDLJ2("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_CDLJ3("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_CDLJ5("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_CDLJ8("01", "Reposição Rota CD -LJ"),
+
   REPOSICAO_LJCD("01", "Reposição Rota LJ -CD"),
 }
 
