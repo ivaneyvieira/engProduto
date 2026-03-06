@@ -39,7 +39,7 @@ class ProdutoMovimentacao(
   var observacao: String? = null
 ) {
   val localAbrev
-    get() = locApp?.rpad(4, "")?.substring(0, 4)?.trim() ?: ""
+    get() = locApp?.rpad(4, " ")?.substring(0, 4)?.trim() ?: ""
 
   val saldoBarraRef: String
     get() {
