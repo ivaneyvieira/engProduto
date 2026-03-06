@@ -100,7 +100,7 @@ class DlgAdicionaMovimentacao(
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.barcode = linha.codigoBarras
-        this.noGravado = 0
+        this.noGravado = pedido.noGravado
         this.gravadoLogin = pedido.gravadoLogin
 
         this.noEntregue = pedido.noEntregue

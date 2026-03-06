@@ -133,8 +133,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val numero = ProdutoMovimentacao.proximoNumero(numLoja)
     val novo = saci.moviumentacaoNova(numero, numLoja) ?: return null
 
-    return ProdutoMovimentacao(
-      numero = null,
+    val produto = ProdutoMovimentacao(
+      numero = saci.movimentacaoProximo(numLoja),
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
       data = novo.data,
@@ -146,6 +146,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       descricao = null,
       grade = null,
     )
+    produto.save()
+    return produto
   }
 
   fun previewPedido(pedido: Movimentacao, printEvent: (impressora: String) -> Unit = {}) = viewModel.exec {

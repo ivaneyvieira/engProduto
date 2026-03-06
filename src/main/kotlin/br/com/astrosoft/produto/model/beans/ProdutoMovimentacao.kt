@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -38,7 +39,7 @@ class ProdutoMovimentacao(
   var observacao: String? = null
 ) {
   val localAbrev
-    get() = locApp?.substring(0, 4) ?: ""
+    get() = locApp?.rpad(4, "")?.substring(0, 4)?.trim() ?: ""
 
   val saldoBarraRef: String
     get() {
@@ -195,7 +196,9 @@ class Movimentacao(
       numero = numero,
     )
     val produtos = ProdutoMovimentacao.findAll(filtro)
-    return produtos
+    return produtos.filter{
+      it.prdno != null && it.prdno != ""
+    }
   }
 
   fun salvaRota() {
