@@ -134,6 +134,8 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
     val login = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.login ?: ""
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
 
+    val noRota = lista.firstOrNull { it.noRota != null }?.noRota
+
     Movimentacao(
       numero = pedido.numero ?: 0,
       numloja = pedido.numloja ?: return@mapNotNull null,
@@ -151,7 +153,7 @@ fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
       noRecebido = noRecebido,
       recebido = recebido,
       recebidoNome = recebidoNome,
-      noRota = pedido.noRota,
+      noRota = noRota,
       dataEntrege = pedido.dataEntrege,
       horaEntrege = pedido.horaEntrege,
       dataRecebido = pedido.dataRecebido,
@@ -237,7 +239,6 @@ enum class ERota(val numero: Int, val descricao: String) {
 }
 
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
-  GRAVADO("G", "Gravado"),
   ENTREGUE("E", "Entregue"),
   RECEBIDO("R", "Recebido"),
   TODOS("T", "Todos")

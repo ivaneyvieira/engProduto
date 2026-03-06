@@ -123,7 +123,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Selecione uma loja")
     }
     val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido")
-    val pedido = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de pedido")
+    val pedido = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido novo")
     subView.adicionaPedido(pedido)
     subView.openProduto(pedido)
   }
