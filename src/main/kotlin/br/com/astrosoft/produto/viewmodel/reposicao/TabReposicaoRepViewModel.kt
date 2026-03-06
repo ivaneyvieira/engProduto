@@ -137,6 +137,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       numero = saci.movimentacaoProximo(numLoja),
       numloja = novo.numloja,
       lojaSigla = novo.lojaSigla,
+      noGravado = user?.no ?: 0,
       data = novo.data,
       noLogin = user?.no,
       hora = novo.hora,

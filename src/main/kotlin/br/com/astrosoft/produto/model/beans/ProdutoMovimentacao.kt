@@ -225,6 +225,7 @@ class Movimentacao(
 enum class ERota(val numero: Int, val descricao: String) {
   CD_LJ(0, "CD-LJ"),
   LJ_CD(1, "LJ-CD")
+  //Rota42, Rota43, Rota45, Rota48
 }
 
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
