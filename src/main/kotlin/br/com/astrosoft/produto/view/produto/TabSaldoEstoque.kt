@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.recebimento.FormValidade
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabSaldoEstoque
+import br.com.astrosoft.produto.viewmodel.produto.TabSaldoEstoqueViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
@@ -18,10 +18,12 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
+import java.time.YearMonth
 
-class TabSaldoEstoque(val viewModel: TabProdutoListViewModel) :
-  TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
-  ITabProdutoList {
+class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
+  TabPanelGrid<ProdutoSaldoEstoque>(ProdutoSaldoEstoque::class),
+  ITabSaldoEstoque {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
@@ -36,6 +38,7 @@ class TabSaldoEstoque(val viewModel: TabProdutoListViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var cmbMesAno: MonthPicker
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
@@ -66,6 +69,45 @@ class TabSaldoEstoque(val viewModel: TabProdutoListViewModel) :
           }
         }
         init()
+        val inicial = YearMonth.now()
+        cmbMesAno = MonthPicker(inicial).apply {
+          this.seti18n(
+            MonthPicker.MonthPickerI18n()
+              .setMonthNames(
+                listOf(
+                  "Janeiro",
+                  "Fevereiro",
+                  "Março",
+                  "Abril",
+                  "Maio",
+                  "Junho",
+                  "Julho",
+                  "Agosto",
+                  "Setembro",
+                  "Outubro",
+                  "Novembro",
+                  "Dezembro"
+                )
+              )
+              .setMonthLabels(
+                listOf(
+                  "Jan",
+                  "Fev",
+                  "Mar",
+                  "Abr",
+                  "Mai",
+                  "Jun",
+                  "Jul",
+                  "Ago",
+                  "Set",
+                  "Out",
+                  "Nov",
+                  "Dez"
+                )
+              )
+              .setFormat("MM/YYYY")
+          )
+        }
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -206,34 +248,39 @@ class TabSaldoEstoque(val viewModel: TabProdutoListViewModel) :
     }
   }
 
-  override fun Grid<ProdutoSaldo>.gridPanel() {
+  override fun Grid<ProdutoSaldoEstoque>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoSaldo::loja, header = "Loja")
-    columnGrid(ProdutoSaldo::codigo, header = "Código").right()
-    columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldo::unidade, header = "Un")
-    columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
-    columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
-    columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
-    columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
-    columnGrid(ProdutoSaldo::tributacao, header = "CST")
-    columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
-    columnGrid(ProdutoSaldo::ncm, header = "NCM")
-    columnGrid(ProdutoSaldo::fornecedor, header = "For")
-    columnGrid(ProdutoSaldo::abrev, header = "Abrev")
-    columnGrid(ProdutoSaldo::tipo, header = "Tipo")
-    columnGrid(ProdutoSaldo::cl, header = "C Lucro")
-    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
+    columnGrid(ProdutoSaldoEstoque::loja, header = "Loja")
+    columnGrid(ProdutoSaldoEstoque::codigo, header = "Código").right()
+    columnGrid(ProdutoSaldoEstoque::descricao, header = "Descrição").expand()
+    columnGrid(ProdutoSaldoEstoque::gradeProduto, header = "Grade")
+    columnGrid(ProdutoSaldoEstoque::unidade, header = "Un")
+    columnGrid(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo")
+    columnGrid(ProdutoSaldoEstoque::qttyAtacado, header = "Atacado")
+    columnGrid(ProdutoSaldoEstoque::qttyTotal, header = "Total")
+    columnGrid(ProdutoSaldoEstoque::estoqueLojas, header = "Est Lojas")
+    columnGrid(ProdutoSaldoEstoque::tributacao, header = "CST")
+    columnGrid(ProdutoSaldoEstoque::rotulo, header = "Rotulo")
+    columnGrid(ProdutoSaldoEstoque::ncm, header = "NCM")
+    columnGrid(ProdutoSaldoEstoque::fornecedor, header = "For")
+    columnGrid(ProdutoSaldoEstoque::abrev, header = "Abrev")
+    columnGrid(ProdutoSaldoEstoque::tipo, header = "Tipo")
+    columnGrid(ProdutoSaldoEstoque::cl, header = "C Lucro")
+    columnGrid(ProdutoSaldoEstoque::tipoValidade, header = "Tipo")
+    columnGrid(ProdutoSaldoEstoque::mesesGarantia, header = "Val")
+    columnGrid(ProdutoSaldoEstoque::codigoRel, header = "Relac").right()
   }
 
-  override fun filtro(): FiltroProdutoSaldo {
-    return FiltroProdutoSaldo(
+  override fun filtro(): FiltroProdutoSaldoEstoque {
+    val mesAno = cmbMesAno.value ?: YearMonth.now()
+    val ym = mesAno.let { ym ->
+      ym.year * 100 + ym.monthValue
+    }
+    return FiltroProdutoSaldoEstoque(
       loja = cmbLoja.value?.no ?: 0,
+      ym = ym,
       pesquisa = edtPesquisa.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
       tributacao = edtTributo.value ?: "",
@@ -251,11 +298,11 @@ class TabSaldoEstoque(val viewModel: TabProdutoListViewModel) :
     )
   }
 
-  override fun updateProdutos(produtos: List<ProdutoSaldo>) {
+  override fun updateProdutos(produtos: List<ProdutoSaldoEstoque>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<ProdutoSaldo> {
+  override fun produtosSelecionados(): List<ProdutoSaldoEstoque> {
     return itensSelecionados()
   }
 

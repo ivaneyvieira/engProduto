@@ -73,6 +73,7 @@ dependencies {
   implementation("com.flowingcode.addons:font-awesome-iron-iconset:5.2.2")
   implementation("org.vaadin.addons.flowingcode:grid-helpers:1.3.0")
   implementation("org.parttio:hugerte-for-flow:1.0.10")
+  implementation("org.vaadin.addons.componentfactory:vcf-month-picker-flow:2.0.0")
 
   //Report
   implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1") {

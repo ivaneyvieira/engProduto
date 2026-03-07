@@ -5,8 +5,6 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldoEstoque
-import br.com.astrosoft.produto.model.printText.PrintProdutos
 
 class TabSaldoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -28,11 +26,13 @@ class TabSaldoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   }
 
   fun geraPlanilha(produtos: List<ProdutoSaldoEstoque>): ByteArray {
-    val planilha = PlanilhaProdutoSaldoEstoque()
-    return planilha.write(produtos)
+    //val planilha = PlanilhaProdutoSaldoEstoque()
+    //return planilha.write(produtos)
+    TODO()
   }
 
   fun imprimeProdutos() = viewModel.exec {
+    /*
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -45,6 +45,7 @@ class TabSaldoEstoqueViewModel(val viewModel: ProdutoViewModel) {
       dados = produtos,
       printer = subView.printerPreview(loja = 0)
     )
+     */
   }
 
   fun cadastraValidade() = viewModel.exec {

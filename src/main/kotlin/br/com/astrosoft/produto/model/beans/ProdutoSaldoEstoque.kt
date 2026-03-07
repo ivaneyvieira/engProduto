@@ -38,6 +38,7 @@ class ProdutoSaldoEstoque(
 
 data class FiltroProdutoSaldoEstoque(
   val loja: Int,
+  val ym: Int,
   val pesquisa: String,
   val fornecedor: Int,
   val tributacao: String,

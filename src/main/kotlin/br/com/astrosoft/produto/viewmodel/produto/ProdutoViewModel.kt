@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
   val tabProdutoListViewModel = TabProdutoListViewModel(this)
+  val tabSaldoEstoqueViewModel = TabSaldoEstoqueViewModel(this)
   val tabProdutoEstoqueViewModel = TabProdutoEstoqueViewModel(this)
   val tabProdutoCadastroViewModel = TabProdutoCadastroViewModel(this)
   val tabProdutoSpedViewModel = TabProdutoSpedViewModel(this)
@@ -18,6 +19,7 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
 
   override fun listTab() = listOf(
     view.tabProdutoList,
+    view.tabSaldoEstoque,
     view.tabProdutoEstoque,
     view.tabProdutoCadastro,
     view.tabProdutoSped,
@@ -33,6 +35,7 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
 
 interface IProdutoView : IView {
   val tabProdutoList: ITabProdutoList
+  val tabSaldoEstoque: ITabSaldoEstoque
   val tabProdutoEstoque: ITabProdutoEstoque
   val tabProdutoCadastro: ITabProdutoCadastro
   val tabProdutoSped: ITabProdutoSped
