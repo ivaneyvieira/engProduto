@@ -9,9 +9,9 @@ class PlanilhaProdutoSaldoEstoque : Planilha<ProdutoSaldoEstoque>("Produto") {
     columnSheet(ProdutoSaldoEstoque::codigo, header = "Código")
     columnSheet(ProdutoSaldoEstoque::descricao, header = "Descrição")
     columnSheet(ProdutoSaldoEstoque::gradeProduto, header = "Grade")
-    columnSheet(ProdutoSaldoEstoque::unidade, header = "Unidade")
-    columnSheet(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo")
-    columnSheet(ProdutoSaldoEstoque::custoVarejo, pattern = "0.0000", header = "Custo Med")
-    columnSheet(ProdutoSaldoEstoque::custoTotal, pattern = "0.00", header = "Custo Total")
+    columnSheet(ProdutoSaldoEstoque::unidade, header = "Un")
+    columnSheet(ProdutoSaldoEstoque::qttyVarejo, header = "Estoque")
+    columnSheet(ProdutoSaldoEstoque::custoVarejo, pattern = "0.0000", header = "Custo Médio")
+    columnSheet(ProdutoSaldoEstoque::custoTotal, pattern = "0.00", header = "Total")
   }
 }

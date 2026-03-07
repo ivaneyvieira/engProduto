@@ -70,19 +70,19 @@ CREATE TEMPORARY TABLE T_STK
   PRIMARY KEY (loja, prdno, gradeProduto),
   INDEX (qttyTotal)
 )
-SELECT S.storeno                             AS loja,
-       S.prdno                               AS prdno,
-       IF(:grade, S.grade, '')               AS gradeProduto,
-       ROUND(SUM(S.qtty2 / 1000))            AS qttyVarejo,
-       ROUND(SUM((S.qtty - S.qtty2) / 1000)) AS qttyAtacado,
-       ROUND(SUM(S.qtty / 1000))             AS qttyTotal,
-       AVG(S.cost2 / 10000)                  AS custoVarejo
+SELECT S.storeno                                                       AS loja,
+       S.prdno                                                         AS prdno,
+       IF(:grade, S.grade, '')                                         AS gradeProduto,
+       ROUND(SUM(S.qtty2 / 1000))                                      AS qttyVarejo,
+       ROUND(SUM((S.qtty - S.qtty2) / 1000))                           AS qttyAtacado,
+       ROUND(SUM(S.qtty / 1000))                                       AS qttyTotal,
+       SUM((S.cost2 / 10000) * (S.qtty2 / 1000)) / SUM(S.qtty2 / 1000) AS custoVarejo
 FROM
   sqldados.stkchk AS S
     INNER JOIN T_PRD
                USING (prdno)
 WHERE (S.storeno = :loja)
-  AND ym = :ym
+  AND (ym = :ym)
 GROUP BY ym, loja, prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
@@ -90,25 +90,25 @@ CREATE TEMPORARY TABLE T_PRDSTK
 (
   PRIMARY KEY (loja, prdno, gradeProduto)
 )
-SELECT S.loja                       AS loja,
-       S.prdno                      AS prdno,
-       P.codigo * 1                 AS codigo,
-       P.descricao                  AS descricao,
-       S.gradeProduto               AS gradeProduto,
-       P.unidade                    AS unidade,
-       S.qttyVarejo                 AS qttyVarejo,
-       S.qttyAtacado                AS qttyAtacado,
-       S.qttyTotal                  AS qttyTotal,
-       S.custoVarejo                AS custoVarejo,
-       S.custoVarejo * S.qttyVarejo AS custoTotal,
-       P.tributacao                 AS tributacao,
-       P.rotulo                     AS rotulo,
-       P.ncm                        AS ncm,
-       P.fornecedor                 AS fornecedor,
-       P.abrev                      AS abrev,
-       P.tipo                       AS tipo,
-       P.cl                         AS cl,
-       MID(L.localizacao, 1, 4)     AS localizacao
+SELECT S.loja                                                AS loja,
+       S.prdno                                               AS prdno,
+       P.codigo * 1                                          AS codigo,
+       P.descricao                                           AS descricao,
+       S.gradeProduto                                        AS gradeProduto,
+       P.unidade                                             AS unidade,
+       S.qttyVarejo                                          AS qttyVarejo,
+       S.qttyAtacado                                         AS qttyAtacado,
+       S.qttyTotal                                           AS qttyTotal,
+       S.custoVarejo                                         AS custoVarejo,
+       IFNULL(S.custoVarejo, 0.00) * IFNULL(S.qttyVarejo, 0) AS custoTotal,
+       P.tributacao                                          AS tributacao,
+       P.rotulo                                              AS rotulo,
+       P.ncm                                                 AS ncm,
+       P.fornecedor                                          AS fornecedor,
+       P.abrev                                               AS abrev,
+       P.tipo                                                AS tipo,
+       P.cl                                                  AS cl,
+       MID(L.localizacao, 1, 4)                              AS localizacao
 FROM
   T_STK              AS S
     LEFT JOIN  T_LOC AS L
