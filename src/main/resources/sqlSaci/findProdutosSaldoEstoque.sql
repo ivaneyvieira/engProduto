@@ -74,7 +74,7 @@ SELECT S.storeno                                 AS loja,
        S.prdno                                   AS prdno,
        S.grade                                   AS grade,
        ROUND(S.qtty2 / 1000)                     AS qttyVarejo,
-       ROUND((S.qtty2 - S.qtty) / 1000)          AS qttyAtacado,
+       ROUND((S.qtty - S.qtty2) / 1000)          AS qttyAtacado,
        ROUND(S.qtty / 1000)                      AS qttyTotal,
        S.cost2 / 10000                           AS custoVarejo,
        ROUND(S.qtty2 / 1000) * (S.cost2 / 10000) AS custoTotal
