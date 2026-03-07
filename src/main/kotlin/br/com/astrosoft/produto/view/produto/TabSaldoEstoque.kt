@@ -71,6 +71,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
         init()
         val inicial = YearMonth.now()
         cmbMesAno = MonthPicker(inicial).apply {
+          this.label = "Mês/Ano"
           this.seti18n(
             MonthPicker.MonthPickerI18n()
               .setMonthNames(
@@ -108,6 +109,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
               .setFormat("MM/YYYY")
           )
         }
+        add(cmbMesAno)
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -319,7 +321,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "Saldo Estoque"
 
   override fun updateComponent() {
     viewModel.updateView()
