@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabSaldoEstoque
 import br.com.astrosoft.produto.viewmodel.produto.TabSaldoEstoqueViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -37,6 +38,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
   private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbMesAno: MonthPicker
+  private lateinit var chkGrade: Checkbox
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
@@ -193,6 +195,12 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
+        chkGrade = checkBox("Grade") {
+          this.value = true
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
         cmbTipoSaldo = select("Tipo Saldo") {
           this.setItems(ETipoSaldo.entries)
           this.setItemLabelGenerator { item ->
@@ -246,6 +254,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
     columnGrid(ProdutoSaldoEstoque::loja, header = "Loja")
     columnGrid(ProdutoSaldoEstoque::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoEstoque::descricao, header = "Descrição").expand()
+    columnGrid(ProdutoSaldoEstoque::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldoEstoque::unidade, header = "Un")
     columnGrid(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo")
     columnGrid(ProdutoSaldoEstoque::qttyAtacado, header = "Atacado")
@@ -275,6 +284,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
       rotulo = edtRotulo.value ?: "",
       tipo = edtTipo.value ?: 0,
       cl = edtCl.value ?: 0,
+      grade = chkGrade.value,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       tipoSaldo = cmbTipoSaldo.value ?: ETipoSaldo.TOTAL,

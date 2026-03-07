@@ -9,14 +9,14 @@ DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT A.prdno AS prdno, A.grade, COALESCE(A.localizacao, '') AS localizacao
+SELECT A.prdno AS prdno, IF(:grade, A.grade, '') AS gradeProduto, COALESCE(A.localizacao, '') AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
-GROUP BY A.prdno, grade;
+GROUP BY A.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
@@ -67,53 +67,52 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
-  PRIMARY KEY (loja, prdno, grade),
+  PRIMARY KEY (loja, prdno, gradeProduto),
   INDEX (qttyTotal)
 )
-SELECT S.storeno                                 AS loja,
-       S.prdno                                   AS prdno,
-       S.grade                                   AS grade,
-       ROUND(S.qtty2 / 1000)                     AS qttyVarejo,
-       ROUND((S.qtty - S.qtty2) / 1000)          AS qttyAtacado,
-       ROUND(S.qtty / 1000)                      AS qttyTotal,
-       S.cost2 / 10000                           AS custoVarejo,
-       ROUND(S.qtty2 / 1000) * (S.cost2 / 10000) AS custoTotal
+SELECT S.storeno                             AS loja,
+       S.prdno                               AS prdno,
+       IF(:grade, S.grade, '')               AS gradeProduto,
+       ROUND(SUM(S.qtty2 / 1000))            AS qttyVarejo,
+       ROUND(SUM((S.qtty - S.qtty2) / 1000)) AS qttyAtacado,
+       ROUND(SUM(S.qtty / 1000))             AS qttyTotal,
+       AVG(S.cost2 / 10000)                  AS custoVarejo
 FROM
   sqldados.stkchk AS S
     INNER JOIN T_PRD
                USING (prdno)
 WHERE (S.storeno = :loja)
   AND ym = :ym
-GROUP BY ym, loja, prdno, grade;
+GROUP BY ym, loja, prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
 CREATE TEMPORARY TABLE T_PRDSTK
 (
-  PRIMARY KEY (loja, prdno, grade)
+  PRIMARY KEY (loja, prdno, gradeProduto)
 )
-SELECT S.loja                   AS loja,
-       S.prdno                  AS prdno,
-       P.codigo * 1             AS codigo,
-       P.descricao              AS descricao,
-       S.grade                  AS grade,
-       P.unidade                AS unidade,
-       S.qttyVarejo             AS qttyVarejo,
-       S.qttyAtacado            AS qttyAtacado,
-       S.qttyTotal              AS qttyTotal,
-       S.custoVarejo            AS custoVarejo,
-       S.custoTotal             AS custoTotal,
-       P.tributacao             AS tributacao,
-       P.rotulo                 AS rotulo,
-       P.ncm                    AS ncm,
-       P.fornecedor             AS fornecedor,
-       P.abrev                  AS abrev,
-       P.tipo                   AS tipo,
-       P.cl                     AS cl,
-       MID(L.localizacao, 1, 4) AS localizacao
+SELECT S.loja                        AS loja,
+       S.prdno                       AS prdno,
+       P.codigo * 1                  AS codigo,
+       P.descricao                   AS descricao,
+       S.gradeProduto                AS gradeProduto,
+       P.unidade                     AS unidade,
+       S.qttyVarejo                  AS qttyVarejo,
+       S.qttyAtacado                 AS qttyAtacado,
+       S.qttyTotal                   AS qttyTotal,
+       S.custoVarejo                 AS custoVarejo,
+       S.custoVarejo * S.custoVarejo AS custoTotal,
+       P.tributacao                  AS tributacao,
+       P.rotulo                      AS rotulo,
+       P.ncm                         AS ncm,
+       P.fornecedor                  AS fornecedor,
+       P.abrev                       AS abrev,
+       P.tipo                        AS tipo,
+       P.cl                          AS cl,
+       MID(L.localizacao, 1, 4)      AS localizacao
 FROM
   T_STK              AS S
     LEFT JOIN  T_LOC AS L
-               USING (prdno, grade)
+               USING (prdno, gradeProduto)
     INNER JOIN T_PRD AS P
                USING (prdno)
 WHERE (S.loja = :loja OR :loja = 0)
@@ -132,7 +131,7 @@ SELECT loja,
        prdno,
        codigo,
        descricao,
-       grade,
+       gradeProduto,
        unidade,
        qttyVarejo,
        qttyAtacado,
@@ -149,6 +148,6 @@ SELECT loja,
        localizacao
 FROM
   T_PRDSTK AS S
-WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR grade LIKE @PESQUISA_START OR
+WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
        unidade = @PESQUISA OR tributacao = @PESQUISA OR rotulo LIKE @PESQUISA_START OR ncm LIKE @PESQUISA_START OR
        fornecedor = @PESQUISA OR abrev LIKE @PESQUISA_LIKE OR cl = @PESQUISA)

@@ -3244,6 +3244,7 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("tributacao", filtro.tributacao)
       this.addOptionalParameter("rotulo", filtro.rotulo)
       this.addOptionalParameter("tipo", filtro.tipo)
+      this.addOptionalParameter("grade", filtro.grade)
       this.addOptionalParameter("cl", filtro.cl)
       this.addOptionalParameter("caracter", filtro.caracter.value)
       this.addOptionalParameter("letraDup", filtro.letraDup.value)

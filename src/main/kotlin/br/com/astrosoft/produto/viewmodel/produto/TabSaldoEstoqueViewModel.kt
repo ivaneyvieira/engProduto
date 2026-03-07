@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldoEstoque
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoSaldoEstoque
 import br.com.astrosoft.produto.model.beans.ValidadeSaci
+import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldoEstoque
 
 class TabSaldoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -26,9 +27,8 @@ class TabSaldoEstoqueViewModel(val viewModel: ProdutoViewModel) {
   }
 
   fun geraPlanilha(produtos: List<ProdutoSaldoEstoque>): ByteArray {
-    //val planilha = PlanilhaProdutoSaldoEstoque()
-    //return planilha.write(produtos)
-    TODO()
+    val planilha = PlanilhaProdutoSaldoEstoque()
+    return planilha.write(produtos)
   }
 
   fun imprimeProdutos() = viewModel.exec {
