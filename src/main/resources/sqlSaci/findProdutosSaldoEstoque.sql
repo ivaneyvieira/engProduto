@@ -26,7 +26,7 @@ CREATE TEMPORARY TABLE T_PRD
 SELECT P.no                                    AS prdno,
        TRIM(P.no) * 1                          AS codigo,
        TRIM(MID(P.name, 1, 37))                AS descricao,
-       TRIM(MID(P.name, 38, 3))                AS unidade,
+       P.unit                                  AS unidade,
        P.taxno                                 AS tributacao,
        IFNULL(R.form_label, '')                AS rotulo,
        N.ncm                                   AS ncm,
