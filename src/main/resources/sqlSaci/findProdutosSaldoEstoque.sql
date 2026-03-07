@@ -90,25 +90,25 @@ CREATE TEMPORARY TABLE T_PRDSTK
 (
   PRIMARY KEY (loja, prdno, gradeProduto)
 )
-SELECT S.loja                        AS loja,
-       S.prdno                       AS prdno,
-       P.codigo * 1                  AS codigo,
-       P.descricao                   AS descricao,
-       S.gradeProduto                AS gradeProduto,
-       P.unidade                     AS unidade,
-       S.qttyVarejo                  AS qttyVarejo,
-       S.qttyAtacado                 AS qttyAtacado,
-       S.qttyTotal                   AS qttyTotal,
-       S.custoVarejo                 AS custoVarejo,
-       S.custoVarejo * S.custoVarejo AS custoTotal,
-       P.tributacao                  AS tributacao,
-       P.rotulo                      AS rotulo,
-       P.ncm                         AS ncm,
-       P.fornecedor                  AS fornecedor,
-       P.abrev                       AS abrev,
-       P.tipo                        AS tipo,
-       P.cl                          AS cl,
-       MID(L.localizacao, 1, 4)      AS localizacao
+SELECT S.loja                      AS loja,
+       S.prdno                     AS prdno,
+       P.codigo * 1                AS codigo,
+       P.descricao                 AS descricao,
+       S.gradeProduto              AS gradeProduto,
+       P.unidade                   AS unidade,
+       S.qttyVarejo                AS qttyVarejo,
+       S.qttyAtacado               AS qttyAtacado,
+       S.qttyTotal                 AS qttyTotal,
+       S.custoVarejo               AS custoVarejo,
+       S.custoVarejo * S.qttyTotal AS custoTotal,
+       P.tributacao                AS tributacao,
+       P.rotulo                    AS rotulo,
+       P.ncm                       AS ncm,
+       P.fornecedor                AS fornecedor,
+       P.abrev                     AS abrev,
+       P.tipo                      AS tipo,
+       P.cl                        AS cl,
+       MID(L.localizacao, 1, 4)    AS localizacao
 FROM
   T_STK              AS S
     LEFT JOIN  T_LOC AS L
