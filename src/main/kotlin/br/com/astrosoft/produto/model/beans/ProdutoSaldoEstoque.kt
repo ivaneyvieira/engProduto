@@ -7,14 +7,13 @@ class ProdutoSaldoEstoque(
   var prdno: String?,
   var codigo: Int?,
   var descricao: String?,
-  var gradeProduto: String?,
+  var grade: String?,
   var unidade: String?,
-  var tipoValidade: String?,
-  var mesesGarantia: Int?,
-  var estoqueLojas: Int?,
   var qttyVarejo: Int?,
   var qttyAtacado: Int?,
   var qttyTotal: Int?,
+  var custoVarejo: Double?,
+  var custoTotal: Double?,
   var tributacao: String?,
   var rotulo: String?,
   var ncm: String?,
@@ -23,8 +22,6 @@ class ProdutoSaldoEstoque(
   var tipo: Int?,
   var cl: Int?,
   var localizacao: String?,
-  var prdnoRel: String?,
-  var codigoRel: Int?
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
@@ -47,12 +44,10 @@ data class FiltroProdutoSaldoEstoque(
   val cl: Int,
   val caracter: ECaracter,
   val letraDup: ELetraDup,
-  val grade: Boolean,
   val tipoSaldo: ETipoSaldo,
   val estoque: EEstoque,
   val saldo: Int,
   val consumo: EConsumo,
-  val update: Boolean,
 ) {
   fun lojaSigla(): String {
     return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""

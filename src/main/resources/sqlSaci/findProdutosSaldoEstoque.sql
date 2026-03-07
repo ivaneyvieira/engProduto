@@ -9,26 +9,14 @@ DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, gradeProduto)
+  PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS prdno, IF(:grade = 'S', A.grade, '') AS gradeProduto, COALESCE(A.localizacao, '') AS localizacao
+SELECT A.prdno AS prdno, A.grade, COALESCE(A.localizacao, '') AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
-  AND :update = TRUE
-GROUP BY A.prdno, gradeProduto;
-
-DROP TEMPORARY TABLE IF EXISTS T_REL;
-CREATE TEMPORARY TABLE T_REL
-(
-  PRIMARY KEY (prdno, temRelacionado)
-)
-SELECT prdno AS prdnoRel, prdno_rel AS prdno, 'S' AS temRelacionado
-FROM
-  sqldados.prdrel
-GROUP BY prdno_rel;
-
+GROUP BY A.prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
@@ -46,14 +34,6 @@ SELECT P.no                                    AS prdno,
        V.sname                                 AS abrev,
        P.typeno                                AS tipo,
        P.clno                                  AS cl,
-       CASE tipoGarantia
-         WHEN 0 THEN 'Dias'
-         WHEN 1 THEN 'Semanas'
-         WHEN 2 THEN 'Meses'
-         WHEN 3 THEN 'Anos'
-                ELSE ''
-       END                                     AS tipoValidade,
-       IF(tipoGarantia = 2, garantia, NULL)    AS mesesGarantia,
        IF((P.bits % POW(2, 10)) > 0, 'S', 'N') AS temRelacionado
 FROM
   sqldados.prd                 AS P
@@ -82,58 +62,46 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
-  AND :update = TRUE;
-
-DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
-CREATE TEMPORARY TABLE T_STKLOJA
-(
-  PRIMARY KEY (prdno, gradeProduto)
-)
-SELECT prdno                                  AS prdno,
-       IF(:grade = 'S', grade, '')            AS gradeProduto,
-       SUM(qtty_varejo + qtty_atacado) / 1000 AS estoqueLojas
-FROM
-  sqldados.stk
-    INNER JOIN T_PRD
-               USING (prdno)
-WHERE storeno IN (2, 3, 4, 5, 8)
-  AND :update = TRUE
-GROUP BY prdno, gradeProduto;
+  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000));
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
-  PRIMARY KEY (loja, prdno, gradeProduto),
+  PRIMARY KEY (loja, prdno, grade),
   INDEX (qttyTotal)
 )
-SELECT S.storeno                                                AS loja,
-       S.prdno                                                  AS prdno,
-       IF(:grade = 'S', S.grade, '')                            AS gradeProduto,
-       ROUND(SUM(S.qtty_varejo / 1000))                         AS qttyVarejo,
-       ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
-       ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal
+SELECT S.storeno                                 AS loja,
+       S.prdno                                   AS prdno,
+       S.grade                                   AS grade,
+       ROUND(S.qtty2 / 1000)                     AS qttyVarejo,
+       ROUND((S.qtty2 - S.qtty) / 1000)          AS qttyAtacado,
+       ROUND(S.qtty / 1000)                      AS qttyTotal,
+       S.cost2 / 10000                           AS custoVarejo,
+       ROUND(S.qtty2 / 1000) * (S.cost2 / 10000) AS custoTotal
 FROM
-  sqldados.stk AS S
-WHERE (S.storeno = :loja OR :loja = 0)
-  AND :update = TRUE
-GROUP BY loja, prdno, gradeProduto;
-
+  sqldados.stkchk AS S
+    INNER JOIN T_PRD
+               USING (prdno)
+WHERE (S.storeno = :loja)
+  AND ym = :ym
+GROUP BY ym, loja, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
 CREATE TEMPORARY TABLE T_PRDSTK
 (
-  PRIMARY KEY (loja, prdno, gradeProduto)
+  PRIMARY KEY (loja, prdno, grade)
 )
 SELECT S.loja                   AS loja,
        S.prdno                  AS prdno,
        P.codigo * 1             AS codigo,
        P.descricao              AS descricao,
-       S.gradeProduto           AS gradeProduto,
+       S.grade                  AS grade,
        P.unidade                AS unidade,
        S.qttyVarejo             AS qttyVarejo,
        S.qttyAtacado            AS qttyAtacado,
        S.qttyTotal              AS qttyTotal,
+       S.custoVarejo            AS custoVarejo,
+       S.custoTotal             AS custoTotal,
        P.tributacao             AS tributacao,
        P.rotulo                 AS rotulo,
        P.ncm                    AS ncm,
@@ -141,19 +109,13 @@ SELECT S.loja                   AS loja,
        P.abrev                  AS abrev,
        P.tipo                   AS tipo,
        P.cl                     AS cl,
-       tipoValidade             AS tipoValidade,
-       mesesGarantia            AS mesesGarantia,
-       MID(L.localizacao, 1, 4) AS localizacao,
-       R.prdnoRel               AS prdnoRel,
-       TRIM(R.prdnoRel) * 1     AS codigoRel
+       MID(L.localizacao, 1, 4) AS localizacao
 FROM
   T_STK              AS S
     LEFT JOIN  T_LOC AS L
-               USING (prdno, gradeProduto)
+               USING (prdno, grade)
     INNER JOIN T_PRD AS P
                USING (prdno)
-    LEFT JOIN  T_REL AS R
-               USING (prdno, temRelacionado)
 WHERE (S.loja = :loja OR :loja = 0)
   AND (((:tipoSaldo = 'TOTAL') AND
         ((:estoque = '<' AND S.qttyTotal < :saldo) OR (:estoque = '>' AND S.qttyTotal > :saldo) OR
@@ -170,14 +132,13 @@ SELECT loja,
        prdno,
        codigo,
        descricao,
-       gradeProduto,
+       grade,
        unidade,
-       tipoValidade,
-       mesesGarantia,
-       L.estoqueLojas,
        qttyVarejo,
        qttyAtacado,
        qttyTotal,
+       custoTotal,
+       custoVarejo,
        tributacao,
        rotulo,
        ncm,
@@ -185,13 +146,9 @@ SELECT loja,
        abrev,
        tipo,
        cl,
-       localizacao,
-       prdnoRel,
-       codigoRel
+       localizacao
 FROM
-  T_PRDSTK              AS S
-    LEFT JOIN T_STKLOJA AS L
-              USING (prdno, gradeProduto)
-WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
+  T_PRDSTK AS S
+WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR grade LIKE @PESQUISA_START OR
        unidade = @PESQUISA OR tributacao = @PESQUISA OR rotulo LIKE @PESQUISA_START OR ncm LIKE @PESQUISA_START OR
-       fornecedor = @PESQUISA OR abrev LIKE @PESQUISA_LIKE OR tipoValidade LIKE @PESQUISA_LIKE OR cl = @PESQUISA)
+       fornecedor = @PESQUISA OR abrev LIKE @PESQUISA_LIKE OR cl = @PESQUISA)

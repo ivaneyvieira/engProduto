@@ -3247,12 +3247,10 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("cl", filtro.cl)
       this.addOptionalParameter("caracter", filtro.caracter.value)
       this.addOptionalParameter("letraDup", filtro.letraDup.value)
-      this.addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
       this.addOptionalParameter("tipoSaldo", filtro.tipoSaldo.name)
       this.addOptionalParameter("estoque", filtro.estoque.value)
       this.addOptionalParameter("saldo", filtro.saldo)
       this.addOptionalParameter("consumo", filtro.consumo.value)
-      this.addOptionalParameter("update", filtro.update)
     }
   }
 

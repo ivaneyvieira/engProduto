@@ -9,7 +9,6 @@ import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabSaldoEstoque
 import br.com.astrosoft.produto.viewmodel.produto.TabSaldoEstoqueViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,7 +33,6 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbConsumo: Select<EConsumo>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-  private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
@@ -69,7 +67,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
           }
         }
         init()
-        val inicial = YearMonth.now()
+        val inicial = YearMonth.now().minusMonths(1)
         cmbMesAno = MonthPicker(inicial).apply {
           this.label = "Mês/Ano"
           this.seti18n(
@@ -106,8 +104,11 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
                   "Dez"
                 )
               )
-              .setFormat("MM/YYYY")
+              //.setFormat("MM/yyyy")
           )
+          addValueChangeListener {
+            viewModel.updateView()
+          }
         }
         add(cmbMesAno)
         edtPesquisa = textField("Pesquisa") {
@@ -192,12 +193,6 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-        chkGrade = checkBox("Grade") {
-          this.value = true
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         cmbTipoSaldo = select("Tipo Saldo") {
           this.setItems(ETipoSaldo.entries)
           this.setItemLabelGenerator { item ->
@@ -229,12 +224,6 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
           }
         }
 
-        button("Cadastra Validade") {
-          onClick {
-            viewModel.cadastraValidade()
-          }
-        }
-
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -257,22 +246,19 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
     columnGrid(ProdutoSaldoEstoque::loja, header = "Loja")
     columnGrid(ProdutoSaldoEstoque::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoEstoque::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoSaldoEstoque::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldoEstoque::unidade, header = "Un")
     columnGrid(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo")
     columnGrid(ProdutoSaldoEstoque::qttyAtacado, header = "Atacado")
     columnGrid(ProdutoSaldoEstoque::qttyTotal, header = "Total")
-    columnGrid(ProdutoSaldoEstoque::estoqueLojas, header = "Est Lojas")
+    columnGrid(ProdutoSaldoEstoque::custoVarejo, pattern = "0.0000", header = "Custo Med")
     columnGrid(ProdutoSaldoEstoque::tributacao, header = "CST")
+    columnGrid(ProdutoSaldoEstoque::custoTotal, pattern = "0.00", header = "Custo Total")
     columnGrid(ProdutoSaldoEstoque::rotulo, header = "Rotulo")
     columnGrid(ProdutoSaldoEstoque::ncm, header = "NCM")
     columnGrid(ProdutoSaldoEstoque::fornecedor, header = "For")
     columnGrid(ProdutoSaldoEstoque::abrev, header = "Abrev")
     columnGrid(ProdutoSaldoEstoque::tipo, header = "Tipo")
     columnGrid(ProdutoSaldoEstoque::cl, header = "C Lucro")
-    columnGrid(ProdutoSaldoEstoque::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldoEstoque::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldoEstoque::codigoRel, header = "Relac").right()
   }
 
   override fun filtro(): FiltroProdutoSaldoEstoque {
@@ -291,12 +277,10 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
       cl = edtCl.value ?: 0,
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
-      grade = chkGrade.value,
       tipoSaldo = cmbTipoSaldo.value ?: ETipoSaldo.TOTAL,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
-      update = true
     )
   }
 
