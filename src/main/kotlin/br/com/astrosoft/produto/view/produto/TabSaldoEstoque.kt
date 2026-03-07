@@ -67,8 +67,8 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
           }
         }
         init()
-        val inicial = YearMonth.now().minusMonths(1)
-        cmbMesAno = MonthPicker(inicial).apply {
+        cmbMesAno = MonthPicker().apply {
+          this.value = YearMonth.now().minusMonths(1)
           this.label = "Mês/Ano"
           this.seti18n(
             MonthPicker.MonthPickerI18n()
@@ -104,7 +104,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
                   "Dez"
                 )
               )
-              //.setFormat("MM/yyyy")
+              .setFormat("MM/YYYY")
           )
           addValueChangeListener {
             viewModel.updateView()
