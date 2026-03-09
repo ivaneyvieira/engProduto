@@ -6,6 +6,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.estoqueCD.EstoqueCDView
 import br.com.astrosoft.produto.view.pedidoTransf.PedidoTransfView
 import br.com.astrosoft.produto.view.produto.ProdutoView
+import br.com.astrosoft.produto.view.reposicao.ReposicaoView
 import br.com.astrosoft.produto.view.ressuprimento.RessuprimentoView
 import com.vaadin.flow.component.Component
 import kotlin.reflect.KClass
@@ -18,7 +19,8 @@ class RouteMainProvider : IRouteMainProvider {
       return when {
         userSaci?.pedidoTransf == true        -> PedidoTransfView::class
         userSaci?.pedido == true              -> RessuprimentoView::class
-        userSaci?.admin == true               -> UsuarioView::class
+        //userSaci?.admin == true               -> UsuarioView::class
+        userSaci?.reposicao == true           -> ReposicaoView::class
         userSaci?.estoqueAcertoMobile == true -> EstoqueCDView::class
         else                                  -> ProdutoView::class
       }

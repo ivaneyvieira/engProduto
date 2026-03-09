@@ -73,9 +73,9 @@ CREATE TEMPORARY TABLE T_STK
 SELECT S.storeno                                                       AS loja,
        S.prdno                                                         AS prdno,
        IF(:grade, S.grade, '')                                         AS gradeProduto,
-       ROUND(SUM(S.qtty2 / 1000))                                      AS qttyVarejo,
-       ROUND(SUM((S.qtty - S.qtty2) / 1000))                           AS qttyAtacado,
-       ROUND(SUM(S.qtty / 1000))                                       AS qttyTotal,
+       (SUM(S.qtty2 / 1000))                                           AS qttyVarejo,
+       (SUM((S.qtty - S.qtty2) / 1000))                                AS qttyAtacado,
+       (SUM(S.qtty / 1000))                                            AS qttyTotal,
        SUM((S.cost2 / 10000) * (S.qtty2 / 1000)) / SUM(S.qtty2 / 1000) AS custoVarejo
 FROM
   sqldados.stkchk AS S
