@@ -257,7 +257,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoAtacado == true
   }
 
   override val label: String

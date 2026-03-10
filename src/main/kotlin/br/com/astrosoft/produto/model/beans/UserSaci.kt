@@ -195,6 +195,7 @@ class UserSaci : IUser {
   var reposicaoUsuarioCD by DelegateAuthorized3(162)
   var reposicaoUsuarioLJ by DelegateAuthorized3(163)
   var produtoSaldoEstoque by DelegateAuthorized3(164)
+  var produtoAtacado by DelegateAuthorized3(165)
 
   //Locais
   private var localEstoque: String?
@@ -507,7 +508,7 @@ class UserSaci : IUser {
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
             produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja ||
-            produtoEstoque || produtoSaldoEstoque || admin
+            produtoEstoque || produtoSaldoEstoque || produtoAtacado || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
