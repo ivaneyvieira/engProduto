@@ -92,7 +92,10 @@ CREATE TEMPORARY TABLE T_STKLOJA
 )
 SELECT prdno                                  AS prdno,
        IF(:grade = 'S', grade, '')            AS gradeProduto,
-       SUM(qtty_varejo + qtty_atacado) / 1000 AS estoqueLojas
+       SUM(qtty_varejo + qtty_atacado) / 1000 AS estoqueLojas,
+       SUM(qtty_varejo) / 1000                AS estoqueLojasVarejo,
+       SUM(qtty_atacado) / 1000               AS estoqueLojasAtacado
+
 FROM
   sqldados.stk
     INNER JOIN T_PRD
@@ -175,6 +178,8 @@ SELECT loja,
        tipoValidade,
        mesesGarantia,
        L.estoqueLojas,
+       L.estoqueLojasVarejo,
+       L.estoqueLojasAtacado,
        qttyVarejo,
        qttyAtacado,
        qttyTotal,

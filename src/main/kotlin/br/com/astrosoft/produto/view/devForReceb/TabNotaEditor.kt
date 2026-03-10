@@ -128,7 +128,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     columnGrid(NotaRecebimentoDev::situacaoDevName, header = "Aba")
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::situacaoDup, header = "Status Dup")
-    columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
+    //columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)

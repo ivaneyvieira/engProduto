@@ -12,6 +12,8 @@ class ProdutoSaldo(
   var tipoValidade: String?,
   var mesesGarantia: Int?,
   var estoqueLojas: Int?,
+  var estoqueLojasVarejo: Int?,
+  var estoqueLojasAtacado: Int?,
   var qttyVarejo: Int?,
   var qttyAtacado: Int?,
   var qttyTotal: Int?,
