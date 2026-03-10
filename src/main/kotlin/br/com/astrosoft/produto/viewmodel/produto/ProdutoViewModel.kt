@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
   val tabProdutoListViewModel = TabProdutoListViewModel(this)
+  val tabAtacadoViewModel = TabAtacadoViewModel(this)
   val tabSaldoEstoqueViewModel = TabSaldoEstoqueViewModel(this)
   val tabProdutoEstoqueViewModel = TabProdutoEstoqueViewModel(this)
   val tabProdutoCadastroViewModel = TabProdutoCadastroViewModel(this)

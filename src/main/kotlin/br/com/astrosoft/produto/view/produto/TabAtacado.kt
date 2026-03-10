@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.recebimento.FormValidade
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabAtacado
+import br.com.astrosoft.produto.viewmodel.produto.TabAtacadoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
@@ -19,9 +19,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabAtacado(val viewModel: TabProdutoListViewModel) :
+class TabAtacado(val viewModel: TabAtacadoViewModel) :
   TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
-  ITabProdutoList {
+  ITabAtacado {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
@@ -185,12 +185,6 @@ class TabAtacado(val viewModel: TabProdutoListViewModel) :
           }
         }
 
-        button("Cadastra Validade") {
-          onClick {
-            viewModel.cadastraValidade()
-          }
-        }
-
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -221,14 +215,9 @@ class TabAtacado(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
     columnGrid(ProdutoSaldo::tributacao, header = "CST")
     columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
-    columnGrid(ProdutoSaldo::ncm, header = "NCM")
     columnGrid(ProdutoSaldo::fornecedor, header = "For")
-    columnGrid(ProdutoSaldo::abrev, header = "Abrev")
     columnGrid(ProdutoSaldo::tipo, header = "Tipo")
     columnGrid(ProdutoSaldo::cl, header = "C Lucro")
-    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
   }
 
   override fun filtro(): FiltroProdutoSaldo {
@@ -272,7 +261,7 @@ class TabAtacado(val viewModel: TabProdutoListViewModel) :
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "Atacado"
 
   override fun updateComponent() {
     viewModel.updateView()
