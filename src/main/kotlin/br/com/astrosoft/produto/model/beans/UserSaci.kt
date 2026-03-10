@@ -194,6 +194,7 @@ class UserSaci : IUser {
   var reposicaoDesfazAssina by DelegateAuthorized3(161)
   var reposicaoUsuarioCD by DelegateAuthorized3(162)
   var reposicaoUsuarioLJ by DelegateAuthorized3(163)
+  var produtoSaldoEstoque by DelegateAuthorized3(164)
 
   //Locais
   private var localEstoque: String?
@@ -506,7 +507,7 @@ class UserSaci : IUser {
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
             produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja ||
-            produtoEstoque || admin
+            produtoEstoque || produtoSaldoEstoque || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
@@ -515,6 +516,7 @@ class UserSaci : IUser {
       produtoEditor = value
       produtoEstoqueValidadeLoja = value
       produtoEstoque = value
+      produtoSaldoEstoque = value
     }
   var nfd
     get() = nfdDevFor || admin

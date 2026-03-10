@@ -311,7 +311,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.produtoList == true
+    return username?.produtoSaldoEstoque == true
   }
 
   override val label: String

@@ -28,6 +28,7 @@ class TabProdutoUsrViewModel(val viewModel: ProdutoViewModel) : TabUsrViewModel(
     this.lojaProduto = usuario.lojaProduto
     this.impressoraProduto = usuario.impressoraProduto
     this.produtoEstoqueValidadeLoja = usuario.produtoEstoqueValidadeLoja
+    this.produtoSaldoEstoque = usuario.produtoSaldoEstoque
   }
 }
 
