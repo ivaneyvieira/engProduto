@@ -95,6 +95,9 @@ data class NotaRecebimentoProdutoDev(
   var transpNFDevolucao: Int?,
   var pesoNFBrutoDevolucao: Double?,
   var pesoNFLiquidoDevolucao: Double?,
+  var situacaoDup: String?,
+  var duplicataNum: String?,
+  var situacaoDupStatus : Int?
 ) {
   var item: Int? = null
 

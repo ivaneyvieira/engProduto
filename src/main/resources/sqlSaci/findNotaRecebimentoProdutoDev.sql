@@ -127,14 +127,33 @@ SELECT NFO.storeno,
        NFO.obsDevolucao,
        NFO.obsGarantia,
        NFO.niDev,
-       vol_qtty / 100 AS volumeNFDevolucao,
-       N.carrno       AS transpNFDevolucao,
-       vol_gross      AS pesoNFBrutoDevolucao,
-       vol_net        AS pesoNFLiquidoDevolucao
+       vol_qtty / 100                AS volumeNFDevolucao,
+       N.carrno                      AS transpNFDevolucao,
+       vol_gross                     AS pesoNFBrutoDevolucao,
+       vol_net                       AS pesoNFLiquidoDevolucao,
+       CASE D.status
+         WHEN 0 THEN 'Incluída'
+         WHEN 1 THEN 'Em cobrança'
+         WHEN 2 THEN 'Quitada'
+         WHEN 3 THEN 'Cartório'
+         WHEN 4 THEN 'No advogado'
+         WHEN 5 THEN 'Cancelada'
+         WHEN 6 THEN 'Perda'
+         WHEN 7 THEN 'Processada'
+         WHEN 8 THEN 'Outros'
+         WHEN 9 THEN 'Pago Parcial'
+                ELSE 'Pendente'
+       END                           AS situacaoDup,
+       CONCAT(D.dupno, '/', D.dupse) AS duplicataNum,
+       IFNULL(D.status, 999)         AS situacaoDupStatus
 FROM
-  T_NFO                    AS NFO
-    INNER JOIN sqldados.nf AS N
-               USING (storeno, pdvno, xano);
+  T_NFO                       AS NFO
+    INNER JOIN sqldados.nf    AS N
+               USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.nfdup AS ND
+               ON ND.nfstoreno = N.storeno AND ND.nfno = N.nfno AND ND.nfse = N.nfse
+    LEFT JOIN  sqldados.dup   AS D
+               ON ND.dupstoreno = D.storeno AND ND.duptype = D.type AND ND.dupno = D.dupno AND ND.dupse = D.dupse;
 
 DROP TEMPORARY TABLE IF EXISTS T_ARQCOLETA;
 CREATE TEMPORARY TABLE T_ARQCOLETA
@@ -478,7 +497,10 @@ SELECT loja,
        pesoBruto,
        D.docno                 AS duplicata,
        CAST(D.duedate AS date) AS dataVencimentoDup,
-       D.amtdue / 100          AS valorVencimentoDup
+       D.amtdue / 100          AS valorVencimentoDup,
+       N.situacaoDup           AS situacaoDup,
+       N.duplicataNum          AS duplicataNum,
+       N.situacaoDupStatus     AS situacaoDupStatus
 FROM
   T_QUERY                  AS Q
     LEFT JOIN T_NOTA_SAIDA AS N

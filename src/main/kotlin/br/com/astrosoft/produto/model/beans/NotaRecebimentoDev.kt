@@ -60,6 +60,9 @@ class NotaRecebimentoDev(
   var pesoNFBrutoDevolucao: Double?,
   var pesoNFLiquidoDevolucao: Double?,
   var produtos: List<NotaRecebimentoProdutoDev>,
+  var situacaoDup: String?,
+  var duplicataNum: String?,
+  var situacaoDupStatus: Int?
 ) {
   val chaveEmail: String
     get() = produtos.firstOrNull()?.chaveDevolucao ?: ""
@@ -319,7 +322,10 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         transpNFDevolucao = nota.transpNFDevolucao,
         pesoNFBrutoDevolucao = nota.pesoNFBrutoDevolucao,
         pesoNFLiquidoDevolucao = nota.pesoNFLiquidoDevolucao,
-        nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000" }
+        nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000" },
+        situacaoDup = nota.situacaoDup,
+        duplicataNum = nota.duplicataNum,
+        situacaoDupStatus = nota.situacaoDupStatus
       )
     }
   }
