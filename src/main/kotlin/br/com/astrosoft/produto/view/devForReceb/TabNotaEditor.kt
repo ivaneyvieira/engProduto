@@ -26,6 +26,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var cmbSituacao: Select<EStituacaoDev?>
+  private lateinit var cmbStatusDup: Select<EStatusDup>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -84,6 +85,19 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         }
       }
     }
+
+    cmbStatusDup = select("Status Dup") {
+      this.setItems(EStatusDup.entries)
+      this.setItemLabelGenerator { item ->
+        item?.descricao ?: ""
+      }
+      this.value = EStatusDup.TODAS
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+        }
+      }
+    }
   }
 
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
@@ -113,7 +127,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
 
     columnGrid(NotaRecebimentoDev::situacaoDevName, header = "Aba")
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::situacaoDup, header = "Situação")
+    columnGrid(NotaRecebimentoDev::situacaoDup, header = "Status Dup")
     columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
@@ -134,6 +148,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      statusDup = cmbStatusDup.value ?: EStatusDup.TODAS,
     )
   }
 

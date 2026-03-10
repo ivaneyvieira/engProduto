@@ -331,3 +331,11 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
   }
 }
 
+enum class EStatusDup(val codigo: Int, val descricao: String) {
+  CANCELADA(5, "Cancelada"),
+  EM_COBRANCA(1, "Em cobrança"),
+  INCLUIDA(0, "Incluída"),
+  PENDENTE(999, "Pendente"),
+  QUITADA(2, "Quitada"),
+  TODAS(-1, "Todas")
+}

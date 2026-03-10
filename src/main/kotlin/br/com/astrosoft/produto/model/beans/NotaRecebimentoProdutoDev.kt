@@ -237,6 +237,7 @@ data class NotaRecebimentoProdutoDev(
 data class FiltroNotaRecebimentoProdutoDev(
   val loja: Int,
   val pesquisa: String,
+  val statusDup: EStatusDup = EStatusDup.TODAS,
   val pago: Boolean = true,
   val nfdstnr: Boolean = false,
 )
