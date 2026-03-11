@@ -17,6 +17,8 @@ class ProdutoSaldo(
   var qttyVarejo: Int?,
   var qttyAtacado: Int?,
   var qttyTotal: Int?,
+  var custoAtacado: Double?,
+  var custoLojasAtacado: Double?,
   var tributacao: String?,
   var rotulo: String?,
   var ncm: String?,

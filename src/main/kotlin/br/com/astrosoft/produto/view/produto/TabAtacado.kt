@@ -213,6 +213,8 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
     columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
     columnGrid(ProdutoSaldo::estoqueLojasAtacado, header = "Atac Lojas")
+    columnGrid(ProdutoSaldo::custoAtacado, header = "Valor Atac")
+    columnGrid(ProdutoSaldo::custoLojasAtacado, header = "V Atac Lojas")
     columnGrid(ProdutoSaldo::tributacao, header = "CST")
     columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
     columnGrid(ProdutoSaldo::fornecedor, header = "For")

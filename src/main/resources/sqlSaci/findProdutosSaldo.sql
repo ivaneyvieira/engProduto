@@ -90,12 +90,12 @@ CREATE TEMPORARY TABLE T_STKLOJA
 (
   PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT prdno                                  AS prdno,
-       IF(:grade = 'S', grade, '')            AS gradeProduto,
-       SUM(qtty_varejo + qtty_atacado) / 1000 AS estoqueLojas,
-       SUM(qtty_varejo) / 1000                AS estoqueLojasVarejo,
-       SUM(qtty_atacado) / 1000               AS estoqueLojasAtacado
-
+SELECT prdno                                            AS prdno,
+       IF(:grade = 'S', grade, '')                      AS gradeProduto,
+       SUM(qtty_varejo + qtty_atacado) / 1000           AS estoqueLojas,
+       SUM(qtty_varejo) / 1000                          AS estoqueLojasVarejo,
+       SUM(qtty_atacado) / 1000                         AS estoqueLojasAtacado,
+       SUM((qtty_atacado / 1000) * (cm_varejo / 10000)) AS custoLojasAtacado
 FROM
   sqldados.stk
     INNER JOIN T_PRD
@@ -115,7 +115,8 @@ SELECT S.storeno                                                AS loja,
        IF(:grade = 'S', S.grade, '')                            AS gradeProduto,
        ROUND(SUM(S.qtty_varejo / 1000))                         AS qttyVarejo,
        ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
-       ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal
+       ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal,
+       SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado
 FROM
   sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
@@ -137,6 +138,7 @@ SELECT S.loja                   AS loja,
        S.qttyVarejo             AS qttyVarejo,
        S.qttyAtacado            AS qttyAtacado,
        S.qttyTotal              AS qttyTotal,
+       S.custoAtacado           AS custoAtacado,
        P.tributacao             AS tributacao,
        P.rotulo                 AS rotulo,
        P.ncm                    AS ncm,
@@ -180,9 +182,11 @@ SELECT loja,
        L.estoqueLojas,
        L.estoqueLojasVarejo,
        L.estoqueLojasAtacado,
+       L.custoLojasAtacado,
        qttyVarejo,
        qttyAtacado,
        qttyTotal,
+       custoAtacado,
        tributacao,
        rotulo,
        ncm,
