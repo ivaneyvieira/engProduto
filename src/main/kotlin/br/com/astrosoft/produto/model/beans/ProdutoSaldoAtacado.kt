@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class ProdutoSaldo(
+class ProdutoSaldoAtacado(
   var loja: Int?,
   var prdno: String?,
   var codigo: Int?,
@@ -34,13 +34,13 @@ class ProdutoSaldo(
     get() = this.codigo?.toString() ?: ""
 
   companion object {
-    fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {
-      return saci.findProdutoSaldo(filtro)
+    fun findProdutoSaldo(filtro: FiltroProdutoSaldoAtacado): List<ProdutoSaldoAtacado> {
+      return saci.findProdutoSaldoAtacado(filtro)
     }
   }
 }
 
-data class FiltroProdutoSaldo(
+data class FiltroProdutoSaldoAtacado(
   val loja: Int,
   val pesquisa: String,
   val fornecedor: Int,
@@ -60,36 +60,4 @@ data class FiltroProdutoSaldo(
   fun lojaSigla(): String {
     return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
   }
-}
-
-enum class ECaracter(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
-}
-
-enum class EConsumo(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
-}
-
-enum class ELetraDup(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
-}
-
-enum class EEstoque(val value: String, val descricao: String) {
-  MENOR("<", "<"),
-  MAIOR(">", ">"),
-  IGUAL("=", "="),
-  TODOS("T", "Todos"),
-  ENTRE("E", "Entre"),
-}
-
-enum class ETipoSaldo(val descricao: String) {
-  VAREJO("Varejo"),
-  ATACADO("Atacado"),
-  TOTAL("Total")
 }

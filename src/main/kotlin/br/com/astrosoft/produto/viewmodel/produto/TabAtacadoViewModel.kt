@@ -1,13 +1,10 @@
 package br.com.astrosoft.produto.viewmodel.produto
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldo
+import br.com.astrosoft.produto.model.beans.FiltroProdutoSaldoAtacado
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.ProdutoSaldo
+import br.com.astrosoft.produto.model.beans.ProdutoSaldoAtacado
 import br.com.astrosoft.produto.model.beans.ValidadeSaci
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldo
-import br.com.astrosoft.produto.model.printText.PrintProdutos
 
 class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -22,18 +19,22 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
+      val produtos = ProdutoSaldoAtacado.findProdutoSaldo(filtro).filter { nota ->
+        (nota.estoqueLojasAtacado ?: 0) != 0
+      }
 
       subView.updateProdutos(produtos)
     }
   }
 
-  fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
-    val planilha = PlanilhaProdutoSaldo()
-    return planilha.write(produtos)
+  fun geraPlanilha(produtos: List<ProdutoSaldoAtacado>): ByteArray {
+    //val planilha = PlanilhaProdutoSaldo()
+    //return planilha.write(produtos)
+    TODO()
   }
 
   fun imprimeProdutos() = viewModel.exec {
+    /*
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -46,6 +47,7 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
       dados = produtos,
       printer = subView.printerPreview(loja = 0)
     )
+     */
   }
 
   val subView
@@ -53,8 +55,8 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
 }
 
 interface ITabAtacado : ITabView {
-  fun filtro(): FiltroProdutoSaldo
-  fun updateProdutos(produtos: List<ProdutoSaldo>)
-  fun produtosSelecionados(): List<ProdutoSaldo>
+  fun filtro(): FiltroProdutoSaldoAtacado
+  fun updateProdutos(produtos: List<ProdutoSaldoAtacado>)
+  fun produtosSelecionados(): List<ProdutoSaldoAtacado>
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
 }
