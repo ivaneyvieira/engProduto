@@ -16,7 +16,6 @@ FROM
   sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
-  AND :update = TRUE
 GROUP BY A.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_REL;
@@ -82,63 +81,56 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
-  AND :update = TRUE;
+  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000));
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
 CREATE TEMPORARY TABLE T_STKLOJA
 (
   PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT prdno                                            AS prdno,
-       IF(:grade = 'S', grade, '')                      AS gradeProduto,
-       SUM(qtty_varejo + qtty_atacado) / 1000           AS estoqueLojas,
-       SUM(qtty_varejo) / 1000                          AS estoqueLojasVarejo,
-       SUM(qtty_atacado) / 1000                         AS estoqueLojasAtacado,
-       SUM((qtty_atacado / 1000) * (cm_varejo / 10000)) AS custoLojasAtacado
+SELECT prdno                                                                   AS prdno,
+       IF(:grade = 'S', grade, '')                                             AS gradeProduto,
+       SUM(IF(storeno = 2, qtty_atacado / 1000, 0.00))                         AS estoqueDSAtacado,
+       SUM(IF(storeno = 3, qtty_atacado / 1000, 0.00))                         AS estoqueMRAtacado,
+       SUM(IF(storeno = 4, qtty_atacado / 1000, 0.00))                         AS estoqueMFAtacado,
+       SUM(IF(storeno = 5, qtty_atacado / 1000, 0.00))                         AS estoquePKAtacado,
+       SUM(IF(storeno = 8, qtty_atacado / 1000, 0.00))                         AS estoqueTMAtacado,
+       SUM(IF(storeno = 2, (qtty_atacado / 1000) * (cm_varejo / 10000), 0.00)) AS custoDSAtacado,
+       SUM(IF(storeno = 3, (qtty_atacado / 1000) * (cm_varejo / 10000), 0.00)) AS custoMRAtacado,
+       SUM(IF(storeno = 4, (qtty_atacado / 1000) * (cm_varejo / 10000), 0.00)) AS custoMFAtacado,
+       SUM(IF(storeno = 5, (qtty_atacado / 1000) * (cm_varejo / 10000), 0.00)) AS custoPKAtacado,
+       SUM(IF(storeno = 8, (qtty_atacado / 1000) * (cm_varejo / 10000), 0.00)) AS custoTMAtacado,
+       SUM(qtty_atacado / 1000)                                                AS estoqueLojasAtacado,
+       SUM((qtty_atacado / 1000) * (cm_varejo / 10000))                        AS custoLojasAtacado
 FROM
   sqldados.stk
     INNER JOIN T_PRD
                USING (prdno)
 WHERE storeno IN (2, 3, 4, 5, 8)
-  AND :update = TRUE
 GROUP BY prdno, gradeProduto;
-
-DROP TEMPORARY TABLE IF EXISTS T_STK;
-CREATE TEMPORARY TABLE T_STK
-(
-  PRIMARY KEY (loja, prdno, gradeProduto),
-  INDEX (qttyTotal)
-)
-SELECT S.storeno                                                AS loja,
-       S.prdno                                                  AS prdno,
-       IF(:grade = 'S', S.grade, '')                            AS gradeProduto,
-       ROUND(SUM(S.qtty_varejo / 1000))                         AS qttyVarejo,
-       ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
-       ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal,
-       SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado
-FROM
-  sqldados.stk AS S
-WHERE (S.storeno = :loja OR :loja = 0)
-  AND :update = TRUE
-GROUP BY loja, prdno, gradeProduto;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
 CREATE TEMPORARY TABLE T_PRDSTK
 (
-  PRIMARY KEY (loja, prdno, gradeProduto)
+  PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT S.loja                   AS loja,
-       S.prdno                  AS prdno,
+SELECT S.prdno                  AS prdno,
        P.codigo * 1             AS codigo,
        P.descricao              AS descricao,
        S.gradeProduto           AS gradeProduto,
        P.unidade                AS unidade,
-       S.qttyVarejo             AS qttyVarejo,
-       S.qttyAtacado            AS qttyAtacado,
-       S.qttyTotal              AS qttyTotal,
-       S.custoAtacado           AS custoAtacado,
+       estoqueLojasAtacado      AS estoqueLojasAtacado,
+       custoLojasAtacado        AS custoLojasAtacado,
+       estoqueDSAtacado         AS estoqueDSAtacado,
+       estoqueMRAtacado         AS estoqueMRAtacado,
+       estoqueMFAtacado         AS estoqueMFAtacado,
+       estoquePKAtacado         AS estoquePKAtacado,
+       estoqueTMAtacado         AS estoqueTMAtacado,
+       custoDSAtacado           AS custoDSAtacado,
+       custoMRAtacado           AS custoMRAtacado,
+       custoMFAtacado           AS custoMFAtacado,
+       custoPKAtacado           AS custoPKAtacado,
+       custoTMAtacado           AS custoTMAtacado,
        P.tributacao             AS tributacao,
        P.rotulo                 AS rotulo,
        P.ncm                    AS ncm,
@@ -152,41 +144,37 @@ SELECT S.loja                   AS loja,
        R.prdnoRel               AS prdnoRel,
        TRIM(R.prdnoRel) * 1     AS codigoRel
 FROM
-  T_STK              AS S
-    LEFT JOIN  T_LOC AS L
-               USING (prdno, gradeProduto)
-    INNER JOIN T_PRD AS P
+  T_PRD                  AS P
+    INNER JOIN T_STKLOJA AS S
                USING (prdno)
-    LEFT JOIN  T_REL AS R
+    LEFT JOIN  T_LOC     AS L
+               USING (prdno, gradeProduto)
+    LEFT JOIN  T_REL     AS R
                USING (prdno, temRelacionado)
-WHERE (S.loja = :loja OR :loja = 0)
-  AND (((:tipoSaldo = 'TOTAL') AND
-        ((:estoque = '<' AND S.qttyTotal < :saldo) OR (:estoque = '>' AND S.qttyTotal > :saldo) OR
-         (:estoque = '=' AND S.qttyTotal = :saldo) OR (:estoque = 'T'))) OR ((:tipoSaldo = 'VAREJO') AND
-                                                                             ((:estoque = '<' AND S.qttyVarejo < :saldo) OR
-                                                                              (:estoque = '>' AND S.qttyVarejo > :saldo) OR
-                                                                              (:estoque = '=' AND S.qttyVarejo = :saldo) OR
-                                                                              (:estoque = 'T'))) OR
-       ((:tipoSaldo = 'ATACADO') AND
-        ((:estoque = '<' AND S.qttyAtacado < :saldo) OR (:estoque = '>' AND S.qttyAtacado > :saldo) OR
-         (:estoque = '=' AND S.qttyAtacado = :saldo) OR (:estoque = 'T'))));
+WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR
+       (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
+       (:estoque = '=' AND S.estoqueLojasAtacado = :saldo) OR
+       (:estoque = 'T'));
 
-SELECT loja,
-       prdno,
+SELECT prdno,
        codigo,
        descricao,
        gradeProduto,
        unidade,
        tipoValidade,
        mesesGarantia,
-       L.estoqueLojas,
-       L.estoqueLojasVarejo,
-       L.estoqueLojasAtacado,
-       L.custoLojasAtacado,
-       qttyVarejo,
-       qttyAtacado,
-       qttyTotal,
-       custoAtacado,
+       estoqueLojasAtacado,
+       custoLojasAtacado,
+       estoqueDSAtacado,
+       estoqueMRAtacado,
+       estoqueMFAtacado,
+       estoquePKAtacado,
+       estoqueTMAtacado,
+       custoDSAtacado,
+       custoMRAtacado,
+       custoMFAtacado,
+       custoPKAtacado,
+       custoTMAtacado,
        tributacao,
        rotulo,
        ncm,
@@ -198,9 +186,7 @@ SELECT loja,
        prdnoRel,
        codigoRel
 FROM
-  T_PRDSTK              AS S
-    LEFT JOIN T_STKLOJA AS L
-              USING (prdno, gradeProduto)
+  T_PRDSTK AS S
 WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
        unidade = @PESQUISA OR tributacao = @PESQUISA OR rotulo LIKE @PESQUISA_START OR ncm LIKE @PESQUISA_START OR
        fornecedor = @PESQUISA OR abrev LIKE @PESQUISA_LIKE OR tipoValidade LIKE @PESQUISA_LIKE OR cl = @PESQUISA)

@@ -24,7 +24,6 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabAtacado(val viewModel: TabAtacadoViewModel) :
   TabPanelGrid<ProdutoSaldoAtacado>(ProdutoSaldoAtacado::class),
   ITabAtacado {
-  private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTributo: TextField
@@ -38,15 +37,6 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
 
-  fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas())
-    val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaProduto != 0
-    val loja = user?.lojaProduto ?: 1
-    val lojaEscolhida = if (loja == 0) 1 else loja
-    cmbLoja.value = viewModel.findLoja(lojaEscolhida)
-  }
-
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -55,18 +45,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       horizontalLayout {
         this.isPadding = false
         this.isMargin = false
-        cmbLoja = select("Loja") {
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
 
-          addValueChangeListener {
-            if (it.isFromClient) {
-              viewModel.updateView()
-            }
-          }
-        }
-        init()
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -195,16 +174,24 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoSaldoAtacado::loja, header = "Loja")
     columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
     //columnGrid(ProdutoSaldo::unidade, header = "Un")
-    columnGrid(ProdutoSaldoAtacado::qttyVarejo, header = "Varejo")
-    columnGrid(ProdutoSaldoAtacado::qttyTotal, header = "Total")
-    columnGrid(ProdutoSaldoAtacado::qttyAtacado, header = "Atacado")
+
+    columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
+    columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
+    columnGrid(ProdutoSaldoAtacado::estoqueMFAtacado, header = "Atac MF")
+    columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
+    columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
+
+    columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
+    columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
+    columnGrid(ProdutoSaldoAtacado::custoMFAtacado, header = "V Atac MF")
+    columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
+    columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
+
     columnGrid(ProdutoSaldoAtacado::estoqueLojasAtacado, header = "Atac Lojas")
-    columnGrid(ProdutoSaldoAtacado::custoAtacado, header = "Valor Atac")
     columnGrid(ProdutoSaldoAtacado::custoLojasAtacado, header = "V Atac Lojas")
     columnGrid(ProdutoSaldoAtacado::tributacao, header = "CST")
     columnGrid(ProdutoSaldoAtacado::rotulo, header = "Rotulo")
@@ -215,7 +202,6 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
 
   override fun filtro(): FiltroProdutoSaldoAtacado {
     return FiltroProdutoSaldoAtacado(
-      loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
       tributacao = edtTributo.value ?: "",
@@ -225,19 +211,33 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
-      tipoSaldo = ETipoSaldo.ATACADO,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
-      update = true
     )
   }
 
   override fun updateProdutos(produtos: List<ProdutoSaldoAtacado>) {
     updateGrid(produtos)
     gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoAtacado)
-      .setFooter(produtos.sumOf { it.custoAtacado ?: 0.00 }
+      .getColumnBy(ProdutoSaldoAtacado::custoDSAtacado)
+      .setFooter(produtos.sumOf { it.custoDSAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldoAtacado::custoMRAtacado)
+      .setFooter(produtos.sumOf { it.custoMRAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldoAtacado::custoMFAtacado)
+      .setFooter(produtos.sumOf { it.custoMFAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldoAtacado::custoPKAtacado)
+      .setFooter(produtos.sumOf { it.custoPKAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldoAtacado::custoTMAtacado)
+      .setFooter(produtos.sumOf { it.custoTMAtacado ?: 0.00 }
         .format())
     gridPanel
       .getColumnBy(ProdutoSaldoAtacado::custoLojasAtacado)

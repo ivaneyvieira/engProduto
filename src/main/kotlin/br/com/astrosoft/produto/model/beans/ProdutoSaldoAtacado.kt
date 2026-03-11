@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 
 class ProdutoSaldoAtacado(
-  var loja: Int?,
   var prdno: String?,
   var codigo: Int?,
   var descricao: String?,
@@ -11,14 +10,18 @@ class ProdutoSaldoAtacado(
   var unidade: String?,
   var tipoValidade: String?,
   var mesesGarantia: Int?,
-  var estoqueLojas: Int?,
-  var estoqueLojasVarejo: Int?,
   var estoqueLojasAtacado: Int?,
-  var qttyVarejo: Int?,
-  var qttyAtacado: Int?,
-  var qttyTotal: Int?,
-  var custoAtacado: Double?,
   var custoLojasAtacado: Double?,
+  var estoqueDSAtacado: Int?,
+  var estoqueMRAtacado: Int?,
+  var estoqueMFAtacado: Int?,
+  var estoquePKAtacado: Int?,
+  var estoqueTMAtacado: Int?,
+  var custoDSAtacado: Double?,
+  var custoMRAtacado: Double?,
+  var custoMFAtacado: Double?,
+  var custoPKAtacado: Double?,
+  var custoTMAtacado: Double?,
   var tributacao: String?,
   var rotulo: String?,
   var ncm: String?,
@@ -41,7 +44,6 @@ class ProdutoSaldoAtacado(
 }
 
 data class FiltroProdutoSaldoAtacado(
-  val loja: Int,
   val pesquisa: String,
   val fornecedor: Int,
   val tributacao: String,
@@ -51,13 +53,7 @@ data class FiltroProdutoSaldoAtacado(
   val caracter: ECaracter,
   val letraDup: ELetraDup,
   val grade: Boolean,
-  val tipoSaldo: ETipoSaldo,
   val estoque: EEstoque,
   val saldo: Int,
   val consumo: EConsumo,
-  val update: Boolean,
-) {
-  fun lojaSigla(): String {
-    return saci.allLojas().firstOrNull { it.no == loja }?.sname ?: ""
-  }
-}
+)
