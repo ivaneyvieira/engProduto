@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -9,6 +10,7 @@ import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabAtacado
 import br.com.astrosoft.produto.viewmodel.produto.TabAtacadoViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -34,7 +36,6 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
-  private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
 
   fun init() {
@@ -154,16 +155,6 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
             viewModel.updateView()
           }
         }
-        cmbTipoSaldo = select("Tipo Saldo") {
-          this.setItems(ETipoSaldo.entries)
-          this.setItemLabelGenerator { item ->
-            item.descricao
-          }
-          this.value = ETipoSaldo.TOTAL
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
         cmdEstoque = select("Estoque") {
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -208,10 +199,10 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldo::codigo, header = "Código").right()
     columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldo::unidade, header = "Un")
+    //columnGrid(ProdutoSaldo::unidade, header = "Un")
     columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
-    columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
     columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
+    columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
     columnGrid(ProdutoSaldo::estoqueLojasAtacado, header = "Atac Lojas")
     columnGrid(ProdutoSaldo::custoAtacado, header = "Valor Atac")
     columnGrid(ProdutoSaldo::custoLojasAtacado, header = "V Atac Lojas")
@@ -234,7 +225,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       caracter = cmbCartacer.value ?: ECaracter.TODOS,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       grade = chkGrade.value,
-      tipoSaldo = cmbTipoSaldo.value ?: ETipoSaldo.TOTAL,
+      tipoSaldo = ETipoSaldo.ATACADO,
       estoque = cmdEstoque.value ?: EEstoque.TODOS,
       saldo = edtSaldo.value ?: 0,
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
@@ -244,6 +235,14 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
 
   override fun updateProdutos(produtos: List<ProdutoSaldo>) {
     updateGrid(produtos)
+    gridPanel
+      .getColumnBy(ProdutoSaldo::custoAtacado)
+      .setFooter(produtos.sumOf { it.custoAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldo::custoLojasAtacado)
+      .setFooter(produtos.sumOf { it.custoLojasAtacado ?: 0.00 }
+        .format())
   }
 
   override fun produtosSelecionados(): List<ProdutoSaldo> {
