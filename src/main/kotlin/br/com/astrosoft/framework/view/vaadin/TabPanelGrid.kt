@@ -44,6 +44,7 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   fun updateGrid(itens: List<T>) {
     gridPanel.deselectAll()
     dataProviderPanel.updateItens(itens)
+    gridPanel.recalculateColumnWidths()
   }
 
   fun listBeans() = gridPanel.list()

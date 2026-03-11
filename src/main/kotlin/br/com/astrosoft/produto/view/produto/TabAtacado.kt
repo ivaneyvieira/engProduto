@@ -243,6 +243,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       .getColumnBy(ProdutoSaldo::custoLojasAtacado)
       .setFooter(produtos.sumOf { it.custoLojasAtacado ?: 0.00 }
         .format())
+    gridPanel.recalculateColumnWidths()
   }
 
   override fun produtosSelecionados(): List<ProdutoSaldo> {
