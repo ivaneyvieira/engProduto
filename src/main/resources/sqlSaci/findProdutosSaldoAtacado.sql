@@ -81,7 +81,8 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000));
+  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
+AND (P.no = LPAD(TRIM(:produto), 16, ' ') OR P.name LIKE CONCAT(TRIM(:produto), '%') OR TRIM(:produto) = '');
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
 CREATE TEMPORARY TABLE T_STKLOJA

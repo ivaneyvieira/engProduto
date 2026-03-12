@@ -25,6 +25,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   TabPanelGrid<ProdutoSaldoAtacado>(ProdutoSaldoAtacado::class),
   ITabAtacado {
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtProduto: TextField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTributo: TextField
   private lateinit var edtRotulo: TextField
@@ -47,9 +48,17 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         this.isMargin = false
 
         edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
+          this.width = "10rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtProduto = textField("Produto") {
+          this.width = "6rem"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -57,7 +66,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         edtFornecedor = integerField("Fornecedor") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -65,7 +74,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         edtTributo = textField("CST") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -74,7 +83,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -82,7 +91,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -90,7 +99,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         edtCl = integerField("C Lucro") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -180,13 +189,13 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     //columnGrid(ProdutoSaldo::unidade, header = "Un")
 
     columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
+    columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
     columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
+    columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
     columnGrid(ProdutoSaldoAtacado::estoqueMFAtacado, header = "Atac MF")
     columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
     columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
 
-    columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
-    columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
     columnGrid(ProdutoSaldoAtacado::custoMFAtacado, header = "V Atac MF")
     columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
     columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
@@ -203,6 +212,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   override fun filtro(): FiltroProdutoSaldoAtacado {
     return FiltroProdutoSaldoAtacado(
       pesquisa = edtPesquisa.value ?: "",
+      produto = edtProduto.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
       tributacao = edtTributo.value ?: "",
       rotulo = edtRotulo.value ?: "",

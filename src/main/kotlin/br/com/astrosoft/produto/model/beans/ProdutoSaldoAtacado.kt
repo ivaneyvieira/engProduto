@@ -45,6 +45,7 @@ class ProdutoSaldoAtacado(
 
 data class FiltroProdutoSaldoAtacado(
   val pesquisa: String,
+  val produto: String,
   val fornecedor: Int,
   val tributacao: String,
   val rotulo: String,
