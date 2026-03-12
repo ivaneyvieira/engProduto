@@ -38,7 +38,7 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
   }
 
   init {
-    column(ProdutoMovimentacao::codigo, "Codigo", 6)
+    column(ProdutoMovimentacao::codigoStr, "Codigo", 6)
     column(ProdutoMovimentacao::descricao, "Descricao", 36)
     column(ProdutoMovimentacao::grade, "Grade", 8)
     column(ProdutoMovimentacao::locApp, "Loc", 4)

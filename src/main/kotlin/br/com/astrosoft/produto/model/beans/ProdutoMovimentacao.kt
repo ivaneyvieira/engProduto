@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -83,6 +84,9 @@ class ProdutoMovimentacao(
   val codigo
     get() = prdno?.trim()?.toIntOrNull() ?: 0
 
+  val codigoStr
+    get() = prdno?.trim()?.lpad(6, "0")?.substring(0, 6)?.trim() ?: ""
+
   companion object {
     fun findAll(filtro: FiltroMovimentacao): List<ProdutoMovimentacao> {
       return saci.movimentacaoFindAll(filtro)
@@ -112,7 +116,7 @@ data class FiltroMovimentacao(
 fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull { mapPedido ->
-    val itensProduto = mapPedido.value.filter{
+    val itensProduto = mapPedido.value.filter {
       //(it.prdno != null) && (it.prdno?.isNotBlank() == true)
       true
     }
@@ -202,7 +206,7 @@ class Movimentacao(
       numero = numero,
     )
     val produtos = ProdutoMovimentacao.findAll(filtro)
-    return produtos.filter{
+    return produtos.filter {
       it.prdno != null && it.prdno != ""
     }
   }
