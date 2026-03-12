@@ -110,6 +110,8 @@ FROM
                USING (storeno, pdvno, xano)
     INNER JOIN T_CUST          AS C
                USING (custno)
+    INNER JOIN T_PRD           AS P
+               USING(prdno)
 WHERE N.cfo = 5927
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.remarks = '2'
@@ -142,6 +144,8 @@ FROM
                USING (vendno)
     INNER JOIN sqldados.iprd AS X
                USING (invno)
+    INNER JOIN T_PRD           AS P
+               USING(prdno)
 WHERE N.cfo = 1202
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.remarks = '2'
