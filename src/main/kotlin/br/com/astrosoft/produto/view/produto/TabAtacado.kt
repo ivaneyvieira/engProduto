@@ -193,11 +193,10 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
     columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
     columnGrid(ProdutoSaldoAtacado::estoqueMFAtacado, header = "Atac MF")
-    columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
-    columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
-
     columnGrid(ProdutoSaldoAtacado::custoMFAtacado, header = "V Atac MF")
+    columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
     columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
+    columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
     columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
 
     columnGrid(ProdutoSaldoAtacado::estoqueLojasAtacado, header = "Atac Lojas")
