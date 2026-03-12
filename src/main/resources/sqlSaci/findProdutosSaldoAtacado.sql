@@ -28,7 +28,6 @@ FROM
   sqldados.prdrel
 GROUP BY prdno_rel;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD
 (
@@ -82,7 +81,39 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
                  ELSE FALSE
       END
   AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
-AND (P.no = LPAD(TRIM(:produto), 16, ' ') OR P.name LIKE CONCAT(TRIM(:produto), '%') OR TRIM(:produto) = '');
+  AND (P.no = LPAD(TRIM(:produto), 16, ' ') OR P.name LIKE CONCAT(TRIM(:produto), '%') OR TRIM(:produto) = '');
+
+DROP TEMPORARY TABLE IF EXISTS T_CUST;
+CREATE TEMPORARY TABLE T_CUST
+(
+  PRIMARY KEY (custno)
+)
+SELECT C.no AS custno
+FROM
+  sqldados.custp              AS C
+    INNER JOIN sqldados.store AS S
+               ON C.cpf_cgc = S.cgc
+WHERE S.no IN (2, 3, 4, 5, 8);
+
+DROP TEMPORARY TABLE IF EXISTS T_SALDO_SAIDA;
+CREATE TEMPORARY TABLE T_SALDO_SAIDA
+(
+  PRIMARY KEY (prdno, gradeProduto)
+)
+SELECT X.prdno                     AS prdno,
+       IF(:grade = 'S', grade, '') AS gradeProduto,
+       SUM(X.qtty / 1000)          AS quant,
+       SUM(X.precoUnitario / 100)  AS valorTotal
+FROM
+  sqldados.nf                  AS N
+    INNER JOIN sqldados.xaprd2 AS X
+               USING (storeno, pdvno, xano)
+    INNER JOIN T_CUST          AS C
+               USING (custno)
+WHERE N.cfo = 5927
+  AND N.storeno IN (2, 3, 4, 5, 8)
+  AND N.remarks = '2'
+GROUP BY X.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
 CREATE TEMPORARY TABLE T_STKLOJA
@@ -143,15 +174,19 @@ SELECT S.prdno                  AS prdno,
        mesesGarantia            AS mesesGarantia,
        MID(L.localizacao, 1, 4) AS localizacao,
        R.prdnoRel               AS prdnoRel,
-       TRIM(R.prdnoRel) * 1     AS codigoRel
+       TRIM(R.prdnoRel) * 1     AS codigoRel,
+       IFNULL(SS.quant, 0)      AS quantSaldoSaida,
+       IFNULL(SS.valorTotal, 0) AS valorTotalSaldoSaida
 FROM
-  T_PRD                  AS P
-    INNER JOIN T_STKLOJA AS S
+  T_PRD                      AS P
+    INNER JOIN T_STKLOJA     AS S
                USING (prdno)
-    LEFT JOIN  T_LOC     AS L
+    LEFT JOIN  T_LOC         AS L
                USING (prdno, gradeProduto)
-    LEFT JOIN  T_REL     AS R
+    LEFT JOIN  T_REL         AS R
                USING (prdno, temRelacionado)
+    LEFT JOIN  T_SALDO_SAIDA AS SS
+               USING (prdno, gradeProduto)
 WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR
        (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
        (:estoque = '=' AND S.estoqueLojasAtacado = :saldo) OR
@@ -185,7 +220,9 @@ SELECT prdno,
        cl,
        localizacao,
        prdnoRel,
-       codigoRel
+       codigoRel,
+       quantSaldoSaida,
+       valorTotalSaldoSaida
 FROM
   T_PRDSTK AS S
 WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR

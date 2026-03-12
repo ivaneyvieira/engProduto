@@ -189,7 +189,8 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
-    //columnGrid(ProdutoSaldo::unidade, header = "Un")
+    columnGrid(ProdutoSaldoAtacado::quantSaldoSaida, header = "Fiscal Q")
+    columnGrid(ProdutoSaldoAtacado::valorTotalSaldoSaida, header = "Fiscal V")
 
     columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
     columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")

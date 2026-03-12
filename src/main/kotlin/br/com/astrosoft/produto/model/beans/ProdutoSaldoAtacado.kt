@@ -31,7 +31,9 @@ class ProdutoSaldoAtacado(
   var cl: Int?,
   var localizacao: String?,
   var prdnoRel: String?,
-  var codigoRel: Int?
+  var codigoRel: Int?,
+  var quantSaldoSaida: Int?,
+  var valorTotalSaldoSaida: Double?
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
