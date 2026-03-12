@@ -189,8 +189,8 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldoAtacado::quantSaldoSaida, header = "Fiscal Q")
-    columnGrid(ProdutoSaldoAtacado::valorTotalSaldoSaida, header = "Fiscal V")
+    columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
+    columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
 
     columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
     columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
@@ -255,6 +255,10 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     gridPanel
       .getColumnBy(ProdutoSaldoAtacado::custoLojasAtacado)
       .setFooter(produtos.sumOf { it.custoLojasAtacado ?: 0.00 }
+        .format())
+    gridPanel
+      .getColumnBy(ProdutoSaldoAtacado::valorFiscal)
+      .setFooter(produtos.sumOf { it.valorFiscal ?: 0.00 }
         .format())
     gridPanel.recalculateColumnWidths()
   }

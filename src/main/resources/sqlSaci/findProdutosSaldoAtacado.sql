@@ -211,8 +211,8 @@ SELECT S.prdno                                             AS prdno,
        MID(L.localizacao, 1, 4)                            AS localizacao,
        R.prdnoRel                                          AS prdnoRel,
        TRIM(R.prdnoRel) * 1                                AS codigoRel,
-       IFNULL(SE.quant, 0) - IFNULL(SS.quant, 0)           AS quantSaldoSaida,
-       IFNULL(SE.valorTotal, 0) - IFNULL(SS.valorTotal, 0) AS valorTotalSaldoSaida
+       IFNULL(SE.quant, 0) - IFNULL(SS.quant, 0)           AS quantFiscal,
+       IFNULL(SE.valorTotal, 0) - IFNULL(SS.valorTotal, 0) AS valorFiscal
 FROM
   T_PRD                        AS P
     INNER JOIN T_STKLOJA       AS S
@@ -259,8 +259,8 @@ SELECT prdno,
        localizacao,
        prdnoRel,
        codigoRel,
-       quantSaldoSaida,
-       valorTotalSaldoSaida
+       quantFiscal,
+       valorFiscal
 FROM
   T_PRDSTK AS S
 WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
