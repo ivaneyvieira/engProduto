@@ -64,7 +64,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         edtFornecedor = integerField("Fornecedor") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
@@ -72,7 +72,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         edtTributo = textField("CST") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
@@ -81,7 +81,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
         }
 
         edtRotulo = textField("Rotulo") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
@@ -89,7 +89,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         edtTipo = integerField("Tipo") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
@@ -97,7 +97,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         edtCl = integerField("C Lucro") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
@@ -107,6 +107,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       }
       horizontalLayout {
         cmbCartacer = select("Caracter") {
+          this.width = "6rem"
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -117,7 +118,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         cmbConsumo = select("Consumo") {
-          this.width = "100px"
+          this.width = "6rem"
           this.setItems(EConsumo.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -128,6 +129,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         cmbLetraDup = select("Letra Dup") {
+          this.width = "6rem"
           this.setItems(ELetraDup.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -144,6 +146,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         cmdEstoque = select("Estoque") {
+          this.width = "6rem"
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -154,7 +157,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
           }
         }
         edtSaldo = integerField("Saldo") {
-          this.width = "100px"
+          this.width = "6rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           this.value = null
