@@ -115,6 +115,38 @@ WHERE N.cfo = 5927
   AND N.remarks = '2'
 GROUP BY X.prdno, gradeProduto;
 
+DROP TEMPORARY TABLE IF EXISTS T_VEND;
+CREATE TEMPORARY TABLE T_VEND
+(
+  PRIMARY KEY (vendno)
+)
+SELECT V.no AS vendno
+FROM
+  sqldados.vend               AS V
+    INNER JOIN sqldados.store AS S
+               ON V.cgc = S.cgc
+WHERE S.no IN (2, 3, 4, 5, 8);
+
+DROP TEMPORARY TABLE IF EXISTS T_SALDO_ENTRADA;
+CREATE TEMPORARY TABLE T_SALDO_ENTRADA
+(
+  PRIMARY KEY (prdno, gradeProduto)
+)
+SELECT prdno                                AS prdno,
+       IF(:grade = 'S', grade, '')          AS gradeProduto,
+       SUM(X.qtty / 1000)                   AS quant,
+       SUM((X.fob / 100) * (X.qtty / 1000)) AS valorTotal
+FROM
+  sqldados.inv               AS N
+    INNER JOIN T_VEND        AS V
+               USING (vendno)
+    INNER JOIN sqldados.iprd AS X
+               USING (invno)
+WHERE N.cfo = 1202
+  AND N.storeno IN (2, 3, 4, 5, 8)
+  AND N.remarks = '2'
+GROUP BY X.prdno, gradeProduto;
+
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
 CREATE TEMPORARY TABLE T_STKLOJA
 (
@@ -146,46 +178,48 @@ CREATE TEMPORARY TABLE T_PRDSTK
 (
   PRIMARY KEY (prdno, gradeProduto)
 )
-SELECT S.prdno                  AS prdno,
-       P.codigo * 1             AS codigo,
-       P.descricao              AS descricao,
-       S.gradeProduto           AS gradeProduto,
-       P.unidade                AS unidade,
-       estoqueLojasAtacado      AS estoqueLojasAtacado,
-       custoLojasAtacado        AS custoLojasAtacado,
-       estoqueDSAtacado         AS estoqueDSAtacado,
-       estoqueMRAtacado         AS estoqueMRAtacado,
-       estoqueMFAtacado         AS estoqueMFAtacado,
-       estoquePKAtacado         AS estoquePKAtacado,
-       estoqueTMAtacado         AS estoqueTMAtacado,
-       custoDSAtacado           AS custoDSAtacado,
-       custoMRAtacado           AS custoMRAtacado,
-       custoMFAtacado           AS custoMFAtacado,
-       custoPKAtacado           AS custoPKAtacado,
-       custoTMAtacado           AS custoTMAtacado,
-       P.tributacao             AS tributacao,
-       P.rotulo                 AS rotulo,
-       P.ncm                    AS ncm,
-       P.fornecedor             AS fornecedor,
-       P.abrev                  AS abrev,
-       P.tipo                   AS tipo,
-       P.cl                     AS cl,
-       tipoValidade             AS tipoValidade,
-       mesesGarantia            AS mesesGarantia,
-       MID(L.localizacao, 1, 4) AS localizacao,
-       R.prdnoRel               AS prdnoRel,
-       TRIM(R.prdnoRel) * 1     AS codigoRel,
-       IFNULL(SS.quant, 0)      AS quantSaldoSaida,
-       IFNULL(SS.valorTotal, 0) AS valorTotalSaldoSaida
+SELECT S.prdno                                             AS prdno,
+       P.codigo * 1                                        AS codigo,
+       P.descricao                                         AS descricao,
+       S.gradeProduto                                      AS gradeProduto,
+       P.unidade                                           AS unidade,
+       estoqueLojasAtacado                                 AS estoqueLojasAtacado,
+       custoLojasAtacado                                   AS custoLojasAtacado,
+       estoqueDSAtacado                                    AS estoqueDSAtacado,
+       estoqueMRAtacado                                    AS estoqueMRAtacado,
+       estoqueMFAtacado                                    AS estoqueMFAtacado,
+       estoquePKAtacado                                    AS estoquePKAtacado,
+       estoqueTMAtacado                                    AS estoqueTMAtacado,
+       custoDSAtacado                                      AS custoDSAtacado,
+       custoMRAtacado                                      AS custoMRAtacado,
+       custoMFAtacado                                      AS custoMFAtacado,
+       custoPKAtacado                                      AS custoPKAtacado,
+       custoTMAtacado                                      AS custoTMAtacado,
+       P.tributacao                                        AS tributacao,
+       P.rotulo                                            AS rotulo,
+       P.ncm                                               AS ncm,
+       P.fornecedor                                        AS fornecedor,
+       P.abrev                                             AS abrev,
+       P.tipo                                              AS tipo,
+       P.cl                                                AS cl,
+       tipoValidade                                        AS tipoValidade,
+       mesesGarantia                                       AS mesesGarantia,
+       MID(L.localizacao, 1, 4)                            AS localizacao,
+       R.prdnoRel                                          AS prdnoRel,
+       TRIM(R.prdnoRel) * 1                                AS codigoRel,
+       IFNULL(SE.quant, 0) - IFNULL(SS.quant, 0)           AS quantSaldoSaida,
+       IFNULL(SE.valorTotal, 0) - IFNULL(SS.valorTotal, 0) AS valorTotalSaldoSaida
 FROM
-  T_PRD                      AS P
-    INNER JOIN T_STKLOJA     AS S
+  T_PRD                        AS P
+    INNER JOIN T_STKLOJA       AS S
                USING (prdno)
-    LEFT JOIN  T_LOC         AS L
+    LEFT JOIN  T_LOC           AS L
                USING (prdno, gradeProduto)
-    LEFT JOIN  T_REL         AS R
+    LEFT JOIN  T_REL           AS R
                USING (prdno, temRelacionado)
-    LEFT JOIN  T_SALDO_SAIDA AS SS
+    LEFT JOIN  T_SALDO_SAIDA   AS SS
+               USING (prdno, gradeProduto)
+    LEFT JOIN  T_SALDO_ENTRADA AS SE
                USING (prdno, gradeProduto)
 WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR
        (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
