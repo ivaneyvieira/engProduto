@@ -32,6 +32,10 @@ class ProdutoSaldoAtacado(
   var localizacao: String?,
   var prdnoRel: String?,
   var codigoRel: Int?,
+  var quantFiscalEntrada: Int?,
+  var quantFiscalSaida: Int?,
+  var valorFiscalEntrada: Double?,
+  var valorFiscalSaida: Double?,
   var quantFiscal: Int?,
   var valorFiscal: Double?
 ) {

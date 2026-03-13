@@ -192,6 +192,9 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
     columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
 
+    columnGrid(ProdutoSaldoAtacado::valorFiscalSaida, header = "Fiscal V Saída")
+    columnGrid(ProdutoSaldoAtacado::valorFiscalEntrada, header = "Fiscal V Entrada")
+
     columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
     columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
     columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")

@@ -111,7 +111,7 @@ FROM
     INNER JOIN T_CUST          AS C
                USING (custno)
     INNER JOIN T_PRD           AS P
-               USING(prdno)
+               USING (prdno)
 WHERE N.cfo = 5927
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.remarks = '2'
@@ -144,8 +144,8 @@ FROM
                USING (vendno)
     INNER JOIN sqldados.iprd AS X
                USING (invno)
-    INNER JOIN T_PRD           AS P
-               USING(prdno)
+    INNER JOIN T_PRD         AS P
+               USING (prdno)
 WHERE N.cfo = 1202
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.remarks = '2'
@@ -211,6 +211,10 @@ SELECT S.prdno                                             AS prdno,
        MID(L.localizacao, 1, 4)                            AS localizacao,
        R.prdnoRel                                          AS prdnoRel,
        TRIM(R.prdnoRel) * 1                                AS codigoRel,
+       IFNULL(SE.quant, 0)                                 AS quantFiscalEntrada,
+       IFNULL(-SS.quant, 0)                                AS quantFiscalSaida,
+       IFNULL(SE.valorTotal, 0)                            AS valorFiscalEntrada,
+       IFNULL(-SS.valorTotal, 0)                           AS valorFiscalSaida,
        IFNULL(SE.quant, 0) - IFNULL(SS.quant, 0)           AS quantFiscal,
        IFNULL(SE.valorTotal, 0) - IFNULL(SS.valorTotal, 0) AS valorFiscal
 FROM
@@ -259,6 +263,10 @@ SELECT prdno,
        localizacao,
        prdnoRel,
        codigoRel,
+       quantFiscalEntrada,
+       quantFiscalSaida,
+       valorFiscalEntrada,
+       valorFiscalSaida,
        quantFiscal,
        valorFiscal
 FROM
