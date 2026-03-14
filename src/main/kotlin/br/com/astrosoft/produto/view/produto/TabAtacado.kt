@@ -185,32 +185,44 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   override fun Grid<ProdutoSaldoAtacado>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
-    this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
-    columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
-    columnGrid(ProdutoSaldoAtacado::valorFiscalSaida, header = "Fiscal V Saída")
-    columnGrid(ProdutoSaldoAtacado::valorFiscalEntrada, header = "Fiscal V Entrada")
-    columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
-    columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
-    columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
-    columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
-    columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
-    columnGrid(ProdutoSaldoAtacado::estoqueMFAtacado, header = "Atac MF")
-    columnGrid(ProdutoSaldoAtacado::custoMFAtacado, header = "V Atac MF")
-    columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
-    columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
-    columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
-    columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
 
-    columnGrid(ProdutoSaldoAtacado::estoqueLojasAtacado, header = "Atac Lojas")
-    columnGrid(ProdutoSaldoAtacado::custoLojasAtacado, header = "V Atac Lojas")
-    columnGrid(ProdutoSaldoAtacado::tributacao, header = "CST")
-    columnGrid(ProdutoSaldoAtacado::rotulo, header = "Rotulo")
-    columnGrid(ProdutoSaldoAtacado::fornecedor, header = "For")
-    columnGrid(ProdutoSaldoAtacado::tipo, header = "Tipo")
-    columnGrid(ProdutoSaldoAtacado::cl, header = "C Lucro")
+    columnGroup("Dados do Produto") {
+      this.addColumnSeq("Seq", width = "50px")
+      columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
+      columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
+      columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
+    }
+
+    columnGroup("Acertos Discal - Entrada / Saída") {
+      columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
+      columnGrid(ProdutoSaldoAtacado::valorFiscalSaida, header = "Fiscal V Saída")
+      columnGrid(ProdutoSaldoAtacado::valorFiscalEntrada, header = "Fiscal V Entrada")
+      columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
+    }
+
+    columnGroup("Acerto Manual - Entrada / Saída") {
+      columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
+      columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
+      columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
+      columnGrid(ProdutoSaldoAtacado::custoMRAtacado, header = "V Atac MR")
+      columnGrid(ProdutoSaldoAtacado::estoqueMFAtacado, header = "Atac MF")
+      columnGrid(ProdutoSaldoAtacado::custoMFAtacado, header = "V Atac MF")
+      columnGrid(ProdutoSaldoAtacado::estoquePKAtacado, header = "Atac PK")
+      columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
+      columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
+      columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
+
+      columnGrid(ProdutoSaldoAtacado::estoqueLojasAtacado, header = "Atac Lojas")
+      columnGrid(ProdutoSaldoAtacado::custoLojasAtacado, header = "V Atac Lojas")
+    }
+
+    columnGroup("Dados Fiscais") {
+      columnGrid(ProdutoSaldoAtacado::tributacao, header = "CST")
+      columnGrid(ProdutoSaldoAtacado::rotulo, header = "Rotulo")
+      columnGrid(ProdutoSaldoAtacado::fornecedor, header = "For")
+      columnGrid(ProdutoSaldoAtacado::tipo, header = "Tipo")
+      columnGrid(ProdutoSaldoAtacado::cl, header = "C Lucro")
+    }
   }
 
   override fun filtro(): FiltroProdutoSaldoAtacado {
