@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -9,6 +10,7 @@ import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabSaldoEstoque
 import br.com.astrosoft.produto.viewmodel.produto.TabSaldoEstoqueViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -296,6 +298,14 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
 
   override fun updateProdutos(produtos: List<ProdutoSaldoEstoque>) {
     updateGrid(produtos)
+    gridPanel
+      .getColumnBy(ProdutoSaldoEstoque::custoVarejo)
+      .setFooter("Valor Total")
+    gridPanel
+      .getColumnBy(ProdutoSaldoEstoque::custoTotal)
+      .setFooter(produtos.sumOf { it.custoTotal ?: 0.00 }
+        .format())
+    gridPanel.recalculateColumnWidths()
   }
 
   override fun produtosSelecionados(): List<ProdutoSaldoEstoque> {
