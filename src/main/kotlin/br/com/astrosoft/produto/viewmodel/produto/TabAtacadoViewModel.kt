@@ -20,7 +20,13 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
     subView.execThread {
       val filtro = subView.filtro()
       val produtos = ProdutoSaldoAtacado.findProdutoSaldo(filtro).filter { nota ->
-        (nota.estoqueLojasAtacado ?: 0) != 0
+        (nota.estoqueDSAtacado ?: 0) != 0 ||
+        (nota.estoqueMFAtacado ?: 0) != 0 ||
+        (nota.estoqueMRAtacado ?: 0) != 0 ||
+        (nota.estoquePKAtacado ?: 0) != 0 ||
+        (nota.estoqueTMAtacado ?: 0) != 0 ||
+        (nota.quantFiscalSaida ?: 0) != 0 ||
+        (nota.quantFiscalEntrada ?: 0) != 0
       }
 
       subView.updateProdutos(produtos)
