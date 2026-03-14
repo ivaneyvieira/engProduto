@@ -193,7 +193,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
     }
 
-    columnGroup("Acertos Discal - Entrada / Saída") {
+    columnGroup("Atacado - Acertos Fiscal - Entrada / Saída") {
       columnGrid(ProdutoSaldoAtacado::quantFiscalSaida, header = "Fiscal Q Entrada")
       columnGrid(ProdutoSaldoAtacado::quantFiscalEntrada, header = "Fiscal Q Saída")
       columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
@@ -202,7 +202,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
     }
 
-    columnGroup("Acerto Manual - Entrada / Saída") {
+    columnGroup("Atacado - Acerto Manual - Entrada / Saída") {
       columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
       columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
       columnGrid(ProdutoSaldoAtacado::estoqueMRAtacado, header = "Atac MR")
