@@ -112,11 +112,9 @@ FROM
                USING (custno)
     INNER JOIN T_PRD           AS P
                USING (prdno)
-WHERE /*N.cfo = 5927*/
-  N.tipo = 9
+WHERE (N.tipo = 9 OR N.remarks = '2')
   AND N.storeno IN (2, 3, 4, 5, 8)
-  AND N.remarks = '2'
-GROUP BY X.prdno, gradeProduto;
+  GROUP BY X.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_VEND;
 CREATE TEMPORARY TABLE T_VEND
