@@ -194,6 +194,8 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
     }
 
     columnGroup("Acertos Discal - Entrada / Saída") {
+      columnGrid(ProdutoSaldoAtacado::quantFiscalSaida, header = "Fiscal Q Entrada")
+      columnGrid(ProdutoSaldoAtacado::quantFiscalEntrada, header = "Fiscal Q Saída")
       columnGrid(ProdutoSaldoAtacado::quantFiscal, header = "Fiscal Q")
       columnGrid(ProdutoSaldoAtacado::valorFiscalSaida, header = "Fiscal V Saída")
       columnGrid(ProdutoSaldoAtacado::valorFiscalEntrada, header = "Fiscal V Entrada")
