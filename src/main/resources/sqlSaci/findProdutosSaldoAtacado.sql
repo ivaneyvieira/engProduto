@@ -112,7 +112,8 @@ FROM
                USING (custno)
     INNER JOIN T_PRD           AS P
                USING (prdno)
-WHERE N.cfo = 5927
+WHERE /*N.cfo = 5927*/
+  N.tipo = 9
   AND N.storeno IN (2, 3, 4, 5, 8)
   AND N.remarks = '2'
 GROUP BY X.prdno, gradeProduto;
