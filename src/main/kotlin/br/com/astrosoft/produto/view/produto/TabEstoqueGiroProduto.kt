@@ -42,6 +42,8 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
   TabAbstractProduto<ITabEstoqueGiroViewModel>(viewModel, showDatas = false), ITabEstoqueGiroViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var cmbVendasFiltro: Select<EEstoqueList>
+  private lateinit var edtVendas: IntegerField
 
   override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueGiro ?: false
 
@@ -62,6 +64,29 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     }
 
     edtSaldo = integerField("Saldo") {
+      this.isAutofocus = true
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      this.value = 1
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+      this.width = "5em"
+    }
+
+    cmbVendasFiltro = select("Vendas") {
+      setItems(EEstoqueList.entries)
+      value = EEstoqueList.TODOS
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+      this.width = "8em"
+    }
+
+    edtVendas = integerField("Saldo") {
       this.isAutofocus = true
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
@@ -112,6 +137,14 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
 
   override fun saldo(): Int {
     return edtSaldo.value ?: 0
+  }
+
+  override fun filtroVendas(): EEstoqueList {
+    return cmbVendasFiltro.value ?: EEstoqueList.TODOS
+  }
+
+  override fun vendas(): Int {
+    return edtVendas.value ?: 0
   }
 
   override fun temValidade(): Boolean {

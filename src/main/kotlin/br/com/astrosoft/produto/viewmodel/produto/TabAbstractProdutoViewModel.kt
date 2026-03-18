@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.report.RelatorioProduto
 sealed class TabAbstractProdutoViewModel<T : ITabAbstractProdutoViewModel>(val viewModel: ProdutoViewModel) {
   abstract val subView: T
 
-  fun updateView() {
+  open fun updateView() {
     val filtro = subView.filtro()
     val resultList = findPrecoAlteracao(filtro)
     subView.updateGrid(resultList)
