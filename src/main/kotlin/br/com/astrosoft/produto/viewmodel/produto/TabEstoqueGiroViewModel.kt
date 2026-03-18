@@ -13,8 +13,8 @@ class TabEstoqueGiroViewModel(viewModel: ProdutoViewModel) :
     return Produtos.find(filtro, false).filter { produto ->
       val vendas = produto.qttyVendas ?: 0
       when(subView.filtroVendas()){
-        EEstoqueList.MENOR -> vendas <= subView.vendas()
-        EEstoqueList.MAIOR -> vendas >= subView.vendas()
+        EEstoqueList.MENOR -> vendas < subView.vendas()
+        EEstoqueList.MAIOR -> vendas > subView.vendas()
         EEstoqueList.IGUAL -> vendas == subView.vendas()
         EEstoqueList.TODOS -> true
       }
