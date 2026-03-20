@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 
 class PlanilhaNotasPedidos : Planilha<NotaRecebimentoProdutoDev>("Nota Dev") {
   init {
+    columnSheet(header = "Item", property = NotaRecebimentoProdutoDev::seq)
     columnSheet(header = "Rótulo", property = NotaRecebimentoProdutoDev::rotulo)
     columnSheet(header = "Fornecedor", property = NotaRecebimentoProdutoDev::vendno)
     columnSheet(header = "NI", property = NotaRecebimentoProdutoDev::ni)

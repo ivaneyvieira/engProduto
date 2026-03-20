@@ -151,6 +151,9 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
   }
 
   fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
+   // produtos.forEachIndexed { index, dev ->
+   //   dev.item = index + 1
+   // }
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
   }
