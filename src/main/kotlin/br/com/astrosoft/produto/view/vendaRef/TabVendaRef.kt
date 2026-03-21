@@ -110,6 +110,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
     columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
     columnGrid(NotaVendaRef::numMetodo, header = "Met")
     columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaVendaRef::documento, header = "Documento")
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }

@@ -14,24 +14,25 @@ SELECT N.storeno                                                AS loja,
        CAST(N.issuedate AS DATE)                                AS data,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
        CASE
-         WHEN tipo = 0  THEN 'VENDA NF'
-         WHEN tipo = 1  THEN 'TRANSFERENCIA'
-         WHEN tipo = 2  THEN 'DEVOLUCAO'
-         WHEN tipo = 3  THEN 'SIMP REME'
-         WHEN tipo = 4  THEN 'ENTRE FUT'
-         WHEN tipo = 5  THEN 'RET DEMON'
-         WHEN tipo = 6  THEN 'VENDA USA'
-         WHEN tipo = 7  THEN 'OUTROS'
-         WHEN tipo = 8  THEN 'NF CF'
-         WHEN tipo = 9  THEN 'PERD/CONSER'
-         WHEN tipo = 10 THEN 'REPOSICAO'
-         WHEN tipo = 11 THEN 'RESSARCI'
-         WHEN tipo = 12 THEN 'COMODATO'
-         WHEN tipo = 13 THEN 'NF EMPRESA'
-         WHEN tipo = 14 THEN 'BONIFICA'
-         WHEN tipo = 15 THEN 'NFE'
+         WHEN N.tipo = 0  THEN 'VENDA NF'
+         WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
+         WHEN N.tipo = 2  THEN 'DEVOLUCAO'
+         WHEN N.tipo = 3  THEN 'SIMP REME'
+         WHEN N.tipo = 4  THEN 'ENTRE FUT'
+         WHEN N.tipo = 5  THEN 'RET DEMON'
+         WHEN N.tipo = 6  THEN 'VENDA USA'
+         WHEN N.tipo = 7  THEN 'OUTROS'
+         WHEN N.tipo = 8  THEN 'NF CF'
+         WHEN N.tipo = 9  THEN 'PERD/CONSER'
+         WHEN N.tipo = 10 THEN 'REPOSICAO'
+         WHEN N.tipo = 11 THEN 'RESSARCI'
+         WHEN N.tipo = 12 THEN 'COMODATO'
+         WHEN N.tipo = 13 THEN 'NF EMPRESA'
+         WHEN N.tipo = 14 THEN 'BONIFICA'
+         WHEN N.tipo = 15 THEN 'NFE'
                         ELSE 'TIPO INVALIDO'
        END                                                      AS tipoNf,
+       CT.sname                                                 AS documento,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
        N.grossamt / 100                                         AS valor,
@@ -51,6 +52,10 @@ FROM
                USING (storeno, pdvno, xano)
     LEFT JOIN  sqlpdv.pxaval   AS V
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqlpdv.pxacrd   AS CR
+               USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.card   AS CT
+               ON CT.no = CR.cardno
     INNER JOIN sqldados.custp  AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp    AS E

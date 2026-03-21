@@ -16,6 +16,7 @@ class NotaVendaRef(
   var tipoNf: String?,
   var hora: LocalTime?,
   var tipoPgto: String?,
+  var documento: String?,
   var valor: Double?,
   var cliente: Int?,
   var uf: String?,
