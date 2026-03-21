@@ -9,6 +9,8 @@ class NotaVendaRef(
   var pdv: Int?,
   var transacao: Int?,
   var pedido: Int?,
+  var numMetodo: Int?,
+  var nomeMetodo: String?,
   var data: LocalDate?,
   var nota: String?,
   var tipoNf: String?,

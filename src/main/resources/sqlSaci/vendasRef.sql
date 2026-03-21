@@ -8,6 +8,8 @@ DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 SELECT N.storeno                                                AS loja,
        N.pdvno                                                  AS pdv,
        N.xano                                                   AS transacao,
+       N.paymno                                                 AS numMetodo,
+       M.sname                                                  AS nomeMetodo,
        N.eordno                                                 AS pedido,
        CAST(N.issuedate AS DATE)                                AS data,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
@@ -41,6 +43,8 @@ SELECT N.storeno                                                AS loja,
        CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs
 FROM
   sqldados.nf                  AS N
+    LEFT JOIN  sqldados.paym   AS M
+               ON N.paymno = M.no
     LEFT JOIN  sqldados.ctadd  AS A
                ON A.custno = N.custno AND A.seqno = N.custno_addno
     LEFT JOIN  sqlpdv.pxa      AS P
