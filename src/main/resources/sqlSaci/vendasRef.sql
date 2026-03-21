@@ -69,3 +69,4 @@ HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota 
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE)
 ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto
+
