@@ -30,9 +30,10 @@ SELECT N.storeno                                                AS loja,
          WHEN N.tipo = 13 THEN 'NF EMPRESA'
          WHEN N.tipo = 14 THEN 'BONIFICA'
          WHEN N.tipo = 15 THEN 'NFE'
-                        ELSE 'TIPO INVALIDO'
+                          ELSE 'TIPO INVALIDO'
        END                                                      AS tipoNf,
        CT.sname                                                 AS documento,
+       COUNT(DISTINCT CR.seqno)                                 AS quantParcelas,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
        N.grossamt / 100                                         AS valor,
@@ -72,6 +73,6 @@ GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-        vendedor LIKE @PESQUISA_LIKE)
+        vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT)
 ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto
 

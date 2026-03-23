@@ -17,6 +17,7 @@ class NotaVendaRef(
   var hora: LocalTime?,
   var tipoPgto: String?,
   var documento: String?,
+  var quantParcelas: Int?,
   var valor: Double?,
   var cliente: Int?,
   var uf: String?,
@@ -25,6 +26,13 @@ class NotaVendaRef(
   var valorTipo: Double?,
   var obs: String?,
 ) {
+  val documentoStr: String
+    get() {
+      val doc = documento ?: return ""
+      val quant = if(quantParcelas == null) "" else " (${quantParcelas}x)"
+      return "$doc $quant"
+    }
+
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
   }
