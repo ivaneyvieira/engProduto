@@ -290,7 +290,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::valIcmsDevolucao, "V. ICMS", width = "70px")
       columnGrid(NotaRecebimentoProdutoDev::valIPIDevolucao, "V. IPI", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::icms, "ICMS", width = "60px")
-      columnGrid(NotaRecebimentoProdutoDev::icmsXml, "ICMS XML", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::ipi, "IPI", width = "50px")
       columnGrid(NotaRecebimentoProdutoDev::totalGeralDevolucao, "Total", width = "90px")
 

@@ -54,7 +54,6 @@ data class NotaRecebimentoProdutoDev(
   var baseIcms: Double?,
   var valIcms: Double?,
   var valIPI: Double?,
-  var icmsXml: Double?,
   var icms: Double?,
   var ipi: Double?,
   var frete: Double?,
