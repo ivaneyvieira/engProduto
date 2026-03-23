@@ -232,7 +232,8 @@ SELECT A.invno,
        IFNULL(X.nfekey, '')                                           AS chaveUlt,
        I.c1                                                           AS chaveSefaz,
        IFNULL(S.ncm, '')                                              AS ncm,
-       A.numAcerto                                                    AS numAcerto
+       A.numAcerto                                                    AS numAcerto,
+       PE.icmsAliq / 100                                              AS icmsXml
 FROM
   sqldados.iprdAdicionalDev          AS A
     INNER JOIN sqldados.inv          AS N
@@ -241,6 +242,12 @@ FROM
                USING (invno)
     LEFT JOIN  sqldados.iprd         AS I
                USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.mfinv        AS NE
+               USING (invno)
+    LEFT JOIN sqldados.mfprd        AS PE
+               ON NE.seqnoAuto = PE.mfinv_seqno
+                 AND PE.prdnoRef = I.prdno
+                 /*AND PE.grade = I.grade*/
     LEFT JOIN  sqldados.carr         AS C
                ON C.no = N.carrno
     LEFT JOIN  sqldados.store        AS L
@@ -348,6 +355,7 @@ SELECT N.storeno                                                      AS loja,
        N.valIcms,
        N.valIPI,
        N.icms,
+       N.icmsXml,
        N.ipi,
        N.frete,
        N.freteNota,
@@ -455,6 +463,7 @@ SELECT loja,
        baseIcms,
        valIcms,
        valIPI,
+       icmsXml,
        icms,
        ipi,
        frete,

@@ -54,6 +54,7 @@ data class NotaRecebimentoProdutoDev(
   var baseIcms: Double?,
   var valIcms: Double?,
   var valIPI: Double?,
+  var icmsXml: Double?,
   var icms: Double?,
   var ipi: Double?,
   var frete: Double?,
@@ -97,7 +98,7 @@ data class NotaRecebimentoProdutoDev(
   var pesoNFLiquidoDevolucao: Double?,
   var situacaoDup: String?,
   var duplicataNum: String?,
-  var situacaoDupStatus : Int?
+  var situacaoDupStatus: Int?
 ) {
   var item: Int? = null
 
