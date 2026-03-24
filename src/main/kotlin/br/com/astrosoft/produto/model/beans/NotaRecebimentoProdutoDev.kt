@@ -97,7 +97,8 @@ data class NotaRecebimentoProdutoDev(
   var pesoNFLiquidoDevolucao: Double?,
   var situacaoDup: String?,
   var duplicataNum: String?,
-  var situacaoDupStatus: Int?
+  var situacaoDupStatus: Int?,
+  var rotuloSped: String?
 ) {
   var item: Int? = null
 

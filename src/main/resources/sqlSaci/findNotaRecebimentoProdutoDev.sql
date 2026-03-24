@@ -375,24 +375,27 @@ SELECT N.storeno                                                      AS loja,
        chaveSefaz                                                     AS chaveSefaz,
        ncm                                                            AS ncm,
        P.weight                                                       AS pesoLiquido,
-       P.weight_g                                                     AS pesoBruto
+       P.weight_g                                                     AS pesoBruto,
+       ST.auxStr1                                                     AS rotuloSped
 FROM
-  T_NOTA                       AS N
-    LEFT JOIN  sqldados.users  AS ER
+  T_NOTA                          AS N
+    LEFT JOIN  sqldados.spedprdst AS ST
+               USING (prdno, storeno)
+    LEFT JOIN  sqldados.users     AS ER
                ON ER.no = N.usernoRecebe
-    LEFT JOIN  sqldados.vend   AS V
+    LEFT JOIN  sqldados.vend      AS V
                ON V.no = N.vendno
-    LEFT JOIN  sqldados.custp  AS C
+    LEFT JOIN  sqldados.custp     AS C
                ON C.cpf_cgc = V.cgc
-    INNER JOIN sqldados.prd    AS P
+    INNER JOIN sqldados.prd       AS P
                ON P.no = N.prdno
-    LEFT JOIN  sqldados.prdref AS PR
+    LEFT JOIN  sqldados.prdref    AS PR
                ON N.prdno = PR.prdno AND N.grade = PR.grade AND P.mfno = PR.vendno
-    LEFT JOIN  T_BARCODE       AS B
+    LEFT JOIN  T_BARCODE          AS B
                ON B.prdno = N.prdno AND B.grade = N.grade
-    LEFT JOIN  T_EST           AS E
+    LEFT JOIN  T_EST              AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
-    LEFT JOIN  sqldados.prdalq AS R
+    LEFT JOIN  sqldados.prdalq    AS R
                ON R.prdno = N.prdno;
 
 DROP TEMPORARY TABLE IF EXISTS T_DUP;
@@ -500,7 +503,8 @@ SELECT loja,
        D.amtdue / 100                    AS valorVencimentoDup,
        IFNULL(N.situacaoDup, 'Pendente') AS situacaoDup,
        IFNULL(N.duplicataNum, '')        AS duplicataNum,
-       IFNULL(N.situacaoDupStatus, 999)  AS situacaoDupStatus
+       IFNULL(N.situacaoDupStatus, 999)  AS situacaoDupStatus,
+       IFNULL(rotuloSped, '')            AS rotuloSped
 FROM
   T_QUERY                  AS Q
     LEFT JOIN T_NOTA_SAIDA AS N

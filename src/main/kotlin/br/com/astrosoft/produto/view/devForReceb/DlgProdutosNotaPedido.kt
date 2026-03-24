@@ -283,6 +283,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::valorDescontoDevolucao, "Desc", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::outDespDevolucao, "Desp", width = "60px")
+      columnGrid(NotaRecebimentoProdutoDev::rotuloSped, "Ctrl \"S\"", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::baseIcmsDevolucao, "Base ICMS", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valorMVA, "MVA", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::baseIcmsSubst, "Base ST", width = "90px")
