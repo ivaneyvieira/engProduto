@@ -18,6 +18,7 @@ class NotaVendaRef(
   var tipoPgto: String?,
   var documento: String?,
   var quantParcelas: Int?,
+  var mediaPrazo: Int?,
   var valor: Double?,
   var cliente: Int?,
   var uf: String?,

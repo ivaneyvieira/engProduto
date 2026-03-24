@@ -5,6 +5,11 @@ DO @PESQUISA_LIKE := CONCAT('%', @PESQUISA, '%');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
+DROP TEMPORARY TABLE IF EXISTS T_NOTA;
+CREATE TEMPORARY TABLE T_NOTA
+(
+  INDEX (loja, pdv, transacao)
+)
 SELECT N.storeno                                                AS loja,
        N.pdvno                                                  AS pdv,
        N.xano                                                   AS transacao,
@@ -32,8 +37,6 @@ SELECT N.storeno                                                AS loja,
          WHEN N.tipo = 15 THEN 'NFE'
                           ELSE 'TIPO INVALIDO'
        END                                                      AS tipoNf,
-       CT.sname                                                 AS documento,
-       COUNT(DISTINCT CR.seqno)                                 AS quantParcelas,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
        N.grossamt / 100                                         AS valor,
@@ -53,10 +56,6 @@ FROM
                USING (storeno, pdvno, xano)
     LEFT JOIN  sqlpdv.pxaval   AS V
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxacrd   AS CR
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqldados.card   AS CT
-               ON CT.no = CR.cardno
     INNER JOIN sqldados.custp  AS C
                ON C.no = N.custno
     INNER JOIN sqldados.emp    AS E
@@ -74,5 +73,62 @@ HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota 
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT)
-ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto
+ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto;
+
+DROP TEMPORARY TABLE IF EXISTS T_CHAVE;
+CREATE TEMPORARY TABLE T_CHAVE
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT loja, pdv, transacao
+FROM
+  T_NOTA
+GROUP BY loja, pdv, transacao;
+
+DROP TEMPORARY TABLE IF EXISTS T_CARD;
+CREATE TEMPORARY TABLE T_CARD
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT loja,
+       pdv,
+       transacao,
+       COUNT(DISTINCT CR.seqno)                                                AS quantParcelas,
+       TRUNCATE((SUM(DATEDIFF(recvdate, date)) / COUNT(DISTINCT CR.seqno)), 0) AS mediaPrazo,
+       CT.sname                                                                AS documento
+FROM
+  T_CHAVE                    AS C
+    INNER JOIN sqlpdv.pxacrd AS CR
+               ON C.loja = CR.storeno
+                 AND C.pdv = CR.pdvno
+                 AND C.transacao = CR.xano
+    LEFT JOIN  sqldados.card AS CT
+               ON CT.no = CR.cardno
+GROUP BY storeno, pdvno, xano;
+
+SELECT loja,
+       pdv,
+       transacao,
+       numMetodo,
+       nomeMetodo,
+       pedido,
+       data,
+       nota,
+       tipoNf,
+       documento,
+       quantParcelas,
+       IFNULL(mediaPrazo, 0) AS mediaPrazo,
+       hora,
+       tipoPgto,
+       valor,
+       cliente,
+       nomeCliente,
+       uf,
+       vendedor,
+       valorTipo,
+       obs
+FROM
+  T_NOTA
+    LEFT JOIN T_CARD
+              USING (loja, pdv, transacao)
 
