@@ -17,6 +17,8 @@ SELECT N.storeno                                                AS loja,
        M.sname                                                  AS nomeMetodo,
        N.eordno                                                 AS pedido,
        CAST(N.issuedate AS DATE)                                AS data,
+       N.nfno                                                   AS nfno,
+       N.nfse                                                   AS nfse,
        CONCAT(N.nfno, '/', N.nfse)                              AS nota,
        CASE
          WHEN N.tipo = 0  THEN 'VENDA NF'
@@ -80,7 +82,7 @@ CREATE TEMPORARY TABLE T_CHAVE
 (
   PRIMARY KEY (loja, pdv, transacao)
 )
-SELECT loja, pdv, transacao
+SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
 FROM
   T_NOTA
 GROUP BY loja, pdv, transacao;
@@ -93,9 +95,9 @@ CREATE TEMPORARY TABLE T_CARD
 SELECT loja,
        pdv,
        transacao,
-       COUNT(DISTINCT CR.seqno)                                                AS quantParcelas,
-       TRUNCATE((SUM(DATEDIFF(recvdate, date)) / COUNT(DISTINCT CR.seqno)), 0) AS mediaPrazo,
-       CT.sname                                                                AS documento
+       COUNT(DISTINCT CR.seqno)                                                     AS quantParcelas,
+       TRUNCATE((SUM(DATEDIFF(recvdate, dataVenda)) / COUNT(DISTINCT CR.seqno)), 0) AS mediaPrazo,
+       CT.sname                                                                     AS documento
 FROM
   T_CHAVE                    AS C
     INNER JOIN sqlpdv.pxacrd AS CR
@@ -104,7 +106,31 @@ FROM
                  AND C.transacao = CR.xano
     LEFT JOIN  sqldados.card AS CT
                ON CT.no = CR.cardno
-GROUP BY storeno, pdvno, xano;
+GROUP BY loja, pdv, transacao;
+
+
+DROP TEMPORARY TABLE IF EXISTS T_DUP;
+CREATE TEMPORARY TABLE T_DUP
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT C.loja,
+       C.pdv,
+       C.transacao,
+       COUNT(DISTINCT D.dupse)                                                    AS quantParcelas,
+       TRUNCATE((SUM(DATEDIFF(duedate, dataVenda)) / COUNT(DISTINCT D.dupse)), 0) AS mediaPrazo
+FROM
+  T_CHAVE                     AS C
+    INNER JOIN sqldados.nfdup AS N
+               ON N.nfstoreno = C.loja
+                 AND N.nfno = C.nfno
+                 AND N.nfse = C.nfse
+    INNER JOIN sqldados.dup   AS D
+               ON D.storeno = N.dupstoreno
+                 AND D.type = N.duptype
+                 AND D.dupno = N.dupno
+                 AND D.dupse = N.dupse
+GROUP BY loja, pdv, transacao;
 
 SELECT loja,
        pdv,
@@ -116,8 +142,18 @@ SELECT loja,
        nota,
        tipoNf,
        documento,
-       quantParcelas,
-       IFNULL(mediaPrazo, 0) AS mediaPrazo,
+       -- COALESCE(C.quantParcelas, D.quantParcelas, 0) AS quantParcelas,
+       CASE
+         WHEN tipoPgto LIKE 'DUP%'  THEN D.quantParcelas
+         WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
+                                    ELSE 0
+       END AS quantParcelas,
+       -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
+       CASE
+         WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
+         WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
+                                    ELSE 0
+       END AS mediaPrazo,
        hora,
        tipoPgto,
        valor,
@@ -128,7 +164,9 @@ SELECT loja,
        valorTipo,
        obs
 FROM
-  T_NOTA
-    LEFT JOIN T_CARD
+  T_NOTA             AS N
+    LEFT JOIN T_CARD AS C
+              USING (loja, pdv, transacao)
+    LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
 
