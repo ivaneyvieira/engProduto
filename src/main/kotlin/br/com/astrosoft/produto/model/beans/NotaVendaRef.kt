@@ -11,6 +11,7 @@ class NotaVendaRef(
   var pedido: Int?,
   var numMetodo: Int?,
   var nomeMetodo: String?,
+  var mult: Double?,
   var data: LocalDate?,
   var nota: String?,
   var tipoNf: String?,

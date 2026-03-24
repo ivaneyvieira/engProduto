@@ -110,6 +110,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
     columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
     columnGrid(NotaVendaRef::numMetodo, header = "Met")
     columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
     columnGrid(NotaVendaRef::documento, header = "Documento")
     columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
     columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
