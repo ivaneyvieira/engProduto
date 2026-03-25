@@ -158,7 +158,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
   }
 
   override val label: String
-    get() = "Venda"
+    get() = "Vendas"
 
   override fun updateComponent() {
     viewModel.updateView()

@@ -19,6 +19,7 @@ class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val viewModel = VendaRefViewModel(this)
   override val tabVendaRef = TabVendaRef(viewModel.tabVendaRefViewModel)
   override val tabResumo = TabResumo(viewModel.tabResumoViewModel)
+  override val tabVendaRefUsr = TabVendaRefUsr(viewModel.tabVendaRefUsrViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

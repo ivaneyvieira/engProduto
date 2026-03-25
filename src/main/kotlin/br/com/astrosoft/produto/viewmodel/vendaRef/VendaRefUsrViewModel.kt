@@ -3,27 +3,23 @@ package br.com.astrosoft.produto.viewmodel.vendaRef
 import br.com.astrosoft.framework.viewmodel.ITabUser
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.retira.PedidoRetiraViewModel
 
-class PedidoRetiraUsrViewModel(val viewModel: PedidoRetiraViewModel) : TabUsrViewModel(viewModel) {
+class VendaRefUsrViewModel(val viewModel: VendaRefViewModel) : TabUsrViewModel(viewModel) {
   override val subView
-    get() = viewModel.view.tabRetiraUsr
+    get() = viewModel.view.tabVendaRefUsr
 
   override fun UserSaci.desative() {
-    this.pedidoRetira = false
+    this.vendaRef = false
   }
 
   override fun UserSaci.isActive(): Boolean {
-    return this.pedidoRetira
+    return this.vendaRef
   }
 
   override fun UserSaci.update(usuario: UserSaci) {
-    this.retiraImprimir = usuario.retiraImprimir
-    this.retiraImpresso = usuario.retiraImpresso
-    this.lojaRetira = usuario.lojaRetira
-    this.impressoraRet = usuario.impressoraRet
-    this.retiraTipo = usuario.retiraTipo
+    this.tabVendaRef = usuario.tabVendaRef
+    this.tabResumo = usuario.tabResumo
   }
 }
 
-interface ITabPedidoRetiraUsr : ITabUser
+interface ITabVendaRefUsr : ITabUser

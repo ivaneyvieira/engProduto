@@ -6,15 +6,18 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class VendaRefViewModel(view: IVendaRefView) : ViewModel<IVendaRefView>(view) {
   val tabVendaRefViewModel = TabVendaRefViewModel(this)
   val tabResumoViewModel = TabResumoViewModel(this)
+  val tabVendaRefUsrViewModel = VendaRefUsrViewModel(this)
 
   override fun listTab() = listOf(
     view.tabVendaRef,
     view.tabResumo,
+    view.tabVendaRefUsr,
   )
 }
 
 interface IVendaRefView : IView {
   val tabVendaRef: ITabVendaRef
   val tabResumo: ITabResumo
+  val tabVendaRefUsr: ITabVendaRefUsr
 }
 
