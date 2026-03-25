@@ -18,6 +18,7 @@ import jakarta.annotation.security.PermitAll
 class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val viewModel = VendaRefViewModel(this)
   override val tabVendaRef = TabVendaRef(viewModel.tabVendaRefViewModel)
+  override val tabResumo = TabResumo(viewModel.tabResumoViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

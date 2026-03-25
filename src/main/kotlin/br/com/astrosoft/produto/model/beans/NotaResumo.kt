@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class NotaVendaRef(
+class NotaResumo(
   var loja: Int?,
   var pdv: Int?,
   var transacao: Int?,
@@ -49,13 +49,13 @@ class NotaVendaRef(
     }
 
   companion object {
-    fun findAll(filtro: FiltroNotaVendaRef): List<NotaVendaRef> {
-      return saci.findNotaVendaRef(filtro)
+    fun findAll(filtro: FiltroNotaResumo): List<NotaResumo> {
+      return saci.findNotaResumo(filtro)
     }
   }
 }
 
-data class FiltroNotaVendaRef(
+data class FiltroNotaResumo(
   val loja: Int,
   val pesquisa: String,
   val dataInicial: LocalDate?,
