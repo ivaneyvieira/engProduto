@@ -251,15 +251,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       columnGrid(NotaRecebimentoProdutoDev::emissao, "Emissão")
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
-      columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
-        this.right()
-        this.setComparator { prd ->
-          val ni = (prd.ni ?: 0).toString().lpad(10, "0")
-          val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
-          val grade = (prd.grade ?: "").lpad(10, "0")
-          "$ni$codigo$grade"
-        }
-      }
       columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       addColumnButton(VaadinIcon.DATE_INPUT, "Acerto", "Acerto") { produto ->
         val produtoSelecionado = gridDetail.selectedItems.toList().ifEmpty {
@@ -271,6 +262,15 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         dlgAcerto.open()
       }
       columnGrid(NotaRecebimentoProdutoDev::numAcerto, "Acerto").right()
+      columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
+        this.right()
+        this.setComparator { prd ->
+          val ni = (prd.ni ?: 0).toString().lpad(10, "0")
+          val codigo = (prd.codigo ?: 0).toString().lpad(10, "0")
+          val grade = (prd.grade ?: "").lpad(10, "0")
+          "$ni$codigo$grade"
+        }
+      }
       columnGrid(NotaRecebimentoProdutoDev::codigo, "Código").right()
       columnGrid(NotaRecebimentoProdutoDev::grade, "Grade", width = "80px")
       columnGrid(NotaRecebimentoProdutoDev::quantDevolucao, "Quant")
