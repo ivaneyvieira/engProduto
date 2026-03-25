@@ -24,3 +24,4 @@ class VendaRefUsrViewModel(val viewModel: VendaRefViewModel) : TabUsrViewModel(v
 }
 
 interface ITabVendaRefUsr : ITabUser
+
