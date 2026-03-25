@@ -4,7 +4,9 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.FiltroNotaResumo
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaResumo
@@ -29,7 +31,6 @@ class TabResumo(val viewModel: TabResumoViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosResumo? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -93,21 +94,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(NotaResumo::loja, header = "Loja")
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosResumo(viewModel, nota)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
-      }
-    }
-    columnGrid(NotaResumo::pedido, header = "Pedido")
-    columnGrid(NotaResumo::pdv, header = "PDV")
     columnGrid(NotaResumo::data, header = "Data")
-    columnGrid(NotaResumo::transacao, header = "Transação")
-    columnGrid(NotaResumo::nota, header = "NF")
-    columnGrid(NotaResumo::uf, header = "UF")
-    columnGrid(NotaResumo::tipoNf, header = "Tipo NF")
-    columnGrid(NotaResumo::hora, header = "Hora")
-    columnGrid(NotaResumo::numeroInterno, header = "NI", width = "100px")
     columnGrid(NotaResumo::numMetodo, header = "Met")
     columnGrid(NotaResumo::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumo::mult, pattern = "#,##0.0000", header = "Mlt")
@@ -119,9 +106,6 @@ class TabResumo(val viewModel: TabResumoViewModel) :
     }
     val valorCol = columnGrid(NotaResumo::valor, header = "Valor NF")
     val valorTipoCol = columnGrid(NotaResumo::valorTipo, header = "Valor TP")
-    columnGrid(NotaResumo::cliente, header = "Cód Cli")
-    columnGrid(NotaResumo::nomeCliente, header = "Nome Cliente").expand()
-    columnGrid(NotaResumo::vendedor, header = "Vendedor").expand()
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
