@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaResumo
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaResumo
+import br.com.astrosoft.produto.model.planilha.PlanilhaResumo
 
 class TabResumoViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -22,9 +23,8 @@ class TabResumoViewModel(val viewModel: VendaRefViewModel) {
   }
 
   fun geraPlanilha(vendas: List<NotaResumo>): ByteArray {
-    //val planilha = PlanilhaVendasRef()
-    //return planilha.write(vendas)
-    TODO()
+    val planilha = PlanilhaResumo()
+    return planilha.write(vendas)
   }
 
   fun imprimeRelatorio() {
