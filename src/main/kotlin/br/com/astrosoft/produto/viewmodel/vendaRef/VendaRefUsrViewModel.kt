@@ -19,6 +19,7 @@ class VendaRefUsrViewModel(val viewModel: VendaRefViewModel) : TabUsrViewModel(v
   override fun UserSaci.update(usuario: UserSaci) {
     this.tabVendaRef = usuario.tabVendaRef
     this.tabResumo = usuario.tabResumo
+    this.tabResumoPgto = usuario.tabResumoPgto
   }
 }
 

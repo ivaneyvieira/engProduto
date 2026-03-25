@@ -7,12 +7,12 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.FiltroNotaResumo
+import br.com.astrosoft.produto.model.beans.FiltroNotaResumoPgto
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaResumo
+import br.com.astrosoft.produto.model.beans.NotaResumoPgto
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumo
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoPgtoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -25,8 +25,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabResumoPgto(val viewModel: TabResumoViewModel) :
-  TabPanelGrid<NotaResumo>(NotaResumo::class), ITabResumo {
+class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
+  TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -88,24 +88,24 @@ class TabResumoPgto(val viewModel: TabResumoViewModel) :
     }
   }
 
-  override fun Grid<NotaResumo>.gridPanel() {
+  override fun Grid<NotaResumoPgto>.gridPanel() {
     this.addClassName("styling")
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     addColumnSeq("Seq")
-    columnGrid(NotaResumo::loja, header = "Loja")
-    columnGrid(NotaResumo::data, header = "Data")
-    columnGrid(NotaResumo::numMetodo, header = "Met")
-    columnGrid(NotaResumo::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaResumo::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaResumo::documento, header = "Documento")
-    columnGrid(NotaResumo::quantParcelas, header = "Parc")
-    columnGrid(NotaResumo::mediaPrazo, header = "Pz M")
-    columnGrid(NotaResumo::tipoPgto, header = "Tipo Pgto") {
+    columnGrid(NotaResumoPgto::loja, header = "Loja")
+    columnGrid(NotaResumoPgto::data, header = "Data")
+    columnGrid(NotaResumoPgto::numMetodo, header = "Met")
+    columnGrid(NotaResumoPgto::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
+    columnGrid(NotaResumoPgto::documento, header = "Documento")
+    columnGrid(NotaResumoPgto::quantParcelas, header = "Parc")
+    columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
+    columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
-    val valorCol = columnGrid(NotaResumo::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaResumo::valorTipo, header = "Valor TP")
+    val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
+    val valorTipoCol = columnGrid(NotaResumoPgto::valorTipo, header = "Valor TP")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
@@ -119,8 +119,8 @@ class TabResumoPgto(val viewModel: TabResumoViewModel) :
     }
   }
 
-  override fun filtro(): FiltroNotaResumo {
-    return FiltroNotaResumo(
+  override fun filtro(): FiltroNotaResumoPgto {
+    return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
@@ -128,21 +128,21 @@ class TabResumoPgto(val viewModel: TabResumoViewModel) :
     )
   }
 
-  override fun updateNotas(notas: List<NotaResumo>) {
+  override fun updateNotas(notas: List<NotaResumoPgto>) {
     this.updateGrid(notas)
   }
 
-  override fun itensNotasSelecionados(): List<NotaResumo> {
+  override fun itensNotasSelecionados(): List<NotaResumoPgto> {
     return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.tabResumo == true
+    return username?.tabResumoPgto == true
   }
 
   override val label: String
-    get() = "Resumo"
+    get() = "Resumo Pgto"
 
   override fun updateComponent() {
     viewModel.updateView()

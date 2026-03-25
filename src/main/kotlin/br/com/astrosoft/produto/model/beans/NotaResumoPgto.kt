@@ -4,7 +4,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class NotaResumo(
+class NotaResumoPgto(
   var loja: Int?,
   var pdv: Int?,
   var transacao: Int?,
@@ -35,10 +35,6 @@ class NotaResumo(
       return "$doc $quant"
     }
 
-  fun produtos(): List<ProdutoNFS> {
-    return saci.findProdutoNF(this)
-  }
-
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -49,13 +45,13 @@ class NotaResumo(
     }
 
   companion object {
-    fun findAll(filtro: FiltroNotaResumo): List<NotaResumo> {
-      return saci.findNotaResumo(filtro)
+    fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
+      return saci.findNotaResumoPgto(filtro)
     }
   }
 }
 
-data class FiltroNotaResumo(
+data class FiltroNotaResumoPgto(
   val loja: Int,
   val pesquisa: String,
   val dataInicial: LocalDate?,

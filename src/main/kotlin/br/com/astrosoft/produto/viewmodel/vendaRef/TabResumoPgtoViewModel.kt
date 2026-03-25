@@ -1,11 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaResumo
+import br.com.astrosoft.produto.model.beans.FiltroNotaResumoPgto
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaResumo
+import br.com.astrosoft.produto.model.beans.NotaResumoPgto
 
-class TabResumoViewModel(val viewModel: VendaRefViewModel) {
+class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -17,11 +17,11 @@ class TabResumoViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaResumo.findAll(filtro)
+    val notas = NotaResumoPgto.findAll(filtro)
     subView.updateNotas(notas)
   }
 
-  fun geraPlanilha(vendas: List<NotaResumo>): ByteArray {
+  fun geraPlanilha(vendas: List<NotaResumoPgto>): ByteArray {
     //val planilha = PlanilhaVendasRef()
     //return planilha.write(vendas)
     TODO()
@@ -35,11 +35,11 @@ class TabResumoViewModel(val viewModel: VendaRefViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabResumo
+    get() = viewModel.view.tabResumoPgto
 }
 
-interface ITabResumo : ITabView {
-  fun filtro(): FiltroNotaResumo
-  fun updateNotas(notas: List<NotaResumo>)
-  fun itensNotasSelecionados(): List<NotaResumo>
+interface ITabResumoPgto : ITabView {
+  fun filtro(): FiltroNotaResumoPgto
+  fun updateNotas(notas: List<NotaResumoPgto>)
+  fun itensNotasSelecionados(): List<NotaResumoPgto>
 }

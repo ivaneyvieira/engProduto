@@ -15,6 +15,7 @@ class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel),
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::tabVendaRef, "Vendas")
     columnGrid(UserSaci::tabResumo, "Resumo")
+    columnGrid(UserSaci::tabResumoPgto, "Resumo Pgto")
   }
 
   override fun FormUsuario.configFields() {
@@ -25,6 +26,9 @@ class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel),
         }
         checkBox("Resumo") {
           binder.bind(this, UserSaci::tabResumo.name)
+        }
+        checkBox("Resumo Pgto") {
+          binder.bind(this, UserSaci::tabResumoPgto.name)
         }
       }
     }

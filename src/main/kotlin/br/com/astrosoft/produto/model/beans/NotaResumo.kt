@@ -35,10 +35,6 @@ class NotaResumo(
       return "$doc $quant"
     }
 
-  fun produtos(): List<ProdutoNFS> {
-    return saci.findProdutoNF(this)
-  }
-
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
