@@ -248,10 +248,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         }
         dlgConferencia.open()
       }
-      columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
-      columnGrid(NotaRecebimentoProdutoDev::emissao, "Emissão")
-      //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
-      columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       addColumnButton(VaadinIcon.DATE_INPUT, "Acerto", "Acerto") { produto ->
         val produtoSelecionado = gridDetail.selectedItems.toList().ifEmpty {
           listOf(produto)
@@ -262,6 +258,10 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         dlgAcerto.open()
       }
       columnGrid(NotaRecebimentoProdutoDev::numAcerto, "Acerto").right()
+      columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
+      columnGrid(NotaRecebimentoProdutoDev::emissao, "Emissão")
+      //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
+      columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
         this.setComparator { prd ->
