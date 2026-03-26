@@ -46,7 +46,7 @@ class NotaResumoPgto(
     }
 
   fun grupo(): String {
-    return "$loja-$data-$numMetodo-${mult.format("0.0000")}-$documento-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
+    return "$loja-$data-$numMetodo-${mult.format("0.0000")}-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
   }
 
   companion object {

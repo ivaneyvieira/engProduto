@@ -262,6 +262,9 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::emissao, "Emissão")
       //columnGrid(NotaRecebimentoProdutoDev::vendno, "For").right()
       columnGrid(NotaRecebimentoProdutoDev::refFabrica, "Ref Fab").right()
+      columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
+      columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
+      columnGrid(NotaRecebimentoProdutoDev::rotuloSped, "Ctrl \"S\"", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
         this.setComparator { prd ->
@@ -277,9 +280,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::valorUnit, "Valor Unit", pattern = "#,##0.0000", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::valorTotalDevolucao, "Valor Total", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::descricao, "Descrição")
-      columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
-      columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
-      columnGrid(NotaRecebimentoProdutoDev::rotuloSped, "Ctrl \"S\"", width = "90px")
       columnGrid(NotaRecebimentoProdutoDev::un, "UN")
       columnGrid(NotaRecebimentoProdutoDev::valorDescontoDevolucao, "Desc", width = "60px")
       columnGrid(NotaRecebimentoProdutoDev::freteDevolucao, "Frete", width = "60px")

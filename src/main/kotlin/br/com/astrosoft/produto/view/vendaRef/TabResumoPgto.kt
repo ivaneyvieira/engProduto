@@ -98,7 +98,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::numMetodo, header = "Met")
     columnGrid(NotaResumoPgto::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaResumoPgto::documento, header = "Documento")
+    //columnGrid(NotaResumoPgto::documento, header = "Documento")
     columnGrid(NotaResumoPgto::quantParcelas, header = "Parc")
     columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto") {
