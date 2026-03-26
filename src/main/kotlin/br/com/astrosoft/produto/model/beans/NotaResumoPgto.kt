@@ -46,7 +46,7 @@ class NotaResumoPgto(
     }
 
   fun grupo(): String {
-    return "$loja-$data-$numMetodo-${mult.format("0.0000")}-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
+    return "$loja-$data-${mult.format("0.0000")}-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
   }
 
   companion object {
@@ -67,13 +67,14 @@ fun List<NotaResumoPgto>.agrupa(): List<NotaResumoPgto> {
   val grupo = this.groupBy { it.grupo() }
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
+    val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
     NotaResumoPgto(
       loja = first.loja,
       pdv = null,
       transacao = null,
       pedido = null,
-      numMetodo = first.numMetodo,
-      nomeMetodo = first.nomeMetodo,
+      numMetodo = firstMetodo?.numMetodo,
+      nomeMetodo = firstMetodo?.nomeMetodo,
       mult = first.mult,
       data = first.data,
       nota = null,
