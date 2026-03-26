@@ -116,17 +116,12 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
-    val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaResumoPgto::valorTipo, header = "Valor TP")
+   // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
+    val valorTipoCol = columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
-      val totalValor = list.groupBy { nota ->
-        "${nota.loja} ${nota.pdv} ${nota.transacao}"
-      }
-        .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
-      valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
       valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
