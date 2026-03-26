@@ -117,6 +117,9 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
       valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
+    this.dataProvider.addDataProviderListener {
+      this.recalculateColumnWidths()
+    }
   }
 
   override fun filtro(): FiltroNotaResumoPgto {

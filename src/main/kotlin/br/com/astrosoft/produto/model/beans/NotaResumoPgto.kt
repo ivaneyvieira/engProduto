@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
@@ -31,7 +32,7 @@ class NotaResumoPgto(
   val documentoStr: String
     get() {
       val doc = documento ?: return ""
-      val quant = if(quantParcelas == null) "" else " (${quantParcelas}x)"
+      val quant = if (quantParcelas == null) "" else " (${quantParcelas}x)"
       return "$doc $quant"
     }
 
@@ -44,9 +45,13 @@ class NotaResumoPgto(
       return groups.getOrNull(1)?.toIntOrNull()
     }
 
+  fun grupo(): String {
+    return "$loja-$data-$numMetodo-${mult.format("0.0000")}-$documento-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
+  }
+
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro)
+      return saci.findNotaResumoPgto(filtro).agrupa()
     }
   }
 }
@@ -57,3 +62,34 @@ data class FiltroNotaResumoPgto(
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )
+
+fun List<NotaResumoPgto>.agrupa(): List<NotaResumoPgto> {
+  val grupo = this.groupBy { it.grupo() }
+  return grupo.values.mapNotNull { ent ->
+    val first = ent.firstOrNull() ?: return@mapNotNull null
+    NotaResumoPgto(
+      loja = first.loja,
+      pdv = null,
+      transacao = null,
+      pedido = null,
+      numMetodo = first.numMetodo,
+      nomeMetodo = first.nomeMetodo,
+      mult = first.mult,
+      data = first.data,
+      nota = null,
+      tipoNf = null,
+      hora = null,
+      tipoPgto = first.tipoPgto,
+      documento = first.documento,
+      quantParcelas = first.quantParcelas,
+      mediaPrazo = first.mediaPrazo,
+      valor = ent.sumOf { it.valor ?: 0.0 },
+      cliente = null,
+      uf = null,
+      nomeCliente = null,
+      vendedor = null,
+      valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
+      obs = null,
+    )
+  }
+}
