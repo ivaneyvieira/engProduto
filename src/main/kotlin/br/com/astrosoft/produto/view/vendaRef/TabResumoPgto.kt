@@ -113,16 +113,17 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     //columnGrid(NotaResumoPgto::documento, header = "Documento")
     columnGrid(NotaResumoPgto::quantParcelas, header = "Parc")
     columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
-    columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto") {
-      this.setFooter(Html("<b><font size=4>Total</font></b>"))
-    }
+    columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
    // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
+
+    columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
-      valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      val totalParcelas = list.sumOf { t -> t.mediaPrazo ?: 0 }
+      getColumnBy(NotaResumoPgto::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
+      getColumnBy(NotaResumoPgto::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
       this.recalculateColumnWidths()
