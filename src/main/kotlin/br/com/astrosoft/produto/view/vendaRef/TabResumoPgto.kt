@@ -15,7 +15,9 @@ import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoPgtoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Html
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -28,6 +30,7 @@ import java.time.LocalDate
 class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var chkLoja: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -50,11 +53,20 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
+        if (it.isFromClient) {
           viewModel.updateView()
+        }
       }
     }
     init()
+    chkLoja = checkBox("Agrupa Lojas") {
+      addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+          gridPanel.getColumnBy(NotaResumoPgto::loja)?.isVisible = !(it.value ?: false)
+        }
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -94,7 +106,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(NotaResumoPgto::loja, header = "Loja")
-    columnGrid(NotaResumoPgto::data, header = "Data")
+    columnGrid(NotaResumoPgto::data, header = "Data", width = null)
     columnGrid(NotaResumoPgto::numMetodo, header = "Met")
     columnGrid(NotaResumoPgto::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
@@ -125,6 +137,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   override fun filtro(): FiltroNotaResumoPgto {
     return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,
+      agrupaLoja = chkLoja.value ?: false,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

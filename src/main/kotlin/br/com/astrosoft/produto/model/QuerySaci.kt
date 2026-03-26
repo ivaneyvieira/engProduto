@@ -449,7 +449,6 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
 
-
   fun findProdutoNF(nfs: NotaResumo): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val produtos = query(sql, ProdutoNFS::class) {
@@ -466,7 +465,6 @@ class QuerySaci : QueryDB(database) {
     }
     return produtos
   }
-
 
   fun findProdutoNF(nfs: NotaVendaRef): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
@@ -1098,7 +1096,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-
   fun findProdutoSaldoAtacado(filtro: FiltroProdutoSaldoAtacado): List<ProdutoSaldoAtacado> {
     val sql = "/sqlSaci/findProdutosSaldoAtacado.sql"
     return query(sql, ProdutoSaldoAtacado::class) {
@@ -1117,7 +1114,6 @@ class QuerySaci : QueryDB(database) {
       this.addOptionalParameter("consumo", filtro.consumo.value)
     }
   }
-
 
   fun findProdutoEstoque(loja: Int, prdno: String, grade: String): List<ProdutoEstoque> {
     val sql = "/sqlSaci/findProdutoEstoqueKardec.sql"

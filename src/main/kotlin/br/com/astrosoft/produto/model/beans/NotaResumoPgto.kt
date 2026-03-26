@@ -45,31 +45,32 @@ class NotaResumoPgto(
       return groups.getOrNull(1)?.toIntOrNull()
     }
 
-  fun grupo(): String {
-    return "$loja-$data-${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
+  fun grupo(agrupaLoja: Boolean): String {
+    return "${if (agrupaLoja) "" else loja}-$data-${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
   }
 
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro).agrupa()
+      return saci.findNotaResumoPgto(filtro).agrupa(filtro.agrupaLoja)
     }
   }
 }
 
 data class FiltroNotaResumoPgto(
   val loja: Int,
+  val agrupaLoja: Boolean,
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )
 
-fun List<NotaResumoPgto>.agrupa(): List<NotaResumoPgto> {
-  val grupo = this.groupBy { it.grupo() }
+fun List<NotaResumoPgto>.agrupa(agrupaLoja: Boolean): List<NotaResumoPgto> {
+  val grupo = this.groupBy { it.grupo(agrupaLoja) }
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
     NotaResumoPgto(
-      loja = first.loja,
+      loja = if (agrupaLoja) null else first.loja,
       pdv = null,
       transacao = null,
       pedido = null,
