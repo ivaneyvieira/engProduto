@@ -28,6 +28,7 @@ class NotaResumoPgto(
   var vendedor: String?,
   var valorTipo: Double?,
   var obs: String?,
+  var contagem: Int? = 1
 ) {
   val documentoStr: String
     get() {
@@ -92,6 +93,7 @@ fun List<NotaResumoPgto>.agrupa(agrupaLoja: Boolean): List<NotaResumoPgto> {
       vendedor = null,
       valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
       obs = null,
+      contagem = ent.sumOf { it.contagem ?: 0 }
     )
   }
 }

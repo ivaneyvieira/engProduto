@@ -164,7 +164,8 @@ SELECT loja,
        uf,
        vendedor,
        valorTipo,
-       obs
+       obs,
+       1 as contagem
 FROM
   T_NOTA             AS N
     LEFT JOIN T_CARD AS C

@@ -114,14 +114,15 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::quantParcelas, header = "Parc")
     columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
-   // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
+    // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
 
     columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
-      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
-      val totalParcelas = list.sumOf { t -> t.mediaPrazo ?: 0 }
+      val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0)}
+      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0)  * (t.contagem ?: 0) } /
+                          list.sumOf { t -> t.contagem ?: 0 }
       getColumnBy(NotaResumoPgto::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
       getColumnBy(NotaResumoPgto::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
