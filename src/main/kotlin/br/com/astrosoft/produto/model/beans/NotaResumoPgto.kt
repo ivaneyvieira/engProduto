@@ -46,7 +46,7 @@ class NotaResumoPgto(
     }
 
   fun grupo(): String {
-    return "$loja-$data-${mult.format("0.0000")}-${quantParcelas.format()}-${mediaPrazo.format()}-$tipoPgto"
+    return "$loja-$data-${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
   }
 
   companion object {
@@ -82,7 +82,7 @@ fun List<NotaResumoPgto>.agrupa(): List<NotaResumoPgto> {
       hora = null,
       tipoPgto = first.tipoPgto,
       documento = first.documento,
-      quantParcelas = first.quantParcelas,
+      quantParcelas = ent.maxOf { it.quantParcelas ?: 0 },
       mediaPrazo = first.mediaPrazo,
       valor = ent.sumOf { it.valor ?: 0.0 },
       cliente = null,
