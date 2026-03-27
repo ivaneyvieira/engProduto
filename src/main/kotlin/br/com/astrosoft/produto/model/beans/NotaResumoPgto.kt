@@ -46,32 +46,37 @@ class NotaResumoPgto(
       return groups.getOrNull(1)?.toIntOrNull()
     }
 
-  fun grupo(agrupaLoja: Boolean): String {
-    return "${if (agrupaLoja) "" else loja}-$data-${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
+  fun grupo(agrupaLojas: Boolean, agrupaParcelas: Boolean): String {
+    val grupoLoja = if (agrupaLojas) "$data"
+    else "$loja-$data"
+    val grupoParcela = if (agrupaParcelas) "$mediaPrazo-$tipoPgto"
+    else "${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
+    return "$grupoLoja-$grupoParcela"
   }
 
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro).agrupa(filtro.agrupaLoja)
+      return saci.findNotaResumoPgto(filtro).agrupa(filtro.agrupaLojas, filtro.agrupaParcelas)
     }
   }
 }
 
 data class FiltroNotaResumoPgto(
   val loja: Int,
-  val agrupaLoja: Boolean,
+  val agrupaLojas: Boolean,
+  val agrupaParcelas: Boolean,
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )
 
-fun List<NotaResumoPgto>.agrupa(agrupaLoja: Boolean): List<NotaResumoPgto> {
-  val grupo = this.groupBy { it.grupo(agrupaLoja) }
+fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): List<NotaResumoPgto> {
+  val grupo = this.groupBy { it.grupo(agrupaLojas, agrupaParcelas) }
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
     NotaResumoPgto(
-      loja = if (agrupaLoja) null else first.loja,
+      loja = if (agrupaLojas) null else first.loja,
       pdv = null,
       transacao = null,
       pedido = null,
@@ -85,7 +90,7 @@ fun List<NotaResumoPgto>.agrupa(agrupaLoja: Boolean): List<NotaResumoPgto> {
       tipoPgto = first.tipoPgto,
       documento = first.documento,
       quantParcelas = ent.maxOf { it.quantParcelas ?: 0 },
-      mediaPrazo = first.mediaPrazo,
+      mediaPrazo = first.mediaPrazo ?: 0,
       valor = ent.sumOf { it.valor ?: 0.0 },
       cliente = null,
       uf = null,

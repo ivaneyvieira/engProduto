@@ -31,6 +31,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
+  private lateinit var chkParcela: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -63,7 +64,19 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateView()
-          gridPanel.getColumnBy(NotaResumoPgto::loja)?.isVisible = !(it.value ?: false)
+          gridPanel.getColumnBy(NotaResumoPgto::loja).isVisible = !(it.value ?: false)
+        }
+      }
+    }
+    chkParcela = checkBox("Agrupa Parcela") {
+      addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+          val visivel = !(it.value ?: false)
+          gridPanel.getColumnBy(NotaResumoPgto::numMetodo).isVisible = visivel
+          gridPanel.getColumnBy(NotaResumoPgto::nomeMetodo).isVisible = visivel
+          gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
+          gridPanel.getColumnBy(NotaResumoPgto::quantParcelas).isVisible = visivel
         }
       }
     }
@@ -121,8 +134,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0)}
-      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0)  * (t.contagem ?: 0) } /
-                          list.sumOf { t -> t.contagem ?: 0 }
+      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0)  * (t.valorTipo ?: 0.00) } /
+                          list.sumOf { t -> t.valorTipo ?: 0.00 }
       getColumnBy(NotaResumoPgto::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
       getColumnBy(NotaResumoPgto::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
@@ -134,7 +147,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   override fun filtro(): FiltroNotaResumoPgto {
     return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,
-      agrupaLoja = chkLoja.value ?: false,
+      agrupaLojas = chkLoja.value ?: false,
+      agrupaParcelas = chkParcela.value ?: false,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

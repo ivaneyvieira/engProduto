@@ -148,12 +148,14 @@ SELECT loja,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.quantParcelas
          WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
+         WHEN tipoPgto IS NULL      THEN 0
                                     ELSE 0
        END                 AS quantParcelas,
        -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
          WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
+         WHEN tipoPgto IS NULL      THEN 0
                                     ELSE 0
        END                 AS mediaPrazo,
        hora,
@@ -165,7 +167,7 @@ SELECT loja,
        vendedor,
        valorTipo,
        obs,
-       1 as contagem
+       1                   AS contagem
 FROM
   T_NOTA             AS N
     LEFT JOIN T_CARD AS C
