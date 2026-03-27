@@ -29,7 +29,8 @@ class NotaResumoPgto(
   var valorFin: Double?,
   var valorTipo: Double?,
   var obs: String?,
-  var contagem: Int? = 1
+  var contagem: Int? = 1,
+  var perVenda: Double? = 0.00
 ) {
   val documentoStr: String
     get() {
@@ -73,6 +74,7 @@ data class FiltroNotaResumoPgto(
 
 fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): List<NotaResumoPgto> {
   val grupo = this.groupBy { it.grupo(agrupaLojas, agrupaParcelas) }
+  val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
@@ -100,7 +102,8 @@ fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): 
       valorFin = ent.sumOf { it.valorFin ?: 0.0 },
       valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
       obs = null,
-      contagem = ent.sumOf { it.contagem ?: 0 }
+      contagem = ent.sumOf { it.contagem ?: 0 },
+      perVenda = ent.sumOf { it.valorTipo ?: 0.0 } * 100.00 / totalValor,
     )
   }
 }
