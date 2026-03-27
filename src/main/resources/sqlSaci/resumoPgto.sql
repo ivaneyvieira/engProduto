@@ -138,7 +138,7 @@ SELECT loja,
        transacao,
        numMetodo,
        nomeMetodo,
-       IFNULL(mult, 1.000) AS mult,
+       IFNULL(mult, 1.000)                           AS mult,
        pedido,
        data,
        nota,
@@ -150,14 +150,14 @@ SELECT loja,
          WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
          WHEN tipoPgto IS NULL      THEN 0
                                     ELSE 0
-       END                 AS quantParcelas,
+       END                                           AS quantParcelas,
        -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
          WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
          WHEN tipoPgto IS NULL      THEN 0
                                     ELSE 0
-       END                 AS mediaPrazo,
+       END                                           AS mediaPrazo,
        hora,
        tipoPgto,
        valor,
@@ -165,9 +165,10 @@ SELECT loja,
        nomeCliente,
        uf,
        vendedor,
+       valorTipo - (valorTipo / IFNULL(mult, 1.000)) AS valorFin,
        valorTipo,
        obs,
-       1                   AS contagem
+       1                                             AS contagem
 FROM
   T_NOTA             AS N
     LEFT JOIN T_CARD AS C

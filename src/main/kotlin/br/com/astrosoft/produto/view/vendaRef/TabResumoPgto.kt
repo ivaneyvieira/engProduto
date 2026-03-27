@@ -68,7 +68,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
         }
       }
     }
-    chkParcela = checkBox("Agrupa Parcela") {
+    chkParcela = checkBox("Agrupa Pz M") {
       addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateView()
@@ -77,6 +77,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
           gridPanel.getColumnBy(NotaResumoPgto::nomeMetodo).isVisible = visivel
           gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
           gridPanel.getColumnBy(NotaResumoPgto::quantParcelas).isVisible = visivel
+          gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
         }
       }
     }
@@ -129,6 +130,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
     // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
 
+    columnGrid(NotaResumoPgto::valorFin, header = "Fin")
     columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
 
     this.dataProvider.addDataProviderListener {

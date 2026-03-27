@@ -26,6 +26,7 @@ class NotaResumoPgto(
   var uf: String?,
   var nomeCliente: String?,
   var vendedor: String?,
+  var valorFin: Double?,
   var valorTipo: Double?,
   var obs: String?,
   var contagem: Int? = 1
@@ -49,8 +50,8 @@ class NotaResumoPgto(
   fun grupo(agrupaLojas: Boolean, agrupaParcelas: Boolean): String {
     val grupoLoja = if (agrupaLojas) "$data"
     else "$loja-$data"
-    val grupoParcela = if (agrupaParcelas) "$mediaPrazo-$tipoPgto"
-    else "${mult.format("0.0000")}-${mediaPrazo.format()}-$tipoPgto"
+    val grupoParcela = if (agrupaParcelas) (mediaPrazo ?: 0).format()
+    else "${mult.format("0.0000")}-${(mediaPrazo ?: 0).format()}-$tipoPgto"
     return "$grupoLoja-$grupoParcela"
   }
 
@@ -96,6 +97,7 @@ fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): 
       uf = null,
       nomeCliente = null,
       vendedor = null,
+      valorFin = ent.sumOf { it.valorFin ?: 0.0 },
       valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
       obs = null,
       contagem = ent.sumOf { it.contagem ?: 0 }
