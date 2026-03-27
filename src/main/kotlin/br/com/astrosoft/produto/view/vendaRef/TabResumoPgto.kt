@@ -138,8 +138,10 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0)}
       val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0)  * (t.valorTipo ?: 0.00) } /
                           list.sumOf { t -> t.valorTipo ?: 0.00 }
+      val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0)}
       getColumnBy(NotaResumoPgto::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
       getColumnBy(NotaResumoPgto::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      getColumnBy(NotaResumoPgto::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
       this.recalculateColumnWidths()
