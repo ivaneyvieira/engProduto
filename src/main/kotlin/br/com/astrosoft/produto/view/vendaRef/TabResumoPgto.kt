@@ -44,6 +44,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   private lateinit var cmbAnoInicial: IntegerField
   private lateinit var cmbAnoFinal: IntegerField
 
+  private lateinit var chkContaC: Checkbox
+
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
@@ -100,6 +102,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
           }
         }
         cmbData = select("Agrupa Data") {
+          this.width = "6rem"
           this.setItems(AgrupaData.entries)
           this.value = AgrupaData.DIA
           this.setItemLabelGenerator { item ->
@@ -156,6 +159,14 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
+
+        chkContaC = checkBox("Conta C") {
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.updateView()
+            }
+          }
+        }
       }
 
       horizontalLayout {
@@ -164,7 +175,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
         this.isSpacing = true
 
         edtPesquisa = textField("Pesquisa") {
-          this.width = "150px"
+          this.width = "10rem"
           valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
@@ -173,6 +184,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
 
         edtDataInicial = datePicker("Data inicial") {
           this.localePtBr()
+          this.width = "8rem"
           this.value = LocalDate.now()
           addValueChangeListener {
             viewModel.updateView()
@@ -180,6 +192,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
         }
         edtDataFinal = datePicker("Data Final") {
           this.localePtBr()
+          this.width = "8rem"
           this.value = LocalDate.now()
           addValueChangeListener {
             viewModel.updateView()
@@ -381,8 +394,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       AgrupaData.ANO -> LocalDate.of(cmbAnoFinal.value ?: LocalDate.now().year, 12, 31)
     }
 
-    edtDataInicial.value = dataI
-    edtDataFinal.value = dataF
+    //edtDataInicial.value = dataI
+    //edtDataFinal.value = dataF
 
     return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,
@@ -392,6 +405,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = dataI,
       dataFinal = dataF,
+      contaC = chkContaC.value ?: false
     )
   }
 

@@ -69,7 +69,13 @@ class NotaResumoPgto(
 
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro).agrupa(filtro)
+      return saci.findNotaResumoPgto(filtro).filter{
+        if(filtro.contaC) true
+        else {
+          val filtroValor = it.tipoPgto?.startsWith("Conta") ?: true
+          filtroValor.not()
+        }
+      }.agrupa(filtro)
     }
   }
 }
@@ -82,6 +88,7 @@ data class FiltroNotaResumoPgto(
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val contaC: Boolean
 )
 
 fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
