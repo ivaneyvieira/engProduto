@@ -7,15 +7,13 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.produto.model.beans.FiltroNotaResumoPgto
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaResumoPgto
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoPgtoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
+import com.github.mvysny.kaributools.sortProperty
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -31,6 +29,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
+  private lateinit var cmbData: Select<AgrupaData>
   private lateinit var chkParcela: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
@@ -49,68 +48,106 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   }
 
   override fun HorizontalLayout.toolBarConfig() {
-    cmbLoja = select("Loja") {
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateView()
+    verticalLayout {
+      this.isMargin = false
+      this.isPadding = false
+      this.isSpacing = false
+
+      horizontalLayout {
+        this.isMargin = false
+        this.isPadding = false
+        this.isSpacing = true
+
+        cmbLoja = select("Loja") {
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.updateView()
+            }
+          }
+        }
+        init()
+        chkLoja = checkBox("Agrupa Lojas") {
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.updateView()
+              gridPanel.getColumnBy(NotaResumoPgto::loja).isVisible = !(it.value ?: false)
+            }
+          }
+        }
+        chkParcela = checkBox("Agrupa Pz M") {
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.updateView()
+              val visivel = !(it.value ?: false)
+              gridPanel.getColumnBy(NotaResumoPgto::numMetodo).isVisible = visivel
+              gridPanel.getColumnBy(NotaResumoPgto::nomeMetodo).isVisible = visivel
+              gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
+              gridPanel.getColumnBy(NotaResumoPgto::quantParcelas).isVisible = visivel
+              gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
+            }
+          }
+        }
+        cmbData = select("Agrupa Data") {
+          this.setItems(AgrupaData.entries)
+          this.value = AgrupaData.DIA
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          addValueChangeListener {
+            if (it.isFromClient) {
+              gridPanel.getColumnBy(NotaResumoPgto::dataFormatada).setHeader(
+                when (it.value) {
+                  AgrupaData.DIA -> "Data"
+                  AgrupaData.MES -> "Mês"
+                  AgrupaData.ANO -> "Ano"
+                }
+              )
+              viewModel.updateView()
+            }
+          }
         }
       }
-    }
-    init()
-    chkLoja = checkBox("Agrupa Lojas") {
-      addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateView()
-          gridPanel.getColumnBy(NotaResumoPgto::loja).isVisible = !(it.value ?: false)
+
+      horizontalLayout {
+        this.isMargin = false
+        this.isPadding = false
+        this.isSpacing = true
+
+        edtPesquisa = textField("Pesquisa") {
+          this.width = "300px"
+          valueChangeMode = ValueChangeMode.TIMEOUT
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataInicial = datePicker("Data inicial") {
+          this.localePtBr()
+          this.value = LocalDate.now()
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtDataFinal = datePicker("Data Final") {
+          this.localePtBr()
+          this.value = LocalDate.now()
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        button("Relatorio") {
+          icon = VaadinIcon.PRINT.create()
+          onClick {
+            viewModel.imprimeRelatorio()
+          }
+        }
+        this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
+          val vendas = itensSelecionados()
+          viewModel.geraPlanilha(vendas)
         }
       }
-    }
-    chkParcela = checkBox("Agrupa Pz M") {
-      addValueChangeListener {
-        if (it.isFromClient) {
-          viewModel.updateView()
-          val visivel = !(it.value ?: false)
-          gridPanel.getColumnBy(NotaResumoPgto::numMetodo).isVisible = visivel
-          gridPanel.getColumnBy(NotaResumoPgto::nomeMetodo).isVisible = visivel
-          gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
-          gridPanel.getColumnBy(NotaResumoPgto::quantParcelas).isVisible = visivel
-          gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
-        }
-      }
-    }
-    edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataInicial = datePicker("Data inicial") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    button("Relatorio") {
-      icon = VaadinIcon.PRINT.create()
-      onClick {
-        viewModel.imprimeRelatorio()
-      }
-    }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
-      val vendas = itensSelecionados()
-      viewModel.geraPlanilha(vendas)
     }
   }
 
@@ -120,7 +157,9 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(NotaResumoPgto::loja, header = "Loja")
-    columnGrid(NotaResumoPgto::data, header = "Data", width = null)
+    columnGrid(NotaResumoPgto::dataFormatada, header = "Data", width = null) {
+      this.sortProperty = NotaResumoPgto::data
+    }
     columnGrid(NotaResumoPgto::numMetodo, header = "Met")
     columnGrid(NotaResumoPgto::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
@@ -156,6 +195,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
       agrupaParcelas = chkParcela.value ?: false,
+      agrupaDatas = cmbData.value ?: AgrupaData.DIA,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

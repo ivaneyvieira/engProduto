@@ -30,7 +30,8 @@ class NotaResumoPgto(
   var valorTipo: Double?,
   var obs: String?,
   var contagem: Int? = 1,
-  var perVenda: Double? = 0.00
+  var perVenda: Double? = 0.00,
+  val dataFormatada: String? = null
 ) {
   val documentoStr: String
     get() {
@@ -48,9 +49,19 @@ class NotaResumoPgto(
       return groups.getOrNull(1)?.toIntOrNull()
     }
 
-  fun grupo(agrupaLojas: Boolean, agrupaParcelas: Boolean): String {
-    val grupoLoja = if (agrupaLojas) "$data"
-    else "$loja-$data"
+  fun grupo(filtro: FiltroNotaResumoPgto): String {
+    val agrupaLojas = filtro.agrupaLojas
+    val agrupaParcelas = filtro.agrupaParcelas
+    val agrupaDatas = filtro.agrupaDatas
+
+    val dataAgrupada = when(agrupaDatas) {
+      AgrupaData.DIA -> data?.format("yyyy-MM-dd") ?: ""
+      AgrupaData.MES -> data?.format("yyyy-MM") ?: ""
+      AgrupaData.ANO -> data?.format("yyyy") ?: ""
+    }
+
+    val grupoLoja = if (agrupaLojas) dataAgrupada
+    else "$loja-$dataAgrupada"
     val grupoParcela = if (agrupaParcelas) (mediaPrazo ?: 0).format()
     else "${mult.format("0.0000")}-${(mediaPrazo ?: 0).format()}-$tipoPgto"
     return "$grupoLoja-$grupoParcela"
@@ -58,7 +69,7 @@ class NotaResumoPgto(
 
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro).agrupa(filtro.agrupaLojas, filtro.agrupaParcelas)
+      return saci.findNotaResumoPgto(filtro).agrupa(filtro)
     }
   }
 }
@@ -67,19 +78,27 @@ data class FiltroNotaResumoPgto(
   val loja: Int,
   val agrupaLojas: Boolean,
   val agrupaParcelas: Boolean,
+  val agrupaDatas: AgrupaData,
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
 )
 
-fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): List<NotaResumoPgto> {
-  val grupo = this.groupBy { it.grupo(agrupaLojas, agrupaParcelas) }
+fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
+  val grupo = this.groupBy { it.grupo(filtro) }
   val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
+
+    val dataAgrupada = when(filtro.agrupaDatas) {
+      AgrupaData.DIA -> first.data?.format("dd/MM/yyyy") ?: ""
+      AgrupaData.MES -> first.data?.format("MM/yyyy") ?: ""
+      AgrupaData.ANO -> first.data?.format("yyyy") ?: ""
+    }
+
     NotaResumoPgto(
-      loja = if (agrupaLojas) null else first.loja,
+      loja = if (filtro.agrupaLojas) null else first.loja,
       pdv = null,
       transacao = null,
       pedido = null,
@@ -87,6 +106,7 @@ fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): 
       nomeMetodo = firstMetodo?.nomeMetodo,
       mult = first.mult,
       data = first.data,
+      dataFormatada = dataAgrupada,
       nota = null,
       tipoNf = null,
       hora = null,
@@ -106,4 +126,10 @@ fun List<NotaResumoPgto>.agrupa(agrupaLojas: Boolean, agrupaParcelas: Boolean): 
       perVenda = ent.sumOf { it.valorTipo ?: 0.0 } * 100.00 / totalValor,
     )
   }
+}
+
+enum class AgrupaData(val descricao: String){
+  DIA("Dia"),
+  MES("Mês"),
+  ANO("Ano"),
 }
