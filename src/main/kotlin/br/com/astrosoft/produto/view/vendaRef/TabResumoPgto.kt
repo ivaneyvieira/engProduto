@@ -93,10 +93,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             if (it.isFromClient) {
               viewModel.updateView()
               val visivel = !(it.value ?: false)
-              gridPanel.getColumnBy(NotaResumoPgto::numMetodo).isVisible = visivel
-              gridPanel.getColumnBy(NotaResumoPgto::nomeMetodo).isVisible = visivel
               gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
-              gridPanel.getColumnBy(NotaResumoPgto::quantParcelas).isVisible = visivel
               gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
             }
           }
@@ -349,14 +346,9 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::dataFormatada, header = "Data", width = null) {
       this.sortProperty = NotaResumoPgto::data
     }
-    columnGrid(NotaResumoPgto::numMetodo, header = "Met")
-    columnGrid(NotaResumoPgto::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
-    //columnGrid(NotaResumoPgto::documento, header = "Documento")
-    columnGrid(NotaResumoPgto::quantParcelas, header = "Parc")
     columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
-    // val valorCol = columnGrid(NotaResumoPgto::valor, header = "Valor NF")
 
     columnGrid(NotaResumoPgto::valorFin, header = "Fin")
     columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
