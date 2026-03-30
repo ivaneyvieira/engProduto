@@ -62,7 +62,11 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000));
+  AND (
+  (:consumo = 'T') OR
+  (:consumo = 'S' AND ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))) OR
+  (:consumo = 'N' AND NOT ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0)))
+  );
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
