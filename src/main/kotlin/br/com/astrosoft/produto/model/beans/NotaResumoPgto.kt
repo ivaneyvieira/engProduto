@@ -20,7 +20,7 @@ class NotaResumoPgto(
   var tipoPgto: String?,
   var documento: String?,
   var quantParcelas: Int?,
-  var mediaPrazo: Int?,
+  var mediaPrazo: Double?,
   var valor: Double?,
   var cliente: Int?,
   var uf: String?,
@@ -33,13 +33,6 @@ class NotaResumoPgto(
   var perVenda: Double? = 0.00,
   val dataFormatada: String? = null
 ) {
-  val documentoStr: String
-    get() {
-      val doc = documento ?: return ""
-      val quant = if (quantParcelas == null) "" else " (${quantParcelas}x)"
-      return "$doc $quant"
-    }
-
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -52,9 +45,10 @@ class NotaResumoPgto(
   fun grupo(filtro: FiltroNotaResumoPgto): String {
     val agrupaLojas = filtro.agrupaLojas
     val agrupaParcelas = filtro.agrupaParcelas
+    val agrupaTipoPagamento = filtro.agrupaTipoPagamento
     val agrupaDatas = filtro.agrupaDatas
 
-    val dataAgrupada = when(agrupaDatas) {
+    val dataAgrupada = when (agrupaDatas) {
       AgrupaData.DIA -> data?.format("yyyy-MM-dd") ?: ""
       AgrupaData.MES -> data?.format("yyyy-MM") ?: ""
       AgrupaData.ANO -> data?.format("yyyy") ?: ""
@@ -62,15 +56,26 @@ class NotaResumoPgto(
 
     val grupoLoja = if (agrupaLojas) dataAgrupada
     else "$loja-$dataAgrupada"
-    val grupoParcela = if (agrupaParcelas) (mediaPrazo ?: 0).format()
-    else "${mult.format("0.0000")}-${(mediaPrazo ?: 0).format()}-$tipoPgto"
+
+    val grupoParcela = if (agrupaParcelas) {
+      if (agrupaTipoPagamento)
+        "${(mediaPrazo ?: 0.00).format()}-$tipoPgto"
+      else
+        (mediaPrazo ?: 0.00).format()
+    } else {
+      if (agrupaTipoPagamento)
+        tipoPgto ?: ""
+      else
+        "${mult.format("0.0000")}-${(mediaPrazo ?: 0.00).format()}-$tipoPgto"
+    }
+
     return "$grupoLoja-$grupoParcela"
   }
 
   companion object {
     fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
-      return saci.findNotaResumoPgto(filtro).filter{
-        if(filtro.contaC) true
+      return saci.findNotaResumoPgto(filtro).filter {
+        if (filtro.contaC) true
         else {
           val filtroValor = it.tipoPgto?.startsWith("Conta") ?: true
           filtroValor.not()
@@ -84,6 +89,7 @@ data class FiltroNotaResumoPgto(
   val loja: Int,
   val agrupaLojas: Boolean,
   val agrupaParcelas: Boolean,
+  val agrupaTipoPagamento: Boolean,
   val agrupaDatas: AgrupaData,
   val pesquisa: String,
   val dataInicial: LocalDate?,
@@ -98,10 +104,26 @@ fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPg
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
 
-    val dataAgrupada = when(filtro.agrupaDatas) {
+    val dataAgrupada = when (filtro.agrupaDatas) {
       AgrupaData.DIA -> first.data?.format("dd/MM/yyyy") ?: ""
       AgrupaData.MES -> first.data?.format("MM/yyyy") ?: ""
       AgrupaData.ANO -> first.data?.format("yyyy") ?: ""
+    }
+
+    val agrupaTipoPagamento = filtro.agrupaTipoPagamento
+    val mediaPrazo = if (agrupaTipoPagamento) {
+      val totalTipo = ent.sumOf { it.valorTipo ?: 0.0 }
+      val totalItens = ent.sumOf { (it.mediaPrazo ?: 0.00) * (it.valorTipo ?: 0.00) }
+      totalItens / totalTipo
+    } else {
+      (first.mediaPrazo ?: 0.00) * 1.00
+    }
+    val multMed: Double? = if (agrupaTipoPagamento) {
+      val totalTipo = ent.sumOf { it.valorTipo ?: 0.0 }
+      val totalFin = ent.sumOf { it.valorFin ?: 0.0 }
+      totalTipo / (totalTipo - totalFin)
+    } else {
+      first.mult ?: 0.00
     }
 
     NotaResumoPgto(
@@ -111,7 +133,7 @@ fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPg
       pedido = null,
       numMetodo = firstMetodo?.numMetodo,
       nomeMetodo = firstMetodo?.nomeMetodo,
-      mult = first.mult,
+      mult = multMed,
       data = first.data,
       dataFormatada = dataAgrupada,
       nota = null,
@@ -120,7 +142,7 @@ fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPg
       tipoPgto = first.tipoPgto,
       documento = first.documento,
       quantParcelas = ent.maxOf { it.quantParcelas ?: 0 },
-      mediaPrazo = first.mediaPrazo ?: 0,
+      mediaPrazo = mediaPrazo,
       valor = ent.sumOf { it.valor ?: 0.0 },
       cliente = null,
       uf = null,
@@ -135,7 +157,7 @@ fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPg
   }
 }
 
-enum class AgrupaData(val descricao: String){
+enum class AgrupaData(val descricao: String) {
   DIA("Dia"),
   MES("Mês"),
   ANO("Ano"),

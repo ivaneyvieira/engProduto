@@ -45,6 +45,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
   private lateinit var cmbAnoFinal: IntegerField
 
   private lateinit var chkContaC: Checkbox
+  private lateinit var chkTipoPagamento: Checkbox
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -95,6 +96,15 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
               val visivel = !(it.value ?: false)
               gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
               gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
+            }
+          }
+        }
+        chkTipoPagamento = checkBox("Agrupa Tipo Pgto") {
+          addValueChangeListener {
+            if (it.isFromClient) {
+              viewModel.updateView()
+              // val visivel = (it.value ?: false)
+              // gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
             }
           }
         }
@@ -156,7 +166,6 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
-
         chkContaC = checkBox("Conta C") {
           addValueChangeListener {
             if (it.isFromClient) {
@@ -306,7 +315,6 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
-
         cmbAnoFinal = integerField("Ano Final") {
           this.value = LocalDate.now().year
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -329,6 +337,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             viewModel.imprimeRelatorio()
           }
         }
+
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
           val vendas = itensSelecionados()
           viewModel.geraPlanilha(vendas)
@@ -346,9 +355,9 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     columnGrid(NotaResumoPgto::dataFormatada, header = "Data", width = null) {
       this.sortProperty = NotaResumoPgto::data
     }
-    columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M")
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
+    columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
+    columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M", pattern = "#,##0.##")
 
     columnGrid(NotaResumoPgto::valorFin, header = "Fin")
     columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
@@ -357,7 +366,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0) }
-      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0) * (t.valorTipo ?: 0.00) } /
+      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) } /
                           list.sumOf { t -> t.valorTipo ?: 0.00 }
       val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0) }
       val totalPerVenda = list.sumOf { t -> (t.perVenda ?: 0.0) }
@@ -393,6 +402,7 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
       agrupaParcelas = chkParcela.value ?: false,
+      agrupaTipoPagamento = chkTipoPagamento.value ?: false,
       agrupaDatas = grupo,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = dataI,
