@@ -48,7 +48,9 @@ class NotaResumo(
       AgrupaData.ANO -> data?.format("yyyy") ?: ""
     }
 
-    return "$grupoLoja-$dataAgrupada"
+    val outroGrupo = "$numMetodo-${mult.format("0.0000")}-$documento-$quantParcelas-${mediaPrazo.format()}-$tipoPgto"
+
+    return "$grupoLoja-$dataAgrupada-$outroGrupo"
   }
 
   companion object {
