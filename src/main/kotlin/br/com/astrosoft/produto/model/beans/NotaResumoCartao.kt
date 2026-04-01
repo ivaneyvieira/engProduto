@@ -5,7 +5,7 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class NotaResumo(
+class NotaResumoCartao(
   var loja: Int?,
   var pdv: Int?,
   var transacao: Int?,
@@ -40,7 +40,7 @@ class NotaResumo(
       return groups.getOrNull(1)?.toIntOrNull()
     }
 
-  fun grupo(filtro: FiltroNotaResumo): String {
+  fun grupo(filtro: FiltroNotaResumoCartao): String {
     val grupoLoja = if (filtro.agrupaLojas) "" else loja.toString()
     val dataAgrupada = when (filtro.agrupaData) {
       AgrupaData.DIA -> data?.format("yyyy-MM-dd") ?: ""
@@ -54,13 +54,13 @@ class NotaResumo(
   }
 
   companion object {
-    fun findAll(filtro: FiltroNotaResumo): List<NotaResumo> {
-      return saci.findNotaResumo(filtro).agrupa(filtro)
+    fun findAll(filtro: FiltroNotaResumoCartao): List<NotaResumoCartao> {
+      return saci.findNotaResumoCartao(filtro).agrupa(filtro)
     }
   }
 }
 
-data class FiltroNotaResumo(
+data class FiltroNotaResumoCartao(
   val loja: Int,
   val agrupaLojas: Boolean,
   val agrupaData: AgrupaData,
@@ -69,7 +69,7 @@ data class FiltroNotaResumo(
   val dataFinal: LocalDate?,
 )
 
-fun List<NotaResumo>.agrupa(filtro: FiltroNotaResumo): List<NotaResumo> {
+fun List<NotaResumoCartao>.agrupa(filtro: FiltroNotaResumoCartao): List<NotaResumoCartao> {
   val grupo = this.groupBy { it.grupo(filtro) }
   val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->
@@ -93,7 +93,7 @@ fun List<NotaResumo>.agrupa(filtro: FiltroNotaResumo): List<NotaResumo> {
       totalTipo / (totalTipo - totalFin)
     }
 
-    NotaResumo(
+    NotaResumoCartao(
       loja = if (filtro.agrupaLojas) null else first.loja,
       pdv = null,
       transacao = null,

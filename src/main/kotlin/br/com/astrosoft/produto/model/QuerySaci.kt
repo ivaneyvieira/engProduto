@@ -1029,6 +1029,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findNotaResumoCartao(filtro: FiltroNotaResumoCartao): List<NotaResumoCartao> {
+    val sql = "/sqlSaci/resumoCartao.sql"
+    return query(sql, NotaResumoCartao::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   fun findNotaResumoPgto(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
     val sql = "/sqlSaci/resumoPgto.sql"
     return query(sql, NotaResumoPgto::class) {

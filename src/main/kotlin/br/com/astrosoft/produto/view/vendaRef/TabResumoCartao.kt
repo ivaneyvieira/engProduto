@@ -9,8 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.monthPicker
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumo
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoCartao
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoCartaoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -29,8 +29,8 @@ import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.LocalDate
 import java.time.YearMonth
 
-class TabResumoCartao(val viewModel: TabResumoViewModel) :
-  TabPanelGrid<NotaResumo>(NotaResumo::class), ITabResumo {
+class TabResumoCartao(val viewModel: TabResumoCartaoViewModel) :
+  TabPanelGrid<NotaResumoCartao>(NotaResumoCartao::class), ITabResumoCartao {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
   private lateinit var edtPesquisa: TextField
@@ -79,7 +79,7 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
-              gridPanel.getColumnBy(NotaResumo::loja).isVisible = !(it.value ?: false)
+              gridPanel.getColumnBy(NotaResumoCartao::loja).isVisible = !(it.value ?: false)
             }
           }
         }
@@ -93,7 +93,7 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
           }
           addValueChangeListener {
             if (it.isFromClient) {
-              gridPanel.getColumnBy(NotaResumo::dataFormatada).setHeader(
+              gridPanel.getColumnBy(NotaResumoCartao::dataFormatada).setHeader(
                 when (it.value) {
                   AgrupaData.DIA -> "Data"
                   AgrupaData.MES -> "Mês"
@@ -237,22 +237,22 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
     }
   }
 
-  override fun Grid<NotaResumo>.gridPanel() {
+  override fun Grid<NotaResumoCartao>.gridPanel() {
     this.addClassName("styling")
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     addColumnSeq("Seq")
-    columnGrid(NotaResumo::loja, header = "Loja")
-    columnGrid(NotaResumo::dataFormatada, header = "Data")
-    columnGrid(NotaResumo::numMetodo, header = "Met")
-    columnGrid(NotaResumo::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaResumo::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaResumo::documento, header = "Documento")
-    columnGrid(NotaResumo::quantParcelas, header = "Parc")
-    columnGrid(NotaResumo::mediaPrazo, header = "Pz M")
-    columnGrid(NotaResumo::tipoPgto, header = "Tipo Pgto")
-    columnGrid(NotaResumo::valor, header = "Valor NF")
-    columnGrid(NotaResumo::valorTipo, header = "Valor TP")
+    columnGrid(NotaResumoCartao::loja, header = "Loja")
+    columnGrid(NotaResumoCartao::dataFormatada, header = "Data")
+    columnGrid(NotaResumoCartao::numMetodo, header = "Met")
+    columnGrid(NotaResumoCartao::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaResumoCartao::mult, pattern = "#,##0.0000", header = "Mlt")
+    columnGrid(NotaResumoCartao::documento, header = "Documento")
+    columnGrid(NotaResumoCartao::quantParcelas, header = "Parc")
+    columnGrid(NotaResumoCartao::mediaPrazo, header = "Pz M")
+    columnGrid(NotaResumoCartao::tipoPgto, header = "Tipo Pgto")
+    columnGrid(NotaResumoCartao::valor, header = "Valor NF")
+    columnGrid(NotaResumoCartao::valorTipo, header = "Valor TP")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
@@ -261,17 +261,17 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
                           list.sumOf { t -> t.valorTipo ?: 0.00 }
       val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0) }
       val mediaMult = totalValorTipo / (totalValorTipo - totalFin)
-      getColumnBy(NotaResumo::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
-      getColumnBy(NotaResumo::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
-      //getColumnBy(NotaResumo::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
-      getColumnBy(NotaResumo::mult).setFooter(Html("<b><font size=4>${mediaMult.format("#,##0.0000")}</font></b>"))
+      getColumnBy(NotaResumoCartao::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
+      getColumnBy(NotaResumoCartao::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      //getColumnBy(NotaResumoCartao::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
+      getColumnBy(NotaResumoCartao::mult).setFooter(Html("<b><font size=4>${mediaMult.format("#,##0.0000")}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
       this.recalculateColumnWidths()
     }
   }
 
-  override fun filtro(): FiltroNotaResumo {
+  override fun filtro(): FiltroNotaResumoCartao {
     val grupo = cmbData.value ?: AgrupaData.DIA
     val dataI = when (grupo) {
       AgrupaData.DIA -> edtDataInicial.value ?: LocalDate.now()
@@ -286,7 +286,7 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
       AgrupaData.ANO -> LocalDate.of(cmbAnoFinal.value ?: LocalDate.now().year, 12, 31)
     }
 
-    return FiltroNotaResumo(
+    return FiltroNotaResumoCartao(
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
       agrupaData = cmbData.value ?: AgrupaData.DIA,
@@ -296,21 +296,21 @@ class TabResumoCartao(val viewModel: TabResumoViewModel) :
     )
   }
 
-  override fun updateNotas(notas: List<NotaResumo>) {
+  override fun updateNotas(notas: List<NotaResumoCartao>) {
     this.updateGrid(notas)
   }
 
-  override fun itensNotasSelecionados(): List<NotaResumo> {
+  override fun itensNotasSelecionados(): List<NotaResumoCartao> {
     return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.tabResumo == true
+    return username?.tabResumoCartao == true
   }
 
   override val label: String
-    get() = "Resumo"
+    get() = "Resumo Cartão"
 
   override fun updateComponent() {
     viewModel.updateView()
