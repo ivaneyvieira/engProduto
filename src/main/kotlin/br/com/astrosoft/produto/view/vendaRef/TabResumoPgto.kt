@@ -7,6 +7,7 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.monthPicker
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoPgtoViewModel
@@ -205,45 +206,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
           }
         }
 
-        cmbMesInicial = MonthPicker().apply {
+        cmbMesInicial = monthPicker("Mês Inicial") {
           this.isVisible = false
-          this.label = "Mês Inicial"
-          this.seti18n(
-            MonthPicker.MonthPickerI18n()
-              .setMonthNames(
-                listOf(
-                  "Janeiro",
-                  "Fevereiro",
-                  "Março",
-                  "Abril",
-                  "Maio",
-                  "Junho",
-                  "Julho",
-                  "Agosto",
-                  "Setembro",
-                  "Outubro",
-                  "Novembro",
-                  "Dezembro"
-                )
-              )
-              .setMonthLabels(
-                listOf(
-                  "Jan",
-                  "Fev",
-                  "Mar",
-                  "Abr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Ago",
-                  "Set",
-                  "Out",
-                  "Nov",
-                  "Dez"
-                )
-              )
-              .setFormat("MM/YYYY")
-          )
           this.value = YearMonth.now()
           addValueChangeListener {
             if (it.isFromClient) {
@@ -251,45 +215,8 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
-        cmbMesFinal = MonthPicker().apply {
+        cmbMesFinal = monthPicker("Mês Final") {
           this.isVisible = false
-          this.label = "Mês Final"
-          this.seti18n(
-            MonthPicker.MonthPickerI18n()
-              .setMonthNames(
-                listOf(
-                  "Janeiro",
-                  "Fevereiro",
-                  "Março",
-                  "Abril",
-                  "Maio",
-                  "Junho",
-                  "Julho",
-                  "Agosto",
-                  "Setembro",
-                  "Outubro",
-                  "Novembro",
-                  "Dezembro"
-                )
-              )
-              .setMonthLabels(
-                listOf(
-                  "Jan",
-                  "Fev",
-                  "Mar",
-                  "Abr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Ago",
-                  "Set",
-                  "Out",
-                  "Nov",
-                  "Dez"
-                )
-              )
-              .setFormat("MM/YYYY")
-          )
           this.value = YearMonth.now()
           addValueChangeListener {
             if (it.isFromClient) {
@@ -297,8 +224,6 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
-
-        add(cmbMesInicial, cmbMesFinal)
 
         cmbAnoInicial = integerField("Ano Inicial") {
           this.value = LocalDate.now().year
@@ -396,9 +321,6 @@ class TabResumoPgto(val viewModel: TabResumoPgtoViewModel) :
 
       AgrupaData.ANO -> LocalDate.of(cmbAnoFinal.value ?: LocalDate.now().year, 12, 31)
     }
-
-    //edtDataInicial.value = dataI
-    //edtDataFinal.value = dataF
 
     return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,

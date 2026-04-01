@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.theme.lumo.LumoUtility
+import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.util.*
 
 fun Component.style(name: String, value: String) {
@@ -101,4 +102,52 @@ fun HasStyle.borderRountend() {
   this.style.set("border", "1px solid var(--lumo-primary-color)")
   this.style.set("border-radius", "10px")
   this.style.set("padding", "10px")
+}
+
+@VaadinDsl
+fun (@VaadinDsl HasComponents).monthPicker(
+  label: String? = null,
+  block: (@VaadinDsl MonthPicker).() -> Unit = {}
+): @VaadinDsl MonthPicker {
+  val mesAno = MonthPicker().apply {
+    this.label = label
+    this.seti18n(
+      MonthPicker.MonthPickerI18n()
+        .setMonthNames(
+          listOf(
+            "Janeiro",
+            "Fevereiro",
+            "Março",
+            "Abril",
+            "Maio",
+            "Junho",
+            "Julho",
+            "Agosto",
+            "Setembro",
+            "Outubro",
+            "Novembro",
+            "Dezembro"
+          )
+        )
+        .setMonthLabels(
+          listOf(
+            "Jan",
+            "Fev",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Set",
+            "Out",
+            "Nov",
+            "Dez"
+          )
+        )
+        .setFormat("MM/YYYY")
+    )
+  }
+  val field = init(mesAno, block)
+  return field
 }

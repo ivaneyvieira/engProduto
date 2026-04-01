@@ -109,7 +109,6 @@ FROM
                ON CT.no = CR.cardno
 GROUP BY loja, pdv, transacao;
 
-
 DROP TEMPORARY TABLE IF EXISTS T_DUP;
 CREATE TEMPORARY TABLE T_DUP
 (
@@ -149,13 +148,13 @@ SELECT loja,
          WHEN tipoPgto LIKE 'DUP%'  THEN D.quantParcelas
          WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
                                     ELSE 0
-       END AS quantParcelas,
+       END                                           AS quantParcelas,
        -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
          WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
                                     ELSE 0
-       END AS mediaPrazo,
+       END                                           AS mediaPrazo,
        hora,
        tipoPgto,
        valor,
@@ -164,6 +163,7 @@ SELECT loja,
        uf,
        vendedor,
        valorTipo,
+       valorTipo - (valorTipo / IFNULL(mult, 1.000)) AS valorFin,
        obs
 FROM
   T_NOTA             AS N
