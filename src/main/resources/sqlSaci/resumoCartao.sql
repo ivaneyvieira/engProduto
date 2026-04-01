@@ -71,6 +71,7 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
+  AND Q.string LIKE 'Cartao%Cred%'
 GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
@@ -171,4 +172,4 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
-
+WHERE tipoPgto LIKE 'Cartao%Cred%'
