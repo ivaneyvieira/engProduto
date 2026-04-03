@@ -244,8 +244,6 @@ class TabResumoCartao(val viewModel: TabResumoCartaoViewModel) :
     addColumnSeq("Seq")
     columnGrid(NotaResumoCartao::loja, header = "Loja")
     columnGrid(NotaResumoCartao::dataFormatada, header = "Data")
-    columnGrid(NotaResumoCartao::numMetodo, header = "Met")
-    columnGrid(NotaResumoCartao::nomeMetodo, header = "Nome Met")
     columnGrid(NotaResumoCartao::mult, pattern = "#,##0.0000", header = "Mlt")
     columnGrid(NotaResumoCartao::documento, header = "Documento")
     columnGrid(NotaResumoCartao::quantParcelas, header = "Parc")

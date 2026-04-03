@@ -7,8 +7,6 @@ class PlanilhaResumoCartao : Planilha<NotaResumoCartao>("Vendas") {
   init {
     columnSheet(NotaResumoCartao::loja, header = "Loja")
     columnSheet(NotaResumoCartao::data, header = "Data")
-    columnSheet(NotaResumoCartao::numMetodo, header = "Met")
-    columnSheet(NotaResumoCartao::nomeMetodo, header = "Nome Met")
     columnSheet(NotaResumoCartao::mult, pattern = "#,##0.0000", header = "Mlt")
     columnSheet(NotaResumoCartao::documento, header = "Documento")
     columnSheet(NotaResumoCartao::quantParcelas, header = "Parc")
