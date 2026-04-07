@@ -1106,6 +1106,27 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findAjusteEst(filtro: FiltroAjusteEst): List<AjusteEst> {
+    val sql = "/sqlSaci/findAjusteEst.sql"
+    return query(sql, AjusteEst::class) {
+      this.addOptionalParameter("loja", filtro.loja)
+      this.addOptionalParameter("pesquisa", filtro.pesquisa)
+      this.addOptionalParameter("fornecedor", filtro.fornecedor)
+      this.addOptionalParameter("tributacao", filtro.tributacao)
+      this.addOptionalParameter("rotulo", filtro.rotulo)
+      this.addOptionalParameter("tipo", filtro.tipo)
+      this.addOptionalParameter("cl", filtro.cl)
+      this.addOptionalParameter("caracter", filtro.caracter.value)
+      this.addOptionalParameter("letraDup", filtro.letraDup.value)
+      this.addOptionalParameter("grade", filtro.grade.let { if (it) "S" else "N" })
+      this.addOptionalParameter("tipoSaldo", filtro.tipoSaldo.name)
+      this.addOptionalParameter("estoque", filtro.estoque.value)
+      this.addOptionalParameter("saldo", filtro.saldo)
+      this.addOptionalParameter("consumo", filtro.consumo.value)
+      this.addOptionalParameter("update", filtro.update)
+    }
+  }
+
   fun findProdutoSaldoAtacado(filtro: FiltroProdutoSaldoAtacado): List<ProdutoSaldoAtacado> {
     val sql = "/sqlSaci/findProdutosSaldoAtacado.sql"
     return query(sql, ProdutoSaldoAtacado::class) {

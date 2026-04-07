@@ -5,10 +5,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoSaldo
-import br.com.astrosoft.produto.model.printText.PrintProdutos
+import br.com.astrosoft.produto.model.planilha.PlanilhaAjusteEst
+import br.com.astrosoft.produto.model.printText.PrintAjusteEst
 
-class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
+class TabAjusteEstViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -21,14 +21,14 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
-      val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
+      val produtos = AjusteEst.findAjusteEst(filtro)
 
       subView.updateProdutos(produtos)
     }
   }
 
-  fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
-    val planilha = PlanilhaProdutoSaldo()
+  fun geraPlanilha(produtos: List<AjusteEst>): ByteArray {
+    val planilha = PlanilhaAjusteEst()
     return planilha.write(produtos)
   }
 
@@ -39,7 +39,7 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
     }
     val filtro = subView.filtro()
 
-    val report = PrintProdutos(filtro)
+    val report = PrintAjusteEst(filtro)
 
     report.print(
       dados = produtos,
@@ -72,12 +72,12 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabProdutoList
+    get() = viewModel.view.tabAjusteEst
 }
 
-interface ITabProdutoList : ITabView {
-  fun filtro(): FiltroProdutoSaldo
-  fun updateProdutos(produtos: List<ProdutoSaldo>)
-  fun produtosSelecionados(): List<ProdutoSaldo>
+interface ITabAjusteEst : ITabView {
+  fun filtro(): FiltroAjusteEst
+  fun updateProdutos(produtos: List<AjusteEst>)
+  fun produtosSelecionados(): List<AjusteEst>
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit)
 }

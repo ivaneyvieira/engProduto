@@ -199,6 +199,7 @@ class UserSaci : IUser {
   var tabResumo by DelegateAuthorized3(166)
   var tabResumoPgto by DelegateAuthorized3(167)
   var tabResumoCartao by DelegateAuthorized3(168)
+  var ajusteEst by DelegateAuthorized3(169)
 
   //Locais
   private var localEstoque: String?
@@ -511,7 +512,7 @@ class UserSaci : IUser {
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
             produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja ||
-            produtoEstoque || produtoSaldoEstoque || produtoAtacado || admin
+            produtoEstoque || produtoSaldoEstoque || produtoAtacado || ajusteEst || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
@@ -521,6 +522,7 @@ class UserSaci : IUser {
       produtoEstoqueValidadeLoja = value
       produtoEstoque = value
       produtoSaldoEstoque = value
+      ajusteEst = true
     }
   var nfd
     get() = nfdDevFor || admin

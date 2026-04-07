@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.recebimento.FormValidade
-import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoList
-import br.com.astrosoft.produto.viewmodel.produto.TabProdutoListViewModel
+import br.com.astrosoft.produto.viewmodel.produto.ITabAjusteEst
+import br.com.astrosoft.produto.viewmodel.produto.TabAjusteEstViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
@@ -19,9 +19,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabAjusteEst(val viewModel: TabProdutoListViewModel) :
-  TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
-  ITabProdutoList {
+class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
+  TabPanelGrid<AjusteEst>(AjusteEst::class), ITabAjusteEst {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
@@ -206,33 +205,33 @@ class TabAjusteEst(val viewModel: TabProdutoListViewModel) :
     }
   }
 
-  override fun Grid<ProdutoSaldo>.gridPanel() {
+  override fun Grid<AjusteEst>.gridPanel() {
     this.addClassName("styling")
     setSelectionMode(Grid.SelectionMode.MULTI)
     this.addColumnSeq("Seq", width = "50px")
-    columnGrid(ProdutoSaldo::loja, header = "Loja")
-    columnGrid(ProdutoSaldo::codigo, header = "Código").right()
-    columnGrid(ProdutoSaldo::descricao, header = "Descrição").expand()
-    columnGrid(ProdutoSaldo::gradeProduto, header = "Grade")
-    columnGrid(ProdutoSaldo::unidade, header = "Un")
-    columnGrid(ProdutoSaldo::qttyVarejo, header = "Varejo")
-    columnGrid(ProdutoSaldo::qttyAtacado, header = "Atacado")
-    columnGrid(ProdutoSaldo::qttyTotal, header = "Total")
-    columnGrid(ProdutoSaldo::estoqueLojas, header = "Est Lojas")
-    columnGrid(ProdutoSaldo::tributacao, header = "CST")
-    columnGrid(ProdutoSaldo::rotulo, header = "Rotulo")
-    columnGrid(ProdutoSaldo::ncm, header = "NCM")
-    columnGrid(ProdutoSaldo::fornecedor, header = "For")
-    columnGrid(ProdutoSaldo::abrev, header = "Abrev")
-    columnGrid(ProdutoSaldo::tipo, header = "Tipo")
-    columnGrid(ProdutoSaldo::cl, header = "C Lucro")
-    columnGrid(ProdutoSaldo::tipoValidade, header = "Tipo")
-    columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
-    columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
+    columnGrid(AjusteEst::loja, header = "Loja")
+    columnGrid(AjusteEst::codigo, header = "Código").right()
+    columnGrid(AjusteEst::descricao, header = "Descrição").expand()
+    columnGrid(AjusteEst::gradeProduto, header = "Grade")
+    columnGrid(AjusteEst::unidade, header = "Un")
+    columnGrid(AjusteEst::qttyVarejo, header = "Varejo")
+    columnGrid(AjusteEst::qttyAtacado, header = "Atacado")
+    columnGrid(AjusteEst::qttyTotal, header = "Total")
+    columnGrid(AjusteEst::estoqueLojas, header = "Est Lojas")
+    columnGrid(AjusteEst::tributacao, header = "CST")
+    columnGrid(AjusteEst::rotulo, header = "Rotulo")
+    columnGrid(AjusteEst::ncm, header = "NCM")
+    columnGrid(AjusteEst::fornecedor, header = "For")
+    columnGrid(AjusteEst::abrev, header = "Abrev")
+    columnGrid(AjusteEst::tipo, header = "Tipo")
+    columnGrid(AjusteEst::cl, header = "C Lucro")
+    columnGrid(AjusteEst::tipoValidade, header = "Tipo")
+    columnGrid(AjusteEst::mesesGarantia, header = "Val")
+    columnGrid(AjusteEst::codigoRel, header = "Relac").right()
   }
 
-  override fun filtro(): FiltroProdutoSaldo {
-    return FiltroProdutoSaldo(
+  override fun filtro(): FiltroAjusteEst {
+    return FiltroAjusteEst(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
@@ -251,11 +250,11 @@ class TabAjusteEst(val viewModel: TabProdutoListViewModel) :
     )
   }
 
-  override fun updateProdutos(produtos: List<ProdutoSaldo>) {
+  override fun updateProdutos(produtos: List<AjusteEst>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<ProdutoSaldo> {
+  override fun produtosSelecionados(): List<AjusteEst> {
     return itensSelecionados()
   }
 
@@ -268,11 +267,11 @@ class TabAjusteEst(val viewModel: TabProdutoListViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.produtoList == true
+    return username?.ajusteEst == true
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "Ajuste Est"
 
   override fun updateComponent() {
     viewModel.updateView()

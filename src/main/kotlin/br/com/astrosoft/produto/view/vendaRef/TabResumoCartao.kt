@@ -248,20 +248,21 @@ class TabResumoCartao(val viewModel: TabResumoCartaoViewModel) :
     columnGrid(NotaResumoCartao::documento, header = "Documento")
     columnGrid(NotaResumoCartao::quantParcelas, header = "Parc")
     columnGrid(NotaResumoCartao::mediaPrazo, header = "Pz M")
+    columnGrid(NotaResumoCartao::valorFin, header = "Fin")
     columnGrid(NotaResumoCartao::tipoPgto, header = "Tipo Pgto")
     columnGrid(NotaResumoCartao::valor, header = "Valor NF")
     columnGrid(NotaResumoCartao::valorTipo, header = "Valor TP")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
-      val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0) }
-      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) } /
-                          list.sumOf { t -> t.valorTipo ?: 0.00 }
-      val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0) }
+      val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.00) }
+      val totalPrazoPonderado = list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) }
+      val totalPrazo = totalPrazoPonderado / totalValorTipo
+      val totalFin = list.sumOf { t -> (t.valorFin ?: 0.00) }
       val mediaMult = totalValorTipo / (totalValorTipo - totalFin)
-      getColumnBy(NotaResumoCartao::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
+      getColumnBy(NotaResumoCartao::mediaPrazo).setFooter(Html("<b><font size=4>${totalPrazo.format()}</font></b>"))
       getColumnBy(NotaResumoCartao::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
-      //getColumnBy(NotaResumoCartao::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
+      getColumnBy(NotaResumoCartao::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
       getColumnBy(NotaResumoCartao::mult).setFooter(Html("<b><font size=4>${mediaMult.format("#,##0.0000")}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
