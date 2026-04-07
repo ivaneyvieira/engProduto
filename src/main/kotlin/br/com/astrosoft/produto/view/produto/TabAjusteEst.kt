@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.produto
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -9,6 +10,9 @@ import br.com.astrosoft.produto.view.recebimento.FormValidade
 import br.com.astrosoft.produto.viewmodel.produto.ITabAjusteEst
 import br.com.astrosoft.produto.viewmodel.produto.TabAjusteEstViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -217,6 +221,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     columnGrid(AjusteEst::qttyVarejo, header = "Varejo")
     columnGrid(AjusteEst::qttyAtacado, header = "Atacado")
     columnGrid(AjusteEst::custoVarejoUnitario, header = "Custo Varejo", pattern = "#,##0.0000")
+    columnGrid(AjusteEst::custoVarejo, header = "Custo Total")
     columnGrid(AjusteEst::qttyTotal, header = "Total")
     columnGrid(AjusteEst::estoqueLojas, header = "Est Lojas")
     columnGrid(AjusteEst::tributacao, header = "CST")
@@ -229,6 +234,15 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     columnGrid(AjusteEst::tipoValidade, header = "Tipo")
     columnGrid(AjusteEst::mesesGarantia, header = "Val")
     columnGrid(AjusteEst::codigoRel, header = "Relac").right()
+
+    this.dataProvider.addDataProviderListener {
+      val list = it.source.fetchAll()
+      val qttyTotal = list.sumOf { t -> t.qttyTotal ?: 0 }
+      val custoVarejo = list.sumOf { t -> t.custoVarejo ?: 0.00 }
+      this.getColumnBy(AjusteEst::custoVarejoUnitario).setFooter(Html("<b><font size=4>Total</font></b>"))
+      this.getColumnBy(AjusteEst::custoVarejo).setFooter(Html("<b><font size=4>${custoVarejo.format()}</font></b>"))
+      this.getColumnBy(AjusteEst::qttyTotal).setFooter(Html("<b><font size=4>${qttyTotal.format()}</font></b>"))
+    }
   }
 
   override fun filtro(): FiltroAjusteEst {

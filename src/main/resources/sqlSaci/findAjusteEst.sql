@@ -117,13 +117,13 @@ SELECT S.storeno                                                AS loja,
        ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
        ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal,
        SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado,
+       SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoVarejo,
        AVG(S.cm_varejo / 10000)                                 AS custoVarejoUnitario
 FROM
   sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
   AND :update = TRUE
 GROUP BY loja, prdno, gradeProduto;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_PRDSTK;
 CREATE TEMPORARY TABLE T_PRDSTK
@@ -140,6 +140,7 @@ SELECT S.loja                   AS loja,
        S.qttyAtacado            AS qttyAtacado,
        S.qttyTotal              AS qttyTotal,
        S.custoAtacado           AS custoAtacado,
+       S.custoVarejo            AS custoVarejo,
        custoVarejoUnitario      AS custoVarejoUnitario,
        P.tributacao             AS tributacao,
        P.rotulo                 AS rotulo,
@@ -190,6 +191,7 @@ SELECT loja,
        qttyAtacado,
        qttyTotal,
        custoAtacado,
+       custoVarejo,
        tributacao,
        rotulo,
        ncm,
