@@ -116,7 +116,8 @@ SELECT S.storeno                                                AS loja,
        ROUND(SUM(S.qtty_varejo / 1000))                         AS qttyVarejo,
        ROUND(SUM(S.qtty_atacado / 1000))                        AS qttyAtacado,
        ROUND(SUM(S.qtty_varejo / 1000 + S.qtty_atacado / 1000)) AS qttyTotal,
-       SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado
+       SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado,
+       AVG(S.cm_varejo / 10000)                                 AS custoVarejoUnitario
 FROM
   sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
@@ -139,6 +140,7 @@ SELECT S.loja                   AS loja,
        S.qttyAtacado            AS qttyAtacado,
        S.qttyTotal              AS qttyTotal,
        S.custoAtacado           AS custoAtacado,
+       custoVarejoUnitario      AS custoVarejoUnitario,
        P.tributacao             AS tributacao,
        P.rotulo                 AS rotulo,
        P.ncm                    AS ncm,
@@ -183,6 +185,7 @@ SELECT loja,
        L.estoqueLojasVarejo,
        L.estoqueLojasAtacado,
        L.custoLojasAtacado,
+       custoVarejoUnitario,
        qttyVarejo,
        qttyAtacado,
        qttyTotal,

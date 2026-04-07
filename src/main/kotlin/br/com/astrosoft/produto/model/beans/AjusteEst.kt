@@ -18,6 +18,7 @@ class AjusteEst(
   var qttyAtacado: Int?,
   var qttyTotal: Int?,
   var custoAtacado: Double?,
+  var custoVarejoUnitario: Double?,
   var custoLojasAtacado: Double?,
   var tributacao: String?,
   var rotulo: String?,

@@ -216,6 +216,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     columnGrid(AjusteEst::unidade, header = "Un")
     columnGrid(AjusteEst::qttyVarejo, header = "Varejo")
     columnGrid(AjusteEst::qttyAtacado, header = "Atacado")
+    columnGrid(AjusteEst::custoVarejoUnitario, header = "Custo Varejo", pattern = "#,##0.0000")
     columnGrid(AjusteEst::qttyTotal, header = "Total")
     columnGrid(AjusteEst::estoqueLojas, header = "Est Lojas")
     columnGrid(AjusteEst::tributacao, header = "CST")
