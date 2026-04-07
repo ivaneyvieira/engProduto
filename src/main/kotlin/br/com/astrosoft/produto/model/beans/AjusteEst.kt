@@ -45,6 +45,7 @@ class AjusteEst(
 data class FiltroAjusteEst(
   val loja: Int,
   val pesquisa: String,
+  val codigo: Int,
   val fornecedor: Int,
   val tributacao: String,
   val rotulo: String,

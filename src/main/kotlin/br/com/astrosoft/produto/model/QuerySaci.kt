@@ -1111,6 +1111,7 @@ class QuerySaci : QueryDB(database) {
     return query(sql, AjusteEst::class) {
       this.addOptionalParameter("loja", filtro.loja)
       this.addOptionalParameter("pesquisa", filtro.pesquisa)
+      this.addOptionalParameter("codigo", filtro.codigo)
       this.addOptionalParameter("fornecedor", filtro.fornecedor)
       this.addOptionalParameter("tributacao", filtro.tributacao)
       this.addOptionalParameter("rotulo", filtro.rotulo)

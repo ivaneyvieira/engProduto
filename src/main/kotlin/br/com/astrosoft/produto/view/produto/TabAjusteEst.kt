@@ -27,6 +27,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
   TabPanelGrid<AjusteEst>(AjusteEst::class), ITabAjusteEst {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtCodigo: IntegerField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTributo: TextField
   private lateinit var edtRotulo: TextField
@@ -70,9 +71,17 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         }
         init()
         edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
+          this.width = "200px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtCodigo = integerField("Código"){
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -80,7 +89,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         edtFornecedor = integerField("Fornecedor") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -88,7 +97,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         edtTributo = textField("CST") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -97,7 +106,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -105,7 +114,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -113,7 +122,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
         edtCl = integerField("C Lucro") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -121,6 +130,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
       }
       horizontalLayout {
         cmbCartacer = select("Caracter") {
+          this.width = "7rem"
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -131,7 +141,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           }
         }
         cmbConsumo = select("Consumo") {
-          this.width = "100px"
+          this.width = "7rem"
           this.setItems(EConsumo.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -142,6 +152,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           }
         }
         cmbLetraDup = select("Letra Dup") {
+          this.width = "7rem"
           this.setItems(ELetraDup.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -158,6 +169,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           }
         }
         cmbTipoSaldo = select("Tipo Saldo") {
+          this.width = "7rem"
           this.setItems(ETipoSaldo.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -168,6 +180,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           }
         }
         cmdEstoque = select("Estoque") {
+          this.width = "7rem"
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
             item.descricao
@@ -178,7 +191,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           }
         }
         edtSaldo = integerField("Saldo") {
-          this.width = "100px"
+          this.width = "7rem"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.TIMEOUT
           this.value = null
@@ -249,6 +262,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     return FiltroAjusteEst(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      codigo = edtCodigo.value ?: 0,
       fornecedor = edtFornecedor.value ?: 0,
       tributacao = edtTributo.value ?: "",
       rotulo = edtRotulo.value ?: "",

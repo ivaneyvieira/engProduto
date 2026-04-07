@@ -83,6 +83,7 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
                  ELSE FALSE
       END
   AND (:consumo = 'T' OR (:consumo = 'S' AND P.no * 1 >= 900000) OR (:consumo = 'N' AND P.no * 1 < 900000))
+  AND (P.no = LPAD(:codigo, 16, ' ') OR :codigo = 0)
   AND :update = TRUE;
 
 DROP TEMPORARY TABLE IF EXISTS T_STKLOJA;
