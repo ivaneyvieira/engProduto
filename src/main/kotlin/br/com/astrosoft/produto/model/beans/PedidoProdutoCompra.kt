@@ -16,6 +16,9 @@ class PedidoProdutoCompra {
   val valorTotalPendente: Double
     get() = qttyPendente * custo
 
+  val codigoNum
+    get() = codigo.trim().toIntOrNull() ?: 0
+
   //Sequencial do item
   var item: Int = 0
 }
