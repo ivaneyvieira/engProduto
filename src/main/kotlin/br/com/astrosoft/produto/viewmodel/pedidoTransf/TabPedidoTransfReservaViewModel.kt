@@ -8,7 +8,6 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferencia
 import br.com.astrosoft.produto.model.printText.RequisicaoTransferenciaConsulta
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
-import org.apache.xmlbeans.impl.common.XmlStreamUtils.printEvent
 
 class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
   fun updateView() {

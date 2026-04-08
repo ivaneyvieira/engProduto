@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.model.printText
 
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.produto.model.beans.NotaRecebimento
-import java.time.LocalDate
 
 class PrintNotaDoc : PrintText<NotaRecebimento>() {
   override fun printTitle(bean: NotaRecebimento) {

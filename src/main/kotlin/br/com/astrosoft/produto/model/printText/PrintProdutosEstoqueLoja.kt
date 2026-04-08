@@ -8,7 +8,6 @@ import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoEstoqueAcerto
 import java.time.LocalDate
 import java.time.LocalTime
 

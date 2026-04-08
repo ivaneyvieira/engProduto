@@ -7,7 +7,6 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.withContext
 import org.simpleflatmapper.sql2o.SfmResultSetHandlerFactoryBuilder
 import org.sql2o.Connection

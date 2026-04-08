@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class EmailDevolucao(

@@ -18,7 +18,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.open.App
 import java.time.LocalDate
 
 class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :

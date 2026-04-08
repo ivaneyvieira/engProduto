@@ -1,11 +1,7 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.superDoubleField
 import br.com.astrosoft.produto.model.beans.ProdutoControle
-import br.com.astrosoft.produto.model.beans.ProdutoEmbalagem
-import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.viewmodel.estoqueCD.IModelConferencia
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleLojaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
@@ -17,9 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import java.time.LocalDate
-import kotlin.math.roundToInt
 
 class DlgControleSaldo(
   val viewModel: TabControleLojaViewModel,

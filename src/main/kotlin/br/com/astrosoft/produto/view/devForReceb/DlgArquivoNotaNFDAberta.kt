@@ -2,18 +2,15 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.InvFileDev
 import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import br.com.astrosoft.produto.model.beans.NotaSaidaDevFile
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.icon
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import kotlin.jvm.java
 
 class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null

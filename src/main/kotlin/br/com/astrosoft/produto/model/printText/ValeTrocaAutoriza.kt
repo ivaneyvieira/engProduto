@@ -4,7 +4,6 @@ import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
-import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 
 class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") : PrintText<ProdutoNFS>() {
