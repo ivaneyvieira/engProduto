@@ -29,8 +29,6 @@ FROM
                ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
 GROUP BY P.invno, P.prdno, P.grade;
 
-
-
 DROP TEMPORARY TABLE IF EXISTS T_INVP;
 CREATE TEMPORARY TABLE T_INVP
 (
@@ -57,14 +55,14 @@ GROUP BY P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
-SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'N' AS tipo
-FROM
-  T_INVN
-UNION
-DISTINCT
-SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'P' AS tipo
-FROM
-  T_INVP;
+  SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'N' AS tipo
+  FROM
+    T_INVN
+  UNION
+  DISTINCT
+  SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'P' AS tipo
+  FROM
+    T_INVP;
 
 DROP TEMPORARY TABLE IF EXISTS T_INVORD;
 CREATE TEMPORARY TABLE T_INVORD
@@ -75,9 +73,9 @@ SELECT storeno,
        MAX(IF(tipo = 'P', invno, NULL)) AS invno2,
        MAX(dataEmissao)                 AS dataEmissao,
        MAX(dataEntrada)                 AS dataEntrada,
-       nfEntrada,
-       prdno,
-       grade,
+       nfEntrada                        AS nfEntrada,
+       prdno                            AS prdno,
+       grade                            AS grade,
        SUM(qtty)                        AS qtty,
        SUM(IF(tipo = 'R', qtty, 0))     AS qttyRcv,
        MAX(cost)                        AS cost
@@ -143,9 +141,7 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
   AND (O.status != 2)
-  AND (O.amt > 0)
-  AND ((:status = 0 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) > 0) OR
-       (:status = 1 AND ROUND((IO.qtty - IO.qttyRcv) * IO.cost, 2) = 0) OR (:status = 999) OR (IO.storeno IS NULL));
+  AND (O.amt > 0);
 
 SELECT loja,
        sigla,

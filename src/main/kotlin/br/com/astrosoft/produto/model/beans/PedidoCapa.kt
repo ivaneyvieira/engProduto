@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 data class PedidoCapa(
   val loja: Int,
@@ -19,7 +20,6 @@ data class PedidoCapa(
   val observacao: String,
   val notas: List<PedidoNota>,
 ) {
-
   fun produtosCompra(): List<PedidoProdutoCompra> {
     return saci.findPedidoProdutoCompra(loja, pedido)
   }
@@ -27,8 +27,16 @@ data class PedidoCapa(
   val totalRecebido: Double
     get() = totalPedido - totalPendente
 
-  val statusPedido: String
-    get() = EPedidosStatus.entries.firstOrNull { it.cod == status }?.descricao ?: ""
+  val statusPedido: EPedidosStatus
+    get() {
+      return if ((totalPendente * 100).roundToInt() == 0) {
+        EPedidosStatus.RECEBIDO
+      } else if ((totalPendente * 100).roundToInt() >= (totalPedido * 100).roundToInt()) {
+        EPedidosStatus.PENDENTE
+      } else {
+        EPedidosStatus.PARCIAL
+      }
+    }
 
   val preEntrada: String
     get() = if (notas.any { it.preEntrada == "S" }) "S" else "N"
@@ -47,6 +55,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
   return grupo.mapNotNull { entry ->
     val (_, list) = entry
     val pedido = list.firstOrNull() ?: return@mapNotNull null
+
     PedidoCapa(
       loja = pedido.loja,
       sigla = pedido.sigla,
@@ -79,6 +88,7 @@ data class FiltroPedidoNota(
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
   TODOS(999, "Todos"),
   PENDENTE(0, "Pendente"),
+  PARCIAL(0, "Parcial"),
   RECEBIDO(1, "Recebido")
 }
 

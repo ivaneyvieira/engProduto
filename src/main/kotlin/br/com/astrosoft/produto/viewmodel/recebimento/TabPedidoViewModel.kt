@@ -4,10 +4,7 @@ import br.com.astrosoft.devolucao.model.reports.RelatorioPedido
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EPreEntrada
-import br.com.astrosoft.produto.model.beans.FiltroPedidoNota
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.PedidoCapa
+import br.com.astrosoft.produto.model.beans.*
 
 class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
   val subView
@@ -18,6 +15,8 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
     val pedidos = PedidoCapa.findPedidoCapa(filtro).filter {
       (it.preEntrada == filtro.preEntrada.cod || filtro.preEntrada == EPreEntrada.TODOS) &&
       (!filtro.semRecebimento || it.totalRecebido.format() == "0,00")
+    }.filter {
+      it.statusPedido == filtro.status || filtro.status == EPedidosStatus.TODOS
     }
     subView.updatePedidos(pedidos)
   }
