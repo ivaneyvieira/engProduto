@@ -3342,6 +3342,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun deletePedido(pedido: PedidoCapa) {
+    val sql = "/sqlSaci/deletePedido.sql"
+    script(sql) {
+      addOptionalParameter("loja", pedido.loja)
+      addOptionalParameter("pedido", pedido.pedido)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

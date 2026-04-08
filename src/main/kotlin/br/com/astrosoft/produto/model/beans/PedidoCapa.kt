@@ -24,6 +24,10 @@ data class PedidoCapa(
     return saci.findPedidoProdutoCompra(loja, pedido)
   }
 
+  fun delete() {
+    saci.deletePedido(this)
+  }
+
   val totalRecebido: Double
     get() = totalPedido - totalPendente
 

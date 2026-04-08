@@ -38,6 +38,25 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
     val file = RelatorioPedido.processaRelatorio(pedidos)
     viewModel.view.showReport(chave = "PedidoImpresso${System.nanoTime()}", report = file)
   }
+
+  fun excluiPedidosRecebidos() = viewModel.exec {
+    val selecionado = subView.predidoSelecionado()
+    if (selecionado.isEmpty()) {
+      fail("Nenhum pedido selecionado")
+    }
+    val pedidosNaoRecebidos = selecionado.filter {
+      it.statusPedido != EPedidosStatus.RECEBIDO
+    }
+    if (pedidosNaoRecebidos.isNotEmpty()) {
+      fail("Não podemos excluir pedidos não recebido")
+    }
+    viewModel.view.showQuestion("Confirma a exclusão de pedidos recebidos?") {
+      selecionado.forEach { pedido ->
+        pedido.delete()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabPedido : ITabView {

@@ -110,6 +110,14 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
             viewModel.imprimePedido()
           }
         }
+        button("Exclui") {
+          val user = AppConfig.userLogin() as? UserSaci
+          this.isVisible = user?.admin == true
+          this.icon = VaadinIcon.TRASH.create()
+          addClickListener {
+            viewModel.excluiPedidosRecebidos()
+          }
+        }
       }
     }
   }
