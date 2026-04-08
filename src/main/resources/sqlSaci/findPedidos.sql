@@ -27,6 +27,8 @@ FROM
                USING (invno)
     INNER JOIN sqldados.ords AS O
                ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+WHERE (I.storeno = :loja OR :loja = 0)
+  AND (I.date >= :dataInicial OR :dataInicial = 0)
 GROUP BY P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INVP;
@@ -51,6 +53,8 @@ FROM
                USING (invno)
     INNER JOIN sqldados.ords AS O
                ON I.ordno = O.no AND I.storeno = O.storeno AND I.vendno = O.vendno
+WHERE (P.storeno = :loja OR :loja = 0)
+  AND (P.date >= :dataInicial OR :dataInicial = 0)
 GROUP BY P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
@@ -88,14 +92,24 @@ CREATE TEMPORARY TABLE T_OPRD
 (
   PRIMARY KEY (storeno, ordno)
 )
-SELECT storeno,
+SELECT P.storeno,
        ordno,
        SUM(qttyRcv * cost)                       AS totalRecebido,
        SUM((qtty - qttyCancel - qttyRcv) * cost) AS totalPendente,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
 FROM
-  sqldados.oprd AS P
-GROUP BY storeno, ordno;
+  sqldados.oprd              AS P
+    INNER JOIN sqldados.ords AS O
+               ON O.storeno = P.storeno
+                 AND O.no = P.ordno
+    INNER JOIN sqldados.vend AS V
+               ON O.vendno = V.no
+WHERE V.name NOT LIKE 'ENGECOPI%'
+  AND (O.storeno = :loja OR :loja = 0)
+  AND (O.date >= :dataInicial OR :dataInicial = 0)
+  AND (O.date <= :dataFinal OR :dataFinal = 0)
+  AND (O.status != 2)
+GROUP BY P.storeno, P.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
@@ -140,8 +154,7 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.storeno = :loja OR :loja = 0)
   AND (O.date >= :dataInicial OR :dataInicial = 0)
   AND (O.date <= :dataFinal OR :dataFinal = 0)
-  AND (O.status != 2)
-  AND (O.amt > 0);
+  AND (O.status != 2);
 
 SELECT loja,
        sigla,
