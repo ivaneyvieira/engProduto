@@ -494,6 +494,16 @@ class UserSaci : IUser {
       lojas = lojas.setValue(37, value.toSaciDate().toString())
     }
 
+  var lojaTransfReserva: Int?
+    get() = lojas.getOrNull(38)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(38, value?.toString() ?: "")
+    }
+
+  fun lojaTransfReserva(): Int? {
+    return lojaTransfReserva ?: storeno
+  }
+
   //-------------------------------------------------
 
   fun List<String>.setValue(index: Int, value: String): List<String> {

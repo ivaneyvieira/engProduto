@@ -24,6 +24,7 @@ class TabPedidoTransfUsrViewModel(val viewModel: PedidoTransfViewModel) : TabUsr
     this.pedidoTransfEnt = usuario.pedidoTransfEnt
     this.pedidoTransfRessu4 = usuario.pedidoTransfRessu4
     this.impressoraTrans = usuario.impressoraTrans
+    this.lojaTransfReserva = usuario.lojaTransfReserva
   }
 }
 

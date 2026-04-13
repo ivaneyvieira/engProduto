@@ -39,8 +39,8 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isVisible = user?.storeno == 0
-    cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
+    cmbLoja.isVisible = user?.lojaTransfReserva() == 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaTransfReserva() ?: 0) ?: Loja.lojaZero
   }
 
   override fun printerUser(): List<String> {
