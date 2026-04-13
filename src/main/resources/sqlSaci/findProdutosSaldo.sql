@@ -68,6 +68,7 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
   AND (R.form_label = :rotulo OR :rotulo = '')
   AND (P.typeno = :tipo OR :tipo = 0)
   AND (P.clno = :cl OR P.deptno = :cl OR P.groupno = :cl OR :cl = 0)
+  AND (P.no = LPAD(:produto, 16, ' ') OR P.name like CONCAT(:produto, '%') OR :produto = '')
   AND CASE :caracter
         WHEN 'S' THEN P.name NOT REGEXP '^[A-Z0-9]'
         WHEN 'N' THEN P.name REGEXP '^[A-Z0-9]'

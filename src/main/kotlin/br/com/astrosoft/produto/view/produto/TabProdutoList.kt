@@ -24,6 +24,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   ITabProdutoList {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtProduto: TextField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTributo: TextField
   private lateinit var edtRotulo: TextField
@@ -67,9 +68,17 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         }
         init()
         edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
+          this.width = "200px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        edtProduto = textField("Produto") {
+          this.width = "100px"
+          this.isClearButtonVisible = true
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -77,7 +86,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtFornecedor = integerField("Fornecedor") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -85,7 +94,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtTributo = textField("CST") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -94,7 +103,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -102,7 +111,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -110,7 +119,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtCl = integerField("C Lucro") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -177,7 +186,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
         edtSaldo = integerField("Saldo") {
           this.width = "100px"
           this.isClearButtonVisible = true
-          valueChangeMode = ValueChangeMode.TIMEOUT
+          valueChangeMode = ValueChangeMode.LAZY
           this.value = null
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           addValueChangeListener {
@@ -235,6 +244,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     return FiltroProdutoSaldo(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
+      produto = edtProduto.value ?: "",
       fornecedor = edtFornecedor.value ?: 0,
       tributacao = edtTributo.value ?: "",
       rotulo = edtRotulo.value ?: "",

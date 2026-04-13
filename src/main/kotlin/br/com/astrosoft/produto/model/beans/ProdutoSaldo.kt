@@ -43,6 +43,7 @@ class ProdutoSaldo(
 data class FiltroProdutoSaldo(
   val loja: Int,
   val pesquisa: String,
+  val produto: String,
   val fornecedor: Int,
   val tributacao: String,
   val rotulo: String,
