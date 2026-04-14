@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaNFDAberta
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoDev
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import java.time.LocalDate
@@ -114,6 +115,11 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       file.delete()
     }
     subView.updateViewFile()
+  }
+
+  fun geraPlanilha(produtos: List<NotaSaidaDev>): ByteArray {
+    val planilha = PlanilhaNFDAberta()
+    return planilha.write(produtos)
   }
 
   val subView

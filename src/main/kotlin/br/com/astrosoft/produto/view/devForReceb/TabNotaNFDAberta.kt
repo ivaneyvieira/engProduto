@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaNFDAberta
@@ -63,6 +64,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     edtDataInicial = datePicker("Data Inicial") {
       this.localePtBr()
+      this.width = "7rem"
       this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
@@ -70,9 +72,18 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
+      this.width = "7rem"
       this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
+      }
+    }
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
+      val produtos = gridPanel.list()
+      if (produtos.isEmpty()) {
+        ByteArray(0)
+      } else {
+        viewModel.geraPlanilha(produtos)
       }
     }
   }
@@ -114,6 +125,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       this.setHeader("Data")
     }
     columnGrid(NotaSaidaDev::cliente) {
+      this.setHeader("Cliente")
     }
     columnGrid(NotaSaidaDev::nomeCliente, width = "20rem") {
       this.setHeader("Nome Cliente")
