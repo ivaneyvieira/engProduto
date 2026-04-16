@@ -79,6 +79,15 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
           }
         }
 
+        edtFornecedor = textField("Fornecedor") {
+          this.width = "150px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.valueChangeTimeout = 1500
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -90,15 +99,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
 
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          addValueChangeListener {
-            viewModel.updateView()
-          }
-        }
-
-        edtFornecedor = textField("Fornecedor") {
-          this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           addValueChangeListener {
@@ -232,7 +232,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
           this.isClearButtonVisible = true
           this.value = LocalDate.now().withDayOfMonth(1)
         }
-
       }
     }
   }

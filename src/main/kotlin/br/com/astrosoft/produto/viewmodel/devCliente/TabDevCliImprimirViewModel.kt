@@ -49,7 +49,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     if (produtosNota.isNotEmpty()) {
       produtosDev.forEach { prdDev ->
         val prdAuto = produtosNota.filter { prd ->
-          prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
+          prdDev.prdno == prd.prdno //*&& prdDev.grade == prd.grade*/
         }
 
         if (prdAuto.isEmpty()) {
@@ -58,7 +58,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }
 
         val quantAuto = produtosNota.filter { prd ->
-          prdDev.prdno == prd.prdno && prdDev.grade == prd.grade
+          prdDev.prdno == prd.prdno /*&& prdDev.grade == prd.grade*/
         }.sumOf { it.quantDev ?: 0 }
 
         if (quantAuto != prdDev.quantidade) {
