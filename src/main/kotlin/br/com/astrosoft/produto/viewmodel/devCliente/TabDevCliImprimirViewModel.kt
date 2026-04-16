@@ -53,7 +53,8 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }
 
         if (prdAuto.isEmpty()) {
-          fail("Produto devolvido diferente do autorizado")
+          //Removido em 16/04/2026
+          //fail("Produto devolvido diferente do autorizado")
         }
 
         val quantAuto = produtosNota.filter { prd ->
