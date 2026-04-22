@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.select.SelectVariant
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
@@ -32,6 +33,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
+  private lateinit var cmbValor: Select<EValor>
+  private lateinit var edtValor: IntegerField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var edtDataInicial: DatePicker
@@ -206,6 +209,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         cmdEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)
+          this.addThemeVariants(SelectVariant.LUMO_ALIGN_CENTER)
           this.setItemLabelGenerator { item ->
             item.descricao
           }
@@ -221,6 +225,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.value = 0
+          this.isAutoselect = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           addValueChangeListener {
             viewModel.updateView()
@@ -228,9 +233,35 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         }
 
         edtDataInicial = datePicker("Data Inv. Inicial") {
+          this.width = "8rem"
           this.localePtBr()
           this.isClearButtonVisible = true
           this.value = LocalDate.now().withDayOfMonth(1)
+        }
+
+        cmbValor = select("Valor") {
+          this.width = "80px"
+          this.setItems(EValor.entries)
+          this.addThemeVariants(SelectVariant.LUMO_ALIGN_CENTER)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EValor.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+
+        edtValor = integerField("Valor Est") {
+          this.width = "80px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.isAutoselect = true
+          this.valueChangeTimeout = 1500
+          this.value = 0
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          addValueChangeListener {
+            viewModel.updateView()
+          }
         }
       }
     }
@@ -348,6 +379,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       inativo = cmbInativo.value ?: EInativo.TODOS,
       listaUser = listaUser,
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
+      opValor = cmbValor.value ?: EValor.TODOS,
+      valorEst = edtValor.value ?: 0,
     )
   }
 

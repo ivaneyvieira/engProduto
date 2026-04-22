@@ -686,6 +686,8 @@ data class FiltroProdutoEstoque(
   val uso: EUso = EUso.TODOS,
   val listaUser: List<String>,
   val letraDup: ELetraDup = ELetraDup.TODOS,
+  val opValor: EValor = EValor.TODOS,
+  val valorEst: Int = 0,
 ) {
   val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
 }

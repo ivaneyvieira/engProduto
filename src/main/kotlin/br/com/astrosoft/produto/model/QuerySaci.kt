@@ -1177,6 +1177,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("inativo", filter.inativo.codigo)
       addOptionalParameter("uso", filter.uso.codigo)
       addOptionalParameter("letraDup", filter.letraDup.value)
+      addOptionalParameter("opValor", filter.opValor.value)
+      addOptionalParameter("valorEst", filter.valorEst)
     }
   }
 

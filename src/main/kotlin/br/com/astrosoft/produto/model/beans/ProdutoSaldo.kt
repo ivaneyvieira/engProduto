@@ -89,6 +89,13 @@ enum class EEstoque(val value: String, val descricao: String) {
   ENTRE("E", "Entre"),
 }
 
+enum class EValor(val value: String, val descricao: String) {
+  MENOR("<", "<"),
+  MAIOR(">", ">"),
+  IGUAL("=", "="),
+  TODOS("T", "Todos"),
+}
+
 enum class ETipoSaldo(val descricao: String) {
   VAREJO("Varejo"),
   ATACADO("Atacado"),

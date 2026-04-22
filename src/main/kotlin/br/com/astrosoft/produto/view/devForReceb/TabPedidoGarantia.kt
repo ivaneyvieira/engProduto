@@ -168,6 +168,8 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       inativo = EInativo.TODOS,
       uso = EUso.TODOS,
       listaUser = listaUser,
+      opValor = EValor.TODOS,
+      valorEst = 0,
     )
   }
 
