@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.LocalDate
 
 class TabControleCD(val viewModel: TabControleCDViewModel) :
@@ -39,6 +40,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var cmbData: Select<EDataInicial>
+  private lateinit var cmbMesAno: MonthPicker
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -253,6 +255,52 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
           }
         }
 
+        cmbMesAno = MonthPicker().apply {
+          this.value = null
+          this.label = "Mês/Ano"
+          this.isClearButtonVisible = true
+          this.seti18n(
+            MonthPicker.MonthPickerI18n()
+              .setMonthNames(
+                listOf(
+                  "Janeiro",
+                  "Fevereiro",
+                  "Março",
+                  "Abril",
+                  "Maio",
+                  "Junho",
+                  "Julho",
+                  "Agosto",
+                  "Setembro",
+                  "Outubro",
+                  "Novembro",
+                  "Dezembro"
+                )
+              )
+              .setMonthLabels(
+                listOf(
+                  "Jan",
+                  "Fev",
+                  "Mar",
+                  "Abr",
+                  "Mai",
+                  "Jun",
+                  "Jul",
+                  "Ago",
+                  "Set",
+                  "Out",
+                  "Nov",
+                  "Dez"
+                )
+              )
+              .setFormat("MM/YYYY")
+          )
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        add(cmbMesAno)
+
         cmbValor = select("Valor") {
           this.width = "5rem"
           this.setItems(EValor.entries)
@@ -379,6 +427,10 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       listOf("TODOS")
     }
 
+    val mesAno = cmbMesAno.value
+    val dataInicial: LocalDate? = mesAno?.atDay(1)
+    val dataFinal: LocalDate? = mesAno?.atEndOfMonth()
+
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
@@ -396,7 +448,9 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       opValor = cmbValor.value ?: EValor.TODOS,
       valorEst = edtValor.value ?: 0,
       dataInicial = edtDataInicial.value ?: LocalDate.now(),
-      eData= cmbData.value ?: EDataInicial.TODOS
+      eData = cmbData.value ?: EDataInicial.TODOS,
+      dataI = dataInicial,
+      dataF = dataFinal
     )
   }
 

@@ -690,6 +690,8 @@ data class FiltroProdutoEstoque(
   val valorEst: Int = 0,
   val dataInicial: LocalDate = LocalDate.now(),
   val eData: EDataInicial = EDataInicial.TODOS,
+  val dataI: LocalDate? = null,
+  val dataF: LocalDate? = null,
 ) {
   val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
 }

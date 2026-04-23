@@ -387,3 +387,6 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
     OR (:eData = 'V' AND dataInicial IS NULL)
     OR (:eData = 'T')
   )
+  AND (dataInicial >= :dataI OR :dataI = 0)
+  AND (dataInicial >= :dataF OR :dataF = 0)
+
