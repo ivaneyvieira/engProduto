@@ -381,12 +381,10 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
     OR (:opValor = 'T')
   )
   AND (
-  (:eData = 'A' AND dataInicial IS NOT NULL AND dataInicial < :dataInicial)
-    OR (:eData = 'D' AND dataInicial IS NOT NULL AND dataInicial > :dataInicial)
-    OR (:eData = 'I' AND dataInicial IS NOT NULL AND dataInicial = :dataInicial)
+  (:eData = 'A' AND dataInicial IS NOT NULL AND dataInicial < :dataI)
+    OR (:eData = 'D' AND dataInicial IS NOT NULL AND dataInicial > :dataF)
+    OR (:eData = 'I' AND dataInicial IS NOT NULL AND dataInicial BETWEEN :dataI AND :dataF)
     OR (:eData = 'V' AND dataInicial IS NULL)
     OR (:eData = 'T')
   )
-  AND (dataInicial >= :dataI OR :dataI = 0)
-  AND (dataInicial >= :dataF OR :dataF = 0)
 
