@@ -241,7 +241,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         }
 
         cmbData = select("Data Inv.") {
-          this.width = "8rem"
+          this.width = "5.5rem"
           this.setItems(EDataInicial.entries)
           this.addThemeVariants(SelectVariant.LUMO_ALIGN_CENTER)
           this.setItemLabelGenerator { item ->
@@ -254,7 +254,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         }
 
         cmbValor = select("Valor") {
-          this.width = "80px"
+          this.width = "5rem"
           this.setItems(EValor.entries)
           this.addThemeVariants(SelectVariant.LUMO_ALIGN_CENTER)
           this.setItemLabelGenerator { item ->
@@ -267,7 +267,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         }
 
         edtValor = integerField("Valor Est") {
-          this.width = "80px"
+          this.width = "5rem"
           this.valueChangeMode = ValueChangeMode.LAZY
           this.isAutoselect = true
           this.valueChangeTimeout = 1500
@@ -326,7 +326,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
     columnGroup("Estoque") {
       this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
-      this.columnGrid(ProdutoEstoque::kardec, header = "CD", width = "75px")
+      this.columnGrid(ProdutoEstoque::kardec, header = "CD", pattern = "#,##0", width = "75px")
       this.columnGrid(ProdutoEstoque::quantDevolucao, header = "Gar", pattern = "#,##0", width = "80px")
     }
 

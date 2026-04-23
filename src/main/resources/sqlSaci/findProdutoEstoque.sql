@@ -373,7 +373,11 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   AND (
   (:opValor = '>' AND valorEstoque > :valorEst)
     OR (:opValor = '<' AND valorEstoque < :valorEst)
-    OR (:opValor = '=' AND valorEstoque = :valorEst)
+    OR (:opValor = '=' AND CASE
+                             WHEN :valorEst LIKE '%000'
+                               THEN TRUNCATE(valorEstoque / 1000, 0) = TRUNCATE(:valorEst / 1000, 0)
+                               ELSE valorEstoque = :valorEst
+                           END)
     OR (:opValor = 'T')
   )
   AND (
