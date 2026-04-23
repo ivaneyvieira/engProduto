@@ -1179,6 +1179,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("letraDup", filter.letraDup.value)
       addOptionalParameter("opValor", filter.opValor.value)
       addOptionalParameter("valorEst", filter.valorEst)
+      addOptionalParameter("dataInicial", filter.dataInicial.toSaciDate())
+      addOptionalParameter("eData", filter.eData.value)
     }
   }
 

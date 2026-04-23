@@ -310,19 +310,7 @@ FROM
 WHERE (E.storeno = :loja OR :loja = 0)
   AND (PD.mfno = @FORNECEDOR_NUMERO OR @FORNECEDOR_NUMERO = 0)
   AND (V.name LIKE CONCAT('%', @FORNECEDOR_NOME, '%') OR @FORNECEDOR_NOME = '')
-GROUP BY E.prdno, E.grade
-HAVING (
-  (:estoque = '>' AND saldo > :saldo)
-    OR (:estoque = '<' AND saldo < :saldo)
-    OR (:estoque = '=' AND saldo = :saldo)
-    OR (:estoque = 'T')
-  )
-   AND (
-  (:opValor = '>' AND valorEstoque > :valorEst)
-    OR (:opValor = '<' AND valorEstoque < :valorEst)
-    OR (:opValor = '=' AND valorEstoque = :valorEst)
-    OR (:opValor = 'T')
-  );
+GROUP BY E.prdno, E.grade;
 
 SELECT loja,
        lojaSigla,
@@ -376,3 +364,22 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (MID(locApp, 1, 4) IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR TRIM(IFNULL(locApp, '')) = '')
   AND (numeroAcerto = :pedido OR :pedido = 0)
+  AND (
+  (:estoque = '>' AND saldo > :saldo)
+    OR (:estoque = '<' AND saldo < :saldo)
+    OR (:estoque = '=' AND saldo = :saldo)
+    OR (:estoque = 'T')
+  )
+  AND (
+  (:opValor = '>' AND valorEstoque > :valorEst)
+    OR (:opValor = '<' AND valorEstoque < :valorEst)
+    OR (:opValor = '=' AND valorEstoque = :valorEst)
+    OR (:opValor = 'T')
+  )
+  AND (
+  (:eData = 'A' AND dataInicial IS NOT NULL AND dataInicial < :dataInicial)
+    OR (:eData = 'D' AND dataInicial IS NOT NULL AND dataInicial > :dataInicial)
+    OR (:eData = 'I' AND dataInicial IS NOT NULL AND dataInicial = :dataInicial)
+    OR (:eData = 'V' AND dataInicial IS NULL)
+    OR (:eData = 'T')
+  )

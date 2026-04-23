@@ -96,6 +96,15 @@ enum class EValor(val value: String, val descricao: String) {
   TODOS("T", "Todos"),
 }
 
+enum class EDataInicial(val value: String, val descricao: String) {
+  ANTES("A", "Antes"),
+  DEPOIS("D", "Depois"),
+  IGUAL("I", "Igual"),
+  VAZIO("V", "Vazio"),
+  TODOS("T", "Todos"),
+}
+
+
 enum class ETipoSaldo(val descricao: String) {
   VAREJO("Varejo"),
   ATACADO("Atacado"),

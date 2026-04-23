@@ -38,6 +38,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var edtDataInicial: DatePicker
+  private lateinit var cmbData: Select<EDataInicial>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -233,10 +234,23 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         }
 
         edtDataInicial = datePicker("Data Inv. Inicial") {
-          this.width = "8rem"
+          this.width = "9rem"
           this.localePtBr()
           this.isClearButtonVisible = true
           this.value = LocalDate.now().withDayOfMonth(1)
+        }
+
+        cmbData = select("Data Inv.") {
+          this.width = "8rem"
+          this.setItems(EDataInicial.entries)
+          this.addThemeVariants(SelectVariant.LUMO_ALIGN_CENTER)
+          this.setItemLabelGenerator { item ->
+            item.descricao
+          }
+          this.value = EDataInicial.TODOS
+          addValueChangeListener {
+            viewModel.updateView()
+          }
         }
 
         cmbValor = select("Valor") {
@@ -381,6 +395,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
       opValor = cmbValor.value ?: EValor.TODOS,
       valorEst = edtValor.value ?: 0,
+      dataInicial = edtDataInicial.value ?: LocalDate.now(),
+      eData= cmbData.value ?: EDataInicial.TODOS
     )
   }
 
