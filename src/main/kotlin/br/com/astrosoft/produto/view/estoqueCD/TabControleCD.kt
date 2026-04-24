@@ -18,8 +18,9 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class TabControleCD(val viewModel: TabControleCDViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabControleCD {
@@ -40,7 +41,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var cmbData: Select<EDataInicial>
-  private lateinit var cmbMesAno: MonthPicker
+  private lateinit var cmbMesAno: Select<YearMonth>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -255,46 +256,20 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
           }
         }
 
-        cmbMesAno = MonthPicker().apply {
-          this.value = null
-          this.label = "Mês/Ano"
-          this.isClearButtonVisible = true
-          this.seti18n(
-            MonthPicker.MonthPickerI18n()
-              .setMonthNames(
-                listOf(
-                  "Janeiro",
-                  "Fevereiro",
-                  "Março",
-                  "Abril",
-                  "Maio",
-                  "Junho",
-                  "Julho",
-                  "Agosto",
-                  "Setembro",
-                  "Outubro",
-                  "Novembro",
-                  "Dezembro"
-                )
-              )
-              .setMonthLabels(
-                listOf(
-                  "Jan",
-                  "Fev",
-                  "Mar",
-                  "Abr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Ago",
-                  "Set",
-                  "Out",
-                  "Nov",
-                  "Dez"
-                )
-              )
-              .setFormat("MM/YYYY")
-          )
+        cmbMesAno = select("Mês/Ano") {
+          this.width = "6rem"
+          val listMonth = buildList {
+            for (i in 0..99) {
+              val month = YearMonth.now().minusMonths(i.toLong())
+              add(month)
+            }
+          }
+          this.setItems(listMonth)
+          this.setItemLabelGenerator { item ->
+            item.atDay(15).format(DateTimeFormatter.ofPattern("MMM/yy"))
+          }
+          this.value = YearMonth.now()
+
           addValueChangeListener {
             viewModel.updateView()
           }
