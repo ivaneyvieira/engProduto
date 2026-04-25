@@ -369,6 +369,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       }
 
       this.columnGrid(ProdutoEstoque::dataInicial, header = "Início Inv", width = "100px")
+      this.columnGrid(ProdutoEstoque::valorEstoque, header = "Valor Est")
       this.columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
       this.columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Emb Sist", pattern = "0.##", width = "80px")
     }
@@ -377,7 +378,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       this.columnGrid(ProdutoEstoque::embalagem, header = "Emb")
       this.columnGrid(ProdutoEstoque::locApp, header = "Loc App", width = "100px")
       this.columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-      this.columnGrid(ProdutoEstoque::valorEstoque, header = "Valor Est")
     }
   }
 
