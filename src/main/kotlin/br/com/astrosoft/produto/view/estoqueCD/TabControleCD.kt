@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -8,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabControleCD
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleCDViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -354,7 +356,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
     }
 
     columnGroup("Inventário") {
-      this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", width = "75px").right()
+      this.columnGrid(ProdutoEstoque::qtConferencia, header = "Inv", pattern ="#,##0", width = "75px").right()
       if (user?.estoqueInsereInventarioCD == true) {
         this.addColumnButton(VaadinIcon.DATE_INPUT, "Edita", "Edita") { produto: ProdutoEstoque ->
           if (user.estoqueAlteraInventarioCD || !produto.isEditadoCDConferencia()) {
@@ -431,6 +433,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
+    val qtConferencia = produtos.sumOf { it.qtConferencia ?: 0}
+    gridPanel.getColumnBy(ProdutoEstoque::qtConferencia).setFooter(qtConferencia.format())
   }
 
   override fun updateKardec() {
