@@ -147,6 +147,7 @@ SELECT N.storeno                                                              AS
        SUM((X.qtty / 1000) * X.preco)                                         AS totalProdutos,
        MAX(IFNULL(MC.marca, 0))                                               AS marca,
        IF(N.status <> 1, 'N', 'S')                                            AS cancelada,
+       N.tipo                                                                 AS nTipo,
        CASE
          WHEN N.remarks LIKE '%RECLASSIFI%' THEN 'RECLASS'
          WHEN N.nfse = 7                    THEN 'ENTREGA_WEB'
@@ -284,6 +285,7 @@ SELECT Q.loja,
        Q.notaEntrega,
        Q.usuarioEntrega,
        Q.dataEntrega,
+       Q.nTipo,
        Q.tipo,
        Q.rota,
        Q.agendado,

@@ -433,8 +433,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
 
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
-    val qtConferencia = produtos.sumOf { it.qtConferencia ?: 0}
-    gridPanel.getColumnBy(ProdutoEstoque::qtConferencia).setFooter(qtConferencia.format())
+    val valorEstoque = produtos.sumOf { it.valorEstoque ?: 0.00}
+    gridPanel.getColumnBy(ProdutoEstoque::valorEstoque).setFooter(valorEstoque.format())
   }
 
   override fun updateKardec() {

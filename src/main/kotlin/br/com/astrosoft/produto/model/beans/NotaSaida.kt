@@ -33,6 +33,7 @@ class NotaSaida(
   var notaEntrega: String?,
   var usuarioEntrega: String?,
   var dataEntrega: LocalDate?,
+  var nTipo: Int?,
   var tipo: String?,
   var countExp: Int?,
   var countCD: Int?,
@@ -165,5 +166,6 @@ enum class ETipoNotaFiscal(val descricao: String) {
   ENTREGA_WEB("Entrega Web"),
   RECLASS("Reclassificação"),
   DEVOLUCAO("Dev Fornecedor"),
+  SIMPLES("Simples Remessa"),
   TODOS("Todos"),
 }
