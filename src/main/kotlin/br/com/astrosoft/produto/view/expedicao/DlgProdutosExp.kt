@@ -1,9 +1,7 @@
 package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.EMarcaNota
 import br.com.astrosoft.produto.model.beans.NotaSaida
@@ -34,7 +32,6 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-
 
 class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
@@ -97,12 +94,6 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         },
         closeEditor = { binder ->
           val bean = binder.bean
-          val quantidadeCD = bean.quantidadeCD
-          val quantidadeNF = bean.quantidadeNF ?: 0
-          if (quantidadeCD != null && (quantidadeCD in 0..quantidadeNF).not()) {
-            DialogHelper.showError("Quantidade CD Invalida")
-            bean.quantidadeCD = quantidadeNF
-          }
           this.dataProvider.refreshItem(bean)
         })
 
@@ -134,13 +125,13 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
             combo.setItemLabelGenerator { grade ->
               val saldo = list.firstOrNull { it.grade == grade }?.saldo ?: 0
               if (grade == null) ""
-              else "$grade Saldo: $saldo"
+              else "$grade Est: $saldo"
             }
           }
         }
       }
       produtoNFLocalizacao()
-      produtoNFQuantidadeCD().integerFieldEditor()
+      produtoNFQuantidadeCD()
       produtoNFQuantidadeNF()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
