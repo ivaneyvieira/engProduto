@@ -76,6 +76,7 @@ SELECT X.storeno                                                     AS loja,
        X.c4                                                          AS dataHoraCD,
        N.tipo                                                        AS tipoNota,
        ROUND(IFNULL((STK.qtty_atacado + STK.qtty_varejo), 0) / 1000) AS estoque,
+       ROUND(IFNULL((SCD.qtty_atacado + SCD.qtty_varejo), 0) / 1000) AS estoqueCD,
        IFNULL(D.quantDev, ROUND(X.qtty / 1000))                      AS quantDev,
        IFNULL(D.temProduto, FALSE)                                   AS temProduto,
        IFNULL(dev, FALSE)                                            AS dev,
@@ -89,6 +90,10 @@ FROM
                USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  sqldados.xaprd2Devolucao AS D
                USING (storeno, pdvno, xano, prdno, grade)
+    LEFT JOIN  sqldados.stk             AS SCD
+               ON SCD.storeno = X.storeno
+                 AND SCD.prdno = X.prdno
+                 AND SCD.grade = IF(X.c6 = '', X.grade, X.c6)
     LEFT JOIN  T_LOC                    AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users           AS EC
@@ -276,6 +281,7 @@ SELECT D.loja,
        usuarioSep,
        tipoNota,
        estoque,
+       estoqueCD,
        temProduto,
        quantDev,
        D.seq,
