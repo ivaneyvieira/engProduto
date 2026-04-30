@@ -117,6 +117,7 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
       }
       this.width = "5rem"
       this.value = item.quantidadeNF ?: 0
+      item.quantidadeCD = value
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT, TextFieldVariant.LUMO_SMALL)
 
       this.min = 1
