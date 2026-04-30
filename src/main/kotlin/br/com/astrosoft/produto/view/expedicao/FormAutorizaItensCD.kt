@@ -95,7 +95,7 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
       }
       this.setItems(grades)
       this.value = if (grades.isNotEmpty()) {
-        item.gradeAlternativa
+        item.grade
       } else {
         this.isReadOnly = true
         null
