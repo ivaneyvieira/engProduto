@@ -205,7 +205,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   }
 
   override fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit) {
-    val form = FormAutoriza()
+    val form = FormAutorizaItensCD(viewModel, lista)
     DialogHelper.showForm(caption = "Entregue", form = form) {
       val user = viewModel.autorizaProduto(lista, form.login, form.senha)
       if (user != null) {
