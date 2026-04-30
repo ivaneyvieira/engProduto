@@ -254,7 +254,7 @@ SELECT Q.loja,
        usuarioSep,
        observacaoPrint,
        observacao,
-       quantidade
+       Q.quantidade
 FROM
   T_QUERY                           AS Q
     INNER JOIN sqldados.xaprd2Marca AS M
