@@ -11,5 +11,5 @@ WHERE storeno = :storeno
   AND prdno = LPAD(:codigo, 16, ' ')
   AND grade = :grade;
 
-REPLACE sqldados.xaprd2Marca(storeno, pdvno, xano, prdno, grade, marca, impresso)
-SELECT :storeno, :pdvno, :xano, LPAD(:codigo, 16, ' ') AS prdno, :grade, :marca, :marcaImpressao
+REPLACE sqldados.xaprd2Marca(storeno, pdvno, xano, prdno, grade, marca, impresso, quantidade)
+SELECT :storeno, :pdvno, :xano, LPAD(:codigo, 16, ' ') AS prdno, :grade, :marca, :marcaImpressao, :quantidade

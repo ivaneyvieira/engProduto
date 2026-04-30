@@ -1,10 +1,14 @@
 package br.com.astrosoft.produto.view.expedicao
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.comboFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.withEditor
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EMarcaNota
+import br.com.astrosoft.produto.model.beans.NotaSaida
+import br.com.astrosoft.produto.model.beans.PrdGrade
+import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
@@ -15,7 +19,8 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
-import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeCD
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeNF
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFUsuarioSep
 import br.com.astrosoft.produto.viewmodel.expedicao.TabNotaExpViewModel
 import com.github.mvysny.karibudsl.v10.button
@@ -30,10 +35,12 @@ import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 
+
 class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
-  val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
+  private val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
+
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da expedicao ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
       button("CD") {
@@ -70,24 +77,34 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      withEditor(ProdutoNFS::class, openEditor = {
-        (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-        when {
-          it.bean?.clno?.startsWith("01") == false -> {
-            Notification.show("O produto não está no grupo de piso")
-          }
+      withEditor(
+        classBean = ProdutoNFS::class,
+        openEditor = {
+          (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
+          when {
+            it.bean?.clno?.startsWith("01") == false -> {
+              Notification.show("O produto não está no grupo de piso")
+            }
 
-          it.bean.tipoNota != 4                    -> {
-            Notification.show("Não é uma expedicao de edtrega futura")
-          }
+            it.bean.tipoNota != 4                    -> {
+              Notification.show("Não é uma expedição de entrega futura")
+            }
 
-          nota.cancelada == "S"                    -> {
-            Notification.show("A expedicao está cancelada")
+            nota.cancelada == "S"                    -> {
+              Notification.show("A expedição está cancelada")
+            }
           }
-        }
-      }, closeEditor = { binder ->
-        this.dataProvider.refreshItem(binder.bean)
-      })
+        },
+        closeEditor = { binder ->
+          val bean = binder.bean
+          val quantidadeCD = bean.quantidadeCD
+          val quantidadeNF = bean.quantidadeNF ?: 0
+          if (quantidadeCD != null && (quantidadeCD in 0..quantidadeNF).not()) {
+            DialogHelper.showError("Quantidade CD Invalida")
+            bean.quantidadeCD = quantidadeNF
+          }
+          this.dataProvider.refreshItem(bean)
+        })
 
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
@@ -123,11 +140,20 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         }
       }
       produtoNFLocalizacao()
-      produtoNFQuantidade()
+      produtoNFQuantidadeCD().integerFieldEditor()
+      produtoNFQuantidadeNF()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
       produtoNFEstoque()
+
+      this.addItemClickListener {
+        val bean = it.item
+        if(this.selectedItems.contains(bean)){
+          this.editor.editItem(bean)
+          (getColumnBy(ProdutoNFS::quantidadeCD).editorComponent as? Focusable<*>)?.focus()
+        }
+      }
 
       this.setPartNameGenerator {
         val marca = it.marca
@@ -150,7 +176,6 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   }
 
   fun update() {
-    val user = AppConfig.userLogin() as? UserSaci
     val marca = EMarcaNota.TODOS
     val listProdutos = nota.produtos(marca, todosLocais = true)
     gridDetail.setItems(listProdutos)

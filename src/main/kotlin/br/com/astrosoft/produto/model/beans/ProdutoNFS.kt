@@ -31,6 +31,8 @@ data class ProdutoNFS(
   var ncm: String?,
   var local: String?,
   var quantidade: Int?,
+  var quantidadeCD: Int?,
+  var quantidadeNF: Int?,
   var preco: Double?,
   var total: Double?,
   var gradeAlternativa: String?,
@@ -52,7 +54,6 @@ data class ProdutoNFS(
   var qtDevNI: Int?,
   var seq: Int?,
 ) {
-
 
   var motivo: String? = null
 

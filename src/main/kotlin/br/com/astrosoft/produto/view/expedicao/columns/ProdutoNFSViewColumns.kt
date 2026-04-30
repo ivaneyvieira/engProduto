@@ -100,6 +100,14 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Quant")
   }
 
+  fun Grid<ProdutoNFS>.produtoNFQuantidadeNF() = columnGrid(ProdutoNFS::quantidadeNF) {
+    this.setHeader("Quant")
+  }
+
+  fun Grid<ProdutoNFS>.produtoNFQuantidadeCD() = columnGrid(ProdutoNFS::quantidadeCD) {
+    this.setHeader("Qtd CD")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFTemProduto() = columnGrid(ProdutoNFS::temProduto) {
     this.setHeader("Com Produto")
   }

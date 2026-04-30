@@ -55,6 +55,9 @@ WHERE s11 > 0
    OR s11 > 0;
 
 ALTER TABLE sqldados.xaprd2Marca
-  ADD INDEX i1 (storeno, pdvno, xano, marca)
+  ADD INDEX i1 (storeno, pdvno, xano, marca);
+
+ALTER TABLE sqldados.xaprd2Marca
+  ADD COLUMN quantidade INT NULL;
 
 

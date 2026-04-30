@@ -197,6 +197,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("usuarioSep", produtoNF.usuarioSep)
       addOptionalParameter("usuarioCD", produtoNF.usernoCD ?: 0)
       addOptionalParameter("usuarioExp", produtoNF.usernoExp ?: 0)
+      addOptionalParameter("quantidade", produtoNF.quantidadeCD)
     }
   }
 
