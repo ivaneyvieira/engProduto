@@ -119,10 +119,10 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
       this.value = item.quantidadeNF ?: 0
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT, TextFieldVariant.LUMO_SMALL)
 
-      this.min = 0
+      this.min = 1
       this.max = item.quantidadeNF ?: 0
       this.i18n = IntegerField.IntegerFieldI18n()
-        .setMinErrorMessage("A quantidade deve ser maior ou igual a 0")
+        .setMinErrorMessage("A quantidade deve ser maior que 0")
         .setMaxErrorMessage("A quantidade deve ser menor ou igual a ${item.quantidadeNF ?: 0}")
 
       this.valueChangeMode = ValueChangeMode.LAZY
