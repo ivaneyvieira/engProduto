@@ -159,4 +159,9 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
   override fun updateComponent() {
     viewModel.updateView()
   }
+
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraRepo.orEmpty().toList()
+  }
 }

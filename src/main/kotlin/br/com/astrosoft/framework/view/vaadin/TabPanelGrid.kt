@@ -64,7 +64,8 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     actionSave: ((SubWindowPrinter) -> Unit)?,
     printEvent: (impressora: String) -> Unit
   ): IPrinter {
-    return PrinterPreview(showPrinter, printerUser(), rota, loja, showPrintBunton, actionSave, printEvent)
+    val print = printerUser()
+    return PrinterPreview(showPrinter, print, rota, loja, showPrintBunton, actionSave, printEvent)
   }
 
   open fun printerUser(): List<String> = emptyList()

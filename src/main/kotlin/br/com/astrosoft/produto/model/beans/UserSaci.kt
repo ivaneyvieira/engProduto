@@ -279,17 +279,17 @@ class UserSaci : IUser {
     }
 
   var impressoraRessu: Set<String>
-    get() = lojas.getOrNull(5)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(5)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(5, value.joinToString(":"))
     }
   var localizacaoRepo: Set<String>
-    get() = lojas.getOrNull(6)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(6)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(6, value.joinToString(":"))
     }
   var impressoraRepo: Set<String>
-    get() = lojas.getOrNull(7)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(7)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(7, value.joinToString(":"))
     }
@@ -331,7 +331,7 @@ class UserSaci : IUser {
     }
 
   var impressoraProduto: Set<String>
-    get() = lojas.getOrNull(14)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(14)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(14, value.joinToString(":"))
     }
@@ -343,7 +343,7 @@ class UserSaci : IUser {
     }
 
   var tipoNotaExpedicao: Set<ETipoNotaFiscal>
-    get() = lojas.getOrNull(16)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
+    get() = lojas.getOrNull(16)?.split(":").orEmpty().toSet().mapNotNull { tipo ->
       ETipoNotaFiscal.entries.firstOrNull { it.name == tipo }
       ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
     }.toSet()
@@ -360,7 +360,7 @@ class UserSaci : IUser {
     }
 
   var retiraTipo: Set<ETipoRetira>
-    get() = lojas.getOrNull(18)?.toString()?.split(":").orEmpty().toSet().mapNotNull { tipo ->
+    get() = lojas.getOrNull(18)?.split(":").orEmpty().toSet().mapNotNull { tipo ->
       ETipoRetira.entries.firstOrNull { it.name == tipo }
       ?: ETipoRetira.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
     }.toSet()
@@ -383,7 +383,7 @@ class UserSaci : IUser {
     }
 
   var impressoraNotaTermica: Set<String>
-    get() = lojas.getOrNull(21)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(21)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(21, value.joinToString(":"))
     }
@@ -411,7 +411,7 @@ class UserSaci : IUser {
     }
 
   var impressoraRec: Set<String>
-    get() = lojas.getOrNull(24)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(24)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(24, value.joinToString(":"))
     }
