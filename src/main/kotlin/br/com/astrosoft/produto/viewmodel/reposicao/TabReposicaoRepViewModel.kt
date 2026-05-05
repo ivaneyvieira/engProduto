@@ -169,6 +169,10 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun assinaEntrega(mov: Movimentacao) = viewModel.exec {
+    if(mov.findProdutos().isEmpty()){
+      fail("Pedido sem produto")
+    }
+
     if (mov.noGravado == 0) {
       fail("O produto não está gravado")
     }
@@ -215,6 +219,10 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun assinaRecebimento(mov: Movimentacao) = viewModel.exec {
+    if(mov.findProdutos().isEmpty()){
+      fail("Pedido sem produto")
+    }
+
     if (mov.noGravado == 0) {
       fail("O produto não está gravado")
     }
@@ -331,14 +339,22 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun removePedidoSelecionado() = viewModel.exec{
+  fun removePedidoSelecionado() = viewModel.exec {
     val pedidosSelecionados = subView.itensSelecionados()
-    if(pedidosSelecionados.isEmpty()) {
+    if (pedidosSelecionados.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
-    viewModel.view.showQuestion("Remove pedidos selecionado"){
-      pedidosSelecionados.forEach {pedido ->
+    val listaProduto: List<ProdutoMovimentacao> = pedidosSelecionados.flatMap { mov ->
+      mov.findProdutos()
+    }
+
+    if (listaProduto.isNotEmpty()) {
+      fail("Pedido com produto não permite remover")
+    }
+
+    viewModel.view.showQuestion("Remove pedidos selecionado") {
+      pedidosSelecionados.forEach { pedido ->
         pedido.remove()
       }
       updateView()
