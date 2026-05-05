@@ -133,11 +133,11 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
         }
       }
       produtoNFLocalizacao()
-      produtoNFQuantidadeCD()
       produtoNFEstoqueCD().apply {
         this.setHeader("Est Sist")
       }
       produtoNFKardec()
+      produtoNFQuantidadeCD()
       produtoNFQuantidadeNF()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
