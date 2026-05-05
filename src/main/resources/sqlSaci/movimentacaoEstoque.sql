@@ -65,7 +65,7 @@ SELECT E.numloja                                          AS loja,
           CONCAT('da\tLoja\t', numero),
           'para\to\tCD')                                  AS observacao,
        NULL                                               AS vencimento,
-       IF(noRota = 1, -movimentacao, movimentacao)        AS qtde,
+       IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
        IF(noRota = 1, ER.sname, EE.sname)                 AS userLogin
 FROM
