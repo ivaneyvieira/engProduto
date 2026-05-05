@@ -330,6 +330,20 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       }
     }
   }
+
+  fun removePedidoSelecionado() = viewModel.exec{
+    val pedidosSelecionados = subView.itensSelecionados()
+    if(pedidosSelecionados.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    viewModel.view.showQuestion("Remove pedidos selecionado"){
+      pedidosSelecionados.forEach {pedido ->
+        pedido.remove()
+      }
+      updateView()
+    }
+  }
 }
 
 interface ITabReposicaoRep : ITabView {

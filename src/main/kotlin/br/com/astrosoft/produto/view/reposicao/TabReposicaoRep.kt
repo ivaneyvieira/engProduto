@@ -70,6 +70,13 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       }
     }
 
+    button("Remove Pedido") {
+      this.icon = VaadinIcon.TRASH.create()
+      onClick {
+        viewModel.removePedidoSelecionado()
+      }
+    }
+
     cmbStatus = select("Status Pendente") {
       this.width = "10rem"
       this.setItems(EStatusMovimentacao.entries)

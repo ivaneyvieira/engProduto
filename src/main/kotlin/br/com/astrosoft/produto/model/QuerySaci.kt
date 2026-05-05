@@ -2597,6 +2597,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+
+  fun removeMovimentacao(pedido: Movimentacao) {
+    val sql = "/sqlSaci/pedidoMovimentacaoLimpa.sql"
+    script(sql) {
+      addOptionalParameter("numLoja", pedido.numloja)
+      addOptionalParameter("numero", pedido.numero)
+    }
+  }
+
   fun copiaPedido(beanCopia: BeanCopia) {
     val sql = "/sqlSaci/copiaPedido.sql"
     script(sql) {

@@ -223,6 +223,10 @@ class Movimentacao(
     }
   }
 
+  fun remove() {
+    saci.removeMovimentacao(this)
+  }
+
   companion object {
     private val listUserSaci = saci.findAllUser()
 
