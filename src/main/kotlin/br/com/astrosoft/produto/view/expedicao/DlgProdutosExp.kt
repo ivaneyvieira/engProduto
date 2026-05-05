@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFEstoqueCD
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGrade
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGradeAlternativa
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFKardec
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
@@ -133,12 +134,17 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       }
       produtoNFLocalizacao()
       produtoNFQuantidadeCD()
-      produtoNFEstoqueCD()
+      produtoNFEstoqueCD().apply {
+        this.setHeader("Est Sist")
+      }
+      produtoNFKardec()
       produtoNFQuantidadeNF()
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
-      produtoNFEstoque()
+      produtoNFEstoque().apply {
+        this.setHeader("Est Loja")
+      }
 
       this.addItemClickListener {
         val bean = it.item

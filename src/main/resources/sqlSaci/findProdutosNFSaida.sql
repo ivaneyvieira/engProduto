@@ -7,7 +7,7 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
+SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao, kardec
 FROM
   sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
@@ -70,6 +70,7 @@ SELECT X.storeno                                                     AS loja,
        EE.login                                                      AS usuarioExp,
        X.c5                                                          AS dataHoraExp,
        IFNULL(L.localizacao, '')                                     AS local,
+       L.kardec                                                      AS kardec,
        X.c3                                                          AS usuarioSep,
        EC.no                                                         AS usernoCD,
        EC.login                                                      AS usuarioCD,
@@ -250,6 +251,7 @@ SELECT D.loja,
        codigo,
        D.grade,
        local,
+       kardec,
        barcodeProd,
        barcodeStrList,
        descricao,

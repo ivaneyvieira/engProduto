@@ -41,7 +41,7 @@ object ProdutoNFNFSViewColumns {
   }
 
   fun Grid<ProdutoNFS>.produtoAutorizacaoExp() = columnGrid(ProdutoNFS::usuarioExp) {
-    this.setHeader("Expedicao")
+    this.setHeader("Expedição")
   }
 
   fun Grid<ProdutoNFS>.produtoAutorizacaoCD() = columnGrid(ProdutoNFS::usuarioCD) {
@@ -109,6 +109,10 @@ object ProdutoNFNFSViewColumns {
   }
 
   fun Grid<ProdutoNFS>.produtoNFEstoqueCD() = columnGrid(ProdutoNFS::estoqueCD) {
+    this.setHeader("Est CD")
+  }
+
+  fun Grid<ProdutoNFS>.produtoNFKardec() = columnGrid(ProdutoNFS::kardec) {
     this.setHeader("Est CD")
   }
 

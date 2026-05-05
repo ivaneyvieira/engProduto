@@ -137,7 +137,6 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCliente()
     colunaNomeCliente()
     colunaNFVendedor()
-    //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
     colunaNFEntregaRetira()

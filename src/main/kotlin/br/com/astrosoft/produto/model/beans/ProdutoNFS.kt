@@ -30,6 +30,7 @@ data class ProdutoNFS(
   var precoCheio: Double?,
   var ncm: String?,
   var local: String?,
+  var kardec: Int?,
   var quantidade: Int?,
   var quantidadeCD: Int?,
   var quantidadeNF: Int?,
