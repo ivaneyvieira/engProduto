@@ -149,7 +149,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
       produtoNFEstoque().apply {
-        this.setHeader("Est Loja")
+        this.setHeader("Est Lojas")
       }
 
       this.addItemClickListener {
