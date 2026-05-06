@@ -57,6 +57,12 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           viewModel.imprimeProdutosNota(nota, itensSelecionados)
         }
       }
+      this.button("Kardex") {
+        this.icon = VaadinIcon.FILE_TABLE.create()
+        onClick {
+          viewModel.updateKardec()
+        }
+      }
     }, onClose = {
       onClose()
     }) {

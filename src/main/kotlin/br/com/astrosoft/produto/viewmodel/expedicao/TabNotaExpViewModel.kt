@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
@@ -108,6 +109,14 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
 
     return user
+  }
+
+  fun updateKardec() = viewModel.exec {
+    val produtos: List<ProdutoEstoque> = subView.produtosSelecionados().flatMap { prd ->
+      ProdutoEstoque.findProdutoEstoque(loja = prd.loja, prdno = prd.prdno, grade = prd.grade)
+    }
+    ProcessamentoKardec.updateKardec(produtos)
+    subView.updateProdutos()
   }
 
   val subView
