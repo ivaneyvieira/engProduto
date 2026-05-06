@@ -112,7 +112,13 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   }
 
   fun updateKardec() = viewModel.exec {
-    val produtos: List<ProdutoEstoque> = subView.produtosSelecionados().flatMap { prd ->
+    val produtosSelecionados = subView.produtosSelecionados()
+
+    if (produtosSelecionados.isEmpty()) {
+      fail("Nenhum produto selecionados")
+    }
+
+    val produtos: List<ProdutoEstoque> = produtosSelecionados.flatMap { prd ->
       ProdutoEstoque.findProdutoEstoque(loja = prd.loja, prdno = prd.prdno, grade = prd.grade)
     }
     ProcessamentoKardec.updateKardec(produtos)
