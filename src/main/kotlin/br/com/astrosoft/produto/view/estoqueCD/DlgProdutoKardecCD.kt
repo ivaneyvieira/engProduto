@@ -76,6 +76,7 @@ class DlgProdutoKardecCD(
       columnGrid(ProdutoKardec::entLogin, "Entregue")
       columnGrid(ProdutoKardec::recLogin, "Recebido")
       columnGrid(ProdutoKardec::doc, "Doc").right()
+      columnGrid(ProdutoKardec::pedido, "Pedido").right()
       columnGrid(ProdutoKardec::nfEnt, "NF Ent").right()
       columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
       columnGrid(ProdutoKardec::observacaoAbrev, "Observação")

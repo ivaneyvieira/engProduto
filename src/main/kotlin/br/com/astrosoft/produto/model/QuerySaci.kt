@@ -2331,6 +2331,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("userLogin", produtoKardec.userLogin)
       addOptionalParameter("recLogin", produtoKardec.recLogin)
       addOptionalParameter("entLogin", produtoKardec.entLogin)
+      addOptionalParameter("pedido", produtoKardec.pedido)
     }
   }
 

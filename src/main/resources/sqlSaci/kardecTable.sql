@@ -63,3 +63,6 @@ FROM
 ALTER TABLE sqldados.produtoKardec
   ADD COLUMN recLogin varchar(50) NULL,
   ADD COLUMN entLogin varchar(50) NULL;
+
+ALTER TABLE sqldados.produtoKardec
+  ADD COLUMN pedido varchar(50) NULL;

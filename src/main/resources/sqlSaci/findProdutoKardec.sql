@@ -15,8 +15,9 @@ CREATE TEMPORARY TABLE T_KARDEX
 SELECT storeno                      AS loja,
        prdno                        AS prdno,
        grade                        AS grade,
-       CAST(date AS date)           AS data,
+       CAST(X.date AS date)         AS data,
        SUBSTRING_INDEX(doc, '.', 1) AS doc,
+       P.eordno                     AS pedido,
        'VENDA'                      AS tipo,
        ROUND(-qtty / 1000)          AS qtde,
        N.remarks                    AS observacao,
@@ -25,20 +26,23 @@ FROM
   sqldados.xalog2          AS X
     INNER JOIN sqldados.nf AS N
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqlpdv.pxa  AS P
+               USING (storeno, pdvno, xano)
 WHERE prdno = :prdno
   AND grade = :grade
   AND storeno = :loja
-  AND date BETWEEN :dataInicial AND @DATA_FINAL
+  AND X.date BETWEEN :dataInicial AND @DATA_FINAL
   AND qtty > 0
   AND N.tipo = 0
   AND N.status <> 1;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
        P.grade                     AS grade,
        CAST(N.issuedate AS date)   AS data,
        CONCAT(N.nfno, '/', N.nfse) AS doc,
+       N.eordno                    AS pedido,
        'FATURA'                    AS tipo,
        ROUND(-P.qtty)              AS qtde,
        remarks                     AS observacao,
@@ -55,12 +59,13 @@ WHERE P.prdno = :prdno
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
   AND N.status <> 1;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
        P.grade                     AS grade,
        CAST(N.issuedate AS date)   AS data,
        CONCAT(N.nfno, '/', N.nfse) AS doc,
+       N.eordno                    AS pedido,
        'TRANSF'                    AS tipo,
        ROUND(-P.qtty)              AS qtde,
        remarks                     AS observacao,
@@ -83,12 +88,13 @@ WHERE P.prdno = :prdno
                   ELSE remarks NOT REGEXP '^RES[A-Z]+ *PED +[0-9]{9} '
       END;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
 SELECT N.storeno                      AS loja,
        P.prdno                        AS prdno,
        P.grade                        AS grade,
        CAST(N.comp_date AS date)      AS data,
        CONCAT(N.nfname, '/', N.invse) AS doc,
+       N.ordno                        AS pedido,
        'DEVOLUCAO'                    AS tipo,
        ROUND(P.qtty / 1000)           AS qtde,
        remarks                        AS observacao,
@@ -112,6 +118,7 @@ SELECT O.storeno                                    AS loja,
        E.grade                                      AS grade,
        CAST(O.date AS DATE)                         AS data,
        O.ordno                                      AS doc,
+       O.ordno                                      AS pedido,
        ROUND(E.qtty / 1000)                         AS qtde,
        TRIM(MID(IFNULL(R.remarks__480, ''), 1, 40)) AS observacao,
        CASE O.paymno
@@ -143,8 +150,8 @@ WHERE (O.paymno IN (431, 432, 433))
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade
 HAVING multAcerto != 0;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
-SELECT loja, prdno, grade, data, doc, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
+SELECT loja, prdno, grade, data, doc, pedido, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo
 FROM
   T_REPOSICAO
 WHERE marca = 1
@@ -207,7 +214,18 @@ SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLog
 FROM
   T_MOVIMENTACAO_KARDEC;
 
-SELECT loja, prdno, grade, data, doc, tipo, qtde, '' AS observacao, saldo, recLogin, entLogin
+SELECT loja,
+       prdno,
+       grade,
+       data,
+       doc,
+       IF(pedido = 0, NULL, pedido) AS pedido,
+       tipo,
+       qtde,
+       ''                           AS observacao,
+       saldo,
+       recLogin,
+       entLogin
 FROM
   T_KARDEX
 ORDER BY data, loja, prdno, grade, doc

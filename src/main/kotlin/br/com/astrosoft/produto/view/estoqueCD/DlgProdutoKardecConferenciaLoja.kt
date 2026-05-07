@@ -79,6 +79,7 @@ class DlgProdutoKardecLoja(
       columnGrid(ControleKardec::loja, "Loja")
       columnGrid(ControleKardec::data, "Data")
       columnGrid(ControleKardec::doc, "Doc").right()
+      columnGrid(ControleKardec::pedido, "Pedido").right()
       columnGrid(ControleKardec::entLogin, "Entregue")
       columnGrid(ControleKardec::recLogin, "Recebido")
       columnGrid(ControleKardec::tipoDescricao, "Tipo")

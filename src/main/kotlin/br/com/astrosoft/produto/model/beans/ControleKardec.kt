@@ -8,6 +8,7 @@ data class ControleKardec(
   var grade: String? = null,
   var data: LocalDate?,
   var doc: String? = null,
+  var pedido: String? = null,
   var tipo: ETipoKardecControle? = null,
   var qtde: Int? = null,
   var observacao: String? = null,
