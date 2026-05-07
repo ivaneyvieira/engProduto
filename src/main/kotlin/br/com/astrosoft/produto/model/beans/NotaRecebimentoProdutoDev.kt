@@ -40,6 +40,7 @@ data class NotaRecebimentoProdutoDev(
   var refFabrica: String?,
   var numAcerto: Int?,
   var cfop: String?,
+  var cfopDev: String?,
   var cst: String?,
   var un: String?,
   var validadeValida: String?,

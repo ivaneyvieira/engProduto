@@ -153,7 +153,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   override val cst: String
     get() = produto.cst ?: ""
   override val cfop: String
-    get() = produto.cfop ?: ""
+    get() = produto.cfopDev ?: ""
   override val unidade: String
     get() = produto.un ?: ""
   override val quantProduto: BigDecimal
