@@ -129,6 +129,7 @@ object ProcessamentoKardec {
     val saldoInicial = async { produto.saldoInicial(loja, dataInicial) }
     val acertoEstoque = async { produto.acertoEstoque(loja, dataInicial) }
     val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataInicial) }
+
     recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await()
   }
 

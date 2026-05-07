@@ -33,6 +33,7 @@ SELECT 4                                                  AS loja,
        prdno,
        grade,
        data,
+       numloja                                            AS ljDoc,
        CONCAT(numero, '/', numloja)                       AS doc,
        ''                                                 AS nfEnt,
        IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_LJCD') AS tipo,
@@ -54,12 +55,14 @@ FROM
 WHERE noRota IN (0, 1)
   AND E.numloja = 4;
 
-INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, doc, nfEnt, tipo, observacao, vencimento, qtde, saldo,
+INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, ljDoc, doc, nfEnt, tipo, observacao, vencimento, qtde,
+                                  saldo,
                                   userLogin, recLogin, entLogin)
 SELECT E.numloja                                          AS loja,
        prdno,
        grade,
        data,
+       numloja                                            AS ljDoc,
        CONCAT(numero, '/', numloja)                       AS doc,
        ''                                                 AS nfEnt,
        IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_LJCD') AS tipo,
@@ -81,7 +84,8 @@ FROM
 WHERE noRota IN (0, 1)
   AND E.numloja != 4;
 
-INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, doc, nfEnt, tipo, observacao, vencimento, qtde, saldo,
+INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, ljDoc, doc, nfEnt, tipo, observacao, vencimento, qtde,
+                                  saldo,
                                   userLogin, recLogin, entLogin)
 SELECT CASE noRota
          WHEN 42 THEN 2
@@ -93,6 +97,7 @@ SELECT CASE noRota
        prdno,
        grade,
        data,
+       numloja                                     AS ljDoc,
        CONCAT(numero, '/', numloja)                AS doc,
        ''                                          AS nfEnt,
        CASE noRota
@@ -123,6 +128,7 @@ SELECT loja,
        prdno,
        grade,
        data,
+       ljDoc,
        doc,
        nfEnt,
        tipo,

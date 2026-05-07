@@ -66,3 +66,6 @@ ALTER TABLE sqldados.produtoKardec
 
 ALTER TABLE sqldados.produtoKardec
   ADD COLUMN pedido varchar(50) NULL;
+
+ALTER TABLE sqldados.produtoKardec
+  ADD COLUMN ljDoc int NULL;
