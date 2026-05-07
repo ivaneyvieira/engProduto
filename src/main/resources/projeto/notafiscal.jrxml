@@ -2877,7 +2877,7 @@ PRODUTO]]></text>
 						<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
-					<text><![CDATA[VAOR IPI]]></text>
+					<text><![CDATA[VALOR IPI]]></text>
 				</staticText>
 				<staticText>
 					<reportElement style="fontLabel" x="513" y="0" width="21" height="20" uuid="64b2bca0-c842-4133-9516-aa2a218a46e5">
@@ -3418,7 +3418,7 @@ PRODUTO]]></text>
 							<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						</box>
 						<textElement textAlignment="Right"/>
-						<textFieldExpression><![CDATA[$F{aliqIPIProduto}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{vlIPIProduto}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
