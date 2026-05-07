@@ -37,7 +37,7 @@ class DlgConferenciaSaldo(
       setSizeFull()
       horizontalLayout {
         this.setWidthFull()
-        edtDataInicial = datePicker("Início Kardec") {
+        edtDataInicial = datePicker("Início Kardex") {
           this.width = "8.5rem"
           this.value = produto.dataInicial
           this.isClearButtonVisible = true

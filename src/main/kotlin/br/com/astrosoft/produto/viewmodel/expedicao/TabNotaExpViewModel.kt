@@ -121,7 +121,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     val produtos: List<ProdutoEstoque> = produtosSelecionados.flatMap { prd ->
       ProdutoEstoque.findProdutoEstoque(loja = prd.loja, prdno = prd.prdno, grade = prd.grade)
     }
-    ProcessamentoKardec.updateKardec(produtos)
+    ProcessamentoKardec.updateKardex(produtos)
     subView.updateProdutos()
   }
 

@@ -16,6 +16,8 @@ data class ProdutoKardec(
   var qtde: Int? = null,
   var saldo: Int? = null,
   var userLogin: String? = null,
+  var recLogin: String? = null,
+  var entLogin: String? = null
 ) {
   fun save() {
     saci.saveKardec(this)

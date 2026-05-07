@@ -653,7 +653,8 @@ class ProdutoEstoque(
   }
 
   fun movimentacaoEstoque(loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
-    return saci.movimentacaoEstoque(this, loja, dataIncial)
+    val lista = saci.movimentacaoEstoque(this, loja, dataIncial)
+    return lista
   }
 
   companion object {

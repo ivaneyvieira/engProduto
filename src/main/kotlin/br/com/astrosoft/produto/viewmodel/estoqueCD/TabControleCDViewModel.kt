@@ -35,9 +35,9 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     return planilha.write(produtos)
   }
 
-  fun updateKardec() = viewModel.exec {
+  fun updateKardex() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-    ProcessamentoKardec.updateKardec(produtos)
+    ProcessamentoKardec.updateKardex(produtos)
     subView.reloadGrid()
   }
 

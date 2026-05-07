@@ -35,7 +35,7 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
 
   fun updateKardec() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
-    ProcessamentoKardec.updateKardec(produtos)
+    ProcessamentoKardec.updateKardex(produtos)
     subView.reloadGrid()
   }
 

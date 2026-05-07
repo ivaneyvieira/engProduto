@@ -162,7 +162,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
-            viewModel.updateKardec()
+            viewModel.updateKardex()
           }
         }
 
@@ -335,7 +335,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
-      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoEstoque ->
+      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardex", "Kardex") { produto: ProdutoEstoque ->
         val dataIncial: LocalDate? = edtDataInicial.value
         dlgKardec = DlgProdutoKardecCD(viewModel, produto, dataIncial)
         dlgKardec?.showDialog {

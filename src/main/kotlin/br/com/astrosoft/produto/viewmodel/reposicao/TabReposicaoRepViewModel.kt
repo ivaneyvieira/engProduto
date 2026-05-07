@@ -315,7 +315,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       produtoEstoque
     }
     launch {
-      ProcessamentoKardec.updateKardec(produtosKad)
+      ProcessamentoKardec.updateKardex(produtosKad)
     }
     launch {
       ProcessamentoKardec.updateControleKardec(produtosKad)

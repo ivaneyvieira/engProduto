@@ -58,4 +58,8 @@ WHERE IFNULL(estoqueConfCD, 0) != IFNULL(qtConfEdit, 0)
 
 SELECT storeno AS loja, TRIM(prdno) AS codigo, grade
 FROM
-  sqldados.prdAdicional
+  sqldados.prdAdicional;
+
+ALTER TABLE sqldados.produtoKardec
+  ADD COLUMN recLogin varchar(50) NULL,
+  ADD COLUMN entLogin varchar(50) NULL;

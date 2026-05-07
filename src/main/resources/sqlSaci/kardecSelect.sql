@@ -9,6 +9,8 @@ SELECT loja,
        qtde,
        saldo,
        userLogin,
+       recLogin,
+       entLogin,
        observacao
 FROM
   sqldados.produtoKardec

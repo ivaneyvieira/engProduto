@@ -115,7 +115,7 @@ class TabEstoqueSaldo(val viewModel: TabEstoqueSaldoViewModel) :
           }
         }
 
-        this.button("Kardex") {
+        this.button("Kardec") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
             viewModel.updateKardec()

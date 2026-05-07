@@ -115,7 +115,7 @@ class DlgProdutoKardecLoja(
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)
-    return "produtoKardex$textTime.xlsx"
+    return "produtoKardec$textTime.xlsx"
   }
 
   private fun HasComponents.downloadExcel(planilha: PlanilhaKardexControle) {
