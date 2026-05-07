@@ -71,12 +71,12 @@ class DlgProdutoKardecCD(
       selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(ProdutoKardec::loja, "Loja")
-      columnGrid(ProdutoKardec::data, "Data")
       columnGrid(ProdutoKardec::userLogin, "Usuário")
+      columnGrid(ProdutoKardec::data, "Data")
+      columnGrid(ProdutoKardec::pedido, "Pedido").right()
       columnGrid(ProdutoKardec::entLogin, "Entregue")
       columnGrid(ProdutoKardec::recLogin, "Recebido")
       columnGrid(ProdutoKardec::doc, "Doc").right()
-      columnGrid(ProdutoKardec::pedido, "Pedido").right()
       columnGrid(ProdutoKardec::nfEnt, "NF Ent").right()
       columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
       columnGrid(ProdutoKardec::observacaoAbrev, "Observação")
