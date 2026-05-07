@@ -42,7 +42,7 @@ SELECT 4                                                  AS loja,
        NULL                                               AS vencimento,
        IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
-       IF(noRota = 1, ER.login, EE.login)                 AS userLogin,
+       NULL                                               AS userLogin,
        ER.login                                           AS recLogin,
        EE.login                                           AS entLogin
 FROM
@@ -69,7 +69,7 @@ SELECT E.numloja                                          AS loja,
        NULL                                               AS vencimento,
        IF(noRota = 1, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
-       IF(noRota = 1, ER.login, EE.login)                 AS userLogin,
+       NULL                                               AS userLogin,
        ER.login                                           AS recLogin,
        EE.login                                           AS entLogin
 FROM
@@ -108,7 +108,7 @@ SELECT CASE noRota
        NULL                                        AS vencimento,
        IF(noRota = 1, movimentacao, -movimentacao) AS qtde,
        0                                           AS saldo,
-       IF(noRota = 1, ER.login, EE.login)          AS userLogin,
+       NULL                                        AS userLogin,
        ER.login                                    AS recLogin,
        EE.login                                    AS entLogin
 FROM

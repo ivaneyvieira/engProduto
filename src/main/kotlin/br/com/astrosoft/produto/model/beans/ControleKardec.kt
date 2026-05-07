@@ -12,6 +12,8 @@ data class ControleKardec(
   var qtde: Int? = null,
   var observacao: String? = null,
   var saldo: Int? = null,
+  var recLogin: String? = null,
+  var entLogin: String? = null
 ) {
   val saldoEmb: Double
     get() {

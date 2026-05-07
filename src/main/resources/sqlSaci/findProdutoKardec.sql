@@ -8,7 +8,9 @@ DROP TABLE IF EXISTS T_KARDEX;
 CREATE TEMPORARY TABLE T_KARDEX
 (
   tipo       VARCHAR(15),
-  observacao VARCHAR(255)
+  observacao VARCHAR(255),
+  recLogin   varchar(50),
+  entLogin   varchar(50)
 )
 SELECT storeno                      AS loja,
        prdno                        AS prdno,
@@ -189,21 +191,23 @@ SELECT numloja                                            AS loja,
        NULL                                               AS vencimento,
        IF(noRota = 0, movimentacao, -movimentacao)        AS qtde,
        0                                                  AS saldo,
-       IF(noRota = 0, ER.sname, EE.sname)                 AS userLogin
+       NULL                                               AS userLogin,
+       ER.login                                           AS recLogin,
+       EE.login                                           AS entLogin
 FROM
-  T_MOVIMENTACAO_ESTOQUE   AS E
-    LEFT JOIN sqldados.emp AS ER
+  T_MOVIMENTACAO_ESTOQUE     AS E
+    LEFT JOIN sqldados.users AS ER
               ON ER.no = E.noRecebido
-    LEFT JOIN sqldados.emp AS EE
+    LEFT JOIN sqldados.users AS EE
               ON EE.no = E.noEntregue
 WHERE numloja = :loja;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo)
-SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo, recLogin, entLogin)
+SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLogin, entLogin
 FROM
   T_MOVIMENTACAO_KARDEC;
 
-SELECT loja, prdno, grade, data, doc, tipo, qtde, '' AS observacao, saldo
+SELECT loja, prdno, grade, data, doc, tipo, qtde, '' AS observacao, saldo, recLogin, entLogin
 FROM
   T_KARDEX
 ORDER BY data, loja, prdno, grade, doc
