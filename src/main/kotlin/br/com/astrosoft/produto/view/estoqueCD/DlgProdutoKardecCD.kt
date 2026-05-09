@@ -86,6 +86,7 @@ class DlgProdutoKardecCD(
       columnGrid(ProdutoKardec::saldo, "Est CD")
       columnGrid(ProdutoKardec::saldoEmb, "Est Emb")
     }
+
     this.addAndExpand(gridDetail)
     update()
   }

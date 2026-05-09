@@ -24,8 +24,10 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class DlgProdutoKardecLoja(
-  val viewModel: TabControleLojaViewModel, val produto: ProdutoControle, val dataInicial: LocalDate?
+class DlgProdutoKardexLoja(
+  val viewModel: TabControleLojaViewModel,
+  val produto: ProdutoControle,
+  val dataInicial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
@@ -122,7 +124,7 @@ class DlgProdutoKardecLoja(
   }
 
   private fun HasComponents.downloadExcel(planilha: PlanilhaKardexControle) {
-    val button = LazyDownloadButton("Planilha",VaadinIcon.TABLE.create(), { filename() }, {
+    val button = LazyDownloadButton("Planilha", VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(gridDetail.list())
       ByteArrayInputStream(bytes)
     })

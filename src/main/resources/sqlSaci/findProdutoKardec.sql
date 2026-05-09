@@ -59,6 +59,7 @@ WHERE P.prdno = :prdno
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
   AND N.status <> 1;
 
+/*
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
@@ -86,7 +87,8 @@ WHERE P.prdno = :prdno
         WHEN 46   THEN (ROUND(P.qtty) % 900) != 0
         WHEN 1040 THEN (ROUND(P.qtty) % 1000) != 0
                   ELSE remarks NOT REGEXP '^RES[A-Z]+ *PED +[0-9]{9} '
-      END;
+      END
+*/
 
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
 SELECT N.storeno                      AS loja,
