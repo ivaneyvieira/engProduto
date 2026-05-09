@@ -78,19 +78,6 @@ class DlgProdutoKardexLoja(
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-/*
-      columnGrid(ControleKardex::loja, "Loja")
-      columnGrid(ControleKardex::data, "Data")
-      columnGrid(ControleKardex::doc, "Doc").right()
-      columnGrid(ControleKardex::pedido, "Pedido").right()
-      columnGrid(ControleKardex::entLogin, "Entregue")
-      columnGrid(ControleKardex::recLogin, "Recebido")
-      columnGrid(ControleKardex::tipoDescricao, "Tipo")
-      columnGrid(ControleKardex::observacao, "Observação", width = "20rem")
-      columnGrid(ControleKardex::qtde, "Qtd")
-      columnGrid(ControleKardex::saldo, "Saldo LJ")
-*/
-
       columnGrid(ControleKardex::loja, "Loja")
       columnGrid(ControleKardex::userLogin, "Usuário")
       columnGrid(ControleKardex::entLogin, "Entregue")
