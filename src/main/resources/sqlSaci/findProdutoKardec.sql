@@ -12,7 +12,7 @@ CREATE TEMPORARY TABLE T_KARDEX
   recLogin   varchar(50),
   entLogin   varchar(50)
 )
-SELECT storeno                      AS loja,
+SELECT X.storeno                      AS loja,
        prdno                        AS prdno,
        grade                        AS grade,
        CAST(X.date AS date)         AS data,
@@ -21,22 +21,25 @@ SELECT storeno                      AS loja,
        'VENDA'                      AS tipo,
        ROUND(-qtty / 1000)          AS qtde,
        N.remarks                    AS observacao,
-       0                            AS saldo
+       0                            AS saldo,
+       U.sname                      AS userLogin
 FROM
-  sqldados.xalog2          AS X
-    INNER JOIN sqldados.nf AS N
+  sqldados.xalog2           AS X
+    INNER JOIN sqldados.nf  AS N
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxa  AS P
+    LEFT JOIN  sqlpdv.pxa   AS P
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.emp AS U
+               ON U.no = N.empno
 WHERE prdno = :prdno
   AND grade = :grade
-  AND storeno = :loja
+  AND X.storeno = :loja
   AND X.date BETWEEN :dataInicial AND @DATA_FINAL
   AND qtty > 0
   AND N.tipo = 0
   AND N.status <> 1;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo, userLogin)
 SELECT N.storeno                   AS loja,
        P.prdno                     AS prdno,
        P.grade                     AS grade,
@@ -45,12 +48,15 @@ SELECT N.storeno                   AS loja,
        N.eordno                    AS pedido,
        'FATURA'                    AS tipo,
        ROUND(-P.qtty)              AS qtde,
-       remarks                     AS observacao,
-       0                           AS saldo
+       N.remarks                   AS observacao,
+       0                           AS saldo,
+       U.sname                     AS userLogin
 FROM
   sqldados.nf                 AS N
     INNER JOIN sqldados.xaprd AS P
                USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.emp   AS U
+               ON U.no = N.empno
 WHERE P.prdno = :prdno
   AND P.grade = :grade
   AND N.storeno = :loja
@@ -90,7 +96,7 @@ WHERE P.prdno = :prdno
       END
 */
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo, userLogin)
 SELECT N.storeno                      AS loja,
        P.prdno                        AS prdno,
        P.grade                        AS grade,
@@ -100,10 +106,13 @@ SELECT N.storeno                      AS loja,
        'DEVOLUCAO'                    AS tipo,
        ROUND(P.qtty / 1000)           AS qtde,
        remarks                        AS observacao,
-       0                              AS saldo
+       0                              AS saldo,
+       U.login                        AS userLogin
 FROM
-  sqldados.inv               AS N
-    INNER JOIN sqldados.iprd AS P
+  sqldados.inv                AS N
+    LEFT JOIN  sqldados.users AS U
+               ON U.no = IF(N.usernoLast = 0, N.usernoFirst, N.usernoLast)
+    INNER JOIN sqldados.iprd  AS P
                USING (invno)
 WHERE P.prdno = :prdno
   AND P.grade = :grade
@@ -135,7 +144,8 @@ SELECT O.storeno                                    AS loja,
                   WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
                   WHEN R.remarks__480 LIKE 'SAIDA%'   THEN -1
                                                       ELSE 0
-                END), 1)                            AS multAcerto
+                END), 1)                            AS multAcerto,
+       U.sname                                      AS userLogin
 FROM
   sqldados.eoprd                       AS E
     LEFT JOIN  sqldados.eoprdAdicional AS EA
@@ -144,6 +154,8 @@ FROM
                USING (storeno, ordno)
     LEFT JOIN  sqldados.eordrk         AS R
                USING (storeno, ordno)
+    LEFT JOIN  sqldados.emp            AS U
+               ON U.no = O.empno
 WHERE (O.paymno IN (431, 432, 433))
   AND (O.date BETWEEN :dataInicial AND @DATA_FINAL)
   AND (E.storeno = :loja)
@@ -152,8 +164,8 @@ WHERE (O.paymno IN (431, 432, 433))
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade
 HAVING multAcerto != 0;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
-SELECT loja, prdno, grade, data, doc, pedido, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo, userLogin)
+SELECT loja, prdno, grade, data, doc, pedido, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo, userLogin
 FROM
   T_REPOSICAO
 WHERE marca = 1
@@ -211,8 +223,8 @@ FROM
               ON EE.no = E.noEntregue
 WHERE numloja = :loja;
 
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo, recLogin, entLogin)
-SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLogin, entLogin
+INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo, recLogin, entLogin, userLogin)
+SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLogin, entLogin, entLogin
 FROM
   T_MOVIMENTACAO_KARDEC;
 
@@ -227,7 +239,8 @@ SELECT loja,
        ''                           AS observacao,
        saldo,
        recLogin,
-       entLogin
+       entLogin,
+       userLogin
 FROM
   T_KARDEX
 ORDER BY data, loja, prdno, grade, doc

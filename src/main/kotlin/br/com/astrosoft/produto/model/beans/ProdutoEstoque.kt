@@ -430,6 +430,7 @@ class ProdutoEstoque(
           qtde = -(produto.quantidade ?: 0),
           saldo = 0,
           userLogin = nota.usuarioSingCD ?: usuario,
+          entLogin = usuario,
           observacao = "${nota.observacao} loja ${nota.loja}"
         )
       }

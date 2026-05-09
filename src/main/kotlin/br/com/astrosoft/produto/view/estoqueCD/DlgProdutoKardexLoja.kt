@@ -78,6 +78,7 @@ class DlgProdutoKardexLoja(
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
+/*
       columnGrid(ControleKardex::loja, "Loja")
       columnGrid(ControleKardex::data, "Data")
       columnGrid(ControleKardex::doc, "Doc").right()
@@ -88,6 +89,23 @@ class DlgProdutoKardexLoja(
       columnGrid(ControleKardex::observacao, "Observação", width = "20rem")
       columnGrid(ControleKardex::qtde, "Qtd")
       columnGrid(ControleKardex::saldo, "Saldo LJ")
+*/
+
+      columnGrid(ControleKardex::loja, "Loja")
+      columnGrid(ControleKardex::userLogin, "Usuário")
+      columnGrid(ControleKardex::entLogin, "Entregue")
+      columnGrid(ControleKardex::recLogin, "Recebido")
+      columnGrid(ControleKardex::data, "Data")
+      columnGrid(ControleKardex::lojaDoc, "Lj Doc").right()
+      columnGrid(ControleKardex::pedido, "Pedido").right()
+      columnGrid(ControleKardex::doc, "NF Fat").right()
+      columnGrid(ControleKardex::docEnt, "NF Ent").right()
+      columnGrid(ControleKardex::tipoDescricao, "Tipo")
+      columnGrid(ControleKardex::observacao, "Observação")
+      columnGrid(ControleKardex::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
+      columnGrid(ControleKardex::qtde, "Qtd")
+      columnGrid(ControleKardex::saldo, "Est CD")
+      columnGrid(ControleKardex::saldoEmb, "Est Emb")
     }
     this.addAndExpand(gridDetail)
     update()
@@ -110,7 +128,7 @@ class DlgProdutoKardexLoja(
       )
     }
     gridDetail.setItems(kardex)
-  }
+ }
 
   private fun closeForm() {
     onClose?.invoke()

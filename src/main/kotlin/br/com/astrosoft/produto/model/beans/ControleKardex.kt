@@ -14,8 +14,18 @@ data class ControleKardex(
   var observacao: String? = null,
   var saldo: Int? = null,
   var recLogin: String? = null,
-  var entLogin: String? = null
+  var entLogin: String? = null,
+  var userLogin: String? = null,
 ) {
+  val vencimento: LocalDate?
+    get() = null
+
+  val docEnt: String?
+    get() = null
+
+  val lojaDoc: Int?
+    get() = loja
+
   val saldoEmb: Double
     get() {
       val prdno = this.prdno ?: return 0.00
