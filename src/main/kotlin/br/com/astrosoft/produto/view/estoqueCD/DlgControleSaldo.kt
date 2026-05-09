@@ -34,7 +34,7 @@ class DlgControleSaldo(
       setSizeFull()
       horizontalLayout {
         this.setWidthFull()
-        edtDataInicial = datePicker("Início Kardec") {
+        edtDataInicial = datePicker("Início Kardex") {
           this.width = "8.5rem"
           this.value = produto.dataInicial
           this.isClearButtonVisible = true
@@ -90,7 +90,7 @@ class DlgControleSaldo(
     produto.dataInicial = edtDataInicial?.value
     produto.estoqueLoja = edtConferencia?.value
     viewModel.updateControle(produto)
-    viewModel.kardec(produto = produto, dataIncial = dataInicial)
+    viewModel.kardex(produto = produto, dataIncial = dataInicial)
     onClose.invoke()
     this.close()
   }

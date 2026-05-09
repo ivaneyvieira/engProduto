@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueConf {
-  private var dlgKardec: DlgProdutoKardec? = null
+  private var dlgKardex: DlgProdutoKardex? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -352,8 +352,8 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     updateGrid(produtos.sortedBy { !it.marcadoConf(userno, data) })
   }
 
-  override fun updateKardec() {
-    dlgKardec?.update()
+  override fun updateKardex() {
+    dlgKardex?.update()
   }
 
   override fun reloadGrid() {

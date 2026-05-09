@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoEstoque
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import br.com.astrosoft.produto.model.beans.ProdutoKardex
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
@@ -94,7 +94,7 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     )
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+  fun kardex(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
 }
@@ -102,7 +102,7 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
 interface ITabControleCD : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
-  fun updateKardec()
+  fun updateKardex()
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
 }

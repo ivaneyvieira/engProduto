@@ -124,7 +124,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     )
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
 
@@ -170,7 +170,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
 interface ITabEstoqueConf : ITabView {
   fun filtro(): FiltroProdutoEstoque
   fun updateProduto(produtos: List<ProdutoEstoque>)
-  fun updateKardec()
+  fun updateKardex()
   fun itensSelecionados(): List<ProdutoEstoque>
   fun reloadGrid()
   fun autorizaAcerto(block: (user: UserSaci) -> Unit)

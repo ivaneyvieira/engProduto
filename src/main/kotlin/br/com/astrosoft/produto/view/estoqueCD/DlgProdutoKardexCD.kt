@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueSaldoViewModel
+import br.com.astrosoft.produto.model.beans.ProdutoKardex
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabControleCDViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -16,14 +16,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutoKardec(
-  val viewModel: TabEstoqueSaldoViewModel,
+class DlgProdutoKardexCD(
+  val viewModel: TabControleCDViewModel,
   val produto: ProdutoEstoque,
   val dataIncial: LocalDate?
 ) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
-  private val gridDetail = Grid(ProdutoKardec::class.java, false)
+  private val gridDetail = Grid(ProdutoKardex::class.java, false)
   private lateinit var edtPesquisa: TextField
 
   fun showDialog(onClose: () -> Unit) {
@@ -70,28 +70,33 @@ class DlgProdutoKardec(
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
 
-      columnGrid(ProdutoKardec::loja, "Loja")
-      columnGrid(ProdutoKardec::data, "Data")
-      columnGrid(ProdutoKardec::userLogin, "Usuário")
-      columnGrid(ProdutoKardec::doc, "Doc").right()
-      columnGrid(ProdutoKardec::nfEnt, "NF Ent").right()
-      columnGrid(ProdutoKardec::tipoDescricao, "Tipo")
-      columnGrid(ProdutoKardec::observacaoAbrev, "Observação")
-      columnGrid(ProdutoKardec::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
-      columnGrid(ProdutoKardec::qtde, "Qtd")
-      columnGrid(ProdutoKardec::saldo, "Est CD")
-      columnGrid(ProdutoKardec::saldoEmb, "Est Emb")
+      columnGrid(ProdutoKardex::loja, "Loja")
+      columnGrid(ProdutoKardex::userLogin, "Usuário")
+      columnGrid(ProdutoKardex::entLogin, "Entregue")
+      columnGrid(ProdutoKardex::recLogin, "Recebido")
+      columnGrid(ProdutoKardex::data, "Data")
+      columnGrid(ProdutoKardex::ljDoc, "Lj Doc").right()
+      columnGrid(ProdutoKardex::pedido, "Pedido").right()
+      columnGrid(ProdutoKardex::doc, "NF Fat").right()
+      columnGrid(ProdutoKardex::nfEnt, "NF Ent").right()
+      columnGrid(ProdutoKardex::tipoDescricao, "Tipo")
+      columnGrid(ProdutoKardex::observacaoAbrev, "Observação")
+      columnGrid(ProdutoKardex::vencimento, "Vencimento", pattern = "MM/yyyy", width = null)
+      columnGrid(ProdutoKardex::qtde, "Qtd")
+      columnGrid(ProdutoKardex::saldo, "Est CD")
+      columnGrid(ProdutoKardex::saldoEmb, "Est Emb")
     }
+
     this.addAndExpand(gridDetail)
     update()
   }
 
-  fun produtosSelecionados(): List<ProdutoKardec> {
+  fun produtosSelecionados(): List<ProdutoKardex> {
     return gridDetail.selectedItems.toList()
   }
 
   fun update() {
-    val kardec = viewModel.kardec(produto, dataIncial).filter {
+    val kardex = viewModel.kardex(produto, dataIncial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
       if (pesquisa.isEmpty()) return@filter true
       val doc = it.doc ?: ""
@@ -109,7 +114,7 @@ class DlgProdutoKardec(
         ignoreCase = true
       )
     }
-    gridDetail.setItems(kardec)
+    gridDetail.setItems(kardex)
   }
 
   private fun closeForm() {

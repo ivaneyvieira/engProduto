@@ -2314,7 +2314,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun saveKardec(produtoKardec: ProdutoKardec) {
+  fun saveKardec(produtoKardec: ProdutoKardex) {
     val sql = "/sqlSaci/kardecSave.sql"
     script(sql) {
       addOptionalParameter("loja", produtoKardec.loja)
@@ -2336,9 +2336,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun selectKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  fun selectKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     val sql = "/sqlSaci/kardecSelect.sql"
-    return query(sql, ProdutoKardec::class) {
+    return query(sql, ProdutoKardex::class) {
       addOptionalParameter("loja", produto.loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
@@ -3138,9 +3138,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoKardec(loja: Int, prdno: String, grade: String, dataInicial: LocalDate?): List<ControleKardec> {
+  fun findProdutoKardec(loja: Int, prdno: String, grade: String, dataInicial: LocalDate?): List<ControleKardex> {
     val sql = "/sqlSaci/findProdutoKardec.sql"
-    val listKardec = query(sql, ControleKardec::class) {
+    val listKardec = query(sql, ControleKardex::class) {
       this.addOptionalParameter("loja", loja)
       this.addOptionalParameter("prdno", prdno)
       this.addOptionalParameter("grade", grade)
@@ -3183,13 +3183,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun controleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  fun controleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     val sql = "/sqlSaci/controleKardec.sql"
     val loja = produto.loja ?: 4
     val dataIncial = produto.dataInicialDefault()
     val prdno = produto.prdno ?: return emptyList()
     val grade = produto.grade ?: return emptyList()
-    return query(sql, ProdutoKardec::class) {
+    return query(sql, ProdutoKardex::class) {
       this.addOptionalParameter("loja", loja)
       this.addOptionalParameter("prdno", prdno)
       this.addOptionalParameter("grade", grade)
@@ -3336,9 +3336,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val sql = "/sqlSaci/movimentacaoEstoque.sql"
-    return query(sql, ProdutoKardec::class) {
+    return query(sql, ProdutoKardex::class) {
       addOptionalParameter("prdno", estoque.prdno)
       addOptionalParameter("grade", estoque.grade)
       addOptionalParameter("loja", loja)

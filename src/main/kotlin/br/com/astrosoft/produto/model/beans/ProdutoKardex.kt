@@ -3,7 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-data class ProdutoKardec(
+data class ProdutoKardex(
   var loja: Int? = null,
   var prdno: String? = null,
   var grade: String? = null,
@@ -54,7 +54,7 @@ data class ProdutoKardec(
       }
     }
 
-    fun findKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+    fun findKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
       return saci.selectKardec(produto)
     }
   }

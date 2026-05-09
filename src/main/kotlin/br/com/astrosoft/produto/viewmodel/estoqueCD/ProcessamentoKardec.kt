@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.produto.model.beans.ETipoKardec
 import br.com.astrosoft.produto.model.beans.ProdutoEstoque
-import br.com.astrosoft.produto.model.beans.ProdutoKardec
+import br.com.astrosoft.produto.model.beans.ProdutoKardex
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
@@ -28,13 +28,13 @@ object ProcessamentoKardec {
   fun updateSaldoKardecMov(produto: ProdutoEstoque, doc: String) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    ProdutoKardec.deleteKardecMov(produto, doc)
+    ProdutoKardex.deleteKardecMov(produto, doc)
     val listaKardec = produto.movimentacaoEstoque(loja, produto.dataInicialDefault())
     listaKardec.forEach { produto ->
       produto.save()
     }
 
-    val kardecProduto = ProdutoKardec.findKardec(produto).ajustaOrdem()
+    val kardecProduto = ProdutoKardex.findKardec(produto).ajustaOrdem()
     kardecProduto.forEach { produto ->
       produto.save()
     }
@@ -44,22 +44,22 @@ object ProcessamentoKardec {
     produto.updateKardec()
   }
 
-  private fun updateKardex(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+  private fun updateKardex(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
     return runBlocking {
-      ProdutoKardec.deleteKardec(produto)
+      ProdutoKardex.deleteKardec(produto)
       val listBuild = fetchKardec(produto, loja, dataIncial)
-      listBuild.forEach { produtoKardec: ProdutoKardec ->
+      listBuild.forEach { produtoKardec: ProdutoKardex ->
         produtoKardec.save()
       }
       listBuild
     }
   }
 
-  private fun updateControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  private fun updateControleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     return runBlocking {
-      ProdutoKardec.deleteKardec(produto)
+      ProdutoKardex.deleteKardec(produto)
       val listBuild = fetchControleKardec(produto)
-      listBuild.forEachIndexed { index, produtoKardec: ProdutoKardec ->
+      listBuild.forEachIndexed { index, produtoKardec: ProdutoKardex ->
         produtoKardec.save()
         println(index)
       }
@@ -67,9 +67,9 @@ object ProcessamentoKardec {
     }
   }
 
-  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardec> {
+  fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     val data = dataIncial ?: produto.dataInicialDefault()
-    val lista = ProdutoKardec.findKardec(produto).ajustaOrdem()
+    val lista = ProdutoKardex.findKardec(produto).ajustaOrdem()
     val listaAntes = lista.filter {
       val dataK = it.data ?: return@filter false
       dataK < data
@@ -84,10 +84,10 @@ object ProcessamentoKardec {
     return (listaSaldo + listaDepois).ajustaOrdem()
   }
 
-  private fun saldoAnterior(produto: ProdutoEstoque, ultimoMov: ProdutoKardec?): List<ProdutoKardec> {
+  private fun saldoAnterior(produto: ProdutoEstoque, ultimoMov: ProdutoKardex?): List<ProdutoKardex> {
     ultimoMov ?: return emptyList()
     return listOf(
-      ProdutoKardec(
+      ProdutoKardex(
         loja = produto.loja,
         prdno = produto.prdno,
         grade = produto.grade,
@@ -120,7 +120,7 @@ object ProcessamentoKardec {
     }
   }
 
-  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardec> = runBlocking {
+  fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> = runBlocking {
     println("Início do processamento do produto ${produto.codigo} na data $dataInicial")
 
     val recebimento = async { produto.recebimentos(loja, dataInicial) }
@@ -133,13 +133,13 @@ object ProcessamentoKardec {
     recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await()
   }
 
-  fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardec> {
+  fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     println("Início do processamento do produto ${produto.codigo}")
     return produto.controleKardec()
   }
 }
 
-fun List<ProdutoKardec>.ajustaOrdem(): List<ProdutoKardec> {
+fun List<ProdutoKardex>.ajustaOrdem(): List<ProdutoKardex> {
   var saldoAcumulado = 0
   return this.distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.data} ${it.doc} ${it.tipo?.num}" }
     .sortedWith(comparator = compareBy({ it.data }, { it.tipo?.num }, { it.loja }, { it.doc })).map {

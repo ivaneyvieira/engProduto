@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import java.time.LocalDate
 
-data class ControleKardec(
+data class ControleKardex(
   var loja: Int? = null,
   var prdno: String? = null,
   var grade: String? = null,

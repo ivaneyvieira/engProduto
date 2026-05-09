@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 
 class TabControleCD(val viewModel: TabControleCDViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabControleCD {
-  private var dlgKardec: DlgProdutoKardecCD? = null
+  private var dlgKardex: DlgProdutoKardexCD? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -337,8 +337,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardex", "Kardex") { produto: ProdutoEstoque ->
         val dataIncial: LocalDate? = edtDataInicial.value
-        dlgKardec = DlgProdutoKardecCD(viewModel, produto, dataIncial)
-        dlgKardec?.showDialog {
+        dlgKardex = DlgProdutoKardexCD(viewModel, produto, dataIncial)
+        dlgKardex?.showDialog {
           viewModel.updateView()
         }
       }
@@ -437,8 +437,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
     gridPanel.getColumnBy(ProdutoEstoque::valorEstoque).setFooter(valorEstoque.format())
   }
 
-  override fun updateKardec() {
-    dlgKardec?.update()
+  override fun updateKardex() {
+    dlgKardex?.update()
   }
 
   override fun reloadGrid() {

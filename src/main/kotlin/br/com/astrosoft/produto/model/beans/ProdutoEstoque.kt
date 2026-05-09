@@ -169,7 +169,7 @@ class ProdutoEstoque(
     saci.updateProdutoKardec(this)
   }
 
-  fun recebimentos(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun recebimentos(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNotaRecebimentoProduto(
       loja = loja,
       pesquisa = "",
@@ -182,7 +182,7 @@ class ProdutoEstoque(
       tipoNota = EListaContas.TODOS,
     )
     return saci.findNotaRecebimentoProduto(filtro).map { nota ->
-      ProdutoKardec(
+      ProdutoKardex(
         loja = loja,
         prdno = prdno ?: "",
         grade = grade ?: "",
@@ -200,9 +200,9 @@ class ProdutoEstoque(
     }
   }
 
-  fun recebimentosKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun recebimentosKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     return saci.findNotaRecebimentoProduto(loja, dataInicial, prdno, grade).map { nota ->
-      ProdutoKardec(
+      ProdutoKardex(
         loja = loja,
         prdno = prdno ?: "",
         grade = grade ?: "",
@@ -232,7 +232,7 @@ class ProdutoEstoque(
     )
   }
 
-  private fun ressuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): List<ProdutoKardec> {
+  private fun ressuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = filtroRessuprimento(marca, dataInicial)
     val ressuprimentos = saci.findRessuprimento(filtro, userRessuprimentoLocais())
     return ressuprimentos.flatMap { ressuprimento ->
@@ -244,7 +244,7 @@ class ProdutoEstoque(
         else                    -> 0
       }
       ressuprimento.produtos(prdno, grade).map { produto ->
-        ProdutoKardec(
+        ProdutoKardex(
           loja = ressuprimento.loja ?: 0,
           prdno = prdno,
           grade = grade,
@@ -260,7 +260,7 @@ class ProdutoEstoque(
     }
   }
 
-  fun ressuprimento(dataInicial: LocalDate): List<ProdutoKardec> {
+  fun ressuprimento(dataInicial: LocalDate): List<ProdutoKardex> {
     val listaKardec =
         ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
     return listaKardec.filter {
@@ -268,7 +268,7 @@ class ProdutoEstoque(
     }
   }
 
-  fun expedicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun expedicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
@@ -328,7 +328,7 @@ class ProdutoEstoque(
       val listExp = produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
-        ProdutoKardec(
+        ProdutoKardex(
           loja = loja,
           prdno = prdno ?: "",
           grade = produto.gradeEfetiva,
@@ -347,7 +347,7 @@ class ProdutoEstoque(
     return ret
   }
 
-  fun expedicao2(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun expedicao2(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
       tipoNota = ETipoNotaFiscal.TODOS,
@@ -417,7 +417,7 @@ class ProdutoEstoque(
       val listExp = produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
-        ProdutoKardec(
+        ProdutoKardex(
           loja = loja,
           prdno = prdno ?: "",
           grade = produto.gradeEfetiva,
@@ -438,7 +438,7 @@ class ProdutoEstoque(
     return ret
   }
 
-  fun expedicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun expedicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val notasEnt = saci.findNotaSaidaPrd(loja, dataInicial, prdno, grade = grade)
     val notas = notasEnt.filter {
       it.cancelada != "S"
@@ -479,7 +479,7 @@ class ProdutoEstoque(
       }
 
 
-      ProdutoKardec(
+      ProdutoKardex(
         loja = loja,
         prdno = prdno ?: "",
         grade = grade,
@@ -496,7 +496,7 @@ class ProdutoEstoque(
     return ret
   }
 
-  fun reposicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun reposicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val localizacao = listOf("TODOS")
     val filtro = FiltroReposicao(
       loja = loja,
@@ -526,7 +526,7 @@ class ProdutoEstoque(
         else -> return@mapNotNull null
       }
 
-      ProdutoKardec(
+      ProdutoKardex(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
         grade = produto.grade ?: "",
@@ -543,7 +543,7 @@ class ProdutoEstoque(
     }
   }
 
-  fun reposicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun reposicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val localizacao = listOf("TODOS")
     val filtro = FiltroReposicao(
       loja = loja,
@@ -573,7 +573,7 @@ class ProdutoEstoque(
         else -> return@mapNotNull null
       }
 
-      ProdutoKardec(
+      ProdutoKardex(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
         grade = produto.grade ?: "",
@@ -588,7 +588,7 @@ class ProdutoEstoque(
     }
   }
 
-  fun saldoInicial(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun saldoInicial(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     if (qtConferencia == null) {
       val list = saci.findSaldoData(
         loja = loja,
@@ -597,7 +597,7 @@ class ProdutoEstoque(
         dataInicial = dataInicial
       )
       return list.map { saldo ->
-        ProdutoKardec(
+        ProdutoKardex(
           loja = saldo.storeno,
           prdno = saldo.prdno,
           grade = saldo.grade,
@@ -612,7 +612,7 @@ class ProdutoEstoque(
       }
     }
 
-    val produtoKardec = ProdutoKardec(
+    val produtoKardec = ProdutoKardex(
       loja = loja,
       prdno = prdno,
       grade = grade ?: "",
@@ -627,7 +627,7 @@ class ProdutoEstoque(
     return listOf(produtoKardec)
   }
 
-  fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardec> {
+  fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val list = saci.findAcertoEstoque(
       loja = loja,
       codigo = codigo.toString(),
@@ -635,7 +635,7 @@ class ProdutoEstoque(
       dataInicial = dataInicial
     )
     return list.map { saldo ->
-      ProdutoKardec(
+      ProdutoKardex(
         loja = saldo.loja,
         prdno = saldo.prdno,
         grade = saldo.grade,
@@ -656,11 +656,11 @@ class ProdutoEstoque(
     saci.removeAcertoProduto(this)
   }
 
-  fun controleKardec(): List<ProdutoKardec> {
+  fun controleKardec(): List<ProdutoKardex> {
     return saci.controleKardec(this)
   }
 
-  fun movimentacaoEstoque(loja: Int, dataIncial: LocalDate): List<ProdutoKardec> {
+  fun movimentacaoEstoque(loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
     val lista = saci.movimentacaoEstoque(this, loja, dataIncial)
     return lista
   }

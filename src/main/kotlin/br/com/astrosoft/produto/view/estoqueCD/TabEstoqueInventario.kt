@@ -21,7 +21,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
   TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueInventario {
-  private var dlgKardec: DlgProdutoKardec? = null
+  private var dlgKardex: DlgProdutoKardex? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -236,8 +236,8 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
     updateGrid(produtos)
   }
 
-  override fun updateKardec() {
-    dlgKardec?.update()
+  override fun updateKardex() {
+    dlgKardex?.update()
   }
 
   override fun reloadGrid() {

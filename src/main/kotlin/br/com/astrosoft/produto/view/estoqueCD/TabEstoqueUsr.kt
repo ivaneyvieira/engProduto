@@ -103,7 +103,7 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       filtroLocalizacao(binder, UserSaci::listaEstoque)
       horizontalLayout {
         setWidthFull()
-        datePicker("Data Inicial Kardec") {
+        datePicker("Data Inicial Kardex") {
           this.localePtBr()
           this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
           binder.bind(this, UserSaci::dataIncialKardec.name)

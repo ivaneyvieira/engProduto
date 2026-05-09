@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.ControleKardec
+import br.com.astrosoft.produto.model.beans.ControleKardex
 import br.com.astrosoft.produto.model.beans.FiltroProdutoControle
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoControle
@@ -27,20 +27,20 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
     subView.updateProduto(produtos)
   }
 
-  fun updateKardec(dataIncial : LocalDate?) = viewModel.exec {
+  fun updateKardex(dataIncial : LocalDate?) = viewModel.exec {
     val listProdutos = subView.itensSelecionados()
     if (listProdutos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
 
     listProdutos.forEach {
-      kardec(produto = it, dataIncial = dataIncial)
+      kardex(produto = it, dataIncial = dataIncial)
     }
 
     updateView()
   }
 
-  fun kardec(produto: ProdutoControle, dataIncial : LocalDate?): List<ControleKardec> {
+  fun kardex(produto: ProdutoControle, dataIncial : LocalDate?): List<ControleKardex> {
     if(produto.dataInicial == null){
       produto.dataInicial = dataIncial ?: LocalDate.now()
     }
@@ -59,7 +59,7 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
 interface ITabControleLoja : ITabView {
   fun filtro(): FiltroProdutoControle
   fun updateProduto(produtos: List<ProdutoControle>)
-  fun updateKardec()
+  fun updateKardex()
   fun itensSelecionados(): List<ProdutoControle>
   fun reloadGrid()
 }

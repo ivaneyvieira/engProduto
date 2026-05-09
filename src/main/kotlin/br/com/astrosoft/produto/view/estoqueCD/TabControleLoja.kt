@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 class TabControleLoja(val viewModel: TabControleLojaViewModel) :
   TabPanelGrid<ProdutoControle>(ProdutoControle::class), ITabControleLoja {
-  private var dlgKardec: DlgProdutoKardexLoja? = null
+  private var dlgKardex: DlgProdutoKardexLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: TextField
@@ -152,7 +152,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
-            viewModel.updateKardec(edtDataInicial.value)
+            viewModel.updateKardex(edtDataInicial.value)
           }
         }
 
@@ -203,10 +203,10 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
-      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardec", "Kardec") { produto: ProdutoControle ->
+      this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardex", "Kardex") { produto: ProdutoControle ->
         val dataIncial: LocalDate? = edtDataInicial.value
-        dlgKardec = DlgProdutoKardexLoja(viewModel = viewModel, produto = produto, dataInicial = dataIncial)
-        dlgKardec?.showDialog {
+        dlgKardex = DlgProdutoKardexLoja(viewModel = viewModel, produto = produto, dataInicial = dataIncial)
+        dlgKardex?.showDialog {
           viewModel.updateView()
         }
       }
@@ -266,8 +266,8 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
     updateGrid(produtos)
   }
 
-  override fun updateKardec() {
-    dlgKardec?.update()
+  override fun updateKardex() {
+    dlgKardex?.update()
   }
 
   override fun reloadGrid() {
