@@ -75,12 +75,14 @@ SELECT I.invno,
        IFNULL(IA.protocolo, 0)                                        AS protocolo,
        N.remarks                                                      AS observacaoNota,
        CASE
-         WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
-                                                          THEN 'Recebimento'
-         WHEN N.account IN ('2.01.25')                    THEN 'Devolução'
-         WHEN N.type = 1                                  THEN 'Transferência'
-         WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%' THEN 'Reclassificação'
-                                                          ELSE ''
+         WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02',
+                            '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
+                                                                                          THEN 'Recebimento'
+         WHEN N.account IN ('2.01.25')                                                    THEN 'Devolução'
+         WHEN N.type = 1                                                                  THEN 'Transferência'
+         WHEN (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')) THEN 'Reclassificação'
+         WHEN (:tipoNota IN ('O', 'T') AND (N.cfo = 1949 AND N.vendno = 9))               THEN 'Outros'
+                                                                                          ELSE ''
        END                                                            AS tipoNota,
        selecionado                                                    AS selecionado,
        SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)   AS valorUnit,
