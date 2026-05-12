@@ -132,7 +132,8 @@ WHERE (N.bits & POW(2, 4) = 0)
         N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR
        (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
-       (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')))
+       (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')) OR
+       (:tipoNota IN ('O', 'T') AND (N.cfo = 1949 AND N.vendno = 9)))
   /*AND N.cfo NOT IN (1556, 2556, 1933, 2933)*/
   AND N.cfo NOT IN (1556, 1933, 2933)
   AND (N.invno = :invno OR :invno = 0)

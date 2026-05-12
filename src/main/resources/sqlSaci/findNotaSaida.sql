@@ -161,7 +161,7 @@ SELECT N.storeno                                                              AS
                                                     'ENTRE_FUT')
          WHEN N.tipo = 5                    THEN 'RET_DEMON'
          WHEN N.tipo = 6                    THEN 'VENDA_USA'
-         WHEN N.tipo = 7                    THEN 'OUTROS'
+         WHEN N.tipo = 7 && N.cfo = 5949    THEN 'OUTROS'
          WHEN N.tipo = 8                    THEN 'NF_CF'
          WHEN N.tipo = 9                    THEN 'PERD/CONSER'
          WHEN N.tipo = 10                   THEN 'REPOSICAO'

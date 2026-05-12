@@ -169,5 +169,6 @@ enum class ETipoNotaFiscal(val descricao: String) {
   RECLASS("Reclassificação"),
   DEVOLUCAO("Dev Fornecedor"),
   SIMPLES("Simples Remessa"),
+  OUTROS("Outros"),
   TODOS("Todos"),
 }

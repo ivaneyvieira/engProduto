@@ -272,6 +272,7 @@ enum class EListaContas(val codigo: String, val descricao: String) {
   DEVOLUCAO(codigo = "D", "Devolução"),
   TRANSFERENCIA(codigo = "X", "Transferência"),
   RECLASSIFICA(codigo = "C", "Reclassificação"),
+  OUTROS(codigo = "O", "Outros"),
   TODOS(codigo = "T", "Todos"),
 }
 
