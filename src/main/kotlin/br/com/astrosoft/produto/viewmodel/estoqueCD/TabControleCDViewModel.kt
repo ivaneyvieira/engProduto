@@ -54,18 +54,6 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     bean?.updateLocalizacao()
   }
 
-  fun copiaLocalizacao() = viewModel.exec {
-    val itens = subView.itensSelecionados()
-    if (itens.isEmpty()) fail("Nenhum item selecionado")
-
-    val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
-    itens.forEach { item ->
-      item.locApp = primeiro.locApp
-      item.updateLocalizacao()
-    }
-    updateView()
-  }
-
   fun imprimeProdutosConf() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {

@@ -141,4 +141,5 @@ SELECT loja,
        entLogin
 FROM
   T_MOVIMENTACAO_KARDEC
+WHERE loja = :loja
 
