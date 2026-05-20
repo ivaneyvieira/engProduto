@@ -12,7 +12,7 @@ CREATE TEMPORARY TABLE T_KARDEX
   recLogin   varchar(50),
   entLogin   varchar(50)
 )
-SELECT X.storeno                      AS loja,
+SELECT X.storeno                    AS loja,
        prdno                        AS prdno,
        grade                        AS grade,
        CAST(X.date AS date)         AS data,
@@ -62,6 +62,7 @@ WHERE P.prdno = :prdno
   AND N.storeno = :loja
   AND N.tipo = 3
   AND N.nfse = '3'
+  AND N.nfse != '3'
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
   AND N.status <> 1;
 
@@ -165,7 +166,17 @@ GROUP BY E.storeno, E.ordno, E.prdno, E.grade
 HAVING multAcerto != 0;
 
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo, userLogin)
-SELECT loja, prdno, grade, data, doc, pedido, metodo AS tipo, qtde * multAcerto AS qtde, observacao, 0 AS saldo, userLogin
+SELECT loja,
+       prdno,
+       grade,
+       data,
+       doc,
+       pedido,
+       metodo            AS tipo,
+       qtde * multAcerto AS qtde,
+       observacao,
+       0                 AS saldo,
+       userLogin
 FROM
   T_REPOSICAO
 WHERE marca = 1
@@ -243,4 +254,5 @@ SELECT loja,
        userLogin
 FROM
   T_KARDEX
+WHERE doc NOT LIKE '%/3'
 ORDER BY data, loja, prdno, grade, doc
