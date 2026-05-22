@@ -41,10 +41,10 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    subView.formAutoriza(itens) { userno ->
+    subView.formAutoriza(itens) { user ->
       itens.forEach { produtoNF ->
         produtoNF.marca = EMarcaNota.ENT.num
-        produtoNF.usernoCD = userno
+        produtoNF.usernoCD = user.no
         produtoNF.salva()
       }
       subView.updateProdutos()
@@ -54,28 +54,28 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   fun marcaEntProdutos() = viewModel.exec {
     val produtosNaoMarcados = subView.produtosNaoMarcados()
-    var continua = false
     if (produtosNaoMarcados.isNotEmpty()) {
       viewModel.view.showQuestion("Existem produtos não marcados. Deseja continuar?") {
-        continua = true
+        marcaProdutosMedianteAutorizacao()
       }
     } else {
-      continua = true
+      marcaProdutosMedianteAutorizacao()
     }
-    if (continua) {
-      val produtos = subView.produtosMarcados()
-      subView.formAutoriza(produtos) { userno ->
-        produtos.forEach { produtoNF ->
-          produtoNF.marca = EMarcaNota.ENT.num
-          produtoNF.usernoCD = userno
-          produtoNF.salva()
-        }
-        subView.updateProdutos()
-        val nota = subView.findNota() ?: fail("Nota não encontrada")
-        val produtosRestantes = nota.produtos(EMarcaNota.CD, todosLocais = false)
-        if (produtosRestantes.isEmpty()) {
-          imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT, todosLocais = false))
-        }
+  }
+
+  private fun marcaProdutosMedianteAutorizacao() {
+    val produtos = subView.produtosMarcados()
+    subView.formAutoriza(produtos) { user ->
+      produtos.forEach { produtoNF ->
+        produtoNF.marca = EMarcaNota.ENT.num
+        produtoNF.usernoCD = user.no
+        produtoNF.salva()
+      }
+      subView.updateProdutos()
+      val nota = subView.findNota() ?: fail("Nota não encontrada")
+      val produtosRestantes = nota.produtos(EMarcaNota.CD, todosLocais = false)
+      if (produtosRestantes.isEmpty()) {
+        imprimeEtiquetaEnt(nota.produtos(EMarcaNota.ENT, todosLocais = false))
       }
     }
   }
@@ -97,7 +97,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
         EtiquetaChave.printPreviewEnt(impressora, produtos, 2)
       } catch (e: Throwable) {
         e.printStackTrace()
-        fail("Falha de impressão na impressora $impressora")
+        fail("Falha de impressão em $impressora")
       }
     }
   }
@@ -153,5 +153,5 @@ interface ITabNotaCD : ITabView {
   fun produtosNaoMarcados(): List<ProdutoNFS>
   fun produtosCodigoBarras(codigoBarra: String): List<ProdutoNFS>
   fun findNota(): NotaSaida?
-  fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
+  fun formAutoriza(lista: List<ProdutoNFS>, marca: (user: UserSaci) -> Unit)
 }
