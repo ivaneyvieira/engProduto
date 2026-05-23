@@ -48,7 +48,7 @@ WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
-SELECT O.numero,
+SELECT numero,
        numloja,
        S.sname                  AS lojaSigla,
        data,

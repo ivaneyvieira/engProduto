@@ -28,7 +28,8 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
     val user = AppConfig.userLogin() as? UserSaci
 
     val filtro = subView.filtro()
-    val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupa().sortedBy { it.numero }.filter {
+    val listaApp = ProdutoEstoqueAcerto.findAll(filtro)
+    val produtos = listaApp.agrupa().sortedBy { it.numero }.filter {
       if (user == null) {
         return@filter true
       }

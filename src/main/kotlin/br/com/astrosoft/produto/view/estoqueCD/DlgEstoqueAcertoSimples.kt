@@ -239,7 +239,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       this.format()
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
-      this.setSelectionMode(Grid.SelectionMode.MULTI)
+      this.selectionMode = Grid.SelectionMode.MULTI
       isMultiSort = false
 
       this.withEditor(
@@ -257,7 +257,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
           abreProximo(it.bean)
         },
         canEdit = {
-          if (acerto.processado == true) {
+          if (acerto.processado) {
             DialogHelper.showWarning("Acerto já processado")
             false
           } else {

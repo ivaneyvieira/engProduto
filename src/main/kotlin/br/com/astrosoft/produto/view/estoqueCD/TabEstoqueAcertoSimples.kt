@@ -87,7 +87,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
     button("Novo Pedido") {
       this.icon = VaadinIcon.NOTEBOOK.create()
       onClick {
-        val loja = cmbLoja?.value
+        val loja = cmbLoja.value
         viewModel.novoPedido(loja?.no ?: 0)
       }
     }
