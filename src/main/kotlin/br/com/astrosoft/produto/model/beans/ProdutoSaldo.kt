@@ -85,6 +85,7 @@ enum class EEstoque(val value: String, val descricao: String) {
   MENOR("<", "<"),
   MAIOR(">", ">"),
   IGUAL("=", "="),
+  DIFERENTE("#", "≠"),
   TODOS("T", "Todos"),
   ENTRE("E", "Entre"),
 }

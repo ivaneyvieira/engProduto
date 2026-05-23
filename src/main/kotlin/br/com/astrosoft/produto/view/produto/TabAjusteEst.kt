@@ -42,7 +42,8 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
   private lateinit var edtSaldo: IntegerField
 
   fun init() {
-    cmbLoja.setItems(viewModel.findAllLojas())
+    val listaLojas = viewModel.findAllLojas() + Loja.lojaZero
+    cmbLoja.setItems(listaLojas.sortedBy { it.no })
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaProduto != 0
     val loja = user?.lojaProduto ?: 1
