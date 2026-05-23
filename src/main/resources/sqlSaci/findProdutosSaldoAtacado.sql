@@ -231,6 +231,7 @@ FROM
 WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR
        (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
        (:estoque = '=' AND S.estoqueLojasAtacado = :saldo) OR
+       (:estoque = '#' AND S.estoqueLojasAtacado != :saldo) OR
        (:estoque = 'T'));
 
 SELECT prdno,

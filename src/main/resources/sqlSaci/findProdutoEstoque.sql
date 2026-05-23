@@ -368,6 +368,7 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   (:estoque = '>' AND saldo > :saldo)
     OR (:estoque = '<' AND saldo < :saldo)
     OR (:estoque = '=' AND saldo = :saldo)
+    OR (:estoque = '#' AND saldo != :saldo)
     OR (:estoque = 'T')
   )
   AND (

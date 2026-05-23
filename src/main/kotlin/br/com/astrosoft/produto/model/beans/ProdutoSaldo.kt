@@ -81,7 +81,7 @@ enum class ELetraDup(val value: String, val descricao: String) {
   TODOS("T", "Todos"),
 }
 
-enum class EEstoque(val value: String, val descricao: String) {
+enum class EEstoque(val valueEEstoque: String, val descricao: String) {
   MENOR("<", "<"),
   MAIOR(">", ">"),
   IGUAL("=", "="),

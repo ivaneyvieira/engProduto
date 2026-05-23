@@ -185,6 +185,7 @@ GROUP BY E.prdno, E.grade
 HAVING (:estoque = '>' AND saldo > :saldo)
     OR (:estoque = '<' AND saldo < :saldo)
     OR (:estoque = '=' AND saldo = :saldo)
+    OR (:estoque = '#' AND saldo != :saldo)
     OR (:estoque = 'T');
 
 SELECT loja,

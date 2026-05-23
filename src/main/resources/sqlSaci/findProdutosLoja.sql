@@ -133,8 +133,11 @@ FROM
                USING (prdno)
     LEFT JOIN  T_REL AS R
                USING (prdno, temRelacionado)
-WHERE ((:estoque = '<' AND S.estoqueTotal < :saldo) OR (:estoque = '>' AND S.estoqueTotal > :saldo) OR
-       (:estoque = '=' AND S.estoqueTotal = :saldo) OR (:estoque = 'T'));
+WHERE ((:estoque = '<' AND S.estoqueTotal < :saldo) OR
+       (:estoque = '>' AND S.estoqueTotal > :saldo) OR
+       (:estoque = '=' AND S.estoqueTotal = :saldo) OR
+       (:estoque = '#' AND S.estoqueTotal != :saldo) OR
+       (:estoque = 'T'));
 
 SELECT prdno,
        codigo,

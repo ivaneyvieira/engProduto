@@ -162,15 +162,23 @@ FROM
                USING (prdno, temRelacionado)
 WHERE (S.loja = :loja OR :loja = 0)
   AND (((:tipoSaldo = 'TOTAL') AND
-        ((:estoque = '<' AND S.qttyTotal < :saldo) OR (:estoque = '>' AND S.qttyTotal > :saldo) OR
-         (:estoque = '=' AND S.qttyTotal = :saldo) OR (:estoque = 'T'))) OR ((:tipoSaldo = 'VAREJO') AND
-                                                                             ((:estoque = '<' AND S.qttyVarejo < :saldo) OR
-                                                                              (:estoque = '>' AND S.qttyVarejo > :saldo) OR
-                                                                              (:estoque = '=' AND S.qttyVarejo = :saldo) OR
-                                                                              (:estoque = 'T'))) OR
+        ((:estoque = '<' AND S.qttyTotal < :saldo) OR
+         (:estoque = '>' AND S.qttyTotal > :saldo) OR
+         (:estoque = '=' AND S.qttyTotal = :saldo) OR
+         (:estoque = '#' AND S.qttyTotal != :saldo) OR
+         (:estoque = 'T'))) OR
+       ((:tipoSaldo = 'VAREJO') AND
+        ((:estoque = '<' AND S.qttyVarejo < :saldo) OR
+         (:estoque = '>' AND S.qttyVarejo > :saldo) OR
+         (:estoque = '=' AND S.qttyVarejo = :saldo) OR
+         (:estoque = '#' AND S.qttyVarejo != :saldo) OR
+         (:estoque = 'T'))) OR
        ((:tipoSaldo = 'ATACADO') AND
-        ((:estoque = '<' AND S.qttyAtacado < :saldo) OR (:estoque = '>' AND S.qttyAtacado > :saldo) OR
-         (:estoque = '=' AND S.qttyAtacado = :saldo) OR (:estoque = 'T'))));
+        ((:estoque = '<' AND S.qttyAtacado < :saldo) OR
+         (:estoque = '>' AND S.qttyAtacado > :saldo) OR
+         (:estoque = '=' AND S.qttyAtacado = :saldo) OR
+         (:estoque = '#' AND S.qttyAtacado != :saldo) OR
+         (:estoque = 'T'))));
 
 SELECT loja,
        prdno,
