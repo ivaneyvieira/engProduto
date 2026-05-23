@@ -14,6 +14,7 @@ class PlanilhaAjusteEst : Planilha<AjusteEst>("Ajuste Estoque") {
     columnSheet(AjusteEst::qttyVarejo, header = "Varejo")
     columnSheet(AjusteEst::qttyAtacado, header = "Atacado")
     columnSheet(AjusteEst::qttyTotal, header = "Total")
+    columnSheet(AjusteEst::custoVarejo, header = "Custo Total")
     columnSheet(AjusteEst::tributacao, header = "Trib")
     columnSheet(AjusteEst::rotulo, header = "Rotulo")
     columnSheet(AjusteEst::ncm, header = "NCM")
