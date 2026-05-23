@@ -82,6 +82,7 @@ class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) :
     columnGrid(MovAtacado::data, header = "Data")
     columnGrid(MovAtacado::pedido, header = "Pedido")
     columnGrid(MovAtacado::transacao, header = "Transação")
+    columnGrid(MovAtacado::fornecedor, header = "For")
     columnGrid(MovAtacado::tipo, header = "Tipo")
     columnGrid(MovAtacado::qtEntrada, header = "Entrada")
     columnGrid(MovAtacado::qtSaida, header = "Saída")

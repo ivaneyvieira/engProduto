@@ -10,6 +10,7 @@ class MovManual(
   var codigoProduto: Int?,
   var nomeProduto: String?,
   var grade: String?,
+  var fornecedor: String?,
   var observacao: String?,
   var pedido: String?,
   var rotulo: String?,

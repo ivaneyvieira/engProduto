@@ -27,6 +27,7 @@ SELECT M.storeno                                      AS loja,
          WHEN M.remarks LIKE '66:PED S%' THEN 'S'
                                          ELSE ''
        END                                            AS tipoPedido,
+       V.sname                                        AS fornecedor,
        M.remarks                                      AS observacao,
        IFNULL(R.form_label, '')                       AS rotulo,
        P.taxno                                        AS tributacao,
@@ -40,6 +41,8 @@ FROM
               USING (storeno, prdno, grade)
     LEFT JOIN sqldados.prd    AS P
               ON (P.no = M.prdno)
+    LEFT JOIN sqldados.vend   AS V
+              ON V.no = P.mfno
     LEFT JOIN sqldados.prdalq AS R
               ON R.prdno = M.prdno
 WHERE M.storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
@@ -60,6 +63,7 @@ SELECT loja,
        nomeProduto,
        grade,
        pedido,
+       fornecedor,
        observacao,
        rotulo,
        tributacao,
