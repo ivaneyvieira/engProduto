@@ -65,7 +65,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
 
   private fun marcaProdutosMedianteAutorizacao() {
     val produtos = subView.produtosMarcados()
-    subView.formAutoriza(produtos) { user ->
+    subView.formAutoriza(produtos) { user: UserSaci ->
       produtos.forEach { produtoNF ->
         produtoNF.marca = EMarcaNota.ENT.num
         produtoNF.usernoCD = user.no

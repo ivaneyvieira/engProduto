@@ -121,7 +121,8 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       numLoja = cmbLoja.value?.no ?: 0,
       numero = edtNumero.value ?: 0,
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
-      dataFinal = edtDateFinal.value ?: LocalDate.now()
+      dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      pesquisa = ""
     )
   }
 

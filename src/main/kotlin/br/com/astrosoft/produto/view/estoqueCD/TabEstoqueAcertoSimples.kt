@@ -16,14 +16,14 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
   TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoSimples {
   private var dlgEstoque: DlgEstoqueAcertoSimples? = null
-  private lateinit var edtNumero: IntegerField
+  private lateinit var edtNumero: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
@@ -52,7 +52,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
 
     init()
 
-    edtNumero = integerField("Número") {
+    edtNumero = textField("Número") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
@@ -129,7 +129,7 @@ class TabEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel) :
   override fun filtro(): FiltroAcerto {
     return FiltroAcerto(
       numLoja = cmbLoja.value?.no ?: 0,
-      numero = edtNumero.value ?: 0,
+      pesquisa = edtNumero.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
       simples = true,

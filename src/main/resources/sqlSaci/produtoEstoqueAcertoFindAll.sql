@@ -48,7 +48,7 @@ WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
-SELECT numero,
+SELECT O.numero,
        numloja,
        S.sname                  AS lojaSigla,
        data,
@@ -73,18 +73,22 @@ SELECT numero,
        gravado,
        O.observacao
 FROM
-  T_ACERTO                            AS A
-    LEFT JOIN T_BARCODE               AS B
+  T_ACERTO                                     AS A
+    LEFT JOIN T_BARCODE                        AS B
               ON B.prdno = A.prdno
                 AND B.grade = A.grade
     LEFT JOIN sqldados.produtoObservacaoAcerto AS O
               USING (numero, numloja)
-    LEFT JOIN sqldados.store          AS S
+    LEFT JOIN sqldados.store                   AS S
               ON S.no = A.numloja
-    LEFT JOIN sqldados.prd            AS P
+    LEFT JOIN sqldados.prd                     AS P
               ON P.no = A.prdno
-    LEFT JOIN T_LOC_APP               AS L
+    LEFT JOIN T_LOC_APP                        AS L
               ON L.storeno = A.numloja
                 AND L.prdno = A.prdno
                 AND L.grade = A.grade
+WHERE (A.numero = :pesquisa * 1
+  OR login LIKE CONCAT(:pesquisa, '%')
+  OR transacao = :pesquisa
+  OR :pesquisa = '')
 

@@ -134,6 +134,7 @@ data class FiltroAcerto(
   val dataFinal: LocalDate? = null,
   val simples: Boolean = false,
   val numero: Int = 0,
+  val pesquisa: String,
 )
 
 fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoEstoqueAcerto> {
@@ -242,6 +243,7 @@ class EstoqueAcerto(
       numLoja = numloja,
       numero = numero,
       simples = simples,
+      pesquisa = "",
     )
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos
