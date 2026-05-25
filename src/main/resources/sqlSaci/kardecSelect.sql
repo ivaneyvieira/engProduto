@@ -41,9 +41,9 @@ SELECT loja,
        recLogin,
        entLogin,
        observacao,
-       quantDevolucao                                             AS quantDevolucao
+       IFNULL(quantDevolucao, 0)                                  AS quantDevolucao
 FROM
-  sqldados.produtoKardec                 AS K
+  sqldados.produtoKardec                      AS K
     LEFT JOIN ( SELECT loja,
                        prdno,
                        grade,
@@ -51,7 +51,7 @@ FROM
                 FROM
                   T_PRD_DEV AS D
                 WHERE D.date <= CURRENT_DATE * 1
-                GROUP BY loja, prdno, grade) AS DEV
+                GROUP BY loja, prdno, grade ) AS DEV
               USING (loja, prdno, grade)
 WHERE (loja = :loja OR :loja = 0)
   AND prdno = :prdno
