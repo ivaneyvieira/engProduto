@@ -28,21 +28,17 @@ CREATE
 SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
 FROM
   sqldados.prd AS P
-WHERE (((P.dereg & POW(2
-  , 2) = 0)
+WHERE (((P.dereg & POW(2, 2) = 0)
   AND (:inativo = 'N'))
   OR
-       ((P.dereg & POW(2
-         , 2) != 0)
+       ((P.dereg & POW(2, 2) != 0)
          AND (:inativo = 'S'))
   OR
        (:inativo = 'T'))
-  AND (((P.bits & POW(2
-  , 13) = 0)
+  AND (((P.bits & POW(2, 13) = 0)
   AND (:uso = 'N'))
   OR
-       ((P.bits & POW(2
-         , 13) != 0)
+       ((P.bits & POW(2, 13) != 0)
          AND (:uso = 'S'))
   OR
        (:uso = 'T'))
@@ -88,8 +84,8 @@ CREATE
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT N.storeno           AS storeno,
-       prdno               AS prdno,
-       grade               AS grade,
+       A.prdno             AS prdno,
+       A.grade             AS grade,
        SUM(quantDevolucao) AS quantDevolucao
 FROM
   sqldados.iprdAdicionalDev          AS A
