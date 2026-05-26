@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.report
 
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.produto.model.beans.FiltroProduto
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.nfeXml.IItensNotaReport
@@ -9,10 +10,22 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalTime
 
-class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev) : IItensNotaReport {
+class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev) :
+  IItensNotaReport {
   val loja = saci.findLoja(nota.loja)
   val fornecedor = saci.findFornecedor(nota.vendno)
   val transportadora = saci.findTransportadora(nota.transpDevolucao ?: 0) ?: saci.findTransportadora(nota.transp ?: 0)
+  val valorVenda = saci.findProduto(
+    FiltroProduto(
+      loja = 0,
+      codigo = produto.codigo?.toString()?.trim() ?: "",
+      typeno = 0,
+      clno = 0,
+      vendno = 0,
+      localizacao = "",
+      nota = ""
+    )
+  ).firstOrNull()?.precoCheio ?: 0.00
 
   override val tituloRelatorio: String
     get() = "Espelho de Nota Fiscal de Devolução - Ped ${nota.numeroDevolucao}"
@@ -159,7 +172,7 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
   override val quantProduto: BigDecimal
     get() = BigDecimal(produto.quantDevolucao ?: 0)
   override val valorUnitProduto: BigDecimal
-    get() = BigDecimal(produto.valorUnit ?: 0.00)
+    get() = BigDecimal(valorVenda )
   override val valorTotalProduto: BigDecimal
     get() = quantProduto * valorUnitProduto
 
