@@ -170,7 +170,7 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
   override val vlICMSProduto: BigDecimal
     get() = BigDecimal.ZERO //BigDecimal(produto.valIcmsDevolucao ?: 0.00)
   override val vlIPIProduto: BigDecimal
-    get() = BigDecimal(produto.valIPIDevolucao ?: 0.00)
+    get() = BigDecimal.ZERO //BigDecimal(produto.valIPIDevolucao ?: 0.00)
   override val aliqICMSProduto: BigDecimal
     get() = BigDecimal(produto.icmsSaida ?: 0.00)
   override val aliqIPIProduto: BigDecimal
