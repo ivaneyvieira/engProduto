@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
+import br.com.astrosoft.produto.model.report.RelatorioEspelhoNotaVenda
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.model.sendMail.Anexo
@@ -138,6 +139,11 @@ class TabNotaPedidoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMode
   fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
     viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
+  }
+
+  fun imprimirEspelhoNotaVenda(nota: NotaRecebimentoDev) = viewModel.exec {
+    val file = RelatorioEspelhoNotaVenda.processaRelatorio(listNota = listOf(nota))
+    viewModel.view.showReport(chave = "Espelho Nota Venda${System.nanoTime()}", report = file)
   }
 
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {

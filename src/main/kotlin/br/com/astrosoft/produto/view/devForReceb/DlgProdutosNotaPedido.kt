@@ -128,6 +128,13 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
           }
         }
 
+        this.button("Esp Nota Venda") {
+          this.icon = VaadinIcon.FILE_TEXT.create()
+          this.addClickListener {
+            viewModel.imprimirEspelhoNotaVenda(nota)
+          }
+        }
+
         this.button("Imp Comp") {
           this.icon = VaadinIcon.FILE_TEXT.create()
           this.addClickListener {
