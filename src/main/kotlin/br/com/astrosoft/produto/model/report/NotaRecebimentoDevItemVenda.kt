@@ -91,16 +91,16 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
     get() = LocalTime.now().format()
   override val faturaDuplicata: String
     get() = ""
-  override val bcICMS: BigDecimal
-    get() = BigDecimal(nota.baseIcmsProdutos)
+  override val bcICMS: BigDecimal?
+    get() = BigDecimal.ZERO //BigDecimal(nota.baseIcmsProdutos)
   override val vlICMS: BigDecimal
-    get() = BigDecimal(nota.valorIcmsProdutos)
+    get() = BigDecimal.ZERO //BigDecimal(nota.valorIcmsProdutos)
   override val bcICMSSt: BigDecimal
     get() = BigDecimal(nota.baseIcmsSubstProduto)
   override val valorICMSSt: BigDecimal
     get() = BigDecimal(nota.icmsSubstProduto)
   override val vlProdutos: BigDecimal
-    get() = BigDecimal(nota.valorTotalProduto)
+    get() = BigDecimal.ZERO //BigDecimal(nota.valorTotalProduto)
   override val vlFrete: BigDecimal
     get() = BigDecimal(nota.valorFrete)
   override val vlSeguro: BigDecimal
@@ -110,11 +110,11 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
   override val vlOutrasDesp: BigDecimal
     get() = BigDecimal(nota.outrasDespesas)
   override val vlIPI: BigDecimal
-    get() = BigDecimal(nota.valorIpiProdutos)
+    get() = BigDecimal.ZERO //BigDecimal(nota.valorIpiProdutos)
   override val vlTrib: BigDecimal
     get() = BigDecimal(999999)
   override val vlNota: BigDecimal
-    get() = BigDecimal(nota.valorTotalNota)
+    get() = BigDecimal.ZERO //BigDecimal(nota.valorTotalNota)
   override val nomeTransportadora: String
     get() {
       return transportadora?.nome ?: ""
@@ -177,14 +177,14 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
     get() = quantProduto * valorUnitProduto
 
   //BigDecimal(produto.valorTotal ?: 0.00)
-  override val bcICMSProduto: BigDecimal
+  override val bcICMSProduto: BigDecimal?
     get() = BigDecimal(produto.baseIcmsDevolucao ?: 0.00)
   override val vlICMSProduto: BigDecimal
     get() = BigDecimal(produto.valIcmsDevolucao ?: 0.00)
   override val vlIPIProduto: BigDecimal
     get() = BigDecimal(produto.valIPIDevolucao ?: 0.00)
   override val aliqICMSProduto: BigDecimal
-    get() = BigDecimal(produto.icms ?: 0.00)
+    get() = BigDecimal(produto.icmsSaida ?: 0.00)
   override val aliqIPIProduto: BigDecimal
     get() = BigDecimal(produto.ipi ?: 0.00)
   override val inscricaoMunicial: String

@@ -33,7 +33,7 @@ interface IItensNotaReport {
   val ieDestinatario: String
   val horaSaida: String
   val faturaDuplicata: String
-  val bcICMS: BigDecimal
+  val bcICMS: BigDecimal?
   val vlICMS: BigDecimal
   val bcICMSSt: BigDecimal
   val valorICMSSt: BigDecimal
@@ -72,7 +72,7 @@ interface IItensNotaReport {
   val quantProduto: BigDecimal
   val valorUnitProduto: BigDecimal
   val valorTotalProduto: BigDecimal
-  val bcICMSProduto: BigDecimal
+  val bcICMSProduto: BigDecimal?
   val vlICMSProduto: BigDecimal
   val vlIPIProduto: BigDecimal
   val aliqICMSProduto: BigDecimal

@@ -115,7 +115,8 @@ HAVING niDev IS NOT NULL;
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_SAIDA;
 CREATE TEMPORARY TABLE T_NOTA_SAIDA
 (
-  PRIMARY KEY (storeno, pdvno, xano)
+  PRIMARY KEY (storeno, pdvno, xano),
+  INDEX (niDev)
 )
 SELECT NFO.storeno,
        NFO.pdvno,
@@ -433,13 +434,13 @@ SELECT loja,
        usuarioRecebe,
   /*Produto*/
        seq,
-       prdno,
+       Q.prdno,
        codigo,
        taxno,
        barcodeStrList,
        barcodeStrListEntrada,
        descricao,
-       grade,
+       Q.grade,
        vendnoProduto,
        quant,
        numAcerto,
@@ -447,7 +448,7 @@ SELECT loja,
        refFabrica,
        Q.cfop,
        IF(Q.cfop < 4000, 6202, Q.cfop)   AS cfopDev,
-       cst,
+       Q.cst,
        un,
        validadeValida,
        validade,
@@ -466,7 +467,7 @@ SELECT loja,
        frete,
        freteNota,
        outDesp,
-       icmsSubst,
+       Q.icmsSubst,
        numeroDevolucao,
        tipoDevolucao                     AS motivoDevolucao,
        quantDevolucao,
@@ -507,12 +508,19 @@ SELECT loja,
        IFNULL(N.situacaoDup, 'Pendente') AS situacaoDup,
        IFNULL(N.duplicataNum, '')        AS duplicataNum,
        IFNULL(N.situacaoDupStatus, 999)  AS situacaoDupStatus,
-       IFNULL(rotuloSped, '')            AS rotuloSped
+       IFNULL(rotuloSped, '')            AS rotuloSped,
+       X.icmsAliq / 100                  AS icmsSaida
 FROM
-  T_QUERY                  AS Q
-    LEFT JOIN T_NOTA_SAIDA AS N
+  T_QUERY                     AS Q
+    LEFT JOIN T_NOTA_SAIDA    AS N
               ON (N.niDev = Q.numeroDevolucao)
-    LEFT JOIN T_DUP        AS D
+    LEFT JOIN sqldados.xaprd2 AS X
+              ON X.storeno = N.storeno AND
+                 X.pdvno = N.pdvno AND
+                 X.xano = N.xano AND
+                 X.prdno = Q.prdno AND
+                 X.grade = Q.grade
+    LEFT JOIN T_DUP           AS D
               ON Q.ni = D.invno
 WHERE ((:pago = TRUE) OR (N.notaDevolucao IS NULL));
 
