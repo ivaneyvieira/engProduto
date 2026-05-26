@@ -379,6 +379,7 @@ SELECT N.storeno                                                      AS loja,
        ncm                                                            AS ncm,
        P.weight                                                       AS pesoLiquido,
        P.weight_g                                                     AS pesoBruto,
+       P.sp / 100                                                     AS precoVenda,
        ST.auxStr1                                                     AS rotuloSped
 FROM
   T_NOTA                          AS N
@@ -468,6 +469,7 @@ SELECT loja,
        freteNota,
        outDesp,
        Q.icmsSubst,
+       precoVenda                        AS precoVenda,
        numeroDevolucao,
        tipoDevolucao                     AS motivoDevolucao,
        quantDevolucao,

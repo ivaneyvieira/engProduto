@@ -101,6 +101,7 @@ data class NotaRecebimentoProdutoDev(
   var situacaoDupStatus: Int?,
   var rotuloSped: String?,
   var icmsSaida: Double?,
+  var precoVenda: Double?,
 ) {
   var item: Int? = null
 

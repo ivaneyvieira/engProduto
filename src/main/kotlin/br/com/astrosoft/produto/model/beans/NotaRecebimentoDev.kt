@@ -64,6 +64,11 @@ class NotaRecebimentoDev(
   var duplicataNum: String?,
   var situacaoDupStatus: Int?
 ) {
+  val totalProdutosVenda
+    get() = produtos.sumOf { prd ->
+      (prd.quantDevolucao ?: 0) * (prd.precoVenda ?: 0.00)
+    }
+
   val chaveEmail: String
     get() = produtos.firstOrNull()?.chaveDevolucao ?: ""
 
