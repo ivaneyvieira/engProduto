@@ -1,5 +1,7 @@
 USE sqldados;
 
+/*Kardec CD */
+
 DROP
   TEMPORARY TABLE IF EXISTS T_PRD_DEV;
 CREATE

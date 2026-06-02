@@ -1,5 +1,7 @@
 USE sqldados;
 
+/* Kardec Loja*/
+
 SET SQL_MODE = '';
 
 DO @DATA_FINAL := ROUND(CURDATE() * 1);
@@ -239,6 +241,24 @@ SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLog
 FROM
   T_MOVIMENTACAO_KARDEC;
 
+DROP TEMPORARY TABLE IF EXISTS T_KARDEC_CD;
+CREATE TEMPORARY TABLE T_KARDEC_CD
+(
+  PRIMARY KEY (loja, prdno, grade, doc)
+)
+SELECT loja,
+       prdno,
+       grade,
+       doc
+FROM
+  sqldados.produtoKardec AS K
+WHERE (loja = :loja OR :loja = 0)
+  AND prdno = :prdno
+  AND grade = :grade
+  AND DATA <= CURRENT_DATE * 1
+  AND tipo = 'EXPEDICAO'
+GROUP BY loja, prdno, grade, doc;
+
 SELECT loja,
        prdno,
        grade,
@@ -253,6 +273,9 @@ SELECT loja,
        entLogin,
        userLogin
 FROM
-  T_KARDEX
-WHERE doc NOT LIKE '%/3'
-ORDER BY data, loja, prdno, grade, doc
+  T_KARDEX                AS L
+    LEFT JOIN T_KARDEC_CD AS C
+              USING (loja, prdno, grade, doc)
+WHERE L.doc NOT LIKE '%/3'
+  AND C.doc IS NULL
+ORDER BY DATA, loja, prdno, grade, doc
