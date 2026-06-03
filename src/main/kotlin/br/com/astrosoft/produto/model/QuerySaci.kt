@@ -3343,7 +3343,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", estoque.prdno)
       addOptionalParameter("grade", estoque.grade)
       addOptionalParameter("loja", loja)
-      addOptionalParameter("dataInicial", dataInicial)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
     }
   }
 
@@ -3353,7 +3353,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", estoque.prdno)
       addOptionalParameter("grade", estoque.grade)
       addOptionalParameter("loja", loja)
-      addOptionalParameter("dataInicial", dataInicial)
+      addOptionalParameter("dataInicial", dataInicial.toSaciDate())
     }
   }
 
