@@ -131,8 +131,10 @@ object ProcessamentoKardec {
     val saldoInicial = async { produto.saldoInicial(loja, dataInicial) }
     val acertoEstoque = async { produto.acertoEstoque(loja, dataInicial) }
     val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataInicial) }
+    val devolucao = async { produto.devolucao(loja, dataInicial) }
 
-    recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await()
+    recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() +
+    movimentacaoEstoque.await() + devolucao.await()
   }
 
   fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {

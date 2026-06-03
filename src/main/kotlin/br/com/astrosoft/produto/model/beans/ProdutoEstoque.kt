@@ -666,6 +666,11 @@ class ProdutoEstoque(
     return lista
   }
 
+  fun devolucao(loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
+    val lista = saci.devolucaoEstoque(this, loja, dataIncial)
+    return lista
+  }
+
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)

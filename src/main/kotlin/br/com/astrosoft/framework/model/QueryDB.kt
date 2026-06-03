@@ -2,8 +2,6 @@ package br.com.astrosoft.framework.model
 
 import br.com.astrosoft.framework.model.exceptions.EModelFail
 import br.com.astrosoft.framework.util.SystemUtils.readFile
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -23,6 +21,7 @@ open class QueryDB(database: DatabaseConfig) {
   init {
     try {
       Class.forName(database.driver)
+      /*
       val config = HikariConfig()
       config.jdbcUrl = database.url
       config.username = database.user
@@ -32,7 +31,7 @@ open class QueryDB(database: DatabaseConfig) {
       config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
       config.isAutoCommit = false
       val ds = HikariDataSource(config)
-      ds.maximumPoolSize = 2
+      ds.maximumPoolSize = 2*/
       this.sql2o = Sql2o(database.url, database.user, database.password)
     } catch (e: Exception) {
       throw RuntimeException(e)

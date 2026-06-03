@@ -3347,6 +3347,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun devolucaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
+    val sql = "/sqlSaci/devolucaoEstoque.sql"
+    return query(sql, ProdutoKardex::class) {
+      addOptionalParameter("prdno", estoque.prdno)
+      addOptionalParameter("grade", estoque.grade)
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("dataInicial", dataInicial)
+    }
+  }
+
   fun findProdutoSaldoEstoque(filtro: FiltroProdutoSaldoEstoque): List<ProdutoSaldoEstoque> {
     val sql = "/sqlSaci/findProdutosSaldoEstoque.sql"
     return query(sql, ProdutoSaldoEstoque::class) {

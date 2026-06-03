@@ -68,63 +68,6 @@ WHERE P.prdno = :prdno
   AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
   AND N.status <> 1;
 
-/*
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo)
-SELECT N.storeno                   AS loja,
-       P.prdno                     AS prdno,
-       P.grade                     AS grade,
-       CAST(N.issuedate AS date)   AS data,
-       CONCAT(N.nfno, '/', N.nfse) AS doc,
-       N.eordno                    AS pedido,
-       'TRANSF'                    AS tipo,
-       ROUND(-P.qtty)              AS qtde,
-       remarks                     AS observacao,
-       0                           AS saldo
-FROM
-  sqldados.nf                 AS N
-    INNER JOIN sqldados.xaprd AS P
-               USING (storeno, pdvno, xano)
-    INNER JOIN sqldados.prd   AS C
-               ON C.no = P.prdno
-WHERE P.prdno = :prdno
-  AND P.grade = :grade
-  AND N.storeno = :loja
-  AND N.tipo = 1
-  AND N.issuedate BETWEEN :dataInicial AND @DATA_FINAL
-  AND N.status <> 1
-  AND CASE C.mfno
-        WHEN 46   THEN (ROUND(P.qtty) % 900) != 0
-        WHEN 1040 THEN (ROUND(P.qtty) % 1000) != 0
-                  ELSE remarks NOT REGEXP '^RES[A-Z]+ *PED +[0-9]{9} '
-      END
-*/
-
-INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, pedido, tipo, qtde, observacao, saldo, userLogin)
-SELECT N.storeno                      AS loja,
-       P.prdno                        AS prdno,
-       P.grade                        AS grade,
-       CAST(N.comp_date AS date)      AS data,
-       CONCAT(N.nfname, '/', N.invse) AS doc,
-       N.ordno                        AS pedido,
-       'DEVOLUCAO'                    AS tipo,
-       ROUND(P.qtty / 1000)           AS qtde,
-       remarks                        AS observacao,
-       0                              AS saldo,
-       U.login                        AS userLogin
-FROM
-  sqldados.inv                AS N
-    LEFT JOIN  sqldados.users AS U
-               ON U.no = IF(N.usernoLast = 0, N.usernoFirst, N.usernoLast)
-    INNER JOIN sqldados.iprd  AS P
-               USING (invno)
-WHERE P.prdno = :prdno
-  AND P.grade = :grade
-  AND N.storeno = :loja
-  AND N.type = 2
-  AND N.bits & POW(2, 4) = 0
-  AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
-  AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL;
-
 DROP TABLE IF EXISTS T_REPOSICAO;
 CREATE TEMPORARY TABLE T_REPOSICAO
 SELECT O.storeno                                    AS loja,

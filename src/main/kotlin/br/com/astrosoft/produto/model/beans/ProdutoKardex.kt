@@ -71,6 +71,7 @@ enum class ETipoKardec(val num: String, val descricao: String) {
   INICIAL("00", "Inicial"),
   RETORNO("01", "Retorno Loja"),
   ACERTO("01", "Acerto Estoque"),
+  DEVOLUCAO("01", "Devolução"),
   MOV_ENTREGA("01", "Movimentação de Entrega"),
   MOV_RECEBIMENTO("01", "Movimentação de Recebimento"),
   REPOSICAO_CDLJ("01", "Reposição Rota CD -LJ"),
