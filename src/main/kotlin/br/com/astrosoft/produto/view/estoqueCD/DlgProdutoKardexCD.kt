@@ -76,7 +76,7 @@ class DlgProdutoKardexCD(
       columnGrid(ProdutoKardex::recLogin, "Recebido")
       columnGrid(ProdutoKardex::data, "Data")
       columnGrid(ProdutoKardex::ljDoc, "Lj Doc").right()
-      columnGrid(ProdutoKardex::quantDevolucao, "Garantia").right()
+      //columnGrid(ProdutoKardex::quantDevolucao, "Garantia").right()
       columnGrid(ProdutoKardex::pedido, "Pedido").right()
       columnGrid(ProdutoKardex::doc, "NF Fat").right()
       columnGrid(ProdutoKardex::nfEnt, "NF Ent").right()
