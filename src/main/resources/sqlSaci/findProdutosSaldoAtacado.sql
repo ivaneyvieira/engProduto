@@ -114,7 +114,7 @@ FROM
                USING (prdno)
 WHERE (N.tipo = 9 OR N.remarks = '2')
   AND N.storeno IN (2, 3, 4, 5, 8)
-  GROUP BY X.prdno, gradeProduto;
+GROUP BY X.prdno, gradeProduto;
 
 DROP TEMPORARY TABLE IF EXISTS T_VEND;
 CREATE TEMPORARY TABLE T_VEND
@@ -228,10 +228,8 @@ FROM
                USING (prdno, gradeProduto)
     LEFT JOIN  T_SALDO_ENTRADA AS SE
                USING (prdno, gradeProduto)
-WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR
-       (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
-       (:estoque = '=' AND S.estoqueLojasAtacado = :saldo) OR
-       (:estoque = '#' AND S.estoqueLojasAtacado != :saldo) OR
+WHERE ((:estoque = '<' AND S.estoqueLojasAtacado < :saldo) OR (:estoque = '>' AND S.estoqueLojasAtacado > :saldo) OR
+       (:estoque = '=' AND S.estoqueLojasAtacado = :saldo) OR (:estoque = '#' AND S.estoqueLojasAtacado != :saldo) OR
        (:estoque = 'T'));
 
 SELECT prdno,

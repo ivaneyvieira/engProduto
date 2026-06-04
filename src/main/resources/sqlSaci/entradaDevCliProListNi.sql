@@ -27,25 +27,23 @@ WHERE (I.invno IN (:listNi))
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
-SELECT CAST(data AS DATE)                                                  AS data,
-       I.codLoja                                                           AS codLoja,
-       I.loja                                                              AS loja,
-       X.prdno                                                             AS prdno,
-       U.name                                                              AS userName,
-       U.login                                                             AS userLogin,
-       TRIM(X.prdno)                                                       AS codigo,
-       TRIM(MID(P.name, 1, 37))                                            AS descricao,
-       X.grade                                                             AS grade,
-       SUM(ROUND(X.qtty / 1000))                                           AS quantidade,
-       observacao                                                          AS observacao,
-       TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(observacao, ')', 2), ')', -1)) AS tipo,
-       SUBSTRING_INDEX(X.c10, '|', 1)                                      AS tipoPrd,
-       IF(X.c10 LIKE '%|%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1),
-          '0') * 1                                                         AS tipoQtd,
-       I.invno                                                             AS ni,
-       I.nota                                                              AS nota,
-       I.valor                                                             AS valor
+SELECT CAST(data AS DATE)                                                                      AS data,
+       I.codLoja                                                                               AS codLoja,
+       I.loja                                                                                  AS loja,
+       X.prdno                                                                                 AS prdno,
+       U.name                                                                                  AS userName,
+       U.login                                                                                 AS userLogin,
+       TRIM(X.prdno)                                                                           AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                                AS descricao,
+       X.grade                                                                                 AS grade,
+       SUM(ROUND(X.qtty / 1000))                                                               AS quantidade,
+       observacao                                                                              AS observacao,
+       TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(observacao, ')', 2), ')', -1))                     AS tipo,
+       SUBSTRING_INDEX(X.c10, '|', 1)                                                          AS tipoPrd,
+       IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1 AS tipoQtd,
+       I.invno                                                                                 AS ni,
+       I.nota                                                                                  AS nota,
+       I.valor                                                                                 AS valor
 FROM
   T_NOTA                      AS I
     INNER JOIN sqldados.iprd  AS X
@@ -69,11 +67,9 @@ SELECT data,
        quantidade,
        observacao,
        tipo,
-       IF(tipo REGEXP '^TRO.* M.*' OR
-          tipo REGEXP '^EST.* M.*' OR
-          tipo REGEXP '^REE.* M.*', tipoPrd, tipo)     AS tipoPrd,
+       IF(tipo REGEXP '^TRO.* M.*' OR tipo REGEXP '^EST.* M.*' OR tipo REGEXP '^REE.* M.*', tipoPrd, tipo) AS tipoPrd,
        tipoQtd,
-       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd) AS tipoQtdEfetiva,
+       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd)                                                     AS tipoQtdEfetiva,
        ni,
        nota,
        valor

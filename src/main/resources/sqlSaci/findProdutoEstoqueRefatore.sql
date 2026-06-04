@@ -1,16 +1,14 @@
-set sql_mode='';
+SET sql_mode = '';
 
 SELECT storeno,
        prdno,
        grade,
        observacao,
-       SUBSTRING_INDEX(A.observacao, ',', 1) * 1 AS qtConferenciaObs,
-       IF(A.observacao LIKE '%,%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
-          0)                                     AS qtConfEditObs,
-       IF(A.observacao LIKE '%,%,%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1,
-          0)                                     AS qtConfEditLojaObs,
+       SUBSTRING_INDEX(A.observacao, ',', 1) * 1                                                             AS qtConferenciaObs,
+       IF(A.observacao LIKE '%,%', SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
+          0)                                                                                                 AS qtConfEditObs,
+       IF(A.observacao LIKE '%,%,%', SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1,
+          0)                                                                                                 AS qtConfEditLojaObs,
        qtConferencia,
        qtConfEdit,
        qtConfEditLoja
@@ -26,13 +24,14 @@ ALTER TABLE sqldados.prdAdicional
 
 UPDATE sqldados.prdAdicional A
 SET A.qtConferencia  = SUBSTRING_INDEX(A.observacao, ',', 1) * 1,
-    A.qtConfEdit     = IF(A.observacao LIKE '%,%',
-                          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
+    A.qtConfEdit     = IF(A.observacao LIKE '%,%', SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 2), ',', -1) * 1,
                           0),
     A.qtConfEditLoja = IF(A.observacao LIKE '%,%,%',
-                          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1,
-                          0)
+                          SUBSTRING_INDEX(SUBSTRING_INDEX(A.observacao, ',', 3), ',', -1) * 1, 0)
 WHERE observacao IS NOT NULL
   AND observacao <> '';
 
-select * from sqldados.prdAdicional where prdno = 19;
+SELECT *
+FROM
+  sqldados.prdAdicional
+WHERE prdno = 19;

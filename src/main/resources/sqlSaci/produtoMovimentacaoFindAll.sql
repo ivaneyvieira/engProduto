@@ -29,30 +29,23 @@ WHERE (numero = :numero OR :numero = -1)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
   AND (data <= :dataFinal OR :dataFinal = 0)
-  AND (
-  CASE :status
-    WHEN 'T' THEN TRUE
-    WHEN 'E' THEN IFNULL(M.noEntregue, 0) = 0 && IFNULL(M.noRecebido, 0) = 0
-    WHEN 'R' THEN IFNULL(M.noEntregue, 0) > 0 && IFNULL(M.noRecebido, 0) = 0
-             ELSE FALSE
-  END
-  );
+  AND (CASE :status
+         WHEN 'T' THEN TRUE
+         WHEN 'E' THEN IFNULL(M.noEntregue, 0) = 0 && IFNULL(M.noRecebido, 0) = 0
+         WHEN 'R' THEN IFNULL(M.noEntregue, 0) > 0 && IFNULL(M.noRecebido, 0) = 0
+                  ELSE FALSE
+       END);
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT P.storeno,
-       P.prdno,
-       P.grade,
-       P.localizacao AS locApp
+SELECT P.storeno, P.prdno, P.grade, P.localizacao AS locApp
 FROM
   sqldados.prdAdicional AS P
     INNER JOIN T_ACERTO AS A
-               ON P.storeno = A.numloja
-                 AND P.prdno = A.prdno
-                 AND P.grade = A.grade
+               ON P.storeno = A.numloja AND P.prdno = A.prdno AND P.grade = A.grade
 GROUP BY P.storeno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
@@ -60,19 +53,16 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no                                                           AS prdno,
-       IFNULL(B.grade, '')                                            AS grade,
-       MAX(TRIM(IF(B.grade IS NULL,
-                   IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13,
-                             P.barcode, NULL), P2.gtin), B.barcode))) AS codbar
+SELECT P.no                                                                                                          AS prdno,
+       IFNULL(B.grade, '')                                                                                           AS grade,
+       MAX(TRIM(IF(B.grade IS NULL, IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13, P.barcode, NULL), P2.gtin),
+                   B.barcode)))                                                                                      AS codbar
 FROM
   sqldados.prd                AS P
     LEFT JOIN sqldados.prd2   AS P2
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno
-                AND B.grade != ''
-                AND LENGTH(TRIM(B.barcode)) = 13
+              ON P.no = B.prdno AND B.grade != '' AND LENGTH(TRIM(B.barcode)) = 13
 WHERE P.no IN ( SELECT DISTINCT prdno FROM T_ACERTO )
 GROUP BY P.no, B.grade
 HAVING codbar != '';
@@ -119,20 +109,13 @@ FROM
     LEFT JOIN sqldados.users AS ER
               ON ER.no = noRecebido
     LEFT JOIN T_BARCODE      AS B
-              ON B.prdno = A.prdno
-                AND B.grade = A.grade
+              ON B.prdno = A.prdno AND B.grade = A.grade
     LEFT JOIN sqldados.store AS S
               ON S.no = A.numloja
     LEFT JOIN sqldados.prd   AS P
               ON P.no = A.prdno
     LEFT JOIN T_LOC_APP      AS L
-              ON L.storeno = A.numloja
-                AND L.prdno = A.prdno
-                AND L.grade = A.grade
+              ON L.storeno = A.numloja AND L.prdno = A.prdno AND L.grade = A.grade
 WHERE numero > 0
-HAVING (@PESQUISA = '' OR
-        numero LIKE @PESQUISA OR
-        lojaSigla LIKE @PESQUISA OR
-        recebido LIKE @PESQUISA_LIKE OR
-        entregue LIKE @PESQUISA_LIKE OR
-        gravadoLogin LIKE @PESQUISA_LIKE)
+HAVING (@PESQUISA = '' OR numero LIKE @PESQUISA OR lojaSigla LIKE @PESQUISA OR recebido LIKE @PESQUISA_LIKE OR
+        entregue LIKE @PESQUISA_LIKE OR gravadoLogin LIKE @PESQUISA_LIKE)

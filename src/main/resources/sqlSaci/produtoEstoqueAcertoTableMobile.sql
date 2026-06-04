@@ -22,8 +22,7 @@ CREATE TABLE produtoEstoqueAcertoMobile
   transacao    varchar(20) DEFAULT '' NULL,
   login        varchar(20) DEFAULT '' NULL,
   PRIMARY KEY (numloja, numero, prdno, grade)
-)
-  ENGINE = MyISAM
+) ENGINE = MyISAM
   CHARSET = latin1;
 
 INSERT INTO produtoEstoqueAcertoMobile (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,

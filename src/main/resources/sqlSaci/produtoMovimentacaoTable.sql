@@ -18,8 +18,7 @@ CREATE TABLE sqldados.produtoMovimentacao
   transacao     varchar(20) DEFAULT '' NULL,
   login         varchar(20) DEFAULT '' NULL,
   PRIMARY KEY (numloja, numero, prdno, grade)
-)
-  ENGINE = MyISAM
+) ENGINE = MyISAM
   CHARSET = latin1;
 
 ALTER TABLE sqldados.produtoMovimentacao
@@ -73,24 +72,22 @@ ALTER TABLE sqldados.produtoMovimentacao
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN noRecebido int NULL;
 
-ALTER TABLE sqldados.produtoMovimentacao
-  RENAME COLUMN gravadoLogin TO noGravado;
+ALTER TABLE sqldados.produtoMovimentacao RENAME COLUMN gravadoLogin TO noGravado;
 
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN noRota int NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoMovimentacao
-ADD COLUMN dataEntrege int NULL DEFAULT 0;
+  ADD COLUMN dataEntrege int NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoMovimentacao
-ADD COLUMN horaEntrege int NULL DEFAULT 0;
+  ADD COLUMN horaEntrege int NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoMovimentacao
-ADD COLUMN dataRecebido int NULL DEFAULT 0;
+  ADD COLUMN dataRecebido int NULL DEFAULT 0;
 
 ALTER TABLE sqldados.produtoMovimentacao
-ADD COLUMN horaRecebido int NULL DEFAULT 0;
-
+  ADD COLUMN horaRecebido int NULL DEFAULT 0;
 
 
 /********************************************************************************/

@@ -130,16 +130,11 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT P.storeno,
-       P.prdno,
-       P.grade,
-       P.localizacao AS locApp
+SELECT P.storeno, P.prdno, P.grade, P.localizacao AS locApp
 FROM
   sqldados.prdAdicional   AS P
     INNER JOIN T_GARANTIA AS A
-               ON P.storeno = A.numloja
-                 AND P.prdno = A.prdno
-                 AND P.grade = A.grade
+               ON P.storeno = A.numloja AND P.prdno = A.prdno AND P.grade = A.grade
 GROUP BY P.storeno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
@@ -147,11 +142,10 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no                                                           AS prdno,
-       IFNULL(B.grade, '')                                            AS grade,
-       MAX(TRIM(IF(B.grade IS NULL,
-                   IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13,
-                             P.barcode, NULL), P2.gtin), B.barcode))) AS codbar
+SELECT P.no                                                                                                          AS prdno,
+       IFNULL(B.grade, '')                                                                                           AS grade,
+       MAX(TRIM(IF(B.grade IS NULL, IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13, P.barcode, NULL), P2.gtin),
+                   B.barcode)))                                                                                      AS codbar
 FROM
   sqldados.prd                AS P
     LEFT JOIN sqldados.prd2   AS P2
@@ -200,30 +194,19 @@ FROM
     LEFT JOIN T_ULTIMO_RECEB                     AS UR
               USING (prdno, grade)
     LEFT JOIN sqldados.invAdicional              AS IA
-              ON IA.invno = UR.niReceb
-                AND IA.tipoDevolucao = 8
-                AND IA.situacaoDev = 6
-                AND IA.numero = A.numero
+              ON IA.invno = UR.niReceb AND IA.tipoDevolucao = 8 AND IA.situacaoDev = 6 AND IA.numero = A.numero
     LEFT JOIN T_BARCODE                          AS B
-              ON B.prdno = A.prdno
-                AND B.grade = A.grade
+              ON B.prdno = A.prdno AND B.grade = A.grade
     LEFT JOIN sqldados.produtoObservacaoGarantia AS O
-              ON O.numero = A.numero
-                AND O.numloja = A.numloja
+              ON O.numero = A.numero AND O.numloja = A.numloja
     LEFT JOIN sqldados.store                     AS S
               ON S.no = A.numloja
     LEFT JOIN sqldados.prd                       AS P
               ON P.no = A.prdno
     LEFT JOIN T_LOC_APP                          AS L
-              ON L.storeno = A.numloja
-                AND L.prdno = A.prdno
-                AND L.grade = A.grade
-WHERE (
-        @PESQUISA_STR = '' OR
-        A.numero = @PESQUISA_NUM OR
-        S.sname LIKE @PESQUISA_LIKE OR
-        UR.forReceb = @PESQUISA_NUM OR
-        UR.nforReceb LIKE @PESQUISA_LIKE)
+              ON L.storeno = A.numloja AND L.prdno = A.prdno AND L.grade = A.grade
+WHERE (@PESQUISA_STR = '' OR A.numero = @PESQUISA_NUM OR S.sname LIKE @PESQUISA_LIKE OR UR.forReceb = @PESQUISA_NUM OR
+       UR.nforReceb LIKE @PESQUISA_LIKE)
 HAVING (:processado = 'S' AND processado = 1)
     OR (:processado = 'N' AND processado = 0)
     OR (:processado = 'T' AND processado = 0)

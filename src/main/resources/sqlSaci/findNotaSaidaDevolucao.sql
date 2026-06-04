@@ -50,23 +50,16 @@ SELECT N.storeno                                                              AS
        END                                                                    AS situacaoDup,
        CONCAT(D.dupno, '/', D.dupse)                                          AS duplicata,
        IFNULL(D.status, 999)                                                  AS situacaoDupStatus,
-       COALESCE(
-           IF(LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
-                                        LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5,
-                                        200),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
-                                        LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5,
-                                        200),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
-                                        LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8,
-                                        200),
-                              ' ', 1), NULL)
-       ) * 1                                                                  AS niDev
+       COALESCE(IF(LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0, SUBSTRING_INDEX(
+           SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                     LOCATE(' PED ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5, 200), ' ', 1), NULL),
+                IF(LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                              LOCATE(' NID ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 5, 200), ' ', 1), NULL),
+                IF(LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
+                              LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8, 200), ' ', 1),
+                   NULL)) * 1                                                 AS niDev
 FROM
   sqldados.nf                               AS N
     LEFT JOIN  sqldados.nfUserPrint         AS PT
@@ -86,9 +79,7 @@ FROM
     LEFT JOIN  sqldados.carr                AS T
                ON T.no = N.carrno
     LEFT JOIN  sqldados.notaSaidaObservacao AS O
-               ON O.storeno = N.storeno
-                 AND O.pdvno = N.pdvno
-                 AND O.xano = N.xano
+               ON O.storeno = N.storeno AND O.pdvno = N.pdvno AND O.xano = N.xano
 WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.issuedate >= @DT
@@ -117,13 +108,9 @@ FROM
     INNER JOIN sqldados.invAdicional           AS IA
                ON IA.numero = Q.niDev
     INNER JOIN sqldados.iprdAdicionalDev       AS AD
-               ON IA.invno = AD.invno AND
-                  IA.tipoDevolucao = AD.tipoDevolucao AND
-                  IA.numero = AD.numero
+               ON IA.invno = AD.invno AND IA.tipoDevolucao = AD.tipoDevolucao AND IA.numero = AD.numero
     LEFT JOIN  sqldados.invAdicionalDevArquivo AS A
-               ON A.invno = IA.invno AND
-                  A.tipoDevolucao = IA.tipoDevolucao AND
-                  A.numero = IA.numero
+               ON A.invno = IA.invno AND A.tipoDevolucao = IA.tipoDevolucao AND A.numero = IA.numero
 GROUP BY Q.loja, Q.pdvno, Q.xano, IA.situacaoDev, IA.invno, IA.numero, IA.tipoDevolucao;
 
 DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT2;
@@ -172,9 +159,8 @@ FROM
               USING (loja, pdvno, xano)
     LEFT JOIN T_FILE_COUNT2 AS C2
               USING (loja, pdvno, xano)
-WHERE (@PESQUISA = '' OR Q.numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
-       nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR
-       pedido LIKE @PESQUISA)
+WHERE (@PESQUISA = '' OR Q.numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR nomeCliente LIKE @PESQUISA_LIKE OR
+       vendedor = @PESQUISA_NUM OR pedido LIKE @PESQUISA)
   AND situacaoDupStatus NOT IN (2, 5)
   AND (IFNULL(duplicata, '') != '' OR observacaoNota NOT LIKE '%PAGO%')
 GROUP BY Q.loja, Q.pdvno, Q.xano, C.situacaoDev, C.invno, C.numero, C.tipoDevolucao

@@ -59,9 +59,7 @@ FROM
     LEFT JOIN  sqldados.xaprd2Marca AS M
                USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  sqldados.stk         AS SCD
-               ON SCD.storeno = X.storeno
-                 AND SCD.prdno = X.prdno
-                 AND SCD.grade = IF(X.c6 = '', X.grade, X.c6)
+               ON SCD.storeno = X.storeno AND SCD.prdno = X.prdno AND SCD.grade = IF(X.c6 = '', X.grade, X.c6)
     INNER JOIN sqldados.nf          AS N
                ON N.storeno = X.storeno AND N.pdvno = X.pdvno AND N.xano = X.xano
 WHERE X.storeno = :storeno

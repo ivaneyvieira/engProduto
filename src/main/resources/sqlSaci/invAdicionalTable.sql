@@ -94,16 +94,14 @@ FROM
   iprdAdicionalDev
 GROUP BY invno, tipoDevolucao, numero;
 
-UPDATE sqldados.invAdicional AS A
-  INNER JOIN T_IPRADICIONALDEV AS T
-  USING (invno, tipoDevolucao)
+UPDATE sqldados.invAdicional AS A INNER JOIN T_IPRADICIONALDEV AS T USING (invno, tipoDevolucao)
 SET A.numero = T.numero
 WHERE A.numero = 0;
 
 DROP TABLE IF EXISTS sqldados.appNumeracao;
 CREATE TABLE sqldados.appNumeracao
 (
-    nome   varchar(50) PRIMARY KEY,
-    numero int NOT NULL
+  nome   varchar(50) PRIMARY KEY,
+  numero int NOT NULL
 );
 

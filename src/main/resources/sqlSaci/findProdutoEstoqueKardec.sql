@@ -7,10 +7,7 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT storeno     AS loja,
-       prdno       AS prdno,
-       grade       AS grade,
-       dataInicial AS dataInicial
+SELECT storeno AS loja, prdno AS prdno, grade AS grade, dataInicial AS dataInicial
 FROM
   sqldados.prdAdicional
 WHERE (storeno IN (2, 3, 4, 5, 8))

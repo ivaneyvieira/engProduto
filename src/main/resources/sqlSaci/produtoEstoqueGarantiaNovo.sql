@@ -22,16 +22,6 @@ FROM
   sqldados.store
 WHERE no = :numLoja;
 
-SELECT numero,
-       numloja,
-       lojaSigla,
-       data,
-       hora,
-       usuario,
-       prdno,
-       descricao,
-       grade,
-       estoqueSis,
-       estoqueReal
+SELECT numero, numloja, lojaSigla, data, hora, usuario, prdno, descricao, grade, estoqueSis, estoqueReal
 FROM
   T_ACERTO

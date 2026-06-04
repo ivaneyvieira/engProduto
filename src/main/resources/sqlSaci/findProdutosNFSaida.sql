@@ -92,9 +92,7 @@ FROM
     LEFT JOIN  sqldados.xaprd2Devolucao AS D
                USING (storeno, pdvno, xano, prdno, grade)
     LEFT JOIN  sqldados.stk             AS SCD
-               ON SCD.storeno = X.storeno
-                 AND SCD.prdno = X.prdno
-                 AND SCD.grade = IF(X.c6 = '', X.grade, X.c6)
+               ON SCD.storeno = X.storeno AND SCD.prdno = X.prdno AND SCD.grade = IF(X.c6 = '', X.grade, X.c6)
     LEFT JOIN  T_LOC                    AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
     LEFT JOIN  sqldados.users           AS EC
@@ -162,16 +160,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v2 (s1, s2, l2),
   INDEX v3 (storeno, obsReg)
 )
-SELECT invno,
-       storeno,
-       date,
-       nfNfno,
-       nfStoreno,
-       nfNfse,
-       s1,
-       s2,
-       l2,
-       CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
+SELECT invno, storeno, date, nfNfno, nfStoreno, nfNfse, s1, s2, l2, CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
 FROM
   sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
@@ -184,9 +173,7 @@ SELECT loja, pdv, transacao, invno, date
 FROM
   T_VENDA            AS U USE INDEX (v2)
     INNER JOIN T_INV AS I
-               ON U.storenoE = I.nfStoreno AND
-                  U.nfnoE = I.nfNfno AND
-                  U.nfseE = I.nfNfse;
+               ON U.storenoE = I.nfStoreno AND U.nfnoE = I.nfNfno AND U.nfseE = I.nfNfse;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI2;
 CREATE TEMPORARY TABLE T_NI2
@@ -194,9 +181,7 @@ SELECT loja, pdv, transacao, invno, date
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.storenoE = I.s1 AND
-                  U.pdvnoE = I.s2 AND
-                  U.xanoE = I.l2;
+               ON U.storenoE = I.s1 AND U.pdvnoE = I.s2 AND U.xanoE = I.l2;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI3;
 CREATE TEMPORARY TABLE T_NI3
@@ -204,9 +189,7 @@ SELECT loja, pdv, transacao, invno, I.date, U.obsNI
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.loja = I.storeno AND
-                  U.obsNI LIKE 'NI%' AND
-                  U.obsNI LIKE CONCAT('%', I.invno, '%');
+               ON U.loja = I.storeno AND U.obsNI LIKE 'NI%' AND U.obsNI LIKE CONCAT('%', I.invno, '%');
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI

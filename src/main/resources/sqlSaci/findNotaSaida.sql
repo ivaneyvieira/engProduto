@@ -213,10 +213,7 @@ FROM
     INNER JOIN sqldados.xaprd2      AS X
                USING (storeno, pdvno, xano)
     LEFT JOIN  sqldados.xaprd2Marca AS MC
-               ON X.storeno = MC.storeno AND
-                  X.pdvno = MC.pdvno AND
-                  X.xano = MC.xano AND
-                  X.prdno = MC.prdno AND
+               ON X.storeno = MC.storeno AND X.pdvno = MC.pdvno AND X.xano = MC.xano AND X.prdno = MC.prdno AND
                   X.grade = MC.grade
     LEFT JOIN  sqldados.users       AS EC
                ON EC.no = X.s4
@@ -252,8 +249,7 @@ WHERE (N.l16 >= :dataEntregaInicial OR :dataEntregaInicial = 0)
         (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
   AND ((:marca IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
-  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR
-                                (IFNULL(CG.storeno, 0) != :loja) OR
+  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
                                 (N.nfse = 7))) OR :marca NOT IN (0, 999))
   AND ('TODOS' IN (:local) OR LC.localizacao IN (:local))
   AND (N.nfno = :numero OR :numero = 0)
@@ -313,14 +309,9 @@ SELECT Q.loja,
 FROM
   T_QUERY                           AS Q
     INNER JOIN sqldados.xaprd2      AS X
-               ON X.storeno = Q.loja AND
-                  X.pdvno = Q.pdvno AND
-                  X.xano = Q.xano
+               ON X.storeno = Q.loja AND X.pdvno = Q.pdvno AND X.xano = Q.xano
     LEFT JOIN  sqldados.xaprd2Marca AS M
-               ON X.storeno = M.storeno AND
-                  X.pdvno = M.pdvno AND
-                  X.xano = M.xano AND
-                  X.prdno = M.prdno AND
+               ON X.storeno = M.storeno AND X.pdvno = M.pdvno AND X.xano = M.xano AND X.prdno = M.prdno AND
                   X.grade = M.grade
 WHERE (@PESQUISA = '' OR numero LIKE @PESQUISA_START OR notaEntrega LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR
        nomeCliente LIKE @PESQUISA_LIKE OR vendedor = @PESQUISA_NUM OR nomeVendedor LIKE @PESQUISA_LIKE OR

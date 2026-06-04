@@ -15,8 +15,7 @@ FROM
     LEFT JOIN sqldados.prd2   AS P2
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno
-                AND TRIM(B.barcode) != TRIM(P.no)
+              ON P.no = B.prdno AND TRIM(B.barcode) != TRIM(P.no)
 WHERE (P.mfno = :codForn OR :codForn = 0)
   AND (P.typeno = :tipo OR :tipo = 0)
   AND (P.clno = :cl OR :cl = 0)
@@ -38,38 +37,20 @@ SELECT P.storeno,
 FROM
   sqldados.prdAdicional     AS P
     INNER JOIN T_PRD        AS A
-               ON P.prdno = A.prdno
-                 AND P.grade = A.grade
+               ON P.prdno = A.prdno AND P.grade = A.grade
     LEFT JOIN  sqldados.stk AS S
-               ON S.storeno = P.storeno
-                 AND S.prdno = P.prdno
-                 AND S.grade = P.grade
+               ON S.storeno = P.storeno AND S.prdno = P.prdno AND S.grade = P.grade
 WHERE P.storeno = 4
 GROUP BY P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
-SELECT :loja AS loja,
-       P.prdno,
-       P.grade,
-       P.barcode,
-       P.descricao,
-       P.codForn,
-       L.locApp,
-       L.estoqueLoja
+SELECT :loja AS loja, P.prdno, P.grade, P.barcode, P.descricao, P.codForn, L.locApp, L.estoqueLoja
 FROM
   T_PRD                 AS P
     LEFT JOIN T_LOC_APP AS L
-              ON P.prdno = L.prdno
-                AND P.grade = L.grade;
+              ON P.prdno = L.prdno AND P.grade = L.grade;
 
-SELECT loja,
-       prdno,
-       barcode,
-       grade,
-       descricao,
-       codForn,
-       locApp,
-       estoqueLoja
+SELECT loja, prdno, barcode, grade, descricao, codForn, locApp, estoqueLoja
 FROM
   T_RESULT

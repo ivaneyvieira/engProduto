@@ -16,4 +16,4 @@ ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
                         locais      = :locais,
                         impressoras = :listaImpressora,
                         lojas       = :listaLoja,
-                        senhaApp = :senha
+                        senhaApp    = :senha

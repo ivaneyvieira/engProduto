@@ -18,8 +18,7 @@ CREATE TEMPORARY TABLE T_PRD
 SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
 FROM
   sqldados.prd AS P
-WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
-       ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
+WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
@@ -72,9 +71,7 @@ CREATE TEMPORARY TABLE T_LOC_NERUS
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno       AS prdno,
-       grade       AS grade,
-       localizacao AS locNerus
+SELECT prdno AS prdno, grade AS grade, localizacao AS locNerus
 FROM
   sqldados.prdloc
     INNER JOIN T_PRDNO
@@ -89,11 +86,7 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno       AS prdno,
-       grade       AS grade,
-       dataInicial AS dataInicial,
-       estoqueLoja AS estoqueLoja,
-       kardexLoja  AS kardexLoja
+SELECT prdno AS prdno, grade AS grade, dataInicial AS dataInicial, estoqueLoja AS estoqueLoja, kardexLoja AS kardexLoja
 FROM
   sqldados.prdControle
     INNER JOIN T_PRDNO
@@ -135,13 +128,10 @@ SELECT S.no                                                                     
        E.grade                                                                        AS grade,
        ROUND(PD.qttyPackClosed / 1000)                                                AS embalagem,
        SUM(CASE
-             WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
-             WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
-                                              ELSE TRUNCATE(
-                                                  ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
-                                                  (PD.qttyPackClosed / 1000), 0)
+             WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
+             WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
+                                              ELSE TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
+                                                            (PD.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        LN.locNerus                                                                    AS locNerus,
        V.no                                                                           AS codForn,

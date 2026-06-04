@@ -153,8 +153,7 @@ SELECT P.storeno,
 FROM
   sqlpdv.pxa       AS P
     INNER JOIN T_V AS V
-               ON P.storeno = V.storeno
-                 AND P.eordno = V.ordno
+               ON P.storeno = V.storeno AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8);
 
@@ -212,9 +211,7 @@ SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_VENDA            AS U USE INDEX (v2)
     INNER JOIN T_INV AS I
-               ON U.storenoE = I.nfStoreno AND
-                  U.nfnoE = I.nfNfno AND
-                  U.nfseE = I.nfNfse;
+               ON U.storenoE = I.nfStoreno AND U.nfnoE = I.nfNfno AND U.nfseE = I.nfNfse;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI2;
 CREATE TEMPORARY TABLE T_NI2
@@ -222,9 +219,7 @@ SELECT loja, pdv, transacao, invno, date, valorNi
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.storenoE = I.s1 AND
-                  U.pdvnoE = I.s2 AND
-                  U.xanoE = I.l2;
+               ON U.storenoE = I.s1 AND U.pdvnoE = I.s2 AND U.xanoE = I.l2;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI3;
 CREATE TEMPORARY TABLE T_NI3
@@ -232,9 +227,7 @@ SELECT loja, pdv, transacao, invno, I.date, valorNi, U.obsNI
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.loja = I.storeno AND
-                  U.obsNI LIKE 'NI%' AND
-                  U.obsNI LIKE CONCAT('%', I.invno, '%');
+               ON U.loja = I.storeno AND U.obsNI LIKE 'NI%' AND U.obsNI LIKE CONCAT('%', I.invno, '%');
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI
@@ -276,9 +269,7 @@ SELECT loja, pdv, transacao, prdno, grade, SUM(ROUND(qtty)) AS qtty
 FROM
   T_VENDA                     AS V
     INNER JOIN sqldados.xaprd AS X
-               ON V.loja = X.storeno
-                 AND V.pdv = X.pdvno
-                 AND V.transacao = X.xano
+               ON V.loja = X.storeno AND V.pdv = X.pdvno AND V.transacao = X.xano
 GROUP BY loja, pdv, transacao, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_VENDA_PENDENTE;

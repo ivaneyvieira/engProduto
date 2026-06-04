@@ -1,5 +1,4 @@
-UPDATE
-  sqldados.oprd
+UPDATE sqldados.oprd
 SET qtty = :qttyPedida
 WHERE storeno = :loja
   AND ordno = :pedido

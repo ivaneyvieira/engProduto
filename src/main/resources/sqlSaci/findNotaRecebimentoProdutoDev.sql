@@ -37,34 +37,27 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, pdvno, xano),
   INDEX (niDev)
 )
-SELECT storeno                 AS storeno,
-       pdvno                   AS pdvno,
-       xano                    AS xano,
-       nfno                    AS nfno,
-       nfse                    AS nfse,
-       cfo                     AS cfop,
-       CONCAT(nfno, '/', nfse) AS notaDevolucao,
-       CAST(issuedate AS date) AS emissaoDevolucao,
-       grossamt / 100          AS valorDevolucao,
-       print_remarks           AS obsDevolucao,
-       remarks                 AS obsGarantia,
-       COALESCE(
-           IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
-                                        200),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
-                                        200),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
-                                        200),
-                              ' ', 1), NULL)
-       )                       AS niDev
+SELECT storeno                                                                                                        AS storeno,
+       pdvno                                                                                                          AS pdvno,
+       xano                                                                                                           AS xano,
+       nfno                                                                                                           AS nfno,
+       nfse                                                                                                           AS nfse,
+       cfo                                                                                                            AS cfop,
+       CONCAT(nfno, '/', nfse)                                                                                        AS notaDevolucao,
+       CAST(issuedate AS date)                                                                                        AS emissaoDevolucao,
+       grossamt / 100                                                                                                 AS valorDevolucao,
+       print_remarks                                                                                                  AS obsDevolucao,
+       remarks                                                                                                        AS obsGarantia,
+       COALESCE(IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+           SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                     LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1), NULL),
+                IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                              LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1), NULL),
+                IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                              LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 200), ' ', 1),
+                   NULL))                                                                                             AS niDev
 FROM
   sqldados.nf
 WHERE issuedate >= @DT
@@ -73,35 +66,28 @@ WHERE issuedate >= @DT
 /*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
 HAVING niDev IS NOT NULL;
 
-INSERT IGNORE INTO T_NFO
-(storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
-SELECT storeno                 AS storeno,
-       pdvno                   AS pdvno,
-       xano                    AS xano,
-       nfno                    AS nfno,
-       nfse                    AS nfse,
-       CONCAT(nfno, '/', nfse) AS notaDevolucao,
-       CAST(issuedate AS date) AS emissaoDevolucao,
-       grossamt / 100          AS valorDevolucao,
-       print_remarks           AS obsDevolucao,
-       remarks                 AS obsGarantia,
-       COALESCE(
-           IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
-                                        100),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5,
-                                        100),
-                              ' ', 1), NULL),
-           IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0,
-              SUBSTRING_INDEX(SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                                        LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8,
-                                        100),
-                              ' ', 1), NULL)
-       )                       AS niDev
+INSERT IGNORE INTO T_NFO (storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao,
+                          obsDevolucao, obsGarantia, niDev)
+SELECT storeno                                                                                                        AS storeno,
+       pdvno                                                                                                          AS pdvno,
+       xano                                                                                                           AS xano,
+       nfno                                                                                                           AS nfno,
+       nfse                                                                                                           AS nfse,
+       CONCAT(nfno, '/', nfse)                                                                                        AS notaDevolucao,
+       CAST(issuedate AS date)                                                                                        AS emissaoDevolucao,
+       grossamt / 100                                                                                                 AS valorDevolucao,
+       print_remarks                                                                                                  AS obsDevolucao,
+       remarks                                                                                                        AS obsGarantia,
+       COALESCE(IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+           SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                     LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100), ' ', 1), NULL),
+                IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                              LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 100), ' ', 1), NULL),
+                IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                              LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 100), ' ', 1),
+                   NULL))                                                                                             AS niDev
 FROM
   sqldados.nf
 WHERE issuedate >= 20250401
@@ -175,7 +161,7 @@ SELECT A.invno,
        A.prdno,
        A.grade,
        N.storeno,
-       L.sname                                                        AS lojaSigla,
+       L.sname                                                                                          AS lojaSigla,
        N.date,
        N.issue_date,
        N.nfname,
@@ -184,15 +170,15 @@ SELECT A.invno,
        N.grossamt,
        N.ordno,
        N.carrno,
-       C.name                                                         AS transportadora,
+       C.name                                                                                           AS transportadora,
        N.auxLong2,
        N.weight,
        N.packages,
-       SUM(I.qtty / 1000)                                             AS qtty,
+       SUM(I.qtty / 1000)                                                                               AS qtty,
        I.cfop,
-       I.cstIcms                                                      AS cst,
-       I.s26                                                          AS usernoRecebe,
-       N.remarks                                                      AS observacaoNota,
+       I.cstIcms                                                                                        AS cst,
+       I.s26                                                                                            AS usernoRecebe,
+       N.remarks                                                                                        AS observacaoNota,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
                                                                THEN 'Recebimento'
@@ -200,42 +186,41 @@ SELECT A.invno,
          WHEN N.type = 1                                       THEN 'Transferência'
          WHEN N.cfo = 1949 AND N.remarks LIKE '%RECLASS%UNID%' THEN 'Reclassificação'
                                                                ELSE ''
-       END                                                            AS tipoNota,
-       SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)   AS valorUnit,
-       SUM((I.qtty / 1000) * (I.fob4 / 10000))                        AS valorTotal,
-       I.discount / 100                                               AS valorDesconto,
-       ((SUM((I.qtty / 1000) * (I.fob4 / 10000)) + (I.ipiAmt / 100)) /
-        (I.baseIcms / 100) - 1.00) * 100                              AS valorMva,
-       I.baseIcms / 100                                               AS baseIcms,
-       I.icms / 100                                                   AS valIcms,
-       I.ipiAmt / 100                                                 AS valIPI,
-       I.icmsAliq / 100                                               AS icms,
-       I.ipi / 100                                                    AS ipi,
-       IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100                     AS frete,
-       N.freight / 100                                                AS freteNota,
-       I.l6 / 100                                                     AS outDesp,
-       I.icmsSubst / 100                                              AS icmsSubst,
-       A.numero                                                       AS numeroDevolucao,
-       A.tipoDevolucao                                                AS tipoDevolucao,
-       A.quantDevolucao                                               AS quantDevolucao,
-       IFNULL(IA.observacao, '')                                      AS observacaoDev,
-       IA.volume                                                      AS volumeDevolucao,
-       IA.peso                                                        AS pesoDevolucao,
-       IA.carrno                                                      AS transpDevolucao,
-       CA.name                                                        AS transportadoraDevolucao,
-       IA.cet                                                         AS cteDevolucao,
-       IA.observacaoAdicional                                         AS observacaoAdicional,
-       CAST(IF(IA.dataDevolucao = 0, NULL, IA.dataDevolucao) AS date) AS dataDevolucao,
-       IA.situacaoDev                                                 AS situacaoDev,
-       UA.login                                                       AS userDevolucao,
-       IFNULL(AC.countColeta, 0)                                      AS countColeta,
-       IFNULL(AC.countArq, 0)                                         AS countArq,
-       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)       AS dataColeta,
-       SUM(I.baseIcmsSubst / 100) / SUM(I.qtty / 1000)                AS baseSTUnit,
-       IFNULL(X.nfekey, '')                                           AS chaveUlt,
-       I.c1                                                           AS chaveSefaz,
-       IFNULL(S.ncm, '')                                              AS ncm,
-       A.numAcerto                                                    AS numAcerto
+       END                                                                                              AS tipoNota,
+       SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)                                     AS valorUnit,
+       SUM((I.qtty / 1000) * (I.fob4 / 10000))                                                          AS valorTotal,
+       I.discount / 100                                                                                 AS valorDesconto,
+       ((SUM((I.qtty / 1000) * (I.fob4 / 10000)) + (I.ipiAmt / 100)) / (I.baseIcms / 100) - 1.00) * 100 AS valorMva,
+       I.baseIcms / 100                                                                                 AS baseIcms,
+       I.icms / 100                                                                                     AS valIcms,
+       I.ipiAmt / 100                                                                                   AS valIPI,
+       I.icmsAliq / 100                                                                                 AS icms,
+       I.ipi / 100                                                                                      AS ipi,
+       IF(N.bits & POW(2, 10) = 0, 0, I.m6) / 100                                                       AS frete,
+       N.freight / 100                                                                                  AS freteNota,
+       I.l6 / 100                                                                                       AS outDesp,
+       I.icmsSubst / 100                                                                                AS icmsSubst,
+       A.numero                                                                                         AS numeroDevolucao,
+       A.tipoDevolucao                                                                                  AS tipoDevolucao,
+       A.quantDevolucao                                                                                 AS quantDevolucao,
+       IFNULL(IA.observacao, '')                                                                        AS observacaoDev,
+       IA.volume                                                                                        AS volumeDevolucao,
+       IA.peso                                                                                          AS pesoDevolucao,
+       IA.carrno                                                                                        AS transpDevolucao,
+       CA.name                                                                                          AS transportadoraDevolucao,
+       IA.cet                                                                                           AS cteDevolucao,
+       IA.observacaoAdicional                                                                           AS observacaoAdicional,
+       CAST(IF(IA.dataDevolucao = 0, NULL, IA.dataDevolucao) AS date)                                   AS dataDevolucao,
+       IA.situacaoDev                                                                                   AS situacaoDev,
+       UA.login                                                                                         AS userDevolucao,
+       IFNULL(AC.countColeta, 0)                                                                        AS countColeta,
+       IFNULL(AC.countArq, 0)                                                                           AS countArq,
+       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date)                                         AS dataColeta,
+       SUM(I.baseIcmsSubst / 100) / SUM(I.qtty / 1000)                                                  AS baseSTUnit,
+       IFNULL(X.nfekey, '')                                                                             AS chaveUlt,
+       I.c1                                                                                             AS chaveSefaz,
+       IFNULL(S.ncm, '')                                                                                AS ncm,
+       A.numAcerto                                                                                      AS numAcerto
 FROM
   sqldados.iprdAdicionalDev          AS A
     INNER JOIN sqldados.inv          AS N
@@ -293,56 +278,56 @@ GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
-SELECT N.storeno                                                      AS loja,
-       N.lojaSigla                                                    AS lojaSigla,
-       DATE(N.date)                                                   AS dataEntrada,
-       DATE(N.issue_date)                                             AS emissao,
-       N.invno                                                        AS ni,
-       TRIM(LEADING '0' FROM TRIM(CONCAT(N.nfname, '/', N.invse)))    AS nfEntrada,
-       C.no                                                           AS custno,
-       N.vendno                                                       AS vendno,
-       V.name                                                         AS fornecedor,
-       N.grossamt / 100                                               AS valorNF,
-       N.ordno                                                        AS pedComp,
-       N.carrno                                                       AS transp,
+SELECT N.storeno                                                                                            AS loja,
+       N.lojaSigla                                                                                          AS lojaSigla,
+       DATE(N.date)                                                                                         AS dataEntrada,
+       DATE(N.issue_date)                                                                                   AS emissao,
+       N.invno                                                                                              AS ni,
+       TRIM(LEADING '0' FROM TRIM(CONCAT(N.nfname, '/', N.invse)))                                          AS nfEntrada,
+       C.no                                                                                                 AS custno,
+       N.vendno                                                                                             AS vendno,
+       V.name                                                                                               AS fornecedor,
+       N.grossamt / 100                                                                                     AS valorNF,
+       N.ordno                                                                                              AS pedComp,
+       N.carrno                                                                                             AS transp,
        N.transportadora,
-       N.auxLong2                                                     AS cte,
-       N.packages                                                     AS volume,
-       N.weight                                                       AS peso,
+       N.auxLong2                                                                                           AS cte,
+       N.packages                                                                                           AS volume,
+       N.weight                                                                                             AS peso,
   /*Produto*/
-       N.seq                                                          AS seq,
-       P.no                                                           AS prdno,
-       IF(P.taxno = '06', '06', '')                                   AS taxno,
-       TRIM(P.no)                                                     AS codigo,
+       N.seq                                                                                                AS seq,
+       P.no                                                                                                 AS prdno,
+       IF(P.taxno = '06', '06', '')                                                                         AS taxno,
+       TRIM(P.no)                                                                                           AS codigo,
        IF(N.grade = '', CONCAT(IFNULL(B.barcodeList, ''), IF(IFNULL(B.barcodeList, '') = '', '', ','), TRIM(P.barcode)),
-          COALESCE(B.barcodeList, TRIM(P.barcode), ''))               AS barcodeStrList,
+          COALESCE(B.barcodeList, TRIM(P.barcode), ''))                                                     AS barcodeStrList,
        IF(N.grade = '', IFNULL(TRIM(P.barcode), ''),
-          COALESCE(B.barcodeList, TRIM(P.barcode), ''))               AS barcodeStrListEntrada,
-       TRIM(MID(P.name, 1, 37))                                       AS descricao,
-       unit                                                           AS un,
-       N.grade                                                        AS grade,
-       P.mfno                                                         AS vendnoProduto,
-       ROUND(N.qtty)                                                  AS quant,
-       ROUND(E.estoque)                                               AS estoque,
-       numAcerto                                                      AS numAcerto,
-       IFNULL(PR.prdrefno, P.mfno_ref)                                AS refFabrica,
-       N.cfop                                                         AS cfop,
-       N.cst                                                          AS cst,
+          COALESCE(B.barcodeList, TRIM(P.barcode), ''))                                                     AS barcodeStrListEntrada,
+       TRIM(MID(P.name, 1, 37))                                                                             AS descricao,
+       unit                                                                                                 AS un,
+       N.grade                                                                                              AS grade,
+       P.mfno                                                                                               AS vendnoProduto,
+       ROUND(N.qtty)                                                                                        AS quant,
+       ROUND(E.estoque)                                                                                     AS estoque,
+       numAcerto                                                                                            AS numAcerto,
+       IFNULL(PR.prdrefno, P.mfno_ref)                                                                      AS refFabrica,
+       N.cfop                                                                                               AS cfop,
+       N.cst                                                                                                AS cst,
        @VALID := IF((tipoGarantia = 3 AND garantia = 999) OR (tipoGarantia = 2 AND garantia > 0), 'S',
-                    'N')                                              AS validadeValida,
-       IF(@VALID = 'S', garantia, NULL)                               AS validade,
+                    'N')                                                                                    AS validadeValida,
+       IF(@VALID = 'S', garantia, NULL)                                                                     AS validade,
        CASE tipoGarantia
          WHEN 0 THEN 'Dias'
          WHEN 1 THEN 'Semanas'
          WHEN 2 THEN 'Meses'
          WHEN 3 THEN 'Anos'
                 ELSE ''
-       END                                                            AS tipoValidade,
-       garantia                                                       AS tempoValidade,
-       ER.no                                                          AS usernoRecebe,
-       ER.login                                                       AS usuarioRecebe,
-       observacaoNota                                                 AS observacaoNota,
-       tipoNota                                                       AS tipoNota,
+       END                                                                                                  AS tipoValidade,
+       garantia                                                                                             AS tempoValidade,
+       ER.no                                                                                                AS usernoRecebe,
+       ER.login                                                                                             AS usuarioRecebe,
+       observacaoNota                                                                                       AS observacaoNota,
+       tipoNota                                                                                             AS tipoNota,
        N.valorUnit,
        N.valorTotal,
        N.valorDesconto,
@@ -356,9 +341,9 @@ SELECT N.storeno                                                      AS loja,
        N.freteNota,
        N.outDesp,
        N.icmsSubst,
-       numeroDevolucao                                                AS numeroDevolucao,
-       IFNULL(tipoDevolucao, 0)                                       AS tipoDevolucao,
-       IF(IFNULL(tipoDevolucao, 0) = 0, 0, IFNULL(quantDevolucao, 0)) AS quantDevolucao,
+       numeroDevolucao                                                                                      AS numeroDevolucao,
+       IFNULL(tipoDevolucao, 0)                                                                             AS tipoDevolucao,
+       IF(IFNULL(tipoDevolucao, 0) = 0, 0, IFNULL(quantDevolucao, 0))                                       AS quantDevolucao,
        volumeDevolucao,
        pesoDevolucao,
        transpDevolucao,
@@ -366,21 +351,21 @@ SELECT N.storeno                                                      AS loja,
        cteDevolucao,
        observacaoAdicional,
        dataDevolucao,
-       IFNULL(situacaoDev, 0)                                         AS situacaoDev,
+       IFNULL(situacaoDev, 0)                                                                               AS situacaoDev,
        userDevolucao,
        observacaoDev,
        countColeta,
        countArq,
        dataColeta,
-       IFNULL(R.form_label, '')                                       AS rotulo,
-       baseSTUnit                                                     AS baseSTUnit,
-       chaveUlt                                                       AS chaveUlt,
-       chaveSefaz                                                     AS chaveSefaz,
-       ncm                                                            AS ncm,
-       P.weight                                                       AS pesoLiquido,
-       P.weight_g                                                     AS pesoBruto,
-       P.sp / 100                                                     AS precoVenda,
-       ST.auxStr1                                                     AS rotuloSped
+       IFNULL(R.form_label, '')                                                                             AS rotulo,
+       baseSTUnit                                                                                           AS baseSTUnit,
+       chaveUlt                                                                                             AS chaveUlt,
+       chaveSefaz                                                                                           AS chaveSefaz,
+       ncm                                                                                                  AS ncm,
+       P.weight                                                                                             AS pesoLiquido,
+       P.weight_g                                                                                           AS pesoBruto,
+       P.sp / 100                                                                                           AS precoVenda,
+       ST.auxStr1                                                                                           AS rotuloSped
 FROM
   T_NOTA                          AS N
     LEFT JOIN  sqldados.spedprdst AS ST
@@ -517,10 +502,7 @@ FROM
     LEFT JOIN T_NOTA_SAIDA    AS N
               ON (N.niDev = Q.numeroDevolucao)
     LEFT JOIN sqldados.xaprd2 AS X
-              ON X.storeno = N.storeno AND
-                 X.pdvno = N.pdvno AND
-                 X.xano = N.xano AND
-                 X.prdno = Q.prdno AND
+              ON X.storeno = N.storeno AND X.pdvno = N.pdvno AND X.xano = N.xano AND X.prdno = Q.prdno AND
                  X.grade = Q.grade
     LEFT JOIN T_DUP           AS D
               ON Q.ni = D.invno
@@ -553,10 +535,8 @@ SET R1.userDevolucao    = R2.userDevolucao,
 WHERE R1.motivoDevolucao = R2.motivoDevolucao
   AND R1.numeroDevolucao = R2.numeroDevolucao;
 
-UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R
-  ON I.invno = R.ni
-    AND I.tipoDevolucao = R.motivoDevolucao
-    AND I.numero = R.numeroDevolucao
+UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND I.tipoDevolucao = R.motivoDevolucao AND
+                                                              I.numero = R.numeroDevolucao
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 

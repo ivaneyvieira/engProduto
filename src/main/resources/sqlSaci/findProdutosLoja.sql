@@ -74,11 +74,8 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (
-  (:consumo = 'T') OR
-  (:consumo = 'S' AND ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))) OR
-  (:consumo = 'N' AND NOT ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0)))
-  );
+  AND ((:consumo = 'T') OR (:consumo = 'S' AND ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))) OR
+       (:consumo = 'N' AND NOT ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))));
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
@@ -133,10 +130,8 @@ FROM
                USING (prdno)
     LEFT JOIN  T_REL AS R
                USING (prdno, temRelacionado)
-WHERE ((:estoque = '<' AND S.estoqueTotal < :saldo) OR
-       (:estoque = '>' AND S.estoqueTotal > :saldo) OR
-       (:estoque = '=' AND S.estoqueTotal = :saldo) OR
-       (:estoque = '#' AND S.estoqueTotal != :saldo) OR
+WHERE ((:estoque = '<' AND S.estoqueTotal < :saldo) OR (:estoque = '>' AND S.estoqueTotal > :saldo) OR
+       (:estoque = '=' AND S.estoqueTotal = :saldo) OR (:estoque = '#' AND S.estoqueTotal != :saldo) OR
        (:estoque = 'T'));
 
 SELECT prdno,

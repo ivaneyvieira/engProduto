@@ -16,16 +16,11 @@ CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT P.storeno,
-       P.prdno,
-       P.grade,
-       P.localizacao AS locApp
+SELECT P.storeno, P.prdno, P.grade, P.localizacao AS locApp
 FROM
   sqldados.prdAdicional AS P
     INNER JOIN T_ACERTO AS A
-               ON P.storeno = A.numloja
-                 AND P.prdno = A.prdno
-                 AND P.grade = A.grade
+               ON P.storeno = A.numloja AND P.prdno = A.prdno AND P.grade = A.grade
 GROUP BY P.storeno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
@@ -33,11 +28,10 @@ CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT P.no                                                           AS prdno,
-       IFNULL(B.grade, '')                                            AS grade,
-       MAX(TRIM(IF(B.grade IS NULL,
-                   IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13,
-                             P.barcode, NULL), P2.gtin), B.barcode))) AS codbar
+SELECT P.no                                                                                                          AS prdno,
+       IFNULL(B.grade, '')                                                                                           AS grade,
+       MAX(TRIM(IF(B.grade IS NULL, IFNULL(IF(LENGTH(TRIM(P.barcode)) = 13, P.barcode, NULL), P2.gtin),
+                   B.barcode)))                                                                                      AS codbar
 FROM
   sqldados.prd                AS P
     LEFT JOIN sqldados.prd2   AS P2
@@ -75,8 +69,7 @@ SELECT numero,
 FROM
   T_ACERTO                                     AS A
     LEFT JOIN T_BARCODE                        AS B
-              ON B.prdno = A.prdno
-                AND B.grade = A.grade
+              ON B.prdno = A.prdno AND B.grade = A.grade
     LEFT JOIN sqldados.produtoObservacaoAcerto AS O
               USING (numero, numloja)
     LEFT JOIN sqldados.store                   AS S
@@ -84,11 +77,6 @@ FROM
     LEFT JOIN sqldados.prd                     AS P
               ON P.no = A.prdno
     LEFT JOIN T_LOC_APP                        AS L
-              ON L.storeno = A.numloja
-                AND L.prdno = A.prdno
-                AND L.grade = A.grade
-WHERE (A.numero = :pesquisa * 1
-  OR login LIKE CONCAT(:pesquisa, '%')
-  OR transacao = :pesquisa
-  OR :pesquisa = '')
+              ON L.storeno = A.numloja AND L.prdno = A.prdno AND L.grade = A.grade
+WHERE (A.numero = :pesquisa * 1 OR login LIKE CONCAT(:pesquisa, '%') OR transacao = :pesquisa OR :pesquisa = '')
 

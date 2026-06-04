@@ -1,92 +1,50 @@
-USE
-  sqldados;
+USE sqldados;
 
-SET
-  SQL_MODE = '';
+SET SQL_MODE = '';
 
-DO
-  @PESQUISA := TRIM(:pesquisa);
-DO
-  @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
-DO
-  @PESQUISASTART := CONCAT(@PESQUISA, '%');
-DO
-  @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
+DO @PESQUISA := TRIM(:pesquisa);
+DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
+DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
+DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-DO
-  @FORNECEDOR_NUMERO := IF(:fornecedor REGEXP '^[0-9]+$', :fornecedor, 0);
-DO
-  @FORNECEDOR_NOME := IF(:fornecedor REGEXP '^[0-9]+$', '', :fornecedor);
+DO @FORNECEDOR_NUMERO := IF(:fornecedor REGEXP '^[0-9]+$', :fornecedor, 0);
+DO @FORNECEDOR_NOME := IF(:fornecedor REGEXP '^[0-9]+$', '', :fornecedor);
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_PRD;
-CREATE
-  TEMPORARY TABLE T_PRD
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
 (
   PRIMARY KEY (prdno)
 )
 SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
 FROM
   sqldados.prd AS P
-WHERE (((P.dereg & POW(2, 2) = 0)
-  AND (:inativo = 'N'))
-  OR
-       ((P.dereg & POW(2, 2) != 0)
-         AND (:inativo = 'S'))
-  OR
+WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
-  AND (((P.bits & POW(2, 13) = 0)
-  AND (:uso = 'N'))
-  OR
-       ((P.bits & POW(2, 13) != 0)
-         AND (:uso = 'S'))
-  OR
-       (:uso = 'T'))
-  AND (P.groupno = :centroLucro
-  OR P.deptno = :centroLucro
-  OR P.clno = :centroLucro
-  OR :centroLucro = 0)
-  AND ((:caracter = 'S'
-  AND P.name NOT REGEXP '^[A-Z0-9]')
-  OR (:caracter = 'N'
-    AND P.name REGEXP '^[A-Z0-9]')
-  OR
+  AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR (:uso = 'T'))
+  AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
+  AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR
        (:caracter = 'T'))
-  AND (P.no = :prdno
-  OR :prdno = '')
+  AND (P.no = :prdno OR :prdno = '')
   AND CASE :letraDup
-        WHEN 'S' THEN (SUBSTRING_INDEX(P.name
-                         , ' '
-                         , 2) REGEXP
-                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)'
-          OR
+        WHEN 'S' THEN (SUBSTRING_INDEX(P.name, ' ', 2) REGEXP
+                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)' OR
                        P.name LIKE '3MM%') = TRUE
-        WHEN 'N' THEN (SUBSTRING_INDEX(P.name
-                         , ' '
-                         , 2) REGEXP
-                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)'
-          OR
+        WHEN 'N' THEN (SUBSTRING_INDEX(P.name, ' ', 2) REGEXP
+                       '^..(AA|BB|CC|DD|EE|FF|GG|HH|II|JJ|KK|LL|MM|NN|OO|PP|QQ|RR|SS|TT|UU|VV|WW|XX|YY|ZZ)' OR
                        P.name LIKE '3MM%') = FALSE
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END;
 
-DO
-  @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
-DO
-  @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
+DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
+DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_PRD_DEV;
-CREATE
-  TEMPORARY TABLE T_PRD_DEV
+DROP TEMPORARY TABLE IF EXISTS T_PRD_DEV;
+CREATE TEMPORARY TABLE T_PRD_DEV
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT N.storeno           AS storeno,
-       A.prdno             AS prdno,
-       A.grade             AS grade,
-       SUM(quantDevolucao) AS quantDevolucao
+SELECT N.storeno AS storeno, A.prdno AS prdno, A.grade AS grade, SUM(quantDevolucao) AS quantDevolucao
 FROM
   sqldados.iprdAdicionalDev          AS A
     LEFT JOIN  sqldados.invAdicional AS IA
@@ -99,10 +57,8 @@ WHERE (situacaoDev = 0 OR situacaoDev IS NULL)
   AND tipoDevolucao = 8
 GROUP BY storeno, prdno, grade;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_PRD_VENDA;
-CREATE
-  TEMPORARY TABLE T_PRD_VENDA
+DROP TEMPORARY TABLE IF EXISTS T_PRD_VENDA;
+CREATE TEMPORARY TABLE T_PRD_VENDA
 (
   PRIMARY KEY (prdno, grade)
 )
@@ -119,16 +75,12 @@ WHERE ym IN (@MES_ATUAL, @NES_ANTERIOR)
   AND (S.storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
-CREATE
-  TEMPORARY TABLE T_LOC_NERUS
+DROP TEMPORARY TABLE IF EXISTS T_LOC_NERUS;
+CREATE TEMPORARY TABLE T_LOC_NERUS
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno       AS prdno,
-       grade       AS grade,
-       localizacao AS locNerus
+SELECT prdno AS prdno, grade AS grade, localizacao AS locNerus
 FROM
   sqldados.prdloc
 WHERE storeno IN (2, 3, 4, 5, 8)
@@ -136,10 +88,8 @@ WHERE storeno IN (2, 3, 4, 5, 8)
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_LOC_APP;
-CREATE
-  TEMPORARY TABLE T_LOC_APP
+DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
+CREATE TEMPORARY TABLE T_LOC_APP
 (
   PRIMARY KEY (prdno, grade)
 )
@@ -167,10 +117,8 @@ WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_BARCODE;
-CREATE
-  TEMPORARY TABLE T_BARCODE
+DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
+CREATE TEMPORARY TABLE T_BARCODE
 (
   PRIMARY KEY (prdno, grade)
 )
@@ -186,10 +134,8 @@ FROM
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_ULT_ACERTO;
-CREATE
-  TEMPORARY TABLE T_ULT_ACERTO
+DROP TEMPORARY TABLE IF EXISTS T_ULT_ACERTO;
+CREATE TEMPORARY TABLE T_ULT_ACERTO
 (
   PRIMARY KEY (numloja, prdno, grade)
 )
@@ -198,10 +144,8 @@ FROM
   sqldados.produtoEstoqueAcerto A
 GROUP BY numloja, prdno, grade;
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_ACERTO;
-CREATE
-  TEMPORARY TABLE T_ACERTO
+DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
+CREATE TEMPORARY TABLE T_ACERTO
 (
   PRIMARY KEY (numloja, prdno, grade)
 )
@@ -223,10 +167,8 @@ FROM
     INNER JOIN T_ULT_ACERTO
                USING (numloja, prdno, grade, numero);
 
-DROP
-  TEMPORARY TABLE IF EXISTS temp_pesquisa;
-CREATE
-  TEMPORARY TABLE temp_pesquisa
+DROP TEMPORARY TABLE IF EXISTS temp_pesquisa;
+CREATE TEMPORARY TABLE temp_pesquisa
 SELECT S.no                                                                           AS loja,
        S.sname                                                                        AS lojaSigla,
        E.prdno                                                                        AS prdno,
@@ -238,13 +180,10 @@ SELECT S.no                                                                     
        E.grade                                                                        AS grade,
        ROUND(PD.qttyPackClosed / 1000)                                                AS embalagem,
        SUM(CASE
-             WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
-             WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
-                                              ELSE TRUNCATE(
-                                                  ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
-                                                  (PD.qttyPackClosed / 1000), 0)
+             WHEN PD.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
+             WHEN PD.name LIKE 'VRC COLOR%'   THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
+                                              ELSE TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
+                                                            (PD.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        LN.locNerus                                                                    AS locNerus,
@@ -360,28 +299,16 @@ WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE O
   AND (locApp LIKE CONCAT(:localizacao, '%') OR :localizacao = '')
   AND (MID(locApp, 1, 4) IN (:localizacaoUser) OR 'TODOS' IN (:localizacaoUser) OR TRIM(IFNULL(locApp, '')) = '')
   AND (numeroAcerto = :pedido OR :pedido = 0)
-  AND (
-  (:estoque = '>' AND saldo > :saldo)
-    OR (:estoque = '<' AND saldo < :saldo)
-    OR (:estoque = '=' AND saldo = :saldo)
-    OR (:estoque = '#' AND saldo != :saldo)
-    OR (:estoque = 'T')
-  )
-  AND (
-  (:opValor = '>' AND valorEstoque > :valorEst)
-    OR (:opValor = '<' AND valorEstoque < :valorEst)
-    OR (:opValor = '=' AND CASE
+  AND ((:estoque = '>' AND saldo > :saldo) OR (:estoque = '<' AND saldo < :saldo) OR
+       (:estoque = '=' AND saldo = :saldo) OR (:estoque = '#' AND saldo != :saldo) OR (:estoque = 'T'))
+  AND ((:opValor = '>' AND valorEstoque > :valorEst) OR (:opValor = '<' AND valorEstoque < :valorEst) OR
+       (:opValor = '=' AND CASE
                              WHEN :valorEst LIKE '%000'
                                THEN TRUNCATE(valorEstoque / 1000, 0) = TRUNCATE(:valorEst / 1000, 0)
                                ELSE valorEstoque = :valorEst
-                           END)
-    OR (:opValor = 'T')
-  )
-  AND (
-  (:eData = 'A' AND dataInicial IS NOT NULL AND dataInicial < :dataI)
-    OR (:eData = 'D' AND dataInicial IS NOT NULL AND dataInicial > :dataF)
-    OR (:eData = 'I' AND dataInicial IS NOT NULL AND dataInicial BETWEEN :dataI AND :dataF)
-    OR (:eData = 'V' AND dataInicial IS NULL)
-    OR (:eData = 'T')
-  )
+                           END) OR (:opValor = 'T'))
+  AND ((:eData = 'A' AND dataInicial IS NOT NULL AND dataInicial < :dataI) OR
+       (:eData = 'D' AND dataInicial IS NOT NULL AND dataInicial > :dataF) OR
+       (:eData = 'I' AND dataInicial IS NOT NULL AND dataInicial BETWEEN :dataI AND :dataF) OR
+       (:eData = 'V' AND dataInicial IS NULL) OR (:eData = 'T'))
 

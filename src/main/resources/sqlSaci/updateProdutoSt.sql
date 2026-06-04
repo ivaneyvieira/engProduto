@@ -75,11 +75,11 @@ FROM
   T_LOJAS                      AS L;
 
 REPLACE INTO sqldados.spedprdst(aliqPis, aliqCofins, auxLong1, auxLong2, auxLong3, auxLong4, auxLong5, auxLong6,
-                                auxLong7, auxLong8, auxMoney1, auxMoney2, auxMoney3, auxMoney4, auxMoney5,
-                                auxMoney6, auxMoney7, auxMoney8, storeno, cstIpi, cstPis, cstCofins, natReceita,
-                                cstIpiIn, cstPisIn, cstCofinsIn, bits, padByte, auxShort1, auxShort2, auxShort3,
-                                auxShort4, auxShort5, auxShort6, auxShort7, auxShort8, prdno, codenq, auxStr1,
-                                auxStr2, auxStr3, auxStr4)
+                                auxLong7, auxLong8, auxMoney1, auxMoney2, auxMoney3, auxMoney4, auxMoney5, auxMoney6,
+                                auxMoney7, auxMoney8, storeno, cstIpi, cstPis, cstCofins, natReceita, cstIpiIn,
+                                cstPisIn, cstCofinsIn, bits, padByte, auxShort1, auxShort2, auxShort3, auxShort4,
+                                auxShort5, auxShort6, auxShort7, auxShort8, prdno, codenq, auxStr1, auxStr2, auxStr3,
+                                auxStr4)
 SELECT aliqPis,
        aliqCofins,
        auxLong1,

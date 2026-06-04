@@ -88,12 +88,9 @@ WHERE (O.paymno IN (431, 432, 433))
   AND (O.storeno = :loja OR :loja = 0)
   AND (E.prdno = :prdno OR :prdno = '')
   AND (E.grade = :grade OR :grade = '')
-  AND (O.ordno = @PESQUISA_NUM OR
-       IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
-       IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR
-       IFNULL(EE.name, '') LIKE @PESQUISA_LIKE OR
-       IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR
-       @PESQUISA = '')
+  AND (O.ordno = @PESQUISA_NUM OR IFNULL(L.localizacao, '') LIKE @PESQUISA_START OR
+       IFNULL(OA.observacao, '') LIKE @PESQUISA_LIKE OR IFNULL(EE.name, '') LIKE @PESQUISA_LIKE OR
+       IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR @PESQUISA = '')
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade
 HAVING multAcerto != 0
 /*

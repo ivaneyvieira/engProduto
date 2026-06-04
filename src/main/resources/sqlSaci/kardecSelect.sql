@@ -2,18 +2,12 @@ USE sqldados;
 
 /*Kardec CD */
 
-DROP
-  TEMPORARY TABLE IF EXISTS T_PRD_DEV;
-CREATE
-  TEMPORARY TABLE T_PRD_DEV
+DROP TEMPORARY TABLE IF EXISTS T_PRD_DEV;
+CREATE TEMPORARY TABLE T_PRD_DEV
 (
   INDEX (loja, prdno, grade)
 )
-SELECT N.storeno           AS loja,
-       A.prdno             AS prdno,
-       A.grade             AS grade,
-       N.date              AS date,
-       SUM(quantDevolucao) AS quantDevolucao
+SELECT N.storeno AS loja, A.prdno AS prdno, A.grade AS grade, N.date AS date, SUM(quantDevolucao) AS quantDevolucao
 FROM
   sqldados.iprdAdicionalDev          AS A
     LEFT JOIN  sqldados.invAdicional AS IA
@@ -46,10 +40,7 @@ SELECT loja,
        IFNULL(quantDevolucao, 0)                                  AS quantDevolucao
 FROM
   sqldados.produtoKardec                      AS K
-    LEFT JOIN ( SELECT loja,
-                       prdno,
-                       grade,
-                       SUM(quantDevolucao) AS quantDevolucao
+    LEFT JOIN ( SELECT loja, prdno, grade, SUM(quantDevolucao) AS quantDevolucao
                 FROM
                   T_PRD_DEV AS D
                 WHERE D.date <= CURRENT_DATE * 1

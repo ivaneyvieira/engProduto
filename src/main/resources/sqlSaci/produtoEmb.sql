@@ -1,11 +1,8 @@
 SELECT no  AS prdno,
        CASE
-         WHEN P.name LIKE 'SVS E-COLOR%' THEN
-           900.00
-         WHEN P.name LIKE 'VRC COLOR%'   THEN
-           1000.00
-                                         ELSE
-           (P.qttyPackClosed / 1000)
+         WHEN P.name LIKE 'SVS E-COLOR%' THEN 900.00
+         WHEN P.name LIKE 'VRC COLOR%'   THEN 1000.00
+                                         ELSE (P.qttyPackClosed / 1000)
        END AS qtdEmbalagem
 FROM
   sqldados.prd AS P

@@ -37,9 +37,7 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND N.status <> 1
   AND Q.string LIKE 'Cartao%Cred%'
 GROUP BY N.storeno, N.pdvno, N.xano, IFNULL(V.seqno, 0), tipoPgto
-HAVING (@PESQUISA = '' OR pdv = @PESQUISA_INT OR
-        tipoPgto LIKE @PESQUISA_LIKE OR
-        transacao = @PESQUISA_INT);
+HAVING (@PESQUISA = '' OR pdv = @PESQUISA_INT OR tipoPgto LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT);
 
 DROP TEMPORARY TABLE IF EXISTS T_CHAVE;
 CREATE TEMPORARY TABLE T_CHAVE
@@ -67,9 +65,7 @@ SELECT loja,
 FROM
   T_CHAVE                    AS C
     INNER JOIN sqlpdv.pxacrd AS CR
-               ON C.loja = CR.storeno
-                 AND C.pdv = CR.pdvno
-                 AND C.transacao = CR.xano
+               ON C.loja = CR.storeno AND C.pdv = CR.pdvno AND C.transacao = CR.xano
     LEFT JOIN  sqldados.card AS CT
                ON CT.no = CR.cardno
 GROUP BY loja, pdv, transacao, CR.s2;

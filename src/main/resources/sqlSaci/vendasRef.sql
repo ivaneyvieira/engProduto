@@ -102,9 +102,7 @@ SELECT loja,
 FROM
   T_CHAVE                    AS C
     INNER JOIN sqlpdv.pxacrd AS CR
-               ON C.loja = CR.storeno
-                 AND C.pdv = CR.pdvno
-                 AND C.transacao = CR.xano
+               ON C.loja = CR.storeno AND C.pdv = CR.pdvno AND C.transacao = CR.xano
     LEFT JOIN  sqldados.card AS CT
                ON CT.no = CR.cardno
 GROUP BY loja, pdv, transacao;
@@ -123,14 +121,9 @@ SELECT C.loja,
 FROM
   T_CHAVE                     AS C
     INNER JOIN sqldados.nfdup AS N
-               ON N.nfstoreno = C.loja
-                 AND N.nfno = C.nfno
-                 AND N.nfse = C.nfse
+               ON N.nfstoreno = C.loja AND N.nfno = C.nfno AND N.nfse = C.nfse
     INNER JOIN sqldados.dup   AS D
-               ON D.storeno = N.dupstoreno
-                 AND D.type = N.duptype
-                 AND D.dupno = N.dupno
-                 AND D.dupse = N.dupse
+               ON D.storeno = N.dupstoreno AND D.type = N.duptype AND D.dupno = N.dupno AND D.dupse = N.dupse
 GROUP BY loja, pdv, transacao;
 
 SELECT loja,

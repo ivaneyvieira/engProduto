@@ -18,7 +18,7 @@ SELECT nome, numero
 FROM
   T_NUMERO_PROX;
 
-select nome, numero
+SELECT nome, numero
 FROM
   sqldados.appNumeracao
 WHERE nome = :nome;

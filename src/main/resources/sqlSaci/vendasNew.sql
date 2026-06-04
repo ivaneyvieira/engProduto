@@ -141,8 +141,7 @@ SELECT P.storeno,
 FROM
   sqlpdv.pxa       AS P
     INNER JOIN T_V AS V
-               ON P.storeno = V.storeno
-                 AND P.eordno = V.ordno
+               ON P.storeno = V.storeno AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
   AND (bits & POW(2, 4)) = 0;
@@ -177,13 +176,7 @@ CREATE TEMPORARY TABLE T_INV
   PRIMARY KEY (invno),
   INDEX v1 (nfStoreno, nfNfno, nfNfse)
 )
-SELECT invno,
-       storeno,
-       date,
-       grossamt / 100 AS valorNi,
-       nfStoreno,
-       nfNfno,
-       nfNfse
+SELECT invno, storeno, date, grossamt / 100 AS valorNi, nfStoreno, nfNfno, nfNfse
 FROM
   sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
@@ -209,13 +202,9 @@ SELECT IFNULL(E.loja, U.storeno)   AS loja,
 FROM
   T_INV                    AS I
     INNER JOIN sqldados.nf AS U
-               ON U.storeno = I.nfStoreno AND
-                  U.nfno = I.nfNfno AND
-                  U.nfse = I.nfNfse
+               ON U.storeno = I.nfStoreno AND U.nfno = I.nfNfno AND U.nfse = I.nfNfse
     LEFT JOIN  T_ENTREGA   AS E
-               ON U.storeno = E.lojaE AND
-                  U.pdvno = E.pdvE AND
-                  U.xano = E.transacaoE;
+               ON U.storeno = E.lojaE AND U.pdvno = E.pdvE AND U.xano = E.transacaoE;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
@@ -238,9 +227,7 @@ SELECT loja, pdv, transacao, prdno, grade, SUM(ROUND(qtty)) AS qtty
 FROM
   T_VENDA                     AS V
     INNER JOIN sqldados.xaprd AS X
-               ON V.loja = X.storeno
-                 AND V.pdv = X.pdvno
-                 AND V.transacao = X.xano
+               ON V.loja = X.storeno AND V.pdv = X.pdvno AND V.transacao = X.xano
 GROUP BY loja, pdv, transacao, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_VENDA_PENDENTE;

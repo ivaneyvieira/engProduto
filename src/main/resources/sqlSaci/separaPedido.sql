@@ -70,13 +70,11 @@ FROM
 WHERE storeno = 1
   AND no = :ordno;
 
-INSERT IGNORE INTO oprdPendente(date, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1,
-                                auxMy2, icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty,
-                                qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes,
-                                qttyVendaMesAnt, qttyVendaMedia, qttyPendente, stkDisponivel,
-                                qttyAbc, storeno, seqno, status, bits, bits2, auxShort1, auxShort2,
-                                auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada,
-                                obs, auxStr)
+INSERT IGNORE INTO oprdPendente(date, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst,
+                                auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel,
+                                qttyVendaMes, qttyVendaMesAnt, qttyVendaMedia, qttyPendente, stkDisponivel, qttyAbc,
+                                storeno, seqno, status, bits, bits2, auxShort1, auxShort2, auxShort3, auxShort4, prdno,
+                                grade, remarks, padbyte, gradeFechada, obs, auxStr)
 SELECT O.date,
        ordno,
        mult,
@@ -127,13 +125,11 @@ FROM
 WHERE O.storeno = 1
   AND O.no = :ordno;
 
-INSERT IGNORE INTO ords (no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno,
-                         dataFaturamento, invno, freightAmt, auxLong1, auxLong2, amtOrigem,
-                         dataEntrega, discountOrig, l1, l2, l3, l4, m1, m2, m3, m4, deliv, storeno,
-                         carrno, empno, prazo, eord_storeno, delivOriginal, bits, bits2, bits3,
-                         padbyte, indxno, repno, auxShort1, auxShort2, noofinst, status, s1, s2, s3,
-                         s4, frete, remarks, ordnoFromVend, remarksInv, remarksRcv, remarksOrd,
-                         auxChar, c1, c2, c3, c4)
+INSERT IGNORE INTO ords (no, date, vendno, discount, amt, package, custo_fin, others, eord_ordno, dataFaturamento,
+                         invno, freightAmt, auxLong1, auxLong2, amtOrigem, dataEntrega, discountOrig, l1, l2, l3, l4,
+                         m1, m2, m3, m4, deliv, storeno, carrno, empno, prazo, eord_storeno, delivOriginal, bits, bits2,
+                         bits3, padbyte, indxno, repno, auxShort1, auxShort2, noofinst, status, s1, s2, s3, s4, frete,
+                         remarks, ordnoFromVend, remarksInv, remarksRcv, remarksOrd, auxChar, c1, c2, c3, c4)
 SELECT @ORDNO_NOVO      AS no,
        CURRENT_DATE * 1 AS date,
        vendno,
@@ -196,11 +192,10 @@ FROM
 WHERE storeno = 1
   AND NO = :ordno;
 
-INSERT INTO oprd (storeno, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2,
-                  icmsSubst, auxLong3, auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost,
-                  qttyRcv, qttyCancel, qttyVendaMes, qttyVendaMesAnt, qttyVendaMedia, qttyPendente,
-                  stkDisponivel, qttyAbc, seqno, status, bits, bits2, auxShort1, auxShort2,
-                  auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada, obs, auxStr)
+INSERT INTO oprd (storeno, ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst, auxLong3,
+                  auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes,
+                  qttyVendaMesAnt, qttyVendaMedia, qttyPendente, stkDisponivel, qttyAbc, seqno, status, bits, bits2,
+                  auxShort1, auxShort2, auxShort3, auxShort4, prdno, grade, remarks, padbyte, gradeFechada, obs, auxStr)
 SELECT 1                   AS storeno,
        @ORDNO_NOVO         AS ordno,
        mult,

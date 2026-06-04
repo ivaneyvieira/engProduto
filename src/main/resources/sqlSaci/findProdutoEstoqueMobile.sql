@@ -107,13 +107,10 @@ SELECT S.no                                                                     
        E.grade                                                                        AS grade,
        ROUND(P.qttyPackClosed / 1000)                                                 AS embalagem,
        SUM(CASE
-             WHEN P.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
-             WHEN P.name LIKE 'VRC COLOR%'   THEN TRUNCATE(
-                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
-                                             ELSE TRUNCATE(
-                                                 ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
-                                                 (P.qttyPackClosed / 1000), 0)
+             WHEN P.name LIKE 'SVS E-COLOR%' THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 900, 2)
+             WHEN P.name LIKE 'VRC COLOR%'   THEN TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) / 1000, 2)
+                                             ELSE TRUNCATE(ROUND((E.qtty_atacado + E.qtty_varejo) / 1000) /
+                                                           (P.qttyPackClosed / 1000), 0)
            END)                                                                       AS qtdEmbalagem,
        IFNULL(A.estoque, 0)                                                           AS estoque,
        A.locApp                                                                       AS locApp,
@@ -153,12 +150,9 @@ FROM
                ON PC.storeno = 10 AND PC.prdno = E.prdno
     LEFT JOIN  T_ACERTO       AS AC
                ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
-WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR
-       ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
+WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
-  AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR
-       ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR
-       (:uso = 'T'))
+  AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR (:uso = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
   AND (E.prdno = :prdno OR :prdno = '')
   AND ((:caracter = 'S' AND P.name NOT REGEXP '^[A-Z0-9]') OR (:caracter = 'N' AND P.name REGEXP '^[A-Z0-9]') OR

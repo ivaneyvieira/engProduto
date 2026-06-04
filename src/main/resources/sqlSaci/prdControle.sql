@@ -10,6 +10,5 @@ CREATE TABLE prdControle
   estoqueLoja int           NULL,
   kardexLoja  int           NULL,
   PRIMARY KEY (storeno, prdno, grade)
-)
-  CHARSET = latin1;
+) CHARSET = latin1;
 

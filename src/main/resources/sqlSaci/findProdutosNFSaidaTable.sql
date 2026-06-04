@@ -12,8 +12,7 @@ CREATE TABLE xaprd2Devolucao
   grade    char(8)  DEFAULT '' NOT NULL,
   quantDev int                 NULL,
   PRIMARY KEY (storeno, pdvno, xano, prdno, grade)
-)
-  ENGINE = MyISAM
+) ENGINE = MyISAM
   CHARSET = latin1;
 
 ALTER TABLE xaprd2Devolucao

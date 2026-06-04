@@ -75,15 +75,9 @@ SELECT loja,
 FROM
   T_MOVMANUAL                 AS M
     LEFT JOIN sqldados.eordrk AS PS
-              ON PS.storeno = M.loja AND
-                 PS.ordno = M.pedido
-WHERE (@PESQUISA = '' OR
-       transacao = @PESQUISANUM OR
-       codigoProduto = @PESQUISANUM OR
-       nomeProduto LIKE @PESQUISALIKE OR
-       grade LIKE @PESQUISASTART OR
-       rotulo LIKE @PESQUISASTART OR
-       tributacao LIKE @PESQUISASTART OR
+              ON PS.storeno = M.loja AND PS.ordno = M.pedido
+WHERE (@PESQUISA = '' OR transacao = @PESQUISANUM OR codigoProduto = @PESQUISANUM OR nomeProduto LIKE @PESQUISALIKE OR
+       grade LIKE @PESQUISASTART OR rotulo LIKE @PESQUISASTART OR tributacao LIKE @PESQUISASTART OR
        fornecedor = @PESQUISANUM OR
        TRIM(IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(MID(PS.remarks__480, 1, 40), '(', 1), '.', 1), '')) LIKE
        @PESQUISASTART)

@@ -32,25 +32,23 @@ WHERE (I.date = :data)
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
-SELECT CAST(I.data AS DATE)                                                  AS data,
-       I.codLoja                                                             AS codLoja,
-       I.loja                                                                AS loja,
-       X.prdno                                                               AS prdno,
-       U.name                                                                AS userName,
-       U.login                                                               AS userLogin,
-       TRIM(X.prdno)                                                         AS codigo,
-       TRIM(MID(P.name, 1, 37))                                              AS descricao,
-       X.grade                                                               AS grade,
-       SUM(ROUND(X.qtty / 1000))                                             AS quantidade,
-       observacao                                                            AS observacao,
-       TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.observacao, ')', 2), ')', -1)) AS tipo,
-       SUBSTRING_INDEX(X.c10, '|', 1)                                        AS tipoPrd,
-       IF(X.c10 LIKE '%|%',
-          SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1),
-          '0') * 1                                                           AS tipoQtd,
-       I.invno                                                               AS ni,
-       I.nota                                                                AS nota,
-       I.valor                                                               AS valor
+SELECT CAST(I.data AS DATE)                                                                    AS data,
+       I.codLoja                                                                               AS codLoja,
+       I.loja                                                                                  AS loja,
+       X.prdno                                                                                 AS prdno,
+       U.name                                                                                  AS userName,
+       U.login                                                                                 AS userLogin,
+       TRIM(X.prdno)                                                                           AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                                AS descricao,
+       X.grade                                                                                 AS grade,
+       SUM(ROUND(X.qtty / 1000))                                                               AS quantidade,
+       observacao                                                                              AS observacao,
+       TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.observacao, ')', 2), ')', -1))                   AS tipo,
+       SUBSTRING_INDEX(X.c10, '|', 1)                                                          AS tipoPrd,
+       IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1 AS tipoQtd,
+       I.invno                                                                                 AS ni,
+       I.nota                                                                                  AS nota,
+       I.valor                                                                                 AS valor
 FROM
   T_NOTA                      AS I
     INNER JOIN sqldados.iprd  AS X
@@ -102,16 +100,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v2 (s1, s2, l2),
   INDEX v3 (storeno, obsReg)
 )
-SELECT invno,
-       storeno,
-       date,
-       nfNfno,
-       nfStoreno,
-       nfNfse,
-       s1,
-       s2,
-       l2,
-       CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
+SELECT invno, storeno, date, nfNfno, nfStoreno, nfNfse, s1, s2, l2, CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
 FROM
   sqldados.inv AS I
 WHERE (I.date = :data)
@@ -126,9 +115,7 @@ SELECT loja, pdv, transacao, invno, date
 FROM
   T_VENDA            AS U USE INDEX (v2)
     INNER JOIN T_INV AS I
-               ON U.storenoE = I.nfStoreno AND
-                  U.nfnoE = I.nfNfno AND
-                  U.nfseE = I.nfNfse;
+               ON U.storenoE = I.nfStoreno AND U.nfnoE = I.nfNfno AND U.nfseE = I.nfNfse;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI2;
 CREATE TEMPORARY TABLE T_NI2
@@ -136,9 +123,7 @@ SELECT loja, pdv, transacao, invno, date
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.storenoE = I.s1 AND
-                  U.pdvnoE = I.s2 AND
-                  U.xanoE = I.l2;
+               ON U.storenoE = I.s1 AND U.pdvnoE = I.s2 AND U.xanoE = I.l2;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI3;
 CREATE TEMPORARY TABLE T_NI3
@@ -146,9 +131,7 @@ SELECT loja, pdv, transacao, invno, I.date, U.obsNI
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
-               ON U.loja = I.storeno AND
-                  U.obsNI LIKE 'NI%' AND
-                  U.obsNI LIKE CONCAT('%', I.invno, '%');
+               ON U.loja = I.storeno AND U.obsNI LIKE 'NI%' AND U.obsNI LIKE CONCAT('%', I.invno, '%');
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI
@@ -180,12 +163,8 @@ FROM
     INNER JOIN T_NI
                USING (invno)
     LEFT JOIN  sqldados.xaprd2Devolucao AS D
-               ON D.storeno = loja AND
-                  D.pdvno = pdv AND
-                  D.xano = transacao AND
-                  D.prdno = I.prdno AND
-                  D.grade = I.grade AND
-                  D.dev = TRUE
+               ON D.storeno = loja AND D.pdvno = pdv AND D.xano = transacao AND D.prdno = I.prdno AND
+                  D.grade = I.grade AND D.dev = TRUE
 GROUP BY loja, pdv, transacao, prdno, grade;
 
 /****************************************************************************************/
@@ -224,8 +203,7 @@ SELECT P.storeno,
 FROM
   sqlpdv.pxa       AS P
     INNER JOIN T_V AS V
-               ON P.storeno = V.storeno
-                 AND P.eordno = V.ordno
+               ON P.storeno = V.storeno AND P.eordno = V.ordno
 WHERE P.cfo IN (5117, 6117)
   AND P.storeno IN (2, 3, 4, 5, 8)
 GROUP BY storeno, ordno;
@@ -260,37 +238,30 @@ SELECT data,
        R.prdno,
        userName,
        userLogin,
-       UA.name                                         AS autorizacaoName,
-       UA.login                                        AS autorizacaoLogin,
+       UA.name                                                                                             AS autorizacaoName,
+       UA.login                                                                                            AS autorizacaoLogin,
        codigo,
        descricao,
        R.grade,
        quantidade,
        R.observacao,
        tipo,
-       IF(tipo REGEXP '^TRO.* M.*' OR
-          tipo REGEXP '^EST.* M.*' OR
-          tipo REGEXP '^REE.* M.*', tipoPrd, tipo)     AS tipoPrd,
-       IFNULL(temProduto, '')                          AS temProduto,
+       IF(tipo REGEXP '^TRO.* M.*' OR tipo REGEXP '^EST.* M.*' OR tipo REGEXP '^REE.* M.*', tipoPrd, tipo) AS tipoPrd,
+       IFNULL(temProduto, '')                                                                              AS temProduto,
        tipoQtd,
-       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd) AS tipoQtdEfetiva,
+       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd)                                                     AS tipoQtdEfetiva,
        ni,
        nota,
        valor
 FROM
   T_RESULT                           AS R
     LEFT JOIN T_NI_PRD               AS N
-              ON R.ni = N.invno
-                AND R.prdno = N.prdno
-                AND R.grade = N.grade
+              ON R.ni = N.invno AND R.prdno = N.prdno AND R.grade = N.grade
     LEFT JOIN T_ENTREGA              AS EF
-              ON EF.lojaE = N.loja
-                AND EF.pdvE = N.pdv
-                AND EF.transacaoE = N.transacao
+              ON EF.lojaE = N.loja AND EF.pdvE = N.pdv AND EF.transacaoE = N.transacao
     LEFT JOIN sqldados.nfAutorizacao AS A
-              ON A.storeno = IFNULL(EF.loja, N.loja)
-                AND A.pdvno = IFNULL(EF.pdv, N.pdv)
-                AND A.xano = IFNULL(EF.transacao, N.transacao)
+              ON A.storeno = IFNULL(EF.loja, N.loja) AND A.pdvno = IFNULL(EF.pdv, N.pdv) AND
+                 A.xano = IFNULL(EF.transacao, N.transacao)
     LEFT JOIN sqldados.users         AS UA
               ON UA.no = A.userTroca;
 
@@ -308,10 +279,7 @@ SELECT data,
        quantidade,
        observacao,
        tipo,
-       IF(tipoPrd = '',
-          TRIM(CONCAT(SUBSTRING_INDEX(tipo, ' ', 1),
-                      IF(temProduto, ' P', '')))
-         , tipoPrd) AS tipoPrd,
+       IF(tipoPrd = '', TRIM(CONCAT(SUBSTRING_INDEX(tipo, ' ', 1), IF(temProduto, ' P', ''))), tipoPrd) AS tipoPrd,
        tipoQtd,
        tipoQtdEfetiva,
        ni,

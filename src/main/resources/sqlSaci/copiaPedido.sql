@@ -64,11 +64,7 @@ FROM
   sqldados.ords
 WHERE storeno = :lojaOriginal
   AND no = :pedidoOriginal
-  AND NOT EXISTS( SELECT *
-                  FROM
-                    sqldados.ords o
-                  WHERE storeno = :lojaDestino
-                    AND no = :pedidoDestino );
+  AND NOT EXISTS( SELECT * FROM sqldados.ords o WHERE storeno = :lojaDestino AND no = :pedidoDestino );
 
 INSERT INTO sqldados.oprd(ordno, mult, ipi, freight, icms, auxLong1, auxLong2, auxMy1, auxMy2, icmsSubst, auxLong3,
                           auxLong4, auxMy3, auxMy4, qtty, qtty_src, qtty_xfr, cost, qttyRcv, qttyCancel, qttyVendaMes,
@@ -121,8 +117,4 @@ FROM
   sqldados.oprd
 WHERE storeno = :lojaOriginal
   AND ordno = :pedidoOriginal
-  AND NOT EXISTS( SELECT *
-                  FROM
-                    sqldados.ords o
-                  WHERE storeno = :lojaDestino
-                    AND no = :pedidoDestino )
+  AND NOT EXISTS( SELECT * FROM sqldados.ords o WHERE storeno = :lojaDestino AND no = :pedidoDestino )

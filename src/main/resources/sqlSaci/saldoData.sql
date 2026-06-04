@@ -200,30 +200,29 @@ WHERE I.bits & POW(2, 4) = 0
 GROUP BY loja, P.prdno, P.grade, I.date;
 
 DROP TABLE IF EXISTS Kardec;
-CREATE TEMPORARY TABLE Kardec
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  Saldo
-UNION ALL
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  NFCupom
-UNION ALL
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  Devolucao
-UNION ALL
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  NFSaida
-UNION ALL
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  MovManual
-UNION ALL
-SELECT loja AS storeno, prdno, grade, date, tipo, quant
-FROM
-  NFEntrada;
+CREATE TEMPORARY TABLE Kardec SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                Saldo
+                              UNION ALL
+                              SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                NFCupom
+                              UNION ALL
+                              SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                Devolucao
+                              UNION ALL
+                              SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                NFSaida
+                              UNION ALL
+                              SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                MovManual
+                              UNION ALL
+                              SELECT loja AS storeno, prdno, grade, date, tipo, quant
+                              FROM
+                                NFEntrada;
 
 SELECT storeno AS storeno, prdno AS prdno, grade AS grade, CAST(@DIA_ANTES AS DATE) AS date, ROUND(SUM(quant)) AS quant
 FROM

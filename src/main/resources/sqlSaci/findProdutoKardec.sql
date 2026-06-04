@@ -85,12 +85,11 @@ SELECT O.storeno                                    AS loja,
                   ELSE ''
        END                                          AS metodo,
        IFNULL(EA.marca, 0)                          AS marca,
-       IF(O.paymno = 433,
-          ROUND(CASE
-                  WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
-                  WHEN R.remarks__480 LIKE 'SAIDA%'   THEN -1
-                                                      ELSE 0
-                END), 1)                            AS multAcerto,
+       IF(O.paymno = 433, ROUND(CASE
+                                  WHEN R.remarks__480 LIKE 'ENTRADA%' THEN 1
+                                  WHEN R.remarks__480 LIKE 'SAIDA%'   THEN -1
+                                                                      ELSE 0
+                                END), 1)            AS multAcerto,
        U.sname                                      AS userLogin
 FROM
   sqldados.eoprd                       AS E
@@ -155,22 +154,20 @@ WHERE prdno = :prdno
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
-SELECT numloja                                            AS loja,
+SELECT numloja                                                      AS loja,
        prdno,
        grade,
        data,
-       CONCAT(numero, '/', numloja)                       AS doc,
-       ''                                                 AS nfEnt,
-       IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_LJCD') AS tipo,
-       IF(noRota = 0,
-          'do\tCD',
-          CONCAT('para\ta\tLoja\t', numloja))             AS observacao,
-       NULL                                               AS vencimento,
-       IF(noRota = 0, movimentacao, -movimentacao)        AS qtde,
-       0                                                  AS saldo,
-       NULL                                               AS userLogin,
-       ER.login                                           AS recLogin,
-       EE.login                                           AS entLogin
+       CONCAT(numero, '/', numloja)                                 AS doc,
+       ''                                                           AS nfEnt,
+       IF(noRota = 0, 'REPOSICAO_CDLJ', 'REPOSICAO_LJCD')           AS tipo,
+       IF(noRota = 0, 'do\tCD', CONCAT('para\ta\tLoja\t', numloja)) AS observacao,
+       NULL                                                         AS vencimento,
+       IF(noRota = 0, movimentacao, -movimentacao)                  AS qtde,
+       0                                                            AS saldo,
+       NULL                                                         AS userLogin,
+       ER.login                                                     AS recLogin,
+       EE.login                                                     AS entLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE     AS E
     LEFT JOIN sqldados.users AS ER
@@ -189,10 +186,7 @@ CREATE TEMPORARY TABLE T_KARDEC_CD
 (
   PRIMARY KEY (loja, prdno, grade, doc)
 )
-SELECT loja,
-       prdno,
-       grade,
-       doc
+SELECT loja, prdno, grade, doc
 FROM
   sqldados.produtoKardec AS K
 WHERE (loja = :loja OR :loja = 0)

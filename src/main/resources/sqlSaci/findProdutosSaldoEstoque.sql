@@ -62,11 +62,8 @@ WHERE (P.mfno = :fornecedor OR :fornecedor = 0)
         WHEN 'T' THEN TRUE
                  ELSE FALSE
       END
-  AND (
-  (:consumo = 'T') OR
-  (:consumo = 'S' AND ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))) OR
-  (:consumo = 'N' AND NOT ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0)))
-  );
+  AND ((:consumo = 'T') OR (:consumo = 'S' AND ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))) OR
+       (:consumo = 'N' AND NOT ((P.no * 1 >= 900000) OR (P.bits & POW(2, 13) > 0))));
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
@@ -121,23 +118,18 @@ FROM
                USING (prdno)
 WHERE (S.loja = :loja OR :loja = 0)
   AND (((:tipoSaldo = 'TOTAL') AND
-        ((:estoque = '<' AND S.qttyTotal < :saldo) OR
-         (:estoque = '>' AND S.qttyTotal > :saldo) OR
-         (:estoque = '=' AND S.qttyTotal = :saldo) OR
-         (:estoque = '#' AND S.qttyTotal != :saldo) OR
-         (:estoque = 'T'))) OR
-       ((:tipoSaldo = 'VAREJO') AND
-        ((:estoque = '<' AND S.qttyVarejo < :saldo) OR
-         (:estoque = '>' AND S.qttyVarejo > :saldo) OR
-         (:estoque = '=' AND S.qttyVarejo = :saldo) OR
-         (:estoque = '#' AND S.qttyVarejo != :saldo) OR
-         (:estoque = 'T'))) OR
-       ((:tipoSaldo = 'ATACADO') AND
-        ((:estoque = '<' AND S.qttyAtacado < :saldo) OR
-         (:estoque = '>' AND S.qttyAtacado > :saldo) OR
-         (:estoque = '=' AND S.qttyAtacado = :saldo) OR
-         (:estoque = '#' AND S.qttyAtacado != :saldo) OR
-         (:estoque = 'T'))));
+        ((:estoque = '<' AND S.qttyTotal < :saldo) OR (:estoque = '>' AND S.qttyTotal > :saldo) OR
+         (:estoque = '=' AND S.qttyTotal = :saldo) OR (:estoque = '#' AND S.qttyTotal != :saldo) OR
+         (:estoque = 'T'))) OR ((:tipoSaldo = 'VAREJO') AND ((:estoque = '<' AND S.qttyVarejo < :saldo) OR
+                                                             (:estoque = '>' AND S.qttyVarejo > :saldo) OR
+                                                             (:estoque = '=' AND S.qttyVarejo = :saldo) OR
+                                                             (:estoque = '#' AND S.qttyVarejo != :saldo) OR
+                                                             (:estoque = 'T'))) OR ((:tipoSaldo = 'ATACADO') AND
+                                                                                    ((:estoque = '<' AND S.qttyAtacado < :saldo) OR
+                                                                                     (:estoque = '>' AND S.qttyAtacado > :saldo) OR
+                                                                                     (:estoque = '=' AND S.qttyAtacado = :saldo) OR
+                                                                                     (:estoque = '#' AND S.qttyAtacado != :saldo) OR
+                                                                                     (:estoque = 'T'))));
 
 SELECT loja,
        prdno,

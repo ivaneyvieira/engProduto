@@ -46,17 +46,19 @@ WHERE A.localizacao = 'CD'
 */
 
 INSERT IGNORE INTO prdAdicional(storeno, prdno, grade, localizacao)
-select storeno, prdno, grade, localizacao
-from T_PRD_LOC AS L
-where storeno != 4;
+SELECT storeno, prdno, grade, localizacao
+FROM
+  T_PRD_LOC AS L
+WHERE storeno != 4;
 
 
-select * from prdAdicional
-where prdno = 2976;
+SELECT *
+FROM
+  prdAdicional
+WHERE prdno = 2976;
 
-UPDATE prdAdicional AS A
-  INNER JOIN T_PRD_LOC AS L
-  ON L.storeno = A.storeno AND L.prdno = A.prdno AND L.grade = A.grade AND A.localizacao != L.localizacao
+UPDATE prdAdicional AS A INNER JOIN T_PRD_LOC AS L ON L.storeno = A.storeno AND L.prdno = A.prdno AND
+                                                      L.grade = A.grade AND A.localizacao != L.localizacao
 SET A.localizacao = L.localizacao
 WHERE A.localizacao != L.localizacao
   AND A.storeno != 4;
@@ -67,8 +69,8 @@ SELECT 0 AS stkmin, 0 AS stkmax, storeno, 0 AS bits, prdno, localizacao, grade
 FROM
   T_PRD_LOC;
 
-REPLACE INTO sqldados.prdloc2(stkmin, stkmax, l1, l2, l3, l4, l5, l6, l7, l8, m1, m2, m3, m4, m5, m6, m7, m8,
-                              storeno, sano, bits, s1, s2, s3, s4, s5, s6, s7, prdno, grade, localizacao, c1, c2)
+REPLACE INTO sqldados.prdloc2(stkmin, stkmax, l1, l2, l3, l4, l5, l6, l7, l8, m1, m2, m3, m4, m5, m6, m7, m8, storeno,
+                              sano, bits, s1, s2, s3, s4, s5, s6, s7, prdno, grade, localizacao, c1, c2)
 SELECT 0  AS stkmin,
        0  AS stkmax,
        0  AS l1,

@@ -6,7 +6,9 @@ FROM
   sqldados.userApp
 WHERE appName = 'engProduto';
 
-select * from sqldados.userSaciApp;
+SELECT *
+FROM
+  sqldados.userSaciApp;
 
 DROP TABLE sqldados.userSaciApp;
 CREATE TABLE sqldados.`userSaciApp`

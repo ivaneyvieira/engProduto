@@ -33,12 +33,8 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date <= :dataFinal OR :dataFinal = 0)
   AND N.storeno IN (1, 2, 3, 4, 5, 8)
   AND (N.storeno = :loja OR :loja = 0)
-  AND (
-  N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')
-    OR N.account IN ('2.01.25')
-    OR N.type = 1
-    OR (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')
-  )
+  AND (N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02') OR
+       N.account IN ('2.01.25') OR N.type = 1 OR (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%'))
   AND N.cfo NOT IN (1556, 2556, 1933, 2933)
 GROUP BY I.invno, I.prdno, I.grade;
 
@@ -258,8 +254,7 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
         (N.storeno = :loja OR (IFNULL(CG.storeno, 0) != :loja AND IFNULL(CG.storeno, 0) != 0))))
   AND ((2 IN (0, 999) AND ((N.tipo = 4 AND IFNULL(T.tipoE, 0) > 0) -- Retira Futura
   OR (N.tipo = 3 AND IFNULL(T.tipoR, 0) > 0) -- Simples
-  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR
-                           (IFNULL(CG.storeno, 0) != :loja) OR
+  OR (N.tipo = 0 AND (N.nfse = 1 OR N.nfse >= 10)) OR (N.tipo = 1 AND N.nfse = 5) OR (IFNULL(CG.storeno, 0) != :loja) OR
                            (N.nfse = 7))) OR 2 NOT IN (0, 999))
 GROUP BY N.storeno, N.pdvno, N.xano;
 
@@ -302,26 +297,24 @@ SELECT Q.loja,
 FROM
   T_QUERY                           AS Q
     INNER JOIN sqldados.xaprd2Marca AS M
-               ON Q.loja = M.storeno AND
-                  Q.pdvno = M.pdvno AND
-                  Q.xano = M.xano
+               ON Q.loja = M.storeno AND Q.pdvno = M.pdvno AND Q.xano = M.xano
 WHERE M.marca = 2
 GROUP BY Q.loja, Q.pdvno, Q.xano;
 
 INSERT INTO T_KARDEC(loja, prdno, grade, data, doc, nfEnt, tipo, observacao, vencimento, qtde, saldo, userLogin)
-SELECT loja                                                    AS loja,
-       X.prdno                                                 AS prdno,
-       X.grade                                                 AS grade,
-       data                                                    AS DATA,
-       CONCAT(numero, '/', serie)                              AS doc,
-       notaEntrega                                             AS nfEnt,
-       IF(tipoNotaSaida = 'ENTRE_FUT', 'ENTREGA', 'EXPEDICAO') AS tipo,
-       observacao                                              AS observacao,
-       NULL                                                    AS vencimento,
-       -X.qtty / 1000                                          AS qtde,
-       0                                                       AS saldo,
+SELECT loja                                                                                                     AS loja,
+       X.prdno                                                                                                  AS prdno,
+       X.grade                                                                                                  AS grade,
+       data                                                                                                     AS DATA,
+       CONCAT(numero, '/', serie)                                                                               AS doc,
+       notaEntrega                                                                                              AS nfEnt,
+       IF(tipoNotaSaida = 'ENTRE_FUT', 'ENTREGA', 'EXPEDICAO')                                                  AS tipo,
+       observacao                                                                                               AS observacao,
+       NULL                                                                                                     AS vencimento,
+       -X.qtty / 1000                                                                                           AS qtde,
+       0                                                                                                        AS saldo,
        IF(tipoNotaSaida = 'ENTRE_FUT', SUBSTRING_INDEX(usuarioCD, '-', 1),
-          SUBSTRING_INDEX(usuarioExp, '-', 1))                 AS userLogin
+          SUBSTRING_INDEX(usuarioExp, '-', 1))                                                                  AS userLogin
 FROM
   T_EXPEDICAO                  AS E
     INNER JOIN sqldados.xaprd2 AS X

@@ -3,8 +3,7 @@ USE sqldados;
 DROP TABLE IF EXISTS nfSaidaArquivoDevolucao;
 CREATE TABLE nfSaidaArquivoDevolucao
 (
-  seq      int AUTO_INCREMENT
-    PRIMARY KEY,
+  seq      int AUTO_INCREMENT PRIMARY KEY,
   storeno  SMALLINT DEFAULT 0 NOT NULL,
   pdvno    SMALLINT DEFAULT 0 NOT NULL,
   xano     INT      DEFAULT 0 NOT NULL,

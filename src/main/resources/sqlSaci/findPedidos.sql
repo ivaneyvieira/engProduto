@@ -58,15 +58,36 @@ WHERE (P.storeno = :loja OR :loja = 0)
 GROUP BY P.invno, P.prdno, P.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
-CREATE TEMPORARY TABLE T_INV
-  SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'N' AS tipo
-  FROM
-    T_INVN
-  UNION
-  DISTINCT
-  SELECT storeno, ordno, vendno, invno, dataEmissao, dataEntrada, nfEntrada, prdno, grade, qtty, cost, 'P' AS tipo
-  FROM
-    T_INVP;
+CREATE TEMPORARY TABLE T_INV SELECT storeno,
+                                    ordno,
+                                    vendno,
+                                    invno,
+                                    dataEmissao,
+                                    dataEntrada,
+                                    nfEntrada,
+                                    prdno,
+                                    grade,
+                                    qtty,
+                                    cost,
+                                    'N' AS tipo
+                             FROM
+                               T_INVN
+                             UNION
+                             DISTINCT
+                             SELECT storeno,
+                                    ordno,
+                                    vendno,
+                                    invno,
+                                    dataEmissao,
+                                    dataEntrada,
+                                    nfEntrada,
+                                    prdno,
+                                    grade,
+                                    qtty,
+                                    cost,
+                                    'P' AS tipo
+                             FROM
+                               T_INVP;
 
 DROP TEMPORARY TABLE IF EXISTS T_INVORD;
 CREATE TEMPORARY TABLE T_INVORD
@@ -100,8 +121,7 @@ SELECT P.storeno,
 FROM
   sqldados.oprd              AS P
     INNER JOIN sqldados.ords AS O
-               ON O.storeno = P.storeno
-                 AND O.no = P.ordno
+               ON O.storeno = P.storeno AND O.no = P.ordno
     INNER JOIN sqldados.vend AS V
                ON O.vendno = V.no
 WHERE V.name NOT LIKE 'ENGECOPI%'

@@ -29,12 +29,8 @@ CREATE TABLE sqldados.produtoValidadeLoja
   INDEX (prdno, grade)
 );
 
-INSERT INTO sqldados.produtoValidadeLoja (prdno, grade,
-                                          vencimentoDS, estoqueDS,
-                                          vencimentoMR, estoqueMR,
-                                          vencimentoMF, estoqueMF,
-                                          vencimentoPK, estoquePK,
-                                          vencimentoTM, estoqueTM)
+INSERT INTO sqldados.produtoValidadeLoja (prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR, vencimentoMF,
+                                          estoqueMF, vencimentoPK, estoquePK, vencimentoTM, estoqueTM)
 SELECT prdno                               AS prdno,
        grade                               AS grade,
        MAX(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
