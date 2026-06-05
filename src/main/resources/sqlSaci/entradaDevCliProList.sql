@@ -7,6 +7,17 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
+DROP TEMPORARY TABLE IF EXISTS T_LOC;
+CREATE TEMPORARY TABLE T_LOC
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT A.prdno AS prdno, A.grade AS grade, TRIM(A.localizacao) AS localizacao
+FROM
+  sqldados.prdAdicional AS A
+WHERE (A.storeno = 4)
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -49,7 +60,8 @@ SELECT CAST(I.data AS DATE)                                                     
        I.invno                                                                                 AS ni,
        I.nota                                                                                  AS nota,
        I.valor                                                                                 AS valor,
-       A.kardec                                                                                AS kardec
+       A.kardec                                                                                AS kardec,
+       TRIM(IFNULL(L.localizacao, ''))                                                         AS localizacao
 FROM
   T_NOTA                             AS I
     INNER JOIN sqldados.iprd         AS X
@@ -60,6 +72,8 @@ FROM
                ON U.no = I.userno
     LEFT JOIN  sqldados.prdAdicional AS A
                ON A.storeno = I.codLoja AND A.prdno = X.prdno AND A.grade = X.grade
+    LEFT JOIN  T_LOC                 AS L
+               ON L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
        I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
@@ -267,7 +281,8 @@ FROM
               ON A.storeno = IFNULL(EF.loja, N.loja) AND A.pdvno = IFNULL(EF.pdv, N.pdv) AND
                  A.xano = IFNULL(EF.transacao, N.transacao)
     LEFT JOIN sqldados.users         AS UA
-              ON UA.no = A.userTroca;
+              ON UA.no = A.userTroca
+WHERE ((TRIM(MID(R.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (R.localizacao = ''));
 
 SELECT data,
        codLoja,

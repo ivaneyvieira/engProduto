@@ -500,7 +500,13 @@ class UserSaci : IUser {
       lojas = lojas.setValue(38, value?.toString() ?: "")
     }
 
-  fun lojaTransfReserva(): Int? {
+  var localizacaoDev: Set<String>
+    get() = if (admin) setOf("TODOS") else lojas.getOrNull(39)?.split(":").orEmpty().toSet()
+    set(value) {
+      lojas = lojas.setValue(39, value.joinToString(":"))
+    }
+
+  fun lojaTransfReserva(): Int {
     return lojaTransfReserva ?: storeno
   }
 

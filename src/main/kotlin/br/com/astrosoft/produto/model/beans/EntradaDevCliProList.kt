@@ -79,6 +79,7 @@ data class FiltroEntradaDevCliProList(
   val loja: Int,
   val data: LocalDate,
   val pesquisa: String,
+  val localizacao: Set<String>
 )
 
 fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {

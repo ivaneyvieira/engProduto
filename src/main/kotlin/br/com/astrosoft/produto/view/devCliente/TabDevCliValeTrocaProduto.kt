@@ -90,10 +90,12 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
   }
 
   override fun filtro(): FiltroEntradaDevCliProList {
+    val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCliProList(
       loja = cmbLoja.value?.no ?: 0,
       data = edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
+      localizacao = user?.localizacaoDev ?: setOf("TODOS")
     )
   }
 
