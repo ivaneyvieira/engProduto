@@ -75,11 +75,11 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
 
   override fun Grid<EntradaDevCliProList>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     columnGrid(EntradaDevCliProList::codigo, header = "Código").right()
     columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
-    columnGrid(EntradaDevCliProList::kardec, header = "CD")
+    columnGrid(EntradaDevCliProList::localizacao, header = "CD")
     columnGrid(EntradaDevCliProList::tipoQtdEfetiva, header = "Quantidade")
     columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCliProList::tipoNotaPre, header = "Tipo")

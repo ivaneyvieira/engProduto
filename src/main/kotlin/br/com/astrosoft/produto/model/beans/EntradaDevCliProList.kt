@@ -24,7 +24,7 @@ data class EntradaDevCliProList(
   var tipoPrd: String?,
   var tipoQtd: Int?,
   var tipoQtdEfetiva: Int?,
-  var kardec: Int?,
+  var localizacao: String?,
 ) {
   fun tipoPrdTratado(): String {
     val temProduto = this.tipoPrd?.endsWith(" P") == true

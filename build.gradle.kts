@@ -54,7 +54,7 @@ dependencies {
 
   // db
   implementation("com.zaxxer:HikariCP:3.4.1")
-  implementation("org.sql2o:sql2o:1.6.0")
+  implementation("org.sql2o:sql2o:1.9.1")
   implementation("org.simpleflatmapper:sfm-sql2o:8.2.3")
   implementation("mysql:mysql-connector-java:5.1.48")
   implementation("net.sourceforge.jtds:jtds:1.3.1")

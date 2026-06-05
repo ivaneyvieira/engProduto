@@ -12,7 +12,7 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT A.prdno AS prdno, A.grade AS grade, TRIM(A.localizacao) AS localizacao
+SELECT A.prdno AS prdno, A.grade AS grade, MID(TRIM(A.localizacao), 1, 4) AS localizacao
 FROM
   sqldados.prdAdicional AS A
 WHERE (A.storeno = 4)
@@ -60,19 +60,16 @@ SELECT CAST(I.data AS DATE)                                                     
        I.invno                                                                                 AS ni,
        I.nota                                                                                  AS nota,
        I.valor                                                                                 AS valor,
-       A.kardec                                                                                AS kardec,
        TRIM(IFNULL(L.localizacao, ''))                                                         AS localizacao
 FROM
-  T_NOTA                             AS I
-    INNER JOIN sqldados.iprd         AS X
+  T_NOTA                      AS I
+    INNER JOIN sqldados.iprd  AS X
                ON I.invno = X.invno
-    LEFT JOIN  sqldados.prd          AS P
+    LEFT JOIN  sqldados.prd   AS P
                ON P.no = X.prdno
-    LEFT JOIN  sqldados.users        AS U
+    LEFT JOIN  sqldados.users AS U
                ON U.no = I.userno
-    LEFT JOIN  sqldados.prdAdicional AS A
-               ON A.storeno = I.codLoja AND A.prdno = X.prdno AND A.grade = X.grade
-    LEFT JOIN  T_LOC                 AS L
+    LEFT JOIN  T_LOC          AS L
                ON L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
@@ -270,7 +267,7 @@ SELECT data,
        ni,
        nota,
        valor,
-       kardec
+       localizacao
 FROM
   T_RESULT                           AS R
     LEFT JOIN T_NI_PRD               AS N
@@ -304,7 +301,7 @@ SELECT data,
        ni,
        nota,
        valor,
-       kardec
+       localizacao
 FROM
   T_PRODUTOS AS P
 GROUP BY ni, data, codLoja, loja, prdno, grade
