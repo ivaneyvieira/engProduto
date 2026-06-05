@@ -95,6 +95,7 @@ WHERE P.prdno = :prdno
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
   AND P.prdno IN ( SELECT prdno FROM sqldados.produtos_dev_loja );
 
+
 DROP TABLE IF EXISTS T_REPOSICAO;
 CREATE TEMPORARY TABLE T_REPOSICAO
 SELECT O.storeno                                    AS loja,
