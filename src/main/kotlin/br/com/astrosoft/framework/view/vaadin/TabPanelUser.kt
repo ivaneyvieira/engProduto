@@ -221,9 +221,10 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
 
   protected fun HasComponents.filtroLocalizacao(
     binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>
+    property: KMutableProperty1<UserSaci, Set<String>>,
+    label: String = "Localização"
   ) {
-    multiSelectComboBox<String>("Localização") {
+    multiSelectComboBox<String>(label) {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
       setItems(listOf("TODOS") + viewModel.allLocalizacao())

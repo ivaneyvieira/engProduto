@@ -101,7 +101,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
           binder.bind(this, UserSaci::dataVendaDevolucao.name)
         }
       }
-      filtroLocalizacao(binder, UserSaci::localizacaoDev)
+      filtroLocalizacao(binder, property =  UserSaci::localizacaoDev, label = "Localização Aba Produto")
     }
   }
 }
