@@ -10,13 +10,11 @@ DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
 CREATE TEMPORARY TABLE T_LOC
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT A.prdno AS prdno, A.grade AS grade, MID(TRIM(A.localizacao), 1, 4) AS localizacao
+SELECT A.storeno AS storeno, A.prdno AS prdno, A.grade AS grade, MID(TRIM(A.localizacao), 1, 4) AS localizacao
 FROM
-  sqldados.prdAdicional AS A
-WHERE (A.storeno = 4)
-GROUP BY prdno, grade;
+  sqldados.prdAdicional AS A;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -70,7 +68,7 @@ FROM
     LEFT JOIN  sqldados.users AS U
                ON U.no = I.userno
     LEFT JOIN  T_LOC          AS L
-               ON L.prdno = X.prdno AND L.grade = X.grade
+               ON L.storeno = I.codLoja AND L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
        I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
