@@ -83,6 +83,8 @@ CREATE TEMPORARY TABLE T_LOC_NERUS
 SELECT prdno AS prdno, grade AS grade, localizacao AS locNerus
 FROM
   sqldados.prdloc
+    INNER JOIN T_PRD AS P
+               USING (prdno)
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
@@ -112,6 +114,8 @@ SELECT prdno                                                     AS prdno,
        estoqueUser                                               AS estoqueUser
 FROM
   sqldados.prdAdicional
+    INNER JOIN T_PRD AS P
+               USING (prdno)
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (storeno = IF(:loja = 0, 4, :loja))
   AND (prdno = :prdno OR :prdno = '')
@@ -127,6 +131,8 @@ SELECT P.no                                                                  AS 
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
 FROM
   sqldados.prd                AS P
+    INNER JOIN T_PRD AS PD
+               ON P.no = PD.prdno
     LEFT JOIN sqldados.prd2   AS P2
               ON P.no = P2.prdno
     LEFT JOIN sqldados.prdbar AS B
@@ -142,6 +148,8 @@ CREATE TEMPORARY TABLE T_ULT_ACERTO
 SELECT numloja, prdno, grade, MAX(numero) AS numero
 FROM
   sqldados.produtoEstoqueAcerto A
+    INNER JOIN T_PRD AS P
+               USING (prdno)
 GROUP BY numloja, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;

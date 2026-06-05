@@ -42,22 +42,25 @@ SELECT CAST(I.data AS DATE)                                                     
        TRIM(MID(P.name, 1, 37))                                                                AS descricao,
        X.grade                                                                                 AS grade,
        SUM(ROUND(X.qtty / 1000))                                                               AS quantidade,
-       observacao                                                                              AS observacao,
+       I.observacao                                                                            AS observacao,
        TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.observacao, ')', 2), ')', -1))                   AS tipo,
        SUBSTRING_INDEX(X.c10, '|', 1)                                                          AS tipoPrd,
        IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1 AS tipoQtd,
        I.invno                                                                                 AS ni,
        I.nota                                                                                  AS nota,
-       I.valor                                                                                 AS valor
+       I.valor                                                                                 AS valor,
+       A.kardec                                                                                AS kardec
 FROM
-  T_NOTA                      AS I
-    INNER JOIN sqldados.iprd  AS X
+  T_NOTA                             AS I
+    INNER JOIN sqldados.iprd         AS X
                ON I.invno = X.invno
-    LEFT JOIN  sqldados.prd   AS P
+    LEFT JOIN  sqldados.prd          AS P
                ON P.no = X.prdno
-    LEFT JOIN  sqldados.users AS U
+    LEFT JOIN  sqldados.users        AS U
                ON U.no = I.userno
-WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(prdno) = @PESQUISANUM OR
+    LEFT JOIN  sqldados.prdAdicional AS A
+               ON A.storeno = I.codLoja AND A.prdno = X.prdno AND A.grade = X.grade
+WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
        I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
 GROUP BY I.codLoja, X.prdno, X.grade, I.observacao
@@ -252,7 +255,8 @@ SELECT data,
        IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd)                                                     AS tipoQtdEfetiva,
        ni,
        nota,
-       valor
+       valor,
+       kardec
 FROM
   T_RESULT                           AS R
     LEFT JOIN T_NI_PRD               AS N
@@ -284,9 +288,10 @@ SELECT data,
        tipoQtdEfetiva,
        ni,
        nota,
-       valor
+       valor,
+       kardec
 FROM
-  T_PRODUTOS
+  T_PRODUTOS AS P
 GROUP BY ni, data, codLoja, loja, prdno, grade
 ORDER BY data, codLoja, loja, prdno, grade
 
