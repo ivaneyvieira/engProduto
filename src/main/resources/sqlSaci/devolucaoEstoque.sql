@@ -34,7 +34,8 @@ WHERE P.prdno = :prdno
   AND N.type = 2
   AND N.bits & POW(2, 4) = 0
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
-  AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL;
+  AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
+  AND P.prdno NOT IN ( SELECT prdno FROM sqldados.produtos_dev_loja );
 
 SELECT loja,
        prdno,
