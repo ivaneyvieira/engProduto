@@ -21,27 +21,9 @@ open class QueryDB(database: DatabaseConfig) {
   init {
     try {
       Class.forName(database.driver)
-      /*
-      val config = HikariConfig()
-      config.jdbcUrl = database.url
-      config.username = database.user
-      config.password = database.password
-      config.addDataSourceProperty("cachePrepStmts", "true")
-      config.addDataSourceProperty("prepStmtCacheSize", "250")
-      config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
-      config.isAutoCommit = false
-      val ds = HikariDataSource(config)
-      ds.maximumPoolSize = 2*/
       this.sql2o = Sql2o(database.url, database.user, database.password)
     } catch (e: Exception) {
       throw RuntimeException(e)
-    }
-  }
-
-  private fun registerDriver(driver: String) {
-    try {
-      Class.forName(driver)
-    } catch (e: ClassNotFoundException) { //throw RuntimeException(e)
     }
   }
 
