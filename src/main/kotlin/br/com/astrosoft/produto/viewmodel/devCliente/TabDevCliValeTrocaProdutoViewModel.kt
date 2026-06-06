@@ -52,6 +52,10 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
 
+    if(produtos.any { it.userEntregaNo != 0 }){
+      fail("Tem produto que já foi entregue")
+    }
+
     subView.autorizaEntrega(produtos) { user, produtos ->
       produtos.forEach { produto ->
         produto.userEntregaNo = user.no
@@ -86,6 +90,12 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       }) {
       fail("Não pode receber produto não entregue")
     }
+
+
+    if(produtos.any { it.userRecebimentoNo != 0 }){
+      fail("Tem produto que já foi recebido")
+    }
+
 
     subView.autorizaRecebimento(produtos) { user, produtos ->
       produtos.forEach { produto ->
