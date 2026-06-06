@@ -294,8 +294,14 @@ SELECT data,
        localizacao,
        UE.no                                                                                            AS userEntregaNo,
        IFNULL(UE.login, '')                                                                             AS userEntrega,
+       IFNULL(UE.name, '')                                                                              AS userEntregaName,
+       D.dataEntrega                                                                                    AS dataEntrega,
+       D.horaEntrega                                                                                    AS horaEntrega,
        UR.no                                                                                            AS userRecebimentoNo,
-       IFNULL(UR.login, '')                                                                             AS userRecebimento
+       IFNULL(UR.login, '')                                                                             AS userRecebimento,
+       IFNULL(UR.name, '')                                                                              AS userRecebimentoName,
+       D.dataRecebimento                                                                                AS dataRecebimento,
+       D.horaRecebimento                                                                                AS horaRecebimento
 FROM
   T_PRODUTOS                                 AS P
     LEFT JOIN sqldados.devClienteAutorizacao AS D

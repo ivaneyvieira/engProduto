@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import java.time.LocalTime
 
 data class EntradaDevCliProList(
   var data: LocalDate?,
@@ -27,8 +28,14 @@ data class EntradaDevCliProList(
   var localizacao: String?,
   var userEntregaNo: Int?,
   var userEntrega: String?,
+  var userEntregaName: String?,
+  var dataEntrega: LocalDate?,
+  var horaEntrega: LocalTime?,
   var userRecebimentoNo: Int?,
-  var userRecebimento: String?
+  var userRecebimento: String?,
+  var userRecebimentoName: String?,
+  var dataRecebimento: LocalDate?,
+  var horaRecebimento: LocalTime?,
 ) {
   fun tipoPrdTratado(): String {
     val temProduto = this.tipoPrd?.endsWith(" P") == true
@@ -68,13 +75,17 @@ data class EntradaDevCliProList(
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 
-  fun salvaAutorizacao(){
+  fun salvaAutorizacao() {
     val auto = AutorizaDevCliente(
       invno = this.ni ?: return,
       prdno = this.prdno ?: return,
       grade = this.grade ?: return,
       userEntrega = this.userEntregaNo ?: 0,
-      userRecebimento = this.userRecebimentoNo ?: 0
+      dataEntrega = this.dataEntrega,
+      horaEntrega = this.horaEntrega,
+      userRecebimento = this.userRecebimentoNo ?: 0,
+      dataRecebimento = this.dataRecebimento,
+      horaRecebimento = this.horaRecebimento,
     )
     saci.autorizaDevCliente(auto)
   }

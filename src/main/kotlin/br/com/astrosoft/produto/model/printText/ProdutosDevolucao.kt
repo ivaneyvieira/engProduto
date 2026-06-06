@@ -32,12 +32,28 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
   }
 
   override fun printSumary(bean: EntradaDevCliProList?) {
+    val entregueNome = bean?.userEntregaName ?: ""
+    val recebidoNome = bean?.userRecebimentoName ?: ""
+
     writeln("")
-    writeln("DOCUMENTO NAO FISCAL", center = true)
+    writeln("")
+    writeln("DOCUMENTO NÃO FISCAL", center = true)
     writeln("")
     writeln("")
-    writeln("_________________________________", center = true)
-    writeln("Conferido", center = true)
+    writeln("____________________________________", center = true)
+    if (entregueNome.isNotBlank()) {
+      writeln(entregueNome ?: "", center = true)
+    }
+    writeln("Separado/Entregue", center = true)
+    writeln("${bean?.dataEntrega.format()} - ${bean?.horaEntrega.format("HH:mm")}", center = true)
+    writeln("")
+    writeln("")
+    writeln("____________________________________", center = true)
+    if (recebidoNome.isNotBlank()) {
+      writeln(recebidoNome ?: "", center = true)
+    }
+    writeln("Recebido", center = true)
+    writeln("${bean?.dataRecebimento.format()} - ${bean?.horaRecebimento.format("HH:mm")}", center = true)
     writeln("")
     writeln("")
   }

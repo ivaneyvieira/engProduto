@@ -7,6 +7,8 @@ import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
+import java.time.LocalDate
+import java.time.LocalTime
 
 class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -39,7 +41,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    val countLog = produtos.map { it.localizacao ?: "" }.size
+    val countLog = produtos.map { it.localizacao ?: "" }.distinct().size
     if (countLog != 1) {
       fail("Foi seleciona produtos de mais de uma localização")
     }
@@ -47,6 +49,9 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
     subView.autorizaEntrega(produtos) { user, produtos ->
       produtos.forEach { produto ->
         produto.userEntregaNo = user.no
+        produto.dataEntrega = LocalDate.now()
+        produto.horaEntrega = LocalTime.now()
+
         produto.salvaAutorizacao()
       }
       updateView()
@@ -59,7 +64,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Nenhum produto selecionado")
     }
 
-    val countLog = produtos.map { it.localizacao ?: "" }.size
+    val countLog = produtos.map { it.localizacao ?: "" }.distinct().size
     if (countLog != 1) {
       fail("Foi seleciona produtos de mais de uma localização")
     }
@@ -74,6 +79,8 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
     subView.autorizaRecebimento(produtos) { user, produtos ->
       produtos.forEach { produto ->
         produto.userRecebimentoNo = user.no
+        produto.dataRecebimento = LocalDate.now()
+        produto.horaRecebimento = LocalTime.now()
         produto.salvaAutorizacao()
       }
       updateView()

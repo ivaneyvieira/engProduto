@@ -828,7 +828,11 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", auto.prdno)
       addOptionalParameter("grade", auto.grade)
       addOptionalParameter("userEntrega", auto.userEntrega)
+      addOptionalParameter("dataEntrega", auto.dataEntrega.toSaciDate())
+      addOptionalParameter("horaEntrega", auto.horaEntrega?.toSecondOfDay() ?: 0)
       addOptionalParameter("userRecebimento", auto.userRecebimento)
+      addOptionalParameter("dataRecebimento", auto.dataRecebimento.toSaciDate())
+      addOptionalParameter("horaRecebimento", auto.horaRecebimento?.toSecondOfDay() ?: 0)
     }
   }
 
