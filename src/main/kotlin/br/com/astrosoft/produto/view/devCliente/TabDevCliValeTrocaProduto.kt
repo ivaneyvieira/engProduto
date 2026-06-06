@@ -16,6 +16,8 @@ import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.asc
+import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -114,6 +116,8 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
     columnGrid(EntradaDevCliProList::data, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
+
+    this.sort(EntradaDevCliProList::localizacao.asc, EntradaDevCliProList::descricao.asc)
   }
 
   override fun filtro(): FiltroEntradaDevCliProList {
