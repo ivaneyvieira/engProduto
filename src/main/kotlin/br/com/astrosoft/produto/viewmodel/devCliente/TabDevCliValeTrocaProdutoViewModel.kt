@@ -92,6 +92,23 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
     return UserSaci.userLogin(login, senha)
   }
 
+  fun desfazerAutorizacao() = viewModel.exec {
+    val produtos: List<EntradaDevCliProList> = subView.produtosSelecionados()
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    produtos.forEach { produto ->
+      produto.userEntregaNo = 0
+      produto.userRecebimentoNo = 0
+      produto.dataEntrega = null
+      produto.dataRecebimento = null
+      produto.horaEntrega = null
+      produto.horaRecebimento = null
+      produto.salvaAutorizacao()
+    }
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliValeTrocaProduto
 }

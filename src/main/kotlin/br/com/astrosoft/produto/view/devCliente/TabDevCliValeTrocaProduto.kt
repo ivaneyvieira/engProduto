@@ -87,6 +87,15 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
         viewModel.imprimeProdutos()
       }
     }
+
+    button("Desfazer Ass") {
+      val user = AppConfig.userLogin() as? UserSaci
+      this.isVisible = user?.admin == true
+      icon = VaadinIcon.PRINT.create()
+      onClick {
+        viewModel.desfazerAutorizacao()
+      }
+    }
   }
 
   override fun Grid<EntradaDevCliProList>.gridPanel() {
