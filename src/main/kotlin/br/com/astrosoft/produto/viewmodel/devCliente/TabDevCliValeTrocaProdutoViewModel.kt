@@ -47,6 +47,11 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Foi seleciona produtos de mais de uma localização")
     }
 
+    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    if (countTipo != 1) {
+      fail("Foi seleciona produtos de mais de um tipo")
+    }
+
     subView.autorizaEntrega(produtos) { user, produtos ->
       produtos.forEach { produto ->
         produto.userEntregaNo = user.no
@@ -68,6 +73,11 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
     val countLog = produtos.map { it.localizacao ?: "" }.distinct().size
     if (countLog != 1) {
       fail("Foi seleciona produtos de mais de uma localização")
+    }
+
+    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    if (countTipo != 1) {
+      fail("Foi seleciona produtos de mais de um tipo")
     }
 
     if (produtos.any {

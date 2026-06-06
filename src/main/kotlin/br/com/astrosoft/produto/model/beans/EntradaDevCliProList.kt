@@ -53,9 +53,12 @@ data class EntradaDevCliProList(
     }
   }
 
+  val produtoTipoP: Boolean
+    get() = this.tipoPrd?.endsWith(" P") == true
+
   val tipoNotaPre: String
     get() {
-      val tipoPrdPre = if (this.tipoPrd?.endsWith(" P") == true) " P" else ""
+      val tipoPrdPre = if (this.produtoTipoP) " P" else ""
       return "${tipoNotaPre()} $tipoPrdPre"
     }
 
