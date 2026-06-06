@@ -25,6 +25,10 @@ data class EntradaDevCliProList(
   var tipoQtd: Int?,
   var tipoQtdEfetiva: Int?,
   var localizacao: String?,
+  var userEntregaNo: Int?,
+  var userEntrega: String?,
+  var userRecebimentoNo: Int?,
+  var userRecebimento: String?
 ) {
   fun tipoPrdTratado(): String {
     val temProduto = this.tipoPrd?.endsWith(" P") == true
@@ -63,6 +67,17 @@ data class EntradaDevCliProList(
 
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
+
+  fun salvaAutorizacao(){
+    val auto = AutorizaDevCliente(
+      invno = this.ni ?: return,
+      prdno = this.prdno ?: return,
+      grade = this.grade ?: return,
+      userEntrega = this.userEntregaNo ?: return,
+      userRecebimento = this.userRecebimentoNo ?: return
+    )
+    saci.autorizaDevCliente(auto)
+  }
 
   companion object {
     fun findAll(filtro: FiltroEntradaDevCliProList): List<EntradaDevCliProList> {

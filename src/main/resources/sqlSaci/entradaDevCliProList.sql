@@ -13,8 +13,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT A.storeno AS storeno, A.prdno AS prdno, A.grade AS grade, MID(TRIM(A.localizacao), 1, 4) AS localizacao
-FROM
-  sqldados.prdAdicional AS A;
+FROM sqldados.prdAdicional AS A;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -72,8 +71,7 @@ FROM
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
        I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
-GROUP BY I.codLoja, X.prdno, X.grade, I.observacao
-ORDER BY descricao, grade, codigo;
+GROUP BY I.invno, I.codLoja, X.prdno, X.grade, I.observacao;
 
 /************************************************************************/
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
@@ -113,8 +111,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v3 (storeno, obsReg)
 )
 SELECT invno, storeno, date, nfNfno, nfStoreno, nfNfse, s1, s2, l2, CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
-FROM
-  sqldados.inv AS I
+FROM sqldados.inv AS I
 WHERE (I.date = :data)
   AND (I.storeno = :loja)
   AND I.bits & POW(2, 4) = 0
@@ -151,18 +148,15 @@ CREATE TEMPORARY TABLE T_NI
   INDEX (loja, pdv, transacao)
 )
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI1
+FROM T_NI1
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI2
+FROM T_NI2
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI3;
+FROM T_NI3;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
@@ -193,8 +187,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
@@ -241,7 +234,6 @@ GROUP BY V.storeno, V.pdvno, V.xano;
 
 /****************************************************************************************/
 
-
 DROP TEMPORARY TABLE IF EXISTS T_PRODUTOS;
 CREATE TEMPORARY TABLE T_PRODUTOS
 SELECT data,
@@ -282,14 +274,14 @@ WHERE ((TRIM(MID(R.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:local
 SELECT data,
        codLoja,
        loja,
-       prdno,
+       P.prdno,
        userName,
        userLogin,
        autorizacaoName,
        autorizacaoLogin,
        codigo,
        descricao,
-       grade,
+       P.grade,
        quantidade,
        observacao,
        tipo,
@@ -299,10 +291,18 @@ SELECT data,
        ni,
        nota,
        valor,
-       localizacao
+       localizacao,
+       UE.no                                                                                            AS userEntregaNo,
+       IFNULL(UE.login, '')                                                                             AS userEntrega,
+       UR.no                                                                                            AS userRecebimentoNo,
+       IFNULL(UR.login, '')                                                                             AS userRecebimento
 FROM
-  T_PRODUTOS AS P
+  T_PRODUTOS                                 AS P
+    LEFT JOIN sqldados.devClienteAutorizacao AS D
+              ON D.invno = ni AND D.prdno = P.prdno AND D.grade = P.grade
+    LEFT JOIN sqldados.users                    UE
+              ON UE.no = D.userEntrega
+    LEFT JOIN sqldados.users                 AS UR
+              ON UR.no = D.userRecebimento
 GROUP BY ni, data, codLoja, loja, prdno, grade
 ORDER BY data, codLoja, loja, prdno, grade
-
-

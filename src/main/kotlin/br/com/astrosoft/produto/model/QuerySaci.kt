@@ -821,16 +821,17 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  /*
-    fun marcaSeparado(storeno: Int, ordno: Int, marca: String) {
-      val sql = "/sqlSaci/marcaSeparado.sql"
-      script(sql) {
-        addOptionalParameter("storeno", storeno)
-        addOptionalParameter("ordno", ordno)
-        addOptionalParameter("marca", marca)
-      }
+  fun autorizaDevCliente(auto: AutorizaDevCliente){
+    val sql = "/sqlSaci/devClienteSave.sql"
+    script(sql){
+      addOptionalParameter("invno", auto.invno)
+      addOptionalParameter("prdno", auto.prdno)
+      addOptionalParameter("grade", auto.grade)
+      addOptionalParameter("userEntrega", auto.userEntrega)
+      addOptionalParameter("userRecebimento", auto.userRecebimento)
     }
-  */
+  }
+
   fun ativaDataHoraImpressao(storeno: Int, ordno: Int, data: LocalDate?, hora: LocalTime?, userno: Int) {
     val sql = "/sqlSaci/ativaDataHoraImpressao.sql"
     script(sql) {

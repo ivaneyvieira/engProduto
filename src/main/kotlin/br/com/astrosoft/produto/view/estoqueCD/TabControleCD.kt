@@ -73,7 +73,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -82,7 +81,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtProduto = integerField("Produto") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -91,7 +89,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -100,7 +97,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -109,7 +105,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }
@@ -118,7 +113,6 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
           addValueChangeListener {
             viewModel.updateView()
           }

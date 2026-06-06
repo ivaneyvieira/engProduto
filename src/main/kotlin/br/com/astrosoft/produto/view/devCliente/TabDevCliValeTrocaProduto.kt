@@ -83,6 +83,8 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
     columnGrid(EntradaDevCliProList::tipoQtdEfetiva, header = "Quantidade")
     columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
     columnGrid(EntradaDevCliProList::tipoNotaPre, header = "Tipo")
+    columnGrid(EntradaDevCliProList::userEntrega, header = "Entregador")
+    columnGrid(EntradaDevCliProList::userRecebimento, header = "Recebedor")
     columnGrid(EntradaDevCliProList::ni, header = "NI")
     columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
     columnGrid(EntradaDevCliProList::data, header = "Data")
