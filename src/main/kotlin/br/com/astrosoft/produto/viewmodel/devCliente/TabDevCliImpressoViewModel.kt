@@ -52,6 +52,12 @@ class TabDevCliImpressoViewModel(val viewModel: DevClienteViewModel) {
     if (produtos.isEmpty()) {
       fail("Não há produtos selecionados")
     }
+    if (produtos.any { (it.userEntregaNo ?: 0) == 0 }) {
+      fail("Tem Produto não entregue")
+    }
+    if (produtos.any { (it.userRecebimentoNo ?: 0) == 0 }) {
+      fail("Tem Produto não recebido")
+    }
     val relatorio = ProdutosDevolucao("Devolucoes de Clientes")
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
