@@ -73,8 +73,8 @@ data class EntradaDevCliProList(
       invno = this.ni ?: return,
       prdno = this.prdno ?: return,
       grade = this.grade ?: return,
-      userEntrega = this.userEntregaNo ?: return,
-      userRecebimento = this.userRecebimentoNo ?: return
+      userEntrega = this.userEntregaNo ?: 0,
+      userRecebimento = this.userRecebimentoNo ?: 0
     )
     saci.autorizaDevCliente(auto)
   }

@@ -134,7 +134,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
 
             if (validacao) {
-              val formAutoriza = FormAutorizaNota()
+              val formAutoriza = FormAutoriza()
               DialogHelper.showForm(caption = "Autoriza Devolução", form = formAutoriza) {
                 viewModel.autorizaNotaVenda(nota, produtos, formAutoriza.login, formAutoriza.senha)
               }

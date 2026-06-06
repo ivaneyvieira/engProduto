@@ -6,7 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.component.textfield.TextField
 
-class FormAutorizaNota : FormLayout() {
+class FormAutoriza() : FormLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
 

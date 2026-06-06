@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -10,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.reposicao.FormAutoriza
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
@@ -65,6 +67,20 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
       }
     }
 
+    button("Autoriza Entrega") {
+      icon = VaadinIcon.SIGN_IN.create()
+      onClick {
+        viewModel.autorizaEntrega()
+      }
+    }
+
+    button("Autoriza Recebimento") {
+      icon = VaadinIcon.SIGN_IN.create()
+      onClick {
+        viewModel.autorizaRecebimento()
+      }
+    }
+
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
@@ -112,6 +128,40 @@ class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewMode
 
   override fun produtosSelecionados(): List<EntradaDevCliProList> {
     return this.itensSelecionados()
+  }
+
+  override fun autorizaEntrega(
+    produtos: List<EntradaDevCliProList>,
+    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+  ) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entrega", form = form) {
+      val login = form.login
+      val senha = form.senha
+      val user = viewModel.validaLogin(login, senha)
+      if (user == null) {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      } else {
+        block(user, produtos)
+      }
+    }
+  }
+
+  override fun autorizaRecebimento(
+    produtos: List<EntradaDevCliProList>,
+    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+  ) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Recebimento", form = form) {
+      val login = form.login
+      val senha = form.senha
+      val user = viewModel.validaLogin(login, senha)
+      if (user == null) {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      } else {
+        block(user, produtos)
+      }
+    }
   }
 
   override fun isAuthorized(): Boolean {

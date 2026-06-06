@@ -156,7 +156,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   }
 
   override fun formAutoriza(nota: EntradaDevCli) {
-    val form = FormAutorizaNota()
+    val form = FormAutoriza()
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
