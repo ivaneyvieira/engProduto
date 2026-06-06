@@ -32,6 +32,29 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Não há produtos selecionados")
     }
 
+    if (produtos.any { it.userEntregaNo == 0 || it.userEntregaNo == null }) {
+      fail("Possui produtos com entrega não autorizada")
+    }
+
+    if (produtos.any { it.userRecebimentoNo == 0 || it.userRecebimentoNo == null}) {
+      fail("Possui produtos com recebimento não autorizada")
+    }
+
+    val countEntregador = produtos.map { it.userEntregaNo ?: 0 }.distinct().size
+    if(countEntregador != 1) {
+      fail("Possui mais de um entregador")
+    }
+
+    val countRecebedor = produtos.map { it.userRecebimentoNo ?: 0 }.distinct().size
+    if(countRecebedor != 1) {
+      fail("Possui mais de um recebedor")
+    }
+
+    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    if (countTipo != 1) {
+      fail("Foi seleciona produtos de mais de um tipo")
+    }
+
     val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
@@ -52,7 +75,7 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
 
-    if(produtos.any { it.userEntregaNo != 0 }){
+    if (produtos.any { it.userEntregaNo != 0 && it.userEntregaNo != null }) {
       fail("Tem produto que já foi entregue")
     }
 
@@ -91,11 +114,9 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Não pode receber produto não entregue")
     }
 
-
-    if(produtos.any { it.userRecebimentoNo != 0 }){
+    if (produtos.any { it.userRecebimentoNo != 0 && it.userRecebimentoNo != null }) {
       fail("Tem produto que já foi recebido")
     }
-
 
     subView.autorizaRecebimento(produtos) { user, produtos ->
       produtos.forEach { produto ->
