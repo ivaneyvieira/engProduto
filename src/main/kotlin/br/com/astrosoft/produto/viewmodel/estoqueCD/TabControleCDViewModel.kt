@@ -9,10 +9,6 @@ import br.com.astrosoft.produto.model.beans.ProdutoKardex
 import br.com.astrosoft.produto.model.planilha.PlanilhaProdutoEstoque
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLoja
 import br.com.astrosoft.produto.model.printText.PrintProdutosEstoqueLojaConf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
@@ -27,22 +23,37 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
+  /*
+    fun updateView() = viewModel.exec {
+      val view = viewModel.view
+      val filtro: FiltroProdutoEstoque = subView.filtro()
+      CoroutineScope(Dispatchers.IO).launch {
+        try {
+          val produtos = withContext(Dispatchers.IO) {
+            ProdutoEstoque.findProdutoEstoque(filtro)
+          }
+          view.execUI {
+            subView.updateProduto(produtos)
+          }
+        } catch (e: Exception) {
+          view.execUI {
+            view.showError(e.message ?: "Erro desconhecido")
+          }
+        }
+      }
+    }*/
 
   fun updateView() = viewModel.exec {
     val view = viewModel.view
     val filtro: FiltroProdutoEstoque = subView.filtro()
-    CoroutineScope(Dispatchers.IO).launch {
-      try {
-        val produtos = withContext(Dispatchers.IO) {
-          ProdutoEstoque.findProdutoEstoque(filtro)
-        }
-        view.execUI {
-          subView.updateProduto(produtos)
-        }
-      } catch (e: Exception) {
-        view.execUI {
-          view.showError(e.message ?: "Erro desconhecido")
-        }
+    try {
+      val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
+      view.execUI {
+        subView.updateProduto(produtos)
+      }
+    } catch (e: Exception) {
+      view.execUI {
+        view.showError(e.message ?: "Erro desconhecido")
       }
     }
   }
