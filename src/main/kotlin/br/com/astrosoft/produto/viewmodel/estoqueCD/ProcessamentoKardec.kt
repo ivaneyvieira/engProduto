@@ -19,7 +19,9 @@ object ProcessamentoKardec {
   fun updateSaldoKardec(produto: ProdutoEstoque) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    val listaKardec = updateKardex(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault())
+    val listaKardec = updateKardex(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault()).filter {
+      it.loja == loja
+    }
     produto.dataUpdate = LocalDate.now()
     val listaOrdenada = listaKardec.ajustaOrdem()
     produto.kardec = listaOrdenada.lastOrNull()?.saldo ?: 0
