@@ -93,10 +93,3 @@ WHERE (O.paymno IN (431, 432, 433))
        IFNULL(ER.name, '') LIKE @PESQUISA_LIKE OR @PESQUISA = '')
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade
 HAVING multAcerto != 0
-/*
-
-select storeno, ordno, date, prdno, grade from sqldados.eord AS O
-         inner join sqldados.eoprd as P
-         USING(storeno, ordno)
- WHERE (O.paymno IN (431, 432, 433))
-*/

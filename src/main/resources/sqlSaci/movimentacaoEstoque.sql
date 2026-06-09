@@ -83,10 +83,10 @@ WHERE noRota IN (0, 1)
 INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, ljDoc, doc, nfEnt, tipo, observacao, vencimento, qtde,
                                   saldo, userLogin, recLogin, entLogin)
 SELECT CASE noRota
-         WHEN 42 THEN 2
-         WHEN 43 THEN 3
-         WHEN 45 THEN 5/*4*/
-         WHEN 48 THEN 8/*5*/
+         WHEN 42 THEN 4
+         WHEN 43 THEN 4
+         WHEN 45 THEN 4
+         WHEN 48 THEN 4
                  ELSE numloja
        END                                                         AS loja,
        prdno,
@@ -115,7 +115,7 @@ FROM
               ON ER.no = E.noRecebido
     LEFT JOIN sqldados.users AS EE
               ON EE.no = E.noEntregue
-WHERE noRota IN (42, 43, 45, 48);
+WHERE E.noRota IN (42, 43, 45, 48);
 
 SELECT loja,
        prdno,
