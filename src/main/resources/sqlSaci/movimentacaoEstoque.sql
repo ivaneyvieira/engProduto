@@ -15,11 +15,10 @@ SELECT numero,
        noRecebido,
        noGravado,
        noRota
-FROM
-  sqldados.produtoMovimentacao
+FROM sqldados.produtoMovimentacao
 WHERE prdno = :prdno
   AND grade = :grade
-  AND (numloja = :loja OR :loja = 4)
+  AND (numloja = :loja OR numloja = 4)
   AND data >= :dataInicial
   AND noGravado > 0
   AND noEntregue > 0
@@ -29,7 +28,9 @@ WHERE prdno = :prdno
 /*Loado da loja*/
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
-(tipo varchar(30))
+(
+  tipo varchar(30)
+)
 SELECT 4                                                           AS loja,
        prdno,
        grade,
@@ -88,27 +89,64 @@ SELECT CASE noRota
          WHEN 45 THEN 4
          WHEN 48 THEN 4
                  ELSE numloja
-       END                                                         AS loja,
+       END                          AS loja,
        prdno,
        grade,
        data,
-       numloja                                                     AS ljDoc,
-       CONCAT(numero, '/', numloja)                                AS doc,
-       ''                                                          AS nfEnt,
+       numloja                      AS ljDoc,
+       CONCAT(numero, '/', numloja) AS doc,
+       ''                           AS nfEnt,
        CASE noRota
          WHEN 42 THEN 'REPOSICAO_CDLJ2'
          WHEN 43 THEN 'REPOSICAO_CDLJ3'
          WHEN 45 THEN 'REPOSICAO_CDLJ5'
          WHEN 48 THEN 'REPOSICAO_CDLJ8'
                  ELSE CONCAT('REPOSICAO_CDLJ', numloja)
-       END                                                         AS tipo,
-       IF(noRota = 1, CONCAT('da\tLoja\t', numero), 'para\to\tCD') AS observacao,
-       NULL                                                        AS vencimento,
-       IF(noRota = 1, movimentacao, -movimentacao)                 AS qtde,
-       0                                                           AS saldo,
-       NULL                                                        AS userLogin,
-       ER.login                                                    AS recLogin,
-       EE.login                                                    AS entLogin
+       END                          AS tipo,
+       ''                           AS observacao,
+       NULL                         AS vencimento,
+       -movimentacao                AS qtde,
+       0                            AS saldo,
+       NULL                         AS userLogin,
+       ER.login                     AS recLogin,
+       EE.login                     AS entLogin
+FROM
+  T_MOVIMENTACAO_ESTOQUE     AS E
+    LEFT JOIN sqldados.users AS ER
+              ON ER.no = E.noRecebido
+    LEFT JOIN sqldados.users AS EE
+              ON EE.no = E.noEntregue
+WHERE E.noRota IN (42, 43, 45, 48);
+
+INSERT INTO T_MOVIMENTACAO_KARDEC(loja, prdno, grade, data, ljDoc, doc, nfEnt, tipo, observacao, vencimento, qtde,
+                                  saldo, userLogin, recLogin, entLogin)
+SELECT CASE noRota
+         WHEN 42 THEN 2
+         WHEN 43 THEN 3
+         WHEN 45 THEN 5
+         WHEN 48 THEN 8
+                 ELSE numloja
+       END                          AS loja,
+       prdno,
+       grade,
+       data,
+       numloja                      AS ljDoc,
+       CONCAT(numero, '/', numloja) AS doc,
+       ''                           AS nfEnt,
+       CASE noRota
+         WHEN 42 THEN 'REPOSICAO_CDLJ2'
+         WHEN 43 THEN 'REPOSICAO_CDLJ3'
+         WHEN 45 THEN 'REPOSICAO_CDLJ5'
+         WHEN 48 THEN 'REPOSICAO_CDLJ8'
+                 ELSE CONCAT('REPOSICAO_CDLJ', numloja)
+       END                          AS tipo,
+       ''                           AS observacao,
+       NULL                         AS vencimento,
+       movimentacao                 AS qtde,
+       0                            AS saldo,
+       NULL                         AS userLogin,
+       ER.login                     AS recLogin,
+       EE.login                     AS entLogin
 FROM
   T_MOVIMENTACAO_ESTOQUE     AS E
     LEFT JOIN sqldados.users AS ER
@@ -132,7 +170,5 @@ SELECT loja,
        userLogin,
        recLogin,
        entLogin
-FROM
-  T_MOVIMENTACAO_KARDEC
-WHERE loja = :loja
+FROM T_MOVIMENTACAO_KARDEC
 
