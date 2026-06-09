@@ -113,7 +113,7 @@ data class FiltroMovimentacao(
   val status: EStatusMovimentacao = EStatusMovimentacao.TODOS,
 )
 
-fun List<ProdutoMovimentacao>.agrupa(): List<Movimentacao> {
+fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull { mapPedido ->
     val itensProduto = mapPedido.value.filter {

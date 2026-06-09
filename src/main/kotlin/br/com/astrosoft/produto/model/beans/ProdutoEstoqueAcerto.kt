@@ -163,7 +163,7 @@ fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): 
   }
 }
 
-fun List<ProdutoEstoqueAcerto>.agrupa(): List<EstoqueAcerto> {
+fun List<ProdutoEstoqueAcerto>.agrupaPgto(): List<EstoqueAcerto> {
   val grupos = this.groupBy { "${it.numloja}-${it.numero}" }
   return grupos.mapNotNull { mapAcerto ->
     val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null

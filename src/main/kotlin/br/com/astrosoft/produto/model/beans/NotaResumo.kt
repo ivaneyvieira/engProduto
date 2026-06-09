@@ -55,7 +55,7 @@ class NotaResumo(
 
   companion object {
     fun findAll(filtro: FiltroNotaResumo): List<NotaResumo> {
-      return saci.findNotaResumo(filtro).agrupa(filtro)
+      return saci.findNotaResumo(filtro).agrupaPgto(filtro)
     }
   }
 }
@@ -69,7 +69,7 @@ data class FiltroNotaResumo(
   val dataFinal: LocalDate?,
 )
 
-fun List<NotaResumo>.agrupa(filtro: FiltroNotaResumo): List<NotaResumo> {
+fun List<NotaResumo>.agrupaPgto(filtro: FiltroNotaResumo): List<NotaResumo> {
   val grupo = this.groupBy { it.grupo(filtro) }
   val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->

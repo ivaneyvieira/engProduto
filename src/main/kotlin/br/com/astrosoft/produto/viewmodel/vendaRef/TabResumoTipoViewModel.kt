@@ -4,9 +4,9 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaResumoPgto
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaResumoPgto
-import br.com.astrosoft.produto.model.planilha.PlanilhaResumoPgto
+import br.com.astrosoft.produto.model.planilha.PlanilhaResumoTipo
 
-class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
+class TabResumoTipoViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -23,7 +23,7 @@ class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
   }
 
   fun geraPlanilha(vendas: List<NotaResumoPgto>): ByteArray {
-    val planilha = PlanilhaResumoPgto()
+    val planilha = PlanilhaResumoTipo()
     return planilha.write(vendas)
   }
 
@@ -35,10 +35,10 @@ class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabResumoPgto
+    get() = viewModel.view.tabResumoTipo
 }
 
-interface ITabResumoPgto : ITabView {
+interface ITabResumoTipo : ITabView {
   fun filtro(): FiltroNotaResumoPgto
   fun updateNotas(notas: List<NotaResumoPgto>)
   fun itensNotasSelecionados(): List<NotaResumoPgto>

@@ -200,6 +200,7 @@ class UserSaci : IUser {
   var tabResumoPgto by DelegateAuthorized3(167)
   var tabResumoCartao by DelegateAuthorized3(168)
   var ajusteEst by DelegateAuthorized3(169)
+  var tabResumoTipo by DelegateAuthorized3(170)
 
   //Locais
   private var localEstoque: String?
@@ -588,11 +589,12 @@ class UserSaci : IUser {
     }
 
   var vendaRef: Boolean
-    get() = tabVendaRef || tabResumo || tabResumoPgto || tabResumoCartao || admin
+    get() = tabVendaRef || tabResumo || tabResumoPgto || tabResumoTipo || tabResumoCartao || admin
     set(value) {
       tabVendaRef = value
       tabResumo = value
       tabResumoPgto = value
+      tabResumoTipo = value
       tabResumoCartao = value
     }
 

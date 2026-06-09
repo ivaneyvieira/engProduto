@@ -10,7 +10,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.monthPicker
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoPgtoViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoTipoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.getColumnBy
@@ -30,13 +30,12 @@ import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.LocalDate
 import java.time.YearMonth
 
-class TabResumoTipo(val viewModel: TabResumoPgtoViewModel) :
+class TabResumoTipo(val viewModel: TabResumoTipoViewModel) :
   TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
   private lateinit var cmbData: Select<AgrupaData>
 
-  private lateinit var chkParcela: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -90,22 +89,10 @@ class TabResumoTipo(val viewModel: TabResumoPgtoViewModel) :
             }
           }
         }
-        chkParcela = checkBox("Agrupa Pz M") {
-          addValueChangeListener {
-            if (it.isFromClient) {
-              viewModel.updateView()
-              val visivel = !(it.value ?: false)
-              gridPanel.getColumnBy(NotaResumoPgto::mult).isVisible = visivel
-              gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
-            }
-          }
-        }
         chkTipoPagamento = checkBox("Agrupa Tipo Pgto") {
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
-              // val visivel = (it.value ?: false)
-              // gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = visivel
             }
           }
         }
@@ -281,26 +268,16 @@ class TabResumoTipo(val viewModel: TabResumoPgtoViewModel) :
       this.sortProperty = NotaResumoPgto::data
     }
     columnGrid(NotaResumoPgto::tipoPgto, header = "Tipo Pgto")
-    columnGrid(NotaResumoPgto::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaResumoPgto::mediaPrazo, header = "Pz M", pattern = "#,##0.##")
 
-    columnGrid(NotaResumoPgto::valorFin, header = "Fin")
     columnGrid(NotaResumoPgto::valorTipo, header = "Valor Total")
     columnGrid(NotaResumoPgto::perVenda, header = "% Venda")
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0) }
-      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) } /
-                          list.sumOf { t -> t.valorTipo ?: 0.00 }
-      val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0) }
       val totalPerVenda = list.sumOf { t -> (t.perVenda ?: 0.0) }
-      val mediaMult =       totalValorTipo / (totalValorTipo - totalFin)
-      getColumnBy(NotaResumoPgto::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
       getColumnBy(NotaResumoPgto::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
-      getColumnBy(NotaResumoPgto::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
       getColumnBy(NotaResumoPgto::perVenda).setFooter(Html("<b><font size=4>${totalPerVenda.format()}</font></b>"))
-      getColumnBy(NotaResumoPgto::mult).setFooter(Html("<b><font size=4>${mediaMult.format("#,##0.0000")}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
       this.recalculateColumnWidths()
@@ -325,7 +302,7 @@ class TabResumoTipo(val viewModel: TabResumoPgtoViewModel) :
     return FiltroNotaResumoPgto(
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
-      agrupaParcelas = chkParcela.value ?: false,
+      agrupaParcelas = true,
       agrupaTipoPagamento = chkTipoPagamento.value ?: false,
       agrupaDatas = grupo,
       pesquisa = edtPesquisa.value ?: "",
@@ -345,11 +322,11 @@ class TabResumoTipo(val viewModel: TabResumoPgtoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.tabResumoPgto == true
+    return username?.tabResumoTipo == true
   }
 
   override val label: String
-    get() = "Resumo Pgto"
+    get() = "Resumo Tipo"
 
   override fun updateComponent() {
     viewModel.updateView()

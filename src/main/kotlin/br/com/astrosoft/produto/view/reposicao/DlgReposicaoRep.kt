@@ -268,7 +268,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
   fun update() {
     val produtos = produtosMovimentacoes()
     gridDetail.setItems(produtos)
-    val mov = produtos.agrupa().firstOrNull()
+    val mov = produtos.agrupaPgto().firstOrNull()
     if (mov != null) {
       movimentacao.noEntregue = mov.noEntregue
       movimentacao.noRecebido = mov.noRecebido
@@ -280,7 +280,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
 
   private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {
     val produtos = movimentacao.findProdutos()
-    val produtosAgrupados = produtos.agrupa().firstOrNull()
+    val produtosAgrupados = produtos.agrupaPgto().firstOrNull()
     if (produtosAgrupados != null) {
       movimentacao.noEntregue = produtosAgrupados.noEntregue
       movimentacao.entregue = produtosAgrupados.entregue

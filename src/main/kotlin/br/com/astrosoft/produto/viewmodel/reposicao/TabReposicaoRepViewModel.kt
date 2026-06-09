@@ -30,7 +30,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val user = AppConfig.userLogin()
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro)
-      .agrupa()
+      .agrupaPgto()
       .filter {
         it.noGravado > 0
       }
@@ -123,7 +123,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Selecione uma loja")
     }
     val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido")
-    val pedido = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido novo")
+    val pedido = listOf(novoPedido).agrupaPgto().firstOrNull() ?: fail("Não foi possível criar o pedido novo")
     subView.adicionaPedido(pedido)
     subView.openProduto(pedido)
   }

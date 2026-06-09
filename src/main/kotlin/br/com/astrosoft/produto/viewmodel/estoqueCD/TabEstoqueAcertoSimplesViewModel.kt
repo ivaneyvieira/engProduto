@@ -29,7 +29,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
 
     val filtro = subView.filtro()
     val listaApp = ProdutoEstoqueAcerto.findAll(filtro)
-    val produtos = listaApp.agrupa().sortedBy { it.numero }.filter {
+    val produtos = listaApp.agrupaPgto().sortedBy { it.numero }.filter {
       if (user == null) {
         return@filter true
       }
@@ -168,7 +168,7 @@ class TabEstoqueAcertoSimplesViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Selecione uma loja")
     }
     val novoPedido = createPedido(numLoja) ?: fail("Não foi possível criar o pedido de acerto")
-    val acerto = listOf(novoPedido).agrupa().firstOrNull() ?: fail("Não foi possível criar o pedido de acerto")
+    val acerto = listOf(novoPedido).agrupaPgto().firstOrNull() ?: fail("Não foi possível criar o pedido de acerto")
     subView.adicionaAcerto(acerto)
   }
 

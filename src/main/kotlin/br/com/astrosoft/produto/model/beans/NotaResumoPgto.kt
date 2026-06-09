@@ -80,7 +80,7 @@ class NotaResumoPgto(
           val filtroValor = it.tipoPgto?.startsWith("Conta") ?: true
           filtroValor.not()
         }
-      }.agrupa(filtro)
+      }.agrupaPgto(filtro)
     }
   }
 }
@@ -97,7 +97,7 @@ data class FiltroNotaResumoPgto(
   val contaC: Boolean
 )
 
-fun List<NotaResumoPgto>.agrupa(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
+fun List<NotaResumoPgto>.agrupaPgto(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
   val grupo = this.groupBy { it.grupo(filtro) }
   val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->

@@ -21,6 +21,7 @@ class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val tabResumo = TabResumo(viewModel.tabResumoViewModel)
   override val tabResumoCartao = TabResumoCartao(viewModel.tabResumoCartaoViewModel)
   override val tabResumoPgto = TabResumoPgto(viewModel.tabResumoPgtoViewModel)
+  override val tabResumoTipo = TabResumoTipo(viewModel.tabResumoTipoViewModel)
   override val tabVendaRefUsr = TabVendaRefUsr(viewModel.tabVendaRefUsrViewModel)
 
   override fun isAccept(): Boolean {
