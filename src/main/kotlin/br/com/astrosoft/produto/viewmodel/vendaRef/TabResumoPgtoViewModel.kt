@@ -18,7 +18,7 @@ class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaResumoPgto.findAll(filtro)
+    val notas = NotaResumoPgto.findAllPgto(filtro)
     subView.updateNotas(notas)
   }
 

@@ -72,8 +72,30 @@ class NotaResumoPgto(
     return "$grupoLoja-$grupoParcela"
   }
 
+  fun grupo(filtro: FiltroNotaResumoTipo): String {
+    val agrupaLojas = filtro.agrupaLojas
+    val agrupaTipoPagamento = filtro.agrupaTipoPagamento
+    val agrupaDatas = filtro.agrupaDatas
+
+    val dataAgrupada = when (agrupaDatas) {
+      AgrupaData.DIA -> data?.format("yyyy-MM-dd") ?: ""
+      AgrupaData.MES -> data?.format("yyyy-MM") ?: ""
+      AgrupaData.ANO -> data?.format("yyyy") ?: ""
+    }
+
+    val grupoLoja = if (agrupaLojas) dataAgrupada
+    else "$loja-$dataAgrupada"
+
+    val grupoParcela = if (agrupaTipoPagamento)
+      ""
+    else
+      tipoPgto
+
+    return "$grupoLoja-$grupoParcela"
+  }
+
   companion object {
-    fun findAll(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
+    fun findAllPgto(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
       return saci.findNotaResumoPgto(filtro).filter {
         if (filtro.contaC) true
         else {
@@ -81,6 +103,16 @@ class NotaResumoPgto(
           filtroValor.not()
         }
       }.agrupaPgto(filtro)
+    }
+
+    fun findAllTipo(filtro: FiltroNotaResumoTipo): List<NotaResumoPgto> {
+      return saci.findNotaResumoPgto(filtro).filter {
+        if (filtro.contaC) true
+        else {
+          val filtroValor = it.tipoPgto?.startsWith("Conta") ?: true
+          filtroValor.not()
+        }
+      }.agrupaTipo(filtro)
     }
   }
 }
@@ -97,7 +129,78 @@ data class FiltroNotaResumoPgto(
   val contaC: Boolean
 )
 
+data class FiltroNotaResumoTipo(
+  val loja: Int,
+  val agrupaLojas: Boolean,
+  val agrupaTipoPagamento: Boolean,
+  val agrupaDatas: AgrupaData,
+  val pesquisa: String,
+  val dataInicial: LocalDate?,
+  val dataFinal: LocalDate?,
+  val contaC: Boolean
+)
+
 fun List<NotaResumoPgto>.agrupaPgto(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
+  val grupo = this.groupBy { it.grupo(filtro) }
+  val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
+  return grupo.values.mapNotNull { ent ->
+    val first = ent.firstOrNull() ?: return@mapNotNull null
+    val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
+
+    val dataAgrupada = when (filtro.agrupaDatas) {
+      AgrupaData.DIA -> first.data?.format("dd/MM/yyyy") ?: ""
+      AgrupaData.MES -> first.data?.format("MM/yyyy") ?: ""
+      AgrupaData.ANO -> first.data?.format("yyyy") ?: ""
+    }
+
+    val agrupaTipoPagamento = filtro.agrupaTipoPagamento
+    val mediaPrazo = if (agrupaTipoPagamento) {
+      val totalTipo = ent.sumOf { it.valorTipo ?: 0.0 }
+      val totalItens = ent.sumOf { (it.mediaPrazo ?: 0.00) * (it.valorTipo ?: 0.00) }
+      totalItens / totalTipo
+    } else {
+      (first.mediaPrazo ?: 0.00) * 1.00
+    }
+    val multMed: Double? = if (agrupaTipoPagamento) {
+      val totalTipo = ent.sumOf { it.valorTipo ?: 0.0 }
+      val totalFin = ent.sumOf { it.valorFin ?: 0.0 }
+      totalTipo / (totalTipo - totalFin)
+    } else {
+      first.mult ?: 0.00
+    }
+
+    NotaResumoPgto(
+      loja = if (filtro.agrupaLojas) null else first.loja,
+      pdv = null,
+      transacao = null,
+      pedido = null,
+      numMetodo = firstMetodo?.numMetodo,
+      nomeMetodo = firstMetodo?.nomeMetodo,
+      mult = multMed,
+      data = first.data,
+      dataFormatada = dataAgrupada,
+      nota = null,
+      tipoNf = null,
+      hora = null,
+      tipoPgto = first.tipoPgto,
+      documento = first.documento,
+      quantParcelas = ent.maxOf { it.quantParcelas ?: 0 },
+      mediaPrazo = mediaPrazo,
+      valor = ent.sumOf { it.valor ?: 0.0 },
+      cliente = null,
+      uf = null,
+      nomeCliente = null,
+      vendedor = null,
+      valorFin = ent.sumOf { it.valorFin ?: 0.0 },
+      valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
+      obs = null,
+      contagem = ent.sumOf { it.contagem ?: 0 },
+      perVenda = ent.sumOf { it.valorTipo ?: 0.0 } * 100.00 / totalValor,
+    )
+  }
+}
+
+fun List<NotaResumoPgto>.agrupaTipo(filtro: FiltroNotaResumoTipo): List<NotaResumoPgto> {
   val grupo = this.groupBy { it.grupo(filtro) }
   val totalValor = this.sumOf { it.valorTipo ?: 0.0 }
   return grupo.values.mapNotNull { ent ->

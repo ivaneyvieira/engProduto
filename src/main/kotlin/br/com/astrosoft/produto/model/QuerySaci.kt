@@ -1060,6 +1060,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findNotaResumoPgto(filtro: FiltroNotaResumoTipo): List<NotaResumoPgto> {
+    val sql = "/sqlSaci/resumoPgto.sql"
+    return query(sql, NotaResumoPgto::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   fun autorizaNota(invno: Int, storeno: Int, pdvno: Int, xano: Int, user: UserSaci) {
     val sql = "/sqlSaci/autorizaNota.sql"
     script(sql) {

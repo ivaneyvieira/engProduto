@@ -9,7 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.helper.monthPicker
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoPgto
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabResumoTipo
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabResumoTipoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -31,7 +31,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class TabResumoTipo(val viewModel: TabResumoTipoViewModel) :
-  TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoPgto {
+  TabPanelGrid<NotaResumoPgto>(NotaResumoPgto::class), ITabResumoTipo {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
   private lateinit var cmbData: Select<AgrupaData>
@@ -93,6 +93,7 @@ class TabResumoTipo(val viewModel: TabResumoTipoViewModel) :
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
+              gridPanel.getColumnBy(NotaResumoPgto::tipoPgto).isVisible = !(it.value ?: false)
             }
           }
         }
@@ -284,7 +285,7 @@ class TabResumoTipo(val viewModel: TabResumoTipoViewModel) :
     }
   }
 
-  override fun filtro(): FiltroNotaResumoPgto {
+  override fun filtro(): FiltroNotaResumoTipo {
     val grupo = cmbData.value ?: AgrupaData.DIA
     val dataI = when (grupo) {
       AgrupaData.DIA -> edtDataInicial.value ?: LocalDate.now()
@@ -299,10 +300,9 @@ class TabResumoTipo(val viewModel: TabResumoTipoViewModel) :
       AgrupaData.ANO -> LocalDate.of(cmbAnoFinal.value ?: LocalDate.now().year, 12, 31)
     }
 
-    return FiltroNotaResumoPgto(
+    return FiltroNotaResumoTipo(
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
-      agrupaParcelas = true,
       agrupaTipoPagamento = chkTipoPagamento.value ?: false,
       agrupaDatas = grupo,
       pesquisa = edtPesquisa.value ?: "",

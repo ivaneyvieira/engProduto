@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaResumoPgto
+import br.com.astrosoft.produto.model.beans.FiltroNotaResumoTipo
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaResumoPgto
 import br.com.astrosoft.produto.model.planilha.PlanilhaResumoTipo
@@ -18,7 +18,7 @@ class TabResumoTipoViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaResumoPgto.findAll(filtro)
+    val notas = NotaResumoPgto.findAllTipo(filtro)
     subView.updateNotas(notas)
   }
 
@@ -39,7 +39,7 @@ class TabResumoTipoViewModel(val viewModel: VendaRefViewModel) {
 }
 
 interface ITabResumoTipo : ITabView {
-  fun filtro(): FiltroNotaResumoPgto
+  fun filtro(): FiltroNotaResumoTipo
   fun updateNotas(notas: List<NotaResumoPgto>)
   fun itensNotasSelecionados(): List<NotaResumoPgto>
 }

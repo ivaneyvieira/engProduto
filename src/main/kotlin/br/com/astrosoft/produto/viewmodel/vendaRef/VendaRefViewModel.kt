@@ -25,7 +25,7 @@ interface IVendaRefView : IView {
   val tabVendaRef: ITabVendaRef
   val tabResumo: ITabResumo
   val tabResumoPgto: ITabResumoPgto
-  val tabResumoTipo: ITabResumoPgto
+  val tabResumoTipo: ITabResumoTipo
   val tabResumoCartao: ITabResumoCartao
   val tabVendaRefUsr: ITabVendaRefUsr
 }
