@@ -53,10 +53,10 @@ enum class ETipoKardecControle(val descricao: String) {
   MOV_ENTREGA("Movimentação de Entrega"),
   MOV_RECEBIMENTO("Movimentação de Recebimento"),
   REPOSICAO_CDLJ("Reposição Rota CD-LJ"),
-  REPOSICAO_CDLJ2("Reposição Rota CD-LJ"),
-  REPOSICAO_CDLJ3("Reposição Rota CD-LJ"),
-  REPOSICAO_CDLJ4("Reposição Rota CD-LJ"),
-  REPOSICAO_CDLJ8("Reposição Rota CD-LJ"),
+  REPOSICAO_CDLJ2("Reposição Rota CD-LJ2"),
+  REPOSICAO_CDLJ3("Reposição Rota CD-LJ3"),
+  REPOSICAO_CDLJ5("Reposição Rota CD-LJ5"),
+  REPOSICAO_CDLJ8("Reposição Rota CD-LJ8"),
   REPOSICAO_LJCD("Reposição Rota LJ-CD"),
 }
 

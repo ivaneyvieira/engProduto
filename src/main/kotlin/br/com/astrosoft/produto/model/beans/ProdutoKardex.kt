@@ -74,11 +74,11 @@ enum class ETipoKardec(val num: String, val descricao: String) {
   DEVOLUCAO("01", "Devolução"),
   MOV_ENTREGA("01", "Movimentação de Entrega"),
   MOV_RECEBIMENTO("01", "Movimentação de Recebimento"),
-  REPOSICAO_CDLJ("01", "Reposição Rota CD -LJ"),
-  REPOSICAO_CDLJ2("01", "Reposição Rota CD -LJ"),
-  REPOSICAO_CDLJ3("01", "Reposição Rota CD -LJ"),
-  REPOSICAO_CDLJ5("01", "Reposição Rota CD -LJ"),
-  REPOSICAO_CDLJ8("01", "Reposição Rota CD -LJ"),
+  REPOSICAO_CDLJ("01", "Reposição Rota CD-LJ"),
+  REPOSICAO_CDLJ2("01", "Reposição Rota CD-LJ2"),
+  REPOSICAO_CDLJ3("01", "Reposição Rota CD-LJ3"),
+  REPOSICAO_CDLJ5("01", "Reposição Rota CD-LJ5"),
+  REPOSICAO_CDLJ8("01", "Reposição Rota CD-LJ8"),
 
   REPOSICAO_LJCD("01", "Reposição Rota LJ -CD"),
 }
