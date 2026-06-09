@@ -182,6 +182,7 @@ WHERE prdno = :prdno
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
+(tipo varchar(30))
 SELECT numloja                                                      AS loja,
        prdno,
        grade,

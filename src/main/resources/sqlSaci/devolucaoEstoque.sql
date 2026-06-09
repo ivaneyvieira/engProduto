@@ -6,6 +6,7 @@ DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
+  (tipo varchar(30))
 SELECT N.storeno                      AS loja,
        P.prdno                        AS prdno,
        P.grade                        AS grade,

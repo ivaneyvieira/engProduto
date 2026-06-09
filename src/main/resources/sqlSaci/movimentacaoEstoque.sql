@@ -29,6 +29,7 @@ WHERE prdno = :prdno
 /*Loado da loja*/
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
+(tipo varchar(30))
 SELECT 4                                                           AS loja,
        prdno,
        grade,
