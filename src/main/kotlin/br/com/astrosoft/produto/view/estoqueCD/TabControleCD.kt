@@ -343,7 +343,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) :
     }
 
     columnGroup("Estoque") {
-      this.columnGrid(ProdutoEstoque::saldo, header = "Sistema", width = "75px")
+      this.columnGrid(ProdutoEstoque::saldoSistema, header = "Sistema", width = "75px")
       this.columnGrid(ProdutoEstoque::qtdDif, header = "Loja", pattern = "#,##0", width = "80px")
       this.columnGrid(ProdutoEstoque::kardec, header = "CD", pattern = "#,##0", width = "75px")
       this.columnGrid(ProdutoEstoque::quantDevolucao, header = "Gar", pattern = "#,##0", width = "80px")

@@ -52,7 +52,17 @@ class ProdutoEstoque(
   var vendaMesAnterior: Int? = null,
   var vendaMesAtual: Int? = null,
   var quantDevolucao: Int? = null,
+  var usoConsumo: Boolean? = null,
 ) {
+  val saldoSistema: Int?
+    get() {
+      return if (usoConsumo == true) {
+        null
+      } else {
+        saldo
+      }
+    }
+
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
 
@@ -74,8 +84,11 @@ class ProdutoEstoque(
     return dataInicial != null && (qtConferencia ?: 0) != 0
   }
 
-  val qtdDif: Double
+  val qtdDif: Double?
     get() {
+      if (usoConsumo == true) {
+        return null
+      }
       val sistema = saldo?.toDouble() ?: 0.0
       val cd = kardec?.toDouble() ?: 0.0
       val diferenca = sistema - cd
@@ -87,7 +100,7 @@ class ProdutoEstoque(
     }
 
   val qtdDifInt
-    get() = qtdDif.roundToInt()
+    get() = qtdDif?.roundToInt()
 
   val saldoBarraRef: String
     get() {

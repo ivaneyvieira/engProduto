@@ -16,8 +16,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (prdno)
 )
 SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
-FROM
-  sqldados.prd AS P
+FROM sqldados.prd AS P
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (((P.bits & POW(2, 13) = 0) AND (:uso = 'N')) OR ((P.bits & POW(2, 13) != 0) AND (:uso = 'S')) OR (:uso = 'T'))
@@ -130,13 +129,13 @@ SELECT P.no                                                                  AS 
        IFNULL(B.grade, '')                                                   AS grade,
        MAX(TRIM(IF(B.grade IS NULL, IFNULL(P2.gtin, P.barcode), B.barcode))) AS codbar
 FROM
-  sqldados.prd                AS P
-    INNER JOIN T_PRD AS PD
+  sqldados.prd                 AS P
+    INNER JOIN T_PRD           AS PD
                ON P.no = PD.prdno
-    LEFT JOIN sqldados.prd2   AS P2
-              ON P.no = P2.prdno
-    LEFT JOIN sqldados.prdbar AS B
-              ON P.no = B.prdno AND B.grade != ''
+    LEFT JOIN  sqldados.prd2   AS P2
+               ON P.no = P2.prdno
+    LEFT JOIN  sqldados.prdbar AS B
+               ON P.no = B.prdno AND B.grade != ''
 GROUP BY P.no, B.grade
 HAVING codbar != '';
 
@@ -148,7 +147,7 @@ CREATE TEMPORARY TABLE T_ULT_ACERTO
 SELECT numloja, prdno, grade, MAX(numero) AS numero
 FROM
   sqldados.produtoEstoqueAcerto A
-    INNER JOIN T_PRD AS P
+    INNER JOIN T_PRD AS         P
                USING (prdno)
 GROUP BY numloja, prdno, grade;
 
@@ -225,30 +224,33 @@ SELECT S.no                                                                     
        AC.processado                                                                  AS processado,
        SV.vendaMesAnterior                                                            AS vendaMesAnterior,
        SV.vendaMesAtual                                                               AS vendaMesAtual,
-       DEV.quantDevolucao                                                             AS quantDevolucao
+       DEV.quantDevolucao                                                             AS quantDevolucao,
+       UC.prdno IS NOT NULL                                                           AS usoConsumo
 FROM
-  sqldados.stk                AS E
-    INNER JOIN sqldados.store AS S
+  sqldados.stk                               AS E
+    INNER JOIN sqldados.store                AS S
                ON E.storeno = S.no
-    INNER JOIN T_PRD          AS PD
+    INNER JOIN T_PRD                         AS PD
                USING (prdno)
-    LEFT JOIN  T_PRD_DEV      AS DEV
+    LEFT JOIN  sqldados.produtos_uso_consumo AS UC
+               USING (prdno)
+    LEFT JOIN  T_PRD_DEV                     AS DEV
                USING (storeno, prdno, grade)
-    LEFT JOIN  sqldados.vend  AS V
+    LEFT JOIN  sqldados.vend                 AS V
                ON V.no = PD.mfno
-    LEFT JOIN  T_LOC_APP      AS A
+    LEFT JOIN  T_LOC_APP                     AS A
                USING (prdno, grade)
-    LEFT JOIN  T_LOC_NERUS    AS LN
+    LEFT JOIN  T_LOC_NERUS                   AS LN
                USING (prdno, grade)
-    LEFT JOIN  T_PRD_VENDA    AS SV
+    LEFT JOIN  T_PRD_VENDA                   AS SV
                USING (prdno, grade)
-    LEFT JOIN  sqldados.users AS U
+    LEFT JOIN  sqldados.users                AS U
                ON U.no = A.estoqueUser
-    LEFT JOIN  T_BARCODE      AS B
+    LEFT JOIN  T_BARCODE                     AS B
                USING (prdno, grade)
-    LEFT JOIN  sqldados.prp   AS PC
+    LEFT JOIN  sqldados.prp                  AS PC
                ON PC.storeno = 10 AND PC.prdno = E.prdno
-    LEFT JOIN  T_ACERTO       AS AC
+    LEFT JOIN  T_ACERTO                      AS AC
                ON E.storeno = AC.numloja AND E.prdno = AC.prdno AND E.grade = AC.grade
 WHERE (E.storeno = :loja OR :loja = 0)
   AND (PD.mfno = @FORNECEDOR_NUMERO OR @FORNECEDOR_NUMERO = 0)
@@ -298,9 +300,9 @@ SELECT loja,
        estoqueConfLoja,
        vendaMesAnterior,
        vendaMesAtual,
-       quantDevolucao
-FROM
-  temp_pesquisa
+       quantDevolucao,
+       usoConsumo
+FROM temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR
        (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')
