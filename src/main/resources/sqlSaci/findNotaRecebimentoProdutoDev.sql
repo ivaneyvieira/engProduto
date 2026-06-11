@@ -249,7 +249,7 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND (N.storeno = :loja OR :loja = 0)
   AND (A.tipoDevolucao > 0)
   AND (IFNULL(IA.situacaoDev, 0) = :situacaoDev OR :situacaoDev = 999)
-GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao;
+GROUP BY A.invno, A.prdno, A.grade, A.numero, A.tipoDevolucao, A.seq;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD;
 CREATE TEMPORARY TABLE T_PRD

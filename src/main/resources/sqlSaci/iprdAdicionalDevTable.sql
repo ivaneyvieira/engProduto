@@ -20,15 +20,13 @@ CREATE TEMPORARY TABLE T_SEQ
   PRIMARY KEY (invno)
 )
 SELECT @rowcount := @rowcount + 1 AS seq, invno
-FROM
-  sqldados.iprdAdicional
+FROM sqldados.iprdAdicional
 WHERE quantDevolucao > 0
 GROUP BY invno
 ORDER BY invno;
 
 SELECT *
-FROM
-  T_SEQ;
+FROM T_SEQ;
 
 INSERT INTO sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao)
 SELECT invno, prdno, grade, seq AS numero, tipoDevolucao, quantDevolucao
@@ -39,8 +37,7 @@ FROM
 WHERE quantDevolucao > 0;
 
 SELECT *
-FROM
-  sqldados.iprdAdicionalDev;
+FROM sqldados.iprdAdicionalDev;
 
 /******************************************/
 
@@ -75,8 +72,7 @@ SELECT seq,
        date,
        filename,
        file
-FROM
-  invAdicionalArquivos
+FROM invAdicionalArquivos
 HAVING tipoDevolucao > 0;
 
 
@@ -89,8 +85,7 @@ FROM
 WHERE quantDevolucao > 0;
 
 SELECT invno, numero, tipoDevolucao, seq, date, filename, file
-FROM
-  invAdicionalDevArquivo;
+FROM invAdicionalDevArquivo;
 
 
 /****************************************************************************************/
@@ -103,8 +98,46 @@ ALTER TABLE sqldados.iprdAdicionalDev
 
 
 SELECT *
-FROM
-  sqldados.invAdicional;
+FROM sqldados.invAdicional;
 
 ALTER TABLE sqldados.iprdAdicionalDev
   ADD COLUMN seq int(10) NULL DEFAULT NULL;
+
+/***************************************************************/
+
+SHOW CREATE TABLE sqldados.iprdAdicionalDev;
+
+create table sqldados.iprdAdicionalDevBACKUP
+SELECT *
+FROM sqldados.iprdAdicionalDev;
+
+CREATE TABLE `iprdAdicionalDev`
+(
+  `invno`          int         NOT NULL,
+  `prdno`          varchar(16) NOT NULL,
+  `grade`          varchar(8)  NOT NULL,
+  `numero`         int         NOT NULL,
+  `tipoDevolucao`  int         NOT NULL DEFAULT '0',
+  `quantDevolucao` int                  DEFAULT '0',
+  `seq`            int                  DEFAULT NULL,
+  `numAcerto`      int                  DEFAULT '0',
+  PRIMARY KEY (`invno`, `prdno`, `grade`, `tipoDevolucao`, `numero`)
+) ENGINE = MyISAM
+  DEFAULT CHARSET = latin1;
+
+UPDATE sqldados.iprdAdicionalDev
+SET seq = 1
+WHERE seq IS NULL;
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  MODIFY COLUMN seq int NOT NULL DEFAULT 1;
+
+ALTER TABLE sqldados.iprdAdicionalDev
+DROP PRIMARY KEY ;
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  ADD PRIMARY KEY (invno, prdno, grade, tipoDevolucao, numero, seq);
+
+
+select * from sqldados.iprdAdicionalDev
+where prdno = 109627;
