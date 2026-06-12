@@ -48,12 +48,10 @@ FROM
   sqldados.iprdAdicionalDev          AS A
     LEFT JOIN  sqldados.invAdicional AS IA
                USING (invno, tipoDevolucao, numero)
-    INNER JOIN T_PRD                 AS P
-               USING (prdno)
     INNER JOIN sqldados.inv          AS N
                USING (invno)
-WHERE (situacaoDev = 0 OR situacaoDev IS NULL)
-  AND tipoDevolucao = 8
+WHERE (IA.situacaoDev = 0 OR IA.situacaoDev IS NULL)
+  AND IA.tipoDevolucao = 8
 GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD_VENDA;

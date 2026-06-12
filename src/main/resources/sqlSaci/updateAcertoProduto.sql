@@ -5,3 +5,4 @@ WHERE invno = :invno
   AND grade = :grade
   AND tipoDevolucao = :tipoDevolucao
   AND numero = :numero
+  AND seq = :seq
