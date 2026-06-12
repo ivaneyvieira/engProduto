@@ -319,9 +319,10 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
 
   fun update() {
     val listProdutos = nota.produtos.sortedBy { "${it.ni}-${it.prdno}-${it.grade}-${it.seq}" }
+    /*
     listProdutos.forEachIndexed { index, dev ->
       dev.seq = index + 1
-    }
+    }*/
 
     gridDetail.setItems(listProdutos)
   }
