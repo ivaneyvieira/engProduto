@@ -219,29 +219,31 @@ SELECT A.invno,
        A.numAcerto                                                                                      AS numAcerto,
        IFNULL(AE.processado, 0)                                                                         AS processado
 FROM
-  sqldados.iprdAdicionalDev                  AS A
-    INNER JOIN sqldados.inv                  AS N
+  sqldados.iprdAdicionalDev                 AS A
+    INNER JOIN sqldados.inv                 AS N
                USING (invno)
-    LEFT JOIN  sqldados.invnfe               AS X
+    LEFT JOIN  sqldados.invnfe              AS X
                USING (invno)
-    LEFT JOIN  sqldados.iprd                 AS I
+    LEFT JOIN  sqldados.iprd                AS I
                USING (invno, prdno, grade)
-    LEFT JOIN  sqldados.carr                 AS C
+    LEFT JOIN  sqldados.carr                AS C
                ON C.no = N.carrno
-    LEFT JOIN  sqldados.store                AS L
+    LEFT JOIN  sqldados.store               AS L
                ON L.no = N.storeno
-    LEFT JOIN  T_ARQCOLETA                   AS AC
+    LEFT JOIN  T_ARQCOLETA                  AS AC
                USING (tipoDevolucao, numero)
-    LEFT JOIN  sqldados.invAdicional         AS IA
+    LEFT JOIN  sqldados.invAdicional        AS IA
                USING (invno, tipoDevolucao, numero)
-    LEFT JOIN  sqldados.carr                 AS CA
+    LEFT JOIN  sqldados.carr                AS CA
                ON CA.no = IA.carrno
-    LEFT JOIN  sqldados.users                AS UA
+    LEFT JOIN  sqldados.users               AS UA
                ON UA.no = IA.userno
-    LEFT JOIN  sqldados.spedprd              AS S
+    LEFT JOIN  sqldados.spedprd             AS S
                ON I.prdno = S.prdno
-    LEFT JOIN  sqldados.produtoEstoqueAcerto AS AE
-               ON AE.numloja = N.storeno AND AE.numero = A.numAcerto AND AE.prdno = A.prdno AND AE.grade = A.grade
+    LEFT JOIN  ( SELECT numloja, numero, SUM(processado) > 0 AS processado
+                 FROM sqldados.produtoEstoqueAcerto
+                 GROUP BY numloja, numero ) AS AE
+               ON AE.numloja = N.storeno AND AE.numero = A.numAcerto
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
