@@ -302,7 +302,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::totalGeralDevolucao, "Total", width = "90px")
 
       this.setPartNameGenerator {
-        if ((it.numAcerto ?: 0) > 0) {
+        if ((it.numAcerto ?: 0) > 0 && it.processado == true) {
           "amarelo"
         } else {
           null

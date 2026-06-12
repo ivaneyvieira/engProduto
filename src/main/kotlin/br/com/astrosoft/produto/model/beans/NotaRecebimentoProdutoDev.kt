@@ -102,12 +102,13 @@ data class NotaRecebimentoProdutoDev(
   var rotuloSped: String?,
   var icmsSaida: Double?,
   var precoVenda: Double?,
+  var processado: Boolean?,
 ) {
   var item: Int? = null
 
   val valorMVA
-    get() = if (((valorTotalDevolucao ?: 0.00) + (valIPIDevolucao
-                                                  ?: 0.00)) == 0.00 ||
+    get() = if (((valorTotalDevolucao) + (valIPIDevolucao
+                                          ?: 0.00)) == 0.00 ||
                 (baseIcmsSubst * 10000).roundToInt() == 0
     ) {
       0.00

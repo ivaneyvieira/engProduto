@@ -17,8 +17,7 @@ CREATE TEMPORARY TABLE T_BARCODE
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
-FROM
-  sqldados.prdbar
+FROM sqldados.prdbar
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
@@ -58,8 +57,7 @@ SELECT storeno                                                                  
                     SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                               LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 200), ' ', 1),
                    NULL))                                                                                             AS niDev
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE issuedate >= @DT
   AND tipo IN (2)
   AND status != 1
@@ -88,8 +86,7 @@ SELECT storeno                                                                  
                     SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
                               LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 100), ' ', 1),
                    NULL))                                                                                             AS niDev
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE issuedate >= 20250401
   AND tipo IN (0)
   AND paymno IN (71)
@@ -150,8 +147,7 @@ CREATE TEMPORARY TABLE T_ARQCOLETA
   PRIMARY KEY (tipoDevolucao, numero)
 )
 SELECT tipoDevolucao, numero, SUM(filename LIKE '%COLETA%') AS countColeta, COUNT(DISTINCT filename) AS countArq
-FROM
-  sqldados.invAdicionalDevArquivo
+FROM sqldados.invAdicionalDevArquivo
 GROUP BY tipoDevolucao, numero;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
@@ -220,28 +216,31 @@ SELECT A.invno,
        IFNULL(X.nfekey, '')                                                                             AS chaveUlt,
        I.c1                                                                                             AS chaveSefaz,
        IFNULL(S.ncm, '')                                                                                AS ncm,
-       A.numAcerto                                                                                      AS numAcerto
+       A.numAcerto                                                                                      AS numAcerto,
+       IFNULL(AE.processado, 0)                                                                         AS processado
 FROM
-  sqldados.iprdAdicionalDev          AS A
-    INNER JOIN sqldados.inv          AS N
+  sqldados.iprdAdicionalDev                  AS A
+    INNER JOIN sqldados.inv                  AS N
                USING (invno)
-    LEFT JOIN  sqldados.invnfe       AS X
+    LEFT JOIN  sqldados.produtoEstoqueAcerto AS AE
+               ON AE.numloja = N.storeno AND AE.numero = A.numAcerto AND AE.prdno = A.prdno AND AE.grade = A.grade
+    LEFT JOIN  sqldados.invnfe               AS X
                USING (invno)
-    LEFT JOIN  sqldados.iprd         AS I
+    LEFT JOIN  sqldados.iprd                 AS I
                USING (invno, prdno, grade)
-    LEFT JOIN  sqldados.carr         AS C
+    LEFT JOIN  sqldados.carr                 AS C
                ON C.no = N.carrno
-    LEFT JOIN  sqldados.store        AS L
+    LEFT JOIN  sqldados.store                AS L
                ON L.no = N.storeno
-    LEFT JOIN  T_ARQCOLETA           AS AC
+    LEFT JOIN  T_ARQCOLETA                   AS AC
                USING (tipoDevolucao, numero)
-    LEFT JOIN  sqldados.invAdicional AS IA
+    LEFT JOIN  sqldados.invAdicional         AS IA
                USING (invno, tipoDevolucao, numero)
-    LEFT JOIN  sqldados.carr         AS CA
+    LEFT JOIN  sqldados.carr                 AS CA
                ON CA.no = IA.carrno
-    LEFT JOIN  sqldados.users        AS UA
+    LEFT JOIN  sqldados.users                AS UA
                ON UA.no = IA.userno
-    LEFT JOIN  sqldados.spedprd      AS S
+    LEFT JOIN  sqldados.spedprd              AS S
                ON I.prdno = S.prdno
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
@@ -257,9 +256,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT S.no AS storeno, prdno, grade
-FROM
-  T_NOTA,
-  sqldados.store AS S
+FROM T_NOTA, sqldados.store AS S
 WHERE S.no IN (1, 2, 3, 4, 5, 8)
   AND (no = :loja OR :loja = 0)
 GROUP BY S.no, prdno, grade;
@@ -365,7 +362,8 @@ SELECT N.storeno                                                                
        P.weight                                                                                             AS pesoLiquido,
        P.weight_g                                                                                           AS pesoBruto,
        P.sp / 100                                                                                           AS precoVenda,
-       ST.auxStr1                                                                                           AS rotuloSped
+       ST.auxStr1                                                                                           AS rotuloSped,
+       processado                                                                                           AS processado
 FROM
   T_NOTA                          AS N
     LEFT JOIN  sqldados.spedprdst AS ST
@@ -393,8 +391,7 @@ CREATE TEMPORARY TABLE T_DUP
   PRIMARY KEY (invno)
 )
 SELECT invno, docno, MIN(duedate) AS duedate, SUM(amtdue) AS amtdue
-FROM
-  sqldados.invxa
+FROM sqldados.invxa
 WHERE invno IN ( SELECT ni FROM T_QUERY )
 GROUP BY invno;
 
@@ -496,7 +493,8 @@ SELECT loja,
        IFNULL(N.duplicataNum, '')        AS duplicataNum,
        IFNULL(N.situacaoDupStatus, 999)  AS situacaoDupStatus,
        IFNULL(rotuloSped, '')            AS rotuloSped,
-       X.icmsAliq / 100                  AS icmsSaida
+       X.icmsAliq / 100                  AS icmsSaida,
+       processado                        AS processado
 FROM
   T_QUERY                     AS Q
     LEFT JOIN T_NOTA_SAIDA    AS N
@@ -521,8 +519,7 @@ SELECT motivoDevolucao,
        MAX(valorDevolucao)   AS valorDevolucao,
        MAX(obsDevolucao)     AS obsDevolucao,
        MAX(situacaoDev)      AS situacaoDev
-FROM
-  T_RESULT
+FROM T_RESULT
 GROUP BY motivoDevolucao, numeroDevolucao;
 
 UPDATE T_RESULT AS R1 INNER JOIN T_RESULT2 AS R2 USING (motivoDevolucao, numeroDevolucao)
@@ -541,7 +538,6 @@ SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 
 SELECT *
-FROM
-  T_RESULT AS R
+FROM T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
 
