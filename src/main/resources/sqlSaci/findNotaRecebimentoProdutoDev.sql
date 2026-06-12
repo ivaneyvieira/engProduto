@@ -222,8 +222,6 @@ FROM
   sqldados.iprdAdicionalDev                  AS A
     INNER JOIN sqldados.inv                  AS N
                USING (invno)
-    LEFT JOIN  sqldados.produtoEstoqueAcerto AS AE
-               ON AE.numloja = N.storeno AND AE.numero = A.numAcerto AND AE.prdno = A.prdno AND AE.grade = A.grade
     LEFT JOIN  sqldados.invnfe               AS X
                USING (invno)
     LEFT JOIN  sqldados.iprd                 AS I
@@ -242,6 +240,8 @@ FROM
                ON UA.no = IA.userno
     LEFT JOIN  sqldados.spedprd              AS S
                ON I.prdno = S.prdno
+    LEFT JOIN  sqldados.produtoEstoqueAcerto AS AE
+               ON AE.numloja = N.storeno AND AE.numero = A.numAcerto AND AE.prdno = A.prdno AND AE.grade = A.grade
 WHERE (N.bits & POW(2, 4) = 0)
   AND (N.date >= @DT)
   AND (N.storeno IN (1, 2, 3, 4, 5, 8))
