@@ -272,6 +272,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::rotuloSped, "Ctrl \"S\"", width = "90px")
+      columnGrid(NotaRecebimentoProdutoDev::estoque, "Estq")
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
         this.setComparator { prd ->
@@ -319,11 +320,6 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
 
   fun update() {
     val listProdutos = nota.produtos.sortedBy { "${it.ni}-${it.prdno}-${it.grade}-${it.seq}" }
-    /*
-    listProdutos.forEachIndexed { index, dev ->
-      dev.seq = index + 1
-    }*/
-
     gridDetail.setItems(listProdutos)
   }
 

@@ -37,6 +37,7 @@ data class NotaRecebimentoProdutoDev(
   var grade: String?,
   var quant: Int?,
   var estoque: Int?,
+  var estoqueLoja: Int?,
   var refFabrica: String?,
   var numAcerto: Int?,
   var cfop: String?,

@@ -275,6 +275,18 @@ FROM
                USING (storeno, prdno, grade)
 GROUP BY prdno, grade;
 
+DROP TEMPORARY TABLE IF EXISTS T_EST_LOJA;
+CREATE TEMPORARY TABLE T_EST_LOJA
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT storeno, prdno, grade, ((qtty_atacado + qtty_varejo) / 1000) AS estoqueLoja
+FROM
+  sqldados.stk       AS S
+    INNER JOIN T_PRD AS N
+               USING (storeno, prdno, grade)
+GROUP BY storeno, prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
 CREATE TEMPORARY TABLE T_QUERY
 SELECT N.storeno                                                                                            AS loja,
@@ -308,6 +320,7 @@ SELECT N.storeno                                                                
        P.mfno                                                                                               AS vendnoProduto,
        ROUND(N.qtty)                                                                                        AS quant,
        ROUND(E.estoque)                                                                                     AS estoque,
+       ROUND(EL.estoqueLoja)                                                                                AS estoqueLoja,
        numAcerto                                                                                            AS numAcerto,
        IFNULL(PR.prdrefno, P.mfno_ref)                                                                      AS refFabrica,
        N.cfop                                                                                               AS cfop,
@@ -384,6 +397,8 @@ FROM
                ON B.prdno = N.prdno AND B.grade = N.grade
     LEFT JOIN  T_EST              AS E
                ON E.prdno = N.prdno AND E.grade = N.grade
+    LEFT JOIN  T_EST_LOJA         AS EL
+               ON EL.storeno = N.storeno AND EL.prdno = N.prdno AND EL.grade = N.grade
     LEFT JOIN  sqldados.prdalq    AS R
                ON R.prdno = N.prdno;
 
