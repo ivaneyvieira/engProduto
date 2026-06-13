@@ -243,7 +243,6 @@ class EntradaDevCli(
       ESolicitacaoTroca.Estorno     -> "Estorno"
       ESolicitacaoTroca.Reembolso   -> "Reembolso"
       ESolicitacaoTroca.MudaCliente -> "Muda"
-      ESolicitacaoTroca.DevCliente  -> "Dev Cliente"
       null                          -> return null
     }
 

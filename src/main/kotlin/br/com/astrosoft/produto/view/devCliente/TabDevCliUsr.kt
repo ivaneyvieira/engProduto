@@ -71,9 +71,6 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         checkBox("Autoriza Muda") {
           binder.bind(this, UserSaci::autorizaMuda.name)
         }
-        checkBox("Autoriza Dev Cliente") {
-          binder.bind(this, UserSaci::autorizaDevCliente.name)
-        }
         checkBox("Autoriza Dev") {
           binder.bind(this, UserSaci::autorizaDev.name)
         }

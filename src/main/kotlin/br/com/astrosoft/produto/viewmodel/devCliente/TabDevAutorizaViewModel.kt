@@ -267,10 +267,6 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
         fail("Mudança de cliente não autorizada")
       }
-
-      ESolicitacaoTroca.DevCliente  -> if (!user.autorizaDevCliente) {
-        fail("Mudança de cliente não autorizada")
-      }
     }
 
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum

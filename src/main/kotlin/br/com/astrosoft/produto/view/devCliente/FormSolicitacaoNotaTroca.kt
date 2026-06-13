@@ -39,10 +39,6 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
         if (user?.autorizaMuda == true) {
           add(ESolicitacaoTroca.MudaCliente)
         }
-
-        if (user?.autorizaDevCliente == true) {
-          add(ESolicitacaoTroca.DevCliente)
-        }
       }
       this.setItems(tipos)
       this.setItemLabelGenerator { item -> item.descricao }

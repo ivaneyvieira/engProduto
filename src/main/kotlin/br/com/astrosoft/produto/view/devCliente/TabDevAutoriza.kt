@@ -104,7 +104,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
 
     val user = AppConfig.userLogin() as? UserSaci
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota ->
-      val form = FormSolicitacaoNotaTroca(nota)
+      val form =  FormSolicitacaoNotaTroca(nota)
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
         val solicitacaoTroca = form.solicitacaoTroca
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
