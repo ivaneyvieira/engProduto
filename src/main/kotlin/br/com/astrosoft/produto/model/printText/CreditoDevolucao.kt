@@ -46,11 +46,6 @@ class CreditoDevolucao(val nota: CreditoCliente, val autorizacao: String = "") :
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
-      tipo.contains("CLI")       -> {
-        writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
-        writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
-      }
-
       tipo.contains("EST CARTAO") -> {
         writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
       }
