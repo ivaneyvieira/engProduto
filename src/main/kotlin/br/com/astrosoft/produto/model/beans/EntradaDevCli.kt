@@ -131,7 +131,7 @@ class EntradaDevCli(
       isReembolso()    -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custnoDev = custno ?: 0,
+          custnoDev = cliCodigo() ?: custno ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.tipoObs,
           notaDev = this,
@@ -141,7 +141,7 @@ class EntradaDevCli(
       }
 
       isMuda()         -> {
-        val mudaCliente = mudaCodigo()
+        val mudaCliente = mudaCodigo() ?: cliCodigo() ?: 0
         val custno = custno ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
@@ -171,6 +171,7 @@ class EntradaDevCli(
   }
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
+  private val CLI_CLIENTE = "CLI[^0-9]*([0-9]+)".toRegex()
 
   fun isReembolso(): Boolean {
     return remarks?.contains("EST CARTAO", ignoreCase = true) == true ||
@@ -188,13 +189,18 @@ class EntradaDevCli(
     return comProduto == "COM"
   }
 
-  private fun mudaCodigo(): Int {
+  private fun mudaCodigo(): Int? {
     val matchResult = MUDA_CLIENTE.find(remarks ?: "")
-    return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
+    return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
+  }
+
+  private fun cliCodigo(): Int? {
+    val matchResult = CLI_CLIENTE.find(remarks ?: "")
+    return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
   }
 
   fun mudaCliente(): String {
-    val codigo = mudaCodigo()
+    val codigo = mudaCodigo() ?: 0
     val cliente = saci.mudaCliente(codigo) ?: return ""
     return "${cliente.codigo} - ${cliente.nome}"
   }
