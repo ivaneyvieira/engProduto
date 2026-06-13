@@ -46,7 +46,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun autorizaNota(nota: NotaVenda, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
-    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
     if (nota.autoriza != "S") {
       fail("Nota não marcada para autorizar")
     }
@@ -65,7 +65,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
-    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
 
     nota.autoriza = "S"
 
@@ -123,7 +123,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       }
 
       val solicitacao = nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
-      val produto = nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
+      val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
@@ -220,7 +220,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       val produtos = subView.produtos()
       if (produtos.none { it.devDB == true }) {
         nota.solicitacaoTrocaEnnum = null
-        nota.produtoTrocaEnnum = null
+        nota.produtoTrocaEnum = null
         nota.nfEntRet = null
         nota.userTroca = 0
         nota.setMotivoTroca = emptySet()
@@ -242,7 +242,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
     user ?: fail("Usuário ou senha inválidos")
 
     when (solicitacaoTroca.solicitacaoTrocaEnnum) {
-      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnnum) {
+      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnum) {
         EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
           fail("Troca com produto não autorizada")
         }
@@ -267,10 +267,14 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
       ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
         fail("Mudança de cliente não autorizada")
       }
+
+      ESolicitacaoTroca.DevCliente  -> if (!user.autorizaDevCliente) {
+        fail("Mudança de cliente não autorizada")
+      }
     }
 
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
-    nota.produtoTrocaEnnum = solicitacaoTroca.produtoTrocaEnnum
+    nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
     nota.userSolicitacao = user.no
     nota.setMotivoTroca = setOf(solicitacaoTroca.motivo)
     nota.update()
@@ -280,7 +284,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
 
   fun desfazSolicitacao(nota: NotaVenda) {
     nota.solicitacaoTrocaEnnum = null
-    nota.produtoTrocaEnnum = null
+    nota.produtoTrocaEnum = null
     nota.userSolicitacao = null
     nota.motivoTroca = null
     nota.update()

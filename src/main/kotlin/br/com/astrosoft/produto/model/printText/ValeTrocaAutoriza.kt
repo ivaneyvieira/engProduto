@@ -45,6 +45,11 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
 
+      nota.tipoObs.contains("CLI")       -> {
+        writeln("Vale Credito: DEV CLIENTE", negrito = true, center = true, expand = true)
+        writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
+      }
+
       nota.tipoObs.contains("EST CARTAO") -> {
         writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
       }

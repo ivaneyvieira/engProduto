@@ -196,7 +196,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
 
       val solicitacao = nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
-      val produto = nota.produtoTrocaEnnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
+      val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
@@ -269,7 +269,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
   fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
-    nota.produtoTrocaEnnum ?: fail("Nota sem produto de troca")
+    nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
 
     nota.autoriza = "S"
 
@@ -321,7 +321,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       val produtos = subView.produtos()
       if (produtos.none { it.devDB == true }) {
         nota.solicitacaoTrocaEnnum = null
-        nota.produtoTrocaEnnum = null
+        nota.produtoTrocaEnum = null
         nota.nfEntRet = null
         nota.userTroca = 0
         nota.setMotivoTroca = emptySet()

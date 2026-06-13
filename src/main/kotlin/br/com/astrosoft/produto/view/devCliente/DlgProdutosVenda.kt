@@ -83,7 +83,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           this.isReadOnly = readOnly
           val produtoTrocas = EProdutoTroca.entries
           this.setItems(produtoTrocas)
-          this.value = nota.produtoTrocaEnnum
+          this.value = nota.produtoTrocaEnum
           this.isReadOnly = true
           this.setItemLabelGenerator { item -> item.descricao }
           this.width = "10rem"
@@ -124,7 +124,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
           onClick {
             nota.solicitacaoTrocaEnnum = edtTipo?.value
-            nota.produtoTrocaEnnum = edtProduto?.value
+            nota.produtoTrocaEnum = edtProduto?.value
             nota.nfEntRet = edtNotaEntRet?.value ?: 0
             nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
             val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
@@ -155,7 +155,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
 
   private fun updateNota() {
     edtTipo?.value = nota.solicitacaoTrocaEnnum
-    edtProduto?.value = nota.produtoTrocaEnnum
+    edtProduto?.value = nota.produtoTrocaEnum
     edtNotaEntRet?.value = nota.nfEntRet
     edtMotivo?.value = nota.setMotivoTroca.firstOrNull()
   }

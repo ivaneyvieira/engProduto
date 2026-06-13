@@ -49,6 +49,7 @@ data class EntradaDevCliProList(
       "EST.*".toRegex().matches(tipoNota) -> "EST CARTAO"
       "REE.*".toRegex().matches(tipoNota) -> "REEMBOLSO"
       "MUD.*".toRegex().matches(tipoNota) -> "MUDA CLIENTE"
+      "CLI.*".toRegex().matches(tipoNota) -> "DEV CLIENTE"
       else                                -> tipoNota
     }
   }

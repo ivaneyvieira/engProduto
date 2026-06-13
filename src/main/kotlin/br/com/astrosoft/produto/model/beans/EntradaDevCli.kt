@@ -94,9 +94,9 @@ class EntradaDevCli(
       return parte2.trim()
     }
 
-  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto().ajustaTipo(produtosAutoriacao())
+  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto().ajustaTipo(produtosAutorizacao())
 
-  private fun produtosAutoriacao(): List<ProdutoNFS> {
+  private fun produtosAutorizacao(): List<ProdutoNFS> {
     return notaAutoriza().flatMap {
       it.produtos()
     }
@@ -243,6 +243,7 @@ class EntradaDevCli(
       ESolicitacaoTroca.Estorno     -> "Estorno"
       ESolicitacaoTroca.Reembolso   -> "Reembolso"
       ESolicitacaoTroca.MudaCliente -> "Muda"
+      ESolicitacaoTroca.DevCliente  -> "Dev Cliente"
       null                          -> return null
     }
 
@@ -256,7 +257,7 @@ class EntradaDevCli(
   fun naoLiberado(): Boolean {
     val nota = notaAutoriza().firstOrNull() ?: return true
     val tipo = nota.solicitacaoTrocaEnnum ?: return true
-    val produto = nota.produtoTrocaEnnum ?: return true
+    val produto = nota.produtoTrocaEnum ?: return true
     val tipoOk = tipo == ESolicitacaoTroca.Estorno ||
                  tipo == ESolicitacaoTroca.MudaCliente ||
                  tipo == ESolicitacaoTroca.Reembolso ||

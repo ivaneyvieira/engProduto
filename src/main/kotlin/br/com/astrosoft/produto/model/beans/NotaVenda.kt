@@ -58,7 +58,7 @@ class NotaVenda(
       solicitacaoTroca = value?.codigo
     }
 
-  var produtoTrocaEnnum: EProdutoTroca?
+  var produtoTrocaEnum: EProdutoTroca?
     get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
     set(value) {
       produtoTroca = value?.codigo
@@ -67,7 +67,7 @@ class NotaVenda(
   val solicitacaoTrocaDescricao: String
     get() = solicitacaoTrocaEnnum?.descricao ?: ""
   val produtoTrocaDescricao: String
-    get() = produtoTrocaEnnum?.descricao ?: ""
+    get() = produtoTrocaEnum?.descricao ?: ""
 
   fun update() {
     saci.updateNotaVenda(this)
@@ -113,7 +113,7 @@ class NotaVenda(
   }
 
   fun motivo(): String? {
-    val produtoTroca = when (produtoTrocaEnnum) {
+    val produtoTroca = when (produtoTrocaEnum) {
       EProdutoTroca.Com   -> "P"
       EProdutoTroca.Sem   -> ""
       EProdutoTroca.Misto -> "M"
@@ -125,6 +125,7 @@ class NotaVenda(
       ESolicitacaoTroca.Estorno     -> "Estorno"
       ESolicitacaoTroca.Reembolso   -> "Reembolso"
       ESolicitacaoTroca.MudaCliente -> "Muda"
+      ESolicitacaoTroca.DevCliente  -> "Dev Cliente"
       null                          -> return null
     }
 
@@ -167,6 +168,7 @@ enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
   Estorno("E", "Estorno"),
   Reembolso("R", "Reembolso"),
   MudaCliente("M", "Muda Cliente"),
+  DevCliente("M", "Dev Cliente"),
 }
 
 enum class EProdutoTroca(val codigo: String, val descricao: String) {

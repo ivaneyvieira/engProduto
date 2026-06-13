@@ -39,6 +39,14 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
         if (user?.autorizaMuda == true) {
           add(ESolicitacaoTroca.MudaCliente)
         }
+
+        if (user?.autorizaMuda == true) {
+          add(ESolicitacaoTroca.MudaCliente)
+        }
+
+        if (user?.autorizaDevCliente == true) {
+          add(ESolicitacaoTroca.MudaCliente)
+        }
       }
       this.setItems(tipos)
       this.setItemLabelGenerator { item -> item.descricao }
@@ -58,10 +66,10 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       this.setItems(entries)
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
-      this.value = nota.produtoTrocaEnnum
+      this.value = nota.produtoTrocaEnum
     }
 
-    if (nota?.tipoNf == "ENTRE FUT") {
+    if (nota.tipoNf == "ENTRE FUT") {
       horizontalLayout {
         nativeLabel("NF Ent/Ret:")
         edtNotaEntRet = integerField {
