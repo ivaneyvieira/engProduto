@@ -129,9 +129,14 @@ class EntradaDevCli(
     val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
     when {
       isReembolso()    -> {
+        val codigoCli = if(isNaoInformado()){
+          cliCodigo() ?: custno ?: 0
+        }else{
+          custno ?: 0
+        }
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custnoDev = cliCodigo() ?: custno ?: 0,
+          custnoDev = codigoCli,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.tipoObs,
           notaDev = this,
@@ -154,14 +159,16 @@ class EntradaDevCli(
       }
 
       isNaoInformado() -> {
-        // val saldoDevolucao = SaldoDevolucao(
-        //   invno = invno,
-        //   custnoDev = lojaNaoInformado?.codigo ?: 0,
-        //   custnoMuda = custno ?: 0,
-        //   saldo = valor ?: 0.00
-        // )
-        //saci.marcaMudaCliente(saldoDevolucao)
-        println("Não faz nada")
+        val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
+        val custno = custno ?: 0
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
+          tipo = this.tipoObs,
+          saldo = valor ?: 0.00
+        )
+        saci.marcaMudaCliente(saldoDevolucao)
       }
     }
   }
