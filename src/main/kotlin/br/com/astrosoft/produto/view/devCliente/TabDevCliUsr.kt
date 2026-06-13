@@ -19,6 +19,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::devCliEditor, "Editor")
     columnGrid(UserSaci::devCliAutoriza, "Editor")
+    columnGrid(UserSaci::devCliCancela, "Editor")
     columnGrid(UserSaci::devCliImprimir, "VC Imprimir")
     columnGrid(UserSaci::devCliImpresso, "VC Impresso")
     columnGrid(UserSaci::devCliValeTrocaProduto, "Produto")
@@ -35,6 +36,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         }
         checkBox("Autoriza") {
           binder.bind(this, UserSaci::devCliAutoriza.name)
+        }
+        checkBox("Cancela") {
+          binder.bind(this, UserSaci::devCliCancela.name)
         }
         checkBox("VC Imprimir") {
           binder.bind(this, UserSaci::devCliImprimir.name)

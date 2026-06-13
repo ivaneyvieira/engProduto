@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevAutoriza
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCancela
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCancelaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -20,13 +20,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCancela(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaVenda>(NotaVenda::class),
-  ITabDevAutoriza {
+class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<NotaVenda>(NotaVenda::class),
+  ITabDevCancela {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosVenda? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -79,7 +78,7 @@ class TabDevCancela(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaV
         viewModel.imprimeRelatorio()
       }
     }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "Autoriza") {
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "Cancela") {
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
     }
@@ -91,21 +90,10 @@ class TabDevCancela(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaV
 
     columnGrid(NotaVenda::loja, header = "Loja")
 
-    addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if (nota.loginSolicitacao.isNullOrBlank()) {
-        DialogHelper.showError("Solicitação não autorizada")
-      } else {
-        dlgProduto = DlgProdutosVenda(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
-      }
-    }
-
     val user = AppConfig.userLogin() as? UserSaci
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota ->
-      val form =  FormSolicitacaoNotaTroca(nota)
-      DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+    addColumnButton(VaadinIcon.SIGN_IN, "Cancela Solicitação", "Solicitação") { nota ->
+      val form = FormSolicitacaoNotaTroca(nota)
+      DialogHelper.showForm(caption = "Cancela Devolução", form = form) {
         val solicitacaoTroca = form.solicitacaoTroca
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
       }
@@ -123,7 +111,7 @@ class TabDevCancela(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaV
       }
     }
 
-    columnGrid(NotaVenda::loginSolicitacao, header = "Autorização")
+    columnGrid(NotaVenda::loginSolicitacao, header = "Cancelação")
     columnGrid(NotaVenda::loginTroca, header = "Assina Troca")
     columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
     columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
@@ -180,32 +168,20 @@ class TabDevCancela(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<NotaV
     return itensSelecionados()
   }
 
-  override fun formAutoriza(nota: NotaVenda) {
+  override fun formCancela(nota: NotaVenda) {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+    DialogHelper.showForm(caption = "Cancela Devolução", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
   }
 
-  override fun fechaFormProduto() {
-    dlgProduto?.fecha()
-  }
-
-  override fun updateProdutos() {
-    dlgProduto?.update()
-  }
-
-  override fun produtos(): List<ProdutoNFS> {
-    return dlgProduto?.produtos().orEmpty()
-  }
-
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliAutoriza == true
+    return username?.devCliCancela == true
   }
 
   override val label: String
-    get() = "Autoriza"
+    get() = "Cancela"
 
   override fun updateComponent() {
     viewModel.updateView()

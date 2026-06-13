@@ -156,7 +156,7 @@ class TabDevAutoriza(val viewModel: TabDevAutorizaViewModel) : TabPanelGrid<Nota
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
       }
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
-      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
+
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
     }
   }
