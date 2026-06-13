@@ -40,12 +40,8 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
           add(ESolicitacaoTroca.MudaCliente)
         }
 
-        if (user?.autorizaMuda == true) {
-          add(ESolicitacaoTroca.MudaCliente)
-        }
-
         if (user?.autorizaDevCliente == true) {
-          add(ESolicitacaoTroca.MudaCliente)
+          add(ESolicitacaoTroca.DevCliente)
         }
       }
       this.setItems(tipos)
