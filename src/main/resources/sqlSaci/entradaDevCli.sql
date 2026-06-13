@@ -45,8 +45,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
@@ -93,8 +92,7 @@ FROM
 DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
 CREATE TEMPORARY TABLE T_REEMBOLSO
 SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
-FROM
-  sqldados.pdvcxh
+FROM sqldados.pdvcxh
 WHERE date >= :dataI
   AND remarks LIKE '%REEMBOLSO%';
 
@@ -184,6 +182,20 @@ WHERE I.account = '2.01.25'
                  ELSE FALSE
       END;
 
+DROP TEMPORARY TABLE IF EXISTS T_DP_FILIAL;
+CREATE TEMPORARY TABLE T_DP_FILIAL
+(
+  INDEX (custno)
+)
+SELECT C.no AS custno, F.no AS filial
+FROM
+  sqldados.custp              AS C
+    INNER JOIN sqldados.store AS L
+               ON L.no = MID(C.no, 1, 1) * 1
+    INNER JOIN sqldados.custp AS F
+               ON F.cpf_cgc = L.cgc
+WHERE C.no IN (200, 300, 400, 500, 800);
+
 SELECT DISTINCT I.invno,
                 I.loja,
                 I.nomeLoja,
@@ -201,6 +213,7 @@ SELECT DISTINCT I.invno,
                 IFNULL(I.pdvno, N.pdvno)                                                  AS pdvno,
                 IFNULL(I.xano, N.xano)                                                    AS xano,
                 IFNULL(I.custno, N.custno)                                                AS custno,
+                FL.filial                                                                 AS filial,
                 IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                            AS nfVenda,
                 IFNULL(I.nfData, DATE(N.issuedate))                                       AS nfData,
                 IFNULL(I.nfValor, N.grossamt / 100)                                       AS nfValor,
@@ -255,6 +268,8 @@ FROM
               ON UA.no = IFNULL(AT.userTroca, ATV.userTroca)
     LEFT JOIN sqldados.users         AS US
               ON US.no = IFNULL(AT.userSolicitacao, ATV.userSolicitacao)
+    LEFT JOIN T_DP_FILIAL            AS FL
+              ON FL.custno = IFNULL(I.custno, N.custno)
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR

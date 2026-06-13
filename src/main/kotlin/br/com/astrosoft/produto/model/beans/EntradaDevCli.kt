@@ -21,6 +21,7 @@ class EntradaDevCli(
   var pdvno: Int?,
   var xano: Int?,
   var custno: Int?,
+  var filial: Int?,
   var nfVenda: String?,
   var nfData: LocalDate?,
   var nfValor: Double?,
@@ -129,14 +130,9 @@ class EntradaDevCli(
     val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
     when {
       isReembolso()    -> {
-        val codigoCli = if(isNaoInformado()){
-          cliCodigo() ?: custno ?: 0
-        }else{
-          custno ?: 0
-        }
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custnoDev = codigoCli,
+          custnoDev = custno ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.tipoObs,
           notaDev = this,
@@ -146,7 +142,7 @@ class EntradaDevCli(
       }
 
       isMuda()         -> {
-        val mudaCliente = mudaCodigo() ?: cliCodigo() ?: 0
+        val mudaCliente = mudaCodigo() ?: 0
         val custno = custno ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
@@ -160,7 +156,7 @@ class EntradaDevCli(
 
       isNaoInformado() -> {
         val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
-        val custno = custno ?: 0
+        val custno = filial ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custnoDev = custno,
