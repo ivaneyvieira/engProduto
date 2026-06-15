@@ -71,18 +71,31 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     super.print(dados.sortedBy { it.tipoPrd }, printer)
   }
 
+  private fun EntradaDevCli.clienteCredito(): String {
+    return if (custnoCli == 0 && custnoMuda == 0) {
+      "${nota.custnoVend} - ${nota.cliente}"
+    } else if (custnoCli == 0) {
+      "${nota.custnoMuda} - ${nota.nameMuda}"
+    } else if (custnoMuda == 0) {
+      "${nota.custnoCli} - ${nota.nameCli}"
+    } else {
+      ""
+    }
+  }
+
   override fun printTitle(bean: EntradaDevCliPro) {
     tituloValeTroca()
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
     writeln("", negrito = true)
     writeln("Loja: ${nota.nomeLoja}", negrito = true)
-    writeln("Cliente Compra: <E>${nota.custno}</E> - ${nota.cliente}", negrito = true)
+    writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
     writeln(
       "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
       negrito = true
     )
-    writeln("Cliente Devolucao: ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
+    writeln("Cliente Devolucao : ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
+    writeln("Cliente do Credito: ${nota.clienteCredito()}", negrito = true)
     writeln("Referente: ${nota.remarks ?: ""}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     val totalTxt = "Valor Total do Vale Troca <E>R$: ${nota.valor.format()}</E>"

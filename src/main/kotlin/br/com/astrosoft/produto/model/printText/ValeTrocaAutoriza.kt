@@ -73,7 +73,7 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
     writeln("", negrito = true)
     writeln("Loja: ${nota.nomeLoja}", negrito = true)
-    writeln("Cliente Compra: <E>${nota.custno}</E> - ${nota.cliente}", negrito = true)
+    writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
     writeln(
       "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
       negrito = true

@@ -23,7 +23,7 @@ class ReportImpresso : ReportBuild<EntradaDevCli>() {
     columnReport(EntradaDevCli::tipoObs, header = "Tipo", aligment = CENTER, width = 70)
     columnReport(EntradaDevCli::nfVenda, header = "NF Venda", aligment = CENTER)
     columnReport(EntradaDevCli::nfData, header = "Data", aligment = CENTER)
-    columnReport(EntradaDevCli::custno, header = "Cód Cli", aligment = RIGHT)
+    columnReport(EntradaDevCli::custnoVend, header = "Cód Cli", aligment = RIGHT)
     columnReport(EntradaDevCli::cliente, header = "Nome do Cliente", width = 200)
   }
 

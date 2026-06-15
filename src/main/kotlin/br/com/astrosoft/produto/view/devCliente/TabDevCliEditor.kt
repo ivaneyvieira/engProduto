@@ -95,7 +95,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
     columnGrid(EntradaDevCli::tipoObs, header = "Tipo")
     columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
     columnGrid(EntradaDevCli::nfData, header = "Data")
-    columnGrid(EntradaDevCli::custno, header = "Cód Cli")
+    columnGrid(EntradaDevCli::custnoVend, header = "Cód Cli")
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }

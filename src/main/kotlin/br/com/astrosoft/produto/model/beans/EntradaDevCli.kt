@@ -20,7 +20,7 @@ class EntradaDevCli(
   var storeno: Int?,
   var pdvno: Int?,
   var xano: Int?,
-  var custno: Int?,
+  var custnoVend: Int?,
   var filial: Int?,
   var nfVenda: String?,
   var nfData: LocalDate?,
@@ -54,6 +54,12 @@ class EntradaDevCli(
   var pdvnoAutorizacao: Int?,
   var xanoAutorizacao: Int?,
   var cancelado: Boolean?,
+  var custnoCli: Int?,
+  var custnoMuda: Int?,
+  var saldoDevolucaoCli: Double?,
+  var saldoDevolucaoMuda: Double?,
+  var nameCli: String?,
+  var nameMuda: String?
 ) {
   var liberaStr: String
     get() = when (liberaImpressao) {
@@ -128,12 +134,12 @@ class EntradaDevCli(
       xano = xano ?: 0,
       impressora = impressora
     )
-    val lojaNaoInformado = saci.findLojaNaoInformada(custno ?: 0)
+    val lojaNaoInformado = saci.findLojaNaoInformada(custnoVend ?: 0)
     when {
       isReembolso()    -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
-          custnoDev = custno ?: 0,
+          custnoDev = custnoVend ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.tipoObs,
           notaDev = this,
@@ -144,7 +150,7 @@ class EntradaDevCli(
 
       isMuda()         -> {
         val mudaCliente = mudaCodigo() ?: 0
-        val custno = custno ?: 0
+        val custno = custnoVend ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custnoDev = custno,
@@ -171,7 +177,7 @@ class EntradaDevCli(
   }
 
   private fun isNaoInformado(): Boolean {
-    return custno == 200 || custno == 300 || custno == 400 || custno == 500 || custno == 800
+    return custnoVend == 200 || custnoVend == 300 || custnoVend == 400 || custnoVend == 500 || custnoVend == 800
   }
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()

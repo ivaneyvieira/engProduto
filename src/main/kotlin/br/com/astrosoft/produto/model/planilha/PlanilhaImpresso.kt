@@ -17,7 +17,7 @@ class PlanilhaImpresso : Planilha<EntradaDevCli>("Credito não Utilizado") {
     columnSheet(EntradaDevCli::tipoObs, header = "Tipo")
     columnSheet(EntradaDevCli::nfVenda, header = "NF Venda")
     columnSheet(EntradaDevCli::nfData, header = "Data")
-    columnSheet(EntradaDevCli::custno, header = "Cód Cli")
+    columnSheet(EntradaDevCli::custnoVend, header = "Cód Cli")
     columnSheet(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnSheet(EntradaDevCli::nfValor, header = "Valor Venda")
     columnSheet(EntradaDevCli::impressora, header = "Impressora")

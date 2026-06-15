@@ -118,7 +118,7 @@ SELECT I.invno                                                                  
        IFNULL(NF1.xano, NF2.xano)                                                                               AS xano,
        NF1.xano                                                                                                 AS xanoNf1,
        nfNfno                                                                                                   AS nfNfno,
-       IFNULL(NF1.custno, NF2.custno)                                                                           AS custno,
+       IFNULL(NF1.custno, NF2.custno)                                                                           AS custnoVend,
        IFNULL(NF1.cfo, NF2.cfo)                                                                                 AS cfo,
        CAST(CONCAT(IFNULL(NF1.nfno, NF2.nfno), '/',
                    IFNULL(NF1.nfse, NF2.nfse)) AS CHAR)                                                         AS nfVenda,
@@ -147,7 +147,11 @@ SELECT I.invno                                                                  
        R.pdvReembolso                                                                                           AS pdvReembolso,
        obsNI                                                                                                    AS obsNI,
        I.c8                                                                                                     AS liberaImpressao,
-       I.bits & POW(2, 4) != 0                                                                                  AS cancelado
+       I.bits & POW(2, 4) != 0                                                                                  AS cancelado,
+       SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('CLI', I.remarks) + LENGTH('CLI'), 100)), ' ', 1) *
+       1                                                                                                        AS custnoCli,
+       SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('MUDA', I.remarks) + LENGTH('MUDA'), 100)), ' ', 1) *
+       1                                                                                                        AS custnoMuda
 FROM
   sqldados.inv               AS I
     LEFT JOIN T_VENDA        AS U
@@ -212,7 +216,7 @@ SELECT DISTINCT I.invno,
                 IFNULL(I.storeno, N.storeno)                                              AS storeno,
                 IFNULL(I.pdvno, N.pdvno)                                                  AS pdvno,
                 IFNULL(I.xano, N.xano)                                                    AS xano,
-                IFNULL(I.custno, N.custno)                                                AS custno,
+                IFNULL(I.custnoVend, N.custno)                                            AS custnoVend,
                 FL.filial                                                                 AS filial,
                 IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                            AS nfVenda,
                 IFNULL(I.nfData, DATE(N.issuedate))                                       AS nfData,
@@ -246,7 +250,13 @@ SELECT DISTINCT I.invno,
                 IFNULL(AT.storeno, ATV.storeno)                                           AS storenoAutorizacao,
                 IFNULL(AT.pdvno, ATV.pdvno)                                               AS pdvnoAutorizacao,
                 IFNULL(AT.xano, ATV.xano)                                                 AS xanoAutorizacao,
-                cancelado                                                                 AS cancelado
+                cancelado                                                                 AS cancelado,
+                custnoCli                                                                 AS custnoCli,
+                custnoMuda                                                                AS custnoMuda,
+                CCli.saldoDevolucao / 100                                                 AS saldoDevolucaoCli,
+                CMuda.saldoDevolucao / 100                                                AS saldoDevolucaoMuda,
+                CCli.name                                                                 AS nameCli,
+                CMuda.name                                                                AS nameMuda
 FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N
@@ -270,10 +280,14 @@ FROM
     LEFT JOIN sqldados.users         AS US
               ON US.no = IFNULL(AT.userSolicitacao, ATV.userSolicitacao)
     LEFT JOIN T_DP_FILIAL            AS FL
-              ON FL.custno = IFNULL(I.custno, N.custno)
+              ON FL.custno = IFNULL(I.custnoVend, N.custno)
+    LEFT JOIN sqldados.custp         AS CCli
+              ON CCli.no = custnoCli
+    LEFT JOIN sqldados.custp         AS CMuda
+              ON CMuda.no = custnoMuda
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
-       IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
+       IFNULL(I.custnoVend, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
 HAVING ((NOT cancelado) AND (NOT :cancelado))
