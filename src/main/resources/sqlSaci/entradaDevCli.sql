@@ -191,7 +191,7 @@ CREATE TEMPORARY TABLE T_DP_FILIAL
 (
   INDEX (custno)
 )
-SELECT C.no AS custno, F.no AS filial
+SELECT C.no AS custno, F.no AS filial, F.name AS nameFilial
 FROM
   sqldados.custp              AS C
     INNER JOIN sqldados.store AS L
@@ -218,6 +218,7 @@ SELECT DISTINCT I.invno,
                 IFNULL(I.xano, N.xano)                                                    AS xano,
                 IFNULL(I.custnoVend, N.custno)                                            AS custnoVend,
                 FL.filial                                                                 AS filial,
+                FL.nameFilial                                                             AS nameFilial,
                 IFNULL(I.nfVenda, CONCAT(I.nfno, '/', I.nfse))                            AS nfVenda,
                 IFNULL(I.nfData, DATE(N.issuedate))                                       AS nfData,
                 IFNULL(I.nfValor, N.grossamt / 100)                                       AS nfValor,
@@ -291,4 +292,4 @@ WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.no
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
 HAVING ((NOT cancelado) AND (NOT :cancelado))
-    OR (:cancelado AND impressora != '' AND IFNULL(custno, 0) IN (200, 300, 400, 500, 800))
+    OR (:cancelado AND impressora != '' AND IFNULL(custnoVend, 0) IN (200, 300, 400, 500, 800))

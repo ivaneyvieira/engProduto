@@ -71,15 +71,23 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     super.print(dados.sortedBy { it.tipoPrd }, printer)
   }
 
-  private fun EntradaDevCli.clienteCredito(): String {
+  private fun EntradaDevCli.clienteCreditoS(): String {
     return if ((custnoCli ?: 0) == 0 && (custnoMuda ?: 0) == 0) {
-      "${nota.custnoVend} - ${nota.cliente}"
+      "$custnoVend - $cliente"
     } else if ((custnoCli ?: 0) == 0) {
-      "${nota.custnoMuda} - ${nota.nameMuda}"
+      "$custnoMuda - $nameMuda"
     } else if ((custnoMuda ?: 0) == 0) {
-      "${nota.custnoCli} - ${nota.nameCli}"
+      "$custnoCli - $nameCli"
     } else {
       ""
+    }
+  }
+
+  private fun EntradaDevCli.clienteCredito(): String {
+    return if ((filial ?: 0) == 0 ) {
+      "$custnoVend - $cliente"
+    }  else {
+      "$filial - $nameFilial"
     }
   }
 

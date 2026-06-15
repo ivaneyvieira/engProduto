@@ -22,6 +22,7 @@ class EntradaDevCli(
   var xano: Int?,
   var custnoVend: Int?,
   var filial: Int?,
+  var nameFilial: String?,
   var nfVenda: String?,
   var nfData: LocalDate?,
   var nfValor: Double?,
