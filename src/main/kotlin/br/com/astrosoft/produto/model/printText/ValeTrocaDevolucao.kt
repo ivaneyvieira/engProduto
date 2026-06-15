@@ -72,11 +72,11 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   }
 
   private fun EntradaDevCli.clienteCredito(): String {
-    return if (custnoCli == 0 && custnoMuda == 0) {
+    return if ((custnoCli ?: 0) == 0 && (custnoMuda ?: 0) == 0) {
       "${nota.custnoVend} - ${nota.cliente}"
-    } else if (custnoCli == 0) {
+    } else if ((custnoCli ?: 0) == 0) {
       "${nota.custnoMuda} - ${nota.nameMuda}"
-    } else if (custnoMuda == 0) {
+    } else if ((custnoMuda ?: 0) == 0) {
       "${nota.custnoCli} - ${nota.nameCli}"
     } else {
       ""
