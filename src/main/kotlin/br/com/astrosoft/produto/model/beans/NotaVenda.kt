@@ -159,7 +159,7 @@ data class FiltroNotaVenda(
   val transacao: Int = 0,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
-  val dataCorte: LocalDate?
+  val dataCorte: LocalDate?,
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {

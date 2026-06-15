@@ -748,6 +748,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("query", filtro.query)
       addOptionalParameter("tipo", filtro.tipo.codigo)
       addOptionalParameter("dataCorte", dataCorte)
+      addOptionalParameter("cancelado", filtro.cancelado)
       addOptionalParameter("dataLimiteInicial", filtro.dataLimiteInicial.toSaciDate())
       addOptionalParameter("impresso", filtro.impresso.let {
         when {
@@ -766,11 +767,21 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora) {
+  fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {
     val sql = "/sqlSaci/marcaImpresso.sql"
     script(sql) {
       addOptionalParameter("invno", invno)
-      addOptionalParameter("marca", impressora.name)
+      addOptionalParameter("marca", impressora?.name ?: "")
+      addOptionalParameter("storeno", storeno)
+      addOptionalParameter("pdvno", pdvno)
+      addOptionalParameter("xano", xano)
+    }
+  }
+
+  fun desmarcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int) {
+    val sql = "/sqlSaci/desmarcaImpresso.sql"
+    script(sql) {
+      addOptionalParameter("invno", invno)
       addOptionalParameter("storeno", storeno)
       addOptionalParameter("pdvno", pdvno)
       addOptionalParameter("xano", xano)
@@ -821,9 +832,9 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun autorizaDevCliente(auto: AutorizaDevCliente){
+  fun autorizaDevCliente(auto: AutorizaDevCliente) {
     val sql = "/sqlSaci/devClienteSave.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("invno", auto.invno)
       addOptionalParameter("prdno", auto.prdno)
       addOptionalParameter("grade", auto.grade)
@@ -2617,7 +2628,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("grade", produtoEstoque.grade)
     }
   }
-
 
   fun removeMovimentacao(pedido: Movimentacao) {
     val sql = "/sqlSaci/pedidoMovimentacaoLimpa.sql"

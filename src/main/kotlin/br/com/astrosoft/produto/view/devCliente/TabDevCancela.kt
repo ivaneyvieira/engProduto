@@ -1,16 +1,15 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCancela
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCancelaViewModel
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.fetchAll
-import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -20,7 +19,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<NotaVenda>(NotaVenda::class),
+class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
   ITabDevCancela {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
@@ -72,107 +71,61 @@ class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<NotaVe
         viewModel.updateView()
       }
     }
-    button("Relatorio") {
-      icon = VaadinIcon.PRINT.create()
+    button("Desfaz Devolução") {
+      this.icon = VaadinIcon.TRASH.create()
       onClick {
-        viewModel.imprimeRelatorio()
+        viewModel.desfazTroca()
       }
-    }
-    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "Cancela") {
-      val vendas = itensSelecionados()
-      viewModel.geraPlanilha(vendas)
     }
   }
 
-  override fun Grid<NotaVenda>.gridPanel() {
+  override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
-    columnGrid(NotaVenda::loja, header = "Loja")
+    columnGrid(EntradaDevCli::loja, header = "Loja")
+    columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
+    columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
+    columnGrid(EntradaDevCli::fezTrocaCol, header = "Troca")
+    columnGrid(EntradaDevCli::invno, header = "NI")
+    columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev").right()
+    columnGrid(EntradaDevCli::data, header = "Data", width = "6rem")
+    columnGrid(EntradaDevCli::vendno, header = "Cód For")
+    columnGrid(EntradaDevCli::fornecedor, header = "Fornecedor")
+    columnGrid(EntradaDevCli::valor, header = "Valor Dev")
+    columnGrid(EntradaDevCli::observacao, header = "Observação").expand()
+    columnGrid(EntradaDevCli::tipoObs, header = "Tipo")
+    columnGrid(EntradaDevCli::nfVenda, header = "NF Venda").right()
+    columnGrid(EntradaDevCli::nfData, header = "Data", width = "6rem")
+    columnGrid(EntradaDevCli::custno, header = "Cód Cli")
+    columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente").expand()
+    columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
+    columnGrid(EntradaDevCli::impressora, header = "Impressora")
+    columnGrid(EntradaDevCli::userName, header = "Usuário")
 
-    val user = AppConfig.userLogin() as? UserSaci
-    addColumnButton(VaadinIcon.SIGN_IN, "Cancela Solicitação", "Solicitação") { nota ->
-      val form = FormSolicitacaoNotaTroca(nota)
-      DialogHelper.showForm(caption = "Cancela Devolução", form = form) {
-        val solicitacaoTroca = form.solicitacaoTroca
-        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
-      }
-    }
-
-    if (user?.defazSolicitacao == true) {
-      addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
-        if (nota.loginSolicitacao.isNullOrBlank()) {
-          DialogHelper.showError("Não existe solicitação para desfazer")
-        } else {
-          DialogHelper.showQuestion("Desfaz a solicitação?") {
-            viewModel.desfazSolicitacao(nota)
-          }
-        }
-      }
-    }
-
-    columnGrid(NotaVenda::loginSolicitacao, header = "Cancelação")
-    columnGrid(NotaVenda::loginTroca, header = "Assina Troca")
-    columnGrid(NotaVenda::dataNi, header = "Data", width = "6rem")
-    columnGrid(NotaVenda::ni, header = "NI", width = "5rem")
-    columnGrid(NotaVenda::valorNi, header = "Valor Dev")
-    columnGrid(NotaVenda::data, header = "Data", width = "6rem")
-    columnGrid(NotaVenda::nota, header = "NF", width = "6rem").right()
-    columnGrid(NotaVenda::notaEntrega, header = "NF Ent", width = "6rem").right()
-    columnGrid(NotaVenda::uf, header = "UF")
-    columnGrid(NotaVenda::tipoNf, header = "Tipo NF") {
-      this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
-    }
-    val valorCol = columnGrid(NotaVenda::valor, header = "Valor NF")
-    columnGrid(NotaVenda::cliente, header = "Cód Cli")
-    columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
-    columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
-    columnGrid(NotaVenda::pdv, header = "PDV")
-    columnGrid(NotaVenda::transacao, header = "Transacao")
-
-    this.setPartNameGenerator {
-      if (it.ni == null) {
-        null
-      } else {
-        "amarelo"
-      }
-    }
-
-    this.dataProvider.addDataProviderListener {
-      val list = it.source.fetchAll()
-      val totalValor = list.groupBy { nota ->
-        "${nota.loja} ${nota.pdv} ${nota.transacao}"
-      }
-        .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
-      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
-      valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-    }
   }
 
-  override fun filtro(): FiltroNotaVenda {
+  override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
-    return FiltroNotaVenda(
+    return FiltroEntradaDevCli(
       loja = cmbLoja.value?.no ?: 0,
-      pesquisa = edtPesquisa.value ?: "",
-      dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value,
-      dataCorte = user?.dataVendaDevolucao
+      query = edtPesquisa.value ?: "",
+      dataI = edtDataInicial.value,
+      dataF = edtDataFinal.value,
+      impresso = true,
+      dataLimiteInicial = LocalDate.of(2023, 12, 1),
+      tipo = ETipoDevCli.COM,
+      dataCorte = user?.dataVendaDevolucao,
+      cancelado = true
     )
   }
 
-  override fun updateNotas(notas: List<NotaVenda>) {
+  override fun updateNotas(notas: List<EntradaDevCli>) {
     this.updateGrid(notas)
   }
 
-  override fun itensNotasSelecionados(): List<NotaVenda> {
+  override fun notasSelecionados(): List<EntradaDevCli> {
     return itensSelecionados()
-  }
-
-  override fun formCancela(nota: NotaVenda) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Cancela Devolução", form = form) {
-      viewModel.autorizaNota(nota, form.login, form.senha)
-    }
   }
 
   override fun isAuthorized(): Boolean {

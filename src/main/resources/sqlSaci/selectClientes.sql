@@ -11,7 +11,7 @@ CREATE TEMPORARY TABLE T_CLI
   cpfCnpj    CHAR(20)    NOT NULL,
   tipoPessoa VARCHAR(1)  NOT NULL,
   rg         VARCHAR(20) NOT NULL,
-  endereco   CHAR(60)    NOT NULL,
+  endereco   CHAR(100)    NOT NULL,
   bairro     CHAR(60)    NOT NULL,
   cidade     CHAR(60)    NOT NULL,
   estado     CHAR(2)     NOT NULL,

@@ -52,7 +52,8 @@ class EntradaDevCli(
   var liberaImpressao: String?,
   var storenoAutorizacao: Int?,
   var pdvnoAutorizacao: Int?,
-  var xanoAutorizacao: Int?
+  var xanoAutorizacao: Int?,
+  var cancelado: Boolean?,
 ) {
   var liberaStr: String
     get() = when (liberaImpressao) {
@@ -120,7 +121,7 @@ class EntradaDevCli(
   }
 
   fun marcaImpresso(impressora: Impressora) {
-    saci.marcaImpresso(
+    saci.marcaTrocaImpresso(
       invno = invno,
       storeno = storeno ?: 0,
       pdvno = pdvVenda ?: 0,
@@ -278,6 +279,29 @@ class EntradaDevCli(
     }
   }
 
+  fun desfazTroca() {
+    if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
+      saci.desmarcaTrocaImpresso(
+        invno = invno,
+        storeno = storeno ?: 0,
+        pdvno = pdvVenda ?: 0,
+        xano = xano ?: 0,
+      )
+
+      val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
+      val custno = filial ?: 0
+
+      val saldoDevolucao = SaldoDevolucao(
+        invno = invno,
+        custnoDev = custno,
+        custnoMuda = mudaCliente,
+        tipo = this.tipoObs,
+        saldo = -(valor ?: 0.00)
+      )
+      saci.marcaMudaCliente(saldoDevolucao)
+    }
+  }
+
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
   }
@@ -291,7 +315,8 @@ data class FiltroEntradaDevCli(
   val dataLimiteInicial: LocalDate?,
   val impresso: Boolean?,
   val tipo: ETipoDevCli,
-  var dataCorte: LocalDate?
+  var dataCorte: LocalDate?,
+  val cancelado: Boolean = false
 )
 
 enum class ETipoDevCli(val codigo: String) {

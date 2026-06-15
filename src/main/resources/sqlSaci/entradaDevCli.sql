@@ -146,7 +146,8 @@ SELECT I.invno                                                                  
           'N')                                                                                                  AS estorno,
        R.pdvReembolso                                                                                           AS pdvReembolso,
        obsNI                                                                                                    AS obsNI,
-       I.c8                                                                                                     AS liberaImpressao
+       I.c8                                                                                                     AS liberaImpressao,
+       I.bits & POW(2, 4) != 0                                                                                  AS cancelado
 FROM
   sqldados.inv               AS I
     LEFT JOIN T_VENDA        AS U
@@ -169,7 +170,6 @@ FROM
               ON S.no = I.storeno
 WHERE I.account = '2.01.25'
   AND I.cfo NOT LIKE '%949'
-  AND I.bits & POW(2, 4) = 0
   AND (I.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (I.storeno = :loja OR :loja = 0)
   AND (I.date >= :dataI OR :dataI = 0)
@@ -245,7 +245,8 @@ SELECT DISTINCT I.invno,
                    IFNULL(AT.produtoTroca, ATV.produtoTroca) = 'C', 'S', liberaImpressao) AS liberaImpressao,
                 IFNULL(AT.storeno, ATV.storeno)                                           AS storenoAutorizacao,
                 IFNULL(AT.pdvno, ATV.pdvno)                                               AS pdvnoAutorizacao,
-                IFNULL(AT.xano, ATV.xano)                                                 AS xanoAutorizacao
+                IFNULL(AT.xano, ATV.xano)                                                 AS xanoAutorizacao,
+                cancelado                                                                 AS cancelado
 FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N
@@ -275,3 +276,5 @@ WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.no
        IFNULL(I.custno, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
+HAVING ((NOT cancelado) AND (NOT :cancelado))
+    OR (:cancelado AND impressora != '' AND IFNULL(custno, 0) IN (200, 300, 400, 500, 800))
