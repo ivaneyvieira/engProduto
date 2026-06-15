@@ -104,7 +104,8 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     )
     writeln("Cliente Devolucao : ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
     writeln("Cliente do Credito: ${nota.clienteCredito()}", negrito = true)
-    writeln("Referente: ${nota.remarks ?: ""}", negrito = true)
+    writeln("Referente: ${nota.remarksLinha1}", negrito = true)
+    writeln("Tipo Credito: ${nota.remarksLinha2}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     val totalTxt = "Valor Total do Vale Troca <E>R$: ${nota.valor.format()}</E>"
     writeln(totalTxt, negrito = true)

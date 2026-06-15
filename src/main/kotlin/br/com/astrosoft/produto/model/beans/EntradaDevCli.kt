@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
@@ -62,6 +63,12 @@ class EntradaDevCli(
   var nameCli: String?,
   var nameMuda: String?
 ) {
+  val remarksLinha1: String
+    get() = remarks?.rpad(80, " ")?.substring(0, 40)?.trim() ?: ""
+
+  val remarksLinha2: String
+    get() = remarks?.rpad(80, " ")?.substring(40, 80)?.trim() ?: ""
+
   var liberaStr: String
     get() = when (liberaImpressao) {
       "S"  -> "Sim"
