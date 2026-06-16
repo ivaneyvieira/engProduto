@@ -17,44 +17,44 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   private fun tituloValeTroca() {
     when {
       nota.tipoObs.contains("TROCA")      -> {
-        writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: TROCA", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("ENTREGA")    -> {
-        writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: ENTREGA", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("RETIRA")     -> {
-        writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: RETIRA", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("REEMBOLSO")  -> {
-        writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: REEMBOLSO", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("GARANTIA")   -> {
-        writeln("Vale Credito: GARANTIA", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: GARANTIA", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("MUDA NF")    -> {
-        writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: MUDA NF", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("MUDA")       -> {
-        writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
-        writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
+        writeln("Vale Credito: MUDA CLIENTE", negrito = true, expand = true)
+        writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true)
       }
 
       nota.tipoObs.contains("EST CARTAO") -> {
-        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("EST BOLETO") -> {
-        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, expand = true)
       }
 
       nota.tipoObs.contains("EST DEP")    -> {
-        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
+        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, expand = true)
       }
     }
   }
@@ -113,10 +113,10 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   override fun printTitle(bean: EntradaDevCliPro) {
     writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true, expand = true)
     tituloValeTroca()
-    val totalTxt = "Valor <E>R$: ${nota.valor.format()}</E>"
+    val totalTxt = "<E>Valor R$: ${nota.valor.format()}</E>"
     writeln(totalTxt, negrito = true)
-    writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
-    writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
+    writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true)
+    writeln("NI: ${nota.invno}", negrito = true, expand = true)
     val clienteCredito = nota.clienteCredito("Credito: ")
     if (clienteCredito.isNotBlank()) {
       writeln(clienteCredito, negrito = true)
