@@ -155,13 +155,27 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
 }
 
 fun String.negrito(): String {
-  return "<B>${this}</B>"
+  return "${Format.NEGRITO.begin()}${this}${Format.NEGRITO.end()}"
 }
 
 fun String.expand(): String {
-  return "<E>${this}</E>"
+  return "${Format.EXPAND.begin()}${this}${Format.EXPAND.end()}"
 }
 
 fun String.expandNegrito(): String {
-  return "<EB>${this}</EB>"
+  return "${Format.EXPAND_NEGRITO.begin()}${this}${Format.EXPAND_NEGRITO.end()}"
+}
+
+enum class Format(val tag: String) {
+  NEGRITO("B"),
+  EXPAND("E"),
+  EXPAND_NEGRITO("EB");
+
+  fun begin(): String {
+    return "<$tag>"
+  }
+
+  fun end(): String {
+    return "</$tag>"
+  }
 }
