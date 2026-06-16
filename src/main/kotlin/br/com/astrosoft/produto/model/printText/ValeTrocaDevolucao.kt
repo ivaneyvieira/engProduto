@@ -113,6 +113,8 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   override fun printTitle(bean: EntradaDevCliPro) {
     writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true, expand = true)
     tituloValeTroca()
+    val totalTxt = "Valor <E>R$: ${nota.valor.format()}</E>"
+    writeln(totalTxt, negrito = true)
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
     val clienteCredito = nota.clienteCredito("Credito: ")
@@ -129,8 +131,6 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("Referente: ${nota.remarksLinha1}", negrito = true)
     writeln("Tipo Credito: ${nota.remarksLinha2}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
-    val totalTxt = "Valor Total do Vale Troca <E>R$: ${nota.valor.format()}</E>"
-    writeln(totalTxt, negrito = true)
     printLine('-')
   }
 
