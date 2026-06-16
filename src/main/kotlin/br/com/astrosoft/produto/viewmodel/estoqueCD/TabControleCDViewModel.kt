@@ -23,25 +23,6 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-  /*
-    fun updateView() = viewModel.exec {
-      val view = viewModel.view
-      val filtro: FiltroProdutoEstoque = subView.filtro()
-      CoroutineScope(Dispatchers.IO).launch {
-        try {
-          val produtos = withContext(Dispatchers.IO) {
-            ProdutoEstoque.findProdutoEstoque(filtro)
-          }
-          view.execUI {
-            subView.updateProduto(produtos)
-          }
-        } catch (e: Exception) {
-          view.execUI {
-            view.showError(e.message ?: "Erro desconhecido")
-          }
-        }
-      }
-    }*/
 
   fun updateView() = viewModel.exec {
     val view = viewModel.view
