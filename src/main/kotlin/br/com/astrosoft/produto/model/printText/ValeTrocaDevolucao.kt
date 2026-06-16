@@ -74,19 +74,25 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
   data class Cliente(val custno: Int, val name: String)
 
   private fun EntradaDevCli.clienteCredito(titulo: String): String {
-    val reg = when {
-      (custnoCli ?: 0) > 0  -> {
-        Cliente(custnoCli ?: 0, nameCli ?: "")
-      }
+    val reg = if (custnoVend in listOf(200, 300, 400, 500, 800)) {
+      when {
+        (custnoCli ?: 0) > 0  -> {
+          Cliente(custnoCli ?: 0, nameCli ?: "")
+        }
 
-      (custnoMuda ?: 0) > 0 -> {
-        Cliente(custnoMuda ?: 0, nameMuda ?: "")
-      }
+        (custnoMuda ?: 0) > 0 -> {
+          Cliente(custnoMuda ?: 0, nameMuda ?: "")
+        }
 
-      else                  -> {
-        Cliente(0, "")
+        else                  -> {
+          Cliente(custnoDev ?: 0, clienteDev ?: "")
+        }
       }
+    } else {
+      Cliente(custnoDev ?: 0, clienteDev ?: "")
     }
+
+    if (reg.custno == 0) return ""
 
     val totalTitulo = titulo.length
     val totalSep = 3
@@ -106,12 +112,14 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
 
   override fun printTitle(bean: EntradaDevCliPro) {
     tituloValeTroca()
+    writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true)
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
     val clienteCredito = nota.clienteCredito("Credito: ")
-    writeln(clienteCredito, negrito = true)
+    if (clienteCredito.isNotBlank()) {
+      writeln(clienteCredito, negrito = true)
+    }
     writeln("", negrito = true)
-    writeln("Loja: ${nota.nomeLoja}", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
     writeln(
       "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
