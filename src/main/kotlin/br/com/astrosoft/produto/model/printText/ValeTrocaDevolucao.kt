@@ -91,17 +91,17 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     val totalTitulo = titulo.length
     val totalSep = 3
     val totalCodigo = reg.custno.toString().length * 2
-    val totalNome = reg.name.length * 2
+    val totalNome = reg.name.length
     val total = totalTitulo + totalSep + totalCodigo + totalNome
     val width = total - widthPage
 
     val regAjustado = if (width > 0) {
-      reg.copy(name = reg.name.substring(0, reg.name.length - (width / 2)))
+      reg.copy(name = reg.name.substring(0, reg.name.length - width))
     } else {
       reg
     }
 
-    return "$titulo<E>${regAjustado.custno}</E> - <E>${regAjustado.name}</E>"
+    return "$titulo<E>${regAjustado.custno}</E> - ${regAjustado.name}"
   }
 
   override fun printTitle(bean: EntradaDevCliPro) {
