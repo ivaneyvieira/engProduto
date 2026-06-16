@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.beans.EntradaDevCli
 import br.com.astrosoft.produto.model.beans.EntradaDevCliPro
 
@@ -75,19 +76,11 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     return if ((custnoCli ?: 0) == 0 && (custnoMuda ?: 0) == 0) {
       ""
     } else if ((custnoCli ?: 0) == 0) {
-      "$custnoMuda - $nameMuda"
+      "<E>$custnoMuda</E> - $nameMuda"
     } else if ((custnoMuda ?: 0) == 0) {
-      "$custnoCli - $nameCli"
+      "<E>$custnoCli</E> - $nameCli"
     } else {
       ""
-    }
-  }
-
-  private fun EntradaDevCli.clienteCredito2(): String {
-    return if ((filial ?: 0) == 0 ) {
-      "$custnoVend - $cliente"
-    }  else {
-      "$filial - $nameFilial"
     }
   }
 
@@ -95,6 +88,8 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     tituloValeTroca()
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
+    val clienteCredito = nota.clienteCredito().rpad(80, " ").substring(0, 64 - 20).trim()
+    writeln("Cliente do Credito: $clienteCredito", negrito = true)
     writeln("", negrito = true)
     writeln("Loja: ${nota.nomeLoja}", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
@@ -103,7 +98,6 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
       negrito = true
     )
     writeln("Cliente Devolucao : ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
-    writeln("Cliente do Credito: ${nota.clienteCredito()}", negrito = true)
     writeln("Referente: ${nota.remarksLinha1}", negrito = true)
     writeln("Tipo Credito: ${nota.remarksLinha2}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
