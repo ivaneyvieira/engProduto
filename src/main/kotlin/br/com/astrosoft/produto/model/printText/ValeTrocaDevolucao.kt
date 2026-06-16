@@ -88,7 +88,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     tituloValeTroca()
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
     writeln("NI: ${nota.invno}", negrito = true, expand = true, center = true)
-    val clienteCredito = nota.clienteCredito().rpad(80, " ").substring(0, 64 - 20).trim()
+    val clienteCredito = nota.clienteCredito().rpad(80, " ").substring(0, 64 - 20 + 7 - 6).trim()
     writeln("Cliente do Credito: $clienteCredito", negrito = true)
     writeln("", negrito = true)
     writeln("Loja: ${nota.nomeLoja}", negrito = true)
