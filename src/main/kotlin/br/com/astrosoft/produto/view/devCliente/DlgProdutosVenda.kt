@@ -169,8 +169,8 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
       selectionMode = Grid.SelectionMode.NONE
 
       this.addItemClickListener {
-        when {
-          it.column.key == ProdutoNFS::dev.name                               -> {
+        when (it.column.key) {
+          ProdutoNFS::dev.name                               -> {
             it.item.dev = !(it.item.dev ?: false)
             if (it.item.dev == true) {
               it.item.temProduto = true
@@ -181,15 +181,41 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             this.dataProvider.refreshAll()
           }
 
-          it.column.key == ProdutoNFS::temProduto.name && it.item.dev == true -> {
+          ProdutoNFS::temProduto.name if it.item.dev == true -> {
             it.item.temProduto = !(it.item.temProduto ?: false)
             this.dataProvider.refreshAll()
           }
 
-          it.column.key == ProdutoNFS::quantDev.name && it.item.dev == true   -> {
+          ProdutoNFS::quantDev.name if it.item.dev == true   -> {
             this.editor.editItem(it.item)
             this.focusEditor(ProdutoNFS::quantDev)
           }
+        }
+      }
+
+
+      this.editor.addCloseListener {
+        val itens = gridDetail.dataProvider.fetchAll().filterNotNull()
+        val bean = it.item
+        val quantDev = itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.sumOf { item ->
+          item.quantDev ?: 0
+        }
+        val lastSeq = itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.maxOfOrNull { item -> item.seq ?: 0 } ?: 0
+        val quantidade = bean.quantidade ?: 0
+        val dif =  quantidade - quantDev
+        if (dif > 0) {
+          val copyBean = bean.copy(
+            quantDev = dif,
+            dev = false,
+            temProduto = false,
+            seq = lastSeq + 1
+          )
+          val novoItens = itens + listOf(copyBean)
+          this.setItems(novoItens)
         }
       }
 
