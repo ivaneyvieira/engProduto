@@ -120,6 +120,9 @@ class EntradaDevCli(
 
   private fun List<EntradaDevCliPro>.ajustaTipo(produtosAutorizacao: List<ProdutoNFS>): List<EntradaDevCliPro> {
     return this.map { prdCli ->
+      if((prdCli.tipo ?: "").endsWith("M")){
+        return@map prdCli
+      }
       val produtoAut = produtosAutorizacao.firstOrNull { prdAut ->
         prdCli.prdno == prdAut.prdno && prdCli.grade == prdAut.grade
       }

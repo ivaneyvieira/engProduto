@@ -67,25 +67,33 @@ SELECT I.invno,
        IFNULL(I.cliente, C.name)                                                                          AS cliente,
        MID(IFNULL(I.vendedor, E.sname), 1, 15)                                                            AS vendedor,
        @TIPO := TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.remarks, ')', 2), ')', -1))                        AS tipo,
-       IF(@TIPO REGEXP '^TRO.* M.*' OR @TIPO REGEXP '^EST.* M.*' OR @TIPO REGEXP '^REE.* M.*',
-          SUBSTRING_INDEX(X.c10, '|', 1), @TIPO)                                                          AS tipoPrd,
+       CASE
+         WHEN D.xano IS NOT NULL THEN TRIM(CONCAT(REPLACE(REPLACE(@TIPO, ' M', ''), ' P', ''),
+                                                  IF(D.temProduto, ' P', '')))
+                                 ELSE IF(@TIPO REGEXP '^TRO.* M.*' OR @TIPO REGEXP '^EST.* M.*' OR
+                                         @TIPO REGEXP '^REE.* M.*', SUBSTRING_INDEX(X.c10, '|', 1), @TIPO)
+       END                                                                                                AS tipoPrd,
        @QTTIPO := IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1 AS tipoQtd,
-       IF(IFNULL(@QTTIPO, 0) = 0, X.qtty / 1000, @QTTIPO)                                                 AS tipoQtdEfetiva
+       CASE
+         WHEN D.xano IS NOT NULL THEN D.quantDev
+                                 ELSE IF(IFNULL(@QTTIPO, 0) = 0, X.qtty / 1000, @QTTIPO)
+       END                                                                                                AS tipoQtdEfetiva
 FROM
-  T_NOTA                      AS I
-    LEFT JOIN  sqldados.nf    AS N
+  T_NOTA                                AS I
+    LEFT JOIN  sqldados.nf              AS N
                ON N.storeno = I.codLoja AND N.nfno = I.nfno AND N.nfse = I.nfse
-    LEFT JOIN  sqldados.custp AS C
+    LEFT JOIN  sqldados.custp           AS C
                ON C.no = N.custno
-    LEFT JOIN  sqldados.emp   AS E
+    LEFT JOIN  sqldados.emp             AS E
                ON E.no = N.empno
-    INNER JOIN sqldados.iprd  AS X
+    INNER JOIN sqldados.iprd            AS X
                ON I.invno = X.invno
-    LEFT JOIN  sqldados.prd   AS P
+    LEFT JOIN  sqldados.xaprd2Devolucao AS D
+               ON D.storeno = N.storeno AND D.pdvno = N.pdvno AND D.xano = N.xano AND D.prdno = X.prdno AND
+                  D.grade = X.grade
+    LEFT JOIN  sqldados.prd             AS P
                ON P.no = X.prdno
-    LEFT JOIN  sqldados.vend  AS V
+    LEFT JOIN  sqldados.vend            AS V
                ON V.no = I.vendno
-GROUP BY I.invno, X.prdno, X.grade
+GROUP BY I.invno, X.prdno, X.grade, D.seq
 ORDER BY descricao, grade, codigo
-
-

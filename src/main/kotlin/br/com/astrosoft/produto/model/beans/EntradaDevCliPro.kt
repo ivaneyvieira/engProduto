@@ -64,6 +64,14 @@ data class EntradaDevCliPro(
 
 fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
   return this.flatMap { bean ->
+    if((bean.tipo ?: "").endsWith("M")){
+      return@flatMap listOf(
+        bean.copy(
+          tipoQtd = 0,
+          tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: bean.quantidade ?: 0),
+        )
+      )
+    }
     if ((bean.tipoPrd ?: "") == "") {
       return@flatMap listOf(bean)
     }

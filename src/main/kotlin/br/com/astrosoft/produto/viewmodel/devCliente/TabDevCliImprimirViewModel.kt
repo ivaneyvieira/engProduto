@@ -62,8 +62,8 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
         }.sumOf { it.quantDev ?: 0 }
 
         if (quantAuto != prdDev.quantidade) {
-         // fail(
-         //   "Quantidade devolvida diferente da autorizada"
+          // fail(
+          //   "Quantidade devolvida diferente da autorizada"
           //)
         }
       }
@@ -121,7 +121,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     }
 
     relatorio.print(
-      nota.produtos(), subView.printerPreview(loja = 0)
+      dados = nota.produtos(), printer = subView.printerPreview(loja = 0)
       { impressora ->
         nota.marcaImpresso(Impressora(0, impressora))
         updateView()
