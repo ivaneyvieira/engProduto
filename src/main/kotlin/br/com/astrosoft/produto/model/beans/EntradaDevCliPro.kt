@@ -44,6 +44,7 @@ data class EntradaDevCliPro(
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
 
+
   fun isTipoMisto(): Boolean {
     val tipoNota = this.tipo ?: ""
     return "TRO.* M.*".toRegex().matches(tipoNota) ||
