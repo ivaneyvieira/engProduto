@@ -200,6 +200,8 @@ enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
   Todos("T", "Todos");
 }
 
+//fun List<ProdutoNFS>.expande(): List<ProdutoNFS> = this
+
 fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
   val grupo = this.groupBy { "${it.prdno} ${it.grade}" }
   val result = grupo.flatMap { entry ->

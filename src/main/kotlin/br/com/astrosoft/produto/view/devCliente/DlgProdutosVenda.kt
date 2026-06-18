@@ -193,10 +193,14 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
         }
       }
 
-
       this.editor.addCloseListener {
-        val itens = gridDetail.dataProvider.fetchAll().filterNotNull()
         val bean = it.item
+        val itens = gridDetail.dataProvider.fetchAll().filterNotNull()
+        itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.forEachIndexed { index, item ->
+          item.seq = index + 1
+        }
         val quantDev = itens.filter { item ->
           item.prdno == bean.prdno && item.grade == bean.grade
         }.sumOf { item ->
@@ -206,7 +210,7 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
           item.prdno == bean.prdno && item.grade == bean.grade
         }.maxOfOrNull { item -> item.seq ?: 0 } ?: 0
         val quantidade = bean.quantidade ?: 0
-        val dif =  quantidade - quantDev
+        val dif = quantidade - quantDev
         if (dif > 0) {
           val copyBean = bean.copy(
             quantDev = dif,
@@ -214,7 +218,17 @@ class DlgProdutosVenda(val viewModel: TabDevAutorizaViewModel, val nota: NotaVen
             temProduto = false,
             seq = lastSeq + 1
           )
-          val novoItens = itens + listOf(copyBean)
+          val pos = itens.indexOf(bean).let { index ->
+            if (index == -1) {
+              itens.size
+            } else {
+              index + 1
+            }
+          }
+          val novoItens = itens.toMutableList()
+          novoItens.add(pos, copyBean)
+
+
           this.setItems(novoItens)
         }
       }
