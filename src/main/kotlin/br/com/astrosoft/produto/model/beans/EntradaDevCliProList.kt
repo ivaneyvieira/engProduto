@@ -113,6 +113,15 @@ data class FiltroEntradaDevCliProList(
 
 fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
   return this.flatMap { bean ->
+    if ((bean.tipo ?: "").endsWith(" M")) {
+      return@flatMap listOf(
+        bean.copy(
+          //tipoPrd = bean.tipoNotaPre(),
+          quantidade = bean.tipoQtdEfetiva
+        )
+      )
+    }
+
     if ((bean.tipoPrd ?: "") == "") {
       return@flatMap listOf(bean)
     }

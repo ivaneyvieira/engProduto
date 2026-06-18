@@ -70,8 +70,8 @@ FROM
     LEFT JOIN  T_LOC          AS L
                ON L.storeno = I.codLoja AND L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
-       TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacaoCompleta LIKE @PESQUISALIKE OR
-       I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
+       TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR
+       I.observacaoCompleta LIKE @PESQUISALIKE OR I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
 GROUP BY I.invno, I.codLoja, X.prdno, X.grade;
 
 /************************************************************************/
@@ -162,9 +162,9 @@ FROM T_NI3;
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
 (
-  INDEX (loja, pdv, transacao, prdno, grade)
+  INDEX (loja, pdv, transacao, prdno, grade, seq)
 )
-SELECT loja, pdv, transacao, I.prdno, I.grade, T_NI.invno, T_NI.date, D.temProduto
+SELECT loja, pdv, transacao, I.prdno, I.grade, T_NI.invno, T_NI.date, D.temProduto, D.seq, D.quantDev
 FROM
   sqldados.iprd                         AS I
     INNER JOIN T_NI
@@ -172,7 +172,7 @@ FROM
     LEFT JOIN  sqldados.xaprd2Devolucao AS D
                ON D.storeno = loja AND D.pdvno = pdv AND D.xano = transacao AND D.prdno = I.prdno AND
                   D.grade = I.grade AND D.dev = TRUE
-GROUP BY loja, pdv, transacao, prdno, grade;
+GROUP BY loja, pdv, transacao, prdno, grade, seq;
 
 /****************************************************************************************/
 
@@ -243,22 +243,25 @@ SELECT data,
        R.prdno,
        userName,
        userLogin,
-       UA.name                                                                                             AS autorizacaoName,
-       UA.login                                                                                            AS autorizacaoLogin,
+       UA.name                                                                                   AS autorizacaoName,
+       UA.login                                                                                  AS autorizacaoLogin,
        codigo,
        descricao,
        R.grade,
        quantidade,
        R.observacao,
-       tipo,
-       IF(tipo REGEXP '^TRO.* M.*' OR tipo REGEXP '^EST.* M.*' OR tipo REGEXP '^REE.* M.*', tipoPrd, tipo) AS tipoPrd,
-       IFNULL(temProduto, 0)                                                                               AS temProduto,
+       @TIPO := tipo                                                                             AS tipo,
+       IF(N.seq IS NULL,
+          IF(tipo REGEXP '^TRO.* M.*' OR tipo REGEXP '^EST.* M.*' OR tipo REGEXP '^REE.* M.*', tipoPrd, tipo),
+          TRIM(CONCAT(REPLACE(REPLACE(@TIPO, ' M', ''), ' P', ''), IF(N.temProduto, ' P', '')))) AS tipoPrd,
+       IFNULL(temProduto, 0)                                                                     AS temProduto,
        tipoQtd,
-       IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd)                                                     AS tipoQtdEfetiva,
+       IF(N.seq IS NULL, IF(IFNULL(tipoQtd, 0) = 0, quantidade, tipoQtd), N.quantDev)            AS tipoQtdEfetiva,
        ni,
        nota,
        valor,
-       localizacao
+       localizacao,
+       seq
 FROM
   T_RESULT                           AS R
     LEFT JOIN T_NI_PRD               AS N
@@ -311,5 +314,5 @@ FROM
               ON UE.no = D.userEntrega
     LEFT JOIN sqldados.users                 AS UR
               ON UR.no = D.userRecebimento
-GROUP BY ni, data, codLoja, loja, prdno, grade
+GROUP BY ni, data, codLoja, loja, prdno, grade, seq
 ORDER BY data, codLoja, loja, prdno, grade
