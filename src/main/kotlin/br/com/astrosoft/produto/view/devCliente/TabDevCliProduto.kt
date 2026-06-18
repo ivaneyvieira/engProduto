@@ -12,8 +12,8 @@ import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.reposicao.FormAutoriza
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliValeTrocaProduto
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliValeTrocaProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliProduto
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
@@ -27,9 +27,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliValeTrocaProduto(val viewModel: TabDevCliValeTrocaProdutoViewModel) :
+class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
   TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
-  ITabDevCliValeTrocaProduto {
+  ITabDevCliProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField

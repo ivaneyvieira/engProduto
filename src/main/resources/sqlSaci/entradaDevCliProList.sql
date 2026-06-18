@@ -20,14 +20,15 @@ CREATE TEMPORARY TABLE T_NOTA
 (
   PRIMARY KEY (invno)
 )
-SELECT I.invno                                            AS invno,
-       IF(I.usernoFirst = 0, I.usernoLast, I.usernoFirst) AS userno,
-       CAST(I.date AS DATE)                               AS data,
-       I.storeno                                          AS codLoja,
-       CONCAT(I.nfname, '/', I.invse)                     AS nota,
-       S.otherName                                        AS loja,
-       I.remarks                                          AS observacao,
-       ROUND(I.grossamt / 100, 2)                         AS valor
+SELECT I.invno                                                            AS invno,
+       IF(I.usernoFirst = 0, I.usernoLast, I.usernoFirst)                 AS userno,
+       CAST(I.date AS DATE)                                               AS data,
+       I.storeno                                                          AS codLoja,
+       CONCAT(I.nfname, '/', I.invse)                                     AS nota,
+       S.otherName                                                        AS loja,
+       I.remarks                                                          AS observacaoCompleta,
+       SUBSTRING_INDEX(SUBSTRING_INDEX(I.remarks, 'CLI ', 1), 'MUDA ', 1) AS observacaoNormal,
+       ROUND(I.grossamt / 100, 2)                                         AS valor
 FROM
   sqldados.inv               AS I
     LEFT JOIN sqldados.store AS S
@@ -40,24 +41,24 @@ WHERE (I.date = :data)
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
-SELECT CAST(I.data AS DATE)                                                                           AS data,
-       I.codLoja                                                                                      AS codLoja,
-       I.loja                                                                                         AS loja,
-       X.prdno                                                                                        AS prdno,
-       U.name                                                                                         AS userName,
-       U.login                                                                                        AS userLogin,
-       TRIM(X.prdno)                                                                                  AS codigo,
-       TRIM(MID(P.name, 1, 37))                                                                       AS descricao,
-       X.grade                                                                                        AS grade,
-       SUM(ROUND(X.qtty / 1000))                                                                      AS quantidade,
-       I.observacao                                                                                   AS observacao,
-       SUBSTRING_INDEX(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.observacao, ')', 2), ')', -1)), ' ', 2) AS tipo,
-       SUBSTRING_INDEX(X.c10, '|', 1)                                                                 AS tipoPrd,
-       IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1        AS tipoQtd,
-       I.invno                                                                                        AS ni,
-       I.nota                                                                                         AS nota,
-       I.valor                                                                                        AS valor,
-       TRIM(IFNULL(L.localizacao, ''))                                                                AS localizacao
+SELECT CAST(I.data AS DATE)                                                                                 AS data,
+       I.codLoja                                                                                            AS codLoja,
+       I.loja                                                                                               AS loja,
+       X.prdno                                                                                              AS prdno,
+       U.name                                                                                               AS userName,
+       U.login                                                                                              AS userLogin,
+       TRIM(X.prdno)                                                                                        AS codigo,
+       TRIM(MID(P.name, 1, 37))                                                                             AS descricao,
+       X.grade                                                                                              AS grade,
+       SUM(ROUND(X.qtty / 1000))                                                                            AS quantidade,
+       I.observacaoCompleta                                                                                 AS observacao,
+       SUBSTRING_INDEX(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(I.observacaoNormal, ')', 3), ')', -1)), ' ', 3) AS tipo,
+       SUBSTRING_INDEX(X.c10, '|', 1)                                                                       AS tipoPrd,
+       IF(X.c10 LIKE '%|%', SUBSTRING_INDEX(SUBSTRING_INDEX(X.c10, '|', 2), '|', -1), '0') * 1              AS tipoQtd,
+       I.invno                                                                                              AS ni,
+       I.nota                                                                                               AS nota,
+       I.valor                                                                                              AS valor,
+       TRIM(IFNULL(L.localizacao, ''))                                                                      AS localizacao
 FROM
   T_NOTA                      AS I
     INNER JOIN sqldados.iprd  AS X
@@ -69,9 +70,9 @@ FROM
     LEFT JOIN  T_LOC          AS L
                ON L.storeno = I.codLoja AND L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
-       TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacao LIKE @PESQUISALIKE OR
+       TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR I.observacaoCompleta LIKE @PESQUISALIKE OR
        I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
-GROUP BY I.invno, I.codLoja, X.prdno, X.grade, I.observacao;
+GROUP BY I.invno, I.codLoja, X.prdno, X.grade;
 
 /************************************************************************/
 DROP TEMPORARY TABLE IF EXISTS T_VENDA;
@@ -285,7 +286,7 @@ SELECT data,
        quantidade,
        observacao,
        tipo,
-       IF(tipoPrd = '', TRIM(CONCAT(SUBSTRING_INDEX(tipo, ' ', 1), IF(temProduto, ' P', ''))), tipoPrd) AS tipoPrd,
+       IF(tipoPrd = '', TRIM(CONCAT(SUBSTRING_INDEX(tipo, ' ', 2), IF(temProduto, ' P', ''))), tipoPrd) AS tipoPrd,
        tipoQtd,
        tipoQtdEfetiva,
        ni,

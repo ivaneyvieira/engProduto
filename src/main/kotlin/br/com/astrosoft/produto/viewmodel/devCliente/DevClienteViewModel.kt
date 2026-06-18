@@ -7,7 +7,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
   val tabDevCliEditorViewModel = TabDevCliEditorViewModel(this)
   val tabDevCliImprimirViewModel = TabDevCliImprimirViewModel(this)
   val tabDevCliDevTrocaViewModel = TabDevCliDevTrocaViewModel(this)
-  val tabDevCliValeTrocaProdutoViewModel = TabDevCliValeTrocaProdutoViewModel(this)
+  val tabDevCliProdutoViewModel = TabDevCliProdutoViewModel(this)
   val tabDevCliImpressoViewModel = TabDevCliImpressoViewModel(this)
   val tabDevCliCreditoViewModel = TabDevCliCreditoViewModel(this)
   val tabDevAutorizaViewModel = TabDevAutorizaViewModel(this)
@@ -21,7 +21,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
     view.tabDevCliImpresso,
     view.tabDevCancela,
     view.tabDevCliEditor,
-    view.tabDevCliValeTrocaProduto,
+    view.tabDevCliProduto,
     view.tabDevCliCredito,
     view.tabDevCliDevTroca,
     view.tabDevCliVenda,
@@ -33,7 +33,7 @@ interface IDevClienteView : IView {
   val tabDevCliImprimir: ITabDevCliImprimir
   val tabDevCliDevTroca: ITabDevCliDevTroca
   val tabDevCliEditor: ITabDevCliEditor
-  val tabDevCliValeTrocaProduto: ITabDevCliValeTrocaProduto
+  val tabDevCliProduto: ITabDevCliProduto
   val tabDevCliImpresso: ITabDevCliImpresso
   val tabDevCliCredito: ITabDevCliCredito
   val tabDevAutoriza: ITabDevAutoriza

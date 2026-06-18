@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
+class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -151,10 +151,10 @@ class TabDevCliValeTrocaProdutoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabDevCliValeTrocaProduto
+    get() = viewModel.view.tabDevCliProduto
 }
 
-interface ITabDevCliValeTrocaProduto : ITabView {
+interface ITabDevCliProduto : ITabView {
   fun filtro(): FiltroEntradaDevCliProList
   fun updateProdutos(produtos: List<EntradaDevCliProList>)
   fun produtosSelecionados(): List<EntradaDevCliProList>
