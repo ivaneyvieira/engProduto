@@ -47,7 +47,14 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
     }
 
     itens.forEach {
-      if (it.local.isNullOrBlank()) fail("Produto sem localização")
+      if (it.local.isNullOrBlank()) {
+        fail("Produto sem localização")
+      }
+      val estoqueCD = it.kardec ?: 0
+      val quantidadeNF = it.quantidadeNF ?: 0
+      if (estoqueCD < quantidadeNF) {
+        fail("Estoque insuficiente para marcar como CD")
+      }
     }
 
     subView.formAutoriza(itens) { userno ->
