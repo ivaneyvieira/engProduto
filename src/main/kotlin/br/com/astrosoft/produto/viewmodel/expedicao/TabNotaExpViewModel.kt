@@ -53,7 +53,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       val estoqueCD = it.kardec ?: 0
       val quantidadeNF = it.quantidadeNF ?: 0
       if (estoqueCD < quantidadeNF) {
-        fail("Estoque insuficiente para marcar como CD")
+        //fail("Estoque insuficiente para marcar como CD")
       }
     }
 
