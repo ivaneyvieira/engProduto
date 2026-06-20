@@ -6,8 +6,11 @@ DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
-  (tipo varchar(30))
-SELECT N.storeno                      AS loja,
+(
+  tipo varchar(30)
+)
+SELECT N.invno                        AS ni,
+       N.storeno                      AS loja,
        P.prdno                        AS prdno,
        P.grade                        AS grade,
        N.storeno                      AS ljDoc,
@@ -37,7 +40,7 @@ WHERE P.prdno = :prdno
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
   AND P.prdno NOT IN ( SELECT prdno FROM sqldados.produtos_dev_loja )
-  AND ((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks LIKE '%TROCA P%'));
+  AND ((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks REGEXP 'TROCA +P'));
 
 SELECT loja,
        prdno,
@@ -54,6 +57,5 @@ SELECT loja,
        userLogin,
        recLogin,
        entLogin
-FROM
-  T_MOVIMENTACAO_KARDEC
+FROM T_MOVIMENTACAO_KARDEC
 

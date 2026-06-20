@@ -120,7 +120,7 @@ class EntradaDevCli(
 
   private fun List<EntradaDevCliPro>.ajustaTipo(produtosAutorizacao: List<ProdutoNFS>): List<EntradaDevCliPro> {
     return this.map { prdCli ->
-      if((prdCli.tipo ?: "").endsWith("M")){
+      if ((prdCli.tipo ?: "").endsWith("M")) {
         return@map prdCli
       }
       val produtoAut = produtosAutorizacao.firstOrNull { prdAut ->
@@ -297,26 +297,26 @@ class EntradaDevCli(
   }
 
   fun desfazTroca() {
-    if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
-      saci.desmarcaTrocaImpresso(
-        invno = invno,
-        storeno = storeno ?: 0,
-        pdvno = pdvVenda ?: 0,
-        xano = xano ?: 0,
-      )
+    //if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
+    saci.desmarcaTrocaImpresso(
+      invno = invno,
+      storeno = storeno ?: 0,
+      pdvno = pdvVenda ?: 0,
+      xano = xano ?: 0,
+    )
 
-      val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
-      val custno = filial ?: 0
+    val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
+    val custno = filial ?: 0
 
-      val saldoDevolucao = SaldoDevolucao(
-        invno = invno,
-        custnoDev = custno,
-        custnoMuda = mudaCliente,
-        tipo = this.tipoObs,
-        saldo = -(valor ?: 0.00)
-      )
-      saci.marcaMudaCliente(saldoDevolucao)
-    }
+    val saldoDevolucao = SaldoDevolucao(
+      invno = invno,
+      custnoDev = custno,
+      custnoMuda = mudaCliente,
+      tipo = this.tipoObs,
+      saldo = -(valor ?: 0.00)
+    )
+    saci.marcaMudaCliente(saldoDevolucao)
+    // }
   }
 
   companion object {
