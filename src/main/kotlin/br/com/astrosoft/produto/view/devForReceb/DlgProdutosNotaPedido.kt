@@ -104,10 +104,21 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
             viewModel.saveNota(nota)
           }
         }
+
         this.button("Adiciona") {
           this.icon = VaadinIcon.PLUS.create()
           this.addClickListener {
             val dlg = DlgAdicionaProdutoNota(viewModel, nota) {
+              gridDetail.dataProvider.refreshAll()
+            }
+            dlg.open()
+          }
+        }
+
+        this.button("Adiciona NF") {
+          this.icon = VaadinIcon.PLUS.create()
+          this.addClickListener {
+            val dlg = DlgAdicionaProdutoNotaInv(viewModel, nota) {
               gridDetail.dataProvider.refreshAll()
             }
             dlg.open()

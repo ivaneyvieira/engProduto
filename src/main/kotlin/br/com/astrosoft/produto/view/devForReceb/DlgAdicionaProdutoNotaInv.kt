@@ -16,13 +16,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaProdutoNota2(
+class DlgAdicionaProdutoNotaInv(
   val viewModel: ITabNotaViewModel,
   val nota: NotaRecebimentoDev,
   val onClose: () -> Unit = {}
 ) : Dialog() {
-  private val listaRow = mutableListOf<LinhaNota>()
-  private var edtNi: IntegerField? = null
+  private val listaRow = mutableListOf<LinhaNotaInv>()
+
 
   init {
     this.isModal = true
@@ -33,16 +33,9 @@ class DlgAdicionaProdutoNota2(
       setSizeFull()
       this.isSpacing = false
       this.isMargin = false
-      //if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
-      edtNi = integerField("NI") {
-        this.isAutoselect = true
-        this.isAutofocus = true
-        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-        this.width = "6rem"
-      }
-      //}
+
       for (i in 1..14) {
-        val linha = LinhaNota(viewModel = viewModel, nota = nota, temLabel = i == 1)
+        val linha = LinhaNotaInv(viewModel = viewModel, nota = nota, temLabel = i == 1)
         listaRow.add(linha)
         add(linha)
       }
@@ -64,7 +57,7 @@ class DlgAdicionaProdutoNota2(
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
-          this@DlgAdicionaProdutoNota2.close()
+          this@DlgAdicionaProdutoNotaInv.close()
         }
       }
     }
@@ -83,14 +76,14 @@ class DlgAdicionaProdutoNota2(
     this.close()
   }
 
-  private fun save(linha: LinhaNota, seq: Int) {
+  private fun save(linha: LinhaNotaInv, seq: Int) {
     val produtoNota = nota.produtos.firstOrNull() ?: return
 
     val prdno = linha.prdno() ?: return
     val grade = linha.grade()
     val saldo = linha.saldo()
     val invno = if (nota.motivoDevolucaoEnun?.notasMultiplas == true) {
-      edtNi?.value ?: 0
+      linha.invno() ?: 0
     } else {
       nota.niPrincipal
     }
@@ -109,8 +102,9 @@ class DlgAdicionaProdutoNota2(
   }
 }
 
-class LinhaNota2(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) :
+class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) :
   HorizontalLayout() {
+  private var edtNi: IntegerField? = null
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -118,12 +112,23 @@ class LinhaNota2(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev,
 
   private val produtos = mutableListOf<PrdGrade>()
 
+  fun invno(): Int? = edtNi?.value
   fun prdno() = produtos.firstOrNull()?.prdno
   fun grade() = edtGrade?.value
   fun saldo() = edtQuant?.value
 
   init {
     this.setWidthFull()
+    edtNi = integerField("NI") {
+      if (!temLabel) {
+        this.label = ""
+      }else{
+        this.isAutofocus = true
+      }
+      this.isAutoselect = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.width = "6rem"
+    }
     edtCodigo = textField("Código") {
       if (!temLabel) {
         this.label = ""
@@ -145,17 +150,12 @@ class LinhaNota2(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev,
           edtQuant?.value = null
 
           if (this.value != "" || this.value != null) {
-            //Notification.show("Produto não encontrado", 3000, Notification.Position.MIDDLE).apply {
-            //  this.addThemeVariants(NotificationVariant.LUMO_ERROR)
-            //}
             edtCodigo?.focus()
-
-            //edtCodigo?.selectAll()
           }
         } else if (produtos.size == 1) {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
           edtGrade?.isEnabled = true
-          edtGrade?.setItems(produtos.map { it.grade })
+          edtGrade?.setItems(produtos.map { it.grade }.sorted())
           edtGrade?.value = produtos.firstOrNull()?.grade
           edtGrade?.isEnabled = false
           edtQuant?.value = 0
@@ -163,7 +163,7 @@ class LinhaNota2(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev,
         } else {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
           edtGrade?.isEnabled = true
-          edtGrade?.setItems(produtos.map { it.grade })
+          edtGrade?.setItems(produtos.map { it.grade }.sorted())
           edtGrade?.value = produtos.firstOrNull()?.grade
           edtQuant?.value = 0
           edtGrade?.focus()
