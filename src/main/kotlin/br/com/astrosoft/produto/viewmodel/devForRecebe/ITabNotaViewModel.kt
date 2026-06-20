@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
+import br.com.astrosoft.produto.model.saci
 
 interface ITabNotaViewModel {
   fun findProdutos(codigo: String): List<PrdGrade>
@@ -9,5 +10,13 @@ interface ITabNotaViewModel {
   fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?)
   fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
     produto.updateAcertoProduto()
+  }
+
+  fun niToNF(ni: Int): String {
+    return saci.niToNF(ni)
+  }
+
+  fun nfToNI(loja: Int, nfno: String, nfse: String): Int?{
+    return saci.nfToNI(loja, nfno, nfse)
   }
 }

@@ -23,7 +23,6 @@ class DlgAdicionaProdutoNotaInv(
 ) : Dialog() {
   private val listaRow = mutableListOf<LinhaNotaInv>()
 
-
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
@@ -104,7 +103,8 @@ class DlgAdicionaProdutoNotaInv(
 
 class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) :
   HorizontalLayout() {
-  private var edtNi: IntegerField? = null
+  private var edtNI: IntegerField? = null
+  private var edtNF: TextField? = null
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -112,28 +112,59 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
 
   private val produtos = mutableListOf<PrdGrade>()
 
-  fun invno(): Int? = edtNi?.value
+  fun invno(): Int? = edtNI?.value
   fun prdno() = produtos.firstOrNull()?.prdno
   fun grade() = edtGrade?.value
   fun saldo() = edtQuant?.value
 
   init {
     this.setWidthFull()
-    edtNi = integerField("NI") {
+    edtNI = integerField("NI") {
       if (!temLabel) {
         this.label = ""
-      }else{
+      } else {
         this.isAutofocus = true
       }
       this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.width = "6rem"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 2000
+
+      addValueChangeListener {
+        if (it.isFromClient) {
+          val ni = it.value ?: return@addValueChangeListener
+          val nf = viewModel.niToNF(ni)
+          edtNF?.value = nf
+        }
+      }
+    }
+    edtNF = textField("NF") {
+      if (!temLabel) {
+        this.label = ""
+      }
+      this.isAutoselect = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.width = "6rem"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 2000
+
+      addValueChangeListener {
+        if (it.isFromClient) {
+          val nf = it.value ?: return@addValueChangeListener
+          val loja = nota.loja ?: return@addValueChangeListener
+          val nfno = nf.split("/").getOrNull(0) ?: return@addValueChangeListener
+          val nfse = nf.split("/").getOrNull(1) ?: return@addValueChangeListener
+          val ni = viewModel.nfToNI(loja, nfno, nfse)
+          edtNI?.value = ni ?: 0
+        }
+      }
     }
     edtCodigo = textField("Código") {
       if (!temLabel) {
         this.label = ""
       }
-      this.width = "180px"
+      this.width = "6rem"
       this.isClearButtonVisible = true
       this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)

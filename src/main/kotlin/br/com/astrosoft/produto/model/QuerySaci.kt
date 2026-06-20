@@ -3413,6 +3413,24 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun niToNF(ni: Int): String {
+    val sql = "/sqlSaci/findNotaInv.sql"
+    val nota = query(sql, NotaInv::class) {
+      addOptionalParameter("ni", ni)
+    }.firstOrNull()
+    return nota?.numeroNF ?: ""
+  }
+
+  fun nfToNI(loja: Int, nfno: String, nfse: String): Int {
+    val sql = "/sqlSaci/findNotaNF.sql"
+    val nota = query(sql, NotaInv::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("nfno", nfno)
+      addOptionalParameter("nfse", nfse)
+    }.firstOrNull()
+    return nota?.ni ?: 0
+  }
+
   companion object {
     private val db = DB("saci")
 
