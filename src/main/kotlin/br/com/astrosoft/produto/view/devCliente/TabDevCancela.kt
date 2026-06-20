@@ -112,7 +112,7 @@ class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<Entrad
       query = edtPesquisa.value ?: "",
       dataI = edtDataInicial.value,
       dataF = edtDataFinal.value,
-      impresso = true,
+      impresso = null,
       dataLimiteInicial = LocalDate.of(2023, 12, 1),
       tipo = ETipoDevCli.COM,
       dataCorte = user?.dataVendaDevolucao,

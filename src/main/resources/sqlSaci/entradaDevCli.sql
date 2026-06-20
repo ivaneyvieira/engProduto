@@ -292,4 +292,4 @@ WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.no
        I.remarks LIKE @PESQUISALIKE)
   AND (IFNULL(I.xano, N.xano) IS NOT NULL)
 HAVING ((NOT cancelado) AND (NOT :cancelado))
-    OR (:cancelado /*AND impressora != ''*/ AND IFNULL(custnoVend, 0) IN (200, 300, 400, 500, 800) AND cancelado)
+    OR (:cancelado /*AND impressora != ''*/ /*AND IFNULL(custnoVend, 0) IN (200, 300, 400, 500, 800)*/ AND cancelado)

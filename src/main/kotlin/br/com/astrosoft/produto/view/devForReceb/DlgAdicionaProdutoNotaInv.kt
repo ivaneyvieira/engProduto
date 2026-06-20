@@ -157,6 +157,9 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           val nfse = nf.split("/").getOrNull(1) ?: return@addValueChangeListener
           val ni = viewModel.nfToNI(loja, nfno, nfse)
           edtNI?.value = ni ?: 0
+          if(ni != null){
+            edtCodigo?.focus()
+          }
         }
       }
     }
