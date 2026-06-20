@@ -155,7 +155,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
         } else if (produtos.size == 1) {
           edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
           edtGrade?.isEnabled = true
-          edtGrade?.setItems(produtos.map { it.grade }.sorted())
+          edtGrade?.setItems(produtos.map { it.grade }.distinct().sorted())
           edtGrade?.value = produtos.firstOrNull()?.grade
           edtGrade?.isEnabled = false
           edtQuant?.value = 0

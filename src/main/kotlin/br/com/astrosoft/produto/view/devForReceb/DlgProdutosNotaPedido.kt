@@ -330,7 +330,8 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
   }
 
   fun update() {
-    val listProdutos = nota.produtos.sortedBy { "${it.ni}-${it.prdno}-${it.grade}-${it.seq}" }
+    val listProdutos = nota.produtos.distinctBy { "${it.ni}-${it.prdno}-${it.grade}" }
+      .sortedBy { "${it.ni}-${it.prdno}-${it.grade}-${it.seq}" }
     gridDetail.setItems(listProdutos)
   }
 
