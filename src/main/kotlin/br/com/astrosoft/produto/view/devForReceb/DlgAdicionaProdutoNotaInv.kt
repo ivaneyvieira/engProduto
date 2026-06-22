@@ -105,6 +105,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
   HorizontalLayout() {
   private var edtNI: IntegerField? = null
   private var edtNF: TextField? = null
+  private var edtRefFab: TextField? = null
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -157,7 +158,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           val nfse = nf.split("/").getOrNull(1) ?: return@addValueChangeListener
           val ni = viewModel.nfToNI(loja, nfno, nfse)
           edtNI?.value = ni ?: 0
-          if(ni != null){
+          if (ni != null) {
             edtCodigo?.focus()
           }
         }
@@ -174,7 +175,12 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 2000
       this.addValueChangeListener {
-        val lista = viewModel.findProdutos(this.value)
+        val value = it.value ?: ""
+
+        val ref = viewModel.codigoToRef(value)
+        edtRefFab?.value = ref ?: ""
+
+        val lista = viewModel.findProdutos(value)
         produtos.clear()
         produtos.addAll(lista)
         if (produtos.isEmpty()) {
@@ -201,6 +207,28 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           edtGrade?.value = produtos.firstOrNull()?.grade
           edtQuant?.value = 0
           edtGrade?.focus()
+        }
+      }
+    }
+
+    edtRefFab = textField("Ref Fabrica") {
+      if (!temLabel) {
+        this.label = ""
+      }
+      this.width = "8rem"
+      this.isClearButtonVisible = true
+      this.isAutoselect = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 2000
+
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          val value = it.value ?: ""
+          val codigo = viewModel.refToCodigo(value)
+          if (codigo != null) {
+            edtCodigo?.value = codigo
+          }
         }
       }
     }

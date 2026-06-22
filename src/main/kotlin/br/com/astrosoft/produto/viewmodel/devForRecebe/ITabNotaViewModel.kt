@@ -19,4 +19,12 @@ interface ITabNotaViewModel {
   fun nfToNI(loja: Int, nfno: String, nfse: String): Int?{
     return saci.nfToNI(loja, nfno, nfse)
   }
+
+  fun refToCodigo(ref: String): String?{
+    return saci.refToCodigo(ref)
+  }
+
+  fun codigoToRef(codigo: String): String? {
+    return saci.codigoToRef(codigo)
+  }
 }
