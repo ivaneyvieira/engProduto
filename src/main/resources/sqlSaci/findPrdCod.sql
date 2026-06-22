@@ -3,7 +3,7 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_REF_PRD;
 CREATE TEMPORARY TABLE T_REF_PRD SELECT 100 AS ordem, no AS prdno, TRIM(no) AS codigo, NULL AS grade, mfno_ref AS ref
                                  FROM sqldados.prd
-                                 WHERE TRIM(no)  = :ref
+                                 WHERE TRIM(no)  = :cod
                                  UNION
                                  SELECT DISTINCT 80             AS ordem,
                                                  prdnoRef       AS prdno,
@@ -11,7 +11,7 @@ CREATE TEMPORARY TABLE T_REF_PRD SELECT 100 AS ordem, no AS prdno, TRIM(no) AS c
                                                  grade,
                                                  prdno          AS ref
                                  FROM sqldados.mfprd
-                                 WHERE TRIM(prdnoRef) = :ref
+                                 WHERE TRIM(prdnoRef) = :cod
                                  UNION
                                  SELECT DISTINCT 50          AS ordem,
                                                  prdno       AS prdno,
@@ -19,7 +19,7 @@ CREATE TEMPORARY TABLE T_REF_PRD SELECT 100 AS ordem, no AS prdno, TRIM(no) AS c
                                                  grade,
                                                  prdrefno    AS ref
                                  FROM sqldados.prdrefpq
-                                 WHERE TRIM(prdno) = :ref;
+                                 WHERE TRIM(prdno) = :cod;
 
 SELECT prdno, codigo, grade, ref
 FROM T_REF_PRD
