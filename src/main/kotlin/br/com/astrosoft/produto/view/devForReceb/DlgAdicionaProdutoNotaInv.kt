@@ -177,8 +177,10 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       this.addValueChangeListener {
         val value = it.value ?: ""
 
-        val ref = viewModel.codigoToRef(value)
-        edtRefFab?.value = ref ?: ""
+        if (it.isFromClient) {
+          val ref = viewModel.codigoToRef(value)
+          edtRefFab?.value = ref ?: ""
+        }
 
         val lista = viewModel.findProdutos(value)
         produtos.clear()
