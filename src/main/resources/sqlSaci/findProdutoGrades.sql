@@ -25,3 +25,4 @@ FROM
               ON P.no = B.prdno AND TRIM(B.barcode) != ''
 WHERE (TRIM(B.barcode) = :codigo OR TRIM(P.no) = :codigo)
   AND B.prdno IS NOT NULL
+

@@ -6,11 +6,14 @@ import br.com.astrosoft.produto.model.beans.ProdutoRef
 import br.com.astrosoft.produto.model.saci
 
 interface ITabNotaViewModel {
-  fun findProdutos(codigo: String): List<PrdGrade>
   fun addProduto(produto: NotaRecebimentoProdutoDev?)
   fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?)
   fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
     produto.updateAcertoProduto()
+  }
+
+  fun findProdutos(codigo: String): List<PrdGrade> {
+    return saci.findProdutoGrades(codigo)
   }
 
   fun niToNF(ni: Int): String {

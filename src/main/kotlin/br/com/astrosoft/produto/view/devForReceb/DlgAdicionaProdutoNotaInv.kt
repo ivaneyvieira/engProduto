@@ -40,7 +40,7 @@ class DlgAdicionaProdutoNotaInv(
         add(linha)
       }
     }
-    this.width = "80%"
+    this.width = "90%"
     this.height = "80%"
   }
 
@@ -119,6 +119,37 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
   fun grade() = edtGrade?.value
   fun saldo() = edtQuant?.value
 
+  private fun processaCodigo(codigo: String){
+    val lista = viewModel.findProdutos(codigo)
+    produtos.clear()
+    produtos.addAll(lista)
+    if (produtos.isEmpty()) {
+      edtDescricao?.value = ""
+      edtGrade?.isEnabled = false
+      edtGrade?.value = null
+      edtQuant?.value = null
+
+      if (codigo != "") {
+        edtCodigo?.focus()
+      }
+    } else if (produtos.size == 1) {
+      edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
+      edtGrade?.isEnabled = true
+      edtGrade?.setItems(produtos.map { it.grade }.sorted())
+      edtGrade?.value = produtos.firstOrNull()?.grade
+      edtGrade?.isEnabled = false
+      edtQuant?.value = 0
+      edtQuant?.focus()
+    } else {
+      edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
+      edtGrade?.isEnabled = true
+      edtGrade?.setItems(produtos.map { it.grade }.distinct().sorted())
+      edtGrade?.value = produtos.firstOrNull()?.grade
+      edtQuant?.value = 0
+      edtGrade?.focus()
+    }
+  }
+
   init {
     this.setWidthFull()
     edtNI = integerField("NI") {
@@ -169,7 +200,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       if (!temLabel) {
         this.label = ""
       }
-      this.width = "6rem"
+      this.width = "9rem"
       this.isClearButtonVisible = true
       this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -189,34 +220,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           }
         }
 
-        val lista = viewModel.findProdutos(value)
-        produtos.clear()
-        produtos.addAll(lista)
-        if (produtos.isEmpty()) {
-          edtDescricao?.value = ""
-          edtGrade?.isEnabled = false
-          edtGrade?.value = null
-          edtQuant?.value = null
-
-          if (this.value != "" || this.value != null) {
-            edtCodigo?.focus()
-          }
-        } else if (produtos.size == 1) {
-          edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
-          edtGrade?.isEnabled = true
-          edtGrade?.setItems(produtos.map { it.grade }.sorted())
-          edtGrade?.value = produtos.firstOrNull()?.grade
-          edtGrade?.isEnabled = false
-          edtQuant?.value = 0
-          edtQuant?.focus()
-        } else {
-          edtDescricao?.value = produtos.firstOrNull()?.descricao ?: ""
-          edtGrade?.isEnabled = true
-          edtGrade?.setItems(produtos.map { it.grade }.distinct().sorted())
-          edtGrade?.value = produtos.firstOrNull()?.grade
-          edtQuant?.value = 0
-          edtGrade?.focus()
-        }
+        processaCodigo(value)
       }
     }
 
@@ -224,7 +228,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       if (!temLabel) {
         this.label = ""
       }
-      this.width = "8rem"
+      this.width = "10rem"
       this.isClearButtonVisible = true
       this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)

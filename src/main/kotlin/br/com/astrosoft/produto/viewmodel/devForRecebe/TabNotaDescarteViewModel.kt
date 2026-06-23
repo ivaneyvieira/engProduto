@@ -75,10 +75,6 @@ class TabNotaDescarteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMo
     updateView()
   }
 
-  override fun findProdutos(codigo: String): List<PrdGrade> {
-    return saci.findProdutoGrades(codigo)
-  }
-
   override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {
     produto ?: fail("Nenhum produto selecionado")
     produto.insertProduto()
