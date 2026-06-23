@@ -3431,30 +3431,31 @@ class QuerySaci : QueryDB(database) {
     return nota?.ni ?: 0
   }
 
-  fun refToCodigo(ref: String): String? {
+  fun refToCodigo(ref: String): List<ProdutoRef> {
     val sql = "/sqlSaci/findPrdRef.sql"
 
     if(ref.isEmpty()){
-      return null
+      return emptyList()
     }
 
     val prd = query(sql, ProdutoRef::class) {
       addOptionalParameter("ref", ref)
-    }.firstOrNull()
-    return prd?.codigo ?: ""
+
+    }
+    return prd
   }
 
-  fun codigoToRef(codigo: String): String? {
+  fun codigoToRef(codigo: String): List<ProdutoRef> {
     val sql = "/sqlSaci/findPrdCod.sql"
 
     if(codigo.isEmpty()){
-      return null
+      return emptyList()
     }
 
     val prd = query(sql, ProdutoRef::class) {
       addOptionalParameter("cod", codigo)
-    }.firstOrNull()
-    return prd?.ref ?: ""
+    }
+    return prd
   }
 
   companion object {

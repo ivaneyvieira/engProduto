@@ -4,6 +4,7 @@ import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
@@ -39,7 +40,7 @@ class DlgAdicionaProdutoNotaInv(
         add(linha)
       }
     }
-    this.width = "60%"
+    this.width = "80%"
     this.height = "80%"
   }
 
@@ -178,8 +179,14 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
         val value = it.value ?: ""
 
         if (it.isFromClient) {
-          val ref = viewModel.codigoToRef(value)
-          edtRefFab?.value = ref ?: ""
+          val produtoRef = viewModel.codigoToRef(value).firstOrNull()
+          edtRefFab?.value = produtoRef?.ref ?: ""
+          val grade = edtGrade?.dataProvider?.fetchAll().orEmpty().firstOrNull { value ->
+            value == (produtoRef?.grade ?: "")
+          }
+          if (grade != null) {
+            edtGrade?.value = grade
+          }
         }
 
         val lista = viewModel.findProdutos(value)
@@ -227,9 +234,17 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       this.addValueChangeListener {
         if (it.isFromClient) {
           val value = it.value ?: ""
-          val codigo = viewModel.refToCodigo(value)
-          if (codigo != null) {
-            edtCodigo?.value = codigo
+          val produtoRef = viewModel.refToCodigo(value).firstOrNull()
+          val codigo = produtoRef?.codigo
+
+          edtCodigo?.value = codigo ?: ""
+
+          val grade = edtGrade?.dataProvider?.fetchAll().orEmpty().firstOrNull { value ->
+            value == (produtoRef?.grade ?: "")
+          }
+
+          if (grade != null) {
+            edtGrade?.value = grade
           }
         }
       }
@@ -248,6 +263,15 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
         this.label = ""
       }
       this.width = "120px"
+
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          val grade = it.value ?: ""
+          val codigo = edtCodigo?.value ?: ""
+          val produtoRef = viewModel.codigoToRef(codigo).firstOrNull { prd -> prd.grade == grade }
+          edtRefFab?.value = produtoRef?.ref ?: ""
+        }
+      }
     }
 
     edtQuant = integerField("Quant") {

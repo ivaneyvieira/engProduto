@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.model.beans.PrdGrade
+import br.com.astrosoft.produto.model.beans.ProdutoRef
 import br.com.astrosoft.produto.model.saci
 
 interface ITabNotaViewModel {
@@ -20,11 +21,11 @@ interface ITabNotaViewModel {
     return saci.nfToNI(loja, nfno, nfse)
   }
 
-  fun refToCodigo(ref: String): String?{
+  fun refToCodigo(ref: String): List<ProdutoRef> {
     return saci.refToCodigo(ref)
   }
 
-  fun codigoToRef(codigo: String): String? {
+  fun codigoToRef(codigo: String): List<ProdutoRef> {
     return saci.codigoToRef(codigo)
   }
 }
