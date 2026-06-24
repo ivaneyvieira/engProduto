@@ -82,8 +82,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findProdutoGrades(codigo: String): List<PrdGrade> {
-    val sql = "/sqlSaci/findProdutoGrades.sql"
+  fun findProdutoGradesCodigo(codigo: String): List<PrdGrade> {
+    val sql = "/sqlSaci/findProdutoGradesCodigo.sql"
+    if (codigo.isEmpty()) {
+      return emptyList()
+    }
+    return query(sql, PrdGrade::class) {
+      addOptionalParameter("codigo", codigo)
+    }
+  }
+
+  fun findProdutoGradesBarcode(codigo: String): List<PrdGrade> {
+    val sql = "/sqlSaci/findProdutoGradesBarcode.sql"
     if (codigo.isEmpty()) {
       return emptyList()
     }
@@ -3440,7 +3450,6 @@ class QuerySaci : QueryDB(database) {
 
     val prd = query(sql, ProdutoRef::class) {
       addOptionalParameter("ref", ref)
-
     }
     return prd
   }

@@ -40,7 +40,7 @@ class DlgAdicionaProdutoNotaInv(
         add(linha)
       }
     }
-    this.width = "90%"
+    this.width = "80%"
     this.height = "80%"
   }
 
@@ -107,6 +107,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
   private var edtNI: IntegerField? = null
   private var edtNF: TextField? = null
   private var edtRefFab: TextField? = null
+  private var edtBarcode: TextField? = null
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
@@ -120,7 +121,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
   fun saldo() = edtQuant?.value
 
   private fun processaCodigo(codigo: String){
-    val lista = viewModel.findProdutos(codigo)
+    val lista = viewModel.findProdutosCodigo(codigo)
     produtos.clear()
     produtos.addAll(lista)
     if (produtos.isEmpty()) {
@@ -200,7 +201,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       if (!temLabel) {
         this.label = ""
       }
-      this.width = "9rem"
+      this.width = "6rem"
       this.isClearButtonVisible = true
       this.isAutoselect = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -221,6 +222,32 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
         }
 
         processaCodigo(value)
+      }
+    }
+
+    edtBarcode = textField("Código de barras") {
+      if (!temLabel) {
+        this.label = ""
+      }
+      this.width = "9rem"
+      this.isClearButtonVisible = true
+      this.isAutoselect = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 2000
+      this.addValueChangeListener {
+        val value = it.value ?: ""
+
+        if (it.isFromClient) {
+          val produtoRef = viewModel.findProdutosBarcode(value).firstOrNull()
+          edtCodigo?.value = produtoRef?.codigo ?: ""
+          val grade = edtGrade?.dataProvider?.fetchAll().orEmpty().firstOrNull { value ->
+            value == (produtoRef?.grade ?: "")
+          }
+          if (grade != null) {
+            edtGrade?.value = grade
+          }
+        }
       }
     }
 
@@ -269,12 +296,14 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
       this.width = "120px"
 
       this.addValueChangeListener {
-        if (it.isFromClient) {
+       // if (it.isFromClient) {
           val grade = it.value ?: ""
           val codigo = edtCodigo?.value ?: ""
           val produtoRef = viewModel.codigoToRef(codigo).firstOrNull { prd -> prd.grade == grade }
           edtRefFab?.value = produtoRef?.ref ?: ""
-        }
+          val produtoBar = viewModel.findProdutosCodigo(codigo).firstOrNull { prd -> prd.grade == grade }
+          edtBarcode?.value = produtoBar?.codigoBarras ?: ""
+       // }
       }
     }
 

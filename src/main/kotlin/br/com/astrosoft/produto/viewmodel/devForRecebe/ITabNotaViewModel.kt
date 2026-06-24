@@ -12,8 +12,12 @@ interface ITabNotaViewModel {
     produto.updateAcertoProduto()
   }
 
-  fun findProdutos(codigo: String): List<PrdGrade> {
-    return saci.findProdutoGrades(codigo)
+  fun findProdutosCodigo(codigo: String): List<PrdGrade> {
+    return saci.findProdutoGradesCodigo(codigo)
+  }
+
+  fun findProdutosBarcode(codigo: String): List<PrdGrade> {
+    return saci.findProdutoGradesBarcode(codigo)
   }
 
   fun niToNF(ni: Int): String {

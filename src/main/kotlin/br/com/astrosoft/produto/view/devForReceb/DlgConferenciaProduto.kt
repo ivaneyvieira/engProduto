@@ -28,7 +28,7 @@ class DlgConferenciaProduto(
     this.footer.toolBar()
 
     val listaGrades = produto.codigo?.toString()?.let {
-      viewModel.findProdutos(it)
+      viewModel.findProdutosCodigo(it)
     }.orEmpty().map {
       it.grade
     }.filter {

@@ -135,7 +135,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 2000
       this.addValueChangeListener {
-        val lista = viewModel.findProdutos(this.value)
+        val lista = viewModel.findProdutosCodigo(this.value)
         produtos.clear()
         produtos.addAll(lista)
         if (produtos.isEmpty()) {
