@@ -69,6 +69,13 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       }
     }
 
+    this.button("Kardex") {
+      this.icon = VaadinIcon.FILE_TABLE.create()
+      onClick {
+        viewModel.updateKardex()
+      }
+    }
+
     button("Autoriza Entrega") {
       icon = VaadinIcon.SIGN_IN.create()
       onClick {
@@ -96,13 +103,6 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.desfazerAutorizacao()
-      }
-    }
-
-    this.button("Kardex") {
-      this.icon = VaadinIcon.FILE_TABLE.create()
-      onClick {
-        viewModel.updateKardex()
       }
     }
   }
