@@ -19,7 +19,7 @@ SELECT N.invno                        AS ni,
        CONCAT(N.nfname, '/', N.invse) AS doc,
        N.ordno                        AS pedido,
        'DEVOLUCAO'                    AS tipo,
-       NULL                           AS vencimento,
+       DATE(NULL)                     AS vencimento,
        ROUND(P.qtty / 1000)           AS qtde,
        remarks                        AS observacao,
        0                              AS saldo,
@@ -35,7 +35,7 @@ FROM
 WHERE P.prdno = :prdno
   AND P.grade = :grade
   AND N.storeno = :loja
-  AND N.type = 2
+  AND (N.type = 2 OR N.account = '2.01.25')
   AND N.bits & POW(2, 4) = 0
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
