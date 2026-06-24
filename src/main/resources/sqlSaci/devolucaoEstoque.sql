@@ -58,4 +58,3 @@ SELECT loja,
        recLogin,
        entLogin
 FROM T_MOVIMENTACAO_KARDEC
-
