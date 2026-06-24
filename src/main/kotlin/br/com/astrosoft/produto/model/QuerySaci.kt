@@ -2332,12 +2332,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun deleteKardec(produto: ProdutoEstoque) {
+  fun deleteKardec(produto: ProdutoEstoque, tipo: ETipoKardec = ETipoKardec.TODOS) {
     val sql = "/sqlSaci/kardecDelete.sql"
     script(sql) {
       addOptionalParameter("loja", produto.loja)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("tipo", tipo.name)
     }
   }
 

@@ -2,11 +2,9 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -36,17 +34,17 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Possui produtos com entrega não autorizada")
     }
 
-    if (produtos.any { it.userRecebimentoNo == 0 || it.userRecebimentoNo == null}) {
+    if (produtos.any { it.userRecebimentoNo == 0 || it.userRecebimentoNo == null }) {
       fail("Possui produtos com recebimento não autorizada")
     }
 
     val countEntregador = produtos.map { it.userEntregaNo ?: 0 }.distinct().size
-    if(countEntregador != 1) {
+    if (countEntregador != 1) {
       fail("Possui mais de um entregador")
     }
 
     val countRecebedor = produtos.map { it.userRecebimentoNo ?: 0 }.distinct().size
-    if(countRecebedor != 1) {
+    if (countRecebedor != 1) {
       fail("Possui mais de um recebedor")
     }
 
@@ -150,6 +148,15 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun updateKardex() = viewModel.exec {
+    val produtos = subView.produtosSelecionados()
+      .flatMap {
+        ProdutoEstoque.findProdutoEstoque(loja = it.codLoja, prdno = it.prdno, grade = it.grade)
+      }
+    ProcessamentoKardec.updateKardex(produtos, ETipoKardec.DEVOLUCAO)
+    subView.reloadGrid()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliProduto
 }
@@ -168,4 +175,6 @@ interface ITabDevCliProduto : ITabView {
     produtos: List<EntradaDevCliProList>,
     block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
   )
+
+  fun reloadGrid()
 }

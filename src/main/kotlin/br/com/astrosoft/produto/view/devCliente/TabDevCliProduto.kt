@@ -98,6 +98,13 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
         viewModel.desfazerAutorizacao()
       }
     }
+
+    this.button("Kardex") {
+      this.icon = VaadinIcon.FILE_TABLE.create()
+      onClick {
+        viewModel.updateKardex()
+      }
+    }
   }
 
   override fun Grid<EntradaDevCliProList>.gridPanel() {
@@ -128,6 +135,10 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       localizacao = user?.localizacaoDev ?: setOf("TODOS")
     )
+  }
+
+  override fun reloadGrid() {
+    gridPanel.dataProvider.refreshAll()
   }
 
   override fun printerUser(): List<String> {

@@ -43,8 +43,8 @@ data class ProdutoKardex(
     get() = tipo?.descricao ?: ""
 
   companion object {
-    fun deleteKardec(produto: ProdutoEstoque) {
-      saci.deleteKardec(produto)
+    fun deleteKardec(produto: ProdutoEstoque, tipo: ETipoKardec = ETipoKardec.TODOS) {
+      saci.deleteKardec(produto, tipo)
     }
 
     fun deleteKardecMov(produto: ProdutoEstoque, doc: String) {
@@ -81,5 +81,6 @@ enum class ETipoKardec(val num: String, val descricao: String) {
   REPOSICAO_CDLJ8("01", "Reposição Rota CD-LJ8"),
 
   REPOSICAO_LJCD("01", "Reposição Rota LJ -CD"),
+  TODOS("00", "Todos")
 }
 

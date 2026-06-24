@@ -16,12 +16,13 @@ object ProcessamentoKardec {
     produto.updateKardec()
   }
 
-  fun updateSaldoKardec(produto: ProdutoEstoque) {
+  fun updateSaldoKardec(produto: ProdutoEstoque, tipo: ETipoKardec = ETipoKardec.TODOS) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    val listaKardec = updateKardex(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault()).filter {
-      it.loja == loja
-    }
+    val listaKardec =
+        updateKardex(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault(), tipo = tipo).filter {
+          it.loja == loja
+        }
     produto.dataUpdate = LocalDate.now()
     val listaOrdenada = listaKardec.ajustaOrdem()
     produto.kardec = listaOrdenada.lastOrNull()?.saldo ?: 0
@@ -47,14 +48,31 @@ object ProcessamentoKardec {
     produto.updateKardec()
   }
 
-  private fun updateKardex(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
+  private fun updateKardex(
+    produto: ProdutoEstoque,
+    loja: Int,
+    dataIncial: LocalDate,
+    tipo: ETipoKardec = ETipoKardec.TODOS
+  ): List<ProdutoKardex> {
     return runBlocking {
-      ProdutoKardex.deleteKardec(produto)
-      val listBuild = fetchKardec(produto, loja, dataIncial)
-      listBuild.forEach { produtoKardec: ProdutoKardex ->
-        produtoKardec.save()
+      if (tipo == ETipoKardec.TODOS) {
+        ProdutoKardex.deleteKardec(produto)
+        val listBuild = fetchKardec(produto, loja, dataIncial)
+        listBuild.forEach { produtoKardec: ProdutoKardex ->
+          produtoKardec.save()
+        }
+        listBuild
+      }else if (tipo ==ETipoKardec.DEVOLUCAO ){
+        ProdutoKardex.deleteKardec(produto, tipo)
+        val produtoList = ProdutoKardex.findKardec(produto)
+        val listBuild = produto.devolucao(loja, dataIncial) + produtoList
+        listBuild.forEach { produtoKardec: ProdutoKardex ->
+          produtoKardec.save()
+        }
+        listBuild
+      }else{
+        emptyList()
       }
-      listBuild
     }
   }
 
@@ -106,9 +124,9 @@ object ProcessamentoKardec {
     )
   }
 
-  fun updateKardex(produtos: List<ProdutoEstoque>) {
+  fun updateKardex(produtos: List<ProdutoEstoque>, tipo: ETipoKardec = ETipoKardec.TODOS) {
     produtos.forEach { produto ->
-      updateSaldoKardec(produto)
+      updateSaldoKardec(produto, tipo)
     }
   }
 
