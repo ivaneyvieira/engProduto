@@ -76,33 +76,10 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       }
     }
 
-    button("Autoriza Entrega") {
-      icon = VaadinIcon.SIGN_IN.create()
-      onClick {
-        viewModel.autorizaEntrega()
-      }
-    }
-
-    button("Autoriza Recebimento") {
-      icon = VaadinIcon.SIGN_IN.create()
-      onClick {
-        viewModel.autorizaRecebimento()
-      }
-    }
-
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeProdutos()
-      }
-    }
-
-    button("Desfazer Ass") {
-      val user = AppConfig.userLogin() as? UserSaci
-      this.isVisible = user?.admin == true
-      icon = VaadinIcon.PRINT.create()
-      onClick {
-        viewModel.desfazerAutorizacao()
       }
     }
   }
@@ -152,40 +129,6 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
 
   override fun produtosSelecionados(): List<EntradaDevCliProList> {
     return this.itensSelecionados()
-  }
-
-  override fun autorizaEntrega(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
-  ) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entrega", form = form) {
-      val login = form.login
-      val senha = form.senha
-      val user = viewModel.validaLogin(login, senha)
-      if (user == null) {
-        DialogHelper.showError("Usuário ou senha inválidos")
-      } else {
-        block(user, produtos)
-      }
-    }
-  }
-
-  override fun autorizaRecebimento(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
-  ) {
-    val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Recebimento", form = form) {
-      val login = form.login
-      val senha = form.senha
-      val user = viewModel.validaLogin(login, senha)
-      if (user == null) {
-        DialogHelper.showError("Usuário ou senha inválidos")
-      } else {
-        block(user, produtos)
-      }
-    }
   }
 
   override fun isAuthorized(): Boolean {

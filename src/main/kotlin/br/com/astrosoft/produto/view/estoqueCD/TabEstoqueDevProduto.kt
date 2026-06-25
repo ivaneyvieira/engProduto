@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.estoqueCD
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -10,6 +11,7 @@ import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.view.reposicao.FormAutoriza
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueDevProduto
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueDevProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
@@ -74,10 +76,33 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
       }
     }
 
+    button("Autoriza Entrega") {
+      icon = VaadinIcon.SIGN_IN.create()
+      onClick {
+        viewModel.autorizaEntrega()
+      }
+    }
+
+    button("Autoriza Recebimento") {
+      icon = VaadinIcon.SIGN_IN.create()
+      onClick {
+        viewModel.autorizaRecebimento()
+      }
+    }
+
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeProdutos()
+      }
+    }
+
+    button("Desfazer Ass") {
+      val user = AppConfig.userLogin() as? UserSaci
+      this.isVisible = user?.admin == true
+      icon = VaadinIcon.PRINT.create()
+      onClick {
+        viewModel.desfazerAutorizacao()
       }
     }
   }
@@ -139,5 +164,39 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
 
   override fun updateComponent() {
     viewModel.updateView()
+  }
+
+  override fun autorizaEntrega(
+    produtos: List<EntradaDevCliProList>,
+    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+  ) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Entrega", form = form) {
+      val login = form.login
+      val senha = form.senha
+      val user = viewModel.validaLogin(login, senha)
+      if (user == null) {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      } else {
+        block(user, produtos)
+      }
+    }
+  }
+
+  override fun autorizaRecebimento(
+    produtos: List<EntradaDevCliProList>,
+    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+  ) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = "Recebimento", form = form) {
+      val login = form.login
+      val senha = form.senha
+      val user = viewModel.validaLogin(login, senha)
+      if (user == null) {
+        DialogHelper.showError("Usuário ou senha inválidos")
+      } else {
+        block(user, produtos)
+      }
+    }
   }
 }
