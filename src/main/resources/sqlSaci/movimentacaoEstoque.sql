@@ -1,5 +1,20 @@
 USE sqldados;
 
+DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO;
+CREATE TEMPORARY TABLE T_MOVIMENTACAO
+(
+  PRIMARY KEY (numloja, numero)
+)
+SELECT numLoja, numero
+FROM sqldados.produtoMovimentacao
+WHERE (numloja = :loja OR numloja = 4)
+  AND DATA >= :dataInicial
+  AND noGravado > 0
+  AND noEntregue > 0
+  AND noRecebido > 0
+  AND noRota IN (0, 1, 42, 43, 45, 48)
+GROUP BY numLoja, numero;
+
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_ESTOQUE;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_ESTOQUE
 SELECT numero,
@@ -15,15 +30,12 @@ SELECT numero,
        noRecebido,
        noGravado,
        noRota
-FROM sqldados.produtoMovimentacao
+FROM
+  sqldados.produtoMovimentacao
+    INNER JOIN T_MOVIMENTACAO
+               USING (numloja, numero)
 WHERE prdno = :prdno
-  AND grade = :grade
-  AND (numloja = :loja OR numloja = 4)
-  AND data >= :dataInicial
-  AND noGravado > 0
-  AND noEntregue > 0
-  AND noRecebido > 0
-  AND noRota IN (0, 1, 42, 43, 45, 48);
+  AND grade = :grade;
 
 /*Loado da loja*/
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
