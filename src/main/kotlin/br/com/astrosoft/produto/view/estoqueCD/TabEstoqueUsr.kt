@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueUsr
 import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
 import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.datepicker.DatePickerVariant
 import com.vaadin.flow.component.grid.Grid
@@ -44,10 +43,10 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
         binder.bind(this, UserSaci::controleCD.name)
       }
       checkBox("Controle Loja") {
-        binder.bind(this, UserSaci::estoqueDevProduto.name)
-      }
-      checkBox("Controle Loja") {
         binder.bind(this, UserSaci::controleLoja.name)
+      }
+      checkBox("Dev Cli") {
+        binder.bind(this, UserSaci::estoqueDevProduto.name)
       }
       checkBox("Acerto") {
         binder.bind(this, UserSaci::estoqueAcerto.name)
@@ -104,20 +103,18 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       }
     }
     verticalBlock("Filtros") {
-      filtroLocalizacao(binder, UserSaci::listaEstoque)
-      horizontalLayout {
-        setWidthFull()
-        datePicker("Data Inicial Kardex") {
-          this.localePtBr()
-          this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
-          binder.bind(this, UserSaci::dataIncialKardec.name)
-        }
+      filtroLoja(binder = binder, property = UserSaci::lojaConferencia, label = "Loja Conferência")
 
-        filtroImpressoraTermica(binder, UserSaci::impressoraEstoque) {
-          this.isExpand = true
-        }
+      filtroLocalizacao(binder = binder, property = UserSaci::listaEstoque)
 
-        filtroLoja(binder, UserSaci::lojaConferencia, "Loja Conferência")
+      filtroImpressoraTermica(binder = binder, property = UserSaci::impressoraEstoque) {
+        this.isExpand = true
+      }
+
+      datePicker(label = "Data Inicial Kardex") {
+        this.localePtBr()
+        this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
+        binder.bind(this, UserSaci::dataIncialKardec.name)
       }
     }
   }

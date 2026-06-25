@@ -69,13 +69,6 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       }
     }
 
-    this.button("Kardex") {
-      this.icon = VaadinIcon.FILE_TABLE.create()
-      onClick {
-        viewModel.updateKardex()
-      }
-    }
-
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {

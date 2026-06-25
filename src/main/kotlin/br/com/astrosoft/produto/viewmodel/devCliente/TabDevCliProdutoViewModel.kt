@@ -2,9 +2,10 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 
 class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -53,15 +54,6 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
 
     val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
     relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
-  }
-
-  fun updateKardex() = viewModel.exec {
-    val produtos = subView.produtosSelecionados()
-      .flatMap {
-        ProdutoEstoque.findProdutoEstoque(loja = it.codLoja, prdno = it.prdno, grade = it.grade)
-      }
-    ProcessamentoKardec.updateKardex(produtos, ETipoKardec.DEVOLUCAO)
-    subView.reloadGrid()
   }
 
   val subView
