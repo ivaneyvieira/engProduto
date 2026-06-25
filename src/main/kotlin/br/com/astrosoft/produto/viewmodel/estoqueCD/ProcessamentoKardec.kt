@@ -20,7 +20,12 @@ object ProcessamentoKardec {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
     val listaKardec =
-        updateKardex(produto = produto, loja = loja, dataIncial = produto.dataInicialDefault(), tipo = tipo).filter {
+        updateKardex(
+          produto = produto,
+          loja = loja,
+          dataIncial = produto.dataInicialDefault(),
+          tipo = tipo
+        ).filter {
           it.loja == loja
         }
     produto.dataUpdate = LocalDate.now()
@@ -62,7 +67,7 @@ object ProcessamentoKardec {
           produtoKardec.save()
         }
         listBuild
-      }else if (tipo ==ETipoKardec.DEVOLUCAO ){
+      } else if (tipo == ETipoKardec.DEVOLUCAO) {
         ProdutoKardex.deleteKardec(produto, tipo)
         val produtoList = ProdutoKardex.findKardec(produto)
         val listBuild = produto.devolucao(loja, dataIncial) + produtoList
@@ -70,7 +75,7 @@ object ProcessamentoKardec {
           produtoKardec.save()
         }
         listBuild
-      }else{
+      } else {
         emptyList()
       }
     }

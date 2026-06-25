@@ -40,7 +40,8 @@ WHERE P.prdno = :prdno
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
   AND P.prdno NOT IN ( SELECT prdno FROM sqldados.produtos_dev_loja )
-  AND ((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks REGEXP 'TROCA +P'));
+  AND ((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks REGEXP 'TROCA +P') OR (N.remarks REGEXP 'EST.+ +P') OR
+       (N.remarks REGEXP 'REE.+ +P') OR (N.remarks REGEXP 'MUD.+ +P'));
 
 SELECT loja,
        prdno,
