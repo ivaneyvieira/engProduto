@@ -40,7 +40,7 @@ class DlgAdicionaProdutoNotaInv(
         add(linha)
       }
     }
-    this.width = "80%"
+    this.width = "82rem"
     this.height = "80%"
   }
 
