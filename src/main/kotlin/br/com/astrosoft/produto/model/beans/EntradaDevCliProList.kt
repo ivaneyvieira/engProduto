@@ -26,6 +26,7 @@ data class EntradaDevCliProList(
   var tipoQtd: Int?,
   var tipoQtdEfetiva: Int?,
   var localizacao: String?,
+  var kardec: Int?,
   var userEntregaNo: Int?,
   var userEntrega: String?,
   var userEntregaName: String?,

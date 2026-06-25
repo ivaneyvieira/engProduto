@@ -12,7 +12,11 @@ CREATE TEMPORARY TABLE T_LOC
 (
   PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT A.storeno AS storeno, A.prdno AS prdno, A.grade AS grade, MID(TRIM(A.localizacao), 1, 4) AS localizacao
+SELECT A.storeno                      AS storeno,
+       A.prdno                        AS prdno,
+       A.grade                        AS grade,
+       MID(TRIM(A.localizacao), 1, 4) AS localizacao,
+       kardec
 FROM sqldados.prdAdicional AS A;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
@@ -58,7 +62,8 @@ SELECT CAST(I.data AS DATE)                                                     
        I.invno                                                                                              AS ni,
        I.nota                                                                                               AS nota,
        I.valor                                                                                              AS valor,
-       TRIM(IFNULL(L.localizacao, ''))                                                                      AS localizacao
+       TRIM(IFNULL(L.localizacao, ''))                                                                      AS localizacao,
+       L.kardec                                                                                             AS kardec
 FROM
   T_NOTA                      AS I
     INNER JOIN sqldados.iprd  AS X
@@ -262,7 +267,8 @@ SELECT data,
        nota,
        valor,
        localizacao,
-       seq
+       seq,
+       kardec
 FROM
   T_RESULT                           AS R
     LEFT JOIN T_NI_PRD               AS N
@@ -288,7 +294,7 @@ SELECT data,
        descricao,
        P.grade,
        quantidade,
-       observacao,
+       P.observacao,
        tipo,
        IF(tipoPrd = '', TRIM(CONCAT(SUBSTRING_INDEX(tipo, ' ', 2), IF(temProduto, ' P', ''))), tipoPrd) AS tipoPrd,
        tipoQtd,
@@ -296,7 +302,7 @@ SELECT data,
        ni,
        nota,
        valor,
-       localizacao,
+       P.localizacao,
        UE.no                                                                                            AS userEntregaNo,
        IFNULL(UE.login, '')                                                                             AS userEntrega,
        IFNULL(UE.name, '')                                                                              AS userEntregaName,
@@ -306,7 +312,8 @@ SELECT data,
        IFNULL(UR.login, '')                                                                             AS userRecebimento,
        IFNULL(UR.name, '')                                                                              AS userRecebimentoName,
        IF(D.dataRecebimento = 0, NULL, D.dataRecebimento)                                               AS dataRecebimento,
-       IF(D.horaRecebimento = 0, NULL, D.horaRecebimento)                                               AS horaRecebimento
+       IF(D.horaRecebimento = 0, NULL, D.horaRecebimento)                                               AS horaRecebimento,
+       IFNULL(P.kardec, 0)                                                                              AS kardec
 FROM
   T_PRODUTOS                                 AS P
     LEFT JOIN sqldados.devClienteAutorizacao AS D
@@ -317,3 +324,4 @@ FROM
               ON UR.no = D.userRecebimento
 GROUP BY ni, data, codLoja, loja, prdno, grade, seq
 ORDER BY data, codLoja, loja, prdno, grade
+
