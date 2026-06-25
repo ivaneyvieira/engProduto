@@ -71,7 +71,8 @@ FROM
                ON L.storeno = I.codLoja AND L.prdno = X.prdno AND L.grade = X.grade
 WHERE (@PESQUISA = '' OR I.codLoja = @PESQUISANUM OR TRIM(X.prdno) = @PESQUISANUM OR
        TRIM(MID(P.name, 1, 37)) LIKE @PESQUISALIKE OR X.grade LIKE @PESQUISAS OR
-       I.observacaoCompleta LIKE @PESQUISALIKE OR I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM)
+       I.observacaoCompleta LIKE @PESQUISALIKE OR I.nota LIKE @PESQUISASTART OR I.invno = @PESQUISANUM OR
+       TRIM(IFNULL(L.localizacao, '')) = @PESQUISA)
 GROUP BY I.invno, I.codLoja, X.prdno, X.grade;
 
 /************************************************************************/
