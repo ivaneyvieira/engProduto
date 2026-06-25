@@ -29,14 +29,6 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Não há produtos selecionados")
     }
 
-    if (produtos.any { it.userEntregaNo == 0 || it.userEntregaNo == null }) {
-      fail("Possui produtos com entrega não autorizada")
-    }
-
-    if (produtos.any { it.userRecebimentoNo == 0 || it.userRecebimentoNo == null }) {
-      fail("Possui produtos com recebimento não autorizada")
-    }
-
     val countEntregador = produtos.map { it.userEntregaNo ?: 0 }.distinct().size
     if (countEntregador != 1) {
       fail("Possui mais de um entregador")
