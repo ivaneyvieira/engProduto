@@ -113,7 +113,7 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
     columnGrid(EntradaDevCliProList::codigo, header = "Código").right()
     columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
     columnGrid(EntradaDevCliProList::grade, header = "Grade")
-    columnGrid(EntradaDevCliProList::localizacao, header = "CD")
+    columnGrid(EntradaDevCliProList::localizacao, header = "Loc CD")
     columnGrid(EntradaDevCliProList::kardec, header = "Est CD")
     columnGrid(EntradaDevCliProList::tipoQtdEfetiva, header = "Qtd Dev")
     columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
