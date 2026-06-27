@@ -82,11 +82,7 @@ class DlgAdicionaProdutoNotaInv(
     val prdno = linha.prdno() ?: return
     val grade = linha.grade()
     val saldo = linha.saldo()
-    val invno = if (nota.motivoDevolucaoEnun?.notasMultiplas == true) {
-      linha.invno() ?: 0
-    } else {
-      nota.niPrincipal
-    }
+    val invno = linha.invno() ?: 0
     if (saldo == null || saldo <= 0) return
 
     val produto = produtoNota.copy(
@@ -153,6 +149,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
 
   init {
     this.setWidthFull()
+
     edtNI = integerField("NI") {
       if (!temLabel) {
         this.label = ""
@@ -173,6 +170,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
         }
       }
     }
+
     edtNF = textField("NF") {
       if (!temLabel) {
         this.label = ""
@@ -197,6 +195,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
         }
       }
     }
+
     edtCodigo = textField("Código") {
       if (!temLabel) {
         this.label = ""
