@@ -167,6 +167,9 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           val ni = it.value ?: return@addValueChangeListener
           val nf = viewModel.niToNF(ni)
           edtNF?.value = nf
+          if(nf.isNotEmpty()){
+            edtCodigo?.focus()
+          }
         }
       }
     }
@@ -189,7 +192,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           val nfse = nf.split("/").getOrNull(1) ?: return@addValueChangeListener
           val ni = viewModel.nfToNI(loja, nfno, nfse)
           edtNI?.value = ni ?: 0
-          if (ni != null) {
+          if (ni != null && ni != 0) {
             edtCodigo?.focus()
           }
         }
