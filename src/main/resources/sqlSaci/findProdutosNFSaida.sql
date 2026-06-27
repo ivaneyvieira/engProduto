@@ -279,3 +279,4 @@ FROM
               ON X.loja = D.loja AND X.pdv = D.pdvno AND X.transacao = D.xano AND X.prdno = D.prdno AND
                  X.grade = D.grade
 WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')
+

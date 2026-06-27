@@ -75,7 +75,7 @@ GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-        vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT)
+        vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT OR M.sname  LIKE @PESQUISA_LIKE)
 ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto;
 
 DROP TEMPORARY TABLE IF EXISTS T_CHAVE;

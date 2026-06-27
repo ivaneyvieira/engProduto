@@ -112,7 +112,6 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
   }
 
   fun update() {
-
     val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)
 
