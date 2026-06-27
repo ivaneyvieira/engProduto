@@ -167,7 +167,7 @@ class LinhaNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDe
           val ni = it.value ?: return@addValueChangeListener
           val nf = viewModel.niToNF(ni)
           edtNF?.value = nf
-          if(nf.isNotEmpty()){
+          if(nf !=  ""){
             edtCodigo?.focus()
           }
         }
