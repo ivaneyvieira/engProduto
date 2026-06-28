@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaRefViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -27,6 +28,7 @@ import java.time.LocalDate
 class TabVendaDet(val viewModel: TabVendaDetViewModel) :
   TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaDet {
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var chkPagamento: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -46,6 +48,7 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
 
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
+      this.width = "6rem"
       this.setItemLabelGenerator { item ->
         item.descricao
       }
@@ -55,6 +58,14 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
       }
     }
     init()
+
+    chkPagamento = checkBox("Pgto") {
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -142,6 +153,7 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
+      agrupado = chkPagamento.value ?: false,
     )
   }
 

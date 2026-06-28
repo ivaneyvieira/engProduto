@@ -20,7 +20,13 @@ class TabVendaDetViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaVendaRef.findAll(filtro).agrupaDetalhe()
+    val notas = NotaVendaRef.findAll(filtro).let { lista ->
+      if (filtro.agrupado) {
+        lista
+      } else {
+        lista.agrupaDetalhe()
+      }
+    }
     subView.updateNotas(notas)
   }
 

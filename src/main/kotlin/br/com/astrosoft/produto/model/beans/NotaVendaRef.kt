@@ -66,7 +66,7 @@ fun List<NotaVendaRef>.agrupaDetalhe(): List<NotaVendaRef> {
     if (ent.value.size > 1) {
       item?.metodosPagamento = ent.value
       item?.mediaPrazo = null
-      item?.tipoPgto = null
+      item?.tipoPgto = "Múltiplo"
       item?.valorTipo = ent.value.sumOf { it.valorTipo ?: 0.0 }
       item?.metodosPagamento = ent.value
     } else {
@@ -82,4 +82,5 @@ data class FiltroNotaVendaRef(
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val agrupado: Boolean = false,
 )
