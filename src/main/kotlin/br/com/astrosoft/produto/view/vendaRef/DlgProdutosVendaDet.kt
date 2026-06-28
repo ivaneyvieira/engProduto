@@ -21,14 +21,14 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaRefViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaDetViewModel
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosVendaDet(val viewModel: TabVendaRefViewModel, val nota: NotaVendaRef) {
+class DlgProdutosVendaDet(val viewModel: TabVendaDetViewModel, val nota: NotaVendaRef) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 

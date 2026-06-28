@@ -9,7 +9,8 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabVendaRef
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabVendaDet
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaDetViewModel
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaRefViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -23,13 +24,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabVendaDet(val viewModel: TabVendaRefViewModel) :
-  TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaRef {
+class TabVendaDet(val viewModel: TabVendaDetViewModel) :
+  TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaDet {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosVenda? = null
+  private var dlgProduto: DlgProdutosVendaDet? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -94,7 +95,7 @@ class TabVendaDet(val viewModel: TabVendaRefViewModel) :
     addColumnSeq("Seq")
     columnGrid(NotaVendaRef::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosVenda(viewModel, nota)
+      dlgProduto = DlgProdutosVendaDet(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -154,11 +155,11 @@ class TabVendaDet(val viewModel: TabVendaRefViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.tabVendaRef == true
+    return username?.tabVendaDet == true
   }
 
   override val label: String
-    get() = "Vendas"
+    get() = "Pgto Det"
 
   override fun updateComponent() {
     viewModel.updateView()

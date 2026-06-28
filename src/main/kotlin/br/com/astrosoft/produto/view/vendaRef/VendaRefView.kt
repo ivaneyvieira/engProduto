@@ -18,6 +18,7 @@ import jakarta.annotation.security.PermitAll
 class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val viewModel = VendaRefViewModel(this)
   override val tabVendaRef = TabVendaRef(viewModel.tabVendaRefViewModel)
+  override val tabVendaDet = TabVendaDet(viewModel.tabVendaDetViewModel)
   override val tabResumo = TabResumo(viewModel.tabResumoViewModel)
   override val tabResumoCartao = TabResumoCartao(viewModel.tabResumoCartaoViewModel)
   override val tabResumoPgto = TabResumoPgto(viewModel.tabResumoPgtoViewModel)

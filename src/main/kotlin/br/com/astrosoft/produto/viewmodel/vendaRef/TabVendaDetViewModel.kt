@@ -4,10 +4,11 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.agrupaDetalhe
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
 import br.com.astrosoft.produto.model.report.ReportVendaRef
 
-class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
+class TabVendaDetViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -19,7 +20,7 @@ class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaVendaRef.findAll(filtro)
+    val notas = NotaVendaRef.findAll(filtro).agrupaDetalhe()
     subView.updateNotas(notas)
   }
 
@@ -36,10 +37,10 @@ class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabVendaRef
+    get() = viewModel.view.tabVendaDet
 }
 
-interface ITabVendaRef : ITabView {
+interface ITabVendaDet : ITabView {
   fun filtro(): FiltroNotaVendaRef
   fun updateNotas(notas: List<NotaVendaRef>)
   fun itensNotasSelecionados(): List<NotaVendaRef>

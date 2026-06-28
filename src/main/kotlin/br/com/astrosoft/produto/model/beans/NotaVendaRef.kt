@@ -28,10 +28,12 @@ class NotaVendaRef(
   var valorTipo: Double?,
   var obs: String?,
 ) {
+  var metodosPagamento: List<NotaVendaRef> = emptyList()
+
   val documentoStr: String
     get() {
       val doc = documento ?: return ""
-      val quant = if(quantParcelas == null) "" else " (${quantParcelas}x)"
+      val quant = if (quantParcelas == null) "" else " (${quantParcelas}x)"
       return "$doc $quant"
     }
 
@@ -52,6 +54,26 @@ class NotaVendaRef(
     fun findAll(filtro: FiltroNotaVendaRef): List<NotaVendaRef> {
       return saci.findNotaVendaRef(filtro)
     }
+  }
+}
+
+fun List<NotaVendaRef>.agrupaDetalhe(): List<NotaVendaRef> {
+  return this.groupBy { venda ->
+    "${venda.loja} ${venda.pdv} ${venda.transacao}"
+  }.mapNotNull { ent ->
+    val item = ent.value.firstOrNull()
+
+    if (ent.value.size > 1) {
+      item?.metodosPagamento = ent.value
+      item?.mediaPrazo = null
+      item?.tipoPgto = null
+      item?.valorTipo = ent.value.sumOf { it.valorTipo ?: 0.0 }
+      item?.metodosPagamento = ent.value
+    } else {
+      item?.metodosPagamento = emptyList()
+    }
+
+    item
   }
 }
 
