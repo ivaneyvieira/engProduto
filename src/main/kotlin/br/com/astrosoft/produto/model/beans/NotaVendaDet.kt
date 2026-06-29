@@ -11,15 +11,11 @@ class NotaVendaDet(
   var pedido: Int?,
   var numMetodo: Int?,
   var nomeMetodo: String?,
-  var seqno: Int?,
-  var dataParcela: LocalDate?,
-  var valorParcela: Double?,
   var mult: Double?,
   var data: LocalDate?,
   var nota: String?,
   var tipoNf: String?,
   var hora: LocalTime?,
-  var documento: String?,
   var valor: Double?,
   var cliente: Int?,
   var uf: String?,
@@ -27,7 +23,13 @@ class NotaVendaDet(
   var vendedor: String?,
   var obs: String?,
 ) {
-  var metodosPagamento: List<NotaVendaDet> = emptyList()
+  fun parcelas(): List<ParcelasVenda> {
+    return saci.findParcelasVenda(
+      loja = loja ?: return emptyList(),
+      pdv = pdv ?: return emptyList(),
+      transacao = transacao ?: return emptyList()
+    )
+  }
 
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
@@ -46,26 +48,6 @@ class NotaVendaDet(
     fun findAll(filtro: FiltroNotaVendaDet): List<NotaVendaDet> {
       return saci.findNotaVendaDet(filtro)
     }
-  }
-}
-
-fun List<NotaVendaDet>.agrupaDetalhe(): List<NotaVendaDet> {
-  return this.groupBy { venda ->
-    "${venda.loja} ${venda.pdv} ${venda.transacao}"
-  }.mapNotNull { ent ->
-    val item = ent.value.firstOrNull()
-
-    if (ent.value.size > 1) {
-      item?.metodosPagamento = ent.value
-      item?.seqno = 1
-      item?.dataParcela = item.data
-      item?.valorParcela = ent.value.sumOf { it.valorParcela ?: 0.0 }
-      item?.metodosPagamento = ent.value
-    } else {
-      item?.metodosPagamento = emptyList()
-    }
-
-    item
   }
 }
 

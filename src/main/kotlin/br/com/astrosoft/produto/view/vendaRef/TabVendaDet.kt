@@ -31,6 +31,7 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosVendaDet? = null
+  private var dlgProdutoPgto: DlgProdutosVendaDetPgto? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -96,12 +97,21 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
 
     addColumnSeq("Seq")
     columnGrid(NotaVendaDet::loja, header = "Loja")
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosVendaDet(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
+
+    addColumnButton(VaadinIcon.FILE_TABLE, "Pagamento Detalhado", "Pgto Det") { nota ->
+      dlgProdutoPgto = DlgProdutosVendaDetPgto(viewModel, nota)
+      dlgProdutoPgto?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
     columnGrid(NotaVendaDet::pedido, header = "Pedido")
     columnGrid(NotaVendaDet::pdv, header = "PDV")
     columnGrid(NotaVendaDet::data, header = "Data")
@@ -114,8 +124,7 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
     columnGrid(NotaVendaDet::numMetodo, header = "Met")
     columnGrid(NotaVendaDet::nomeMetodo, header = "Nome Met")
     columnGrid(NotaVendaDet::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaVendaDet::documento, header = "Documento")
-    //columnGrid(NotaVendaDet::quantParcelas, header = "Parc")
+
     val valorCol = columnGrid(NotaVendaDet::valor, header = "Valor NF")
     columnGrid(NotaVendaDet::cliente, header = "Cód Cli")
     columnGrid(NotaVendaDet::nomeCliente, header = "Nome Cliente").expand()

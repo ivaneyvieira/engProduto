@@ -1078,6 +1078,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findParcelasVenda(loja: Int, pdv: Int, transacao: Int): List<ParcelasVenda> {
+    val sql = "/sqlSaci/vendasDetParcelas.sql"
+    return query(sql, ParcelasVenda::class) {
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("pdv", pdv)
+      addOptionalParameter("transacao", transacao)
+    }
+  }
+
   fun findNotaResumo(filtro: FiltroNotaResumo): List<NotaResumo> {
     val sql = "/sqlSaci/resumo.sql"
     return query(sql, NotaResumo::class) {
@@ -3472,7 +3481,7 @@ class QuerySaci : QueryDB(database) {
   fun refToCodigo(ref: String): List<ProdutoRef> {
     val sql = "/sqlSaci/findPrdRef.sql"
 
-    if(ref.isEmpty()){
+    if (ref.isEmpty()) {
       return emptyList()
     }
 
@@ -3485,7 +3494,7 @@ class QuerySaci : QueryDB(database) {
   fun codigoToRef(codigo: String): List<ProdutoRef> {
     val sql = "/sqlSaci/findPrdCod.sql"
 
-    if(codigo.isEmpty()){
+    if (codigo.isEmpty()) {
       return emptyList()
     }
 

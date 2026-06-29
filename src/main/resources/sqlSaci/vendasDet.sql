@@ -72,55 +72,6 @@ WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
 GROUP BY N.storeno, N.pdvno, N.xano
 ORDER BY N.storeno, N.pdvno, N.xano;
 
-DROP TEMPORARY TABLE IF EXISTS T_CHAVE;
-CREATE TEMPORARY TABLE T_CHAVE
-(
-  PRIMARY KEY (loja, pdv, transacao)
-)
-SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
-FROM T_NOTA
-GROUP BY loja, pdv, transacao;
-
-DROP TEMPORARY TABLE IF EXISTS T_CARD;
-CREATE TEMPORARY TABLE T_CARD
-(
-  PRIMARY KEY (loja, pdv, transacao, seqno)
-)
-SELECT loja,
-       pdv,
-       transacao,
-       CR.seqno                   AS seqno,
-       CAST(MAX(CR.date) AS date) AS dataParcela,
-       SUM(CR.amt / 100)          AS valorParcela,
-       CT.sname                   AS documento
-FROM
-  T_CHAVE                    AS C
-    INNER JOIN sqlpdv.pxacrd AS CR
-               ON C.loja = CR.storeno AND C.pdv = CR.pdvno AND C.transacao = CR.xano
-    LEFT JOIN  sqldados.card AS CT
-               ON CT.no = CR.cardno
-GROUP BY loja, pdv, transacao, seqno;
-
-
-DROP TEMPORARY TABLE IF EXISTS T_DUP;
-CREATE TEMPORARY TABLE T_DUP
-(
-  PRIMARY KEY (loja, pdv, transacao, seqno)
-)
-SELECT C.loja,
-       C.pdv,
-       C.transacao,
-       D.dupno                      AS seqno,
-       CAST(MAX(D.duedate) AS date) AS dataParcela,
-       SUM(D.amtdue / 100)          AS valorParcela
-FROM
-  T_CHAVE                     AS C
-    INNER JOIN sqldados.nfdup AS N
-               ON N.nfstoreno = C.loja AND N.nfno = C.nfno AND N.nfse = C.nfse
-    INNER JOIN sqldados.dup   AS D
-               ON D.storeno = N.dupstoreno AND D.type = N.duptype AND D.dupno = N.dupno AND D.dupse = N.dupse
-GROUP BY loja, pdv, transacao, D.dupno;
-
 SELECT loja,
        pdv,
        transacao,
@@ -131,22 +82,6 @@ SELECT loja,
        data,
        nota,
        tipoNf,
-       documento,
-       CASE
-         WHEN tipoPgto LIKE 'DUP%'  THEN D.seqno
-         WHEN tipoPgto LIKE 'CART%' THEN C.seqno
-                                    ELSE 0
-       END AS seqno,
-       CASE
-         WHEN tipoPgto LIKE 'DUP%'  THEN D.dataParcela
-         WHEN tipoPgto LIKE 'CART%' THEN C.dataParcela
-                                    ELSE data
-       END AS dataParcela,
-       CASE
-         WHEN tipoPgto LIKE 'DUP%'  THEN D.valorParcela
-         WHEN tipoPgto LIKE 'CART%' THEN C.valorParcela
-                                    ELSE valor
-       END AS valorParcela,
        hora,
        valor,
        cliente,
@@ -154,13 +89,8 @@ SELECT loja,
        uf,
        vendedor,
        obs
-FROM
-  T_NOTA             AS N
-    LEFT JOIN T_CARD AS C
-              USING (loja, pdv, transacao)
-    LEFT JOIN T_DUP  AS D
-              USING (loja, pdv, transacao)
+FROM T_NOTA AS N
 WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
-        tipoNf LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
-        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
-        vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT OR nomeMetodo REGEXP @PESQUISA_REGEXP)
+       tipoNf LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
+       UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
+       vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT OR nomeMetodo REGEXP @PESQUISA_REGEXP)

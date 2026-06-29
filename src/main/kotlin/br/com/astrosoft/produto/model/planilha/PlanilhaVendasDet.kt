@@ -18,7 +18,6 @@ class PlanilhaVendasDet : Planilha<NotaVendaDet>("Vendas") {
     columnSheet(NotaVendaDet::numMetodo, header = "Met")
     columnSheet(NotaVendaDet::nomeMetodo, header = "Nome Met")
     columnSheet(NotaVendaDet::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnSheet(NotaVendaDet::documento, header = "Documento")
     columnSheet(NotaVendaDet::valor, header = "Valor NF")
     columnSheet(NotaVendaDet::cliente, header = "Cód Cli")
     columnSheet(NotaVendaDet::nomeCliente, header = "Nome Cliente")
