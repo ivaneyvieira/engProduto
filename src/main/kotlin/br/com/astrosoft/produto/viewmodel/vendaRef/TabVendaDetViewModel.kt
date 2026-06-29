@@ -1,12 +1,12 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
+import br.com.astrosoft.produto.model.beans.FiltroNotaVendaDet
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.NotaVendaDet
 import br.com.astrosoft.produto.model.beans.agrupaDetalhe
-import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
-import br.com.astrosoft.produto.model.report.ReportVendaRef
+import br.com.astrosoft.produto.model.planilha.PlanilhaVendasDet
+import br.com.astrosoft.produto.model.report.ReportVendaDet
 
 class TabVendaDetViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -20,24 +20,18 @@ class TabVendaDetViewModel(val viewModel: VendaRefViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaVendaRef.findAll(filtro).let { lista ->
-      if (filtro.agrupado) {
-        lista
-      } else {
-        lista.agrupaDetalhe()
-      }
-    }
+    val notas = NotaVendaDet.findAll(filtro).agrupaDetalhe()
     subView.updateNotas(notas)
   }
 
-  fun geraPlanilha(vendas: List<NotaVendaRef>): ByteArray {
-    val planilha = PlanilhaVendasRef()
+  fun geraPlanilha(vendas: List<NotaVendaDet>): ByteArray {
+    val planilha = PlanilhaVendasDet()
     return planilha.write(vendas)
   }
 
   fun imprimeRelatorio() {
     val notas = subView.itensNotasSelecionados()
-    val report = ReportVendaRef()
+    val report = ReportVendaDet()
     val file = report.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
@@ -47,7 +41,7 @@ class TabVendaDetViewModel(val viewModel: VendaRefViewModel) {
 }
 
 interface ITabVendaDet : ITabView {
-  fun filtro(): FiltroNotaVendaRef
-  fun updateNotas(notas: List<NotaVendaRef>)
-  fun itensNotasSelecionados(): List<NotaVendaRef>
+  fun filtro(): FiltroNotaVendaDet
+  fun updateNotas(notas: List<NotaVendaDet>)
+  fun itensNotasSelecionados(): List<NotaVendaDet>
 }

@@ -481,6 +481,23 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
 
+  fun findProdutoNF(nfs: NotaVendaDet): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdv)
+      addOptionalParameter("xano", nfs.transacao)
+      addOptionalParameter("loja", 0)
+      addOptionalParameter("marca", EMarcaNota.TODOS.num)
+      addOptionalParameter("prdno", "")
+      addOptionalParameter("grade", "")
+      addOptionalParameter("lojaLocal", 4)
+      addOptionalParameter("todosLocais", "S")
+      addOptionalParameter("local", listOf("TODOS"))
+    }
+    return produtos
+  }
+
   fun findProdutoNF(nfs: NotaVendaRef): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val produtos = query(sql, ProdutoNFS::class) {
@@ -1044,6 +1061,16 @@ class QuerySaci : QueryDB(database) {
   fun findNotaVendaRef(filtro: FiltroNotaVendaRef): List<NotaVendaRef> {
     val sql = "/sqlSaci/vendasRef.sql"
     return query(sql, NotaVendaRef::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
+  fun findNotaVendaDet(filtro: FiltroNotaVendaDet): List<NotaVendaDet> {
+    val sql = "/sqlSaci/vendasDet.sql"
+    return query(sql, NotaVendaDet::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())

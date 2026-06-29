@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaNota
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.NotaVendaDet
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
@@ -28,7 +28,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosVendaDet(val viewModel: TabVendaDetViewModel, val nota: NotaVendaRef) {
+class DlgProdutosVendaDet(val viewModel: TabVendaDetViewModel, val nota: NotaVendaDet) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 
@@ -42,7 +42,7 @@ class DlgProdutosVendaDet(val viewModel: TabVendaDetViewModel, val nota: NotaVen
     val linha1 =
         "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
     val linha2 =
-        "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+        "Tipo NF: ${nota.tipoNf}${espaco}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
     form = SubWindowForm(
       title = "$linha1|$linha2",
       toolBar = {

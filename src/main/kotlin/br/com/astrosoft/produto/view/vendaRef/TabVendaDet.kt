@@ -5,13 +5,12 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
+import br.com.astrosoft.produto.model.beans.FiltroNotaVendaDet
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.NotaVendaDet
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabVendaDet
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaDetViewModel
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaRefViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -26,9 +25,8 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabVendaDet(val viewModel: TabVendaDetViewModel) :
-  TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaDet {
+  TabPanelGrid<NotaVendaDet>(NotaVendaDet::class), ITabVendaDet {
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var chkPagamento: Checkbox
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
@@ -58,13 +56,6 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
       }
     }
     init()
-
-    chkPagamento = checkBox("Pgto") {
-      addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
-      }
-    }
 
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -99,41 +90,36 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
     }
   }
 
-  override fun Grid<NotaVendaRef>.gridPanel() {
+  override fun Grid<NotaVendaDet>.gridPanel() {
     this.addClassName("styling")
     this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     addColumnSeq("Seq")
-    columnGrid(NotaVendaRef::loja, header = "Loja")
+    columnGrid(NotaVendaDet::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosVendaDet(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    columnGrid(NotaVendaRef::pedido, header = "Pedido")
-    columnGrid(NotaVendaRef::pdv, header = "PDV")
-    columnGrid(NotaVendaRef::data, header = "Data")
-    columnGrid(NotaVendaRef::transacao, header = "Transação")
-    columnGrid(NotaVendaRef::nota, header = "NF")
-    columnGrid(NotaVendaRef::uf, header = "UF")
-    columnGrid(NotaVendaRef::tipoNf, header = "Tipo NF")
-    columnGrid(NotaVendaRef::hora, header = "Hora")
-    columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
-    columnGrid(NotaVendaRef::numMetodo, header = "Met")
-    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaVendaRef::documento, header = "Documento")
-    //columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
-    columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
-    columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
-      this.setFooter(Html("<b><font size=4>Total</font></b>"))
-    }
-    val valorCol = columnGrid(NotaVendaRef::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
-    columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
-    columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
-    columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
+    columnGrid(NotaVendaDet::pedido, header = "Pedido")
+    columnGrid(NotaVendaDet::pdv, header = "PDV")
+    columnGrid(NotaVendaDet::data, header = "Data")
+    columnGrid(NotaVendaDet::transacao, header = "Transação")
+    columnGrid(NotaVendaDet::nota, header = "NF")
+    columnGrid(NotaVendaDet::uf, header = "UF")
+    columnGrid(NotaVendaDet::tipoNf, header = "Tipo NF")
+    columnGrid(NotaVendaDet::hora, header = "Hora")
+    columnGrid(NotaVendaDet::numeroInterno, header = "NI", width = "100px")
+    columnGrid(NotaVendaDet::numMetodo, header = "Met")
+    columnGrid(NotaVendaDet::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaVendaDet::mult, pattern = "#,##0.0000", header = "Mlt")
+    columnGrid(NotaVendaDet::documento, header = "Documento")
+    //columnGrid(NotaVendaDet::quantParcelas, header = "Parc")
+    val valorCol = columnGrid(NotaVendaDet::valor, header = "Valor NF")
+    columnGrid(NotaVendaDet::cliente, header = "Cód Cli")
+    columnGrid(NotaVendaDet::nomeCliente, header = "Nome Cliente").expand()
+    columnGrid(NotaVendaDet::vendedor, header = "Vendedor").expand()
 
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
@@ -141,27 +127,24 @@ class TabVendaDet(val viewModel: TabVendaDetViewModel) :
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
       }
         .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
-      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-      valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
 
-  override fun filtro(): FiltroNotaVendaRef {
-    return FiltroNotaVendaRef(
+  override fun filtro(): FiltroNotaVendaDet {
+    return FiltroNotaVendaDet(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      agrupado = chkPagamento.value ?: false,
     )
   }
 
-  override fun updateNotas(notas: List<NotaVendaRef>) {
+  override fun updateNotas(notas: List<NotaVendaDet>) {
     this.updateGrid(notas)
   }
 
-  override fun itensNotasSelecionados(): List<NotaVendaRef> {
+  override fun itensNotasSelecionados(): List<NotaVendaDet> {
     return itensSelecionados()
   }
 
