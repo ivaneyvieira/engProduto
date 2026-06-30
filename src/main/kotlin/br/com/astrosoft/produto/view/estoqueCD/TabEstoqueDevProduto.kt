@@ -134,7 +134,7 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       data = edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
-      localizacao = user?.localizacaoDev ?: setOf("TODOS")
+      localizacao = user?.listaEstoque ?: setOf("TODOS")
     )
   }
 
