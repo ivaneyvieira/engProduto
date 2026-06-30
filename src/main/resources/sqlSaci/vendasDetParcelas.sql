@@ -23,7 +23,7 @@ SELECT CR.storeno                     AS loja,
        CR.xano                        AS transacao,
        dataVenda                      AS dataVenda,
        CR.seqno                       AS seqno,
-       'Cart]ao/Pix'                  AS tipo,
+       'Cartão/Pix'                   AS tipo,
        CAST(MAX(CR.recvdate) AS date) AS dataParcela,
        SUM(CR.amt / 100)              AS valorParcela,
        CT.sname                       AS documento
