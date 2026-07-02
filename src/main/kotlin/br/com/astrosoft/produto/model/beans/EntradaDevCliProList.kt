@@ -37,6 +37,7 @@ data class EntradaDevCliProList(
   var userRecebimentoName: String?,
   var dataRecebimento: LocalDate?,
   var horaRecebimento: LocalTime?,
+  var seq: Int?,
 ) {
   fun tipoPrdTratado(): String {
     val temProduto = this.tipoPrd?.endsWith(" P") == true
