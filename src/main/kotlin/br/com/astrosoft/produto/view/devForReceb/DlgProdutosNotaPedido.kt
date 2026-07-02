@@ -255,7 +255,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-      isMultiSort = false
+      isMultiSort = true
       selectionMode = Grid.SelectionMode.MULTI
 
       columnGrid(NotaRecebimentoProdutoDev::seq, "Item").right()
