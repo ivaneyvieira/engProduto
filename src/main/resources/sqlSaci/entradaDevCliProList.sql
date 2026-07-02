@@ -175,7 +175,7 @@ FROM
   sqldados.iprd                         AS I
     INNER JOIN T_NI
                USING (invno)
-    LEFT JOIN  sqldados.xaprd2Devolucao AS D
+    INNER JOIN  sqldados.xaprd2Devolucao AS D
                ON D.storeno = loja AND D.pdvno = pdv AND D.xano = transacao AND D.prdno = I.prdno AND
                   D.grade = I.grade AND D.dev = TRUE
 GROUP BY loja, pdv, transacao, prdno, grade, seq;
@@ -313,7 +313,8 @@ SELECT data,
        IFNULL(UR.name, '')                                                                              AS userRecebimentoName,
        IF(D.dataRecebimento = 0, NULL, D.dataRecebimento)                                               AS dataRecebimento,
        IF(D.horaRecebimento = 0, NULL, D.horaRecebimento)                                               AS horaRecebimento,
-       IFNULL(P.kardec, 0)                                                                              AS kardec
+       IFNULL(P.kardec, 0)                                                                              AS kardec,
+       seq                                                                                              AS seq
 FROM
   T_PRODUTOS                                 AS P
     LEFT JOIN sqldados.devClienteAutorizacao AS D
