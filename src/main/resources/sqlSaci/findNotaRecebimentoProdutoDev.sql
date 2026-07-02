@@ -268,11 +268,12 @@ CREATE TEMPORARY TABLE T_EST
 (
   PRIMARY KEY (prdno, grade)
 )
-SELECT prdno, grade, ((qtty_atacado + qtty_varejo) / 1000) AS estoque
+SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoque
 FROM
   sqldados.stk       AS S
     INNER JOIN T_PRD AS N
                USING (storeno, prdno, grade)
+WHERE (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST_LOJA;
