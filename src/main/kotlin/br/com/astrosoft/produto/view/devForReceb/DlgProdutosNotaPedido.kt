@@ -283,7 +283,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       columnGrid(NotaRecebimentoProdutoDev::cfop, "CFOP")
       columnGrid(NotaRecebimentoProdutoDev::cst, "CST")
       columnGrid(NotaRecebimentoProdutoDev::rotuloSped, "Ctrl \"S\"", width = "90px")
-      columnGrid(NotaRecebimentoProdutoDev::estoque, "Estq")
+      columnGrid(NotaRecebimentoProdutoDev::estoqueLoja, "Estq")
       columnGrid(NotaRecebimentoProdutoDev::ni, "NI") {
         this.right()
         this.setComparator { prd ->
