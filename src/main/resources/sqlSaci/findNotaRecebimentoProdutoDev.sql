@@ -260,7 +260,6 @@ CREATE TEMPORARY TABLE T_PRD
 SELECT S.no AS storeno, prdno, grade
 FROM T_NOTA, sqldados.store AS S
 WHERE S.no IN (1, 2, 3, 4, 5, 8)
-  AND (no = :loja OR :loja = 0)
 GROUP BY S.no, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST;
@@ -270,10 +269,10 @@ CREATE TEMPORARY TABLE T_EST
 )
 SELECT prdno, grade, SUM((qtty_atacado + qtty_varejo) / 1000) AS estoque
 FROM
-  sqldados.stk       AS S
-    INNER JOIN T_PRD AS N
+  sqldados.stk AS S
+    INNER JOIN T_PRD
                USING (storeno, prdno, grade)
-WHERE (storeno = :loja OR :loja = 0)
+WHERE storeno IN (1, 2, 3, 4, 5, 8)
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_EST_LOJA;
