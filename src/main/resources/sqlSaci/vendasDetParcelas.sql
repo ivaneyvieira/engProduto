@@ -5,13 +5,22 @@ CREATE TEMPORARY TABLE T_CHAVE
 (
   PRIMARY KEY (loja, pdv, transacao)
 )
-SELECT storeno AS loja, pdvno AS pdv, xano AS transacao, nfno, nfse, CAST(issuedate AS date) AS dataVenda
-FROM sqldados.nf
+SELECT storeno              AS loja,
+       pdvno                AS pdv,
+       xano                 AS transacao,
+       nfno,
+       nfse,
+       xatype,
+       Q.string             AS tipo,
+       CAST(N.date AS date) AS dataVenda
+FROM
+  sqlpdv.pxa                  AS N
+    LEFT JOIN sqldados.query1 AS Q
+              ON Q.no_short = N.xatype
 WHERE storeno = :loja
   AND pdvno = :pdv
   AND xano = :transacao
 GROUP BY loja, pdv, transacao;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_CARD;
 CREATE TEMPORARY TABLE T_CARD
@@ -57,8 +66,34 @@ FROM
                ON D.storeno = N.dupstoreno AND D.type = N.duptype AND D.dupno = N.dupno AND D.dupse = N.dupse
 GROUP BY loja, pdv, transacao, D.dupno;
 
+DROP TEMPORARY TABLE IF EXISTS T_OUTROS;
+CREATE TEMPORARY TABLE T_OUTROS
+(
+  PRIMARY KEY (loja, pdv, transacao, seqno)
+)
+SELECT storeno       AS loja,
+       pdvno         AS pdv,
+       xano          AS transacao,
+       dataVenda     AS dataVenda,
+       1             AS seqno,
+       CASE C.xatype
+         WHEN 1 THEN 'Cred. Dev.'
+                ELSE C.tipo
+       END           AS tipo,
+       dataVenda     AS dataParcela,
+       (N.amt / 100) AS valorParcela
+FROM
+  T_CHAVE                 AS C
+    INNER JOIN sqlpdv.pxa AS N
+               ON N.storeno = C.loja AND N.pdvno = C.pdv AND N.xano = C.transacao
+WHERE C.xatype NOT IN (3, 4, 8, 9, 33)
+GROUP BY loja, pdv, transacao;
+
 SELECT loja, pdv, transacao, seqno, tipo, dataVenda, dataParcela, valorParcela, documento
 FROM T_CARD
 UNION
 SELECT loja, pdv, transacao, seqno, tipo, dataVenda, dataParcela, valorParcela, '' AS documento
 FROM T_DUP
+UNION
+SELECT loja, pdv, transacao, seqno, tipo, dataVenda, dataParcela, valorParcela, '' AS documento
+FROM T_OUTROS
