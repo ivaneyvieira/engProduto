@@ -19,15 +19,14 @@ object ProcessamentoKardec {
   fun updateSaldoKardec(produto: ProdutoEstoque, tipo: ETipoKardec = ETipoKardec.TODOS) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
-    val listaKardec =
-        updateKardex(
-          produto = produto,
-          loja = loja,
-          dataIncial = produto.dataInicialDefault(),
-          tipo = tipo
-        ).filter {
-          it.loja == loja
-        }
+    val listaKardec = updateKardex(
+      produto = produto,
+      loja = loja,
+      dataIncial = produto.dataInicialDefault(),
+      tipo = tipo
+    ).filter {
+      it.loja == loja
+    }
     produto.dataUpdate = LocalDate.now()
     val listaOrdenada = listaKardec.ajustaOrdem()
     produto.kardec = listaOrdenada.lastOrNull()?.saldo ?: 0
@@ -60,23 +59,29 @@ object ProcessamentoKardec {
     tipo: ETipoKardec = ETipoKardec.TODOS
   ): List<ProdutoKardex> {
     return runBlocking {
-      if (tipo == ETipoKardec.TODOS) {
-        ProdutoKardex.deleteKardec(produto)
-        val listBuild = fetchKardec(produto, loja, dataIncial)
-        listBuild.forEach { produtoKardec: ProdutoKardex ->
-          produtoKardec.save()
+      when (tipo) {
+        ETipoKardec.TODOS     -> {
+          ProdutoKardex.deleteKardec(produto)
+          val listBuild = fetchKardec(produto, loja, dataIncial)
+          listBuild.forEach { produtoKardec: ProdutoKardex ->
+            produtoKardec.save()
+          }
+          listBuild
         }
-        listBuild
-      } else if (tipo == ETipoKardec.DEVOLUCAO) {
-        ProdutoKardex.deleteKardec(produto, tipo)
-        val produtoList = ProdutoKardex.findKardec(produto)
-        val listBuild = produto.devolucao(loja, dataIncial) + produtoList
-        listBuild.forEach { produtoKardec: ProdutoKardex ->
-          produtoKardec.save()
+
+        ETipoKardec.DEVOLUCAO -> {
+          ProdutoKardex.deleteKardec(produto, tipo)
+          val produtoList = ProdutoKardex.findKardec(produto)
+          val listBuild = produto.devolucao(loja, dataIncial) + produtoList
+          listBuild.forEach { produtoKardec: ProdutoKardex ->
+            produtoKardec.save()
+          }
+          listBuild
         }
-        listBuild
-      } else {
-        emptyList()
+
+        else                  -> {
+          emptyList()
+        }
       }
     }
   }

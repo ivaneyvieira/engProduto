@@ -447,7 +447,9 @@ class ProdutoEstoque(
           observacao = "${nota.observacao} loja ${nota.loja}"
         )
       }
-      listExp.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }
+      listExp.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }.filter {
+        it.tipo != ETipoKardec.ENTREGA || (it.loja ?: 0) == (it.ljDoc ?: 0)  || (it.ljDoc ?: 0) == 0
+      }
     }
     return ret
   }
