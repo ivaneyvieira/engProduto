@@ -89,9 +89,10 @@ class ProdutoEstoque(
       if (usoConsumo == true) {
         return null
       }
-      val sistema = saldo?.toDouble() ?: 0.0
-      val cd = kardec?.toDouble() ?: 0.0
-      val diferenca = sistema - cd
+      val sistema = saldo?.toDouble() ?: 0.00
+      val cd = kardec?.toDouble() ?: 0.00
+      val gar = quantDevolucao?.toDouble() ?: 0.00
+      val diferenca = sistema - cd - gar
       return if (descricao?.startsWith("SVS E") == true) {
         diferenca * 900.0 / 900.0
       } else {
@@ -448,7 +449,6 @@ class ProdutoEstoque(
         )
       }
       listExp.distinctBy { "${it.loja} ${it.doc} ${it.nfEnt}" }.filter {
-        //it.tipo != ETipoKardec.ENTREGA || (it.loja ?: 0) == (it.ljDoc ?: 0)  || (it.ljDoc ?: 0) == 0
         it.tipo != ETipoKardec.ENTREGA || (it.loja ?: 0) == 4
       }
     }
