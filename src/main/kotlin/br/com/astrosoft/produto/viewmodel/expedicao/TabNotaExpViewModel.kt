@@ -4,6 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaExpedicao
+import br.com.astrosoft.produto.model.planilha.PlanilhaImpresso
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
@@ -12,6 +14,12 @@ import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
+  }
+
+  fun geraPlanilha(): ByteArray {
+    val notas = subView.notasSelecionadas()
+    val planilha = PlanilhaExpedicao()
+    return planilha.write(notas)
   }
 
   fun updateView() {
@@ -143,4 +151,5 @@ interface ITabNotaExp : ITabView {
   fun updateProdutos()
   fun produtosSelecionados(): List<ProdutoNFS>
   fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit)
+  fun notasSelecionadas(): List<NotaSaida>
 }

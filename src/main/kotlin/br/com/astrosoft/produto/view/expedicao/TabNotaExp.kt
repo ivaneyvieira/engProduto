@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.expedicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
@@ -115,11 +116,15 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
         viewModel.updateView()
       }
     }
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaExp") {
+      viewModel.geraPlanilha()
+    }
   }
 
   override fun Grid<NotaSaida>.gridPanel() {
     this.addClassName("styling")
     this.format()
+    this.setSelectionMode(Grid.SelectionMode.MULTI)
 
     colunaNFLoja()
 
@@ -213,5 +218,9 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
         marca(user.no)
       }
     }
+  }
+
+  override fun notasSelecionadas(): List<NotaSaida> {
+    return gridPanel.selectedItems.toList()
   }
 }
