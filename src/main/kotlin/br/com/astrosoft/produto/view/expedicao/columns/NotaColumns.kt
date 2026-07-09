@@ -27,6 +27,10 @@ object NotaColumns {
     this.setHeader("Cliente")
   }
 
+  fun Grid<NotaSaida>.colunaNFCfop() = columnGrid(NotaSaida::cfop) {
+    this.setHeader("CFOP")
+  }
+
   fun Grid<NotaSaida>.colunaNFData() = columnGrid(NotaSaida::data) {
     this.setHeader("Data")
   }

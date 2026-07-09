@@ -23,6 +23,7 @@ class NotaSaida(
   var vendedor: Int?,
   var nomeVendedor: String?,
   var nomeCompletoVendedor: String?,
+  var cfop: String?,
   //var locais: String?,
   var usuarioExp: String?,
   var usuarioCD: String?,

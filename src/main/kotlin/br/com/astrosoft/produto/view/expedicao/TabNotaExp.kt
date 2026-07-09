@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaHora
+import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFCfop
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFCliente
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFData
 import br.com.astrosoft.produto.view.expedicao.columns.NotaColumns.colunaNFEntregaRetira
@@ -139,6 +140,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFVendedor()
     colunaNFValor()
     colunaNFTipo()
+    colunaNFCfop()
     colunaNFEntregaRetira()
     colunaNFSituacao()
 

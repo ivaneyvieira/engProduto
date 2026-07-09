@@ -1,20 +1,5 @@
 USE sqldados;
 
-
-/*
-
-SHOW INDEX FROM sqldados.nf
-
-CREATE INDEX e6 ON sqldados.nf (l16)
-
- */
-/*
- SHOW INDEX FROM sqldados.nf
-
-DROP INDEX e6 ON sqldados.nf
-CREATE INDEX e6 ON sqldados.nf (l16, issuedate)
-*/
-
 DO @DT := :dataNotas;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
@@ -23,8 +8,7 @@ CREATE TEMPORARY TABLE T_TIPO
   PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno AS storeno, ordno AS ordno, SUM((E.bits & 2) > 0) AS tipoR, SUM((E.bits & 2) = 0) AS tipoE
-FROM
-  sqldados.eoprdf AS E
+FROM sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (`date` >= @DT)
 GROUP BY storeno, ordno;
@@ -61,8 +45,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
@@ -93,8 +76,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno, A.grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')
@@ -112,8 +94,7 @@ CREATE TEMPORARY TABLE T_CARGA
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT storeno, pdvno, xano
-FROM
-  sqldados.nfrprd
+FROM sqldados.nfrprd
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
   AND `date` > @DT
@@ -141,6 +122,7 @@ SELECT N.storeno                                                              AS
        N.empno                                                                AS vendedor,
        TRIM(MID(E.sname, 1, 20))                                              AS nomeVendedor,
        TRIM(E.name)                                                           AS nomeCompletoVendedor,
+       IFNULL(CAST(N.cfo AS char), '')                                        AS cfop,
        GROUP_CONCAT(DISTINCT IF(LC.localizacao = '', NULL, LC.localizacao))   AS locais,
        MAX(X.c5)                                                              AS usuarioExp,
        MAX(X.c4)                                                              AS usuarioCD,
@@ -271,6 +253,7 @@ SELECT Q.loja,
        Q.vendedor,
        Q.nomeVendedor,
        Q.nomeCompletoVendedor,
+       cfop,
   /*Q.locais,*/
        Q.usuarioExp,
        Q.usuarioCD,
