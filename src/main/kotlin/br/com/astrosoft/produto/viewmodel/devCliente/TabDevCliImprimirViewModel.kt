@@ -120,12 +120,15 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
+    val dados = nota.produtos()
+    val printer = subView.printerPreview(loja = 0) { impressora ->
+      nota.marcaImpresso(Impressora(0, impressora))
+      updateView()
+    }
+
     relatorio.print(
-      dados = nota.produtos(), printer = subView.printerPreview(loja = 0)
-      { impressora ->
-        nota.marcaImpresso(Impressora(0, impressora))
-        updateView()
-      })
+      dados = dados, printer = printer
+    )
   }
 
   /**************************** imprimeValeTroca ************************************/

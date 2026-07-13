@@ -22,8 +22,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliImprimir {
+  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker

@@ -110,7 +110,12 @@ class EntradaDevCli(
       return parte2.trim()
     }
 
-  fun produtos() = saci.entradaDevCliPro(invno).explodeMisto().ajustaTipo(produtosAutorizacao())
+  fun produtos(): List<EntradaDevCliPro> {
+    val dadosBruto = saci.entradaDevCliPro(invno)
+    val dadosExplodidos = dadosBruto.explodeMisto()
+    val dadosAjustados = dadosExplodidos.ajustaTipo(produtosAutorizacao())
+    return dadosAjustados
+  }
 
   private fun produtosAutorizacao(): List<ProdutoNFS> {
     return notaAutoriza().flatMap {
