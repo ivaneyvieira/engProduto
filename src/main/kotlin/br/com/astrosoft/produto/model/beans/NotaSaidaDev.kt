@@ -20,6 +20,7 @@ class NotaSaidaDev(
   var valorNota: Double?,
   var dataEmissao: LocalDate?,
   var hora: LocalTime?,
+  var cfop: String?,
   var volume: Double?,
   var peso: Double?,
   var vendedor: Int?,

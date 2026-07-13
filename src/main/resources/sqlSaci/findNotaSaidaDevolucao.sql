@@ -25,6 +25,7 @@ SELECT N.storeno                                                              AS
        N.grossamt / 100                                                       AS valorNota,
        CAST(N.issuedate AS DATE)                                              AS dataEmissao,
        SEC_TO_TIME(P.time)                                                    AS hora,
+       N.cfo                                                                  AS cfop,
        N.vol_qtty / 100                                                       AS volume,
        N.vol_gross                                                            AS peso,
        N.empno                                                                AS vendedor,
@@ -119,8 +120,7 @@ CREATE TEMPORARY TABLE T_FILE_COUNT2
   INDEX (loja, pdvno, xano)
 )
 SELECT storeno AS loja, pdvno, xano, COUNT(seq) AS quant
-FROM
-  sqldados.nfSaidaArquivoDevolucao
+FROM sqldados.nfSaidaArquivoDevolucao
 GROUP BY storeno, pdvno, xano;
 
 SELECT loja,
@@ -136,6 +136,7 @@ SELECT loja,
        valorNota,
        dataEmissao,
        hora,
+       cfop,
        vendedor,
        volume,
        peso,

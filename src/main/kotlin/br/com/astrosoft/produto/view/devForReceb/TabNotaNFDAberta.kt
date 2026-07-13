@@ -124,6 +124,9 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::dataEmissao) {
       this.setHeader("Data")
     }
+    columnGrid(NotaSaidaDev::cfop) {
+      this.setHeader("CFOP")
+    }
     columnGrid(NotaSaidaDev::cliente) {
       this.setHeader("Cliente")
     }
