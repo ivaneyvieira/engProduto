@@ -16,7 +16,9 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaSaidaDev.findDevolucao(filtro)
+    val notas = NotaSaidaDev.findDevolucao(filtro).distinctBy { nota ->
+      "${nota.loja}-${nota.pdvno}-${nota.xano}=${nota.situacaoDevName}"
+    }
     subView.updateNotas(notas)
   }
 
