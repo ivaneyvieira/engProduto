@@ -88,8 +88,8 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (X.grade = :grade OR :grade = '')
   AND (N.status <> 1)
   AND (N.tipo = 2)
+  AND (N.storeno = :loja OR :loja = 0)
 GROUP BY N.storeno, N.pdvno, N.xano;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT;
 CREATE TEMPORARY TABLE T_FILE_COUNT
