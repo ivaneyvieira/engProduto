@@ -8,8 +8,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao, kardec
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')
@@ -22,8 +21,7 @@ CREATE TEMPORARY TABLE T_STK
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, SUM(qtty_atacado) AS qtty_atacado, SUM(qtty_varejo) AS qtty_varejo
-FROM
-  sqldados.stk
+FROM sqldados.stk
 WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND (prdno = :prdno OR :prdno = '')
   AND (grade = :grade OR :grade = '')
@@ -82,7 +80,8 @@ SELECT X.storeno                                                     AS loja,
        IFNULL(D.temProduto, FALSE)                                   AS temProduto,
        IFNULL(dev, FALSE)                                            AS dev,
        X.date                                                        AS dataNota,
-       IFNULL(D.seq, 0)                                              AS seq
+       IFNULL(D.seq, 0)                                              AS seq,
+       R.storenoStk                                                  AS lojaRsv
 FROM
   sqldados.prd                          AS P
     INNER JOIN sqldados.xaprd2          AS X
@@ -101,6 +100,9 @@ FROM
                ON EE.no = X.s5
     INNER JOIN sqldados.nf              AS N
                ON N.storeno = X.storeno AND N.pdvno = X.pdvno AND N.xano = X.xano
+    LEFT JOIN  sqldados.nfrprd          AS R
+               ON R.storeno = X.storeno AND R.pdvno = X.pdvno AND R.xano = X.xano AND R.prdno = X.prdno AND
+                  R.grade = X.grade
     LEFT JOIN  sqldados.prdbar          AS BC
                ON P.no = BC.prdno AND BC.grade = X.grade AND LENGTH(TRIM(BC.barcode)) = 13
     LEFT JOIN  T_STK                    AS STK
@@ -161,8 +163,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v3 (storeno, obsReg)
 )
 SELECT invno, storeno, date, nfNfno, nfStoreno, nfNfse, s1, s2, l2, CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
-FROM
-  sqldados.inv AS I
+FROM sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
   AND I.date >= ( SELECT MIN(dataNota) FROM T_DADOS );
@@ -197,18 +198,15 @@ CREATE TEMPORARY TABLE T_NI
   INDEX (loja, pdv, transacao)
 )
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI1
+FROM T_NI1
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI2
+FROM T_NI2
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI3;
+FROM T_NI3;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
@@ -272,7 +270,8 @@ SELECT D.loja,
        D.seq,
        X.invno              AS ni,
        CAST(X.date AS date) AS dataNi,
-       X.qtDev              AS qtDevNI
+       X.qtDev              AS qtDevNI,
+       lojaRsv              AS lojaRsv
 FROM
   T_DADOS              AS D
     LEFT JOIN T_NI_PRD AS X

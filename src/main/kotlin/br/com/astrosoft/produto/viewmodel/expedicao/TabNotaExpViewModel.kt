@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaExpedicao
-import br.com.astrosoft.produto.model.planilha.PlanilhaImpresso
 import br.com.astrosoft.produto.model.printText.NotaExpedicao
 import br.com.astrosoft.produto.model.printText.NotaExpedicaoEF
 import br.com.astrosoft.produto.model.zpl.EtiquetaChave
@@ -54,14 +53,20 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       fail("Nenhum produto para marcar como CD")
     }
 
-    itens.forEach {
-      if (it.local.isNullOrBlank()) {
+    itens.forEach { produto ->
+      if (produto.local.isNullOrBlank()) {
         fail("Produto sem localização")
       }
-      val estoqueCD = it.kardec ?: 0
-      val quantidadeNF = it.quantidadeNF ?: 0
-      if (estoqueCD < quantidadeNF) {
-        //fail("Estoque insuficiente para marcar como CD")
+      //val estoqueCD = produto.kardec ?: 0
+      //val quantidadeNF = produto.quantidadeNF ?: 0
+      //if (estoqueCD < quantidadeNF) {
+      //fail("Estoque insuficiente para marcar como CD")
+      //}
+      val lojaRsv = produto.lojaRsv
+      if (lojaRsv != null) {
+        if (lojaRsv != 4) {
+          fail("Loja do estoque não é a loja de entrega ")
+        }
       }
     }
 

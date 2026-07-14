@@ -27,6 +27,10 @@ object ProdutoNFNFSViewColumns {
     this.setHeader("Grade")
   }
 
+  fun Grid<ProdutoNFS>.produtoLojaRsv() = columnGrid(ProdutoNFS::lojaRsv) {
+    this.setHeader("Lj Rsv")
+  }
+
   fun Grid<ProdutoNFS>.produtoNFGradeAlternativa() = columnGrid(ProdutoNFS::gradeAlternativa) {
     this.setHeader("Grade Editada")
   }

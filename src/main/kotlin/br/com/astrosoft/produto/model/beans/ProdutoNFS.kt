@@ -55,6 +55,7 @@ data class ProdutoNFS(
   var dataNi: LocalDate?,
   var qtDevNI: Int?,
   var seq: Int?,
+  var lojaRsv: Int?
 ) {
 
   var motivo: String? = null
