@@ -128,36 +128,44 @@ fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
       return@flatMap listOf(bean)
     }
 
-    if (!(bean.tipoPrd ?: "").endsWith(" P")) {
+    if ((bean.tipoPrd ?: "").endsWith(" P").not()) {
       return@flatMap listOf(
         bean.copy(
           //tipoPrd = bean.tipoNotaPre(),
           tipoQtd = 0,
-          tipoQtdEfetiva = (bean.quantidade ?: 0)
+          tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
+        )
+      )
+    } else {
+      return@flatMap listOf(
+        bean.copy(
+          //tipoPrd = bean.tipoNotaPre(),
+          tipoQtd = 0,
+          tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
         )
       )
     }
-
-    val quantComProduto = (bean.tipoQtd ?: 0)
-    val quantSemProduto = (bean.quantidade ?: 0) - (bean.tipoQtd ?: 0)
-    val itemsComProdutos = if (quantComProduto == 0) {
-      null
-    } else {
-      bean.copy(
-        //tipoPrd = "${bean.tipoNotaPre()} P",
-        tipoQtd = quantComProduto,
-        tipoQtdEfetiva = quantComProduto
-      )
-    }
-    val itemsSemProdutos = if (quantSemProduto == 0) {
-      null
-    } else {
-      bean.copy(
-        //tipoPrd = bean.tipoNotaPre(),
-        tipoQtd = quantSemProduto,
-        tipoQtdEfetiva = quantSemProduto
-      )
-    }
-    listOfNotNull(itemsComProdutos, itemsSemProdutos)
+    /*
+        val quantComProduto = (bean.tipoQtd ?: 0)
+        val quantSemProduto = (bean.quantidade ?: 0) - (bean.tipoQtd ?: 0)
+        val itemsComProdutos = if (quantComProduto == 0) {
+          null
+        } else {
+          bean.copy(
+            //tipoPrd = "${bean.tipoNotaPre()} P",
+            tipoQtd = quantComProduto,
+            tipoQtdEfetiva = quantComProduto
+          )
+        }
+        val itemsSemProdutos = if (quantSemProduto == 0) {
+          null
+        } else {
+          bean.copy(
+            //tipoPrd = bean.tipoNotaPre(),
+            tipoQtd = quantSemProduto,
+            tipoQtdEfetiva = quantSemProduto
+          )
+        }
+        listOfNotNull(itemsComProdutos, itemsSemProdutos)*/
   }
 }

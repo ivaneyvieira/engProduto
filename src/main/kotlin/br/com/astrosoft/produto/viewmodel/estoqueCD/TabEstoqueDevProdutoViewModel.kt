@@ -19,11 +19,12 @@ class TabEstoqueDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val produtos = EntradaDevCliProList.findAll(filtro).filter {
+    val produtos = EntradaDevCliProList.findAll(filtro)
+    val produtosFiltrados = produtos.filter {
       it.tipoNotaPre.endsWith(" P")
     }
 
-    subView.updateProdutos(produtos)
+    subView.updateProdutos(produtosFiltrados)
   }
 
   fun imprimeProdutos() = viewModel.exec {
