@@ -460,6 +460,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -477,6 +478,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -494,6 +496,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -511,6 +514,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -528,6 +532,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -552,6 +557,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 4)
       addOptionalParameter("todosLocais", todosLocais.let { if (it) "S" else "N" })
       addOptionalParameter("local", user?.localizacaoNota?.toList() ?: listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -593,6 +599,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("lojaLocal", 0)
       addOptionalParameter("todosLocais", "S")
       addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
     }
     return produtos
   }
@@ -3200,6 +3207,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("temProduto", produtoNF.temProduto)
       addOptionalParameter("dev", produtoNF.dev)
       addOptionalParameter("seq", produtoNF.seq ?: 0)
+      addOptionalParameter("invno", produtoNF.ni)
     }
   }
 

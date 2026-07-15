@@ -81,7 +81,8 @@ SELECT X.storeno                                                     AS loja,
        IFNULL(dev, FALSE)                                            AS dev,
        X.date                                                        AS dataNota,
        IFNULL(D.seq, 0)                                              AS seq,
-       R.storenoStk                                                  AS lojaRsv
+       R.storenoStk                                                  AS lojaRsv,
+       D.invno                                                       AS niDev
 FROM
   sqldados.prd                          AS P
     INNER JOIN sqldados.xaprd2          AS X
@@ -276,6 +277,7 @@ FROM
   T_DADOS              AS D
     LEFT JOIN T_NI_PRD AS X
               ON X.loja = D.loja AND X.pdv = D.pdvno AND X.transacao = D.xano AND X.prdno = D.prdno AND
-                 X.grade = D.grade
+                 X.grade = D.grade AND (X.invno = D.niDev OR D.niDev = 0)
 WHERE (:todosLocais = 'S' OR IFNULL(local, '') != '')
+  AND (D.niDev = :invno OR D.niDev = 0 OR :invno = 0)
 

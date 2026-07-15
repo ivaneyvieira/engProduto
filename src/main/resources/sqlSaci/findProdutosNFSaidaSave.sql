@@ -1,7 +1,7 @@
 USE sqldados;
 
-REPLACE xaprd2Devolucao(storeno, pdvno, xano, prdno, grade, seq, quantDev, temProduto, dev)
-VALUES (:storeno, :pdvno, :xano, :prdno, :grade, IFNULL(:seq, 1), :quantDev, :temProduto, :dev);
+REPLACE xaprd2Devolucao(storeno, pdvno, xano, prdno, grade, seq, quantDev, temProduto, dev, invno)
+VALUES (:storeno, :pdvno, :xano, :prdno, :grade, IFNULL(:seq, 1), :quantDev, :temProduto, :dev, :invno);
 
 DELETE
 FROM xaprd2Devolucao

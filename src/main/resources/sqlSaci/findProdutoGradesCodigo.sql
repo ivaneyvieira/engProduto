@@ -11,4 +11,3 @@ FROM
     LEFT JOIN sqldados.prdbar AS B
               ON P.no = B.prdno AND LENGTH(TRIM(B.barcode)) > 10
 WHERE P.no <=> LPAD(:codigo, 16, ' ')
-

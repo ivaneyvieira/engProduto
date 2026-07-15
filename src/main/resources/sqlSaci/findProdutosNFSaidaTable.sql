@@ -30,3 +30,7 @@ ALTER TABLE xaprd2Devolucao
 ALTER TABLE xaprd2Devolucao
   ADD PRIMARY KEY (storeno, pdvno, xano, prdno, grade, seq);
 
+
+ALTER TABLE sqldados.xaprd2Devolucao
+  ADD COLUMN invno int(10) DEFAULT 0;
+
