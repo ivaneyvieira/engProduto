@@ -157,7 +157,11 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("")
     writeln("")
     val len = ("_______________________________  ".length - solicitacao.length) / 2
-    val str = " ".repeat(len)
+    val str = if (len > 0) {
+      " ".repeat(len)
+    } else {
+      ""
+    }
 
     writeln("_______________________________  _______________________________")
     writeln("${str}${solicitacao}${str}                     Caixa")

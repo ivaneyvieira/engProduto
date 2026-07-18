@@ -20,7 +20,7 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val produtos = EntradaDevCliProList.findAll(filtro).distinctBy {dev ->
-      "${dev.loja} ${dev.prdno} ${dev.grade}"
+      "${dev.loja} ${dev.prdno} ${dev.grade} ${dev.tipoPrd}"
     }
     subView.updateProdutos(produtos)
   }
