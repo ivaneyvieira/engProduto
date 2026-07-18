@@ -115,8 +115,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     tituloValeTroca()
     val totalTxt = "<E>Valor R$: ${nota.valor.format()}</E>"
     writeln(totalTxt, negrito = true)
-    writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true)
-    writeln("NI: ${nota.invno}", negrito = true, expand = true)
+    writeln("<E>NI: ${nota.invno} - </E>VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true)
     val clienteCredito = nota.clienteCredito("Credito: ")
     if (clienteCredito.isNotBlank()) {
       writeln(clienteCredito, negrito = true)
@@ -172,7 +171,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     }
 
     writeln("_______________________________  _______________________________")
-    writeln("${str}${solicitacao}${str}                     Caixa")
+    writeln("${str}${solicitacao}${str}               Caixa")
     writeln("           Autorizacao")
     writeln("")
     writeln("")
