@@ -141,10 +141,18 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
       nota.nameAutorizacao ?: ""
     }
 
+    val metadeWith = this.widthPage / 2
+
     val solicitacao = if (nota.nameSolicitacao.isNullOrBlank()) {
       nota.nameAutorizacao ?: ""
     } else {
       nota.nameSolicitacao ?: ""
+    }.let{sol ->
+      if(sol.length > metadeWith) {
+        sol.substring(0, metadeWith)
+      }else{
+        sol
+      }
     }
 
     writeln("")
@@ -156,7 +164,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")
-    val len = ("_______________________________  ".length - solicitacao.length) / 2
+    val len = (metadeWith - solicitacao.length) / 2
     val str = if (len > 0) {
       " ".repeat(len)
     } else {
