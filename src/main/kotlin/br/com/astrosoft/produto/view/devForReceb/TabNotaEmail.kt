@@ -170,7 +170,7 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaEmail == true
+    return true //username?.devFor2NotaEmail == true
   }
 
   override val label: String

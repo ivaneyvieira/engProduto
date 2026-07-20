@@ -187,7 +187,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaDivergente == true
+    return true //username?.devFor2NotaDivergente == true
   }
 
   override val label: String

@@ -176,7 +176,7 @@ class TabNotaNFD(val viewModel: TabNotaNFDViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaNFD == true
+    return true //username?.devFor2NotaNFD == true
   }
 
   override val label: String

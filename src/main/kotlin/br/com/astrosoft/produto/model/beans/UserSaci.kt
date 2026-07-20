@@ -142,9 +142,10 @@ class UserSaci : IUser {
   var avariaRecReposto by DelegateAuthorized2(110)
   var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
   var devFor2NotaPedido by DelegateAuthorized2(112)
-  var devFor2NotaNFD by DelegateAuthorized2(113)
+  //var devFor2NotaNFD by DelegateAuthorized2(113)
   var devFor2NotaTransportadora by DelegateAuthorized2(114)
-  var devFor2NotaEmail by DelegateAuthorized2(115)
+
+  //var devFor2NotaEmail by DelegateAuthorized2(115)
   var devFor2NotaReposto by DelegateAuthorized2(116)
   var devFor2NotaAcerto by DelegateAuthorized2(117)
   var devFor2NotaGarantia by DelegateAuthorized2(118)
@@ -154,14 +155,14 @@ class UserSaci : IUser {
   var ressuprimentoRessu by DelegateAuthorized2(122)
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
-  var devFor2NotaColeta by DelegateAuthorized3(126)
+  //var devFor2NotaColeta by DelegateAuthorized3(126)
   var devFor2NotaDescarte by DelegateAuthorized3(127)
   var devFor2NotaEditor by DelegateAuthorized3(128)
   var estoqueAcertoSimples by DelegateAuthorized3(129)
   var produtoEstoque by DelegateAuthorized3(130)
   var estoqueInsereInventarioCD by DelegateAuthorized3(131)
   var notaTipo by DelegateAuthorized3(132)
-  var devFor2NotaDivergente by DelegateAuthorized3(133)
+  //var devFor2NotaDivergente by DelegateAuthorized3(133)
   var estoqueLoja by DelegateAuthorized3(134)
   var devFor2NotaNulo by DelegateAuthorized3(135)
   var devFor2NotaFornecedor by DelegateAuthorized3(136)
@@ -169,7 +170,7 @@ class UserSaci : IUser {
 
   //var autorizaMista by DelegateAuthorized3(138)
   //var ajustaMista by DelegateAuthorized3(139)
-  var devFor2NotaColetaRep by DelegateAuthorized3(140)
+  //var devFor2NotaColetaRep by DelegateAuthorized3(140)
   var ressuprimentoEnvioDoc by DelegateAuthorized3(141)
   var ressuprimentoRecebeDoc by DelegateAuthorized3(142)
   var devCliAutoriza by DelegateAuthorized3(143)
@@ -202,9 +203,9 @@ class UserSaci : IUser {
   var ajusteEst by DelegateAuthorized3(169)
   var tabResumoTipo by DelegateAuthorized3(170)
   var devCliCancela by DelegateAuthorized3(171)
-  var estoqueDevProduto  by DelegateAuthorized3(172)
+  var estoqueDevProduto by DelegateAuthorized3(172)
   var tabVendaDet by DelegateAuthorized3(173)
-  var clienteCredito  by DelegateAuthorized3(174)
+  var clienteCredito by DelegateAuthorized3(174)
 
   //Locais
   private var localEstoque: String?
@@ -562,17 +563,17 @@ class UserSaci : IUser {
       notaTipo = value
     }
   var devFor2
-    get() = devFor2NotaPedido || devFor2NotaNFD || devFor2NotaTransportadora || devFor2NotaEmail ||
+    get() = devFor2NotaPedido || /*devFor2NotaNFD ||*/ devFor2NotaTransportadora /*|| devFor2NotaEmail*/ ||
             devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada ||
-            notaNFDAberta || devFor2NotaColeta || devFor2NotaDescarte || devFor2NotaEditor || devFor2NotaDivergente ||
-            devFor2NotaNulo || devFor2NotaFornecedor || devFor2NotaRetornoNFD || devFor2NotaColetaRep ||
+            notaNFDAberta || /*devFor2NotaColeta ||*/ devFor2NotaDescarte || devFor2NotaEditor || /*devFor2NotaDivergente ||*/
+            devFor2NotaNulo || devFor2NotaFornecedor || devFor2NotaRetornoNFD || /*devFor2NotaColetaRep ||*/
             devFor2NotaNFDSTNR || admin
     set(value) {
       devFor2NotaPedido = value
-      devFor2NotaNFD = value
-      devFor2NotaColeta = value
+      //devFor2NotaNFD = value
+      //devFor2NotaColeta = value
       devFor2NotaTransportadora = value
-      devFor2NotaEmail = value
+      /*devFor2NotaEmail = value*/
       devFor2NotaAcerto = value
       devFor2NotaReposto = value
       devFor2NotaGarantia = value
@@ -580,11 +581,11 @@ class UserSaci : IUser {
       devFor2NotaDescarte = value
       notaNFDAberta = value
       devFor2NotaEditor = value
-      devFor2NotaDivergente = value
+      //devFor2NotaDivergente = value
       devFor2NotaNulo = value
       devFor2NotaFornecedor = value
       devFor2NotaRetornoNFD = value
-      devFor2NotaColetaRep = value
+      //devFor2NotaColetaRep = value
       devFor2NotaNFDSTNR = value
     }
   val menuDevolucaoAvariaRec: Boolean

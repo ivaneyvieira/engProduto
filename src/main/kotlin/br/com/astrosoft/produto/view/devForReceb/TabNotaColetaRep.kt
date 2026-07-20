@@ -177,7 +177,7 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaColetaRep == true
+    return true //username?.devFor2NotaColetaRep == true
   }
 
   override val label: String

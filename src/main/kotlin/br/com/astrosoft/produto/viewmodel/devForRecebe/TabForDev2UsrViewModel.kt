@@ -19,12 +19,12 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.devFor2NotaEditor = usuario.devFor2NotaEditor
-    this.devFor2NotaDivergente = usuario.devFor2NotaDivergente
+    //this.devFor2NotaDivergente = usuario.devFor2NotaDivergente
     this.devFor2NotaPedido = usuario.devFor2NotaPedido
-    this.devFor2NotaColeta = usuario.devFor2NotaColeta
-    this.devFor2NotaNFD = usuario.devFor2NotaNFD
+    //this.devFor2NotaColeta = usuario.devFor2NotaColeta
+    //this.devFor2NotaNFD = usuario.devFor2NotaNFD
     this.devFor2NotaTransportadora = usuario.devFor2NotaTransportadora
-    this.devFor2NotaEmail = usuario.devFor2NotaEmail
+    //this.devFor2NotaEmail = usuario.devFor2NotaEmail
     this.devFor2NotaReposto = usuario.devFor2NotaReposto
     this.devFor2NotaAcerto = usuario.devFor2NotaAcerto
     this.devFor2NotaAcertoPago = usuario.devFor2NotaAcertoPago
@@ -37,7 +37,7 @@ class TabNotaUsrViewModel(val viewModel: DevFor2ViewModel) : TabUsrViewModel(vie
     this.devFor2ImpressoraTermica = usuario.devFor2ImpressoraTermica
     this.devFor2NotaFornecedor = usuario.devFor2NotaFornecedor
     this.devFor2NotaRetornoNFD = usuario.devFor2NotaRetornoNFD
-    this.devFor2NotaColetaRep = usuario.devFor2NotaColetaRep
+    //this.devFor2NotaColetaRep = usuario.devFor2NotaColetaRep
     this.devFor2NotaNFDSTNR = usuario.devFor2NotaNFDSTNR
   }
 }
