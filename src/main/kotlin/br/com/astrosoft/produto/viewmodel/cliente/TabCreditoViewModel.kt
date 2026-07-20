@@ -1,9 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.cliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.DadosCliente
-import br.com.astrosoft.produto.model.beans.FiltroDadosCliente
-import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCliente
+import br.com.astrosoft.produto.model.beans.DadosCredito
+import br.com.astrosoft.produto.model.beans.FiltroDadosCredito
+import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCredito
 
 class TabCreditoViewModel(val viewModel: ClienteViewModel) {
   val subView
@@ -11,7 +11,7 @@ class TabCreditoViewModel(val viewModel: ClienteViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val notas = DadosCliente.findAll(filtro)
+    val notas = DadosCredito.findAll(filtro)
     subView.updateNotas(notas)
   }
 
@@ -21,14 +21,14 @@ class TabCreditoViewModel(val viewModel: ClienteViewModel) {
       viewModel.view.showError("Selecione os clientes para gerar a planilha")
       return byteArrayOf()
     } else {
-      val planilha = PlanilhaDadosCliente()
+      val planilha = PlanilhaDadosCredito()
       return planilha.write(clientes)
     }
   }
 }
 
 interface ITabCredito : ITabView {
-  fun filtro(): FiltroDadosCliente
-  fun updateNotas(movManualList: List<DadosCliente>)
-  fun clientesSelecionados(): List<DadosCliente>
+  fun filtro(): FiltroDadosCredito
+  fun updateNotas(movManualList: List<DadosCredito>)
+  fun clientesSelecionados(): List<DadosCredito>
 }

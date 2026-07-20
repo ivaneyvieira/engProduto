@@ -1971,6 +1971,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun selectCredito(filtro: FiltroDadosCredito): List<DadosCredito> {
+    val sql = "/sqlSaci/selectCredito.sql"
+    return query(sql, DadosCredito::class) {
+      this.addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
   fun updateValidadeSaci(validade: ValidadeSaci) {
     val sql = "/sqlSaci/updateValidadeSaci.sql"
     script(sql) {
