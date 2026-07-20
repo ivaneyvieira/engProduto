@@ -9,6 +9,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
+import com.github.mvysny.karibudsl.v10.button
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
@@ -96,6 +98,13 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         if (it.isFromClient) {
           viewModel.updateView()
         }
+      }
+    }
+
+    button("Pedido") {
+      this.icon = VaadinIcon.ARROW_RIGHT.create()
+      this.onClick {
+        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
   }

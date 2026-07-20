@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
@@ -75,6 +76,18 @@ class TabNotaEditorViewModel(val viewModel: DevFor2ViewModel) {
   fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
+  }
+
+  fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
+    val itens = subView.notasSelecionadas()
+    if (itens.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+
+    itens.forEach {
+      it.marcaSituacao(situacao)
+    }
+    updateView()
   }
 }
 
