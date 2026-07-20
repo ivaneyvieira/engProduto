@@ -1975,6 +1975,8 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/selectCredito.sql"
     return query(sql, DadosCredito::class) {
       this.addOptionalParameter("pesquisa", filtro.pesquisa)
+      this.addOptionalParameter("operacao", filtro.operacao.cod)
+      this.addOptionalParameter("credito", filtro.credito)
     }
   }
 

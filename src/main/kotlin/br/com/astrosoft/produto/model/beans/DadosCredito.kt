@@ -25,4 +25,13 @@ class DadosCredito {
 
 data class FiltroDadosCredito(
   val pesquisa: String,
+  val operacao: OperacaoCredito,
+  val credito: Double,
 )
+
+enum class OperacaoCredito(val cod: String, val descricao: String) {
+  IGUAL("=", "="),
+  MENOR("<", "<"),
+  MAIOR(">", ">"),
+  TODOS("T", "Todos")
+}
