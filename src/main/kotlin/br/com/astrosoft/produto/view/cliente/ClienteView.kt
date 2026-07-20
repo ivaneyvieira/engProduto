@@ -19,6 +19,7 @@ class ClienteView() : ViewLayout<ClienteViewModel>(), IClienteView {
   override val viewModel = ClienteViewModel(this)
 
   override val tabCadastro = TabCadastro(viewModel.tabCadastroViewModel)
+  override val tabCredito = TabCredito(viewModel.tabCreditoViewModel)
   override val tabClienteUsr = TabClienteUsr(viewModel.tabClienteUsrViewModel)
 
   override fun isAccept(): Boolean {

@@ -19,6 +19,7 @@ class TabClienteUsrViewModel(val viewModel: ClienteViewModel) : TabUsrViewModel(
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.clienteCadastro = usuario.clienteCadastro
+    this.clienteCredito = usuario.clienteCredito
   }
 }
 

@@ -5,15 +5,18 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ClienteViewModel(view: IClienteView) : ViewModel<IClienteView>(view) {
   val tabCadastroViewModel = TabCadastroViewModel(this)
+  val tabCreditoViewModel = TabCreditoViewModel(this)
   val tabClienteUsrViewModel = TabClienteUsrViewModel(this)
 
   override fun listTab() = listOf(
     view.tabCadastro,
+    view.tabCredito,
     view.tabClienteUsr,
   )
 }
 
 interface IClienteView : IView {
   val tabCadastro: ITabCadastro
+  val tabCredito: ITabCredito
   val tabClienteUsr: ITabClienteUsr
 }

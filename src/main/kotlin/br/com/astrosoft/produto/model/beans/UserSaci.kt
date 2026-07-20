@@ -204,6 +204,7 @@ class UserSaci : IUser {
   var devCliCancela by DelegateAuthorized3(171)
   var estoqueDevProduto  by DelegateAuthorized3(172)
   var tabVendaDet by DelegateAuthorized3(173)
+  var clienteCredito  by DelegateAuthorized3(174)
 
   //Locais
   private var localEstoque: String?
@@ -696,9 +697,10 @@ class UserSaci : IUser {
     get() = produtoList
 
   var cliente
-    get() = clienteCadastro || admin
+    get() = clienteCadastro || clienteCredito || admin
     set(value) {
       clienteCadastro = value
+      clienteCredito = value
     }
 
   var devCliente

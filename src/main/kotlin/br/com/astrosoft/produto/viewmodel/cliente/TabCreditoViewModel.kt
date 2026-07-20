@@ -5,9 +5,9 @@ import br.com.astrosoft.produto.model.beans.DadosCliente
 import br.com.astrosoft.produto.model.beans.FiltroDadosCliente
 import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCliente
 
-class TabCadastroViewModel(val viewModel: ClienteViewModel) {
+class TabCreditoViewModel(val viewModel: ClienteViewModel) {
   val subView
-    get() = viewModel.view.tabCadastro
+    get() = viewModel.view.tabCredito
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
@@ -27,7 +27,7 @@ class TabCadastroViewModel(val viewModel: ClienteViewModel) {
   }
 }
 
-interface ITabCadastro : ITabView {
+interface ITabCredito : ITabView {
   fun filtro(): FiltroDadosCliente
   fun updateNotas(movManualList: List<DadosCliente>)
   fun clientesSelecionados(): List<DadosCliente>
