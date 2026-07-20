@@ -49,13 +49,6 @@ class TabCredito(val viewModel: TabCreditoViewModel) :
     columnGrid(DadosCliente::custno, header = "Número")
     columnGrid(DadosCliente::nome, header = "Nome").expand()
     columnGrid(DadosCliente::cpfCnpj, header = "CPF/CNPJ")
-    columnGrid(DadosCliente::rg, header = "RG")
-    columnGrid(DadosCliente::endereco, header = "Endereço").expand()
-    columnGrid(DadosCliente::bairro, header = "Bairro")
-    columnGrid(DadosCliente::rota, header = "Rota")
-    columnGrid(DadosCliente::cidade, header = "Cidade")
-    columnGrid(DadosCliente::estado, header = "Estado")
-    columnGrid(DadosCliente::fone, header = "Fone")
   }
 
   override fun filtro(): FiltroDadosCliente {
