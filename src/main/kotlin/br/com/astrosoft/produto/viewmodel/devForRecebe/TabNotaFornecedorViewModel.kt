@@ -1,6 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
+import br.com.astrosoft.framework.util.isValidEmail
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroFornecedor
 import br.com.astrosoft.produto.model.beans.FornecedorArquivo
 import br.com.astrosoft.produto.model.beans.FornecedorClass
@@ -35,7 +37,17 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
     subView.updateArquivos()
   }
 
-  fun saveEmail(rep: Representante) {
+  fun emailValid(emailList: String) {
+    val lista = emailList.split(",")
+    lista.forEach { email ->
+      if (isValidEmail(email.trim()).not()) {
+        fail("O e-mail $email não é válido")
+      }
+    }
+  }
+
+  fun saveEmail(rep: Representante) = viewModel.exec {
+    emailValid(rep.email)
     rep.saveEmail()
     subView.updateRepresentante()
   }

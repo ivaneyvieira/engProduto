@@ -83,7 +83,7 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       dlgRepresentante?.showDialogRepresentante()
     }
 
-    columnGrid(FornecedorClass::no, header = "Forn", width = "3rem")
+    columnGrid(property = FornecedorClass::no, header = "Forn", width = "4rem")
     columnGrid(FornecedorClass::descricao, header = "Nome", width = "20rem")
     columnGrid(FornecedorClass::custno, header = "Cliente")
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")

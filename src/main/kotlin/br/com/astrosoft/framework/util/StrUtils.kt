@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.util
 
+import jakarta.mail.internet.InternetAddress
 import org.jsoup.Jsoup
 import java.text.DecimalFormat
 import java.text.Normalizer
@@ -95,5 +96,15 @@ fun CharSequence.unaccent(): String {
 fun String.customTrim(): String {
   return trim {
     it <= ' '
+  }
+}
+
+fun isValidEmail(email: String): Boolean {
+  return try {
+    val emailAddr = InternetAddress(email)
+    emailAddr.validate()
+    true
+  } catch (e: Exception) {
+    false
   }
 }

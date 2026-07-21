@@ -3394,7 +3394,7 @@ class QuerySaci : QueryDB(database) {
   fun saveEmail(rep: Representante) {
     val sql = "/sqlSaci/representanteSaveEmail.sql"
     script(sql) {
-      addOptionalParameter("idEmail", rep.repno)
+      addOptionalParameter("repno", rep.repno)
       addOptionalParameter("emailList", rep.email)
     }
   }
