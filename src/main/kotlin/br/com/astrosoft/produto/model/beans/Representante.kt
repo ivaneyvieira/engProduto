@@ -30,5 +30,5 @@ class RepresentanteContato(
   var telefone: String,
   var obsTel: String,
   var celular: String,
-  var email: String
+  var email: String?
 )

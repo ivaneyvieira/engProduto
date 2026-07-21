@@ -3089,7 +3089,7 @@ class QuerySaci : QueryDB(database) {
         vendno = rep.vendno,
         nome = rep.nome,
         telefone = rep.telefone,
-        email = rep.email,
+        email = rep.email ?: "",
         celular = rep.celular,
         contatos = it.value
       )

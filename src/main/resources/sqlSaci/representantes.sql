@@ -10,7 +10,6 @@ SELECT R.no                                                                     
        CAST(CONCAT(R.no, ' - ', R.name) AS CHAR)                                    AS nome,
        CAST(CONCAT(TRIM(MID(R.ddd, 1, 5)), ' ', TRIM(MID(R.phone, 1, 10))) AS CHAR) AS telefone,
        IF(R.celular = 0, '', CAST(R.celular AS CHAR))                               AS celular,
-       R.email                                                                      AS email,
        R.ddd                                                                        AS ddd,
        phone                                                                        AS phone,
        obs_tel1                                                                     AS obs_tel1,
@@ -29,37 +28,55 @@ CREATE TEMPORARY TABLE T_REP_PHONE
   INDEX (repno)
 )
 SELECT 1 AS numPhone, repno, TRIM(MID(ddd, 1, 5)) AS ddd, TRIM(MID(phone, 1, 10)) AS phone, obs_tel1 AS obs_tel
-FROM
-  T_REP;
+FROM T_REP;
 
 INSERT INTO T_REP_PHONE(numPhone, repno, ddd, phone, obs_tel)
 SELECT 2 AS numPhone, repno, TRIM(MID(ddd, 6, 5)) AS ddd, TRIM(MID(phone, 11, 10)) AS phone, obs_tel2 AS obs_tel
-FROM
-  T_REP;
+FROM T_REP;
 
 INSERT INTO T_REP_PHONE(numPhone, repno, ddd, phone, obs_tel)
 SELECT 3 AS numPhone, repno, TRIM(MID(ddd, 11, 5)) AS ddd, TRIM(MID(phone, 21, 10)) AS phone, obs_tel3 AS obs_tel
-FROM
-  T_REP;
+FROM T_REP;
 
 INSERT INTO T_REP_PHONE(numPhone, repno, ddd, phone, obs_tel)
 SELECT 4 AS numPhone, repno, TRIM(MID(ddd, 16, 5)) AS ddd, TRIM(MID(phone, 31, 10)) AS phone, obs_tel4 AS obs_tel
-FROM
-  T_REP;
+FROM T_REP;
+
+DROP TABLE IF EXISTS T_EMAIL_REP;
+CREATE TEMPORARY TABLE T_EMAIL_REP
+SELECT R.no AS repno, 'R' AS tipo, R.email
+FROM sqldados.rep AS R
+WHERE TRIM(R.email) != ''
+GROUP BY R.no;
+
+DROP TABLE IF EXISTS T_EMAIL_ADD;
+CREATE TEMPORARY TABLE T_EMAIL_ADD
+SELECT A.repno, 'A' AS tipo, emailList AS email
+FROM sqldados.repAdicional AS A
+WHERE TRIM(A.emailList) != '';
+
+DROP TABLE IF EXISTS T_EMAIL_UNION;
+CREATE TEMPORARY TABLE T_EMAIL_UNION
+(
+  PRIMARY KEY (repno)
+)
+SELECT repno, GROUP_CONCAT(DISTINCT email ORDER BY tipo, repno) AS emailList
+FROM ( SELECT repno, tipo, email FROM T_EMAIL_ADD UNION SELECT repno, tipo, email FROM T_EMAIL_REP ) AS D
+GROUP BY repno;
 
 SELECT vendno,
        repno,
        nome,
        numPhone,
-       CONCAT(P.ddd, ' ', P.phone)                 AS telefone,
-       P.obs_tel                                   AS obsTel,
-       IF(A.emailList IS NULL, R.email, emailList) AS email,
-       celular                                     AS celular
+       CONCAT(P.ddd, ' ', P.phone) AS telefone,
+       P.obs_tel                   AS obsTel,
+       A.emailList                 AS email,
+       celular                     AS celular
 FROM
-  T_REP                              AS R
-    INNER JOIN T_REP_PHONE           AS P
+  T_REP                      AS R
+    INNER JOIN T_REP_PHONE   AS P
                USING (repno)
-    LEFT JOIN  sqldados.repAdicional AS A
+    LEFT JOIN  T_EMAIL_UNION AS A
                USING (repno)
 WHERE P.phone > 0
 ORDER BY vendno, repno, numPhone

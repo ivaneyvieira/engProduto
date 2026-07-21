@@ -12,6 +12,13 @@ class FornecedorClass {
   var termDev: String? = null
   var countArq: Int? = null
   var obs: String? = null
+  var emailList: String? = null
+
+  val emailListDistinct: List<String>
+    get() = emailList?.split(",")?.map { it.trim() }?.filter { it != "" }?.distinct() ?: emptyList()
+
+  val emailListDistinctSrt: String
+    get() = emailListDistinct.joinToString(",")
 
   fun save() {
     saci.fornecedorClassSave(this)
