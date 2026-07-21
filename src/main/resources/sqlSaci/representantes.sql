@@ -42,27 +42,14 @@ INSERT INTO T_REP_PHONE(numPhone, repno, ddd, phone, obs_tel)
 SELECT 4 AS numPhone, repno, TRIM(MID(ddd, 16, 5)) AS ddd, TRIM(MID(phone, 31, 10)) AS phone, obs_tel4 AS obs_tel
 FROM T_REP;
 
-DROP TABLE IF EXISTS T_EMAIL_REP;
-CREATE TEMPORARY TABLE T_EMAIL_REP
-SELECT R.no AS repno, 'R' AS tipo, R.email
-FROM sqldados.rep AS R
-WHERE TRIM(R.email) != ''
-GROUP BY R.no;
-
-DROP TABLE IF EXISTS T_EMAIL_ADD;
-CREATE TEMPORARY TABLE T_EMAIL_ADD
-SELECT A.repno, 'A' AS tipo, emailList AS email
-FROM sqldados.repAdicional AS A
-WHERE TRIM(A.emailList) != '';
-
 DROP TABLE IF EXISTS T_EMAIL_UNION;
 CREATE TEMPORARY TABLE T_EMAIL_UNION
 (
-  PRIMARY KEY (repno)
+  PRIMARY KEY (vendno)
 )
-SELECT repno, GROUP_CONCAT(DISTINCT email ORDER BY tipo, repno) AS emailList
-FROM ( SELECT repno, tipo, email FROM T_EMAIL_ADD UNION SELECT repno, tipo, email FROM T_EMAIL_REP ) AS D
-GROUP BY repno;
+SELECT vendno, GROUP_CONCAT(DISTINCT email) AS emailList
+FROM sqldados.vendct
+GROUP BY vendno;
 
 SELECT vendno,
        repno,
@@ -77,6 +64,6 @@ FROM
     INNER JOIN T_REP_PHONE   AS P
                USING (repno)
     LEFT JOIN  T_EMAIL_UNION AS A
-               USING (repno)
+               USING (vendno)
 WHERE P.phone > 0
 ORDER BY vendno, repno, numPhone

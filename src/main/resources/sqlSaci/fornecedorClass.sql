@@ -2,33 +2,14 @@ SET SQL_MODE = '';
 
 USE sqldados;
 
-DROP TABLE IF EXISTS T_EMAIL_REP;
-CREATE TEMPORARY TABLE T_EMAIL_REP
-SELECT V.vendno, 'R' AS tipo, MIN(R.no) AS repno, R.email
-FROM
-  sqldados.rep                 AS R
-    INNER JOIN sqldados.repven AS V
-               ON V.repno = R.no
-WHERE TRIM(R.email) != ''
-GROUP BY V.vendno, R.email;
-
-DROP TABLE IF EXISTS T_EMAIL_ADD;
-CREATE TEMPORARY TABLE T_EMAIL_ADD
-SELECT V.vendno, 'A' AS tipo, A.repno, emailList AS email
-FROM
-  sqldados.repAdicional        AS A
-    INNER JOIN sqldados.repven AS V
-               ON V.repno = A.repno
-WHERE TRIM(A.emailList) != '';
-
 DROP TABLE IF EXISTS T_EMAIL_UNION;
 CREATE TEMPORARY TABLE T_EMAIL_UNION
 (
   PRIMARY KEY (vendno)
 )
-SELECT vendno, GROUP_CONCAT(DISTINCT email ORDER BY tipo, repno) AS emailList
-FROM
-  ( SELECT vendno, tipo, repno, email FROM T_EMAIL_ADD UNION SELECT vendno, tipo, repno, email FROM T_EMAIL_REP ) AS D
+SELECT vendno, GROUP_CONCAT(DISTINCT email) AS emailList
+FROM sqldados.vendct
+WHERE TRIM(email) != ''
 GROUP BY vendno;
 
 DROP TABLE IF EXISTS T_FORN;

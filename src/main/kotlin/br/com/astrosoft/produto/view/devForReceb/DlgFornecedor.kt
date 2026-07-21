@@ -30,22 +30,13 @@ class DlgFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: F
   private fun createGridRepresentantes(listRepresentantes: List<Representante>): Grid<Representante> {
     val gridDetail = Grid(Representante::class.java, false)
     return gridDetail.apply {
-      this.withEditor(
-        classBean = Representante::class,
-        openEditor = {
-          val edit = getColumnBy(Representante::email) as? Focusable<*>
-          edit?.focus()
-        },
-        closeEditor = {
-          viewModel.saveEmail(it.bean)
-        })
       addThemeVariants()
       isMultiSort = false
       setItems(listRepresentantes)
       columnGrid(Representante::nome, "Representante")
       columnGrid(Representante::telefone, "Telefone")
       columnGrid(Representante::celular, "Celular")
-      columnGrid(Representante::email, "Email", isExpand = true).textFieldEditor()
+      columnGrid(Representante::email, "Email", isExpand = true)
     }
   }
 
