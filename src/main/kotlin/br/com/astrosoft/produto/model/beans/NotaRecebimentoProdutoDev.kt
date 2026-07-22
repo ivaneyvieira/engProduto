@@ -246,6 +246,7 @@ data class FiltroNotaRecebimentoProdutoDev(
   val statusDup: Set<EStatusDup> = EStatusDup.entries.toSet(),
   val pago: Boolean = true,
   val nfdstnr: Boolean = false,
+  val nfd: Int = 0
 )
 
 

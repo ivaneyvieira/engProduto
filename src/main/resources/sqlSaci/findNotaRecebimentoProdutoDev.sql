@@ -558,4 +558,5 @@ WHERE I.situacaoDev != R.situacaoDev;
 SELECT *
 FROM T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
+  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0)
 

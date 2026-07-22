@@ -18,6 +18,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
@@ -26,6 +27,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   private var dlgArquivo: DlgArquivoNotaEditor? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtNFD: TextField
   private lateinit var cmbSituacao: Select<EStituacaoDev?>
   private lateinit var cmbStatusDup: MultiSelectComboBox<EStatusDup>
 
@@ -52,8 +54,19 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       }
     }
     init()
+
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    edtNFD = textField("NFD") {
+      this.width = "5rem"
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
       addValueChangeListener {
@@ -157,6 +170,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       statusDup = cmbStatusDup.value ,
+      nfd = edtNFD.value?.toIntOrNull() ?: 0,
     )
   }
 

@@ -1569,6 +1569,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("pago", filtro.pago)
+      addOptionalParameter("nfd", filtro.nfd)
       addOptionalParameter("situacaoDev", situacaoDev)
     }
   }
