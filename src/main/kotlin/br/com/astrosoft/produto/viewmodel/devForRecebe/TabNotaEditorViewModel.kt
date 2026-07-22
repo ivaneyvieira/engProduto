@@ -15,8 +15,8 @@ class TabNotaEditorViewModel(val viewModel: DevFor2ViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.EDITOR).filter {nota ->
-      filtro.statusDup == EStatusDup.TODAS || filtro.statusDup.codigo == nota.situacaoDupStatus
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.EDITOR).filter { nota ->
+      nota.situacaoDupStatus in filtro.statusDup.map { it.codigo }
     }
     subView.updateNota(notas)
   }

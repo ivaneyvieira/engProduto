@@ -342,5 +342,4 @@ enum class EStatusDup(val codigo: Int, val descricao: String) {
   INCLUIDA(0, "Incluída"),
   PENDENTE(999, "Pendente"),
   QUITADA(2, "Quitada"),
-  TODAS(-1, "Todas")
 }

@@ -9,10 +9,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.onClick
-import com.github.mvysny.karibudsl.v10.select
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -28,7 +27,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var cmbSituacao: Select<EStituacaoDev?>
-  private lateinit var cmbStatusDup: Select<EStatusDup>
+  private lateinit var cmbStatusDup: MultiSelectComboBox<EStatusDup>
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -88,12 +87,12 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       }
     }
 
-    cmbStatusDup = select("Status Dup") {
+    cmbStatusDup = multiSelectComboBox("Status Dup") {
       this.setItems(EStatusDup.entries)
       this.setItemLabelGenerator { item ->
         item?.descricao ?: ""
       }
-      this.value = EStatusDup.TODAS
+      this.value = EStatusDup.entries.toSet()
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateView()
@@ -157,7 +156,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      statusDup = cmbStatusDup.value ?: EStatusDup.TODAS,
+      statusDup = cmbStatusDup.value ,
     )
   }
 
