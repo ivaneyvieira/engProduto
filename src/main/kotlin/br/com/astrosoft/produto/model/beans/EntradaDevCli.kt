@@ -326,6 +326,7 @@ class EntradaDevCli(
 
   companion object {
     fun findAll(filtro: FiltroEntradaDevCli) = saci.entradaDevCli(filtro)
+    fun findAllDevolucoes(filtro: FiltroEntradaDevCli) = saci.entradaDevCliDevolucoes(filtro)
   }
 }
 

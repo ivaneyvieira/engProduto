@@ -19,7 +19,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
-    val notas = EntradaDevCli.findAll(filtro)
+    val notas = EntradaDevCli.findAllDevolucoee(filtro)
     subView.updateNotas(notas)
   }
 

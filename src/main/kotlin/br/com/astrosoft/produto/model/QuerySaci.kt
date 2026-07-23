@@ -794,6 +794,34 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun entradaDevCliDevolucoes(filtro: FiltroEntradaDevCli): List<EntradaDevCli> {
+    val sql = "/sqlSaci/entradaDevCliDevolucoes.sql"
+    val dataCorte = filtro.dataCorte.toSaciDate().let {
+      if (it == 0) {
+        LocalDate.now().minusMonths(2).toSaciDate()
+      } else {
+        it
+      }
+    }
+    return query(sql, EntradaDevCli::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("dataI", filtro.dataI.toSaciDate())
+      addOptionalParameter("dataF", filtro.dataF.toSaciDate())
+      addOptionalParameter("query", filtro.query)
+      addOptionalParameter("tipo", filtro.tipo.codigo)
+      addOptionalParameter("dataCorte", dataCorte)
+      addOptionalParameter("cancelado", filtro.cancelado)
+      addOptionalParameter("dataLimiteInicial", filtro.dataLimiteInicial.toSaciDate())
+      addOptionalParameter("impresso", filtro.impresso.let {
+        when {
+          it == null -> "T"
+          it         -> "S"
+          else       -> "N"
+        }
+      })
+    }
+  }
+
   fun entradaDevCliPro(invno: Int): List<EntradaDevCliPro> {
     val sql = "/sqlSaci/entradaDevCliPro.sql"
     return query(sql, EntradaDevCliPro::class) {
