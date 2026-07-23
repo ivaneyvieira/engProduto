@@ -28,6 +28,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     produto.marcaAjuste(ajuste)
   }
 
+
   /**************************** imprimeValeTroca ************************************/
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
