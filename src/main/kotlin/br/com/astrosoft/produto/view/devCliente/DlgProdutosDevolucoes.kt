@@ -18,6 +18,7 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
@@ -32,7 +33,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosDevolucoes(val viewModel: TabDevCliImprimirViewModel, val nota: NotaVenda) {
+class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val nota: NotaVenda) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 

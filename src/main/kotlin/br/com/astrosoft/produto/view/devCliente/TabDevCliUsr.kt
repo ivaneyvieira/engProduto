@@ -20,6 +20,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     columnGrid(UserSaci::devCliEditor, "Editor")
     columnGrid(UserSaci::devCliAutoriza, "Editor")
     columnGrid(UserSaci::devCliCancela, "Editor")
+    columnGrid(UserSaci::devCliDevolucoes, "Dev Cli")
     columnGrid(UserSaci::devCliImprimir, "VC Imprimir")
     columnGrid(UserSaci::devCliImpresso, "VC Impresso")
     columnGrid(UserSaci::devCliValeTrocaProduto, "Produto")
@@ -39,6 +40,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         }
         checkBox("Cancela") {
           binder.bind(this, UserSaci::devCliCancela.name)
+        }
+        checkBox("Dev Cli") {
+          binder.bind(this, UserSaci::devCliDevolucoes.name)
         }
         checkBox("VC Imprimir") {
           binder.bind(this, UserSaci::devCliImprimir.name)

@@ -19,6 +19,7 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
 
   override fun UserSaci.update(usuario: UserSaci) {
     this.devCliEditor = usuario.devCliEditor
+    this.devCliDevolucoes = usuario.devCliDevolucoes
     this.devCliImprimir = usuario.devCliImprimir
     this.devCliImpresso = usuario.devCliImpresso
     this.devCliValeTrocaProduto = usuario.devCliValeTrocaProduto

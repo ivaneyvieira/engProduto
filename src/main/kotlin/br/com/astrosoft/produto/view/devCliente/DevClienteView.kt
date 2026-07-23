@@ -19,6 +19,7 @@ class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val viewModel = DevClienteViewModel(this)
   override val tabDevCliEditor = TabDevCliEditor(viewModel.tabDevCliEditorViewModel)
   override val tabDevCliImprimir = TabDevCliImprimir(viewModel.tabDevCliImprimirViewModel)
+  override val tabDevCliDevolucoes = TabDevCliDevolucoes(viewModel.tabDevCliDevolucoesViewModel)
   override val tabDevCliDevTroca = TabDevCliDevTroca(viewModel.tabDevCliDevTrocaViewModel)
   override val tabDevCliProduto = TabDevCliProduto(viewModel.tabDevCliProdutoViewModel)
   override val tabDevCliImpresso = TabDevCliImpresso(viewModel.tabDevCliImpressoViewModel)

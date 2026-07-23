@@ -7,8 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliImprimir
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliDevolucoes
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,13 +21,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliDevolucoes(val viewModel: TabDevCliImprimirViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliImprimir {
+class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
+  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliDevolucoes {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosImprimir? = null
+  private var dlgProduto: DlgProdutosDevolucoes? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -113,7 +113,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliImprimirViewModel) :
         if (notaLocalizada.loginTroca.isNullOrBlank()) {
           DialogHelper.showError("Solicitação não autorizada")
         } else {
-          dlgProduto = DlgProdutosImprimir(viewModel, notaLocalizada)
+          dlgProduto = DlgProdutosDevolucoes(viewModel, notaLocalizada)
           dlgProduto?.showDialog {
             viewModel.updateView()
           }
@@ -184,11 +184,11 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliImprimirViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliImprimir == true
+    return username?.devCliDevolucoes == true
   }
 
   override val label: String
-    get() = "VC Imprimir"
+    get() = "Dev Cli"
 
   override fun updateComponent() {
     viewModel.updateView()
