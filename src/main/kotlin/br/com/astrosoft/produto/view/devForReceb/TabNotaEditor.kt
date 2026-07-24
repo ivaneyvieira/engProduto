@@ -138,6 +138,9 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       },
       closeEditor = {
         viewModel.saveNota(nota = it.bean, updateGrid = true)
+      },
+      canEdit = {nota ->
+        nota?.situacaoDevName?.contains("Pedido") == true
       })
 
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
