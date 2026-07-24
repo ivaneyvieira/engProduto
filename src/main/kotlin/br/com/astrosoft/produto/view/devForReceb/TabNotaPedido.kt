@@ -137,6 +137,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       }
     }
 
+
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
