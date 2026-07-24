@@ -128,6 +128,18 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
 
+    if (user?.defazSolicitacao == true) {
+      addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota: EntradaDevCli ->
+        if (nota.loginSolicitacao.isNullOrBlank()) {
+          DialogHelper.showError("Não existe solicitação para desfazer")
+        } else {
+          DialogHelper.showQuestion("Desfaz a solicitação?") {
+            viewModel.desfazSolicitacao(nota)
+          }
+        }
+      }
+    }
+
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")

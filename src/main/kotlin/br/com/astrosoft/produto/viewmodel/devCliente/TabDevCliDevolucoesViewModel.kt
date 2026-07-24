@@ -382,6 +382,16 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  fun desfazSolicitacao(nota: EntradaDevCli) {
+    nota.solicitacaoTrocaEnnum = null
+    nota.produtoTrocaEnum = null
+    nota.userSolicitacao = null
+    nota.motivoTroca = null
+    nota.update()
+
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliDevolucoes
 }
