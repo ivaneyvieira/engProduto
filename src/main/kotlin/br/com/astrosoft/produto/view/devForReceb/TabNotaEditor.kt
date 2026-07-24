@@ -109,7 +109,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       this.setItemLabelGenerator { item ->
         item?.descricao ?: ""
       }
-      this.value = EStatusDup.entries.toSet()
+      this.value = setOf(EStatusDup.EM_COBRANCA, EStatusDup.INCLUIDA, EStatusDup.PENDENTE)
       this.addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateView()

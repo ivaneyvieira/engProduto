@@ -139,6 +139,8 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
 
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
+    columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
+
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
