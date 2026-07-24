@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabNotaEditorViewModel(val viewModel: DevFor2ViewModel) {
+class TabNotaEditorViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewModel) {
   val subView
     get() = viewModel.view.tabNotaEditor
 

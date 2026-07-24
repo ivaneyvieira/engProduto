@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.view.vaadin.helper.upload
 import br.com.astrosoft.framework.view.vaadin.hugeRTE
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
+import br.com.astrosoft.produto.viewmodel.devForRecebe.EmailViewModel
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
 import com.github.mvysny.karibudsl.v10.bind
 import com.github.mvysny.karibudsl.v10.horizontalLayout
@@ -13,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
 
-class FormEmail(val viewModel: TabNotaPedidoViewModel, val email: EmailDevolucao) : VerticalLayout() {
+class FormEmail(val viewModel: EmailViewModel, val email: EmailDevolucao) : VerticalLayout() {
   val binder = Binder(EmailDevolucao::class.java)
   var listAnexos: HorizontalLayout? = null
 

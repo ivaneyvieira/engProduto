@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaPedidoViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.EmailViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.vaadin.flow.component.grid.Grid
@@ -14,7 +14,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebimentoDev) {
+class DlgEnviaEmail(val viewModel: EmailViewModel, var nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(EmailDevolucao::class.java, false)
 
@@ -28,9 +28,11 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
           onClick {
             val email = viewModel.emailDevolucao(nota)
             val form = FormEmail(viewModel, email)
-            DialogHelper.showForm("Nova mensagem", form){
+            DialogHelper.showForm("Nova mensagem", form) {
               val email = form.emailDevolucao()
-              viewModel.enviaEmail(email)
+              viewModel.enviaEmail(email) {
+                updateEmail()
+              }
             }
           }
         }
@@ -38,14 +40,18 @@ class DlgEnviaEmail(val viewModel: TabNotaPedidoViewModel, var nota: NotaRecebim
           this.icon = VaadinIcon.TRASH.create()
 
           onClick {
-            viewModel.removeEmail()
+            viewModel.removeEmail(emailSelecionados()) {
+              updateEmail()
+            }
           }
         }
         button("Reenviar") {
           this.icon = VaadinIcon.MAILBOX.create()
 
           onClick {
-            viewModel.reenviarEmail()
+            viewModel.reenviarEmail(emailSelecionados()) {
+              updateEmail()
+            }
           }
         }
       },

@@ -34,6 +34,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   private lateinit var edtNFD: TextField
   private lateinit var cmbSituacao: Select<EStituacaoDev?>
   private lateinit var cmbStatusDup: MultiSelectComboBox<EStatusDup>
+  private var dlgEMail: DlgEnviaEmail? = null
 
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -160,6 +161,18 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         viewModel.updateView()
       }
     }
+
+    addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { nota: NotaRecebimentoDev ->
+      DlgRepresentante().showDialogRepresentante(nota)
+    }
+
+    addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
+      dlgEMail = DlgEnviaEmail(viewModel, nota)
+      dlgEMail?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
 
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
