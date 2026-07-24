@@ -6,11 +6,15 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.textFieldEditor
+import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.combobox.MultiSelectComboBox
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -126,6 +130,16 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
 
+    this.withEditor(
+      classBean = NotaRecebimentoDev::class,
+      openEditor = {
+        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+        edit?.focus()
+      },
+      closeEditor = {
+        viewModel.saveNota(nota = it.bean, updateGrid = true)
+      })
+
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaEditor(viewModel, nota)
@@ -162,7 +176,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     //columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
     //columnGrid(NotaRecebimentoDev::dataEntrada, header = "Entrada", width = null)
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
-    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px")
+    columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
 
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {

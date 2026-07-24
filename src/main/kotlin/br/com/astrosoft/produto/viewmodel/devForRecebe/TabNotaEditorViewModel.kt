@@ -89,6 +89,13 @@ class TabNotaEditorViewModel(val viewModel: DevFor2ViewModel) {
     }
     updateView()
   }
+
+  fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
+    nota.save()
+    if (updateGrid) {
+      updateView()
+    }
+  }
 }
 
 interface ITabNotaEditor : ITabView {

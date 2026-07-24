@@ -25,7 +25,9 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHeader(nota, readOnly = true)
+        this.formHeader(nota, readOnly = false) { nota ->
+          nota.save()
+        }
       },
       toolBar = {
         integerField("Volume") {
