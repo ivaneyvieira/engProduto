@@ -99,10 +99,9 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
+
     val user = AppConfig.userLogin() as? UserSaci
-    if (user?.liberaImpressao == true) {
-      columnGrid(EntradaDevCli::liberaStr, header = "Libera")
-    }
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       val notasAutoriza = nota.notaAutoriza()
       if (notasAutoriza.isEmpty()) {
@@ -110,7 +109,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       } else {
         val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
 
-        if (notaLocalizada.loginTroca.isNullOrBlank()) {
+        if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showError("Solicitação não autorizada")
         } else {
           dlgProduto = DlgProdutosDevolucoes(viewModel, notaLocalizada)
@@ -120,6 +119,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         }
       }
     }
+
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota: EntradaDevCli ->
       val form = FormSolicitacaoDevolucaoTroca(nota)
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {

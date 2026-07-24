@@ -177,6 +177,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnGrid(NotaRecebimentoDev::situacaoDevName, header = "Aba")
+    columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::situacaoDup, header = "Status Dup")
     //columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
