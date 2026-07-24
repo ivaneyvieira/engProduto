@@ -28,7 +28,6 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     produto.marcaAjuste(ajuste)
   }
 
-
   /**************************** imprimeValeTroca ************************************/
 
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
@@ -336,6 +335,50 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun salvaLiberaPedido(bean: EntradaDevCli) {
     bean.salvaLiberaPedido()
+    updateView()
+  }
+
+  fun autorizaSolicitacao(nota: EntradaDevCli, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
+    solicitacaoTroca ?: fail("Solicitação de troca inválida")
+    val login = solicitacaoTroca.login
+    val senha = solicitacaoTroca.senha
+    val user = UserSaci.userLogin(login, senha)
+    user ?: fail("Usuário ou senha inválidos")
+
+    when (solicitacaoTroca.solicitacaoTrocaEnnum) {
+      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnum) {
+        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+          fail("Troca com produto não autorizada")
+        }
+
+        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+          fail("Troca sem produto não autorizada")
+        }
+
+        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
+          fail("Troca mista de produto não autorizada")
+        }
+      }
+
+      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+        fail("Estorno de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+        fail("Reembolso de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+        fail("Mudança de cliente não autorizada")
+      }
+    }
+
+    nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
+    nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
+    nota.userSolicitacao = user.no
+    nota.setMotivoTroca = setOf(solicitacaoTroca.motivo)
+    nota.update()
+
     updateView()
   }
 

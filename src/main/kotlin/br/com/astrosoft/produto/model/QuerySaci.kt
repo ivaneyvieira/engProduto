@@ -3161,6 +3161,23 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull() ?: ProximoNumero(nome = nome, numero = 1)
   }
 
+  fun updateNotaVenda(venda: EntradaDevCli) {
+    val sql = "/sqlSaci/updateNotaVenda.sql"
+    script(sql) {
+      addOptionalParameter("storeno", venda.loja ?: 0)
+      addOptionalParameter("pdvno", venda.pdvno ?: 0)
+      addOptionalParameter("xano", venda.xano ?: 0)
+      addOptionalParameter("autoriza", venda.autoriza)
+      addOptionalParameter("userTroca", venda.userTroca ?: 0)
+      addOptionalParameter("userSolicitacao", venda.userSolicitacao ?: 0)
+      addOptionalParameter("solicitacaoTroca", venda.solicitacaoTroca)
+      addOptionalParameter("produtoTroca", venda.produtoTroca)
+      addOptionalParameter("motivoTroca", venda.motivoTroca)
+      addOptionalParameter("motivoTrocaCod", venda.motivoTrocaCod)
+      addOptionalParameter("nfEntRet", venda.nfEntRet)
+    }
+  }
+
   fun updateNotaVenda(venda: NotaVenda) {
     val sql = "/sqlSaci/updateNotaVenda.sql"
     script(sql) {

@@ -21,6 +21,12 @@ class EntradaDevCli(
   var storeno: Int?,
   var pdvno: Int?,
   var xano: Int?,
+  var autoriza: String?,
+  var userTroca: Int?,
+  var userSolicitacao: Int?,
+  var motivoTroca: String?,
+  var nfEntRet: Int?,
+  var tipoNf: String?,
   var custnoVend: Int?,
   var filial: Int?,
   var nameFilial: String?,
@@ -83,17 +89,26 @@ class EntradaDevCli(
       }
     }
 
-  val setMotivoTroca: Set<EMotivoTroca>
+  var setMotivoTroca: Set<EMotivoTroca>
     get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
+    set(value) {
+      motivoTrocaCod = value.joinToString(";") { it.codigo }
+    }
 
   val strMotivoTroca: String
     get() = setMotivoTroca.sortedBy { it.codigo }.joinToString(", ") { it.descricao }
 
-  val solicitacaoTrocaEnnum: ESolicitacaoTroca?
+  var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
+    set(value) {
+      solicitacaoTroca = value?.codigo
+    }
 
-  val produtoTrocaEnnum: EProdutoTroca?
+  var produtoTrocaEnum: EProdutoTroca?
     get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
+    set(value) {
+      produtoTroca = value?.codigo
+    }
 
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
@@ -263,7 +278,7 @@ class EntradaDevCli(
   }
 
   fun motivo(): String? {
-    val produtoTroca = when (produtoTrocaEnnum) {
+    val produtoTroca = when (produtoTrocaEnum) {
       EProdutoTroca.Com   -> "P"
       EProdutoTroca.Sem   -> ""
       EProdutoTroca.Misto -> "M"
@@ -322,6 +337,10 @@ class EntradaDevCli(
     )
     saci.marcaMudaCliente(saldoDevolucao)
     // }
+  }
+
+  fun update() {
+    saci.updateNotaVenda(this)
   }
 
   companion object {

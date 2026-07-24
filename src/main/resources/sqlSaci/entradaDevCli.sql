@@ -245,19 +245,43 @@ SELECT DISTINCT I.invno,
                 IF(I.remarks REGEXP '(^| )P( |$)', 'COM', 'SEM')                          AS comProduto,
                 IFNULL(AT.solicitacaoTroca, 'N')                                          AS solicitacaoTroca,
                 IFNULL(AT.produtoTroca, 'N')                                              AS produtoTroca,
-                IFNULL(AT.motivoTrocaCod, '')                                             AS motivoTrocaCod,
+                IFNULL(AT.motivoTrocaCod, ATV.motivoTrocaCod)                             AS motivoTrocaCod,
                 IF(IFNULL(AT.solicitacaoTroca, ATV.solicitacaoTroca) = 'T' AND
                    IFNULL(AT.produtoTroca, ATV.produtoTroca) = 'C', 'S', liberaImpressao) AS liberaImpressao,
                 IFNULL(AT.storeno, ATV.storeno)                                           AS storenoAutorizacao,
                 IFNULL(AT.pdvno, ATV.pdvno)                                               AS pdvnoAutorizacao,
                 IFNULL(AT.xano, ATV.xano)                                                 AS xanoAutorizacao,
+                IFNULL(AT.autoriza, ATV.autoriza)                                         AS autoriza,
+                IFNULL(AT.userTroca, ATV.userTroca)                                       AS userTroca,
+                IFNULL(AT.userSolicitacao, ATV.userSolicitacao)                           AS userSolicitacao,
+                IFNULL(AT.motivoTroca, ATV.motivoTroca)                                   AS motivoTroca,
+                IFNULL(AT.nfEntRet, ATV.nfEntRet)                                         AS nfEntRet,
                 cancelado                                                                 AS cancelado,
                 custnoCli                                                                 AS custnoCli,
                 custnoMuda                                                                AS custnoMuda,
                 CCli.saldoDevolucao / 100                                                 AS saldoDevolucaoCli,
                 CMuda.saldoDevolucao / 100                                                AS saldoDevolucaoMuda,
                 CCli.name                                                                 AS nameCli,
-                CMuda.name                                                                AS nameMuda
+                CMuda.name                                                                AS nameMuda,
+                CASE
+                  WHEN N.tipo = 0  THEN 'VENDA NF'
+                  WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
+                  WHEN N.tipo = 2  THEN 'DEVOLUCAO'
+                  WHEN N.tipo = 3  THEN 'SIMP REME'
+                  WHEN N.tipo = 4  THEN 'ENTRE FUT'
+                  WHEN N.tipo = 5  THEN 'RET DEMON'
+                  WHEN N.tipo = 6  THEN 'VENDA USA'
+                  WHEN N.tipo = 7  THEN 'OUTROS'
+                  WHEN N.tipo = 8  THEN 'NF CF'
+                  WHEN N.tipo = 9  THEN 'PERD/CONSER'
+                  WHEN N.tipo = 10 THEN 'REPOSICAO'
+                  WHEN N.tipo = 11 THEN 'RESSARCI'
+                  WHEN N.tipo = 12 THEN 'COMODATO'
+                  WHEN N.tipo = 13 THEN 'NF EMPRESA'
+                  WHEN N.tipo = 14 THEN 'BONIFICA'
+                  WHEN N.tipo = 15 THEN 'NFE'
+                                   ELSE 'TIPO INVALIDO'
+                END                                                                       AS tipoNf
 FROM
   T_NOTA                             AS I
     LEFT JOIN sqldados.nf            AS N

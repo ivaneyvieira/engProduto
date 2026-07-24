@@ -16,7 +16,7 @@ class FormSolicitacaoNotaTrocaView(val nota: EntradaDevCli) : FormLayout() {
     textField("Produto") {
       this.isReadOnly = true
       this.width = "300px"
-      this.value = nota.produtoTrocaEnnum?.descricao ?: ""
+      this.value = nota.produtoTrocaEnum?.descricao ?: ""
     }
 
     textArea("Motivos") {
