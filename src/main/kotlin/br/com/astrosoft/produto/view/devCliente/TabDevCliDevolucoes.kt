@@ -27,7 +27,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosDevolucoes? = null
+  private var dlgProduto: DlgProdutosVendaDevoluccao? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -112,7 +112,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showError("Solicitação não autorizada")
         } else {
-          dlgProduto = DlgProdutosDevolucoes(viewModel, notaLocalizada)
+          dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
           dlgProduto?.showDialog {
             viewModel.updateView()
           }
