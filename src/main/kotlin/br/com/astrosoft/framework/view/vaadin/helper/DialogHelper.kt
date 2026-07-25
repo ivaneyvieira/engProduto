@@ -79,7 +79,7 @@ object DialogHelper {
 
   fun showWarning(msg: String) {
     ConfirmDialog().apply {
-      this.setHeader("Aviso")
+      this.setHeader("Aviso!")
       this.setText(msg)
       this.setConfirmText("OK")
       this.open()

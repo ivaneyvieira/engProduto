@@ -376,26 +376,6 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-    val tipoObs = nota.tipoObs
-    val comProduto = tipoObs.contains(" P ") || tipoObs.endsWith(" P")
-    val misto = tipoObs.contains(" M ") || tipoObs.endsWith(" M")
-
-    if(misto){
-      if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Misto){
-        fail("O tipo de devolução não é misto")
-      }
-    }else{
-      if(comProduto){
-        if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Com){
-          fail("O tipo de devolução não é com produto")
-        }
-      }else{
-        if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Sem){
-          fail("O tipo de devolução não é sem produto")
-        }
-      }
-    }
-
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
     nota.userSolicitacao = user.no

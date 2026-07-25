@@ -339,6 +339,33 @@ class EntradaDevCli(
     // }
   }
 
+  fun validaTipoCredito(solicitacaoTrocaEnnum: ESolicitacaoTroca) {
+    if (tipoObs.startsWith(solicitacaoTrocaEnnum.codigo).not()) {
+      throw Exception("O tipo de Crédito divergente da nota de devolução")
+    }
+  }
+
+  fun validaTipoDevolucao(produtoTrocaEnum: EProdutoTroca) {
+    val comProduto = tipoObs.contains(" P ") || tipoObs.endsWith(" P")
+    val misto = tipoObs.contains(" M ") || tipoObs.endsWith(" M")
+
+    if (misto) {
+      if (produtoTrocaEnum != EProdutoTroca.Misto) {
+        throw Exception("O tipo de devolução divergente da nota de devolução")
+      }
+    } else {
+      if (comProduto) {
+        if (produtoTrocaEnum != EProdutoTroca.Com) {
+          throw Exception("O tipo de devolução divergente da nota de devolução")
+        }
+      } else {
+        if (produtoTrocaEnum != EProdutoTroca.Sem) {
+          throw Exception("O tipo de devolução divergente da nota de devolução")
+        }
+      }
+    }
+  }
+
   fun update() {
     saci.updateNotaVenda(this)
   }

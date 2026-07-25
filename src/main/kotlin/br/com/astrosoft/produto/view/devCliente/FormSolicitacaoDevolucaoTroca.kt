@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.produto.model.beans.*
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.formlayout.FormLayout
@@ -21,7 +22,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
   init {
     val readOnly = !nota.nameSolicitacao.isNullOrBlank()
     val user = AppConfig.userLogin() as? UserSaci
-    edtTipo = select("Tipo") {
+    edtTipo = select("Tipo do Crédito") {
       this.isReadOnly = readOnly
       val tipos = buildList {
         if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
@@ -44,9 +45,30 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
       this.value = nota.solicitacaoTrocaEnnum
+
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          this.isInvalid = false
+          this.errorMessage = ""
+          val value = it.value
+          if (value != null) {
+            try {
+              nota.validaTipoCredito(value)
+            } catch (e: Exception) {
+              val message = e.message
+              if (message != null) {
+                DialogHelper.showWarning(message)
+                this.focus()
+                this.isInvalid = true
+                this.errorMessage = message
+              }
+            }
+          }
+        }
+      }
     }
 
-    edtProduto = select("Produto") {
+    edtProduto = select("Tipo da Devolução") {
       this.isReadOnly = readOnly
       val entries = buildList {
         val comProduto = user?.autorizaTrocaP == true
@@ -59,6 +81,27 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
       this.value = nota.produtoTrocaEnum
+
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          this.isInvalid = false
+          this.errorMessage = ""
+          val value = it.value
+          if (value != null) {
+            try {
+              nota.validaTipoDevolucao(value)
+            } catch (e: Exception) {
+              val message = e.message
+              if (message != null) {
+                DialogHelper.showWarning(message)
+                this.focus()
+                this.isInvalid = true
+                this.errorMessage = message
+              }
+            }
+          }
+        }
+      }
     }
 
     if (nota.tipoNf == "ENTRE FUT") {
