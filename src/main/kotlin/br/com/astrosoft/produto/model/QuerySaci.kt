@@ -3111,7 +3111,7 @@ class QuerySaci : QueryDB(database) {
     val contatos = query(sql, RepresentanteContato::class) {
       addOptionalParameter("vendno", vendno)
     }.toList()
-    return contatos.groupBy { "${it.vendno} ${it.repno}" }.mapNotNull {
+    return contatos.groupBy { "${it.vendno} ${it.nome}" }.mapNotNull {
       val rep = it.value.firstOrNull() ?: return@mapNotNull null
       Representante(
         repno = rep.repno,

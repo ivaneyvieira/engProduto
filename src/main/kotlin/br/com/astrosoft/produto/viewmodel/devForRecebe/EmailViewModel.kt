@@ -23,7 +23,8 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   fun emailDevolucao(nota: NotaRecebimentoDev): EmailDevolucao {
-    val listaEmail = nota.listRepresentantes().flatMap {
+    val listaRep = nota.listRepresentantes()
+    val listaEmail = listaRep.flatMap {
       it.emailList
     }.distinct()
 
