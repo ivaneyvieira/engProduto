@@ -127,7 +127,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota: EntradaDevCli ->
       val form = FormSolicitacaoDevolucaoTroca(nota)
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
-        val solicitacaoTroca = form.solicitacaoTroca
+        val solicitacaoTroca: SolicitacaoTroca? = form.solicitacaoTroca
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
       }
     }

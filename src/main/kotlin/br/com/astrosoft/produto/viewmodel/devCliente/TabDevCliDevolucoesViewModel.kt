@@ -342,6 +342,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun autorizaSolicitacao(nota: EntradaDevCli, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
     solicitacaoTroca ?: fail("Solicitação de troca inválida")
+
     val login = solicitacaoTroca.login
     val senha = solicitacaoTroca.senha
     val user = UserSaci.userLogin(login, senha)
@@ -372,6 +373,26 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
       ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
         fail("Mudança de cliente não autorizada")
+      }
+    }
+
+    val tipoObs = nota.tipoObs
+    val comProduto = tipoObs.contains(" P ") || tipoObs.endsWith(" P")
+    val misto = tipoObs.contains(" M ") || tipoObs.endsWith(" M")
+
+    if(misto){
+      if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Misto){
+        fail("O tipo de devolução não é misto")
+      }
+    }else{
+      if(comProduto){
+        if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Com){
+          fail("O tipo de devolução não é com produto")
+        }
+      }else{
+        if(solicitacaoTroca.produtoTrocaEnum != EProdutoTroca.Sem){
+          fail("O tipo de devolução não é sem produto")
+        }
       }
     }
 
