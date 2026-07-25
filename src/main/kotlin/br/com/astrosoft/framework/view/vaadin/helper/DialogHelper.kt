@@ -70,7 +70,7 @@ object DialogHelper {
 
   fun showError(msg: String) {
     ConfirmDialog().apply {
-      this.setHeader("Erro do aplicativo")
+      this.setHeader("Erro")
       this.setText(msg)
       this.setConfirmText("OK")
       this.open()

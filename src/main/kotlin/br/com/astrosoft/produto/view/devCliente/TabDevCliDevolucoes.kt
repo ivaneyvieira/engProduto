@@ -103,18 +103,22 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      val notasAutoriza = nota.notaAutoriza()
-      if (notasAutoriza.isEmpty()) {
-        DialogHelper.showError("Nota de autorização não localizada ")
+      if (nota.loginSolicitacao.isNullOrBlank()) {
+        DialogHelper.showError("Devolução sem autorização")
       } else {
-        val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
-
-        if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
-          DialogHelper.showError("Solicitação não autorizada")
+        val notasAutoriza = nota.notaAutoriza()
+        if (notasAutoriza.isEmpty()) {
+          DialogHelper.showError("Nota de autorização não localizada")
         } else {
-          dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
-          dlgProduto?.showDialog {
-            viewModel.updateView()
+          val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
+
+          if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
+            DialogHelper.showError("Solicitação não autorizada")
+          } else {
+            dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
+            dlgProduto?.showDialog {
+              viewModel.updateView()
+            }
           }
         }
       }
