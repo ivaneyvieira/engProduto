@@ -125,6 +125,13 @@ class EntradaDevCli(
       return parte2.trim()
     }
 
+  val cliMuda: Int
+    get() {
+      val regexp = "MUDA +P* +CLI *([0-9]+)"
+      val matchResult = regexp.toRegex().find(tipoObs )
+      return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
+    }
+
   fun produtos(): List<EntradaDevCliPro> {
     val dadosBruto = saci.entradaDevCliPro(invno)
     val dadosExplodidos = dadosBruto.explodeMisto()

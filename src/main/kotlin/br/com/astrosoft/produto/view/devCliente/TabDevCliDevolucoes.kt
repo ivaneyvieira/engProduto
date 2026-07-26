@@ -153,6 +153,22 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
 
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
+    columnGrid(EntradaDevCli::tipoObs, header = "Observação") {
+      this.setPartNameGenerator() { nota ->
+        if (nota.nameCli.isNullOrBlank()) {
+          if (nota.tipoObs.contains("MUDA")) {
+            "vermelho"
+          } else {
+            null
+          }
+        } else {
+          null
+        }
+      }
+    }
+    if (user?.admin == true) {
+      columnGrid(EntradaDevCli::cliMuda, header = "Muda Cli")
+    }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")
     columnGrid(EntradaDevCli::data, header = "Data")
