@@ -126,9 +126,16 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
 
     addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota: EntradaDevCli ->
       val form = FormSolicitacaoDevolucaoTroca(nota)
+
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
-        val solicitacaoTroca: SolicitacaoTroca? = form.solicitacaoTroca
-        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+        val result = form.validaFiltro()
+        result.onFailure {
+          DialogHelper.showWarning(it.message ?: "Erro no filtro")
+        }
+        result.onSuccess { solicitacaoTroca ->
+          val solicitacaoTroca: SolicitacaoTroca = solicitacaoTroca
+          viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+        }
       }
     }
 

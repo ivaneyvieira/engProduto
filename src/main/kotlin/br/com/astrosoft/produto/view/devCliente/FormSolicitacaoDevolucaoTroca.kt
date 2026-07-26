@@ -12,8 +12,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
-  private var edtTipo: Select<ESolicitacaoTroca>? = null
-  private var edtProduto: Select<EProdutoTroca>? = null
+  private var edtTipoCredito: Select<ESolicitacaoTroca>? = null
+  private var edtTipoDevolucao: Select<EProdutoTroca>? = null
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
@@ -22,7 +22,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
   init {
     val readOnly = !nota.nameSolicitacao.isNullOrBlank()
     val user = AppConfig.userLogin() as? UserSaci
-    edtTipo = select("Tipo do Crédito") {
+    edtTipoCredito = select("Tipo do Crédito") {
       this.isReadOnly = readOnly
       val tipos = buildList {
         if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
@@ -60,7 +60,6 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
                 DialogHelper.showWarning(message)
                 this.focus()
                 this.isInvalid = true
-                this.errorMessage = message
               }
             }
           }
@@ -68,7 +67,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       }
     }
 
-    edtProduto = select("Tipo da Devolução") {
+    edtTipoDevolucao = select("Tipo da Devolução") {
       this.isReadOnly = readOnly
       val entries = buildList {
         val comProduto = user?.autorizaTrocaP == true
@@ -96,7 +95,6 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
                 DialogHelper.showWarning(message)
                 this.focus()
                 this.isInvalid = true
-                this.errorMessage = message
               }
             }
           }
@@ -137,21 +135,33 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
     }
   }
 
-  val solicitacaoTroca: SolicitacaoTroca?
-    get() {
-      val solicitacaoTrocaEnnum = edtTipo?.value ?: return null
-      val produtoTrocaEnnum = edtProduto?.value ?: return null
-      val nfEntRet = edtNotaEntRet?.value
-      val motivo = edtMotivo?.value ?: return null
-      val login: String = edtLogin?.value ?: ""
-      val senha: String = edtSenha?.value ?: ""
-      return SolicitacaoTroca(
-        solicitacaoTrocaEnnum,
-        produtoTrocaEnnum,
-        nfEntRet,
-        motivo,
-        login,
-        senha
-      )
+  fun validaFiltro(): Result<SolicitacaoTroca> {
+    return if (edtTipoDevolucao?.isInvalid == true || edtTipoCredito?.isInvalid == true) {
+      Result.failure(Exception("Filtro Inválido"))
+    } else {
+      val solicitacao = solicitacaoTroca()
+      if (solicitacao == null) {
+        Result.failure(Exception("Filtro Inválido"))
+      } else {
+        Result.success(solicitacao)
+      }
     }
+  }
+
+  private fun solicitacaoTroca(): SolicitacaoTroca? {
+    val solicitacaoTrocaEnum = edtTipoCredito?.value ?: return null
+    val produtoTrocaEnum = edtTipoDevolucao?.value ?: return null
+    val nfEntRet = edtNotaEntRet?.value
+    val motivo = edtMotivo?.value ?: return null
+    val login: String = edtLogin?.value ?: ""
+    val senha: String = edtSenha?.value ?: ""
+    return SolicitacaoTroca(
+      solicitacaoTrocaEnnum = solicitacaoTrocaEnum,
+      produtoTrocaEnum = produtoTrocaEnum,
+      nfEntRet = nfEntRet,
+      motivo = motivo,
+      login = login,
+      senha = senha
+    )
+  }
 }

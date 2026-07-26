@@ -341,7 +341,7 @@ class EntradaDevCli(
 
   fun validaTipoCredito(solicitacaoTrocaEnnum: ESolicitacaoTroca) {
     if (tipoObs.startsWith(solicitacaoTrocaEnnum.codigo).not()) {
-      throw Exception("O tipo de Crédito divergente da nota de devolução")
+      throw Exception("O tipo de crédito divergente da nota de devolução")
     }
   }
 

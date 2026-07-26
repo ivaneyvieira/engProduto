@@ -340,9 +340,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun autorizaSolicitacao(nota: EntradaDevCli, solicitacaoTroca: SolicitacaoTroca?) = viewModel.exec {
-    solicitacaoTroca ?: fail("Solicitação de troca inválida")
-
+  fun autorizaSolicitacao(nota: EntradaDevCli, solicitacaoTroca: SolicitacaoTroca) = viewModel.exec {
     val login = solicitacaoTroca.login
     val senha = solicitacaoTroca.senha
     val user = UserSaci.userLogin(login, senha)
