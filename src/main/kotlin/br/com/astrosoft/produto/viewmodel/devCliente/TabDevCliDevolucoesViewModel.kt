@@ -302,35 +302,37 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun desatorizaTroca(nota: NotaVenda, produto: ProdutoNFS) = viewModel.exec {
     viewModel.view.showQuestion("Confirma desautorizar devolução do produto ${produto.codigo}?") {
-      val user = AppConfig.userLogin() as? UserSaci
+      viewModel.exec {
+        val user = AppConfig.userLogin() as? UserSaci
 
-      if (user?.desautorizaDev == false) {
-        fail("Usuário sem permissão")
-      }
+        if (user?.desautorizaDev == false) {
+          fail("Usuário sem permissão")
+        }
 
-      if (produto.devDB == false) {
-        fail("Solicitação não foi autorizada")
-      }
+        if (produto.devDB == false) {
+          fail("Solicitação não foi autorizada")
+        }
 
-      if ((produto.ni ?: 0) != 0) {
-        fail("A nota de volução já foi emitida")
-      }
+        if ((produto.ni ?: 0) != 0) {
+          fail("A nota de devolução já foi emitida")
+        }
 
-      produto.dev = false
-      produto.temProduto = false
-      produto.quantDev = produto.quantidade
-      produto.updateQuantDev()
+        produto.dev = false
+        produto.temProduto = false
+        produto.quantDev = produto.quantidade
+        produto.updateQuantDev()
 
-      subView.updateProdutos()
+        subView.updateProdutos()
 
-      val produtos = subView.produtos()
-      if (produtos.none { it.devDB == true }) {
-        nota.solicitacaoTrocaEnnum = null
-        nota.produtoTrocaEnum = null
-        nota.nfEntRet = null
-        nota.userTroca = 0
-        nota.setMotivoTroca = emptySet()
-        nota.update()
+        val produtos = subView.produtos()
+        if (produtos.none { it.devDB == true }) {
+          nota.solicitacaoTrocaEnnum = null
+          nota.produtoTrocaEnum = null
+          nota.nfEntRet = null
+          nota.userTroca = 0
+          nota.setMotivoTroca = emptySet()
+          nota.update()
+        }
       }
     }
   }
