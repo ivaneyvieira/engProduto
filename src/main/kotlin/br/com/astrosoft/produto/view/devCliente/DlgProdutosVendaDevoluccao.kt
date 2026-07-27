@@ -21,7 +21,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevAutorizaViewModel
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -243,7 +242,7 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
       produtoNFNIData()
       if (user?.desautorizaDev == true) {
         addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
-          viewModel.desatorizaTroca(nota, produto)
+          viewModel.desautorizaTroca(nota, produto)
         }
       }
       produtoNFCodigo()

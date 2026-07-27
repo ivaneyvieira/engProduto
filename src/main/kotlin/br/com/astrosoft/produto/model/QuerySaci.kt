@@ -954,28 +954,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaMudaCliente(saldoDevolucao: SaldoDevolucao) {
+  fun transfereCredito(custnoOri: Int, custnoDes: Int, saldo: Double) {
     val sql = "/sqlSaci/updateSaldoMuda.sql"
     script(sql) {
-      addOptionalParameter("invno", saldoDevolucao.invno)
-      addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
-      addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
-      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
+      addOptionalParameter(name = "custnoOri", value = custnoOri)
+      addOptionalParameter(name = "custnoDes", value = custnoDes)
+      addOptionalParameter(name = "saldo", value = saldo)
     }
   }
 
   fun marcaReembolso(saldoDevolucao: SaldoDevolucao) {
     val sql = "/sqlSaci/updateSaldoReembolso.sql"
     script(sql) {
-      addOptionalParameter("invno", saldoDevolucao.invno)
-      addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
-      addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
       addOptionalParameter("tipo", saldoDevolucao.tipo)
       addOptionalParameter("nfdev", saldoDevolucao.notaDev?.notaFiscal ?: "")
       addOptionalParameter("loja", saldoDevolucao.notaDev?.loja ?: 0)
       addOptionalParameter("nfno", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(0)?.toInt() ?: 0)
       addOptionalParameter("nfse", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(1) ?: "")
-      addOptionalParameter("saldo", (saldoDevolucao.saldo * 100.00).toInt())
     }
   }
 

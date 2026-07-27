@@ -300,7 +300,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun desatorizaTroca(nota: NotaVenda, produto: ProdutoNFS) = viewModel.exec {
+  fun desautorizaTroca(nota: NotaVenda, produto: ProdutoNFS) = viewModel.exec {
     viewModel.view.showQuestion("Confirma desautorizar devolução do produto ${produto.codigo}?") {
       viewModel.exec {
         val user = AppConfig.userLogin() as? UserSaci
@@ -395,6 +395,25 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
+  private fun atualizaCredito(nota: EntradaDevCli) {
+    val solicitacaoTrocaEnum = nota.solicitacaoTrocaEnnum ?: return
+    if (solicitacaoTrocaEnum != ESolicitacaoTroca.MudaCliente && nota.tipoObs.startsWith("MUDA")) {
+      nota.desfazTroca()
+      nota.marcaImpresso(Impressora(0, ""))
+    }
+  }
+
+  fun atualizaCredito() = viewModel.exec {
+    val notas = subView.notasSelecionada()
+    if (notas.isEmpty()) {
+      fail("Nenhuma nota selecionada")
+    }
+    notas.forEach { nota ->
+      atualizaCredito(nota)
+    }
+    updateView()
+  }
+
   val subView
     get() = viewModel.view.tabDevCliDevolucoes
 }
@@ -407,4 +426,5 @@ interface ITabDevCliDevolucoes : ITabView {
   fun fechaFormProduto()
   fun updateProdutos()
   fun produtos(): List<ProdutoNFS>
+  fun notasSelecionada(): List<EntradaDevCli>
 }

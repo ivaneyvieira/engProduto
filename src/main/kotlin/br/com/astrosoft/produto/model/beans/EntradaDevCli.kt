@@ -128,7 +128,7 @@ class EntradaDevCli(
   val cliMuda: Int
     get() {
       val regexp = "MUDA +P* +CLI *([0-9]+)"
-      val matchResult = regexp.toRegex().find(tipoObs )
+      val matchResult = regexp.toRegex().find(tipoObs)
       return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
     }
 
@@ -184,32 +184,23 @@ class EntradaDevCli(
           saldo = valor ?: 0.00
         )
         saci.marcaReembolso(saldoDevolucao)
+        saci.transfereCredito(
+          custnoOri = custnoVend ?: 0,
+          custnoDes = lojaNaoInformado?.codigo ?: 0,
+          saldo = valor ?: 0.00
+        )
       }
 
       isMuda()         -> {
         val mudaCliente = mudaCodigo() ?: 0
         val custno = custnoVend ?: 0
-        val saldoDevolucao = SaldoDevolucao(
-          invno = invno,
-          custnoDev = custno,
-          custnoMuda = mudaCliente,
-          tipo = this.tipoObs,
-          saldo = valor ?: 0.00
-        )
-        saci.marcaMudaCliente(saldoDevolucao)
+        saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = valor ?: 0.00)
       }
 
       isNaoInformado() -> {
         val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
         val custno = filial ?: 0
-        val saldoDevolucao = SaldoDevolucao(
-          invno = invno,
-          custnoDev = custno,
-          custnoMuda = mudaCliente,
-          tipo = this.tipoObs,
-          saldo = valor ?: 0.00
-        )
-        saci.marcaMudaCliente(saldoDevolucao)
+        saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = valor ?: 0.00)
       }
     }
   }
@@ -324,7 +315,6 @@ class EntradaDevCli(
   }
 
   fun desfazTroca() {
-    //if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
     saci.desmarcaTrocaImpresso(
       invno = invno,
       storeno = storeno ?: 0,
@@ -335,19 +325,11 @@ class EntradaDevCli(
     val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
     val custno = filial ?: 0
 
-    val saldoDevolucao = SaldoDevolucao(
-      invno = invno,
-      custnoDev = custno,
-      custnoMuda = mudaCliente,
-      tipo = this.tipoObs,
-      saldo = -(valor ?: 0.00)
-    )
-    saci.marcaMudaCliente(saldoDevolucao)
-    // }
+    saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = -(valor ?: 0.00))
   }
 
-  fun validaTipoCredito(solicitacaoTrocaEnnum: ESolicitacaoTroca) {
-    if (tipoObs.startsWith(solicitacaoTrocaEnnum.codigo).not()) {
+  fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
+    if (tipoObs.startsWith(solicitacaoTrocaEnum.codigo).not()) {
       throw Exception("O tipo de crédito divergente da nota de devolução")
     }
   }

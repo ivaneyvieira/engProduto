@@ -9,6 +9,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliDevolucoes
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import net.sf.dynamicreports.report.builder.DynamicReports.grid
 import java.time.LocalDate
 
 class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
@@ -75,6 +77,10 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         viewModel.updateView()
       }
     }
+
+    button ("Atualiza Crédito Dev"){
+      viewModel.atualizaCredito()
+    }
   }
 
   override fun Grid<EntradaDevCli>.gridPanel() {
@@ -124,7 +130,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
 
-    addColumnButton(VaadinIcon.SIGN_IN, "Autoriza Solicitação", "Solicitação") { nota: EntradaDevCli ->
+    addColumnButton(iconButton = VaadinIcon.SIGN_IN, tooltip = "Autoriza Solicitação", header = "Solicitação") { nota: EntradaDevCli ->
       val form = FormSolicitacaoDevolucaoTroca(nota)
 
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
@@ -227,6 +233,10 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
 
   override fun produtos(): List<ProdutoNFS> {
     return dlgProduto?.produtos().orEmpty()
+  }
+
+  override fun notasSelecionada(): List<EntradaDevCli>{
+    return itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
