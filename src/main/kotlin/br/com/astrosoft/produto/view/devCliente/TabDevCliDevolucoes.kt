@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliDevolucoes
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -78,8 +79,10 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
 
-    button ("Atualiza Crédito Dev"){
-      viewModel.atualizaCredito()
+    button("Atualiza Crédito Dev") {
+      this.onClick {
+        viewModel.atualizaCredito()
+      }
     }
   }
 
@@ -130,7 +133,11 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
 
-    addColumnButton(iconButton = VaadinIcon.SIGN_IN, tooltip = "Autoriza Solicitação", header = "Solicitação") { nota: EntradaDevCli ->
+    addColumnButton(
+      iconButton = VaadinIcon.SIGN_IN,
+      tooltip = "Autoriza Solicitação",
+      header = "Solicitação"
+    ) { nota: EntradaDevCli ->
       val form = FormSolicitacaoDevolucaoTroca(nota)
 
       DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
@@ -235,7 +242,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     return dlgProduto?.produtos().orEmpty()
   }
 
-  override fun notasSelecionada(): List<EntradaDevCli>{
+  override fun notasSelecionada(): List<EntradaDevCli> {
     return itensSelecionados()
   }
 
