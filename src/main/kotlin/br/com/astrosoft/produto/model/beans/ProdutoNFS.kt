@@ -60,6 +60,8 @@ data class ProdutoNFS(
 
   var motivo: String? = null
 
+  var quantidadeDev: Int? = null
+
   override fun toString(): String {
     return "ProdutoNFS(loja=$loja, pdvno=$pdvno, xano=$xano, nota=$nota, codigo=$codigo, grade=$grade, barcodeProd=$barcodeProd, barcodeStrList=$barcodeStrList, descricao=$descricao, vendno=$vendno, fornecedor=$fornecedor, typeno=$typeno, typeName=$typeName, clno=$clno, clname=$clname, altura=$altura, comprimento=$comprimento, largura=$largura, precoCheio=$precoCheio, ncm=$ncm, local=$local, quantidade=$quantidade, preco=$preco, total=$total, gradeAlternativa=$gradeAlternativa, marca=$marca, marcaImpressao=$marcaImpressao, usernoExp=$usernoExp, usuarioExp=$usuarioExp, dataHoraExp=$dataHoraExp, usernoCD=$usernoCD, usuarioCD=$usuarioCD, dataHoraCD=$dataHoraCD, usuarioSep='$usuarioSep', tipoNota=$tipoNota)"
   }

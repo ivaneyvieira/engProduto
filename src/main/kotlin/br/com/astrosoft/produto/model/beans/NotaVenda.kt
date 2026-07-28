@@ -75,10 +75,15 @@ class NotaVenda(
 
   fun produtos(): List<ProdutoNFS> {
     val motivo = solicitacaoTrocaEnnum?.descricao
-    return saci.findProdutoNF(this).map {
-      it.motivo = motivo
-      it
+    return saci.findProdutoNF(this).map { prd ->
+      prd.motivo = motivo
+      prd
     }
+  }
+
+  fun produtosDevolucao(): List<ProdutosDev>{
+    val invno = this.ni ?: return emptyList()
+    return saci.produtosDevolucao(invno)
   }
 
   fun produtosEntrega(): List<ProdutoNFS> {

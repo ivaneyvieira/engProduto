@@ -3562,6 +3562,13 @@ class QuerySaci : QueryDB(database) {
     return prd
   }
 
+  fun produtosDevolucao(invno: Int): List<ProdutosDev> {
+    val sql = "/sqlSaci/produtosDevolucao.sql"
+    return query(sql, ProdutosDev::class){
+      addOptionalParameter("invno", invno ?: 0)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

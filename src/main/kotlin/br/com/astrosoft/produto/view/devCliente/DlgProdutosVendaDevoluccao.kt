@@ -287,7 +287,7 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
     return gridDetail.selectedItems.toList()
   }
 
-  fun update() {
+  fun update(): List<ProdutoNFS> {
     val pesquisa = edtPesquisa?.value.orEmpty()
     val listProdutos = nota.produtos().expande().filter { prd ->
       pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
@@ -295,12 +295,26 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
       (prd.barcodeStrList ?: "").contains(pesquisa) ||
       (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
     }
+
+    val produtosDev = nota.produtosDevolucao()
+    listProdutos.filter { it.dev == false }.forEach { prdNF ->
+      produtosDev.firstOrNull { prd ->
+        prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
+      }?.let{prd ->
+        prdNF.ni = prd.invno
+        prdNF.quantidadeDev = prd.quantidadeDev
+      }
+    }
+
     gridDetail.setItems(listProdutos)
     updateNota()
 
     val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
+
+
+    return listProdutos
   }
 
   fun produtos(): List<ProdutoNFS> {
