@@ -192,6 +192,20 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
+      produtos.filter { prd ->
+        prd.ni == nota.ni
+      }.groupBy { prd ->
+        "${prd.prdno}-${prd.grade}"
+      }.map { ent ->
+        val list = ent.value
+        val prd = ent.value.firstOrNull()
+        val quantDev = list.sumOf { it.quantDev ?: 0 }
+        val quantNotaDev = prd?.quantidadeDev ?: 0
+        if (quantDev != quantNotaDev) {
+          fail("Quantidade informada é diferente da nota de devolução")
+        }
+      }
+
       user ?: fail("Usuário inválido")
       val produtosDev = produtos
         .filter { it.devDB == false }
@@ -225,9 +239,8 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
       }
       val valorDevolucao = user.valorDevolucao
 
-      when {
-        solicitacao == ESolicitacaoTroca.Troca       -> {
-
+      when (solicitacao) {
+        ESolicitacaoTroca.Troca       -> {
           if (produto == EProdutoTroca.Com) {
             if (valorProdutos > valorDevolucao) {
               fail("Valor da devolução maior que o autorizado")
@@ -239,31 +252,24 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
           }
         }
 
-        solicitacao == ESolicitacaoTroca.Estorno     -> {
+        ESolicitacaoTroca.Estorno     -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
-        solicitacao == ESolicitacaoTroca.Reembolso   -> {
+        ESolicitacaoTroca.Reembolso   -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
-        solicitacao == ESolicitacaoTroca.MudaCliente -> {
+        ESolicitacaoTroca.MudaCliente -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
-        }
-
-        else                                         -> {
-          //Não faz nada
         }
       }
-
-      /***********************************************************************************/
-
     } catch (e: Exception) {
       val msg = e.message
       viewModel.view.showWarning(msg ?: "Erro genérico")
