@@ -193,7 +193,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
   fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
       produtos.filter { prd ->
-        prd.ni == nota.ni
+        prd.ni == nota.ni && prd.dev == true
       }.groupBy { prd ->
         "${prd.prdno}-${prd.grade}"
       }.map { ent ->
