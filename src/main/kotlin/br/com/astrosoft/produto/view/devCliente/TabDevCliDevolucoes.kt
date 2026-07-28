@@ -75,6 +75,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     }
 
     button("Atualiza Crédito Dev") {
+      this.isVisible = false
       this.onClick {
         viewModel.atualizaCredito()
       }

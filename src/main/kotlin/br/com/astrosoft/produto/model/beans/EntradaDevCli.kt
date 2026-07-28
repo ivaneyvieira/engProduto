@@ -184,23 +184,32 @@ class EntradaDevCli(
           saldo = valor ?: 0.00
         )
         saci.marcaReembolso(saldoDevolucao)
-        saci.transfereCredito(
-          custnoOri = custnoVend ?: 0,
-          custnoDes = lojaNaoInformado?.codigo ?: 0,
-          saldo = valor ?: 0.00
-        )
       }
 
       isMuda()         -> {
         val mudaCliente = mudaCodigo() ?: 0
         val custno = custnoVend ?: 0
-        saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = valor ?: 0.00)
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
+          tipo = this.tipoObs,
+          saldo = valor ?: 0.00
+        )
+        saci.marcaMudaCliente(saldoDevolucao)
       }
 
       isNaoInformado() -> {
         val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
         val custno = filial ?: 0
-        saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = valor ?: 0.00)
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
+          tipo = this.tipoObs,
+          saldo = valor ?: 0.00
+        )
+        saci.marcaMudaCliente(saldoDevolucao)
       }
     }
   }
@@ -315,6 +324,7 @@ class EntradaDevCli(
   }
 
   fun desfazTroca() {
+    //if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
     saci.desmarcaTrocaImpresso(
       invno = invno,
       storeno = storeno ?: 0,
@@ -325,7 +335,15 @@ class EntradaDevCli(
     val mudaCliente = cliCodigo() ?: mudaCodigo() ?: 0
     val custno = filial ?: 0
 
-    saci.transfereCredito(custnoOri = custno, custnoDes = mudaCliente, saldo = -(valor ?: 0.00))
+    val saldoDevolucao = SaldoDevolucao(
+      invno = invno,
+      custnoDev = custno,
+      custnoMuda = mudaCliente,
+      tipo = this.tipoObs,
+      saldo = -(valor ?: 0.00)
+    )
+    saci.marcaMudaCliente(saldoDevolucao)
+    // }
   }
 
   fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
