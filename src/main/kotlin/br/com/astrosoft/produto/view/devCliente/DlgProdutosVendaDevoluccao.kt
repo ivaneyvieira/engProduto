@@ -171,6 +171,13 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
       this.addItemClickListener {
         when (it.column.key) {
           ProdutoNFS::dev.name                               -> {
+            val itensDev = nota.produtosDevolucao()
+            itensDev.filter { dev ->
+              dev.prdno == it.item.prdno && dev.grade == it.item.grade
+            }.ifEmpty {
+              DialogHelper.showWarning("Este produto não está presente na nota de devolução")
+              return@addItemClickListener
+            }
             it.item.dev = !(it.item.dev ?: false)
             if (it.item.dev == true) {
               it.item.temProduto = true
