@@ -4,6 +4,8 @@ import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.util.SystemUtils
 import br.com.astrosoft.framework.util.Template
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.padronizarRazaoSocial
+import br.com.astrosoft.framework.util.produzirNomeReduzido
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.AnexoEmail
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
@@ -53,15 +55,14 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
   }
 
   private fun NotaRecebimentoDev.emailSubject(): String {
-    val partesNameFornecedor = this.fornecedor?.split(" ") ?: emptyList()
-    val part1 = partesNameFornecedor.getOrNull(0) ?: ""
-    val part2 = partesNameFornecedor.getOrNull(1) ?: ""
-    val fornecedor = "$part1 $part2".trim()
     val nfd = this.notaDevolucao ?: ""
     val motivo = this.motivoDevolucaoName
     val nfo = nfEntrada ?: ""
 
-    return "$fornecedor | NFD $nfd ($motivo) NFO $nfo"
+    val fonecedorRazao = padronizarRazaoSocial(this.fornecedor ?: "")
+    val fornecedorReduzido = produzirNomeReduzido(fonecedorRazao)
+
+    return "$fornecedorReduzido | NFD $nfd ($motivo) NFO $nfo"
   }
 
 
