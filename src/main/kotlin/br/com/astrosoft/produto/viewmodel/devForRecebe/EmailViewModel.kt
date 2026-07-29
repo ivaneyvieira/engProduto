@@ -80,6 +80,7 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     template.set("CTEEMIS", this.dataDevolucao.format())
     template.set("NFD", this.notaDevolucao ?: "")
     template.set("NFDEMIS", this.emissaoDevolucao.format())
+    template.set("NFDVALOR", this.valorDevolucao.format())
     template.set("COLETA", this.dataColeta.format())
 
     return template.render()
