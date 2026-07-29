@@ -1,6 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.model.DB
+import br.com.astrosoft.framework.util.SystemUtils
+import br.com.astrosoft.framework.util.Template
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.AnexoEmail
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
@@ -10,6 +13,7 @@ import br.com.astrosoft.produto.model.sendMail.EmailRequest
 import br.com.astrosoft.produto.model.sendMail.sendEmailAsync
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 open class EmailViewModel(val viewModel: DevFor2ViewModel) {
   fun addAnexo(email: EmailDevolucao, fileName: String, dados: ByteArray) {
@@ -43,7 +47,41 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     email.ccEmailList = DB.garantiaCopy.split(",").map { it.trim() }.toSet()
     email.toEmailList = listaEmail.toSet()
     email.dataEmail = LocalDateTime.now()
+    email.subject = nota.emailSubject()
+    email.htmlContent = nota.emailContent()
     return email
+  }
+
+  private fun NotaRecebimentoDev.emailSubject(): String {
+    val partesNameFornecedor = this.fornecedor?.split(" ") ?: emptyList()
+    val part1 = partesNameFornecedor.getOrNull(0) ?: ""
+    val part2 = partesNameFornecedor.getOrNull(1) ?: ""
+    val fornecedor = "$part1 $part2".trim()
+    val nfd = this.notaDevolucao ?: ""
+    val motivo = this.motivoDevolucaoName
+    val nfo = nfEntrada ?: ""
+
+    return "$fornecedor | NFD $nfd ($motivo) NFO $nfo"
+  }
+
+
+  private fun NotaRecebimentoDev.emailContent(): String {
+    val template = Template("/html/emailDevolucao.html")
+
+    val hora = LocalTime.now().hour
+    val saudacao = if(hora < 12) "Bom dia" else if(hora < 18) "Boa tarde" else "Boa noite"
+
+    template.set("SAUDACAO", saudacao)
+    template.set("MOTIVO",  this.motivoDevolucaoName)
+    template.set("NFO", nfEntrada ?: "")
+    template.set("NFOEMIS", emissao.format())
+    template.set("CTE", this.cteDevolucao ?: "")
+    template.set("CTEEMIS", this.dataDevolucao.format())
+    template.set("NFD", this.notaDevolucao ?: "")
+    template.set("NFDEMIS", this.emissaoDevolucao.format())
+    template.set("COLETA", this.dataColeta.format())
+
+    return template.render()
   }
 
   fun enviaEmail(email: EmailDevolucao, updateEmails: () -> Unit) {
