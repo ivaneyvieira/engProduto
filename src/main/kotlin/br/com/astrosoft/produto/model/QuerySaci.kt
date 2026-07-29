@@ -1054,6 +1054,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", nota.loja ?: 0)
       addOptionalParameter("pdv", nota.pdv ?: 0)
       addOptionalParameter("transacao", nota.transacao ?: 0)
+      addOptionalParameter("ni", nota.ni ?: 0)
     }
   }
 
@@ -1076,6 +1077,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("tipoDev", nota.tipoDev ?: "")
       addOptionalParameter("observacao", nota.observacao ?: "")
       addOptionalParameter("impresso", nota.impresso ?: "N")
+      addOptionalParameter("ni", nota.ni ?: 0)
     }
   }
 
@@ -1845,8 +1847,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("validade", filtro.validade)
-      addOptionalParameter("mes", filtro.mes)
-      addOptionalParameter("ano", ano)
       addOptionalParameter("grade", filtro.grade)
       addOptionalParameter("caracter", filtro.caracter.value)
     }
@@ -3175,6 +3175,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("motivoTroca", venda.motivoTroca)
       addOptionalParameter("motivoTrocaCod", venda.motivoTrocaCod)
       addOptionalParameter("nfEntRet", venda.nfEntRet)
+      addOptionalParameter("invno", venda.invno)
     }
   }
 
@@ -3192,6 +3193,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("motivoTroca", venda.motivoTroca)
       addOptionalParameter("motivoTrocaCod", venda.motivoTrocaCod)
       addOptionalParameter("nfEntRet", venda.nfEntRet)
+      addOptionalParameter("invno", venda.ni)
     }
   }
 
@@ -3273,6 +3275,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("storeno", venda.loja ?: 0)
       addOptionalParameter("pdvno", venda.pdv ?: 0)
       addOptionalParameter("xano", venda.transacao ?: 0)
+      addOptionalParameter("invno", venda.ni ?: 0)
     }
   }
 

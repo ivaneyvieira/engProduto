@@ -1,5 +1,6 @@
 USE sqldados;
 
+
 SET SQL_MODE = '';
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
@@ -153,7 +154,8 @@ FROM
               ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
 WHERE N.storeno = :storeno
   AND N.pdvno = :pdvno
-  AND N.xano = :xano;
+  AND N.xano = :xano
+GROUP BY N.storeno, N.pdvno, N.xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV

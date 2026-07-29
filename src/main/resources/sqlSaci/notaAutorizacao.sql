@@ -1,5 +1,6 @@
 USE sqldados;
 
+
 /*
 CREATE TABLE sqldados.nfAutorizacao
 (
@@ -69,7 +70,7 @@ SELECT N.storeno                                                                
        A.tipoDev                                                                                  AS tipoDev,
        S.no                                                                                       AS usernoSing,
        S.name                                                                                     AS autorizacao,
-       IFNULL(I1.invno, I2.invno)                                                                 AS ni,
+       IF(A.invno = 0, IFNULL(I1.invno, I2.invno), A.invno)                                       AS ni,
        IFNULL(CONCAT(I1.nfname, '/', I1.invse), CONCAT(I2.nfname, '/', I2.invse))                 AS nfDev,
        CAST(IFNULL(I1.issue_date, I2.issue_date) AS DATE)                                         AS dataDev,
        IFNULL(I1.grossamt, I2.grossamt) / 100                                                     AS valorDev,

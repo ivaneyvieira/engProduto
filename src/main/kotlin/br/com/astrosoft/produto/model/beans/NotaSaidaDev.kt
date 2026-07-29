@@ -65,9 +65,9 @@ class NotaSaidaDev(
   val tipoNotaSaidaDesc: String
     get() = "Devoluçao"
 
-  fun save() {
-    saci.saveNotaSaida(this)
-  }
+//  fun save() {
+//    saci.saveNotaSaida(this)
+//  }
 
   private val produtos = mutableListOf<NotaSaidaDevProduto>()
 

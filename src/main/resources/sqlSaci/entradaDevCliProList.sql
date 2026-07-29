@@ -1,5 +1,6 @@
 USE sqldados;
 
+
 SET sql_mode = '';
 
 DO @PESQUISA := TRIM(:pesquisa);
@@ -107,7 +108,8 @@ FROM
                ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
     LEFT JOIN  sqldados.nf            AS EF
                ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
-WHERE N.issuedate >= SUBDATE(:data, INTERVAL 45 DAY);
+WHERE N.issuedate >= SUBDATE(:data, INTERVAL 45 DAY)
+GROUP BY N.storeno, N.pdvno, N.xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_INV;
 CREATE TEMPORARY TABLE T_INV
@@ -277,7 +279,7 @@ FROM
               ON EF.lojaE = N.loja AND EF.pdvE = N.pdv AND EF.transacaoE = N.transacao
     LEFT JOIN sqldados.nfAutorizacao AS A
               ON A.storeno = IFNULL(EF.loja, N.loja) AND A.pdvno = IFNULL(EF.pdv, N.pdv) AND
-                 A.xano = IFNULL(EF.transacao, N.transacao)
+                 A.xano = IFNULL(EF.transacao, N.transacao) AND (A.invno = R.ni OR A.invno = 0)
     LEFT JOIN sqldados.users         AS UA
               ON UA.no = A.userTroca
 WHERE ((TRIM(MID(R.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (R.localizacao = ''));

@@ -1,5 +1,6 @@
 USE sqldados;
 
+
 SET sql_mode = '';
 
 DO @PESQUISA := :query;

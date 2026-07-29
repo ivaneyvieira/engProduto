@@ -7,3 +7,4 @@ FROM
 WHERE storeno = :loja
   AND nfno = :nfno
   AND nfse = :nfse
+

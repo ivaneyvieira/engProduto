@@ -48,9 +48,9 @@ class NotaAutorizacao(
       return saci.findNotaAutorizacao(filtro)
     }
 
-    fun insert(chave: NotaAutorizacaoChave) {
-      saci.insertNotaAutorizacao(chave)
-    }
+//    fun insert(chave: NotaAutorizacaoChave) {
+//      saci.insertNotaAutorizacao(chave)
+//    }
 
     fun findNota(loja: Int, nota: String): NotaAutorizacao? {
       val split = nota.trim().split("/")
@@ -79,5 +79,5 @@ data class NotaAutorizacaoChave(
     get() = notaFiscal.substringBefore("/").toIntOrNull() ?: 0
 
   val nfse
-    get() = notaFiscal.substringAfter("/").toIntOrNull() ?: 0
+    get() = notaFiscal.substringAfter("/")
 }

@@ -29,7 +29,7 @@ class ComparaValidade(
     get() = tipoGarantia?.descricao ?: ""
 
   companion object {
-    fun consultaByTipo(filtro: FiltroValidade) = saci.consultaValidade(filtro)
+    //fun consultaByTipo(filtro: FiltroValidade) = saci.consultaValidade(filtro)
   }
 }
 

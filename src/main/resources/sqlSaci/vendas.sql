@@ -64,6 +64,7 @@ SELECT N.storeno                                                AS loja,
        IFNULL(AT.motivoTroca, '')                               AS motivoTroca,
        IFNULL(AT.motivoTrocaCod, '')                            AS motivoTrocaCod,
        IFNULL(AT.nfEntRet, 0)                                   AS nfEntRet,
+       IFNULL(AT.invno, 0)                                      AS invno,
        CAST(MID(CASE
                   WHEN N.remarks REGEXP 'NI *[0-9]+'       THEN N.remarks
                   WHEN N.print_remarks REGEXP 'NI *[0-9]+' THEN N.print_remarks
@@ -115,8 +116,7 @@ CREATE TEMPORARY TABLE T_XANO
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT loja AS storeno, pdv AS pdvno, transacao AS xano
-FROM
-  T_VENDA
+FROM T_VENDA
 GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -197,8 +197,7 @@ SELECT invno,
        l2,
        grossamt / 100                        AS valorNi,
        CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
-FROM
-  sqldados.inv AS I
+FROM sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
   AND (I.invno = :invno OR :invno = 0)
@@ -207,7 +206,7 @@ WHERE I.storeno IN (2, 3, 4, 5, 8)
 
 DROP TEMPORARY TABLE IF EXISTS T_NI1;
 CREATE TEMPORARY TABLE T_NI1
-SELECT loja, pdv, transacao, invno, date, valorNi
+SELECT loja, pdv, transacao, I.invno, date, valorNi
 FROM
   T_VENDA            AS U USE INDEX (v2)
     INNER JOIN T_INV AS I
@@ -215,7 +214,7 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS T_NI2;
 CREATE TEMPORARY TABLE T_NI2
-SELECT loja, pdv, transacao, invno, date, valorNi
+SELECT loja, pdv, transacao, I.invno, date, valorNi
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
@@ -223,7 +222,7 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS T_NI3;
 CREATE TEMPORARY TABLE T_NI3
-SELECT loja, pdv, transacao, invno, I.date, valorNi, U.obsNI
+SELECT loja, pdv, transacao, I.invno, I.date, valorNi, U.obsNI
 FROM
   T_INV                AS I
     INNER JOIN T_VENDA AS U
@@ -235,18 +234,15 @@ CREATE TEMPORARY TABLE T_NI
   INDEX (loja, pdv, transacao)
 )
 SELECT loja, pdv, transacao, invno, date, valorNi
-FROM
-  T_NI1
+FROM T_NI1
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date, valorNi
-FROM
-  T_NI2
+FROM T_NI2
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date, valorNi
-FROM
-  T_NI3;
+FROM T_NI3;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
@@ -334,3 +330,4 @@ WHERE (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota L
        UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor LIKE @PESQUISA_LIKE OR E.notaEntrega LIKE @PESQUISA_LIKE OR IFNULL(I.invno, 0) = @PESQUISA_INT)
 GROUP BY U.loja, U.pdv, U.transacao, U.tipo, I.invno/*, E.lojaE, E.pdvE, E.transacaoE*/
+
