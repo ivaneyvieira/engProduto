@@ -295,10 +295,10 @@ FROM
     LEFT JOIN sqldados.nfAutorizacao AS AT
               ON AT.storeno = IFNULL(EF.loja, IFNULL(I.storeno, N.storeno)) AND
                  AT.pdvno = IFNULL(EF.pdv, IFNULL(I.pdvno, N.pdvno)) AND
-                 AT.xano = IFNULL(EF.transacao, IFNULL(I.xano, N.xano)) AND (AT.invno = I.invno OR AT.invno = 0)
+                 AT.xano = IFNULL(EF.transacao, IFNULL(I.xano, N.xano)) AND (AT.invno = I.invno)
     LEFT JOIN sqldados.nfAutorizacao AS ATV
               ON ATV.storeno = I.lojaVenda AND ATV.pdvno = I.pdvVenda AND ATV.xano = I.xanoVenda AND
-                 (ATV.invno = I.invno OR ATV.invno = 0)
+                 (ATV.invno = I.invno)
     LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp           AS E

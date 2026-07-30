@@ -301,15 +301,19 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
       (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
       (prd.barcodeStrList ?: "").contains(pesquisa) ||
       (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
-    }
+    }.sortedWith(compareBy({ (it.dev ?: false).not() }, { -(it.ni ?: 0) }))
 
-    val produtosDev = nota.produtosDevolucao()
-    listProdutos.filter { it.dev == false }.forEach { prdNF ->
-      produtosDev.firstOrNull { prd ->
-        prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
-      }?.let{prd ->
-        prdNF.ni = prd.invno
-        prdNF.quantidadeDev = prd.quantidadeDev
+    if (listProdutos.any { it.dev == true && it.ni == nota.ni }.not()) {
+      val produtosDev = nota.produtosDevolucao()
+      listProdutos.filter {
+        it.dev == false
+      }.forEach { prdNF ->
+        produtosDev.firstOrNull { prd ->
+          prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
+        }?.let { prd ->
+          prdNF.ni = prd.invno
+          prdNF.quantidadeDev = prd.quantidadeDev
+        }
       }
     }
 
@@ -319,7 +323,6 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
     val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-
 
     return listProdutos
   }
