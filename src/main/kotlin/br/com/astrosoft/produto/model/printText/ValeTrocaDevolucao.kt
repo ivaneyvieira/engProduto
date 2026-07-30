@@ -84,6 +84,9 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
           Cliente(custnoMuda ?: 0, nameMuda ?: "")
         }
 
+        (custnoObs ?: 0) > 0  -> {
+          Cliente(custnoObs ?: 0, nameObs ?: "")
+        }
         else                  -> {
           Cliente(custnoDev ?: 0, clienteDev ?: "")
         }

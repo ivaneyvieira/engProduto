@@ -3161,6 +3161,16 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull() ?: ProximoNumero(nome = nome, numero = 1)
   }
 
+  fun desfazSolidcitacaoDevolucao(venda: EntradaDevCli){
+    val sql = "/sqlSaci/desfazDevolucao.sql"
+    script(sql){
+      addOptionalParameter("storeno", venda.loja ?: 0)
+      addOptionalParameter("pdvno", venda.pdvno ?: 0)
+      addOptionalParameter("xano", venda.xano ?: 0)
+      addOptionalParameter("invno", venda.invno)
+    }
+  }
+
   fun updateNotaVenda(venda: EntradaDevCli) {
     val sql = "/sqlSaci/updateNotaVenda.sql"
     script(sql) {

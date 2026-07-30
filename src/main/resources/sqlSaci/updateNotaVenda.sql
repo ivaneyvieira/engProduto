@@ -1,5 +1,12 @@
 USE sqldados;
 
+UPDATE sqldados.nfAutorizacao
+SET invno = :invno
+WHERE storeno = :storeno
+  AND pdvno = :pdvno
+  AND xano = :xano
+  AND invno = 0
+  AND :invno != 0;
 
 INSERT IGNORE sqldados.nfAutorizacao(storeno, pdvno, xano, invno, usernoSing, tipoDev, observacao, impresso, dataInsert)
 SELECT :storeno AS storeno,
@@ -25,4 +32,4 @@ SET autoriza         = :autoriza,
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano
-  AND invno = :invno
+  AND (invno = :invno OR invno = 0)

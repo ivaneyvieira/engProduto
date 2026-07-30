@@ -111,7 +111,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       if (nota.loginSolicitacao.isNullOrBlank()) {
         DialogHelper.showWarning("Devolução sem autorização")
       } else {
-        val notasAutoriza = nota.notaAutoriza().filter {venda ->
+        val notasAutoriza = nota.notaAutoriza().filter { venda ->
           venda.ni == nota.invno
         }
         if (notasAutoriza.isEmpty()) {
@@ -166,19 +166,18 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::tipoObs, header = "Observação") {
       this.setPartNameGenerator() { nota ->
-        if (nota.nameCli.isNullOrBlank()) {
-          if (nota.tipoObs.contains("MUDA")) {
+        if ((nota.custnoObs ?: 0) == 0) {
+          null
+        } else
+          if (nota.nameObs.isNullOrBlank()) {
             "vermelho"
           } else {
             null
           }
-        } else {
-          null
-        }
       }
     }
     if (user?.admin == true) {
-      columnGrid(EntradaDevCli::cliMuda, header = "Muda Cli")
+      columnGrid(EntradaDevCli::custnoObs, header = "Muda Cli")
     }
     columnGrid(EntradaDevCli::invno, header = "NI")
     columnGrid(EntradaDevCli::notaFiscal, header = "NF Dev")

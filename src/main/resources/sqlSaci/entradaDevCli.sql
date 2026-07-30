@@ -152,7 +152,8 @@ SELECT I.invno                                                                  
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('CLI', I.remarks) + LENGTH('CLI'), 100)), ' ', 1) *
        1                                                                                                        AS custnoCli,
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('MUDA', I.remarks) + LENGTH('MUDA'), 100)), ' ', 1) *
-       1                                                                                                        AS custnoMuda
+       1                                                                                                        AS custnoMuda,
+       SUBSTRING_INDEX(TRIM(MID(I.remarks, 41, 40)), ' ', -1) * 1                                               AS custnoObs
 FROM
   sqldados.inv               AS I
     LEFT JOIN T_VENDA        AS U
@@ -260,10 +261,12 @@ SELECT DISTINCT I.invno,
                 cancelado                                                                 AS cancelado,
                 custnoCli                                                                 AS custnoCli,
                 custnoMuda                                                                AS custnoMuda,
+                custnoObs                                                                 AS custnoObs,
                 CCli.saldoDevolucao / 100                                                 AS saldoDevolucaoCli,
                 CMuda.saldoDevolucao / 100                                                AS saldoDevolucaoMuda,
                 CCli.name                                                                 AS nameCli,
                 CMuda.name                                                                AS nameMuda,
+                CObs.name                                                                 AS nameObs,
                 CASE
                   WHEN N.tipo = 0  THEN 'VENDA NF'
                   WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
@@ -312,6 +315,8 @@ FROM
               ON CCli.no = custnoCli
     LEFT JOIN sqldados.custp         AS CMuda
               ON CMuda.no = custnoMuda
+    LEFT JOIN sqldados.custp         AS CObs
+              ON CObs.no = custnoObs
 WHERE (@PESQUISA = '' OR I.invno = @PESQUISANUM OR I.loja = @PESQUISANUM OR I.notaFiscal LIKE @PESQUISASTART OR
        I.vendno = @PESQUISANUM OR I.fornecedor LIKE @PESQUISALIKE OR nfVenda LIKE @PESQUISASTART OR
        IFNULL(I.custnoVend, N.custno) = @PESQUISANUM OR IFNULL(I.cliente, C.name) LIKE @PESQUISALIKE OR

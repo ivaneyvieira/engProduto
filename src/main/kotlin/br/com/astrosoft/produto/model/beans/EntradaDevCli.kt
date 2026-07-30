@@ -64,10 +64,12 @@ class EntradaDevCli(
   var cancelado: Boolean?,
   var custnoCli: Int?,
   var custnoMuda: Int?,
+  var custnoObs: Int?,
   var saldoDevolucaoCli: Double?,
   var saldoDevolucaoMuda: Double?,
   var nameCli: String?,
-  var nameMuda: String?
+  var nameMuda: String?,
+  var nameObs: String?,
 ) {
   val remarksLinha1: String
     get() = remarks?.rpad(80, " ")?.substring(0, 40)?.trim() ?: ""
@@ -123,13 +125,6 @@ class EntradaDevCli(
     get() {
       val parte2 = remarks?.split(")")?.getOrNull(1) ?: return ""
       return parte2.trim()
-    }
-
-  val cliMuda: Int
-    get() {
-      val regexp = "MUDA +P* +CLI *([0-9]+)"
-      val matchResult = regexp.toRegex().find(tipoObs)
-      return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
     }
 
   fun produtos(): List<EntradaDevCliPro> {
@@ -375,6 +370,10 @@ class EntradaDevCli(
 
   fun update() {
     saci.updateNotaVenda(this)
+  }
+
+  fun desfazSolicitacao() {
+    saci.desfazSolidcitacaoDevolucao(this)
   }
 
   companion object {

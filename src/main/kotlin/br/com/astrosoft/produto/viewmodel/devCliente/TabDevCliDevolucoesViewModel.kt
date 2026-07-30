@@ -396,7 +396,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     nota.produtoTrocaEnum = null
     nota.userSolicitacao = null
     nota.motivoTroca = null
-    nota.update()
+    nota.desfazSolicitacao()
 
     updateView()
   }
