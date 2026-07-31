@@ -118,6 +118,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
     edtMotivo = select("Motivo:") {
       this.isReadOnly = readOnly
       this.setItems(EMotivoTroca.entries)
+      this.value = nota.setMotivoTroca.firstOrNull()
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "10rem"
     }

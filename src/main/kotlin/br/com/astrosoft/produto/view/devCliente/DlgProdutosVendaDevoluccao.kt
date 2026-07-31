@@ -36,7 +36,11 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, val nota: NotaVenda) {
+class DlgProdutosVendaDevoluccao(
+  val viewModel: TabDevCliDevolucoesViewModel,
+  val nota: NotaVenda,
+  val notaAssinada: Boolean
+) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
 
@@ -295,36 +299,35 @@ class DlgProdutosVendaDevoluccao(val viewModel: TabDevCliDevolucoesViewModel, va
   }
 
   fun update(): List<ProdutoNFS> {
+    val produtosDev = nota.produtosDevolucao()
+
     val pesquisa = edtPesquisa?.value.orEmpty()
-    val listProdutos = nota.produtos().expande().filter { prd ->
+    val listProdutosVenda = nota.produtos().expande().filter { prd ->
       pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
       (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
       (prd.barcodeStrList ?: "").contains(pesquisa) ||
       (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
     }.sortedWith(compareBy({ (it.dev ?: false).not() }, { -(it.ni ?: 0) }))
 
-    if (listProdutos.any { it.dev == true && it.ni == nota.ni }.not()) {
-      val produtosDev = nota.produtosDevolucao()
-      listProdutos.filter {
-        it.dev == false
-      }.forEach { prdNF ->
-        produtosDev.firstOrNull { prd ->
-          prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
-        }?.let { prd ->
-          prdNF.ni = prd.invno
-          prdNF.quantidadeDev = prd.quantidadeDev
-        }
+    listProdutosVenda.filter {
+      it.dev == false && !notaAssinada
+    }.forEach { prdNF ->
+      produtosDev.firstOrNull { prd ->
+        prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
+      }?.let { prd ->
+        prdNF.ni = prd.invno
+        prdNF.quantidadeDev = prd.quantidadeDev
       }
     }
 
-    gridDetail.setItems(listProdutos)
+    gridDetail.setItems(listProdutosVenda)
     updateNota()
 
-    val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
+    val totalValor = listProdutosVenda.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
 
-    return listProdutos
+    return listProdutosVenda
   }
 
   fun produtos(): List<ProdutoNFS> {

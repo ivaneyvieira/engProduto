@@ -192,11 +192,16 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         DialogHelper.showWarning("Nota de autorização não localizada")
       } else {
         val notaLocalizada = notasAutoriza.firstOrNull() ?: return
+        notaLocalizada.solicitacaoTrocaEnnum = nota.solicitacaoTrocaEnnum
+        notaLocalizada.produtoTrocaEnum = nota.produtoTrocaEnum
+        notaLocalizada.nfEntRet = nota.nfEntRet
+        notaLocalizada.setMotivoTroca = nota.setMotivoTroca
 
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showWarning("Solicitação não autorizada")
         } else {
-          dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
+          val notaAssinada = nota.loginAutorizacao.isNullOrBlank().not()
+          dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada, notaAssinada)
           dlgProduto?.showDialog {
             viewModel.updateView()
           }
