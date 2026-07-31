@@ -196,6 +196,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         notaLocalizada.produtoTrocaEnum = nota.produtoTrocaEnum
         notaLocalizada.nfEntRet = nota.nfEntRet
         notaLocalizada.setMotivoTroca = nota.setMotivoTroca
+        notaLocalizada.loginSolicitacao = nota.loginSolicitacao
 
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showWarning("Solicitação não autorizada")

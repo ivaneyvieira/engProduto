@@ -308,18 +308,21 @@ class DlgProdutosVendaDevoluccao(
       (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
     }.sortedWith(compareBy({ (it.dev ?: false).not() }, { -(it.ni ?: 0) }))
 
-    val produtoVendaDev = listProdutosVenda.filter { it.dev == true }.map { "${it.prdno ?: ""} ${it.grade ?: ""}" }
+    val listaChaveDev = produtosDev.map { "${it.prdno ?: ""} ${it.grade ?: ""}" }.distinct().toSet()
 
-    listProdutosVenda.filter {
-      val chave = "${it.prdno ?: ""} ${it.grade ?: ""}"
-      it.dev == false && !notaAssinada && chave !in produtoVendaDev
-    }.forEach { prdNF ->
-      produtosDev.firstOrNull { prd ->
-
-        prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
-      }?.let { prd ->
-        prdNF.ni = prd.invno
-        prdNF.quantidadeDev = prd.quantidadeDev
+    if( notaAssinada.not()) {
+      listProdutosVenda.filter {
+        val chave = "${it.prdno ?: ""} ${it.grade ?: ""}"
+        (it.dev == false) && (chave in listaChaveDev)
+      }.forEach { prdNF ->
+        produtosDev.firstOrNull { prd ->
+          prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
+        }?.let { prd ->
+          prdNF.ni = prd.invno
+          prdNF.quantDev = prd.quantidadeDev
+          prdNF.quantidadeDev = prd.quantidadeDev
+          prdNF.dataNi = prd.data
+        }
       }
     }
 

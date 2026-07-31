@@ -204,7 +204,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
         val list = ent.value
         val prd = ent.value.firstOrNull()
         val quantDev = list.sumOf { it.quantDev ?: 0 }
-        val quantNotaDev = prd?.quantidadeDev ?: 0
+        val quantNotaDev = prd?.quantDev ?: 0
         if (quantDev != quantNotaDev) {
           fail("Quantidade informada é diferente da nota de devolução")
         }
