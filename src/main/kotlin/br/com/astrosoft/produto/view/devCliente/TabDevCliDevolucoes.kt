@@ -108,27 +108,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if (nota.loginSolicitacao.isNullOrBlank()) {
-        DialogHelper.showWarning("Devolução sem autorização")
-      } else {
-        val notasAutoriza = nota.notaAutoriza().filter { venda ->
-          venda.ni == nota.invno
-        }
-        if (notasAutoriza.isEmpty()) {
-          DialogHelper.showWarning("Nota de autorização não localizada")
-        } else {
-          val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
-
-          if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
-            DialogHelper.showWarning("Solicitação não autorizada")
-          } else {
-            dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
-            dlgProduto?.showDialog {
-              viewModel.updateView()
-            }
-          }
-        }
-      }
+      execProduto(nota)
     }
 
     addColumnButton(
@@ -136,29 +116,12 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       tooltip = "Autoriza Solicitação",
       header = "Solicitação"
     ) { nota: EntradaDevCli ->
-      val form = FormSolicitacaoDevolucaoTroca(nota)
-
-      DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
-        val result = form.validaFiltro()
-        result.onFailure {
-          DialogHelper.showWarning(it.message ?: "Erro no filtro")
-        }
-        result.onSuccess { solicitacaoTroca ->
-          val solicitacaoTroca: SolicitacaoTroca = solicitacaoTroca
-          viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
-        }
-      }
+      execSolicitacoes(nota)
     }
 
     if (user?.defazSolicitacao == true) {
       addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota: EntradaDevCli ->
-        if (nota.loginSolicitacao.isNullOrBlank()) {
-          DialogHelper.showError("Não existe solicitação para desfazer")
-        } else {
-          DialogHelper.showQuestion("Desfaz a solicitação?") {
-            viewModel.desfazSolicitacao(nota)
-          }
-        }
+        execDesfazSolicitacoes(nota)
       }
     }
 
@@ -191,6 +154,55 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     columnGrid(EntradaDevCli::custnoVend, header = "Cód Cliente")
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
+  }
+
+  private fun execDesfazSolicitacoes(nota: EntradaDevCli) {
+    if (nota.loginSolicitacao.isNullOrBlank()) {
+      DialogHelper.showError("Não existe solicitação para desfazer")
+    } else {
+      DialogHelper.showQuestion("Desfaz a solicitação?") {
+        viewModel.desfazSolicitacao(nota)
+      }
+    }
+  }
+
+  private fun execSolicitacoes(nota: EntradaDevCli) {
+    val form = FormSolicitacaoDevolucaoTroca(nota)
+
+    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+      val result = form.validaFiltro()
+      result.onFailure {
+        DialogHelper.showWarning(it.message ?: "Erro no filtro")
+      }
+      result.onSuccess { solicitacaoTroca ->
+        val solicitacaoTroca: SolicitacaoTroca = solicitacaoTroca
+        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+      }
+    }
+  }
+
+  private fun execProduto(nota: EntradaDevCli) {
+    if (nota.loginSolicitacao.isNullOrBlank()) {
+      DialogHelper.showWarning("Devolução sem autorização")
+    } else {
+      val notasAutoriza = nota.notaAutoriza().filter { venda ->
+        venda.ni == nota.invno
+      }
+      if (notasAutoriza.isEmpty()) {
+        DialogHelper.showWarning("Nota de autorização não localizada")
+      } else {
+        val notaLocalizada = notasAutoriza.firstOrNull() ?: return
+
+        if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
+          DialogHelper.showWarning("Solicitação não autorizada")
+        } else {
+          dlgProduto = DlgProdutosVendaDevoluccao(viewModel, notaLocalizada)
+          dlgProduto?.showDialog {
+            viewModel.updateView()
+          }
+        }
+      }
+    }
   }
 
   override fun filtro(): FiltroEntradaDevCli {
