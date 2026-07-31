@@ -303,9 +303,8 @@ class EntradaDevCli(
   }
 
   fun naoLiberado(): Boolean {
-    val nota = notaAutoriza().firstOrNull() ?: return true
-    val tipo = nota.solicitacaoTrocaEnnum ?: return true
-    val produto = nota.produtoTrocaEnum ?: return true
+    val tipo = this.solicitacaoTrocaEnnum ?: return true
+    val produto = this.produtoTrocaEnum ?: return true
     val tipoOk = tipo == ESolicitacaoTroca.Estorno ||
                  tipo == ESolicitacaoTroca.MudaCliente ||
                  tipo == ESolicitacaoTroca.Reembolso ||

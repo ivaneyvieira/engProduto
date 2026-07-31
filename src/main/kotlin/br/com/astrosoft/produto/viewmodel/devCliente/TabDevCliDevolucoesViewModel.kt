@@ -192,6 +192,10 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
 
   fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
+      if (produtos.any { !(it.dev ?: false) && (it.ni ?: 0) > 0 }) {
+        fail("Falta selecionar produto")
+      }
+
       produtos.filter { prd ->
         prd.ni == nota.ni && prd.dev == true
       }.groupBy { prd ->

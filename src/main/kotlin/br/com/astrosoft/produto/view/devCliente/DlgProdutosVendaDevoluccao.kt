@@ -239,7 +239,6 @@ class DlgProdutosVendaDevoluccao(
           val novoItens = itens.toMutableList()
           novoItens.add(pos, copyBean)
 
-
           this.setItems(novoItens)
         }
       }
@@ -309,10 +308,14 @@ class DlgProdutosVendaDevoluccao(
       (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
     }.sortedWith(compareBy({ (it.dev ?: false).not() }, { -(it.ni ?: 0) }))
 
+    val produtoVendaDev = listProdutosVenda.filter { it.dev == true }.map { "${it.prdno ?: ""} ${it.grade ?: ""}" }
+
     listProdutosVenda.filter {
-      it.dev == false && !notaAssinada
+      val chave = "${it.prdno ?: ""} ${it.grade ?: ""}"
+      it.dev == false && !notaAssinada && chave !in produtoVendaDev
     }.forEach { prdNF ->
       produtosDev.firstOrNull { prd ->
+
         prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
       }?.let { prd ->
         prdNF.ni = prd.invno
