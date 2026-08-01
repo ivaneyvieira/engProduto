@@ -30,7 +30,7 @@ WHERE (numero = :numero OR :numero = -1)
   AND (data <= :dataFinal OR :dataFinal = 0)
   AND (CASE :status
          WHEN 'T' THEN TRUE
-         WHEN 'G' THEN IFNULL(M.noGravado, 0) = 0
+         WHEN 'G' THEN IFNULL(M.noGravado, 0) > 0 && IFNULL(M.noGravado, 0) = 0 && IFNULL(M.noEntregue, 0) = 0
          WHEN 'E' THEN IFNULL(M.noGravado, 0) > 0 && IFNULL(M.noEntregue, 0) = 0
          WHEN 'R' THEN IFNULL(M.noGravado, 0) > 0 && IFNULL(M.noEntregue, 0) > 0 && IFNULL(M.noRecebido, 0) = 0
                   ELSE FALSE
