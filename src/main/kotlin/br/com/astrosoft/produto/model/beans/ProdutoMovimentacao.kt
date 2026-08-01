@@ -247,6 +247,7 @@ enum class ERota(val numero: Int, val descricao: String) {
 }
 
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
+  GRAVADO("G", "Gravado"),
   ENTREGUE("E", "Entregue"),
   RECEBIDO("R", "Recebido"),
   TODOS("T", "Todos")

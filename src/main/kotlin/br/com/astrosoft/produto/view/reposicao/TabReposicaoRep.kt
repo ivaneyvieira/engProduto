@@ -83,7 +83,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      this.value = EStatusMovimentacao.TODOS
+      this.value = EStatusMovimentacao.GRAVADO
       this.addValueChangeListener {
         viewModel.updateView()
       }

@@ -23,16 +23,16 @@ SELECT M.numero,
        SEC_TO_TIME(horaEntrege)                               AS horaEntrege,
        CAST(IF(dataRecebido = 0, NULL, dataRecebido) AS date) AS dataRecebido,
        SEC_TO_TIME(horaRecebido)                              AS horaRecebido
-FROM
-  sqldados.produtoMovimentacao AS M
+FROM sqldados.produtoMovimentacao AS M
 WHERE (numero = :numero OR :numero = -1)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
   AND (data <= :dataFinal OR :dataFinal = 0)
   AND (CASE :status
          WHEN 'T' THEN TRUE
-         WHEN 'E' THEN IFNULL(M.noEntregue, 0) = 0 && IFNULL(M.noRecebido, 0) = 0
-         WHEN 'R' THEN IFNULL(M.noEntregue, 0) > 0 && IFNULL(M.noRecebido, 0) = 0
+         WHEN 'G' THEN IFNULL(M.noGravado, 0) = 0
+         WHEN 'E' THEN IFNULL(M.noGravado, 0) > 0 && IFNULL(M.noEntregue, 0) = 0
+         WHEN 'R' THEN IFNULL(M.noGravado, 0) > 0 && IFNULL(M.noEntregue, 0) > 0 && IFNULL(M.noRecebido, 0) = 0
                   ELSE FALSE
        END);
 
