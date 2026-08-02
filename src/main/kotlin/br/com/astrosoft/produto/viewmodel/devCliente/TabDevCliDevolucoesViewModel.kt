@@ -196,16 +196,10 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
         fail("Falta selecionar produto")
       }
 
-      produtos.filter { prd ->
-        prd.ni == nota.ni && prd.dev == true
-      }.groupBy { prd ->
-        "${prd.prdno}-${prd.grade}"
-      }.map { ent ->
-        val list = ent.value
-        val prd = ent.value.firstOrNull()
-        val quantDev = list.sumOf { it.quantDev ?: 0 }
-        val quantNotaDev = prd?.quantDev ?: 0
-        if (quantDev != quantNotaDev) {
+      produtos.forEach {
+        val quantidade = it.quantidade ?: 0
+        val quantDev = it.quantDev ?: 0
+        if(quantDev > quantidade) {
           fail("Quantidade informada é diferente da nota de devolução")
         }
       }

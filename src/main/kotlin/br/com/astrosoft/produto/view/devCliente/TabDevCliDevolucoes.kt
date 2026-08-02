@@ -185,8 +185,9 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     if (nota.loginSolicitacao.isNullOrBlank()) {
       DialogHelper.showWarning("Devolução sem autorização")
     } else {
-      val notasAutoriza = nota.notaAutoriza().filter { venda ->
-        venda.ni == nota.invno
+      val lista = nota.notaAutoriza()
+      val notasAutoriza = lista.filter { venda ->
+        venda.ni == nota.invno || venda.ni == 0
       }
       if (notasAutoriza.isEmpty()) {
         DialogHelper.showWarning("Nota de autorização não localizada")

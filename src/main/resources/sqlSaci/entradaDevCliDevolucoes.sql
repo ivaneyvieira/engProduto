@@ -293,9 +293,9 @@ FROM
     LEFT JOIN T_ENTREGA              AS EF
               ON EF.lojaE = I.storeno AND EF.pdvE = I.pdvno AND EF.transacaoE = I.xano
     LEFT JOIN sqldados.nfAutorizacao AS AT
-              ON AT.storeno = IFNULL(EF.loja, IFNULL(I.storeno, N.storeno)) AND
-                 AT.pdvno = IFNULL(EF.pdv, IFNULL(I.pdvno, N.pdvno)) AND
-                 AT.xano = IFNULL(EF.transacao, IFNULL(I.xano, N.xano)) AND (AT.invno = I.invno)
+              ON AT.storeno = IFNULL(IFNULL(I.storeno, N.storeno), EF.loja) AND
+                 AT.pdvno = IFNULL(IFNULL(I.pdvno, N.pdvno), EF.pdv) AND
+                 AT.xano = IFNULL(IFNULL(I.xano, N.xano), EF.transacao) AND (AT.invno = I.invno)
     LEFT JOIN sqldados.nfAutorizacao AS ATV
               ON ATV.storeno = I.lojaVenda AND ATV.pdvno = I.pdvVenda AND ATV.xano = I.xanoVenda AND
                  (ATV.invno = I.invno)

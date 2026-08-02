@@ -265,16 +265,15 @@ class EntradaDevCli(
   }
 
   fun notaAutoriza(): List<NotaVenda> {
-    val user = AppConfig.userLogin() as? UserSaci
     val filtro = FiltroNotaVenda(
       loja = storenoAutorizacao ?: loja,
       pdv = pdvnoAutorizacao ?: 0,
       transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
       invno = 0,
-      dataInicial = user?.dataVendaDevolucao,
-      dataFinal = nfData,
-      dataCorte = user?.dataVendaDevolucao
+      dataInicial = null,
+      dataFinal = null,
+      dataCorte = dataVenda?.minusDays(180),
     )
     return NotaVenda.findAll(filtro)
   }

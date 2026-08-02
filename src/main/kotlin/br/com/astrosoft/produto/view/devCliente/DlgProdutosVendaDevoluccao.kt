@@ -310,7 +310,7 @@ class DlgProdutosVendaDevoluccao(
 
     val listaChaveDev = produtosDev.map { "${it.prdno ?: ""} ${it.grade ?: ""}" }.distinct().toSet()
 
-    if( notaAssinada.not()) {
+    if (notaAssinada.not()) {
       listProdutosVenda.filter {
         val chave = "${it.prdno ?: ""} ${it.grade ?: ""}"
         (it.dev == false) && (chave in listaChaveDev)
@@ -326,14 +326,24 @@ class DlgProdutosVendaDevoluccao(
       }
     }
 
-    gridDetail.setItems(listProdutosVenda)
+    val listProdutosVendaFiltro = if (notaAssinada) {
+      listProdutosVenda.filter {
+        it.dev == true && it.ni == nota.ni
+      }
+    } else {
+      listProdutosVenda.filter {
+        it.ni == nota.ni
+      }
+    }
+
+    gridDetail.setItems(listProdutosVendaFiltro)
     updateNota()
 
-    val totalValor = listProdutosVenda.sumOf { it.total ?: 0.0 }
+    val totalValor = listProdutosVendaFiltro.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
 
-    return listProdutosVenda
+    return listProdutosVendaFiltro
   }
 
   fun produtos(): List<ProdutoNFS> {
