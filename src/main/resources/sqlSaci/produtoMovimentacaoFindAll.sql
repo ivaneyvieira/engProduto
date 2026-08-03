@@ -117,5 +117,6 @@ FROM
     LEFT JOIN T_LOC_APP      AS L
               ON L.storeno = A.numloja AND L.prdno = A.prdno AND L.grade = A.grade
 WHERE numero > 0
+  AND TRIM(A.prdno) != ''
 HAVING (@PESQUISA = '' OR numero LIKE @PESQUISA OR lojaSigla LIKE @PESQUISA OR recebido LIKE @PESQUISA_LIKE OR
         entregue LIKE @PESQUISA_LIKE OR gravadoLogin LIKE @PESQUISA_LIKE)
