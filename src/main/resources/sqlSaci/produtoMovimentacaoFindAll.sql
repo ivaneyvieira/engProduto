@@ -10,6 +10,7 @@ CREATE TEMPORARY TABLE T_ACERTO
 )
 SELECT M.numero,
        M.numloja,
+       M.numloja                                              AS storeno,
        M.data,
        M.hora,
        M.prdno,
@@ -52,18 +53,27 @@ GROUP BY prdno, grade;
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
 (
-  PRIMARY KEY (prdno, grade)
+  PRIMARY KEY (storeno, prdno, grade)
 )
-SELECT prdno                                                                                    AS prdno,
-       grade                                                                                    AS grade,
-       SUM(ROUND(IF(storeno = 4, qtty_varejo + qtty_atacado, 0) / 1000))                        AS estCD,
-       SUM(ROUND(IF(storeno = :numLoja OR :numLoja = 0, qtty_varejo + qtty_atacado, 0) / 1000)) AS estSis
+SELECT storeno, prdno AS prdno, grade AS grade, SUM(ROUND((qtty_varejo + qtty_atacado) / 1000)) AS estSis
 FROM
   sqldados.stk
     INNER JOIN T_PRD
                USING (prdno, grade)
 WHERE storeno IN (2, 3, 4, 5, 8)
-GROUP BY prdno, grade;
+  AND (storeno = :numLoja OR :numLoja = 0)
+GROUP BY storeno, prdno, grade;
+
+DROP TEMPORARY TABLE IF EXISTS T_KARDEC;
+CREATE TEMPORARY TABLE T_KARDEC
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT storeno, prdno AS prdno, grade AS grade, SUM(kardec) AS estCD
+FROM sqldados.prdAdicional
+WHERE storeno IN (2, 3, 4, 5, 8)
+  AND (storeno = :numLoja OR :numLoja = 0)
+GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
 CREATE TEMPORARY TABLE T_LOC_APP
@@ -121,7 +131,7 @@ SELECT numero                   AS numero,
        ER.name                  AS recebidoNome,
        A.movimentacao           AS movimentacao,
        A.estoque                AS estoque,
-       IFNULL(STK.estCD, 0)     AS estCD,
+       IFNULL(KD.estCD, 0)      AS estCD,
        IFNULL(STK.estSis, 0)    AS estSis,
        A.noRota                 AS noRota,
        dataEntrege              AS dataEntrege,
@@ -132,6 +142,8 @@ SELECT numero                   AS numero,
 FROM
   T_ACERTO                   AS A
     LEFT JOIN T_STK          AS STK
+              USING (storeno, prdno, grade)
+    LEFT JOIN T_KARDEC       AS KD
               USING (prdno, grade)
     LEFT JOIN sqldados.users AS UL
               ON UL.no = A.noLogin
