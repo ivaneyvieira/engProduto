@@ -179,31 +179,6 @@ class LinhaProduto(
       }
     }
 
-    edtGrade = select("Grade") {
-      if (index > 0) this.label = ""
-      this.width = "120px"
-
-      this.addValueChangeListener { event ->
-        val grade = event.value
-        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
-      }
-    }
-
-    edtMovimentacao = integerField("Quant") {
-      if (index > 0) this.label = ""
-      this.width = "100px"
-      this.isClearButtonVisible = true
-      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-      this.valueChangeMode = ValueChangeMode.LAZY
-      this.valueChangeTimeout = 1000
-
-      this.addValueChangeListener {
-        if(it.isFromClient){
-         selecionaLinha(index + 1)
-        }
-      }
-    }
-
     edtCodigoBarras = textField("Código de Barras") {
       if (index > 0) this.label = ""
       this.width = "8rem"
@@ -231,6 +206,31 @@ class LinhaProduto(
               edtMovimentacao.focus()
             }
           }
+        }
+      }
+    }
+
+    edtGrade = select("Grade") {
+      if (index > 0) this.label = ""
+      this.width = "120px"
+
+      this.addValueChangeListener { event ->
+        val grade = event.value
+        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
+      }
+    }
+
+    edtMovimentacao = integerField("Quant") {
+      if (index > 0) this.label = ""
+      this.width = "100px"
+      this.isClearButtonVisible = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1000
+
+      this.addValueChangeListener {
+        if(it.isFromClient){
+         selecionaLinha(index + 1)
         }
       }
     }
