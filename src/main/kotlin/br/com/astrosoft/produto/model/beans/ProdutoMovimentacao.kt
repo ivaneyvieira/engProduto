@@ -32,6 +32,8 @@ class ProdutoMovimentacao(
   var recebidoNome: String? = null,
   var movimentacao: Int? = null,
   var estoque: Int? = null,
+  var estCD: Int? = null,
+  var estSis: Int? = null,
   var noRota: Int? = null,
   var dataEntrege: LocalDate? = null,
   var horaEntrege: LocalTime? = null,
@@ -239,6 +241,7 @@ class Movimentacao(
 enum class ERota(val numero: Int, val descricao: String) {
   CD_LJ(0, "CD-LJ"),
   LJ_CD(1, "LJ-CD"),
+
   //Rota42, Rota43, Rota45, Rota48
   ROTA42(42, "CD-LJ2"),
   ROTA43(43, "CD-LJ3"),

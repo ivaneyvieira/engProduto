@@ -245,7 +245,9 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       columnGrid(ProdutoMovimentacao::codFor, "For", width = "5rem")
       columnGrid(ProdutoMovimentacao::localAbrev, "Loc App", width = "5rem")
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
-      columnGrid(ProdutoMovimentacao::estoque, "Estoque", width = "5rem")
+      columnGrid(ProdutoMovimentacao::estCD, "Est CD", width = "5rem")
+      columnGrid(ProdutoMovimentacao::estSis, "Est Sist", width = "5rem")
+      //columnGrid(ProdutoMovimentacao::estoque, "Estoque", width = "5rem")
 
       this.setPartNameGenerator { produto ->
         val entregue = produto.noEntregue ?: 0
