@@ -333,7 +333,8 @@ class DlgProdutosVendaDevolucao(
     } else {
       listProdutosVenda.filter {
         it.ni == nota.ni
-      }
+      }.sortedBy { it.seq ?: 0 }
+        .distinctBy { "${it.prdno ?: ""} ${it.grade ?: ""} ${it.ni ?: 0}" }
     }
 
     gridDetail.setItems(listProdutosVendaFiltro)
