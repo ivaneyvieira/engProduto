@@ -266,6 +266,7 @@ class EntradaDevCli(
   fun notaAutoriza(): List<NotaVenda> {
     val data = dataVenda ?: LocalDate.now()
     val dataCorte = data?.minusDays(30) ?: return emptyList()
+    val dataInicial = data.minusDays(7)
 
 
     val filtroDefault = FiltroNotaVenda(
@@ -274,7 +275,7 @@ class EntradaDevCli(
       transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
       invno = 0,
-      dataInicial = null,
+      dataInicial = dataInicial,
       dataFinal = null,
       dataCorte = dataCorte,
     )
@@ -292,7 +293,7 @@ class EntradaDevCli(
       transacao = dePara.transacaoE ?: 0,
       pesquisa = "",
       invno = 0,
-      dataInicial = null,
+      dataInicial = dataInicial,
       dataFinal = null,
       dataCorte = dataCorte,
     )
@@ -304,7 +305,7 @@ class EntradaDevCli(
         transacao = dePara.transacao ?: 0,
         pesquisa = "",
         invno = 0,
-        dataInicial = null,
+        dataInicial = dataInicial,
         dataFinal = null,
         dataCorte = dataCorte,
       )
