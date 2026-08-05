@@ -1,0 +1,356 @@
+package br.com.astrosoft.produto.view.devCliente
+
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.view.vaadin.SubWindowForm
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFBarcode
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFCodigo
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDescricao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFDev
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFGrade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFLocalizacao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFNI
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFNIData
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoTotal
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFPrecoUnitario
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantDevNI
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidade
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFQuantidadeDevolucao
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
+import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
+import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
+import com.github.mvysny.kaributools.getColumnBy
+import com.vaadin.flow.component.Html
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.data.value.ValueChangeMode
+
+class DlgProdutosVendaDevolucaoNovo(
+  val viewModel: TabDevCliDevolucoesViewModel,
+  val nota: NotaVenda,
+  val notaAssinada: Boolean
+) {
+  private var form: SubWindowForm? = null
+  private val gridDetail = Grid(ProdutoNFS::class.java, false)
+
+  private var edtPesquisa: TextField? = null
+  private var edtTipo: Select<ESolicitacaoTroca>? = null
+  private var edtProduto: Select<EProdutoTroca>? = null
+  private var edtNotaEntRet: IntegerField? = null
+  private var edtMotivo: Select<EMotivoTroca>? = null
+
+  fun showDialog(onClose: () -> Unit) {
+    val readOnly = false
+    val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
+    val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
+      "NÃO INFORMADO"
+    else
+      nota.nomeCliente
+    val linha1 =
+        "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
+    val linha2 =
+        "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+    form = SubWindowForm(
+      title = "$linha1|$linha2",
+      toolBar = {
+        val user = AppConfig.userLogin() as? UserSaci
+
+        edtPesquisa = textField("Pesquisa") {
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            update()
+          }
+        }
+        edtTipo = select("Tipo") {
+          this.isReadOnly = readOnly
+          val tipos = ESolicitacaoTroca.entries
+          this.setItems(tipos)
+          this.value = nota.solicitacaoTrocaEnnum
+          this.isReadOnly = true
+          this.setItemLabelGenerator { item -> item.descricao }
+          this.width = "10rem"
+        }
+
+        edtProduto = select("Produto") {
+          this.isReadOnly = readOnly
+          val produtoTrocas = EProdutoTroca.entries
+          this.setItems(produtoTrocas)
+          this.value = nota.produtoTrocaEnum
+          this.isReadOnly = true
+          this.setItemLabelGenerator { item -> item.descricao }
+          this.width = "10rem"
+        }
+
+        if (nota.tipoNf == "ENTRE FUT") {
+          edtNotaEntRet = integerField("NF Ent Fut") {
+            this.isReadOnly = readOnly
+            this.width = "6rem"
+            this.isAutoselect = true
+            val nfNumero = nota.notaEntrega?.split("/")?.getOrNull(0)?.toIntOrNull() ?: 0
+            this.value = nfNumero
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeMode = ValueChangeMode.LAZY
+
+            viewModel.salvaNfEntRet(nota, nfNumero)
+
+            addValueChangeListener {
+              if (it.isFromClient) {
+                viewModel.salvaNfEntRet(nota, this.value)
+              }
+            }
+          }
+        }
+
+        edtMotivo = select("Motivo:") {
+          this.isReadOnly = readOnly
+          this.setItems(EMotivoTroca.entries)
+          this.value = nota.setMotivoTroca.firstOrNull()
+          this.isReadOnly = true
+          this.setItemLabelGenerator { item -> item.descricao }
+          this.width = "10rem"
+        }
+
+        button("Assina Troca") {
+          this.icon = VaadinIcon.SIGN_IN.create()
+          this.isEnabled = !readOnly
+
+          onClick {
+            nota.solicitacaoTrocaEnnum = edtTipo?.value
+            nota.produtoTrocaEnum = edtProduto?.value
+            nota.nfEntRet = edtNotaEntRet?.value ?: 0
+            nota.setMotivoTroca = setOf(edtMotivo?.value).filterNotNull().toSet()
+            val produtos: List<ProdutoNFS> = gridDetail.dataProvider.fetchAll().filterNotNull()
+
+            val user = AppConfig.userLogin() as? UserSaci
+
+            val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
+
+            if (validacao) {
+              val formAutoriza = FormAutoriza()
+              DialogHelper.showForm(caption = "Autoriza Devolução", form = formAutoriza) {
+                viewModel.autorizaNotaVenda(nota, produtos, formAutoriza.login, formAutoriza.senha)
+              }
+            }
+          }
+        }
+      },
+      onClose = {
+        onClose()
+      }) {
+      HorizontalLayout().apply {
+        setSizeFull()
+        createGridProdutos()
+      }
+    }
+    form?.open()
+  }
+
+  private fun updateNota() {
+    edtTipo?.value = nota.solicitacaoTrocaEnnum
+    edtProduto?.value = nota.produtoTrocaEnum
+    edtNotaEntRet?.value = nota.nfEntRet
+    edtMotivo?.value = nota.setMotivoTroca.firstOrNull()
+  }
+
+  private fun HorizontalLayout.createGridProdutos() {
+    gridDetail.apply {
+      this.addClassName("styling")
+      setSizeFull()
+      addThemeVariants(GridVariant.LUMO_COMPACT)
+      isMultiSort = false
+      selectionMode = Grid.SelectionMode.NONE
+
+      this.addItemClickListener {
+        when (it.column.key) {
+          ProdutoNFS::dev.name                               -> {
+            val itensDev = nota.produtosDevolucao()
+            itensDev.filter { dev ->
+              dev.prdno == it.item.prdno && dev.grade == it.item.grade
+            }.ifEmpty {
+              DialogHelper.showWarning("Este produto não está presente na nota de devolução")
+              return@addItemClickListener
+            }
+            it.item.dev = !(it.item.dev ?: false)
+            if (it.item.dev == true) {
+              it.item.temProduto = true
+            } else {
+              it.item.temProduto = null
+              it.item.quantDev = it.item.quantidade
+            }
+            this.dataProvider.refreshAll()
+          }
+
+          ProdutoNFS::temProduto.name if it.item.dev == true -> {
+            it.item.temProduto = !(it.item.temProduto ?: false)
+            this.dataProvider.refreshAll()
+          }
+
+          ProdutoNFS::quantDev.name if it.item.dev == true   -> {
+            this.editor.editItem(it.item)
+            this.focusEditor(ProdutoNFS::quantDev)
+          }
+        }
+      }
+
+      this.editor.addCloseListener {
+        val bean = it.item
+        val itens = gridDetail.dataProvider.fetchAll().filterNotNull()
+        itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.forEachIndexed { index, item ->
+          item.seq = index + 1
+        }
+        val quantDev = itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.sumOf { item ->
+          item.quantDev ?: 0
+        }
+        val lastSeq = itens.filter { item ->
+          item.prdno == bean.prdno && item.grade == bean.grade
+        }.maxOfOrNull { item -> item.seq ?: 0 } ?: 0
+        val quantidade = bean.quantidade ?: 0
+        val dif = quantidade - quantDev
+        if (dif > 0) {
+          val copyBean = bean.copy(
+            quantDev = dif,
+            dev = false,
+            temProduto = false,
+            seq = lastSeq + 1
+          )
+          val pos = itens.indexOf(bean).let { index ->
+            if (index == -1) {
+              itens.size
+            } else {
+              index + 1
+            }
+          }
+          val novoItens = itens.toMutableList()
+          novoItens.add(pos, copyBean)
+
+          this.setItems(novoItens)
+        }
+      }
+
+      val user = AppConfig.userLogin() as? UserSaci
+
+      produtoNFDev()
+      produtoNFTemProduto()
+      produtoNFQuantidadeDevolucao().integerFieldEditor()
+      produtoNFNI()
+      produtoNFNIData()
+      if (user?.desautorizaDev == true) {
+        addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
+          viewModel.desautorizaTroca(nota, produto)
+        }
+      }
+      produtoNFCodigo()
+      produtoNFDescricao()
+      produtoNFGrade()
+      produtoNFBarcode()
+      produtoAutorizacaoExp()
+      produtoNFLocalizacao()
+      produtoNFQuantidade()
+      produtoNFPrecoUnitario().apply {
+        this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
+      }
+      produtoNFPrecoTotal()
+      produtoNFSeq()
+      produtoNFQuantDevNI()
+
+      this.setPartNameGenerator {
+        val marca = it.marca
+        val marcaImpressao = it.marcaImpressao ?: 0
+        when {
+          marcaImpressao > 0          -> "azul"
+          marca == EMarcaNota.CD.num  -> "amarelo"
+          marca == EMarcaNota.ENT.num -> "amarelo"
+          else                        -> null
+        }
+      }
+    }
+    this.addAndExpand(gridDetail)
+
+    update()
+
+    gridDetail.setPartNameGenerator {
+      if (it.dev == true) {
+        "amarelo"
+      } else {
+        null
+      }
+    }
+  }
+
+  fun itensSelecionados(): List<ProdutoNFS> {
+    return gridDetail.selectedItems.toList()
+  }
+
+  fun update(): List<ProdutoNFS> {
+    val produtosDev = nota.produtosDevolucao()
+
+    val pesquisa = edtPesquisa?.value.orEmpty()
+    val listProdutosVenda = nota.produtos().expande().filter { prd ->
+      pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
+      (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
+      (prd.barcodeStrList ?: "").contains(pesquisa) ||
+      (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
+    }.sortedWith(compareBy({ (it.dev ?: false).not() }, { -(it.ni ?: 0) }))
+
+    val listaChaveDev = produtosDev.map { "${it.prdno ?: ""} ${it.grade ?: ""}" }.distinct().toSet()
+
+    if (notaAssinada.not()) {
+      listProdutosVenda.filter {
+        val chave = "${it.prdno ?: ""} ${it.grade ?: ""}"
+        (it.dev == false) && (chave in listaChaveDev)
+      }.forEach { prdNF ->
+        produtosDev.firstOrNull { prd ->
+          prd.prdno == prdNF.prdno && prd.grade == prdNF.grade
+        }?.let { prd ->
+          prdNF.ni = prd.invno
+          prdNF.quantDev = prd.quantidadeDev
+          prdNF.quantidadeDev = prd.quantidadeDev
+          prdNF.dataNi = prd.data
+        }
+      }
+    }
+
+    val listProdutosVendaFiltro = if (notaAssinada) {
+      listProdutosVenda.filter {
+        it.dev == true && it.ni == nota.ni
+      }
+    } else {
+      listProdutosVenda.filter {
+        it.ni == nota.ni
+      }
+    }
+
+    gridDetail.setItems(listProdutosVendaFiltro)
+    updateNota()
+
+    val totalValor = listProdutosVendaFiltro.sumOf { it.total ?: 0.0 }
+    val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
+    totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
+
+    return listProdutosVendaFiltro
+  }
+
+  fun produtos(): List<ProdutoNFS> {
+    return gridDetail.list()
+  }
+
+  fun fecha() {
+    form?.close()
+  }
+}
