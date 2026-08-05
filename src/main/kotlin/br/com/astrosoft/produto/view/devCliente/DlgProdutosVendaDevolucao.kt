@@ -36,7 +36,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosVendaDevoluccao(
+class DlgProdutosVendaDevolucao(
   val viewModel: TabDevCliDevolucoesViewModel,
   val nota: NotaVenda,
   val notaAssinada: Boolean

@@ -271,9 +271,9 @@ class EntradaDevCli(
       transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
       invno = 0,
-      dataInicial = null,
-      dataFinal = null,
-      dataCorte = dataVenda?.minusDays(180),
+      dataInicial = dataVenda,
+      dataFinal = LocalDate.now(),
+      dataCorte = dataVenda?.minusDays(30),
     )
     return NotaVenda.findAll(filtro)
   }
