@@ -1,5 +1,6 @@
 USE sqldados;
 
+
 SET sql_mode = '';
 
 DO @PESQUISA := :query;
@@ -290,13 +291,14 @@ FROM
     LEFT JOIN sqldados.nf            AS N
               ON N.storeno = I.loja AND N.nfno = I.nfno AND N.nfse = I.nfse
     LEFT JOIN T_ENTREGA              AS EF
-              ON (EF.lojaE = I.storeno AND EF.pdvE = I.pdvno AND EF.transacaoE = I.xano) OR
-                 (EF.loja = I.storeno AND EF.pdv = I.pdvno AND EF.transacao = I.xano)
+              ON EF.lojaE = I.storeno AND EF.pdvE = I.pdvno AND EF.transacaoE = I.xano
     LEFT JOIN sqldados.nfAutorizacao AS AT
-              ON AT.storeno = EF.lojaE AND AT.pdvno = EF.pdvE AND AT.xano = EF.transacaoE AND (AT.invno = I.invno)
+              ON AT.storeno = IFNULL(IFNULL(I.storeno, N.storeno), EF.loja) AND
+                 AT.pdvno = IFNULL(IFNULL(I.pdvno, N.pdvno), EF.pdv) AND
+                 AT.xano = IFNULL(IFNULL(I.xano, N.xano), EF.transacao) AND (AT.invno = I.invno)
     LEFT JOIN sqldados.nfAutorizacao AS ATV
-              ON ATV.storeno = IFNULL(EF.loja, I.lojaVenda) AND ATV.pdvno = IFNULL(EF.pdv, I.pdvVenda) AND
-                 ATV.xano = IFNULL(EF.transacao, I.xanoVenda) AND (ATV.invno = I.invno)
+              ON ATV.storeno = I.lojaVenda AND ATV.pdvno = I.pdvVenda AND ATV.xano = I.xanoVenda AND
+                 (ATV.invno = I.invno)
     LEFT JOIN sqldados.custp         AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp           AS E
@@ -304,9 +306,9 @@ FROM
     LEFT JOIN sqldados.users         AS U
               ON U.no = I.userno
     LEFT JOIN sqldados.users         AS UA
-              ON UA.no = IFNULL(IF(AT.userTroca = 0, NULL, AT.userTroca), ATV.userTroca)
+              ON UA.no = IFNULL(AT.userTroca, ATV.userTroca)
     LEFT JOIN sqldados.users         AS US
-              ON US.no = IFNULL(IF(AT.userSolicitacao = 0, NULL, AT.userSolicitacao), ATV.userSolicitacao)
+              ON US.no = IFNULL(AT.userSolicitacao, ATV.userSolicitacao)
     LEFT JOIN T_DP_FILIAL            AS FL
               ON FL.custno = IFNULL(I.custnoVend, N.custno)
     LEFT JOIN sqldados.custp         AS CCli
