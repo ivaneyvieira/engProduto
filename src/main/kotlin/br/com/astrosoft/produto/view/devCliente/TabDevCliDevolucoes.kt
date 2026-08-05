@@ -205,6 +205,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         notaLocalizada.loginSolicitacao = nota.loginSolicitacao
         notaLocalizada.ni = nota.invno
 
+
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showWarning("Solicitação não autorizada")
         } else {

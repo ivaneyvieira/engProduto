@@ -230,9 +230,6 @@ FROM
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
 CREATE TEMPORARY TABLE T_NI
-(
-  INDEX (loja, pdv, transacao)
-)
 SELECT loja, pdv, transacao, invno, date, valorNi
 FROM T_NI1
 UNION
@@ -244,6 +241,14 @@ DISTINCT
 SELECT loja, pdv, transacao, invno, date, valorNi
 FROM T_NI3;
 
+DROP TEMPORARY TABLE IF EXISTS T_NI_KEY;
+CREATE TEMPORARY TABLE T_NI_KEY
+  (primary key(loja, pdv, transacao, invno))
+SELECT loja, pdv, transacao, invno, date, valorNi
+FROM T_NI
+GROUP BY loja, pdv, transacao, invno;
+
+
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD
 (
@@ -252,7 +257,7 @@ CREATE TEMPORARY TABLE T_NI_PRD
 SELECT loja, pdv, transacao, prdno, grade, SUM(ROUND(qtty / 1000)) AS qtty
 FROM
   sqldados.iprd
-    INNER JOIN T_NI
+    INNER JOIN T_NI_KEY
                USING (invno)
 GROUP BY loja, pdv, transacao, prdno, grade;
 
@@ -321,7 +326,7 @@ FROM
   T_VENDA                      AS U
     LEFT JOIN T_VENDA_PENDENTE AS P
               USING (loja, pdv, transacao)
-    LEFT JOIN T_NI             AS I
+    LEFT JOIN T_NI_KEY             AS I
               USING (loja, pdv, transacao)
     LEFT JOIN T_ENTREGA        AS E
               USING (loja, pdv, transacao)

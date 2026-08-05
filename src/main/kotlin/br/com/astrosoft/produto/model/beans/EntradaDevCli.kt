@@ -268,7 +268,6 @@ class EntradaDevCli(
     val dataCorte = data?.minusDays(30) ?: return emptyList()
     val dataInicial = data.minusDays(7)
 
-
     val filtroDefault = FiltroNotaVenda(
       loja = storenoAutorizacao ?: return emptyList(),
       pdv = pdvnoAutorizacao ?: return emptyList(),
@@ -281,16 +280,16 @@ class EntradaDevCli(
     )
     val listaDefault = NotaVenda.findAll(filtroDefault)
 
-    if(listaDefault.isNotEmpty()){
+    if (listaDefault.isNotEmpty()) {
       return listaDefault
     }
 
-
     val dePara = saci.deParaVendaEntrega(xanoAutorizacao ?: return emptyList(), dataCorte) ?: return emptyList()
+
     val filtro = FiltroNotaVenda(
-      loja = dePara.lojaE ?: 0,
-      pdv = dePara.pdvE ?: 0,
-      transacao = dePara.transacaoE ?: 0,
+      loja = dePara.loja ?: 0,
+      pdv = dePara.pdv ?: 0,
+      transacao = dePara.transacao ?: 0,
       pesquisa = "",
       invno = 0,
       dataInicial = dataInicial,
@@ -300,16 +299,28 @@ class EntradaDevCli(
     val lista = NotaVenda.findAll(filtro)
     return lista.ifEmpty {
       val filtro = FiltroNotaVenda(
-        loja = dePara.loja ?: 0,
-        pdv = dePara.pdv ?: 0,
-        transacao = dePara.transacao ?: 0,
+        loja = dePara.lojaE ?: 0,
+        pdv = dePara.pdvE ?: 0,
+        transacao = dePara.transacaoE ?: 0,
         pesquisa = "",
         invno = 0,
         dataInicial = dataInicial,
         dataFinal = null,
         dataCorte = dataCorte,
       )
-      val listaNova = NotaVenda.findAll(filtro)
+      val listaNova = NotaVenda.findAll(filtro).map { notaVenda ->
+        notaVenda.loja = dePara.loja
+        notaVenda.pdv = dePara.pdv
+        notaVenda.transacao = dePara.transacao
+        notaVenda.nota = dePara.notaVenda
+
+        notaVenda.lojaE = dePara.lojaE
+        notaVenda.pdvE = dePara.pdvE
+        notaVenda.transacaoE = dePara.transacaoE
+        notaVenda.notaEntrega = dePara.notaEntrega
+
+        notaVenda
+      }
       listaNova
     }
   }
