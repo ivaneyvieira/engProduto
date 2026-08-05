@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -264,6 +265,7 @@ class EntradaDevCli(
   }
 
   fun notaAutoriza(): List<NotaVenda> {
+    val user = AppConfig.userLogin() as? UserSaci
     val data = dataVenda ?: LocalDate.now()
     val dataCorte = data?.minusDays(30) ?: return emptyList()
     val dataInicial = data.minusDays(7)
@@ -274,9 +276,9 @@ class EntradaDevCli(
       transacao = xanoAutorizacao ?: return emptyList(),
       pesquisa = "",
       invno = 0,
-      dataInicial = dataInicial,
-      dataFinal = null,
-      dataCorte = dataCorte,
+      dataInicial = user?.dataVendaDevolucao,
+      dataFinal = nfData,
+      dataCorte = user?.dataVendaDevolucao
     )
     val listaDefault = NotaVenda.findAll(filtroDefault)
 
@@ -292,9 +294,9 @@ class EntradaDevCli(
       transacao = dePara.transacao ?: 0,
       pesquisa = "",
       invno = 0,
-      dataInicial = dataInicial,
-      dataFinal = null,
-      dataCorte = dataCorte,
+      dataInicial = user?.dataVendaDevolucao,
+      dataFinal = nfData,
+      dataCorte = user?.dataVendaDevolucao
     )
     val lista = NotaVenda.findAll(filtro)
     return lista.ifEmpty {
@@ -304,9 +306,9 @@ class EntradaDevCli(
         transacao = dePara.transacaoE ?: 0,
         pesquisa = "",
         invno = 0,
-        dataInicial = dataInicial,
-        dataFinal = null,
-        dataCorte = dataCorte,
+        dataInicial = user?.dataVendaDevolucao,
+        dataFinal = nfData,
+        dataCorte = user?.dataVendaDevolucao
       )
       val listaNova = NotaVenda.findAll(filtro).map { notaVenda ->
         notaVenda.loja = dePara.loja
