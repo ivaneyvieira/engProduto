@@ -266,6 +266,25 @@ class EntradaDevCli(
   fun notaAutoriza(): List<NotaVenda> {
     val data = dataVenda ?: LocalDate.now()
     val dataCorte = data?.minusDays(30) ?: return emptyList()
+
+
+    val filtroDefault = FiltroNotaVenda(
+      loja = storenoAutorizacao ?: return emptyList(),
+      pdv = pdvnoAutorizacao ?: return emptyList(),
+      transacao = xanoAutorizacao ?: return emptyList(),
+      pesquisa = "",
+      invno = 0,
+      dataInicial = null,
+      dataFinal = null,
+      dataCorte = dataCorte,
+    )
+    val listaDefault = NotaVenda.findAll(filtroDefault)
+
+    if(listaDefault.isNotEmpty()){
+      return listaDefault
+    }
+
+
     val dePara = saci.deParaVendaEntrega(xanoAutorizacao ?: return emptyList(), dataCorte) ?: return emptyList()
     val filtro = FiltroNotaVenda(
       loja = dePara.lojaE ?: 0,
@@ -278,7 +297,7 @@ class EntradaDevCli(
       dataCorte = dataCorte,
     )
     val lista = NotaVenda.findAll(filtro)
-    return if (lista.isEmpty()) {
+    return lista.ifEmpty {
       val filtro = FiltroNotaVenda(
         loja = dePara.loja ?: 0,
         pdv = dePara.pdv ?: 0,
@@ -291,8 +310,6 @@ class EntradaDevCli(
       )
       val listaNova = NotaVenda.findAll(filtro)
       listaNova
-    } else {
-      lista
     }
   }
 
