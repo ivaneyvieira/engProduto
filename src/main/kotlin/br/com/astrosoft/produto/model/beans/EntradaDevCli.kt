@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
@@ -265,17 +264,36 @@ class EntradaDevCli(
   }
 
   fun notaAutoriza(): List<NotaVenda> {
+    val data = dataVenda ?: LocalDate.now()
+    val dataCorte = data?.minusDays(30) ?: return emptyList()
+    val dePara = saci.deParaVendaEntrega(xanoAutorizacao ?: return emptyList(), dataCorte) ?: return emptyList()
     val filtro = FiltroNotaVenda(
-      loja = storenoAutorizacao ?: loja,
-      pdv = pdvnoAutorizacao ?: 0,
-      transacao = xanoAutorizacao ?: return emptyList(),
+      loja = dePara.lojaE ?: 0,
+      pdv = dePara.pdvE ?: 0,
+      transacao = dePara.transacaoE ?: 0,
       pesquisa = "",
       invno = 0,
       dataInicial = null,
       dataFinal = null,
-      dataCorte = dataVenda?.minusDays(30),
+      dataCorte = dataCorte,
     )
-    return NotaVenda.findAll(filtro)
+    val lista = NotaVenda.findAll(filtro)
+    return if (lista.isEmpty()) {
+      val filtro = FiltroNotaVenda(
+        loja = dePara.loja ?: 0,
+        pdv = dePara.pdv ?: 0,
+        transacao = dePara.transacao ?: 0,
+        pesquisa = "",
+        invno = 0,
+        dataInicial = null,
+        dataFinal = null,
+        dataCorte = dataCorte,
+      )
+      val listaNova = NotaVenda.findAll(filtro)
+      listaNova
+    } else {
+      lista
+    }
   }
 
   fun motivo(): String? {

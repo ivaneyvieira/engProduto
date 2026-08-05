@@ -186,9 +186,14 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       DialogHelper.showWarning("Devolução sem autorização")
     } else {
       val lista = nota.notaAutoriza()
-      val notasAutoriza = lista.filter { venda ->
-        venda.ni == nota.invno || venda.ni == 0
-      }
+      val notasAutoriza =
+          if (lista.size > 1) {
+            lista.filter { venda ->
+              venda.ni == nota.invno || venda.ni == 0
+            }
+          } else {
+            lista
+          }
       if (notasAutoriza.isEmpty()) {
         DialogHelper.showWarning("Nota de autorização não localizada")
       } else {
@@ -198,6 +203,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         notaLocalizada.nfEntRet = nota.nfEntRet
         notaLocalizada.setMotivoTroca = nota.setMotivoTroca
         notaLocalizada.loginSolicitacao = nota.loginSolicitacao
+        notaLocalizada.ni = nota.invno
 
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showWarning("Solicitação não autorizada")

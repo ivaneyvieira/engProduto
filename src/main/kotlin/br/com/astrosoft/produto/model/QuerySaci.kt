@@ -822,6 +822,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun deParaVendaEntrega(xano: Int, dataCorte: LocalDate): DeParaVendaEntrega? {
+    val sql = "/sqlSaci/deParaVendaEntrega.sql"
+    return query(sql, DeParaVendaEntrega::class) {
+      addOptionalParameter("xano", xano)
+      addOptionalParameter("dataCorte", dataCorte.toSaciDate())
+    }.firstOrNull()
+  }
+
   fun entradaDevCliPro(invno: Int): List<EntradaDevCliPro> {
     val sql = "/sqlSaci/entradaDevCliPro.sql"
     return query(sql, EntradaDevCliPro::class) {
@@ -3161,9 +3169,9 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull() ?: ProximoNumero(nome = nome, numero = 1)
   }
 
-  fun desfazSolidcitacaoDevolucao(venda: EntradaDevCli){
+  fun desfazSolidcitacaoDevolucao(venda: EntradaDevCli) {
     val sql = "/sqlSaci/desfazDevolucao.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("storeno", venda.loja ?: 0)
       addOptionalParameter("pdvno", venda.pdvno ?: 0)
       addOptionalParameter("xano", venda.xano ?: 0)
@@ -3582,7 +3590,7 @@ class QuerySaci : QueryDB(database) {
 
   fun produtosDevolucao(invno: Int): List<ProdutosDev> {
     val sql = "/sqlSaci/produtosDevolucao.sql"
-    return query(sql, ProdutosDev::class){
+    return query(sql, ProdutosDev::class) {
       addOptionalParameter("invno", invno ?: 0)
     }
   }
