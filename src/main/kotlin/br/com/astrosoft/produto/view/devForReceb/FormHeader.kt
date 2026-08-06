@@ -124,7 +124,7 @@ fun VerticalLayout.formHeader(
           this.isReadOnly = readOnly
           this.localePtBr()
           this.width = "7.5rem"
-          this.value = nota.dataColeta
+          this.value = nota.emissaoDevolucao
 
           addValueChangeListener {
             nota.dataColeta = this.value
