@@ -83,7 +83,7 @@ class DlgAdicionaMovimentacao(
 
   private fun closeForm() {
     val user = AppConfig.userLogin()
-    val produtos = produtoLinha.mapNotNull { linha ->
+    val produtos: List<ProdutoMovimentacao> = produtoLinha.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
 
       val produto = ProdutoMovimentacao()

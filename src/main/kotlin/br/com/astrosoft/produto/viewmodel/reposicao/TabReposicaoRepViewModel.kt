@@ -360,6 +360,10 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       updateView()
     }
   }
+
+  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String): List<ProdutoNotaEntrada> {
+    return saci.movimentacaoFindByNf(loja, nfno, nfse)
+  }
 }
 
 interface ITabReposicaoRep : ITabView {

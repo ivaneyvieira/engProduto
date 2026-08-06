@@ -132,14 +132,32 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               this.icon = VaadinIcon.PLUS.create()
               this.onClick {
                 if (movimentacao.noEntregue > 0) {
-                  DialogHelper.showError("O pedido já está assinado a Entrega")
+                  DialogHelper.showWarning("O pedido já está assinado a Entrega")
                   return@onClick
                 }
                 if (movimentacao.enumRota == null) {
-                  DialogHelper.showError("Rota não informada")
+                  DialogHelper.showWarning("Rota não informada")
                   return@onClick
                 }
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
+                  update()
+                }
+                dlg.open()
+              }
+            }
+
+            this.button("Adiciona por Nota") {
+              this.icon = VaadinIcon.PLUS.create()
+              this.onClick {
+                if (movimentacao.noEntregue > 0) {
+                  DialogHelper.showWarning("O pedido já está assinado a Entrega")
+                  return@onClick
+                }
+                if (movimentacao.enumRota == null) {
+                  DialogHelper.showWarning("Rota não informada")
+                  return@onClick
+                }
+                val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
                   update()
                 }
                 dlg.open()
@@ -191,9 +209,11 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
           }
         }
       },
-      onClose = {
-        closeForm()
-      }) {
+      onClose =
+          {
+            closeForm()
+          })
+    {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -227,10 +247,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
         },
         canEdit = { _ ->
           if (movimentacao.enumRota == null) {
-            DialogHelper.showError("Reposição sem rota")
+            DialogHelper.showWarning("Reposição sem rota")
             false
           } else if (movimentacao.noEntregue > 0) {
-            DialogHelper.showError("Reposição já entregue")
+            DialogHelper.showWarning("Reposição já entregue")
             false
           } else {
             true
