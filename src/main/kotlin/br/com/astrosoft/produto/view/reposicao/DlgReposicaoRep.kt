@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -27,6 +28,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
   private var edtPesquisa: TextField? = null
   private var edtCodigoBarra: TextField? = null
   private var cmbRota: Select<ERota>? = null
+  private var pesquisaFiltro: Boolean = false
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -141,6 +143,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 }
                 val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
                   update()
+                  pesquisaFiltro = true
                 }
                 dlg.open()
               }
@@ -159,6 +162,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 }
                 val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
                   update()
+                  pesquisaFiltro = true
                 }
                 dlg.open()
               }
@@ -374,8 +378,8 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     }
   }
 
-  private fun updateGrid(usaFiltro: Boolean = true) {
-    val findProdutos = if (usaFiltro) {
+  private fun updateGridSeleciona(usaFiltro: Boolean = true) {
+    val findProdutos: List<ProdutoMovimentacao> = if (usaFiltro) {
       findProdutos()
     } else {
       emptyList()
@@ -392,6 +396,49 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       produtos.forEach {
         gridDetail.select(it)
       }
+    }
+  }
+
+  private fun updateGrid(usaFiltro: Boolean = true) {
+    if (usaFiltro) {
+      if (pesquisaFiltro) {
+        val query = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
+        val codigo = edtCodPrd?.value?.toString() ?: ""
+        val barcode = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
+        val produtos = gridDetail.dataProvider.fetchAll()
+        val produtosFiltrados = produtos.filter { prd ->
+          (
+              prd.codigo.toString() == query ||
+              prd.descricao?.contains(query) == true ||
+              prd.grade == query ||
+              prd.barcode.toString() == query ||
+              prd.codFor.toString() == query ||
+              prd.localAbrev == query
+          ) &&
+          (
+              prd.codigo.toString() == codigo || codigo == ""
+          ) &&
+          (
+              prd.barcode.toString() == barcode || barcode == ""
+          )
+        }
+
+        val produtosNaoFiltrado = produtos.filter {
+          it !in produtosFiltrados
+        }
+
+        val produtosOrganizados = produtosFiltrados.sortedBy { it.codigo } + produtosNaoFiltrado
+
+        gridDetail.deselectAll()
+        gridDetail.setItems(produtosOrganizados)
+        produtosFiltrados.forEach {
+          gridDetail.select(it)
+        }
+      } else {
+        updateGridSeleciona(true)
+      }
+    } else {
+      updateGridSeleciona(false)
     }
   }
 
