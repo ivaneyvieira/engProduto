@@ -96,6 +96,19 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
+  fun saveItensPedido(pedido: Movimentacao) = viewModel.exec {
+    if (pedido.noEntregue > 0) {
+      fail("Entrega assinada, produto não pode ser salvo")
+    }
+
+    val itensNaoSelecionado = subView.produtosNaoSelecionado()
+    itensNaoSelecionado.forEach { produto ->
+      produto.remove()
+    }
+
+    subView.limpaNaoSelecionado()
+  }
+
   fun addProduto(produto: ProdutoMovimentacao) {
     produto.save()
     updateView()
@@ -381,4 +394,5 @@ interface ITabReposicaoRep : ITabView {
   fun openProduto(pedido: Movimentacao)
   fun gravaSelecao()
   fun closeForm()
+  fun limpaNaoSelecionado()
 }

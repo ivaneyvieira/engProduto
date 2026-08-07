@@ -244,6 +244,10 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) :
     dlgEstoque?.closeForm()
   }
 
+  override fun limpaNaoSelecionado() {
+    dlgEstoque?.limpaNaoSelecionado()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.reposicaoRep == true

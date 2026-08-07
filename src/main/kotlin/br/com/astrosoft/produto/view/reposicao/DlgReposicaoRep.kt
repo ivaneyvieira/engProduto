@@ -17,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
+import kotlin.collections.forEach
 
 class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao: Movimentacao) {
   private var onClose: (() -> Unit)? = null
@@ -28,7 +29,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
   private var edtPesquisa: TextField? = null
   private var edtCodigoBarra: TextField? = null
   private var cmbRota: Select<ERota>? = null
-  private var pesquisaFiltro: Boolean = false
+  private var pesquisaFiltro: Boolean = true
 
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -83,6 +84,14 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               this.icon = VaadinIcon.TRASH.create()
               this.onClick {
                 viewModel.removePedido(movimentacao)
+              }
+            }
+
+            this.button("Salva") {
+              this.isVisible = true
+              this.icon = VaadinIcon.EDIT.create()
+              this.onClick {
+                viewModel.saveItensPedido(movimentacao)
               }
             }
 
@@ -160,8 +169,12 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   DialogHelper.showWarning("Rota não informada")
                   return@onClick
                 }
+                viewModel.saveItensPedido(movimentacao)
                 val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
+                  val produtos = gridDetail.dataProvider.fetchAll()
                   update()
+                  gridDetail.selectAll(produtos)
+                  ordemSelect()
                   pesquisaFiltro = true
                 }
                 dlg.open()
@@ -205,9 +218,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 }
                 gridDetail.setItems(itensRota)
 
-                itensRota.forEach {
-                  gridDetail.select(it)
-                }
+                gridDetail.selectAll(itensRota)
               }
             }
           }
@@ -271,7 +282,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoMovimentacao::estCD, "Est CD", width = "5rem")
       columnGrid(ProdutoMovimentacao::estSis, "Est Sist", width = "5rem")
-      //columnGrid(ProdutoMovimentacao::estoque, "Estoque", width = "5rem")
 
       this.setPartNameGenerator { produto ->
         val entregue = produto.noEntregue ?: 0
@@ -389,51 +399,60 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       it !in selecionados
     }
     gridDetail.setItems(selecionados + produtos)
-    selecionados.forEach {
-      gridDetail.select(it)
-    }
+    gridDetail.selectAll(selecionados)
     if (produtos.size == 1) {
-      produtos.forEach {
-        gridDetail.select(it)
-      }
+      gridDetail.selectAll(produtos)
+    }
+  }
+
+  private fun ordemSelect() {
+    val produtosSelecionados = produtosSelecionados().sortedBy { it.descricao }
+    val produtosNaoSelecionado = produtosNaoSelecionado().sortedBy { it.descricao }
+    val produtos = produtosSelecionados + produtosNaoSelecionado
+    gridDetail.setItems(produtos)
+    gridDetail.selectAll(produtosSelecionados)
+  }
+
+  private fun processaFiltro() {
+    val query = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
+    if(query.isBlank()) {
+      return
+    }
+    val codigo = edtCodPrd?.value?.toString() ?: ""
+    val barcode = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
+    val produtosSelecionados = produtosSelecionados()
+    val produtos = gridDetail.dataProvider.fetchAll()
+    val produtosFiltrados = (produtos.filter { prd ->
+      (prd.descricao?.startsWith(query) == true) &&
+      (prd.codigo.toString() == codigo || codigo == "") &&
+      (prd.barcode.toString() == barcode || barcode == "")
+    } + produtosSelecionados).distinct()
+
+    if(produtosFiltrados.isEmpty()) {
+      return
+    }
+
+    val produtosNaoFiltrado = produtos.filter {
+      it !in produtosFiltrados
+    }
+
+    val produtosOrganizados = produtosFiltrados.sortedBy { it.codigo } + produtosNaoFiltrado
+
+    gridDetail.deselectAll()
+    gridDetail.setItems(produtosOrganizados)
+    gridDetail.selectAll(produtosFiltrados)
+  }
+
+  private fun Grid<ProdutoMovimentacao>.selectAll(list: List<ProdutoMovimentacao>) {
+    list.forEach {
+      this.select(it)
     }
   }
 
   private fun updateGrid(usaFiltro: Boolean = true) {
     if (usaFiltro) {
       if (pesquisaFiltro) {
-        val query = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-        val codigo = edtCodPrd?.value?.toString() ?: ""
-        val barcode = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
-        val produtos = gridDetail.dataProvider.fetchAll()
-        val produtosFiltrados = produtos.filter { prd ->
-          (
-              prd.codigo.toString() == query ||
-              prd.descricao?.contains(query) == true ||
-              prd.grade == query ||
-              prd.barcode.toString() == query ||
-              prd.codFor.toString() == query ||
-              prd.localAbrev == query
-          ) &&
-          (
-              prd.codigo.toString() == codigo || codigo == ""
-          ) &&
-          (
-              prd.barcode.toString() == barcode || barcode == ""
-          )
-        }
-
-        val produtosNaoFiltrado = produtos.filter {
-          it !in produtosFiltrados
-        }
-
-        val produtosOrganizados = produtosFiltrados.sortedBy { it.codigo } + produtosNaoFiltrado
-
-        gridDetail.deselectAll()
-        gridDetail.setItems(produtosOrganizados)
-        produtosFiltrados.forEach {
-          gridDetail.select(it)
-        }
+        processaFiltro()
       } else {
         updateGridSeleciona(true)
       }
@@ -469,5 +488,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
 
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
     return gridDetail.list() - produtosSelecionado().toSet()
+  }
+
+  fun limpaNaoSelecionado() {
+    val produtos = produtosSelecionados()
+    gridDetail.setItems(produtos)
   }
 }
