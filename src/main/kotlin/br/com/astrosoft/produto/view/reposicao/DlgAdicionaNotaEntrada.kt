@@ -75,7 +75,11 @@ class DlgAdicionaNotaEntrada(
 
   private fun updateProdutos() {
     val user = AppConfig.userLogin() as? UserSaci ?: return
-    val lojaUser = user.lojaUsuario
+    val lojaUser = if(user.admin){
+      0
+    }else{
+      user.lojaUsuario
+    }
     val loja = pedido.numloja
     val numeroNF = edtNota.value ?: ""
     val numeroPedido = edtPedido.value ?: 0
