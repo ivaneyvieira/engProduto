@@ -76,9 +76,9 @@ class DlgAdicionaNotaEntrada(
 
   private fun updateProdutos() {
     val user = AppConfig.userLogin() as? UserSaci ?: return
-    val lojaUser = if(user.admin){
+    val lojaUser = if (user.admin) {
       0
-    }else{
+    } else {
       user.lojaUsuario
     }
     val loja = pedido.numloja
@@ -95,10 +95,16 @@ class DlgAdicionaNotaEntrada(
         pedido = numeroPedido
       )
       val item = lista.firstOrNull()
-      if(item?.loja  == loja){
+
+      if(item == null){
+        gridProdutos.setItems(emptyList())
+        return
+      }
+
+      if (item.loja == loja) {
         lista
-      }else{
-        DialogHelper.showWarning("Cliente indevido")
+      } else {
+        //DialogHelper.showWarning("Cliente indevido")
         emptyList()
       }
     } else {

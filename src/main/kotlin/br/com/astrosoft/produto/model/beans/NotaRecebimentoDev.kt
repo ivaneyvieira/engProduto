@@ -332,8 +332,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         situacaoDup = nota.situacaoDup,
         duplicataNum = nota.duplicataNum,
         situacaoDupStatus = nota.situacaoDupStatus,
-        obsDup = produtos.filter { !it.obsDup.isNullOrBlank() }.mapNotNull { it.obsDup }.distinct()
-          .joinToString { "\n"}
+        obsDup = nota.obsDup
       )
     }
   }

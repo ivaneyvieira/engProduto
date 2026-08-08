@@ -2,16 +2,12 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.format
-import br.com.astrosoft.framework.view.vaadin.helper.right
-import br.com.astrosoft.framework.view.vaadin.helper.textFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.withEditor
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaEditorViewModel
-import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.karibudsl.v23.multiSelectComboBox
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Focusable
@@ -146,7 +142,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       closeEditor = {
         viewModel.saveNota(nota = it.bean, updateGrid = true)
       },
-      canEdit = {nota ->
+      canEdit = { nota ->
         nota?.situacaoDevName?.contains("Pedido") == true
       })
 
@@ -207,7 +203,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      statusDup = cmbStatusDup.value ,
+      statusDup = cmbStatusDup.value,
       nfd = edtNFD.value?.toIntOrNull() ?: 0,
     )
   }
