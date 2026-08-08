@@ -118,10 +118,16 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       }
     }
 
-    button("Pedido") {
-      this.icon = VaadinIcon.ARROW_RIGHT.create()
-      this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
+    select("Enviar") {
+      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO - EStituacaoDev.COLETA - EStituacaoDev.COLETAREP)
+      this.setItemLabelGenerator { sit ->
+        sit.descricao
+      }
+      this.addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.marcaSituacao(it.value)
+          it.source.clear()
+        }
       }
     }
   }
