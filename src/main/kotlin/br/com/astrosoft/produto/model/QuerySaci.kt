@@ -3595,12 +3595,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String): List<ProdutoNotaEntrada> {
+  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String,  lojaUser: Int, pedido: Int): List<ProdutoNotaEntrada> {
     val sql = "/sqlSaci/produtoNotaEntrada.sql"
     return query(sql, ProdutoNotaEntrada::class){
       addOptionalParameter("loja", loja)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
+      addOptionalParameter("lojaUser", lojaUser)
+      addOptionalParameter("pedido", pedido)
     }
   }
 

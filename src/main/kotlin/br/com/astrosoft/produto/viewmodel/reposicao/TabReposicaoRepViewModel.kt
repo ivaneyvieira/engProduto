@@ -182,7 +182,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun assinaEntrega(mov: Movimentacao) = viewModel.exec {
-    if(mov.findProdutos().isEmpty()){
+    if (mov.findProdutos().isEmpty()) {
       fail("Pedido sem produto")
     }
 
@@ -232,7 +232,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 
   fun assinaRecebimento(mov: Movimentacao) = viewModel.exec {
-    if(mov.findProdutos().isEmpty()){
+    if (mov.findProdutos().isEmpty()) {
       fail("Pedido sem produto")
     }
 
@@ -374,8 +374,14 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
 
-  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String): List<ProdutoNotaEntrada> {
-    return saci.movimentacaoFindByNf(loja, nfno, nfse)
+  fun movimentacaoFindByNf(
+    loja: Int,
+    nfno: String,
+    nfse: String,
+    lojaUser: Int,
+    pedido: Int
+  ): List<ProdutoNotaEntrada> {
+    return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, lojaUser = lojaUser, pedido = pedido)
   }
 }
 

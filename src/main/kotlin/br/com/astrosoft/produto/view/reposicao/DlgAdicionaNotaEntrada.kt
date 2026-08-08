@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
 import br.com.astrosoft.produto.model.beans.ProdutoNotaEntrada
+import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
@@ -15,6 +16,9 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaNotaEntrada(
@@ -22,8 +26,9 @@ class DlgAdicionaNotaEntrada(
   val pedido: Movimentacao,
   val onClose: (DlgAdicionaNotaEntrada) -> Unit = {}
 ) : Dialog() {
-
   private lateinit var gridProdutos: Grid<ProdutoNotaEntrada>
+  private lateinit var edtNota: TextField
+  private lateinit var edtPedido: IntegerField
 
   init {
     this.isModal = true
@@ -49,22 +54,41 @@ class DlgAdicionaNotaEntrada(
       this.isPadding = false
       this.isSpacing = true
 
-      textField("Nota Fiscal") {
+      edtNota = textField("Nota Fiscal") {
         this.isAutofocus = true
         this.valueChangeMode = ValueChangeMode.LAZY
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         this.addValueChangeListener {
-          updateProdutos(it.value)
+          updateProdutos()
+        }
+      }
+
+      edtPedido = integerField("Pedido") {
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        this.addValueChangeListener {
+          updateProdutos()
         }
       }
     }
   }
 
-  private fun updateProdutos(numeroNF: String) {
+  private fun updateProdutos() {
+    val user = AppConfig.userLogin() as? UserSaci ?: return
+    val lojaUser = user.lojaUsuario
     val loja = pedido.numloja
-    val lista: List<ProdutoNotaEntrada> = if (numeroNF.contains("/") && loja > 0) {
+    val numeroNF = edtNota.value ?: ""
+    val numeroPedido = edtPedido.value ?: 0
+    val lista: List<ProdutoNotaEntrada> = if (loja > 0) {
       val nfno = numeroNF.split("/").getOrNull(0)?.trim() ?: ""
       val nfse = numeroNF.split("/").getOrNull(1)?.trim() ?: ""
-      viewModel.movimentacaoFindByNf(loja, nfno, nfse)
+      viewModel.movimentacaoFindByNf(
+        loja = loja,
+        nfno = nfno,
+        nfse = nfse,
+        lojaUser = lojaUser,
+        pedido = numeroPedido
+      )
     } else {
       emptyList()
     }
@@ -83,7 +107,7 @@ class DlgAdicionaNotaEntrada(
       this.columnGrid(property = ProdutoNotaEntrada::movimentacao, header = "Quant")
       this.columnGrid(property = ProdutoNotaEntrada::descricao, header = "Descrição", isExpand = true)
     }
-    updateProdutos("")
+    updateProdutos()
   }
 
   fun HasComponents.toolBar() {
