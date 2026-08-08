@@ -62,7 +62,8 @@ class NotaRecebimentoDev(
   var produtos: List<NotaRecebimentoProdutoDev>,
   var situacaoDup: String?,
   var duplicataNum: String?,
-  var situacaoDupStatus: Int?
+  var situacaoDupStatus: Int?,
+  var obsDup: String?
 ) {
   val totalProdutosVenda
     get() = produtos.sumOf { prd ->
@@ -330,7 +331,9 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         nfdstnr = produtos.any { it.taxno == "06" && it.cst == "000" },
         situacaoDup = nota.situacaoDup,
         duplicataNum = nota.duplicataNum,
-        situacaoDupStatus = nota.situacaoDupStatus
+        situacaoDupStatus = nota.situacaoDupStatus,
+        obsDup = produtos.filter { !it.obsDup.isNullOrBlank() }.mapNotNull { it.obsDup }.distinct()
+          .joinToString { "\n"}
       )
     }
   }

@@ -131,7 +131,8 @@ SELECT NFO.storeno,
                 ELSE 'Pendente'
        END                           AS situacaoDup,
        CONCAT(D.dupno, '/', D.dupse) AS duplicataNum,
-       IFNULL(D.status, 999)         AS situacaoDupStatus
+       IFNULL(D.status, 999)         AS situacaoDupStatus,
+       D.remarks                     AS obsDup
 FROM
   T_NFO                       AS NFO
     INNER JOIN sqldados.nf    AS N
@@ -512,7 +513,8 @@ SELECT loja,
        IFNULL(N.situacaoDupStatus, 999)  AS situacaoDupStatus,
        IFNULL(rotuloSped, '')            AS rotuloSped,
        X.icmsAliq / 100                  AS icmsSaida,
-       processado                        AS processado
+       processado                        AS processado,
+       obsDup                            AS obsDup
 FROM
   T_QUERY                     AS Q
     LEFT JOIN T_NOTA_SAIDA    AS N

@@ -158,7 +158,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
               }
             }
 
-            this.button("Adiciona por Nota") {
+            this.button("Adiciona por Doc") {
               this.icon = VaadinIcon.PLUS.create()
               this.onClick {
                 if (movimentacao.noEntregue > 0) {

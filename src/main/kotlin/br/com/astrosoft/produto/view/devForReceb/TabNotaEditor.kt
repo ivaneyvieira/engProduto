@@ -194,6 +194,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null)
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
+    columnGrid(NotaRecebimentoDev::obsDup, header = "Obs Dup")
     //columnGrid(NotaRecebimentoDev::niListStr, header = "NI", width = "5.5rem")
     //columnGrid(NotaRecebimentoDev::nfEntrada, header = "NF Entrada").right()
     //columnGrid(NotaRecebimentoDev::emissao, header = "Emissão", width = null)
