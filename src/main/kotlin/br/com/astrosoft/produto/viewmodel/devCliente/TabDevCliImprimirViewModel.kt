@@ -6,6 +6,8 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.ValeTrocaDevolucao
+import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -337,6 +339,35 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
 
   fun salvaLiberaPedido(bean: EntradaDevCli) {
     bean.salvaLiberaPedido()
+    updateView()
+  }
+
+  private fun localizaAutoriacao(dev: EntradaDevCli): NotaVenda? {
+    val filtro: FiltroNotaVenda = FiltroNotaVenda(
+      loja = dev.loja,
+      pesquisa = dev.invno.toString(),
+      invno = dev.invno,
+      pdv = 0,
+      transacao = 0,
+      dataInicial = LocalDate.now().minusMonths(2),
+      dataFinal = LocalDate.now(),
+      dataCorte = LocalDate.now().minusMonths(2),
+    )
+    val notas = NotaVenda.findAll(filtro)
+
+    return notas.firstOrNull {
+      it.loginSolicitacao != "" && it.loginTroca != ""
+    }
+  }
+
+  fun buscaAutorizacao(dev: EntradaDevCli) = viewModel.exec{
+    val autorizacao = localizaAutoriacao(dev) ?: fail("Autorização Não encontrada")
+    saci.salvaAutoirizacao(
+      loja = autorizacao.loja ?: fail("Loja inválida"),
+      pdv = autorizacao.pdv ?: fail("Pdv inválido"),
+      transacao = autorizacao.transacao ?: fail("Tranação inválida"),
+      ni = autorizacao.ni ?: dev.invno
+    )
     updateView()
   }
 

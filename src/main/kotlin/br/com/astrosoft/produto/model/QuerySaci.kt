@@ -3604,6 +3604,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun salvaAutoirizacao(loja: Int, pdv: Int, transacao: Int, ni: Int) {
+val sql = "/sqlSaci/salvaAutoirizacao.sql"
+    script(sql){
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("pdv", pdv)
+      addOptionalParameter("transacao", transacao)
+      addOptionalParameter("ni", ni)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

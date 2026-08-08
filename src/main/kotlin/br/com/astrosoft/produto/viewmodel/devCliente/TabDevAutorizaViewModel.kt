@@ -19,7 +19,7 @@ class TabDevAutorizaViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun updateView() = runBlocking {
-    val filtro = subView.filtro()
+    val filtro: FiltroNotaVenda = subView.filtro()
     val notas = NotaVenda.findAll(filtro)
     subView.updateNotas(notas)
   }

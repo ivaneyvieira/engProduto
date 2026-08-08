@@ -120,6 +120,13 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         }
       }
     }
+
+    if (user?.admin == true) {
+      addColumnButton(VaadinIcon.SEARCH, "Busca Autorização", "Busca") { dev ->
+        viewModel.buscaAutorizacao(dev)
+      }
+    }
+
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
