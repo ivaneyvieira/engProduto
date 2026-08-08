@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 class ProdutoNotaEntrada {
+  var loja : Int? = null
   var prdno: String? = null
   var descricao: String? = null
   var grade: String? = null

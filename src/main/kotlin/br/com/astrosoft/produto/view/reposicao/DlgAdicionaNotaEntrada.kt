@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
@@ -86,13 +87,20 @@ class DlgAdicionaNotaEntrada(
     val lista: List<ProdutoNotaEntrada> = if (loja > 0) {
       val nfno = numeroNF.split("/").getOrNull(0)?.trim() ?: ""
       val nfse = numeroNF.split("/").getOrNull(1)?.trim() ?: ""
-      viewModel.movimentacaoFindByNf(
+      val lista = viewModel.movimentacaoFindByNf(
         loja = loja,
         nfno = nfno,
         nfse = nfse,
         lojaUser = lojaUser,
         pedido = numeroPedido
       )
+      val item = lista.firstOrNull()
+      if(item?.loja  == loja){
+        lista
+      }else{
+        DialogHelper.showWarning("Cliente indevido")
+        emptyList()
+      }
     } else {
       emptyList()
     }

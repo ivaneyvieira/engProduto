@@ -5,7 +5,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_INV
 (
   PRIMARY KEY (invno)
 )
-SELECT invno
+SELECT invno, storeno
 FROM sqldados.inv AS N
 WHERE N.storeno = :loja
   AND N.nfname = :nfno
@@ -14,7 +14,8 @@ WHERE N.storeno = :loja
 
 DROP TEMPORARY TABLE IF EXISTS T_NF;
 CREATE TEMPORARY TABLE IF NOT EXISTS T_NF
-SELECT I.prdno                            AS prdno,
+SELECT N.storeno                          AS loja,
+       I.prdno                            AS prdno,
        I.grade                            AS grade,
        P.name                             AS descricao,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
@@ -48,7 +49,8 @@ WHERE (P.storeno IN (2, 3, 4, 5, 8))
 
 DROP TEMPORARY TABLE IF EXISTS T_PED_PRD;
 CREATE TEMPORARY TABLE IF NOT EXISTS T_PED_PRD
-SELECT I.prdno                            AS prdno,
+SELECT I.storeno                          AS loja,
+       I.prdno                            AS prdno,
        I.grade                            AS grade,
        P.name                             AS descricao,
        TRIM(IFNULL(B.barcode, P.barcode)) AS barcode,
@@ -62,8 +64,8 @@ FROM
     LEFT JOIN  sqldados.prdbar AS B
                USING (prdno, grade);
 
-SELECT prdno, grade, descricao, barcode, movimentacao
+SELECT loja, prdno, grade, descricao, barcode, movimentacao
 FROM T_NF
 UNION
-SELECT prdno, grade, descricao, barcode, movimentacao
+SELECT loja, prdno, grade, descricao, barcode, movimentacao
 FROM T_PED_PRD
