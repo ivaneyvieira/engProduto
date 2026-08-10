@@ -17,8 +17,7 @@ CREATE TEMPORARY TABLE T_BARCODE
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
-FROM
-  sqldados.prdbar
+FROM sqldados.prdbar
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
@@ -27,8 +26,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')
@@ -76,12 +74,13 @@ SELECT I.invno,
        N.remarks                                                      AS observacaoNota,
        CASE
          WHEN N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02',
-                            '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')            THEN 'Recebimento'
-         WHEN N.account IN ('2.01.25')                                                    THEN 'Devolução'
-         WHEN N.type = 1                                                                  THEN 'Transferência'
-         WHEN (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')) THEN 'Reclassificação'
-         WHEN (:tipoNota IN ('O', 'T') AND (N.cfo = 1949 AND N.vendno = 9))               THEN 'Outros'
-                                                                                          ELSE ''
+                            '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')                     THEN 'Recebimento'
+         WHEN N.account IN ('2.01.25')                                                             THEN 'Devolução'
+         WHEN N.type = 1                                                                           THEN 'Transferência'
+         WHEN (:tipoNota IN ('C', 'T') AND (N.cfo IN (1949, 1926) AND N.remarks LIKE '%RECLASS%'))
+                                                                                                   THEN 'Reclassificação'
+         WHEN (:tipoNota IN ('O', 'T') AND (N.cfo IN (1949, 1926) AND N.vendno = 9))               THEN 'Outros'
+                                                                                                   ELSE ''
        END                                                            AS tipoNota,
        selecionado                                                    AS selecionado,
        SUM((I.qtty / 1000) * (I.fob4 / 10000)) / SUM(I.qtty / 1000)   AS valorUnit,
@@ -131,8 +130,8 @@ WHERE (N.bits & POW(2, 4) = 0)
   AND ((:tipoNota IN ('R', 'T') AND
         N.account IN ('2.01.20', '2.01.21', '4.01.01.04.02', '4.01.01.06.04', '6.03.01.01.01', '6.03.01.01.02')) OR
        (:tipoNota IN ('D', 'T') AND N.account IN ('2.01.25')) OR (:tipoNota IN ('X', 'T') AND (N.type = 1)) OR
-       (:tipoNota IN ('C', 'T') AND (N.cfo = 1949 AND N.remarks LIKE '%RECLASS%')) OR
-       (:tipoNota IN ('O', 'T') AND (N.cfo = 1949 AND N.vendno = 9)))
+       (:tipoNota IN ('C', 'T') AND (N.cfo IN (1949, 1926) AND N.remarks LIKE '%RECLASS%')) OR
+       (:tipoNota IN ('O', 'T') AND (N.cfo IN (1949, 1926) AND N.vendno = 9)))
   /*AND N.cfo NOT IN (1556, 2556, 1933, 2933)*/
   AND N.cfo NOT IN (1556, 1933, 2933)
   AND (N.invno = :invno OR :invno = 0)
@@ -169,8 +168,7 @@ SELECT storeno                            AS storeno,
        MAX(IF(num = 3, vencimento, NULL)) AS venc03,
        MAX(IF(num = 4, quantidade, NULL)) AS qtty04,
        MAX(IF(num = 4, vencimento, NULL)) AS venc04
-FROM
-  sqldados.qtd_vencimento
+FROM sqldados.qtd_vencimento
 GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
@@ -428,8 +426,7 @@ SELECT loja,
        NULL          AS emissaoDevolucao,
        NULL          AS valorDevolucao,
        ''            AS obsDevolucao
-FROM
-  T_QUERY AS Q
+FROM T_QUERY AS Q
 HAVING (@PESQUISA = '' OR ni LIKE @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno LIKE @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp LIKE @PESQUISA_NUM OR
         transp LIKE @PESQUISA_NUM OR cte LIKE @PESQUISA_NUM OR volume LIKE @PESQUISA_NUM OR
