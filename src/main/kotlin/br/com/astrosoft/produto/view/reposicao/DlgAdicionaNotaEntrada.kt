@@ -76,14 +76,18 @@ class DlgAdicionaNotaEntrada(
 
   private fun updateProdutos() {
     val user = AppConfig.userLogin() as? UserSaci ?: return
-    val lojaUser = if (user.admin) {
-      0
-    } else {
-      user.lojaUsuario
-    }
+    val lojaUser = user.lojaUsuario
     val loja = pedido.numloja
     val numeroNF = edtNota.value ?: ""
     val numeroPedido = edtPedido.value ?: 0
+
+    if(lojaUser != 0){
+      if(loja != lojaUser){
+        showAvisoGrid("Cliente indevido")
+        return
+      }
+    }
+
     val lista: List<ProdutoNotaEntrada> = if (loja > 0) {
       val nfno = numeroNF.split("/").getOrNull(0)?.trim() ?: ""
       val nfse = numeroNF.split("/").getOrNull(1)?.trim() ?: ""
@@ -91,27 +95,42 @@ class DlgAdicionaNotaEntrada(
         loja = loja,
         nfno = nfno,
         nfse = nfse,
-        lojaUser = lojaUser,
         pedido = numeroPedido
       )
-      val item = lista.firstOrNull()
-
-      if(item == null){
-        gridProdutos.setItems(emptyList())
-        return
-      }
-
-      if (item.loja == loja) {
-        lista
-      } else {
-        //DialogHelper.showWarning("Cliente indevido")
-        emptyList()
-      }
+      lista
     } else {
       emptyList()
     }
-    gridProdutos.setItems(lista)
-    gridProdutos.recalculateColumnWidths()
+    if(valida(lista)) {
+      gridProdutos.emptyStateText = ""
+      gridProdutos.setItems(lista)
+      gridProdutos.recalculateColumnWidths()
+    }
+  }
+
+  private fun valida(lista: List<ProdutoNotaEntrada>): Boolean {
+    lista.ifEmpty {
+      return true
+    }
+    val bean = lista.firstOrNull() ?: return true
+    if(bean.tipo == "P"){
+      if((bean.paymno ?: 0) != 431){
+        showAvisoGrid("Tipo de pagamento inválido")
+        return false
+      }
+
+      if((bean.loja ?: 0) != (bean.lojaCliente ?: 0)){
+        showAvisoGrid("Cliente do pedido Inválido")
+        return false
+      }
+    }
+
+    return true
+  }
+
+  private fun showAvisoGrid(aviso: String) {
+    gridProdutos.setItems(emptyList())
+    gridProdutos.emptyStateText = aviso
   }
 
   private fun VerticalLayout.gridProdutos() {

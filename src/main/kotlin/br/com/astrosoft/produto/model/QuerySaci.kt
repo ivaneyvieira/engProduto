@@ -3595,20 +3595,19 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String,  lojaUser: Int, pedido: Int): List<ProdutoNotaEntrada> {
+  fun movimentacaoFindByNf(loja: Int, nfno: String, nfse: String, pedido: Int): List<ProdutoNotaEntrada> {
     val sql = "/sqlSaci/produtoNotaEntrada.sql"
-    return query(sql, ProdutoNotaEntrada::class){
+    return query(sql, ProdutoNotaEntrada::class) {
       addOptionalParameter("loja", loja)
       addOptionalParameter("nfno", nfno)
       addOptionalParameter("nfse", nfse)
-      addOptionalParameter("lojaUser", lojaUser)
       addOptionalParameter("pedido", pedido)
     }
   }
 
   fun salvaAutoirizacao(loja: Int, pdv: Int, transacao: Int, ni: Int) {
-val sql = "/sqlSaci/salvaAutoirizacao.sql"
-    script(sql){
+    val sql = "/sqlSaci/salvaAutoirizacao.sql"
+    script(sql) {
       addOptionalParameter("loja", loja)
       addOptionalParameter("pdv", pdv)
       addOptionalParameter("transacao", transacao)

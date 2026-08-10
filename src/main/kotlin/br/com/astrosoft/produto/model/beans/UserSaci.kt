@@ -530,7 +530,11 @@ class UserSaci : IUser {
     get() = localizacaoRepo.joinToString(", ")
 
   val lojaUsuario
-    get() = no.toString().substring(0, 1).toIntOrNull() ?: 0
+    get() =  if(admin){
+      0
+    }else{
+      no.toString().substring(0, 1).toIntOrNull() ?: 0
+    }
 
   var produto
     get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||

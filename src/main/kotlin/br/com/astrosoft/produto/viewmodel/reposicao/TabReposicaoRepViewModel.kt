@@ -378,10 +378,9 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     loja: Int,
     nfno: String,
     nfse: String,
-    lojaUser: Int,
     pedido: Int
   ): List<ProdutoNotaEntrada> {
-    return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, lojaUser = lojaUser, pedido = pedido)
+    return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, pedido = pedido)
   }
 }
 
