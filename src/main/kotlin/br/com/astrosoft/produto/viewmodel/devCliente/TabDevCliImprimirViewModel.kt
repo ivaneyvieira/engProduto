@@ -360,8 +360,6 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
-
-
   fun buscaAutorizacao(dev: EntradaDevCli) = viewModel.exec {
     processaBusca(dev)
     updateView()

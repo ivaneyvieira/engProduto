@@ -161,7 +161,11 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     notas.filter { dev ->
       dev.loginSolicitacao.isNullOrBlank() || dev.loginAutorizacao.isNullOrBlank()
     }.forEach { dev ->
-      viewModel.processaBusca(dev)
+      try {
+        viewModel.processaBusca(dev)
+      }catch (e: Exception) {
+        println(e.message)
+      }
     }
 
     updateGrid(notas)
