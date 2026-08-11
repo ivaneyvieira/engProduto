@@ -84,7 +84,8 @@ FROM
     LEFT JOIN  sqlpdv.pxaval          AS V
                ON V.storeno = N.storeno AND V.pdvno = N.pdvno AND V.xano = N.xano
     LEFT JOIN  sqldados.nfAutorizacao AS AT
-               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano
+               ON AT.storeno = N.storeno AND AT.pdvno = N.pdvno AND AT.xano = N.xano AND
+                  (AT.invno = :invno OR :invno = 0)
     LEFT JOIN  sqldados.nf            AS EF
                ON N.storeno = EF.storeno AND EF.nfno = IFNULL(AT.nfEntRet, 0) AND EF.nfse = '3'
     LEFT JOIN  sqldados.users         AS UT
@@ -229,21 +230,22 @@ FROM
                ON U.loja = I.storeno AND U.obsNI LIKE 'NI%' AND U.obsNI LIKE CONCAT('%', I.invno, '%');
 
 DROP TEMPORARY TABLE IF EXISTS T_NI;
-CREATE TEMPORARY TABLE T_NI
-SELECT loja, pdv, transacao, invno, date, valorNi
-FROM T_NI1
-UNION
-DISTINCT
-SELECT loja, pdv, transacao, invno, date, valorNi
-FROM T_NI2
-UNION
-DISTINCT
-SELECT loja, pdv, transacao, invno, date, valorNi
-FROM T_NI3;
+CREATE TEMPORARY TABLE T_NI SELECT loja, pdv, transacao, invno, date, valorNi
+                            FROM T_NI1
+                            UNION
+                            DISTINCT
+                            SELECT loja, pdv, transacao, invno, date, valorNi
+                            FROM T_NI2
+                            UNION
+                            DISTINCT
+                            SELECT loja, pdv, transacao, invno, date, valorNi
+                            FROM T_NI3;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_KEY;
 CREATE TEMPORARY TABLE T_NI_KEY
-  (primary key(loja, pdv, transacao, invno))
+(
+  PRIMARY KEY (loja, pdv, transacao, invno)
+)
 SELECT loja, pdv, transacao, invno, date, valorNi
 FROM T_NI
 GROUP BY loja, pdv, transacao, invno;
@@ -326,7 +328,7 @@ FROM
   T_VENDA                      AS U
     LEFT JOIN T_VENDA_PENDENTE AS P
               USING (loja, pdv, transacao)
-    LEFT JOIN T_NI_KEY             AS I
+    LEFT JOIN T_NI_KEY         AS I
               USING (loja, pdv, transacao)
     LEFT JOIN T_ENTREGA        AS E
               USING (loja, pdv, transacao)
