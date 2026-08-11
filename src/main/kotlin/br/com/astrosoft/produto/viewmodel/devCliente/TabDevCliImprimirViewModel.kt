@@ -360,15 +360,21 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     }
   }
 
-  fun buscaAutorizacao(dev: EntradaDevCli) = viewModel.exec{
+
+
+  fun buscaAutorizacao(dev: EntradaDevCli) = viewModel.exec {
+    processaBusca(dev)
+    updateView()
+  }
+
+  fun processaBusca(dev: EntradaDevCli) {
     val autorizacao = localizaAutoriacao(dev) ?: fail("Autorização Não encontrada")
     saci.salvaAutoirizacao(
       loja = autorizacao.loja ?: fail("Loja inválida"),
       pdv = autorizacao.pdv ?: fail("Pdv inválido"),
-      transacao = autorizacao.transacao ?: fail("Tranação inválida"),
+      transacao = autorizacao.transacao ?: fail("Transaação inválida"),
       ni = autorizacao.ni ?: dev.invno
     )
-    updateView()
   }
 
   val subView

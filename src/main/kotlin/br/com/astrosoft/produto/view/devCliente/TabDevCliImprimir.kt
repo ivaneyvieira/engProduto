@@ -158,6 +158,12 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
   }
 
   override fun updateNotas(notas: List<EntradaDevCli>) {
+    notas.filter { dev ->
+      dev.loginSolicitacao.isNullOrBlank() || dev.loginAutorizacao.isNullOrBlank()
+    }.forEach { dev ->
+      viewModel.processaBusca(dev)
+    }
+
     updateGrid(notas)
   }
 
