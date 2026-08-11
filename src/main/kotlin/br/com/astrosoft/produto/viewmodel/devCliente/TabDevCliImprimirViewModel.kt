@@ -358,7 +358,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     val notas = NotaVenda.findAll(filtro)
 
     return notas.firstOrNull {
-      it.loginSolicitacao != "" && it.loginTroca != ""
+      it.loginSolicitacao != "" || it.loginTroca != ""
     }
   }
 
