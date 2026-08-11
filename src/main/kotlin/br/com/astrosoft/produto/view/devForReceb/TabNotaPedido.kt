@@ -149,6 +149,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null)
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
+    columnGrid(NotaRecebimentoDev::obsDup, header = "Obs Dup")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
 
