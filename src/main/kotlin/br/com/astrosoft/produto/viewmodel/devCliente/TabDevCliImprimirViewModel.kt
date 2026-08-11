@@ -122,7 +122,9 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-    val dados = nota.produtos()
+    val dados = nota.produtos().distinctBy {
+      "${it.invno}-${it.prdno}-${it.grade}"
+    }
     val printer = subView.printerPreview(loja = 0) { impressora ->
       nota.marcaImpresso(Impressora(0, impressora))
       updateView()
