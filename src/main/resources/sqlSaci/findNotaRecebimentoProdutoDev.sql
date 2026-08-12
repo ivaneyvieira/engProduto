@@ -369,7 +369,7 @@ SELECT N.storeno                                                                
        observacaoDev,
        countColeta,
        countArq,
-       dataColeta,
+       dataColeta                                                                                           AS dataColeta,
        IFNULL(R.form_label, '')                                                                             AS rotulo,
        baseSTUnit                                                                                           AS baseSTUnit,
        chaveUlt                                                                                             AS chaveUlt,
@@ -494,7 +494,7 @@ SELECT loja,
        N.pesoNFBrutoDevolucao,
        N.pesoNFLiquidoDevolucao,
        observacaoDev,
-       dataColeta,
+       dataColeta                        AS dataColeta,
        observacaoAdicional,
        countColeta,
        countArq,
@@ -557,8 +557,128 @@ UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 
-SELECT *
+DROP TEMPORARY TABLE IF EXISTS T_RESULT_COLETA;
+CREATE TEMPORARY TABLE T_RESULT_COLETA
+SELECT loja,
+       lojaSigla,
+       dataEntrada,
+       emissao,
+       ni,
+       nfEntrada,
+       custno,
+       vendno,
+       fornecedor,
+       valorNF,
+       pedComp,
+       transp,
+       transportadora,
+       cte,
+       volume,
+       peso,
+       usernoRecebe,
+       usuarioRecebe,
+       seq,
+       prdno,
+       codigo,
+       taxno,
+       barcodeStrList,
+       barcodeStrListEntrada,
+       descricao,
+       grade,
+       vendnoProduto,
+       quant,
+       numAcerto,
+       estoque,
+       estoqueLoja,
+       refFabrica,
+       cfop,
+       cfopDev,
+       cst,
+       un,
+       validadeValida,
+       validade,
+       tipoValidade,
+       tempoValidade,
+       observacaoNota,
+       tipoNota,
+       valorUnit,
+       valorTotal,
+       valorDesconto,
+       baseIcms,
+       valIcms,
+       valIPI,
+       icms,
+       ipi,
+       frete,
+       freteNota,
+       outDesp,
+       icmsSubst,
+       precoVenda,
+       numeroDevolucao,
+       motivoDevolucao,
+       quantDevolucao,
+       pesoDevolucao,
+       volumeDevolucao,
+       transpDevolucao,
+       transportadoraDevolucao,
+       cteDevolucao,
+       dataDevolucao,
+       situacaoDev,
+       userDevolucao,
+       notaDevolucao,
+       emissaoDevolucao,
+       valorDevolucao,
+       obsDevolucao,
+       storeno,
+       pdvno,
+       xano,
+       volumeNFDevolucao,
+       transpNFDevolucao,
+       pesoNFBrutoDevolucao,
+       pesoNFLiquidoDevolucao,
+       observacaoDev,
+       IF(emissaoDevolucao IS NULL, NULL, IFNULL(dataColeta, emissaoDevolucao)) AS dataColeta,
+       observacaoAdicional,
+       countColeta,
+       countArq,
+       rotulo,
+       baseSTUnit,
+       chaveUlt,
+       chaveSefaz,
+       ncm,
+       pesoLiquido,
+       pesoBruto,
+       duplicata,
+       dataVencimentoDup,
+       valorVencimentoDup,
+       situacaoDup,
+       duplicataNum,
+       situacaoDupStatus,
+       rotuloSped,
+       icmsSaida,
+       processado,
+       obsDup
 FROM T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
-  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0)
+  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0);
+/*
+UPDATE         addOptionalParameter("invno", invno)
+  addOptionalParameter("numero", nota.numeroDevolucao)
+  addOptionalParameter("tipoDevolucao", nota.motivoDevolucao)
+*/
 
+DROP TEMPORARY TABLE IF EXISTS T_RESULT_UPDATE;
+CREATE TEMPORARY TABLE T_RESULT_UPDATE
+(
+  PRIMARY KEY (invno, numero, tipoDevolucao)
+)
+SELECT ni AS invno, numeroDevolucao AS numero, motivoDevolucao AS tipoDevolucao, MAX(IFNULL(dataColeta*1, 0)) AS dataColeta
+FROM T_RESULT_COLETA
+GROUP BY invno, numero, tipoDevolucao;
+
+UPDATE sqldados.invAdicional AS A INNER JOIN T_RESULT_UPDATE AS U USING (invno, numero, tipoDevolucao)
+SET A.dataColeta = U.dataColeta
+WHERE A.dataColeta != U.dataColeta;
+
+SELECT *
+FROM T_RESULT_COLETA
