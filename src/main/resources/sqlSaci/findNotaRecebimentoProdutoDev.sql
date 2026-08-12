@@ -661,11 +661,6 @@ SELECT loja,
 FROM T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
   AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0);
-/*
-UPDATE         addOptionalParameter("invno", invno)
-  addOptionalParameter("numero", nota.numeroDevolucao)
-  addOptionalParameter("tipoDevolucao", nota.motivoDevolucao)
-*/
 
 DROP TEMPORARY TABLE IF EXISTS T_RESULT_UPDATE;
 CREATE TEMPORARY TABLE T_RESULT_UPDATE

@@ -77,3 +77,10 @@ CREATE INDEX e8 ON sqldados.nf (tipo, paymno, status, issuedate);
 
 ALTER TABLE sqldados.iprdAdicionalDev
   ADD numAcerto int NULL DEFAULT 0;
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  ADD nfdRecusa varchar(25) NULL DEFAULT '',
+  ADD nfRetorno varchar(25) NULL DEFAULT '',
+  ADD emissaoRetorno int NULL DEFAULT 0,
+  ADD niRetorno int NULL DEFAULT 0;
+
