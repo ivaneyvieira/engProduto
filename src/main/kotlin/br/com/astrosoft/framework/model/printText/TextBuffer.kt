@@ -17,8 +17,13 @@ class TextBuffer {
     return buffer.toString()
   }
 
-  fun println(text: String) {
-    buffer.append(text).appendLine()
+  fun printLine(text: String) {
+    val linhasLn = text.split("\n")
+
+
+    linhasLn.forEach { linha ->
+      buffer.append(linha).appendLine()
+    }
   }
 
   fun inicializePrint() {

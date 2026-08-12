@@ -117,7 +117,17 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   }
 
   protected fun writeln(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
-    textBuffer.println(text.let { textOrig ->
+    val linhas = text.split("\n")
+    if(linhas.size > 1) {
+      println("Nova linha")
+    }
+    linhas.forEach { linha ->
+      writeLine(linha, center, expand, negrito)
+    }
+  }
+
+  private fun writeLine(text: String, center: Boolean, expand: Boolean, negrito: Boolean) {
+    textBuffer.printLine(text.let { textOrig ->
       val textCenter = if (center) {
         val widthPageCalc = if (expand) widthPage / 2 else widthPage
         val margem = (widthPageCalc - textOrig.length) / 2

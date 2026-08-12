@@ -80,7 +80,7 @@ class TabNotaRecebidaViewModel(val viewModel: RecebimentoViewModel) {
         dados = nota.produtos,
         printer = object : IPrinter {
           override fun print(text: TextBuffer) {
-            buf.println(text.textBuf())
+            buf.printLine(text.textBuf())
           }
         }
       )

@@ -90,13 +90,12 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
 
     val buf = TextBuffer()
 
-
     itens.forEach { nota ->
       report.print(
         dados = nota.produtos,
         printer = object : IPrinter {
           override fun print(text: TextBuffer) {
-            buf.println(text.textBuf())
+            buf.printLine(text.textBuf())
           }
         }
       )
@@ -127,7 +126,7 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
       dados = listOf(termo),
       printer = object : IPrinter {
         override fun print(text: TextBuffer) {
-          buf.println(text.textBuf())
+          buf.printLine(text.textBuf())
         }
       }
     )

@@ -177,7 +177,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
           ProdutoMovimentacao::grade
         )
       ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      printer = subView.printerPreview(printEvent = printEvent)
     )
   }
 

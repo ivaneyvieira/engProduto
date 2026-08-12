@@ -42,7 +42,8 @@ class PrintReposicaoMovimentacao() : PrintText<ProdutoMovimentacao>() {
     column(ProdutoMovimentacao::descricao, "Descricao", 36)
     column(ProdutoMovimentacao::grade, "Grade", 8)
     column(ProdutoMovimentacao::locApp, "Loc", 4)
-    column(ProdutoMovimentacao::movimentacao, "_Quant", 6)
+    column(ProdutoMovimentacao::movimentacao, "_Quant", 6, lineBreak = true)
+    column(ProdutoMovimentacao::barcodeRelatorio, "", size = 40)
   }
 
   override fun printSumary(bean: ProdutoMovimentacao?) {

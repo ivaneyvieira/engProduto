@@ -41,6 +41,9 @@ class ProdutoMovimentacao(
   var horaRecebido: LocalTime? = null,
   var observacao: String? = null
 ) {
+  val barcodeRelatorio: String
+    get() = "       <E>${barcode ?: ""}</E>"
+
   val localAbrev
     get() = locApp?.rpad(4, " ")?.substring(0, 4)?.trim() ?: ""
 
