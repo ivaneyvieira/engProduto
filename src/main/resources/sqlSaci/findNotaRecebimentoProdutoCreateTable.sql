@@ -81,3 +81,15 @@ ALTER TABLE sqldados.iprdAdicionalDev
   ADD emissaoRetorno int         NULL DEFAULT 0,
   ADD niRetorno      int         NULL DEFAULT 0;
 
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  DROP COLUMN nfdRecusa,
+  DROP COLUMN nfRetorno,
+  DROP COLUMN emissaoRetorno,
+  DROP COLUMN niRetorno;
+
+ALTER TABLE sqldados.invAdicional
+  ADD nfdRecusa      varchar(25) NULL DEFAULT '',
+  ADD nfRetorno      varchar(25) NULL DEFAULT '',
+  ADD emissaoRetorno int         NULL DEFAULT 0,
+  ADD niRetorno      int         NULL DEFAULT 0;

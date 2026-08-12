@@ -144,6 +144,62 @@ fun VerticalLayout.formHeader(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.emissaoDevolucao.format()
         }
+
+        textField("NFD Recusa") {
+          this.isReadOnly = readOnly
+          this.pattern = "[0-9]+/[A-Z0-9a-z]+"
+          this.allowedCharPattern = "[A-Z0-9a-z/]"
+          this.width = "6rem"
+          this.value = nota.nfdRecusa ?: ""
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.nfdRecusa = this.value
+            salvaNota(nota)
+          }
+        }
+
+        textField("NF Retorno") {
+          this.isReadOnly = readOnly
+          this.pattern = "[0-9]+/[A-Z0-9a-z]+"
+          this.allowedCharPattern = "[A-Z0-9a-z/]"
+          this.width = "6rem"
+          this.value = nota.nfRetorno ?: ""
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.nfRetorno = this.value
+            salvaNota(nota)
+          }
+        }
+
+        datePicker("Emissão") {
+          this.isReadOnly = readOnly
+          this.localePtBr()
+          this.width = "7.5rem"
+          this.value = nota.emissaoRetorno
+
+          addValueChangeListener {
+            nota.emissaoRetorno = this.value
+            salvaNota(nota)
+          }
+        }
+
+        integerField("NI") {
+          this.isReadOnly = readOnly
+          this.width = "5rem"
+          this.value = nota.niRetorno ?: 0
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.valueChangeMode = ValueChangeMode.LAZY
+
+          addValueChangeListener {
+            nota.niRetorno = this.value
+            salvaNota(nota)
+          }
+        }
+
         textField("Motivo Devolução") {
           this.isReadOnly = true
           this.isExpand = true
@@ -190,9 +246,7 @@ fun VerticalLayout.formHeader(
           this.isExpand = true
           this.value = nota.observacaoAdicional ?: ""
           //this.value = nota.obsDevolucaoAjustada() ?: ""
-
           this.valueChangeMode = ValueChangeMode.LAZY
-
 
           addValueChangeListener {
             nota.observacaoAdicional = this.value ?: ""

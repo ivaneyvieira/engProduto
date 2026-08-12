@@ -2823,6 +2823,10 @@ class QuerySaci : QueryDB(database) {
         addOptionalParameter("situacaoDev", nota.situacaoDev)
         addOptionalParameter("observacaoDev", nota.observacaoDev)
         addOptionalParameter("observacaoAdicional", nota.observacaoAdicional)
+        addOptionalParameter("nfdRecusa", nota.nfdRecusa)
+        addOptionalParameter("nfRetorno", nota.nfRetorno)
+        addOptionalParameter("emissaoRetorno", nota.emissaoRetorno.toSaciDate())
+        addOptionalParameter("niRetorno", nota.niRetorno ?: 0)
         addOptionalParameter("userno", userno)
       }
     }
