@@ -33,8 +33,7 @@ CREATE TEMPORARY TABLE T_NOTA_RECEBIMENTO
   PRIMARY KEY (invno)
 )
 SELECT invno, s26
-FROM
-  sqldados.inv
+FROM sqldados.inv
 WHERE s26 > 0
   AND date >= 20240501
   AND storeno IN (1, 2, 3, 4, 5, 6, 7, 8);
@@ -49,8 +48,7 @@ ALTER TABLE sqldados.iprdAdicional
   ADD selecionado BOOLEAN DEFAULT FALSE;
 
 SELECT *
-FROM
-  sqldados.iprdAdicional;
+FROM sqldados.iprdAdicional;
 
 
 ALTER TABLE sqldados.iprdAdicional
@@ -66,8 +64,7 @@ ALTER TABLE sqldados.invAdicional
   ADD observacaoAdicional VARCHAR(400) DEFAULT '';
 
 SELECT *
-FROM
-  sqldados.invAdicional;
+FROM sqldados.invAdicional;
 
 SHOW INDEX FROM sqldados.nf;
 
@@ -79,8 +76,8 @@ ALTER TABLE sqldados.iprdAdicionalDev
   ADD numAcerto int NULL DEFAULT 0;
 
 ALTER TABLE sqldados.iprdAdicionalDev
-  ADD nfdRecusa varchar(25) NULL DEFAULT '',
-  ADD nfRetorno varchar(25) NULL DEFAULT '',
-  ADD emissaoRetorno int NULL DEFAULT 0,
-  ADD niRetorno int NULL DEFAULT 0;
+  ADD nfdRecusa      varchar(25) NULL DEFAULT '',
+  ADD nfRetorno      varchar(25) NULL DEFAULT '',
+  ADD emissaoRetorno int         NULL DEFAULT 0,
+  ADD niRetorno      int         NULL DEFAULT 0;
 
