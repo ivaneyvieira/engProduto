@@ -145,7 +145,7 @@ fun VerticalLayout.formHeader(
           this.value = nota.emissaoDevolucao.format()
         }
 
-        textField("NFD Recusa") {
+        textField("NFD Recusada") {
           this.isReadOnly = readOnly
           this.pattern = "[0-9]+/[A-Z0-9a-z]+"
           this.allowedCharPattern = "[A-Z0-9a-z/]"

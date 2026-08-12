@@ -569,7 +569,13 @@ UPDATE sqldados.invAdicional AS I INNER JOIN T_RESULT AS R ON I.invno = R.ni AND
 SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 
-DROP TEMPORARY TABLE IF EXISTS T_RESULT_COLETA;
+SELECT *
+FROM T_RESULT AS R
+WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
+  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0)
+
+/*
+DROP TEMPORARY TABLE IF EXISTS T_RESULT_COLETA
 CREATE TEMPORARY TABLE T_RESULT_COLETA
 SELECT loja,
        lojaSigla,
@@ -676,9 +682,10 @@ SELECT loja,
        obsDup
 FROM T_RESULT AS R
 WHERE (situacaoDev = :situacaoDev OR :situacaoDev = 999)
-  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0);
+  AND (notaDevolucao LIKE CONCAT(:nfd, '/%') OR :nfd = 0)
 
-DROP TEMPORARY TABLE IF EXISTS T_RESULT_UPDATE;
+
+DROP TEMPORARY TABLE IF EXISTS T_RESULT_UPDATE
 CREATE TEMPORARY TABLE T_RESULT_UPDATE
 (
   PRIMARY KEY (invno, numero, tipoDevolucao)
@@ -688,11 +695,13 @@ SELECT ni                             AS invno,
        motivoDevolucao                AS tipoDevolucao,
        MAX(IFNULL(dataColeta * 1, 0)) AS dataColeta
 FROM T_RESULT_COLETA
-GROUP BY invno, numero, tipoDevolucao;
+GROUP BY invno, numero, tipoDevolucao
 
 UPDATE sqldados.invAdicional AS A INNER JOIN T_RESULT_UPDATE AS U USING (invno, numero, tipoDevolucao)
 SET A.dataColeta = U.dataColeta
-WHERE A.dataColeta != U.dataColeta;
+WHERE A.dataColeta != U.dataColeta
 
 SELECT *
 FROM T_RESULT_COLETA
+
+ */
