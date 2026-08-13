@@ -348,7 +348,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     val filtro: FiltroNotaVenda = FiltroNotaVenda(
       loja = dev.loja,
       pesquisa = dev.invno.toString(),
-      invno = dev.invno,
+      invno = 0,
       pdv = 0,
       transacao = 0,
       dataInicial = LocalDate.now().minusMonths(2),
