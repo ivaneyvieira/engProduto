@@ -344,9 +344,9 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  private fun localizaAutorizacao(dev: EntradaDevCli): NotaVenda? {
-    val notas = localizaNota(dev, comInvno = true).ifEmpty {
-      localizaNota(dev, comInvno = false)
+  private fun localizaAutorizacao(dev: EntradaDevCli, meses: Long): NotaVenda? {
+    val notas = localizaNota(dev, comInvno = true, meses).ifEmpty {
+      localizaNota(dev, comInvno = false, meses)
     }
     val nota = notas.firstOrNull {
       val temSolicitacaoTroca = !it.loginSolicitacao.isNullOrBlank()
@@ -356,16 +356,18 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     return nota
   }
 
-  private fun localizaNota(dev: EntradaDevCli, comInvno: Boolean): List<NotaVenda> {
+  private fun localizaNota(dev: EntradaDevCli, comInvno: Boolean, meses: Long): List<NotaVenda> {
+    val dataInicial = LocalDate.now().minusMonths(meses)
+    val dataFinal = LocalDate.now().minusMonths(meses - 1)
     val filtro: FiltroNotaVenda = FiltroNotaVenda(
       loja = dev.loja,
       pesquisa = dev.invno.toString(),
       invno = if (comInvno) dev.invno else 0,
       pdv = 0,
       transacao = 0,
-      dataInicial = LocalDate.now().minusMonths(2),
-      dataFinal = LocalDate.now(),
-      dataCorte = LocalDate.now().minusMonths(2),
+      dataInicial = dataInicial,
+      dataCorte = dataInicial,
+      dataFinal = dataFinal,
     )
     val notas = NotaVenda.findAll(filtro)
     return notas
@@ -377,7 +379,12 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun processaBusca(dev: EntradaDevCli) {
-    val autorizacao = localizaAutorizacao(dev) ?: fail("Autorização Não encontrada")
+    val autorizacao = localizaAutorizacao(dev, 1)
+                      ?: localizaAutorizacao(dev, 2)
+                      ?: localizaAutorizacao(dev, 3)
+                      ?: localizaAutorizacao(dev, 4)
+                      ?: localizaAutorizacao(dev, 5)
+                      ?: fail("Autorização Não encontrada")
     saci.salvaAutoirizacao(
       loja = autorizacao.loja ?: fail("Loja inválida"),
       pdv = autorizacao.pdv ?: fail("Pdv inválido"),
