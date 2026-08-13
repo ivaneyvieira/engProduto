@@ -344,13 +344,16 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  private fun localizaAutoriacao(dev: EntradaDevCli): NotaVenda? {
+  private fun localizaAutorizacao(dev: EntradaDevCli): NotaVenda? {
     val notas = localizaNota(dev, comInvno = true).ifEmpty {
       localizaNota(dev, comInvno = false)
     }
-    return notas.firstOrNull {
-      it.loginSolicitacao != "" || it.loginTroca != ""
-    }
+    val nota = notas.firstOrNull {
+      val temSolicitacaoTroca = !it.loginSolicitacao.isNullOrBlank()
+      val temTroca = !it.loginTroca.isNullOrBlank()
+      temSolicitacaoTroca || temTroca
+    } ?: notas.firstOrNull()
+    return nota
   }
 
   private fun localizaNota(dev: EntradaDevCli, comInvno: Boolean): List<NotaVenda> {
@@ -374,7 +377,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun processaBusca(dev: EntradaDevCli) {
-    val autorizacao = localizaAutoriacao(dev) ?: fail("Autorização Não encontrada")
+    val autorizacao = localizaAutorizacao(dev) ?: fail("Autorização Não encontrada")
     saci.salvaAutoirizacao(
       loja = autorizacao.loja ?: fail("Loja inválida"),
       pdv = autorizacao.pdv ?: fail("Pdv inválido"),
