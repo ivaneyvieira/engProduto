@@ -345,10 +345,19 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
   }
 
   private fun localizaAutoriacao(dev: EntradaDevCli): NotaVenda? {
+    val notas = localizaNota(dev, comInvno = true).ifEmpty {
+      localizaNota(dev, comInvno = false)
+    }
+    return notas.firstOrNull {
+      it.loginSolicitacao != "" || it.loginTroca != ""
+    }
+  }
+
+  private fun localizaNota(dev: EntradaDevCli, comInvno: Boolean): List<NotaVenda> {
     val filtro: FiltroNotaVenda = FiltroNotaVenda(
       loja = dev.loja,
       pesquisa = dev.invno.toString(),
-      invno = 0,
+      invno = if (comInvno) dev.invno else 0,
       pdv = 0,
       transacao = 0,
       dataInicial = LocalDate.now().minusMonths(2),
@@ -356,10 +365,7 @@ class TabDevCliImprimirViewModel(val viewModel: DevClienteViewModel) {
       dataCorte = LocalDate.now().minusMonths(2),
     )
     val notas = NotaVenda.findAll(filtro)
-
-    return notas.firstOrNull {
-      it.loginSolicitacao != "" || it.loginTroca != ""
-    }
+    return notas
   }
 
   fun buscaAutorizacao(dev: EntradaDevCli) = viewModel.exec {
