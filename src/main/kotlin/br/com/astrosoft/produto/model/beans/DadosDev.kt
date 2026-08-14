@@ -13,7 +13,7 @@ class DadosDev(
   var obs: String?,
   var nfVenda: String?,
   var obsTipo: String?,
-  var dataVenda: LocalDate?,
+  var dataVenda: String?,
   var codCliente: Int?,
   var nomeCliente: String?,
   val produtos: List<DadosDevProduto>,

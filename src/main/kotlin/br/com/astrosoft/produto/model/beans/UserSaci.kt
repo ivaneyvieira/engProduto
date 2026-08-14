@@ -142,6 +142,7 @@ class UserSaci : IUser {
   var avariaRecReposto by DelegateAuthorized2(110)
   var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
   var devFor2NotaPedido by DelegateAuthorized2(112)
+
   //var devFor2NotaNFD by DelegateAuthorized2(113)
   var devFor2NotaTransportadora by DelegateAuthorized2(114)
 
@@ -155,6 +156,7 @@ class UserSaci : IUser {
   var ressuprimentoRessu by DelegateAuthorized2(122)
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
+
   //var devFor2NotaColeta by DelegateAuthorized3(126)
   var devFor2NotaDescarte by DelegateAuthorized3(127)
   var devFor2NotaEditor by DelegateAuthorized3(128)
@@ -162,6 +164,7 @@ class UserSaci : IUser {
   var produtoEstoque by DelegateAuthorized3(130)
   var estoqueInsereInventarioCD by DelegateAuthorized3(131)
   var notaTipo by DelegateAuthorized3(132)
+
   //var devFor2NotaDivergente by DelegateAuthorized3(133)
   var estoqueLoja by DelegateAuthorized3(134)
   var devFor2NotaNulo by DelegateAuthorized3(135)
@@ -206,7 +209,8 @@ class UserSaci : IUser {
   var estoqueDevProduto by DelegateAuthorized3(172)
   var tabVendaDet by DelegateAuthorized3(173)
   var clienteCredito by DelegateAuthorized3(174)
-  var devCliDevolucoes  by DelegateAuthorized3(175)
+  var devCliDevolucoes by DelegateAuthorized3(175)
+  var devDados by DelegateAuthorized3(176)
 
   //Locais
   private var localEstoque: String?
@@ -530,9 +534,9 @@ class UserSaci : IUser {
     get() = localizacaoRepo.joinToString(", ")
 
   val lojaUsuario
-    get() =  if(admin){
+    get() = if (admin) {
       0
-    }else{
+    } else {
       no.toString().substring(0, 1).toIntOrNull() ?: 0
     }
 
@@ -711,7 +715,7 @@ class UserSaci : IUser {
 
   var devCliente
     get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito || devCliDevolucoes ||
-            devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || admin
+            devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || devDados || admin
     set(value) {
       devCliImprimir = value
       devCliImpresso = value
@@ -723,6 +727,7 @@ class UserSaci : IUser {
       devCliAutoriza = value
       devCliCancela = value
       devCliDevolucoes = value
+      devDados = value
     }
 
   var acertoEstoque

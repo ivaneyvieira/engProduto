@@ -12,7 +12,7 @@ class DadosDevProduto {
   var obs: String? = null
   var nfVenda: String? = null
   var obsTipo: String? = null
-  var dataVenda: LocalDate? = null
+  var dataVenda: String? = null
   var codCliente: Int? = null
   var nomeCliente: String? = null
   var prdno: String? = null

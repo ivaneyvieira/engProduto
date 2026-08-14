@@ -15,7 +15,9 @@ SELECT invno                                              AS ni,
        @POS2 := POSITION('(' IN I.remarks)                AS pos2,
        TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1))      AS nfVenda,
        TRIM(SUBSTR(I.remarks, 41, 40))                    AS obsTipo,
-       NULL                                               AS dataVenda,
+       @POS1 := POSITION('(' IN I.remarks) + 1            AS posData1,
+       @POS2 := POSITION(')' IN I.remarks)                AS posData2,
+       TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1))      AS dataVenda,
        vendno                                             AS codCliente,
        V.sname                                            AS nomeCliente
 FROM

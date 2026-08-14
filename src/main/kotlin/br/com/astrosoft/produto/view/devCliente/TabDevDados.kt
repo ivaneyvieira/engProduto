@@ -118,7 +118,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliImprimir == true
+    return username?.devDados == true
   }
 
   override val label: String
