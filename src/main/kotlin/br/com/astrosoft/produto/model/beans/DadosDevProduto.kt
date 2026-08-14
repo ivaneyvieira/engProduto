@@ -25,8 +25,13 @@ class DadosDevProduto {
   var nfse: String? = null
   var pdvno: Int? = null
   var xano: Int? = null
+  var nfTipo: Int? = null
   var userSolicitacao: Int? = null
+  var loginSolicitacao: String? = null
+  var nomeSolicitacao: String? = null
   var userTroca: Int? = null
+  var loginTroca: String? = null
+  var nomeTroca: String? = null
   var produtoTroca: String? = null
   var tipoDev: String? = null
   var nfEntRet: Int? = null

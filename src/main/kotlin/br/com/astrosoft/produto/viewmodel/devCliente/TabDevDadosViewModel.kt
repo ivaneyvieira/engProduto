@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 
 class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
@@ -22,6 +23,52 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun ajusteProduto(ajuste: AjusteProduto) {
     val produto = ajuste.produto
     produto.marcaAjuste(ajuste)
+  }
+
+  fun desfazSolicitacao(nota: DadosDev) {
+
+  }
+
+  fun autorizaSolicitacao(nota: DadosDev, solicitacaoTroca: SolicitacaoTroca) = viewModel.exec {
+    val login = solicitacaoTroca.login
+    val senha = solicitacaoTroca.senha
+    val user = UserSaci.userLogin(login, senha)
+    user ?: fail("Usuário ou senha inválidos")
+
+    when (solicitacaoTroca.solicitacaoTrocaEnnum) {
+      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnum) {
+        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+          fail("Troca com produto não autorizada")
+        }
+
+        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+          fail("Troca sem produto não autorizada")
+        }
+
+        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
+          fail("Troca mista de produto não autorizada")
+        }
+      }
+
+      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+        fail("Estorno de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+        fail("Reembolso de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+        fail("Mudança de cliente não autorizada")
+      }
+    }
+
+    nota.tipoDevEnum = solicitacaoTroca.solicitacaoTrocaEnnum
+    nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
+    nota.userSolicitacao = user.no
+    nota.update()
+
+    updateView()
   }
 
   val subView

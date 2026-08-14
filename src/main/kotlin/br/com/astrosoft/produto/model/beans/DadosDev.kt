@@ -22,12 +22,50 @@ class DadosDev(
   var nfse: String?,
   var pdvno: Int?,
   var xano: Int?,
+  var nfTipo: Int?,
   var userSolicitacao: Int?,
+  var loginSolicitacao: String?,
+  var nomeSolicitacao: String?,
   var userTroca: Int?,
+  var loginTroca: String?,
+  var nomeTroca: String?,
   var produtoTroca: String?,
   var tipoDev: String?,
   var nfEntRet: Int?,
 ) {
+  fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
+    val tipo = this.obsTipo ?: throw Exception("Observação vazia")
+    if (tipo.startsWith(solicitacaoTrocaEnum.codigo).not()) {
+      throw Exception("O tipo de crédito divergente da nota de devolução")
+    }
+  }
+
+  fun validaTipoDevolucao(produtoTrocaEnum: EProdutoTroca) {
+    val tipo = obsTipo ?: throw Exception("Observação vazia")
+    val comProduto = tipo.contains(" P ") || tipo.endsWith(" P")
+    val misto = tipo.contains(" M ") || tipo.endsWith(" M")
+
+    if (misto) {
+      if (produtoTrocaEnum != EProdutoTroca.Misto) {
+        throw Exception("O tipo de devolução divergente da nota de devolução")
+      }
+    } else {
+      if (comProduto) {
+        if (produtoTrocaEnum != EProdutoTroca.Com) {
+          throw Exception("O tipo de devolução divergente da nota de devolução")
+        }
+      } else {
+        if (produtoTrocaEnum != EProdutoTroca.Sem) {
+          throw Exception("O tipo de devolução divergente da nota de devolução")
+        }
+      }
+    }
+  }
+
+  fun update() {
+    saci.updateDadosDev(this)
+  }
+
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {
@@ -39,6 +77,18 @@ class DadosDev(
       }
 
       return "$nfdno/$nfdse"
+    }
+
+  var tipoDevEnum: ESolicitacaoTroca?
+    get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
+    set(value) {
+      tipoDev = value?.codigo
+    }
+
+  var produtoTrocaEnum: EProdutoTroca?
+    get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
+    set(value) {
+      produtoTroca = value?.codigo
     }
 
   companion object {
@@ -70,8 +120,13 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       nfse = nota.nfse,
       pdvno = nota.pdvno,
       xano = nota.xano,
+      nfTipo = nota.nfTipo,
       userSolicitacao = nota.userSolicitacao,
+      loginSolicitacao = nota.loginSolicitacao,
+      nomeSolicitacao = nota.nomeSolicitacao,
       userTroca = nota.userTroca,
+      loginTroca = nota.loginTroca,
+      nomeTroca = nota.nomeTroca,
       produtoTroca = nota.produtoTroca,
       tipoDev = nota.tipoDev,
       nfEntRet = nota.nfEntRet,

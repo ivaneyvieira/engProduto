@@ -3619,13 +3619,26 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun findDadosDev(filtro: FiltroDadosDev): List<DadosDevProduto>{
+  fun findDadosDev(filtro: FiltroDadosDev): List<DadosDevProduto> {
     val sql = "/sqlSaci/dadosDev.sql"
-    return query(sql, DadosDevProduto::class){
+    return query(sql, DadosDevProduto::class) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
+  fun updateDadosDev(dado: DadosDev) {
+    val sql = "/sqlSaci/dadosDevUpdate.sql"
+    script(sql) {
+      addOptionalParameter("invno", dado.ni)
+      addOptionalParameter("userSolicitacao", dado.userSolicitacao)
+      addOptionalParameter("userTroca", dado.userTroca)
+      addOptionalParameter("produtoTroca", dado.produtoTroca)
+      addOptionalParameter("tipoDev", dado.tipoDev)
+      addOptionalParameter("nfEntRet", dado.nfEntRet)
+
     }
   }
 

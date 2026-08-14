@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -89,6 +90,25 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
       }
     }
 
+    val user = AppConfig.userLogin() as? UserSaci
+
+    addColumnButton(
+      iconButton = VaadinIcon.SIGN_IN,
+      tooltip = "Autoriza Solicitação",
+      header = "Solicitação"
+    ) { nota ->
+      execSolicitacoes(nota)
+    }
+
+    if (user?.defazSolicitacao == true) {
+      addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
+        execDesfazSolicitacoes(nota)
+      }
+    }
+
+    columnGrid(DadosDev::loginSolicitacao, header = "Autorização")
+    columnGrid(DadosDev::loginTroca, header = "Assina Troca")
+
     columnGrid(DadosDev::ni, header = "NI")
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
     columnGrid(DadosDev::dataDevolucao, header = "Data", width = null)
@@ -98,6 +118,31 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::dataVenda, header = "Data", width = null)
     columnGrid(DadosDev::codCliente, header = "Cliente")
     columnGrid(DadosDev::nomeCliente, header = "Nome")
+  }
+
+  private fun execDesfazSolicitacoes(nota: DadosDev) {
+    if (nota.loginSolicitacao.isNullOrBlank()) {
+      DialogHelper.showError("Não existe solicitação para desfazer")
+    } else {
+      DialogHelper.showQuestion("Desfaz a solicitação?") {
+        viewModel.desfazSolicitacao(nota)
+      }
+    }
+  }
+
+  private fun execSolicitacoes(nota: DadosDev) {
+    val form = FormSolicitacaoDevDados(nota)
+
+    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+      val result = form.validaFiltro()
+      result.onFailure {
+        DialogHelper.showWarning(it.message ?: "Erro no filtro")
+      }
+      result.onSuccess { solicitacaoTroca ->
+        val solicitacaoTroca: SolicitacaoTroca = solicitacaoTroca
+        viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
+      }
+    }
   }
 
   override fun filtro(): FiltroDadosDev {

@@ -55,7 +55,8 @@ SELECT ni,
        SUBSTRING_INDEX(T.nfVenda, '/', -1)    AS nfse,
        N.storeno                              AS storeno,
        N.pdvno                                AS pdvno,
-       N.xano                                 AS xano
+       N.xano                                 AS xano,
+       N.tipo                                 AS nfTipo
 FROM
   T_NOTA                  AS T
     LEFT JOIN sqldados.nf AS N
@@ -79,8 +80,13 @@ SELECT N.ni                  AS ni,
        NF.nfse               AS nfse,
        NF.pdvno              AS pdvno,
        NF.xano               AS xano,
+       NF.nfTipo             AS nfTipo,
        N.userSolicitacao     AS userSolicitacao,
+       US.login              AS loginSolicitacao,
+       US.name               AS nomeSolicitacao,
        N.userTroca           AS userTroca,
+       UT.login              AS loginTroca,
+       UT.name               AS nomeTroca,
        N.produtoTroca        AS produtoTroca,
        N.tipoDev             AS tipoDev,
        N.nfEntRet            AS nfEntRet,
@@ -104,6 +110,8 @@ FROM
                ON P.no = I.prdno
     LEFT JOIN  sqldados.dadosDevProduto AS D
                USING (invno, prdno, grade)
-
-
+    LEFT JOIN  sqldados.users           AS US
+               ON US.no = N.userSolicitacao
+    LEFT JOIN  sqldados.users           AS UT
+               ON US.no = N.userTroca
 
