@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(view) {
   val tabDevCliEditorViewModel = TabDevCliEditorViewModel(this)
   val tabDevCliImprimirViewModel = TabDevCliImprimirViewModel(this)
+  val tabDevDadosViewModel = TabDevDadosViewModel(this)
   val tabDevCliDevolucoesViewModel = TabDevCliDevolucoesViewModel(this)
   val tabDevCliDevTrocaViewModel = TabDevCliDevTrocaViewModel(this)
   val tabDevCliProdutoViewModel = TabDevCliProdutoViewModel(this)
@@ -19,6 +20,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
   override fun listTab() = listOf(
     view.tabDevAutoriza,
     view.tabDevCliDevolucoes,
+    view.tabDevDados,
     view.tabDevCliImprimir,
     view.tabDevCliImpresso,
     view.tabDevCancela,
@@ -33,6 +35,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
 
 interface IDevClienteView : IView {
   val tabDevCliImprimir: ITabDevCliImprimir
+  val tabDevDados: ITabDevDados
   val tabDevCliDevolucoes: ITabDevCliDevolucoes
   val tabDevCliDevTroca: ITabDevCliDevTroca
   val tabDevCliEditor: ITabDevCliEditor

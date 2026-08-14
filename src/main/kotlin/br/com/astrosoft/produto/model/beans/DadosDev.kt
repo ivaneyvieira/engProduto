@@ -3,20 +3,23 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class DadosDev (
-  var ni: Int? = null,
-  var loja: Int? = null,
-  var nfdno: String? = null,
-  var nfdse: String? = null,
-  var valorDev: Double? = null,
-  var obs: String? = null,
-  var nfVenda: String? = null,
-  var obsTipo: String? = null,
-  var dataVenda: LocalDate? = null,
-  var codCliente: Int? = null,
-  var nomeCliente: String? = null,
+class DadosDev(
+  var ni: Int?,
+  var loja: Int?,
+  var nfdno: String?,
+  var nfdse: String?,
+  var dataDevolucao: LocalDate?,
+  var valorDev: Double?,
+  var obs: String?,
+  var nfVenda: String?,
+  var obsTipo: String?,
+  var dataVenda: LocalDate?,
+  var codCliente: Int?,
+  var nomeCliente: String?,
   val produtos: List<DadosDevProduto>,
-){
+) {
+  val nfDevolucao: String
+    get() = "$nfdno/$nfdse"
 
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDev> {
@@ -26,7 +29,7 @@ class DadosDev (
 }
 
 private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
-  return this.groupBy { it.ni }.mapNotNull  {
+  return this.groupBy { it.ni }.mapNotNull {
     val lista = it.value
     val nota = lista.firstOrNull() ?: return@mapNotNull null
     DadosDev(
@@ -34,6 +37,7 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       loja = nota.loja,
       nfdno = nota.nfdno,
       nfdse = nota.nfdse,
+      dataDevolucao = nota.dataDevolucao,
       valorDev = nota.valorDev,
       obs = nota.obs,
       nfVenda = nota.nfVenda,

@@ -7,6 +7,7 @@ class DadosDevProduto {
   var loja: Int? = null
   var nfdno: String? = null
   var nfdse: String? = null
+  var dataDevolucao: LocalDate? = null
   var valorDev: Double? = null
   var obs: String? = null
   var nfVenda: String? = null
@@ -20,5 +21,11 @@ class DadosDevProduto {
   var unidade: String? = null
   var quantidadeDev: Int? = null
   var valorUnitario: Double? = null
+
+  val codigo: Int?
+    get() = prdno?.trim()?.toIntOrNull()
+
+  val valorTotal: Double
+    get() = (valorUnitario ?: 0.0) * (quantidadeDev ?: 0)
 }
 
