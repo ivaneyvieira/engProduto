@@ -5,6 +5,8 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.ResolverStyle
 import java.util.*
 
 const val DATE_PATTERN = "dd/MM/yyyy"
@@ -152,4 +154,18 @@ fun LocalDate.firstDayOfMonth(): LocalDate {
 
 fun LocalDate.lastDayOfMonth(): LocalDate {
   return this.withDayOfMonth(this.lengthOfMonth())
+}
+
+fun stringToDate(dataStr: String): LocalDate? {
+  val formatter = DateTimeFormatterBuilder()
+    .appendPattern("d/M/")
+    .appendOptional(DateTimeFormatter.ofPattern("yyyy"))
+    .appendOptional(DateTimeFormatter.ofPattern("yy"))
+    .toFormatter()
+    // ResolverStyle.SMART garante a validação do calendário (ex: rejeita 31/02)
+    .withResolverStyle(ResolverStyle.SMART)
+
+  return runCatching {
+    LocalDate.parse(dataStr.trim(), formatter)
+  }.getOrNull()
 }

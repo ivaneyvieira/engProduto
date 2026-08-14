@@ -9,6 +9,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
+import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -90,11 +91,11 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
     columnGrid(DadosDev::ni, header = "NI")
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
-    columnGrid(DadosDev::dataDevolucao, header = "data")
+    columnGrid(DadosDev::dataDevolucao, header = "Data", width = null)
     columnGrid(DadosDev::valorDev, header = "Valor Dev")
-    columnGrid(DadosDev::obsTipo, header = "Tipo do Crédiot")
+    columnGrid(DadosDev::obsTipo, header = "Tipo do Crédito")
     columnGrid(DadosDev::nfVenda, header = "NFVenda")
-    columnGrid(DadosDev::dataVenda, header = "Data")
+    columnGrid(DadosDev::dataVenda, header = "Data", width = null)
     columnGrid(DadosDev::codCliente, header = "Cliente")
     columnGrid(DadosDev::nomeCliente, header = "Nome")
   }

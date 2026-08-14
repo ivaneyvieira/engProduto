@@ -3620,7 +3620,7 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun findDadosDev(filtro: FiltroDadosDev): List<DadosDevProduto>{
-    val sql = "/sqlSaci/notaDevolucao.sql"
+    val sql = "/sqlSaci/dadosDev.sql"
     return query(sql, DadosDevProduto::class){
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pesquisa", filtro.pesquisa)

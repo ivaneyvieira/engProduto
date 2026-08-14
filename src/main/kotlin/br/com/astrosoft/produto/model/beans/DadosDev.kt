@@ -13,13 +13,33 @@ class DadosDev(
   var obs: String?,
   var nfVenda: String?,
   var obsTipo: String?,
-  var dataVenda: String?,
+  var dataVenda: LocalDate?,
   var codCliente: Int?,
   var nomeCliente: String?,
   val produtos: List<DadosDevProduto>,
+  /*DadosDevProduto?*/
+  var nfno: Int?,
+  var nfse: String?,
+  var pdvno: Int?,
+  var xano: Int?,
+  var userSolicitacao: Int?,
+  var userTroca: Int?,
+  var produtoTroca: String?,
+  var tipoDev: String?,
+  var nfEntRet: Int?,
 ) {
   val nfDevolucao: String
-    get() = "$nfdno/$nfdse"
+    get() {
+      if (nfdno.isNullOrBlank()) {
+        return ""
+      }
+
+      if (nfdse.isNullOrBlank()) {
+        return nfdno ?: ""
+      }
+
+      return "$nfdno/$nfdse"
+    }
 
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDev> {
@@ -45,7 +65,16 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       dataVenda = nota.dataVenda,
       codCliente = nota.codCliente,
       nomeCliente = nota.nomeCliente,
-      produtos = lista
+      produtos = lista,
+      nfno = nota.nfno,
+      nfse = nota.nfse,
+      pdvno = nota.pdvno,
+      xano = nota.xano,
+      userSolicitacao = nota.userSolicitacao,
+      userTroca = nota.userTroca,
+      produtoTroca = nota.produtoTroca,
+      tipoDev = nota.tipoDev,
+      nfEntRet = nota.nfEntRet,
     )
   }
 }

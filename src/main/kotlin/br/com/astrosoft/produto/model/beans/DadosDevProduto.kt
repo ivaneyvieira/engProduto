@@ -12,7 +12,7 @@ class DadosDevProduto {
   var obs: String? = null
   var nfVenda: String? = null
   var obsTipo: String? = null
-  var dataVenda: String? = null
+  var dataVenda: LocalDate? = null
   var codCliente: Int? = null
   var nomeCliente: String? = null
   var prdno: String? = null
@@ -21,6 +21,17 @@ class DadosDevProduto {
   var unidade: String? = null
   var quantidadeDev: Int? = null
   var valorUnitario: Double? = null
+  var nfno: Int? = null
+  var nfse: String? = null
+  var pdvno: Int? = null
+  var xano: Int? = null
+  var userSolicitacao: Int? = null
+  var userTroca: Int? = null
+  var produtoTroca: String? = null
+  var tipoDev: String? = null
+  var nfEntRet: Int? = null
+  var produtoTrocaItem: String? = null
+  var quantidadeTipo: Int? = null
 
   val codigo: Int?
     get() = prdno?.trim()?.toIntOrNull()
