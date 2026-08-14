@@ -3619,6 +3619,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun findDadosDev(filtro: FiltroDadosDev): List<DadosDevProduto>{
+    val sql = "/sqlSaci/notaDevolucao.sql"
+    return query(sql, DadosDevProduto::class){
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
