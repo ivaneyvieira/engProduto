@@ -3638,7 +3638,13 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("produtoTroca", dado.produtoTroca)
       addOptionalParameter("tipoDev", dado.tipoDev)
       addOptionalParameter("nfEntRet", dado.nfEntRet)
+    }
+  }
 
+  fun deleteDadosDev(dado: DadosDev) {
+    val sql = "/sqlSaci/dadosDevDelete.sql"
+    script(sql) {
+      addOptionalParameter("invno", dado.ni)
     }
   }
 

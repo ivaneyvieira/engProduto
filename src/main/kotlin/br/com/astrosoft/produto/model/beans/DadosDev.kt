@@ -66,6 +66,10 @@ class DadosDev(
     saci.updateDadosDev(this)
   }
 
+  fun apagaDados() {
+    saci.deleteDadosDev(this)
+  }
+
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {

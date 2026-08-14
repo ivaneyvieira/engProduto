@@ -84,9 +84,13 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosDadosDev(viewModel, nota)
-      dlgProduto?.showDialog {
-        viewModel.updateView()
+      if (nota.loginSolicitacao.isNullOrBlank()) {
+        DialogHelper.showError("Solicitação não autorizada")
+      } else {
+        dlgProduto = DlgProdutosDadosDev(viewModel, nota)
+        dlgProduto?.showDialog {
+          viewModel.updateView()
+        }
       }
     }
 

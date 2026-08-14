@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.saci
 
 class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -26,7 +27,8 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun desfazSolicitacao(nota: DadosDev) {
-
+    nota.apagaDados()
+    updateView()
   }
 
   fun autorizaSolicitacao(nota: DadosDev, solicitacaoTroca: SolicitacaoTroca) = viewModel.exec {
