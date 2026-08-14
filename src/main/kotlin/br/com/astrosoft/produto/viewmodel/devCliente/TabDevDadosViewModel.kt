@@ -3,7 +3,6 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.saci
 
 class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -71,6 +70,26 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
     nota.update()
 
     updateView()
+  }
+
+  fun salvaNfEntRet(nota: DadosDev, nfNumero: Int) {
+    TODO("Not yet implemented")
+  }
+
+  fun validaProcesamento(user: UserSaci?, nota: DadosDev, produtos: List<DadosDevProduto>): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  fun autorizaNotaVenda(nota: DadosDev, produtos: List<DadosDevProduto>, login: String, senha: String) {
+    TODO("Not yet implemented")
+  }
+
+  fun desautorizaTroca(nota: DadosDev, produto: DadosDevProduto) {
+    TODO("Not yet implemented")
+  }
+
+  fun desatorizaTroca(nota: DadosDev, produto: DadosDevProduto) {
+    TODO("Not yet implemented")
   }
 
   val subView
