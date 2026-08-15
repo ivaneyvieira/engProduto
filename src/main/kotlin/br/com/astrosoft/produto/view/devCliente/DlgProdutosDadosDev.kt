@@ -131,19 +131,19 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      selectionMode = Grid.SelectionMode.NONE
+      selectionMode = Grid.SelectionMode.SINGLE
 
-      this.addItemClickListener {e ->
+      this.addItemClickListener { e ->
         val key = e.column.key
-        val item = e.item ?: return@addItemClickListener
+        val item = e.item ?: gridDetail.selectedItems.firstOrNull() ?: return@addItemClickListener
         when (key) {
-          DadosDevProduto::dev.name                                   -> {
+          DadosDevProduto::dev.name                                -> {
             item.dev = !(item.dev ?: false)
             if (item.dev == true) {
               item.temProduto = true
             } else {
-              item.temProduto = null
-              item.quantidadeTipo = item.quantidadeDev
+              item.temProduto = false
+              item.quantidadeTipo = null
             }
             this.dataProvider.refreshAll()
           }
@@ -161,35 +161,8 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       }
 
       this.editor.addCloseListener {
-        val bean = it.item
-        val itens = gridDetail.dataProvider.fetchAll().filterNotNull()
-        val quantDev = itens.filter { item ->
-          item.prdno == bean.prdno && item.grade == bean.grade
-        }.sumOf { item ->
-          item.quantidadeTipo ?: 0
-        }
-
-        val quantidade = bean.quantidadeDev ?: 0
-        val dif = quantidade - quantDev
-        if (dif > 0) {
-          val copyBean = bean.copy(
-            quantidadeTipo = dif,
-            dev = false,
-          )
-          copyBean.temProduto = false
-
-          val pos = itens.indexOf(bean).let { index ->
-            if (index == -1) {
-              itens.size
-            } else {
-              index + 1
-            }
-          }
-          val novoItens = itens.toMutableList()
-          novoItens.add(pos, copyBean)
-
-          this.setItems(novoItens)
-        }
+        val itens = gridDetail.dataProvider.fetchAll().expande()
+        this.setItems(itens)
       }
 
       val user = AppConfig.userLogin() as? UserSaci

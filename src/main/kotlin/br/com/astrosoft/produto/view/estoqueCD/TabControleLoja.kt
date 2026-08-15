@@ -157,10 +157,8 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         }
 
         this.button("Imprimir") {
+          this.isEnabled = false
           this.icon = VaadinIcon.PRINT.create()
-          onClick {
-            //TODO não implementado
-          }
         }
 
         cmdEstoque = select("Estoque") {

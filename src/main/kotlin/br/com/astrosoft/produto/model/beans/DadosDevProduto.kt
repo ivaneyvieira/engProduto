@@ -43,7 +43,6 @@ data class DadosDevProduto(
   var dev: Boolean? = false
 ) {
 
-
   fun update() {
     saci.updateDadosDevProduto(this)
   }
@@ -59,19 +58,23 @@ data class DadosDevProduto(
     other as DadosDevProduto
 
     if (ni != other.ni) return false
-    if (pdvno != other.pdvno) return false
+    if (prdno != other.prdno) return false
     if (grade != other.grade) return false
-    if (produtoTroca != other.produtoTroca) return false
+    if (produtoTrocaItem != other.produtoTrocaItem) return false
 
     return true
   }
 
   override fun hashCode(): Int {
     var result = ni ?: 0
-    result = 31 * result + (pdvno ?: 0)
+    result = 31 * result + (prdno?.hashCode() ?: 0)
     result = 31 * result + (grade?.hashCode() ?: 0)
-    result = 31 * result + (produtoTroca?.hashCode() ?: 0)
+    result = 31 * result + (produtoTrocaItem?.hashCode() ?: 0)
     return result
+  }
+
+  override fun toString(): String {
+    return "DadosDevProduto(ni=$ni, loja=$loja, nfdno=$nfdno, nfdse=$nfdse, dataDevolucao=$dataDevolucao, valorDev=$valorDev, obs=$obs, nfVenda=$nfVenda, obsTipo=$obsTipo, dataVenda=$dataVenda, codCliente=$codCliente, nomeCliente=$nomeCliente, prdno=$prdno, grade=$grade, descricao=$descricao, unidade=$unidade, quantidadeDev=$quantidadeDev, valorUnitario=$valorUnitario, nfno=$nfno, nfse=$nfse, pdvno=$pdvno, xano=$xano, nfTipo=$nfTipo, vendedor=$vendedor, notaEntrega=$notaEntrega, userSolicitacao=$userSolicitacao, loginSolicitacao=$loginSolicitacao, nomeSolicitacao=$nomeSolicitacao, userTroca=$userTroca, loginTroca=$loginTroca, nomeTroca=$nomeTroca, produtoTroca=$produtoTroca, tipoDev=$tipoDev, nfEntRet=$nfEntRet, produtoTrocaItem=$produtoTrocaItem, quantidadeTipo=$quantidadeTipo, dev=$dev)"
   }
 
   val codigo: Int?
@@ -104,6 +107,29 @@ data class DadosDevProduto(
 }
 
 fun List<DadosDevProduto>.expande(): List<DadosDevProduto> {
-  //TODO
-  return this
+  return this.groupBy { "${it.ni} ${it.prdno} ${it.grade}" }.flatMap { entry ->
+    val lista = entry.value
+    val listaDev = lista.filter { it.dev == true }.ifEmpty {
+      return lista
+    }
+
+    val item = lista.firstOrNull() ?: return@flatMap emptyList()
+    val quantNF = lista.firstOrNull()?.quantidadeDev ?: 0
+    val quantDev = listaDev.sumOf { it.quantidadeTipo ?: 0 }
+    val quantDif = quantNF - quantDev
+
+    val listaDif = if (quantDif > 0) {
+      val produtoTrocaItem = if (item.produtoTrocaItem == "C") "S" else if (item.produtoTrocaItem == "S") "C" else null
+      listOf(
+        item.copy().apply {
+          this.dev = false
+          this.produtoTrocaItem = produtoTrocaItem
+          this.quantidadeTipo = quantDif
+        }
+      )
+    } else {
+      emptyList()
+    }
+    listaDev + listaDif
+  }
 }
