@@ -6,12 +6,14 @@ import java.time.LocalDate
 data class DadosDevProduto(
   var ni: Int? = null,
   var loja: Int? = null,
+  var nomeLoja: String?,
   var nfdno: String? = null,
   var nfdse: String? = null,
   var dataDevolucao: LocalDate? = null,
   var valorDev: Double? = null,
   var obs: String? = null,
   var nfVenda: String? = null,
+  var obsNotaVenda: String?,
   var obsTipo: String? = null,
   var dataVenda: LocalDate? = null,
   var codCliente: Int? = null,
@@ -27,7 +29,10 @@ data class DadosDevProduto(
   var pdvno: Int? = null,
   var xano: Int? = null,
   var nfTipo: Int? = null,
+  var empno: Int?,
   var vendedor: String? = null,
+  var custnoVend: Int?,
+  var nomeVend: String?,
   var notaEntrega: String? = null,
   var userSolicitacao: Int? = null,
   var loginSolicitacao: String? = null,
@@ -42,6 +47,8 @@ data class DadosDevProduto(
   var quantidadeTipo: Int? = null,
   var dev: Boolean? = false
 ) {
+  val codigoFormat: String
+    get() = prdno?.trim()?.padStart(6, '0') ?: ""
 
   fun update() {
     saci.updateDadosDevProduto(this)

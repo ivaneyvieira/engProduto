@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import kotlin.collections.ifEmpty
+import br.com.astrosoft.produto.model.printText.ValeTrocaDadosDev
 
 class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -74,7 +74,7 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun salvaNfEntRet(nota: DadosDev, nfNumero: Int) = viewModel.exec{
+  fun salvaNfEntRet(nota: DadosDev, nfNumero: Int) = viewModel.exec {
     nota.nfEntRet = nfNumero
     nota.salvaNfEntRet()
   }
@@ -157,31 +157,32 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
     return true
   }
 
-  fun autorizaNotaVenda(nota: DadosDev, produtos: List<DadosDevProduto>, login: String, senha: String)= viewModel.exec {
-    nota.tipoDevEnum ?: fail("Nota sem solicitação de troca")
-    nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
+  fun autorizaNotaVenda(nota: DadosDev, produtos: List<DadosDevProduto>, login: String, senha: String) =
+      viewModel.exec {
+        nota.tipoDevEnum ?: fail("Nota sem solicitação de troca")
+        nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
 
-    val user = UserSaci.userLogin(login, senha)
+        val user = UserSaci.userLogin(login, senha)
 
-    if (!validaProcesamento(user, nota, produtos)) {
-      return@exec
-    }
+        if (!validaProcesamento(user, nota, produtos)) {
+          return@exec
+        }
 
-    user ?: fail("Usuário inválido")
+        user ?: fail("Usuário inválido")
 
-    if (!user.autorizaDev) {
-      fail("Usuário sem permissão para autorizar devolução")
-    }
+        if (!user.autorizaDev) {
+          fail("Usuário sem permissão para autorizar devolução")
+        }
 
-    nota.userTroca = user.no
-    nota.update()
-    produtos.forEach { prd ->
-      prd.update()
-    }
-    subView.fechaFormProduto()
-    subView.updateProdutos()
-    updateView()
-  }
+        nota.userTroca = user.no
+        nota.update()
+        produtos.forEach { prd ->
+          prd.update()
+        }
+        subView.fechaFormProduto()
+        subView.updateProdutos()
+        updateView()
+      }
 
   fun desautorizaTroca(nota: DadosDev, produto: DadosDevProduto) = viewModel.exec {
     viewModel.view.showQuestion("Confirma desautorizar devolução do produto ${produto.codigo}?") {
@@ -206,6 +207,35 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       }
     }
   }
+
+  /**************************** imprimeValeTroca ************************************/
+
+  fun imprimeValeTroca(nota: DadosDev) = viewModel.exec {
+    if (nota.naoLiberado()) {
+      fail("Liberar impressão para: Estorno, Reembolso, Muda Cliente e Sem Produto")
+    }
+
+    val loginAutorizacao = nota.loginTroca ?: ""
+    if (loginAutorizacao.isBlank()) {
+      fail("Devolução não foi autorizada.")
+    }
+
+    val relatorio = ValeTrocaDadosDev(nota)
+
+    val dados = nota.produtos.filter {
+      it.dev == true
+    }
+    val printer = subView.printerPreview(loja = 0) { impressora ->
+      //nota.marcaImpresso(Impressora(0, impressora))
+      updateView()
+    }
+
+    relatorio.print(
+      dados = dados, printer = printer
+    )
+  }
+
+  /**************************** imprimeValeTroca ************************************/
 
   val subView
     get() = viewModel.view.tabDevDados

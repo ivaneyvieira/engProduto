@@ -10,6 +10,7 @@ CREATE TEMPORARY TABLE T_NOTA
 
 SELECT I.invno                                                                AS ni,
        I.storeno                                                              AS loja,
+       S.sname                                                                AS nomeLoja,
        I.nfname                                                               AS nfdno,
        I.invse                                                                AS nfdse,
        CAST(IF(issue_date = 0, NULL, issue_date) AS date)                     AS dataDevolucao,
@@ -18,6 +19,7 @@ SELECT I.invno                                                                AS
        @POS1 := POSITION('NF' IN I.remarks) + 2                               AS pos1,
        @POS2 := POSITION('(' IN I.remarks)                                    AS pos2,
        TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1))                          AS nfVenda,
+       TRIM(SUBSTR(I.remarks, 1, 40))                                         AS obsNotaVenda,
        TRIM(SUBSTR(I.remarks, 41, 40))                                        AS obsTipo,
        @POS1 := POSITION('(' IN I.remarks) + 1                                AS posData1,
        @POS2 := POSITION(')' IN I.remarks)                                    AS posData2,
@@ -36,6 +38,8 @@ FROM
                ON V.no = I.vendno
     LEFT JOIN  sqldados.dadosDev AS D
                USING (invno)
+    LEFT JOIN  sqldados.store    AS S
+               ON S.no = I.storeno
 WHERE I.type = 2
   AND I.bits & POW(2, 4) = 0
   AND I.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
@@ -56,21 +60,31 @@ SELECT ni,
        N.storeno                              AS storeno,
        N.pdvno                                AS pdvno,
        N.xano                                 AS xano,
-       N.tipo                                 AS nfTipo
+       N.tipo                                 AS nfTipo,
+       N.custno                               AS custnoVend,
+       C.name                                 AS nomeVend,
+       N.empno                                AS empno,
+       E.name                                 AS vendedor
 FROM
-  T_NOTA                  AS T
-    LEFT JOIN sqldados.nf AS N
+  T_NOTA                     AS T
+    LEFT JOIN sqldados.nf    AS N
               ON N.storeno = T.loja AND N.nfno = SUBSTRING_INDEX(T.nfVenda, '/', 1) * 1 AND
-                 N.nfse = SUBSTRING_INDEX(T.nfVenda, '/', -1) AND N.issuedate = T.dataVenda * 1;
+                 N.nfse = SUBSTRING_INDEX(T.nfVenda, '/', -1) AND N.issuedate = T.dataVenda * 1
+    LEFT JOIN sqldados.custp AS C
+              ON C.no = N.custno
+    LEFT JOIN sqldados.emp   AS E
+              ON E.no = N.empno;
 
 SELECT N.ni                     AS ni,
        N.loja                   AS loja,
+       N.nomeLoja               AS nomeLoja,
        N.nfdno                  AS nfdno,
        N.nfdse                  AS nfdse,
        N.dataDevolucao          AS dataDevolucao,
        N.valorDev               AS valorDev,
        N.obs                    AS obs,
        N.nfVenda                AS nfVenda,
+       N.obsNotaVenda           AS obsNotaVenda,
        N.obsTipo                AS obsTipo,
        N.dataVenda              AS dataVenda,
        N.codCliente             AS codCliente,
@@ -81,8 +95,11 @@ SELECT N.ni                     AS ni,
        NF.pdvno                 AS pdvno,
        NF.xano                  AS xano,
        NF.nfTipo                AS nfTipo,
-       ''                       AS vendedor,
+       NF.empno                 AS empno,
+       NF.vendedor              AS vendedor,
        ''                       AS notaEntrega,
+       NF.custnoVend            AS custnoVend,
+       NF.nomeVend              AS nomeVend,
        N.userSolicitacao        AS userSolicitacao,
        US.login                 AS loginSolicitacao,
        US.name                  AS nomeSolicitacao,

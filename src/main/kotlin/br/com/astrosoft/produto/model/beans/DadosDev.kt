@@ -6,12 +6,14 @@ import java.time.LocalDate
 class DadosDev(
   var ni: Int?,
   var loja: Int?,
+  var nomeLoja: String?,
   var nfdno: String?,
   var nfdse: String?,
   var dataDevolucao: LocalDate?,
   var valorDev: Double?,
   var obs: String?,
   var nfVenda: String?,
+  var obsNotaVenda: String?,
   var obsTipo: String?,
   var dataVenda: LocalDate?,
   var codCliente: Int?,
@@ -23,7 +25,10 @@ class DadosDev(
   var pdvno: Int?,
   var xano: Int?,
   var nfTipo: Int?,
+  var empno: Int?,
   var vendedor: String?,
+  var custnoVend: Int?,
+  var nomeVend: String?,
   var notaEntrega: String?,
   var userSolicitacao: Int?,
   var loginSolicitacao: String?,
@@ -74,6 +79,30 @@ class DadosDev(
 
   fun salvaNfEntRet() {
     saci.salvaNfEntRet(this)
+  }
+
+  fun naoLiberado(): Boolean {
+    val tipo = this.tipoDevEnum ?: return true
+    val produto = this.produtoTrocaEnum ?: return true
+    val tipoOk = tipo == ESolicitacaoTroca.Estorno ||
+                 tipo == ESolicitacaoTroca.MudaCliente ||
+                 tipo == ESolicitacaoTroca.Reembolso ||
+                 produto == EProdutoTroca.Sem ||
+                 produto == EProdutoTroca.Misto
+    return tipoOk
+  }
+
+  private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
+
+  private fun mudaCodigo(): Int? {
+    val matchResult = MUDA_CLIENTE.find(obsTipo ?: "")
+    return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
+  }
+
+  fun mudaCliente(): String {
+    val codigo = mudaCodigo() ?: 0
+    val cliente = saci.mudaCliente(codigo) ?: return ""
+    return "${cliente.codigo} - ${cliente.nome}"
   }
 
   val nfDevolucao: String
@@ -142,6 +171,11 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       produtoTroca = nota.produtoTroca,
       tipoDev = nota.tipoDev,
       nfEntRet = nota.nfEntRet,
+      nomeLoja = nota.nomeLoja,
+      obsNotaVenda = nota.obsNotaVenda,
+      empno = nota.empno,
+      custnoVend = nota.custnoVend,
+      nomeVend = nota.nomeVend,
     )
   }
 }

@@ -83,6 +83,10 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
     columnGrid(DadosDev::loja, header = "Loja")
 
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
+      viewModel.imprimeValeTroca(nota)
+    }
+
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       if (nota.loginSolicitacao.isNullOrBlank()) {
         DialogHelper.showError("Solicitação não autorizada")
