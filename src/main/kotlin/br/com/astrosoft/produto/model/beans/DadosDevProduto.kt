@@ -117,7 +117,7 @@ fun List<DadosDevProduto>.expande(): List<DadosDevProduto> {
   return this.groupBy { "${it.ni} ${it.prdno} ${it.grade}" }.flatMap { entry ->
     val lista = entry.value
     val listaDev = lista.filter { it.dev == true }.ifEmpty {
-      return lista
+      return@flatMap lista
     }
 
     val item = lista.firstOrNull() ?: return@flatMap emptyList()
