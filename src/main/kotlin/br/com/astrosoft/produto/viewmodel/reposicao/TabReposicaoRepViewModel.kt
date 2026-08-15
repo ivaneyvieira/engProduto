@@ -5,11 +5,13 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.PrintReposicaoConferencia
 import br.com.astrosoft.produto.model.printText.PrintReposicaoMovimentacao
 import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.apache.xmlbeans.impl.common.XmlStreamUtils.printEvent
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -381,6 +383,23 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     pedido: Int
   ): List<ProdutoNotaEntrada> {
     return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, pedido = pedido)
+  }
+
+  fun previewPedidoConferencia(movimentacao: Movimentacao) {
+    val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
+
+    val relatorio = PrintReposicaoConferencia()
+
+    relatorio.print(
+      dados = produtos.sortedWith(
+        compareBy(
+          ProdutoMovimentacao::descricao,
+          ProdutoMovimentacao::codigo,
+          ProdutoMovimentacao::grade
+        )
+      ),
+      printer = subView.printerPreview()
+    )
   }
 }
 

@@ -102,6 +102,13 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                 viewModel.desfazAssinatura(movimentacao)
               }
             }
+
+            this.button("Imprimir") {
+              this.icon = VaadinIcon.PRINT.create()
+              this.onClick {
+                 viewModel.previewPedidoConferencia(movimentacao)
+              }
+            }
           }
           horizontalBlock {
             this.isSpacing = true

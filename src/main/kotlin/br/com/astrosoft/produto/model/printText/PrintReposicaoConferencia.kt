@@ -8,7 +8,7 @@ import br.com.astrosoft.produto.model.beans.ERota
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
 import java.time.LocalTime
 
-class PrintReposicaoMovimentacao : PrintText<ProdutoMovimentacao>() {
+class PrintReposicaoConferencia() : PrintText<ProdutoMovimentacao>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ProdutoMovimentacao) {
     val rota = bean.noRota?.let { noRota ->
@@ -17,7 +17,7 @@ class PrintReposicaoMovimentacao : PrintText<ProdutoMovimentacao>() {
 
     val rotaDescricao = rota?.descricao ?: ""
 
-    writeln("Reposicao Rota $rotaDescricao", negrito = true, center = true)
+    writeln("Separacao Rota $rotaDescricao", negrito = true, center = true)
     writeln("")
     val text1 = "Data: ${bean.data.format()} - ${LocalTime.now().format("HH:mm")}"
     val text2 = "Pedido : ${bean.numero}"
@@ -53,22 +53,6 @@ class PrintReposicaoMovimentacao : PrintText<ProdutoMovimentacao>() {
     writeln("")
     writeln("")
     writeln("DOCUMENTO NÃO FISCAL", center = true)
-    writeln("")
-    writeln("")
-    writeln("____________________________________", center = true)
-    if (entregueNome.isNotBlank()) {
-      writeln(entregueNome ?: "", center = true)
-    }
-    writeln("Separado/Entregue", center = true)
-    writeln("${bean?.dataEntrege.format()} - ${bean?.horaEntrege.format("HH:mm")}", center = true)
-    writeln("")
-    writeln("")
-    writeln("____________________________________", center = true)
-    if (recebidoNome.isNotBlank()) {
-      writeln(recebidoNome ?: "", center = true)
-    }
-    writeln("Recebido", center = true)
-    writeln("${bean?.dataRecebido.format()} - ${bean?.horaRecebido.format("HH:mm")}", center = true)
     writeln("")
     writeln("")
   }
