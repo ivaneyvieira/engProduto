@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 data class DadosDevProduto(
@@ -41,6 +42,37 @@ data class DadosDevProduto(
   var quantidadeTipo: Int? = null,
   var dev: Boolean? = false
 ) {
+
+
+  fun update() {
+    saci.updateDadosDevProduto(this)
+  }
+
+  fun deleteDados() {
+    saci.deleteDadosDevProduto(this)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as DadosDevProduto
+
+    if (ni != other.ni) return false
+    if (pdvno != other.pdvno) return false
+    if (grade != other.grade) return false
+    if (produtoTroca != other.produtoTroca) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = ni ?: 0
+    result = 31 * result + (pdvno ?: 0)
+    result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + (produtoTroca?.hashCode() ?: 0)
+    return result
+  }
 
   val codigo: Int?
     get() = prdno?.trim()?.toIntOrNull()

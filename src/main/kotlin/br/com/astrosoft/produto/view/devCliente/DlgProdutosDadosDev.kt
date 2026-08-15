@@ -133,26 +133,28 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
 
-      this.addItemClickListener {
-        when (it.column.key) {
+      this.addItemClickListener {e ->
+        val key = e.column.key
+        val item = e.item ?: return@addItemClickListener
+        when (key) {
           DadosDevProduto::dev.name                                   -> {
-            it.item.dev = !(it.item.dev ?: false)
-            if (it.item.dev == true) {
-              it.item.temProduto = true
+            item.dev = !(item.dev ?: false)
+            if (item.dev == true) {
+              item.temProduto = true
             } else {
-              it.item.temProduto = null
-              it.item.quantidadeTipo = it.item.quantidadeDev
+              item.temProduto = null
+              item.quantidadeTipo = item.quantidadeDev
             }
             this.dataProvider.refreshAll()
           }
 
-          DadosDevProduto::temProduto.name if it.item.dev == true     -> {
-            it.item.temProduto = !(it.item.temProduto ?: false)
+          DadosDevProduto::temProduto.name if item.dev == true     -> {
+            item.temProduto = !(item.temProduto ?: false)
             this.dataProvider.refreshAll()
           }
 
-          DadosDevProduto::quantidadeTipo.name if it.item.dev == true -> {
-            this.editor.editItem(it.item)
+          DadosDevProduto::quantidadeTipo.name if item.dev == true -> {
+            this.editor.editItem(item)
             this.focusEditor(DadosDevProduto::quantidadeTipo)
           }
         }
@@ -197,7 +199,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       columnGrid(DadosDevProduto::quantidadeTipo, header = "Qtd Dev").integerFieldEditor()
       if (user?.desautorizaDev == true) {
         addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
-          viewModel.desatorizaTroca(nota, produto)
+          viewModel.desautorizaTroca(nota, produto)
         }
       }
       columnGrid(DadosDevProduto::codigo, header = "Código")

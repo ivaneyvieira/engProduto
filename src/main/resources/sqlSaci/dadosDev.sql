@@ -116,5 +116,5 @@ FROM
     LEFT JOIN  sqldados.users           AS US
                ON US.no = N.userSolicitacao
     LEFT JOIN  sqldados.users           AS UT
-               ON US.no = N.userTroca
+               ON UT.no = N.userTroca
 

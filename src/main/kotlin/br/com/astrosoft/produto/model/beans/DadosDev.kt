@@ -72,6 +72,10 @@ class DadosDev(
     saci.deleteDadosDev(this)
   }
 
+  fun salvaNfEntRet() {
+    saci.salvaNfEntRet(this)
+  }
+
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {

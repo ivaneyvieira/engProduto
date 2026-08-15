@@ -3629,6 +3629,14 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun salvaNfEntRet(dado: DadosDev) {
+    val sql = "/sqlSaci/dadosDevUpdateNFRet.sql"
+    script(sql) {
+      addOptionalParameter("invno", dado.ni)
+      addOptionalParameter("nfEntRet", dado.nfEntRet)
+    }
+  }
+
   fun updateDadosDev(dado: DadosDev) {
     val sql = "/sqlSaci/dadosDevUpdate.sql"
     script(sql) {
@@ -3645,6 +3653,27 @@ class QuerySaci : QueryDB(database) {
     val sql = "/sqlSaci/dadosDevDelete.sql"
     script(sql) {
       addOptionalParameter("invno", dado.ni)
+    }
+  }
+
+  fun updateDadosDevProduto(produto: DadosDevProduto) {
+    val sql = "/sqlSaci/updateDadosDevProduto.sql"
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("produtoTroca", produto.produtoTrocaItem)
+      addOptionalParameter("quantidade", produto.quantidadeTipo)
+    }
+  }
+
+  fun deleteDadosDevProduto(produto: DadosDevProduto) {
+    val sql = "/sqlSaci/deleteDadosDevProduto.sql"
+    script(sql) {
+      addOptionalParameter("invno", produto.ni)
+      addOptionalParameter("prdno", produto.prdno)
+      addOptionalParameter("grade", produto.grade)
+      addOptionalParameter("produtoTroca", produto.produtoTrocaItem)
     }
   }
 

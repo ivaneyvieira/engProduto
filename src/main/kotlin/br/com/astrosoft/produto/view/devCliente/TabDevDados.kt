@@ -166,6 +166,10 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     dlgProduto?.update()
   }
 
+  override fun fechaFormProduto() {
+    dlgProduto?.fecha()
+  }
+
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devDados == true
