@@ -88,13 +88,9 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      if (nota.loginSolicitacao.isNullOrBlank()) {
-        DialogHelper.showError("Solicitação não autorizada")
-      } else {
-        dlgProduto = DlgProdutosDadosDev(viewModel, nota)
-        dlgProduto?.showDialog {
-          viewModel.updateView()
-        }
+      dlgProduto = DlgProdutosDadosDev(viewModel, nota)
+      dlgProduto?.showDialog {
+        viewModel.updateView()
       }
     }
 

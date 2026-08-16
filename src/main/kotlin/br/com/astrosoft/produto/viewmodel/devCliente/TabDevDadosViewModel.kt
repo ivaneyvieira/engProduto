@@ -211,12 +211,18 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   /**************************** imprimeValeTroca ************************************/
 
   fun imprimeValeTroca(nota: DadosDev) = viewModel.exec {
-    if (nota.naoLiberado()) {
-      fail("Liberar impressão para: Estorno, Reembolso, Muda Cliente e Sem Produto")
+    val assinatura = nota.loginTroca ?: ""
+    val autorizacao = nota.loginSolicitacao ?: ""
+
+    if(assinatura.isBlank() && autorizacao.isBlank()) {
+      fail("Devolução não foi autorizada e assinada.")
     }
 
-    val loginAutorizacao = nota.loginTroca ?: ""
-    if (loginAutorizacao.isBlank()) {
+    if(assinatura.isBlank()) {
+      fail("Devolução não foi assinada.")
+    }
+
+    if(autorizacao.isBlank()) {
       fail("Devolução não foi autorizada.")
     }
 
@@ -226,7 +232,6 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       it.dev == true
     }
     val printer = subView.printerPreview(loja = 0) { impressora ->
-      //nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     }
 

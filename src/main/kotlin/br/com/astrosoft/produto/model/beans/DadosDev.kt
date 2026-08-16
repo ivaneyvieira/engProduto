@@ -81,17 +81,6 @@ class DadosDev(
     saci.salvaNfEntRet(this)
   }
 
-  fun naoLiberado(): Boolean {
-    val tipo = this.tipoDevEnum ?: return true
-    val produto = this.produtoTrocaEnum ?: return true
-    val tipoOk = tipo == ESolicitacaoTroca.Estorno ||
-                 tipo == ESolicitacaoTroca.MudaCliente ||
-                 tipo == ESolicitacaoTroca.Reembolso ||
-                 produto == EProdutoTroca.Sem ||
-                 produto == EProdutoTroca.Misto
-    return tipoOk
-  }
-
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
   private fun mudaCodigo(): Int? {
