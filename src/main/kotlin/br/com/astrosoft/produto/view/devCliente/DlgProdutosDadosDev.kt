@@ -133,43 +133,20 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       isMultiSort = false
       selectionMode = Grid.SelectionMode.SINGLE
 
-      this.addItemClickListener { e ->
-        val key = e.column.key
-        val item = e.item ?: gridDetail.selectedItems.firstOrNull() ?: return@addItemClickListener
-        when (key) {
-          DadosDevProduto::dev.name                                -> {
-            item.dev = !(item.dev ?: false)
-            if (item.dev == true) {
-              item.temProduto = true
-            } else {
-              item.temProduto = false
-              item.quantidadeTipo = null
-            }
-            this.dataProvider.refreshAll()
-          }
-
-          DadosDevProduto::temProduto.name if item.dev == true     -> {
-            item.temProduto = !(item.temProduto ?: false)
-            this.dataProvider.refreshAll()
-          }
-
-          DadosDevProduto::quantidadeTipo.name if item.dev == true -> {
-            this.editor.editItem(item)
-            this.focusEditor(DadosDevProduto::quantidadeTipo)
-          }
-        }
-      }
-
-      this.editor.addCloseListener {
-        val itens = gridDetail.dataProvider.fetchAll().expande()
-        this.setItems(itens)
-      }
+      this.withEditor(
+        classBean = DadosDevProduto::class,
+        openEditor = {
+          this.focusEditor(DadosDevProduto::quantidadeCom)
+        },
+        closeEditor = {
+          gridDetail.dataProvider.refreshAll()
+        })
 
       val user = AppConfig.userLogin() as? UserSaci
 
-      columnGrid(DadosDevProduto::dev, header = "Dev")
-      columnGrid(DadosDevProduto::temProduto, header = "Com Produto")
-      columnGrid(DadosDevProduto::quantidadeTipo, header = "Qtd Dev").integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto").integerFieldEditor()
+
       if (user?.desautorizaDev == true) {
         addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
           viewModel.desautorizaTroca(nota, produto)
@@ -189,7 +166,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
     update()
 
     gridDetail.setPartNameGenerator {
-      if (it.dev == true) {
+      if (it.produtoTrocaItemEnum != null) {
         "amarelo"
       } else {
         null
@@ -203,7 +180,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
 
   fun update() {
     val pesquisa = edtPesquisa?.value.orEmpty()
-    val listProdutos = nota.produtos.expande().filter { prd ->
+    val listProdutos = nota.produtos.filter { prd ->
       pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
       (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
       (prd.ni == pesquisa.toIntOrNull())

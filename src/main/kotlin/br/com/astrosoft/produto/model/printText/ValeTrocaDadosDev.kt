@@ -5,13 +5,14 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.DadosDev
 import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.EProdutoTroca
 
 class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   init {
     column(DadosDevProduto::codigoFormat, "Codigo", 6)
     column(DadosDevProduto::descricao, "Descricao", 41)
     column(DadosDevProduto::grade, "Grade", 8)
-    column(DadosDevProduto::quantidadeTipo, "Qtd", 6)
+    column(DadosDevProduto::quantidadeTotal, "Qtd", 6)
   }
 
   val obsTipo = nota.obsTipo ?: ""
@@ -63,14 +64,27 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
 
   override fun groupBotton(beanDetail: DadosDevProduto): String {
     return if (beanDetail.produtoTroca == "M") {
-      beanDetail.produtoTrocaItem ?: ""
+      beanDetail.produtoTrocaItemEnum?.codigo ?: ""
     } else {
       ""
     }
   }
 
+  private fun List<DadosDevProduto>.explode(): List<DadosDevProduto> {
+    return this.flatMap { prd ->
+      val tipo = prd.produtoTrocaItemEnum ?: return@flatMap emptyList()
+      if (tipo == EProdutoTroca.Misto) {
+        val prdCom = prd.copy(quantidadeSem = 0)
+        val prdSem = prd.copy(quantidadeCom = 0)
+        listOf(prdCom, prdSem)
+      } else {
+        listOf(prd)
+      }
+    }
+  }
+
   override fun print(dados: List<DadosDevProduto>, printer: IPrinter) {
-    super.print(dados.sortedBy { it.produtoTrocaItem }, printer)
+    super.print(dados.explode().sortedBy { it.produtoTrocaItemEnum?.codigo ?: "" }, printer)
   }
 
   data class Cliente(val custno: Int, val name: String)
@@ -166,7 +180,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     writeln("")
     writeln("")
     writeln("______________________________________", center = true)
-    writeln(autorizacao ?: "", center = true)
+    writeln(autorizacao, center = true)
     writeln("Setor de Troca", center = true)
     writeln("")
     writeln("")

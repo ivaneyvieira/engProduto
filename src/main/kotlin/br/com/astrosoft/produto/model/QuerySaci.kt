@@ -3662,8 +3662,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("produtoTroca", produto.produtoTrocaItem)
-      addOptionalParameter("quantidade", produto.quantidadeTipo)
+      addOptionalParameter("quantidadeCom", produto.quantidadeCom)
+      addOptionalParameter("quantidadeSem", produto.quantidadeSem)
     }
   }
 
@@ -3673,7 +3673,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("invno", produto.ni)
       addOptionalParameter("prdno", produto.prdno)
       addOptionalParameter("grade", produto.grade)
-      addOptionalParameter("produtoTroca", produto.produtoTrocaItem)
     }
   }
 

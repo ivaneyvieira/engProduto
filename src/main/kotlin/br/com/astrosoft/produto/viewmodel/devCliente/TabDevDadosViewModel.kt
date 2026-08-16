@@ -82,17 +82,15 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun validaProcesamento(user: UserSaci?, nota: DadosDev, produtos: List<DadosDevProduto>): Boolean {
     try {
       user ?: fail("Usuário inválido")
-      val produtosDev = produtos
-        .filter { it.dev == true }
-      produtosDev.ifEmpty {
+      produtos.ifEmpty {
         fail("Nenhum produto selecionado")
       }
 
       val solicitacao = nota.tipoDevEnum ?: fail("Tipo de devolução não informada")
       val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
 
-      val produtosDevComProduto = produtosDev.filter { it.temProduto == true }
-      val produtosDevSemProduto = produtosDev.filter { it.temProduto == false }
+      val produtosDevComProduto = produtos.filter { it.temProduto == true }
+      val produtosDevSemProduto = produtos.filter { it.temProduto == false }
 
       val tipoResultante = when {
         produtosDevComProduto.isNotEmpty() && produtosDevSemProduto.isEmpty() -> EProdutoTroca.Com
@@ -105,13 +103,22 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       }
       /*********************************************************************************/
 
-      val valorProdutos = produtosDev.sumOf { prd ->
-        (prd.quantidadeTipo ?: 0) * 1.0 * (prd.valorUnitario ?: 0.00)
+      produtos.forEach { prd ->
+        val qtdCom = prd.quantidadeCom ?: 0
+        val qtdSem = prd.quantidadeSem ?: 0
+        val quantDev = prd.quantidadeDev ?: 0
+        if (quantDev != (qtdSem + qtdCom)) {
+          fail("Quantidade devolvida diferente da autorizada")
+        }
+      }
+
+      val valorProdutos = produtos.sumOf { prd ->
+        prd.valorTotal
       }
       val valorDevolucao = user.valorDevolucao
 
-      when {
-        solicitacao == ESolicitacaoTroca.Troca       -> {
+      when (solicitacao) {
+        ESolicitacaoTroca.Troca       -> {
 
           if (produto == EProdutoTroca.Com) {
             if (valorProdutos > valorDevolucao) {
@@ -124,26 +131,22 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
           }
         }
 
-        solicitacao == ESolicitacaoTroca.Estorno     -> {
+        ESolicitacaoTroca.Estorno     -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
-        solicitacao == ESolicitacaoTroca.Reembolso   -> {
+        ESolicitacaoTroca.Reembolso   -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
 
-        solicitacao == ESolicitacaoTroca.MudaCliente -> {
+        ESolicitacaoTroca.MudaCliente -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
-        }
-
-        else                                         -> {
-          //Não faz nada
         }
       }
 
@@ -193,10 +196,6 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
           fail("Usuário sem permissão")
         }
 
-        if (produto.dev == false) {
-          fail("Solicitação não foi autorizada")
-        }
-
         if ((produto.ni ?: 0) != 0) {
           fail("A nota de devolução já foi emitida")
         }
@@ -214,23 +213,21 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
     val assinatura = nota.loginTroca ?: ""
     val autorizacao = nota.loginSolicitacao ?: ""
 
-    if(assinatura.isBlank() && autorizacao.isBlank()) {
+    if (assinatura.isBlank() && autorizacao.isBlank()) {
       fail("Devolução não foi autorizada e assinada.")
     }
 
-    if(assinatura.isBlank()) {
+    if (assinatura.isBlank()) {
       fail("Devolução não foi assinada.")
     }
 
-    if(autorizacao.isBlank()) {
+    if (autorizacao.isBlank()) {
       fail("Devolução não foi autorizada.")
     }
 
     val relatorio = ValeTrocaDadosDev(nota)
 
-    val dados = nota.produtos.filter {
-      it.dev == true
-    }
+    val dados = nota.produtos
     val printer = subView.printerPreview(loja = 0) { impressora ->
       updateView()
     }

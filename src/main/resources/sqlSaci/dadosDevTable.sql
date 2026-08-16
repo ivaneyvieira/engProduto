@@ -24,3 +24,19 @@ CREATE TABLE dadosDevProduto
   quantidade   int        DEFAULT 0  NULL,
   PRIMARY KEY (invno, prdno, grade, produtoTroca)
 );
+
+TRUNCATE dadosDev;
+TRUNCATE dadosDevProduto;
+
+ALTER TABLE dadosDevProduto
+  DROP PRIMARY KEY;
+
+ALTER TABLE dadosDevProduto
+  ADD PRIMARY KEY (invno, prdno, grade);
+
+
+ALTER TABLE dadosDevProduto
+  DROP COLUMN produtoTroca,
+  DROP COLUMN quantidade,
+  ADD COLUMN quantidadeCom int DEFAULT 0 NULL,
+  ADD COLUMN quantidadeSem int DEFAULT 0 NULL;
