@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class PrecificacaoViewModel(view: IPrecificacaoView) : ViewModel<IPrecificacaoView>(view) {
   val tabPrecificacaoViewModel = TabPrecificacaoViewModel(this)
+  val tabPrecificacaoDadosViewModel = TabPrecificacaoDadosViewModel(this)
   val tabPrecificacaoEntradaViewModel = TabPrecificacaoEntradaViewModel(this)
   val tabPrecificacaoEntradaMaViewModel = TabPrecificacaoEntradaMaViewModel(this)
   val tabPrecificacaoSaidaViewModel = TabPrecificacaoSaidaViewModel(this)
@@ -12,6 +13,7 @@ class PrecificacaoViewModel(view: IPrecificacaoView) : ViewModel<IPrecificacaoVi
 
   override fun listTab() = listOf(
     view.tabPrecificacaoViewModel,
+    view.tabPrecificacaoDadosViewModel,
     view.tabPrecificacaoEntradaViewModel,
     view.tabPrecificacaoSaidaViewModel,
     view.tabPrecificacaoEntradaMaViewModel,
@@ -24,5 +26,6 @@ interface IPrecificacaoView : IView {
   val tabPrecificacaoEntradaViewModel: ITabPrecificacaoViewModel
   val tabPrecificacaoEntradaMaViewModel: ITabPrecificacaoViewModel
   val tabPrecificacaoSaidaViewModel: ITabPrecificacaoViewModel
+  val tabPrecificacaoDadosViewModel: ITabPrecificacaoDadosViewModel
   val tabPrecificacaoUsr: ITabPrecificacaoUsr
 }

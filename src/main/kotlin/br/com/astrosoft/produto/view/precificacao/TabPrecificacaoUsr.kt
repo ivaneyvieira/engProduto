@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.Grid
 class TabPrecificacaoUsr(viewModel: TabPrecificacaoUsrViewModel) : TabPanelUser(viewModel), ITabPrecificacaoUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::precificacaoPrecificacao, "Precificação")
+    columnGrid(UserSaci::precificacaoDados, "Precificação Dados")
     columnGrid(UserSaci::precificacaoEntrada, "Precificação Entrada")
     columnGrid(UserSaci::precificacaoSaida, "Precificação Saída")
     columnGrid(UserSaci::precificacaoEntradaMa, "Prec Ent MA")
@@ -22,6 +23,9 @@ class TabPrecificacaoUsr(viewModel: TabPrecificacaoUsrViewModel) : TabPanelUser(
     verticalBlock("Menus") {
       checkBox("Precificação") {
         binder.bind(this, UserSaci::precificacaoPrecificacao.name)
+      }
+      checkBox("Precificação Dados") {
+        binder.bind(this, UserSaci::precificacaoDados.name)
       }
       checkBox("Precificação Entrada") {
         binder.bind(this, UserSaci::precificacaoEntrada.name)

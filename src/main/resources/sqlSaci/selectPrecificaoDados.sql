@@ -7,11 +7,11 @@ CREATE TEMPORARY TABLE T_PRD
 )
 SELECT P.no AS prdno, S.no AS storeno, P.name AS descrivao, taxno
 FROM sqldados.prd AS P, sqldados.store AS S
-WHERE S.no IN (2, 3, 4, 5, 8, 10)
-  AND P.no = '              19';
+WHERE S.no IN (2, 3, 4, 5, 8, 10)/*
+  AND P.no = '              19'*/;
 
 /*
- select * from prp where prdno = '              19' and storeno = 10;
+ select * from prp where prdno = '              19' and storeno = 10
  */
 
 DROP TEMPORARY TABLE IF EXISTS T_PRP;
@@ -37,7 +37,9 @@ SELECT storeno,
 FROM
   T_PRD
     LEFT JOIN sqldados.prp AS P
-              USING (prdno, storeno);
+              USING (prdno, storeno)
+WHERE (:pesquisa = '' OR descrivao LIKE CONCAT(:pesquisa, '%') OR taxno LIKE :pesquisa OR
+       TRIM(prdno) LIKE :pesquisa);
 
 SELECT prdno                                         AS prdno,
        descrivao                                     AS descricao,
@@ -79,4 +81,5 @@ SELECT prdno                                         AS prdno,
        SUM(IF(storeno = 7, creditoPisCofins, NULL))  AS creditoPisCofins08,
        SUM(IF(storeno = 10, creditoPisCofins, NULL)) AS creditoPisCofins10
 FROM T_PRP
-GROUP BY prdno;
+GROUP BY prdno
+ORDER BY prdno;

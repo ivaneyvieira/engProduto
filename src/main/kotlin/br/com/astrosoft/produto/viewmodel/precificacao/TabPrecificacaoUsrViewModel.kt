@@ -22,6 +22,7 @@ class TabPrecificacaoUsrViewModel(val viewModel: PrecificacaoViewModel) : TabUsr
     this.precificacaoEntrada = usuario.precificacaoEntrada
     this.precificacaoSaida = usuario.precificacaoSaida
     this.precificacaoEntradaMa = usuario.precificacaoEntradaMa
+    this.precificacaoDados = usuario.precificacaoDados
   }
 }
 

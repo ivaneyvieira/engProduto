@@ -211,6 +211,7 @@ class UserSaci : IUser {
   var clienteCredito by DelegateAuthorized3(174)
   var devCliDevolucoes by DelegateAuthorized3(175)
   var devDados by DelegateAuthorized3(176)
+  var precificacaoDados by DelegateAuthorized3(177)
 
   //Locais
   private var localEstoque: String?
@@ -666,13 +667,15 @@ class UserSaci : IUser {
 
   var precificacao
     get() = precificacaoPrecificacao || precificacaoEntrada || precificacaoEntradaMa ||
-            precificacaoSaida || admin
+            precificacaoSaida || precificacaoDados || admin
     set(value) {
       precificacaoPrecificacao = value
       precificacaoEntrada = value
       precificacaoEntradaMa = value
       precificacaoSaida = value
+      precificacaoDados = value
     }
+
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
   var pedidoRetira

@@ -1,5 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.produto.model.saci
+
 class DadosPrecificacao {
   var prdno: String? = null
   var descricao: String? = null
@@ -40,4 +42,15 @@ class DadosPrecificacao {
   var creditoPisCofins05: Double? = null
   var creditoPisCofins08: Double? = null
   var creditoPisCofins10: Double? = null
+
+  val codigo
+    get() = prdno?.trim()?.toIntOrNull() ?: 0
+
+  companion object {
+    fun findAll(filtro: FiltroDadosPrecificacao): List<DadosPrecificacao> {
+      return saci.precificacaoDados(filtro)
+    }
+  }
 }
+
+data class FiltroDadosPrecificacao(val pesquisa: String)

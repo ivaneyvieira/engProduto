@@ -21,6 +21,7 @@ class PrecificacaoView : ViewLayout<PrecificacaoViewModel>(), IPrecificacaoView 
   override val tabPrecificacaoEntradaViewModel = TabPrecificacaoEntrada(viewModel.tabPrecificacaoEntradaViewModel)
   override val tabPrecificacaoEntradaMaViewModel = TabPrecificacaoEntradaMa(viewModel.tabPrecificacaoEntradaMaViewModel)
   override val tabPrecificacaoSaidaViewModel = TabPrecificacaoSaida(viewModel.tabPrecificacaoSaidaViewModel)
+  override val tabPrecificacaoDadosViewModel = TabPrecificacaoDados(viewModel.tabPrecificacaoDadosViewModel)
   override val tabPrecificacaoUsr = TabPrecificacaoUsr(viewModel.tabPrecificacaoUsrViewModel)
 
   override fun isAccept(): Boolean {

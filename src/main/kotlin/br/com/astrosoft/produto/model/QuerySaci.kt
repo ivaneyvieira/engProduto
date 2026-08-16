@@ -3676,6 +3676,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun precificacaoDados(filtro: FiltroDadosPrecificacao):List<DadosPrecificacao>{
+    val sql = "/sqlSaci/selectPrecificaoDados.sql"
+    return query(sql, DadosPrecificacao::class){
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 
