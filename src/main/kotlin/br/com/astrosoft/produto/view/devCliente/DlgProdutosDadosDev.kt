@@ -136,7 +136,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       this.withEditor(
         classBean = DadosDevProduto::class,
         openEditor = {
-          this.focusEditor(DadosDevProduto::quantidadeCom)
+          this.focusEditor(DadosDevProduto::quantidadeSem)
         },
         closeEditor = {
           gridDetail.dataProvider.refreshAll()
@@ -152,8 +152,8 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       columnGrid(DadosDevProduto::codigo, header = "Código")
       columnGrid(DadosDevProduto::descricao, header = "Descrição")
       columnGrid(DadosDevProduto::grade, header = "Grade")
-      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
       columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto").integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
       columnGrid(DadosDevProduto::quantidadeDev, header = "Quant")
       columnGrid(DadosDevProduto::valorUnitario, header = "Preço") {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
