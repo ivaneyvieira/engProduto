@@ -179,7 +179,27 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
 
   fun update() {
     val pesquisa = edtPesquisa?.value.orEmpty()
-    val listProdutos = nota.produtos.filter { prd ->
+    val produtos = nota.produtos
+    produtos.forEach { prd ->
+      if (nota.produtoTrocaEnum == EProdutoTroca.Com) {
+        if (prd.quantidadeTotal == 0) {
+          prd.quantidadeCom = prd.quantidadeDev
+          prd.quantidadeSem = null
+        }
+      } else if (nota.produtoTrocaEnum == EProdutoTroca.Sem) {
+        if (prd.quantidadeTotal == 0) {
+          prd.quantidadeSem = prd.quantidadeDev
+          prd.quantidadeCom = null
+        }
+      } else if (nota.produtoTrocaEnum == EProdutoTroca.Misto) {
+        if (prd.quantidadeTotal == 0) {
+          prd.quantidadeSem = null
+          prd.quantidadeCom = null
+        }
+      }
+    }
+
+    val listProdutos = produtos.filter { prd ->
       pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
       (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
       (prd.ni == pesquisa.toIntOrNull())
