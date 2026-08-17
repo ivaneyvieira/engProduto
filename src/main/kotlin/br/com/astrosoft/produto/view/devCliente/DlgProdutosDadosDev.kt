@@ -144,9 +144,6 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
 
       val user = AppConfig.userLogin() as? UserSaci
 
-      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
-      columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto").integerFieldEditor()
-
       if (user?.desautorizaDev == true) {
         addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz troca", header = "Desfaz") { produto ->
           viewModel.desautorizaTroca(nota, produto)
@@ -155,6 +152,8 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       columnGrid(DadosDevProduto::codigo, header = "Código")
       columnGrid(DadosDevProduto::descricao, header = "Descrição")
       columnGrid(DadosDevProduto::grade, header = "Grade")
+      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto").integerFieldEditor()
       columnGrid(DadosDevProduto::quantidadeDev, header = "Quant")
       columnGrid(DadosDevProduto::valorUnitario, header = "Preço") {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
