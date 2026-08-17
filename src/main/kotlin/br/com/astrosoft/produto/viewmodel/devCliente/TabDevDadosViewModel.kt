@@ -195,32 +195,33 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   ) {
     val solicitacaoTrocaEnum = nota.tipoDevEnum ?: fail("Tipo de Crédito não Informado")
     val produtoTrocaEnum = nota.produtoTrocaEnum ?: fail("Tipo da Devolução não informada")
+    val login = user.login
 
     when (solicitacaoTrocaEnum) {
       ESolicitacaoTroca.Troca       -> when (produtoTrocaEnum) {
         EProdutoTroca.Com   -> if (!user.autorizaImpTrocaP) {
-          fail("Impressão de Troca com produto não autorizada")
+          fail("Impressão de Troca com produto não autorizada para usuário $login")
         }
 
         EProdutoTroca.Sem   -> if (!user.autorizaImpTroca) {
-          fail("Impressão de Troca sem produto não autorizada")
+          fail("Impressão de Troca sem produto não autorizada para usuário $login")
         }
 
         EProdutoTroca.Misto -> if (!user.autorizaImpTrocaP || !user.autorizaImpTroca) {
-          fail("Impressão de Troca mista de produto não autorizada")
+          fail("Impressão de Troca mista de produto não autorizada para usuário $login")
         }
       }
 
       ESolicitacaoTroca.Estorno     -> if (!user.autorizaImpEstorno) {
-        fail("Impressão de Estorno de produto não autorizado")
+        fail("Impressão de Estorno de produto não autorizado para usuário $login")
       }
 
       ESolicitacaoTroca.Reembolso   -> if (!user.autorizaImpReembolso) {
-        fail("Impressão de Reembolso de produto não autorizado")
+        fail("Impressão de Reembolso de produto não autorizado para usuário $login")
       }
 
       ESolicitacaoTroca.MudaCliente -> if (!user.autorizaImpMuda) {
-        fail("Impressão de Mudança de cliente não autorizada")
+        fail("Impressão de Mudança de cliente não autorizada para usuário $login")
       }
     }
 

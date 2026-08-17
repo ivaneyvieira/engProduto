@@ -6,11 +6,9 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
-import br.com.astrosoft.produto.viewmodel.devCliente.autorizaImp
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -85,13 +83,6 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
-      val user = AppConfig.userLogin() as? UserSaci
-
-      if(user.autorizaImp().not()){
-        DialogHelper.showWarning("Usuário sem permissão de impressão")
-        return@addColumnButton
-      }
-
       val assinatura = nota.loginTroca ?: ""
 
       if (assinatura.isBlank()) {
@@ -154,7 +145,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
   }
 
   private fun execDesfazSolicitacoes(nota: DadosDev) {
-    if (nota.loginSolicitacao.isNullOrBlank()) {
+    if (nota.tipoDevEnum == null && nota.produtoTrocaEnum == null && nota.loginSolicitacao == null && nota.loginTroca == null) {
       DialogHelper.showError("Não existe solicitação para desfazer")
     } else {
       DialogHelper.showQuestion("Desfaz a solicitação?") {
