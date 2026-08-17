@@ -198,28 +198,28 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
 
     when (solicitacaoTrocaEnum) {
       ESolicitacaoTroca.Troca       -> when (produtoTrocaEnum) {
-        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+        EProdutoTroca.Com   -> if (!user.autorizaImpTrocaP) {
           fail("Troca com produto não autorizada")
         }
 
-        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+        EProdutoTroca.Sem   -> if (!user.autorizaImpTroca) {
           fail("Troca sem produto não autorizada")
         }
 
-        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
+        EProdutoTroca.Misto -> if (!user.autorizaImpTrocaP || !user.autorizaImpTroca) {
           fail("Troca mista de produto não autorizada")
         }
       }
 
-      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+      ESolicitacaoTroca.Estorno     -> if (!user.autorizaImpEstorno) {
         fail("Estorno de produto não autorizado")
       }
 
-      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaImpReembolso) {
         fail("Reembolso de produto não autorizado")
       }
 
-      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaImpMuda) {
         fail("Mudança de cliente não autorizada")
       }
     }

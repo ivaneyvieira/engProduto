@@ -213,6 +213,12 @@ class UserSaci : IUser {
   var devDados by DelegateAuthorized3(176)
   var precificacaoDados by DelegateAuthorized3(177)
 
+  var autorizaImpTrocaP by DelegateAuthorized3(178)
+  var autorizaImpTroca by DelegateAuthorized3(179)
+  var autorizaImpEstorno by DelegateAuthorized3(180)
+  var autorizaImpReembolso by DelegateAuthorized3(181)
+  var autorizaImpMuda by DelegateAuthorized3(182)
+
   //Locais
   private var localEstoque: String?
     get() = locais.split(":").getOrNull(0)

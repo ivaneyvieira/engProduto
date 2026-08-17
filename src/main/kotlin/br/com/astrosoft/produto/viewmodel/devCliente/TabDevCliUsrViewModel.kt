@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabUser
 import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
+import br.com.astrosoft.produto.model.beans.DelegateAuthorized3
 import br.com.astrosoft.produto.model.beans.UserSaci
 
 class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewModel(viewModel) {
@@ -41,6 +42,12 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
     this.liberaImpressao = usuario.liberaImpressao
     this.localizacaoDev = usuario.localizacaoDev
     this.devDados = usuario.devDados
+
+    this.autorizaImpTrocaP = usuario.autorizaImpTrocaP
+    this.autorizaImpTroca =  usuario.autorizaImpTroca
+    this.autorizaImpEstorno = usuario.autorizaImpEstorno
+    this.autorizaImpReembolso = usuario.autorizaImpReembolso
+    this.autorizaImpMuda = usuario.autorizaImpMuda
   }
 }
 

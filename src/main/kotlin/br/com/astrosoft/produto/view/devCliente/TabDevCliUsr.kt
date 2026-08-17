@@ -96,6 +96,23 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
           binder.bind(this, UserSaci::liberaImpressao.name)
         }
       }
+      verticalBlock("Impressão") {
+        checkBox("Impressão Troca P") {
+          binder.bind(this, UserSaci::autorizaImpTrocaP.name)
+        }
+        checkBox("Impressão Troca") {
+          binder.bind(this, UserSaci::autorizaImpTroca.name)
+        }
+        checkBox("Impressão Estorno") {
+          binder.bind(this, UserSaci::autorizaImpEstorno.name)
+        }
+        checkBox("Impressão Reembolso") {
+          binder.bind(this, UserSaci::autorizaImpReembolso.name)
+        }
+        checkBox("Impressão Muda") {
+          binder.bind(this, UserSaci::autorizaImpMuda.name)
+        }
+      }
     }
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)
