@@ -10,7 +10,6 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
-import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -84,7 +83,16 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
-      viewModel.imprimeValeTroca(nota)
+      if (nota.loginSolicitacao == null) {
+        val formAutoriza = FormAutoriza()
+        DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {
+          viewModel.imprimeValeTroca(nota, formAutoriza.login, formAutoriza.senha)
+          viewModel.updateView()
+        }
+      } else {
+        viewModel.imprimeValeTroca(nota)
+        viewModel.updateView()
+      }
     }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -99,7 +107,12 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     addColumnButton(
       iconButton = VaadinIcon.SIGN_IN,
       tooltip = "Autoriza Solicitação",
-      header = "Solicitação"
+      header = "Solicitação",
+      configIcon = { icon, nota ->
+        if (nota.tipoDevEnum != null && nota.produtoTrocaEnum != null) {
+          icon.color = "yellow"
+        }
+      }
     ) { nota ->
       execSolicitacoes(nota)
     }
@@ -143,7 +156,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
         DialogHelper.showWarning(it.message ?: "Erro no filtro")
       }
       result.onSuccess { solicitacaoTroca ->
-        val solicitacaoTroca: SolicitacaoTroca = solicitacaoTroca
+        val solicitacaoTroca: SolicitacaoTrocaSimples = solicitacaoTroca
         viewModel.autorizaSolicitacao(nota, solicitacaoTroca)
       }
     }

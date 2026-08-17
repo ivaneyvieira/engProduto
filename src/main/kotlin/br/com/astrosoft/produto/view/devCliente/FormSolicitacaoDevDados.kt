@@ -14,8 +14,6 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 class FormSolicitacaoDevDados(val nota: DadosDev) : FormLayout() {
   private var edtTipoCredito: Select<ESolicitacaoTroca>? = null
   private var edtTipoDevolucao: Select<EProdutoTroca>? = null
-  private var edtLogin: TextField? = null
-  private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
 
   init {
@@ -113,21 +111,9 @@ class FormSolicitacaoDevDados(val nota: DadosDev) : FormLayout() {
         }
       }
     }
-
-    edtLogin = textField("Login") {
-      this.isVisible = !readOnly
-      this.isReadOnly = readOnly
-      this.width = "300px"
-    }
-
-    edtSenha = passwordField("Senha") {
-      this.isVisible = !readOnly
-      this.isReadOnly = readOnly
-      this.width = "300px"
-    }
   }
 
-  fun validaFiltro(): Result<SolicitacaoTroca> {
+  fun validaFiltro(): Result<SolicitacaoTrocaSimples> {
     return if (edtTipoDevolucao?.isInvalid == true || edtTipoCredito?.isInvalid == true) {
       Result.failure(Exception("Filtro Inválido"))
     } else {
@@ -140,19 +126,15 @@ class FormSolicitacaoDevDados(val nota: DadosDev) : FormLayout() {
     }
   }
 
-  private fun solicitacaoTroca(): SolicitacaoTroca? {
+  private fun solicitacaoTroca(): SolicitacaoTrocaSimples? {
     val solicitacaoTrocaEnum = edtTipoCredito?.value ?: return null
     val produtoTrocaEnum = edtTipoDevolucao?.value ?: return null
     val nfEntRet = edtNotaEntRet?.value
-    val login: String = edtLogin?.value ?: ""
-    val senha: String = edtSenha?.value ?: ""
-    return SolicitacaoTroca(
+
+    return SolicitacaoTrocaSimples(
       solicitacaoTrocaEnnum = solicitacaoTrocaEnum,
       produtoTrocaEnum = produtoTrocaEnum,
       nfEntRet = nfEntRet,
-      motivo = EMotivoTroca.CompraErrada,
-      login = login,
-      senha = senha
     )
   }
 }

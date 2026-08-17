@@ -45,7 +45,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
             update()
           }
         }
-        edtTipo = select("Tipo") {
+        edtTipo = select("Tipo do Crédito") {
           this.isReadOnly = readOnly
           val tipos = ESolicitacaoTroca.entries
           this.setItems(tipos)
@@ -55,7 +55,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
           this.width = "10rem"
         }
 
-        edtProduto = select("Produto") {
+        edtProduto = select("Tipo da Devolução") {
           this.isReadOnly = readOnly
           val produtoTrocas = EProdutoTroca.entries
           this.setItems(produtoTrocas)

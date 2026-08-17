@@ -8,3 +8,9 @@ data class SolicitacaoTroca(
   val login: String,
   val senha: String
 )
+
+data class SolicitacaoTrocaSimples(
+  val solicitacaoTrocaEnnum: ESolicitacaoTroca,
+  val produtoTrocaEnum: EProdutoTroca,
+  val nfEntRet: Int?,
+)

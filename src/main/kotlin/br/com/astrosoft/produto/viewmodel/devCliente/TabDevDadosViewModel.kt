@@ -32,43 +32,10 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
     updateView()
   }
 
-  fun autorizaSolicitacao(nota: DadosDev, solicitacaoTroca: SolicitacaoTroca) = viewModel.exec {
-    val login = solicitacaoTroca.login
-    val senha = solicitacaoTroca.senha
-    val user = UserSaci.userLogin(login, senha)
-    user ?: fail("Usuário ou senha inválidos")
-
-    when (solicitacaoTroca.solicitacaoTrocaEnnum) {
-      ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnum) {
-        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
-          fail("Troca com produto não autorizada")
-        }
-
-        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
-          fail("Troca sem produto não autorizada")
-        }
-
-        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
-          fail("Troca mista de produto não autorizada")
-        }
-      }
-
-      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
-        fail("Estorno de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
-        fail("Reembolso de produto não autorizado")
-      }
-
-      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
-        fail("Mudança de cliente não autorizada")
-      }
-    }
-
+  fun autorizaSolicitacao(nota: DadosDev, solicitacaoTroca: SolicitacaoTrocaSimples) = viewModel.exec {
     nota.tipoDevEnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
-    nota.userSolicitacao = user.no
+    nota.userSolicitacao = null
     nota.update()
 
     updateView()
@@ -210,21 +177,70 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   /**************************** imprimeValeTroca ************************************/
 
   fun imprimeValeTroca(nota: DadosDev) = viewModel.exec {
-    val assinatura = nota.loginTroca ?: ""
-    val autorizacao = nota.loginSolicitacao ?: ""
+    val userno = nota.userSolicitacao ?: fail("Usuário ou senha inválidos")
+    val user = UserSaci.findUser(userno) ?: fail("Usuário ou senha inválidos")
+    imprimeValeTroca(nota, user)
+  }
 
-    if (assinatura.isBlank() && autorizacao.isBlank()) {
-      fail("Devolução não foi autorizada e assinada.")
+  fun imprimeValeTroca(nota: DadosDev, login: String, senha: String) = viewModel.exec {
+    val user = UserSaci.userLogin(login, senha)
+    user ?: fail("Usuário ou senha inválidos")
+
+    imprimeValeTroca(nota, user)
+  }
+
+  private fun imprimeValeTroca(
+    nota: DadosDev,
+    user: UserSaci
+  ) {
+    val solicitacaoTrocaEnum = nota.tipoDevEnum ?: fail("Tipo de Crédito não Informado")
+    val produtoTrocaEnum = nota.produtoTrocaEnum ?: fail("Tipo da Devolução não informada")
+
+    when (solicitacaoTrocaEnum) {
+      ESolicitacaoTroca.Troca       -> when (produtoTrocaEnum) {
+        EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
+          fail("Troca com produto não autorizada")
+        }
+
+        EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
+          fail("Troca sem produto não autorizada")
+        }
+
+        EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
+          fail("Troca mista de produto não autorizada")
+        }
+      }
+
+      ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
+        fail("Estorno de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
+        fail("Reembolso de produto não autorizado")
+      }
+
+      ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
+        fail("Mudança de cliente não autorizada")
+      }
     }
+
+    val assinatura = nota.loginTroca ?: ""
 
     if (assinatura.isBlank()) {
       fail("Devolução não foi assinada.")
     }
 
-    if (autorizacao.isBlank()) {
-      fail("Devolução não foi autorizada.")
-    }
+    nota.tipoDevEnum = solicitacaoTrocaEnum
+    nota.produtoTrocaEnum = produtoTrocaEnum
+    nota.userSolicitacao = user.no
+    nota.loginSolicitacao = user.login
+    nota.nomeSolicitacao = user.name
+    nota.update()
 
+    imprime(nota)
+  }
+
+  private fun imprime(nota: DadosDev) {
     val relatorio = ValeTrocaDadosDev(nota)
 
     val dados = nota.produtos
@@ -247,6 +263,5 @@ interface ITabDevDados : ITabView {
   fun filtro(): FiltroDadosDev
   fun updateNotas(notas: List<DadosDev>)
   fun updateProdutos()
-
   fun fechaFormProduto()
 }
