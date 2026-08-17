@@ -178,6 +178,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
   }
 
   fun update() {
+
     val pesquisa = edtPesquisa?.value.orEmpty()
     val produtos = nota.produtos
     produtos.forEach { prd ->
