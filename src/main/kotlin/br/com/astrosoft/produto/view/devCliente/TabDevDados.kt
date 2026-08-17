@@ -87,7 +87,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
       val assinatura = nota.loginTroca ?: ""
 
       if (assinatura.isBlank()) {
-        DialogHelper.showWarning("Devolução não foi assinada.")
+        DialogHelper.showWarning("Devolução sem Assinatura de Troca.")
         return@addColumnButton
       }
       if (nota.loginSolicitacao == null) {
