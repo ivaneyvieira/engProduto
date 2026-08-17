@@ -10,6 +10,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.autorizaImp
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -84,12 +85,20 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
+      val user = AppConfig.userLogin() as? UserSaci
+
+      if(user.autorizaImp().not()){
+        DialogHelper.showWarning("Usuário sem permissão de impressão")
+        return@addColumnButton
+      }
+
       val assinatura = nota.loginTroca ?: ""
 
       if (assinatura.isBlank()) {
         DialogHelper.showWarning("Devolução sem Assinatura de Troca.")
         return@addColumnButton
       }
+
       if (nota.loginSolicitacao == null) {
         val formAutoriza = FormAutoriza()
         DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {

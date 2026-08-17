@@ -52,3 +52,15 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
 }
 
 interface ITabDevCliUsr : ITabUser
+
+fun UserSaci?.autorizaImp(): Boolean {
+  this ?: return false
+
+  val autorizaImpTrocaP = this.autorizaImpTrocaP
+  val autorizaImpTroca =  this.autorizaImpTroca
+  val autorizaImpEstorno = this.autorizaImpEstorno
+  val autorizaImpReembolso = this.autorizaImpReembolso
+  val autorizaImpMuda = this.autorizaImpMuda
+
+  return autorizaImpTrocaP || autorizaImpTroca || autorizaImpEstorno || autorizaImpReembolso || autorizaImpMuda
+}
