@@ -224,12 +224,6 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       }
     }
 
-    val assinatura = nota.loginTroca ?: ""
-
-    if (assinatura.isBlank()) {
-      fail("Devolução não foi assinada.")
-    }
-
     nota.tipoDevEnum = solicitacaoTrocaEnum
     nota.produtoTrocaEnum = produtoTrocaEnum
     nota.userSolicitacao = user.no

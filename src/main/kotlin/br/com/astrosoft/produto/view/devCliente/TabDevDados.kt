@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
@@ -83,6 +84,12 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
+      val assinatura = nota.loginTroca ?: ""
+
+      if (assinatura.isBlank()) {
+        DialogHelper.showWarning("Devolução não foi assinada.")
+        return@addColumnButton
+      }
       if (nota.loginSolicitacao == null) {
         val formAutoriza = FormAutoriza()
         DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {
