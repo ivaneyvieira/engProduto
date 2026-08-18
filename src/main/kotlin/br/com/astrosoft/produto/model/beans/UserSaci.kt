@@ -218,6 +218,7 @@ class UserSaci : IUser {
   var autorizaImpEstorno by DelegateAuthorized3(180)
   var autorizaImpReembolso by DelegateAuthorized3(181)
   var autorizaImpMuda by DelegateAuthorized3(182)
+  var devDadosProduto  by DelegateAuthorized3(183)
 
   //Locais
   private var localEstoque: String?
@@ -724,7 +725,8 @@ class UserSaci : IUser {
 
   var devCliente
     get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito || devCliDevolucoes ||
-            devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || devDados || admin
+            devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || devDados ||
+            devDadosProduto || admin
     set(value) {
       devCliImprimir = value
       devCliImpresso = value
@@ -737,6 +739,7 @@ class UserSaci : IUser {
       devCliCancela = value
       devCliDevolucoes = value
       devDados = value
+      devDadosProduto = value
     }
 
   var acertoEstoque

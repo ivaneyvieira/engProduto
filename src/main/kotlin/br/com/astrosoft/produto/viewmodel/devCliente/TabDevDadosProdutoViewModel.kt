@@ -1,13 +1,11 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.FiltroDadosDev
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 
-class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
+class TabDevDadosProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -19,14 +17,12 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val produtos = EntradaDevCliProList.findAll(filtro).distinctBy {dev ->
-      "${dev.loja} ${dev.prdno} ${dev.grade} ${dev.tipoPrd}"
-    }
+    val produtos = DadosDevProduto.findAll(filtro)
     subView.updateProdutos(produtos)
   }
 
   fun imprimeProdutos() = viewModel.exec {
-    val produtos = subView.produtosSelecionados()
+    /*val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Não há produtos selecionados")
     }
@@ -47,16 +43,16 @@ class TabDevCliProdutoViewModel(val viewModel: DevClienteViewModel) {
     }
 
     val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
-    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
+    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))*/
   }
 
   val subView
-    get() = viewModel.view.tabDevCliProduto
+    get() = viewModel.view.tabDevDadosProduto
 }
 
-interface ITabDevCliProduto : ITabView {
-  fun filtro(): FiltroEntradaDevCliProList
-  fun updateProdutos(produtos: List<EntradaDevCliProList>)
-  fun produtosSelecionados(): List<EntradaDevCliProList>
+interface ITabDevDadosProduto : ITabView {
+  fun filtro(): FiltroDadosDev
+  fun updateProdutos(produtos: List<DadosDevProduto>)
+  fun produtosSelecionados(): List<DadosDevProduto>
   fun reloadGrid()
 }

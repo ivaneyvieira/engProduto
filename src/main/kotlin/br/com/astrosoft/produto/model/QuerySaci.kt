@@ -3626,6 +3626,10 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+      addOptionalParameter("localizacao", filtro.localizacao)
+      addOptionalParameter("devolvido", filtro.devolvido.let{
+        if(it) "S" else "N"
+      })
     }
   }
 

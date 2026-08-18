@@ -45,7 +45,23 @@ data class DadosDevProduto(
   var nfEntRet: Int? = null,
   var quantidadeCom: Int? = null,
   var quantidadeSem: Int? = null,
+  var localizacao: String? = null,
+  var userEntrega: String? = null,
+  var userRecebimento: String? = null,
 ) {
+  val nfDevolucao: String
+    get() {
+      if (nfdno.isNullOrBlank()) {
+        return ""
+      }
+
+      if (nfdse.isNullOrBlank()) {
+        return nfdno ?: ""
+      }
+
+      return "$nfdno/$nfdse"
+    }
+
   val quantidadeTotal
     get() = (quantidadeCom ?: 0) + (quantidadeSem ?: 0)
 
@@ -106,4 +122,10 @@ data class DadosDevProduto(
       val prdTroca = produtoTrocaItemEnum ?: return null
       return prdTroca == EProdutoTroca.Com || prdTroca == EProdutoTroca.Misto
     }
+
+  companion object {
+    fun findAll(filtro: FiltroDadosDev): List<DadosDevProduto> {
+      return saci.findDadosDev(filtro)
+    }
+  }
 }

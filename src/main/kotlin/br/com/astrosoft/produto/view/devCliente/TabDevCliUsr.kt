@@ -25,6 +25,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     columnGrid(UserSaci::devCliImprimir, "VC Imprimir")
     columnGrid(UserSaci::devCliImpresso, "VC Impresso")
     columnGrid(UserSaci::devCliValeTrocaProduto, "Produto")
+    columnGrid(UserSaci::devDadosProduto, "Prd Devolvidos")
     columnGrid(UserSaci::devCliCredito, "Crédito")
     columnGrid(UserSaci::devClienteTroca, "Troca")
     columnGrid(UserSaci::devCliVenda, "Venda")
@@ -56,6 +57,9 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         }
         checkBox("Produto") {
           binder.bind(this, UserSaci::devCliValeTrocaProduto.name)
+        }
+        checkBox("Prd Devolvidos") {
+          binder.bind(this, UserSaci::devDadosProduto.name)
         }
         checkBox("Crédito") {
           binder.bind(this, UserSaci::devCliCredito.name)
@@ -130,7 +134,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
           binder.bind(this, UserSaci::dataVendaDevolucao.name)
         }
       }
-      filtroLocalizacao(binder, property =  UserSaci::localizacaoDev, label = "Localização Aba Produto")
+      filtroLocalizacao(binder, property = UserSaci::localizacaoDev, label = "Localização Aba Produto")
     }
   }
 }

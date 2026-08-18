@@ -175,6 +175,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
+
     )
   }
 

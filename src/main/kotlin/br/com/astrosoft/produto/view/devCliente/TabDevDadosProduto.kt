@@ -2,18 +2,16 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
-import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.FiltroDadosDev
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.reposicao.FormAutoriza
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliProduto
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDadosProduto
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
@@ -27,9 +25,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevDadosProduto(val viewModel: TabDevCliProdutoViewModel) :
-  TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
-  ITabDevCliProduto {
+class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
+  TabPanelGrid<DadosDevProduto>(DadosDevProduto::class),
+  ITabDevDadosProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
@@ -77,33 +75,35 @@ class TabDevDadosProduto(val viewModel: TabDevCliProdutoViewModel) :
     }
   }
 
-  override fun Grid<EntradaDevCliProList>.gridPanel() {
+  override fun Grid<DadosDevProduto>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
-    columnGrid(EntradaDevCliProList::codigo, header = "Código").right()
-    columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
-    columnGrid(EntradaDevCliProList::grade, header = "Grade")
-    columnGrid(EntradaDevCliProList::localizacao, header = "CD")
-    columnGrid(EntradaDevCliProList::tipoQtdEfetiva, header = "Quantidade")
-    columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
-    columnGrid(EntradaDevCliProList::tipoNotaPre, header = "Tipo")
-    columnGrid(EntradaDevCliProList::userEntrega, header = "Entregador")
-    columnGrid(EntradaDevCliProList::userRecebimento, header = "Recebedor")
-    columnGrid(EntradaDevCliProList::ni, header = "NI")
-    columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
-    columnGrid(EntradaDevCliProList::data, header = "Data")
+    columnGrid(DadosDevProduto::codigo, header = "Código").right()
+    columnGrid(DadosDevProduto::descricao, header = "Descrição").expand()
+    columnGrid(DadosDevProduto::grade, header = "Grade")
+    columnGrid(DadosDevProduto::localizacao, header = "CD")
+    columnGrid(DadosDevProduto::quantidadeDev, header = "Quantidade")
+    columnGrid(DadosDevProduto::obsNotaVenda, header = "Observação").expand()
+    columnGrid(DadosDevProduto::obsTipo, header = "Tipo")
+    columnGrid(DadosDevProduto::userEntrega, header = "Entregador")
+    columnGrid(DadosDevProduto::userRecebimento, header = "Recebedor")
+    columnGrid(DadosDevProduto::ni, header = "NI")
+    columnGrid(DadosDevProduto::nfDevolucao, header = "NF Dev")
+    columnGrid(DadosDevProduto::dataDevolucao, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
 
-    this.sort(EntradaDevCliProList::localizacao.asc, EntradaDevCliProList::descricao.asc)
+    this.sort(DadosDevProduto::localizacao.asc, DadosDevProduto::descricao.asc)
   }
 
-  override fun filtro(): FiltroEntradaDevCliProList {
+  override fun filtro(): FiltroDadosDev {
     val user = AppConfig.userLogin() as? UserSaci
-    return FiltroEntradaDevCliProList(
+    return FiltroDadosDev(
       loja = cmbLoja.value?.no ?: 0,
-      data = edtData.value ?: LocalDate.now(),
+      dataInicial = edtData.value ?: LocalDate.now(),
+      dataFinal = edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
-      localizacao = user?.localizacaoDev ?: setOf("TODOS")
+      localizacao = user?.localizacaoDev ?: setOf("TODOS"),
+      devolvido = true
     )
   }
 
@@ -116,21 +116,21 @@ class TabDevDadosProduto(val viewModel: TabDevCliProdutoViewModel) :
     return username?.impressoraDev.orEmpty().toList()
   }
 
-  override fun updateProdutos(produtos: List<EntradaDevCliProList>) {
+  override fun updateProdutos(produtos: List<DadosDevProduto>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<EntradaDevCliProList> {
+  override fun produtosSelecionados(): List<DadosDevProduto> {
     return this.itensSelecionados()
   }
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devCliValeTrocaProduto == true
+    return username?.devDadosProduto == true
   }
 
   override val label: String
-    get() = "Produto"
+    get() = "Prd Devolvido"
 
   override fun updateComponent() {
     viewModel.updateView()

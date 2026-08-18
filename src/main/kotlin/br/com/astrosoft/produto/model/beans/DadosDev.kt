@@ -174,4 +174,6 @@ data class FiltroDadosDev(
   val pesquisa: String,
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
+  val devolvido: Boolean = false,
+  var localizacao: Set<String> = setOf("TODOS")
 )
