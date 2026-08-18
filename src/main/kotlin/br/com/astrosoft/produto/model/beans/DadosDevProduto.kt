@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import java.time.LocalTime
 
 data class DadosDevProduto(
   var ni: Int? = null,
@@ -46,9 +47,29 @@ data class DadosDevProduto(
   var quantidadeCom: Int? = null,
   var quantidadeSem: Int? = null,
   var localizacao: String? = null,
+  var userEntregaNo: Int? = null,
   var userEntrega: String? = null,
+  var userEntregaName: String? = null,
+  var dataEntrega: LocalDate? = null,
+  var horaEntrega: LocalTime? = null,
+  var userRecebimentoNo: Int? = null,
   var userRecebimento: String? = null,
+  var userRecebimentoName: String? = null,
+  var dataRecebimento: LocalDate? = null,
+  var horaRecebimento: LocalTime? = null,
 ) {
+  var tipoDevEnum: ESolicitacaoTroca?
+    get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
+    set(value) {
+      tipoDev = value?.codigo
+    }
+
+  var produtoTrocaEnum: EProdutoTroca?
+    get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
+    set(value) {
+      produtoTroca = value?.codigo
+    }
+
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {

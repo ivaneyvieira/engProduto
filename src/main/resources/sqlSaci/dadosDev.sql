@@ -93,68 +93,83 @@ FROM
     LEFT JOIN sqldados.emp   AS E
               ON E.no = N.empno;
 
-SELECT N.ni                  AS ni,
-       N.loja                AS loja,
-       N.nomeLoja            AS nomeLoja,
-       N.nfdno               AS nfdno,
-       N.nfdse               AS nfdse,
-       N.dataDevolucao       AS dataDevolucao,
-       N.valorDev            AS valorDev,
-       N.obs                 AS obs,
-       N.nfVenda             AS nfVenda,
-       N.obsNotaVenda        AS obsNotaVenda,
-       N.obsTipo             AS obsTipo,
-       N.dataVenda           AS dataVenda,
-       N.codCliente          AS codCliente,
-       N.nomeCliente         AS nomeCliente,
+SELECT N.ni                                               AS ni,
+       N.loja                                             AS loja,
+       N.nomeLoja                                         AS nomeLoja,
+       N.nfdno                                            AS nfdno,
+       N.nfdse                                            AS nfdse,
+       N.dataDevolucao                                    AS dataDevolucao,
+       N.valorDev                                         AS valorDev,
+       N.obs                                              AS obs,
+       N.nfVenda                                          AS nfVenda,
+       N.obsNotaVenda                                     AS obsNotaVenda,
+       N.obsTipo                                          AS obsTipo,
+       N.dataVenda                                        AS dataVenda,
+       N.codCliente                                       AS codCliente,
+       N.nomeCliente                                      AS nomeCliente,
   /*Dados*/
-       NF.nfno               AS nfno,
-       NF.nfse               AS nfse,
-       NF.pdvno              AS pdvno,
-       NF.xano               AS xano,
-       NF.nfTipo             AS nfTipo,
-       NF.empno              AS empno,
-       NF.vendedor           AS vendedor,
-       ''                    AS notaEntrega,
-       NF.custnoVend         AS custnoVend,
-       NF.nomeVend           AS nomeVend,
-       N.userSolicitacao     AS userSolicitacao,
-       US.login              AS loginSolicitacao,
-       US.name               AS nomeSolicitacao,
-       N.userTroca           AS userTroca,
-       UT.login              AS loginTroca,
-       UT.name               AS nomeTroca,
-       N.produtoTroca        AS produtoTroca,
-       N.tipoDev             AS tipoDev,
-       N.nfEntRet            AS nfEntRet,
-       ''                    AS userEntrega,
-       ''                    AS userRecebimento,
+       NF.nfno                                            AS nfno,
+       NF.nfse                                            AS nfse,
+       NF.pdvno                                           AS pdvno,
+       NF.xano                                            AS xano,
+       NF.nfTipo                                          AS nfTipo,
+       NF.empno                                           AS empno,
+       NF.vendedor                                        AS vendedor,
+       ''                                                 AS notaEntrega,
+       NF.custnoVend                                      AS custnoVend,
+       NF.nomeVend                                        AS nomeVend,
+       N.userSolicitacao                                  AS userSolicitacao,
+       US.login                                           AS loginSolicitacao,
+       US.name                                            AS nomeSolicitacao,
+       N.userTroca                                        AS userTroca,
+       UT.login                                           AS loginTroca,
+       UT.name                                            AS nomeTroca,
+       N.produtoTroca                                     AS produtoTroca,
+       N.tipoDev                                          AS tipoDev,
+       N.nfEntRet                                         AS nfEntRet,
   /* Produtos */
-       I.prdno               AS prdno,
-       I.grade               AS grade,
-       P.name                AS descricao,
-       P.unit                AS unidade,
-       ROUND(I.qtty / 1000)  AS quantidadeDev,
-       ROUND(I.fob / 100, 2) AS valorUnitario,
-       L.localizacao         AS localizacao,
+       I.prdno                                            AS prdno,
+       I.grade                                            AS grade,
+       P.name                                             AS descricao,
+       P.unit                                             AS unidade,
+       ROUND(I.qtty / 1000)                               AS quantidadeDev,
+       ROUND(I.fob / 100, 2)                              AS valorUnitario,
+       L.localizacao                                      AS localizacao,
 /* Dados*/
-       D.quantidadeCom       AS quantidadeCom,
-       D.quantidadeSem       AS quantidadeSem
+       D.quantidadeCom                                    AS quantidadeCom,
+       D.quantidadeSem                                    AS quantidadeSem,
+  /*Entrega / Dev*/
+       UE.no                                              AS userEntregaNo,
+       IFNULL(UE.login, '')                               AS userEntrega,
+       IFNULL(UE.name, '')                                AS userEntregaName,
+       IF(A.dataEntrega = 0, NULL, A.dataEntrega)         AS dataEntrega,
+       IF(A.horaEntrega = 0, NULL, A.horaEntrega)         AS horaEntrega,
+       UR.no                                              AS userRecebimentoNo,
+       IFNULL(UR.login, '')                               AS userRecebimento,
+       IFNULL(UR.name, '')                                AS userRecebimentoName,
+       IF(A.dataRecebimento = 0, NULL, A.dataRecebimento) AS dataRecebimento,
+       IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento
 FROM
-  T_NOTA                                AS N
-    LEFT JOIN  T_NOTA_NF                AS NF
+  T_NOTA                                      AS N
+    LEFT JOIN  T_NOTA_NF                      AS NF
                USING (ni)
-    INNER JOIN sqldados.iprd            AS I
+    INNER JOIN sqldados.iprd                  AS I
                ON I.invno = N.ni
-    INNER JOIN sqldados.prd             AS P
+    INNER JOIN sqldados.prd                   AS P
                ON P.no = I.prdno
-    LEFT JOIN  sqldados.dadosDevProduto AS D
+    LEFT JOIN  sqldados.dadosDevProduto       AS D
                USING (invno, prdno, grade)
-    LEFT JOIN  T_LOC                    AS L
+    LEFT JOIN  sqldados.devClienteAutorizacao AS A
+               USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.users                    UE
+               ON UE.no = A.userEntrega
+    LEFT JOIN  sqldados.users                 AS UR
+               ON UR.no = A.userRecebimento
+    LEFT JOIN  T_LOC                          AS L
                ON L.storeno = N.loja AND L.prdno = I.prdno AND L.grade = I.grade
-    LEFT JOIN  sqldados.users           AS US
+    LEFT JOIN  sqldados.users                 AS US
                ON US.no = N.userSolicitacao
-    LEFT JOIN  sqldados.users           AS UT
+    LEFT JOIN  sqldados.users                 AS UT
                ON UT.no = N.userTroca
 WHERE (:devolvido = 'N' OR (US.no IS NOT NULL AND UT.no IS NOT NULL))
   AND ((TRIM(MID(L.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (L.localizacao = ''))

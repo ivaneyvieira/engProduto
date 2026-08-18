@@ -1,9 +1,13 @@
 package br.com.astrosoft.produto.viewmodel.devCliente
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.EProdutoTroca
 import br.com.astrosoft.produto.model.beans.FiltroDadosDev
 import br.com.astrosoft.produto.model.beans.Loja
+import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
+import br.com.astrosoft.produto.model.printText.ProdutosDevolucaoDados
 
 class TabDevDadosProdutoViewModel(val viewModel: DevClienteViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -22,7 +26,7 @@ class TabDevDadosProdutoViewModel(val viewModel: DevClienteViewModel) {
   }
 
   fun imprimeProdutos() = viewModel.exec {
-    /*val produtos = subView.produtosSelecionados()
+    val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Não há produtos selecionados")
     }
@@ -37,13 +41,13 @@ class TabDevDadosProdutoViewModel(val viewModel: DevClienteViewModel) {
       fail("Possui mais de um recebedor")
     }
 
-    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    val countTipo = produtos.map { it.produtoTrocaItemEnum == EProdutoTroca.Com }.distinct().size
     if (countTipo != 1) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
 
-    val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
-    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))*/
+    val relatorio = ProdutosDevolucaoDados("Devolucoes de Clientes com Produtos")
+    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
   val subView
