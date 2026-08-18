@@ -154,5 +154,5 @@ FROM
                ON US.no = N.userSolicitacao
     LEFT JOIN  sqldados.users                 AS UT
                ON UT.no = N.userTroca
-WHERE (:devolvido = 'N' OR (US.no IS NOT NULL AND UT.no IS NOT NULL))
+WHERE (:devolvido = 'N' OR (UT.no IS NOT NULL))
   AND ((TRIM(MID(L.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (L.localizacao = ''))
