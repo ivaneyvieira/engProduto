@@ -138,6 +138,18 @@ data class DadosDevProduto(
       }
     }
 
+  val produtoTipo: String
+    get() {
+      val prdTroca = produtoTrocaItemEnum ?: return ""
+      val tipoTroca = tipoDevEnum ?: return ""
+      val sigla = when (prdTroca) {
+        EProdutoTroca.Com   -> "P"
+        EProdutoTroca.Sem   -> ""
+        EProdutoTroca.Misto -> "M"
+      }
+      return "$tipoTroca $sigla".trim()
+    }
+
   val temProduto: Boolean?
     get() {
       val prdTroca = produtoTrocaItemEnum ?: return null

@@ -48,6 +48,11 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
 
   fun validaProcesamento(user: UserSaci?, nota: DadosDev, produtos: List<DadosDevProduto>): Boolean {
     try {
+      val assina = nota.loginTroca
+      if(assina != null){
+        fail("Troca já Assinada")
+      }
+
       user ?: fail("Usuário inválido")
       produtos.ifEmpty {
         fail("Nenhum produto selecionado")
