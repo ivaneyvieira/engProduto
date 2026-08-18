@@ -77,7 +77,7 @@ class SubWindowPrinter(
                     printerUser.isEmpty()                      -> emptyList()
                     else                                       -> printerUser
                   }
-              setItems(lista)
+              setItems(lista.distinct().sorted())
 
               this.value = lista.firstOrNull()
             }
@@ -99,8 +99,8 @@ class SubWindowPrinter(
                   val impressora = Impressora.findImpressora(impressoraName)
                   val tipoRota = impressora?.tipoRota()
                   if (tipoRota != null) {
-                    val impressoraOrigem = Impressora.findImpressora(rota?.lojaOrigem, tipoRota)?.name ?: ""
-                    val impressoraDestino = Impressora.findImpressora(rota?.lojaDestino, tipoRota)?.name ?: ""
+                    val impressoraOrigem = Impressora.findImpressoraOrigem(rota?.lojaOrigem, tipoRota)?.name ?: ""
+                    val impressoraDestino = Impressora.findImpressoraDestino(rota?.lojaDestino, tipoRota)?.name ?: ""
                     val printerRota = listOf(impressoraOrigem, impressoraDestino)
                     printerRota.forEach { printer ->
                       imprimeText(text, printer, loja)
