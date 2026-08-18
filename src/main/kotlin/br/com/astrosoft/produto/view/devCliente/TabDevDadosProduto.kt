@@ -82,7 +82,7 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
     columnGrid(DadosDevProduto::descricao, header = "Descrição").expand()
     columnGrid(DadosDevProduto::grade, header = "Grade")
     columnGrid(DadosDevProduto::localizacao, header = "CD")
-    columnGrid(DadosDevProduto::quantidadeDev, header = "Quantidade")
+    columnGrid(DadosDevProduto::quantidadeTotal, header = "Quantidade")
     columnGrid(DadosDevProduto::obsNotaVenda, header = "Observação").expand()
     columnGrid(DadosDevProduto::produtoTipo, header = "Tipo")
     columnGrid(DadosDevProduto::userEntrega, header = "Entregador")

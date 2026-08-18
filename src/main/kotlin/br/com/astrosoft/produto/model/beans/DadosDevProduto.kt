@@ -106,6 +106,7 @@ data class DadosDevProduto(
     if (ni != other.ni) return false
     if (prdno != other.prdno) return false
     if (grade != other.grade) return false
+    if (produtoTrocaItemEnum != other.produtoTrocaItemEnum) return false
 
     return true
   }
@@ -114,6 +115,7 @@ data class DadosDevProduto(
     var result = ni ?: 0
     result = 31 * result + (prdno?.hashCode() ?: 0)
     result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + (produtoTrocaItemEnum?.hashCode() ?: 0)
     return result
   }
 
@@ -150,15 +152,22 @@ data class DadosDevProduto(
       return "$tipoTroca $sigla".trim()
     }
 
-  val temProduto: Boolean?
-    get() {
-      val prdTroca = produtoTrocaItemEnum ?: return null
-      return prdTroca == EProdutoTroca.Com || prdTroca == EProdutoTroca.Misto
-    }
-
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDevProduto> {
-      return saci.findDadosDev(filtro)
+      return saci.findDadosDev(filtro).explode()
+    }
+  }
+}
+
+private fun List<DadosDevProduto>.explode(): List<DadosDevProduto> {
+  return this.flatMap { prd ->
+    val tipo = prd.produtoTrocaItemEnum ?: return@flatMap emptyList()
+    if (tipo == EProdutoTroca.Misto) {
+      val prdCom = prd.copy(quantidadeSem = 0)
+      val prdSem = prd.copy(quantidadeCom = 0)
+      listOf(prdCom, prdSem)
+    } else {
+      listOf(prd)
     }
   }
 }
