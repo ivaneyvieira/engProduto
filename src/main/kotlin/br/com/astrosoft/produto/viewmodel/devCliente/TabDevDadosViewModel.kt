@@ -56,8 +56,8 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       val solicitacao = nota.tipoDevEnum ?: fail("Tipo de devolução não informada")
       val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
 
-      val produtosDevComProduto = produtos.filter { it.temProduto == true }
-      val produtosDevSemProduto = produtos.filter { it.temProduto == false }
+      val produtosDevComProduto = produtos.filter { it.produtoTrocaItemEnum == EProdutoTroca.Com }
+      val produtosDevSemProduto = produtos.filter { it.produtoTrocaItemEnum == EProdutoTroca.Sem }
 
       val tipoResultante = when {
         produtosDevComProduto.isNotEmpty() && produtosDevSemProduto.isEmpty() -> EProdutoTroca.Com
