@@ -1,3 +1,4 @@
+
 USE sqldados;
 
 SET sql_mode = '';
@@ -48,24 +49,6 @@ WHERE I.type = 2
   AND (I.issue_date <= :dataFinal OR :dataFinal = 0)
 HAVING (:pesquisa = '' OR ni = :pesquisa OR nfdno = :pesquisa OR nfVenda LIKE CONCAT(:pesquisa, '%') OR
         obsTipo LIKE CONCAT('%', :pesquisa, '%') OR codCliente = :pesquisa OR nomeCliente LIKE CONCAT(:pesquisa, '%'));
-
-DROP TEMPORARY TABLE IF EXISTS T_LOC;
-CREATE TEMPORARY TABLE T_LOC
-(
-  PRIMARY KEY (storeno, prdno, grade)
-)
-SELECT A.storeno                      AS storeno,
-       A.prdno                        AS prdno,
-       A.grade                        AS grade,
-       MID(TRIM(A.localizacao), 1, 4) AS localizacao,
-       kardec
-FROM
-  sqldados.prdAdicional      AS A
-    INNER JOIN sqldados.iprd AS I
-               USING (prdno, grade)
-    INNER JOIN T_NOTA        AS N
-               ON N.ni = I.invno
-GROUP BY A.storeno, A.prdno, A.grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA_NF;
 CREATE TEMPORARY TABLE T_NOTA_NF
@@ -134,7 +117,7 @@ SELECT N.ni                                               AS ni,
        P.unit                                             AS unidade,
        ROUND(I.qtty / 1000)                               AS quantidadeDev,
        ROUND(I.fob / 100, 2)                              AS valorUnitario,
-       L.localizacao                                      AS localizacao,
+       MID(TRIM(L.localizacao), 1, 4)                                      AS localizacao,
 /* Dados*/
        D.quantidadeCom                                    AS quantidadeCom,
        D.quantidadeSem                                    AS quantidadeSem,
@@ -165,7 +148,7 @@ FROM
                ON UE.no = A.userEntrega
     LEFT JOIN  sqldados.users                 AS UR
                ON UR.no = A.userRecebimento
-    LEFT JOIN  T_LOC                          AS L
+    LEFT JOIN  sqldados.prdAdicional                      AS L
                ON L.storeno = N.loja AND L.prdno = I.prdno AND L.grade = I.grade
     LEFT JOIN  sqldados.users                 AS US
                ON US.no = N.userSolicitacao
@@ -173,4 +156,3 @@ FROM
                ON UT.no = N.userTroca
 WHERE (:devolvido = 'N' OR (US.no IS NOT NULL AND UT.no IS NOT NULL))
   AND ((TRIM(MID(L.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (L.localizacao = ''))
-
