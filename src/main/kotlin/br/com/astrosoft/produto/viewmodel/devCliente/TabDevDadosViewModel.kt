@@ -56,13 +56,14 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
       val solicitacao = nota.tipoDevEnum ?: fail("Tipo de devolução não informada")
       val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
 
-      val produtosDevComProduto = produtos.filter { it.produtoTrocaItemEnum == EProdutoTroca.Com }
-      val produtosDevSemProduto = produtos.filter { it.produtoTrocaItemEnum == EProdutoTroca.Sem }
+      val produtosDevComProduto = produtos.sumOf { it.quantidadeCom ?: 0 }
+      val produtosDevSemProduto = produtos.sumOf { it.quantidadeSem ?: 0 }
 
       val tipoResultante = when {
-        produtosDevComProduto.isNotEmpty() && produtosDevSemProduto.isEmpty() -> EProdutoTroca.Com
-        produtosDevComProduto.isEmpty() && produtosDevSemProduto.isNotEmpty() -> EProdutoTroca.Sem
-        else                                                                  -> EProdutoTroca.Misto
+        produtosDevComProduto > 0 && produtosDevSemProduto == 0 -> EProdutoTroca.Com
+        produtosDevComProduto == 0 && produtosDevSemProduto > 0 -> EProdutoTroca.Sem
+        produtosDevComProduto > 0 && produtosDevSemProduto > 0  -> EProdutoTroca.Misto
+        else                                                    -> fail("Não há produtos para devolução")
       }
 
       if (tipoResultante != produto) {
